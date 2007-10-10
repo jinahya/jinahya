@@ -37,7 +37,6 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             byteValue |= (bitValue << (available - bitLength));
             bitIndexToWrite += bitLength;
         } else { // avabilable < length
-            int shift = bitLength - available;
             writeUnsignedByte(bitValue >> (bitLength - available), available);
             writeUnsignedByte((bitValue << available) >> available,
                               (bitLength - available));
