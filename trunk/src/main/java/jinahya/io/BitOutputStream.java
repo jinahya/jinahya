@@ -53,16 +53,19 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
     private void writeUnsignedShort(int bitValue, int bitLength)
         throws IOException {
 
+        int shift = 32 - bitLength;
+        int shifted = (bitValue << shift) >>> shift; // zero padded
+
         int dividend = bitLength;
         int divisor = 7;
         int quotient = dividend / divisor;
         int remainder = dividend % divisor;
 
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedByte((bitValue << (divisor * i)) >> ((quotient - i) * divisor + remainder), divisor);
+            writeUnsignedByte((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
         }
         if (remainder > 0) {
-            writeUnsignedByte((bitValue << (quotient * divisor)) >> (quotient * divisor), remainder);
+            writeUnsignedByte((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
         }
     }
 
@@ -72,22 +75,9 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             throw new IllegalArgumentException
                     ("Invalid bit length: " + bitLength);
         }
-        int boundary = (int)Math.pow(2, bitLength -1);
-        if (bitValue < -boundary || bitValue >= boundary) {
-            throw new IllegalArgumentException
-                    ("Invalid bit value: " + bitValue);
-        }
-        writeUnsignedInt(bitValue >>> (bitLength - 1), 1); // sign bit
-        writeUnsignedInt((bitValue << 1) >>> 1, bitLength - 1);
-        /*
-        boolean negative = (bitValue < 0);
-        writeBoolean(negative);
-        int unsigned = negative ? (bitValue + boundary) : bitValue;
-        if (negative && bitLength == 32) {
-            unsigned++;
-        }
-        writeUnsignedInt(unsigned, bitLength - 1);
-         */
+
+        writeUnsignedByte((bitValue < 0 ? 1 : 0), 1); // sign bit
+        writeUnsignedInt(bitValue, bitLength - 1);
     }
 
 
@@ -98,31 +88,21 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             throw new IllegalArgumentException
                     ("Invalid bit length: " + bitLength);
         }
-        int boundary = (int)Math.pow(2, bitLength);
-        if (bitValue < 0 || bitValue >= boundary) {
-            throw new IllegalArgumentException
-                    ("Invalid bit value: " + bitValue);
-        }
+
+        int shift = 32 - bitLength;
+        int shifted = (bitValue << shift) >>> shift; // zero padded
+
         int dividend = bitLength;
         int divisor = 15;
         int quotient = dividend / divisor;
         int remainder = dividend % divisor;
 
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedByte((bitValue << (divisor * i)) >> ((quotient - i) * divisor + remainder), divisor);
+            writeUnsignedShort((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
         }
         if (remainder > 0) {
-            writeUnsignedByte((bitValue << (quotient * divisor)) >> (quotient * divisor), remainder);
+            writeUnsignedShort((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
         }
-        /*
-        if (remainder > 0) {
-            writeUnsignedShort((bitValue >> (dividend - remainder)), remainder);
-        }
-        int operand = (int)Math.pow(2, divisor) - 1;
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort((bitValue >> (divisor * i)) & operand, divisor);
-        }
-         */
     }
 
 
@@ -133,22 +113,8 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             throw new IllegalArgumentException
                     ("Invalid bit length: " + bitLength);
         }
-        long boundary = (long)Math.pow(2, bitLength -1);
-        if (bitValue < -boundary || bitValue >= boundary) {
-            throw new IllegalArgumentException
-                    ("Invalid bit value: " + bitValue);
-        }
-        writeUnsignedLong(bitValue >>> (bitLength - 1), 1); // sign bit
-        writeUnsignedLong((bitValue << 1) >>> 1, bitLength - 1);
-        /*
-        boolean negative = (bitValue < 0);
-        writeBoolean(negative);
-        long unsigned = negative ? (bitValue + boundary) : bitValue;
-        if (negative && bitLength == 64) {
-            unsigned++;
-        }
-        writeUnsignedLong(unsigned, bitLength - 1);
-         */
+        writeUnsignedByte((bitValue < 0 ? 1 : 0), 1);
+        writeUnsignedLong(bitValue, bitLength -1);
     }
 
 
@@ -159,32 +125,20 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             throw new IllegalArgumentException
                     ("Invalid bit length: " + bitLength);
         }
-        long boundary = (long)Math.pow(2, bitLength);
-        if (bitValue < 0 || bitValue >= boundary) {
-            throw new IllegalArgumentException
-                    ("Invalid bit value: " + bitValue);
-        }
+        int shift = 64 - bitLength;
+        long shifted = (bitValue << shift) >>> shift; // zero padded
+
         int dividend = bitLength;
-        int divisor = 31;
+        int divisor = 15;
         int quotient = dividend / divisor;
         int remainder = dividend % divisor;
+
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedInt((int)(bitValue << (divisor * i)) >> ((quotient - i) * divisor + remainder), divisor);
+            writeUnsignedLong((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
         }
         if (remainder > 0) {
-            writeUnsignedInt((int)(bitValue << (quotient * divisor)) >> (quotient * divisor), remainder);
+            writeUnsignedLong((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
         }
-        /*
-        if (remainder > 0) {
-            writeUnsignedInt((int)(bitValue >> (dividend - remainder)),
-                             remainder);
-        }
-        long operand = (long)Math.pow(2, divisor) - 1;
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedInt((int)((bitValue >> (divisor * i)) & operand),
-                             divisor);
-        }
-         */
     }
 
 

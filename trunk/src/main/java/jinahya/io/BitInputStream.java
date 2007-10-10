@@ -55,7 +55,6 @@ public class BitInputStream extends FilterInputStream implements BitInput {
 
 
     private int readUnsignedShort(int bitLength) throws IOException {
-
         int value = 0;
         int dividend = bitLength;
         int divisor = 7;
@@ -79,8 +78,7 @@ public class BitInputStream extends FilterInputStream implements BitInput {
             throw new IllegalArgumentException
                     ("Illegal bit length: " + bitLength);
         }
-        return (readUnsignedInt(1) << (bitLength - 1) |
-                readUnsignedInt(bitLength - 1));
+        return (0 - readUnsignedByte(1)) & readUnsignedInt(bitLength - 1);
     }
 
 
@@ -113,8 +111,7 @@ public class BitInputStream extends FilterInputStream implements BitInput {
             throw new IllegalArgumentException
                     ("Illegal bit length: " + bitLength);
         }
-        return (readUnsignedLong(1) << (bitLength - 1) |
-                readUnsignedLong(bitLength - 1));
+        return (0L - readUnsignedByte(1)) & readUnsignedLong(bitLength - 1);
     }
 
 
