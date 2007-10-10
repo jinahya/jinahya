@@ -53,8 +53,7 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
     private void writeUnsignedShort(int bitValue, int bitLength)
         throws IOException {
 
-        int shift = 32 - bitLength;
-        int shifted = (bitValue << shift) >>> shift; // zero padded
+        int shifted = bitValue << (32 - bitLength);
 
         int dividend = bitLength;
         int divisor = 7;
@@ -62,10 +61,11 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
         int remainder = dividend % divisor;
 
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedByte((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
+            writeUnsignedByte(shifted >>> (32 - divisor), divisor);
+            shifted <<= divisor;
         }
         if (remainder > 0) {
-            writeUnsignedByte((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
+            writeUnsignedByte(shifted >>> (32 - remainder), remainder);
         }
     }
 
@@ -89,8 +89,7 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
                     ("Invalid bit length: " + bitLength);
         }
 
-        int shift = 32 - bitLength;
-        int shifted = (bitValue << shift) >>> shift; // zero padded
+        int shifted = bitValue << (32 - bitLength);
 
         int dividend = bitLength;
         int divisor = 15;
@@ -98,10 +97,11 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
         int remainder = dividend % divisor;
 
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedShort((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
+            writeUnsignedShort(shifted >>> (32 - divisor), divisor);
+            shifted <<= divisor;
         }
         if (remainder > 0) {
-            writeUnsignedShort((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
+            writeUnsignedShort(shifted >>> (32 - remainder), remainder);
         }
     }
 
@@ -125,8 +125,8 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
             throw new IllegalArgumentException
                     ("Invalid bit length: " + bitLength);
         }
-        int shift = 64 - bitLength;
-        long shifted = (bitValue << shift) >>> shift; // zero padded
+
+        long shifted = bitValue << (64 - bitLength);
 
         int dividend = bitLength;
         int divisor = 15;
@@ -134,10 +134,11 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
         int remainder = dividend % divisor;
 
         for (int i = 0; i < quotient; i++) {
-            writeUnsignedLong((shifted << (shift + divisor * i)) >> (shift + (bitLength - (divisor * i))), divisor);
+            writeUnsignedInt((int)(shifted >>> (32 - divisor)), divisor);
+            shifted <<= divisor;
         }
         if (remainder > 0) {
-            writeUnsignedLong((shifted << (shift + quotient * divisor)) >> (shift + quotient * divisor), remainder);
+            writeUnsignedInt((int)(shifted >>> (32 - remainder)), remainder);
         }
     }
 
