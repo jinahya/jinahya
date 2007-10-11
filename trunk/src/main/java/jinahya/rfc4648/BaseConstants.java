@@ -8,17 +8,17 @@ package jinahya.rfc4648;
 public class BaseConstants {
 
 
-    private static final String BASE64 =
+    public static final String BASE64 =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    private static final String BASE64URL =
+    public static final String BASE64URL =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-    private static final String BASE32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    public static final String BASE32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
-    private static final String BASE32HEX = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    public static final String BASE32HEX = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
 
-    private static final String BASE16 = "0123456789ABCDEF";
+    public static final String BASE16 = "0123456789ABCDEF";
 
-    private static final String HEX = BASE16;
+    public static final String HEX = BASE16;
 }
