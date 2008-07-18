@@ -6,10 +6,10 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>jinahya</groupId>
-  <artifactId>rfc4648</artifactId>
-  <name>rfc4648</name>
+  <artifactId>jinahya</artifactId>
+  <name>jinahya</name>
   <version>1.0</version>
-  <url>http://code.google.com/p/jihahya/</url>
+  <url>http://maven.apache.org</url>
   <build>
     <plugins>
       <plugin>
@@ -24,5 +24,10 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
