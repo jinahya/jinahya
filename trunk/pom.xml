@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>jinahya</groupId>
   <artifactId>jinahya</artifactId>
-  <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <version>1.0</version>
   <name>jinahya</name>
-  <url>http://maven.apache.org</url>
+  <url>http://code.google.com/p/jinahya/</url>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>RELEASE</version>
         <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
@@ -35,4 +35,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <modules>
+    <module>rfc4648</module>
+  </modules>
 </project>
