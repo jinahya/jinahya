@@ -18,6 +18,8 @@ public interface BitOutput {
     public void writeInt(int length, int value) throws IOException;
 
     /**
+     * @param length
+     * @param value
      */
     public void writeUnsignedInt(int length, int value) throws IOException;
 

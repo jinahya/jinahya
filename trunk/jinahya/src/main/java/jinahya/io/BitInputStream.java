@@ -12,6 +12,16 @@ import java.io.InputStream;
  */
 public class BitInputStream extends FilterInputStream implements BitInput {
 
+    private static final int[] powers = new int[8];
+    //new int[] { 1, 2, 4, 8, 16, 32, 64, 128};
+
+    static {
+        powers[0] = 1;
+        for (int i = 1; i < powers.length; i++) {
+            powers[i] = (powers[i - 1] * 2);
+        }
+    }
+
 
     /**
      * @param in
@@ -20,86 +30,14 @@ public class BitInputStream extends FilterInputStream implements BitInput {
         super(in);
 
         index = 8;
-        octet = 0xFFFFFFFF;
-
+        octet = -1;
         count = 0L;
     }
 
 
-    /** {@inheritDoc} */
-    //@Override
-    public void close() throws IOException {
-        if (index != 8) {
-            throw new IllegalStateException("not octet-aligned");
-        }
-        super.close();
-    }
-
-
-    /**
-     */
-    public void finish() {
-        if (index != 8) {
-            throw new IllegalStateException("not octet-aligned");
-        }
-        in = null;
-    }
-
-
-    /** {@inheritDoc} */
-    //@Override
-    public int read() throws IOException {
-        if (index != 8) {
-            throw new IllegalStateException("not octet-aligned");
-        }
-        try {
-            return readUnsignedShort(8);
-        } catch (EOFException eofe) {
-            return -1;
-        }
-    }
-
-
-    /** {@inheritDoc} */
-    //@Override
-    public int read(byte[] b) throws IOException {
-        return read(b, 0, b.length); // for sure
-        //return super.read(b);
-    }
-
-
-    /** {@inheritDoc} */
-    //@Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        if (off < 0 || len < 0 || len > b.length - off) {
-            throw new IndexOutOfBoundsException("doc");
-        }
-        if (index != 8) {
-            throw new IllegalStateException("not octet-aligned");
-        }
-        for (int i = off; i < len; i++) {
-            try {
-                b[i] = (byte)readUnsignedShort(8);
-            } catch (EOFException eofe) {
-                return (i == off ? -1 : i);
-            }
-        }
-        return len;
-    }
-
-
-    /**
-     * @param length
-     * @return
-     * @exception IllegalArgumentException
-     * @exception IOException
-     */
     private int readUnsignedByte(int length) throws IOException {
-        if (length < 1 || length >= 8) {
-            throw new IllegalArgumentException("unacceptable: " + length);
-        }
         if (index == 8) {
-            if ((octet = in.read()) == -1) {
+            if ((octet = (byte)in.read()) == -1) {
                 throw new EOFException("EOF");
             }
             index = 0;
@@ -107,8 +45,9 @@ public class BitInputStream extends FilterInputStream implements BitInput {
         int value = 0;
         int available = 8 - index;
         if (available >= length) {
-            value = (octet << index) >>> (8 - length);
+            value = (octet >>> (available - length)) & powers[length];
             index += length;
+            count += length;
             return value;
         }
         int required = length - available;
@@ -120,10 +59,7 @@ public class BitInputStream extends FilterInputStream implements BitInput {
 
     private int readUnsignedShort(int length) throws IOException {
         int value = 0;
-        //int dividend = length;
-        //int divisor = 7;
         int quotient = length / 7;
-
         for (int i = 0; i < quotient; i++) {
             value <<= 7;
             value |= readUnsignedByte(7);
@@ -146,12 +82,10 @@ public class BitInputStream extends FilterInputStream implements BitInput {
 
     /** {@inheritDoc} */
     public int readUnsignedInt(int length) throws IOException {
-        if (length < 1 || length >=32) {
+        if (length < 1 || length >= 32) {
             throw new IllegalArgumentException("unacceptable: " + length);
         }
         int value = 0;
-        //int dividend = length;
-        //int divisor = 15;
         int quotient = length / 15;
         for (int i = 0; i < quotient; i++) {
             value <<= 15;
@@ -179,8 +113,6 @@ public class BitInputStream extends FilterInputStream implements BitInput {
             throw new IllegalArgumentException("unacceptalbe: " + length);
         }
         long value = 0L;
-        //int dividend = length;
-        //int divisor = 31;
         int quotient = length / 31;
         for (int i = 0; i < quotient; i++) {
             value <<= 31;
@@ -198,11 +130,8 @@ public class BitInputStream extends FilterInputStream implements BitInput {
     public long getCount() { return count; }
 
 
-    public void setCount(long count) { this.count = count; }
-
-
-    private byte index;
-    private int octet;
+    private int index;
+    private byte octet;
 
     private long count;
 }
