@@ -40,5 +40,6 @@
   <modules>
     <module>jinahya</module>
     <module>rfc4648</module>
+    <module>iptv</module>
   </modules>
 </project>
