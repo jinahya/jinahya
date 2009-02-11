@@ -1,6 +1,8 @@
 package jinahya.io;
 
 
+import java.io.IOException;
+
 
 /**
  * @author Jin Kwon

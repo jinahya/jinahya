@@ -28,7 +28,7 @@ public class BitOutputImpl implements BitOutput {
         if (available >= length) {
             octet |= (value << (available - length));
             if ((index += length) == 0x08) {
-                out.write(octet);
+                adapter.putOctet(octet);
                 index = 0x00;
                 octet = 0x00;
             }

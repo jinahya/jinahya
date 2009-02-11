@@ -1,6 +1,7 @@
 package jinahya.io;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 
 
@@ -12,7 +13,7 @@ public class BitInputImpl implements BitInput {
     /**
      * @param adapter
      */
-    public BitInputStream(BitInputAdapter adapter) {
+    public BitInputImpl(BitInputAdapter adapter) {
         super();
 
         this.adapter = adapter;
