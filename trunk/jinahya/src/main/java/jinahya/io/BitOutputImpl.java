@@ -1,33 +1,22 @@
 package jinahya.io;
 
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 
 /**
  * @author Jin Kwon
  */
-public class BitOutputStream extends FilterOutputStream implements BitOutput {
-
-
-    private static final int[] powers = new int[8];
-    //new int[] { 1, 2, 4, 8, 16, 32, 64, 128};
-
-    static {
-        powers[0] = 1;
-        for (int i = 1; i < powers.length; i++) {
-            powers[i] = (powers[i - 1] * 2);
-        }
-    }
+public class BitOutputImpl implements BitOutput {
 
 
     /**
      * @param out
      */
-    public BitOutputStream(OutputStream out) {
-        super(out);
+    public BitOutputImpl(BitOutputAdapter adapter) {
+        super();
+
+        this.adapter = adapter;
 
         index = 0x00;
         octet = 0x00;
@@ -110,6 +99,8 @@ public class BitOutputStream extends FilterOutputStream implements BitOutput {
         }
     }
 
+
+    private BitOutputAdapter adapter;
 
     private int index;
     private byte octet;

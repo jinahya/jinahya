@@ -1,47 +1,21 @@
 package jinahya.io;
 
 
-import java.io.EOFException;
-import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 /**
  * @author Jin Kwon
  */
-public class BitInputStream extends FilterInputStream implements BitInput {
-
-    /*
-    private static final int[] powers =
-        new int[] {
-        0x01, // 1
-        0x02, // 2
-        0x04, // 4
-        0x08, // 8
-        0x10, // 16
-        0x20, // 32
-        0x40, // 64
-        0x80  // 128
-    };
-    */
-
-    /*
-    private static final int[] powers = new int[8];
-    static {
-        powers[0] = 1;
-        for (int i = 1; i < powers.length; i++) {
-            powers[i] = (powers[i - 1] * 2);
-        }
-    }
-    */
-
+public class BitInputImpl implements BitInput {
 
     /**
-     * @param in
+     * @param adapter
      */
-    public BitInputStream(InputStream in) {
-        super(in);
+    public BitInputStream(BitInputAdapter adapter) {
+        super();
+
+        this.adapter = adapter;
 
         index = 0x08;
         octet = 0xFF;
@@ -51,7 +25,7 @@ public class BitInputStream extends FilterInputStream implements BitInput {
     protected int readUnsignedByte(int length) throws IOException {
 
         if (index == 0x08) {
-            if ((octet = in.read()) == -1) {
+            if ((octet = adapter.getOctet()) == -1) {
                 throw new EOFException("EOF");
             }
             index = 0x00;
@@ -152,6 +126,8 @@ public class BitInputStream extends FilterInputStream implements BitInput {
         return value;
     }
 
+
+    private BitInputAdapter adapter;
 
     private int index; // current bit index
     private int octet; // current octet
