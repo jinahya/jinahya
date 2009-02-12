@@ -10,17 +10,40 @@ import java.io.IOException;
  */
 public class BitInputImpl implements BitInput {
 
+
     /**
      * @param adapter
      */
     public BitInputImpl(BitInputAdapter adapter) {
+        this(adapter, false);
+    }
+
+
+    /**
+     * @param adapter
+     * @param validate
+     */
+    public BitInputImpl(BitInputAdapter adapter, boolean validate) {
         super();
 
         this.adapter = adapter;
+        this.validate = validate;
 
         index = 0x08;
         octet = 0xFF;
     }
+
+
+    private static final int[] powers = new int[] {
+        0x01,
+        0x03,
+        0x07,
+        0x0F, // 15
+        0x1F, // 31
+        0x3F, // 63
+        0x7F, // 127
+        0xFF  // 255
+    };
 
 
     protected int readUnsignedByte(int length) throws IOException {
@@ -35,19 +58,19 @@ public class BitInputImpl implements BitInput {
         int available = 0x08 - index;
 
         if (available >= length) {
+            octet <<= index;
+            octet >>>= index;
             index += length;
-            return (octet << index) >>> (0x08 - length);
+            return (octet >>> (available - length));
         }
 
         int required = length - available;
         return (readUnsignedByte(available) << required) |
             readUnsignedByte(required);
-
     }
 
 
     protected int readUnsignedShort(int length) throws IOException {
-
         int value = 0x00;
 
         int quotient = length / 7;
@@ -67,17 +90,12 @@ public class BitInputImpl implements BitInput {
 
 
     /** {@inheritDoc} */
-    public int readInt(int length) throws IOException {
-        int shift = length - 1;
-        return 0 - (readUnsignedByte(1) << shift) + readUnsignedInt(shift);
-    }
-
-
-    /** {@inheritDoc} */
     public int readUnsignedInt(int length) throws IOException {
 
-        if (length < 1 || length >= 32) {
-            throw new IllegalArgumentException("unacceptable: " + length);
+        if (validate) {
+            if (length < 1 || length >= 32) {
+                throw new IllegalArgumentException("unacceptable: " + length);
+            }
         }
 
         int value = 0x00;
@@ -97,19 +115,21 @@ public class BitInputImpl implements BitInput {
 
 
     /** {@inheritDoc} */
-    public long readLong(int length) throws IOException {
-        int shift = length - 1;
-        return 0L - (readUnsignedByte(1) << shift) + readUnsignedLong(shift);
+    public int readInt(int length) throws IOException {
+        int value = readUnsignedByte(1);
+        for (int i = 0; i < 31 - length; i++) {
+            value |= (value <<= 1);
+        }
+        value <<= length;
+        System.out.println("value: " + value);
+        return value | readUnsignedInt(length -1);
     }
+
+
 
 
     /** {@inheritDoc} */
     public long readUnsignedLong(int length) throws IOException {
-
-        if (length < 1 || length >= 64) {
-            throw new IllegalArgumentException("unacceptalbe: " + length);
-        }
-
         long value = 0x00L;
 
         int quotient = length / 31;
@@ -128,8 +148,25 @@ public class BitInputImpl implements BitInput {
     }
 
 
+    /** {@inheritDoc} */
+    public long readLong(int length) throws IOException {
+        return (readUnsignedByte(1) < 0 ?
+                ~readUnsignedLong(length - 1) : readUnsignedLong(length - 1));
+    }
+
+
+
     private BitInputAdapter adapter;
 
     private int index; // current bit index
     private int octet; // current octet
+
+
+
+    public boolean getValidate() { return validate; }
+
+    public void setValidate(boolean validate) { this.validate = validate; }
+
+
+    private boolean validate;
 }

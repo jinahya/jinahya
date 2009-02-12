@@ -1,4 +1,5 @@
-<?xml version="1.0"?><project>
+<?xml version="1.0"?>
+<project>
   <parent>
     <groupId>jinahya</groupId>
     <artifactId>parent</artifactId>
@@ -16,18 +17,18 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>RELEASE</version>
         <configuration>
-          <source>1.3</source>
-          <target>1.1</target>
+          <!--source>1.3</source>
+          <target>1.1</target-->
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  <dependencies>
+  <!--dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-  </dependencies>
+  </dependencies-->
 </project>
