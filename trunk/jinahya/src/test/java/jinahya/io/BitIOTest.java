@@ -113,23 +113,19 @@ public class BitIOTest {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         for (int i = 0; i < 1048576; i++) {
             int expected = random.nextInt();
             out.writeInt(32, expected);
             pout.flush();
             Assert.assertEquals(in.readInt(32), expected);
+        }
+
+
+        for (int i = 0; i < 1048576; i++) {
+            long expected = random.nextLong();
+            out.writeLong(64, expected);
+            pout.flush();
+            Assert.assertEquals(in.readLong(64), expected);
         }
     }
 }
