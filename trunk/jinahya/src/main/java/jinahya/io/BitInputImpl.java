@@ -34,15 +34,15 @@ public class BitInputImpl implements BitInput {
     }
 
 
-    private static final int[] powers = new int[] {
-        0x01,
-        0x03,
-        0x07,
-        0x0F, // 15
-        0x1F, // 31
-        0x3F, // 63
-        0x7F, // 127
-        0xFF  // 255
+    private static final int[] powers  = new int[] {
+        0x01, // 1   0000 0001
+        0x03, // 3   0000 0011
+        0x07, // 7   0000 0111
+        0x0F, // 15  0000 1111
+        0x1F, // 31  0001 1111
+        0x3F, // 63  0011 1111
+        0x7F, // 127 0111 1111
+        0xFF  // 255 1111 1111
     };
 
 
@@ -58,15 +58,13 @@ public class BitInputImpl implements BitInput {
         int available = 0x08 - index;
 
         if (available >= length) {
-            octet <<= index;
-            octet >>>= index;
             index += length;
-            return (octet >>> (available - length));
+            return (octet >>> (available - length)) & powers[length -1];
         }
 
         int required = length - available;
-        return (readUnsignedByte(available) << required) |
-            readUnsignedByte(required);
+        return ((readUnsignedByte(available) << required) |
+                readUnsignedByte(required));
     }
 
 
@@ -92,12 +90,6 @@ public class BitInputImpl implements BitInput {
     /** {@inheritDoc} */
     public int readUnsignedInt(int length) throws IOException {
 
-        if (validate) {
-            if (length < 1 || length >= 32) {
-                throw new IllegalArgumentException("unacceptable: " + length);
-            }
-        }
-
         int value = 0x00;
 
         int quotient = length / 15;
@@ -117,11 +109,11 @@ public class BitInputImpl implements BitInput {
     /** {@inheritDoc} */
     public int readInt(int length) throws IOException {
         int value = readUnsignedByte(1);
-        for (int i = 0; i < 31 - length; i++) {
+        value <<= (length - 1);
+        for (int i = 0; i < 32 - (length - 1); i++) {
             value |= (value <<= 1);
         }
-        value <<= length;
-        System.out.println("value: " + value);
+
         return value | readUnsignedInt(length -1);
     }
 
@@ -150,8 +142,13 @@ public class BitInputImpl implements BitInput {
 
     /** {@inheritDoc} */
     public long readLong(int length) throws IOException {
-        return (readUnsignedByte(1) < 0 ?
-                ~readUnsignedLong(length - 1) : readUnsignedLong(length - 1));
+        long value = readUnsignedByte(1);
+        value <<= (length - 1);
+        for (int i = 0; i < 64 - (length - 1); i++) {
+            value |= (value <<= 1);
+        }
+
+        return value | readUnsignedLong(length -1);
     }
 
 

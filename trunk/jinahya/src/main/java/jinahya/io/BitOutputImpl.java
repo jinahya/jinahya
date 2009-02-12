@@ -33,16 +33,15 @@ public class BitOutputImpl implements BitOutput {
     }
 
 
-
     private static final int[] powers  = new int[] {
-        0x01,
-        0x03,
-        0x07,
-        0x0F, // 15 = 2^4 - 1
-        0x1F, // 31 = 2^5 - 1
-        0x3F, // 63 = 2^6 - 1
-        0x7F, // 127 = 2^7 - 1
-        0xFF
+        0x01, // 1   0000 0001
+        0x03, // 3   0000 0011
+        0x07, // 7   0000 0111
+        0x0F, // 15  0000 1111
+        0x1F, // 31  0001 1111
+        0x3F, // 63  0011 1111
+        0x7F, // 127 0111 1111
+        0xFF  // 255 1111 1111
     };
 
 
@@ -80,8 +79,6 @@ public class BitOutputImpl implements BitOutput {
     protected void writeUnsignedShort(int length, int value)
         throws IOException {
 
-        //System.out.println("\tshort: " + length + "/" + value);
-
         int quotient = length / 7;
         int remainder = length % 7;
         if (remainder > 0) {
@@ -95,7 +92,6 @@ public class BitOutputImpl implements BitOutput {
 
     /** {@inheritDoc} */
     public void writeUnsignedInt(int length, int value) throws IOException {
-        //System.out.println("int: " + length + "/" + value);
         int quotient = length / 15;
         int remainder = length % 15;
         if (remainder > 0) {
@@ -109,7 +105,6 @@ public class BitOutputImpl implements BitOutput {
 
     /** {@inheritDoc} */
     public void writeInt(int length, int value) throws IOException {
-        //System.out.println("value: " + value);
         writeUnsignedByte(1, value >> (length - 1)); // sign bit
         writeUnsignedInt(length - 1, value);
     }
