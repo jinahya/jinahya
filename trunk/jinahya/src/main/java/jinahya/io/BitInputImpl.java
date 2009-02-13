@@ -59,6 +59,7 @@ public class BitInputImpl implements BitInput {
 
         if (available >= length) {
             index += length;
+            //System.out.println("byte length: " + length);
             return (octet >>> (available - length)) & powers[length -1];
         }
 

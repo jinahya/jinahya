@@ -30,10 +30,6 @@ public class BitIOTest {
 
 
 
-        out.writeInt(32, -1);
-        Assert.assertEquals(in.readInt(32), -1);
-
-
         Random random = new Random();
 
 
@@ -72,9 +68,6 @@ public class BitIOTest {
         System.out.println("read long done");
         
 
-
-
-
         DataInputStream dis = new DataInputStream(new BufferedInputStream(pin));
 
         for (int i = 0; i < 1048576; i++) {
@@ -110,15 +103,44 @@ public class BitIOTest {
         System.out.println("write long done");
 
 
-
-
-
         for (int i = 0; i < 1048576; i++) {
             int expected = random.nextInt();
             out.writeInt(32, expected);
             pout.flush();
             Assert.assertEquals(in.readInt(32), expected);
         }
+        System.out.println("signed 32bit int");
+
+
+        for (int i = 0; i < 1048576; i++) {
+            int length = (int)(Math.random() * 31 + 1); // 1 ~ 31
+            int expected = (int)(Math.random() * Math.pow(2, length -1 ));
+            if ((int)(Math.random() * 2) == 0) {
+                expected = 0 - expected;
+            }
+            out.writeInt(length, expected);
+            int pad = 8 - length % 8;
+            out.writeInt(pad, 0);
+            pout.flush();
+
+            Assert.assertEquals(in.readInt(length), expected);
+            in.readInt(pad);
+        }
+        System.out.println("signed int");
+
+        for (int i = 0; i < 1048576; i++) {
+            int length = (int)(Math.random() * 31 + 1); // 1 ~ 31
+            int expected = (int)(Math.random() * Math.pow(2, length -1 ));
+            out.writeUnsignedInt(length, expected);
+            int pad = 8 - length % 8;
+            out.writeInt(pad, 0);
+            pout.flush();
+
+            Assert.assertEquals(in.readUnsignedInt(length), expected);
+            in.readInt(pad);
+        }
+        System.out.println("unsigned int");
+
 
 
         for (int i = 0; i < 1048576; i++) {
@@ -127,5 +149,35 @@ public class BitIOTest {
             pout.flush();
             Assert.assertEquals(in.readLong(64), expected);
         }
+        System.out.println("signed 64bit long");
+
+        for (int i = 0; i < 1048576; i++) {
+            int length = (int)(Math.random() * 63 + 1); // 1 ~ 63
+            long expected = (long)(Math.random() * Math.pow(2, length -1 ));
+            if ((int)(Math.random() * 2) == 0) {
+                expected = 0L - expected;
+            }
+            out.writeLong(length, expected);
+            int pad = 8 - length % 8;
+            out.writeInt(pad, 0);
+            pout.flush();
+
+            Assert.assertEquals(in.readLong(length), expected);
+            in.readInt(pad);
+        }
+        System.out.println("signed long");
+
+        for (int i = 0; i < 1048576; i++) {
+            int length = (int)(Math.random() * 31 + 1); // 1 ~ 31
+            long expected = (long)(Math.random() * Math.pow(2, length -1 ));
+            out.writeUnsignedLong(length, expected);
+            int pad = 8 - length % 8;
+            out.writeInt(pad, 0);
+            pout.flush();
+
+            Assert.assertEquals(in.readUnsignedLong(length), expected);
+            in.readInt(pad);
+        }
+        System.out.println("unsigned long");
     }
 }
