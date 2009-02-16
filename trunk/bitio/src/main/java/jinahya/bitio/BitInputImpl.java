@@ -172,10 +172,10 @@ public class BitInputImpl implements BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        long value = readUnsignedByte(1);
-        value <<= (length - 1);
+        long value = readUnsignedByte(1); // sign bit
+        value <<= (length - 1); // zero padding
         for (int i = 0; i < 64 - (length - 1); i++) {
-            value |= (value <<= 1);
+            value |= (value <<= 1); // copy shift
         }
 
         return value | readUnsignedLong(length -1);
