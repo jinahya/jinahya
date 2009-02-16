@@ -59,10 +59,8 @@
     </dependencies-->
   </dependencyManagement>
   <modules>
-    <module>jinahya</module>
-    <module>rfc4648</module>
-    <module>iptv</module>
-    <module>rfc4648-bitio</module>
     <module>bitio</module>
+    <module>rfc4648</module>
+    <module>rfc4648-bitio</module>
   </modules>
 </project>
