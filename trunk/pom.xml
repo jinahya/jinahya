@@ -62,7 +62,6 @@
     <module>jinahya</module>
     <module>rfc4648</module>
     <module>iptv</module>
-    <module>rfc4648-standalone</module>
     <module>rfc4648-bitio</module>
     <module>bitio</module>
   </modules>
