@@ -9,10 +9,6 @@ import jinahya.bitio.BitInput;
 import jinahya.bitio.BitInputAdapter;
 import jinahya.bitio.BitInputImpl;
 
-import jinahya.rfc4648.AbstractRFC4648Encoder;
-import jinahya.rfc4648.EncodingOutputHandler;
-import jinahya.rfc4648.RFC4648Utils;
-
 
 /**
  *
