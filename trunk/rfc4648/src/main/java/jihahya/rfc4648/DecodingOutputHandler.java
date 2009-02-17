@@ -4,6 +4,11 @@ package jinahya.rfc4648;
 import java.io.IOException;
 
 
+/**
+ *
+ *
+ * @author Jin Kwon
+ */
 public interface DecodingOutputHandler {
 
     /**

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 
 /**
+ *
+ *
  * @author Jin Kwon
  */
 public interface EncodingOutputHandler {

@@ -2,6 +2,8 @@ package jinahya.rfc4648;
 
 
 /**
+ *
+ *
  * @author Jin Kwon
  */
 public class RFC4648Constants {
