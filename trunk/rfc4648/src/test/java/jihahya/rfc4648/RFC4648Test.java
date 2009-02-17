@@ -1,4 +1,4 @@
-package jinahya.io.bitio;
+package jinahya.rfc4648;
 
 
 import java.io.*;
@@ -9,7 +9,6 @@ import org.testng.*;
 import org.testng.annotations.*;
 
 import jinahya.rfc4648.*;
-import jinahya.rfc4648.bitio.*;
 
 
 public class RFC4648Test {
