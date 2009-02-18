@@ -52,4 +52,20 @@ public interface BitOutput {
      * @exception IOException if an I/O error occurs
      */
     public void writeUnsignedLong(int length, long value) throws IOException;
+
+
+    /**
+     * Describe <code>getCount</code> method here.
+     *
+     * @return a <code>long</code> value
+     */
+    public long getCount();
+
+
+    /**
+     * Describe <code>setCount</code> method here.
+     *
+     * @param count a <code>long</code> value
+     */
+    public void setCount(long count);
 }

@@ -16,14 +16,14 @@ public class BitIOTest {
         final PipedOutputStream pout = new PipedOutputStream();
         final PipedInputStream pin = new PipedInputStream(pout);
 
-        BitOutput out = new BitOutputImpl(new BitOutputAdapter() {
-                public void putOctet(int octet) throws IOException {
-                    pout.write(octet);
+        BitOutput out = new BitOutputImpl(new ByteOutput() {
+                public void writeByte(int b) throws IOException {
+                    pout.write(b);
                 }
             });
 
-        BitInput in = new BitInputImpl(new BitInputAdapter() {
-                public int getOctet() throws IOException {
+        BitInput in = new BitInputImpl(new ByteInput() {
+                public int readByte() throws IOException {
                     return pin.read();
                 }
             });

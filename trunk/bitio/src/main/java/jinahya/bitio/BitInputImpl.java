@@ -14,13 +14,15 @@ public class BitInputImpl implements BitInput {
     /**
      * @param adapter
      */
-    public BitInputImpl(BitInputAdapter adapter) {
+    public BitInputImpl(ByteInput input) {
         super();
 
-        this.adapter = adapter;
+        this.input = input;
 
         index = 0x08;
         octet = 0xFF;
+
+        count = 0L;
     }
 
 
@@ -50,7 +52,7 @@ public class BitInputImpl implements BitInput {
         }
 
         if (index == 0x08) {
-            if ((octet = adapter.getOctet()) == -1) {
+            if ((octet = input.readByte()) == -1) {
                 throw new EOFException("EOF");
             }
             index = 0x00;
@@ -60,6 +62,7 @@ public class BitInputImpl implements BitInput {
 
         if (available >= length) {
             index += length;
+            count += length;
             return (octet >>> (available - length)) & powers[length -1];
         }
 
@@ -183,8 +186,20 @@ public class BitInputImpl implements BitInput {
 
 
 
-    private BitInputAdapter adapter;
+    private ByteInput input;
 
     private int index; // current bit index
     private int octet; // current octet
+
+
+
+    /** {@inheritDoc} */
+    public long getCount() { return count; }
+
+
+    /** {@inheritDoc} */
+    public void setCount(long count) { this.count = count; }
+
+
+    private long count;
 }

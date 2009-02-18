@@ -9,6 +9,7 @@ import java.io.IOException;
  */
 public interface BitInput {
 
+
     /**
      * Reads a signed integer.
      *
@@ -48,4 +49,21 @@ public interface BitInput {
      * @exception IOException if an I/O error occurs
      */
     public long readUnsignedLong(int length) throws IOException;
+
+
+
+    /**
+     * Describe <code>getCount</code> method here.
+     *
+     * @return a <code>long</code> value
+     */
+    public long getCount();
+
+
+    /**
+     * Describe <code>setCount</code> method here.
+     *
+     * @param count a <code>long</code> value
+     */
+    public void setCount(long count);
 }

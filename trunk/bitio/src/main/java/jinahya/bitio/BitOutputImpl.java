@@ -11,15 +11,17 @@ public class BitOutputImpl implements BitOutput {
 
 
     /**
-     * @param adapter
+     * @param output
      */
-    public BitOutputImpl(BitOutputAdapter adapter) {
+    public BitOutputImpl(ByteOutput output) {
         super();
 
-        this.adapter = adapter;
+        this.output = output;
 
         index = 0x00;
         octet = 0x00;
+
+        count = 0L;
     }
 
 
@@ -49,8 +51,9 @@ public class BitOutputImpl implements BitOutput {
         int available = 0x08 - index;
         if (available >= length) {
             octet |= ((value & powers[length - 1]) << (available - length));
+            count += length;
             if ((index += length) == 0x08) {
-                adapter.putOctet(octet);
+                output.writeByte(octet);
                 index = 0x00;
                 octet = 0x00;
             }
@@ -148,8 +151,20 @@ public class BitOutputImpl implements BitOutput {
 
 
 
-    private BitOutputAdapter adapter;
+    private ByteOutput output;
 
     private int index;
     private byte octet;
+
+
+
+    /** {@inheritDoc} */
+    public long getCount() { return count; }
+
+
+    /** {@inheritDoc} */
+    public void setCount(long count) { this.count = count; }
+
+
+    private long count;
 }
