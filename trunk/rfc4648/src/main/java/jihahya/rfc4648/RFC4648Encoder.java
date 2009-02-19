@@ -4,39 +4,23 @@ package jinahya.rfc4648;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 
 import jinahya.bitio.BitInput;
-import jinahya.bitio.BitInputAdapter;
-import jinahya.bitio.BitInputImpl;
+import jinahya.bitio.BitInputStreamAdapter;
 
 
-/**
- *
- *
- * @author Jin Kwon
- */
 public class RFC4648Encoder {
 
 
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @param handler
-     */
     public RFC4648Encoder(String alphabet, final InputStream input,
-                          EncodingOutputHandler handler) {
+                          Writer output) {
 
         super();
 
         this.alphabet = alphabet;
-        this.input = new BitInputImpl(new BitInputAdapter() {
-                public int getOctet() throws IOException {
-                    return input.read();
-                }});
-
-        this.handler = handler;
+        this.input = new BitInputStreamAdapter(input);
+        this.output = output;
 
         pad = RFC4648Constants.pad;
     }
@@ -57,7 +41,7 @@ public class RFC4648Encoder {
                 if (available >= bitsPerChar) {
                     try {
                         int unsigned = input.readUnsignedInt(bitsPerChar);
-                        handler.encoded(alphabet.charAt(unsigned));
+                        output.write(alphabet.charAt(unsigned));
                     } catch (EOFException eofe) {
                         if (i != 0) {
                             throw new IOException("this couldn't happen");
@@ -71,11 +55,11 @@ public class RFC4648Encoder {
                         (input.readUnsignedInt(available) << required);
                     try {
                         unsigned |= input.readUnsignedInt(required);
-                        handler.encoded(alphabet.charAt(unsigned));
+                        output.write(alphabet.charAt(unsigned));
                     } catch (EOFException eofe) {
-                        handler.encoded(alphabet.charAt(unsigned));
+                        output.write(alphabet.charAt(unsigned));
                         for (int j = i + 1; j < charsPerWord; j++) {
-                            handler.encoded(pad);
+                            output.write(pad);
                         }
                         return;
                     }
@@ -87,28 +71,7 @@ public class RFC4648Encoder {
 
     private String alphabet;
     private BitInput input;
-    private EncodingOutputHandler handler;
+    private Writer output;
+
     private char pad;
-
-
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @param output
-     * @throws IOException
-     */
-    public static void encode(String alphabet, InputStream input,
-                              final java.io.Writer output)
-        throws IOException {
-
-        new RFC4648Encoder
-            (alphabet, input, 
-             new EncodingOutputHandler() {
-                 public void encoded(char encoded) throws IOException {
-                     output.write(encoded);
-                 }
-             }).encode();
-    }
 }

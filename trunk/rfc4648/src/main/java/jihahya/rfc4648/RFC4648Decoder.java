@@ -4,10 +4,11 @@ package jinahya.rfc4648;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.OutputStream;
 
 import jinahya.bitio.BitOutput;
-import jinahya.bitio.BitOutputAdapter;
-import jinahya.bitio.BitOutputImpl;
+import jinahya.bitio.BitOutputStreamAdapter;
+import jinahya.bitio.ByteOutput;
 
 
 /**
@@ -18,18 +19,13 @@ import jinahya.bitio.BitOutputImpl;
 public class RFC4648Decoder {
 
 
-    public RFC4648Decoder(String alphabet, Reader input,
-                          final DecodingOutputHandler handler) {
+    public RFC4648Decoder(String alphabet, Reader input, OutputStream output) {
 
         super();
 
         this.alphabet = alphabet;
         this.input = input;
-
-        output = new BitOutputImpl(new BitOutputAdapter() {
-                public void putOctet(int octet) throws IOException {
-                    handler.decoded(octet);
-                }});
+        this.output = new BitOutputStreamAdapter(output);
 
         pad = RFC4648Constants.pad;
     }
@@ -76,18 +72,4 @@ public class RFC4648Decoder {
     private Reader input;
     private BitOutput output;
     private char pad;
-
-
-    public static void decode(String alphabet, Reader input,
-                              final java.io.OutputStream output)
-        throws IOException {
-
-        new RFC4648Decoder
-            (alphabet, input,
-             new DecodingOutputHandler() {
-                 public void decoded(int decoded) throws IOException {
-                     output.write(decoded);
-                 }
-                }).decode();
-    }
 }
