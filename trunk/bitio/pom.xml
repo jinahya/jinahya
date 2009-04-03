@@ -16,6 +16,8 @@
         <configuration>
           <source>1.3</source>
           <target>1.1</target>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
         </configuration>
       </plugin>
     </plugins>
