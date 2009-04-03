@@ -7,9 +7,14 @@ import java.io.InputStream;
 import java.io.Writer;
 
 import jinahya.bitio.BitInput;
-import jinahya.bitio.BitInputStreamAdapter;
+import jinahya.bitio.BitInputImpl;
 
 
+/**
+ *
+ *
+ * @author Jin Kwon
+ */
 public class RFC4648Encoder {
 
 
@@ -19,10 +24,9 @@ public class RFC4648Encoder {
         super();
 
         this.alphabet = alphabet;
-        this.input = new BitInputStreamAdapter(input);
-        this.output = output;
 
-        pad = RFC4648Constants.pad;
+        this.input = new BitInputImpl(input);
+        this.output = output;
     }
 
 
@@ -59,7 +63,7 @@ public class RFC4648Encoder {
                     } catch (EOFException eofe) {
                         output.write(alphabet.charAt(unsigned));
                         for (int j = i + 1; j < charsPerWord; j++) {
-                            output.write(pad);
+                            output.write(RFC4648Constants.pad);
                         }
                         return;
                     }
@@ -70,8 +74,7 @@ public class RFC4648Encoder {
 
 
     private String alphabet;
+
     private BitInput input;
     private Writer output;
-
-    private char pad;
 }

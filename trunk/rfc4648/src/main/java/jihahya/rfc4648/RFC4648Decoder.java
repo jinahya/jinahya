@@ -7,8 +7,7 @@ import java.io.Reader;
 import java.io.OutputStream;
 
 import jinahya.bitio.BitOutput;
-import jinahya.bitio.BitOutputStreamAdapter;
-import jinahya.bitio.ByteOutput;
+import jinahya.bitio.BitOutputImpl;
 
 
 /**
@@ -24,10 +23,9 @@ public class RFC4648Decoder {
         super();
 
         this.alphabet = alphabet;
-        this.input = input;
-        this.output = new BitOutputStreamAdapter(output);
 
-        pad = RFC4648Constants.pad;
+        this.input = input;
+        this.output = new BitOutputImpl(output);
     }
 
 
@@ -44,7 +42,7 @@ public class RFC4648Decoder {
                     }
                     throw new EOFException("not finished properly");
                 }
-                if (c == pad) {
+                if (c == RFC4648Constants.pad) {
                     if (i == 0) { // :(
                         throw new IOException("bad padding");
                     }
@@ -56,7 +54,7 @@ public class RFC4648Decoder {
                         if (c == -1) { // end of stream?
                             throw new EOFException("not finished properly");
                         }
-                        if (c != pad) { // not the pad char?
+                        if (c != RFC4648Constants.pad) { // not the pad char?
                             throw new IOException("bad padding");
                         }
                     }
@@ -69,7 +67,7 @@ public class RFC4648Decoder {
 
 
     private String alphabet;
+
     private Reader input;
     private BitOutput output;
-    private char pad;
 }
