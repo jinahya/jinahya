@@ -35,6 +35,29 @@
       <classifier>jdk14</classifier>
     </dependency>
   </dependencies>
+  <developers>
+    <developer>
+      <id>jinahya</id>
+      <name>Jin Kwon</name>
+      <email>jinahya@gmail.com</email>
+      <!--url>http://eric.propellors.net</url-->
+      <organization>Jinahya</organization>
+      <!--organizationUrl>http://mojo.codehaus.org</organizationUrl-->
+      <roles>
+        <role>all but nothing</role>
+        <!--role>architect</role>
+        <role>developer</role-->
+      </roles>
+      <timezone>+9</timezone>
+      <properties>
+        <!--picUrl>http://tinyurl.com/prv4t</picUrl-->
+      </properties>
+    </developer>
+  </developers>
+  <organization>
+    <name>Jinahya</name>
+    <!--url>http://mojo.codehaus.org</url-->
+  </organization>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
@@ -42,4 +65,10 @@
   <reporting>
     <!--outputEncoding>UTF-8</outputEncoding-->
   </reporting>
+  <scm>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/bitio</connection>
+    <!--developerConnection>scm:svn:https://127.0.0.1/svn/my-project</developerConnection-->
+    <!--tag>HEAD</tag-->
+    <!--url>http://127.0.0.1/websvn/my-project</url-->
+  </scm>
 </project>
