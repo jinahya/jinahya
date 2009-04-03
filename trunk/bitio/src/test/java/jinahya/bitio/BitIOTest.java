@@ -16,13 +16,13 @@ public class BitIOTest {
         final PipedOutputStream pout = new PipedOutputStream();
         final PipedInputStream pin = new PipedInputStream(pout);
 
-        BitOutput out = new BitOutputImpl(new ByteOutput() {
+        BitOutput out = new BitOutputImpl(new BitOutputImpl.ByteOutput() {
                 public void writeByte(int b) throws IOException {
                     pout.write(b);
                 }
             });
 
-        BitInput in = new BitInputImpl(new ByteInput() {
+        BitInput in = new BitInputImpl(new BitInputImpl.ByteInput() {
                 public int readByte() throws IOException {
                     return pin.read();
                 }
