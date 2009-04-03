@@ -2,6 +2,9 @@ package jinahya.rfc4648;
 
 
 /**
+ *
+ *
+ * @author Jin Kwon
  */
 public class RFC4648Utils {
 
@@ -11,6 +14,7 @@ public class RFC4648Utils {
      *
      * @param a
      * @param b
+     * @return
      */
     public static int leastCommonMultiple(int a, int b) {
         return (a * b) / greatestCommonDivisor(a, b);
@@ -22,6 +26,7 @@ public class RFC4648Utils {
      *
      * @param a
      * @param b
+     * @return
      */
     public static int greatestCommonDivisor(int a, int b) {
         return b == 0 ? a : greatestCommonDivisor(b, a % b);
@@ -32,6 +37,7 @@ public class RFC4648Utils {
      *
      *
      * @param alphabet
+     * @return
      */
     public static int bitsPerChar(String alphabet) {
         return (int)(Math.log(alphabet.length())/Math.log(2.0d));
@@ -42,6 +48,7 @@ public class RFC4648Utils {
      *
      *
      * @param bitsPerChar
+     * @return
      */
     public static int bytesPerWord(int bitsPerChar) {
         return leastCommonMultiple(8, bitsPerChar) / 8;
@@ -53,6 +60,7 @@ public class RFC4648Utils {
      *
      * @param bytesPerWord
      * @param bitsPerChar
+     * @return
      */
     public static int charsPerWord(int bytesPerWord, int bitsPerChar) {
         return bytesPerWord * 8 / bitsPerChar;
