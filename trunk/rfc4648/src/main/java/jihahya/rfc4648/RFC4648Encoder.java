@@ -18,9 +18,14 @@ import jinahya.bitio.BitInputImpl;
 public class RFC4648Encoder {
 
 
-    public RFC4648Encoder(String alphabet, final InputStream input,
-                          Writer output) {
-
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
+     */
+    public RFC4648Encoder(String alphabet, InputStream input, Writer output) {
         super();
 
         this.alphabet = alphabet;
@@ -33,7 +38,7 @@ public class RFC4648Encoder {
     /**
      *
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public void encode() throws IOException {
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);

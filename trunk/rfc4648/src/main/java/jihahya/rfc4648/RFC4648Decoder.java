@@ -18,6 +18,13 @@ import jinahya.bitio.BitOutputImpl;
 public class RFC4648Decoder {
 
 
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
+     */
     public RFC4648Decoder(String alphabet, Reader input, OutputStream output) {
 
         super();
@@ -29,6 +36,11 @@ public class RFC4648Decoder {
     }
 
 
+    /**
+     *
+     *
+     * @throws IOException if an I/O error occurs
+     */
     public void decode() throws IOException {
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);

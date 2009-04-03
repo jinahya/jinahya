@@ -13,8 +13,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.3</source>
+          <target>1.1</target>
         </configuration>
       </plugin>
     </plugins>
@@ -37,7 +37,7 @@
       <artifactId>testng</artifactId>
       <version>5.8</version>
       <scope>test</scope>
-      <classifier>jdk15</classifier>
+      <classifier>jdk14</classifier>
     </dependency>
   </dependencies>
   <properties>
