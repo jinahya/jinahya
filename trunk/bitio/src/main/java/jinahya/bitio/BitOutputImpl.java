@@ -2,6 +2,7 @@ package jinahya.bitio;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 
 /**
@@ -11,6 +12,38 @@ public class BitOutputImpl implements BitOutput {
 
 
     /**
+     *
+     *
+     */
+    public static interface ByteOutput {
+
+        /**
+         *
+         *
+         * @param b
+         * @throws IOException if an I/O error occurs
+         */
+        public void writeByte(int b) throws IOException;
+    }
+
+
+    /**
+     *
+     *
+     * @param out
+     */
+    public BitOutputImpl(final OutputStream out) {
+        this(new ByteOutput() {
+                public void writeByte(int b) throws IOException {
+                    out.write(b);
+                }
+            });
+    }
+
+
+    /**
+     *
+     *
      * @param output
      */
     public BitOutputImpl(ByteOutput output) {

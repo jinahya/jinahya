@@ -3,16 +3,51 @@ package jinahya.bitio;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
+ *
+ *
  * @author Jin Kwon
  */
 public class BitInputImpl implements BitInput {
 
 
     /**
-     * @param adapter
+     *
+     *
+     */
+    public static interface ByteInput {
+
+        /**
+         *
+         *
+         * @return
+         * @exception IOException if an I/O error occurs
+         */
+        public int readByte() throws IOException;
+    }
+
+
+    /**
+     *
+     *
+     * @param in
+     */
+    public BitInputImpl(final InputStream in) {
+        this(new ByteInput() {
+                public int readByte() throws IOException {
+                    return in.read();
+                }
+            });
+    }
+
+
+    /**
+     *
+     *
+     * @param input
      */
     public BitInputImpl(ByteInput input) {
         super();
