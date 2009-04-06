@@ -84,6 +84,10 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
+  <issueManagement>
+    <system>googlecode</system>
+    <url>http://code.google.com/p/jinahya/issues/list</url>
+  </issueManagement>
   <organization>
     <name>Jinahya</name>
     <!--url>http://mojo.codehaus.org</url-->
