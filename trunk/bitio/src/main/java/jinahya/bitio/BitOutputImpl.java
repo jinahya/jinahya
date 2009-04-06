@@ -6,6 +6,8 @@ import java.io.OutputStream;
 
 
 /**
+ *
+ *
  * @author Jin Kwon
  */
 public class BitOutputImpl implements BitOutput {
