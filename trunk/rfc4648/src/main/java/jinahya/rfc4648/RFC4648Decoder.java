@@ -1,6 +1,8 @@
 package jinahya.rfc4648;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.CharArrayReader;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
@@ -24,9 +26,87 @@ public class RFC4648Decoder {
      * @param alphabet
      * @param input
      * @param output
+     * @throws IOException if an I/O error occurs
+     */
+    public static void decode(String alphabet, Reader input,
+                              OutputStream output)
+        throws IOException {
+
+        new RFC4648Decoder(alphabet, input, output).decode();
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @return decoded byte array
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] decode(String alphabet, Reader input)
+        throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            decode(alphabet, input, out);
+            out.flush();
+            return out.toByteArray();
+        } finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
+     * @throws IOException if an I/O error occurs
+     */
+    public static void decode(String alphabet, char[] input,
+                              OutputStream output)
+        throws IOException {
+
+        Reader in = new CharArrayReader(input);
+        try {
+            decode(alphabet, in, output);
+        } finally {
+            in.close();
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @return decoded byte array
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] decode(String alphabet, char[] input)
+        throws IOException {
+
+        Reader in = new CharArrayReader(input);
+        try {
+            return decode(alphabet, in);
+        } finally {
+            in.close();
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
      */
     public RFC4648Decoder(String alphabet, Reader input, OutputStream output) {
-
         super();
 
         this.alphabet = alphabet;

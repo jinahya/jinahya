@@ -1,6 +1,8 @@
 package jinahya.rfc4648;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayWriter;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,83 @@ import jinahya.bitio.BitInputImpl;
  * @author Jin Kwon
  */
 public class RFC4648Encoder {
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
+     * @throws IOException if an I/O error occurs
+     */
+    public static void encode(String alphabet, InputStream input, Writer output)
+        throws IOException {
+
+        new RFC4648Encoder(alphabet, input, output).encode();
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @return encoded char array
+     * @throws IOException if an I/O error occurs
+     */
+    public static char[] encode(String alphabet, InputStream input)
+        throws IOException {
+
+        CharArrayWriter out = new CharArrayWriter();
+        try {
+            encode(alphabet, input, out);
+            out.flush();
+            return out.toCharArray();
+        } finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @param output
+     * @throws IOException if an I/O error occurs
+     */
+    public static void encode(String alphabet, byte[] input, Writer output)
+        throws IOException {
+
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
+        try {
+            encode(alphabet, in, output);
+        } finally {
+            in.close();
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @param alphabet
+     * @param input
+     * @return encoded char array
+     * @throws IOException if an I/O error occurs
+     */
+    public static char[] encode(String alphabet, byte[] input)
+        throws IOException {
+
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
+        try {
+            return encode(alphabet, in);
+        } finally {
+            in.close();
+        }
+    }
 
 
     /**
