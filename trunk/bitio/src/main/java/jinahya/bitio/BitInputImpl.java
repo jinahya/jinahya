@@ -15,7 +15,7 @@ public class BitInputImpl implements BitInput {
 
 
     /**
-     *
+     * An interface for the byte supplier
      *
      */
     public static interface ByteInput {
@@ -23,7 +23,7 @@ public class BitInputImpl implements BitInput {
         /**
          *
          *
-         * @return
+         * @return the next byte to be used or -1 for EOF
          * @exception IOException if an I/O error occurs
          */
         public int readByte() throws IOException;
@@ -31,9 +31,9 @@ public class BitInputImpl implements BitInput {
 
 
     /**
+     * Creates an instance with given input stream.
      *
-     *
-     * @param in
+     * @param in an input stream
      */
     public BitInputImpl(final InputStream in) {
         this(new ByteInput() {
@@ -45,9 +45,9 @@ public class BitInputImpl implements BitInput {
 
 
     /**
+     * Creates an instance with given input.
      *
-     *
-     * @param input
+     * @param input byte input
      */
     public BitInputImpl(ByteInput input) {
         super();
@@ -74,9 +74,9 @@ public class BitInputImpl implements BitInput {
 
 
     /**
+     * Reads an unsigned byte value.
      *
-     *
-     * @param length
+     * @param length number of bits
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException
      */
@@ -108,7 +108,7 @@ public class BitInputImpl implements BitInput {
 
 
     /**
-     *
+     * Reads an unsigned short value.
      *
      * @param length
      * @throws IOException if an I/O error occurs
@@ -221,19 +221,23 @@ public class BitInputImpl implements BitInput {
 
 
 
-    private ByteInput input;
+    private transient ByteInput input;
 
-    private int index; // current bit index
-    private int octet; // current octet
+    private transient int index; // current bit index
+    private transient int octet; // current octet
 
-
-
-    /** {@inheritDoc} */
-    public long getCount() { return count; }
 
 
     /** {@inheritDoc} */
-    public void setCount(long count) { this.count = count; }
+    public long getCount() {
+        return count;
+    }
+
+
+    /** {@inheritDoc} */
+    public void setCount(long count) {
+        this.count = count;
+    }
 
 
     private long count;
