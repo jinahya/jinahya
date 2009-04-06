@@ -50,6 +50,7 @@
       <classifier>jdk14</classifier>
     </dependency>
   </dependencies>
+  <description>rfc-4648 implementations</description>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -72,14 +73,14 @@
   <distributionManagement>
     <site>
       <id>jinahya.googlecode.com</id>
-      <!--name>jinahya:rfc4648</name-->
+      <name>jinahya:rfc4648</name>
       <url>svn:https://jinahya.googlecode.com/svn/site/rfc4648</url>
     </site>
-    <!--repository>
+    <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>jinahya.googlecode.com</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/rfc4648</url>
-    </repository-->
+      <url>svn:https://jinahya.googlecode.com/svn/repo</url>
+    </repository>
   </distributionManagement>
   <licenses>
     <license>
