@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 
 /**
- *
+ * BitInput implementation.
  *
  * @author Jin Kwon
  */
@@ -15,7 +15,7 @@ public class BitInputImpl implements BitInput {
 
 
     /**
-     * An interface for the byte supplier
+     * An interface for byte suppliers
      *
      */
     public static interface ByteInput {

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 
 /**
- *
+ * An interface for writing bit level values.
  *
  * @author Jin Kwon
  */
@@ -57,17 +57,17 @@ public interface BitOutput {
 
 
     /**
-     * Describe <code>getCount</code> method here.
+     * Returns the number of bits supplied
      *
-     * @return a <code>long</code> value
+     * @return number of bits
      */
     public long getCount();
 
 
     /**
-     * Describe <code>setCount</code> method here.
+     * Sets the number of bits supplied
      *
-     * @param count a <code>long</code> value
+     * @param count number of bits
      */
     public void setCount(long count);
 }

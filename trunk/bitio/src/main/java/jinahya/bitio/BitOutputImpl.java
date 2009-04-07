@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 
 /**
- *
+ * BitOutput implementation.
  *
  * @author Jin Kwon
  */
@@ -14,7 +14,7 @@ public class BitOutputImpl implements BitOutput {
 
 
     /**
-     * An interface for byte consumer.
+     * An interface for byte consumers.
      *
      */
     public static interface ByteOutput {
@@ -153,7 +153,6 @@ public class BitOutputImpl implements BitOutput {
         }
 
         writeUnsignedByte(1, (value < 0 ? 0x01 : 0x00)); // sign bit
-        //writeUnsignedByte(1, value >>> (length - 1)); // sign bit
         writeUnsignedInt(length - 1, value);
     }
 
@@ -184,7 +183,6 @@ public class BitOutputImpl implements BitOutput {
         }
 
         writeUnsignedByte(1, (value < 0L ? 0x01 : 0x00)); // sign bit
-        //writeUnsignedByte(1, (int)(value >>> (length - 1))); // sign bit
         writeUnsignedLong(length - 1, value);
     }
 
