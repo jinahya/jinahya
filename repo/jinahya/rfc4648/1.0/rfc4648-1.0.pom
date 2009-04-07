@@ -60,9 +60,8 @@
       <organization>Jinahya</organization>
       <!--organizationUrl>http://mojo.codehaus.org</organizationUrl-->
       <roles>
-        <role>all but nothing</role>
-        <!--role>architect</role>
-        <role>developer</role-->
+        <role>developer</role>
+        <!--role>architect</role-->
       </roles>
       <timezone>+9</timezone>
       <properties>
@@ -86,7 +85,7 @@
     <license>
       <name>Apache 2</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>manual</distribution>
+      <distribution>repo</distribution>
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
@@ -150,7 +149,7 @@
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/rfc4648</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/rfc4648</developerConnection>
-    <!--tag>HEAD</tag-->
-    <!--url>http://127.0.0.1/websvn/my-project</url-->
+    <tag>HEAD</tag>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/trunk/rfc4648</url>
   </scm>
 </project>
