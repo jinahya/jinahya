@@ -163,64 +163,62 @@
 <a name="153" href="#153">153</a>         }
 <a name="154" href="#154">154</a> 
 <a name="155" href="#155">155</a>         writeUnsignedByte(1, (value &lt; 0 ? 0x01 : 0x00)); <em class="jxr_comment">// sign bit</em>
-<a name="156" href="#156">156</a>         <em class="jxr_comment">//writeUnsignedByte(1, value &gt;&gt;&gt; (length - 1)); // sign bit</em>
-<a name="157" href="#157">157</a>         writeUnsignedInt(length - 1, value);
-<a name="158" href="#158">158</a>     }
+<a name="156" href="#156">156</a>         writeUnsignedInt(length - 1, value);
+<a name="157" href="#157">157</a>     }
+<a name="158" href="#158">158</a> 
 <a name="159" href="#159">159</a> 
-<a name="160" href="#160">160</a> 
-<a name="161" href="#161">161</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
-<a name="162" href="#162">162</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeUnsignedLong(<strong class="jxr_keyword">int</strong> length, <strong class="jxr_keyword">long</strong> value) <strong class="jxr_keyword">throws</strong> IOException {
-<a name="163" href="#163">163</a> 
-<a name="164" href="#164">164</a>         <strong class="jxr_keyword">if</strong> (length &lt; 1 || length &gt;= 64) {
-<a name="165" href="#165">165</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"illegal length: "</span> + length);
-<a name="166" href="#166">166</a>         }
-<a name="167" href="#167">167</a> 
-<a name="168" href="#168">168</a>         <strong class="jxr_keyword">int</strong> quotient = length / 31;
-<a name="169" href="#169">169</a>         <strong class="jxr_keyword">int</strong> remainder = length % 31;
-<a name="170" href="#170">170</a>         <strong class="jxr_keyword">if</strong> (remainder &gt; 0) {
-<a name="171" href="#171">171</a>             writeUnsignedInt(remainder, (<strong class="jxr_keyword">int</strong>)(value &gt;&gt; (quotient * 31)));
-<a name="172" href="#172">172</a>         }
-<a name="173" href="#173">173</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = quotient - 1; i &gt;= 0; i--) {
-<a name="174" href="#174">174</a>             writeUnsignedInt(31, (<strong class="jxr_keyword">int</strong>)(value &gt;&gt; (i * 31)));
-<a name="175" href="#175">175</a>         }
-<a name="176" href="#176">176</a>     }
+<a name="160" href="#160">160</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
+<a name="161" href="#161">161</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeUnsignedLong(<strong class="jxr_keyword">int</strong> length, <strong class="jxr_keyword">long</strong> value) <strong class="jxr_keyword">throws</strong> IOException {
+<a name="162" href="#162">162</a> 
+<a name="163" href="#163">163</a>         <strong class="jxr_keyword">if</strong> (length &lt; 1 || length &gt;= 64) {
+<a name="164" href="#164">164</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"illegal length: "</span> + length);
+<a name="165" href="#165">165</a>         }
+<a name="166" href="#166">166</a> 
+<a name="167" href="#167">167</a>         <strong class="jxr_keyword">int</strong> quotient = length / 31;
+<a name="168" href="#168">168</a>         <strong class="jxr_keyword">int</strong> remainder = length % 31;
+<a name="169" href="#169">169</a>         <strong class="jxr_keyword">if</strong> (remainder &gt; 0) {
+<a name="170" href="#170">170</a>             writeUnsignedInt(remainder, (<strong class="jxr_keyword">int</strong>)(value &gt;&gt; (quotient * 31)));
+<a name="171" href="#171">171</a>         }
+<a name="172" href="#172">172</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = quotient - 1; i &gt;= 0; i--) {
+<a name="173" href="#173">173</a>             writeUnsignedInt(31, (<strong class="jxr_keyword">int</strong>)(value &gt;&gt; (i * 31)));
+<a name="174" href="#174">174</a>         }
+<a name="175" href="#175">175</a>     }
+<a name="176" href="#176">176</a> 
 <a name="177" href="#177">177</a> 
-<a name="178" href="#178">178</a> 
-<a name="179" href="#179">179</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
-<a name="180" href="#180">180</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeLong(<strong class="jxr_keyword">int</strong> length, <strong class="jxr_keyword">long</strong> value) <strong class="jxr_keyword">throws</strong> IOException {
-<a name="181" href="#181">181</a> 
-<a name="182" href="#182">182</a>         <strong class="jxr_keyword">if</strong> (length &lt;= 1 || length &gt; 64) {
-<a name="183" href="#183">183</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"illegal length: "</span> + length);
-<a name="184" href="#184">184</a>         }
-<a name="185" href="#185">185</a> 
-<a name="186" href="#186">186</a>         writeUnsignedByte(1, (value &lt; 0L ? 0x01 : 0x00)); <em class="jxr_comment">// sign bit</em>
-<a name="187" href="#187">187</a>         <em class="jxr_comment">//writeUnsignedByte(1, (int)(value &gt;&gt;&gt; (length - 1))); // sign bit</em>
-<a name="188" href="#188">188</a>         writeUnsignedLong(length - 1, value);
-<a name="189" href="#189">189</a>     }
+<a name="178" href="#178">178</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
+<a name="179" href="#179">179</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeLong(<strong class="jxr_keyword">int</strong> length, <strong class="jxr_keyword">long</strong> value) <strong class="jxr_keyword">throws</strong> IOException {
+<a name="180" href="#180">180</a> 
+<a name="181" href="#181">181</a>         <strong class="jxr_keyword">if</strong> (length &lt;= 1 || length &gt; 64) {
+<a name="182" href="#182">182</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"illegal length: "</span> + length);
+<a name="183" href="#183">183</a>         }
+<a name="184" href="#184">184</a> 
+<a name="185" href="#185">185</a>         writeUnsignedByte(1, (value &lt; 0L ? 0x01 : 0x00)); <em class="jxr_comment">// sign bit</em>
+<a name="186" href="#186">186</a>         writeUnsignedLong(length - 1, value);
+<a name="187" href="#187">187</a>     }
+<a name="188" href="#188">188</a> 
+<a name="189" href="#189">189</a> 
 <a name="190" href="#190">190</a> 
-<a name="191" href="#191">191</a> 
+<a name="191" href="#191">191</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a href="../../jinahya/bitio/BitOutputImpl.html">ByteOutput</a> output;
 <a name="192" href="#192">192</a> 
-<a name="193" href="#193">193</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a href="../../jinahya/bitio/BitOutputImpl.html">ByteOutput</a> output;
-<a name="194" href="#194">194</a> 
-<a name="195" href="#195">195</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <strong class="jxr_keyword">int</strong> index;
-<a name="196" href="#196">196</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> byte octet;
+<a name="193" href="#193">193</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <strong class="jxr_keyword">int</strong> index;
+<a name="194" href="#194">194</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> byte octet;
+<a name="195" href="#195">195</a> 
+<a name="196" href="#196">196</a> 
 <a name="197" href="#197">197</a> 
-<a name="198" href="#198">198</a> 
-<a name="199" href="#199">199</a> 
-<a name="200" href="#200">200</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
-<a name="201" href="#201">201</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getCount() {
-<a name="202" href="#202">202</a>         <strong class="jxr_keyword">return</strong> count;
-<a name="203" href="#203">203</a>     }
-<a name="204" href="#204">204</a> 
-<a name="205" href="#205">205</a> 
-<a name="206" href="#206">206</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
-<a name="207" href="#207">207</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCount(<strong class="jxr_keyword">long</strong> count) {
-<a name="208" href="#208">208</a>         <strong class="jxr_keyword">this</strong>.count = count;
-<a name="209" href="#209">209</a>     }
-<a name="210" href="#210">210</a> 
-<a name="211" href="#211">211</a> 
-<a name="212" href="#212">212</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> count;
-<a name="213" href="#213">213</a> }
+<a name="198" href="#198">198</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
+<a name="199" href="#199">199</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getCount() {
+<a name="200" href="#200">200</a>         <strong class="jxr_keyword">return</strong> count;
+<a name="201" href="#201">201</a>     }
+<a name="202" href="#202">202</a> 
+<a name="203" href="#203">203</a> 
+<a name="204" href="#204">204</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> {@inheritDoc} */</em>
+<a name="205" href="#205">205</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCount(<strong class="jxr_keyword">long</strong> count) {
+<a name="206" href="#206">206</a>         <strong class="jxr_keyword">this</strong>.count = count;
+<a name="207" href="#207">207</a>     }
+<a name="208" href="#208">208</a> 
+<a name="209" href="#209">209</a> 
+<a name="210" href="#210">210</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> count;
+<a name="211" href="#211">211</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
