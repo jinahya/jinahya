@@ -29,19 +29,19 @@ public class RFC4648Constants {
         "wxyz0123456789-_";
 
 
-    /** Alphabet for base32 */
+    /** Alphabet for 'base32' */
     public static final String base32 =
         "ABCDEFGHIJKLMNOP" +
         "QRSTUVWXYZ234567";
 
 
-    /** Alphabet for base32hex */
+    /** Alphabet for 'base32hex' */
     public static final String base32hex =
         "0123456789ABCDEF" +
         "GHIJKLMNOPQRSTUV";
 
 
-    /** Alphabet for base16 */
+    /** Alphabet for 'base16' */
     public static final String base16 =
         "0123456789ABCDEF";
 }
