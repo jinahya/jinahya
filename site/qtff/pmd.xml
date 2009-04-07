@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2009-04-07T19:30:54.192">
+<file name="/Users/onacit/Documents/svnwc/jinahya.googlecode.com/trunk/qtff/src/main/java/jinahya/qtff/Spectrum.java">
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.qtff" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.UnsupportedEncodingException'
+</violation>
+<violation beginline="5" endline="5" begincolumn="1" endcolumn="32" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.qtff" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.nio.charset.Charset'
+</violation>
+</file>
+</pmd>
