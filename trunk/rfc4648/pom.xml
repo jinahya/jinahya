@@ -135,6 +135,14 @@
     </plugins>
   </reporting>
   <repositories>
+    <repository>
+      <!--releases>
+        <enabled>true</enabled>
+      </releases-->
+      <id>jinahya.googlecode.com</id>
+      <name>Jinahya</name>
+      <url>http://jinahya.googlecode.com/svn/repo</url>
+    </repository>
     <!--repository>
       <id>maven-repository.dev.java.net</id>
       <name>Java.net Repository for Maven</name>
