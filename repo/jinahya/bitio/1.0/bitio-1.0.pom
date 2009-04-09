@@ -89,6 +89,8 @@
     <system>googlecode</system>
     <url>http://code.google.com/p/jinahya/issues/list</url>
   </issueManagement>
+  <mailingLists>
+  </mailingLists>
   <organization>
     <name>Jinahya</name>
     <!--url>http://mojo.codehaus.org</url-->
