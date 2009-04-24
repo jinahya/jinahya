@@ -56,19 +56,18 @@ public interface BitInput {
     public long readUnsignedLong(int length) throws IOException;
 
 
-
-    /**
+    /*
      * Returns the number of bits consumed.
      *
      * @return number of bits
-     */
     public long getCount();
+    */
 
 
-    /**
+    /*
      * Sets the number of bits consumed.
      *
      * @param count number of bits
-     */
     public void setCount(long count);
+    */
 }

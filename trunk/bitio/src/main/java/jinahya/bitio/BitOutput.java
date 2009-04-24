@@ -56,18 +56,18 @@ public interface BitOutput {
     public void writeUnsignedLong(int length, long value) throws IOException;
 
 
-    /**
+    /*
      * Returns the number of bits supplied
      *
      * @return number of bits
-     */
     public long getCount();
+    */
 
 
-    /**
+    /*
      * Sets the number of bits supplied
      *
      * @param count number of bits
-     */
     public void setCount(long count);
+    */
 }

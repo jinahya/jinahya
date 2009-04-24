@@ -194,14 +194,21 @@ public class BitOutputImpl implements BitOutput {
     private transient byte octet;
 
 
-
-    /** {@inheritDoc} */
+    /**
+     * Returns the number of bits supplied
+     *
+     * @return number of bits
+     */
     public long getCount() {
         return count;
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Sets the number of bits supplied
+     *
+     * @param count number of bits
+     */
     public void setCount(long count) {
         this.count = count;
     }

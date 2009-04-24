@@ -228,13 +228,21 @@ public class BitInputImpl implements BitInput {
 
 
 
-    /** {@inheritDoc} */
+    /**
+     * Returns the number of bits consumed.
+     *
+     * @return number of bits
+     */
     public long getCount() {
         return count;
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Sets the number of bits consumed.
+     *
+     * @param count number of bits
+     */
     public void setCount(long count) {
         this.count = count;
     }
