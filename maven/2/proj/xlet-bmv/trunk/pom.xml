@@ -95,7 +95,7 @@
   <!--issueManagement/-->
   <!--ciManagement/-->
   <!--mailingLists/-->
-  <scm/>
+  <!--scm/-->
   <!--prerequisites/-->
   <repositories>
   </repositories>
@@ -110,7 +110,7 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>jinahya.googlecode.com</id>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo/bmv</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
   <!--profiles/-->
