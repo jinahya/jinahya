@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya</groupId>
-  <artifactId>bmv</artifactId>
+  <artifactId>xlet-bmv</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
   <dependencies>
@@ -12,6 +12,7 @@
       <artifactId>testng</artifactId>
       <version>5.8</version>
       <classifier>jdk14</classifier>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <!--parent/-->
@@ -71,9 +72,9 @@
     </plugins>
   </reporting>
 
-  <name>bmv</name>
+  <name>xlet-bmv</name>
   <description>Bind-Model-View</description>
-  <url>http://jinahya.googlecode.com/svn/maven/2/site/bmv</url>
+  <url>http://jinahya.googlecode.com/svn/maven/2/site/xlet-bmv</url>
   <inceptionYear>2008</inceptionYear>
   <licenses>
     <license>
@@ -104,8 +105,8 @@
   <distributionManagement>
     <site>
       <id>jinahya.googlecode.com</id>
-      <name>jinahya:bmv</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/bmv</url>
+      <name>jinahya:xlet-bmv</name>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/xlet-bmv</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>

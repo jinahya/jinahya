@@ -78,7 +78,7 @@ public abstract class Bind extends PropertyChangeSupported
                     try {
                         baos.write(buffer, 0, inflater.inflate(buffer));
                     } catch (DataFormatException dfe) {
-                        throw new IOException(dfe.getMessage(), dfe);
+                        throw new IOException(dfe.getMessage());
                     }
                 }
                 baos.flush();

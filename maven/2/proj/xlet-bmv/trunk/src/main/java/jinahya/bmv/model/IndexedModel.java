@@ -15,17 +15,18 @@ import jinahya.bmv.bind.Bind;
 public abstract class IndexedModel extends Model {
 
 
-    public IndexedModel(Class clazz, String name, String read) {
-        super();
+    public IndexedModel(Class clazz, Bind bind, String name, String read) {
+        super(clazz, bind);
 
-        if (!Bind.class.isAssignableFrom(clazz)) {
-            throw new IllegalArgumentException
-                ("not assignable to " + Bind.class);
-        }
-
-        this.clazz = clazz;
         this.name = name;
-        this.read = read;
+
+        try {
+            this.read = clazz.getMethod(read, new Class[0]);
+            value = this.read.invoke(getBind(), new Object[0]);
+            index = Array.getLength(value) == 0 ? -1 : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -42,65 +43,40 @@ public abstract class IndexedModel extends Model {
 
 
     public void setBind(Bind newBind) {
-        if (newBind != null & !clazz.isInstance(newBind)) {
-            throw new IllegalArgumentException("not an instannce of " + clazz);
-        }
-
-        if (newBind == null) {
-            setValue(null);
-        } else {
-            try {
-                Method method = clazz.getMethod(read, new Class[0]);
-                setValue(method.invoke(newBind, new Object[0]));
-            } catch (Exception e) {
-                e.printStackTrace();
-                setValue(null);
-            }
-        }
-
         super.setBind(newBind);
+
+        try {
+            setValue(read.invoke(newBind, new Object[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public synchronized Object getValue() {
+    public Object getValue() {
         return value;
     }
 
 
-    protected synchronized void setValue(Object newValue) {
-
-        if (newValue == null) {
-            index = -1;
-        } else {
-            try {
-                index = Array.getLength(newValue) == 0 ? -1 : 0;
-            } catch (IllegalArgumentException iae) { // not an array?
-                iae.printStackTrace();
-                setValue(null);
-                return;
-            }
-        }
-
+    protected void setValue(Object newValue) {
         Object oldValue = value;
         value = newValue;
+
+        index = Array.getLength(value) == 0 ? -1 : 0;
 
         firePropertyChange("value", oldValue, value);
         firePropertyChange(name, oldValue, value);
     }
 
 
-    public synchronized int getIndex() {
+    public int getIndex() {
         return index;
     }
 
 
-    public synchronized void setIndex(int newIndex) {
+    public void setIndex(int newIndex) {
 
-        if (value == null) {
-            return;
-        }
-
-        if (newIndex < 0 || newIndex >= Array.getLength(value)) {
+        if (newIndex < -1 || newIndex >= Array.getLength(value)) {
             throw new ArrayIndexOutOfBoundsException();
         }
 
@@ -110,12 +86,12 @@ public abstract class IndexedModel extends Model {
     }
 
 
-    public synchronized boolean increaseIndex(int count, boolean roll) {
+    public boolean increaseIndex(int count, boolean roll) {
         if (count <= 0) {
             throw new IllegalArgumentException("negative count: " + count);
         }
 
-        if (value == null) {
+        if (index < 0) {
             return false;
         }
 
@@ -140,12 +116,12 @@ public abstract class IndexedModel extends Model {
     }
 
 
-    public synchronized boolean decreaseIndex(int count, boolean roll) {
+    public boolean decreaseIndex(int count, boolean roll) {
         if (count <= 0) {
             throw new IllegalArgumentException("negative count: " + count);
         }
 
-        if (value == null) {
+        if (index < 0) {
             return false;
         }
 
@@ -170,18 +146,17 @@ public abstract class IndexedModel extends Model {
     }
 
 
-    public synchronized Object getIndexedValue() {
-        if (value == null || Array.getLength(value) == 0) {
+    public Object getIndexedValue() {
+        if (index < 0 || Array.getLength(value) == 0) {
             return null;
         }
         return Array.get(value, index);
     }
 
 
-    private Class clazz;
     private String name;
-    private String read;
+    private Method read;
 
-    private Object value = null;
-    private int index = -1;
+    private Object value;
+    private int index;
 }

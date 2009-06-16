@@ -11,7 +11,6 @@ import java.awt.MediaTracker;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -37,8 +36,60 @@ public abstract class View extends Container
     implements KeyListener, PropertyChangeListener {
 
 
-    public View() {
+    public static void activate(Component component) {
+        if (component instanceof View) {
+            ((View) component).activate();
+        }
+        if (component instanceof Container) {
+            Component[] components = ((Container) component).getComponents();
+            for (int i = 0; i < components.length; i++) {
+                activate(components[i]);
+            }
+        }
+    }
+
+
+    public static void deactivate(Component component) {
+        if (component instanceof Container) {
+            Component[] components = ((Container) component).getComponents();
+            for (int i = 0; i < components.length; i++) {
+                deactivate(components[i]);
+            }
+        }
+        if (component instanceof View) {
+            ((View) component).deactivate();
+        }
+    }
+
+
+    public static void removeAllImages(Component component) {
+        if (component instanceof Container) {
+            Component[] components = ((Container) component).getComponents();
+            for (int i = 0; i < components.length; i++) {
+                removeAllImages(components[i]);
+            }
+        }
+        if (component instanceof View) {
+            ((View) component).removeAllImages();
+        }
+    }
+
+
+    public View(Class clazz, Model model) {
         super();
+
+        if (!Model.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException
+                (clazz + " is not assignable to " + Model.class);
+        }
+        if (!clazz.isInstance(model)) {
+            throw new IllegalArgumentException
+                (String.valueOf(model) + " is not an instance of " + clazz);
+        }
+
+        this.clazz = clazz;
+        this.model = model;
+        this.model.addPropertyChangeListener(this);
 
         enableEvents(AWTEvent.KEY_EVENT_MASK);
         enableEvents(AWTEvent.COMPONENT_EVENT_MASK);
@@ -54,49 +105,12 @@ public abstract class View extends Container
 
     public synchronized void activate() {
         activated = true;
-        Component[] components = getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof View) {
-                ((View) components[i]).activate();
-            }
-        }
-
     }
 
 
     public synchronized void deactivate() {
-        Component[] components = getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof View) {
-                ((View) components[i]).deactivate();
-            }
-        }
         activated = false;
     }
-
-
-    /*
-    public boolean isActivated() {
-        return activated;
-    }
-
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-
-        Component[] components = getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof View) {
-                View view = (View) components[i];
-                view.setActivated(activated);
-            }
-        }
-
-        if (activated) {
-            repaint();
-        }
-    }
-    */
 
 
     protected Vector splitText(Graphics g, int width, String string,
@@ -229,16 +243,19 @@ public abstract class View extends Container
 
 
     protected Image addImageFromResource(String name) {
+        System.out.println("addImageFromResource: " + name);
         return addImage(getClass().getResource(name));
     }
 
 
     protected Image addImage(URL url) {
+        System.out.println("addImage: " + url);
         return addImage(toolkit.createImage(url));
     }
 
 
     protected Image addImage(byte[] image) {
+        System.out.println("addImage: " + image);
         return addImage(toolkit.createImage(image));
     }
 
@@ -249,6 +266,7 @@ public abstract class View extends Container
 
 
     protected Image addImage(String filename) {
+        System.out.println("addImage: " + filename);
         return addImage(toolkit.createImage(filename));
     }
 
@@ -277,7 +295,8 @@ public abstract class View extends Container
                     ie.printStackTrace();
                 }
                 if (tracker.isErrorID(id)) {
-                    System.out.println("IMAGE LOADING ERROR");
+                    System.out.println
+                        (getClass() + ": IMAGE LOADING ERROR: " + image);
                 }
                 tracker.removeImage(image, id);
                 table.put(image, Boolean.TRUE);
@@ -309,24 +328,25 @@ public abstract class View extends Container
             }
             table.clear();
         }
-
     }
 
 
-    public void show(final Component focusOwner, boolean requestFocus) {
-        if (isVisible()) {
-            repaint();
-        } else {
-            setVisible(true);
-        }
-        if (requestFocus) {
-            requestFocus();
-            addComponentListener(new ComponentAdapter() {
-                    public void componentHidden(ComponentEvent ce) {
-                        focusOwner.requestFocus();
-                        removeComponentListener(this);
-                    }
-                });
+    public void show(Component focusOwner) {
+        this.focusOwner = focusOwner;
+        requestFocus();
+        setVisible(true);
+    }
+
+
+    //@Override
+    protected void processComponentEvent(ComponentEvent ce) {
+        super.processComponentEvent(ce);
+
+        if (ce.getID() == ComponentEvent.COMPONENT_HIDDEN) {
+            if (focusOwner != null) {
+                focusOwner.requestFocus();
+                focusOwner = null;
+            }
         }
     }
 
@@ -337,13 +357,15 @@ public abstract class View extends Container
 
 
     public void setModel(Model newModel) {
-        if (model != null) {
-            model.removePropertyChangeListener(this);
+
+        if (!clazz.isInstance(newModel)) {
+            throw new IllegalArgumentException
+                (String.valueOf(newModel) + " is not an instance of " + clazz);
         }
+
+        model.removePropertyChangeListener(this);
         model = newModel;
-        if (model != null) {
-            model.addPropertyChangeListener(this);
-        }
+        model.addPropertyChangeListener(this);
     }
 
 
@@ -353,5 +375,8 @@ public abstract class View extends Container
 
     private boolean activated = false;
 
-    private Model model = null;
+    private Class clazz;
+    private Model model;
+
+    private Component focusOwner = null;
 }
