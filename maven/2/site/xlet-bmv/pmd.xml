@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2009-06-16T21:57:47.837">
+<pmd version="4.2.2" timestamp="2009-06-17T00:42:35.905">
 <file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/xlet-bmv/trunk/src/main/java/jinahya/bmv/view/View.java">
-<violation beginline="346" endline="349" begincolumn="13" endcolumn="13" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="jinahya.bmv.view" class="View" method="processComponentEvent" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+<violation beginline="340" endline="343" begincolumn="13" endcolumn="13" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="jinahya.bmv.view" class="View" method="processComponentEvent" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
 </file>

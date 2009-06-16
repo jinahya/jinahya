@@ -47,14 +47,14 @@
 <a name="37" href="#37">37</a>  
 <a name="38" href="#38">38</a>  
 <a name="39" href="#39">39</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> activate(Component component) {
-<a name="40" href="#40">40</a>          <strong class="jxr_keyword">if</strong> (component instanceof View) {
-<a name="41" href="#41">41</a>              ((<a href="../../../jinahya/bmv/view/View.html">View</a>) component).activate();
-<a name="42" href="#42">42</a>          }
-<a name="43" href="#43">43</a>          <strong class="jxr_keyword">if</strong> (component instanceof Container) {
-<a name="44" href="#44">44</a>              Component[] components = ((Container) component).getComponents();
-<a name="45" href="#45">45</a>              <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; components.length; i++) {
-<a name="46" href="#46">46</a>                  activate(components[i]);
-<a name="47" href="#47">47</a>              }
+<a name="40" href="#40">40</a>          <strong class="jxr_keyword">if</strong> (component instanceof Container) {
+<a name="41" href="#41">41</a>              Component[] components = ((Container) component).getComponents();
+<a name="42" href="#42">42</a>              <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; components.length; i++) {
+<a name="43" href="#43">43</a>                  activate(components[i]);
+<a name="44" href="#44">44</a>              }
+<a name="45" href="#45">45</a>          }
+<a name="46" href="#46">46</a>          <strong class="jxr_keyword">if</strong> (component instanceof View) {
+<a name="47" href="#47">47</a>              ((<a href="../../../jinahya/bmv/view/View.html">View</a>) component).activate();
 <a name="48" href="#48">48</a>          }
 <a name="49" href="#49">49</a>      }
 <a name="50" href="#50">50</a>  
@@ -326,70 +326,64 @@
 <a name="316" href="#316">316</a> 
 <a name="317" href="#317">317</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeAllImages() {
 <a name="318" href="#318">318</a>         <strong class="jxr_keyword">synchronized</strong> (table) {
-<a name="319" href="#319">319</a>             Component[] components = getComponents();
-<a name="320" href="#320">320</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; components.length; i++) {
-<a name="321" href="#321">321</a>                 <strong class="jxr_keyword">if</strong> (components[i] instanceof View) {
-<a name="322" href="#322">322</a>                     ((<a href="../../../jinahya/bmv/view/View.html">View</a>) components[i]).removeAllImages();
-<a name="323" href="#323">323</a>                 }
-<a name="324" href="#324">324</a>             }
-<a name="325" href="#325">325</a>             <strong class="jxr_keyword">for</strong> (Enumeration e = table.keys(); e.hasMoreElements(); ) {
-<a name="326" href="#326">326</a>                 Image image = (Image) e.nextElement();
-<a name="327" href="#327">327</a>                 image.flush();
-<a name="328" href="#328">328</a>             }
-<a name="329" href="#329">329</a>             table.clear();
-<a name="330" href="#330">330</a>         }
-<a name="331" href="#331">331</a>     }
-<a name="332" href="#332">332</a> 
+<a name="319" href="#319">319</a>             <strong class="jxr_keyword">for</strong> (Enumeration e = table.keys(); e.hasMoreElements(); ) {
+<a name="320" href="#320">320</a>                 Image image = (Image) e.nextElement();
+<a name="321" href="#321">321</a>                 image.flush();
+<a name="322" href="#322">322</a>             }
+<a name="323" href="#323">323</a>             table.clear();
+<a name="324" href="#324">324</a>         }
+<a name="325" href="#325">325</a>     }
+<a name="326" href="#326">326</a> 
+<a name="327" href="#327">327</a> 
+<a name="328" href="#328">328</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> show(Component focusOwner) {
+<a name="329" href="#329">329</a>         <strong class="jxr_keyword">this</strong>.focusOwner = focusOwner;
+<a name="330" href="#330">330</a>         requestFocus();
+<a name="331" href="#331">331</a>         setVisible(<strong class="jxr_keyword">true</strong>);
+<a name="332" href="#332">332</a>     }
 <a name="333" href="#333">333</a> 
-<a name="334" href="#334">334</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> show(Component focusOwner) {
-<a name="335" href="#335">335</a>         <strong class="jxr_keyword">this</strong>.focusOwner = focusOwner;
-<a name="336" href="#336">336</a>         requestFocus();
-<a name="337" href="#337">337</a>         setVisible(<strong class="jxr_keyword">true</strong>);
-<a name="338" href="#338">338</a>     }
-<a name="339" href="#339">339</a> 
-<a name="340" href="#340">340</a> 
-<a name="341" href="#341">341</a>     <em class="jxr_comment">//@Override</em>
-<a name="342" href="#342">342</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processComponentEvent(ComponentEvent ce) {
-<a name="343" href="#343">343</a>         <strong class="jxr_keyword">super</strong>.processComponentEvent(ce);
-<a name="344" href="#344">344</a> 
-<a name="345" href="#345">345</a>         <strong class="jxr_keyword">if</strong> (ce.getID() == ComponentEvent.COMPONENT_HIDDEN) {
-<a name="346" href="#346">346</a>             <strong class="jxr_keyword">if</strong> (focusOwner != <strong class="jxr_keyword">null</strong>) {
-<a name="347" href="#347">347</a>                 focusOwner.requestFocus();
-<a name="348" href="#348">348</a>                 focusOwner = <strong class="jxr_keyword">null</strong>;
-<a name="349" href="#349">349</a>             }
-<a name="350" href="#350">350</a>         }
-<a name="351" href="#351">351</a>     }
+<a name="334" href="#334">334</a> 
+<a name="335" href="#335">335</a>     <em class="jxr_comment">//@Override</em>
+<a name="336" href="#336">336</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processComponentEvent(ComponentEvent ce) {
+<a name="337" href="#337">337</a>         <strong class="jxr_keyword">super</strong>.processComponentEvent(ce);
+<a name="338" href="#338">338</a> 
+<a name="339" href="#339">339</a>         <strong class="jxr_keyword">if</strong> (ce.getID() == ComponentEvent.COMPONENT_HIDDEN) {
+<a name="340" href="#340">340</a>             <strong class="jxr_keyword">if</strong> (focusOwner != <strong class="jxr_keyword">null</strong>) {
+<a name="341" href="#341">341</a>                 focusOwner.requestFocus();
+<a name="342" href="#342">342</a>                 focusOwner = <strong class="jxr_keyword">null</strong>;
+<a name="343" href="#343">343</a>             }
+<a name="344" href="#344">344</a>         }
+<a name="345" href="#345">345</a>     }
+<a name="346" href="#346">346</a> 
+<a name="347" href="#347">347</a> 
+<a name="348" href="#348">348</a>     <strong class="jxr_keyword">public</strong> <a href="../../../jinahya/bmv/model/Model.html">Model</a> getModel() {
+<a name="349" href="#349">349</a>         <strong class="jxr_keyword">return</strong> model;
+<a name="350" href="#350">350</a>     }
+<a name="351" href="#351">351</a> 
 <a name="352" href="#352">352</a> 
-<a name="353" href="#353">353</a> 
-<a name="354" href="#354">354</a>     <strong class="jxr_keyword">public</strong> <a href="../../../jinahya/bmv/model/Model.html">Model</a> getModel() {
-<a name="355" href="#355">355</a>         <strong class="jxr_keyword">return</strong> model;
-<a name="356" href="#356">356</a>     }
-<a name="357" href="#357">357</a> 
-<a name="358" href="#358">358</a> 
-<a name="359" href="#359">359</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModel(<a href="../../../jinahya/bmv/model/Model.html">Model</a> newModel) {
-<a name="360" href="#360">360</a> 
-<a name="361" href="#361">361</a>         <strong class="jxr_keyword">if</strong> (!clazz.isInstance(newModel)) {
-<a name="362" href="#362">362</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="363" href="#363">363</a>                 (String.valueOf(newModel) + <span class="jxr_string">" is not an instance of "</span> + clazz);
-<a name="364" href="#364">364</a>         }
+<a name="353" href="#353">353</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModel(<a href="../../../jinahya/bmv/model/Model.html">Model</a> newModel) {
+<a name="354" href="#354">354</a> 
+<a name="355" href="#355">355</a>         <strong class="jxr_keyword">if</strong> (!clazz.isInstance(newModel)) {
+<a name="356" href="#356">356</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="357" href="#357">357</a>                 (String.valueOf(newModel) + <span class="jxr_string">" is not an instance of "</span> + clazz);
+<a name="358" href="#358">358</a>         }
+<a name="359" href="#359">359</a> 
+<a name="360" href="#360">360</a>         model.removePropertyChangeListener(<strong class="jxr_keyword">this</strong>);
+<a name="361" href="#361">361</a>         model = newModel;
+<a name="362" href="#362">362</a>         model.addPropertyChangeListener(<strong class="jxr_keyword">this</strong>);
+<a name="363" href="#363">363</a>     }
+<a name="364" href="#364">364</a> 
 <a name="365" href="#365">365</a> 
-<a name="366" href="#366">366</a>         model.removePropertyChangeListener(<strong class="jxr_keyword">this</strong>);
-<a name="367" href="#367">367</a>         model = newModel;
-<a name="368" href="#368">368</a>         model.addPropertyChangeListener(<strong class="jxr_keyword">this</strong>);
-<a name="369" href="#369">369</a>     }
-<a name="370" href="#370">370</a> 
+<a name="366" href="#366">366</a>     <strong class="jxr_keyword">private</strong> MediaTracker tracker;
+<a name="367" href="#367">367</a>     <strong class="jxr_keyword">private</strong> Toolkit toolkit = Toolkit.getDefaultToolkit();
+<a name="368" href="#368">368</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Hashtable table = <strong class="jxr_keyword">new</strong> Hashtable();
+<a name="369" href="#369">369</a> 
+<a name="370" href="#370">370</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> activated = false;
 <a name="371" href="#371">371</a> 
-<a name="372" href="#372">372</a>     <strong class="jxr_keyword">private</strong> MediaTracker tracker;
-<a name="373" href="#373">373</a>     <strong class="jxr_keyword">private</strong> Toolkit toolkit = Toolkit.getDefaultToolkit();
-<a name="374" href="#374">374</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Hashtable table = <strong class="jxr_keyword">new</strong> Hashtable();
-<a name="375" href="#375">375</a> 
-<a name="376" href="#376">376</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> activated = false;
-<a name="377" href="#377">377</a> 
-<a name="378" href="#378">378</a>     <strong class="jxr_keyword">private</strong> Class clazz;
-<a name="379" href="#379">379</a>     <strong class="jxr_keyword">private</strong> <a href="../../../jinahya/bmv/model/Model.html">Model</a> model;
-<a name="380" href="#380">380</a> 
-<a name="381" href="#381">381</a>     <strong class="jxr_keyword">private</strong> Component focusOwner = <strong class="jxr_keyword">null</strong>;
-<a name="382" href="#382">382</a> }
+<a name="372" href="#372">372</a>     <strong class="jxr_keyword">private</strong> Class clazz;
+<a name="373" href="#373">373</a>     <strong class="jxr_keyword">private</strong> <a href="../../../jinahya/bmv/model/Model.html">Model</a> model;
+<a name="374" href="#374">374</a> 
+<a name="375" href="#375">375</a>     <strong class="jxr_keyword">private</strong> Component focusOwner = <strong class="jxr_keyword">null</strong>;
+<a name="376" href="#376">376</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
