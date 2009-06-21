@@ -42,6 +42,7 @@ public abstract class IndexedModel extends Model {
     }
 
 
+    //@Override
     public void setBind(Bind newBind) {
         super.setBind(newBind);
 
@@ -70,6 +71,7 @@ public abstract class IndexedModel extends Model {
 
 
     public int getIndex() {
+        System.out.println(toString() + " -> getting index: " + index);
         return index;
     }
 
@@ -82,6 +84,7 @@ public abstract class IndexedModel extends Model {
 
         int oldIndex = index;
         index = newIndex;
+        System.out.println(toString() + " -> setting index: " + index);
         firePropertyChange("index", oldIndex, index);
     }
 
@@ -151,6 +154,11 @@ public abstract class IndexedModel extends Model {
             return null;
         }
         return Array.get(value, index);
+    }
+
+
+    public int getLength() {
+        return Array.getLength(value);
     }
 
 

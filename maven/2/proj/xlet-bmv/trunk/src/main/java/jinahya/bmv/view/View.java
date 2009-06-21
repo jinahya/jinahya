@@ -37,40 +37,55 @@ public abstract class View extends Container
 
 
     public static void activate(Component component) {
-        if (component instanceof View) {
-            ((View) component).activate();
-        }
         if (component instanceof Container) {
             Component[] components = ((Container) component).getComponents();
             for (int i = 0; i < components.length; i++) {
                 activate(components[i]);
             }
         }
+        if (component instanceof View) {
+            View view = (View) component;
+            if (!view.active) {
+                view.active = true;
+                view.activated();
+            }
+        }
     }
 
 
     public static void deactivate(Component component) {
+        if (component instanceof View) {
+            View view = (View) component;
+            if (view.active) {
+                view.active = false;
+                view.deactivated();
+            }
+        }
         if (component instanceof Container) {
             Component[] components = ((Container) component).getComponents();
             for (int i = 0; i < components.length; i++) {
                 deactivate(components[i]);
             }
         }
-        if (component instanceof View) {
-            ((View) component).deactivate();
-        }
     }
 
 
-    public static void removeAllImages(Component component) {
+    public static void removeImages(Component component) {
         if (component instanceof Container) {
             Component[] components = ((Container) component).getComponents();
             for (int i = 0; i < components.length; i++) {
-                removeAllImages(components[i]);
+                removeImages(components[i]);
             }
         }
         if (component instanceof View) {
-            ((View) component).removeAllImages();
+            Hashtable table = ((View) component).table;
+            synchronized (table) {
+                for (Enumeration e = table.keys(); e.hasMoreElements();) {
+                    Image image = (Image) e.nextElement();
+                    image.flush();
+                }
+                table.clear();
+            }
         }
     }
 
@@ -98,18 +113,18 @@ public abstract class View extends Container
     }
 
 
-    public boolean activated() {
-        return activated;
+    protected synchronized final boolean active() {
+        return active;
     }
 
 
-    public synchronized void activate() {
-        activated = true;
+    protected void activated() {
+        // do nothing
     }
 
 
-    public synchronized void deactivate() {
-        activated = false;
+    protected void deactivated() {
+        // do nothing
     }
 
 
@@ -218,6 +233,31 @@ public abstract class View extends Container
     }
 
 
+    protected void drawString(Graphics g, String string, Rectangle boundary,
+                              boolean clip, int halign, int valign,
+                              String ellipsis) {
+
+        if (string == null) {
+            return;
+        }
+        FontMetrics metrics = g.getFontMetrics();
+
+        if (metrics.stringWidth(string) <= boundary.width) {
+            drawString(g, string, boundary, clip, halign, valign);
+            return;
+        }
+
+        for (int i = 0; i < string.length(); i++) {
+            String s = string.substring(0, string.length() - i) + ellipsis;
+            if (metrics.stringWidth(s) <= boundary.width) {
+                drawString(g, s, boundary, clip, halign, valign);
+                return;
+            }
+        }
+        return;
+    }
+
+
     // java.awt.event.KeyListener
     public void keyPressed(KeyEvent ke) {
         //empty
@@ -243,19 +283,16 @@ public abstract class View extends Container
 
 
     protected Image addImageFromResource(String name) {
-        System.out.println("addImageFromResource: " + name);
         return addImage(getClass().getResource(name));
     }
 
 
     protected Image addImage(URL url) {
-        System.out.println("addImage: " + url);
         return addImage(toolkit.createImage(url));
     }
 
 
     protected Image addImage(byte[] image) {
-        System.out.println("addImage: " + image);
         return addImage(toolkit.createImage(image));
     }
 
@@ -266,7 +303,6 @@ public abstract class View extends Container
 
 
     protected Image addImage(String filename) {
-        System.out.println("addImage: " + filename);
         return addImage(toolkit.createImage(filename));
     }
 
@@ -314,23 +350,6 @@ public abstract class View extends Container
     }
 
 
-    public void removeAllImages() {
-        synchronized (table) {
-            Component[] components = getComponents();
-            for (int i = 0; i < components.length; i++) {
-                if (components[i] instanceof View) {
-                    ((View) components[i]).removeAllImages();
-                }
-            }
-            for (Enumeration e = table.keys(); e.hasMoreElements(); ) {
-                Image image = (Image) e.nextElement();
-                image.flush();
-            }
-            table.clear();
-        }
-    }
-
-
     public void show(Component focusOwner) {
         this.focusOwner = focusOwner;
         requestFocus();
@@ -373,7 +392,7 @@ public abstract class View extends Container
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
     private final Hashtable table = new Hashtable();
 
-    private boolean activated = false;
+    private volatile boolean active = false;
 
     private Class clazz;
     private Model model;
