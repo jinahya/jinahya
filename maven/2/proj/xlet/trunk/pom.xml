@@ -5,7 +5,7 @@
   <groupId>jinahya</groupId>
   <artifactId>xlet</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>${project.rootVersion}</version>
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
@@ -26,6 +26,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.rootVersion>1.0</project.rootVersion>
   </properties>
 
   <build>

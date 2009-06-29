@@ -5,11 +5,11 @@
   <parent>
     <artifactId>xlet</artifactId>
     <groupId>jinahya</groupId>
-    <version>1.0</version>
+    <version>${project.rootVersion}</version>
   </parent>
   <groupId>jinahya.xlet</groupId>
   <artifactId>view</artifactId>
-  <version>1.0</version>
+  <version>${project.parent.version}</version>
   <name>view</name>
   <url>http://maven.apache.org</url>
   <dependencies>
