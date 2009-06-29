@@ -1,9 +1,6 @@
 package jinahya.xlet.model;
 
 
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyChangeListener;
-
 import jinahya.xlet.bind.Bind;
 
 
@@ -34,16 +31,16 @@ public abstract class Model extends AbstractModel {
     }
 
 
-    public void setBind(Bind bind) {
-        if (!clazz.isInstance(bind)) {
+    public void setBind(Bind newBind) {
+        if (!clazz.isInstance(newBind)) {
             throw new IllegalArgumentException
                 (bind + " is not an bind of " + clazz);
         }
-        this.bind.removePropertyListener(this);
-        Bind old = this.bind;
-        this.bind = bind;
-        firePropertyChangeEvent("bind", old, this.bind);
-        this.bind.addPropertyListener(this);
+        bind.removePropertyChangeListener(this);
+        Bind oldBind = bind;
+        bind = newBind;
+        firePropertyChange("bind", oldBind, bind);
+        bind.addPropertyChangeListener(this);
     }
 
 

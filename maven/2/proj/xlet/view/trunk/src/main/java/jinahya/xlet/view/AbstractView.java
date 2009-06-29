@@ -36,7 +36,7 @@ public abstract class AbstractView
                 }
             }
             if (component instanceof View) {
-                View view = (View) component;
+                AbstractView view = (AbstractView) component;
                 if (!view.active) {
                     view.activating();
                     view.active = true;
@@ -57,7 +57,7 @@ public abstract class AbstractView
                 }
             }
             if (component instanceof View) {
-                View view = (View) component;
+                AbstractView view = (AbstractView) component;
                 if (view.active) {
                     view.deactivating();
                     view.active = false;
@@ -78,7 +78,7 @@ public abstract class AbstractView
                 }
             }
             if (component instanceof View) {
-                View view = (View) component;
+                AbstractView view = (AbstractView) component;
                 synchronized (view.table) {
                     for (Enumeration e = view.table.elements();
                          e.hasMoreElements(); ) {
@@ -92,7 +92,7 @@ public abstract class AbstractView
     }
 
 
-    public View() {
+    public AbstractView() {
         tracker = new MediaTracker(this);
     }
 

@@ -24,24 +24,6 @@ public abstract class AbstractBind implements Serializable {
     }
 
 
-    /**
-     *
-     * @param out
-     * @return this object
-     * @throws IOException if an I/O error occurs
-     */
-    public abstract Object send(DataOutput out) throws IOException;
-
-
-    /**
-     *
-     * @param in
-     * @return this object
-     * @throws IOException if an I/O error occurs
-     */
-    public abstract Object receive(DataInput in) throws IOException;
-
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
     }

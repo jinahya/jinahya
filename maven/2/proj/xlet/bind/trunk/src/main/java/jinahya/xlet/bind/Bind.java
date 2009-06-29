@@ -4,6 +4,7 @@ package jinahya.xlet.bind;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Hashtable;
 
 
 /**
@@ -25,7 +26,7 @@ public abstract class Bind extends AbstractBind {
      * @return this object
      * @throws IOException if an I/O error occurs
      */
-    public abstract Object send(DataOutput out) throws IOException;
+    public abstract Bind send(DataOutput out) throws IOException;
 
 
     /**
@@ -34,5 +35,9 @@ public abstract class Bind extends AbstractBind {
      * @return this object
      * @throws IOException if an I/O error occurs
      */
-    public abstract Object receive(DataInput in) throws IOException;
+    public abstract Bind receive(DataInput in) throws IOException;
+
+
+    private final Hashtable reqParams = new Hashtable();
+    private final Hashtable resParams = new Hashtable();
 }
