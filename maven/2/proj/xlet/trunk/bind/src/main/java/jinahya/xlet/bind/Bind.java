@@ -48,7 +48,7 @@ public abstract class Bind implements Serializable {
 
         boolean nullFlag = in.readBoolean();
         if (nullFlag & !nullable) {
-            throw new NullPointerException("null received");
+            throw new NullPointerException("null received for non-null");
         }
         byte[] v = null;
         if (!nullFlag) {
@@ -63,7 +63,7 @@ public abstract class Bind implements Serializable {
         throws IOException {
 
         if (!nullable & v == null) {
-            throw new NullPointerException("sending null");
+            throw new NullPointerException("sending null for non-null");
         }
         out.writeBoolean(v == null);
         if (v != null) {
@@ -85,7 +85,7 @@ public abstract class Bind implements Serializable {
         throws IOException {
 
         if (!nullable & v == null) {
-            throw new NullPointerException("sending null");
+            throw new NullPointerException("sending null for non-null");
         }
 
         sendBytes(out, v == null ? null : v.getBytes("UTF-8"), nullable);
