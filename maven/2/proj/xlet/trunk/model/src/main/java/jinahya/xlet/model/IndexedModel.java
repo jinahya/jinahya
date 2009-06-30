@@ -22,6 +22,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import jinahya.xlet.bind.Bind;
+
 
 /**
  *
@@ -41,6 +43,25 @@ public abstract class IndexedModel extends Model {
 
         value = this.read.invoke(getBind(), new Object[0]);
         index = Array.getLength(value) == 0 ? -1 : 0;
+    }
+
+
+    //@Override
+    public synchronized void setBind(Bind bind) {
+        super.setBind(bind);
+    }
+
+
+    public synchronized Object getIndexedValue() {
+        if (index < 0 || Array.getLength(value) == 0) {
+            return null;
+        }
+        return Array.get(value, index);
+    }
+
+
+    public synchronized int getLength() {
+        return Array.getLength(value);
     }
 
 

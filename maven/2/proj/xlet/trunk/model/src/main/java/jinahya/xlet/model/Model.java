@@ -46,6 +46,7 @@ public abstract class Model implements PropertyChangeListener {
         }
 
         bind = (Bind) (this.clazz = clazz).newInstance();
+        bind.addPropertyChangeListener(this);
 
         pcs = new PropertyChangeSupport(this);
     }
