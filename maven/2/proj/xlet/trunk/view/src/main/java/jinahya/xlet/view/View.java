@@ -46,7 +46,7 @@ import java.util.Vector;
 public class View extends Container {
 
 
-    public static final void activate(Component component) {
+    public static synchronized final void activate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -67,7 +67,7 @@ public class View extends Container {
     }
 
 
-    public static final void deactivate(Component component) {
+    public static synchronized final void deactivate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -88,7 +88,7 @@ public class View extends Container {
     }
 
 
-    public static final void removeAllImages(Component component) {
+    public static synchronized final void removeAllImages(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
