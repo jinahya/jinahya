@@ -114,7 +114,7 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>jinahya.googlecode.com</id>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo/</url>
       <!--url>scm:svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
     </repository>
   </distributionManagement>
