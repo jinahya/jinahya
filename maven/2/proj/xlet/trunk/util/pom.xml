@@ -9,9 +9,16 @@
     <version>1.0</version>
   </parent>
   <groupId>jinahya.xlet</groupId>
-  <artifactId>view</artifactId>
+  <artifactId>util</artifactId>
   <version>${project.parent.version}</version>
-  <name>view</name>
+  <name>util</name>
   <url>http://maven.apache.org</url>
-  <!--dependencies/-->
+  <dependencies>
+    <!--dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency-->
+  </dependencies>
 </project>

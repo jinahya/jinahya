@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya</groupId>
   <artifactId>xlet</artifactId>
   <packaging>pom</packaging>
-  <version>${project.rootVersion}</version>
+  <version>1.0</version>
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
@@ -24,11 +22,12 @@
     <module>bind</module>
     <module>model</module>
     <module>view</module>
+    <module>util</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.rootVersion>1.0</project.rootVersion>
+    <!--project.rootVersion>1.0</project.rootVersion-->
   </properties>
 
   <build>
@@ -115,7 +114,8 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>jinahya.googlecode.com</id>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo/</url>
+      <!--url>scm:svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
     </repository>
   </distributionManagement>
   <!--profiles/-->
