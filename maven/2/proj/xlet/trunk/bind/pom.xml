@@ -5,7 +5,8 @@
   <parent>
     <artifactId>xlet</artifactId>
     <groupId>jinahya</groupId>
-    <version>${project.rootVersion}</version>
+    <version>1.0</version>
+    <!--version>${project.rootVersion}</version-->
   </parent>
   <groupId>jinahya.xlet</groupId>
   <artifactId>bind</artifactId>
