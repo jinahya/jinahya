@@ -27,7 +27,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!--project.rootVersion>1.0</project.rootVersion-->
+    <project.rootVersion>1.0</project.rootVersion>
   </properties>
 
   <build>
@@ -48,6 +48,11 @@
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.3</version>
       </plugin>
     </plugins>
   </build>
