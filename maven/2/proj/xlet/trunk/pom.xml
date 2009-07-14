@@ -5,7 +5,8 @@
   <groupId>jinahya</groupId>
   <artifactId>xlet</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <!--version>1.0</version-->
+  <version>${project.rootVersion}</version>
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
