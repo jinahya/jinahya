@@ -109,12 +109,12 @@ public final class Preferences {
 
 
     public String get(String key, String def) {
-        return (String) getClassifiedValue(def.getClass(), key, def);
+        return (String) getClassifiedValue(String.class, key, def);
     }
 
 
     public void put(String key, String val) {
-        putClassifiedValue(val.getClass(), key, val);
+        putClassifiedValue(String.class, key, val);
     }
 
 

@@ -46,7 +46,7 @@ import java.util.Vector;
 public class View extends Container {
 
 
-    public static synchronized final void activate(Component component) {
+    public static synchronized void activate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -67,7 +67,7 @@ public class View extends Container {
     }
 
 
-    public static synchronized final void deactivate(Component component) {
+    public static synchronized void deactivate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -88,7 +88,7 @@ public class View extends Container {
     }
 
 
-    public static synchronized final void removeAllImages(Component component) {
+    public static synchronized void removeAllImages(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -117,7 +117,7 @@ public class View extends Container {
     }
 
 
-    protected synchronized final boolean active() {
+    protected synchronized boolean active() {
         return active;
     }
 
@@ -142,10 +142,11 @@ public class View extends Container {
     }
 
 
+
     private boolean active = false;
 
 
-    protected final Image addImage(InputStream in) throws IOException {
+    protected Image addImage(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             int available = in.available();
@@ -161,27 +162,27 @@ public class View extends Container {
     }
 
 
-    protected final Image addImage(String name) {
+    protected Image addImage(String name) {
         return addImage(toolkit.getImage(name));
     }
 
 
-    protected final Image addImage(URL url) {
+    protected Image addImage(URL url) {
         return addImage(toolkit.getImage(url));
     }
 
 
-    protected final Image addImage(byte[] img) {
+    protected Image addImage(byte[] img) {
         return addImage(toolkit.createImage(img));
     }
 
 
-    protected final Image addImage(byte[] img, int off, int len) {
+    protected Image addImage(byte[] img, int off, int len) {
         return addImage(toolkit.createImage(img, len, len));
     }
 
 
-    protected final Image addImage(Image image) {
+    protected Image addImage(Image image) {
         synchronized (table) {
             if (!table.containsKey(image)) {
                 table.put(image, Boolean.FALSE);
@@ -192,7 +193,7 @@ public class View extends Container {
     }
 
 
-    protected final Image getImage(Image image) {
+    protected Image getImage(Image image) {
         synchronized (table) {
             if (!table.containsKey(image)) { // NOT EVEN ADDED YET
                 table.put(image, Boolean.FALSE);
@@ -215,7 +216,7 @@ public class View extends Container {
     }
 
 
-    protected final void removeImage(Image image) {
+    protected void removeImage(Image image) {
         synchronized (table) {
             table.remove(image);
         }
