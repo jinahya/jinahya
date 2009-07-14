@@ -6,6 +6,7 @@
     <artifactId>xlet</artifactId>
     <groupId>jinahya</groupId>
     <version>1.0</version>
+    <!--version>${project.rootVersion}</version-->
   </parent>
   <groupId>jinahya.xlet</groupId>
   <artifactId>model</artifactId>
