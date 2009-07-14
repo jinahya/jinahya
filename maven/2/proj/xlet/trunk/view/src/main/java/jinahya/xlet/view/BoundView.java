@@ -28,7 +28,7 @@ import java.beans.PropertyChangeListener;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BoundView extends View implements PropertyChangeListener {
+public abstract class BoundView extends View implements PropertyChangeListener {
 
 
     public BoundView(Class clazz) {

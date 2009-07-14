@@ -44,7 +44,8 @@ import java.lang.reflect.Method;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BoundModel extends Model implements PropertyChangeListener {
+public abstract class BoundModel extends Model
+    implements PropertyChangeListener {
 
 
     public BoundModel(Class clazz) {

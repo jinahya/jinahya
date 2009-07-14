@@ -18,8 +18,10 @@
 package jinahya.xlet.view;
 
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -43,7 +45,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class View extends Container {
+public abstract class View extends Container {
 
 
     public static synchronized void activate(Component component) {
@@ -112,6 +114,36 @@ public class View extends Container {
     }
 
 
+    private static final Hashtable FONT_TABLE = new Hashtable();
+    protected static Font getFont(String name, int style, int size) {
+        String key = (name + "|" + Integer.toString(style) + "|" +
+                      Integer.toString(size));
+        synchronized (FONT_TABLE) {
+            Font font = (Font) FONT_TABLE.get(key);
+            if (font == null) {
+                font = new Font(name, style, size);
+                FONT_TABLE.put(key, font);
+            }
+            return font;
+        }
+    }
+
+
+    private static final Hashtable COLOR_TABLE = new Hashtable();
+    protected static Color getColor(int r, int g, int b) {
+        String key = (Integer.toString(r) + "|" + Integer.toString(g) + "|" +
+                      Integer.toString(b));
+        synchronized (COLOR_TABLE) {
+            Color color = (Color) COLOR_TABLE.get(key);
+            if (color == null) {
+                color = new Color(r, g, b);
+                COLOR_TABLE.put(key, color);
+            }
+            return color;
+        }
+    }
+
+
     public View() {
         tracker = new MediaTracker(this);
     }
@@ -122,25 +154,16 @@ public class View extends Container {
     }
 
 
-    protected void activating() {
-        // empty
-    }
+    protected abstract void activating();
 
 
-    protected void activated() {
-        // empty
-    }
+    protected abstract void activated();
 
 
-    protected void deactivating() {
-        // empty
-    }
+    protected abstract void deactivating();
 
 
-    protected void deactivated() {
-        // empty
-    }
-
+    protected abstract void deactivated();
 
 
     private boolean active = false;
