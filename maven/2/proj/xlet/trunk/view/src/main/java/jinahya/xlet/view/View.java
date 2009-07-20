@@ -48,7 +48,7 @@ import java.util.Vector;
 public abstract class View extends Container {
 
 
-    public static synchronized void activate(Component component) {
+    public static final synchronized void activate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -69,7 +69,7 @@ public abstract class View extends Container {
     }
 
 
-    public static synchronized void deactivate(Component component) {
+    public static final synchronized void deactivate(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -90,7 +90,7 @@ public abstract class View extends Container {
     }
 
 
-    public static synchronized void removeAllImages(Component component) {
+    public static final synchronized void removeAllImages(Component component) {
         synchronized (component) {
             if (component instanceof Container) {
                 Component[] components =
@@ -114,33 +114,62 @@ public abstract class View extends Container {
     }
 
 
-    private static final Hashtable FONT_TABLE = new Hashtable();
-    protected static Font getFont(String name, int style, int size) {
-        String key = (name + "|" + Integer.toString(style) + "|" +
-                      Integer.toString(size));
-        synchronized (FONT_TABLE) {
-            Font font = (Font) FONT_TABLE.get(key);
-            if (font == null) {
-                font = new Font(name, style, size);
-                FONT_TABLE.put(key, font);
+    // <Class, Hashtable<String, Object>>
+    private static final Hashtable SHARED_RESOURCE_TABLE = new Hashtable();
+
+
+    protected static final Object getSharedResource(Class cls, String key) {
+        synchronized (SHARED_RESOURCE_TABLE) {
+            Hashtable classified = (Hashtable) SHARED_RESOURCE_TABLE.get(cls);
+            if (classified == null) {
+                return null;
             }
-            return font;
+            return classified.get(key);
         }
     }
 
 
-    private static final Hashtable COLOR_TABLE = new Hashtable();
-    protected static Color getColor(int r, int g, int b) {
-        String key = (Integer.toString(r) + "|" + Integer.toString(g) + "|" +
-                      Integer.toString(b));
-        synchronized (COLOR_TABLE) {
-            Color color = (Color) COLOR_TABLE.get(key);
-            if (color == null) {
-                color = new Color(r, g, b);
-                COLOR_TABLE.put(key, color);
-            }
-            return color;
+    protected static final Object putSharedResource(Class cls, String key,
+                                                    Object val) {
+
+        if (!cls.isInstance(val)) {
+            throw new IllegalArgumentException
+                (String.valueOf(val) + " is not an instance of " + cls);
         }
+        synchronized (SHARED_RESOURCE_TABLE) {
+            Hashtable classified = (Hashtable) SHARED_RESOURCE_TABLE.get(cls);
+            if (classified == null) {
+                classified = new Hashtable();
+                SHARED_RESOURCE_TABLE.put(cls, classified);
+            }
+            return classified.put(key, val);
+        }
+    }
+
+
+    protected static final Font getSharedFont(String name, int style,
+                                              int size) {
+
+        String key = (name + "|" + Integer.toString(style) + "|" +
+                      Integer.toString(size));
+        Font font = (Font) getSharedResource(Font.class, key);
+        if (font == null) {
+            font = new Font(name, style, size);
+            putSharedResource(Font.class, key, font);
+        }
+        return font;
+    }
+
+
+    protected static final Color getSharedColor(int red, int green, int blue) {
+        String key = (Integer.toString(red) + "|" + Integer.toString(green) +
+                      "|" + Integer.toString(blue));
+        Color color = (Color) getSharedResource(Color.class, key);
+        if (color == null) {
+            color = new Color(red, green, blue);
+            putSharedResource(Color.class, key, color);
+        }
+        return color;
     }
 
 
@@ -154,10 +183,24 @@ public abstract class View extends Container {
     }
 
 
+    protected synchronized final void activate() {
+        if (!active()) {
+            activate(this);
+        }
+    }
+
+
     protected abstract void activating();
 
 
     protected abstract void activated();
+
+
+    protected synchronized final void deactivate() {
+        if (active()) {
+            deactivate(this);
+        }
+    }
 
 
     protected abstract void deactivating();

@@ -19,6 +19,7 @@
 package jinahya.xlet.util.prefs;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,9 +38,7 @@ public final class Preferences {
     private static final Hashtable ENTRIES = new Hashtable();
 
 
-    public static synchronized Preferences nodeForPackage(Class clazz)
-        throws Exception {
-
+    public static synchronized Preferences nodeForPackage(Class clazz) {
         String packageName = "unnamed";
         String className = clazz.getName();
         int lastDotIndex = className.lastIndexOf('.');
@@ -66,7 +65,7 @@ public final class Preferences {
     }
 
 
-    public synchronized void clear() throws Exception {
+    public synchronized void clear() {
         synchronized (entries) {
             entries.clear();
         }
@@ -180,7 +179,9 @@ public final class Preferences {
     }
 
 
-    public void importNode(InputStream in) throws Exception {
+    public void importNode(InputStream in)
+        throws IOException, ClassNotFoundException {
+
         synchronized (entries) {
             entries.clear();
             ObjectInputStream ois = new ObjectInputStream(in);
@@ -202,7 +203,9 @@ public final class Preferences {
     }
 
 
-    public void exportNode(OutputStream out) throws Exception {
+    public void exportNode(OutputStream out)
+        throws IOException, ClassNotFoundException {
+
         synchronized (entries) {
             ObjectOutputStream oos = new ObjectOutputStream(out);
             try {
