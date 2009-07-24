@@ -47,6 +47,14 @@ import java.util.Vector;
  */
 public abstract class View extends Container {
 
+    protected static final int HALIGN_LEFT = 0x01;
+    protected static final int HALIGN_CENTER = 0x02;
+    protected static final int HALIGN_RIGHT = 0x03;
+
+    protected static final int VALIGN_TOP = 0x01;
+    protected static final int VALIGN_CENTER = 0x02;
+    protected static final int VALIGN_BOTTOM = 0x03;
+
 
     public static final synchronized void activate(Component component) {
         synchronized (component) {
@@ -92,6 +100,9 @@ public abstract class View extends Container {
 
     public static final synchronized void removeAllImages(Component component) {
         synchronized (component) {
+
+            deactivate(component); // deactivate if active
+
             if (component instanceof Container) {
                 Component[] components =
                     ((Container) component).getComponents();
@@ -183,10 +194,8 @@ public abstract class View extends Container {
     }
 
 
-    protected synchronized final void activate() {
-        if (!active()) {
-            activate(this);
-        }
+    public final void activate() {
+        activate(this);
     }
 
 
@@ -196,10 +205,8 @@ public abstract class View extends Container {
     protected abstract void activated();
 
 
-    protected synchronized final void deactivate() {
-        if (active()) {
-            deactivate(this);
-        }
+    public  final void deactivate() {
+        deactivate(this);
     }
 
 
@@ -357,12 +364,12 @@ public abstract class View extends Container {
         int stringWidth = metrics.stringWidth(string);
         int x = boundary.x;
         switch (halign) {
-            case 0x01: // LEFT
+            case HALIGN_LEFT: // LEFT
                 break;
-            case 0x02: // CENTER
+            case HALIGN_CENTER: // CENTER
                 x += (boundary.width - stringWidth) / 2;
                 break;
-            case 0x03: // RIGHT
+            case HALIGN_RIGHT: // RIGHT
                 x += (boundary.width - stringWidth);
                 break;
             default:
@@ -372,12 +379,12 @@ public abstract class View extends Container {
         int stringHeight = metrics.getAscent() + metrics.getDescent();
         int y = boundary.y + metrics.getAscent(); // TOP
         switch (valign) {
-            case 0x01: // TOP
+            case VALIGN_TOP: // TOP
                 break;
-            case 0x02: // CENTER
+            case VALIGN_CENTER: // CENTER
                 y += (boundary.height - stringHeight) / 2;
                 break;
-            case 0x03: // BOTTOM
+            case VALIGN_BOTTOM: // BOTTOM
                 y = boundary.y + boundary.height - metrics.getDescent();
                 break;
             default:
