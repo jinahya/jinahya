@@ -6,12 +6,12 @@
   <parent>
     <artifactId>xlet</artifactId>
     <groupId>jinahya</groupId>
-    <version>1.0</version>
+    <version>root</version>
     <!--version>${project.rootVersion}</version-->
   </parent>
   <groupId>jinahya.xlet</groupId>
   <artifactId>util</artifactId>
-  <version>${project.parent.version}</version>
+  <version>${project.moduleVersion}</version>
   <name>util</name>
   <url>http://maven.apache.org</url>
   <!--dependencies/-->

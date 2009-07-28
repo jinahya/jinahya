@@ -194,20 +194,10 @@ public abstract class View extends Container {
     }
 
 
-    public final void activate() {
-        activate(this);
-    }
-
-
     protected abstract void activating();
 
 
     protected abstract void activated();
-
-
-    public  final void deactivate() {
-        deactivate(this);
-    }
 
 
     protected abstract void deactivating();
@@ -255,11 +245,10 @@ public abstract class View extends Container {
     }
 
 
-    protected Image addImage(Image image) {
+    private Image addImage(Image image) {
         synchronized (table) {
             if (!table.containsKey(image)) {
                 table.put(image, Boolean.FALSE);
-                tracker.addImage(image, image.hashCode());
             }
             return image;
         }
@@ -268,22 +257,27 @@ public abstract class View extends Container {
 
     protected Image getImage(Image image) {
         synchronized (table) {
-            if (!table.containsKey(image)) { // NOT EVEN ADDED YET
-                table.put(image, Boolean.FALSE);
+
+            if (!table.containsKey(image)) {
+                return image;
             }
+
             if (((Boolean) table.get(image)).booleanValue()) {
                 return image;
             }
-            tracker.addImage(image, image.hashCode());
+
+            int id = 1;
+            tracker.addImage(image, id);
             try {
-                tracker.waitForID(image.hashCode(), 5000L); // 5 secs
-                if (!tracker.isErrorID(image.hashCode())) {
+                tracker.waitForID(id, 5000L); // 5 secs
+                if (!tracker.isErrorID(id)) {
                     table.put(image, Boolean.TRUE);
                 }
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
-            tracker.removeImage(image, image.hashCode());
+            tracker.removeImage(image, id);
+
             return image;
         }
     }
@@ -291,7 +285,10 @@ public abstract class View extends Container {
 
     protected void removeImage(Image image) {
         synchronized (table) {
-            table.remove(image);
+            if (table.containsKey(image)) {
+                table.remove(image);
+                image.flush();
+            }
         }
     }
 
@@ -382,10 +379,13 @@ public abstract class View extends Container {
             case VALIGN_TOP: // TOP
                 break;
             case VALIGN_CENTER: // CENTER
-                y += (boundary.height - stringHeight) / 2;
+                //y += (boundary.height - stringHeight) / 2;
+                int gap = stringHeight - boundary.height;
+                y = boundary.y + boundary.height + (gap / 2);
                 break;
             case VALIGN_BOTTOM: // BOTTOM
-                y = boundary.y + boundary.height - metrics.getDescent();
+                //y = boundary.y + boundary.height - metrics.getDescent();
+                y = boundary.y + boundary.height;
                 break;
             default:
                 break;

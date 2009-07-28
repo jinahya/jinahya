@@ -5,7 +5,7 @@
   <groupId>jinahya</groupId>
   <artifactId>xlet</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>root</version>
   <!--version>${project.rootVersion}</version-->
   <dependencies>
     <dependency>
@@ -28,7 +28,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.rootVersion>1.0.1</project.rootVersion>
+    <project.moduleVersion>1.0</project.moduleVersion>
   </properties>
 
   <build>
@@ -120,7 +120,7 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>jinahya.googlecode.com</id>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
       <!--url>scm:svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
     </repository>
   </distributionManagement>
