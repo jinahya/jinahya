@@ -7,7 +7,8 @@
     <versions>
       <version>1.0</version>
       <version>root</version>
+      <version>parent</version>
     </versions>
-    <lastUpdated>20090807093121</lastUpdated>
+    <lastUpdated>20090807093339</lastUpdated>
   </versioning>
 </metadata>
