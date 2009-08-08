@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.UI;
 using System.Xml;
 
 
 namespace XML2JSON
 {
-    public partial class XML2JSON : System.Web.UI.Page
+    public partial class XML2JSON : Page
     {
         private static void element2json(XmlElement element, TextWriter writer)
         {
@@ -95,14 +97,15 @@ namespace XML2JSON
                 hasPrevious = true;
             }
 
-            if (hasPrevious)
-            {
-                writer.Write(", ");
-            }
+
             Object textNodeList;
             if (dictionary.TryGetValue("text()", out textNodeList))
             {
                 writer.Write("\"text()\": \"");
+                if (hasPrevious)
+                {
+                    writer.Write(", ");
+                }
                 foreach (XmlNode textNode in ((LinkedList<XmlNode>)textNodeList))
                 {
                     if (textNode.NodeType == XmlNodeType.CDATA)
@@ -154,12 +157,13 @@ namespace XML2JSON
                     }
                 }
                 writer.Write("\"");
+                hasPrevious = true;
             }
             else
             {
-                writer.Write("\"text()\": null");
+                //writer.Write("\"text()\": null");
             }
-            hasPrevious = true;
+
 
             foreach (KeyValuePair<String, Object> pair in dictionary)
             {
@@ -196,20 +200,25 @@ namespace XML2JSON
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            string url = Request.Params.Get(0);
+            String xml = Request.Params.Get("xml");
+            if (xml == null)
+            {
+                Response.StatusCode = 400;
+                Response.StatusDescription = "Missing request parameter: xml";
+                //Response.Redirect("~/ErrorPages/BadRequest.htm");
+                Response.End();
+                return;
+            }
 
-            // Set the page's content type to JPEG files
-            // and clear all response headers.
             Response.Clear();
-
-            Response.ContentType = "application/json";
-
-            // Buffer response so that page is sent
-            // after processing is complete.
-            Response.BufferOutput = true;
+            //Response.ContentType = "application/json";
+            Response.ContentType = "text/plain";
+            Response.Charset = "UTF-8";
+            //Response.BufferOutput = true;
+            Response.StatusCode = 200;
 
             XmlDocument document = new XmlDocument();
-            document.Load(url);
+            document.Load(Request.Params.Get("xml"));
 
             foreach (XmlNode childNode in document.ChildNodes)
             {
@@ -227,6 +236,7 @@ namespace XML2JSON
 
             // Send the output to the client.
             Response.Flush();
+            Response.End();
         }
     }
 }
