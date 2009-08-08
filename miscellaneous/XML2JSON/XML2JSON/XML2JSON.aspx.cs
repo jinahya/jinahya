@@ -15,11 +15,9 @@ namespace XML2JSON
         private static void element2json(XmlElement element, TextWriter writer)
         {
             writer.Write("{");
-            Dictionary<String, Object> dictionary =
-                new Dictionary<String, Object>();
+            Dictionary<String, Object> dictionary = new Dictionary<String, Object>();
 
-            for (IEnumerator e = element.Attributes.GetEnumerator();
-                 e.MoveNext(); )
+            for (IEnumerator e = element.Attributes.GetEnumerator(); e.MoveNext(); )
             {
                 XmlAttribute attribute = (XmlAttribute)e.Current;
                 dictionary.Add("@" + attribute.Name, attribute.Value);
