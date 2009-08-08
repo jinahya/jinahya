@@ -5,7 +5,7 @@
   <groupId>jinahya</groupId>
   <artifactId>xlet</artifactId>
   <packaging>pom</packaging>
-  <version>root</version>
+  <version>parent</version>
   <!--version>${project.rootVersion}</version-->
   <dependencies>
     <dependency>

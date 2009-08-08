@@ -113,7 +113,7 @@ public abstract class View extends Container {
             if (component instanceof View) {
                 View view = (View) component;
                 synchronized (view.table) {
-                    for (Enumeration e = view.table.elements();
+                    for (Enumeration e = view.table.keys();
                          e.hasMoreElements(); ) {
 
                         ((Image) e.nextElement()).flush();
