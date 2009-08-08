@@ -101,11 +101,12 @@ namespace XML2JSON
             Object textNodeList;
             if (dictionary.TryGetValue("text()", out textNodeList))
             {
-                writer.Write("\"text()\": \"");
                 if (hasPrevious)
                 {
                     writer.Write(", ");
                 }
+                writer.Write("\"text()\": \"");
+
                 foreach (XmlNode textNode in ((LinkedList<XmlNode>)textNodeList))
                 {
                     if (textNode.NodeType == XmlNodeType.CDATA)
@@ -159,11 +160,6 @@ namespace XML2JSON
                 writer.Write("\"");
                 hasPrevious = true;
             }
-            else
-            {
-                //writer.Write("\"text()\": null");
-            }
-
 
             foreach (KeyValuePair<String, Object> pair in dictionary)
             {
