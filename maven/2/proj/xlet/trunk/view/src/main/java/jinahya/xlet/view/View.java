@@ -185,6 +185,10 @@ public abstract class View extends Container {
 
 
     public View() {
+        super();
+
+        super.setVisible(false);
+
         tracker = new MediaTracker(this);
     }
 
