@@ -97,14 +97,17 @@ namespace XML2JSON
                 hasPrevious = true;
             }
 
-
-            Object textNodeList;
-            if (dictionary.TryGetValue("text()", out textNodeList))
+            if (hasPrevious)
             {
-                if (hasPrevious)
-                {
-                    writer.Write(", ");
-                }
+                writer.Write(", ");
+            }
+            Object textNodeList;
+            if (!dictionary.TryGetValue("text()", out textNodeList))
+            {
+                writer.Write("\"text()\": null");
+            }
+            else
+            {
                 writer.Write("\"text()\": \"");
 
                 foreach (XmlNode textNode in ((LinkedList<XmlNode>)textNodeList))
@@ -158,8 +161,8 @@ namespace XML2JSON
                     }
                 }
                 writer.Write("\"");
-                hasPrevious = true;
             }
+            hasPrevious = true;
 
             foreach (KeyValuePair<String, Object> pair in dictionary)
             {
