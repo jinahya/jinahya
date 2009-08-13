@@ -44,10 +44,10 @@ namespace XML2JSON
                         break;
                     case XmlNodeType.Text:
                     case XmlNodeType.CDATA:
-                        if (!dictionary.TryGetValue("text()", out list))
+                        if (!dictionary.TryGetValue("#text", out list))
                         {
                             list = new LinkedList<XmlNode>();
-                            dictionary.Add("text()", list);
+                            dictionary.Add("#text", list);
                         }
                         ((LinkedList<XmlNode>)list).AddLast(childNode);
                         break;
@@ -82,6 +82,7 @@ namespace XML2JSON
                 }
             }
 
+            // ATTRIBUTES
             bool hasPrevious = false;
             foreach (KeyValuePair<String, Object> pair in dictionary)
             {
@@ -93,7 +94,8 @@ namespace XML2JSON
                 {
                     writer.Write(", ");
                 }
-                writer.Write("\"{0}\": \"{1}\"", pair.Key, pair.Value);
+                writer.Write("\"{0}\": \"{1}\"", pair.Key.Substring(1), pair.Value); // without "@"
+                //writer.Write("\"{0}\": \"{1}\"", pair.Key, pair.Value);
                 hasPrevious = true;
             }
 
@@ -102,13 +104,15 @@ namespace XML2JSON
                 writer.Write(", ");
             }
             Object textNodeList;
-            if (!dictionary.TryGetValue("text()", out textNodeList))
+            if (!dictionary.TryGetValue("#text", out textNodeList))
             {
-                writer.Write("\"text()\": null");
+                writer.Write("\"text\": null");
+                //writer.Write("\"#text\": null");
             }
             else
             {
-                writer.Write("\"text()\": \"");
+                writer.Write("\"text\": \"");
+                //writer.Write("\"#text\": \"");
 
                 foreach (XmlNode textNode in ((LinkedList<XmlNode>)textNodeList))
                 {
@@ -166,7 +170,7 @@ namespace XML2JSON
 
             foreach (KeyValuePair<String, Object> pair in dictionary)
             {
-                if (pair.Key.StartsWith("@") || pair.Key.Equals("text()"))
+                if (pair.Key.StartsWith("@") || pair.Key.Equals("#text"))
                 {
                     continue;
                 }
@@ -213,7 +217,7 @@ namespace XML2JSON
             //Response.ContentType = "application/json";
             Response.ContentType = "text/plain";
             Response.Charset = "UTF-8";
-            //Response.BufferOutput = true;
+            Response.BufferOutput = true;
             Response.StatusCode = 200;
 
             XmlDocument document = new XmlDocument();
