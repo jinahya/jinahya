@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.UI;
@@ -221,7 +222,16 @@ namespace XML2JSON
             Response.StatusCode = 200;
 
             XmlDocument document = new XmlDocument();
-            document.Load(Request.Params.Get("xml"));
+
+            //XmlReaderSettings settings = new XmlReaderSettings();
+            //settings.XmlResolver = null;
+            //settings.ProhibitDtd = false;
+            //XmlReader reader = XmlTextReader.Create(xml);
+            //document.Load(reader);
+
+            document.XmlResolver = null;
+            document.Load(xml);
+            //document.Load(new WebClient().OpenRead(xml)));
 
             foreach (XmlNode childNode in document.ChildNodes)
             {
