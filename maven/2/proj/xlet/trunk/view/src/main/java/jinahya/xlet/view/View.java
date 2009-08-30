@@ -56,9 +56,15 @@ public abstract class View extends Container {
     protected static final int VALIGN_BOTTOM = 0x03;
 
 
-    public static final synchronized void activate(Component component) {
+    public static final void activate(Component component) {
+        activate(component, true);
+    }
+
+
+    public static final void activate(Component component,
+                                      boolean includeChildren) {
         synchronized (component) {
-            if (component instanceof Container) {
+            if (component instanceof Container & includeChildren) {
                 Component[] components =
                     ((Container) component).getComponents();
                 for (int i = 0; i < components.length; i++) {
@@ -77,9 +83,15 @@ public abstract class View extends Container {
     }
 
 
-    public static final synchronized void deactivate(Component component) {
+    public static final void deactivate(Component component) {
+        deactivate(component, true);
+    }
+
+
+    public static final void deactivate(Component component,
+                                        boolean includeChildren) {
         synchronized (component) {
-            if (component instanceof Container) {
+            if (component instanceof Container & includeChildren) {
                 Component[] components =
                     ((Container) component).getComponents();
                 for (int i = 0; i < components.length; i++) {
@@ -98,24 +110,31 @@ public abstract class View extends Container {
     }
 
 
-    public static final synchronized void removeAllImages(Component component) {
+    public static final void removeAllImages(Component component) {
+        removeAllImages(component, true);
+    }
+
+
+    public static final void removeAllImages(Component component,
+                                             boolean includeChildren) {
+
         synchronized (component) {
 
-            deactivate(component); // deactivate if active
+            deactivate(component, includeChildren); // deactivate if active
 
-            if (component instanceof Container) {
+            if (component instanceof Container & includeChildren) {
                 Component[] components =
                     ((Container) component).getComponents();
                 for (int i = 0; i < components.length; i++) {
                     removeAllImages(components[i]);
                 }
             }
+
             if (component instanceof View) {
                 View view = (View) component;
                 synchronized (view.table) {
-                    for (Enumeration e = view.table.keys();
-                         e.hasMoreElements(); ) {
-
+                    Enumeration e = view.table.keys();
+                    while (e.hasMoreElements()) {
                         ((Image) e.nextElement()).flush();
                     }
                     view.table.clear();
