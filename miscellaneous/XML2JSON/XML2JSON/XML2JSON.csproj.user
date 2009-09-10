@@ -10,7 +10,7 @@
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
           <PublishCopyOption>ProjectFiles</PublishCopyOption>
-          <PublishTargetLocation>E:\XML2JSON\</PublishTargetLocation>
+          <PublishTargetLocation>C:\Users\onacit\Desktop\XML2JSON\</PublishTargetLocation>
           <PublishDeleteAllFiles>True</PublishDeleteAllFiles>
           <PublishCopyAppData>True</PublishCopyAppData>
           <ExternalProgram>

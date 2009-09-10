@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.SessionState;
 using System.Web.UI;
 using System.Xml;
 
@@ -15,6 +16,10 @@ namespace XML2JSON
 {
     public partial class XML2JSON : Page
     {
+
+        //private static TextWriter LogWriter = TextWriter.Synchronized(new StreamWriter("C:\\log\\XML2JSON.txt", true));
+        private static TextWriter LogWriter = null;
+
         private static void element2json(XmlElement element, TextWriter writer)
         {
             writer.Write("{");
@@ -207,12 +212,16 @@ namespace XML2JSON
             String xml = Request.Params.Get("xml");
             if (xml == null)
             {
+                Log("No parameter for 'xml'");
+
                 Response.StatusCode = 400;
                 Response.StatusDescription = "Missing request parameter: xml";
                 //Response.Redirect("~/ErrorPages/BadRequest.htm");
                 Response.End();
                 return;
             }
+
+            Log("xml: " + xml);
 
             Response.Clear();
             //Response.ContentType = "application/json";
@@ -230,7 +239,15 @@ namespace XML2JSON
             //document.Load(reader);
 
             document.XmlResolver = null;
-            document.Load(xml);
+            try
+            {
+                document.Load(xml);
+                Log("xml document has been loaded");
+            }
+            catch (Exception exception)
+            {
+                Log("failed to load xml document from " + xml, exception);
+            }
             //document.Load(new WebClient().OpenRead(xml)));
 
             foreach (XmlNode childNode in document.ChildNodes)
@@ -247,9 +264,66 @@ namespace XML2JSON
                 break;
             }
 
+            Log("conversion has been finished");
+
             // Send the output to the client.
             Response.Flush();
+            Log("flushed");
             Response.End();
         }
+
+        
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            //LogWriter = TextWriter.Synchronized(new StreamWriter(this.MapPathSecure("log.txt")));
+        }
+
+
+        protected void Page_Disposed(object sender, EventArgs e)
+        {
+            //LogWriter.Flush();
+            //LogWriter.Close();
+        }
+
+             
+        private void Log(String message)
+        {
+            if (LogWriter == null)
+            {
+                return;
+            }
+            Log(message, null);
+        }
+
+
+        private void Log(String message, Exception exception)
+        {
+            if (LogWriter == null)
+            {
+                return;
+            }
+            LogWriter.WriteLine("{0}: {1}", Session.SessionID, message);
+            LogWriter.Flush();
+            if (exception != null)
+            {
+                Log(exception);
+            }
+        }
+
+
+        private void Log(Exception exception)
+        {
+            if (LogWriter == null)
+            {
+                return;
+            }
+            LogWriter.WriteLine("\t{0}: {1}", exception.GetType(), exception.Message);
+            Exception innerException = exception.InnerException;
+            if (innerException != null)
+            {
+                Log(innerException);
+            }
+        }
+
     }
 }
