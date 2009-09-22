@@ -14,21 +14,37 @@ import java.io.InputStream;
 public class BitInputImpl implements BitInput {
 
 
+    /**
+     *
+     */
     public static interface ByteInput {
 
+        /**
+         *
+         * @return
+         * @throws IOException
+         */
         public int readByte() throws IOException;
     }
 
 
+    /**
+     *
+     * @param in
+     */
     public BitInputImpl(final InputStream in) {
         this(new ByteInput() {
-                public int readByte() throws IOException {
-                    return in.read();
-                }
-            });
+            public int readByte() throws IOException {
+                return in.read();
+            }
+        });
     }
 
 
+    /**
+     *
+     * @param input
+     */
     public BitInputImpl(ByteInput input) {
         super();
 
@@ -106,6 +122,7 @@ public class BitInputImpl implements BitInput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public int readUnsignedInt(int length) throws IOException {
 
         if (length < 1 || length >= 32) {
@@ -129,6 +146,7 @@ public class BitInputImpl implements BitInput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public int readInt(int length) throws IOException {
 
         if (length <= 1 || length > 32) {
@@ -146,6 +164,7 @@ public class BitInputImpl implements BitInput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public long readUnsignedLong(int length) throws IOException {
 
         if (length < 1 || length >= 64) {
@@ -187,11 +206,13 @@ public class BitInputImpl implements BitInput {
     }
 
 
+    //@Override
     public long getCount() {
         return count;
     }
 
 
+    //@Override
     public void setCount(long count) {
         this.count = count;
     }

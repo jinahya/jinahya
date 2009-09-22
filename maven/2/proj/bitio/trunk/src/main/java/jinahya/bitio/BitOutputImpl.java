@@ -13,20 +13,39 @@ import java.io.OutputStream;
 public class BitOutputImpl implements BitOutput {
 
 
+    /**
+     *
+     */
     public static interface ByteOutput {
+
+
+        /**
+         * Writes given bytes to target.
+         *
+         * @param b byte value
+         * @throws IOException if an I/O error occurs
+         */
         public void writeByte(int b) throws IOException;
     }
 
 
+    /**
+     *
+     * @param out
+     */
     public BitOutputImpl(final OutputStream out) {
         this(new ByteOutput() {
-                public void writeByte(int b) throws IOException {
-                    out.write(b);
-                }
-            });
+            public void writeByte(int b) throws IOException {
+                out.write(b);
+            }
+        });
     }
 
 
+    /**
+     *
+     * @param output
+     */
     public BitOutputImpl(ByteOutput output) {
         super();
 
@@ -93,6 +112,7 @@ public class BitOutputImpl implements BitOutput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public void writeUnsignedInt(int length, int value) throws IOException {
 
         if (length < 1 || length >= 32) {
@@ -111,6 +131,7 @@ public class BitOutputImpl implements BitOutput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public void writeInt(int length, int value) throws IOException {
 
         if (length <= 1 || length > 32) {
@@ -123,6 +144,7 @@ public class BitOutputImpl implements BitOutput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public void writeUnsignedLong(int length, long value) throws IOException {
 
         if (length < 1 || length >= 64) {
@@ -141,6 +163,7 @@ public class BitOutputImpl implements BitOutput {
 
 
     /** {@inheritDoc} */
+    //@Override
     public void writeLong(int length, long value) throws IOException {
 
         if (length <= 1 || length > 64) {
@@ -152,11 +175,13 @@ public class BitOutputImpl implements BitOutput {
     }
 
 
+    //@Override
     public long getCount() {
         return count;
     }
 
 
+    //@Override
     public void setCount(long count) {
         this.count = count;
     }
