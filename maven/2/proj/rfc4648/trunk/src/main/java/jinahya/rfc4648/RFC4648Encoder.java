@@ -17,7 +17,7 @@ import jinahya.bitio.BitInputImpl;
  *
  * @author <a href="jinahya@gmail.com">Jin Kwon</a>
  */
-public class RFC4648Encoder {
+public final class RFC4648Encoder {
 
 
     /**
@@ -28,7 +28,8 @@ public class RFC4648Encoder {
      * @param output
      * @throws IOException if an I/O error occurs
      */
-    public static void encode(String alphabet, InputStream input, Writer output)
+    public static void encode(final String alphabet, final InputStream input,
+                              final Writer output)
         throws IOException {
 
         new RFC4648Encoder(alphabet, input, output).encode();
@@ -43,7 +44,7 @@ public class RFC4648Encoder {
      * @return encoded char array
      * @throws IOException if an I/O error occurs
      */
-    public static char[] encode(String alphabet, InputStream input)
+    public static char[] encode(final String alphabet, final InputStream input)
         throws IOException {
 
         CharArrayWriter out = new CharArrayWriter();
@@ -65,7 +66,8 @@ public class RFC4648Encoder {
      * @param output
      * @throws IOException if an I/O error occurs
      */
-    public static void encode(String alphabet, byte[] input, Writer output)
+    public static void encode(final String alphabet, final byte[] input,
+                              final Writer output)
         throws IOException {
 
         ByteArrayInputStream in = new ByteArrayInputStream(input);
@@ -85,7 +87,7 @@ public class RFC4648Encoder {
      * @return encoded char array
      * @throws IOException if an I/O error occurs
      */
-    public static char[] encode(String alphabet, byte[] input)
+    public static char[] encode(final String alphabet, final byte[] input)
         throws IOException {
 
         ByteArrayInputStream in = new ByteArrayInputStream(input);
@@ -104,7 +106,8 @@ public class RFC4648Encoder {
      * @param input
      * @param output
      */
-    public RFC4648Encoder(String alphabet, InputStream input, Writer output) {
+    private RFC4648Encoder(final String alphabet, final InputStream input,
+                           final Writer output) {
         super();
 
         this.alphabet = alphabet;
@@ -119,7 +122,7 @@ public class RFC4648Encoder {
      *
      * @throws IOException if an I/O error occurs
      */
-    public void encode() throws IOException {
+    private void encode() throws IOException {
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);
         int charsPerWord = RFC4648Utils.charsPerWord(bytesPerWord, bitsPerChar);

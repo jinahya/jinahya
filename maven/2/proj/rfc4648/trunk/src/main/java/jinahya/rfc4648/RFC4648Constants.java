@@ -10,11 +10,11 @@ public final class RFC4648Constants {
 
 
     /** Default pad character. '=' */
-    public static final char PAD = '=';
+    public static char PAD = '=';
 
 
     /** Alphabet for 'base64'. */
-    public static final String BASE64 =
+    public static String BASE64 =
         "ABCDEFGHIJKLMNOP" +
         "QRSTUVWXYZabcdef" +
         "ghijklmnopqrstuv" +
@@ -22,7 +22,7 @@ public final class RFC4648Constants {
 
 
     /** Alphabet for 'base64url'. */
-    public static final String BASE64URL =
+    public static String BASE64URL =
         "ABCDEFGHIJKLMNOP" +
         "QRSTUVWXYZabcdef" +
         "ghijklmnopqrstuv" +
@@ -30,19 +30,19 @@ public final class RFC4648Constants {
 
 
     /** Alphabet for 'base32'. */
-    public static final String BASE32 =
+    public static String BASE32 =
         "ABCDEFGHIJKLMNOP" +
         "QRSTUVWXYZ234567";
 
 
     /** Alphabet for 'base32hex'. */
-    public static final String BASE32HEX =
+    public static String BASE32HEX =
         "0123456789ABCDEF" +
         "GHIJKLMNOPQRSTUV";
 
 
     /** Alphabet for 'base16'. */
-    public static final String BASE16 =
+    public static String BASE16 =
         "0123456789ABCDEF";
 
 

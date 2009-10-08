@@ -17,7 +17,7 @@ import jinahya.bitio.BitOutputImpl;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class RFC4648Decoder {
+public final class RFC4648Decoder {
 
 
     /**
@@ -28,8 +28,8 @@ public class RFC4648Decoder {
      * @param output
      * @throws IOException if an I/O error occurs
      */
-    public static void decode(String alphabet, Reader input,
-                              OutputStream output)
+    public static void decode(final String alphabet, final Reader input,
+                              final OutputStream output)
         throws IOException {
 
         new RFC4648Decoder(alphabet, input, output).decode();
@@ -44,7 +44,7 @@ public class RFC4648Decoder {
      * @return decoded byte array
      * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(String alphabet, Reader input)
+    public static byte[] decode(final String alphabet, final Reader input)
         throws IOException {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -66,8 +66,8 @@ public class RFC4648Decoder {
      * @param output
      * @throws IOException if an I/O error occurs
      */
-    public static void decode(String alphabet, char[] input,
-                              OutputStream output)
+    public static void decode(final String alphabet, final char[] input,
+                              final OutputStream output)
         throws IOException {
 
         Reader in = new CharArrayReader(input);
@@ -87,7 +87,7 @@ public class RFC4648Decoder {
      * @return decoded byte array
      * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(String alphabet, char[] input)
+    public static byte[] decode(final String alphabet, final char[] input)
         throws IOException {
 
         Reader in = new CharArrayReader(input);
@@ -106,7 +106,9 @@ public class RFC4648Decoder {
      * @param input
      * @param output
      */
-    public RFC4648Decoder(String alphabet, Reader input, OutputStream output) {
+    private RFC4648Decoder(final String alphabet, final Reader input,
+                           final OutputStream output) {
+
         super();
 
         this.alphabet = alphabet;
@@ -121,7 +123,7 @@ public class RFC4648Decoder {
      *
      * @throws IOException if an I/O error occurs
      */
-    public void decode() throws IOException {
+    private void decode() throws IOException {
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);
         int charsPerWord = RFC4648Utils.charsPerWord(bytesPerWord, bitsPerChar);

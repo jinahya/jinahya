@@ -6,7 +6,10 @@ package jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com>Jin Kwon</a>
  */
-class RFC4648Utils {
+final class RFC4648Utils {
+
+
+    public static final int OCTET_SIZE = 8;
 
 
     /**
@@ -29,7 +32,11 @@ class RFC4648Utils {
      * @return the value of greatest common divisor
      */
     public static int greatestCommonDivisor(final int a, final int b) {
-        return b == 0 ? a : greatestCommonDivisor(b, a % b);
+        if (b == 0) {
+            return a;
+        } else {
+            return greatestCommonDivisor(b, a % b);
+        }
     }
 
 
@@ -40,7 +47,7 @@ class RFC4648Utils {
      * @return number of bits per character
      */
     public static int bitsPerChar(final String alphabet) {
-        return (int)(Math.log(alphabet.length())/Math.log(2.0d));
+        return (int) (Math.log(alphabet.length()) / Math.log(2.0d));
     }
 
 
@@ -51,7 +58,7 @@ class RFC4648Utils {
      * @return number of bytes per word
      */
     public static int bytesPerWord(final int bitsPerChar) {
-        return leastCommonMultiple(8, bitsPerChar) / 8;
+        return leastCommonMultiple(OCTET_SIZE, bitsPerChar) / OCTET_SIZE;
     }
 
 
@@ -65,7 +72,7 @@ class RFC4648Utils {
     public static int charsPerWord(final int bytesPerWord,
                                    final int bitsPerChar) {
 
-        return bytesPerWord * 8 / bitsPerChar;
+        return bytesPerWord * OCTET_SIZE / bitsPerChar;
     }
 
 
