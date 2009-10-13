@@ -5,10 +5,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya</groupId>
-  <artifactId>ktiptv-support</artifactId>
+  <artifactId>xlet-support</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <classifier>jdk14</classifier>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>ktiptv</groupId>
       <artifactId>ca_adaptor_stub</artifactId>
@@ -37,6 +43,12 @@
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <classifier>jdk15</classifier>
+        <version>5.9</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <classifier>jdk14</classifier>
         <version>5.9</version>
       </dependency>
       <dependency>
@@ -177,11 +189,18 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>ktiptv-support</name>
-  <description>Utilities for KT IPTV</description>
+  <name>xlet-support</name>
+  <description>Utilities for Xlet</description>
   <!--url/-->
   <inceptionYear>2009</inceptionYear>
-  <!--licenses/-->
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>manual</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
   <!--organization/-->
   <developers>
     <developer>
@@ -202,10 +221,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/xlet-support/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/xlet-support/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/xlet-support/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -236,7 +255,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/ktiptv</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/xlet-support</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
