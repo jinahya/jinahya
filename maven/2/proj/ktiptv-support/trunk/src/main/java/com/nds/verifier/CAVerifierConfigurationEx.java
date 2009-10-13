@@ -11,7 +11,7 @@ import java.util.Hashtable;
 public class CAVerifierConfigurationEx {
 
 
-    private static int[] REGION_BLOCK_NUMBER_LENGTH = new int[] { 0, 0};
+    private static int[] REGION_BLOCK_NUMBER_LENGTH = new int[] { 0, -1};
     static {
         try {
             REGION_BLOCK_NUMBER_LENGTH =
@@ -76,13 +76,10 @@ public class CAVerifierConfigurationEx {
 
         int byteIndexInBlock = regionBitIndexInBlock / 8;
 
-        int bitIndexInByte = regionBitIndexInBlock % 8;
-
-        bitIndexInByte = 7 - bitIndexInByte;
-
+        int bitIndexInByte = 7 - (regionBitIndexInBlock % 8); // LETTLE ENDIAN
 
         byte regionByte = blockBytes[byteIndexInBlock];
 
-        return ((regionByte >>> (7 - bitIndexInByte)) & 0x01) != 0x00;
+        return ((regionByte >>> bitIndexInByte) & 0x01) != 0x00;
     }
 }
