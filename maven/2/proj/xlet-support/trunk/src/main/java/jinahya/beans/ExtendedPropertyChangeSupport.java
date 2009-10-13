@@ -46,8 +46,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, boolean oldValue,
-                                   boolean newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final boolean oldValue,
+                                   final boolean newValue) {
 
         firePropertyChange(propertyName, oldValue ?
                            Boolean.TRUE : Boolean.FALSE,
@@ -61,8 +62,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, byte oldValue,
-                                   byte newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final byte oldValue,
+                                   final byte newValue) {
 
         firePropertyChange(propertyName, new Byte(oldValue),
                            new Byte(newValue));
@@ -75,8 +77,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, char oldValue,
-                                   char newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final char oldValue,
+                                   final char newValue) {
 
         firePropertyChange(propertyName, new Character(oldValue),
                            new Character(newValue));
@@ -89,8 +92,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, short oldValue,
-                                   short newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final short oldValue,
+                                   final short newValue) {
 
         firePropertyChange(propertyName, new Short(oldValue),
                            new Short(newValue));
@@ -103,8 +107,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, int oldValue,
-                                   int newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final int oldValue,
+                                   final int newValue) {
 
         firePropertyChange(propertyName, new Integer(oldValue),
                            new Integer(newValue));
@@ -117,8 +122,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, long oldValue,
-                                   long newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final long oldValue,
+                                   final long newValue) {
 
         firePropertyChange(propertyName, new Long(oldValue),
                            new Long(newValue));
@@ -131,8 +137,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, float oldValue,
-                                   float newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final float oldValue,
+                                   final float newValue) {
 
         firePropertyChange(propertyName, new Float(oldValue),
                            new Float(newValue));
@@ -145,8 +152,9 @@ public class ExtendedPropertyChangeSupport extends PropertyChangeSupport {
      * @param oldValue
      * @param newValue
      */
-    public void firePropertyChange(String propertyName, double oldValue,
-                                   double newValue) {
+    public void firePropertyChange(final String propertyName,
+                                   final double oldValue,
+                                   final double newValue) {
 
         firePropertyChange(propertyName, new Double(oldValue),
                            new Double(newValue));

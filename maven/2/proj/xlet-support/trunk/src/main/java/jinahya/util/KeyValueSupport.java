@@ -81,6 +81,7 @@ public final class KeyValueSupport {
                              final Hashtable target) {
 
         synchronized (source) {
+            source.clear();
             synchronized (target) {
                 for (Enumeration e = source.keys(); e.hasMoreElements(); ) {
                     String key = (String) e.nextElement();
@@ -126,11 +127,13 @@ public final class KeyValueSupport {
 
     /**
      * Retains only the mappings in <code>source</code> that are contained in
-     * <code>target</code>. In other words, removes from this KVS all of its
-     * keys that are not contained in the specified KVS.
+     * <code>target</code>. In other words, removes from <code>source</code>
+     * all of its keys that are not contained in the specified
+     * <code>target</code>.
      *
      * @param source KVS whose entries going to be retained.
-     * @param target KVS containing entries to be retained in this KVS.
+     * @param target KVS containing entries to be retained in 
+     *        <code>source</code>
      * @return <code>true</code> if this KVS changed as a result of the call
      */
     public static boolean retain(final KeyValueSupport source,
@@ -156,31 +159,15 @@ public final class KeyValueSupport {
      *
      */
     public KeyValueSupport() {
-        this(new Hashtable());
-    }
-
-
-    private KeyValueSupport(Hashtable paramEntries) {
         super();
-
-        entries = paramEntries;
 
         epcs = new ExtendedPropertyChangeSupport(this);
     }
 
 
-    /**
-     * Creates an copy with a shallow copy of internal entries.
-     * <p/>
-     * [FROM java.util.Hashtable.clone()] The keys and values themselves are
-     * not cloned. This is a relatively expensive operation.
-     *
-     * @return
-     * @throws CloneNotSupportedException
-     */
     //@Override
     public Object clone() throws CloneNotSupportedException {
-        return new KeyValueSupport((Hashtable) entries.clone());
+        throw new CloneNotSupportedException(":)");
     }
 
 
@@ -438,7 +425,7 @@ public final class KeyValueSupport {
 
     private float getRandom(float except) {
         while (true) {
-            float random = new Float(getRandom((double)except)).floatValue();
+            float random = new Float(getRandom((double) except)).floatValue();
             if (random != except) {
                 return random;
             }
@@ -512,7 +499,7 @@ public final class KeyValueSupport {
     }
 
 
-    private final Hashtable entries;
+    private final Hashtable entries = new Hashtable();
 
     private ExtendedPropertyChangeSupport epcs;
 }
