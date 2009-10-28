@@ -15,48 +15,25 @@
  *  under the License.
  */
 
-package jinahya.util.state;
+package xlet;
+
+
+import jinahya.util.javatv.xlet.AbstractXlet;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface StateMachineSpec {
+public class Impl extends AbstractXlet {
+
+    // "xlet.Impl".hashCode();
+    // -91910485
+
+    public static final int IDENTIFIER = 0xFA858EAB;
 
 
-
-    public static final int UNKNOWN_STATE = 0xFFFFFFFF;
-
-
-    /**
-     *
-     * @return
-     */
-    public int getIdentifier();
-
-
-    /**
-     *
-     * @param machine
-     * @return
-     */
-    public int getStartingState(StateMachine machine);
-
-
-    /**
-     *
-     * @param sourceState
-     * @param targetState
-     * @return
-     */
-    public boolean isTransitionAllowed(int sourceState, int targetState);
-
-
-    /**
-     *
-     * @param state
-     * @return false
-     */
-    public boolean isFinishingState(int state);
+    public Impl() {
+        super(IDENTIFIER);
+    }
 }

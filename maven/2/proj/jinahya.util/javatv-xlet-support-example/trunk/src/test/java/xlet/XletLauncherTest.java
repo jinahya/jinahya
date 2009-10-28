@@ -15,48 +15,30 @@
  *  under the License.
  */
 
-package jinahya.util.state;
+package xlet;
+
+
+import javax.tv.xlet.Xlet;
+import javax.tv.xlet.XletStateChangeException;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface StateMachineSpec {
-
-
-
-    public static final int UNKNOWN_STATE = 0xFFFFFFFF;
-
+public class XletLauncherTest {
 
     /**
-     *
-     * @return
+     * @throws XletStateChangeException
+     * @testng.test
      */
-    public int getIdentifier();
-
-
-    /**
-     *
-     * @param machine
-     * @return
-     */
-    public int getStartingState(StateMachine machine);
-
-
-    /**
-     *
-     * @param sourceState
-     * @param targetState
-     * @return
-     */
-    public boolean isTransitionAllowed(int sourceState, int targetState);
-
-
-    /**
-     *
-     * @param state
-     * @return false
-     */
-    public boolean isFinishingState(int state);
+    public void launch() throws XletStateChangeException {
+        Xlet xlet = new Impl();
+        xlet.initXlet(null);
+        for (int i = 0; i < 5; i++) {
+            xlet.startXlet();
+            xlet.pauseXlet();
+        }
+        xlet.destroyXlet(true);
+    }
 }

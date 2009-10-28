@@ -99,14 +99,16 @@ public class StateMachineSupport {
     public synchronized void transit(int newState)
         throws StateMachineException {
 
-        if (state == newState || !spec.isTransitionAllowed(state, newState)) {
+        if (newState == StateMachineSpec.UNKNOWN_STATE || newState == state ||
+            !spec.isTransitionAllowed(state, newState)) {
             throw new StateMachineException
                 ("STATE TRANSITION NOT ALLOWED: " + state + " -> " + newState);
         }
 
         if (state == StateMachineSpec.UNKNOWN_STATE) {
             String name = "/META-INF/jinahya/util/state/" +
-                hex(machine.getIdentifier()) + "." + hex(spec.getIdentifier());
+                hex(machine.getIdentifier()).toUpperCase() + "." +
+                hex(spec.getIdentifier()).toUpperCase();
             InputStream stream = machine.getClass().getResourceAsStream(name);
             if (stream == null) {
                 throw new StateMachineException("RESOURCE NOT FOUND: " + name);
