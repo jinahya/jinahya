@@ -66,6 +66,7 @@ public class JavaTVXletSpec implements StateMachineSpec {
      */
     public static final int INVALID = (DESTROYED << 1);
 
+
     // "jinahya.util.state.javatv.xlet.JavaTVXletSpec".hashCode();
     // -1050399172
     public static final int IDENTIFIER = 0xC1642E3C; //
