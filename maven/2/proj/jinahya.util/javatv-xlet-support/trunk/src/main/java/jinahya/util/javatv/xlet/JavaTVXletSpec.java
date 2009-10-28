@@ -71,6 +71,8 @@ public class JavaTVXletSpec implements StateMachineSpec {
         "jinahya.util.state.javatv.xlet.JavaTVXletSpec".hashCode();
 
 
+
+
     //@Override
     public int getIdentifier() {
         return IDENTIFIER;
