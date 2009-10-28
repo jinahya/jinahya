@@ -15,12 +15,12 @@
  *  under the License.
  */
 
-package jinahya.statemachine.event;
+package jinahya.util.state.event;
 
 
 import java.util.EventObject;
 
-import jinahya.statemachine.StateMachine;
+import jinahya.util.state.StateMachine;
 
 
 /**

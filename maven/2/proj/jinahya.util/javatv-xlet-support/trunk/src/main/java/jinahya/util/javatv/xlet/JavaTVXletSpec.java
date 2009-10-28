@@ -15,18 +15,20 @@
  *  under the License.
  */
 
-package jinahya.statemachine.spec.xlet;
+package jinahya.util.javatv.xlet;
 
 
-import jinahya.statemachine.StateMachine;
-import jinahya.statemachine.spec.AbstractStateMachineSpec;
+import javax.tv.xlet.Xlet;
+
+import jinahya.util.state.StateMachine;
+import jinahya.util.state.StateMachineSpec;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletSpec extends AbstractStateMachineSpec {
+public class JavaTVXletSpec implements StateMachineSpec {
 
 
     /**
@@ -65,14 +67,22 @@ public abstract class XletSpec extends AbstractStateMachineSpec {
     public static final int INVALID = (DESTROYED << 1);
 
 
+    public static final int IDENTIFIER =
+        "jinahya.util.state.javatv.xlet.JavaTVXletSpec".hashCode();
 
-    protected XletSpec(int identifier) {
-        super(identifier);
+
+    //@Override
+    public int getIdentifier() {
+        return IDENTIFIER;
     }
 
 
     //@Override
     public int getStartingState(final StateMachine machine) {
+        if (!(machine instanceof Xlet)) {
+            throw new IllegalArgumentException
+                (machine + " is not an instance of " + Xlet.class);
+        }
         return LOADED;
     }
 
@@ -84,17 +94,12 @@ public abstract class XletSpec extends AbstractStateMachineSpec {
 
 
     //@Override
-    public boolean transitionAllowed(final int sourceState,
-                                     final int targetState) {
+    public boolean isTransitionAllowed(final int sourceState,
+                                       final int targetState) {
 
-        boolean allowed = false;
+        boolean allowed = true;
 
         switch (sourceState) {
-            case UNKNOWN_STATE:
-                allowed = targetState == LOADED;
-                break;
-            case NOT_LOADED:
-                break;
             case LOADED:
                 allowed = (targetState == PAUSED || targetState == DESTROYED);
                 //allowed = targetState == PAUSED;
@@ -104,10 +109,6 @@ public abstract class XletSpec extends AbstractStateMachineSpec {
                 break;
             case STARTED:
                 allowed = (targetState == PAUSED || targetState == DESTROYED);
-                break;
-            case DESTROYED:
-                break;
-            case INVALID:
                 break;
             default:
                 break;

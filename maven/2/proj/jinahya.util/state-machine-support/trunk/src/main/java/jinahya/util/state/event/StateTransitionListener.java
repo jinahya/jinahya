@@ -15,19 +15,22 @@
  *  under the License.
  */
 
-package jinahya.statemachine;
+package jinahya.util.state.event;
+
+
+import java.util.EventListener;
 
 
 /**
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface StateMachineTask {
+public interface StateTransitionListener extends EventListener {
 
 
     /**
      *
-     * @param state
+     * @param event
      */
-    public void perform(int state);
+    public void stateTransited(StateTransitionEvent event);
 }
