@@ -28,8 +28,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import jinahya.util.Logger;
 
 
 /**
@@ -39,7 +42,13 @@ import java.util.Vector;
 public final class ImageSupport {
 
 
+    private static final byte[] BUFFER = new byte[1024];
 
+
+    /**
+     *
+     * @param component
+     */
     public ImageSupport(Component component) {
         super();
 
@@ -47,9 +56,21 @@ public final class ImageSupport {
     }
 
 
+    /**
+     *
+     * @param source
+     * @param owner
+     * @param load
+     * @param block
+     * @return
+     * @throws Exception
+     */
     public boolean retain(final Object source, final Object owner,
                           final boolean load, final boolean block)
         throws Exception {
+
+        Logger.out(this, "RETAIN(SOURCE: " + source + ", OWNER: " + owner +
+            ", LOAD: " + load + ", BLOCK" + block + ")");
 
         synchronized (sourceImageTable) {
             Image image = (Image) sourceImageTable.get(source);
@@ -80,7 +101,17 @@ public final class ImageSupport {
     }
 
 
+    /**
+     *
+     * @param source
+     * @param owner
+     * @return
+     */
     public boolean release(final Object source, final Object owner) {
+
+        Logger.out(this, "RELEASE(SOURCE: " + source +
+                   ", OWNER: " + owner + ")");
+
         synchronized (sourceImageTable) {
             if (!sourceImageTable.contains(source)) {
                 return false;
@@ -103,6 +134,29 @@ public final class ImageSupport {
     }
 
 
+    /**
+     *
+     * @param owner
+     * @return
+     */
+    public boolean releaseAll(final Object owner) {
+        Logger.out(this, "RELEASE(OWNER: " + owner + ")");
+
+        boolean changed = false;
+        synchronized (sourceImageTable) {
+            synchronized (sourceOwnerTable) {
+                Enumeration e = sourceOwnerTable.keys();
+                while (e.hasMoreElements()) {
+                    if (release(e.nextElement(), owner)) {
+                        changed = true;
+                    }
+                }
+            }
+        }
+        return changed;
+    }
+
+
     private Image get(final Object source) throws IOException {
         if (source instanceof String) {
             return get((String) source);
@@ -118,6 +172,9 @@ public final class ImageSupport {
 
 
     private Image get(String name) throws IOException {
+
+        Logger.out(this, "GET(NAME: " + name + ")");
+
         InputStream in = getClass().getResourceAsStream(name);
         try {
             return get(in);
@@ -128,6 +185,9 @@ public final class ImageSupport {
 
 
     private Image get(File file) throws IOException {
+
+        Logger.out(this, "GET(FILE: " + file + ")");
+
         InputStream in = new FileInputStream(file);
         try {
             return get(in);
@@ -138,6 +198,9 @@ public final class ImageSupport {
 
 
     private Image get(URL url) throws IOException {
+
+        Logger.out(this, "GET(URL: " + url + ")");
+
         InputStream in = url.openStream();
         try {
             return get(in);
@@ -150,9 +213,9 @@ public final class ImageSupport {
     private Image get(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            synchronized (buffer) {
-                for (int read = -1; (read = in.read(buffer)) != -1;) {
-                    baos.write(buffer, 0, read);
+            synchronized (BUFFER) {
+                for (int read = -1; (read = in.read(BUFFER)) != -1;) {
+                    baos.write(BUFFER, 0, read);
                 }
             }
             baos.flush();
@@ -164,7 +227,10 @@ public final class ImageSupport {
 
 
     private void load(final Image image, final boolean block) {
-        Thread t = new Thread() {
+
+        Logger.out(this, "LOAD(IMAGE: " + image + ", BLOCK: " + block + ")");
+
+        Thread thread = new Thread() {
             //@Override
             public void run() {
                 int id = image.hashCode();
@@ -180,11 +246,11 @@ public final class ImageSupport {
                 }
             }
         };
-        t.start();
+        thread.start();
 
         if (block) {
             try {
-                t.join();
+                thread.join();
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
@@ -199,6 +265,4 @@ public final class ImageSupport {
 
     // <java.awt.Image, java.util.Vector<Object>>
     private final Hashtable sourceOwnerTable = new Hashtable();
-
-    private final transient byte[] buffer = new byte[1024];
 }

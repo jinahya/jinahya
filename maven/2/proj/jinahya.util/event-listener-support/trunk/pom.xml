@@ -4,99 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>jinahya</groupId>
-  <artifactId>ktiptv-support</artifactId>
+  <groupId>jinahya.util</groupId>
+  <artifactId>event-listener-support</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
-      <groupId>ktiptv</groupId>
-      <artifactId>ca_adaptor_stub</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>ktiptv</groupId>
-      <artifactId>usage_stub</artifactId>
-      <classifier>live</classifier>
-    </dependency>
-    <dependency>
-      <groupId>ktiptv</groupId>
-      <artifactId>authentication_client</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>alticast</groupId>
-      <artifactId>lrpp_client</artifactId>
-      <scope>provided</scope>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <classifier>jdk14</classifier>
+      <version>5.9</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
-  <!--parent/-->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <classifier>jdk15</classifier>
-        <version>5.9</version>
-      </dependency>
-      <dependency>
-        <groupId>javame</groupId>
-        <artifactId>javatv</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mhp</groupId>
-        <artifactId>mhp</artifactId>
-        <version>1.0.3</version>
-      </dependency>
-      <!--dependency>
-        <groupId>net.sf.kxml</groupId>
-        <artifactId>kxml2-min</artifactId>
-        <version>2.3.0</version>
-      </dependency-->
-      <dependency>
-        <groupId>net.sf.kxml</groupId>
-        <artifactId>kxml2</artifactId>
-        <version>2.3.0</version>
-      </dependency>
-      <dependency>
-        <groupId>alticast</groupId>
-        <artifactId>lrpp_client</artifactId>
-        <version>3.0s</version>
-      </dependency>
-      <dependency>
-        <groupId>ktiptv</groupId>
-        <artifactId>ca_adaptor_stub</artifactId>
-        <version>20080806.154144</version>
-      </dependency>
-      <dependency>
-        <groupId>ktiptv</groupId>
-        <artifactId>navigator_observer_interface</artifactId>
-        <version>20081007.152736</version>
-      </dependency>
-      <dependency>
-        <groupId>ktiptv</groupId>
-        <artifactId>authentication_client</artifactId>
-        <version>20051026.163404</version>
-      </dependency>
-      <dependency>
-        <groupId>ktiptv</groupId>
-        <artifactId>unicasting_stub</artifactId>
-        <version>0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>ktiptv</groupId>
-        <artifactId>usage_stub</artifactId>
-        <classifier>live</classifier>
-        <version>0.8</version>
-      </dependency>
-      <dependency>
-        <groupId>jinahya.xlet</groupId>
-        <artifactId>view</artifactId>
-        <version>1.0</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -104,6 +24,13 @@
 
   <!-- Build Settings -->
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.9</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <inherited>true</inherited>
@@ -116,15 +43,6 @@
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2-beta-4</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
   <reporting>
     <plugins>
@@ -177,8 +95,8 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>ktiptv-support</name>
-  <description>Utilities for KT IPTV</description>
+  <name>event-listener-support</name>
+  <description>Event Listener Support</description>
   <!--url/-->
   <inceptionYear>2009</inceptionYear>
   <licenses>
@@ -209,10 +127,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/event-listener-support/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/event-listener-support/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/ktiptv/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/event-listener-support/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -243,7 +161,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/ktiptv</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/event-listener-support</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>

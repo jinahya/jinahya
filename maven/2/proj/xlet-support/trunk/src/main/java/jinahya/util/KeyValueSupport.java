@@ -65,97 +65,6 @@ public final class KeyValueSupport {
 
 
     /**
-     * Clear <code>target</code> and copy all entries from <code>source</code>.
-     *
-     * @param source
-     * @param target
-     */
-    public static void copy(final KeyValueSupport source,
-                            final KeyValueSupport target) {
-
-        copy(source.entries, target.entries);
-    }
-
-
-    private static void copy(final Hashtable source,
-                             final Hashtable target) {
-
-        synchronized (source) {
-            source.clear();
-            synchronized (target) {
-                for (Enumeration e = source.keys(); e.hasMoreElements(); ) {
-                    String key = (String) e.nextElement();
-                    target.put(key, (String) source.get(key));
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Merge <code>targetEntries</code> with <code>sourceEntries</code>.
-     *
-     * @param source
-     * @param target
-     * @param overwrite overwrite entries if exists.
-     */
-    public static void merge(final KeyValueSupport source,
-                             final KeyValueSupport target,
-                             final boolean overwrite) {
-
-        merge(source.entries, target.entries, overwrite);
-    }
-
-
-    private static void merge(final Hashtable source, final Hashtable target,
-                              final boolean overwrite) {
-
-        synchronized (source) {
-            synchronized (target) {
-                Enumeration e = source.keys();
-                while (e.hasMoreElements()) {
-                    Object key = e.nextElement();
-                    if (!overwrite && (target.get(key) != null)) {
-                        continue;
-                    }
-                    target.put(key, source.get(key));
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Retains only the mappings in <code>source</code> that are contained in
-     * <code>target</code>. In other words, removes from <code>source</code>
-     * all of its keys that are not contained in the specified
-     * <code>target</code>.
-     *
-     * @param source KVS whose entries going to be retained.
-     * @param target KVS containing entries to be retained in 
-     *        <code>source</code>
-     * @return <code>true</code> if this KVS changed as a result of the call
-     */
-    public static boolean retain(final KeyValueSupport source,
-                                 final KeyValueSupport target) {
-
-        boolean changed = false;
-        synchronized (source.entries) {
-            String[] keys = source.keys();
-            synchronized (target.entries) {
-                for (int i = 0; i < keys.length; i++) {
-                    if (!target.contains(keys[i])) {
-                        source.entries.remove(keys[i]);
-                        changed = true;
-                    }
-                }
-            }
-        }
-        return changed;
-    }
-
-
-    /**
      *
      */
     public KeyValueSupport() {
@@ -253,7 +162,7 @@ public final class KeyValueSupport {
     public void unmarshal(final Unmarshaller unmarshaller) throws Exception {
         KeyValueSupport copy = new KeyValueSupport();
         unmarshaller.unmarshal(copy);
-        copy(copy, this);
+        copy(copy);
     }
 
 
@@ -264,7 +173,7 @@ public final class KeyValueSupport {
      */
     public void marhsal(final Marshaller marshaller) throws Exception {
         KeyValueSupport copy = new KeyValueSupport();
-        copy(this, copy);
+        copy.copy(this);
         marshaller.marshal(copy);
     }
 
@@ -496,6 +405,126 @@ public final class KeyValueSupport {
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         epcs.removePropertyChangeListener(listener);
+    }
+
+
+    public void copy(KeyValueSupport support) {
+        synchronized (entries) {
+            entries.clear();
+            synchronized (support.entries) {
+                for (Enumeration e = support.entries.keys();
+                     e.hasMoreElements(); ) {
+
+                    String key = (String) e.nextElement();
+                    entries.put(key, (String) support.entries.get(key));
+                }
+            }
+        }
+    }
+
+
+    public void merge(KeyValueSupport support, boolean overwrite) {
+         synchronized (entries) {
+            synchronized (support.entries) {
+                Enumeration e = support.entries.keys();
+                while (e.hasMoreElements()) {
+                    Object key = e.nextElement();
+                    if (!overwrite && entries.contains(key)) {
+                        continue;
+                    }
+                    entries.put(key, support.entries.get(key));
+                }
+            }
+        }
+    }
+
+
+    public boolean retain(KeyValueSupport support) {
+        boolean changed = false;
+        synchronized (support.entries) {
+            synchronized (entries) {
+                String[] keys = keys();
+                for (int i = 0; i < keys.length; i++) {
+                    if (!support.entries.contains(keys[i])) {
+                        entries.remove(keys[i]);
+                        changed = true;
+                    }
+                }
+            }
+        }
+        return changed;
+    }
+
+
+    /**
+     *
+     * @param prefix
+     * @return
+     */
+    public KeyValueSupport addPrefix(final String prefix) {
+        String trimmed = prefix.trim();
+        if (trimmed.length() == 0) {
+            throw new IllegalArgumentException("ILLEGAL PREFIX: " + prefix);
+        }
+        synchronized (entries) {
+            String[] keys = keys();
+            for (int i = 0; i < keys.length; i++) {
+                entries.put(trimmed + keys[i], entries.get(keys[i]));
+                entries.remove(keys[i]);
+            }
+        }
+        return this;
+    }
+
+
+    /**
+     * Removes prefix from each entry's key.
+     *
+     * @param prefix
+     * @return self
+     */
+    public KeyValueSupport removePrefix(final String prefix) {
+        String trimmed = prefix.trim();
+        if (trimmed.length() == 0) {
+            throw new IllegalArgumentException("ILLEGAL PREFIX: " + prefix);
+        }
+        synchronized (entries) {
+            String[] keys = keys();
+            for (int i = 0; i < keys.length; i++) {
+                if (!keys[i].startsWith(trimmed)) {
+                    continue;
+                }
+                entries.put(keys[i].substring(trimmed.length()),
+                            entries.get(keys[i]));
+                entries.remove(keys[i]);
+            }
+        }
+        return this;
+    }
+
+
+    /**
+     * Returns a new copy contains entries of which each key starts with given
+     * prefix.
+     *
+     * @param prefix prefix to be filtered
+     * @return a new copy of KVS
+     */
+    public KeyValueSupport filterPrefix(final String prefix) {
+        String trimmed = prefix.trim();
+        if (trimmed.length() == 0) {
+            throw new IllegalArgumentException("ILLEGAL PREFIX: " + prefix);
+        }
+        KeyValueSupport copy = new KeyValueSupport();
+        synchronized (entries) {
+            String[] keys = keys();
+            for (int i = 0; i < keys.length; i++) {
+                if (keys[i].startsWith(trimmed)) {
+                    copy.entries.put(keys[i], entries.get(keys[i]));
+                }
+            }
+        }
+        return copy;
     }
 
 

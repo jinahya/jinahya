@@ -76,10 +76,11 @@ public class CAVerifierConfigurationEx {
 
         int byteIndexInBlock = regionBitIndexInBlock / 8;
 
-        int bitIndexInByte = 7 - (regionBitIndexInBlock % 8); // LETTLE ENDIAN
+        int bitIndexInByte = regionBitIndexInBlock % 8;
+        bitIndexInByte = 7 - bitIndexInByte // LETTLE ENDIAN
 
         byte regionByte = blockBytes[byteIndexInBlock];
 
-        return ((regionByte >>> bitIndexInByte) & 0x01) != 0x00;
+        return ((regionByte >>> (7 - bitIndexInByte)) & 0x01) != 0x00;
     }
 }

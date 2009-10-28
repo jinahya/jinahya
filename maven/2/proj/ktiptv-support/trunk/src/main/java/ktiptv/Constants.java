@@ -11,8 +11,9 @@ import com.kt.sso.SSOClient;
 public final class Constants {
 
 
-    public static final String PIN_NUMBER =
-        SSOClient.getInstance().getPINNumber();
+    public static final SSOClient SSO_CLIENT = SSOClient.getInstance();
 
-    public static final String SAID = SSOClient.getInstance().getSAID();
+    public static final String PIN_NUMBER = SSO_CLIENT.getPINNumber();
+
+    public static final String SAID = SSO_CLIENT.getSAID();
 }
