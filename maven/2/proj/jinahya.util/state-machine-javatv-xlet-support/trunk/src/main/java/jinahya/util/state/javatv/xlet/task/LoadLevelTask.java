@@ -15,10 +15,10 @@
  *  under the License.
  */
 
-package jinahya.util.javatv.xlet.task;
+package jinahya.util.state.javatv.xlet.task;
 
 
-import jinahya.util.javatv.xlet.JavaTVXletSpec;
+import jinahya.util.state.javatv.xlet.JavaTVXletSpec;
 import jinahya.util.state.StateMachineException;
 import jinahya.util.state.StateMachineSpec;
 

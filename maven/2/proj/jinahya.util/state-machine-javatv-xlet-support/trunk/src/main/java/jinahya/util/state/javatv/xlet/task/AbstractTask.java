@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.util.javatv.xlet.task;
+package jinahya.util.state.javatv.xlet.task;
 
 
 import jinahya.util.state.StateMachineException;

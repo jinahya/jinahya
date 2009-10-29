@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.util.javatv.xlet;
+package jinahya.util.state.javatv.xlet;
 
 
 import javax.tv.xlet.Xlet;
