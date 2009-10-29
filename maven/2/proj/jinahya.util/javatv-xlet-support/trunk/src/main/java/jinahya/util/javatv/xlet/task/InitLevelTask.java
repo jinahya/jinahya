@@ -40,9 +40,7 @@ public abstract class InitLevelTask extends AbstractTask {
             start(priority);
         }
 
-        if (previousState == JavaTVXletSpec.LOADED &&
-            currentState == JavaTVXletSpec.DESTROYED) {
-
+        if (currentState == JavaTVXletSpec.DESTROYED) {
             finish(priority);
         }
     }

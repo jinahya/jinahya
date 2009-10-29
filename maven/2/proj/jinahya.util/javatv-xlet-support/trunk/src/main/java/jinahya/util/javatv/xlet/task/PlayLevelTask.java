@@ -44,9 +44,7 @@ public abstract class PlayLevelTask extends AbstractTask {
              finish(priority);
         }
 
-        if (previousState == JavaTVXletSpec.STARTED &&
-            currentState == JavaTVXletSpec.DESTROYED) {
-
+        if (currentState == JavaTVXletSpec.DESTROYED) {
             finish(priority);
         }
     }
