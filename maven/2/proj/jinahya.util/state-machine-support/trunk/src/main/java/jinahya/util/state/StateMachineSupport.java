@@ -18,10 +18,6 @@
 package jinahya.util.state;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Vector;
 
 import jinahya.util.event.EventListenerSupport;
@@ -38,7 +34,7 @@ public class StateMachineSupport {
 
 
     /**
-     *
+     * 
      * @param machine
      * @param spec
      * @throws StateMachineException
@@ -47,38 +43,41 @@ public class StateMachineSupport {
                                final StateMachineSpec spec)
         throws StateMachineException {
 
+        this(machine, spec, new DefaultStateMachineTaskManager(machine, spec));
+    }
+
+
+    /**
+     *
+     * @param machine
+     * @param spec
+     * @param manager
+     * @throws StateMachineException
+     */
+    public StateMachineSupport(final StateMachine machine,
+                               final StateMachineSpec spec,
+                               final StateMachineTaskManager manager)
+        throws StateMachineException {
+
         super();
 
         els = new EventListenerSupport(machine);
 
-        transit((this.spec = spec).getStartingState(this.machine = machine));
-    }
+        manager.loadTasks(tasks);
 
-
-    private String hex(int val) {
-        return hex(bytes(val));
-    }
-
-
-    private String hex(byte[] bytes) {
-        StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < bytes.length; i++) {
-            int val = bytes[i] & 0xFF;
-            if (val < 16) {
-                buffer.append('0');
+        for (int i = tasks.size() - 1; i >= 0; i--) {
+            if (!(tasks.elementAt(i) instanceof StateMachineTask)) {
+                tasks.removeElementAt(i);
+                continue;
             }
-            buffer.append(Integer.toHexString(val));
+            for (int j = 0; j < i; j++) {
+                if (tasks.elementAt(j).equals(tasks.elementAt(i))) {
+                    tasks.removeElementAt(i);
+                }
+            }
         }
-        return buffer.toString();
-    }
 
-
-    private byte[] bytes(int val) {
-        byte[] bytes = new byte[4];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[bytes.length - (i + 1)] = (byte)((val >>> (8 * i)) & 0xFF);
-        }
-        return bytes;
+        transit((this.spec = spec).getStartingState(this.machine = machine));
     }
 
 
@@ -103,56 +102,6 @@ public class StateMachineSupport {
             !spec.isTransitionAllowed(state, newState)) {
             throw new StateMachineException
                 ("STATE TRANSITION NOT ALLOWED: " + state + " -> " + newState);
-        }
-
-        if (state == StateMachineSpec.UNKNOWN_STATE) {
-            String name = "/META-INF/jinahya/util/state/" +
-                hex(machine.getIdentifier()).toUpperCase() + "." +
-                hex(spec.getIdentifier()).toUpperCase();
-            InputStream stream = machine.getClass().getResourceAsStream(name);
-            if (stream == null) {
-                throw new StateMachineException("RESOURCE NOT FOUND: " + name);
-            }
-            try {
-                try {
-                    BufferedReader reader = new BufferedReader
-                        (new InputStreamReader(stream, "UTF8"));
-                    try {
-                        String line = null;
-                        while ((line = reader.readLine()) != null) {
-                            line = line.trim();
-                            if (line.length() == 0) {
-                                continue;
-                            }
-                            try {
-                                Class clazz = Class.forName(line);
-                                if (!StateMachineTask.class.
-                                    isAssignableFrom(clazz)) {
-                                    throw new StateMachineException
-                                        (clazz.getName() +
-                                         " is not assignable to " +
-                                         StateMachineTask.class);
-                                }
-                                try {
-                                    tasks.addElement(clazz.newInstance());
-                                } catch (InstantiationException ie) {
-                                    throw new StateMachineException(ie);
-                                } catch (IllegalAccessException iae) {
-                                    throw new StateMachineException(iae);
-                                }
-                            } catch (ClassNotFoundException cnfe) {
-                                throw new StateMachineException(cnfe);
-                            }
-                        }
-                    } finally {
-                        reader.close();
-                    }
-                } finally {
-                    stream.close();
-                }
-            } catch (IOException ioe) {
-                throw new StateMachineException(ioe);
-            }
         }
 
         if (finished) {
