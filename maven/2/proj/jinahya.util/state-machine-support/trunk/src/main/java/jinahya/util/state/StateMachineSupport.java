@@ -34,20 +34,6 @@ public class StateMachineSupport {
 
 
     /**
-     * 
-     * @param machine
-     * @param spec
-     * @throws StateMachineException
-     */
-    public StateMachineSupport(final StateMachine machine,
-                               final StateMachineSpec spec)
-        throws StateMachineException {
-
-        this(machine, spec, new DefaultStateMachineTaskManager(machine, spec));
-    }
-
-
-    /**
      *
      * @param machine
      * @param spec
@@ -63,7 +49,11 @@ public class StateMachineSupport {
 
         els = new EventListenerSupport(machine);
 
-        manager.loadTasks(tasks);
+        if (manager == null) {
+            new DefaultStateMachineTaskManager(machine, spec).loadTasks(tasks);
+        } else {
+            manager.loadTasks(tasks);
+        }
 
         for (int i = tasks.size() - 1; i >= 0; i--) {
             if (!(tasks.elementAt(i) instanceof StateMachineTask)) {

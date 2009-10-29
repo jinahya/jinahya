@@ -15,13 +15,13 @@
  *  under the License.
  */
 
-package xlet.task;
+package xlet;
 
-
-import jinahya.util.javatv.xlet.JavaTVXletSpec;
 
 import jinahya.util.state.StateMachineException;
-import jinahya.util.state.StateMachineTask;
+
+import jinahya.util.state.javatv.xlet.InitLevelTask;
+
 
 
 /**
@@ -29,26 +29,23 @@ import jinahya.util.state.StateMachineTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class InitTask implements StateMachineTask {
+public class InitTask extends InitLevelTask {
+
 
     //@Override
-    public void perform(int previousState, int currentState, int priority)
-        throws StateMachineException {
-
-        if (previousState == JavaTVXletSpec.LOADED &&
-            currentState == JavaTVXletSpec.PAUSED) {
-            System.out.println("INIT_TASK: initXlet");
-            resource = new int[1024];
-            for (int i = 0; i < resource.length; i++) {
-                resource[i] = i;
-            }
-        } else if (currentState == JavaTVXletSpec.DESTROYED) {
-            System.out.println("INIT_TASK: destroyXlet");
-            resource = null;
-        } else {
-            // not interested
+    public void start(int priority) throws StateMachineException {
+        if (priority != 0) {
+            return;
         }
+        System.out.println("INIT: START @ " + priority);
     }
 
-    private int[] resource;
+
+    //@Override
+    public void finish(int priority) throws StateMachineException {
+        if (priority != 0) {
+            return;
+        }
+        System.out.println("INIT: FINISH @ " + priority);
+    }
 }

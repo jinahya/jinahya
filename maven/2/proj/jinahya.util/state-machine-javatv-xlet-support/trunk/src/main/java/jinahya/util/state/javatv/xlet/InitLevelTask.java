@@ -15,10 +15,9 @@
  *  under the License.
  */
 
-package jinahya.util.state.javatv.xlet.task;
+package jinahya.util.state.javatv.xlet;
 
 
-import jinahya.util.state.javatv.xlet.JavaTVXletSpec;
 import jinahya.util.state.StateMachineException;
 
 
@@ -26,7 +25,7 @@ import jinahya.util.state.StateMachineException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class InitLevelTask extends AbstractTask {
+public abstract class InitLevelTask extends LevelTask {
 
 
     //@Override

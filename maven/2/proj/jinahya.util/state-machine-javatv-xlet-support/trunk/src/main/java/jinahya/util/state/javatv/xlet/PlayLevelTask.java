@@ -15,32 +15,33 @@
  *  under the License.
  */
 
-package jinahya.util.state.javatv.xlet.task;
+package jinahya.util.state.javatv.xlet;
 
 
 import jinahya.util.state.StateMachineException;
-import jinahya.util.state.StateMachineTask;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class AbstractTask implements StateMachineTask {
+public abstract class PlayLevelTask extends LevelTask {
 
 
-    /**
-     *
-     * @param priority
-     * @throws StateMachineException
-     */
-    protected abstract void start(int priority) throws StateMachineException;
+    //@Override
+    public void perform(final int previousState, final int currentState,
+                        final int priority)
+        throws StateMachineException {
 
+         if (currentState == JavaTVXletSpec.STARTED) {
+            start(priority);
+        }
 
-    /**
-     *
-     * @param priority
-     * @throws StateMachineException
-     */
-    protected abstract void finish(int priority) throws StateMachineException;
+         if (previousState == JavaTVXletSpec.STARTED &&
+             (currentState == JavaTVXletSpec.PAUSED ||
+              currentState == JavaTVXletSpec.DESTROYED)) {
+
+             finish(priority);
+        }
+    }
 }

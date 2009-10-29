@@ -25,6 +25,7 @@ import javax.tv.xlet.XletStateChangeException;
 import jinahya.util.state.StateMachine;
 import jinahya.util.state.StateMachineException;
 import jinahya.util.state.StateMachineSupport;
+import jinahya.util.state.StateMachineTaskManager;
 
 
 /**
@@ -37,14 +38,15 @@ public abstract class AbstractXlet implements Xlet, StateMachine {
     /**
      *
      * @param identifier
+     * @param manager
      */
-    public AbstractXlet(final int identifier) {
+    public AbstractXlet(final int identifier, StateMachineTaskManager manager) {
         super();
 
         this.identifier = identifier;
 
         try {
-            sms = new StateMachineSupport(this, new JavaTVXletSpec());
+            sms = new StateMachineSupport(this, new JavaTVXletSpec(), manager);
         } catch (StateMachineException sme) {
             sme.printStackTrace();
         }

@@ -18,7 +18,11 @@
 package xlet;
 
 
-import jinahya.util.javatv.xlet.AbstractXlet;
+import java.util.Vector;
+
+import jinahya.util.state.StateMachineException;
+import jinahya.util.state.StateMachineTaskManager;
+import jinahya.util.state.javatv.xlet.AbstractXlet;
 
 
 /**
@@ -33,7 +37,21 @@ public class Impl extends AbstractXlet {
     public static final int IDENTIFIER = 0xFA858EAB;
 
 
+    /*
     public Impl() {
-        super(IDENTIFIER);
+        super(IDENTIFIER, null);
+    }
+    */
+
+
+    public Impl() {
+        super(IDENTIFIER, new StateMachineTaskManager() {
+            public void loadTasks(Vector tasks) throws StateMachineException {
+                tasks.addElement(new DefaultTask());
+                tasks.addElement(new LoadTask());
+                tasks.addElement(new InitTask());
+                tasks.addElement(new PlayTask());
+            }
+        });
     }
 }
