@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya.util</groupId>
-  <artifactId>javatv-xlet-support-example</artifactId>
+  <artifactId>state-machine-javatv-xlet-support-example</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>jinahya.util</groupId>
-      <artifactId>javatv-xlet-support</artifactId>
+      <artifactId>state-machine-javatv-xlet-support</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
@@ -107,7 +107,7 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>javatv-xlet-support-example</name>
+  <name>state-machine-javatv-xlet-support-example</name>
   <description>JavaTV Xlet Support Example</description>
   <!--url/-->
   <inceptionYear>2009</inceptionYear>
@@ -139,10 +139,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/javatv-xlet-support-example/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/javatv-xlet-support-example/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/state-machine-javatv-xlet-support-example/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/state-machine-javatv-xlet-support-example/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/javatv-xlet-support-example/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/state-machine-javatv-xlet-support-example/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -173,7 +173,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/javatv-xlet-support-example</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/state-machine-javatv-xlet-support-example</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
