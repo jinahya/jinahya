@@ -145,7 +145,7 @@
       <name>googlecode:jinahya</name>
       <url>http://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
-    <repository>
+    <!--repository>
       <id>googlecode:jinahya-files</id>
       <name>googlecode:jinahya-files</name>
       <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
@@ -160,7 +160,7 @@
       <id>maven2-repository.dev.java.net</id>
       <name>Java.net Repository for Maven2</name>
       <url>http://download.java.net/maven/2</url>
-    </repository>
+    </repository-->
   </repositories>
   <!--pluginRepositories/-->
   <distributionManagement>
