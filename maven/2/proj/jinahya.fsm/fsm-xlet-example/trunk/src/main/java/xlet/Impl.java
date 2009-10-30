@@ -49,9 +49,9 @@ public class Impl implements Xlet {
             fsms = new XletSupport(new FSMTaskFactory() {
                 public void createTasks(Vector tasks) throws FSMException {
                     tasks.addElement(new DefaultTask());
-                    tasks.addElement(new LoadTask());
-                    tasks.addElement(new InitTask());
-                    tasks.addElement(new PlayTask());
+                    tasks.addElement(new SimpleLoadTask());
+                    tasks.addElement(new SimpleInitTask());
+                    tasks.addElement(new SimplePlayTask());
                 }
             }, XletSpec.LOADED);
         } catch (FSMException fsme) {
