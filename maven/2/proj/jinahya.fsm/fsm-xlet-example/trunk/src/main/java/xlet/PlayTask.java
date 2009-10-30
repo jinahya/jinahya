@@ -15,32 +15,34 @@
  *  under the License.
  */
 
-package jinahya.fsm.xlet;
+package xlet;
 
 
 import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMTask;
 
 
 /**
+ * This task works for initXlet() and destroyXlet().
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletTask implements FSMTask {
+public class PlayTask extends jinahya.fsm.xlet.PlayTask {
 
 
-    /**
-     *
-     * @param priority
-     * @throws FSMException
-     */
-    protected abstract void start(int priority) throws FSMException;
+    //@Override
+    public void start(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
+        }
+        System.out.println("PLAY: START @ " + priority);
+    }
 
 
-    /**
-     *
-     * @param priority
-     * @throws FSMException
-     */
-    protected abstract void finish(int priority) throws FSMException;
+    //@Override
+    public void finish(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
+        }
+        System.out.println("PLAY: FINISH @ " + priority);
+    }
 }

@@ -15,33 +15,34 @@
  *  under the License.
  */
 
-package jinahya.fsm.xlet;
+package xlet;
 
 
 import jinahya.fsm.FSMException;
 
 
 /**
+ * This task works for initXlet() and destroyXlet().
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class PlayTask extends XletTask {
+public class LoadTask extends jinahya.fsm.xlet.LoadTask {
 
 
     //@Override
-    public void perform(final int previousState, final int currentState,
-                        final int priority)
-        throws FSMException {
-
-        if (currentState == XletSpec.STARTED) {
-            start(priority);
+    public void start(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
         }
+        System.out.println("LOAD: START @ " + priority);
+    }
 
-        if (previousState == XletSpec.STARTED &&
-            (currentState == XletSpec.PAUSED ||
-            currentState == XletSpec.DESTROYED)) {
 
-            finish(priority);
+    //@Override
+    public void finish(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
         }
+        System.out.println("LOAD: FINISH @ " + priority);
     }
 }

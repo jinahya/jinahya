@@ -15,43 +15,27 @@
  *  under the License.
  */
 
-package jinahya.fsm.xlet;
+package xlet;
 
 
 import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMSupport;
-import jinahya.fsm.FSMTaskFactory;
+import jinahya.fsm.FSMTask;
 
 
 /**
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletSupport extends FSMSupport {
+public class DefaultTask implements FSMTask {
 
 
-    /*
-     *
-     * @param factory
-     * @return
-     * @throws FSMException
-     */
-    /*
-    public static XletSupport iAmInMyConstructor(FSMTaskFactory factory)
+    //@Override
+    public void perform(int previousState, int currentState, int priority)
         throws FSMException {
 
-        return new XletSupport(factory, XletSpec.LOADED);
-    }
-     */
-
-
-    /**
-     *
-     * @param factory
-     * @param state
-     * @throws FSMException
-     */
-    public XletSupport(FSMTaskFactory factory, int state) throws FSMException {
-        super(new XletSpec(), factory, state);
+        if (priority != 0) {
+            return;
+        }
+        System.out.println("STATE: " + previousState + " -> " + currentState + " @ " + priority);
     }
 }

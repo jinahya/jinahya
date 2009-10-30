@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 onacit.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,33 +15,34 @@
  *  under the License.
  */
 
-package jinahya.fsm.xlet;
+package xlet;
 
 
 import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMSpec;
 
 
 /**
+ * This task works for initXlet() and destroyXlet().
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class LoadTask extends XletTask {
+public class InitTask extends jinahya.fsm.xlet.InitTask {
 
 
     //@Override
-    public void perform(final int previousState, final int currentState,
-                        final int priority)
-        throws FSMException {
-
-        if (previousState == FSMSpec.UNKNOWN_STATE &&
-            currentState == XletSpec.LOADED) {
-
-            start(priority);
+    public void start(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
         }
+        System.out.println("INIT: START @ " + priority);
+    }
 
-        if (currentState == XletSpec.DESTROYED) {
-            finish(priority);
+
+    //@Override
+    public void finish(int priority) throws FSMException {
+        if (priority != 0) {
+            return;
         }
+        System.out.println("INIT: FINISH @ " + priority);
     }
 }
