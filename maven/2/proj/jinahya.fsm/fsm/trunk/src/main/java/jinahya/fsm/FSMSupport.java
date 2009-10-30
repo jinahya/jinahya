@@ -25,42 +25,44 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class StateMachineSupport {
+public class FSMSupport {
 
 
     /**
      *
-     * @param machine
      * @param spec
-     * @param manager
-     * @throws StateMachineException
+     * @param factory
+     * @param state
+     * @throws FSMException
      */
-    public StateMachineSupport(final StateMachine machine,
-                               final StateMachineSpec spec,
-                               final StateMachineTaskManager manager)
-        throws StateMachineException {
+    public FSMSupport(final FSMSpec spec, final FSMTaskFactory factory,
+                      final int state)
+        throws FSMException {
 
         super();
 
-        if (manager == null) {
-            new DefaultStateMachineTaskManager(machine, spec).loadTasks(tasks);
-        } else {
-            manager.loadTasks(tasks);
-        }
+        this.spec = spec;
 
-        for (int i = tasks.size() - 1; i >= 0; i--) {
-            if (!(tasks.elementAt(i) instanceof StateMachineTask)) {
-                tasks.removeElementAt(i);
-                continue;
-            }
-            for (int j = 0; j < i; j++) {
-                if (tasks.elementAt(j).equals(tasks.elementAt(i))) {
-                    tasks.removeElementAt(i);
+        final Vector temp = new Vector();
+        synchronized (temp) {
+            factory.createTasks(temp);
+            for (int i = temp.size() - 1; i >= 0; i--) {
+                if (!(temp.elementAt(i) instanceof FSMTask)) {
+                    temp.removeElementAt(i);
+                    continue;
+                }
+                for (int j = 0; j < i; j++) {
+                    if (temp.elementAt(j).equals(temp.elementAt(i))) {
+                        temp.removeElementAt(i);
+                    }
                 }
             }
+            for (int i = 0; i < temp.size(); i++) {
+                tasks.addElement(temp.elementAt(i));
+            }
         }
 
-        transit((this.spec = spec).getStartingState(this.machine = machine));
+        transit(state);
     }
 
 
@@ -75,33 +77,42 @@ public class StateMachineSupport {
 
     /**
      *
-     * @param newState
-     * @throws StateMachineException
+     * @param state
+     * @throws FSMException
      */
-    public synchronized void transit(int newState)
-        throws StateMachineException {
+    public synchronized void setState(int state) throws FSMException {
+        transit(state);
+    }
 
-        if (newState == StateMachineSpec.UNKNOWN_STATE || newState == state ||
+
+    /**
+     *
+     * @param newState
+     * @throws FSMException
+     */
+    public synchronized void transit(int newState) throws FSMException {
+
+        if (newState == FSMSpec.UNKNOWN_STATE || newState == state ||
             !spec.isTransitionAllowed(state, newState)) {
-            throw new StateMachineException
+            throw new FSMException
                 ("STATE TRANSITION NOT ALLOWED: " + state + " -> " + newState);
         }
 
         if (finished) {
-            throw new StateMachineException("ALREADY FINISHED!");
+            throw new FSMException("ALREADY FINISHED!");
         }
 
         int oldState = state;
         state = newState;
 
-        StateMachineException thrown = null;
+        FSMException thrown = null;
 
         for (int priority = 0; priority < 10; priority++) {
             for (int i = 0; i < tasks.size(); i++) {
-                StateMachineTask task = (StateMachineTask) tasks.elementAt(i);
+                FSMTask task = (FSMTask) tasks.elementAt(i);
                 try {
                     task.perform(oldState, state, priority);
-                } catch (StateMachineException sme) {
+                } catch (FSMException sme) {
                     thrown = sme;
                 }
             }
@@ -117,10 +128,9 @@ public class StateMachineSupport {
     }
 
 
-    private StateMachine machine;
-    private StateMachineSpec spec;
+    private FSMSpec spec;
 
-    private int state = StateMachineSpec.UNKNOWN_STATE;
+    private int state = FSMSpec.UNKNOWN_STATE;
 
     private final Vector tasks = new Vector();
 

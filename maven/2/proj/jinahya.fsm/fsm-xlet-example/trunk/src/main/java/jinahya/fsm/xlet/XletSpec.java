@@ -18,15 +18,14 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.StateMachine;
-import jinahya.fsm.StateMachineSpec;
+import jinahya.fsm.FSMSpec;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JavaTVXletSpec implements StateMachineSpec {
+public class XletSpec implements FSMSpec {
 
 
     /**
@@ -63,25 +62,6 @@ public class JavaTVXletSpec implements StateMachineSpec {
      * DESTROYED but the Xlet object has not yet been garbage collected.
      */
     public static final int INVALID = (DESTROYED << 1);
-
-
-    // "jinahya.util.javatv.xlet.JavaTVXletSpec".hashCode();
-    // -2135453761
-    public static final int IDENTIFIER = 0x80B78FBF; //
-
-
-
-
-    //@Override
-    public int getIdentifier() {
-        return IDENTIFIER;
-    }
-
-
-    //@Override
-    public int getStartingState(final StateMachine machine) {
-        return LOADED;
-    }
 
 
     //@Override

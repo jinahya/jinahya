@@ -15,55 +15,43 @@
  *  under the License.
  */
 
-package jinahya.fsm;
+package jinahya.fsm.xlet;
+
+
+import jinahya.fsm.FSMException;
+import jinahya.fsm.FSMSupport;
+import jinahya.fsm.FSMTaskFactory;
 
 
 /**
  *
  * @author <a href="jinahya@gmail.com">Jin Kwon</a>
  */
-public class StateMachineException extends Exception {
+public class XletSupport extends FSMSupport {
 
 
-    private static final long serialVersionUID = -5925728381873724134L;
-
-
-    /**
+    /*
      *
-     * @param message
-     */
-    public StateMachineException(String message) {
-        this(message, null);
-    }
-
-
-    /**
-     *
-     * @param cause
-     */
-    public StateMachineException(Throwable cause) {
-        this(cause.getMessage(), cause);
-    }
-
-
-    /**
-     * 
-     * @param message
-     * @param cause
-     */
-    public StateMachineException(String message, Throwable cause) {
-        super(message);
-    }
-
-
-    /**
-     *
+     * @param factory
      * @return
+     * @throws FSMException
      */
-    public Throwable getCause() {
-        return cause;
-    }
+    /*
+    public static XletSupport iAmInMyConstructor(FSMTaskFactory factory)
+        throws FSMException {
 
-    
-    private Throwable cause;
+        return new XletSupport(factory, XletSpec.LOADED);
+    }
+     */
+
+
+    /**
+     *
+     * @param factory
+     * @param state
+     * @throws FSMException
+     */
+    public XletSupport(FSMTaskFactory factory, int state) throws FSMException {
+        super(new XletSpec(), factory, state);
+    }
 }

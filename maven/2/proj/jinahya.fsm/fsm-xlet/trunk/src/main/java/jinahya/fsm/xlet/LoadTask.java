@@ -18,28 +18,29 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.FSMException;
+import jinahya.fsm.FSMSpec;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class InitLevelTask extends LevelTask {
+public abstract class LoadTask extends XletTask {
 
 
     //@Override
     public void perform(final int previousState, final int currentState,
                         final int priority)
-        throws StateMachineException {
+        throws FSMException {
 
-        if (previousState == JavaTVXletSpec.LOADED &&
-            currentState == JavaTVXletSpec.PAUSED) {
+        if (previousState == FSMSpec.UNKNOWN_STATE &&
+            currentState == XletSpec.LOADED) {
 
             start(priority);
         }
 
-        if (currentState == JavaTVXletSpec.DESTROYED) {
+        if (currentState == XletSpec.DESTROYED) {
             finish(priority);
         }
     }

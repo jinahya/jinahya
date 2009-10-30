@@ -20,43 +20,50 @@ package jinahya.fsm;
 
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="jinahya@gmail.com">Jin Kwon</a>
  */
-public interface StateMachineSpec {
+public class FSMException extends Exception {
 
 
+    private static final long serialVersionUID = -5925728381873724134L;
 
-    public static final int UNKNOWN_STATE = 0xFFFFFFFF;
+
+    /**
+     *
+     * @param message
+     */
+    public FSMException(String message) {
+        this(message, null);
+    }
+
+
+    /**
+     *
+     * @param cause
+     */
+    public FSMException(Throwable cause) {
+        this(cause.getMessage(), cause);
+    }
+
+
+    /**
+     * 
+     * @param message
+     * @param cause
+     */
+    public FSMException(String message, Throwable cause) {
+        super(message);
+    }
 
 
     /**
      *
      * @return
      */
-    public int getIdentifier();
+    public Throwable getCause() {
+        return cause;
+    }
 
-
-    /**
-     *
-     * @param machine
-     * @return
-     */
-    public int getStartingState(StateMachine machine);
-
-
-    /**
-     *
-     * @param sourceState
-     * @param targetState
-     * @return
-     */
-    public boolean isTransitionAllowed(int sourceState, int targetState);
-
-
-    /**
-     *
-     * @param state
-     * @return false
-     */
-    public boolean isFinishingState(int state);
+    
+    private Throwable cause;
 }
