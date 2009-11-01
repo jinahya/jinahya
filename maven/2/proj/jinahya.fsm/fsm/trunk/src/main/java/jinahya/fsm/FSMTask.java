@@ -27,11 +27,11 @@ public interface FSMTask {
 
     /**
      *
-     * @param previousState
-     * @param currentState
+     * @param sourceState
+     * @param targetState
      * @param priority
      * @throws FSMException
      */
-    public void perform(int previousState, int currentState, int priority)
+    public void perform(int sourceState, int targetState, int priority)
         throws FSMException;
 }

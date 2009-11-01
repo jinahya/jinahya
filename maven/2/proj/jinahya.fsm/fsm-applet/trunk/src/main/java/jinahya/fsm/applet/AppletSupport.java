@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.fsm.xlet;
+package jinahya.fsm.applet;
 
 
 import jinahya.fsm.FSMException;
@@ -25,9 +25,9 @@ import jinahya.fsm.FSMTaskFactory;
 
 /**
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletSupport extends FSMSupport {
+public class AppletSupport extends FSMSupport {
 
 
     /**
@@ -36,10 +36,10 @@ public class XletSupport extends FSMSupport {
      * @return
      * @throws FSMException
      */
-    public static XletSupport createFromConstructor(FSMTaskFactory factory)
+    public static AppletSupport createForConstructor(FSMTaskFactory factory)
         throws FSMException {
 
-        return new XletSupport(factory, XletSpec.LOADED);
+        return new AppletSupport(factory, AppletSpec.LOADED);
     }
 
 
@@ -49,10 +49,10 @@ public class XletSupport extends FSMSupport {
      * @return
      * @throws FSMException
      */
-    public static XletSupport createFromInitXlet(FSMTaskFactory factory)
+    public static AppletSupport createForInit(FSMTaskFactory factory)
         throws FSMException {
 
-        return new XletSupport(factory, XletSpec.PAUSED);
+        return new AppletSupport(factory, AppletSpec.PAUSED);
     }
 
 
@@ -62,27 +62,29 @@ public class XletSupport extends FSMSupport {
      * @param state
      * @throws FSMException
      */
-    public XletSupport(FSMTaskFactory factory, int state) throws FSMException {
-        super(new XletSpec(), factory, state);
+    public AppletSupport(FSMTaskFactory factory, int state)
+        throws FSMException {
+
+        super(new AppletSpec(), factory, state);
     }
 
 
-    public void initXletInvoked() throws FSMException {
-        transit(XletSpec.PAUSED);
+    public void initInvoked() throws FSMException {
+        transit(AppletSpec.PAUSED);
     }
 
 
-    public void startXletInvoked() throws FSMException {
-        transit(XletSpec.STARTED);
+    public void startInvoked() throws FSMException {
+        transit(AppletSpec.STARTED);
     }
 
 
-    public void pauseXletInvoked() throws FSMException {
-        transit(XletSpec.PAUSED);
+    public void pauseStopInvoked() throws FSMException {
+        transit(AppletSpec.PAUSED);
     }
 
 
-    public void destroyXletInvoked() throws FSMException {
-        transit(XletSpec.DESTROYED);
+    public void destroyInvoked() throws FSMException {
+        transit(AppletSpec.DESTROYED);
     }
 }
