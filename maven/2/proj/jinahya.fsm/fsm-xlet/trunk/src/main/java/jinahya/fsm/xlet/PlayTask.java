@@ -25,7 +25,7 @@ import jinahya.fsm.FSMException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class PlayTask extends XletTask {
+public abstract class PlayTask extends SwitchTask {
 
 
     //@Override
@@ -34,14 +34,14 @@ public abstract class PlayTask extends XletTask {
         throws FSMException {
 
         if (currentState == XletSpec.STARTED) {
-            start(priority);
+            turnOn(priority);
         }
 
         if (previousState == XletSpec.STARTED &&
             (currentState == XletSpec.PAUSED ||
-            currentState == XletSpec.DESTROYED)) {
+             currentState == XletSpec.DESTROYED)) {
 
-            finish(priority);
+            turnOff(priority);
         }
     }
 }

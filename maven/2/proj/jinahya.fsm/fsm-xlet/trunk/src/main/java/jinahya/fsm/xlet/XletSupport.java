@@ -30,19 +30,30 @@ import jinahya.fsm.FSMTaskFactory;
 public class XletSupport extends FSMSupport {
 
 
-    /*
+    /**
      *
      * @param factory
      * @return
      * @throws FSMException
      */
-    /*
     public static XletSupport iAmInMyConstructor(FSMTaskFactory factory)
         throws FSMException {
 
         return new XletSupport(factory, XletSpec.LOADED);
     }
+
+
+    /**
+     *
+     * @param factory
+     * @return
+     * @throws FSMException
      */
+    public static XletSupport iAmInMyInitXlet(FSMTaskFactory factory)
+        throws FSMException {
+
+        return new XletSupport(factory, XletSpec.PAUSED);
+    }
 
 
     /**

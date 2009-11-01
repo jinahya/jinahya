@@ -64,9 +64,13 @@ public class XletSpec implements FSMSpec {
     public static final int INVALID = (DESTROYED << 1);
 
 
+
     //@Override
-    public boolean isFinishingState(final int state) {
-        return state == DESTROYED;
+    public boolean isStartingTransition(final int sourceState,
+                                        final int targetState) {
+
+        return (sourceState == UNKNOWN_STATE && targetState == LOADED) ||
+               (sourceState == LOADED && targetState == PAUSED);
     }
 
 
@@ -92,5 +96,12 @@ public class XletSpec implements FSMSpec {
         }
 
         return allowed;
+    }
+
+
+    //@Override
+    public boolean isFinishingTransition(final int sourceState,
+                                         final int targetState) {
+        return targetState == DESTROYED;
     }
 }

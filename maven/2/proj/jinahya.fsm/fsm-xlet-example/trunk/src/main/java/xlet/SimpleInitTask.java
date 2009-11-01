@@ -32,19 +32,19 @@ public class SimpleInitTask extends InitTask {
 
 
     //@Override
-    public void start(int priority) throws FSMException {
+    public void turnOn(int priority) throws FSMException {
         if (priority != 0) {
             return;
         }
-        System.out.println("INIT: START @ " + priority);
+        System.out.println("INIT: ON @ " + priority);
     }
 
 
     //@Override
-    public void finish(int priority) throws FSMException {
+    public void turnOff(int priority) throws FSMException {
         if (priority != 0) {
             return;
         }
-        System.out.println("INIT: FINISH @ " + priority);
+        System.out.println("INIT: OFF @ " + priority);
     }
 }

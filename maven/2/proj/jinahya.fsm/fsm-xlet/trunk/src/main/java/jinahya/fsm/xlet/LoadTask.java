@@ -26,7 +26,7 @@ import jinahya.fsm.FSMSpec;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class LoadTask extends XletTask {
+public abstract class LoadTask extends SwitchTask {
 
 
     //@Override
@@ -37,11 +37,11 @@ public abstract class LoadTask extends XletTask {
         if (previousState == FSMSpec.UNKNOWN_STATE &&
             currentState == XletSpec.LOADED) {
 
-            start(priority);
+            turnOn(priority);
         }
 
         if (currentState == XletSpec.DESTROYED) {
-            finish(priority);
+            turnOff(priority);
         }
     }
 }

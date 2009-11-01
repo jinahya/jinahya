@@ -33,15 +33,27 @@ public interface FSMSpec {
      *
      * @param sourceState
      * @param targetState
-     * @return
+     * @return true if this transition means one of the starting transition of
+     *         the machine, false otherwise.
+     */
+    public boolean isStartingTransition(int sourceState, int targetState);
+
+
+    /**
+     *
+     * @param sourceState
+     * @param targetState
+     * @return true if given transition is an allowed one, false otherwise.
      */
     public boolean isTransitionAllowed(int sourceState, int targetState);
 
 
     /**
      *
-     * @param state
-     * @return false
+     * @param sourceState
+     * @param targetState
+     * @return true if this transition means one of the finishing transition of
+     *         the machine, false otherwise.
      */
-    public boolean isFinishingState(int state);
+    public boolean isFinishingTransition(int sourceState, int targetState);
 }

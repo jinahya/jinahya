@@ -26,7 +26,7 @@ import jinahya.fsm.FSMTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletTask implements FSMTask {
+public abstract class SwitchTask implements FSMTask {
 
 
     /**
@@ -34,7 +34,7 @@ public abstract class XletTask implements FSMTask {
      * @param priority
      * @throws FSMException
      */
-    protected abstract void start(int priority) throws FSMException;
+    protected abstract void turnOn(int priority) throws FSMException;
 
 
     /**
@@ -42,5 +42,5 @@ public abstract class XletTask implements FSMTask {
      * @param priority
      * @throws FSMException
      */
-    protected abstract void finish(int priority) throws FSMException;
+    protected abstract void turnOff(int priority) throws FSMException;
 }

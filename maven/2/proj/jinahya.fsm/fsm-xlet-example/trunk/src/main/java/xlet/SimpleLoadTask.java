@@ -32,7 +32,7 @@ public class SimpleLoadTask extends LoadTask {
 
 
     //@Override
-    public void start(int priority) throws FSMException {
+    public void turnOn(int priority) throws FSMException {
         if (priority != 0) {
             return;
         }
@@ -41,7 +41,7 @@ public class SimpleLoadTask extends LoadTask {
 
 
     //@Override
-    public void finish(int priority) throws FSMException {
+    public void turnOff(int priority) throws FSMException {
         if (priority != 0) {
             return;
         }

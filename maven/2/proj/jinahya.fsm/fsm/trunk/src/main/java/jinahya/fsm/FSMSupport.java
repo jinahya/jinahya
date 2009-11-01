@@ -42,25 +42,7 @@ public class FSMSupport {
         super();
 
         this.spec = spec;
-
-        final Vector temp = new Vector();
-        synchronized (temp) {
-            factory.createTasks(temp);
-            for (int i = temp.size() - 1; i >= 0; i--) {
-                if (!(temp.elementAt(i) instanceof FSMTask)) {
-                    temp.removeElementAt(i);
-                    continue;
-                }
-                for (int j = 0; j < i; j++) {
-                    if (temp.elementAt(j).equals(temp.elementAt(i))) {
-                        temp.removeElementAt(i);
-                    }
-                }
-            }
-            for (int i = 0; i < temp.size(); i++) {
-                tasks.addElement(temp.elementAt(i));
-            }
-        }
+        this.factory = factory;
 
         transit(state);
     }
@@ -80,7 +62,7 @@ public class FSMSupport {
      * @param state
      * @throws FSMException
      */
-    public synchronized void setState(int state) throws FSMException {
+    public synchronized void setState(final int state) throws FSMException {
         transit(state);
     }
 
@@ -90,49 +72,66 @@ public class FSMSupport {
      * @param newState
      * @throws FSMException
      */
-    public synchronized void transit(int newState) throws FSMException {
+    public synchronized void transit(final int newState) throws FSMException {
 
         if (newState == FSMSpec.UNKNOWN_STATE || newState == state ||
             !spec.isTransitionAllowed(state, newState)) {
             throw new FSMException
-                ("STATE TRANSITION NOT ALLOWED: " + state + " -> " + newState);
+                ("transition is not allowed: " + state + " -> " + newState);
         }
 
         if (finished) {
-            throw new FSMException("ALREADY FINISHED!");
+            throw new FSMException("already finished!");
         }
 
         int oldState = state;
         state = newState;
 
-        FSMException thrown = null;
 
-        for (int priority = 0; priority < 10; priority++) {
-            for (int i = 0; i < tasks.size(); i++) {
-                FSMTask task = (FSMTask) tasks.elementAt(i);
-                try {
-                    task.perform(oldState, state, priority);
-                } catch (FSMException sme) {
-                    thrown = sme;
+        if (!started && spec.isStartingTransition(oldState, state)) {
+            started = true;
+            final Vector temp = new Vector();
+            factory.createTasks(temp);
+            synchronized (temp) {
+                for (int i = temp.size() - 1; i >= 0; i--) {
+                    if (!(temp.elementAt(i) instanceof FSMTask)) {
+                        temp.removeElementAt(i);
+                        continue;
+                    }
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (temp.elementAt(j).equals(temp.elementAt(i))) {
+                            temp.removeElementAt(i);
+                        }
+                    }
+                }
+                for (int i = 0; i < temp.size(); i++) {
+                    tasks.addElement(temp.elementAt(i));
                 }
             }
         }
 
-        if (spec.isFinishingState(state)) {
+
+        if (!finished && spec.isFinishingTransition(oldState, state)) {
             finished = true;
         }
 
-        if (thrown != null) {
-            throw thrown;
+
+        for (int priority = 0; priority < 10; priority++) {
+            for (int i = 0; i < tasks.size(); i++) {
+                FSMTask task = (FSMTask) tasks.elementAt(i);
+                task.perform(oldState, state, priority);
+            }
         }
     }
 
 
     private FSMSpec spec;
+    private FSMTaskFactory factory;
 
     private int state = FSMSpec.UNKNOWN_STATE;
 
     private final Vector tasks = new Vector();
 
-    private boolean finished = false;
+    private volatile boolean started = false;
+    private volatile boolean finished = false;
 }
