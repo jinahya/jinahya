@@ -30,8 +30,8 @@ public interface ByteOutput {
 
     /**
      *
-     * @param b
-     * @throws IOException
+     * @param b octet 0-255
+     * @throws IOException if an I/O error occurs
      */
     public void writeByte(int b) throws IOException;
 }

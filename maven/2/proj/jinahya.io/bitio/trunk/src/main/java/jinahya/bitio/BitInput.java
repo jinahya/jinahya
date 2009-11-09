@@ -1,7 +1,6 @@
 package jinahya.bitio;
 
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,8 +14,9 @@ public class BitInput {
 
 
     /**
+     * Creates a new instance with specified input.
      *
-     * @param in
+     * @param in octet input
      */
     public BitInput(final InputStream in) {
         this(new ByteInput() {
@@ -28,6 +28,7 @@ public class BitInput {
 
 
     /**
+     * Creates a new instance with specified input.
      *
      * @param input
      */
@@ -38,82 +39,71 @@ public class BitInput {
     }
 
 
-    private static final int[] powers  = new int[] {
-        0x01, // 1   0000 0001
-        0x03, // 3   0000 0011
-        0x07, // 7   0000 0111
-        0x0F, // 15  0000 1111
-        0x1F, // 31  0001 1111
-        0x3F, // 63  0011 1111
-        0x7F, // 127 0111 1111
-    };
-
-
     /**
+     * Reads one bit and returns true if it is one.
      *
-     * @return
+     * @return true for one, false for zero
      * @throws IOException
      */
     public boolean readBoolean() throws IOException {
-        return readUnsignedByte(1) == 0x01;
+        return (readUnsignedByte(1) == 0x01);
     }
 
 
-    /**
-     *
-     * @param length
-     * @return
-     * @throws IOException
-     */
-    public int readUnsignedByte(int length) throws IOException {
+    private int readUnsignedByte(int length) throws IOException {
 
         if (length < 1 || length >= 8) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
         if (avail == 0x00) {
-            if ((octet = input.readByte()) == -1) {
-                throw new EOFException("EOF");
+            octet = input.readByte();
+
+            {
+                System.out.print("readOctet: ");
+                String binary = Integer.toBinaryString(octet & 0xFF);
+                for (int i = 0; i < (8 - binary.length()); i++) {
+                    System.out.print(("0"));
+                }
+                System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
             }
+
             avail = 0x08;
         }
 
         if (avail >= length) {
+            System.out.println("readUnsignedByte(" + length + ")");
+            int value = ((octet & 0xFF) >>> (avail - length));
             avail -= length;
             count += length;
-            int value = (octet >> length);
-            octet &= powers[avail - 1];
+            octet &= (0xFF >> (8 - avail));
             return value;
         } else {
             int requi = length - avail;
             return ((readUnsignedByte(avail) << requi) |
-                     readUnsignedByte(requi));
+                    readUnsignedByte(requi));
         }
     }
 
 
-    /**
-     *
-     * @param length
-     * @return
-     * @throws IOException
-     */
-    public int readUnsignedShort(int length) throws IOException {
+    private int readUnsignedShort(int length) throws IOException {
 
         if (length < 1 || length >= 16) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
+        System.out.println("readUnsignedShort(" + length + ")");
+
         int value = 0x00;
 
-        int quotient = length / 7;
+        int quotient = length / 0x07;
         for (int i = 0; i < quotient; i++) {
-            value <<= 7;
-            value |= readUnsignedByte(7);
+            value <<= 0x07;
+            value |= readUnsignedByte(0x07);
         }
 
         int remainder = length % 7;
-        if (remainder > 0) {
+        if (remainder > 0x00) {
             value <<= remainder;
             value |= readUnsignedByte(remainder);
         }
@@ -123,16 +113,19 @@ public class BitInput {
 
 
     /**
+     * Reads specifed number of bits and returns an unsigned integer.
      *
-     * @param length
-     * @return
-     * @throws IOException
+     * @param length number of bits to read
+     * @return an unsigned integer
+     * @throws IOException if an I/O error occurs
      */
     public int readUnsignedInt(int length) throws IOException {
 
         if (length < 1 || length >= 32) {
             throw new IllegalArgumentException("illegal length: " + length);
-       }
+        }
+
+        System.out.println("readUnsignedInt(" + length + ")");
 
         int value = 0x00;
 
@@ -153,10 +146,11 @@ public class BitInput {
 
 
     /**
+     * Read specifed length of bits and return an integer.
      *
-     * @param length
-     * @return
-     * @throws IOException
+     * @param length number of bits to read
+     * @return a signed integer
+     * @throws IOException if an I/O error occurs.
      */
     public int readInt(int length) throws IOException {
 
@@ -164,23 +158,30 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int value = (readBoolean() ? 0 : -1) << (length - 1);
+        System.out.println("readInt(" + length + ")");
 
-        return value | readUnsignedInt(length -1);
+        int value = (0 - readUnsignedByte(1)) << (length - 1);
+
+        value |= readUnsignedInt(length -1);
+
+        return value;
     }
 
 
     /**
+     * Reads specified number of bits and returns and unsigned integer.
      *
-     * @param length
-     * @return
-     * @throws IOException
+     * @param length number of bits to read.
+     * @return an unsigned integer
+     * @throws IOException if an I/O error occurs.
      */
     public long readUnsignedLong(int length) throws IOException {
 
         if (length < 1 || length >= 64) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
+
+        System.out.println("readUnsignedLong(" + length + ")");
 
         long value = 0x00L;
 
@@ -201,10 +202,11 @@ public class BitInput {
 
 
     /**
+     * Reads specified number of bits and returns a signed long.
      *
-     * @param length
-     * @return
-     * @throws IOException
+     * @param length number of bits to read
+     * @return a signed long
+     * @throws IOException if an I/O error occurs.
      */
     public long readLong(int length) throws IOException {
 
@@ -212,15 +214,20 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        long value = (readBoolean() ? -1L : 0L) << (length - 1);
+        System.out.println("readLong(" + length + ")");
 
-        return value | readUnsignedLong(length -1);
+        long value = ((long) (0 - readUnsignedByte(1))) << (length - 1);
+
+        value |= readUnsignedLong(length -1);
+
+        return value;
     }
 
 
     /**
+     * Returns the number of bits consumed so far.
      *
-     * @return
+     * @return number of bits consumed so far.
      */
     public long getCount() {
         return count;
@@ -228,8 +235,9 @@ public class BitInput {
 
 
     /**
+     * Closes this input widh zero padding for octet alignment.
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occursa
      */
     public void close() throws IOException {
         if (avail > 0x00) {

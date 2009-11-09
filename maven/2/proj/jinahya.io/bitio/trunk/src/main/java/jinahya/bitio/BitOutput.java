@@ -1,3 +1,20 @@
+/*
+ *  Copyright 2009 Jin Kwon.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  under the License.
+ */
+
 package jinahya.bitio;
 
 
@@ -14,8 +31,9 @@ public class BitOutput {
 
 
     /**
+     * Creates a new instance with specifed output.
      *
-     * @param out
+     * @param out output
      */
     public BitOutput(final OutputStream out) {
         this(new ByteOutput() {
@@ -27,8 +45,9 @@ public class BitOutput {
 
 
     /**
+     * Creates a new instance with specified output.
      *
-     * @param output
+     * @param output output
      */
     public BitOutput(final ByteOutput output) {
         super();
@@ -37,145 +56,187 @@ public class BitOutput {
     }
 
 
-    private static final int[] powers  = new int[] {
-        0x01, // 1   0000 0001
-        0x03, // 3   0000 0011
-        0x07, // 7   0000 0111
-        0x0F, // 15  0000 1111
-        0x1F, // 31  0001 1111
-        0x3F, // 63  0011 1111
-        0x7F, // 127 0111 1111
-    };
-
-
     /**
+     * Writes a boolean value. Only one bit is used.
      *
-     * @param value
-     * @throws IOException
+     * @param value boolean value
+     * @throws IOException if an I/O error occurs.
      */
     public void writeBoolean(boolean value) throws IOException {
         writeUnsignedByte(1, value ? 0x01 : 0x00);
     }
 
 
-    public void writeUnsignedByte(final int length, final int value)
+    private void writeUnsignedByte(final int length, final int value)
         throws IOException {
 
+        if (length < 0x01 || length >= 0x08) {
+            throw new IllegalArgumentException("illegal length: " + length);
+        }
+
+        if (value < 0x00) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        }
+
         if (avail >= length) {
+            System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
             octet <<= length;
-            octet |= (value & powers[length - 1]);
-            if ((avail -= length) == 0) {
+            octet |= (value & (0xFF >> (0x08 - length)));
+            if ((avail -= length) == 0x00) {
+
+                {
+                    System.out.print("writeOctet: ");
+                    String binary = Integer.toBinaryString(octet & 0xFF);
+                    for (int i = 0; i < (8 - binary.length()); i++) {
+                        System.out.print(("0"));
+                    }
+                    System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
+                }
+
                 output.writeByte(octet);
                 octet = 0x00;
                 avail = 0x08;
             }
         } else {
             int requi = length - avail;
-            writeUnsignedByte(avail, value >> (requi));
+            writeUnsignedByte(avail, (value >> (requi)));
             writeUnsignedByte(requi, value);
         }
     }
 
 
-    public void writeUnsignedShort(final int length, final int value)
+    private void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        int quotient = length / 7;
-        int remainder = length % 7;
+        if (length < 0x01 || length >= 0x10) {
+            throw new IllegalArgumentException("illegal length: " + length);
+        }
+
+        if (value < 0x00) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        }
+
+        System.out.println("writeUnsignedShort(" + length + ", " + value + ")");
+
+        int quotient = length / 0x07;
+        int remainder = length % 0x07;
         if (remainder > 0) {
-            writeUnsignedByte(remainder, value >> (quotient * 7));
+            writeUnsignedByte(remainder, (value >> (quotient * 0x07)));
         }
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedByte(7, value >> (i * 7));
+            writeUnsignedByte(7, (value >> (i * 0x07)));
         }
     }
 
 
     /**
+     * Writes an unsigned integer.
      *
-     * @param length
-     * @param value
-     * @throws IOException
+     * @param length number of bits
+     * @param value int value
+     * @throws IOException if an I/O error occurs.
      */
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        if (length < 1 || length >= 32) {
+        System.out.println("writeUnsignedInt(" + length + ", " + value + ")");
+
+        if (length < 0x1 || length >= 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int quotient = length / 15;
-        int remainder = length % 15;
+        if (value < 0x00) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        }
+
+        int quotient = length / 0x0F;
+        int remainder = length % 0x0F;
         if (remainder > 0) {
-            writeUnsignedShort(remainder, value >> (quotient * 15));
+            writeUnsignedShort(remainder, (value >> (quotient * 0x0F)));
         }
         for (int i = quotient -1; i >= 0; i--) {
-            writeUnsignedShort(15, value >> (i * 15));
+            writeUnsignedShort(0x0F, (value >> (i * 0x0F)));
         }
     }
 
 
     /**
+     * Writes an signed integer.
      *
-     * @param length
-     * @param value
-     * @throws IOException
+     * @param length number of bits
+     * @param value int value
+     * @throws IOException if an I/O error occurs.
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        if (length <= 1 || length > 32) {
+        System.out.println("writeInt(" + length + ", " + value + ")");
+
+        if (length <= 0x01 || length > 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        writeBoolean(value < 0);
-        writeUnsignedInt(length - 1, value);
+        writeBoolean(value < 0x00);
+        writeUnsignedInt(length - 1, value & Integer.MAX_VALUE);
     }
 
 
     /**
+     * Writes an unsigned long.
      *
-     * @param length
-     * @param value
-     * @throws IOException
+     * @param length number of bits
+     * @param value value
+     * @throws IOException if an I/O error occurs.
      */
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        if (length < 1 || length >= 64) {
+        System.out.println("writeUnsignedLong(" + length + ", " + value + ")");
+
+        if (length < 0x01 || length >= 0x40) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int quotient = length / 31;
-        int remainder = length % 31;
+        if (value < 0x00L) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        }
+
+        int quotient = length / 0x1F;
+        int remainder = length % 0x1F;
         if (remainder > 0) {
-            writeUnsignedInt(remainder, (int) (value >>> (quotient * 31)));
+            writeUnsignedInt(remainder,
+                (int) ((value >> (quotient * 0x1F)) & Integer.MAX_VALUE));
         }
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedInt(31, (int) ((value >> (i * 31)) & 0x7FFFFFFFL));
+            writeUnsignedInt(0x1F,
+                (int) ((value >> (i * 0x1F)) & Integer.MAX_VALUE));
         }
     }
 
 
     /**
+     * Writes a signed long.
      *
-     * @param length
-     * @param value
-     * @throws IOException
+     * @param length number of bits
+     * @param value value
+     * @throws IOException if an I/O error occurs.
      */
     public void writeLong(int length, long value) throws IOException {
 
-        if (length <= 1 || length > 64) {
+        if (length <= 0x01 || length > 0x40) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        writeBoolean(value < 0L);
-        writeUnsignedLong(length - 1, value);
+        System.out.println("writeLong(" + length + ", " + value + ")");
+
+        writeBoolean(value < 0x00);
+        writeUnsignedLong(length - 1, value & Long.MAX_VALUE);
     }
 
 
     /**
+     * Returns the number of bits written so far.
      *
-     * @return
+     * @return number of bits written so far.
      */
     public long getCount() {
         return count;
@@ -183,8 +244,9 @@ public class BitOutput {
 
 
     /**
+     * Closes this output padding zero for octec alignment.
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public void close() throws IOException {
         if (avail < 0x08) {
