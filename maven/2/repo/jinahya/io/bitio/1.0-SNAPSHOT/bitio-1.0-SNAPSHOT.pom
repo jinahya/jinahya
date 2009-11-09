@@ -175,13 +175,13 @@
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
-      <id>jinahya@googlecode.com</id>
+      <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>jinahya@googlecode.com</id>
+      <id>jinahya.googlecode.com</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
