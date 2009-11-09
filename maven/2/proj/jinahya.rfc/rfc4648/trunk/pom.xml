@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>jinahya</groupId>
+  <groupId>jinahya.rfc</groupId>
   <artifactId>rfc4648</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -13,11 +13,11 @@
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>5.9</version>
-      <classifier>jdk15</classifier>
+      <classifier>jdk14</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>jinahya</groupId>
+      <groupId>jinahya.io</groupId>
       <artifactId>bitio</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
@@ -152,7 +152,24 @@
     <url>http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</url>
   </scm>
   <!--prerequisites/-->
-  <!--repositories/-->
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      <id>jinahya.googlecode.com</id>
+      <name>Jinahya Googlecode</name>
+      <url>http://jinahya.googlecode.com/svn/maven/2/repo</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>

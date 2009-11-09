@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.Writer;
 
 import jinahya.bitio.BitInput;
-import jinahya.bitio.BitInputImpl;
 
 
 /**
@@ -112,7 +111,7 @@ public final class RFC4648Encoder {
 
         this.alphabet = alphabet;
 
-        this.input = new BitInputImpl(input);
+        this.input = new BitInput(input);
         this.output = output;
     }
 
@@ -123,23 +122,25 @@ public final class RFC4648Encoder {
      * @throws IOException if an I/O error occurs
      */
     private void encode() throws IOException {
+
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);
         int charsPerWord = RFC4648Utils.charsPerWord(bytesPerWord, bitsPerChar);
+
         while (true) {
-            for (int i = 0; i < charsPerWord; i++) {
+
+            try {
+                int unsigned = input.readUnsignedInt(bitsPerChar);
+                output.write(alphabet.charAt(unsigned));
+            } catch (EOFException eofe) {
+                return;
+            }
+
+            for (int i = 1; i < charsPerWord; i++) {
                 int available = 8 - ((bitsPerChar * i) % 8);
                 if (available >= bitsPerChar) {
-                    try {
-                        int unsigned = input.readUnsignedInt(bitsPerChar);
-                        output.write(alphabet.charAt(unsigned));
-                    } catch (EOFException eofe) {
-                        if (i != 0) {
-                            throw new IOException("this couldn't happen");
-                        }
-                        // i == 0
-                        return;
-                    }
+                    int unsigned = input.readUnsignedInt(bitsPerChar);
+                    output.write(alphabet.charAt(unsigned));
                 } else { // need next octet
                     int required = bitsPerChar - available;
                     int unsigned =

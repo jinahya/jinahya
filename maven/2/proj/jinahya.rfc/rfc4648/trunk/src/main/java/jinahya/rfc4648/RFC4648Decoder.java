@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.io.OutputStream;
 
 import jinahya.bitio.BitOutput;
-import jinahya.bitio.BitOutputImpl;
 
 
 /**
@@ -114,20 +113,18 @@ public final class RFC4648Decoder {
         this.alphabet = alphabet;
 
         this.input = input;
-        this.output = new BitOutputImpl(output);
+        this.output = new BitOutput(output);
     }
 
 
-    /**
-     *
-     *
-     * @throws IOException if an I/O error occurs
-     */
     private void decode() throws IOException {
+
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);
         int charsPerWord = RFC4648Utils.charsPerWord(bytesPerWord, bitsPerChar);
+
         while (true) {
+
             for (int i = 0; i < charsPerWord; i++) {
                 int c = input.read();
                 if (c == -1) { // end of stream
