@@ -67,11 +67,11 @@ public class LongTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeLong(length, expected);
-        output.close();
+        output.alignOctets(1);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLong(length);
-        input.close();
+        input.alignOctets(1);
 
         Assert.assertEquals(actual, expected);
     }

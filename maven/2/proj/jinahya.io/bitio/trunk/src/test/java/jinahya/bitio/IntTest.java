@@ -66,11 +66,11 @@ public class IntTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeInt(length, expected);
-        output.close();
+        output.alignOctets(1);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readInt(length);
-        input.close();
+        input.alignOctets(1);
 
         Assert.assertEquals(actual, expected);
     }

@@ -82,6 +82,7 @@ public class BitOutput {
             System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
             octet <<= length;
             octet |= (value & (0xFF >> (0x08 - length)));
+            count += length;
             if ((avail -= length) == 0x00) {
 
                 {
@@ -175,7 +176,7 @@ public class BitOutput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        writeBoolean(value < 0x00);
+        writeUnsignedByte(1, (value >>> (length - 1)) & 0x01);
         writeUnsignedInt(length - 1, value & Integer.MAX_VALUE);
     }
 
@@ -228,7 +229,7 @@ public class BitOutput {
 
         System.out.println("writeLong(" + length + ", " + value + ")");
 
-        writeBoolean(value < 0x00);
+        writeUnsignedByte(1, (int) ((value >>> (length - 1)) & 0x01));
         writeUnsignedLong(length - 1, value & Long.MAX_VALUE);
     }
 
@@ -244,15 +245,44 @@ public class BitOutput {
 
 
     /**
+     *
+     * @param octetLength
+     * @throws IOException
+     */
+    public void alignOctets(int octetLength) throws IOException {
+        if (octetLength <= 0x00) {
+            throw new IllegalArgumentException
+                ("illegal octet length: " + octetLength);
+        }
+        System.out.println("octetLength: " + octetLength);
+        System.out.println("count: " + count);
+        int length = (octetLength * 8) - (int) (count % 8);
+        System.out.println("length: " + length);
+
+        int quotient = length / 7;
+        System.out.println("quotient: " + quotient);
+        for (int i = 0; i < quotient; i++) {
+            writeUnsignedByte(7, 0x00);
+        }
+
+        int remainder = length % 7;
+        System.out.println("remainder: " + remainder);
+        if (remainder > 0) {
+            writeUnsignedByte(remainder, 0x00);
+        }
+    }
+
+
+    /**
      * Closes this output padding zero for octec alignment.
      *
      * @throws IOException if an I/O error occurs
      */
+    /*
     public void close() throws IOException {
-        if (avail < 0x08) {
-            writeUnsignedByte(avail, 0x00);
-        }
+        alignOctets((byte) 0x01);
     }
+     */
 
 
     private ByteOutput output;

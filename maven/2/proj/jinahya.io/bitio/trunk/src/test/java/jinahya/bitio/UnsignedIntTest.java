@@ -47,11 +47,11 @@ public class UnsignedIntTest {
 
         BitOutput output = new BitOutput(baos);
         output.writeUnsignedInt(length, expected);
-        output.close();
+        output.alignOctets(1);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readUnsignedInt(length);
-        input.close();
+        input.alignOctets(1);
 
         Assert.assertEquals(actual, expected);
     }

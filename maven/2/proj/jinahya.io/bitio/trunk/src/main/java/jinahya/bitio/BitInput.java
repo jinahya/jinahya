@@ -1,3 +1,20 @@
+/*
+ *  Copyright 2009 Jin Kwon.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  under the License.
+ */
+
 package jinahya.bitio;
 
 
@@ -235,15 +252,40 @@ public class BitInput {
 
 
     /**
+     *
+     * @param octetLength number of octets to be aligned
+     * @throws IOException if an I/O error occurs
+     */
+    public void alignOctets(int octetLength) throws IOException {
+        if (octetLength <= 0x00) {
+            throw new IllegalArgumentException
+                ("illegal octet length: " + octetLength);
+        }
+
+        int length = (int) (count % (octetLength * 8));
+
+        int quotient = length / 7;
+        for (int i = 0; i < quotient; i++) {
+            readUnsignedByte(7);
+        }
+
+        int remainder = length % 7;
+        if (remainder > 0) {
+            readUnsignedByte(remainder);
+        }
+    }
+
+
+    /**
      * Closes this input widh zero padding for octet alignment.
      *
      * @throws IOException if an I/O error occursa
      */
+    /*
     public void close() throws IOException {
-        if (avail > 0x00) {
-            readUnsignedByte(avail);
-        }
+        alignOctets((byte) 0x01);
     }
+     */
 
 
     private ByteInput input;

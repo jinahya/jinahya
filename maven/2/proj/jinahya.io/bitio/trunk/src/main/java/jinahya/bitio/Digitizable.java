@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,41 +18,28 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
-
-import org.testng.Assert;
+import java.io.IOException;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BooleanTest {
+public interface Digitizable {
 
 
     /**
      *
+     * @param in
      * @throws IOException
-     * @testng.test invocationCount="1024"
      */
-    public void test() throws IOException {
-        System.out.println("----------------------------------------- BOOLEAN");
-
-        boolean expected = random.nextBoolean();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitOutput output = new BitOutput(baos);
-        output.writeBoolean(expected);
-        output.alignOctets(1);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        boolean actual = input.readBoolean();
-        input.alignOctets(1);
-
-        Assert.assertEquals(actual, expected);
-    }
+    public void readDigits(BitInput in) throws IOException;
 
 
-    private Random random = new Random();
+    /**
+     *
+     * @param out
+     * @throws IOException
+     */
+    public void writeDigits(BitOutput out) throws IOException;
 }

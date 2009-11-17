@@ -47,11 +47,11 @@ public class UnsignedLongTest {
 
         BitOutput output = new BitOutput(baos);
         output.writeUnsignedLong(length, expected);
-        output.close();
+        output.alignOctets(1);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readUnsignedLong(length);
-        input.close();
+        input.alignOctets(1);
 
         Assert.assertEquals(actual, expected);
     }
