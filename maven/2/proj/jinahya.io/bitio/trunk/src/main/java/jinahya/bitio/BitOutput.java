@@ -33,7 +33,7 @@ public class BitOutput {
     /**
      * Creates a new instance with specifed output.
      *
-     * @param out output
+     * @param out output to which octets are write
      */
     public BitOutput(final OutputStream out) {
         this(new ByteOutput() {
@@ -47,7 +47,7 @@ public class BitOutput {
     /**
      * Creates a new instance with specified output.
      *
-     * @param output output
+     * @param output output to which octets are write
      */
     public BitOutput(final ByteOutput output) {
         super();
@@ -57,7 +57,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a boolean value. Only one bit is used.
+     * Writes a boolean value. Only one bit is consumed.
      *
      * @param value boolean value
      * @throws IOException if an I/O error occurs.
@@ -67,32 +67,51 @@ public class BitOutput {
     }
 
 
+    /**
+     * Writes an array of bytes.
+     *
+     * @param value byte array
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeBytes(byte[] value) throws IOException {
+        for (int i = 0; i < value.length; i++) {
+            writeUnsignedShort(8, value[i]);
+        }
+    }
+
+
     private void writeUnsignedByte(final int length, final int value)
         throws IOException {
 
+        /*
         if (length < 0x01 || length >= 0x08) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
+         */
 
+        /*
         if (value < 0x00) {
             throw new IllegalArgumentException("illegal value: " + value);
         }
+         */
 
         if (avail >= length) {
-            System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
+            ////System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
             octet <<= length;
             octet |= (value & (0xFF >> (0x08 - length)));
             count += length;
             if ((avail -= length) == 0x00) {
 
+                /*
                 {
-                    System.out.print("writeOctet: ");
+                    //System.out.print("writeOctet: ");
                     String binary = Integer.toBinaryString(octet & 0xFF);
                     for (int i = 0; i < (8 - binary.length()); i++) {
-                        System.out.print(("0"));
+                        //System.out.print(("0"));
                     }
-                    System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
+                    //System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
                 }
+                 */
 
                 output.writeByte(octet);
                 octet = 0x00;
@@ -109,15 +128,19 @@ public class BitOutput {
     private void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
+        /*
         if (length < 0x01 || length >= 0x10) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
+         */
 
+        /*
         if (value < 0x00) {
             throw new IllegalArgumentException("illegal value: " + value);
         }
+         */
 
-        System.out.println("writeUnsignedShort(" + length + ", " + value + ")");
+        ////System.out.println("writeUnsignedShort(" + length + ", " + value + ")");
 
         int quotient = length / 0x07;
         int remainder = length % 0x07;
@@ -140,15 +163,17 @@ public class BitOutput {
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        System.out.println("writeUnsignedInt(" + length + ", " + value + ")");
+        ////System.out.println("writeUnsignedInt(" + length + ", " + value + ")");
 
         if (length < 0x1 || length >= 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
+        /*
         if (value < 0x00) {
             throw new IllegalArgumentException("illegal value: " + value);
         }
+         */
 
         int quotient = length / 0x0F;
         int remainder = length % 0x0F;
@@ -170,14 +195,19 @@ public class BitOutput {
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        System.out.println("writeInt(" + length + ", " + value + ")");
+        ////System.out.println("writeInt(" + length + ", " + value + ")");
 
         if (length <= 0x01 || length > 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
+        writeUnsignedByte(1, value >> (length - 1));
+        writeUnsignedInt(length - 1, value);
+
+        /*
         writeUnsignedByte(1, (value >>> (length - 1)) & 0x01);
         writeUnsignedInt(length - 1, value & Integer.MAX_VALUE);
+         */
     }
 
 
@@ -191,25 +221,34 @@ public class BitOutput {
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        System.out.println("writeUnsignedLong(" + length + ", " + value + ")");
+        ////System.out.println("writeUnsignedLong(" + length + ", " + value + ")");
 
         if (length < 0x01 || length >= 0x40) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
+        /*
         if (value < 0x00L) {
             throw new IllegalArgumentException("illegal value: " + value);
         }
+         */
 
         int quotient = length / 0x1F;
         int remainder = length % 0x1F;
         if (remainder > 0) {
+            writeUnsignedInt(remainder, (int) (value >> (quotient * 0x1F)));
+            /*
             writeUnsignedInt(remainder,
                 (int) ((value >> (quotient * 0x1F)) & Integer.MAX_VALUE));
+             */
         }
         for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedInt(0x1F, (int) (value >> (i * 0x1F)));
+
+            /*
             writeUnsignedInt(0x1F,
                 (int) ((value >> (i * 0x1F)) & Integer.MAX_VALUE));
+             */
         }
     }
 
@@ -227,10 +266,15 @@ public class BitOutput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("writeLong(" + length + ", " + value + ")");
+        ////System.out.println("writeLong(" + length + ", " + value + ")");
 
+        writeUnsignedByte(1, (int) (value >>> (length - 1)));
+        writeUnsignedLong(length - 1, value);
+
+        /*
         writeUnsignedByte(1, (int) ((value >>> (length - 1)) & 0x01));
         writeUnsignedLong(length - 1, value & Long.MAX_VALUE);
+         */
     }
 
 
@@ -254,19 +298,19 @@ public class BitOutput {
             throw new IllegalArgumentException
                 ("illegal octet length: " + octetLength);
         }
-        System.out.println("octetLength: " + octetLength);
-        System.out.println("count: " + count);
+        //System.out.println("octetLength: " + octetLength);
+        //System.out.println("count: " + count);
         int length = (octetLength * 8) - (int) (count % 8);
-        System.out.println("length: " + length);
+        //System.out.println("length: " + length);
 
         int quotient = length / 7;
-        System.out.println("quotient: " + quotient);
+        //System.out.println("quotient: " + quotient);
         for (int i = 0; i < quotient; i++) {
             writeUnsignedByte(7, 0x00);
         }
 
         int remainder = length % 7;
-        System.out.println("remainder: " + remainder);
+        //System.out.println("remainder: " + remainder);
         if (remainder > 0) {
             writeUnsignedByte(remainder, 0x00);
         }

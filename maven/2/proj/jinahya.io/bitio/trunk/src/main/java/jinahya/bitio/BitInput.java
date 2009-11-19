@@ -77,19 +77,19 @@ public class BitInput {
             octet = input.readByte();
 
             {
-                System.out.print("readOctet: ");
+                //System.out.print("readOctet: ");
                 String binary = Integer.toBinaryString(octet & 0xFF);
                 for (int i = 0; i < (8 - binary.length()); i++) {
-                    System.out.print(("0"));
+                    //System.out.print(("0"));
                 }
-                System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
+                //System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
             }
 
             avail = 0x08;
         }
 
         if (avail >= length) {
-            System.out.println("readUnsignedByte(" + length + ")");
+            //System.out.println("readUnsignedByte(" + length + ")");
             int value = ((octet & 0xFF) >>> (avail - length));
             avail -= length;
             count += length;
@@ -109,7 +109,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("readUnsignedShort(" + length + ")");
+        //System.out.println("readUnsignedShort(" + length + ")");
 
         int value = 0x00;
 
@@ -142,7 +142,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("readUnsignedInt(" + length + ")");
+        //System.out.println("readUnsignedInt(" + length + ")");
 
         int value = 0x00;
 
@@ -175,7 +175,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("readInt(" + length + ")");
+        //System.out.println("readInt(" + length + ")");
 
         int value = (0 - readUnsignedByte(1)) << (length - 1);
 
@@ -198,7 +198,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("readUnsignedLong(" + length + ")");
+        //System.out.println("readUnsignedLong(" + length + ")");
 
         long value = 0x00L;
 
@@ -231,7 +231,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        System.out.println("readLong(" + length + ")");
+        //System.out.println("readLong(" + length + ")");
 
         long value = ((long) (0 - readUnsignedByte(1))) << (length - 1);
 
