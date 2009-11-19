@@ -18,8 +18,12 @@
 package jinahya.bitio;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.UTFDataFormatException;
+import java.io.Writer;
 
 
 /**
@@ -67,6 +71,40 @@ public class BitInput {
     }
 
 
+    /**
+     *
+     * @param value
+     * @throws IOException
+     */
+    public void readBytes(byte[] value) throws IOException {
+        readBytes(value, 0, value.length);
+    }
+
+
+    /**
+     *
+     * @param value
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
+    public void readBytes(byte[] value, int offset, int length)
+        throws IOException {
+
+        if (offset < 0 || offset >= value.length) {
+            throw new IllegalArgumentException("illegal offset: " + offset);
+        }
+
+        if (length <= 0 || (offset + length) > value.length) {
+            throw new IllegalArgumentException("illegal length: " + length);
+        }
+
+        for (int i = 0; i < length; i++) {
+            value[offset + i] = (byte) readUnsignedShort(8);
+        }
+    }
+
+
     private int readUnsignedByte(int length) throws IOException {
 
         if (length < 1 || length >= 8) {
@@ -75,22 +113,11 @@ public class BitInput {
 
         if (avail == 0x00) {
             octet = input.readByte();
-
-            {
-                //System.out.print("readOctet: ");
-                String binary = Integer.toBinaryString(octet & 0xFF);
-                for (int i = 0; i < (8 - binary.length()); i++) {
-                    //System.out.print(("0"));
-                }
-                //System.out.println(Integer.toBinaryString(octet & 0xFF) + " (" + octet + ")");
-            }
-
             avail = 0x08;
         }
 
         if (avail >= length) {
-            //System.out.println("readUnsignedByte(" + length + ")");
-            int value = ((octet & 0xFF) >>> (avail - length));
+            int value = octet >> (avail - length);
             avail -= length;
             count += length;
             octet &= (0xFF >> (8 - avail));
@@ -109,7 +136,7 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        //System.out.println("readUnsignedShort(" + length + ")");
+        ////System.out.println("readUnsignedShort(" + length + ")");
 
         int value = 0x00;
 
@@ -142,8 +169,6 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        //System.out.println("readUnsignedInt(" + length + ")");
-
         int value = 0x00;
 
         int quotient = length / 15;
@@ -175,8 +200,6 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        //System.out.println("readInt(" + length + ")");
-
         int value = (0 - readUnsignedByte(1)) << (length - 1);
 
         value |= readUnsignedInt(length -1);
@@ -197,8 +220,6 @@ public class BitInput {
         if (length < 1 || length >= 64) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
-
-        //System.out.println("readUnsignedLong(" + length + ")");
 
         long value = 0x00L;
 
@@ -231,8 +252,6 @@ public class BitInput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        //System.out.println("readLong(" + length + ")");
-
         long value = ((long) (0 - readUnsignedByte(1))) << (length - 1);
 
         value |= readUnsignedLong(length -1);
@@ -252,6 +271,7 @@ public class BitInput {
 
 
     /**
+     * Reads some (if required) dummy bits for octet alignment.
      *
      * @param octetLength number of octets to be aligned
      * @throws IOException if an I/O error occurs
@@ -277,15 +297,67 @@ public class BitInput {
 
 
     /**
-     * Closes this input widh zero padding for octet alignment.
+     * Reads a string in modifed UTF-8 encoding.
      *
-     * @throws IOException if an I/O error occursa
+     * @return a string
+     * @throws IOException if an I/O error occurs.
      */
-    /*
-    public void close() throws IOException {
-        alignOctets((byte) 0x01);
+    public String readUTF() throws IOException {
+        Writer writer = new StringWriter();
+        try {
+            readUTF(writer);
+            writer.flush();
+            return writer.toString();
+        } finally {
+            writer.close();
+        }
     }
+
+
+    /**
+     * Reads a sequence of characters in modified UTF-8 encoding.
+     *
+     * @param writer character source
+     * @throws IOException if an I/O error occurs.
      */
+    public void readUTF(Writer writer) throws IOException {
+
+        byte[] bytes = new byte[readUnsignedInt(16)];
+        readBytes(bytes);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        try {
+            for (int a = -1; (a = bais.read()) != -1;) {
+                if ((a >> 4) == 0x0F || // 1111xxxx
+                    (a >> 6) == 0x02) { // 10xxxxxx
+                    throw new UTFDataFormatException("a: " + a);
+                }
+                if ((a >> 7) == 0x00) { // 0xxxxxxxx
+                    writer.append((char) a);
+                } else if ((a >> 5) == 0x06) { // 110xxxxx
+                    int b = bais.read();
+                    if (b == -1 || (b >> 6) != 0x02) { // NOT(10xxxxxx)
+                        throw new UTFDataFormatException("2b: " + b);
+                    }
+                    writer.append((char) (((a & 0x1F) << 6) | (b & 0x3F)));
+                } else if (a >> 4 == 0x0E) { // 1110xxxx
+                    int b = bais.read();
+                    if (b == -1 || (b >> 6) != 0x02) { // NOT(10xxxxxx)
+                        throw new UTFDataFormatException("3b: " + b);
+                    }
+                    int c = bais.read();
+                    if (c == -1 || (c >> 6) != 0x02) { // NOT(10xxxxxx)
+                        throw new UTFDataFormatException("3c: " + b);
+                    }
+                    writer.write((char) (((a & 0x0F) << 12) |
+                                         ((b & 0x3F) << 6) |
+                                          (c & 0x3F)));
+                }
+            }
+        } finally {
+            bais.close();
+        }
+    }
 
 
     private ByteInput input;
