@@ -51,7 +51,7 @@ public class BitInput {
     /**
      * Creates a new instance with specified input.
      *
-     * @param input
+     * @param input octet input
      */
     public BitInput(final ByteInput input) {
         super();
@@ -64,7 +64,7 @@ public class BitInput {
      * Reads one bit and returns true if it is one.
      *
      * @return true for one, false for zero
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     public boolean readBoolean() throws IOException {
         return (readUnsignedByte(1) == 0x01);
@@ -72,9 +72,10 @@ public class BitInput {
 
 
     /**
+     * Reads a sequence of bytes.
      *
-     * @param value
-     * @throws IOException
+     * @param value value to be read
+     * @throws IOException if an I/O error occurs.
      */
     public void readBytes(byte[] value) throws IOException {
         readBytes(value, 0, value.length);
@@ -82,11 +83,12 @@ public class BitInput {
 
 
     /**
+     * Reads a sequence of bytes.
      *
-     * @param value
-     * @param offset
-     * @param length
-     * @throws IOException
+     * @param value value to be read
+     * @param offset offset to start
+     * @param length length to be read
+     * @throws IOException if an I/O error occurs.
      */
     public void readBytes(byte[] value, int offset, int length)
         throws IOException {
@@ -165,19 +167,19 @@ public class BitInput {
      */
     public int readUnsignedInt(int length) throws IOException {
 
-        if (length < 1 || length >= 32) {
+        if (length < 0x01 || length >= 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
         int value = 0x00;
 
-        int quotient = length / 15;
+        int quotient = length / 0x0F;
         for (int i = 0; i < quotient; i++) {
             value <<= 15;
-            value |= readUnsignedShort(15);
+            value |= readUnsignedShort(0x0F);
         }
 
-        int remainder = length % 15;
+        int remainder = length % 0x0F;
         if (remainder > 0) {
             value <<= remainder;
             value |= readUnsignedShort(remainder);
@@ -196,15 +198,37 @@ public class BitInput {
      */
     public int readInt(int length) throws IOException {
 
-        if (length <= 1 || length > 32) {
+        if (length <= 0x01 || length > 0x20) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int value = (0 - readUnsignedByte(1)) << (length - 1);
+        int value = (0x00 - readUnsignedByte(0x01)) << (length - 1);
 
         value |= readUnsignedInt(length -1);
 
         return value;
+    }
+
+
+    /**
+     * Read a 32-bit signed integer.
+     *
+     * @return an int
+     * @throws IOException if an I/O error occurs.
+     */
+    public int readInt() throws IOException {
+        return readInt(0x20);
+    }
+
+
+    /**
+     * Read a 32-bit signed floating-point value.
+     *
+     * @return a float
+     * @throws IOException if an I/O error occurs.
+     */
+    public float readFloat() throws IOException {
+        return Float.intBitsToFloat(readInt());
     }
 
 
@@ -248,7 +272,7 @@ public class BitInput {
      */
     public long readLong(int length) throws IOException {
 
-        if (length <= 1 || length > 64) {
+        if (length <= 1 || length > 0x40) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
@@ -257,6 +281,28 @@ public class BitInput {
         value |= readUnsignedLong(length -1);
 
         return value;
+    }
+
+
+    /**
+     * Reads a 64-bit long value.
+     *
+     * @return a long
+     * @throws IOException if an I/O error occurs.
+     */
+    public long readLong() throws IOException {
+        return readLong(0x40);
+    }
+
+
+    /**
+     * Reads a 64-bit signed floating-point value.
+     *
+     * @return a double
+     * @throws IOException if an I/O error occurs.
+     */
+    public double readDouble() throws IOException {
+        return Double.longBitsToDouble(readLong());
     }
 
 

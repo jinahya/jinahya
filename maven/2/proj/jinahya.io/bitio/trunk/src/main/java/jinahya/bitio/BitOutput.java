@@ -72,9 +72,10 @@ public class BitOutput {
 
 
     /**
+     * Writes a sequence of bytes.
      *
-     * @param value
-     * @throws IOException
+     * @param value value to be written
+     * @throws IOException if an I/O error occurs.
      */
     public void writeBytes(byte[] value) throws IOException {
         writeBytes(value, 0, value.length);
@@ -85,8 +86,8 @@ public class BitOutput {
      * Writes an array of bytes.
      *
      * @param value byte array
-     * @param offset
-     * @param length
+     * @param offset offset
+     * @param length length
      * @throws IOException if an I/O error occurs.
      */
     public void writeBytes(byte[] value, int offset, int length)
@@ -184,6 +185,28 @@ public class BitOutput {
 
 
     /**
+     * Writes a 32-bit signed integer.
+     *
+     * @param value value to be written
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeInt(final int value) throws IOException {
+        writeInt(0x20, value);
+    }
+
+
+    /**
+     * Writes a 32-bit signed floating-point value.
+     *
+     * @param value value to be written
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeFloat(final float value) throws IOException {
+        writeInt(Float.floatToIntBits(value));
+    }
+
+
+    /**
      * Writes an unsigned long.
      *
      * @param length number of bits
@@ -215,7 +238,8 @@ public class BitOutput {
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
-    public void writeLong(int length, long value) throws IOException {
+    public void writeLong(final int length, final long value)
+        throws IOException {
 
         if (length <= 0x01 || length > 0x40) {
             throw new IllegalArgumentException("illegal length: " + length);
@@ -223,6 +247,28 @@ public class BitOutput {
 
         writeUnsignedByte(1, (int) (value >> (length - 1)));
         writeUnsignedLong(length - 1, value);
+    }
+
+
+    /**
+     * Writes a 64-bit signed long.
+     *
+     * @param value value to be written
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeLong(final long value) throws IOException {
+        writeLong(0x40, value);
+    }
+
+
+    /**
+     * Writes a 64-bit signed floating-point value.
+     *
+     * @param value value to be written
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeDouble(final double value) throws IOException {
+        writeLong(Double.doubleToLongBits(value));
     }
 
 
