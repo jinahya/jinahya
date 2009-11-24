@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface ByteOutput {
+public interface OctetOutput {
 
 
     /**

@@ -40,7 +40,7 @@ public class BitOutput {
      * @param out output to which octets are write
      */
     public BitOutput(final OutputStream out) {
-        this(new ByteOutput() {
+        this(new OctetOutput() {
             public void writeByte(int b) throws IOException {
                 out.write(b);
             }
@@ -53,7 +53,7 @@ public class BitOutput {
      *
      * @param output output to which octets are write
      */
-    public BitOutput(final ByteOutput output) {
+    public BitOutput(final OctetOutput output) {
         super();
 
         this.output = output;
@@ -358,7 +358,7 @@ public class BitOutput {
     }
 
 
-    private ByteOutput output;
+    private OctetOutput output;
 
     private int octet = 0x00;
     private int avail = 0x08;

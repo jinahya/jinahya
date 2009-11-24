@@ -19,6 +19,7 @@ package jinahya.bitio;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -40,7 +41,7 @@ public class BitInput {
      * @param in octet input
      */
     public BitInput(final InputStream in) {
-        this(new ByteInput() {
+        this(new OctetInput() {
             public int readByte() throws IOException {
                 return in.read();
             }
@@ -53,7 +54,7 @@ public class BitInput {
      *
      * @param input octet input
      */
-    public BitInput(final ByteInput input) {
+    public BitInput(final OctetInput input) {
         super();
 
         this.input = input;
@@ -115,6 +116,9 @@ public class BitInput {
 
         if (avail == 0x00) {
             octet = input.readByte();
+            if (octet == -1) {
+                throw new EOFException(":)");
+            }
             avail = 0x08;
         }
 
@@ -328,7 +332,7 @@ public class BitInput {
                 ("illegal octet length: " + octetLength);
         }
 
-        int length = (int) (count % (octetLength * 8));
+        int length = 8 - ((int) (count % (octetLength * 8)));
 
         int quotient = length / 7;
         for (int i = 0; i < quotient; i++) {
@@ -406,7 +410,7 @@ public class BitInput {
     }
 
 
-    private ByteInput input;
+    private OctetInput input;
 
     private int octet = 0x00;
     private int avail = 0x00;
