@@ -61,6 +61,53 @@ public class IntTest {
     /**
      *
      * @throws IOException
+     * @testng.test invocationCount="1024"
+     */
+    public void testLE() throws IOException {
+        System.out.println("------------------------------------------ INT LE");
+
+        final int length = random.nextInt(3) + 1; // 1 - 4;
+        int expected = random.nextInt((int) Math.pow(2, length * 8));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitOutput output = new BitOutput(baos);
+        output.writeIntLE(length, expected);
+        output.alignOctets(1);
+
+        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        int actual = input.readIntLE(length);
+        input.alignOctets(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    /**
+     *
+     * @throws IOException
+     * @testng.test invocationCount="1024"
+     */
+    public void testLE32() throws IOException {
+        System.out.println("-------------------------------------- INT LE(32)");
+
+        int expected = random.nextInt();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitOutput output = new BitOutput(baos);
+        output.writeIntLE(4, expected);
+        output.alignOctets(1);
+
+        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        int actual = input.readIntLE(4);
+        input.alignOctets(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    /**
+     *
+     * @throws IOException
      */
     private void test(final int length, final int expected) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

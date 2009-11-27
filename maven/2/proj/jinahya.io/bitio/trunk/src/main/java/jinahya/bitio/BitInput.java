@@ -42,7 +42,7 @@ public class BitInput {
      */
     public BitInput(final InputStream in) {
         this(new OctetInput() {
-            public int readByte() throws IOException {
+            public int readOctet() throws IOException {
                 return in.read();
             }
         });
@@ -115,7 +115,7 @@ public class BitInput {
         }
 
         if (avail == 0x00) {
-            octet = input.readByte();
+            octet = input.readOctet();
             if (octet == -1) {
                 throw new EOFException(":)");
             }
@@ -141,8 +141,6 @@ public class BitInput {
         if (length < 1 || length >= 16) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
-
-        ////System.out.println("readUnsignedShort(" + length + ")");
 
         int value = 0x00;
 
@@ -226,6 +224,27 @@ public class BitInput {
 
 
     /**
+     *
+     * @param octetLength number of octets
+     * @return an int value in little endian
+     * @throws IOException if an I/O error occurs
+     */
+    public int readIntLE(final int octetLength) throws IOException {
+        if (octetLength <= 0 || octetLength > 4) {
+            throw new IllegalArgumentException
+                ("invalid octet length: " + octetLength);
+        }
+
+        int value = 0x00;
+        for (int i = 0; i < octetLength; i++) {
+            value |= (readUnsignedInt(8) << (i * 8));
+        }
+
+        return value;
+    }
+
+
+    /**
      * Read a 32-bit signed floating-point value.
      *
      * @return a float
@@ -296,6 +315,27 @@ public class BitInput {
      */
     public long readLong() throws IOException {
         return readLong(0x40);
+    }
+
+
+    /**
+     *
+     * @param octetLength number of octets
+     * @return an long value in little endian
+     * @throws IOException if an I/O error occurs
+     */
+    public long readLongLE(final int octetLength) throws IOException {
+        if (octetLength <= 0 || octetLength > 8) {
+            throw new IllegalArgumentException
+                ("invalid octet length: " + octetLength);
+        }
+
+        long value = 0x00;
+        for (int i = 0; i < octetLength; i++) {
+            value |= (readUnsignedLong(8) << (i * 8));
+        }
+
+        return value;
     }
 
 

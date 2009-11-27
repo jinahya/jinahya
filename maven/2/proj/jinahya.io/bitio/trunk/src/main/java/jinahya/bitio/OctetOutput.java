@@ -29,9 +29,10 @@ public interface OctetOutput {
 
 
     /**
+     * Writes a composed octet to desired output.
      *
      * @param b octet 0-255
      * @throws IOException if an I/O error occurs
      */
-    public void writeByte(int b) throws IOException;
+    public void writeOctet(int b) throws IOException;
 }

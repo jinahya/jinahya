@@ -41,7 +41,7 @@ public class BitOutput {
      */
     public BitOutput(final OutputStream out) {
         this(new OctetOutput() {
-            public void writeByte(int b) throws IOException {
+            public void writeOctet(int b) throws IOException {
                 out.write(b);
             }
         });
@@ -115,7 +115,7 @@ public class BitOutput {
             octet |= (value & (0xFF >> (0x08 - length)));
             count += length;
             if ((avail -= length) == 0x00) {
-                output.writeByte(octet);
+                output.writeOctet(octet);
                 octet = 0x00;
                 avail = 0x08;
             }
@@ -196,6 +196,26 @@ public class BitOutput {
 
 
     /**
+     *
+     * @param octetLength
+     * @param value
+     * @throws IOException
+     */
+    public void writeIntLE(final int octetLength, final int value)
+        throws IOException {
+
+        if (octetLength <= 0 || octetLength > 4) {
+            throw new IllegalArgumentException
+                ("illegal octet length: " + octetLength);
+        }
+
+        for (int i = 0; i < octetLength; i++) {
+            writeUnsignedInt(8, value >>> (i * 8));
+        }
+    }
+
+
+    /**
      * Writes a 32-bit signed floating-point value.
      *
      * @param value value to be written
@@ -258,6 +278,26 @@ public class BitOutput {
      */
     public void writeLong(final long value) throws IOException {
         writeLong(0x40, value);
+    }
+
+
+    /**
+     *
+     * @param octetLength
+     * @param value
+     * @throws IOException
+     */
+    public void writeLongLE(final int octetLength, final long value)
+        throws IOException {
+
+        if (octetLength <= 0 || octetLength > 8) {
+            throw new IllegalArgumentException
+                ("illegal octet length: " + octetLength);
+        }
+
+        for (int i = 0; i < octetLength; i++) {
+            writeUnsignedLong(8, value >>> (i * 8));
+        }
     }
 
 

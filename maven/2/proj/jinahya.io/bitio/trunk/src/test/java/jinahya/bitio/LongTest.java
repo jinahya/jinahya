@@ -52,10 +52,57 @@ public class LongTest {
      * @throws IOException
      * @testng.test invocationCount="1024"
      */
-    public void test32() throws IOException {
+    public void test64() throws IOException {
         System.out.println("---------------------------------------- Long(64)");
 
         test(64, random.nextLong());
+    }
+
+
+    /**
+     *
+     * @throws IOException
+     * @testng.test invocationCount="1024"
+     */
+    public void testLE() throws IOException {
+        System.out.println("----------------------------------------- LONG LE");
+
+        final int length = random.nextInt(7) + 1; // 1 - 7;
+        long expected = (long) (Math.random() * Math.pow(2, length * 8));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitOutput output = new BitOutput(baos);
+        output.writeLongLE(length, expected);
+        output.alignOctets(1);
+
+        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        long actual = input.readLongLE(length);
+        input.alignOctets(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    /**
+     *
+     * @throws IOException
+     * @testng.test invocationCount="1024"
+     */
+    public void testLE64() throws IOException {
+        System.out.println("------------------------------------- LONG LE(64)");
+
+        long expected = random.nextLong();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitOutput output = new BitOutput(baos);
+        output.writeLongLE(8, expected);
+        output.alignOctets(1);
+
+        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        long actual = input.readLongLE(8);
+        input.alignOctets(1);
+
+        Assert.assertEquals(actual, expected);
     }
 
 

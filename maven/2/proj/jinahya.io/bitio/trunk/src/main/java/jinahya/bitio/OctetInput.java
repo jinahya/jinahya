@@ -29,10 +29,10 @@ public interface OctetInput {
 
 
     /**
-     * Returns next octet value.
+     * Reads an octet from desired input.
      *
      * @return octet value 0-255 or -1 if EOF
      * @throws IOException if an I/O error occurs
      */
-    public int readByte() throws IOException;
+    public int readOctet() throws IOException;
 }
