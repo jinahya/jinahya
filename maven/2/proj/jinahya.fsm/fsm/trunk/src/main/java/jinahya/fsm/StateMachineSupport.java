@@ -111,11 +111,42 @@ public class StateMachineSupport {
         }
 
 
-        for (int priority = 9; priority >=0; priority++) {
+        TaskExecutorService parent = null;
+        for (int priority = 9; priority >= 0; priority--) {
+            /*
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].perform(transition, priority);
             }
+             */
+
+            TaskExecutorService child =
+                new TaskExecutorService(parent, tasks, transition, priority,
+                                        threadCount);
+            child.start();
+            parent = child;
         }
+
+        if (parent != null) {
+            try {
+                parent.join();
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+    }
+
+
+    public synchronized void setThreadCount(final int threadCount) {
+        if (threadCount <= 0) {
+            throw new IllegalArgumentException
+                ("illegal thread count: " + threadCount);
+        }
+        this.threadCount = threadCount;
+    }
+
+
+    public synchronized int getThreadCount() {
+        return threadCount;
     }
 
 
@@ -128,4 +159,8 @@ public class StateMachineSupport {
 
     private volatile boolean started = false;
     private volatile boolean finished = false;
+
+    private volatile int threadCount = 1;
 }
+
+
