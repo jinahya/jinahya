@@ -39,7 +39,7 @@ public abstract class Task {
     /**
      * Performs the desired jobs.
      * <p>
-     * This method invoked with 10 different <code>priority</code> values (0-9)
+     * This method invoked with 10 different <code>priority</code> values (9-0)
      *
      * @param transition transition
      * @param priority priority

@@ -111,7 +111,7 @@ public class StateMachineSupport {
         }
 
 
-        for (int priority = 0; priority < 10; priority++) {
+        for (int priority = 9; priority >=0; priority++) {
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].perform(transition, priority);
             }
