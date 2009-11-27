@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,28 +18,29 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMSupport;
-import jinahya.fsm.FSMTaskFactory;
+import jinahya.fsm.State;
+import jinahya.fsm.StateMachineException;
+import jinahya.fsm.StateMachineSupport;
+import jinahya.fsm.TaskFactory;
 
 
 /**
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletSupport extends FSMSupport {
+public class XletSupport extends StateMachineSupport {
 
 
     /**
      *
      * @param factory
      * @return
-     * @throws FSMException
+     * @throws StateMachineException
      */
-    public static XletSupport createFromConstructor(FSMTaskFactory factory)
-        throws FSMException {
+    public static XletSupport createInConstructor(TaskFactory factory)
+        throws StateMachineException {
 
-        return new XletSupport(factory, XletSpec.LOADED);
+        return new XletSupport(factory, XletState.LOADED);
     }
 
 
@@ -47,12 +48,12 @@ public class XletSupport extends FSMSupport {
      *
      * @param factory
      * @return
-     * @throws FSMException
+     * @throws StateMachineException
      */
-    public static XletSupport createFromInitXlet(FSMTaskFactory factory)
-        throws FSMException {
+    public static XletSupport createInInitXlet(TaskFactory factory)
+        throws StateMachineException {
 
-        return new XletSupport(factory, XletSpec.PAUSED);
+        return new XletSupport(factory, XletState.PAUSED);
     }
 
 
@@ -60,29 +61,31 @@ public class XletSupport extends FSMSupport {
      *
      * @param factory
      * @param state
-     * @throws FSMException
+     * @throws StateMachineException
      */
-    public XletSupport(FSMTaskFactory factory, int state) throws FSMException {
+    public XletSupport(TaskFactory factory, State state)
+        throws StateMachineException {
+
         super(new XletSpec(), factory, state);
     }
 
 
-    public void initXletInvoked() throws FSMException {
-        transit(XletSpec.PAUSED);
+    public void initXletInvoked() throws StateMachineException {
+        transit(XletState.PAUSED);
     }
 
 
-    public void startXletInvoked() throws FSMException {
-        transit(XletSpec.STARTED);
+    public void startXletInvoked() throws StateMachineException {
+        transit(XletState.STARTED);
     }
 
 
-    public void pauseXletInvoked() throws FSMException {
-        transit(XletSpec.PAUSED);
+    public void pauseXletInvoked() throws StateMachineException {
+        transit(XletState.PAUSED);
     }
 
 
-    public void destroyXletInvoked() throws FSMException {
-        transit(XletSpec.DESTROYED);
+    public void destroyXletInvoked() throws StateMachineException {
+        transit(XletState.DESTROYED);
     }
 }

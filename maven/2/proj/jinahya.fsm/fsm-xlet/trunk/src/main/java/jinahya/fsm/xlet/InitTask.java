@@ -18,8 +18,9 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.FSMSpec;
+import jinahya.fsm.State;
 import jinahya.fsm.SwitchTask;
+import jinahya.fsm.Transition;
 import jinahya.fsm.TransitionMatcher;
 
 
@@ -29,18 +30,23 @@ import jinahya.fsm.TransitionMatcher;
  */
 public abstract class InitTask extends SwitchTask {
 
+
+    /**
+     *
+     */
     public InitTask() {
         super(new TransitionMatcher() {
-            public boolean matches(final int sourceState,
-                                   final int targetState) {
-                return ((sourceState == FSMSpec.UNKNOWN_STATE ||
-                         sourceState == XletSpec.LOADED) &&
-                        targetState == XletSpec.PAUSED);
+            //@Override
+            public boolean matches(Transition transition) {
+                return
+                    ((transition.getSourceState().equals(State.UNKNOWN) ||
+                      transition.getSourceState().equals(XletState.LOADED)) &&
+                     transition.getTargetState().equals(XletState.PAUSED));
             }
         }, new TransitionMatcher() {
-            public boolean matches(final int sourceState,
-                                   final int targetState) {
-                return targetState == XletSpec.DESTROYED;
+            //@Override
+            public boolean matches(Transition transition) {
+                return transition.getTargetState().equals(XletState.DESTROYED);
             }
         });
     }

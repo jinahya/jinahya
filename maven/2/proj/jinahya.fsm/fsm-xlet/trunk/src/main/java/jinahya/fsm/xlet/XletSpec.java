@@ -18,14 +18,16 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.FSMSpec;
+import jinahya.fsm.State;
+import jinahya.fsm.StateMachineSpec;
+import jinahya.fsm.Transition;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletSpec implements FSMSpec {
+public class XletSpec implements StateMachineSpec {
 
 
     /**
@@ -66,42 +68,46 @@ public class XletSpec implements FSMSpec {
 
 
     //@Override
-    public boolean isStartingTransition(final int sourceState,
-                                        final int targetState) {
+    public boolean isStartingTransition(Transition transition) {
 
-        return (sourceState == UNKNOWN_STATE && targetState == LOADED) ||
-               (sourceState == LOADED && targetState == PAUSED);
+        // UNKNOWN -> LOADED || LOADED -> PAUSED
+        return (transition.getSourceState().equals(State.UNKNOWN) &&
+                transition.getTargetState().equals(XletState.LOADED)) ||
+               (transition.getSourceState().equals(XletState.LOADED) &&
+                transition.getTargetState().equals(XletState.PAUSED));
     }
 
 
     //@Override
-    public boolean isTransitionAllowed(final int sourceState,
-                                       final int targetState) {
+    public boolean isTransitionAllowed(Transition transition) {
 
-        boolean allowed = true;
-
-        switch (sourceState) {
-            case LOADED:
-                allowed = (targetState == PAUSED || targetState == DESTROYED);
-                //allowed = targetState == PAUSED;
-                break;
-            case PAUSED:
-                allowed = (targetState == STARTED || targetState == DESTROYED);
-                break;
-            case STARTED:
-                allowed = (targetState == PAUSED || targetState == DESTROYED);
-                break;
-            default:
-                break;
+        if (transition.getSourceState().equals(State.UNKNOWN)) {
+            return (transition.getTargetState().equals(XletState.LOADED) ||
+                    transition.getTargetState().equals(XletState.PAUSED));
+        } else if (transition.getSourceState().equals(XletState.NOT_LOADED)) {
+            // not gonna happen
+        } else if (transition.getSourceState().equals(XletState.LOADED)) {
+            return (transition.getTargetState().equals(XletState.PAUSED) ||
+                    transition.getTargetState().equals(XletState.DESTROYED));
+        } else if (transition.getSourceState().equals(XletState.PAUSED)) {
+            return (transition.getTargetState().equals(XletState.STARTED) ||
+                    transition.getTargetState().equals(XletState.DESTROYED));
+        } else if (transition.getSourceState().equals(XletState.STARTED)) {
+            return (transition.getTargetState().equals(XletState.PAUSED) ||
+                    transition.getTargetState().equals(XletState.DESTROYED));
+        } else if (transition.getSourceState().equals(XletState.DESTROYED)) {
+            // not gonnna happen
+        } else if (transition.getSourceState().equals(XletState.INVALID)) {
+            // not gonna happen
+        } else {
         }
 
-        return allowed;
+        return false;
     }
 
 
     //@Override
-    public boolean isFinishingTransition(final int sourceState,
-                                         final int targetState) {
-        return targetState == DESTROYED;
+    public boolean isFinishingTransition(Transition transition) {
+        return transition.getTargetState().equals(XletState.DESTROYED);
     }
 }
