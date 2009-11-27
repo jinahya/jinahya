@@ -162,7 +162,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>

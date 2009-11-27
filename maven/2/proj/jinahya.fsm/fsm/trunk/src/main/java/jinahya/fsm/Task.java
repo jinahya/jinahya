@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,50 +20,34 @@ package jinahya.fsm;
 
 /**
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class FSMException extends Exception {
+public interface Task {
 
-
-    private static final long serialVersionUID = -5925728381873724134L;
 
 
     /**
+     * Initialize this task.
      *
-     * @param message
+     * @throws StateMachineException if any error occurs.
      */
-    public FSMException(String message) {
-        this(message, null);
-    }
-
-
-    /**
-     *
-     * @param cause
-     */
-    public FSMException(Throwable cause) {
-        this(cause.getMessage(), cause);
-    }
+    public void initalize() throws StateMachineException;
 
 
     /**
      * 
-     * @param message
-     * @param cause
+     * @param transition
+     * @param priority
+     * @throws StateMachineException
      */
-    public FSMException(String message, Throwable cause) {
-        super(message);
-    }
+    public void perform(Transition transition, int priority)
+        throws StateMachineException;
 
 
     /**
+     * Destroys this task.
      *
-     * @return
+     * @throws StateMachineException if any error occurs.
      */
-    public Throwable getCause() {
-        return cause;
-    }
-
-    
-    private Throwable cause;
+    public void destroy() throws StateMachineException;
 }

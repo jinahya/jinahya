@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,15 +18,12 @@
 package jinahya.fsm;
 
 
-import java.util.Vector;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface FSMTaskFactory {
+public interface TaskFactory {
 
 
-    public void createTasks(Vector tasks) throws FSMException;
+    public Task[] createTasks() throws StateMachineException;
 }

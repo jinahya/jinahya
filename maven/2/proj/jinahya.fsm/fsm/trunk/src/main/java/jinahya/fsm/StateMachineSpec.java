@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,38 +22,31 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface FSMSpec {
-
-
-
-    public static final int UNKNOWN_STATE = 0xFFFFFFFF;
+public interface StateMachineSpec {
 
 
     /**
      *
-     * @param sourceState
-     * @param targetState
-     * @return true if this transition means one of the starting transition of
+     * @param transition
+     * @return true if given transition means one of the starting transitions of
      *         the machine, false otherwise.
      */
-    public boolean isStartingTransition(int sourceState, int targetState);
+    public boolean isStartingTransition(Transition transition);
 
 
     /**
      *
-     * @param sourceState
-     * @param targetState
+     * @param transition
      * @return true if given transition is an allowed one, false otherwise.
      */
-    public boolean isTransitionAllowed(int sourceState, int targetState);
+    public boolean isTransitionAllowed(Transition transition);
 
 
     /**
      *
-     * @param sourceState
-     * @param targetState
-     * @return true if this transition means one of the finishing transition of
-     *         the machine, false otherwise.
+     * @param transition
+     * @return true if given transition means one of the finishing transitions
+     *         of the machine, false otherwise.
      */
-    public boolean isFinishingTransition(int sourceState, int targetState);
+    public boolean isFinishingTransition(Transition transition);
 }

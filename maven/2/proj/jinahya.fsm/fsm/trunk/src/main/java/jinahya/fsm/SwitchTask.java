@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class SwitchTask implements FSMTask {
+public abstract class SwitchTask implements Task {
 
 
     /**
@@ -41,15 +41,19 @@ public abstract class SwitchTask implements FSMTask {
 
 
     //@Override
-    public void perform(int sourceState, int targetState, int priority)
-        throws FSMException {
+    public final synchronized void perform(Transition transition, int priority)
+        throws StateMachineException {
 
-        if (onMatcher.matches(sourceState, targetState)) {
-            turnOn(priority);
-        }
-
-        if (offMatcher.matches(sourceState, targetState)) {
-            turnOff(priority);
+        if (on) {
+            if (offMatcher.matches(transition)) {
+                off(priority);
+                on = false;
+            }
+        } else { // off
+            if (onMatcher.matches(transition)) {
+                on(priority);
+                on = true;
+            }
         }
     }
 
@@ -57,19 +61,31 @@ public abstract class SwitchTask implements FSMTask {
     /**
      *
      * @param priority
-     * @throws FSMException
+     * @throws StateMachineException
      */
-    protected abstract void turnOn(int priority) throws FSMException;
+    protected abstract void on(int priority) throws StateMachineException;
 
 
     /**
      *
      * @param priority
-     * @throws FSMException
+     * @throws StateMachineException
      */
-    protected abstract void turnOff(int priority) throws FSMException;
+    protected abstract void off(int priority) throws StateMachineException;
+
+
+    /**
+     * Returns whether this task is currently turn on or not.
+     *
+     * @return true if this switch task is currently turned on, false otherwise
+     */
+    public synchronized final boolean isOn() {
+        return on;
+    }
 
 
     private TransitionMatcher onMatcher;
     private TransitionMatcher offMatcher;
+
+    private volatile boolean on = false;
 }
