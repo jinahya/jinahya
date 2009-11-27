@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2009-11-27T14:16:04.818">
+<file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/src/main/java/jinahya/fsm/xlet/XletSpec.java">
+<violation beginline="87" endline="89" begincolumn="78" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="jinahya.fsm.xlet" class="XletSpec" method="isTransitionAllowed" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="98" endline="100" begincolumn="77" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="jinahya.fsm.xlet" class="XletSpec" method="isTransitionAllowed" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="100" endline="102" begincolumn="75" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="jinahya.fsm.xlet" class="XletSpec" method="isTransitionAllowed" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+<violation beginline="102" endline="103" begincolumn="16" endcolumn="9" rule="EmptyIfStmt" ruleset="Basic Rules" package="jinahya.fsm.xlet" class="XletSpec" method="isTransitionAllowed" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyIfStmt" priority="3">
+Avoid empty if statements
+</violation>
+</file>
+</pmd>
