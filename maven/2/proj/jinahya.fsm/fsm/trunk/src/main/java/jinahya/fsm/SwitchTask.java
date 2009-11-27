@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class SwitchTask implements Task {
+public abstract class SwitchTask extends Task {
 
 
     /**

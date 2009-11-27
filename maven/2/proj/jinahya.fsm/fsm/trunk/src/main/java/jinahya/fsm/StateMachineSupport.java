@@ -90,13 +90,14 @@ public class StateMachineSupport {
                 ("transition is not allowed: " + transition);
         }
 
+        state = newState;
 
         if (!started && spec.isStartingTransition(transition)) {
             started = true;
 
             tasks = factory.createTasks();
             for (int i = 0; i < tasks.length; i++) {
-                tasks[i].initalize();
+                tasks[i].initialize();
             }
         }
 

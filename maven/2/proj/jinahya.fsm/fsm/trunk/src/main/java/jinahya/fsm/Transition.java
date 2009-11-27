@@ -75,7 +75,7 @@ public class Transition {
 
     //@Override
     public String toString() {
-        return "TRANSITION: " + sourceState + " -> " + targetState;
+        return "TRANSITION: [" + sourceState + "] -> [" + targetState + "]";
     }
 
 

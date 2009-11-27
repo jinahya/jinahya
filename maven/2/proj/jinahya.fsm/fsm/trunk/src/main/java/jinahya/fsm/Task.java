@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Task {
+public abstract class Task {
 
 
 
@@ -31,7 +31,9 @@ public interface Task {
      *
      * @throws StateMachineException if any error occurs.
      */
-    public void initalize() throws StateMachineException;
+    public void initialize() throws StateMachineException {
+        // empty
+    }
 
 
     /**
@@ -40,7 +42,7 @@ public interface Task {
      * @param priority
      * @throws StateMachineException
      */
-    public void perform(Transition transition, int priority)
+    public abstract void perform(Transition transition, int priority)
         throws StateMachineException;
 
 
@@ -49,5 +51,7 @@ public interface Task {
      *
      * @throws StateMachineException if any error occurs.
      */
-    public void destroy() throws StateMachineException;
+    public void destroy() throws StateMachineException {
+        // empty
+    }
 }
