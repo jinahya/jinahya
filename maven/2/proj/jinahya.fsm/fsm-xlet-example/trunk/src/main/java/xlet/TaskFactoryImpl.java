@@ -18,6 +18,8 @@
 package xlet;
 
 
+import java.util.Vector;
+
 import jinahya.fsm.StateMachineException;
 import jinahya.fsm.Task;
 import jinahya.fsm.TaskFactory;
@@ -31,11 +33,14 @@ public class TaskFactoryImpl implements TaskFactory {
 
     //@Override
     public Task[] createTasks() throws StateMachineException {
-        Task[] tasks = new Task[4];
-        tasks[0] = new DefaultTask();
-        tasks[1] = new SimpleLoadTask();
-        tasks[2] = new SimpleInitTask();
-        tasks[3] = new SimplePlayTask();
-        return tasks;
+        Vector vector = new Vector();
+        for (int i = 0; i < 20; i++) {
+            vector.addElement(new DefaultTask());
+        }
+        vector.addElement(new SimpleLoadTask());
+        vector.addElement(new SimpleInitTask());
+        vector.addElement(new SimplePlayTask());
+
+        return (Task[]) vector.toArray(new Task[vector.size()]);
     }
 }

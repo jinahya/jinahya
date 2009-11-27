@@ -34,14 +34,24 @@ import jinahya.fsm.xlet.XletSupport;
 public class Impl2 implements Xlet {
 
 
-    //@Override
-    public void initXlet(XletContext ctx) throws XletStateChangeException {
+
+    /**
+     *
+     */
+    public Impl2() {
+        super();
+
         try {
-            fsms = XletSupport.createInInitXlet(new TaskFactoryImpl());
+            fsms = XletSupport.createInConstructor(new TaskFactoryImpl());
+            fsms.setThreadCount(20);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
+    }
 
+
+    //@Override
+    public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
             fsms.initXletInvoked();
         } catch (StateMachineException fsme) {

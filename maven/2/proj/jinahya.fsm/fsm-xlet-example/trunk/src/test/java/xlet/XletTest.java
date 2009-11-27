@@ -9,7 +9,7 @@
  * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or xletied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *  under the License.
@@ -42,30 +42,34 @@ public abstract class XletTest {
     @Test
     public void test() throws XletStateChangeException {
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before Loading");
-        Xlet impl = new Impl();
-        System.out.println("After Loading");
+        if (xlet == null) {
+            System.out.println("NULL");
+            return;
+        }
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before initXlet()");
-        impl.initXlet(null);
-        System.out.println("After initXlet()");
+        long start = System.currentTimeMillis();
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before startXlet()");
-        impl.startXlet();
-        System.out.println("After startXlet()");
+        //System.out.println("-------------------------------------------------");
+        //System.out.println("Before initXlet()");
+        xlet.initXlet(null);
+        //System.out.println("After initXlet()");
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before pauseXlet()");
-        impl.pauseXlet();
-        System.out.println("After pauseXlet()");
+        //System.out.println("-------------------------------------------------");
+        //System.out.println("Before startXlet()");
+        xlet.startXlet();
+        //System.out.println("After startXlet()");
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before destroyXlet()");
-        impl.destroyXlet(true);
-        System.out.println("After destroyXlet()");
+        //System.out.println("-------------------------------------------------");
+        //System.out.println("Before pauseXlet()");
+        xlet.pauseXlet();
+        //System.out.println("After pauseXlet()");
+
+        //System.out.println("-------------------------------------------------");
+        //System.out.println("Before destroyXlet()");
+        xlet.destroyXlet(true);
+        //System.out.println("After destroyXlet()");
+
+        System.out.println("ELLAPSED: " + (System.currentTimeMillis() - start));
     }
 
 

@@ -44,6 +44,7 @@ public class Impl implements Xlet {
 
         try {
             fsms = XletSupport.createInConstructor(new TaskFactoryImpl());
+            fsms.setThreadCount(5);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }

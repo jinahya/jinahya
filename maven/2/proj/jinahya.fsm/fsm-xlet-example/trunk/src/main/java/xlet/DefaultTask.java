@@ -32,12 +32,20 @@ public class DefaultTask extends Task {
 
 
     //@Override
-    public void perform(Transition transition, int priority)
+    public void perform(final Transition transition, final int priority)
         throws StateMachineException {
 
+        /*
         if (priority != 0) {
             return;
         }
-        System.out.println(transition);
+         */
+
+        try {
+            Thread.sleep(10L);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+        //System.out.println(transition + " @ " + priority);
     }
 }
