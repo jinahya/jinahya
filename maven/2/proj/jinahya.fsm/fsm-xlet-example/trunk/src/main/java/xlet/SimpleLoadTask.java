@@ -18,7 +18,7 @@
 package xlet;
 
 
-import jinahya.fsm.FSMException;
+import jinahya.fsm.StateMachineException;
 
 import jinahya.fsm.xlet.LoadTask;
 
@@ -32,7 +32,7 @@ public class SimpleLoadTask extends LoadTask {
 
 
     //@Override
-    public void turnOn(int priority) throws FSMException {
+    public void on(int priority) throws StateMachineException {
         if (priority != 0) {
             return;
         }
@@ -41,7 +41,7 @@ public class SimpleLoadTask extends LoadTask {
 
 
     //@Override
-    public void turnOff(int priority) throws FSMException {
+    public void off(int priority) throws StateMachineException {
         if (priority != 0) {
             return;
         }

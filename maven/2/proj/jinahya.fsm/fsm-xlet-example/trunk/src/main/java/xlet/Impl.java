@@ -18,17 +18,14 @@
 package xlet;
 
 
-import java.util.Vector;
-
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
-import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMSupport;
-import jinahya.fsm.FSMTaskFactory;
+import jinahya.fsm.StateMachineException;
+import jinahya.fsm.StateMachineSupport;
 
-import jinahya.fsm.xlet.XletSpec;
+import jinahya.fsm.xlet.XletState;
 import jinahya.fsm.xlet.XletSupport;
 
 
@@ -46,15 +43,8 @@ public class Impl implements Xlet {
         super();
 
         try {
-            fsms = new XletSupport(new FSMTaskFactory() {
-                public void createTasks(Vector tasks) throws FSMException {
-                    tasks.addElement(new DefaultTask());
-                    tasks.addElement(new SimpleLoadTask());
-                    tasks.addElement(new SimpleInitTask());
-                    tasks.addElement(new SimplePlayTask());
-                }
-            }, XletSpec.LOADED);
-        } catch (FSMException fsme) {
+            fsms = XletSupport.createInConstructor(new TaskFactoryImpl());
+        } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -63,8 +53,8 @@ public class Impl implements Xlet {
     //@Override
     public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
-            fsms.setState(XletSpec.PAUSED);
-        } catch (FSMException fsme) {
+            fsms.setState(XletState.PAUSED);
+        } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -73,8 +63,8 @@ public class Impl implements Xlet {
     //@Override
     public void startXlet() throws XletStateChangeException {
         try {
-            fsms.setState(XletSpec.STARTED);
-        } catch (FSMException fsme) {
+            fsms.setState(XletState.STARTED);
+        } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -83,8 +73,8 @@ public class Impl implements Xlet {
     //@Override
     public void pauseXlet() {
         try {
-            fsms.setState(XletSpec.PAUSED);
-        } catch (FSMException fsme) {
+            fsms.setState(XletState.PAUSED);
+        } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -95,12 +85,12 @@ public class Impl implements Xlet {
         throws XletStateChangeException {
 
         try {
-            fsms.setState(XletSpec.DESTROYED);
-        } catch (FSMException fsme) {
+            fsms.setState(XletState.DESTROYED);
+        } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
 
 
-    private FSMSupport fsms;
+    private StateMachineSupport fsms;
 }

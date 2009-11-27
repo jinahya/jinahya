@@ -10,12 +10,18 @@
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.7</version>
+      <scope>test</scope>
+    </dependency>
+    <!--dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <classifier>jdk14</classifier>
       <version>5.9</version>
       <scope>test</scope>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>javame</groupId>
       <artifactId>javatv</artifactId>
@@ -47,11 +53,35 @@
         <inherited>true</inherited>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
+        <!--configuration>
           <encoding>${project.build.sourceEncoding}</encoding>
           <source>1.3</source>
           <target>1.1</target>
-        </configuration>
+        </configuration-->
+        <executions>
+          <execution>
+            <id>java-1.3-compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <source>1.3</source>
+              <target>1.1</target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>java-1.5-compile</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <source>1.5</source>
+              <target>1.5</target>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <pluginManagement/>
@@ -173,7 +203,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet-example</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet-example/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>

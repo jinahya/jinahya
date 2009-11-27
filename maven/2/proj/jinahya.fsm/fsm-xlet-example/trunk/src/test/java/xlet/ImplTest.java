@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,55 +19,17 @@ package xlet;
 
 
 import javax.tv.xlet.Xlet;
-import javax.tv.xlet.XletStateChangeException;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ImplTest {
+public class ImplTest extends XletTest {
 
 
-    /**
-     * @testng.test
-     */
-    public void launch() {
-
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before Loading");
-        Xlet impl = new Impl();
-        System.out.println("After Loading");
-
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before initXlet()");
-        try {
-            impl.initXlet(null);
-        } catch (XletStateChangeException xsce) {
-            xsce.printStackTrace();
-        }
-        System.out.println("After initXlet()");
-
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before startXlet()");
-        try {
-            impl.startXlet();
-        } catch (XletStateChangeException xsce) {
-            xsce.printStackTrace();
-        }
-        System.out.println("After startXlet()");
-
-        System.out.println("-------------------------------------------------");
-        System.out.println("Before pauseXlet()");
-        impl.pauseXlet();
-        System.out.println("After pauseXlet()");
-
-        System.out.println("-------------------------------------------------");
-        try {
-            impl.destroyXlet(true);
-        } catch (XletStateChangeException xsce) {
-            xsce.printStackTrace();
-        }
-        System.out.println("After destroyXlet()");
+    @Override
+    public Xlet createXlet() {
+        return new Impl();
     }
 }

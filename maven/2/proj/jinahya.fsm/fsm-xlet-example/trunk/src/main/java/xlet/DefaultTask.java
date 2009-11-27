@@ -18,24 +18,26 @@
 package xlet;
 
 
-import jinahya.fsm.FSMException;
-import jinahya.fsm.FSMTask;
+import jinahya.fsm.StateMachineException;
+import jinahya.fsm.Task;
+import jinahya.fsm.Transition;
+
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DefaultTask implements FSMTask {
+public class DefaultTask extends Task {
 
 
     //@Override
-    public void perform(int previousState, int currentState, int priority)
-        throws FSMException {
+    public void perform(Transition transition, int priority)
+        throws StateMachineException {
 
         if (priority != 0) {
             return;
         }
-        System.out.println("STATE: " + previousState + " -> " + currentState + " @ " + priority);
+        System.out.println(transition);
     }
 }
