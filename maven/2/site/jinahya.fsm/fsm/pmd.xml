@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2009-11-27T13:54:09.980">
+<file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/src/main/java/jinahya/fsm/State.java">
+<violation beginline="40" endline="43" begincolumn="9" endcolumn="9" rule="BrokenNullCheck" ruleset="Basic Rules" package="jinahya.fsm" class="State" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#BrokenNullCheck" priority="2">
+Method call on object which may be null
+</violation>
+<violation beginline="45" endline="47" begincolumn="9" endcolumn="9" rule="BrokenNullCheck" ruleset="Basic Rules" package="jinahya.fsm" class="State" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#BrokenNullCheck" priority="2">
+Method call on object which may be null
+</violation>
+</file>
+<file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/src/main/java/jinahya/fsm/StateMachineException.java">
+<violation beginline="57" endline="59" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="jinahya.fsm" class="StateMachineException" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'cause'.
+</violation>
+</file>
+</pmd>
