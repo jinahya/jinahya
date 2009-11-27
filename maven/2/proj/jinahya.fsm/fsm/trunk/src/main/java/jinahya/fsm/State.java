@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,9 @@ package jinahya.fsm;
 public class State {
 
 
+    /**
+     * the ultimate unknown state. all state machines start with this state.
+     */
     public static final State UNKNOWN = new State("default", "unknown");
 
 
@@ -34,15 +37,15 @@ public class State {
      * @param namespace namespace of this state
      * @param name name of this state
      */
-    public State(String namespace, String name) {
+    public State(final String namespace, final String name) {
         super();
 
-        if (namespace == null && namespace.trim().length() == 0) {
+        if (namespace == null || namespace.trim().length() == 0) {
             throw new IllegalArgumentException
                 ("illegal namespace: " + namespace);
         }
 
-        if (name == null && name.trim().length() == 0) {
+        if (name == null || name.trim().length() == 0) {
             throw new IllegalArgumentException("illegal name: " + name);
         }
 

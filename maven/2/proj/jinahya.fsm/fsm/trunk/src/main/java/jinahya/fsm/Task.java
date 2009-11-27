@@ -37,10 +37,13 @@ public abstract class Task {
 
 
     /**
-     * 
-     * @param transition
-     * @param priority
-     * @throws StateMachineException
+     * Performs the desired jobs.
+     * <p>
+     * This method invoked with 10 different <code>priority</code> values (0-9)
+     *
+     * @param transition transition
+     * @param priority priority
+     * @throws StateMachineException if any error occurs
      */
     public abstract void perform(Transition transition, int priority)
         throws StateMachineException;

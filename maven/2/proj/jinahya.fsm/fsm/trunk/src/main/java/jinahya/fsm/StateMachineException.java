@@ -56,6 +56,8 @@ public class StateMachineException extends Exception {
      */
     public StateMachineException(String message, Throwable cause) {
         super(message);
+
+        this.cause = cause;
     }
 
 
