@@ -32,9 +32,10 @@ public class XletSupport extends StateMachineSupport {
 
 
     /**
+     * Creates an instance. Intended to be invoked in constructor.
      *
      * @param factory
-     * @return
+     * @return a new instance
      * @throws StateMachineException
      */
     public static XletSupport createInConstructor(TaskFactory factory)
@@ -45,7 +46,7 @@ public class XletSupport extends StateMachineSupport {
 
 
     /**
-     *
+     * Creates an instance. Intended to be invoked in <code>initXlet</code>
      * @param factory
      * @return
      * @throws StateMachineException

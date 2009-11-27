@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -84,7 +84,7 @@ public class XletSpec implements StateMachineSpec {
         if (transition.getSourceState().equals(State.UNKNOWN)) {
             return (transition.getTargetState().equals(XletState.LOADED) ||
                     transition.getTargetState().equals(XletState.PAUSED));
-        } else if (transition.getSourceState().equals(XletState.NOT_LOADED)) {
+        //} else if (transition.getSourceState().equals(XletState.NOT_LOADED)) {
             // not gonna happen
         } else if (transition.getSourceState().equals(XletState.LOADED)) {
             return (transition.getTargetState().equals(XletState.PAUSED) ||
@@ -95,11 +95,12 @@ public class XletSpec implements StateMachineSpec {
         } else if (transition.getSourceState().equals(XletState.STARTED)) {
             return (transition.getTargetState().equals(XletState.PAUSED) ||
                     transition.getTargetState().equals(XletState.DESTROYED));
-        } else if (transition.getSourceState().equals(XletState.DESTROYED)) {
+        //} else if (transition.getSourceState().equals(XletState.DESTROYED)) {
             // not gonnna happen
-        } else if (transition.getSourceState().equals(XletState.INVALID)) {
+        //} else if (transition.getSourceState().equals(XletState.INVALID)) {
             // not gonna happen
-        } else {
+        //} else {
+            // @@?
         }
 
         return false;
