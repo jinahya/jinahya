@@ -40,6 +40,18 @@ public class StateMachineSupport {
 
         super();
 
+        if (spec == null) {
+            throw new IllegalArgumentException("spec is null");
+        }
+
+        if (factory == null) {
+            throw new IllegalArgumentException("factory is null");
+        }
+
+        if (state == null) {
+            throw new IllegalArgumentException("state is null");
+        }
+
         this.spec = spec;
         this.factory = factory;
 
