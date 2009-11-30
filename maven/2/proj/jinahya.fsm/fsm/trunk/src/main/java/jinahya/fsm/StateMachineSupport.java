@@ -85,13 +85,13 @@ public class StateMachineSupport {
     /**
      * Transit the state.
      *
-     * @param newState new state
+     * @param state new state
      * @throws StateMachineException if any error occurs.
      */
-    public synchronized void transit(final State newState)
+    public synchronized void transit(final State state)
         throws StateMachineException {
 
-        if (newState == null) {
+        if (state == null) {
             throw new IllegalArgumentException("new state is null!");
         }
 
@@ -99,16 +99,16 @@ public class StateMachineSupport {
             throw new StateMachineException("already finished!");
         }
 
-        final Transition transition = new Transition(state, newState);
+        final Transition transition = new Transition(this.state, state);
 
         if (!spec.isTransitionAllowed(transition)) {
             throw new StateMachineException
                 ("transition is not allowed: " + transition);
         }
 
-        state = newState;
+        this.state = state;
 
-        // ------------------------------------------------------------- STARTED
+        // ------------------------------------------------------ CHECK STARTING
         if (!started && spec.isStartingTransition(transition)) {
             started = true;
 
@@ -119,16 +119,7 @@ public class StateMachineSupport {
         }
 
 
-        // ------------------------------------------------------------ FINISHED
-        if (!finished && spec.isFinishingTransition(transition)) {
-            finished = true;
-
-            for (int i = 0; i < tasks.length; i++) {
-                tasks[i].destroy();
-            }
-        }
-
-
+        // ------------------------------------------------------------- PERFORM
         TaskExecutorService parent = null;
         for (int priority = 9; priority >= 0; priority--) {
             TaskExecutorService child = new TaskExecutorService
@@ -141,6 +132,16 @@ public class StateMachineSupport {
             parent.join();
         } catch (InterruptedException ie) {
             ie.printStackTrace();
+        }
+
+
+        // ----------------------------------------------------- CHECK FINISHING
+        if (!finished && spec.isFinishingTransition(transition)) {
+            finished = true;
+
+            for (int i = 0; i < tasks.length; i++) {
+                tasks[i].destroy();
+            }
         }
     }
 
