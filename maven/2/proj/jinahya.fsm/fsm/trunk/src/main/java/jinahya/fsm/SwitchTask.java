@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -41,18 +41,19 @@ public abstract class SwitchTask extends Task {
 
 
     //@Override
-    public final synchronized void perform(Transition transition, int priority)
+    public synchronized final void perform(final Transition transition,
+                                           final int priority)
         throws StateMachineException {
 
         if (on) {
             if (offMatcher.matches(transition)) {
+                on = !on;
                 off(priority);
-                on = false;
             }
         } else { // off
             if (onMatcher.matches(transition)) {
+                on = !on;
                 on(priority);
-                on = true;
             }
         }
     }

@@ -43,9 +43,7 @@ class TaskExecutor extends Thread {
 
     //@Override
     public void run() {
-        int i = 0;
         for (Task task = null; (task = service.getTask()) != null;) {
-            i++;
             try {
                 task.perform(transition, priority);
             } catch (StateMachineException sme) {

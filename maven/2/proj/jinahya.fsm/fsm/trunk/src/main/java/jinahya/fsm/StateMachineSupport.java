@@ -26,11 +26,12 @@ public class StateMachineSupport {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param spec
-     * @param factory
-     * @param state
-     * @throws StateMachineException
+     * @param spec spec
+     * @param factory task factory
+     * @param state initial state
+     * @throws StateMachineException if any error occurs.
      */
     public StateMachineSupport(final StateMachineSpec spec,
                                final TaskFactory factory,
@@ -47,8 +48,9 @@ public class StateMachineSupport {
 
 
     /**
+     * Returns the current state value.
      *
-     * @return
+     * @return the current state
      */
     public synchronized State getState() {
         return state;
@@ -56,9 +58,10 @@ public class StateMachineSupport {
 
 
     /**
+     * Sets the current state. Identical to transit().
      *
-     * @param state
-     * @throws StateMachineException
+     * @param state new state
+     * @throws StateMachineException if any error occurs.
      */
     public synchronized void setState(final State state)
         throws StateMachineException {
@@ -68,9 +71,10 @@ public class StateMachineSupport {
 
 
     /**
+     * Transit the state.
      *
-     * @param newState
-     * @throws StateMachineException
+     * @param newState new state
+     * @throws StateMachineException if any error occurs.
      */
     public synchronized void transit(final State newState)
         throws StateMachineException {
@@ -92,6 +96,7 @@ public class StateMachineSupport {
 
         state = newState;
 
+        // ------------------------------------------------------------- STARTED
         if (!started && spec.isStartingTransition(transition)) {
             started = true;
 
@@ -102,6 +107,7 @@ public class StateMachineSupport {
         }
 
 
+        // ------------------------------------------------------------ FINISHED
         if (!finished && spec.isFinishingTransition(transition)) {
             finished = true;
 
@@ -113,29 +119,25 @@ public class StateMachineSupport {
 
         TaskExecutorService parent = null;
         for (int priority = 9; priority >= 0; priority--) {
-            /*
-            for (int i = 0; i < tasks.length; i++) {
-                tasks[i].perform(transition, priority);
-            }
-             */
-
-            TaskExecutorService child =
-                new TaskExecutorService(parent, tasks, transition, priority,
-                                        threadCount);
+            TaskExecutorService child = new TaskExecutorService
+                (parent, tasks, transition, priority, threadCount);
             child.start();
             parent = child;
         }
 
-        if (parent != null) {
-            try {
-                parent.join();
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
+        try {
+            parent.join();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         }
     }
 
 
+    /**
+     * Set the thread count.
+     *
+     * @param threadCount new thread count
+     */
     public synchronized void setThreadCount(final int threadCount) {
         if (threadCount <= 0) {
             throw new IllegalArgumentException
@@ -145,6 +147,11 @@ public class StateMachineSupport {
     }
 
 
+    /**
+     * Returns the current thread count.
+     *
+     * @return thread count
+     */
     public synchronized int getThreadCount() {
         return threadCount;
     }

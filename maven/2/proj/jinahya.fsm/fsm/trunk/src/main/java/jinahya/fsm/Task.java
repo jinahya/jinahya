@@ -25,7 +25,6 @@ package jinahya.fsm;
 public abstract class Task {
 
 
-
     /**
      * Initialize this task.
      *
