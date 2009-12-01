@@ -101,6 +101,17 @@ public class StateMachine {
             throw new IllegalStateException("already finished!");
         }
 
+
+        // -------------------------------------- JOIN PREVIOUS EXECUTOR SERVICE
+        if (previousExecutorService != null) {
+            try {
+                previousExecutorService.join();
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+
+
         // --------------------------------------------------- CREATE TRANSITION
         final State[] transitionHistory = new State[history.size()];
         history.toArray(transitionHistory);
@@ -115,6 +126,7 @@ public class StateMachine {
         }
 
 
+        // -------------------------------------------------------- CHANGE STATE
         State oldState = this.state;
         this.state = state;
 
@@ -124,9 +136,15 @@ public class StateMachine {
             started = true;
 
             final Task[] created = factory.createTasks();
+            for (int i = 0; i < created.length; i++) {
+                if (created[i] == null) {
+                    throw new NullPointerException("null task @ " + i);
+                }
+            }
             tasks = new Task[created.length];
             System.arraycopy(created, 0, tasks, 0, tasks.length);
 
+            // ------------------------------------------------ INITIALIZE TASKS
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].initialize();
             }
@@ -136,25 +154,38 @@ public class StateMachine {
         if (started) {
 
             // --------------------------------------------------------- PERFORM
-            ExecutorService parent = null;
-            for (int priority = 9; priority >= 0; priority--) {
-                ExecutorService child = new ExecutorService
-                    (parent, tasks, transition, priority, getThreadCount());
-                child.start();
-                parent = child;
+            if (threadCount > 0) {
+                ExecutorService parent = null;
+                for (int priority = 9; priority >= 0; priority--) {
+                    ExecutorService child =
+                        new ExecutorService(parent, tasks, transition, priority,
+                                            threadCount);
+                    child.start();
+                    parent = child;
+                }
+                previousExecutorService = parent;
+            } else {
+                for (int priority = 9; priority >= 0; priority--) {
+                    for (int i = 0; i < tasks.length; i++) {
+                        tasks[i].perform(transition, priority);
+                    }
+                }
             }
 
+            /*
             // ------------------------------------------------------------ JOIN
             try {
                 parent.join();
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
+             */
 
             // ------------------------------------------------- CHECK FINISHING
             if (!finished && spec.isFinishingTransition(transition)) {
                 finished = true;
 
+                // ----------------------------------------------- DESTROY TASKS
                 for (int i = 0; i < tasks.length; i++) {
                     tasks[i].destroy();
                 }
@@ -163,7 +194,7 @@ public class StateMachine {
 
         // ------------------------------------------------------------- HISTORY
         history.addElement(oldState);
-        while (history.size() > getHistoryCount()) {
+        while (history.size() > historyCount) {
             history.removeElementAt(0);
         }
     }
@@ -182,10 +213,10 @@ public class StateMachine {
     /**
      * Set the thread count.
      *
-     * @param threadCount new thread count; non-zero positive
+     * @param threadCount new thread count; zero for non-thread
      */
     public synchronized void setThreadCount(final int threadCount) {
-        if (threadCount <= 0) {
+        if (threadCount < 0) {
             throw new IllegalArgumentException
                 ("illegal thread count: " + threadCount);
         }
@@ -209,7 +240,7 @@ public class StateMachine {
      * @param historyCount new history count; non-zero positive
      */
     public synchronized void setHistoryCount(int historyCount) {
-        if (historyCount <= 0) {
+        if (historyCount < 0) {
             throw new IllegalArgumentException
                 ("illegal history count: " + historyCount);
         }
@@ -227,8 +258,10 @@ public class StateMachine {
     private volatile boolean started = false;
     private volatile boolean finished = false;
 
-    private volatile int threadCount = 1;
+    private volatile int threadCount = 0;
 
-    private volatile int historyCount = 10;
+    private volatile int historyCount = 0;
     private final Vector history = new Vector();
+
+    private transient Thread previousExecutorService = null;
 }
