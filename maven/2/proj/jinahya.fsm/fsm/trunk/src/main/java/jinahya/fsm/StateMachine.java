@@ -123,7 +123,10 @@ public class StateMachine {
         if (!started && spec.isStartingTransition(transition)) {
             started = true;
 
-            tasks = factory.createTasks();
+            final Task[] created = factory.createTasks();
+            tasks = new Task[created.length];
+            System.arraycopy(created, 0, tasks, 0, tasks.length);
+
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].initialize();
             }
@@ -148,12 +151,6 @@ public class StateMachine {
                 ie.printStackTrace();
             }
 
-            // --------------------------------------------------------- HISTORY
-            history.insertElementAt(oldState, 0);
-            while (history.size() > getHistoryCount()) {
-                history.removeElementAt(history.size() - 1);
-            }
-
             // ------------------------------------------------- CHECK FINISHING
             if (!finished && spec.isFinishingTransition(transition)) {
                 finished = true;
@@ -162,6 +159,12 @@ public class StateMachine {
                     tasks[i].destroy();
                 }
             }
+        }
+
+        // ------------------------------------------------------------- HISTORY
+        history.addElement(oldState);
+        while (history.size() > getHistoryCount()) {
+            history.removeElementAt(0);
         }
     }
 
@@ -214,12 +217,12 @@ public class StateMachine {
     }
 
 
-    private StateMachineSpec spec;
-    private TaskFactory factory;
+    private StateMachineSpec spec = null;
+    private TaskFactory factory = null;
 
     private State state = State.UNKNOWN;
 
-    private transient Task[] tasks;
+    private transient Task[] tasks = null;
 
     private volatile boolean started = false;
     private volatile boolean finished = false;

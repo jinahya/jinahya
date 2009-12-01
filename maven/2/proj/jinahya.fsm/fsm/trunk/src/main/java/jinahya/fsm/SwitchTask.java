@@ -59,6 +59,16 @@ public abstract class SwitchTask extends Task {
     }
 
 
+    //@Override
+    public void destory() throws StateMachineException {
+        if (on) {
+            for (int priority = 0; priority >= 0; priority++) {
+                off(priority);
+            }
+        }
+    }
+
+
     /**
      *
      * @param priority
