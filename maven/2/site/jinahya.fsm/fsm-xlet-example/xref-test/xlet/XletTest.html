@@ -19,7 +19,7 @@
 <a name="9" href="#9">9</a>   <em class="jxr_comment"> * </em>
 <a name="10" href="#10">10</a>  <em class="jxr_comment"> *  Unless required by applicable law or agreed to in writing, software</em>
 <a name="11" href="#11">11</a>  <em class="jxr_comment"> *  distributed under the License is distributed on an "AS IS" BASIS,</em>
-<a name="12" href="#12">12</a>  <em class="jxr_comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a name="12" href="#12">12</a>  <em class="jxr_comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or xletied.</em>
 <a name="13" href="#13">13</a>  <em class="jxr_comment"> *  See the License for the specific language governing permissions and</em>
 <a name="14" href="#14">14</a>  <em class="jxr_comment"> *  limitations under the License.</em>
 <a name="15" href="#15">15</a>  <em class="jxr_comment"> *  under the License.</em>
@@ -52,35 +52,39 @@
 <a name="42" href="#42">42</a>      @Test
 <a name="43" href="#43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> test() <strong class="jxr_keyword">throws</strong> XletStateChangeException {
 <a name="44" href="#44">44</a>  
-<a name="45" href="#45">45</a>          System.out.println(<span class="jxr_string">"-------------------------------------------------"</span>);
-<a name="46" href="#46">46</a>          System.out.println(<span class="jxr_string">"Before Loading"</span>);
-<a name="47" href="#47">47</a>          Xlet impl = <strong class="jxr_keyword">new</strong> Impl();
-<a name="48" href="#48">48</a>          System.out.println(<span class="jxr_string">"After Loading"</span>);
+<a name="45" href="#45">45</a>          <strong class="jxr_keyword">if</strong> (xlet == <strong class="jxr_keyword">null</strong>) {
+<a name="46" href="#46">46</a>              System.out.println(<span class="jxr_string">"NULL"</span>);
+<a name="47" href="#47">47</a>              <strong class="jxr_keyword">return</strong>;
+<a name="48" href="#48">48</a>          }
 <a name="49" href="#49">49</a>  
-<a name="50" href="#50">50</a>          System.out.println(<span class="jxr_string">"-------------------------------------------------"</span>);
-<a name="51" href="#51">51</a>          System.out.println(<span class="jxr_string">"Before initXlet()"</span>);
-<a name="52" href="#52">52</a>          impl.initXlet(<strong class="jxr_keyword">null</strong>);
-<a name="53" href="#53">53</a>          System.out.println(<span class="jxr_string">"After initXlet()"</span>);
-<a name="54" href="#54">54</a>  
-<a name="55" href="#55">55</a>          System.out.println(<span class="jxr_string">"-------------------------------------------------"</span>);
-<a name="56" href="#56">56</a>          System.out.println(<span class="jxr_string">"Before startXlet()"</span>);
-<a name="57" href="#57">57</a>          impl.startXlet();
-<a name="58" href="#58">58</a>          System.out.println(<span class="jxr_string">"After startXlet()"</span>);
-<a name="59" href="#59">59</a>  
-<a name="60" href="#60">60</a>          System.out.println(<span class="jxr_string">"-------------------------------------------------"</span>);
-<a name="61" href="#61">61</a>          System.out.println(<span class="jxr_string">"Before pauseXlet()"</span>);
-<a name="62" href="#62">62</a>          impl.pauseXlet();
-<a name="63" href="#63">63</a>          System.out.println(<span class="jxr_string">"After pauseXlet()"</span>);
-<a name="64" href="#64">64</a>  
-<a name="65" href="#65">65</a>          System.out.println(<span class="jxr_string">"-------------------------------------------------"</span>);
-<a name="66" href="#66">66</a>          System.out.println(<span class="jxr_string">"Before destroyXlet()"</span>);
-<a name="67" href="#67">67</a>          impl.destroyXlet(<strong class="jxr_keyword">true</strong>);
-<a name="68" href="#68">68</a>          System.out.println(<span class="jxr_string">"After destroyXlet()"</span>);
-<a name="69" href="#69">69</a>      }
-<a name="70" href="#70">70</a>  
+<a name="50" href="#50">50</a>          <strong class="jxr_keyword">long</strong> start = System.currentTimeMillis();
+<a name="51" href="#51">51</a>  
+<a name="52" href="#52">52</a>          <em class="jxr_comment">//System.out.println("-------------------------------------------------");</em>
+<a name="53" href="#53">53</a>          <em class="jxr_comment">//System.out.println("Before initXlet()");</em>
+<a name="54" href="#54">54</a>          xlet.initXlet(<strong class="jxr_keyword">null</strong>);
+<a name="55" href="#55">55</a>          <em class="jxr_comment">//System.out.println("After initXlet()");</em>
+<a name="56" href="#56">56</a>  
+<a name="57" href="#57">57</a>          <em class="jxr_comment">//System.out.println("-------------------------------------------------");</em>
+<a name="58" href="#58">58</a>          <em class="jxr_comment">//System.out.println("Before startXlet()");</em>
+<a name="59" href="#59">59</a>          xlet.startXlet();
+<a name="60" href="#60">60</a>          <em class="jxr_comment">//System.out.println("After startXlet()");</em>
+<a name="61" href="#61">61</a>  
+<a name="62" href="#62">62</a>          <em class="jxr_comment">//System.out.println("-------------------------------------------------");</em>
+<a name="63" href="#63">63</a>          <em class="jxr_comment">//System.out.println("Before pauseXlet()");</em>
+<a name="64" href="#64">64</a>          xlet.pauseXlet();
+<a name="65" href="#65">65</a>          <em class="jxr_comment">//System.out.println("After pauseXlet()");</em>
+<a name="66" href="#66">66</a>  
+<a name="67" href="#67">67</a>          <em class="jxr_comment">//System.out.println("-------------------------------------------------");</em>
+<a name="68" href="#68">68</a>          <em class="jxr_comment">//System.out.println("Before destroyXlet()");</em>
+<a name="69" href="#69">69</a>          xlet.destroyXlet(<strong class="jxr_keyword">true</strong>);
+<a name="70" href="#70">70</a>          <em class="jxr_comment">//System.out.println("After destroyXlet()");</em>
 <a name="71" href="#71">71</a>  
-<a name="72" href="#72">72</a>      <strong class="jxr_keyword">private</strong> Xlet xlet;
-<a name="73" href="#73">73</a>  }
+<a name="72" href="#72">72</a>          System.out.println(<span class="jxr_string">"ELLAPSED: "</span> + (System.currentTimeMillis() - start));
+<a name="73" href="#73">73</a>      }
+<a name="74" href="#74">74</a>  
+<a name="75" href="#75">75</a>  
+<a name="76" href="#76">76</a>      <strong class="jxr_keyword">private</strong> Xlet xlet;
+<a name="77" href="#77">77</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
