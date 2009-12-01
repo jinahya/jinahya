@@ -24,7 +24,7 @@ import javax.tv.xlet.XletStateChangeException;
 
 import jinahya.fsm.StateMachineException;
 
-import jinahya.fsm.xlet.XletSupport;
+import jinahya.fsm.xlet.XletStateMachine;
 
 
 /**
@@ -42,7 +42,7 @@ public class Impl2 implements Xlet {
         super();
 
         try {
-            fsms = XletSupport.createInConstructor(new TaskFactoryImpl());
+            fsms = XletStateMachine.createInConstructor(new TaskFactoryImpl().createTasks());
             fsms.setThreadCount(20);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
@@ -92,5 +92,5 @@ public class Impl2 implements Xlet {
     }
 
 
-    private XletSupport fsms;
+    private XletStateMachine fsms;
 }
