@@ -18,12 +18,14 @@
 package jinahya.fsm.xlet;
 
 
+import jinahya.fsm.State;
 import jinahya.fsm.SwitchTask;
 import jinahya.fsm.Transition;
 import jinahya.fsm.TransitionMatcher;
 
 
 /**
+ * Task performes only in play level.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -31,21 +33,24 @@ public abstract class PlayTask extends SwitchTask {
 
 
     /**
-     *
+     * Creates a new instance.
      */
     public PlayTask() {
         super(new TransitionMatcher() {
             //@Override
-            public boolean matches(Transition transition) {
-                return transition.getTargetState().equals(XletState.STARTED);
+            public boolean matches(final Transition transition) {
+                //final State sourceState = transition.getSourceState();
+                final State targetState = transition.getTargetState();
+                return targetState.equals(XletState.STARTED);
             }
         }, new TransitionMatcher() {
             //@Override
-            public boolean matches(Transition transition) {
-                return
-                    (transition.getSourceState().equals(XletState.STARTED) &&
-                     (transition.getTargetState().equals(XletState.PAUSED) ||
-                      transition.getTargetState().equals(XletState.DESTROYED)));
+            public boolean matches(final Transition transition) {
+                final State sourceState = transition.getSourceState();
+                final State targetState = transition.getTargetState();
+                return (sourceState.equals(XletState.STARTED) &&
+                        (targetState.equals(XletState.PAUSED) ||
+                         targetState.equals(XletState.DESTROYED)));
             }
         });
     }

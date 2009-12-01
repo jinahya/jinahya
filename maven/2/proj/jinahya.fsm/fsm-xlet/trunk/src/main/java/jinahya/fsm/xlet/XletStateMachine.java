@@ -20,72 +20,94 @@ package jinahya.fsm.xlet;
 
 import jinahya.fsm.State;
 import jinahya.fsm.StateMachineException;
-import jinahya.fsm.StateMachineSupport;
-import jinahya.fsm.TaskFactory;
+import jinahya.fsm.StateMachine;
+import jinahya.fsm.Task;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletSupport extends StateMachineSupport {
+public class XletStateMachine extends StateMachine {
 
 
     /**
      * Creates an instance. Intended to be invoked in constructor.
      *
-     * @param factory
+     * @param tasks
      * @return a new instance
      * @throws StateMachineException
      */
-    public static XletSupport createInConstructor(TaskFactory factory)
+    public static XletStateMachine createInConstructor(Task[] tasks)
         throws StateMachineException {
 
-        return new XletSupport(factory, XletState.LOADED);
+        return new XletStateMachine(tasks, XletState.LOADED);
     }
 
 
     /**
-     * Creates an instance. Intended to be invoked in <code>initXlet</code>
-     * @param factory
-     * @return
-     * @throws StateMachineException
-     */
-    public static XletSupport createInInitXlet(TaskFactory factory)
-        throws StateMachineException {
-
-        return new XletSupport(factory, XletState.PAUSED);
-    }
-
-
-    /**
+     * Creates an instance. Intended to be invoked in <code>initXlet</code>.
      *
-     * @param factory
-     * @param state
+     * @param tasks tasks
+     * @return a new instance
      * @throws StateMachineException
      */
-    public XletSupport(TaskFactory factory, State state)
+    public static XletStateMachine createInInitXlet(Task[] tasks)
         throws StateMachineException {
 
-        super(new XletSpec(), factory, state);
+        return new XletStateMachine(tasks, XletState.PAUSED);
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param tasks tasks
+     * @param state initial state
+     * @throws StateMachineException if any error occurs
+     */
+    public XletStateMachine(final Task[] tasks, final State state)
+        throws StateMachineException {
+
+        super(new XletStateMachineSpec(), tasks, state);
+    }
+
+
+    /**
+     * Notifies the <code>initXlet<code> invoked.
+     *
+     * @throws StateMachineException if any error occurs.
+     */
     public void initXletInvoked() throws StateMachineException {
         transit(XletState.PAUSED);
     }
 
 
+    /**
+     * Notifies the <code>startXlet</code> invoked.
+     *
+     * @throws StateMachineException if any error occurs.
+     */
     public void startXletInvoked() throws StateMachineException {
         transit(XletState.STARTED);
     }
 
 
+    /**
+     * Notifies the <code>pauseXlet</code> invoked.
+     *
+     * @throws StateMachineException if any error occurs.
+     */
     public void pauseXletInvoked() throws StateMachineException {
         transit(XletState.PAUSED);
     }
 
 
+    /**
+     * Notifies the <code>destroyXlet</code> invoked.
+     *
+     * @throws StateMachineException if any error occurs.
+     */
     public void destroyXletInvoked() throws StateMachineException {
         transit(XletState.DESTROYED);
     }

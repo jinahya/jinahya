@@ -25,6 +25,7 @@ import jinahya.fsm.TransitionMatcher;
 
 
 /**
+ * Task performs only in init level.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -32,21 +33,24 @@ public abstract class InitTask extends SwitchTask {
 
 
     /**
-     *
+     * Creates a new instance.
      */
     public InitTask() {
         super(new TransitionMatcher() {
             //@Override
-            public boolean matches(Transition transition) {
-                return
-                    ((transition.getSourceState().equals(State.UNKNOWN) ||
-                      transition.getSourceState().equals(XletState.LOADED)) &&
-                     transition.getTargetState().equals(XletState.PAUSED));
+            public boolean matches(final Transition transition) {
+                final State sourceState = transition.getSourceState();
+                final State targetState = transition.getTargetState();
+                return ((sourceState.equals(State.UNKNOWN) ||
+                         sourceState.equals(XletState.LOADED)) &&
+                        targetState.equals(XletState.PAUSED));
             }
         }, new TransitionMatcher() {
             //@Override
-            public boolean matches(Transition transition) {
-                return transition.getTargetState().equals(XletState.DESTROYED);
+            public boolean matches(final Transition transition) {
+                //final State sourceState = transition.getSourceState();
+                final State targetState = transition.getTargetState();
+                return targetState.equals(XletState.DESTROYED);
             }
         });
     }
