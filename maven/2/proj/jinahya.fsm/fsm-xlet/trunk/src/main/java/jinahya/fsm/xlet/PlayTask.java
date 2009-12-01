@@ -39,9 +39,10 @@ public abstract class PlayTask extends SwitchTask {
         super(new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                //final State sourceState = transition.getSourceState();
+                final State sourceState = transition.getSourceState();
                 final State targetState = transition.getTargetState();
-                return targetState.equals(XletState.STARTED);
+                return sourceState.equals(XletState.PAUSED) &&
+                       targetState.equals(XletState.STARTED);
             }
         }, new TransitionMatcher() {
             //@Override
