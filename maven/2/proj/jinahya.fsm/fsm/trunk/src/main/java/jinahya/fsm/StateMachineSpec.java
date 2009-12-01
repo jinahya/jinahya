@@ -26,16 +26,17 @@ public interface StateMachineSpec {
 
 
     /**
+     * Checks if specifed transition is a starting condition or not
      *
-     * @param transition
-     * @return true if given transition means one of the starting transitions of
-     *         the machine, false otherwise.
+     * @param transition transition
+     * @return true if specifed transition is starting transition,
+     *         false otherwise
      */
     public boolean isStartingTransition(Transition transition);
 
 
     /**
-     *
+     * Checks if specifed transition is permitted or not.
      * @param transition
      * @return true if given transition is an allowed one, false otherwise.
      */
