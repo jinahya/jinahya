@@ -22,13 +22,14 @@ import java.util.Vector;
 
 import jinahya.fsm.StateMachineException;
 import jinahya.fsm.Task;
+import jinahya.fsm.TaskFactory;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class TaskFactoryImpl {// implements TaskFactory {
+public class TaskFactoryImpl implements TaskFactory {
 
     //@Override
     public Task[] createTasks() throws StateMachineException {

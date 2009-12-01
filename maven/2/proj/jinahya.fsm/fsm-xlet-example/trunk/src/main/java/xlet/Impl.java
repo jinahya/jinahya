@@ -43,8 +43,8 @@ public class Impl implements Xlet {
         super();
 
         try {
-            fsms = XletStateMachine.createInConstructor(new TaskFactoryImpl().createTasks());
-            fsms.setThreadCount(5);
+            xsm = XletStateMachine.createInConstructor(new TaskFactoryImpl());
+            xsm.setThreadCount(5);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class Impl implements Xlet {
     //@Override
     public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
-            fsms.setState(XletState.PAUSED);
+            xsm.setState(XletState.PAUSED);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class Impl implements Xlet {
     //@Override
     public void startXlet() throws XletStateChangeException {
         try {
-            fsms.setState(XletState.STARTED);
+            xsm.setState(XletState.STARTED);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
@@ -74,7 +74,7 @@ public class Impl implements Xlet {
     //@Override
     public void pauseXlet() {
         try {
-            fsms.setState(XletState.PAUSED);
+            xsm.setState(XletState.PAUSED);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
@@ -86,12 +86,12 @@ public class Impl implements Xlet {
         throws XletStateChangeException {
 
         try {
-            fsms.setState(XletState.DESTROYED);
+            xsm.setState(XletState.DESTROYED);
         } catch (StateMachineException fsme) {
             fsme.printStackTrace();
         }
     }
 
 
-    private StateMachine fsms;
+    private StateMachine xsm;
 }
