@@ -111,137 +111,170 @@
 <a name="101" href="#101">101</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished!"</span>);
 <a name="102" href="#102">102</a>         }
 <a name="103" href="#103">103</a> 
-<a name="104" href="#104">104</a>         <em class="jxr_comment">// --------------------------------------------------- CREATE TRANSITION</em>
-<a name="105" href="#105">105</a>         <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/State.html">State</a>[] transitionHistory = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/State.html">State</a>[history.size()];
-<a name="106" href="#106">106</a>         history.toArray(transitionHistory);
-<a name="107" href="#107">107</a>         <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a> transition =
-<a name="108" href="#108">108</a>             <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a>(<strong class="jxr_keyword">this</strong>.state, state, transitionHistory);
-<a name="109" href="#109">109</a> 
-<a name="110" href="#110">110</a> 
-<a name="111" href="#111">111</a>         <em class="jxr_comment">// -------------------------------------------- CHECK TRANSITION ALLOWED</em>
-<a name="112" href="#112">112</a>         <strong class="jxr_keyword">if</strong> (!spec.isTransitionAllowed(transition)) {
-<a name="113" href="#113">113</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/StateMachineException.html">StateMachineException</a>
-<a name="114" href="#114">114</a>                 (<span class="jxr_string">"transition is not allowed: "</span> + transition);
-<a name="115" href="#115">115</a>         }
-<a name="116" href="#116">116</a> 
-<a name="117" href="#117">117</a> 
-<a name="118" href="#118">118</a>         <a href="../../jinahya/fsm/State.html">State</a> oldState = <strong class="jxr_keyword">this</strong>.state;
-<a name="119" href="#119">119</a>         <strong class="jxr_keyword">this</strong>.state = state;
+<a name="104" href="#104">104</a> 
+<a name="105" href="#105">105</a>         <em class="jxr_comment">// -------------------------------------- JOIN PREVIOUS EXECUTOR SERVICE</em>
+<a name="106" href="#106">106</a>         <strong class="jxr_keyword">if</strong> (previousExecutorService != <strong class="jxr_keyword">null</strong>) {
+<a name="107" href="#107">107</a>             <strong class="jxr_keyword">try</strong> {
+<a name="108" href="#108">108</a>                 previousExecutorService.join();
+<a name="109" href="#109">109</a>             } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
+<a name="110" href="#110">110</a>                 ie.printStackTrace();
+<a name="111" href="#111">111</a>             }
+<a name="112" href="#112">112</a>         }
+<a name="113" href="#113">113</a> 
+<a name="114" href="#114">114</a> 
+<a name="115" href="#115">115</a>         <em class="jxr_comment">// --------------------------------------------------- CREATE TRANSITION</em>
+<a name="116" href="#116">116</a>         <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/State.html">State</a>[] transitionHistory = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/State.html">State</a>[history.size()];
+<a name="117" href="#117">117</a>         history.toArray(transitionHistory);
+<a name="118" href="#118">118</a>         <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a> transition =
+<a name="119" href="#119">119</a>             <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a>(<strong class="jxr_keyword">this</strong>.state, state, transitionHistory);
 <a name="120" href="#120">120</a> 
 <a name="121" href="#121">121</a> 
-<a name="122" href="#122">122</a>         <em class="jxr_comment">// ------------------------------------------------------ CHECK STARTING</em>
-<a name="123" href="#123">123</a>         <strong class="jxr_keyword">if</strong> (!started &amp;&amp; spec.isStartingTransition(transition)) {
-<a name="124" href="#124">124</a>             started = <strong class="jxr_keyword">true</strong>;
-<a name="125" href="#125">125</a> 
-<a name="126" href="#126">126</a>             <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[] created = factory.createTasks();
-<a name="127" href="#127">127</a>             tasks = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[created.length];
-<a name="128" href="#128">128</a>             System.arraycopy(created, 0, tasks, 0, tasks.length);
-<a name="129" href="#129">129</a> 
-<a name="130" href="#130">130</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.length; i++) {
-<a name="131" href="#131">131</a>                 tasks[i].initialize();
-<a name="132" href="#132">132</a>             }
-<a name="133" href="#133">133</a>         }
-<a name="134" href="#134">134</a> 
-<a name="135" href="#135">135</a> 
-<a name="136" href="#136">136</a>         <strong class="jxr_keyword">if</strong> (started) {
+<a name="122" href="#122">122</a>         <em class="jxr_comment">// -------------------------------------------- CHECK TRANSITION ALLOWED</em>
+<a name="123" href="#123">123</a>         <strong class="jxr_keyword">if</strong> (!spec.isTransitionAllowed(transition)) {
+<a name="124" href="#124">124</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/StateMachineException.html">StateMachineException</a>
+<a name="125" href="#125">125</a>                 (<span class="jxr_string">"transition is not allowed: "</span> + transition);
+<a name="126" href="#126">126</a>         }
+<a name="127" href="#127">127</a> 
+<a name="128" href="#128">128</a> 
+<a name="129" href="#129">129</a>         <em class="jxr_comment">// -------------------------------------------------------- CHANGE STATE</em>
+<a name="130" href="#130">130</a>         <a href="../../jinahya/fsm/State.html">State</a> oldState = <strong class="jxr_keyword">this</strong>.state;
+<a name="131" href="#131">131</a>         <strong class="jxr_keyword">this</strong>.state = state;
+<a name="132" href="#132">132</a> 
+<a name="133" href="#133">133</a> 
+<a name="134" href="#134">134</a>         <em class="jxr_comment">// ------------------------------------------------------ CHECK STARTING</em>
+<a name="135" href="#135">135</a>         <strong class="jxr_keyword">if</strong> (!started &amp;&amp; spec.isStartingTransition(transition)) {
+<a name="136" href="#136">136</a>             started = <strong class="jxr_keyword">true</strong>;
 <a name="137" href="#137">137</a> 
-<a name="138" href="#138">138</a>             <em class="jxr_comment">// --------------------------------------------------------- PERFORM</em>
-<a name="139" href="#139">139</a>             <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a> parent = <strong class="jxr_keyword">null</strong>;
-<a name="140" href="#140">140</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> priority = 9; priority &gt;= 0; priority--) {
-<a name="141" href="#141">141</a>                 <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a> child = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a>
-<a name="142" href="#142">142</a>                     (parent, tasks, transition, priority, getThreadCount());
-<a name="143" href="#143">143</a>                 child.start();
-<a name="144" href="#144">144</a>                 parent = child;
-<a name="145" href="#145">145</a>             }
+<a name="138" href="#138">138</a>             <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[] created = factory.createTasks();
+<a name="139" href="#139">139</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; created.length; i++) {
+<a name="140" href="#140">140</a>                 <strong class="jxr_keyword">if</strong> (created[i] == <strong class="jxr_keyword">null</strong>) {
+<a name="141" href="#141">141</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"null task @ "</span> + i);
+<a name="142" href="#142">142</a>                 }
+<a name="143" href="#143">143</a>             }
+<a name="144" href="#144">144</a>             tasks = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[created.length];
+<a name="145" href="#145">145</a>             System.arraycopy(created, 0, tasks, 0, tasks.length);
 <a name="146" href="#146">146</a> 
-<a name="147" href="#147">147</a>             <em class="jxr_comment">// ------------------------------------------------------------ JOIN</em>
-<a name="148" href="#148">148</a>             <strong class="jxr_keyword">try</strong> {
-<a name="149" href="#149">149</a>                 parent.join();
-<a name="150" href="#150">150</a>             } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
-<a name="151" href="#151">151</a>                 ie.printStackTrace();
-<a name="152" href="#152">152</a>             }
+<a name="147" href="#147">147</a>             <em class="jxr_comment">// ------------------------------------------------ INITIALIZE TASKS</em>
+<a name="148" href="#148">148</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.length; i++) {
+<a name="149" href="#149">149</a>                 tasks[i].initialize();
+<a name="150" href="#150">150</a>             }
+<a name="151" href="#151">151</a>         }
+<a name="152" href="#152">152</a> 
 <a name="153" href="#153">153</a> 
-<a name="154" href="#154">154</a>             <em class="jxr_comment">// ------------------------------------------------- CHECK FINISHING</em>
-<a name="155" href="#155">155</a>             <strong class="jxr_keyword">if</strong> (!finished &amp;&amp; spec.isFinishingTransition(transition)) {
-<a name="156" href="#156">156</a>                 finished = <strong class="jxr_keyword">true</strong>;
-<a name="157" href="#157">157</a> 
-<a name="158" href="#158">158</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.length; i++) {
-<a name="159" href="#159">159</a>                     tasks[i].destroy();
-<a name="160" href="#160">160</a>                 }
-<a name="161" href="#161">161</a>             }
-<a name="162" href="#162">162</a>         }
-<a name="163" href="#163">163</a> 
-<a name="164" href="#164">164</a>         <em class="jxr_comment">// ------------------------------------------------------------- HISTORY</em>
-<a name="165" href="#165">165</a>         history.addElement(oldState);
-<a name="166" href="#166">166</a>         <strong class="jxr_keyword">while</strong> (history.size() &gt; getHistoryCount()) {
-<a name="167" href="#167">167</a>             history.removeElementAt(0);
-<a name="168" href="#168">168</a>         }
-<a name="169" href="#169">169</a>     }
-<a name="170" href="#170">170</a> 
-<a name="171" href="#171">171</a> 
-<a name="172" href="#172">172</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="173" href="#173">173</a> <em class="jxr_javadoccomment">     * Returns the current thread count.</em>
-<a name="174" href="#174">174</a> <em class="jxr_javadoccomment">     *</em>
-<a name="175" href="#175">175</a> <em class="jxr_javadoccomment">     * @return thread count</em>
-<a name="176" href="#176">176</a> <em class="jxr_javadoccomment">     */</em>
-<a name="177" href="#177">177</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">int</strong> getThreadCount() {
-<a name="178" href="#178">178</a>         <strong class="jxr_keyword">return</strong> threadCount;
-<a name="179" href="#179">179</a>     }
-<a name="180" href="#180">180</a> 
-<a name="181" href="#181">181</a> 
-<a name="182" href="#182">182</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="183" href="#183">183</a> <em class="jxr_javadoccomment">     * Set the thread count.</em>
-<a name="184" href="#184">184</a> <em class="jxr_javadoccomment">     *</em>
-<a name="185" href="#185">185</a> <em class="jxr_javadoccomment">     * @param threadCount new thread count; non-zero positive</em>
-<a name="186" href="#186">186</a> <em class="jxr_javadoccomment">     */</em>
-<a name="187" href="#187">187</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> setThreadCount(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> threadCount) {
-<a name="188" href="#188">188</a>         <strong class="jxr_keyword">if</strong> (threadCount &lt;= 0) {
-<a name="189" href="#189">189</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="190" href="#190">190</a>                 (<span class="jxr_string">"illegal thread count: "</span> + threadCount);
-<a name="191" href="#191">191</a>         }
-<a name="192" href="#192">192</a>         <strong class="jxr_keyword">this</strong>.threadCount = threadCount;
-<a name="193" href="#193">193</a>     }
+<a name="154" href="#154">154</a>         <strong class="jxr_keyword">if</strong> (started) {
+<a name="155" href="#155">155</a> 
+<a name="156" href="#156">156</a>             <em class="jxr_comment">// --------------------------------------------------------- PERFORM</em>
+<a name="157" href="#157">157</a>             <strong class="jxr_keyword">if</strong> (threadCount &gt; 0) {
+<a name="158" href="#158">158</a>                 <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a> parent = <strong class="jxr_keyword">null</strong>;
+<a name="159" href="#159">159</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> priority = 9; priority &gt;= 0; priority--) {
+<a name="160" href="#160">160</a>                     <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a> child =
+<a name="161" href="#161">161</a>                         <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/ExecutorService.html">ExecutorService</a>(parent, tasks, transition, priority,
+<a name="162" href="#162">162</a>                                             threadCount);
+<a name="163" href="#163">163</a>                     child.start();
+<a name="164" href="#164">164</a>                     parent = child;
+<a name="165" href="#165">165</a>                 }
+<a name="166" href="#166">166</a>                 previousExecutorService = parent;
+<a name="167" href="#167">167</a>             } <strong class="jxr_keyword">else</strong> {
+<a name="168" href="#168">168</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> priority = 9; priority &gt;= 0; priority--) {
+<a name="169" href="#169">169</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.length; i++) {
+<a name="170" href="#170">170</a>                         tasks[i].perform(transition, priority);
+<a name="171" href="#171">171</a>                     }
+<a name="172" href="#172">172</a>                 }
+<a name="173" href="#173">173</a>             }
+<a name="174" href="#174">174</a> 
+<a name="175" href="#175">175</a>             <em class="jxr_comment">/*</em>
+<a name="176" href="#176">176</a> <em class="jxr_comment">            // ------------------------------------------------------------ JOIN</em>
+<a name="177" href="#177">177</a> <em class="jxr_comment">            try {</em>
+<a name="178" href="#178">178</a> <em class="jxr_comment">                parent.join();</em>
+<a name="179" href="#179">179</a> <em class="jxr_comment">            } catch (InterruptedException ie) {</em>
+<a name="180" href="#180">180</a> <em class="jxr_comment">                ie.printStackTrace();</em>
+<a name="181" href="#181">181</a> <em class="jxr_comment">            }</em>
+<a name="182" href="#182">182</a> <em class="jxr_comment">             */</em>
+<a name="183" href="#183">183</a> 
+<a name="184" href="#184">184</a>             <em class="jxr_comment">// ------------------------------------------------- CHECK FINISHING</em>
+<a name="185" href="#185">185</a>             <strong class="jxr_keyword">if</strong> (!finished &amp;&amp; spec.isFinishingTransition(transition)) {
+<a name="186" href="#186">186</a>                 finished = <strong class="jxr_keyword">true</strong>;
+<a name="187" href="#187">187</a> 
+<a name="188" href="#188">188</a>                 <em class="jxr_comment">// ----------------------------------------------- DESTROY TASKS</em>
+<a name="189" href="#189">189</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.length; i++) {
+<a name="190" href="#190">190</a>                     tasks[i].destroy();
+<a name="191" href="#191">191</a>                 }
+<a name="192" href="#192">192</a>             }
+<a name="193" href="#193">193</a>         }
 <a name="194" href="#194">194</a> 
-<a name="195" href="#195">195</a> 
-<a name="196" href="#196">196</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="197" href="#197">197</a> <em class="jxr_javadoccomment">     * Returns current value of historyCount.</em>
-<a name="198" href="#198">198</a> <em class="jxr_javadoccomment">     *</em>
-<a name="199" href="#199">199</a> <em class="jxr_javadoccomment">     * @return historyCount</em>
-<a name="200" href="#200">200</a> <em class="jxr_javadoccomment">     */</em>
-<a name="201" href="#201">201</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">int</strong> getHistoryCount() {
-<a name="202" href="#202">202</a>         <strong class="jxr_keyword">return</strong> historyCount;
-<a name="203" href="#203">203</a>     }
-<a name="204" href="#204">204</a> 
-<a name="205" href="#205">205</a> 
-<a name="206" href="#206">206</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="207" href="#207">207</a> <em class="jxr_javadoccomment">     * Sets state transition history count.</em>
-<a name="208" href="#208">208</a> <em class="jxr_javadoccomment">     *</em>
-<a name="209" href="#209">209</a> <em class="jxr_javadoccomment">     * @param historyCount new history count; non-zero positive</em>
-<a name="210" href="#210">210</a> <em class="jxr_javadoccomment">     */</em>
-<a name="211" href="#211">211</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> setHistoryCount(<strong class="jxr_keyword">int</strong> historyCount) {
-<a name="212" href="#212">212</a>         <strong class="jxr_keyword">if</strong> (historyCount &lt;= 0) {
-<a name="213" href="#213">213</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="214" href="#214">214</a>                 (<span class="jxr_string">"illegal history count: "</span> + historyCount);
-<a name="215" href="#215">215</a>         }
-<a name="216" href="#216">216</a>         <strong class="jxr_keyword">this</strong>.historyCount = historyCount;
-<a name="217" href="#217">217</a>     }
-<a name="218" href="#218">218</a> 
-<a name="219" href="#219">219</a> 
-<a name="220" href="#220">220</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/StateMachineSpec.html">StateMachineSpec</a> spec = <strong class="jxr_keyword">null</strong>;
-<a name="221" href="#221">221</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/TaskFactory.html">TaskFactory</a> factory = <strong class="jxr_keyword">null</strong>;
-<a name="222" href="#222">222</a> 
-<a name="223" href="#223">223</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/State.html">State</a> state = State.UNKNOWN;
-<a name="224" href="#224">224</a> 
-<a name="225" href="#225">225</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[] tasks = <strong class="jxr_keyword">null</strong>;
+<a name="195" href="#195">195</a>         <em class="jxr_comment">// ------------------------------------------------------------- HISTORY</em>
+<a name="196" href="#196">196</a>         history.addElement(oldState);
+<a name="197" href="#197">197</a>         <strong class="jxr_keyword">while</strong> (history.size() &gt; historyCount) {
+<a name="198" href="#198">198</a>             history.removeElementAt(0);
+<a name="199" href="#199">199</a>         }
+<a name="200" href="#200">200</a>     }
+<a name="201" href="#201">201</a> 
+<a name="202" href="#202">202</a> 
+<a name="203" href="#203">203</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="204" href="#204">204</a> <em class="jxr_javadoccomment">     * Returns the current thread count.</em>
+<a name="205" href="#205">205</a> <em class="jxr_javadoccomment">     *</em>
+<a name="206" href="#206">206</a> <em class="jxr_javadoccomment">     * @return thread count</em>
+<a name="207" href="#207">207</a> <em class="jxr_javadoccomment">     */</em>
+<a name="208" href="#208">208</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">int</strong> getThreadCount() {
+<a name="209" href="#209">209</a>         <strong class="jxr_keyword">return</strong> threadCount;
+<a name="210" href="#210">210</a>     }
+<a name="211" href="#211">211</a> 
+<a name="212" href="#212">212</a> 
+<a name="213" href="#213">213</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="214" href="#214">214</a> <em class="jxr_javadoccomment">     * Set the thread count.</em>
+<a name="215" href="#215">215</a> <em class="jxr_javadoccomment">     *</em>
+<a name="216" href="#216">216</a> <em class="jxr_javadoccomment">     * @param threadCount new thread count; zero for non-thread</em>
+<a name="217" href="#217">217</a> <em class="jxr_javadoccomment">     */</em>
+<a name="218" href="#218">218</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> setThreadCount(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> threadCount) {
+<a name="219" href="#219">219</a>         <strong class="jxr_keyword">if</strong> (threadCount &lt; 0) {
+<a name="220" href="#220">220</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="221" href="#221">221</a>                 (<span class="jxr_string">"illegal thread count: "</span> + threadCount);
+<a name="222" href="#222">222</a>         }
+<a name="223" href="#223">223</a>         <strong class="jxr_keyword">this</strong>.threadCount = threadCount;
+<a name="224" href="#224">224</a>     }
+<a name="225" href="#225">225</a> 
 <a name="226" href="#226">226</a> 
-<a name="227" href="#227">227</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> started = false;
-<a name="228" href="#228">228</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> finished = false;
-<a name="229" href="#229">229</a> 
-<a name="230" href="#230">230</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> threadCount = 1;
-<a name="231" href="#231">231</a> 
-<a name="232" href="#232">232</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> historyCount = 10;
-<a name="233" href="#233">233</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector history = <strong class="jxr_keyword">new</strong> Vector();
-<a name="234" href="#234">234</a> }
+<a name="227" href="#227">227</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="228" href="#228">228</a> <em class="jxr_javadoccomment">     * Returns current value of historyCount.</em>
+<a name="229" href="#229">229</a> <em class="jxr_javadoccomment">     *</em>
+<a name="230" href="#230">230</a> <em class="jxr_javadoccomment">     * @return historyCount</em>
+<a name="231" href="#231">231</a> <em class="jxr_javadoccomment">     */</em>
+<a name="232" href="#232">232</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">int</strong> getHistoryCount() {
+<a name="233" href="#233">233</a>         <strong class="jxr_keyword">return</strong> historyCount;
+<a name="234" href="#234">234</a>     }
+<a name="235" href="#235">235</a> 
+<a name="236" href="#236">236</a> 
+<a name="237" href="#237">237</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="238" href="#238">238</a> <em class="jxr_javadoccomment">     * Sets state transition history count.</em>
+<a name="239" href="#239">239</a> <em class="jxr_javadoccomment">     *</em>
+<a name="240" href="#240">240</a> <em class="jxr_javadoccomment">     * @param historyCount new history count; non-zero positive</em>
+<a name="241" href="#241">241</a> <em class="jxr_javadoccomment">     */</em>
+<a name="242" href="#242">242</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> setHistoryCount(<strong class="jxr_keyword">int</strong> historyCount) {
+<a name="243" href="#243">243</a>         <strong class="jxr_keyword">if</strong> (historyCount &lt; 0) {
+<a name="244" href="#244">244</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="245" href="#245">245</a>                 (<span class="jxr_string">"illegal history count: "</span> + historyCount);
+<a name="246" href="#246">246</a>         }
+<a name="247" href="#247">247</a>         <strong class="jxr_keyword">this</strong>.historyCount = historyCount;
+<a name="248" href="#248">248</a>     }
+<a name="249" href="#249">249</a> 
+<a name="250" href="#250">250</a> 
+<a name="251" href="#251">251</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/StateMachineSpec.html">StateMachineSpec</a> spec = <strong class="jxr_keyword">null</strong>;
+<a name="252" href="#252">252</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/TaskFactory.html">TaskFactory</a> factory = <strong class="jxr_keyword">null</strong>;
+<a name="253" href="#253">253</a> 
+<a name="254" href="#254">254</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/State.html">State</a> state = State.UNKNOWN;
+<a name="255" href="#255">255</a> 
+<a name="256" href="#256">256</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> <a href="../../jinahya/fsm/Task.html">Task</a>[] tasks = <strong class="jxr_keyword">null</strong>;
+<a name="257" href="#257">257</a> 
+<a name="258" href="#258">258</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> started = false;
+<a name="259" href="#259">259</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> finished = false;
+<a name="260" href="#260">260</a> 
+<a name="261" href="#261">261</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> threadCount = 0;
+<a name="262" href="#262">262</a> 
+<a name="263" href="#263">263</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> historyCount = 0;
+<a name="264" href="#264">264</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector history = <strong class="jxr_keyword">new</strong> Vector();
+<a name="265" href="#265">265</a> 
+<a name="266" href="#266">266</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> Thread previousExecutorService = <strong class="jxr_keyword">null</strong>;
+<a name="267" href="#267">267</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
