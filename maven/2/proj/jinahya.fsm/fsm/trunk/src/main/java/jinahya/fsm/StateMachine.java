@@ -32,11 +32,11 @@ public class StateMachine {
      * Creates a new instance.
      *
      * @param spec spec
-     * @param tasks tasks to be performed
+     * @param factory task factory
      * @param state initial state
      * @throws StateMachineException if any error occurs.
      */
-    public StateMachine(final StateMachineSpec spec, final Task[] tasks,
+    public StateMachine(final StateMachineSpec spec, final TaskFactory factory,
                         final State state)
         throws StateMachineException {
 
@@ -46,11 +46,8 @@ public class StateMachine {
             throw new NullPointerException("spec");
         }
 
-        if (tasks == null) {
-            throw new NullPointerException("tasks");
-        }
-        if (tasks.length == 0) {
-            throw new IllegalArgumentException("empty task");
+        if (factory == null) {
+            throw new NullPointerException("factory");
         }
 
         if (state == null) {
@@ -58,7 +55,7 @@ public class StateMachine {
         }
 
         this.spec = spec;
-        this.tasks = tasks;
+        this.factory = factory;
 
         transit(state);
     }
@@ -126,6 +123,7 @@ public class StateMachine {
         if (!started && spec.isStartingTransition(transition)) {
             started = true;
 
+            tasks = factory.createTasks();
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].initialize();
             }
@@ -217,10 +215,11 @@ public class StateMachine {
 
 
     private StateMachineSpec spec;
+    private TaskFactory factory;
 
     private State state = State.UNKNOWN;
 
-    private Task[] tasks;
+    private transient Task[] tasks;
 
     private volatile boolean started = false;
     private volatile boolean finished = false;
