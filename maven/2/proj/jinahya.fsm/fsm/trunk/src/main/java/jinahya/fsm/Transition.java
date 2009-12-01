@@ -30,8 +30,10 @@ public class Transition {
      *
      * @param sourceState source state of this transition
      * @param targetState target state of this transition
+     * @param transitionHistory history of state transitions
      */
-    public Transition(final State sourceState, final State targetState) {
+    public Transition(final State sourceState, final State targetState,
+                      final State[] transitionHistory) {
         super();
 
         if (sourceState == null) {
@@ -42,6 +44,11 @@ public class Transition {
             throw new IllegalArgumentException("illegal targetState: null");
         }
 
+        if (transitionHistory == null) {
+            throw new IllegalArgumentException
+                ("illegal transition history: null");
+        }
+
         /*
         if (sourceState.equals(targetState)) {
             throw new IllegalArgumentException("transition for same states");
@@ -50,6 +57,7 @@ public class Transition {
 
         this.sourceState = sourceState;
         this.targetState = targetState;
+        this.transitionHistory = transitionHistory;
     }
 
 
@@ -73,6 +81,16 @@ public class Transition {
     }
 
 
+    /**
+     * Returns transition history.
+     *
+     * @return transition history.
+     */
+    public State[] getTransitionHistory() {
+        return transitionHistory;
+    }
+
+
     //@Override
     public String toString() {
         return "TRANSITION: [" + sourceState + "] -> [" + targetState + "]";
@@ -81,4 +99,5 @@ public class Transition {
 
     private State sourceState;
     private State targetState;
+    private State[] transitionHistory;
 }

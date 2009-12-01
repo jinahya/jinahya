@@ -25,7 +25,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class TaskExecutorService extends Thread {
+class ExecutorService extends Thread {
 
 
     /**
@@ -35,7 +35,7 @@ class TaskExecutorService extends Thread {
      * @param priority
      * @param count
      */
-    public TaskExecutorService(TaskExecutorService parent, Task[] tasks,
+    public ExecutorService(ExecutorService parent, Task[] tasks,
                                Transition transition, int priority, int count) {
         super();
 
@@ -60,7 +60,7 @@ class TaskExecutorService extends Thread {
 
         Vector executors = new Vector();
         for (int i = 0; i < count; i++) {
-            Thread executor = new TaskExecutor(this, transition, priority);
+            Thread executor = new Executor(this, transition, priority);
             executors.addElement(executor);
             executor.start();
         }
@@ -84,7 +84,7 @@ class TaskExecutorService extends Thread {
     }
 
 
-    private TaskExecutorService parent;
+    private ExecutorService parent;
     private Task[] tasks;
     private Transition transition;
     private int priority;

@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class TaskExecutor extends Thread {
+class Executor extends Thread {
 
 
     /**
@@ -31,7 +31,7 @@ class TaskExecutor extends Thread {
      * @param transition transition
      * @param priority priority
      */
-    public TaskExecutor(TaskExecutorService service, Transition transition,
+    public Executor(ExecutorService service, Transition transition,
                         int priority) {
         super();
 
@@ -55,7 +55,7 @@ class TaskExecutor extends Thread {
     }
 
 
-    private TaskExecutorService service;
+    private ExecutorService service;
     private Transition transition;
     private int priority;
 }
