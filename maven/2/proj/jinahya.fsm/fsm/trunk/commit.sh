@@ -1,3 +1,3 @@
 #!/bin/sh
 svn ci -m ^^*
-mvn -Dmaven.test.skip=true clean install
+mvn -Dmaven.test.skip=true clean install site site:deploy
