@@ -27,16 +27,16 @@ public abstract class SwitchTask extends Task {
 
     /**
      * 
-     * @param onMatcher
-     * @param offMatcher
+     * @param onMatchers
+     * @param offMatchers
      */
-    public SwitchTask(final TransitionMatcher onMatcher,
-                      final TransitionMatcher offMatcher) {
+    public SwitchTask(final TransitionMatcher[] onMatchers,
+                      final TransitionMatcher[] offMatchers) {
 
         super();
 
-        this.onMatcher = onMatcher;
-        this.offMatcher = offMatcher;
+        this.onMatchers = onMatchers;
+        this.offMatchers = offMatchers;
     }
 
 
@@ -46,24 +46,20 @@ public abstract class SwitchTask extends Task {
         throws StateMachineException {
 
         if (on) {
-            if (offMatcher.matches(transition)) {
-                on = !on;
-                off(priority);
+            for (int i = 0; i < offMatchers.length; i++) {
+                if (offMatchers[i].matches(transition)) {
+                    off(priority);
+                    on = Boolean.FALSE.booleanValue();
+                    break;
+                }
             }
         } else { // off
-            if (onMatcher.matches(transition)) {
-                on = !on;
-                on(priority);
-            }
-        }
-    }
-
-
-    //@Override
-    public void destory() throws StateMachineException {
-        if (on) {
-            for (int priority = 0; priority >= 0; priority++) {
-                off(priority);
+            for (int i = 0; i < onMatchers.length; i++) {
+                if (onMatchers[i].matches(transition)) {
+                    on(priority);
+                    on = Boolean.TRUE.booleanValue();
+                    break;
+                }
             }
         }
     }
@@ -95,8 +91,8 @@ public abstract class SwitchTask extends Task {
     }
 
 
-    private TransitionMatcher onMatcher;
-    private TransitionMatcher offMatcher;
+    private TransitionMatcher[] onMatchers;
+    private TransitionMatcher[] offMatchers;
 
     private volatile boolean on = false;
 }
