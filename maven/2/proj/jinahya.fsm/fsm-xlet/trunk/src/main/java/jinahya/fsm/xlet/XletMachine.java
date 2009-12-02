@@ -19,7 +19,7 @@ package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.State;
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 import jinahya.fsm.Machine;
 import jinahya.fsm.MachineSpec;
 import jinahya.fsm.TaskFactory;
@@ -34,14 +34,14 @@ public class XletMachine extends Machine {
 
     /*
     public static XletStateMachine createInConstructor(TaskFactory factory)
-        throws StateMachineException {
+        throws MachineException {
 
         return new XletStateMachine(factory, XletState.LOADED);
     }
 
 
     public static XletStateMachine createInInitXlet(TaskFactory factory)
-        throws StateMachineException {
+        throws MachineException {
 
         return new XletStateMachine(factory, XletState.PAUSED);
     }
@@ -53,10 +53,10 @@ public class XletMachine extends Machine {
      *
      * @param factory factory
      * @param state initial state
-     * @throws StateMachineException if any error occurs
+     * @throws MachineException if any error occurs
      */
     public XletMachine(final TaskFactory factory, final State state)
-        throws StateMachineException {
+        throws MachineException {
 
         this(new XletMachineSpec(), factory, state);
     }
@@ -68,11 +68,11 @@ public class XletMachine extends Machine {
      * @param spec spec
      * @param factory factory
      * @param state state
-     * @throws StateMachineException if any error occurs
+     * @throws MachineException if any error occurs
      */
     public XletMachine(final MachineSpec spec,
                             final TaskFactory factory, final State state)
-        throws StateMachineException {
+        throws MachineException {
 
         super(spec, factory, state);
     }
@@ -81,9 +81,9 @@ public class XletMachine extends Machine {
     /**
      * Notifies the <code>initXlet<code> invoked.
      *
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
-    public void initXletInvoked() throws StateMachineException {
+    public void initXletInvoked() throws MachineException {
         transit(XletState.PAUSED);
     }
 
@@ -91,9 +91,9 @@ public class XletMachine extends Machine {
     /**
      * Notifies the <code>startXlet</code> invoked.
      *
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
-    public void startXletInvoked() throws StateMachineException {
+    public void startXletInvoked() throws MachineException {
         transit(XletState.STARTED);
     }
 
@@ -101,9 +101,9 @@ public class XletMachine extends Machine {
     /**
      * Notifies the <code>pauseXlet</code> invoked.
      *
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
-    public void pauseXletInvoked() throws StateMachineException {
+    public void pauseXletInvoked() throws MachineException {
         transit(XletState.PAUSED);
     }
 
@@ -111,9 +111,9 @@ public class XletMachine extends Machine {
     /**
      * Notifies the <code>destroyXlet</code> invoked.
      *
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
-    public void destroyXletInvoked() throws StateMachineException {
+    public void destroyXletInvoked() throws MachineException {
         transit(XletState.DESTROYED);
     }
 }

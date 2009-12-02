@@ -18,7 +18,7 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
 
@@ -33,7 +33,7 @@ public abstract class PlayTask extends Task {
 
     //@Override
     public void perform(Transition transition, int priority)
-        throws StateMachineException {
+        throws MachineException {
 
         if (XletTransitionMatcher.START_XLET.matches(transition)) {
             perform(priority);
@@ -44,7 +44,7 @@ public abstract class PlayTask extends Task {
     /**
      *
      * @param priority
-     * @throws StateMachineException
+     * @throws MachineException
      */
-    protected abstract void perform(int priority) throws StateMachineException;
+    protected abstract void perform(int priority) throws MachineException;
 }
