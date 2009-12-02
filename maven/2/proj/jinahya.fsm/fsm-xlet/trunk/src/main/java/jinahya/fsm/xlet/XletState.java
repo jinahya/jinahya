@@ -28,7 +28,7 @@ import jinahya.fsm.State;
 public final class XletState {
 
 
-    private static final String NAMESPACE = "javax.tv.xlet.Xlet";
+    private static final String NAMESPACE = "XLET";
 
 
     /**
