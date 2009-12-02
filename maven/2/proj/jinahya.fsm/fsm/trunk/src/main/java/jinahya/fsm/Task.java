@@ -30,7 +30,7 @@ public abstract class Task {
      *
      * @throws StateMachineException if any error occurs.
      */
-    public void initialize() throws StateMachineException {
+    public void initialize() throws MachineException {
         // empty
     }
 
@@ -45,7 +45,7 @@ public abstract class Task {
      * @throws StateMachineException if any error occurs
      */
     public abstract void perform(Transition transition, int priority)
-        throws StateMachineException;
+        throws MachineException;
 
 
     /**
@@ -53,7 +53,7 @@ public abstract class Task {
      *
      * @throws StateMachineException if any error occurs.
      */
-    public void destroy() throws StateMachineException {
+    public void destroy() throws MachineException {
         // empty
     }
 }

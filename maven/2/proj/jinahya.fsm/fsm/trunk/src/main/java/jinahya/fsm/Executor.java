@@ -46,7 +46,7 @@ class Executor extends Thread {
         for (Task task = null; (task = service.getTask()) != null;) {
             try {
                 task.perform(transition, priority);
-            } catch (StateMachineException sme) {
+            } catch (MachineException sme) {
                 sme.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();

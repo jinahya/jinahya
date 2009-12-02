@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class StateMachineException extends Exception {
+public class MachineException extends Exception {
 
 
     private static final long serialVersionUID = -5925728381873724134L;
@@ -33,7 +33,7 @@ public class StateMachineException extends Exception {
      *
      * @param message message
      */
-    public StateMachineException(String message) {
+    public MachineException(String message) {
         this(message, null);
     }
 
@@ -43,7 +43,7 @@ public class StateMachineException extends Exception {
      *
      * @param cause cause
      */
-    public StateMachineException(Throwable cause) {
+    public MachineException(Throwable cause) {
         this(cause.getMessage(), cause);
     }
 
@@ -54,7 +54,7 @@ public class StateMachineException extends Exception {
      * @param message message
      * @param cause cause
      */
-    public StateMachineException(String message, Throwable cause) {
+    public MachineException(String message, Throwable cause) {
         super(message);
 
         this.cause = cause;

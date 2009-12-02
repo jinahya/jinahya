@@ -43,7 +43,7 @@ public abstract class SwitchTask extends Task {
     //@Override
     public synchronized final void perform(final Transition transition,
                                            final int priority)
-        throws StateMachineException {
+        throws MachineException {
 
         if (on) {
             for (int i = 0; i < offMatchers.length; i++) {
@@ -70,7 +70,7 @@ public abstract class SwitchTask extends Task {
      * @param priority
      * @throws StateMachineException
      */
-    protected abstract void on(int priority) throws StateMachineException;
+    protected abstract void on(int priority) throws MachineException;
 
 
     /**
@@ -78,7 +78,7 @@ public abstract class SwitchTask extends Task {
      * @param priority
      * @throws StateMachineException
      */
-    protected abstract void off(int priority) throws StateMachineException;
+    protected abstract void off(int priority) throws MachineException;
 
 
     /**

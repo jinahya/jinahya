@@ -30,5 +30,5 @@ public interface TaskFactory {
      * @return
      * @throws StateMachineException
      */
-    public Task[] createTasks() throws StateMachineException;
+    public Task[] createTasks() throws MachineException;
 }

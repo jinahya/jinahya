@@ -38,7 +38,7 @@ public class Machine {
      */
     public Machine(final MachineSpec spec, final TaskFactory factory,
                    final State state)
-        throws StateMachineException {
+        throws MachineException {
 
         super();
 
@@ -78,7 +78,7 @@ public class Machine {
      * @throws StateMachineException if any error occurs.
      */
     public synchronized void setState(final State state)
-        throws StateMachineException {
+        throws MachineException {
 
         transit(state);
     }
@@ -91,7 +91,7 @@ public class Machine {
      * @throws StateMachineException if any error occurs.
      */
     public synchronized void transit(final State state)
-        throws StateMachineException {
+        throws MachineException {
 
         if (state == null) {
             throw new IllegalArgumentException("new state is null!");
@@ -121,7 +121,7 @@ public class Machine {
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
         if (!spec.isTransitionAllowed(transition)) {
-            throw new StateMachineException
+            throw new MachineException
                 ("transition is not allowed: " + transition);
         }
 
@@ -225,7 +225,7 @@ public class Machine {
      *
      * @throws StateMachineException if any error occurs.
      */
-    public synchronized void start() throws StateMachineException {
+    public synchronized void start() throws MachineException {
         if (started) {
             return;
         }
@@ -246,7 +246,7 @@ public class Machine {
      *
      * @throws StateMachineException if any error occurs
      */
-    public synchronized void finish() throws StateMachineException {
+    public synchronized void finish() throws MachineException {
         if (finished) {
             return;
         }
