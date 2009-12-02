@@ -25,7 +25,7 @@ import jinahya.fsm.State;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletState {
+public final class XletState {
 
 
     private static final String NAMESPACE = "javax.tv.xlet.Xlet";
@@ -65,5 +65,10 @@ public class XletState {
      * Destroyed but the Xlet object has not yet been garbage collected.
      */
     public static final State INVALID = new State(NAMESPACE, "INVALIED");
+
+
+    private XletState() {
+        super();
+    }
 
 }

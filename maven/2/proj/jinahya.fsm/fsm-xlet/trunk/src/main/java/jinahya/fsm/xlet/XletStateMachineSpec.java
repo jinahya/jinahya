@@ -37,8 +37,10 @@ public class XletStateMachineSpec implements StateMachineSpec {
         final State targetState = transition.getTargetState();
         return (sourceState.equals(State.UNKNOWN) &&
                 targetState.equals(XletState.LOADED)) ||
+                /*
                (sourceState.equals(XletState.LOADED) &&
                 targetState.equals(XletState.PAUSED)) ||
+                 */
                (sourceState.equals(State.UNKNOWN) &&
                 targetState.equals(XletState.PAUSED));
     }
