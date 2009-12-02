@@ -18,10 +18,9 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.SwitchTask;
-import jinahya.fsm.State;
+import jinahya.fsm.StateMachineException;
+import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
-import jinahya.fsm.TransitionMatcher;
 
 
 /**
@@ -29,28 +28,23 @@ import jinahya.fsm.TransitionMatcher;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class LoadTask extends SwitchTask {
+public abstract class LoadTask extends Task {
+
+
+    //@Override
+    public void perform(Transition transition, int priority)
+        throws StateMachineException {
+
+        if (XletTransitionMatcher.LOAD_XLET.matches(transition)) {
+            perform(priority);
+        }
+    }
 
 
     /**
-     * Creats a new instance.
+     *
+     * @param priority
+     * @throws StateMachineException
      */
-    public LoadTask() {
-        super(new TransitionMatcher() {
-            //@Override
-            public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return (sourceState.equals(State.UNKNOWN) &&
-                        targetState.equals(XletState.LOADED));
-            }
-        }, new TransitionMatcher() {
-            //@Override
-            public boolean matches(final Transition transition) {
-                //final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return targetState.equals(XletState.DESTROYED);
-            }
-        });
-    }
+    protected abstract void perform(int priority) throws StateMachineException;
 }

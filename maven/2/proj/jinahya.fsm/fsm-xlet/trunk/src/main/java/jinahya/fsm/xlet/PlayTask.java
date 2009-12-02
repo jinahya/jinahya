@@ -18,41 +18,33 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.State;
-import jinahya.fsm.SwitchTask;
+import jinahya.fsm.StateMachineException;
+import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
-import jinahya.fsm.TransitionMatcher;
 
 
 /**
- * Task performes only in play level.
+ * Task performs only in load level.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class PlayTask extends SwitchTask {
+public abstract class PlayTask extends Task {
+
+
+    //@Override
+    public void perform(Transition transition, int priority)
+        throws StateMachineException {
+
+        if (XletTransitionMatcher.START_XLET.matches(transition)) {
+            perform(priority);
+        }
+    }
 
 
     /**
-     * Creates a new instance.
+     *
+     * @param priority
+     * @throws StateMachineException
      */
-    public PlayTask() {
-        super(new TransitionMatcher() {
-            //@Override
-            public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return sourceState.equals(XletState.PAUSED) &&
-                       targetState.equals(XletState.STARTED);
-            }
-        }, new TransitionMatcher() {
-            //@Override
-            public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return (sourceState.equals(XletState.STARTED) &&
-                        (targetState.equals(XletState.PAUSED) ||
-                         targetState.equals(XletState.DESTROYED)));
-            }
-        });
-    }
+    protected abstract void perform(int priority) throws StateMachineException;
 }
