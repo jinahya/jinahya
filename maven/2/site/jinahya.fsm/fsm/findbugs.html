@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2009-12-01
+        Last Published: 2009-12-02
                       </div>
             <div class="xright">            <a href="${project.url}">fsm</a>
             
@@ -171,7 +171,7 @@
 <th>Missing Classes</th>
 </tr>
 <tr class="b"><td>66</td>
-<td>2</td>
+<td>5</td>
 <td>0</td>
 <td>0</td>
 </tr>
@@ -181,25 +181,67 @@
 <table class="bodyTable"><tr class="a"><th>Class</th>
 <th>Bugs</th>
 </tr>
+<tr class="b"><td><a href="#jinahya.fsm.StateMachine">jinahya.fsm.StateMachine</a></td>
+<td>1</td>
+</tr>
+<tr class="a"><td><a href="#jinahya.fsm.SwitchTask">jinahya.fsm.SwitchTask</a></td>
+<td>2</td>
+</tr>
 <tr class="b"><td><a href="#jinahya.fsm.Transition">jinahya.fsm.Transition</a></td>
 <td>2</td>
 </tr>
 </table>
 </div>
-<a name="jinahya.fsm.Transition"></a><div class="section"><h3>jinahya.fsm.Transition</h3>
+<a name="jinahya.fsm.StateMachine"></a><div class="section"><h3>jinahya.fsm.StateMachine</h3>
 <table class="bodyTable"><tr class="a"><th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th>
 </tr>
-<tr class="b"><td>jinahya.fsm.Transition.getTransitionHistory() may expose internal representation by returning Transition.transitionHistory</td>
+<tr class="b"><td>Null pointer dereference of StateMachine.tasks in jinahya.fsm.StateMachine.finish()</td>
+<td>CORRECTNESS</td>
+<td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_ALWAYS_NULL" class="externalLink">NP_ALWAYS_NULL</a></td>
+<td><a href="./xref/jinahya/fsm/StateMachine.html#256">256</a></td>
+<td>High</td>
+</tr>
+</table>
+</div>
+<a name="jinahya.fsm.SwitchTask"></a><div class="section"><h3>jinahya.fsm.SwitchTask</h3>
+<table class="bodyTable"><tr class="a"><th>Bug</th>
+<th>Category</th>
+<th>Details</th>
+<th>Line</th>
+<th>Priority</th>
+</tr>
+<tr class="b"><td>new jinahya.fsm.SwitchTask(TransitionMatcher[], TransitionMatcher[]) may expose internal representation by storing an externally mutable object into SwitchTask.offMatchers</td>
+<td>MALICIOUS_CODE</td>
+<td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2" class="externalLink">EI_EXPOSE_REP2</a></td>
+<td><a href="./xref/jinahya/fsm/SwitchTask.html#39">39</a></td>
+<td>Medium</td>
+</tr>
+<tr class="a"><td>new jinahya.fsm.SwitchTask(TransitionMatcher[], TransitionMatcher[]) may expose internal representation by storing an externally mutable object into SwitchTask.onMatchers</td>
+<td>MALICIOUS_CODE</td>
+<td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2" class="externalLink">EI_EXPOSE_REP2</a></td>
+<td><a href="./xref/jinahya/fsm/SwitchTask.html#38">38</a></td>
+<td>Medium</td>
+</tr>
+</table>
+</div>
+<a name="jinahya.fsm.Transition"></a><div class="section"><h3>jinahya.fsm.Transition</h3>
+<table class="bodyTable"><tr class="b"><th>Bug</th>
+<th>Category</th>
+<th>Details</th>
+<th>Line</th>
+<th>Priority</th>
+</tr>
+<tr class="a"><td>jinahya.fsm.Transition.getTransitionHistory() may expose internal representation by returning Transition.transitionHistory</td>
 <td>MALICIOUS_CODE</td>
 <td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP" class="externalLink">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/jinahya/fsm/Transition.html#90">90</a></td>
 <td>Medium</td>
 </tr>
-<tr class="a"><td>new jinahya.fsm.Transition(State, State, State[]) may expose internal representation by storing an externally mutable object into Transition.transitionHistory</td>
+<tr class="b"><td>new jinahya.fsm.Transition(State, State, State[]) may expose internal representation by storing an externally mutable object into Transition.transitionHistory</td>
 <td>MALICIOUS_CODE</td>
 <td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2" class="externalLink">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/jinahya/fsm/Transition.html#60">60</a></td>
