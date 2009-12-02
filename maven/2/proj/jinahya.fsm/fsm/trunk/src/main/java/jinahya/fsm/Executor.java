@@ -32,7 +32,7 @@ class Executor extends Thread {
      * @param priority priority
      */
     public Executor(ExecutorService service, Transition transition,
-                        int priority) {
+                    int priority) {
         super();
 
         this.service = service;

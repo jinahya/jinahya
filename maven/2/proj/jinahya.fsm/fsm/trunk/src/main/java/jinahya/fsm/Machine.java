@@ -25,7 +25,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class StateMachine {
+public class Machine {
 
 
     /**
@@ -36,8 +36,8 @@ public class StateMachine {
      * @param state initial state
      * @throws StateMachineException if any error occurs.
      */
-    public StateMachine(final StateMachineSpec spec, final TaskFactory factory,
-                        final State state)
+    public Machine(final MachineSpec spec, final TaskFactory factory,
+                   final State state)
         throws StateMachineException {
 
         super();
@@ -140,9 +140,15 @@ public class StateMachine {
         if (started) {
 
             // --------------------------------------------------------- PERFORM
-            if (threadCount > 0) {
+            if (threadCount == 0) {
+                for (int priority = 0; priority < 10; priority++) {
+                    for (int i = 0; i < tasks.length; i++) {
+                        tasks[i].perform(transition, priority);
+                    }
+                }
+            } else {
                 ExecutorService parent = null;
-                for (int priority = 9; priority >= 0; priority--) {
+                for (int priority = 0; priority < 10; priority++) {
                     ExecutorService child =
                         new ExecutorService(parent, tasks, transition, priority,
                                             threadCount);
@@ -150,12 +156,6 @@ public class StateMachine {
                     parent = child;
                 }
                 previousExecutorService = parent;
-            } else {
-                for (int priority = 9; priority >= 0; priority--) {
-                    for (int i = 0; i < tasks.length; i++) {
-                        tasks[i].perform(transition, priority);
-                    }
-                }
             }
 
             // ------------------------------------------------- CHECK FINISHING
@@ -220,20 +220,19 @@ public class StateMachine {
     }
 
 
+    /**
+     * Starts machine manually.
+     *
+     * @throws StateMachineException if any error occurs.
+     */
     public synchronized void start() throws StateMachineException {
         if (started) {
             return;
         }
         started = true;
 
-        final Task[] created = factory.createTasks();
-        for (int i = 0; i < created.length; i++) {
-            if (created[i] == null) {
-                throw new NullPointerException("null task @ " + i);
-            }
-        }
-        tasks = new Task[created.length];
-        System.arraycopy(created, 0, tasks, 0, tasks.length);
+        // -------------------------------------------------------- CREATE TASKS
+        tasks = factory.createTasks();
 
         // ---------------------------------------------------- INITIALIZE TASKS
         for (int i = 0; i < tasks.length; i++) {
@@ -242,6 +241,11 @@ public class StateMachine {
     }
 
 
+    /**
+     * Finish machine manually.
+     *
+     * @throws StateMachineException if any error occurs
+     */
     public synchronized void finish() throws StateMachineException {
         if (finished) {
             return;
@@ -259,7 +263,7 @@ public class StateMachine {
     }
 
 
-    private StateMachineSpec spec = null;
+    private MachineSpec spec = null;
     private TaskFactory factory = null;
 
     private State state = State.UNKNOWN;
