@@ -133,21 +133,7 @@ public class StateMachine {
 
         // ------------------------------------------------------ CHECK STARTING
         if (!started && spec.isStartingTransition(transition)) {
-            started = true;
-
-            final Task[] created = factory.createTasks();
-            for (int i = 0; i < created.length; i++) {
-                if (created[i] == null) {
-                    throw new NullPointerException("null task @ " + i);
-                }
-            }
-            tasks = new Task[created.length];
-            System.arraycopy(created, 0, tasks, 0, tasks.length);
-
-            // ------------------------------------------------ INITIALIZE TASKS
-            for (int i = 0; i < tasks.length; i++) {
-                tasks[i].initialize();
-            }
+            start();
         }
 
 
@@ -172,23 +158,9 @@ public class StateMachine {
                 }
             }
 
-            /*
-            // ------------------------------------------------------------ JOIN
-            try {
-                parent.join();
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-             */
-
             // ------------------------------------------------- CHECK FINISHING
             if (!finished && spec.isFinishingTransition(transition)) {
-                finished = true;
-
-                // ----------------------------------------------- DESTROY TASKS
-                for (int i = 0; i < tasks.length; i++) {
-                    tasks[i].destroy();
-                }
+                finish();
             }
         }
 
@@ -245,6 +217,45 @@ public class StateMachine {
                 ("illegal history count: " + historyCount);
         }
         this.historyCount = historyCount;
+    }
+
+
+    public synchronized void start() throws StateMachineException {
+        if (started) {
+            return;
+        }
+        started = true;
+
+        final Task[] created = factory.createTasks();
+        for (int i = 0; i < created.length; i++) {
+            if (created[i] == null) {
+                throw new NullPointerException("null task @ " + i);
+            }
+        }
+        tasks = new Task[created.length];
+        System.arraycopy(created, 0, tasks, 0, tasks.length);
+
+        // ---------------------------------------------------- INITIALIZE TASKS
+        for (int i = 0; i < tasks.length; i++) {
+            tasks[i].initialize();
+        }
+    }
+
+
+    public synchronized void finish() throws StateMachineException {
+        if (finished) {
+            return;
+        }
+        finished = true;
+
+        if (tasks != null) {
+            return;
+        }
+
+        // ------------------------------------------------------- DESTROY TASKS
+        for (int i = 0; i < tasks.length; i++) {
+            tasks[i].destroy();
+        }
     }
 
 
