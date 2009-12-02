@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
 package xlet;
 
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 
-import jinahya.fsm.xlet.InitTask;
+import jinahya.fsm.xlet.InitSwitchTask;
 
 
 /**
@@ -28,11 +28,11 @@ import jinahya.fsm.xlet.InitTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimpleInitTask extends InitTask {
+public class SimpleInitTask extends InitSwitchTask {
 
 
     //@Override
-    public void on(int priority) throws StateMachineException {
+    public void on(int priority) throws MachineException {
         if (priority != 0) {
             return;
         }
@@ -41,7 +41,7 @@ public class SimpleInitTask extends InitTask {
 
 
     //@Override
-    public void off(int priority) throws StateMachineException {
+    public void off(int priority) throws MachineException {
         if (priority != 0) {
             return;
         }

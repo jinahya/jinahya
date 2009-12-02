@@ -18,9 +18,9 @@
 package xlet;
 
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 
-import jinahya.fsm.xlet.PlayTask;
+import jinahya.fsm.xlet.PlaySwitchTask;
 
 
 /**
@@ -28,11 +28,11 @@ import jinahya.fsm.xlet.PlayTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimplePlayTask extends PlayTask {
+public class SimplePlayTask extends PlaySwitchTask {
 
 
     //@Override
-    public void on(int priority) throws StateMachineException {
+    public void on(int priority) throws MachineException {
         if (priority != 0) {
             return;
         }
@@ -41,7 +41,7 @@ public class SimplePlayTask extends PlayTask {
 
 
     //@Override
-    public void off(int priority) throws StateMachineException {
+    public void off(int priority) throws MachineException {
         if (priority != 0) {
             return;
         }

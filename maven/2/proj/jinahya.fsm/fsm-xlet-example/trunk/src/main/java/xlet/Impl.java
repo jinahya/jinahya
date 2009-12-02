@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
-import jinahya.fsm.StateMachineException;
-import jinahya.fsm.StateMachine;
+import jinahya.fsm.MachineException;
+import jinahya.fsm.Machine;
 
 import jinahya.fsm.xlet.XletState;
-import jinahya.fsm.xlet.XletStateMachine;
+import jinahya.fsm.xlet.XletMachine;
 
 
 /**
@@ -43,9 +43,10 @@ public class Impl implements Xlet {
         super();
 
         try {
-            xsm = XletStateMachine.createInConstructor(new TaskFactoryImpl());
+            xsm = new XletMachine(new TaskFactoryImpl(), XletState.LOADED);
+            xsm.setHistoryCount(10);
             xsm.setThreadCount(5);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -55,7 +56,7 @@ public class Impl implements Xlet {
     public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
             xsm.setState(XletState.PAUSED);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -65,7 +66,7 @@ public class Impl implements Xlet {
     public void startXlet() throws XletStateChangeException {
         try {
             xsm.setState(XletState.STARTED);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -75,7 +76,7 @@ public class Impl implements Xlet {
     public void pauseXlet() {
         try {
             xsm.setState(XletState.PAUSED);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -87,11 +88,11 @@ public class Impl implements Xlet {
 
         try {
             xsm.setState(XletState.DESTROYED);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
 
 
-    private StateMachine xsm;
+    private Machine xsm;
 }

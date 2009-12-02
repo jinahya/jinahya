@@ -20,7 +20,7 @@ package xlet;
 
 import java.util.Vector;
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 import jinahya.fsm.Task;
 import jinahya.fsm.TaskFactory;
 
@@ -31,8 +31,9 @@ import jinahya.fsm.TaskFactory;
  */
 public class TaskFactoryImpl implements TaskFactory {
 
+
     //@Override
-    public Task[] createTasks() throws StateMachineException {
+    public Task[] createTasks() throws MachineException {
         Vector vector = new Vector();
         for (int i = 0; i < 20; i++) {
             vector.addElement(new DefaultTask());

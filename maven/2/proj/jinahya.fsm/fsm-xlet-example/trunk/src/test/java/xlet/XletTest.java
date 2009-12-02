@@ -54,6 +54,7 @@ public abstract class XletTest {
         xlet.initXlet(null);
         //System.out.println("After initXlet()");
 
+        for (int i = 0; i < 30; i++) {
         //System.out.println("-------------------------------------------------");
         //System.out.println("Before startXlet()");
         xlet.startXlet();
@@ -63,6 +64,7 @@ public abstract class XletTest {
         //System.out.println("Before pauseXlet()");
         xlet.pauseXlet();
         //System.out.println("After pauseXlet()");
+        }
 
         //System.out.println("-------------------------------------------------");
         //System.out.println("Before destroyXlet()");

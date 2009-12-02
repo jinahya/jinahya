@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 
-import jinahya.fsm.xlet.XletStateMachine;
+import jinahya.fsm.xlet.XletState;
+import jinahya.fsm.xlet.XletMachine;
 
 
 /**
@@ -42,9 +43,10 @@ public class Impl2 implements Xlet {
         super();
 
         try {
-            xsm = XletStateMachine.createInConstructor(new TaskFactoryImpl());
+            xsm = new XletMachine(new TaskFactoryImpl(), XletState.LOADED);
+            xsm.setHistoryCount(10);
             xsm.setThreadCount(20);
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -54,7 +56,7 @@ public class Impl2 implements Xlet {
     public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
             xsm.initXletInvoked();
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -64,7 +66,7 @@ public class Impl2 implements Xlet {
     public void startXlet() throws XletStateChangeException {
         try {
             xsm.startXletInvoked();
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -74,7 +76,7 @@ public class Impl2 implements Xlet {
     public void pauseXlet() {
         try {
             xsm.pauseXletInvoked();
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
@@ -86,11 +88,11 @@ public class Impl2 implements Xlet {
 
         try {
             xsm.destroyXletInvoked();
-        } catch (StateMachineException fsme) {
+        } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
     }
 
 
-    private XletStateMachine xsm;
+    private XletMachine xsm;
 }

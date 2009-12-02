@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 package xlet;
 
 
-import jinahya.fsm.StateMachineException;
+import jinahya.fsm.MachineException;
 import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
 
@@ -33,7 +33,7 @@ public class DefaultTask extends Task {
 
     //@Override
     public void perform(final Transition transition, final int priority)
-        throws StateMachineException {
+        throws MachineException {
 
         /*
         if (priority != 0) {
@@ -47,5 +47,9 @@ public class DefaultTask extends Task {
             ie.printStackTrace();
         }
         //System.out.println(transition + " @ " + priority);
+        jinahya.fsm.State[] history = transition.getTransitionHistory();
+        for (int i = 0; i < history.length; i++) {
+            System.out.println("[" + i + "]: " + history[i]);
+        }
     }
 }
