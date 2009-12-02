@@ -21,6 +21,7 @@ package jinahya.fsm.xlet;
 import jinahya.fsm.State;
 import jinahya.fsm.StateMachineException;
 import jinahya.fsm.StateMachine;
+import jinahya.fsm.StateMachineSpec;
 import jinahya.fsm.TaskFactory;
 
 
@@ -31,13 +32,7 @@ import jinahya.fsm.TaskFactory;
 public class XletStateMachine extends StateMachine {
 
 
-    /**
-     * Creates an instance. Intended to be invoked in constructor.
-     *
-     * @param factory factory
-     * @return a new instance
-     * @throws StateMachineException
-     */
+    /*
     public static XletStateMachine createInConstructor(TaskFactory factory)
         throws StateMachineException {
 
@@ -45,18 +40,12 @@ public class XletStateMachine extends StateMachine {
     }
 
 
-    /**
-     * Creates an instance. Intended to be invoked in <code>initXlet</code>.
-     *
-     * @param factory factory
-     * @return a new instance
-     * @throws StateMachineException
-     */
     public static XletStateMachine createInInitXlet(TaskFactory factory)
         throws StateMachineException {
 
         return new XletStateMachine(factory, XletState.PAUSED);
     }
+     */
 
 
     /**
@@ -69,7 +58,23 @@ public class XletStateMachine extends StateMachine {
     public XletStateMachine(final TaskFactory factory, final State state)
         throws StateMachineException {
 
-        super(new XletStateMachineSpec(), factory, state);
+        this(new XletStateMachineSpec(), factory, state);
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param spec spec
+     * @param factory factory
+     * @param state state
+     * @throws StateMachineException if any error occurs
+     */
+    public XletStateMachine(final StateMachineSpec spec,
+                            final TaskFactory factory, final State state)
+        throws StateMachineException {
+
+        super(spec, factory, state);
     }
 
 
