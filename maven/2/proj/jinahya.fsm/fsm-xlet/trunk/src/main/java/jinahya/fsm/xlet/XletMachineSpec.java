@@ -19,7 +19,7 @@ package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.State;
-import jinahya.fsm.StateMachineSpec;
+import jinahya.fsm.MachineSpec;
 import jinahya.fsm.Transition;
 
 
@@ -27,7 +27,7 @@ import jinahya.fsm.Transition;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletStateMachineSpec implements StateMachineSpec {
+public class XletMachineSpec implements MachineSpec {
 
 
     //@Override

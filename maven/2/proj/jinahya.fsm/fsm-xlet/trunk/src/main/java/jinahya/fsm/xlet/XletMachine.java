@@ -20,8 +20,8 @@ package jinahya.fsm.xlet;
 
 import jinahya.fsm.State;
 import jinahya.fsm.StateMachineException;
-import jinahya.fsm.StateMachine;
-import jinahya.fsm.StateMachineSpec;
+import jinahya.fsm.Machine;
+import jinahya.fsm.MachineSpec;
 import jinahya.fsm.TaskFactory;
 
 
@@ -29,7 +29,7 @@ import jinahya.fsm.TaskFactory;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletStateMachine extends StateMachine {
+public class XletMachine extends Machine {
 
 
     /*
@@ -55,10 +55,10 @@ public class XletStateMachine extends StateMachine {
      * @param state initial state
      * @throws StateMachineException if any error occurs
      */
-    public XletStateMachine(final TaskFactory factory, final State state)
+    public XletMachine(final TaskFactory factory, final State state)
         throws StateMachineException {
 
-        this(new XletStateMachineSpec(), factory, state);
+        this(new XletMachineSpec(), factory, state);
     }
 
 
@@ -70,7 +70,7 @@ public class XletStateMachine extends StateMachine {
      * @param state state
      * @throws StateMachineException if any error occurs
      */
-    public XletStateMachine(final StateMachineSpec spec,
+    public XletMachine(final MachineSpec spec,
                             final TaskFactory factory, final State state)
         throws StateMachineException {
 
