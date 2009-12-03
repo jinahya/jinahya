@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 onacit.
+ *  Copyright 2009 Jin Kwon.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,8 +30,9 @@ public class EventListenerSupport {
 
 
     /**
-     * 
-     * @param source
+     * Creates a new instance.
+     *
+     * @param source source
      */
     public EventListenerSupport(Object source) {
         super();
@@ -41,8 +42,9 @@ public class EventListenerSupport {
 
 
     /**
+     * Returns the source of this support.
      *
-     * @return
+     * @return source owner
      */
     public Object getSource() {
         return source;
@@ -50,9 +52,11 @@ public class EventListenerSupport {
 
 
     /**
+     * Returns listeners which is or assignable from specified
+     * <code>listenerClass</code>
      *
-     * @param listenerClass
-     * @return
+     * @param listenerClass listener class
+     * @return an instance of vector contains listener instances.
      */
     public Vector getListeners(final Class listenerClass) {
         return getListeners(listenerClass, true);
@@ -60,10 +64,11 @@ public class EventListenerSupport {
 
 
     /**
+     * Returns listeners.
      *
-     * @param listenerClass
-     * @param includeAssignables
-     * @return
+     * @param listenerClass listener class
+     * @param includeAssignables true for including those assignlables too.
+     * @return an instance of vector contains listener instances.
      */
     public Vector getListeners(final Class listenerClass,
                                final boolean includeAssignables) {
@@ -73,13 +78,10 @@ public class EventListenerSupport {
         synchronized (listeners) {
             for (int i = 0; i < listeners.size(); i += 2) {
                 Class clazz = (Class) listeners.elementAt(i);
-                if (clazz.equals(listenerClass)) {
+                if (clazz.equals(listenerClass) ||
+                    (includeAssignables &&
+                     listenerClass.isAssignableFrom(clazz))) {
                     vector.addElement(listeners.elementAt(i + 1));
-                } else {
-                    if (includeAssignables &&
-                        listenerClass.isAssignableFrom(clazz)) {
-                        vector.addElement(listeners.elementAt(i + 1));
-                    }
                 }
             }
         }
@@ -89,9 +91,10 @@ public class EventListenerSupport {
 
 
     /**
+     * Adds listener to this support.
      *
-     * @param listener
-     * @return
+     * @param listener listener to be added
+     * @return true if added, false if already added
      */
     public boolean addEventListener(EventListener listener) {
         synchronized (listeners) {
@@ -107,18 +110,22 @@ public class EventListenerSupport {
 
 
     /**
+     * Removes listener from this support.
      *
-     * @param listener
-     * @return
+     * @param listener listener to be removed
+     * @return true if specifed <code>listener</code> removed from this support.
      */
-    public boolean removeEventListener(EventListener listener) {
+    public boolean removeEventListener(final EventListener listener) {
+        if (listener == null) {
+            throw new NullPointerException("listener");
+        }
         synchronized (listeners) {
             int index = listeners.indexOf(listener);
             if (index == -1) {
                 return false;
             }
-            listeners.removeElementAt(index);
-            listeners.removeElementAt(index - 1);
+            listeners.removeElementAt(index); // instance
+            listeners.removeElementAt(index - 1); // class
         }
         return true;
     }
