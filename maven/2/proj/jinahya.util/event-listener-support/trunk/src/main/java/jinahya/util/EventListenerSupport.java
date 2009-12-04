@@ -53,11 +53,13 @@ public class EventListenerSupport {
 
 
     /**
-     * Returns the total number of listeners of the supplied type for this listener list.
-     * @param c
-     * @return
+     * Returns the total number of listeners of the supplied type for this 
+     * listener list.
+     *
+     * @param c listener class
+     * @return the total number of listeners of the given type.
      */
-    public int getListenerCount(Class c) {
+    public int getListenerCount(final Class c) {
         if (!EventListener.class.isAssignableFrom(c)) {
             throw new ClassCastException
                 (c + " is not assignable to " + EventListener.class);
@@ -73,6 +75,11 @@ public class EventListenerSupport {
     }
 
 
+    /**
+     * Returns all listener instances.
+     *
+     * @return all listeners
+     */
     public Object[] getListeners() {
         Vector all = new Vector();
         synchronized (table) {
@@ -95,7 +102,13 @@ public class EventListenerSupport {
     }
 
 
-    public Object[] getListeners(Class c) {
+    /**
+     * Return an array of all the listeners of the given type.
+     *
+     * @param c listener class
+     * @return all listeners of the given type.
+     */
+    public Object[] getListeners(final Class c) {
         if (!EventListener.class.isAssignableFrom(c)) {
             throw new ClassCastException
                 (c + " is not assignable to " + EventListener.class);
@@ -160,6 +173,12 @@ public class EventListenerSupport {
     }
 
 
+    /**
+     * Removes the listener as a listener of the specified type.
+     *
+     * @param c listener class
+     * @param l listener instance
+     */
     public void remove(final Class c, final EventListener l) {
         removeIfAdded(c, l);
     }
