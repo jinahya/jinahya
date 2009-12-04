@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.util;
+package jinahya.util.els;
 
 
 import java.util.Enumeration;

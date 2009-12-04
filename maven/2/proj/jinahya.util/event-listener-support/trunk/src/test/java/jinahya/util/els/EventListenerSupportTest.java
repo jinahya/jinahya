@@ -1,6 +1,7 @@
-package jinahya.util;
+package jinahya.util.els;
 
 
+import jinahya.util.els.EventListenerSupport;
 import java.util.EventListener;
 import java.util.EventObject;
 
