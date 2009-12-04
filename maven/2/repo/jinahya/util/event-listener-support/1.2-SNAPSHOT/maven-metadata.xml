@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya.util</groupId>
+  <artifactId>event-listener-support</artifactId>
+  <version>1.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20091204075814</lastUpdated>
+  </versioning>
+</metadata>
