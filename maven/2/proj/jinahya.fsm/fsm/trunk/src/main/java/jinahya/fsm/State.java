@@ -41,12 +41,11 @@ public class State {
         super();
 
         if (namespace == null || namespace.trim().length() == 0) {
-            throw new IllegalArgumentException
-                ("illegal namespace: " + namespace);
+            throw new IllegalArgumentException("namespace: " + namespace);
         }
 
         if (name == null || name.trim().length() == 0) {
-            throw new IllegalArgumentException("illegal name: " + name);
+            throw new IllegalArgumentException("name: " + name);
         }
 
         this.namespace = namespace;

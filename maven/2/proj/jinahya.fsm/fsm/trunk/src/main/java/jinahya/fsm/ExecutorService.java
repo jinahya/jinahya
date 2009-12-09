@@ -25,7 +25,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class ExecutorService extends Thread {
+final class ExecutorService extends Thread {
 
 
     /**
@@ -35,8 +35,9 @@ class ExecutorService extends Thread {
      * @param priority
      * @param count
      */
-    public ExecutorService(ExecutorService parent, Task[] tasks,
-                           Transition transition, int priority, int count) {
+    public ExecutorService(final ExecutorService parent, final Task[] tasks,
+                           final Transition transition, final int priority,
+                           final int count) {
         super();
 
         this.parent = parent;
@@ -55,6 +56,7 @@ class ExecutorService extends Thread {
                 parent.join();
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
+                return;
             }
         }
 
@@ -71,6 +73,7 @@ class ExecutorService extends Thread {
                 executors.removeElementAt(0);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
+                break;
             }
         }
     }

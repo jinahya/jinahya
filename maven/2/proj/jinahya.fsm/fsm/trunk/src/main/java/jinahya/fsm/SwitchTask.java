@@ -35,8 +35,13 @@ public abstract class SwitchTask extends Task {
 
         super();
 
-        this.onMatchers = onMatchers;
-        this.offMatchers = offMatchers;
+        this.onMatchers = new TransitionMatcher[onMatchers.length];
+        System.arraycopy(onMatchers, 0, this.onMatchers, 0,
+                         this.onMatchers.length);
+
+        this.offMatchers = new TransitionMatcher[offMatchers.length];
+        System.arraycopy(offMatchers, 0, this.offMatchers, 0,
+                         this.offMatchers.length);
     }
 
 
@@ -68,7 +73,7 @@ public abstract class SwitchTask extends Task {
     /**
      *
      * @param priority
-     * @throws StateMachineException
+     * @throws MachineException
      */
     protected abstract void on(int priority) throws MachineException;
 
@@ -76,7 +81,7 @@ public abstract class SwitchTask extends Task {
     /**
      *
      * @param priority
-     * @throws StateMachineException
+     * @throws MachineException
      */
     protected abstract void off(int priority) throws MachineException;
 

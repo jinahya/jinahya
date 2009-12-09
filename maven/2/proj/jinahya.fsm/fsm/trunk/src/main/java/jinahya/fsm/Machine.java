@@ -34,7 +34,7 @@ public class Machine {
      * @param spec spec
      * @param factory task factory
      * @param state initial state
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
     public Machine(final MachineSpec spec, final TaskFactory factory,
                    final State state)
@@ -75,7 +75,8 @@ public class Machine {
      * Sets the current state. Identical to transit().
      *
      * @param state new state
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
+     * @see #transit(jinahya.fsm.State)
      */
     public synchronized void setState(final State state)
         throws MachineException {
@@ -88,24 +89,24 @@ public class Machine {
      * Transit the state.
      *
      * @param state new state
-     * @throws StateMachineException if any error occurs.
+     * @throws MachineException if any error occurs.
      */
     public synchronized void transit(final State state)
         throws MachineException {
 
         if (state == null) {
-            throw new IllegalArgumentException("new state is null!");
+            throw new NullPointerException("state");
         }
 
         if (finished) {
-            throw new IllegalStateException("already finished!");
+            throw new IllegalStateException("finished");
         }
 
 
         // -------------------------------------- JOIN PREVIOUS EXECUTOR SERVICE
-        if (previousExecutorService != null) {
+        if (pool != null) {
             try {
-                previousExecutorService.join();
+                pool.join();
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
@@ -113,34 +114,47 @@ public class Machine {
 
 
         // --------------------------------------------------- CREATE TRANSITION
+        final State sourceState = this.state;
+        final State targetState = state;
         final State[] transitionHistory = new State[history.size()];
         history.toArray(transitionHistory);
-        final Transition transition =
-            new Transition(this.state, state, transitionHistory);
+        final Transition transition = new Transition() {
+            //@Override
+            public State getSourceState() {
+                return sourceState;
+            }
+            //@Override
+            public State getTargetState() {
+                return targetState;
+            }
+            //@Override
+            public State[] getTransitionHistory() {
+                return transitionHistory;
+            }
+        };
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
         if (!spec.isTransitionAllowed(transition)) {
-            throw new MachineException
-                ("transition is not allowed: " + transition);
+            throw new MachineException("not allowed: " + transition);
         }
-
-
-        // -------------------------------------------------------- CHANGE STATE
-        State oldState = this.state;
-        this.state = state;
 
 
         // ------------------------------------------------------ CHECK STARTING
         if (!started && spec.isStartingTransition(transition)) {
-            start();
+            tasks = factory.createTasks();
+            // ------------------------------------------------ INITIALIZE TASKS
+            for (int i = 0; i < tasks.length; i++) {
+                tasks[i].initialize();
+            }
+            started = true;
         }
 
 
         if (started) {
 
             // --------------------------------------------------------- PERFORM
-            if (threadCount == 0) {
+            if (poolSize == 0) {
                 for (int priority = 0; priority < 10; priority++) {
                     for (int i = 0; i < tasks.length; i++) {
                         tasks[i].perform(transition, priority);
@@ -149,26 +163,39 @@ public class Machine {
             } else {
                 ExecutorService parent = null;
                 for (int priority = 0; priority < 10; priority++) {
-                    ExecutorService child =
-                        new ExecutorService(parent, tasks, transition, priority,
-                                            threadCount);
+                    ExecutorService child = new ExecutorService
+                        (parent, tasks, transition, priority, poolSize);
                     child.start();
                     parent = child;
                 }
-                previousExecutorService = parent;
+                pool = parent;
             }
 
             // ------------------------------------------------- CHECK FINISHING
-            if (!finished && spec.isFinishingTransition(transition)) {
-                finish();
+            if (spec.isFinishingTransition(transition)) {
+                try {
+                    pool.join();
+
+                    // ------------------------------------------- DESTROY TASKS
+                    for (int i = 0; i < tasks.length; i++) {
+                        tasks[i].destroy();
+                    }
+
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+
+                finished = true;
             }
         }
 
         // ------------------------------------------------------------- HISTORY
-        history.addElement(oldState);
-        while (history.size() > historyCount) {
-            history.removeElementAt(0);
+        history.insertElementAt(this.state, 0);
+        while (history.size() >= historySize) {
+            history.removeElementAt(history.size() - 1);
         }
+
+        this.state = state;
     }
 
 
@@ -177,89 +204,46 @@ public class Machine {
      *
      * @return thread count
      */
-    public synchronized int getThreadCount() {
-        return threadCount;
+    public int getPoolSize() {
+        return poolSize;
     }
 
 
     /**
      * Set the thread count.
      *
-     * @param threadCount new thread count; zero for non-thread
+     * @param poolSize new thread count; zero for non-thread
      */
-    public synchronized void setThreadCount(final int threadCount) {
-        if (threadCount < 0) {
+    public void setPoolSize(final int poolSize) {
+        if (poolSize < 0) {
             throw new IllegalArgumentException
-                ("illegal thread count: " + threadCount);
+                ("poolSize: " + poolSize + " < 0");
         }
-        this.threadCount = threadCount;
+        this.poolSize = poolSize;
     }
 
 
     /**
-     * Returns current value of historyCount.
+     * Returns current value of count.
      *
-     * @return historyCount
+     * @return count
      */
-    public synchronized int getHistoryCount() {
-        return historyCount;
+    public int getHistorySize() {
+        return historySize;
     }
 
 
     /**
      * Sets state transition history count.
      *
-     * @param historyCount new history count; non-zero positive
+     * @param historySize new history count; non-zero positive
      */
-    public synchronized void setHistoryCount(int historyCount) {
-        if (historyCount < 0) {
+    public void setHistorySize(final int historySize) {
+        if (historySize < 0) {
             throw new IllegalArgumentException
-                ("illegal history count: " + historyCount);
+                ("historySize: " + historySize + " < 0");
         }
-        this.historyCount = historyCount;
-    }
-
-
-    /**
-     * Starts machine manually.
-     *
-     * @throws StateMachineException if any error occurs.
-     */
-    public synchronized void start() throws MachineException {
-        if (started) {
-            return;
-        }
-        started = true;
-
-        // -------------------------------------------------------- CREATE TASKS
-        tasks = factory.createTasks();
-
-        // ---------------------------------------------------- INITIALIZE TASKS
-        for (int i = 0; i < tasks.length; i++) {
-            tasks[i].initialize();
-        }
-    }
-
-
-    /**
-     * Finish machine manually.
-     *
-     * @throws StateMachineException if any error occurs
-     */
-    public synchronized void finish() throws MachineException {
-        if (finished) {
-            return;
-        }
-        finished = true;
-
-        if (tasks != null) {
-            return;
-        }
-
-        // ------------------------------------------------------- DESTROY TASKS
-        for (int i = 0; i < tasks.length; i++) {
-            tasks[i].destroy();
-        }
+        this.historySize = historySize;
     }
 
 
@@ -268,15 +252,14 @@ public class Machine {
 
     private State state = State.UNKNOWN;
 
+    private final Vector history = new Vector();
+    private int historySize = 0;
+
     private transient Task[] tasks = null;
 
     private volatile boolean started = false;
     private volatile boolean finished = false;
 
-    private volatile int threadCount = 0;
-
-    private volatile int historyCount = 0;
-    private final Vector history = new Vector();
-
-    private transient Thread previousExecutorService = null;
+    private transient Thread pool = null;
+    private int poolSize = 0;
 }

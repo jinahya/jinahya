@@ -22,7 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class Executor extends Thread {
+final class Executor extends Thread {
 
 
     /**
@@ -31,8 +31,8 @@ class Executor extends Thread {
      * @param transition transition
      * @param priority priority
      */
-    public Executor(ExecutorService service, Transition transition,
-                    int priority) {
+    public Executor(final ExecutorService service, final Transition transition,
+                    final int priority) {
         super();
 
         this.service = service;
@@ -46,8 +46,8 @@ class Executor extends Thread {
         for (Task task = null; (task = service.getTask()) != null;) {
             try {
                 task.perform(transition, priority);
-            } catch (MachineException sme) {
-                sme.printStackTrace();
+            } catch (MachineException me) {
+                me.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }

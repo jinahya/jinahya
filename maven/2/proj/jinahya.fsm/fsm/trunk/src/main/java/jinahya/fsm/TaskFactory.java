@@ -26,9 +26,10 @@ public interface TaskFactory {
 
 
     /**
-     * 
-     * @return
-     * @throws StateMachineException
+     * Returns tasks.
+     *
+     * @return an array of tasks
+     * @throws MachineException if any error occurs
      */
     public Task[] createTasks() throws MachineException;
 }

@@ -22,43 +22,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Transition {
-
-
-    /**
-     * Creates an instance.
-     *
-     * @param sourceState source state of this transition
-     * @param targetState target state of this transition
-     * @param transitionHistory history of state transitions
-     */
-    public Transition(final State sourceState, final State targetState,
-                      final State[] transitionHistory) {
-        super();
-
-        if (sourceState == null) {
-            throw new IllegalArgumentException("illegal sourceState: null");
-        }
-
-        if (targetState == null) {
-            throw new IllegalArgumentException("illegal targetState: null");
-        }
-
-        if (transitionHistory == null) {
-            throw new IllegalArgumentException
-                ("illegal transition history: null");
-        }
-
-        /*
-        if (sourceState.equals(targetState)) {
-            throw new IllegalArgumentException("transition for same states");
-        }
-         */
-
-        this.sourceState = sourceState;
-        this.targetState = targetState;
-        this.transitionHistory = transitionHistory;
-    }
+public interface Transition {
 
 
     /**
@@ -66,9 +30,7 @@ public class Transition {
      *
      * @return source state
      */
-    public State getSourceState() {
-        return sourceState;
-    }
+    public State getSourceState();
 
 
     /**
@@ -76,28 +38,13 @@ public class Transition {
      *
      * @return target state
      */
-    public State getTargetState() {
-        return targetState;
-    }
+    public State getTargetState();
 
 
     /**
-     * Returns transition history.
+     * Returns the transition history. Lower the index, later the state.
      *
-     * @return transition history.
+     * @return the transition history.
      */
-    public State[] getTransitionHistory() {
-        return transitionHistory;
-    }
-
-
-    //@Override
-    public String toString() {
-        return "TRANSITION: [" + sourceState + "] -> [" + targetState + "]";
-    }
-
-
-    private State sourceState;
-    private State targetState;
-    private State[] transitionHistory;
+    public State[] getTransitionHistory();
 }
