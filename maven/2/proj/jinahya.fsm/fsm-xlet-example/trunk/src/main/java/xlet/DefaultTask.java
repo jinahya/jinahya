@@ -47,9 +47,12 @@ public class DefaultTask extends Task {
             ie.printStackTrace();
         }
         //System.out.println(transition + " @ " + priority);
+
+        /*
         jinahya.fsm.State[] history = transition.getTransitionHistory();
         for (int i = 0; i < history.length; i++) {
             System.out.println("[" + i + "]: " + history[i]);
         }
+         */
     }
 }

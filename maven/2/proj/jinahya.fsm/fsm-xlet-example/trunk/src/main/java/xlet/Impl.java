@@ -44,8 +44,8 @@ public class Impl implements Xlet {
 
         try {
             xsm = new XletMachine(new TaskFactoryImpl(), XletState.LOADED);
-            xsm.setHistoryCount(10);
-            xsm.setThreadCount(5);
+            xsm.setHistorySize(10);
+            xsm.setPoolSize(5);
         } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
