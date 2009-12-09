@@ -33,10 +33,8 @@ public final class XletTransitionMatcher {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return sourceState.equals(State.UNKNOWN) &&
-                       targetState.equals(XletState.LOADED);
+                return transition.getSourceState().equals(State.UNKNOWN) &&
+                       transition.getTargetState().equals(XletState.LOADED);
             }
         };
 
@@ -58,10 +56,8 @@ public final class XletTransitionMatcher {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return sourceState.equals(XletState.PAUSED) &&
-                       targetState.equals(XletState.STARTED);
+                return transition.getSourceState().equals(XletState.PAUSED) &&
+                       transition.getTargetState().equals(XletState.STARTED);
             }
     };
 
@@ -70,10 +66,8 @@ public final class XletTransitionMatcher {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                final State sourceState = transition.getSourceState();
-                final State targetState = transition.getTargetState();
-                return sourceState.equals(XletState.STARTED) &&
-                       targetState.equals(XletState.PAUSED);
+                return transition.getSourceState().equals(XletState.STARTED) &&
+                       transition.getTargetState().equals(XletState.PAUSED);
             }
     };
 

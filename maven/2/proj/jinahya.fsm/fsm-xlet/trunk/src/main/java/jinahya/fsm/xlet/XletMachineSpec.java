@@ -32,15 +32,11 @@ public class XletMachineSpec implements MachineSpec {
 
     //@Override
     public boolean isStartingTransition(final Transition transition) {
-        // UNKNOWN -> LOADED || LOADED -> PAUSED | UNKNOWN -> PAUSED
+        // UNKNOWN -> (LOADED | PAUSED)
         final State sourceState = transition.getSourceState();
         final State targetState = transition.getTargetState();
         return (sourceState.equals(State.UNKNOWN) &&
                 targetState.equals(XletState.LOADED)) ||
-                /*
-               (sourceState.equals(XletState.LOADED) &&
-                targetState.equals(XletState.PAUSED)) ||
-                 */
                (sourceState.equals(State.UNKNOWN) &&
                 targetState.equals(XletState.PAUSED));
     }
@@ -53,8 +49,6 @@ public class XletMachineSpec implements MachineSpec {
         if (sourceState.equals(State.UNKNOWN)) {
             return (targetState.equals(XletState.LOADED) ||
                     targetState.equals(XletState.PAUSED));
-        //} else if (sourceState.equals(XletState.NOT_LOADED)) {
-            // not gonna happen
         } else if (sourceState.equals(XletState.LOADED)) {
             return targetState.equals(XletState.PAUSED);
         } else if (sourceState.equals(XletState.PAUSED)) {
@@ -63,12 +57,6 @@ public class XletMachineSpec implements MachineSpec {
         } else if (sourceState.equals(XletState.STARTED)) {
             return (targetState.equals(XletState.PAUSED) ||
                     targetState.equals(XletState.DESTROYED));
-        //} else if (sourceState.equals(XletState.DESTROYED)) {
-            // not gonnna happen
-        //} else if (sourceState.equals(XletState.INVALID)) {
-            // not gonna happen
-        //} else {
-            // @@?
         }
 
         return false;

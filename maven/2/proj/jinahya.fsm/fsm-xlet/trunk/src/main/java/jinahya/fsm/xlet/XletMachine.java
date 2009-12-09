@@ -70,8 +70,8 @@ public class XletMachine extends Machine {
      * @param state state
      * @throws MachineException if any error occurs
      */
-    public XletMachine(final MachineSpec spec,
-                            final TaskFactory factory, final State state)
+    public XletMachine(final MachineSpec spec, final TaskFactory factory,
+                       final State state)
         throws MachineException {
 
         super(spec, factory, state);
