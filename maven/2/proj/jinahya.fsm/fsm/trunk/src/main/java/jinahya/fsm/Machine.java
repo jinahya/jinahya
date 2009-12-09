@@ -191,7 +191,7 @@ public class Machine {
 
         // ------------------------------------------------------------- HISTORY
         history.insertElementAt(this.state, 0);
-        while (history.size() >= historySize) {
+        while (history.size() > historySize) {
             history.removeElementAt(history.size() - 1);
         }
 

@@ -28,7 +28,7 @@ public class State {
     /**
      * the ultimate unknown state. all state machines start with this state.
      */
-    public static final State UNKNOWN = new State("default", "unknown");
+    public static final State UNKNOWN = new State("DEFAULT", "UNKNOWN");
 
 
     /**
