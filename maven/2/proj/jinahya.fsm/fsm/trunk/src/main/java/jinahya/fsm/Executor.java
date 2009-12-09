@@ -22,7 +22,8 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-final class Executor extends Thread {
+//final class Executor extends Thread {
+final class Executor implements Runnable {
 
 
     /**

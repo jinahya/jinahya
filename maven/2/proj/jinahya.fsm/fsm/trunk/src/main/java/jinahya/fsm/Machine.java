@@ -161,10 +161,10 @@ public class Machine {
                     }
                 }
             } else {
-                ExecutorService parent = null;
+                Thread parent = null;
                 for (int priority = 0; priority < 10; priority++) {
-                    ExecutorService child = new ExecutorService
-                        (parent, tasks, transition, priority, poolSize);
+                    Thread child = new Thread(new ExecutorService
+                        (parent, tasks, transition, priority, poolSize));
                     child.start();
                     parent = child;
                 }

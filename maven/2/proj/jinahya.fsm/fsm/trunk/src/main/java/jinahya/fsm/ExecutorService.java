@@ -25,7 +25,8 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-final class ExecutorService extends Thread {
+//final class ExecutorService extends Thread {
+final class ExecutorService implements Runnable {
 
 
     /**
@@ -35,7 +36,7 @@ final class ExecutorService extends Thread {
      * @param priority
      * @param count
      */
-    public ExecutorService(final ExecutorService parent, final Task[] tasks,
+    public ExecutorService(final Thread parent, final Task[] tasks,
                            final Transition transition, final int priority,
                            final int count) {
         super();
@@ -62,7 +63,8 @@ final class ExecutorService extends Thread {
 
         Vector executors = new Vector();
         for (int i = 0; i < count; i++) {
-            Thread executor = new Executor(this, transition, priority);
+            Thread executor =
+                new Thread(new Executor(this, transition, priority));
             executors.addElement(executor);
             executor.start();
         }
@@ -87,7 +89,7 @@ final class ExecutorService extends Thread {
     }
 
 
-    private ExecutorService parent;
+    private Thread parent;
     private Task[] tasks;
     private Transition transition;
     private int priority;
