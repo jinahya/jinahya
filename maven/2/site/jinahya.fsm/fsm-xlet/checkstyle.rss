@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2009</copyright>
     <item>
-      <title>File: 7,
-             Errors: 44,
+      <title>File: 11,
+             Errors: 61,
              Warnings: 0,
              Infos: 0
       </title>
@@ -43,6 +43,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.XletMachine.java">jinahya/fsm/xlet/XletMachine.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.PlayTask.java">jinahya/fsm/xlet/PlayTask.java</a>
                 </td>
                 <td>
@@ -52,7 +66,35 @@
                   0
                 </td>
                 <td>
-                  3
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.PlaySwitchTask.java">jinahya/fsm/xlet/PlaySwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.XletTransitionMatcher.java">jinahya/fsm/xlet/XletTransitionMatcher.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
                 </td>
               </tr>
                           <tr>
@@ -66,12 +108,12 @@
                   0
                 </td>
                 <td>
-                  2
+                  5
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.XletStateMachineSpec.java">jinahya/fsm/xlet/XletStateMachineSpec.java</a>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.XletMachineSpec.java">jinahya/fsm/xlet/XletMachineSpec.java</a>
                 </td>
                 <td>
                   0
@@ -80,7 +122,7 @@
                   0
                 </td>
                 <td>
-                  20
+                  18
                 </td>
               </tr>
                           <tr>
@@ -99,20 +141,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.XletStateMachine.java">jinahya/fsm/xlet/XletStateMachine.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.LoadTask.java">jinahya/fsm/xlet/LoadTask.java</a>
                 </td>
                 <td>
@@ -122,7 +150,35 @@
                   0
                 </td>
                 <td>
-                  1
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.LoadSwitchTask.java">jinahya/fsm/xlet/LoadSwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#jinahya.fsm.xlet.InitSwitchTask.java">jinahya/fsm/xlet/InitSwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                       </tbody>
