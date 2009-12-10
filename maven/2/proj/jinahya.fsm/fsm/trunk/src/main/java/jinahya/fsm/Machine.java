@@ -256,8 +256,9 @@ public class Machine {
 
 
     /**
+     * Returns the current value of <code>poolSleep</code>.
      *
-     * @return
+     * @return poolSleep
      */
     public long getPoolSleep() {
         return poolSleep;
@@ -265,8 +266,9 @@ public class Machine {
 
 
     /**
-     * 
-     * @param poolSleep
+     * Sets new value of </code>poolSleep</code>.
+     *
+     * @param poolSleep new poolSleep
      */
     public void setPoolSleep(final long poolSleep) {
         if (poolSleep <= 0L) {
