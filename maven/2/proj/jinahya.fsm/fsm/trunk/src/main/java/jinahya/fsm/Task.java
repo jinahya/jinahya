@@ -38,14 +38,12 @@ public abstract class Task {
 
     /**
      * Performs the desired jobs.
-     * <p>
-     * This method invoked with 10 different <code>priority</code> values (0-9)
      *
      * @param transition transition
-     * @param priority priority
+     * @param precedence precedence task precedence
      * @throws MachineException if any error occurs
      */
-    public abstract void perform(Transition transition, int priority)
+    public abstract void perform(Transition transition, int precedence)
         throws MachineException;
 
 

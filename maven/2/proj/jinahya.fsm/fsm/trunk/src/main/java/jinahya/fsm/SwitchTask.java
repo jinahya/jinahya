@@ -48,13 +48,13 @@ public abstract class SwitchTask extends Task {
 
     //@Override
     public synchronized final void perform(final Transition transition,
-                                           final int priority)
+                                           final int precedence)
         throws MachineException {
 
         if (on) {
             for (int i = 0; i < offMatchers.length; i++) {
                 if (offMatchers[i].matches(transition)) {
-                    off(priority);
+                    off(precedence);
                     on = Boolean.FALSE.booleanValue();
                     break;
                 }
@@ -62,7 +62,7 @@ public abstract class SwitchTask extends Task {
         } else { // off
             for (int i = 0; i < onMatchers.length; i++) {
                 if (onMatchers[i].matches(transition)) {
-                    on(priority);
+                    on(precedence);
                     on = Boolean.TRUE.booleanValue();
                     break;
                 }
@@ -74,19 +74,19 @@ public abstract class SwitchTask extends Task {
     /**
      * Performs when this switch task is on.
      *
-     * @param priority task priority
+     * @param precedence task precedence
      * @throws MachineException if any error occurs.
      */
-    protected abstract void on(int priority) throws MachineException;
+    protected abstract void on(int precedence) throws MachineException;
 
 
     /**
      * Performes when this switch task is off.
      *
-     * @param priority task priority
+     * @param precedence task precedence
      * @throws MachineException if any error occurs.
      */
-    protected abstract void off(int priority) throws MachineException;
+    protected abstract void off(int precedence) throws MachineException;
 
 
     /**

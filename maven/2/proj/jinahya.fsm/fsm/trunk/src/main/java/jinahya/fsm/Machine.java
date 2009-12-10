@@ -18,6 +18,8 @@
 package jinahya.fsm;
 
 
+import java.io.PrintStream;
+import java.util.Date;
 import java.util.Vector;
 
 
@@ -26,6 +28,12 @@ import java.util.Vector;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class Machine {
+
+
+    /**
+     * Date to be used for loggine.
+     */
+    private static final Date DATE = new Date();
 
 
     /**
@@ -139,38 +147,55 @@ public class Machine {
             throw new MachineException("not allowed: " + transition);
         }
 
+        log("Transiting from " + sourceState + " to " + targetState);
 
         // ------------------------------------------------------ CHECK STARTING
         if (!started && spec.isStartingTransition(transition)) {
-            tasks = factory.createTasks();
+            log("Checked as a starting transition");
+
+            // ---------------------------------------------------- CREATE TASKS
+            log("Creating tasks");
+            final Task[] _tasks = factory.createTasks();
+            tasks = new Task[_tasks.length];
+            System.arraycopy(_tasks, 0, tasks, 0, tasks.length);
+            log("Tasks are created");
+
             // ------------------------------------------------ INITIALIZE TASKS
+            log("Initializing tasks");
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].initialize();
             }
+            log("Tasks are initalized");
+
             started = true;
+            log("Machine started");
         }
 
 
         if (started) {
 
             final int _poolSize = poolSize;
+            log("Pool size: " + _poolSize);
+
             // --------------------------------------------------------- PERFORM
             if (_poolSize == 0) {
+                log("Perform without threads");
                 // ------------------------------------------------ NO THREADING
-                for (int priority = 0; priority <= minimumPriority;
-                     priority++) {
+                for (int precedence = 0; precedence <= minimumPrecedence;
+                     precedence++) {
                     for (int i = 0; i < tasks.length; i++) {
-                        tasks[i].perform(transition, priority);
+                        tasks[i].perform(transition, precedence);
                     }
                 }
             } else {
+                log("Perform with threads");
                 // --------------------------------------------------- THREADING
                 final long _poolSleep = poolSleep;
                 Thread parent = null;
-                for (int priority = 0; priority <= minimumPriority;
-                     priority++) {
+                for (int precedence = 0; precedence <= minimumPrecedence;
+                     precedence++) {
                     Thread child = new Thread(new ExecutorService
-                        (parent, tasks, transition, priority, _poolSize,
+                        (parent, tasks, transition, precedence, _poolSize,
                          _poolSleep));
                     child.start();
                     parent = child;
@@ -180,19 +205,27 @@ public class Machine {
 
             // ------------------------------------------------- CHECK FINISHING
             if (spec.isFinishingTransition(transition)) {
-                try {
-                    pool.join();
+                log("Checked as a finishing transition");
 
-                    // ------------------------------------------- DESTROY TASKS
-                    for (int i = 0; i < tasks.length; i++) {
-                        tasks[i].destroy();
+                if (_poolSize > 0) {
+                    while (pool.isAlive()) {
+                        try {
+                            pool.join();
+                        } catch (InterruptedException ie) {
+                            ie.printStackTrace();
+                        }
                     }
-
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
                 }
 
+                // ----------------------------------------------- DESTROY TASKS
+                log("Destroying tasks");
+                for (int i = 0; i < tasks.length; i++) {
+                    tasks[i].destroy();
+                }
+                log("Tasks are destroyed");
+
                 finished = true;
+                log("Machine finished");
             }
         }
 
@@ -280,26 +313,47 @@ public class Machine {
 
 
     /**
-     * Return the current value of <code>minimumPriority</code>.
+     * Return the current value of <code>minimumprecedence</code>.
      *
-     * @return minimumPriority
+     * @return minimumprecedence
      */
-    public int getMinimumPriority() {
-        return minimumPriority;
+    public int getMinimumPrecedence() {
+        return minimumPrecedence;
     }
 
 
     /**
-     * Sets new value for <code>minimumPriority</code>.
+     * Sets new value for <code>minimumprecedence</code>.
      *
-     * @param minimumPriority minimumPriority (positive)
+     * @param minimumprecedence minimumprecedence (positive)
      */
-    public void setMinimumPriority(final int minimumPriority) {
-        if (minimumPriority < 0) {
+    public void setMinimumPrecedence(final int minimumprecedence) {
+        if (minimumprecedence < 0) {
             throw new IllegalArgumentException
-                ("minimumPriority: " + minimumPriority + " < 0");
+                ("minimumPrecedence: " + minimumprecedence + " < 0");
         }
-        this.minimumPriority = minimumPriority;
+        this.minimumPrecedence = minimumprecedence;
+    }
+
+
+    /**
+     * Set logger to which logging messages written.
+     *
+     * @param logger logger
+     */
+    public void setLogger(final PrintStream logger) {
+        this.logger = logger;
+    }
+
+
+    private void log(final String message) {
+        synchronized (DATE) {
+            DATE.setTime(System.currentTimeMillis());
+            try {
+                logger.println("[JINAHYA.FSM] " + message + " @ " + DATE);
+            } catch (NullPointerException npe) {
+            }
+        }
     }
 
 
@@ -311,7 +365,7 @@ public class Machine {
     private int historySize = 0;
     private int poolSize = 0;
     private long poolSleep = 0L;
-    private int minimumPriority = 9;
+    private int minimumPrecedence = 9;
 
     private final Vector history = new Vector();
 
@@ -321,4 +375,6 @@ public class Machine {
     private volatile boolean finished = false;
 
     private transient Thread pool = null;
+
+    private transient PrintStream logger;
 }

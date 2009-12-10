@@ -32,19 +32,19 @@ final class ExecutorService implements Runnable {
      *
      * @param parent
      * @param tasks
-     * @param priority
+     * @param precedence
      * @param poolSize
      * @param poolSleep
      */
     public ExecutorService(final Thread parent, final Task[] tasks,
-                           final Transition transition, final int priority,
+                           final Transition transition, final int precedence,
                            final int poolSize, final long poolSleep) {
         super();
 
         this.parent = parent;
         this.tasks = tasks;
         this.transition = transition;
-        this.priority = priority;
+        this.precedence = precedence;
         this.poolSize = poolSize;
         this.poolSleep = poolSleep;
     }
@@ -74,7 +74,7 @@ final class ExecutorService implements Runnable {
                             ie.printStackTrace();
                         }
                         try {
-                            task.perform(transition, priority);
+                            task.perform(transition, precedence);
                         } catch (MachineException me) {
                             me.printStackTrace();
                         } catch (Exception e) {
@@ -110,7 +110,7 @@ final class ExecutorService implements Runnable {
     private Thread parent;
     private Task[] tasks;
     private Transition transition;
-    private int priority;
+    private int precedence;
     private int poolSize;
     private long poolSleep;
 
