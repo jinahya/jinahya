@@ -26,9 +26,10 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * 
-     * @param onMatchers
-     * @param offMatchers
+     * Creates a new instance.
+     *
+     * @param onMatchers conditions to be matched for switch-on.
+     * @param offMatchers conditions to be matched for switch-off.
      */
     public SwitchTask(final TransitionMatcher[] onMatchers,
                       final TransitionMatcher[] offMatchers) {
@@ -71,25 +72,27 @@ public abstract class SwitchTask extends Task {
 
 
     /**
+     * Performs when this switch task is on.
      *
-     * @param priority
-     * @throws MachineException
+     * @param priority task priority
+     * @throws MachineException if any error occurs.
      */
     protected abstract void on(int priority) throws MachineException;
 
 
     /**
+     * Performes when this switch task is off.
      *
-     * @param priority
-     * @throws MachineException
+     * @param priority task priority
+     * @throws MachineException if any error occurs.
      */
     protected abstract void off(int priority) throws MachineException;
 
 
     /**
-     * Returns whether this task is currently turn on or not.
+     * Returns whether this task is currently turned on or not.
      *
-     * @return true if this switch task is currently turned on, false otherwise
+     * @return true if this switch task is currently turned on, false otherwise.
      */
     public synchronized final boolean isOn() {
         return on;

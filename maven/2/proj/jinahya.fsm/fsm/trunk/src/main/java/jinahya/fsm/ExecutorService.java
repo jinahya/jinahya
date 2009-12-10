@@ -25,7 +25,6 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-//final class ExecutorService extends Thread {
 final class ExecutorService implements Runnable {
 
 
@@ -34,18 +33,20 @@ final class ExecutorService implements Runnable {
      * @param parent
      * @param tasks
      * @param priority
-     * @param count
+     * @param poolSize
+     * @param poolSleep
      */
     public ExecutorService(final Thread parent, final Task[] tasks,
                            final Transition transition, final int priority,
-                           final int count) {
+                           final int poolSize, final long poolSleep) {
         super();
 
         this.parent = parent;
         this.tasks = tasks;
         this.transition = transition;
         this.priority = priority;
-        this.count = count;
+        this.poolSize = poolSize;
+        this.poolSleep = poolSleep;
     }
 
 
@@ -62,9 +63,26 @@ final class ExecutorService implements Runnable {
         }
 
         Vector executors = new Vector();
-        for (int i = 0; i < count; i++) {
-            Thread executor =
-                new Thread(new Executor(this, transition, priority));
+        for (int i = 0; i < poolSize; i++) {
+            Thread executor = new Thread() {
+                //@Override
+                public void run() {
+                    for (Task task = null; (task = getTask()) != null;) {
+                        try {
+                            Thread.sleep(poolSleep);
+                        } catch (InterruptedException ie) {
+                            ie.printStackTrace();
+                        }
+                        try {
+                            task.perform(transition, priority);
+                        } catch (MachineException me) {
+                            me.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
             executors.addElement(executor);
             executor.start();
         }
@@ -81,11 +99,11 @@ final class ExecutorService implements Runnable {
     }
 
 
-    public synchronized Task getTask() {
-        if (index >= tasks.length) {
+    private synchronized Task getTask() {
+        if (taskIndex >= tasks.length) {
             return null;
         }
-        return tasks[index++];
+        return tasks[taskIndex++];
     }
 
 
@@ -93,8 +111,9 @@ final class ExecutorService implements Runnable {
     private Task[] tasks;
     private Transition transition;
     private int priority;
-    private int count;
+    private int poolSize;
+    private long poolSleep;
 
-    private volatile int index = 0;
+    private volatile int taskIndex = 0;
 }
 

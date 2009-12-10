@@ -26,28 +26,33 @@ public interface MachineSpec {
 
 
     /**
-     * Checks if specifed transition is a starting condition or not
+     * Checks if specifed <code>transition</code> is a starting condition or
+     * not. Once this method returns true, this method is never going to be
+     * invoked.
      *
-     * @param transition transition
-     * @return true if specifed transition is starting transition,
-     *         false otherwise
+     * @param transition transition to be checked
+     * @return true if specifed transition is starting transition, false
+     *         otherwise
      */
     public boolean isStartingTransition(Transition transition);
 
 
     /**
-     * Checks if specifed transition is permitted or not.
-     * @param transition
-     * @return true if given transition is an allowed one, false otherwise.
+     * Checks if specifed <code>transition</code> is permitted or not.
+     *
+     * @param transition transition to be checked.
+     * @return true if given transition is allowed, false otherwise.
      */
     public boolean isTransitionAllowed(Transition transition);
 
 
     /**
+     * Check if specified <code>transition</code> is for finishing or not. Once
+     * this method returns true, this method is never going to be invoked.
      *
-     * @param transition
-     * @return true if given transition means one of the finishing transitions
-     *         of the machine, false otherwise.
+     * @param transition transition to be checked
+     * @return true if given <code>transition<code> means one of the finishing
+     *         transitions of the machine, false otherwise.
      */
     public boolean isFinishingTransition(Transition transition);
 }

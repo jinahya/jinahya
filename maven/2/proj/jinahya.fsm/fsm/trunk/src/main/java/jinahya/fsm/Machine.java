@@ -153,18 +153,25 @@ public class Machine {
 
         if (started) {
 
+            final int _poolSize = poolSize;
             // --------------------------------------------------------- PERFORM
-            if (poolSize == 0) {
-                for (int priority = 0; priority < 10; priority++) {
+            if (_poolSize == 0) {
+                // ------------------------------------------------ NO THREADING
+                for (int priority = 0; priority <= minimumPriority;
+                     priority++) {
                     for (int i = 0; i < tasks.length; i++) {
                         tasks[i].perform(transition, priority);
                     }
                 }
             } else {
+                // --------------------------------------------------- THREADING
+                final long _poolSleep = poolSleep;
                 Thread parent = null;
-                for (int priority = 0; priority < 10; priority++) {
+                for (int priority = 0; priority <= minimumPriority;
+                     priority++) {
                     Thread child = new Thread(new ExecutorService
-                        (parent, tasks, transition, priority, poolSize));
+                        (parent, tasks, transition, priority, _poolSize,
+                         _poolSleep));
                     child.start();
                     parent = child;
                 }
@@ -191,7 +198,8 @@ public class Machine {
 
         // ------------------------------------------------------------- HISTORY
         history.insertElementAt(this.state, 0);
-        while (history.size() > historySize) {
+        int _historySize = historySize;
+        while (history.size() > _historySize) {
             history.removeElementAt(history.size() - 1);
         }
 
@@ -247,13 +255,63 @@ public class Machine {
     }
 
 
+    /**
+     *
+     * @return
+     */
+    public long getPoolSleep() {
+        return poolSleep;
+    }
+
+
+    /**
+     * 
+     * @param poolSleep
+     */
+    public void setPoolSleep(final long poolSleep) {
+        if (poolSleep <= 0L) {
+            throw new IllegalArgumentException(poolSleep + " <= 0L");
+        }
+
+        this.poolSleep = poolSleep;
+    }
+
+
+    /**
+     * Return the current value of <code>minimumPriority</code>.
+     *
+     * @return minimumPriority
+     */
+    public int getMinimumPriority() {
+        return minimumPriority;
+    }
+
+
+    /**
+     * Sets new value for <code>minimumPriority</code>.
+     *
+     * @param minimumPriority minimumPriority (positive)
+     */
+    public void setMinimumPriority(final int minimumPriority) {
+        if (minimumPriority < 0) {
+            throw new IllegalArgumentException
+                ("minimumPriority: " + minimumPriority + " < 0");
+        }
+        this.minimumPriority = minimumPriority;
+    }
+
+
     private MachineSpec spec = null;
     private TaskFactory factory = null;
 
     private State state = State.UNKNOWN;
 
-    private final Vector history = new Vector();
     private int historySize = 0;
+    private int poolSize = 0;
+    private long poolSleep = 0L;
+    private int minimumPriority = 9;
+
+    private final Vector history = new Vector();
 
     private transient Task[] tasks = null;
 
@@ -261,5 +319,4 @@ public class Machine {
     private volatile boolean finished = false;
 
     private transient Thread pool = null;
-    private int poolSize = 0;
 }
