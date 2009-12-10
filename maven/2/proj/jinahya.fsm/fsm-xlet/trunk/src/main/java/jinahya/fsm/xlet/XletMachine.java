@@ -32,22 +32,6 @@ import jinahya.fsm.TaskFactory;
 public class XletMachine extends Machine {
 
 
-    /*
-    public static XletStateMachine createInConstructor(TaskFactory factory)
-        throws MachineException {
-
-        return new XletStateMachine(factory, XletState.LOADED);
-    }
-
-
-    public static XletStateMachine createInInitXlet(TaskFactory factory)
-        throws MachineException {
-
-        return new XletStateMachine(factory, XletState.PAUSED);
-    }
-     */
-
-
     /**
      * Creates a new instance.
      *

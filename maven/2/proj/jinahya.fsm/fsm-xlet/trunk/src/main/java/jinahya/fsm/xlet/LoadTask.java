@@ -32,19 +32,20 @@ public abstract class LoadTask extends Task {
 
 
     //@Override
-    public void perform(Transition transition, int priority)
+    public void perform(Transition transition, int precedence)
         throws MachineException {
 
         if (XletTransitionMatcher.LOAD_XLET.matches(transition)) {
-            perform(priority);
+            perform(precedence);
         }
     }
 
 
     /**
+     * Performs when xlet instance created.
      *
-     * @param priority
-     * @throws MachineException
+     * @param precedence task precedence
+     * @throws MachineException if any error occurs.
      */
-    protected abstract void perform(int priority) throws MachineException;
+    protected abstract void perform(int precedence) throws MachineException;
 }
