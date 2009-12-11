@@ -113,10 +113,12 @@ public class Machine {
 
         // -------------------------------------- JOIN PREVIOUS EXECUTOR SERVICE
         if (pool != null) {
-            try {
-                pool.join();
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
+            while (pool.isAlive()) {
+                try {
+                    pool.join();
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
             }
         }
 

@@ -54,11 +54,13 @@ final class ExecutorService implements Runnable {
     public void run() {
 
         if (parent != null) {
-            try {
-                parent.join();
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-                return;
+            while (parent.isAlive()) {
+                try {
+                    parent.join();
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                    return;
+                }
             }
         }
 
