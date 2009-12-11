@@ -47,14 +47,19 @@ public class XletMachineSpec implements MachineSpec {
         final State sourceState = transition.getSourceState();
         final State targetState = transition.getTargetState();
         if (sourceState.equals(State.UNKNOWN)) {
+            // UNKNOWN -> (LOADED | PAUSED)
             return (targetState.equals(XletState.LOADED) ||
                     targetState.equals(XletState.PAUSED));
         } else if (sourceState.equals(XletState.LOADED)) {
-            return targetState.equals(XletState.PAUSED);
+            // LOADED -> (PAUSED | DESTROYED)
+            return (targetState.equals(XletState.PAUSED) ||
+                    targetState.equals(XletState.DESTROYED));
         } else if (sourceState.equals(XletState.PAUSED)) {
+            // PAUSED -> (STARTED | DESTROYED)
             return (targetState.equals(XletState.STARTED) ||
                     targetState.equals(XletState.DESTROYED));
         } else if (sourceState.equals(XletState.STARTED)) {
+            // STARTED -> (PAUSED | DESTROYED)
             return (targetState.equals(XletState.PAUSED) ||
                     targetState.equals(XletState.DESTROYED));
         }
@@ -65,12 +70,12 @@ public class XletMachineSpec implements MachineSpec {
 
     //@Override
     public boolean isFinishingTransition(final Transition transition) {
-        // PAUSED -> DESTROYED | STARTED -> DESTROYED
+        // (LOADED | PAUSED | STARTED) -> DESTROYED
         final State sourceState = transition.getSourceState();
         final State targetState = transition.getTargetState();
-        return (sourceState.equals(XletState.PAUSED) &&
-                targetState.equals(XletState.DESTROYED)) ||
-               (sourceState.equals(XletState.STARTED) &&
+        return ((sourceState.equals(XletState.LOADED) ||
+                 sourceState.equals(XletState.PAUSED) ||
+                 sourceState.equals(XletState.STARTED)) &&
                 targetState.equals(XletState.DESTROYED));
     }
 }
