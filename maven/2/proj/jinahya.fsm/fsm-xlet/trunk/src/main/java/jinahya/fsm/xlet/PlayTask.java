@@ -32,7 +32,7 @@ public abstract class PlayTask extends Task {
 
 
     //@Override
-    public void perform(Transition transition, int precedence)
+    public void perform(final Transition transition, final int precedence)
         throws MachineException {
 
         if (XletTransitionMatcher.START_XLET.matches(transition)) {

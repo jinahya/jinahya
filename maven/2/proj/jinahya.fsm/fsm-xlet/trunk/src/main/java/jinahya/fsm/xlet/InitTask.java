@@ -32,7 +32,7 @@ public abstract class InitTask extends Task {
 
 
     //@Override
-    public void perform(Transition transition, int precedence)
+    public void perform(final Transition transition, final int precedence)
         throws MachineException {
 
         if (XletTransitionMatcher.INIT_XLET.matches(transition)) {
