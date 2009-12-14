@@ -28,7 +28,7 @@ import jinahya.fsm.Transition;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DefaultTask extends Task {
+class DefaultTask extends Task {
 
 
     //@Override

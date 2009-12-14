@@ -28,7 +28,7 @@ import jinahya.fsm.xlet.XletMachineSpec;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletMachineSpecImpl2 extends XletMachineSpec {
+class XletMachineSpecImpl2 extends XletMachineSpec {
 
 
     //@Override

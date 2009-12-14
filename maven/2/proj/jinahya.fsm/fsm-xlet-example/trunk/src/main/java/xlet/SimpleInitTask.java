@@ -28,7 +28,7 @@ import jinahya.fsm.xlet.InitSwitchTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimpleInitTask extends InitSwitchTask {
+class SimpleInitTask extends InitSwitchTask {
 
 
     //@Override

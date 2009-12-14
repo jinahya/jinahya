@@ -29,7 +29,7 @@ import jinahya.fsm.TaskFactory;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class TaskFactoryImpl implements TaskFactory {
+class TaskFactoryImpl implements TaskFactory {
 
 
     //@Override

@@ -28,7 +28,7 @@ import jinahya.fsm.xlet.LoadSwitchTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimpleLoadTask extends LoadSwitchTask {
+class SimpleLoadTask extends LoadSwitchTask {
 
 
     //@Override

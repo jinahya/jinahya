@@ -28,7 +28,7 @@ import jinahya.fsm.xlet.PlaySwitchTask;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimplePlayTask extends PlaySwitchTask {
+class SimplePlayTask extends PlaySwitchTask {
 
 
     //@Override
