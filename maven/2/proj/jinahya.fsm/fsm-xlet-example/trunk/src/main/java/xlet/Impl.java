@@ -42,10 +42,10 @@ public class Impl implements Xlet {
     public Impl() {
         super();
 
+        xsm = new XletMachine(new XletMachineSpecImpl(), new TaskFactoryImpl());
+        xsm.setHistorySize(10);
         try {
-            xsm = new XletMachine(new TaskFactoryImpl(), XletState.LOADED);
-            xsm.setHistorySize(10);
-            xsm.setPoolSize(5);
+            xsm.setState(XletState.LOADED);
         } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
