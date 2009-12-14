@@ -37,8 +37,8 @@ final class Executor implements Runnable {
      * @param poolSleep
      */
     public Executor(final Thread parent, final Task[] tasks,
-                           final Transition transition, final int precedence,
-                           final int poolSize, final long poolSleep) {
+                    final Transition transition, final int precedence,
+                    final int poolSize, final long poolSleep) {
         super();
 
         this.parent = parent;

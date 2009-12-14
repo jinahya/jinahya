@@ -135,10 +135,12 @@ public class Machine {
             }
             //@Override
             public String toString() {
-                return "[TRANSITOIN: " + sourceState + " -> " +
+                return "[TRANSITION: " + sourceState + " -> " +
                         targetState + "]";
             }
         };
+
+        log("transition: " + transition);
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
@@ -146,7 +148,6 @@ public class Machine {
             throw new MachineException("not allowed: " + transition);
         }
 
-        log("Transiting from " + sourceState + " to " + targetState);
 
         // ------------------------------------------------------ CHECK STARTING
         if (!started && spec.isStartingTransition(transition)) {
