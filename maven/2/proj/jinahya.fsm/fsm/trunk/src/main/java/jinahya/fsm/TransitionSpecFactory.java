@@ -26,6 +26,21 @@ public interface TransitionSpecFactory {
 
 
     /**
+     * Default implementation.
+     *
+     * @see jinahya.fsm.TransitionSpec#DEFAULT_SPEC
+     */
+    public static final TransitionSpecFactory DEFAULT_FACTORY =
+        new TransitionSpecFactory() {
+
+        //@Override
+        public TransitionSpec getTransitionSpec(final Transition transition) {
+            return TransitionSpec.DEFAULT_SPEC;
+        }
+    };
+
+
+    /**
      * Returns an spec for given <code>transition</code>.
      *
      * @param transition target transition
