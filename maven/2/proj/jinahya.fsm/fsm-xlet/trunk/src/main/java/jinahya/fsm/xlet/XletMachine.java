@@ -18,9 +18,8 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.State;
-import jinahya.fsm.MachineException;
 import jinahya.fsm.Machine;
+import jinahya.fsm.MachineException;
 import jinahya.fsm.MachineSpec;
 import jinahya.fsm.TaskFactory;
 
@@ -35,30 +34,11 @@ public class XletMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param factory factory
-     * @param state initial state
-     * @throws MachineException if any error occurs
+     * @param spec machine spec
+     * @param factory task factory
      */
-    public XletMachine(final TaskFactory factory, final State state)
-        throws MachineException {
-
-        this(new XletMachineSpec(), factory, state);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param spec spec
-     * @param factory factory
-     * @param state state
-     * @throws MachineException if any error occurs
-     */
-    public XletMachine(final MachineSpec spec, final TaskFactory factory,
-                       final State state)
-        throws MachineException {
-
-        super(spec, factory, state);
+    public XletMachine(final MachineSpec spec, final TaskFactory factory) {
+        super(spec, factory);
     }
 
 
