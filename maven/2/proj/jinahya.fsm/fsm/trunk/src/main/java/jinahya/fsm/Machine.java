@@ -22,6 +22,8 @@ import java.io.PrintStream;
 import java.util.Date;
 import java.util.Vector;
 
+import jinahya.fsm.MachineSpec.TransitionSpec;
+
 
 /**
  *
@@ -39,30 +41,22 @@ public class Machine {
     /**
      * Creates a new instance.
      *
-     * @param machineSpec machine spec
-     * @param taskFactory task factory
-     * @param transitionSpecFactory transition spec factory
+     * @param spec machine spec
+     * @param factory task factory
      */
-    public Machine(final MachineSpec machineSpec, final TaskFactory taskFactory,
-                   final TransitionSpecFactory transitionSpecFactory) {
-
+    public Machine(final MachineSpec spec, final TaskFactory factory) {
         super();
 
-        if (machineSpec == null) {
-            throw new NullPointerException("machineSpec");
+        if (spec == null) {
+            throw new NullPointerException("spec");
         }
 
-        if (taskFactory == null) {
-            throw new NullPointerException("taskFactory");
+        if (factory == null) {
+            throw new NullPointerException("factory");
         }
 
-        if (transitionSpecFactory == null) {
-            throw new NullPointerException("transitionSpecFactory");
-        }
-
-        this.machineSpec = machineSpec;
-        this.taskFactory = taskFactory;
-        this.transitionSpecFactory = transitionSpecFactory;
+        this.spec = spec;
+        this.factory = factory;
     }
 
 
@@ -148,19 +142,19 @@ public class Machine {
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!machineSpec.isTransitionAllowed(transition)) {
+        if (!spec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed: " + transition);
         }
 
         log("Transiting from " + sourceState + " to " + targetState);
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && machineSpec.isStartingTransition(transition)) {
+        if (!started && spec.isStartingTransition(transition)) {
             log("checked as a starting transition");
 
             // ---------------------------------------------------- CREATE TASKS
             log("creating tasks...");
-            final Task[] _tasks = taskFactory.createTasks();
+            final Task[] _tasks = factory.createTasks();
             tasks = new Task[_tasks.length];
             System.arraycopy(_tasks, 0, tasks, 0, tasks.length);
             log("tasks are created");
@@ -177,12 +171,10 @@ public class Machine {
         }
 
 
-
-
         if (started) {
 
             final TransitionSpec transitionSpec =
-                transitionSpecFactory.getTransitionSpec(transition);
+                spec.getTransitionSpec(transition);
 
             log("transition spec: " + transitionSpec);
 
@@ -223,7 +215,7 @@ public class Machine {
             }
 
             // ------------------------------------------------- CHECK FINISHING
-            if (machineSpec.isFinishingTransition(transition)) {
+            if (spec.isFinishingTransition(transition)) {
                 log("checked as a finishing transition");
 
                 if (pool != null) {
@@ -322,9 +314,8 @@ public class Machine {
     }
 
 
-    private MachineSpec machineSpec;
-    private TaskFactory taskFactory;
-    private TransitionSpecFactory transitionSpecFactory;
+    private MachineSpec spec;
+    private TaskFactory factory;
 
     private State state = State.UNKNOWN;
 

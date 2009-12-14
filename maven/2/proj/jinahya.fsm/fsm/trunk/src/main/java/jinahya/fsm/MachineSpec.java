@@ -25,6 +25,48 @@ package jinahya.fsm;
 public interface MachineSpec {
 
 
+
+    /**
+     * Represents how machine works for a specific transition.
+     *
+     * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+     */
+    public static interface TransitionSpec {
+
+
+        /**
+         * Returns number of threads to be forked for executing tasks.
+         *
+         * @return number of threads
+         */
+        int getPoolSize();
+
+
+        /**
+         * Returns executors' sleeping time for given <code>transition</code>.
+         *
+         * @return sleeping time in milliseconds
+         */
+        long getPoolSleep();
+
+
+        /**
+         * Returns the flag for immediate return after forking threads.
+         *
+         * @return true for immediate return, false otherwise.
+         */
+        boolean getImmediateReturnFlag();
+
+
+        /**
+         * Returns minimum precedence for given <code>transition</code>.
+         *
+         * @return minimum precedence for given <code>transition</code>
+         */
+        int getMinimumPrecedence();
+    }
+
+
     /**
      * Checks if specifed <code>transition</code> is a starting condition or
      * not. Once this method returns true, this method is never going to be
@@ -34,7 +76,7 @@ public interface MachineSpec {
      * @return true if specifed transition is starting transition, false
      *         otherwise
      */
-    public boolean isStartingTransition(Transition transition);
+    boolean isStartingTransition(Transition transition);
 
 
     /**
@@ -43,7 +85,7 @@ public interface MachineSpec {
      * @param transition transition to be checked.
      * @return true if given transition is allowed, false otherwise.
      */
-    public boolean isTransitionAllowed(Transition transition);
+    boolean isTransitionAllowed(Transition transition);
 
 
     /**
@@ -54,5 +96,14 @@ public interface MachineSpec {
      * @return true if given <code>transition<code> means one of the finishing
      *         transitions of the machine, false otherwise.
      */
-    public boolean isFinishingTransition(Transition transition);
+    boolean isFinishingTransition(Transition transition);
+
+
+    /**
+     * Returns the spec for given <code>transition</code>.
+     *
+     * @param transition transition
+     * @return an instance of <code>TransitionSpec</code>
+     */
+    TransitionSpec getTransitionSpec(Transition transition);
 }

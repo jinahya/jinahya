@@ -40,12 +40,18 @@ public class State {
     public State(final String namespace, final String name) {
         super();
 
-        if (namespace == null || namespace.trim().length() == 0) {
-            throw new IllegalArgumentException("namespace: " + namespace);
+        if (namespace == null) {
+            throw new NullPointerException("namespace");
+        }
+        if (namespace.trim().length() == 0) {
+            throw new IllegalArgumentException("namespace: empty");
         }
 
-        if (name == null || name.trim().length() == 0) {
-            throw new IllegalArgumentException("name: " + name);
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+        if (name.trim().length() == 0) {
+            throw new IllegalArgumentException("name: empty");
         }
 
         this.namespace = namespace;
