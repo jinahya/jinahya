@@ -39,33 +39,30 @@ public class Machine {
     /**
      * Creates a new instance.
      *
-     * @param spec spec
-     * @param factory task factory
-     * @param state initial state
-     * @throws MachineException if any error occurs.
+     * @param machineSpec machine spec
+     * @param taskFactory task factory
+     * @param transitionSpecFactory transition spec factory
      */
-    public Machine(final MachineSpec spec, final TaskFactory factory,
-                   final State state)
-        throws MachineException {
+    public Machine(final MachineSpec machineSpec, final TaskFactory taskFactory,
+                   final TransitionSpecFactory transitionSpecFactory) {
 
         super();
 
-        if (spec == null) {
-            throw new NullPointerException("spec");
+        if (machineSpec == null) {
+            throw new NullPointerException("machineSpec");
         }
 
-        if (factory == null) {
-            throw new NullPointerException("factory");
+        if (taskFactory == null) {
+            throw new NullPointerException("taskFactory");
         }
 
-        if (state == null) {
-            throw new NullPointerException("state");
+        if (transitionSpecFactory == null) {
+            throw new NullPointerException("transitionSpecFactory");
         }
 
-        this.spec = spec;
-        this.factory = factory;
-
-        transit(state);
+        this.machineSpec = machineSpec;
+        this.taskFactory = taskFactory;
+        this.transitionSpecFactory = transitionSpecFactory;
     }
 
 
@@ -120,14 +117,15 @@ public class Machine {
                     ie.printStackTrace();
                 }
             }
+            pool = null;
         }
 
 
         // --------------------------------------------------- CREATE TRANSITION
         final State sourceState = this.state;
         final State targetState = state;
-        final State[] transitionHistory = new State[history.size()];
-        history.toArray(transitionHistory);
+        final State[] transitionHistory = new State[historyVector.size()];
+        historyVector.toArray(transitionHistory);
         final Transition transition = new Transition() {
             //@Override
             public State getSourceState() {
@@ -141,47 +139,63 @@ public class Machine {
             public State[] getTransitionHistory() {
                 return transitionHistory;
             }
+            //@Override
+            public String toString() {
+                return "[TRANSITOIN: " + sourceState + " -> " +
+                        targetState + "]";
+            }
         };
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!spec.isTransitionAllowed(transition)) {
+        if (!machineSpec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed: " + transition);
         }
 
         log("Transiting from " + sourceState + " to " + targetState);
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && spec.isStartingTransition(transition)) {
-            log("Checked as a starting transition");
+        if (!started && machineSpec.isStartingTransition(transition)) {
+            log("checked as a starting transition");
 
             // ---------------------------------------------------- CREATE TASKS
-            log("Creating tasks");
-            final Task[] _tasks = factory.createTasks();
+            log("creating tasks...");
+            final Task[] _tasks = taskFactory.createTasks();
             tasks = new Task[_tasks.length];
             System.arraycopy(_tasks, 0, tasks, 0, tasks.length);
-            log("Tasks are created");
+            log("tasks are created");
 
             // ------------------------------------------------ INITIALIZE TASKS
-            log("Initializing tasks");
+            log("initializing tasks...");
             for (int i = 0; i < tasks.length; i++) {
                 tasks[i].initialize();
             }
-            log("Tasks are initalized");
+            log("tasks are initalized");
 
             started = true;
-            log("Machine started");
+            log("machine started");
         }
+
+
 
 
         if (started) {
 
-            final int _poolSize = poolSize;
-            log("Pool size: " + _poolSize);
+            final TransitionSpec transitionSpec =
+                transitionSpecFactory.getTransitionSpec(transition);
+
+            log("transition spec: " + transitionSpec);
+
+            final int poolSize = Math.max(0, transitionSpec.getPoolSize());
+            log("pool size: " + poolSize);
+
+            final int minimumPrecedence =
+                Math.max(0, transitionSpec.getMinimumPrecedence());
+            log("minimum precedence: " + minimumPrecedence);
 
             // --------------------------------------------------------- PERFORM
-            if (_poolSize == 0) {
-                log("Perform without threads");
+            if (poolSize == 0) {
+
                 // ------------------------------------------------ NO THREADING
                 for (int precedence = 0; precedence <= minimumPrecedence;
                      precedence++) {
@@ -190,15 +204,18 @@ public class Machine {
                     }
                 }
             } else {
-                log("Perform with threads");
+
                 // --------------------------------------------------- THREADING
-                final long _poolSleep = poolSleep;
+                final long poolSleep =
+                    Math.max(0L, transitionSpec.getPoolSleep());
+                log("pool sleep: " + poolSleep);
+
                 Thread parent = null;
                 for (int precedence = 0; precedence <= minimumPrecedence;
                      precedence++) {
                     Thread child = new Thread(new ExecutorService
-                        (parent, tasks, transition, precedence, _poolSize,
-                         _poolSleep));
+                        (parent, tasks, transition, precedence, poolSize,
+                         poolSleep));
                     child.start();
                     parent = child;
                 }
@@ -206,10 +223,10 @@ public class Machine {
             }
 
             // ------------------------------------------------- CHECK FINISHING
-            if (spec.isFinishingTransition(transition)) {
-                log("Checked as a finishing transition");
+            if (machineSpec.isFinishingTransition(transition)) {
+                log("checked as a finishing transition");
 
-                if (_poolSize > 0) {
+                if (pool != null) {
                     while (pool.isAlive()) {
                         try {
                             pool.join();
@@ -217,52 +234,46 @@ public class Machine {
                             ie.printStackTrace();
                         }
                     }
+                    pool = null;
                 }
 
                 // ----------------------------------------------- DESTROY TASKS
-                log("Destroying tasks");
+                log("destroying tasks...");
                 for (int i = 0; i < tasks.length; i++) {
                     tasks[i].destroy();
                 }
-                log("Tasks are destroyed");
+                log("tasks are destroyed");
 
                 finished = true;
-                log("Machine finished");
+                log("machine finished");
             }
-        }
+
+            // ------------------------------------------- IMMEDIATE RETURN FLAG
+            final boolean immediateReturnFlag =
+                transitionSpec.getImmediateReturnFlag();
+            log("immediate return flag: " + immediateReturnFlag);
+            if (!immediateReturnFlag && pool != null) {
+                while (pool.isAlive()) {
+                    try {
+                        pool.join();
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                }
+                pool = null;
+            }
+
+        } // started
+
 
         // ------------------------------------------------------------- HISTORY
-        history.insertElementAt(this.state, 0);
-        int _historySize = historySize;
-        while (history.size() > _historySize) {
-            history.removeElementAt(history.size() - 1);
+        historyVector.insertElementAt(this.state, 0);
+        while (historyVector.size() > historySize) {
+            historyVector.removeElementAt(historyVector.size() - 1);
         }
+
 
         this.state = state;
-    }
-
-
-    /**
-     * Returns the current thread count.
-     *
-     * @return thread count
-     */
-    public int getPoolSize() {
-        return poolSize;
-    }
-
-
-    /**
-     * Set the thread count.
-     *
-     * @param poolSize new thread count; zero for non-thread
-     */
-    public void setPoolSize(final int poolSize) {
-        if (poolSize < 0) {
-            throw new IllegalArgumentException
-                ("poolSize: " + poolSize + " < 0");
-        }
-        this.poolSize = poolSize;
     }
 
 
@@ -291,85 +302,34 @@ public class Machine {
 
 
     /**
-     * Returns the current value of <code>poolSleep</code>.
-     *
-     * @return poolSleep
-     */
-    public long getPoolSleep() {
-        return poolSleep;
-    }
-
-
-    /**
-     * Sets new value of </code>poolSleep</code>.
-     *
-     * @param poolSleep new poolSleep
-     */
-    public void setPoolSleep(final long poolSleep) {
-        if (poolSleep <= 0L) {
-            throw new IllegalArgumentException(poolSleep + " <= 0L");
-        }
-
-        this.poolSleep = poolSleep;
-    }
-
-
-    /**
-     * Return the current value of <code>minimumprecedence</code>.
-     *
-     * @return minimumprecedence
-     */
-    public int getMinimumPrecedence() {
-        return minimumPrecedence;
-    }
-
-
-    /**
-     * Sets new value for <code>minimumprecedence</code>.
-     *
-     * @param minimumprecedence minimumprecedence (positive)
-     */
-    public void setMinimumPrecedence(final int minimumprecedence) {
-        if (minimumprecedence < 0) {
-            throw new IllegalArgumentException
-                ("minimumPrecedence: " + minimumprecedence + " < 0");
-        }
-        this.minimumPrecedence = minimumprecedence;
-    }
-
-
-    /**
      * Set logger to which logging messages written.
      *
      * @param logger logger
      */
-    public void setLogger(final PrintStream logger) {
+    public synchronized void setLogger(final PrintStream logger) {
         this.logger = logger;
     }
 
 
-    private void log(final String message) {
+    private synchronized void log(final String message) {
+        if (logger == null) {
+            return;
+        }
         synchronized (DATE) {
             DATE.setTime(System.currentTimeMillis());
-            try {
-                logger.println("[JINAHYA.FSM] " + message + " @ " + DATE);
-            } catch (NullPointerException npe) {
-            }
+            logger.println("[JINAHYA.FSM] " + message + " @ " + DATE);
         }
     }
 
 
-    private MachineSpec spec = null;
-    private TaskFactory factory = null;
+    private MachineSpec machineSpec;
+    private TaskFactory taskFactory;
+    private TransitionSpecFactory transitionSpecFactory;
 
     private State state = State.UNKNOWN;
 
     private int historySize = 0;
-    private int poolSize = 0;
-    private long poolSleep = 0L;
-    private int minimumPrecedence = 9;
-
-    private final Vector history = new Vector();
+    private final Vector historyVector = new Vector();
 
     private transient Task[] tasks = null;
 

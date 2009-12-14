@@ -72,7 +72,7 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * Performs when this switch task is on.
+     * Performes when this switch task is on.
      *
      * @param precedence task precedence
      * @throws MachineException if any error occurs.

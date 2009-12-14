@@ -100,7 +100,7 @@ public class State {
 
     //@Override
     public String toString() {
-        return "STATE: " + name + "@" + namespace;
+        return "[STATE: " + name + "@" + namespace + "]";
     }
 
 
