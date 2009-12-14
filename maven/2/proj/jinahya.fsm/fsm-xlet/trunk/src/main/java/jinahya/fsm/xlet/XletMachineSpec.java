@@ -36,9 +36,8 @@ public abstract class XletMachineSpec implements MachineSpec {
         final State sourceState = transition.getSourceState();
         final State targetState = transition.getTargetState();
         return (sourceState.equals(State.UNKNOWN) &&
-                targetState.equals(XletState.LOADED)) ||
-               (sourceState.equals(State.UNKNOWN) &&
-                targetState.equals(XletState.PAUSED));
+                (targetState.equals(XletState.LOADED) ||
+                 targetState.equals(XletState.PAUSED)));
     }
 
 
