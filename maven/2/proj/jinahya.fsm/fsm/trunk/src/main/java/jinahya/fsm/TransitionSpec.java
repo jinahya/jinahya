@@ -50,6 +50,14 @@ public interface TransitionSpec {
         public int getMinimumPrecedence() {
             return 9;
         }
+
+        //@Override
+        public String toString() {
+            return "[TRANSITION.SPEC: poolSize(" + getPoolSize() + ")/" +
+                "poolSleep(" + getPoolSleep() + ")/" +
+                "immediateReturnFlag(" + getImmediateReturnFlag() + ")/" +
+                "minimumPrecedence(" + getMinimumPrecedence() + ")]";
+        }
     };
 
 
