@@ -205,7 +205,7 @@ public class Machine {
                 Thread parent = null;
                 for (int precedence = 0; precedence <= minimumPrecedence;
                      precedence++) {
-                    Thread child = new Thread(new ExecutorService
+                    Thread child = new Thread(new Executor
                         (parent, tasks, transition, precedence, poolSize,
                          poolSleep));
                     child.start();

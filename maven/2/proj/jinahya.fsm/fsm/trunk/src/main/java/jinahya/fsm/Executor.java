@@ -25,7 +25,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-final class ExecutorService implements Runnable {
+final class Executor implements Runnable {
 
 
     /**
@@ -36,7 +36,7 @@ final class ExecutorService implements Runnable {
      * @param poolSize
      * @param poolSleep
      */
-    public ExecutorService(final Thread parent, final Task[] tasks,
+    public Executor(final Thread parent, final Task[] tasks,
                            final Transition transition, final int precedence,
                            final int poolSize, final long poolSleep) {
         super();
@@ -70,10 +70,12 @@ final class ExecutorService implements Runnable {
                 //@Override
                 public void run() {
                     for (Task task = null; (task = getTask()) != null;) {
-                        try {
-                            Thread.sleep(poolSleep);
-                        } catch (InterruptedException ie) {
-                            ie.printStackTrace();
+                        if (poolSleep > 0L) {
+                            try {
+                                Thread.sleep(poolSleep);
+                            } catch (InterruptedException ie) {
+                                ie.printStackTrace();
+                            }
                         }
                         try {
                             task.perform(transition, precedence);
