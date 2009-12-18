@@ -61,6 +61,25 @@ public class BitOutput {
 
 
     /**
+     * Creates inheriting attributes from specified <code>parent</code>.
+     *
+     * @param parent parent output
+     * @param resetCount true for starting count from 0L,
+     *                   false for continuing from <code>parent</code>'s count.
+     */
+    public BitOutput(final BitOutput parent, final boolean resetCount) {
+        super();
+
+        output = parent.output;
+
+        octet = parent.octet;
+        avail = parent.avail;
+
+        count = resetCount ? 0L : parent.count;
+    }
+
+
+    /**
      * Writes a boolean value. Only one bit is consumed.
      *
      * @param value boolean value
@@ -396,6 +415,143 @@ public class BitOutput {
             baos.close();
         }
     }
+
+
+    public void writeUnsignedFixedPoint(final int m, final int n,
+                                        final float value)
+        throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n > 0x20) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") > 0x20");
+        }
+
+        writeUnsignedInt(m + n, (int) (value * Math.pow(2, n)));
+    }
+
+
+    public void writeFixedPoint(final int m, final int n, final float value)
+        throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n >= 0x20) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") >= 0x20");
+        }
+
+        writeInt(1 + m + n, (int) (value * Math.pow(2, n)));
+    }
+
+
+
+    public void writeUnsignedLongFixedPoint(final int m, final int n,
+                                            final double value)
+        throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n > 0x40) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") > 0x40");
+        }
+
+        writeUnsignedLong(m + n, (long) (value * Math.pow(2, n)));
+    }
+
+
+    public void writeLongFixedPoint(final int m, final int n,
+                                    final double value)
+        throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n >= 0x40) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") >= 0x40");
+        }
+
+        writeLong(1 + m + n, (long) (value * Math.pow(2, n)));
+    }
+
+    /*
+    private void writeFraction(final int n, float value) throws IOException {
+        float fraction = .5f;
+        for (int i = 0; i < n; i++) {
+            if (value >= fraction) {
+                writeBoolean(true);
+                value -= fraction;
+            } else {
+                writeBoolean(false);
+            }
+            fraction /= 2.0f;
+        }
+    }
+     */
+
+
+    /*
+    private float getMaximumUnsignedFixedPoint(int m, int n) {
+
+        float value = .0f;
+
+        float integer = 1.0f;
+        for (int i = 0; i < m; i++) {
+            value += integer;
+            integer *= 2.0f;
+        }
+
+        float fraction = .5f;
+        for (int i = 0; i < n; i++) {
+            value += fraction;
+            fraction /= 2.0f;
+        }
+
+        return value;
+    }
+     */
 
 
     private OctetOutput output;

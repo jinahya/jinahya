@@ -62,6 +62,26 @@ public class BitInput {
 
 
     /**
+     * Creates an instance inheriting attributes from specified
+     * <code>parent</code>.
+     *
+     * @param parent parent input
+     * @param resetCount true for starting count from 0L,
+     *                   false for continuing from <code>parent</code>'s count.
+     */
+    public BitInput(final BitInput parent, boolean resetCount) {
+        super();
+
+        input = parent.input;
+
+        octet = parent.octet;
+        avail = parent.octet;
+
+        count = resetCount ? 0L : parent.count;
+    }
+
+
+    /**
      * Reads one bit and returns true if it is one.
      *
      * @return true for one, false for zero
@@ -95,11 +115,11 @@ public class BitInput {
         throws IOException {
 
         if (offset < 0 || offset >= value.length) {
-            throw new IllegalArgumentException("illegal offset: " + offset);
+            throw new IllegalArgumentException("offset: " + offset);
         }
 
-        if (length <= 0 || (offset + length) > value.length) {
-            throw new IllegalArgumentException("illegal length: " + length);
+        if (length < 0 || (offset + length) > value.length) {
+            throw new IllegalArgumentException("length: " + length);
         }
 
         for (int i = 0; i < length; i++) {
@@ -201,7 +221,7 @@ public class BitInput {
     public int readInt(int length) throws IOException {
 
         if (length <= 0x01 || length > 0x20) {
-            throw new IllegalArgumentException("illegal length: " + length);
+            throw new IllegalArgumentException("length: " + length);
         }
 
         int value = (0x00 - readUnsignedByte(0x01)) << (length - 1);
@@ -224,6 +244,7 @@ public class BitInput {
 
 
     /**
+     * Read <code>length</code> octet-long integer in little endian byte order.
      *
      * @param octetLength number of octets
      * @return an int value in little endian
@@ -231,8 +252,7 @@ public class BitInput {
      */
     public int readIntLE(final int octetLength) throws IOException {
         if (octetLength <= 0 || octetLength > 4) {
-            throw new IllegalArgumentException
-                ("invalid octet length: " + octetLength);
+            throw new IllegalArgumentException("octetLength: " + octetLength);
         }
 
         int value = 0x00;
@@ -265,7 +285,7 @@ public class BitInput {
     public long readUnsignedLong(int length) throws IOException {
 
         if (length < 1 || length >= 64) {
-            throw new IllegalArgumentException("illegal length: " + length);
+            throw new IllegalArgumentException("length: " + length);
         }
 
         long value = 0x00L;
@@ -296,7 +316,7 @@ public class BitInput {
     public long readLong(int length) throws IOException {
 
         if (length <= 1 || length > 0x40) {
-            throw new IllegalArgumentException("illegal length: " + length);
+            throw new IllegalArgumentException("length: " + length);
         }
 
         long value = ((long) (0 - readUnsignedByte(1))) << (length - 1);
@@ -319,6 +339,7 @@ public class BitInput {
 
 
     /**
+     * Reads <code>length</code> octet-long long in little endian byte order.
      *
      * @param octetLength number of octets
      * @return an long value in little endian
@@ -326,8 +347,7 @@ public class BitInput {
      */
     public long readLongLE(final int octetLength) throws IOException {
         if (octetLength <= 0 || octetLength > 8) {
-            throw new IllegalArgumentException
-                ("invalid octet length: " + octetLength);
+            throw new IllegalArgumentException("octetLength: " + octetLength);
         }
 
         long value = 0x00;
@@ -448,6 +468,132 @@ public class BitInput {
             bais.close();
         }
     }
+
+
+    public float readUnsignedFixedPoint(int m, int n) throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n > 0x20) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") > 0x20");
+        }
+
+        return readUnsignedInt(m + n) / new Double(Math.pow(2, n)).floatValue();
+    }
+
+
+    /**
+     * Reads a signed fixed-point.
+     *
+     * @param m integer bit length (excluding the sign bit) (m >= 0)
+     * @param n fraction bit length (n >= 0)
+     * @return Q(m, n)
+     * @throws IOException if an I/O error occurs
+     */
+    public float readFixedPoint(int m, int n) throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n >= 0x20) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") >= 0x20");
+        }
+
+        return readInt(1 + m + n) / new Double(Math.pow(2, n)).floatValue();
+    }
+
+
+
+    public double readUnsignedLongFixedPoint(int m, int n) throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n > 0x40) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") > 0x40");
+        }
+
+        return readUnsignedLong(m + n) / Math.pow(2, n);
+    }
+
+
+    /**
+     * Reads a signed fixed-point.
+     *
+     * @param m integer bit length (excluding the sign bit) (m >= 0)
+     * @param n fraction bit length (n >= 0)
+     * @return Q(m, n)
+     * @throws IOException if an I/O error occurs
+     */
+    public double readLongFixedPoint(int m, int n) throws IOException {
+
+        if (m < 0) {
+            throw new IllegalArgumentException("m(" + m + ") < 0");
+        }
+
+        if (n < 0) {
+            throw new IllegalArgumentException("n(" + n + ") < 0");
+        }
+
+        if (m == 0 && n == 0) {
+            throw new IllegalArgumentException("m == 0 && n == 0");
+        }
+
+        if (m + n >= 0x40) {
+            throw new IllegalArgumentException
+                ("m(" + m + ") + n(" + n + ") >= 0x40");
+        }
+
+        return readLong(1 + m + n) / Math.pow(2, n);
+    }
+
+
+    /*
+    private float readFraction(int n) throws IOException {
+        float value = .0f;
+
+        float fraction = .5f;
+        for (int i = 0; i < n; i++) {
+            if (readBoolean()) {
+                value += fraction;
+            }
+            fraction /= 2.0f;
+        }
+
+        return value;
+    }
+     */
 
 
     private OctetInput input;
