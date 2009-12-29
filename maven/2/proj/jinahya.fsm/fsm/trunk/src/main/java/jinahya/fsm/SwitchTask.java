@@ -36,6 +36,15 @@ public abstract class SwitchTask extends Task {
 
         super();
 
+        if (onMatchers.length == 0) {
+            throw new IllegalArgumentException("onMatchers: empty");
+        }
+
+        if (offMatchers.length == 0) {
+            throw new IllegalArgumentException("offMatchers: empty");
+        }
+
+
         this.onMatchers = new TransitionMatcher[onMatchers.length];
         System.arraycopy(onMatchers, 0, this.onMatchers, 0,
                          this.onMatchers.length);
@@ -47,23 +56,32 @@ public abstract class SwitchTask extends Task {
 
 
     //@Override
-    public synchronized final void perform(final Transition transition,
-                                           final int precedence)
+    public void perform(final Transition transition, final int precedence)
         throws MachineException {
 
         if (on) {
             for (int i = 0; i < offMatchers.length; i++) {
                 if (offMatchers[i].matches(transition)) {
-                    off(precedence);
-                    on = Boolean.FALSE.booleanValue();
+                    try {
+                        off(precedence);
+                    } finally {
+                        synchronized (this) {
+                            on = Boolean.FALSE.booleanValue();
+                        }
+                    }
                     break;
                 }
             }
         } else { // off
             for (int i = 0; i < onMatchers.length; i++) {
                 if (onMatchers[i].matches(transition)) {
-                    on(precedence);
-                    on = Boolean.TRUE.booleanValue();
+                    try {
+                        on(precedence);
+                    } finally {
+                        synchronized (this) {
+                            on = Boolean.TRUE.booleanValue();
+                        }
+                    }
                     break;
                 }
             }
@@ -94,8 +112,10 @@ public abstract class SwitchTask extends Task {
      *
      * @return true if this switch task is currently turned on, false otherwise.
      */
-    public synchronized final boolean isOn() {
-        return on;
+    public boolean isOn() {
+        synchronized (this) {
+            return on;
+        }
     }
 
 

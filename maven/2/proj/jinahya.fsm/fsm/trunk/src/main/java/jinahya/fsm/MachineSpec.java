@@ -26,45 +26,13 @@ public interface MachineSpec {
 
 
 
-    /**
-     * Represents how machine works for a specific transition.
-     *
-     * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
-     */
+    /*
     public static interface TransitionSpec {
-
-
-        /**
-         * Returns number of threads to be forked for executing tasks.
-         *
-         * @return number of threads
-         */
         int getPoolSize();
-
-
-        /**
-         * Returns executors' sleeping time for given <code>transition</code>.
-         *
-         * @return sleeping time in milliseconds
-         */
         long getPoolSleep();
-
-
-        /**
-         * Returns the flag for immediate return after forking threads.
-         *
-         * @return true for immediate return, false otherwise.
-         */
-        boolean getImmediateReturnFlag();
-
-
-        /**
-         * Returns minimum precedence for given <code>transition</code>.
-         *
-         * @return minimum precedence for given <code>transition</code>
-         */
         int getMinimumPrecedence();
     }
+     */
 
 
     /**
@@ -97,13 +65,4 @@ public interface MachineSpec {
      *         transitions of the machine, false otherwise.
      */
     boolean isFinishingTransition(Transition transition);
-
-
-    /**
-     * Returns the spec for given <code>transition</code>.
-     *
-     * @param transition transition
-     * @return an instance of <code>TransitionSpec</code>
-     */
-    TransitionSpec getTransitionSpec(Transition transition);
 }

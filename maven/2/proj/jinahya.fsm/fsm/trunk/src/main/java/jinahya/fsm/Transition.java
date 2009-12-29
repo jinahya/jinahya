@@ -30,7 +30,7 @@ public interface Transition {
      *
      * @return source state
      */
-    public State getSourceState();
+    State getSourceState();
 
 
     /**
@@ -38,13 +38,5 @@ public interface Transition {
      *
      * @return target state
      */
-    public State getTargetState();
-
-
-    /**
-     * Returns the transition history. Lower the index, later the state.
-     *
-     * @return the transition history.
-     */
-    public State[] getTransitionHistory();
+    State getTargetState();
 }

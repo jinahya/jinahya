@@ -38,7 +38,7 @@ final class Executor implements Runnable {
      */
     public Executor(final Thread parent, final Task[] tasks,
                     final Transition transition, final int precedence,
-                    final int poolSize, final long poolSleep) {
+                    final int poolSize) {
         super();
 
         this.parent = parent;
@@ -46,7 +46,6 @@ final class Executor implements Runnable {
         this.transition = transition;
         this.precedence = precedence;
         this.poolSize = poolSize;
-        this.poolSleep = poolSleep;
     }
 
 
@@ -59,7 +58,6 @@ final class Executor implements Runnable {
                     parent.join();
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
-                    return;
                 }
             }
         }
@@ -70,13 +68,6 @@ final class Executor implements Runnable {
                 //@Override
                 public void run() {
                     for (Task task = null; (task = getTask()) != null;) {
-                        if (poolSleep > 0L) {
-                            try {
-                                Thread.sleep(poolSleep);
-                            } catch (InterruptedException ie) {
-                                ie.printStackTrace();
-                            }
-                        }
                         try {
                             task.perform(transition, precedence);
                         } catch (MachineException me) {
@@ -104,10 +95,10 @@ final class Executor implements Runnable {
 
 
     private synchronized Task getTask() {
-        if (taskIndex >= tasks.length) {
-            return null;
+        if (taskIndex < tasks.length) {
+            return tasks[taskIndex++];
         }
-        return tasks[taskIndex++];
+        return null;
     }
 
 
@@ -116,7 +107,6 @@ final class Executor implements Runnable {
     private Transition transition;
     private int precedence;
     private int poolSize;
-    private long poolSleep;
 
     private volatile int taskIndex = 0;
 }
