@@ -42,7 +42,7 @@ class DefaultTask extends Task {
          */
 
         try {
-            Thread.sleep(10L);
+            Thread.sleep(5L);
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }

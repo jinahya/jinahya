@@ -18,15 +18,19 @@
 package xlet;
 
 
+import java.util.Vector;
+
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
 import jinahya.fsm.MachineException;
 import jinahya.fsm.Machine;
+import jinahya.fsm.Task;
 
 import jinahya.fsm.xlet.XletState;
 import jinahya.fsm.xlet.XletMachine;
+import jinahya.fsm.xlet.XletMachineSpec;
 
 
 /**
@@ -42,8 +46,18 @@ public class Impl implements Xlet {
     public Impl() {
         super();
 
-        xsm = new XletMachine(new XletMachineSpecImpl(), new TaskFactoryImpl());
-        xsm.setHistorySize(10);
+        Vector vector = new Vector();
+        for (int i = 0; i < 100; i++) {
+            vector.addElement(new DefaultTask());
+        }
+        vector.addElement(new SimpleLoadTask());
+        vector.addElement(new SimpleInitTask());
+        vector.addElement(new SimplePlayTask());
+
+        Task[] tasks = (Task[]) vector.toArray(new Task[vector.size()]);
+
+        xsm = new XletMachine(new XletMachineSpec(), tasks);
+        xsm.setThreadPoolSize(5);
         try {
             xsm.setState(XletState.LOADED);
         } catch (MachineException fsme) {
