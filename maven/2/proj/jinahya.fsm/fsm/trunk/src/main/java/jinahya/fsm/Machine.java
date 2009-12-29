@@ -43,8 +43,9 @@ public class Machine {
         }
 
         this.spec = spec;
-        this.tasks = tasks;
-        //this.factory = factory;
+
+        this.tasks = new Task[tasks.length];
+        System.arraycopy(tasks, 0, this.tasks, 0, this.tasks.length);
     }
 
 

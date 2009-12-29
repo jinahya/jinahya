@@ -36,10 +36,16 @@ public abstract class SwitchTask extends Task {
 
         super();
 
+        if (onMatchers == null) {
+            throw new NullPointerException("onMatchers");
+        }
         if (onMatchers.length == 0) {
             throw new IllegalArgumentException("onMatchers: empty");
         }
 
+        if (offMatchers == null) {
+            throw new NullPointerException("offMatchers");
+        }
         if (offMatchers.length == 0) {
             throw new IllegalArgumentException("offMatchers: empty");
         }
