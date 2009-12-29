@@ -18,9 +18,6 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.State;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -28,47 +25,45 @@ import jinahya.fsm.State;
 public final class XletState {
 
 
-    private static final String NAMESPACE = "XLET";
-
-
     /**
      * Xlet object has not even loaded yet.
+     * INFORMATIVE
      */
-    public static final State NOT_LOADED = new State(NAMESPACE, "NOT_LOADED");
+    public static final int NOT_LOADED = 0x01;
 
 
     /**
      * Xlet instance created.
      */
-    public static final State LOADED = new State(NAMESPACE, "LOADED");
+    public static final int LOADED = NOT_LOADED << 1;
 
 
     /**
      * <code>initXlet()</code> or pauseXlet() invoked.
      */
-    public static final State PAUSED = new State(NAMESPACE, "PAUSED");
+    public static final int PAUSED = LOADED << 1;
 
 
     /**
      * <code>startXlet()</code> invoked.
      */
-    public static final State STARTED = new State(NAMESPACE, "STARTED");
+    public static final int STARTED = PAUSED << 1;
 
 
     /**
      * <code>destroyXlet()</code> invoked.
      */
-    public static final State DESTROYED = new State(NAMESPACE, "DESTROYED");
+    public static final int DESTROYED = PAUSED << 1;
 
 
     /**
      * Destroyed but the Xlet object has not yet been garbage collected.
+     * INFORMATIVE
      */
-    public static final State INVALID = new State(NAMESPACE, "INVALIED");
+    public static final int INVALID = DESTROYED << 1;
 
 
     private XletState() {
         super();
     }
-
 }

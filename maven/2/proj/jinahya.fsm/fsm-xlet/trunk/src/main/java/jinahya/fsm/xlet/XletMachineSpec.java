@@ -18,8 +18,8 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.State;
 import jinahya.fsm.MachineSpec;
+import jinahya.fsm.State;
 import jinahya.fsm.Transition;
 
 
@@ -33,48 +33,54 @@ public class XletMachineSpec implements MachineSpec {
     //@Override
     public boolean isStartingTransition(final Transition transition) {
         // UNKNOWN -> (LOADED | PAUSED)
-        final State sourceState = transition.getSourceState();
-        final State targetState = transition.getTargetState();
-        return (sourceState.equals(State.UNKNOWN) &&
-                (targetState.equals(XletState.LOADED) ||
-                 targetState.equals(XletState.PAUSED)));
+        final int sourceState = transition.getSourceState();
+        final int targetState = transition.getTargetState();
+        return (sourceState == State.UNKNOWN &&
+                (targetState == XletState.LOADED ||
+                 targetState == XletState.PAUSED));
     }
 
 
     //@Override
     public boolean isTransitionAllowed(final Transition transition) {
-        final State sourceState = transition.getSourceState();
-        final State targetState = transition.getTargetState();
-        if (sourceState.equals(State.UNKNOWN)) {
-            // UNKNOWN -> (LOADED | PAUSED)
-            return (targetState.equals(XletState.LOADED) ||
-                    targetState.equals(XletState.PAUSED));
-        } else if (sourceState.equals(XletState.LOADED)) {
-            // LOADED -> (PAUSED | DESTROYED)
-            return (targetState.equals(XletState.PAUSED) ||
-                    targetState.equals(XletState.DESTROYED));
-        } else if (sourceState.equals(XletState.PAUSED)) {
-            // PAUSED -> (STARTED | DESTROYED)
-            return (targetState.equals(XletState.STARTED) ||
-                    targetState.equals(XletState.DESTROYED));
-        } else if (sourceState.equals(XletState.STARTED)) {
-            // STARTED -> (PAUSED | DESTROYED)
-            return (targetState.equals(XletState.PAUSED) ||
-                    targetState.equals(XletState.DESTROYED));
+        final int sourceState = transition.getSourceState();
+        final int targetState = transition.getTargetState();
+
+        boolean allowed = false;
+
+        switch (sourceState) {
+            case State.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
+                allowed = (targetState == XletState.LOADED ||
+                           targetState == XletState.PAUSED);
+                break;
+            case XletState.LOADED: // LOADED -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletState.PAUSED ||
+                           targetState == XletState.DESTROYED);
+                break;
+            case XletState.PAUSED: // PAUSED -> (STARTED | DESTROYED)
+                allowed = (targetState == XletState.STARTED ||
+                           targetState == XletState.DESTROYED);
+                break;
+            case XletState.STARTED: // STARTED -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletState.PAUSED ||
+                           targetState == XletState.DESTROYED);
+                break;
+            default:
+                break;
         }
 
-        return false;
+        return allowed;
     }
 
 
     //@Override
     public boolean isFinishingTransition(final Transition transition) {
         // (LOADED | PAUSED | STARTED) -> DESTROYED
-        final State sourceState = transition.getSourceState();
-        final State targetState = transition.getTargetState();
-        return ((sourceState.equals(XletState.LOADED) ||
-                 sourceState.equals(XletState.PAUSED) ||
-                 sourceState.equals(XletState.STARTED)) &&
-                targetState.equals(XletState.DESTROYED));
+        final int sourceState = transition.getSourceState();
+        final int targetState = transition.getTargetState();
+        return ((sourceState == XletState.LOADED ||
+                 sourceState == XletState.PAUSED ||
+                 sourceState == XletState.STARTED) &&
+                targetState == XletState.DESTROYED);
     }
 }
