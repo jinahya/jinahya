@@ -21,7 +21,7 @@ package jinahya.fsm.xlet;
 import jinahya.fsm.Machine;
 import jinahya.fsm.MachineException;
 import jinahya.fsm.MachineSpec;
-import jinahya.fsm.TaskFactory;
+import jinahya.fsm.Task;
 
 
 /**
@@ -35,10 +35,12 @@ public class XletMachine extends Machine {
      * Creates a new instance.
      *
      * @param spec machine spec
-     * @param factory task factory
+     * @param tasks tasks to be performed
      */
-    public XletMachine(final MachineSpec spec, final TaskFactory factory) {
-        super(spec, factory);
+    //public XletMachine(final MachineSpec spec, final TaskFactory factory) {
+    public XletMachine(final MachineSpec spec, final Task[] tasks) {
+
+        super(spec, tasks);
     }
 
 

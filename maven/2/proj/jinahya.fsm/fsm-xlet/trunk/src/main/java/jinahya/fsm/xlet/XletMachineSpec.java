@@ -27,7 +27,7 @@ import jinahya.fsm.Transition;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletMachineSpec implements MachineSpec {
+public class XletMachineSpec implements MachineSpec {
 
 
     //@Override
