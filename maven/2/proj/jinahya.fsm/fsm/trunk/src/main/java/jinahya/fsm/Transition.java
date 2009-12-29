@@ -30,7 +30,7 @@ public interface Transition {
      *
      * @return source state
      */
-    State getSourceState();
+    int getSourceState();
 
 
     /**
@@ -38,5 +38,5 @@ public interface Transition {
      *
      * @return target state
      */
-    State getTargetState();
+    int getTargetState();
 }

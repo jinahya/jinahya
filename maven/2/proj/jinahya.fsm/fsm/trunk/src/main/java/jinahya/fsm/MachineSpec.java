@@ -25,7 +25,6 @@ package jinahya.fsm;
 public interface MachineSpec {
 
 
-
     /*
     public static interface TransitionSpec {
         int getPoolSize();

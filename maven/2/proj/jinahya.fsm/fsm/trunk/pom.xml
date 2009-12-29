@@ -100,7 +100,7 @@
   <!-- More Project Information -->
   <name>fsm</name>
   <description>State Machine Support</description>
-  <!--url/-->
+  <url>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/</url>
   <inceptionYear>2009</inceptionYear>
   <licenses>
     <license>

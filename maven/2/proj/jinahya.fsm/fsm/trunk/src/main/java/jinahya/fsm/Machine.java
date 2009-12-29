@@ -25,6 +25,7 @@ package jinahya.fsm;
 public class Machine {
 
 
+
     /**
      * Creates a new instance.
      *
@@ -32,6 +33,7 @@ public class Machine {
      * @param tasks tasks to be performed
      */
     public Machine(final MachineSpec spec, final Task[] tasks) {
+
         super();
 
         if (spec == null) {
@@ -54,7 +56,7 @@ public class Machine {
      *
      * @return the current state
      */
-    public synchronized State getState() {
+    public synchronized int getState() {
         return state;
     }
 
@@ -64,9 +66,9 @@ public class Machine {
      *
      * @param state new state
      * @throws MachineException if any error occurs.
-     * @see #transit(jinahya.fsm.State)
+     * @see #transit(jinahya.fsm.int)
      */
-    public synchronized void setState(final State state)
+    public synchronized void setState(final int state)
         throws MachineException {
 
         transit(state);
@@ -78,14 +80,9 @@ public class Machine {
      *
      * @param state new state
      * @throws MachineException if any error occurs.
-     * @see #setState(jinahya.fsm.State)
+     * @see #setState(jinahya.fsm.int)
      */
-    public synchronized void transit(final State state)
-        throws MachineException {
-
-        if (state == null) {
-            throw new NullPointerException("state");
-        }
+    public synchronized void transit(final int state) throws MachineException {
 
 
         // ------------------------------------------------------ CHECK FINISHED
@@ -95,15 +92,15 @@ public class Machine {
 
 
         // --------------------------------------------------- CREATE TRANSITION
-        final State sourceState = this.state;
-        final State targetState = state;
+        final int sourceState = this.state;
+        final int targetState = state;
         final Transition transition = new Transition() {
             //@Override
-            public State getSourceState() {
+            public int getSourceState() {
                 return sourceState;
             }
             //@Override
-            public State getTargetState() {
+            public int getTargetState() {
                 return targetState;
             }
             //@Override
@@ -250,14 +247,11 @@ public class Machine {
 
     private MachineSpec spec;
     private Task[] tasks;
-    //private TaskFactory factory;
+
+    private volatile int state = State.UNKNOWN;
 
     private int minimumPrecedence = 0;
     private int threadPoolSize = 0;
-
-    //private transient Task[] tasks = null;
-
-    private volatile State state = State.UNKNOWN;
 
     private volatile boolean started = Boolean.FALSE.booleanValue();
     private volatile boolean finished = Boolean.FALSE.booleanValue();
