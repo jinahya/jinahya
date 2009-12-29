@@ -103,7 +103,7 @@
   <!-- More Project Information -->
   <name>fsm-xlet</name>
   <description>Xlet State Machine Support</description>
-  <!--url/-->
+  <url>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet/</url>
   <inceptionYear>2009</inceptionYear>
   <licenses>
     <license>
