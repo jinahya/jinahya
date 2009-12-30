@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,46 +15,38 @@
  *  under the License.
  */
 
-package xlet;
+package jinahya.fsm.android.activity;
 
 
 import jinahya.fsm.MachineException;
 import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
 
+import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class DefaultTask extends Task {
+public abstract class VisibleTask extends Task {
 
 
-    //@Override
+    @Override
     public void perform(final Transition transition, final int precedence)
         throws MachineException {
 
-        /*
-        if (priority != 0) {
-            return;
+        if (ON_START.matches(transition)) {
+            perform(precedence);
         }
-         */
-
-        //System.out.println(transition.toString() + " / " + precedence);
-
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
-        //System.out.println(transition + " @ " + priority);
-
-        /*
-        jinahya.fsm.State[] history = transition.getTransitionHistory();
-        for (int i = 0; i < history.length; i++) {
-            System.out.println("[" + i + "]: " + history[i]);
-        }
-         */
     }
+
+
+    /**
+     * Performs when xlet <code>onResume()</code> method invoked.
+     *
+     * @param precedence task precedence
+     * @throws MachineException if any error occurs
+     */
+    protected abstract void perform(int precedence) throws MachineException;
 }

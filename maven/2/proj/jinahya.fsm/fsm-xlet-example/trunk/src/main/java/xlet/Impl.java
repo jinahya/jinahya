@@ -29,7 +29,6 @@ import jinahya.fsm.Machine;
 import jinahya.fsm.Task;
 
 import jinahya.fsm.xlet.XletState;
-import jinahya.fsm.xlet.XletMachine;
 import jinahya.fsm.xlet.XletMachineSpec;
 
 
@@ -56,8 +55,11 @@ public class Impl implements Xlet {
 
         Task[] tasks = (Task[]) vector.toArray(new Task[vector.size()]);
 
-        xsm = new XletMachine(new XletMachineSpec(), tasks);
+        xsm = new Machine(new XletMachineSpec(), tasks);
+
+        xsm.setMinimumPrecedence(20);
         xsm.setThreadPoolSize(5);
+
         try {
             xsm.setState(XletState.LOADED);
         } catch (MachineException fsme) {
