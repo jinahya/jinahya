@@ -29,11 +29,13 @@ import static jinahya.fsm.android.activity.ActivityState.*;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-//public final class ActivityTransitionMatcher {
 public enum ActivityTransitionMatcher implements TransitionMatcher {
 
 
 
+    /**
+     *
+     */
     ON_CREATE {
         @Override
         public boolean matches(final Transition transition) {
@@ -41,6 +43,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == LOADED);
         }
     },
+
+
+    /**
+     *
+     */
     ON_START {
         @Override
         public boolean matches(final Transition transition) {
@@ -48,6 +55,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == PAUSED);
         }
     },
+
+
+    /**
+     *
+     */
     ON_RESUME {
         @Override
         public boolean matches(final Transition transition) {
@@ -55,6 +67,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == ACTIVE);
         }
     },
+
+
+    /**
+     *
+     */
     ON_PAUSE {
         @Override
         public boolean matches(final Transition transition) {
@@ -62,6 +79,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == PAUSED);
         }
     },
+
+
+    /**
+     *
+     */
     ON_STOP {
         @Override
         public boolean matches(final Transition transition) {
@@ -69,6 +91,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == STOPPED);
         }
     },
+
+
+    /**
+     *
+     */
     ON_DESTROY {
         @Override
         public boolean matches(final Transition transition) {
@@ -76,6 +103,11 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
                     transition.getTargetState() == DESTROYED);
         }
     },
+
+
+    /**
+     *
+     */
     ON_RESTART {
         @Override
         public boolean matches(final Transition transition) {

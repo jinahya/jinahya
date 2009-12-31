@@ -30,13 +30,13 @@ import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class LoadSwitchTask extends SwitchTask {
+public abstract class SuspensionSwitchTask extends SwitchTask {
 
 
     /**
      * Creates a new instance.
      */
-    public LoadSwitchTask() {
+    public SuspensionSwitchTask() {
         super(new TransitionMatcher[] {
                   ON_CREATE},
               new TransitionMatcher[] {
