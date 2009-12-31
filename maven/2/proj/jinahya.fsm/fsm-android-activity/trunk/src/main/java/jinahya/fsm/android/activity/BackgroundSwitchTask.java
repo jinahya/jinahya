@@ -18,9 +18,8 @@
 package jinahya.fsm.android.activity;
 
 
-import jinahya.fsm.MachineException;
-import jinahya.fsm.Task;
-import jinahya.fsm.Transition;
+import jinahya.fsm.SwitchTask;
+import jinahya.fsm.TransitionMatcher;
 
 import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
 
@@ -29,24 +28,16 @@ import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class VisibleTask extends Task {
-
-
-    @Override
-    public void perform(final Transition transition, final int precedence)
-        throws MachineException {
-
-        if (ON_START.matches(transition)) {
-            perform(precedence);
-        }
-    }
+public abstract class BackgroundSwitchTask extends SwitchTask {
 
 
     /**
-     * Performs when xlet <code>onResume()</code> method invoked.
-     *
-     * @param precedence task precedence
-     * @throws MachineException if any error occurs
+     * Creates a new instance.
      */
-    protected abstract void perform(int precedence) throws MachineException;
+    public BackgroundSwitchTask() {
+        super(new TransitionMatcher[] {
+                  ON_START},
+              new TransitionMatcher[] {
+                  ON_STOP});
+    }
 }
