@@ -19,8 +19,10 @@ package jinahya.fsm.android.activity;
 
 
 import jinahya.fsm.MachineSpec;
-import jinahya.fsm.State;
+import static jinahya.fsm.State.UNKNOWN;
 import jinahya.fsm.Transition;
+
+import static jinahya.fsm.android.activity.ActivityState.*;
 
 
 /**
@@ -31,8 +33,8 @@ public class ActivityMachineSpec implements MachineSpec {
 
 
     public boolean isStartingTransition(final Transition transition) {
-        return (transition.getSourceState() == State.UNKNOWN &&
-                transition.getTargetState() == ActivityState.LOADED);
+        return (transition.getSourceState() == UNKNOWN &&
+                transition.getTargetState() == LOADED);
     }
 
 
@@ -43,22 +45,20 @@ public class ActivityMachineSpec implements MachineSpec {
         final int targetState = transition.getTargetState();
 
         switch (transition.getSourceState()) {
-            case State.UNKNOWN:
-                allowed = (targetState == ActivityState.LOADED);
+            case UNKNOWN:
+                allowed = (targetState == LOADED);
                 break;
-            case ActivityState.LOADED:
-                allowed = (targetState == ActivityState.PAUSED);
+            case LOADED:
+                allowed = (targetState == PAUSED);
                 break;
-            case ActivityState.PAUSED:
-                allowed = (targetState == ActivityState.ACTIVE ||
-                           targetState == ActivityState.STOPPED);
+            case PAUSED:
+                allowed = (targetState == ACTIVE || targetState == STOPPED);
                 break;
-            case ActivityState.ACTIVE:
-                allowed = (targetState == ActivityState.PAUSED);
+            case ACTIVE:
+                allowed = (targetState == PAUSED);
                 break;
-            case ActivityState.STOPPED:
-                allowed = (targetState == ActivityState.LOADED ||
-                           targetState == ActivityState.DESTROYED);
+            case STOPPED:
+                allowed = (targetState == LOADED || targetState == DESTROYED);
                 break;
             default:
                 break;
@@ -69,7 +69,7 @@ public class ActivityMachineSpec implements MachineSpec {
 
 
     public boolean isFinishingTransition(final Transition transition) {
-        return (transition.getSourceState() == ActivityState.STOPPED &&
-                transition.getTargetState() == ActivityState.DESTROYED);
+        return (transition.getSourceState() == STOPPED &&
+                transition.getTargetState() == DESTROYED);
     }
 }
