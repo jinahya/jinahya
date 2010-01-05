@@ -50,10 +50,25 @@
       <activation>
         <os>
           <family>mac</family>
+          <name>mac os x</name>
         </os>
       </activation>
       <properties>
         <java.bootstrap.classes>${java.home}/../Classes/classes.jar</java.bootstrap.classes>
+      </properties>
+    </profile>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <!--
+          <name>linux</name>
+          -->
+        </os>
+      </activation>
+      <properties>
+        <java.bootstrap.classes>${java.home}/lib/rt.jar</java.bootstrap.classes>
       </properties>
     </profile>
   </profiles>
