@@ -24,8 +24,7 @@ import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
 
 
 /**
- * A task turning on for <code>onCreate()</code> and turning off for
- * <code>onDestroy()</code>.
+ * <code>onCreate()</code> -> ON; <code>onDestroy()</code> -> OFF.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

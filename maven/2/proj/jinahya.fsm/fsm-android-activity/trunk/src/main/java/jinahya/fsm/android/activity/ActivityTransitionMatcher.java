@@ -189,9 +189,12 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
     _DESTROYED {
         @Override
         public boolean matches(final Transition transition) {
+            return ON_DESTROY.matches(transition);
+            /*
             final int sourceState = transition.getSourceState();
             final int targetState = transition.getTargetState();
             return (sourceState == STOPPED && targetState == DESTROYED);
+             */
         }
     };
 
