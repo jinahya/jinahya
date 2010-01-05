@@ -57,7 +57,8 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>http://java.sun.com/j2se/1.3/docs/api/</link>
+            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+            <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm/apidocs/</link>
           </links>
           <!--
           <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>

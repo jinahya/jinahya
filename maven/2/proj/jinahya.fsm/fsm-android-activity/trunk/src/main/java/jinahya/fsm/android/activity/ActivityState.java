@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.fsm.android.activity;
@@ -28,13 +27,13 @@ public final class ActivityState {
     /**
      * <code>UNKNOWN -> onCreate() | STOPPED -> onRestart()</code>.
      */
-    public static final int LOADED = 0x01;
+    public static final int SUSPENDED = 0x01;
 
 
     /**
-     * <code>LOADED -> onStart() | ACTIVE -> onPause()</code>.
+     * <code>SUSPENDED -> onStart() | ACTIVE -> onPause()</code>.
      */
-    public static final int PAUSED = LOADED << 1;
+    public static final int PAUSED = SUSPENDED << 1;
 
 
     /**
@@ -47,9 +46,6 @@ public final class ActivityState {
      * <code>PAUSED -> onStop()</code>.
      */
     public static final int STOPPED = ACTIVE << 1;
-
-
-    //public static final int RELOADED = STOPPED << 1;
 
 
     /**

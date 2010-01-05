@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.fsm.android.activity;
@@ -32,12 +31,25 @@ import static jinahya.fsm.android.activity.ActivityState.*;
 public class ActivityMachineSpec implements MachineSpec {
 
 
+    /**
+     * <code>UNKNOWN -> SUSPENDED</code>.
+     *
+     * @param transition {@inheritDoc}
+     * @return {@inheritDoc}
+     */
+    @Override
     public boolean isStartingTransition(final Transition transition) {
         return (transition.getSourceState() == UNKNOWN &&
-                transition.getTargetState() == LOADED);
+                transition.getTargetState() == SUSPENDED);
     }
 
 
+    /**
+     * 
+     * @param transition {@inheritDoc}
+     * @return {@inheritDoc}
+     */
+    @Override
     public boolean isTransitionAllowed(final Transition transition) {
 
         boolean allowed = false;
@@ -46,9 +58,9 @@ public class ActivityMachineSpec implements MachineSpec {
 
         switch (transition.getSourceState()) {
             case UNKNOWN:
-                allowed = (targetState == LOADED);
+                allowed = (targetState == SUSPENDED);
                 break;
-            case LOADED:
+            case SUSPENDED:
                 allowed = (targetState == PAUSED);
                 break;
             case PAUSED:
@@ -58,7 +70,8 @@ public class ActivityMachineSpec implements MachineSpec {
                 allowed = (targetState == PAUSED);
                 break;
             case STOPPED:
-                allowed = (targetState == LOADED || targetState == DESTROYED);
+                allowed = (targetState == SUSPENDED ||
+                           targetState == DESTROYED);
                 break;
             default:
                 break;
@@ -68,6 +81,13 @@ public class ActivityMachineSpec implements MachineSpec {
     }
 
 
+    /**
+     * <code>STOPPED -> DESTROYED</code>.
+     *
+     * @param transition {@inheritDoc}
+     * @return {@inheritDoc}
+     */
+    @Override
     public boolean isFinishingTransition(final Transition transition) {
         return (transition.getSourceState() == STOPPED &&
                 transition.getTargetState() == DESTROYED);
