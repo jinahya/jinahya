@@ -25,7 +25,7 @@ public final class State {
 
 
     /**
-     *
+     * The initial state that all machines start from.
      */
     public static final int UNKNOWN = 0xFFFFFFFF;
 
