@@ -49,27 +49,14 @@ public abstract class XletTest {
 
         long start = System.currentTimeMillis();
 
-        //System.out.println("-------------------------------------------------");
-        //System.out.println("Before initXlet()");
         xlet.initXlet(null);
-        //System.out.println("After initXlet()");
 
-        for (int i = 0; i < 30; i++) {
-        //System.out.println("-------------------------------------------------");
-        //System.out.println("Before startXlet()");
-        xlet.startXlet();
-        //System.out.println("After startXlet()");
-
-        //System.out.println("-------------------------------------------------");
-        //System.out.println("Before pauseXlet()");
-        xlet.pauseXlet();
-        //System.out.println("After pauseXlet()");
+        for (int i = 0; i < 10; i++) {
+            xlet.startXlet();
+            xlet.pauseXlet();
         }
 
-        //System.out.println("-------------------------------------------------");
-        //System.out.println("Before destroyXlet()");
         xlet.destroyXlet(true);
-        //System.out.println("After destroyXlet()");
 
         System.out.println("ELLAPSED: " + (System.currentTimeMillis() - start));
     }

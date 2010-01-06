@@ -35,26 +35,10 @@ class DefaultTask extends Task {
     public void perform(final Transition transition, final int precedence)
         throws MachineException {
 
-        /*
-        if (priority != 0) {
-            return;
-        }
-         */
-
-        //System.out.println(transition.toString() + " / " + precedence);
-
         try {
-            Thread.sleep(1000L);
+            Thread.sleep(10L);
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        //System.out.println(transition + " @ " + priority);
-
-        /*
-        jinahya.fsm.State[] history = transition.getTransitionHistory();
-        for (int i = 0; i < history.length; i++) {
-            System.out.println("[" + i + "]: " + history[i]);
-        }
-         */
     }
 }

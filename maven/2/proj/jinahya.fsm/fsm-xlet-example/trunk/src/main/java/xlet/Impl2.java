@@ -46,20 +46,19 @@ public class Impl2 implements Xlet {
     public Impl2() {
         super();
 
-        Vector vector = new Vector();
+        xsm = new Machine(new XletMachineSpec());
+
         for (int i = 0; i < 100; i++) {
-            vector.addElement(new DefaultTask());
+            xsm.submit(new DefaultTask());
         }
-        vector.addElement(new SimpleLoadTask());
-        vector.addElement(new SimpleInitTask());
-        vector.addElement(new SimplePlayTask());
+        xsm.submit(new SimpleLoadTask());
+        xsm.submit(new SimpleInitTask());
+        xsm.submit(new SimplePlayTask());
+        xsm.submit(new HistoryTask());
 
-        Task[] tasks = (Task[]) vector.toArray(new Task[vector.size()]);
-
-        xsm = new Machine(new XletMachineSpec(), tasks);
-
-        xsm.setMinimumPrecedence(20);
-        xsm.setThreadPoolSize(20);
+        xsm.setMinimumPrecedence(10);
+        xsm.setPoolSize(20);
+        xsm.setHistorySize(10);
 
         try {
             xsm.setState(XletState.LOADED);
