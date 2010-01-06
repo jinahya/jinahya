@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2009 - 2010</copyright>
     <item>
-      <title>File: 10,
-             Errors: 122,
+      <title>File: 8,
+             Errors: 82,
              Warnings: 0,
              Infos: 0
       </title>
@@ -71,20 +71,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm//checkstyle.html#jinahya.fsm.TransitionHistoryTask.java">jinahya/fsm/TransitionHistoryTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm//checkstyle.html#jinahya.fsm.MachineSpec.java">jinahya/fsm/MachineSpec.java</a>
                 </td>
                 <td>
@@ -95,20 +81,6 @@
                 </td>
                 <td>
                   4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm//checkstyle.html#jinahya.fsm.Executor.java">jinahya/fsm/Executor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  23
                 </td>
               </tr>
                           <tr>
@@ -164,7 +136,7 @@
                   0
                 </td>
                 <td>
-                  43
+                  41
                 </td>
               </tr>
                       </tbody>
