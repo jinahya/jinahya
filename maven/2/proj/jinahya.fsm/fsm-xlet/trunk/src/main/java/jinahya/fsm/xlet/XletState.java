@@ -18,6 +18,9 @@
 package jinahya.fsm.xlet;
 
 
+import jinahya.fsm.State;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -29,7 +32,7 @@ public final class XletState {
      * Xlet object has not even loaded yet.
      * INFORMATIVE
      */
-    public static final int NOT_LOADED = 0x01;
+    public static final int NOT_LOADED = State.UNKNOWN << 1;
 
 
     /**
@@ -53,7 +56,7 @@ public final class XletState {
     /**
      * <code>destroyXlet()</code> invoked.
      */
-    public static final int DESTROYED = PAUSED << 1;
+    public static final int DESTROYED = STARTED << 1;
 
 
     /**
