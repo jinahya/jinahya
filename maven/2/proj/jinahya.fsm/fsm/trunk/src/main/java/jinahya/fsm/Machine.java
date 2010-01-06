@@ -166,9 +166,10 @@ public class Machine {
 
         // ------------------------------------------------------------- HISTORY
         history.insertElementAt(new Integer(this.state), 0);
-        history.setSize(historySize);
+        history.setSize(Math.min(history.size(), historySize));
+        //history.trimToSize();
 
-        
+
         this.state = state;
     }
 
@@ -357,7 +358,7 @@ public class Machine {
     public final void setHistorySize(final int historySize) {
         if (historySize < 0) {
             throw new IllegalArgumentException
-                ("poolSize(" + historySize + ") < 0");
+                ("historySize(" + historySize + ") < 0");
         }
 
         synchronized (this) {
