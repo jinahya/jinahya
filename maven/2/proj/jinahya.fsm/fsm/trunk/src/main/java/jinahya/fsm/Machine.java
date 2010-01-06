@@ -17,6 +17,9 @@
 package jinahya.fsm;
 
 
+import java.util.Vector;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -29,24 +32,15 @@ public class Machine {
      * Creates a new instance.
      *
      * @param spec machine spec
-     * @param tasks tasks to be performed
      */
-    public Machine(final MachineSpec spec, final Task[] tasks) {
-
+    public Machine(final MachineSpec spec) {
         super();
 
         if (spec == null) {
             throw new NullPointerException("spec");
         }
 
-        if (tasks == null) {
-            throw new NullPointerException("tasks");
-        }
-
         this.spec = spec;
-
-        this.tasks = new Task[tasks.length];
-        System.arraycopy(tasks, 0, this.tasks, 0, this.tasks.length);
     }
 
 
@@ -125,31 +119,30 @@ public class Machine {
         if (isStarted()) {
 
             // --------------------------------------------------------- PERFORM
-            if (threadPoolSize == 0) {
-                for (int precedence = 0; precedence <= minimumPrecedence;
-                     precedence++) {
-                    for (int i = 0; i < tasks.length; i++) {
-                        tasks[i].perform(transition, precedence);
+            if (poolSize == 0x00) {
+                for (int p = 0; p <= minimumPrecedence; p++) {
+                    for (int i = 0; i < tasks.size(); i++) {
+                        ((Task)tasks.elementAt(i)).perform(transition, p);
                     }
                 }
             } else {
 
-                Thread parent = null;
+                Thread[] threads = null;
 
-                for (int precedence = 0; precedence <= minimumPrecedence;
-                     precedence++) {
-                    Thread child = new Thread
-                        (new Executor(parent, tasks, transition, precedence,
-                                      threadPoolSize));
-                    child.start();
-                    parent = child;
+                for (int p = 0; p <= minimumPrecedence; p++) {
+                    threads = perform(threads, transition, p);
                 }
 
-                while (parent.isAlive()) {
-                    try {
-                        parent.join();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
+                // wait for all threads in last group end
+                // minimumPrecedence is always positive(>=0)
+                //assert threads != null;
+                for (int i = 0; i < threads.length; i++) {
+                    while (threads[i].isAlive()) {
+                        try {
+                            threads[i].join();
+                        } catch (InterruptedException ie) {
+                            ie.printStackTrace();
+                        }
                     }
                 }
             }
@@ -166,23 +159,86 @@ public class Machine {
     }
 
 
+    private Thread[] perform(final Thread[] parents,
+                             final Transition transition,
+                             final int precedence) {
+
+        // wait for all previous threads end
+        if (parents != null) {
+            for (int i = 0; i < parents.length; i++) {
+                while (parents[i].isAlive()) {
+                    try {
+                        parents[i].join();
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        // prepare a copy of task list
+        final Vector tmp = new Vector();
+        for (int i = 0; i < tasks.size(); i++) {
+            tmp.addElement(tasks.elementAt(i));
+        }
+
+        Thread[] children = new Thread[poolSize];
+        for (int i = 0; i < children.length; i++) {
+            children[i] = new Thread() {
+                //@Override
+                public void run() {
+                    while (Boolean.TRUE.booleanValue()) {
+
+                        // locate next task
+                        Task task = null;
+                        synchronized (tmp) {
+                            if (tmp.isEmpty()) {
+                                break;
+                            }
+                            task = (Task) tmp.firstElement();
+                            tmp.removeElementAt(0x00);
+                        }
+
+                        // perform the task
+                        try {
+                            task.perform(transition, precedence);
+                        } catch (MachineException me) {
+                            me.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+        }
+
+        for (int i = 0; i < children.length; i++) {
+            children[i].start();
+        }
+
+        return children;
+    }
+
+
     public synchronized boolean isStarted() {
         return started;
     }
 
 
     public synchronized void start() throws MachineException {
-        if (started) {
+        if (isStarted()) {
             return;
         }
 
-        //tasks = factory.createTasks();
-
-        for (int i = 0; i < tasks.length; i++) {
-            tasks[i].initialize();
+        try {
+            synchronized (tasks) {
+                for (int i = 0; i < tasks.size(); i++) {
+                    ((Task) tasks.elementAt(i)).initialize();
+                }
+            }
+        } finally {
+            started = Boolean.TRUE.booleanValue();
         }
-
-        started = Boolean.TRUE.booleanValue();
     }
 
 
@@ -192,17 +248,19 @@ public class Machine {
 
 
     public synchronized void finish() throws MachineException {
-        if (finished) {
+        if (isFinished()) {
             return;
         }
 
-        if (isStarted()) {
-            for (int i = 0; i < tasks.length; i++) {
-                tasks[i].destroy();
+        try {
+            synchronized (tasks) {
+                for (int i = tasks.size() - 1; i >= 0; i--) {
+                    ((Task) tasks.elementAt(i)).destroy();
+                }
             }
+        } finally {
+            finished = Boolean.TRUE.booleanValue();
         }
-
-        finished = Boolean.TRUE.booleanValue();
     }
 
 
@@ -212,45 +270,80 @@ public class Machine {
 
 
     public void setMinimumPrecedence(int minimumPrecedence) {
+
         if (minimumPrecedence < 0) {
             throw new IllegalArgumentException
-                ("minimumPrecedence: " + minimumPrecedence + " < 0");
+                ("minimumPrecedence(" + minimumPrecedence + ") < 0");
         }
 
-        if (isStarted() || isFinished()) {
-            return;
-        }
+        synchronized (this) {
+            if (isStarted()) {
+                throw new IllegalStateException("already started");
+            }
 
-        this.minimumPrecedence = minimumPrecedence;
+            if (isFinished()) {
+                throw new IllegalStateException("already finished");
+            }
+
+            this.minimumPrecedence = minimumPrecedence;
+        }
     }
 
 
-    public int getThreadPoolSize() {
-        return threadPoolSize;
+    public int getPoolSize() {
+        return poolSize;
     }
 
 
-    public void setThreadPoolSize(int threadPoolSize) {
-        if (threadPoolSize < 0) {
+    public void setPoolSize(int poolSize) {
+        if (poolSize < 0) {
             throw new IllegalArgumentException
-                ("threadPoolSize: " + threadPoolSize + " < 0");
+                ("poolSize(" + poolSize + ") < 0");
         }
 
-        if (isStarted() || isFinished()) {
-            return;
+        synchronized (this) {
+            if (isStarted()) {
+                throw new IllegalStateException("already started");
+            }
+
+            if (isFinished()) {
+                throw new IllegalStateException("already finished");
+            }
+
+            this.poolSize = poolSize;
+        }
+    }
+
+
+    public void submit(final Task task) {
+
+        if (task == null) {
+            throw new NullPointerException("task");
         }
 
-        this.threadPoolSize = threadPoolSize;
+        synchronized (this) {
+            if (isStarted()) {
+                throw new IllegalStateException("already started");
+            }
+
+            if (isFinished()) {
+                throw new IllegalStateException("already finished");
+            }
+
+            tasks.addElement(task);
+        }
     }
 
 
     private MachineSpec spec;
-    private Task[] tasks;
+    //private Task[] tasks;
+
+    private final Vector tasks = new Vector();
 
     private volatile int state = State.UNKNOWN;
 
     private int minimumPrecedence = 0;
-    private int threadPoolSize = 0;
+    private int poolSize = 0;
 
     private volatile boolean started = Boolean.FALSE.booleanValue();
     private volatile boolean finished = Boolean.FALSE.booleanValue();

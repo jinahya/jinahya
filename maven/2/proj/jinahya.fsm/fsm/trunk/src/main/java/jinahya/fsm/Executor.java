@@ -35,7 +35,7 @@ final class Executor implements Runnable {
      * @param poolSize
      * @param poolSleep
      */
-    public Executor(final Thread parent, final Task[] tasks,
+    public Executor(final Thread parent, final Vector tasks,
                     final Transition transition, final int precedence,
                     final int poolSize) {
         super();
@@ -87,22 +87,21 @@ final class Executor implements Runnable {
                 executors.removeElementAt(0);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
-                break;
             }
         }
     }
 
 
     private synchronized Task getTask() {
-        if (taskIndex < tasks.length) {
-            return tasks[taskIndex++];
+        if (taskIndex < tasks.size()) {
+            return (Task) tasks.elementAt(taskIndex++);
         }
         return null;
     }
 
 
     private Thread parent;
-    private Task[] tasks;
+    private Vector tasks;
     private Transition transition;
     private int precedence;
     private int poolSize;
