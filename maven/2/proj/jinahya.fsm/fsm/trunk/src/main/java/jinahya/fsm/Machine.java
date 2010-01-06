@@ -49,7 +49,7 @@ public class Machine {
      *
      * @return the current state
      */
-    public synchronized int getState() {
+    public synchronized final int getState() {
         return state;
     }
 
@@ -61,7 +61,7 @@ public class Machine {
      * @throws MachineException if any error occurs.
      * @see #transit(jinahya.fsm.int)
      */
-    public synchronized void setState(final int state)
+    public synchronized final void setState(final int state)
         throws MachineException {
 
         transit(state);
@@ -75,7 +75,8 @@ public class Machine {
      * @throws MachineException if any error occurs.
      * @see #setState(jinahya.fsm.int)
      */
-    public synchronized void transit(final int state) throws MachineException {
+    public synchronized final void transit(final int state)
+        throws MachineException {
 
 
         // ------------------------------------------------------ CHECK FINISHED
@@ -87,6 +88,10 @@ public class Machine {
         // --------------------------------------------------- CREATE TRANSITION
         final int sourceState = this.state;
         final int targetState = state;
+        final int[] previousStates = new int[history.size()];
+        for (int i = 0; i < previousStates.length; i++) {
+            previousStates[i] = ((Integer) history.elementAt(i)).intValue();
+        }
         final Transition transition = new Transition() {
             //@Override
             public int getSourceState() {
@@ -95,6 +100,10 @@ public class Machine {
             //@Override
             public int getTargetState() {
                 return targetState;
+            }
+            //@Override
+            public int[] getPreviousStates() {
+                return previousStates;
             }
             //@Override
             public String toString() {
@@ -155,6 +164,11 @@ public class Machine {
         }
 
 
+        // ------------------------------------------------------------- HISTORY
+        history.insertElementAt(new Integer(this.state), 0);
+        history.setSize(historySize);
+
+        
         this.state = state;
     }
 
@@ -220,12 +234,12 @@ public class Machine {
     }
 
 
-    public synchronized boolean isStarted() {
+    public final synchronized boolean isStarted() {
         return started;
     }
 
 
-    public synchronized void start() throws MachineException {
+    public final synchronized void start() throws MachineException {
         if (isStarted()) {
             return;
         }
@@ -242,12 +256,12 @@ public class Machine {
     }
 
 
-    public synchronized boolean isFinished() {
+    public final synchronized boolean isFinished() {
         return finished;
     }
 
 
-    public synchronized void finish() throws MachineException {
+    public final synchronized void finish() throws MachineException {
         if (isFinished()) {
             return;
         }
@@ -264,12 +278,12 @@ public class Machine {
     }
 
 
-    public int getMinimumPrecedence() {
+    public final int getMinimumPrecedence() {
         return minimumPrecedence;
     }
 
 
-    public void setMinimumPrecedence(int minimumPrecedence) {
+    public final void setMinimumPrecedence(int minimumPrecedence) {
 
         if (minimumPrecedence < 0) {
             throw new IllegalArgumentException
@@ -290,12 +304,12 @@ public class Machine {
     }
 
 
-    public int getPoolSize() {
+    public final int getPoolSize() {
         return poolSize;
     }
 
 
-    public void setPoolSize(int poolSize) {
+    public final void setPoolSize(int poolSize) {
         if (poolSize < 0) {
             throw new IllegalArgumentException
                 ("poolSize(" + poolSize + ") < 0");
@@ -315,7 +329,7 @@ public class Machine {
     }
 
 
-    public void submit(final Task task) {
+    public final void submit(final Task task) {
 
         if (task == null) {
             throw new NullPointerException("task");
@@ -335,8 +349,32 @@ public class Machine {
     }
 
 
+    public final int getHistorySize() {
+        return historySize;
+    }
+
+
+    public final void setHistorySize(final int historySize) {
+        if (historySize < 0) {
+            throw new IllegalArgumentException
+                ("poolSize(" + historySize + ") < 0");
+        }
+
+        synchronized (this) {
+            if (isStarted()) {
+                throw new IllegalStateException("already started");
+            }
+
+            if (isFinished()) {
+                throw new IllegalStateException("already finished");
+            }
+
+            this.historySize = historySize;
+        }
+    }
+
+
     private MachineSpec spec;
-    //private Task[] tasks;
 
     private final Vector tasks = new Vector();
 
@@ -344,6 +382,9 @@ public class Machine {
 
     private int minimumPrecedence = 0;
     private int poolSize = 0;
+
+    private int historySize = 0;
+    private final Vector history = new Vector();
 
     private volatile boolean started = Boolean.FALSE.booleanValue();
     private volatile boolean finished = Boolean.FALSE.booleanValue();

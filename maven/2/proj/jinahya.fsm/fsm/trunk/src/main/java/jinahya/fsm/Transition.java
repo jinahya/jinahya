@@ -38,4 +38,12 @@ public interface Transition {
      * @return target state
      */
     int getTargetState();
+
+
+    /**
+     * Returns previous states.
+     *
+     * @return previous states
+     */
+    int[] getPreviousStates();
 }
