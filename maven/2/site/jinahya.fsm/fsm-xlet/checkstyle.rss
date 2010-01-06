@@ -6,10 +6,10 @@
     <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet/</link>
     <description>fsm-xlet - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2009</copyright>
+    <copyright>&#169;2009 - 2010</copyright>
     <item>
-      <title>File: 11,
-             Errors: 55,
+      <title>File: 10,
+             Errors: 42,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,21 +38,7 @@
                   0
                 </td>
                 <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletMachine.java">jinahya/fsm/xlet/XletMachine.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
+                  4
                 </td>
               </tr>
                           <tr>
@@ -94,7 +80,7 @@
                   0
                 </td>
                 <td>
-                  16
+                  12
                 </td>
               </tr>
                           <tr>
