@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2009-12-29T13:58:15.499">
+<pmd version="4.2.2" timestamp="2010-01-06T18:05:23.095">
+<file name="/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/src/main/java/jinahya/fsm/TransitionHistoryTask.java">
+<violation beginline="71" endline="75" begincolumn="12" endcolumn="5" rule="UselessOverridingMethod" ruleset="Basic Rules" package="jinahya.fsm" class="TransitionHistoryTask" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UselessOverridingMethod" priority="3">
+Overriding method merely calls super
+</violation>
+</file>
 </pmd>
