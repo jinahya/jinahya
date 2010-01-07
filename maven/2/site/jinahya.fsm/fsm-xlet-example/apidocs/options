@@ -1,17 +1,17 @@
 -classpath
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/fsm/fsm/1.0-SNAPSHOT/fsm-1.0-SNAPSHOT.jar:/Users/onacit/.m2/repository/javame/javatv/1.0/javatv-1.0.jar:/Users/onacit/.m2/repository/jinahya/fsm/fsm-xlet/1.0-SNAPSHOT/fsm-xlet-1.0-SNAPSHOT.jar'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/fsm/fsm/1.0-SNAPSHOT/fsm-1.0-SNAPSHOT.jar:/Users/onacit/.m2/repository/javame/javatv/1.0/javatv-1.0.jar:/Users/onacit/.m2/repository/jinahya/fsm/fsm-xlet/1.0-SNAPSHOT/fsm-xlet-1.0-SNAPSHOT.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/src/main/java'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/src/main/java'
 -author
 -bottom
-'Copyright &#169; 2009. All Rights Reserved.'
+'Copyright &#169; 2009-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/target/site/apidocs'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle

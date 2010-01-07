@@ -38,24 +38,24 @@
 <a name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:jinahya@gmail.com" target="alexandria_uri">mailto:jinahya@gmail.com</a>"&gt;Jin Kwon&lt;/a&gt;</em>
 <a name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a name="31" href="#31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../xlet/SimpleLoadTask.html">SimpleLoadTask</a> <strong class="jxr_keyword">extends</strong> LoadSwitchTask {
+<a name="31" href="#31">31</a>  <strong class="jxr_keyword">class</strong> <a href="../xlet/SimpleLoadTask.html">SimpleLoadTask</a> <strong class="jxr_keyword">extends</strong> LoadSwitchTask {
 <a name="32" href="#32">32</a>  
 <a name="33" href="#33">33</a>  
 <a name="34" href="#34">34</a>      <em class="jxr_comment">//@Override</em>
-<a name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> on(<strong class="jxr_keyword">int</strong> priority) <strong class="jxr_keyword">throws</strong> MachineException {
-<a name="36" href="#36">36</a>          <strong class="jxr_keyword">if</strong> (priority != 0) {
+<a name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> on(<strong class="jxr_keyword">int</strong> precedence) <strong class="jxr_keyword">throws</strong> MachineException {
+<a name="36" href="#36">36</a>          <strong class="jxr_keyword">if</strong> (precedence != 0) {
 <a name="37" href="#37">37</a>              <strong class="jxr_keyword">return</strong>;
 <a name="38" href="#38">38</a>          }
-<a name="39" href="#39">39</a>          System.out.println(<span class="jxr_string">"LOAD: START @ "</span> + priority);
+<a name="39" href="#39">39</a>          <em class="jxr_comment">//System.out.println("LOAD: START @ " + precedence);</em>
 <a name="40" href="#40">40</a>      }
 <a name="41" href="#41">41</a>  
 <a name="42" href="#42">42</a>  
 <a name="43" href="#43">43</a>      <em class="jxr_comment">//@Override</em>
-<a name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> off(<strong class="jxr_keyword">int</strong> priority) <strong class="jxr_keyword">throws</strong> MachineException {
-<a name="45" href="#45">45</a>          <strong class="jxr_keyword">if</strong> (priority != 0) {
+<a name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> off(<strong class="jxr_keyword">int</strong> precedence) <strong class="jxr_keyword">throws</strong> MachineException {
+<a name="45" href="#45">45</a>          <strong class="jxr_keyword">if</strong> (precedence != 0) {
 <a name="46" href="#46">46</a>              <strong class="jxr_keyword">return</strong>;
 <a name="47" href="#47">47</a>          }
-<a name="48" href="#48">48</a>          System.out.println(<span class="jxr_string">"LOAD: FINISH @ "</span> + priority);
+<a name="48" href="#48">48</a>          <em class="jxr_comment">//System.out.println("LOAD: FINISH @ " + precedence);</em>
 <a name="49" href="#49">49</a>      }
 <a name="50" href="#50">50</a>  }
 </pre>

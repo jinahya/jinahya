@@ -1,3 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="55" tokens="165">
+<file line="60" path="/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/src/main/java/xlet/Impl.java"/>
+<file line="60" path="/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet-example/trunk/src/main/java/xlet/Impl2.java"/>
+<codefragment>
+<![CDATA[
+        xsm.setPoolSize(20);
+        xsm.setHistorySize(10);
+
+        try {
+            xsm.setState(XletState.LOADED);
+        } catch (MachineException fsme) {
+            fsme.printStackTrace();
+        }
+    }
+
+
+    //@Override
+    public void initXlet(XletContext ctx) throws XletStateChangeException {
+        try {
+            xsm.setState(XletState.PAUSED);
+        } catch (MachineException fsme) {
+            fsme.printStackTrace();
+        }
+    }
+
+
+    //@Override
+    public void startXlet() throws XletStateChangeException {
+        try {
+            xsm.setState(XletState.STARTED);
+        } catch (MachineException fsme) {
+            fsme.printStackTrace();
+        }
+    }
+
+
+    //@Override
+    public void pauseXlet() {
+        try {
+            xsm.setState(XletState.PAUSED);
+        } catch (MachineException fsme) {
+            fsme.printStackTrace();
+        }
+    }
+
+
+    //@Override
+    public void destroyXlet(boolean unconditional)
+        throws XletStateChangeException {
+
+        try {
+            xsm.setState(XletState.DESTROYED);
+        } catch (MachineException fsme) {
+            fsme.printStackTrace();
+        }
+    }
+
+
+    private Machine xsm;
+}
+]]>
+</codefragment>
+</duplication>
 </pmd-cpd>
