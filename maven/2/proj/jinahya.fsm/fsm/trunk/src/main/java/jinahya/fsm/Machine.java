@@ -21,6 +21,7 @@ import java.util.Vector;
 
 
 /**
+ * Represents a finite state machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -59,7 +60,7 @@ public class Machine {
      *
      * @param state new state
      * @throws MachineException if any error occurs.
-     * @see #transit(jinahya.fsm.int)
+     * @see #transit(int)
      */
     public synchronized final void setState(final int state)
         throws MachineException {
@@ -73,17 +74,15 @@ public class Machine {
      *
      * @param state new state
      * @throws MachineException if any error occurs.
-     * @see #setState(jinahya.fsm.int)
+     * @see #setState(int)
      */
     public synchronized final void transit(final int state)
         throws MachineException {
-
 
         // ------------------------------------------------------ CHECK FINISHED
         if (isFinished()) {
             return;
         }
-
 
         // --------------------------------------------------- CREATE TRANSITION
         final int sourceState = this.state;
@@ -103,7 +102,9 @@ public class Machine {
             }
             //@Override
             public int[] getPreviousStates() {
-                return previousStates;
+                int[] result = new int[previousStates.length];
+                System.arraycopy(previousStates, 0, result, 0, result.length);
+                return result;
             }
             //@Override
             public String toString() {
@@ -131,7 +132,11 @@ public class Machine {
             if (poolSize == 0x00) {
                 for (int p = 0; p <= minimumPrecedence; p++) {
                     for (int i = 0; i < tasks.size(); i++) {
-                        ((Task)tasks.elementAt(i)).perform(transition, p);
+                        try {
+                            ((Task) tasks.elementAt(i)).perform(transition, p);
+                        } catch (MachineException me) {
+                            me.printStackTrace();
+                        }
                     }
                 }
             } else {
@@ -167,7 +172,6 @@ public class Machine {
         // ------------------------------------------------------------- HISTORY
         history.insertElementAt(new Integer(this.state), 0);
         history.setSize(Math.min(history.size(), historySize));
-        //history.trimToSize();
 
 
         this.state = state;
@@ -241,7 +245,7 @@ public class Machine {
 
 
     public final synchronized void start() throws MachineException {
-        if (isStarted()) {
+        if (isStarted() || isFinished()) {
             return;
         }
 
@@ -263,7 +267,7 @@ public class Machine {
 
 
     public final synchronized void finish() throws MachineException {
-        if (isFinished()) {
+        if (!isStarted() || isFinished()) {
             return;
         }
 
