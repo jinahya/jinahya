@@ -142,268 +142,270 @@
 <a name="132" href="#132">132</a>             <strong class="jxr_keyword">if</strong> (poolSize == 0x00) {
 <a name="133" href="#133">133</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> p = 0; p &lt;= minimumPrecedence; p++) {
 <a name="134" href="#134">134</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.size(); i++) {
-<a name="135" href="#135">135</a>                         <strong class="jxr_keyword">try</strong> {
-<a name="136" href="#136">136</a>                             ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).perform(transition, p);
-<a name="137" href="#137">137</a>                         } <strong class="jxr_keyword">catch</strong> (MachineException me) {
-<a name="138" href="#138">138</a>                             me.printStackTrace();
-<a name="139" href="#139">139</a>                         }
-<a name="140" href="#140">140</a>                     }
-<a name="141" href="#141">141</a>                 }
-<a name="142" href="#142">142</a>             } <strong class="jxr_keyword">else</strong> {
-<a name="143" href="#143">143</a> 
-<a name="144" href="#144">144</a>                 Thread[] threads = <strong class="jxr_keyword">null</strong>;
+<a name="135" href="#135">135</a>                         ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).perform(transition, p);
+<a name="136" href="#136">136</a>                     }
+<a name="137" href="#137">137</a>                 }
+<a name="138" href="#138">138</a>             } <strong class="jxr_keyword">else</strong> {
+<a name="139" href="#139">139</a> 
+<a name="140" href="#140">140</a>                 Thread[] threads = <strong class="jxr_keyword">null</strong>;
+<a name="141" href="#141">141</a> 
+<a name="142" href="#142">142</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> p = 0; p &lt;= minimumPrecedence; p++) {
+<a name="143" href="#143">143</a>                     threads = perform(threads, transition, p);
+<a name="144" href="#144">144</a>                 }
 <a name="145" href="#145">145</a> 
-<a name="146" href="#146">146</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> p = 0; p &lt;= minimumPrecedence; p++) {
-<a name="147" href="#147">147</a>                     threads = perform(threads, transition, p);
-<a name="148" href="#148">148</a>                 }
-<a name="149" href="#149">149</a> 
-<a name="150" href="#150">150</a>                 <em class="jxr_comment">// wait for all threads in last group end</em>
-<a name="151" href="#151">151</a>                 <em class="jxr_comment">// minimumPrecedence is always positive(&gt;=0)</em>
-<a name="152" href="#152">152</a>                 <em class="jxr_comment">//assert threads != null;</em>
-<a name="153" href="#153">153</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; threads.length; i++) {
-<a name="154" href="#154">154</a>                     <strong class="jxr_keyword">while</strong> (threads[i].isAlive()) {
-<a name="155" href="#155">155</a>                         <strong class="jxr_keyword">try</strong> {
-<a name="156" href="#156">156</a>                             threads[i].join();
-<a name="157" href="#157">157</a>                         } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
-<a name="158" href="#158">158</a>                             ie.printStackTrace();
-<a name="159" href="#159">159</a>                         }
-<a name="160" href="#160">160</a>                     }
-<a name="161" href="#161">161</a>                 }
-<a name="162" href="#162">162</a>             }
-<a name="163" href="#163">163</a>         }
-<a name="164" href="#164">164</a> 
-<a name="165" href="#165">165</a> 
-<a name="166" href="#166">166</a>         <em class="jxr_comment">// ----------------------------------------------------- CHECK FINISHING</em>
-<a name="167" href="#167">167</a>         <strong class="jxr_keyword">if</strong> (spec.isFinishingTransition(transition)) {
-<a name="168" href="#168">168</a>             finish();
-<a name="169" href="#169">169</a>         }
-<a name="170" href="#170">170</a> 
+<a name="146" href="#146">146</a>                 <em class="jxr_comment">// wait for all threads in last group end</em>
+<a name="147" href="#147">147</a>                 <em class="jxr_comment">// minimumPrecedence is always positive(&gt;=0)</em>
+<a name="148" href="#148">148</a>                 <em class="jxr_comment">//assert threads != null;</em>
+<a name="149" href="#149">149</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; threads.length; i++) {
+<a name="150" href="#150">150</a>                     <strong class="jxr_keyword">while</strong> (threads[i].isAlive()) {
+<a name="151" href="#151">151</a>                         <strong class="jxr_keyword">try</strong> {
+<a name="152" href="#152">152</a>                             threads[i].join();
+<a name="153" href="#153">153</a>                         } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
+<a name="154" href="#154">154</a>                             ie.printStackTrace();
+<a name="155" href="#155">155</a>                         }
+<a name="156" href="#156">156</a>                     }
+<a name="157" href="#157">157</a>                 }
+<a name="158" href="#158">158</a>             }
+<a name="159" href="#159">159</a>         }
+<a name="160" href="#160">160</a> 
+<a name="161" href="#161">161</a> 
+<a name="162" href="#162">162</a>         <em class="jxr_comment">// ----------------------------------------------------- CHECK FINISHING</em>
+<a name="163" href="#163">163</a>         <strong class="jxr_keyword">if</strong> (spec.isFinishingTransition(transition)) {
+<a name="164" href="#164">164</a>             finish();
+<a name="165" href="#165">165</a>         }
+<a name="166" href="#166">166</a> 
+<a name="167" href="#167">167</a> 
+<a name="168" href="#168">168</a>         <em class="jxr_comment">// ------------------------------------------------------------- HISTORY</em>
+<a name="169" href="#169">169</a>         history.insertElementAt(<strong class="jxr_keyword">new</strong> Integer(<strong class="jxr_keyword">this</strong>.state), 0);
+<a name="170" href="#170">170</a>         history.setSize(Math.min(history.size(), historySize));
 <a name="171" href="#171">171</a> 
-<a name="172" href="#172">172</a>         <em class="jxr_comment">// ------------------------------------------------------------- HISTORY</em>
-<a name="173" href="#173">173</a>         history.insertElementAt(<strong class="jxr_keyword">new</strong> Integer(<strong class="jxr_keyword">this</strong>.state), 0);
-<a name="174" href="#174">174</a>         history.setSize(Math.min(history.size(), historySize));
+<a name="172" href="#172">172</a> 
+<a name="173" href="#173">173</a>         <strong class="jxr_keyword">this</strong>.state = state;
+<a name="174" href="#174">174</a>     }
 <a name="175" href="#175">175</a> 
 <a name="176" href="#176">176</a> 
-<a name="177" href="#177">177</a>         <strong class="jxr_keyword">this</strong>.state = state;
-<a name="178" href="#178">178</a>     }
-<a name="179" href="#179">179</a> 
+<a name="177" href="#177">177</a>     <strong class="jxr_keyword">private</strong> Thread[] perform(<strong class="jxr_keyword">final</strong> Thread[] parents,
+<a name="178" href="#178">178</a>                              <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a> transition,
+<a name="179" href="#179">179</a>                              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> precedence) {
 <a name="180" href="#180">180</a> 
-<a name="181" href="#181">181</a>     <strong class="jxr_keyword">private</strong> Thread[] perform(<strong class="jxr_keyword">final</strong> Thread[] parents,
-<a name="182" href="#182">182</a>                              <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Transition.html">Transition</a> transition,
-<a name="183" href="#183">183</a>                              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> precedence) {
-<a name="184" href="#184">184</a> 
-<a name="185" href="#185">185</a>         <em class="jxr_comment">// wait for all previous threads end</em>
-<a name="186" href="#186">186</a>         <strong class="jxr_keyword">if</strong> (parents != <strong class="jxr_keyword">null</strong>) {
-<a name="187" href="#187">187</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.length; i++) {
-<a name="188" href="#188">188</a>                 <strong class="jxr_keyword">while</strong> (parents[i].isAlive()) {
-<a name="189" href="#189">189</a>                     <strong class="jxr_keyword">try</strong> {
-<a name="190" href="#190">190</a>                         parents[i].join();
-<a name="191" href="#191">191</a>                     } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
-<a name="192" href="#192">192</a>                         ie.printStackTrace();
-<a name="193" href="#193">193</a>                     }
-<a name="194" href="#194">194</a>                 }
-<a name="195" href="#195">195</a>             }
-<a name="196" href="#196">196</a>         }
-<a name="197" href="#197">197</a> 
-<a name="198" href="#198">198</a>         <em class="jxr_comment">// prepare a copy of task list</em>
-<a name="199" href="#199">199</a>         <strong class="jxr_keyword">final</strong> Vector tmp = <strong class="jxr_keyword">new</strong> Vector();
-<a name="200" href="#200">200</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.size(); i++) {
-<a name="201" href="#201">201</a>             tmp.addElement(tasks.elementAt(i));
-<a name="202" href="#202">202</a>         }
-<a name="203" href="#203">203</a> 
-<a name="204" href="#204">204</a>         Thread[] children = <strong class="jxr_keyword">new</strong> Thread[poolSize];
-<a name="205" href="#205">205</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.length; i++) {
-<a name="206" href="#206">206</a>             children[i] = <strong class="jxr_keyword">new</strong> Thread() {
-<a name="207" href="#207">207</a>                 <em class="jxr_comment">//@Override</em>
-<a name="208" href="#208">208</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
-<a name="209" href="#209">209</a>                     <strong class="jxr_keyword">while</strong> (Boolean.TRUE.booleanValue()) {
-<a name="210" href="#210">210</a> 
-<a name="211" href="#211">211</a>                         <em class="jxr_comment">// locate next task</em>
-<a name="212" href="#212">212</a>                         <a href="../../jinahya/fsm/Task.html">Task</a> task = <strong class="jxr_keyword">null</strong>;
-<a name="213" href="#213">213</a>                         <strong class="jxr_keyword">synchronized</strong> (tmp) {
-<a name="214" href="#214">214</a>                             <strong class="jxr_keyword">if</strong> (tmp.isEmpty()) {
-<a name="215" href="#215">215</a>                                 <strong class="jxr_keyword">break</strong>;
-<a name="216" href="#216">216</a>                             }
-<a name="217" href="#217">217</a>                             task = (Task) tmp.firstElement();
-<a name="218" href="#218">218</a>                             tmp.removeElementAt(0x00);
-<a name="219" href="#219">219</a>                         }
-<a name="220" href="#220">220</a> 
-<a name="221" href="#221">221</a>                         <em class="jxr_comment">// perform the task</em>
-<a name="222" href="#222">222</a>                         <strong class="jxr_keyword">try</strong> {
-<a name="223" href="#223">223</a>                             task.perform(transition, precedence);
-<a name="224" href="#224">224</a>                         } <strong class="jxr_keyword">catch</strong> (MachineException me) {
-<a name="225" href="#225">225</a>                             me.printStackTrace();
-<a name="226" href="#226">226</a>                         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a name="227" href="#227">227</a>                             e.printStackTrace();
-<a name="228" href="#228">228</a>                         }
-<a name="229" href="#229">229</a>                     }
-<a name="230" href="#230">230</a>                 }
-<a name="231" href="#231">231</a>             };
-<a name="232" href="#232">232</a>         }
-<a name="233" href="#233">233</a> 
-<a name="234" href="#234">234</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.length; i++) {
-<a name="235" href="#235">235</a>             children[i].start();
-<a name="236" href="#236">236</a>         }
-<a name="237" href="#237">237</a> 
-<a name="238" href="#238">238</a>         <strong class="jxr_keyword">return</strong> children;
-<a name="239" href="#239">239</a>     }
-<a name="240" href="#240">240</a> 
-<a name="241" href="#241">241</a> 
-<a name="242" href="#242">242</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isStarted() {
-<a name="243" href="#243">243</a>         <strong class="jxr_keyword">return</strong> started;
-<a name="244" href="#244">244</a>     }
-<a name="245" href="#245">245</a> 
-<a name="246" href="#246">246</a> 
-<a name="247" href="#247">247</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> start() <strong class="jxr_keyword">throws</strong> MachineException {
-<a name="248" href="#248">248</a>         <strong class="jxr_keyword">if</strong> (isStarted() || isFinished()) {
-<a name="249" href="#249">249</a>             <strong class="jxr_keyword">return</strong>;
-<a name="250" href="#250">250</a>         }
-<a name="251" href="#251">251</a> 
-<a name="252" href="#252">252</a>         <strong class="jxr_keyword">try</strong> {
-<a name="253" href="#253">253</a>             <strong class="jxr_keyword">synchronized</strong> (tasks) {
-<a name="254" href="#254">254</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.size(); i++) {
-<a name="255" href="#255">255</a>                     ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).initialize();
-<a name="256" href="#256">256</a>                 }
-<a name="257" href="#257">257</a>             }
-<a name="258" href="#258">258</a>         } <strong class="jxr_keyword">finally</strong> {
-<a name="259" href="#259">259</a>             started = Boolean.TRUE.booleanValue();
-<a name="260" href="#260">260</a>         }
-<a name="261" href="#261">261</a>     }
-<a name="262" href="#262">262</a> 
-<a name="263" href="#263">263</a> 
-<a name="264" href="#264">264</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isFinished() {
-<a name="265" href="#265">265</a>         <strong class="jxr_keyword">return</strong> finished;
-<a name="266" href="#266">266</a>     }
-<a name="267" href="#267">267</a> 
-<a name="268" href="#268">268</a> 
-<a name="269" href="#269">269</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> finish() <strong class="jxr_keyword">throws</strong> MachineException {
-<a name="270" href="#270">270</a>         <strong class="jxr_keyword">if</strong> (!isStarted() || isFinished()) {
-<a name="271" href="#271">271</a>             <strong class="jxr_keyword">return</strong>;
-<a name="272" href="#272">272</a>         }
+<a name="181" href="#181">181</a>         <em class="jxr_comment">// wait for all previous threads end</em>
+<a name="182" href="#182">182</a>         <strong class="jxr_keyword">if</strong> (parents != <strong class="jxr_keyword">null</strong>) {
+<a name="183" href="#183">183</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.length; i++) {
+<a name="184" href="#184">184</a>                 <strong class="jxr_keyword">while</strong> (parents[i].isAlive()) {
+<a name="185" href="#185">185</a>                     <strong class="jxr_keyword">try</strong> {
+<a name="186" href="#186">186</a>                         parents[i].join();
+<a name="187" href="#187">187</a>                     } <strong class="jxr_keyword">catch</strong> (InterruptedException ie) {
+<a name="188" href="#188">188</a>                         ie.printStackTrace();
+<a name="189" href="#189">189</a>                     }
+<a name="190" href="#190">190</a>                 }
+<a name="191" href="#191">191</a>             }
+<a name="192" href="#192">192</a>         }
+<a name="193" href="#193">193</a> 
+<a name="194" href="#194">194</a>         <em class="jxr_comment">// prepare a copy of task list</em>
+<a name="195" href="#195">195</a>         <strong class="jxr_keyword">final</strong> Vector tmp = <strong class="jxr_keyword">new</strong> Vector();
+<a name="196" href="#196">196</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.size(); i++) {
+<a name="197" href="#197">197</a>             tmp.addElement(tasks.elementAt(i));
+<a name="198" href="#198">198</a>         }
+<a name="199" href="#199">199</a> 
+<a name="200" href="#200">200</a>         Thread[] children = <strong class="jxr_keyword">new</strong> Thread[poolSize];
+<a name="201" href="#201">201</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.length; i++) {
+<a name="202" href="#202">202</a>             children[i] = <strong class="jxr_keyword">new</strong> Thread() {
+<a name="203" href="#203">203</a>                 <em class="jxr_comment">//@Override</em>
+<a name="204" href="#204">204</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
+<a name="205" href="#205">205</a>                     <strong class="jxr_keyword">for</strong> (Task task = <strong class="jxr_keyword">null</strong>; <strong class="jxr_keyword">true</strong>; task = <strong class="jxr_keyword">null</strong>) {
+<a name="206" href="#206">206</a> 
+<a name="207" href="#207">207</a>                         <em class="jxr_comment">// locate next task</em>
+<a name="208" href="#208">208</a>                         <strong class="jxr_keyword">synchronized</strong> (tmp) {
+<a name="209" href="#209">209</a>                             <strong class="jxr_keyword">if</strong> (!tmp.isEmpty()) {
+<a name="210" href="#210">210</a>                                 task = (Task) tmp.firstElement();
+<a name="211" href="#211">211</a>                                 tmp.removeElementAt(0x00);
+<a name="212" href="#212">212</a>                             }
+<a name="213" href="#213">213</a>                         }
+<a name="214" href="#214">214</a> 
+<a name="215" href="#215">215</a>                         <strong class="jxr_keyword">if</strong> (task == <strong class="jxr_keyword">null</strong>) {
+<a name="216" href="#216">216</a>                             <strong class="jxr_keyword">break</strong>;
+<a name="217" href="#217">217</a>                         }
+<a name="218" href="#218">218</a> 
+<a name="219" href="#219">219</a>                         <em class="jxr_comment">// perform the task</em>
+<a name="220" href="#220">220</a>                         <strong class="jxr_keyword">try</strong> {
+<a name="221" href="#221">221</a>                             task.perform(transition, precedence);
+<a name="222" href="#222">222</a>                         } <strong class="jxr_keyword">catch</strong> (MachineException me) {
+<a name="223" href="#223">223</a>                             me.printStackTrace();
+<a name="224" href="#224">224</a>                         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a name="225" href="#225">225</a>                             e.printStackTrace();
+<a name="226" href="#226">226</a>                         }
+<a name="227" href="#227">227</a>                     }
+<a name="228" href="#228">228</a>                 }
+<a name="229" href="#229">229</a>             };
+<a name="230" href="#230">230</a>         }
+<a name="231" href="#231">231</a> 
+<a name="232" href="#232">232</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.length; i++) {
+<a name="233" href="#233">233</a>             children[i].start();
+<a name="234" href="#234">234</a>         }
+<a name="235" href="#235">235</a> 
+<a name="236" href="#236">236</a>         <strong class="jxr_keyword">return</strong> children;
+<a name="237" href="#237">237</a>     }
+<a name="238" href="#238">238</a> 
+<a name="239" href="#239">239</a> 
+<a name="240" href="#240">240</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isStarted() {
+<a name="241" href="#241">241</a>         <strong class="jxr_keyword">return</strong> started;
+<a name="242" href="#242">242</a>     }
+<a name="243" href="#243">243</a> 
+<a name="244" href="#244">244</a> 
+<a name="245" href="#245">245</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> start() <strong class="jxr_keyword">throws</strong> MachineException {
+<a name="246" href="#246">246</a>         <strong class="jxr_keyword">if</strong> (isStarted() || isFinished()) {
+<a name="247" href="#247">247</a>             <strong class="jxr_keyword">return</strong>;
+<a name="248" href="#248">248</a>         }
+<a name="249" href="#249">249</a> 
+<a name="250" href="#250">250</a>         <strong class="jxr_keyword">try</strong> {
+<a name="251" href="#251">251</a>             <strong class="jxr_keyword">synchronized</strong> (tasks) {
+<a name="252" href="#252">252</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tasks.size(); i++) {
+<a name="253" href="#253">253</a>                     ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).initialize();
+<a name="254" href="#254">254</a>                 }
+<a name="255" href="#255">255</a>             }
+<a name="256" href="#256">256</a>         } <strong class="jxr_keyword">finally</strong> {
+<a name="257" href="#257">257</a>             started = Boolean.TRUE.booleanValue();
+<a name="258" href="#258">258</a>         }
+<a name="259" href="#259">259</a>     }
+<a name="260" href="#260">260</a> 
+<a name="261" href="#261">261</a> 
+<a name="262" href="#262">262</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isFinished() {
+<a name="263" href="#263">263</a>         <strong class="jxr_keyword">return</strong> finished;
+<a name="264" href="#264">264</a>     }
+<a name="265" href="#265">265</a> 
+<a name="266" href="#266">266</a> 
+<a name="267" href="#267">267</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> finish() <strong class="jxr_keyword">throws</strong> MachineException {
+<a name="268" href="#268">268</a>         <strong class="jxr_keyword">if</strong> (isFinished()) {
+<a name="269" href="#269">269</a>             <strong class="jxr_keyword">return</strong>;
+<a name="270" href="#270">270</a>         }
+<a name="271" href="#271">271</a> 
+<a name="272" href="#272">272</a>         finished = Boolean.TRUE.booleanValue();
 <a name="273" href="#273">273</a> 
-<a name="274" href="#274">274</a>         <strong class="jxr_keyword">try</strong> {
-<a name="275" href="#275">275</a>             <strong class="jxr_keyword">synchronized</strong> (tasks) {
-<a name="276" href="#276">276</a>                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = tasks.size() - 1; i &gt;= 0; i--) {
-<a name="277" href="#277">277</a>                     ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).destroy();
-<a name="278" href="#278">278</a>                 }
-<a name="279" href="#279">279</a>             }
-<a name="280" href="#280">280</a>         } <strong class="jxr_keyword">finally</strong> {
-<a name="281" href="#281">281</a>             finished = Boolean.TRUE.booleanValue();
-<a name="282" href="#282">282</a>         }
-<a name="283" href="#283">283</a>     }
-<a name="284" href="#284">284</a> 
-<a name="285" href="#285">285</a> 
-<a name="286" href="#286">286</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getMinimumPrecedence() {
-<a name="287" href="#287">287</a>         <strong class="jxr_keyword">return</strong> minimumPrecedence;
-<a name="288" href="#288">288</a>     }
-<a name="289" href="#289">289</a> 
-<a name="290" href="#290">290</a> 
-<a name="291" href="#291">291</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setMinimumPrecedence(<strong class="jxr_keyword">int</strong> minimumPrecedence) {
+<a name="274" href="#274">274</a>         <strong class="jxr_keyword">if</strong> (isStarted()) {
+<a name="275" href="#275">275</a>             <strong class="jxr_keyword">try</strong> {
+<a name="276" href="#276">276</a>                 <strong class="jxr_keyword">synchronized</strong> (tasks) {
+<a name="277" href="#277">277</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = tasks.size() - 1; i &gt;= 0; i--) {
+<a name="278" href="#278">278</a>                         ((<a href="../../jinahya/fsm/Task.html">Task</a>) tasks.elementAt(i)).destroy();
+<a name="279" href="#279">279</a>                     }
+<a name="280" href="#280">280</a>                 }
+<a name="281" href="#281">281</a>             } <strong class="jxr_keyword">finally</strong> {
+<a name="282" href="#282">282</a>                 finished = Boolean.TRUE.booleanValue();
+<a name="283" href="#283">283</a>             }
+<a name="284" href="#284">284</a>         }
+<a name="285" href="#285">285</a>     }
+<a name="286" href="#286">286</a> 
+<a name="287" href="#287">287</a> 
+<a name="288" href="#288">288</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getMinimumPrecedence() {
+<a name="289" href="#289">289</a>         <strong class="jxr_keyword">return</strong> minimumPrecedence;
+<a name="290" href="#290">290</a>     }
+<a name="291" href="#291">291</a> 
 <a name="292" href="#292">292</a> 
-<a name="293" href="#293">293</a>         <strong class="jxr_keyword">if</strong> (minimumPrecedence &lt; 0) {
-<a name="294" href="#294">294</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="295" href="#295">295</a>                 (<span class="jxr_string">"minimumPrecedence("</span> + minimumPrecedence + <span class="jxr_string">") &lt; 0"</span>);
-<a name="296" href="#296">296</a>         }
-<a name="297" href="#297">297</a> 
-<a name="298" href="#298">298</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="299" href="#299">299</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
-<a name="300" href="#300">300</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
-<a name="301" href="#301">301</a>             }
-<a name="302" href="#302">302</a> 
-<a name="303" href="#303">303</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
-<a name="304" href="#304">304</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
-<a name="305" href="#305">305</a>             }
-<a name="306" href="#306">306</a> 
-<a name="307" href="#307">307</a>             <strong class="jxr_keyword">this</strong>.minimumPrecedence = minimumPrecedence;
-<a name="308" href="#308">308</a>         }
-<a name="309" href="#309">309</a>     }
-<a name="310" href="#310">310</a> 
-<a name="311" href="#311">311</a> 
-<a name="312" href="#312">312</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getPoolSize() {
-<a name="313" href="#313">313</a>         <strong class="jxr_keyword">return</strong> poolSize;
-<a name="314" href="#314">314</a>     }
-<a name="315" href="#315">315</a> 
-<a name="316" href="#316">316</a> 
-<a name="317" href="#317">317</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPoolSize(<strong class="jxr_keyword">int</strong> poolSize) {
-<a name="318" href="#318">318</a>         <strong class="jxr_keyword">if</strong> (poolSize &lt; 0) {
-<a name="319" href="#319">319</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="320" href="#320">320</a>                 (<span class="jxr_string">"poolSize("</span> + poolSize + <span class="jxr_string">") &lt; 0"</span>);
-<a name="321" href="#321">321</a>         }
-<a name="322" href="#322">322</a> 
-<a name="323" href="#323">323</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="324" href="#324">324</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
-<a name="325" href="#325">325</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
-<a name="326" href="#326">326</a>             }
-<a name="327" href="#327">327</a> 
-<a name="328" href="#328">328</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
-<a name="329" href="#329">329</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
-<a name="330" href="#330">330</a>             }
-<a name="331" href="#331">331</a> 
-<a name="332" href="#332">332</a>             <strong class="jxr_keyword">this</strong>.poolSize = poolSize;
-<a name="333" href="#333">333</a>         }
-<a name="334" href="#334">334</a>     }
-<a name="335" href="#335">335</a> 
-<a name="336" href="#336">336</a> 
-<a name="337" href="#337">337</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> submit(<strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Task.html">Task</a> task) {
+<a name="293" href="#293">293</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setMinimumPrecedence(<strong class="jxr_keyword">int</strong> minimumPrecedence) {
+<a name="294" href="#294">294</a> 
+<a name="295" href="#295">295</a>         <strong class="jxr_keyword">if</strong> (minimumPrecedence &lt; 0) {
+<a name="296" href="#296">296</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="297" href="#297">297</a>                 (<span class="jxr_string">"minimumPrecedence("</span> + minimumPrecedence + <span class="jxr_string">") &lt; 0"</span>);
+<a name="298" href="#298">298</a>         }
+<a name="299" href="#299">299</a> 
+<a name="300" href="#300">300</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a name="301" href="#301">301</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
+<a name="302" href="#302">302</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
+<a name="303" href="#303">303</a>             }
+<a name="304" href="#304">304</a> 
+<a name="305" href="#305">305</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
+<a name="306" href="#306">306</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
+<a name="307" href="#307">307</a>             }
+<a name="308" href="#308">308</a> 
+<a name="309" href="#309">309</a>             <strong class="jxr_keyword">this</strong>.minimumPrecedence = minimumPrecedence;
+<a name="310" href="#310">310</a>         }
+<a name="311" href="#311">311</a>     }
+<a name="312" href="#312">312</a> 
+<a name="313" href="#313">313</a> 
+<a name="314" href="#314">314</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getPoolSize() {
+<a name="315" href="#315">315</a>         <strong class="jxr_keyword">return</strong> poolSize;
+<a name="316" href="#316">316</a>     }
+<a name="317" href="#317">317</a> 
+<a name="318" href="#318">318</a> 
+<a name="319" href="#319">319</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPoolSize(<strong class="jxr_keyword">int</strong> poolSize) {
+<a name="320" href="#320">320</a>         <strong class="jxr_keyword">if</strong> (poolSize &lt; 0) {
+<a name="321" href="#321">321</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="322" href="#322">322</a>                 (<span class="jxr_string">"poolSize("</span> + poolSize + <span class="jxr_string">") &lt; 0"</span>);
+<a name="323" href="#323">323</a>         }
+<a name="324" href="#324">324</a> 
+<a name="325" href="#325">325</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a name="326" href="#326">326</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
+<a name="327" href="#327">327</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
+<a name="328" href="#328">328</a>             }
+<a name="329" href="#329">329</a> 
+<a name="330" href="#330">330</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
+<a name="331" href="#331">331</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
+<a name="332" href="#332">332</a>             }
+<a name="333" href="#333">333</a> 
+<a name="334" href="#334">334</a>             <strong class="jxr_keyword">this</strong>.poolSize = poolSize;
+<a name="335" href="#335">335</a>         }
+<a name="336" href="#336">336</a>     }
+<a name="337" href="#337">337</a> 
 <a name="338" href="#338">338</a> 
-<a name="339" href="#339">339</a>         <strong class="jxr_keyword">if</strong> (task == <strong class="jxr_keyword">null</strong>) {
-<a name="340" href="#340">340</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"task"</span>);
-<a name="341" href="#341">341</a>         }
-<a name="342" href="#342">342</a> 
-<a name="343" href="#343">343</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="344" href="#344">344</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
-<a name="345" href="#345">345</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
-<a name="346" href="#346">346</a>             }
-<a name="347" href="#347">347</a> 
-<a name="348" href="#348">348</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
-<a name="349" href="#349">349</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
-<a name="350" href="#350">350</a>             }
-<a name="351" href="#351">351</a> 
-<a name="352" href="#352">352</a>             tasks.addElement(task);
-<a name="353" href="#353">353</a>         }
-<a name="354" href="#354">354</a>     }
-<a name="355" href="#355">355</a> 
-<a name="356" href="#356">356</a> 
-<a name="357" href="#357">357</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getHistorySize() {
-<a name="358" href="#358">358</a>         <strong class="jxr_keyword">return</strong> historySize;
-<a name="359" href="#359">359</a>     }
-<a name="360" href="#360">360</a> 
-<a name="361" href="#361">361</a> 
-<a name="362" href="#362">362</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setHistorySize(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> historySize) {
-<a name="363" href="#363">363</a>         <strong class="jxr_keyword">if</strong> (historySize &lt; 0) {
-<a name="364" href="#364">364</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
-<a name="365" href="#365">365</a>                 (<span class="jxr_string">"historySize("</span> + historySize + <span class="jxr_string">") &lt; 0"</span>);
-<a name="366" href="#366">366</a>         }
-<a name="367" href="#367">367</a> 
-<a name="368" href="#368">368</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="369" href="#369">369</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
-<a name="370" href="#370">370</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
-<a name="371" href="#371">371</a>             }
-<a name="372" href="#372">372</a> 
-<a name="373" href="#373">373</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
-<a name="374" href="#374">374</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
-<a name="375" href="#375">375</a>             }
-<a name="376" href="#376">376</a> 
-<a name="377" href="#377">377</a>             <strong class="jxr_keyword">this</strong>.historySize = historySize;
-<a name="378" href="#378">378</a>         }
-<a name="379" href="#379">379</a>     }
-<a name="380" href="#380">380</a> 
-<a name="381" href="#381">381</a> 
-<a name="382" href="#382">382</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/MachineSpec.html">MachineSpec</a> spec;
+<a name="339" href="#339">339</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> submit(<strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/Task.html">Task</a> task) {
+<a name="340" href="#340">340</a> 
+<a name="341" href="#341">341</a>         <strong class="jxr_keyword">if</strong> (task == <strong class="jxr_keyword">null</strong>) {
+<a name="342" href="#342">342</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"task"</span>);
+<a name="343" href="#343">343</a>         }
+<a name="344" href="#344">344</a> 
+<a name="345" href="#345">345</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a name="346" href="#346">346</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
+<a name="347" href="#347">347</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
+<a name="348" href="#348">348</a>             }
+<a name="349" href="#349">349</a> 
+<a name="350" href="#350">350</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
+<a name="351" href="#351">351</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
+<a name="352" href="#352">352</a>             }
+<a name="353" href="#353">353</a> 
+<a name="354" href="#354">354</a>             tasks.addElement(task);
+<a name="355" href="#355">355</a>         }
+<a name="356" href="#356">356</a>     }
+<a name="357" href="#357">357</a> 
+<a name="358" href="#358">358</a> 
+<a name="359" href="#359">359</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getHistorySize() {
+<a name="360" href="#360">360</a>         <strong class="jxr_keyword">return</strong> historySize;
+<a name="361" href="#361">361</a>     }
+<a name="362" href="#362">362</a> 
+<a name="363" href="#363">363</a> 
+<a name="364" href="#364">364</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setHistorySize(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> historySize) {
+<a name="365" href="#365">365</a>         <strong class="jxr_keyword">if</strong> (historySize &lt; 0) {
+<a name="366" href="#366">366</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException
+<a name="367" href="#367">367</a>                 (<span class="jxr_string">"historySize("</span> + historySize + <span class="jxr_string">") &lt; 0"</span>);
+<a name="368" href="#368">368</a>         }
+<a name="369" href="#369">369</a> 
+<a name="370" href="#370">370</a>         <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a name="371" href="#371">371</a>             <strong class="jxr_keyword">if</strong> (isStarted()) {
+<a name="372" href="#372">372</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already started"</span>);
+<a name="373" href="#373">373</a>             }
+<a name="374" href="#374">374</a> 
+<a name="375" href="#375">375</a>             <strong class="jxr_keyword">if</strong> (isFinished()) {
+<a name="376" href="#376">376</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"already finished"</span>);
+<a name="377" href="#377">377</a>             }
+<a name="378" href="#378">378</a> 
+<a name="379" href="#379">379</a>             <strong class="jxr_keyword">this</strong>.historySize = historySize;
+<a name="380" href="#380">380</a>         }
+<a name="381" href="#381">381</a>     }
+<a name="382" href="#382">382</a> 
 <a name="383" href="#383">383</a> 
-<a name="384" href="#384">384</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector tasks = <strong class="jxr_keyword">new</strong> Vector();
+<a name="384" href="#384">384</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/fsm/MachineSpec.html">MachineSpec</a> spec;
 <a name="385" href="#385">385</a> 
-<a name="386" href="#386">386</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> state = State.UNKNOWN;
+<a name="386" href="#386">386</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector tasks = <strong class="jxr_keyword">new</strong> Vector();
 <a name="387" href="#387">387</a> 
-<a name="388" href="#388">388</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> minimumPrecedence = 0;
-<a name="389" href="#389">389</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> poolSize = 0;
-<a name="390" href="#390">390</a> 
-<a name="391" href="#391">391</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> historySize = 0;
-<a name="392" href="#392">392</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector history = <strong class="jxr_keyword">new</strong> Vector();
-<a name="393" href="#393">393</a> 
-<a name="394" href="#394">394</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> started = Boolean.FALSE.booleanValue();
-<a name="395" href="#395">395</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> finished = Boolean.FALSE.booleanValue();
-<a name="396" href="#396">396</a> }
+<a name="388" href="#388">388</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> state = State.UNKNOWN;
+<a name="389" href="#389">389</a> 
+<a name="390" href="#390">390</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> minimumPrecedence = 0;
+<a name="391" href="#391">391</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> poolSize = 0;
+<a name="392" href="#392">392</a> 
+<a name="393" href="#393">393</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> historySize = 0;
+<a name="394" href="#394">394</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Vector history = <strong class="jxr_keyword">new</strong> Vector();
+<a name="395" href="#395">395</a> 
+<a name="396" href="#396">396</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> started = Boolean.FALSE.booleanValue();
+<a name="397" href="#397">397</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> finished = Boolean.FALSE.booleanValue();
+<a name="398" href="#398">398</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
