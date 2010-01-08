@@ -132,11 +132,7 @@ public class Machine {
             if (poolSize == 0x00) {
                 for (int p = 0; p <= minimumPrecedence; p++) {
                     for (int i = 0; i < tasks.size(); i++) {
-                        try {
-                            ((Task) tasks.elementAt(i)).perform(transition, p);
-                        } catch (MachineException me) {
-                            me.printStackTrace();
-                        }
+                        ((Task) tasks.elementAt(i)).perform(transition, p);
                     }
                 }
             } else {
@@ -206,16 +202,18 @@ public class Machine {
             children[i] = new Thread() {
                 //@Override
                 public void run() {
-                    while (Boolean.TRUE.booleanValue()) {
+                    for (Task task = null; true; task = null) {
 
                         // locate next task
-                        Task task = null;
                         synchronized (tmp) {
-                            if (tmp.isEmpty()) {
-                                break;
+                            if (!tmp.isEmpty()) {
+                                task = (Task) tmp.firstElement();
+                                tmp.removeElementAt(0x00);
                             }
-                            task = (Task) tmp.firstElement();
-                            tmp.removeElementAt(0x00);
+                        }
+
+                        if (task == null) {
+                            break;
                         }
 
                         // perform the task
@@ -267,18 +265,22 @@ public class Machine {
 
 
     public final synchronized void finish() throws MachineException {
-        if (!isStarted() || isFinished()) {
+        if (isFinished()) {
             return;
         }
 
-        try {
-            synchronized (tasks) {
-                for (int i = tasks.size() - 1; i >= 0; i--) {
-                    ((Task) tasks.elementAt(i)).destroy();
+        finished = Boolean.TRUE.booleanValue();
+
+        if (isStarted()) {
+            try {
+                synchronized (tasks) {
+                    for (int i = tasks.size() - 1; i >= 0; i--) {
+                        ((Task) tasks.elementAt(i)).destroy();
+                    }
                 }
+            } finally {
+                finished = Boolean.TRUE.booleanValue();
             }
-        } finally {
-            finished = Boolean.TRUE.booleanValue();
         }
     }
 
