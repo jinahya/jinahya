@@ -28,6 +28,10 @@ import java.util.Vector;
 public class Machine {
 
 
+    private static final int STARTED = 0x01;
+
+    private static final int FINISHED = STARTED << 1;
+
 
     /**
      * Creates a new instance.
@@ -87,9 +91,9 @@ public class Machine {
         // --------------------------------------------------- CREATE TRANSITION
         final int sourceState = this.state;
         final int targetState = state;
-        final int[] previousStates = new int[history.size()];
+        final int[] previousStates = new int[previousStatesVector.size()];
         for (int i = 0; i < previousStates.length; i++) {
-            previousStates[i] = ((Integer) history.elementAt(i)).intValue();
+            previousStates[i] = ((Integer) previousStatesVector.elementAt(i)).intValue();
         }
         final Transition transition = new Transition() {
             //@Override
@@ -128,11 +132,19 @@ public class Machine {
 
         if (isStarted()) {
 
+
             // --------------------------------------------------------- PERFORM
-            if (poolSize == 0x00) {
+
+            final int maximumPoolSize =
+                Math.max(0x00, spec.getMaximumPoolSize());
+
+            final int minimumPrecedence =
+                Math.max(0x00, spec.getMinimumPrecedence());
+
+            if (maximumPoolSize == 0) {
                 for (int p = 0; p <= minimumPrecedence; p++) {
-                    for (int i = 0; i < tasks.size(); i++) {
-                        ((Task) tasks.elementAt(i)).perform(transition, p);
+                    for (int i = 0; i < taskVector.size(); i++) {
+                        ((Task) taskVector.elementAt(i)).perform(transition, p);
                     }
                 }
             } else {
@@ -140,7 +152,7 @@ public class Machine {
                 Thread[] threads = null;
 
                 for (int p = 0; p <= minimumPrecedence; p++) {
-                    threads = perform(threads, transition, p);
+                    threads = perform(threads, transition, p, maximumPoolSize);
                 }
 
                 // wait for all threads in last group end
@@ -166,8 +178,10 @@ public class Machine {
 
 
         // ------------------------------------------------------------- HISTORY
-        history.insertElementAt(new Integer(this.state), 0);
-        history.setSize(Math.min(history.size(), historySize));
+        previousStatesVector.insertElementAt(new Integer(this.state), 0);
+        final int maximumHistorySize =
+            Math.max(0x00, spec.getMaximumHistorySize());
+        previousStatesVector.setSize(Math.min(previousStatesVector.size(), maximumHistorySize));
 
 
         this.state = state;
@@ -176,7 +190,7 @@ public class Machine {
 
     private Thread[] perform(final Thread[] parents,
                              final Transition transition,
-                             final int precedence) {
+                             final int precedence, final int maximumPoolSize) {
 
         // wait for all previous threads end
         if (parents != null) {
@@ -193,11 +207,11 @@ public class Machine {
 
         // prepare a copy of task list
         final Vector tmp = new Vector();
-        for (int i = 0; i < tasks.size(); i++) {
-            tmp.addElement(tasks.elementAt(i));
+        for (int i = 0; i < taskVector.size(); i++) {
+            tmp.addElement(taskVector.elementAt(i));
         }
 
-        Thread[] children = new Thread[poolSize];
+        Thread[] children = new Thread[maximumPoolSize];
         for (int i = 0; i < children.length; i++) {
             children[i] = new Thread() {
                 //@Override
@@ -238,7 +252,7 @@ public class Machine {
 
 
     public final synchronized boolean isStarted() {
-        return started;
+        return ((modifier & STARTED) != 0);
     }
 
 
@@ -247,20 +261,22 @@ public class Machine {
             return;
         }
 
-        try {
-            synchronized (tasks) {
-                for (int i = 0; i < tasks.size(); i++) {
-                    ((Task) tasks.elementAt(i)).initialize();
+        modifier |= STARTED;
+
+        synchronized (taskVector) {
+            for (int i = 0; i < taskVector.size(); i++) {
+                try {
+                    ((Task) taskVector.elementAt(i)).initialize();
+                } catch (MachineException me) {
+                    me.printStackTrace();
                 }
             }
-        } finally {
-            started = Boolean.TRUE.booleanValue();
         }
     }
 
 
     public final synchronized boolean isFinished() {
-        return finished;
+        return ((modifier & FINISHED) != 0);
     }
 
 
@@ -269,69 +285,18 @@ public class Machine {
             return;
         }
 
-        finished = Boolean.TRUE.booleanValue();
+        modifier |= FINISHED;
 
         if (isStarted()) {
-            try {
-                synchronized (tasks) {
-                    for (int i = tasks.size() - 1; i >= 0; i--) {
-                        ((Task) tasks.elementAt(i)).destroy();
+            synchronized (taskVector) {
+                for (int i = taskVector.size() - 1; i >= 0; i--) {
+                    try {
+                        ((Task) taskVector.elementAt(i)).destroy();
+                    } catch (MachineException me) {
+                        me.printStackTrace();
                     }
                 }
-            } finally {
-                finished = Boolean.TRUE.booleanValue();
             }
-        }
-    }
-
-
-    public final int getMinimumPrecedence() {
-        return minimumPrecedence;
-    }
-
-
-    public final void setMinimumPrecedence(int minimumPrecedence) {
-
-        if (minimumPrecedence < 0) {
-            throw new IllegalArgumentException
-                ("minimumPrecedence(" + minimumPrecedence + ") < 0");
-        }
-
-        synchronized (this) {
-            if (isStarted()) {
-                throw new IllegalStateException("already started");
-            }
-
-            if (isFinished()) {
-                throw new IllegalStateException("already finished");
-            }
-
-            this.minimumPrecedence = minimumPrecedence;
-        }
-    }
-
-
-    public final int getPoolSize() {
-        return poolSize;
-    }
-
-
-    public final void setPoolSize(int poolSize) {
-        if (poolSize < 0) {
-            throw new IllegalArgumentException
-                ("poolSize(" + poolSize + ") < 0");
-        }
-
-        synchronized (this) {
-            if (isStarted()) {
-                throw new IllegalStateException("already started");
-            }
-
-            if (isFinished()) {
-                throw new IllegalStateException("already finished");
-            }
-
-            this.poolSize = poolSize;
         }
     }
 
@@ -351,48 +316,21 @@ public class Machine {
                 throw new IllegalStateException("already finished");
             }
 
-            tasks.addElement(task);
-        }
-    }
-
-
-    public final int getHistorySize() {
-        return historySize;
-    }
-
-
-    public final void setHistorySize(final int historySize) {
-        if (historySize < 0) {
-            throw new IllegalArgumentException
-                ("historySize(" + historySize + ") < 0");
-        }
-
-        synchronized (this) {
-            if (isStarted()) {
-                throw new IllegalStateException("already started");
-            }
-
-            if (isFinished()) {
-                throw new IllegalStateException("already finished");
-            }
-
-            this.historySize = historySize;
+            taskVector.addElement(task);
         }
     }
 
 
     private MachineSpec spec;
 
-    private final Vector tasks = new Vector();
+    private final Vector taskVector = new Vector();
 
     private volatile int state = State.UNKNOWN;
 
-    private int minimumPrecedence = 0;
-    private int poolSize = 0;
+    private final Vector previousStatesVector = new Vector();
 
-    private int historySize = 0;
-    private final Vector history = new Vector();
+    private volatile int modifier = 0x00;
 
-    private volatile boolean started = Boolean.FALSE.booleanValue();
-    private volatile boolean finished = Boolean.FALSE.booleanValue();
+    //private volatile boolean started = Boolean.FALSE.booleanValue();
+    //private volatile boolean finished = Boolean.FALSE.booleanValue();
 }

@@ -21,7 +21,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface MachineSpec {
+public class MachineSpec {
 
 
     /*
@@ -34,24 +34,54 @@ public interface MachineSpec {
 
 
     /**
+     *
+     * @return 0
+     */
+    public int getMaximumHistorySize() {
+        return 0x00;
+    }
+
+
+    /**
+     *
+     * @return 0
+     */
+    public int getMinimumPrecedence() {
+        return 0x00;
+    }
+
+
+    /**
+     *
+     * @return 0
+     */
+    public int getMaximumPoolSize() {
+        return 0x00;
+    }
+
+
+    /**
      * Checks if specifed <code>transition</code> is a starting condition or
      * not. Once this method returns true, this method is never going to be
      * invoked.
      *
      * @param transition transition to be checked
-     * @return true if specifed transition is starting transition, false
-     *         otherwise
+     * @return true
      */
-    boolean isStartingTransition(Transition transition);
+    public boolean isStartingTransition(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
 
 
     /**
      * Checks if specifed <code>transition</code> is permitted or not.
      *
      * @param transition transition to be checked.
-     * @return true if given transition is allowed, false otherwise.
+     * @return true
      */
-    boolean isTransitionAllowed(Transition transition);
+    public boolean isTransitionAllowed(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
 
 
     /**
@@ -59,8 +89,9 @@ public interface MachineSpec {
      * this method returns true, this method is never going to be invoked.
      *
      * @param transition transition to be checked
-     * @return true if given <code>transition<code> means one of the finishing
-     *         transitions of the machine, false otherwise.
+     * @return true
      */
-    boolean isFinishingTransition(Transition transition);
+    public boolean isFinishingTransition(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
 }
