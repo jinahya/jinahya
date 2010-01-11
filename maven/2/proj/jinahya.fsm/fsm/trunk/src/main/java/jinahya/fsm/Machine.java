@@ -93,7 +93,8 @@ public class Machine {
         final int targetState = state;
         final int[] previousStates = new int[previousStatesVector.size()];
         for (int i = 0; i < previousStates.length; i++) {
-            previousStates[i] = ((Integer) previousStatesVector.elementAt(i)).intValue();
+            previousStates[i] =
+                ((Integer) previousStatesVector.elementAt(i)).intValue();
         }
         final Transition transition = new Transition() {
             //@Override
@@ -135,36 +136,24 @@ public class Machine {
 
             // --------------------------------------------------------- PERFORM
 
-            final int maximumPoolSize =
-                Math.max(0x00, spec.getMaximumPoolSize());
-
             final int minimumPrecedence =
-                Math.max(0x00, spec.getMinimumPrecedence());
+                Math.max(0x00, spec.getMinimumPrecedence(transition));
 
-            if (maximumPoolSize == 0) {
-                for (int p = 0; p <= minimumPrecedence; p++) {
-                    for (int i = 0; i < taskVector.size(); i++) {
-                        ((Task) taskVector.elementAt(i)).perform(transition, p);
-                    }
-                }
-            } else {
+            Thread[] threads = null;
 
-                Thread[] threads = null;
+            for (int p = 0; p <= minimumPrecedence; p++) {
+                threads = perform(threads, transition, p);
+            }
 
-                for (int p = 0; p <= minimumPrecedence; p++) {
-                    threads = perform(threads, transition, p, maximumPoolSize);
-                }
-
-                // wait for all threads in last group end
-                // minimumPrecedence is always positive(>=0)
-                //assert threads != null;
-                for (int i = 0; i < threads.length; i++) {
-                    while (threads[i].isAlive()) {
-                        try {
-                            threads[i].join();
-                        } catch (InterruptedException ie) {
-                            ie.printStackTrace();
-                        }
+            // wait for all threads in last group end
+            // minimumPrecedence is always positive(>=0)
+            //assert threads != null;
+            for (int i = 0; i < threads.length; i++) {
+                while (threads[i].isAlive()) {
+                    try {
+                        threads[i].join();
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
                     }
                 }
             }
@@ -181,7 +170,8 @@ public class Machine {
         previousStatesVector.insertElementAt(new Integer(this.state), 0);
         final int maximumHistorySize =
             Math.max(0x00, spec.getMaximumHistorySize());
-        previousStatesVector.setSize(Math.min(previousStatesVector.size(), maximumHistorySize));
+        previousStatesVector.setSize
+            (Math.min(previousStatesVector.size(), maximumHistorySize));
 
 
         this.state = state;
@@ -190,7 +180,7 @@ public class Machine {
 
     private Thread[] perform(final Thread[] parents,
                              final Transition transition,
-                             final int precedence, final int maximumPoolSize) {
+                             final int precedence) {
 
         // wait for all previous threads end
         if (parents != null) {
@@ -210,6 +200,9 @@ public class Machine {
         for (int i = 0; i < taskVector.size(); i++) {
             tmp.addElement(taskVector.elementAt(i));
         }
+
+        final int maximumPoolSize =
+            Math.max(0x01, spec.getMaximumPoolSize(transition, precedence));
 
         Thread[] children = new Thread[maximumPoolSize];
         for (int i = 0; i < children.length; i++) {

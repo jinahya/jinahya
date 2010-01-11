@@ -44,19 +44,23 @@ public class MachineSpec {
 
     /**
      *
+     * @param transition
      * @return 0
      */
-    public int getMinimumPrecedence() {
+    public int getMinimumPrecedence(final Transition transition) {
         return 0x00;
     }
 
 
     /**
      *
+     * @param transition
+     * @param precedence
      * @return 0
      */
-    public int getMaximumPoolSize() {
-        return 0x00;
+    public int getMaximumPoolSize(final Transition transition,
+                                  final int precedence) {
+        return 0x01;
     }
 
 
