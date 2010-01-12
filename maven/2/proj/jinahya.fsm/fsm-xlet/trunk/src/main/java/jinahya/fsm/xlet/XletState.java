@@ -32,38 +32,38 @@ public final class XletState {
      * Xlet object has not even loaded yet.
      * INFORMATIVE
      */
-    public static final int NOT_LOADED = State.UNKNOWN << 1;
+    public static final int NOT_LOADED = State.UNKNOWN >>> 1;
 
 
     /**
      * Xlet instance created.
      */
-    public static final int LOADED = NOT_LOADED << 1;
+    public static final int LOADED = NOT_LOADED >> 1;
 
 
     /**
      * <code>initXlet()</code> or pauseXlet() invoked.
      */
-    public static final int PAUSED = LOADED << 1;
+    public static final int PAUSED = LOADED >> 1;
 
 
     /**
      * <code>startXlet()</code> invoked.
      */
-    public static final int ACTIVE = PAUSED << 1;
+    public static final int ACTIVE = PAUSED >> 1;
 
 
     /**
      * <code>destroyXlet()</code> invoked.
      */
-    public static final int DESTROYED = ACTIVE << 1;
+    public static final int DESTROYED = ACTIVE >> 1;
 
 
     /**
      * Destroyed but the Xlet object has not yet been garbage collected.
      * INFORMATIVE
      */
-    public static final int INVALID = DESTROYED << 1;
+    public static final int INVALID = DESTROYED >> 1;
 
 
     private XletState() {

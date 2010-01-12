@@ -66,10 +66,10 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>PAUSED -> STARTED</code>.
+     * <code>PAUSED -> ACTIVE</code>.
      *
      * @see XletState#PAUSED
-     * @see XletState#STARTED
+     * @see XletState#ACTIVE
      */
     public static final TransitionMatcher START_XLET = new TransitionMatcher() {
             //@Override
@@ -81,9 +81,9 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>STARTED -> PAUSED</code>.
+     * <code>ACTIVE -> PAUSED</code>.
      *
-     * @see XletState#STARTED
+     * @see XletState#ACTIVE
      * @see XletState#PAUSED
      */
     public static final TransitionMatcher PAUSE_XLET = new TransitionMatcher() {
@@ -98,7 +98,7 @@ public final class XletTransitionMatcher {
     /**
      * {@link XletState#LOADED} &#8594; {@link XletState#DESTROYED} ||
      * {@link XletState#PAUSED} &#8594; {@link XletState#DESTROYED} ||
-     * {@link XletState#STARTED) &#8594; {@link XletState#DESTROYED}.
+     * {@link XletState#ACTIVE) &#8594; {@link XletState#DESTROYED}.
      *
      * @see XletState#LOADED
      * @see XletState#PAUSED
