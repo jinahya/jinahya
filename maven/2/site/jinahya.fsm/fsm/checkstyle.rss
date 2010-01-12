@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2009 - 2010</copyright>
     <item>
-      <title>File: 8,
-             Errors: 73,
+      <title>File: 9,
+             Errors: 60,
              Warnings: 0,
              Infos: 0
       </title>
@@ -27,6 +27,20 @@
             </tr>
           </thead>
           <tbody>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm//checkstyle.html#jinahya.fsm.package-info.java">jinahya/fsm/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
                           <tr>
                 <td>
                   <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm//checkstyle.html#jinahya.fsm.State.java">jinahya/fsm/State.java</a>
@@ -52,7 +66,7 @@
                   0
                 </td>
                 <td>
-                  13
+                  8
                 </td>
               </tr>
                           <tr>
@@ -80,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  13
+                  10
                 </td>
               </tr>
                           <tr>
@@ -108,7 +122,7 @@
                   0
                 </td>
                 <td>
-                  11
+                  9
                 </td>
               </tr>
                           <tr>
@@ -136,7 +150,7 @@
                   0
                 </td>
                 <td>
-                  23
+                  19
                 </td>
               </tr>
                       </tbody>
