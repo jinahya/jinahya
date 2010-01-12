@@ -30,7 +30,7 @@ public class MachineSpec {
      * @return 0
      */
     public int getMaximumHistorySize() {
-        return 0x00;
+        return 0x0A;
     }
 
 

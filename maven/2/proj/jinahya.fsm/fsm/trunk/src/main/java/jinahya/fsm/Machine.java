@@ -250,17 +250,15 @@ public class Machine {
             throw new NullPointerException("task");
         }
 
-        synchronized (this) {
-            if (started) {
-                throw new IllegalStateException("already started");
-            }
-
-            if (finished) {
-                throw new IllegalStateException("already finished");
-            }
-
-            tasks.addElement(task);
+        if (started) {
+            throw new IllegalStateException("already started");
         }
+
+        if (finished) {
+            throw new IllegalStateException("already finished");
+        }
+
+        tasks.addElement(task);
     }
 
 
