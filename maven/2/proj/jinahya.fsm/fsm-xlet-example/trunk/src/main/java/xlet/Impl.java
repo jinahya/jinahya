@@ -18,15 +18,13 @@
 package xlet;
 
 
-import java.util.Vector;
-
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
 import jinahya.fsm.MachineException;
 import jinahya.fsm.Machine;
-import jinahya.fsm.Task;
+import jinahya.fsm.Transition;
 
 import jinahya.fsm.xlet.XletState;
 import jinahya.fsm.xlet.XletMachineSpec;
@@ -45,7 +43,21 @@ public class Impl implements Xlet {
     public Impl() {
         super();
 
-        xsm = new Machine(new XletMachineSpec());
+        xsm = new Machine(new XletMachineSpec() {
+            //@Override
+            public int getMinimumPrecedence(Transition transition) {
+                return 10;
+            }
+            //@Override
+            public int getMaximumPoolSize(final Transition transition,
+                                          final int precedence) {
+                return 10;
+            }
+            //@Override
+            public int getMaximumHistorySize() {
+                return 10;
+            }
+        });
 
         for (int i = 0; i < 100; i++) {
             xsm.submit(new DefaultTask());
@@ -54,11 +66,6 @@ public class Impl implements Xlet {
         xsm.submit(new SimpleInitTask());
         xsm.submit(new SimplePlayTask());
         xsm.submit(new HistoryTask());
-
-
-        xsm.setMinimumPrecedence(10);
-        xsm.setPoolSize(10);
-        xsm.setHistorySize(10);
 
         try {
             xsm.setState(XletState.LOADED);
@@ -81,7 +88,7 @@ public class Impl implements Xlet {
     //@Override
     public void startXlet() throws XletStateChangeException {
         try {
-            xsm.setState(XletState.STARTED);
+            xsm.setState(XletState.ACTIVE);
         } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
