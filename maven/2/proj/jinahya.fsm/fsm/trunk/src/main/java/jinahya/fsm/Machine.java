@@ -101,6 +101,10 @@ public class Machine {
             }
             //@Override
             public int getPreviousState(final int depth) {
+                if (depth < 0) {
+                    throw new IllegalArgumentException
+                        ("depth(" + depth + ") < 0") ;
+                }
                 if (depth < previousStates.length) {
                     return previousStates[depth];
                 } else {
@@ -143,7 +147,7 @@ public class Machine {
 
             // wait for all threads in last group end
             // minimumPrecedence is always positive(>=0)
-            //assert threads != null;
+            // assert threads != null;
             for (int i = 0; i < threads.length; i++) {
                 while (threads[i].isAlive()) {
                     try {
