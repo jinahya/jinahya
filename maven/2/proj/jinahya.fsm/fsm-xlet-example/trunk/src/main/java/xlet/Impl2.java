@@ -44,6 +44,12 @@ public class Impl2 implements Xlet {
     public Impl2() {
         super();
 
+
+    }
+
+
+    //@Override
+    public void initXlet(XletContext ctx) throws XletStateChangeException {
         xsm = new Machine(new XletMachineSpec() {
             //@Override
             public int getMinimumPrecedence(Transition transition) {
@@ -68,16 +74,6 @@ public class Impl2 implements Xlet {
         xsm.submit(new SimplePlayTask());
         xsm.submit(new HistoryTask());
 
-        try {
-            xsm.setState(XletState.LOADED);
-        } catch (MachineException fsme) {
-            fsme.printStackTrace();
-        }
-    }
-
-
-    //@Override
-    public void initXlet(XletContext ctx) throws XletStateChangeException {
         try {
             xsm.setState(XletState.PAUSED);
         } catch (MachineException fsme) {

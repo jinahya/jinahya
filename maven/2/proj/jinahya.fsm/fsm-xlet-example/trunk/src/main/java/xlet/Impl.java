@@ -43,6 +43,7 @@ public class Impl implements Xlet {
     public Impl() {
         super();
 
+
         xsm = new Machine(new XletMachineSpec() {
             //@Override
             public int getMinimumPrecedence(Transition transition) {
@@ -50,7 +51,7 @@ public class Impl implements Xlet {
             }
             //@Override
             public int getMaximumPoolSize(final Transition transition,
-                                          final int precedence) {
+                final int precedence) {
                 return 10;
             }
             //@Override
