@@ -27,28 +27,26 @@ import jinahya.fsm.Transition;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletMachineSpec implements MachineSpec {
+public class XletMachineSpec extends MachineSpec {
 
 
     //@Override
     public boolean isStartingTransition(final Transition transition) {
         // UNKNOWN -> (LOADED | PAUSED)
-        final int sourceState = transition.getSourceState();
-        final int targetState = transition.getTargetState();
-        return (sourceState == State.UNKNOWN &&
-                (targetState == XletState.LOADED ||
-                 targetState == XletState.PAUSED));
+        return (transition.getSourceState() == State.UNKNOWN &&
+                (transition.getTargetState() == XletState.LOADED ||
+                 transition.getTargetState() == XletState.PAUSED));
     }
 
 
     //@Override
     public boolean isTransitionAllowed(final Transition transition) {
-        final int sourceState = transition.getSourceState();
+
+        boolean allowed = super.isTransitionAllowed(transition);
+
         final int targetState = transition.getTargetState();
 
-        boolean allowed = false;
-
-        switch (sourceState) {
+        switch (transition.getSourceState()) {
             case State.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
                 allowed = (targetState == XletState.LOADED ||
                            targetState == XletState.PAUSED);
@@ -57,11 +55,11 @@ public class XletMachineSpec implements MachineSpec {
                 allowed = (targetState == XletState.PAUSED ||
                            targetState == XletState.DESTROYED);
                 break;
-            case XletState.PAUSED: // PAUSED -> (STARTED | DESTROYED)
-                allowed = (targetState == XletState.STARTED ||
+            case XletState.PAUSED: // PAUSED -> (ACTIVE | DESTROYED)
+                allowed = (targetState == XletState.ACTIVE ||
                            targetState == XletState.DESTROYED);
                 break;
-            case XletState.STARTED: // STARTED -> (PAUSED | DESTROYED)
+            case XletState.ACTIVE: // ACTIVE -> (PAUSED | DESTROYED)
                 allowed = (targetState == XletState.PAUSED ||
                            targetState == XletState.DESTROYED);
                 break;
@@ -75,12 +73,10 @@ public class XletMachineSpec implements MachineSpec {
 
     //@Override
     public boolean isFinishingTransition(final Transition transition) {
-        // (LOADED | PAUSED | STARTED) -> DESTROYED
-        final int sourceState = transition.getSourceState();
-        final int targetState = transition.getTargetState();
-        return ((sourceState == XletState.LOADED ||
-                 sourceState == XletState.PAUSED ||
-                 sourceState == XletState.STARTED) &&
-                targetState == XletState.DESTROYED);
+        // (LOADED | PAUSED | ACTIVE) -> DESTROYED
+        return ((transition.getSourceState() == XletState.LOADED ||
+                 transition.getSourceState() == XletState.PAUSED ||
+                 transition.getSourceState() == XletState.ACTIVE) &&
+                transition.getTargetState() == XletState.DESTROYED);
     }
 }

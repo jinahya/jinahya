@@ -47,5 +47,6 @@ public abstract class InitTask extends Task {
      * @param precedence task precedence
      * @throws MachineException if any error occurs.
      */
-    protected abstract void perform(int precedence) throws MachineException;
+    protected abstract void perform(final int precedence)
+        throws MachineException;
 }

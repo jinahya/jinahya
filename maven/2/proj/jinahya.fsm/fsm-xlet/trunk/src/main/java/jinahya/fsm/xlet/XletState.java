@@ -50,13 +50,13 @@ public final class XletState {
     /**
      * <code>startXlet()</code> invoked.
      */
-    public static final int STARTED = PAUSED << 1;
+    public static final int ACTIVE = PAUSED << 1;
 
 
     /**
      * <code>destroyXlet()</code> invoked.
      */
-    public static final int DESTROYED = STARTED << 1;
+    public static final int DESTROYED = ACTIVE << 1;
 
 
     /**

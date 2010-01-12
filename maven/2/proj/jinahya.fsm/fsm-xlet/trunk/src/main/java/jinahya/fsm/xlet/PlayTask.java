@@ -24,7 +24,7 @@ import jinahya.fsm.Transition;
 
 
 /**
- * Task performs only in load level.
+ * Task performs only in play level.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -47,5 +47,6 @@ public abstract class PlayTask extends Task {
      * @param precedence task precedence
      * @throws MachineException if any error occurs
      */
-    protected abstract void perform(int precedence) throws MachineException;
+    protected abstract void perform(final int precedence)
+        throws MachineException;
 }

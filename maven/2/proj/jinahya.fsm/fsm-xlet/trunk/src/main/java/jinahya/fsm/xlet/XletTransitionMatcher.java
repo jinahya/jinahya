@@ -34,10 +34,9 @@ public final class XletTransitionMatcher {
      * <code>UNKNOWN -> LOADED</code>.
      *
      * @see jinahya.fsm.State#UNKNOWN
-     * @see jinahya.fsm.xlet.XletState#LOADED
+     * @see XletState#LOADED
      */
-    public static final TransitionMatcher LOAD_XLET =
-        new TransitionMatcher() {
+    public static final TransitionMatcher LOAD_XLET = new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 return (transition.getSourceState() == State.UNKNOWN &&
@@ -50,11 +49,10 @@ public final class XletTransitionMatcher {
      * <code>(UNKNOWN|LOADED) -> PAUSED</code>.
      *
      * @see jinahya.fsm.State#UNKNOWN
-     * @see jinahya.fsm.xlet.XletState#LOADED
-     * @see jinahya.fsm.xlet.XletState#PAUSED
+     * @see XletState#LOADED
+     * @see XletState#PAUSED
      */
-    public static final TransitionMatcher INIT_XLET =
-        new TransitionMatcher() {
+    public static final TransitionMatcher INIT_XLET = new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 final int sourceState = transition.getSourceState();
@@ -70,15 +68,14 @@ public final class XletTransitionMatcher {
     /**
      * <code>PAUSED -> STARTED</code>.
      *
-     * @see jinahya.fsm.xlet.XletState#PAUSED
-     * @see jinahya.fsm.xlet.XletState#STARTED
+     * @see XletState#PAUSED
+     * @see XletState#STARTED
      */
-    public static final TransitionMatcher START_XLET =
-        new TransitionMatcher() {
+    public static final TransitionMatcher START_XLET = new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 return (transition.getSourceState() == XletState.PAUSED &&
-                        transition.getTargetState() == XletState.STARTED);
+                        transition.getTargetState() == XletState.ACTIVE);
             }
     };
 
@@ -86,38 +83,36 @@ public final class XletTransitionMatcher {
     /**
      * <code>STARTED -> PAUSED</code>.
      *
-     * @see jinahya.fsm.xlet.XletState#STARTED
-     * @see jinahya.fsm.xlet.XletState#PAUSED
+     * @see XletState#STARTED
+     * @see XletState#PAUSED
      */
-    public static final TransitionMatcher PAUSE_XLET =
-        new TransitionMatcher() {
+    public static final TransitionMatcher PAUSE_XLET = new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                final int sourceState = transition.getSourceState();
-                return (sourceState == XletState.STARTED &&
+                return (transition.getSourceState() == XletState.ACTIVE &&
                         transition.getTargetState() == XletState.PAUSED);
             }
     };
 
 
     /**
-     * <code>(LOADED|PAUSED|STARTED) -> DESTROYED</code>.
+     * {@link XletState#LOADED} &#8594; {@link XletState#DESTROYED} ||
+     * {@link XletState#PAUSED} &#8594; {@link XletState#DESTROYED} ||
+     * {@link XletState#STARTED) &#8594; {@link XletState#DESTROYED}.
      *
-     * @see jinahya.fsm.xlet.XletState#LOADED
-     * @see jinahya.fsm.xlet.XletState#PAUSED
-     * @see jinahya.fsm.xlet.XletState#STARTED
-     * @see jinahya.fsm.xlet.XletState#DESTROYED
+     * @see XletState#LOADED
+     * @see XletState#PAUSED
+     * @see XletState#ACTIVE
+     * @see XletState#DESTROYED
      */
     public static final TransitionMatcher DESTROY_XLET =
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                final int sourceState = transition.getSourceState();
-                final int targetState = transition.getTargetState();
-                return ((sourceState == XletState.LOADED ||
-                         sourceState == XletState.PAUSED ||
-                         sourceState == XletState.STARTED) &&
-                        targetState == XletState.DESTROYED);
+                return ((transition.getSourceState() == XletState.LOADED ||
+                         transition.getSourceState() == XletState.PAUSED ||
+                         transition.getSourceState() == XletState.ACTIVE) &&
+                        transition.getTargetState() == XletState.DESTROYED);
             }
         };
 
