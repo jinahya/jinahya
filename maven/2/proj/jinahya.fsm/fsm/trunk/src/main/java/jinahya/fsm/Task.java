@@ -25,8 +25,8 @@ public abstract class Task {
 
 
     /**
-     * Initialize this task. Override this method if you have to allocate any
-     * resources.
+     * Initialize this task.
+     * Override this method if you need to.
      *
      * @throws MachineException if any error occurs.
      */
@@ -36,19 +36,20 @@ public abstract class Task {
 
 
     /**
-     * Performs the desired jobs.
+     * Do any desired jobs.
      *
      * @param transition transition
      * @param precedence precedence task precedence
      * @throws MachineException if any error occurs
      */
-    public abstract void perform(Transition transition, int precedence)
+    public abstract void perform(final Transition transition,
+                                 final int precedence)
         throws MachineException;
 
 
     /**
-     * Destroys this task. Override this method if you have to free any
-     * resources.
+     * Destroys this task.
+     * Override this method if you need to.
      *
      * @throws MachineException if any error occurs.
      */

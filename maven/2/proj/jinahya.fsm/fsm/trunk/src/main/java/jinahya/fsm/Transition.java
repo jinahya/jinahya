@@ -40,10 +40,5 @@ public interface Transition {
     int getTargetState();
 
 
-    /**
-     * Returns previous states.
-     *
-     * @return previous states
-     */
-    int[] getPreviousStates();
+    boolean checkPreviousState(int depth, int state);
 }

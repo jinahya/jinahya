@@ -21,19 +21,11 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MachineSpec {
-
-
-    /*
-    public static interface TransitionSpec {
-        int getPoolSize();
-        long getPoolSleep();
-        int getMinimumPrecedence();
-    }
-     */
+public abstract class MachineSpec {
 
 
     /**
+     * Return the maximum number of old states that machine can hold.
      *
      * @return 0
      */
@@ -43,8 +35,9 @@ public class MachineSpec {
 
 
     /**
+     * Returns the minimum task precedence for given transition.
      *
-     * @param transition
+     * @param transition state transition
      * @return 0
      */
     public int getMinimumPrecedence(final Transition transition) {
@@ -53,10 +46,11 @@ public class MachineSpec {
 
 
     /**
+     * Returns the maximum number of threads for given values.
      *
-     * @param transition
-     * @param precedence
-     * @return 0
+     * @param transition state transition
+     * @param precedence task precedence
+     * @return 1
      */
     public int getMaximumPoolSize(final Transition transition,
                                   final int precedence) {
@@ -72,9 +66,7 @@ public class MachineSpec {
      * @param transition transition to be checked
      * @return true
      */
-    public boolean isStartingTransition(Transition transition) {
-        return Boolean.TRUE.booleanValue();
-    }
+    public abstract boolean isStartingTransition(Transition transition);
 
 
     /**
@@ -83,9 +75,7 @@ public class MachineSpec {
      * @param transition transition to be checked.
      * @return true
      */
-    public boolean isTransitionAllowed(Transition transition) {
-        return Boolean.TRUE.booleanValue();
-    }
+    public abstract boolean isTransitionAllowed(Transition transition);
 
 
     /**
@@ -95,7 +85,5 @@ public class MachineSpec {
      * @param transition transition to be checked
      * @return true
      */
-    public boolean isFinishingTransition(Transition transition) {
-        return Boolean.TRUE.booleanValue();
-    }
+    public abstract boolean isFinishingTransition(Transition transition);
 }

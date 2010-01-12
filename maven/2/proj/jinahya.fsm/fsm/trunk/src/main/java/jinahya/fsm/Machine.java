@@ -91,11 +91,6 @@ public class Machine {
         // --------------------------------------------------- CREATE TRANSITION
         final int sourceState = this.state;
         final int targetState = state;
-        final int[] previousStates = new int[previousStatesVector.size()];
-        for (int i = 0; i < previousStates.length; i++) {
-            previousStates[i] =
-                ((Integer) previousStatesVector.elementAt(i)).intValue();
-        }
         final Transition transition = new Transition() {
             //@Override
             public int getSourceState() {
@@ -106,10 +101,14 @@ public class Machine {
                 return targetState;
             }
             //@Override
-            public int[] getPreviousStates() {
-                int[] result = new int[previousStates.length];
-                System.arraycopy(previousStates, 0, result, 0, result.length);
-                return result;
+            public boolean checkPreviousState(final int depth,
+                                              final int state) {
+                try {
+                    return (((Integer) states.elementAt(depth)).intValue() ==
+                            state);
+                } catch (ArrayIndexOutOfBoundsException aioobe) {
+                    return false;
+                }
             }
             //@Override
             public String toString() {
@@ -167,11 +166,11 @@ public class Machine {
 
 
         // ------------------------------------------------------------- HISTORY
-        previousStatesVector.insertElementAt(new Integer(this.state), 0);
+        states.insertElementAt(new Integer(this.state), 0);
         final int maximumHistorySize =
             Math.max(0x00, spec.getMaximumHistorySize());
-        previousStatesVector.setSize
-            (Math.min(previousStatesVector.size(), maximumHistorySize));
+        states.setSize
+            (Math.min(states.size(), maximumHistorySize));
 
 
         this.state = state;
@@ -320,7 +319,7 @@ public class Machine {
 
     private volatile int state = State.UNKNOWN;
 
-    private final Vector previousStatesVector = new Vector();
+    private final Vector states = new Vector();
 
     private volatile int modifier = 0x00;
 
