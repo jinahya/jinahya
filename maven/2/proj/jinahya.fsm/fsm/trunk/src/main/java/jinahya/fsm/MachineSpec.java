@@ -21,7 +21,7 @@ package jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class MachineSpec {
+public class MachineSpec {
 
 
     /**
@@ -66,7 +66,9 @@ public abstract class MachineSpec {
      * @param transition transition to be checked
      * @return true
      */
-    public abstract boolean isStartingTransition(Transition transition);
+    public boolean isStartingTransition(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
 
 
     /**
@@ -75,7 +77,9 @@ public abstract class MachineSpec {
      * @param transition transition to be checked.
      * @return true
      */
-    public abstract boolean isTransitionAllowed(Transition transition);
+    public boolean isTransitionAllowed(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
 
 
     /**
@@ -83,7 +87,9 @@ public abstract class MachineSpec {
      * this method returns true, this method is never going to be invoked.
      *
      * @param transition transition to be checked
-     * @return true
+     * @return fasle
      */
-    public abstract boolean isFinishingTransition(Transition transition);
+    public boolean isFinishingTransition(Transition transition) {
+        return Boolean.FALSE.booleanValue();
+    }
 }
