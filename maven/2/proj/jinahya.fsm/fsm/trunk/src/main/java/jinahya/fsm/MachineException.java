@@ -32,7 +32,7 @@ public class MachineException extends Exception {
      *
      * @param message message
      */
-    public MachineException(String message) {
+    public MachineException(final String message) {
         this(message, null);
     }
 
@@ -42,7 +42,7 @@ public class MachineException extends Exception {
      *
      * @param cause cause
      */
-    public MachineException(Throwable cause) {
+    public MachineException(final Throwable cause) {
         this(cause.getMessage(), cause);
     }
 
@@ -53,7 +53,7 @@ public class MachineException extends Exception {
      * @param message message
      * @param cause cause
      */
-    public MachineException(String message, Throwable cause) {
+    public MachineException(final String message, final Throwable cause) {
         super(message);
 
         this.cause = cause;
@@ -65,7 +65,7 @@ public class MachineException extends Exception {
      *
      * @return the cause of this exception or null
      */
-    public Throwable getCause() {
+    public final Throwable getCause() {
         return cause;
     }
 

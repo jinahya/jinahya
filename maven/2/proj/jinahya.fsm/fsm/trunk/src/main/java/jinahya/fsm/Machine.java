@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ public class Machine {
      *
      * @return the current state
      */
-    public synchronized final int getState() {
+    public final synchronized int getState() {
         return state;
     }
 
@@ -61,7 +61,7 @@ public class Machine {
      * @throws MachineException if any error occurs.
      * @see #transit(int)
      */
-    public synchronized final void setState(final int state)
+    public final synchronized void setState(final int state)
         throws MachineException {
 
         transit(state);
@@ -75,7 +75,7 @@ public class Machine {
      * @throws MachineException if any error occurs.
      * @see #setState(int)
      */
-    public synchronized final void transit(final int state)
+    public final synchronized void transit(final int state)
         throws MachineException {
 
         // ------------------------------------------------------ CHECK FINISHED
@@ -178,6 +178,13 @@ public class Machine {
     }
 
 
+    /**
+     *
+     * @param parents
+     * @param transition
+     * @param precedence
+     * @return
+     */
     private Thread[] perform(final Thread[] parents,
                              final Transition transition,
                              final int precedence) {

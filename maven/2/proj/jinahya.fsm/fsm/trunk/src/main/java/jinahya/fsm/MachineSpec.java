@@ -66,7 +66,7 @@ public class MachineSpec {
      * @param transition transition to be checked
      * @return true
      */
-    public boolean isStartingTransition(Transition transition) {
+    public boolean isStartingTransition(final Transition transition) {
         return Boolean.TRUE.booleanValue();
     }
 
@@ -77,7 +77,7 @@ public class MachineSpec {
      * @param transition transition to be checked.
      * @return true
      */
-    public boolean isTransitionAllowed(Transition transition) {
+    public boolean isTransitionAllowed(final Transition transition) {
         return Boolean.TRUE.booleanValue();
     }
 
@@ -89,7 +89,7 @@ public class MachineSpec {
      * @param transition transition to be checked
      * @return fasle
      */
-    public boolean isFinishingTransition(Transition transition) {
+    public boolean isFinishingTransition(final Transition transition) {
         return Boolean.FALSE.booleanValue();
     }
 }

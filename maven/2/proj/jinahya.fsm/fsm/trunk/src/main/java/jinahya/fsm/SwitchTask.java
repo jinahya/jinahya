@@ -61,7 +61,7 @@ public abstract class SwitchTask extends Task {
 
 
     //@Override
-    public void perform(final Transition transition, final int precedence)
+    public final void perform(final Transition transition, final int precedence)
         throws MachineException {
 
         if (on) {
@@ -117,7 +117,7 @@ public abstract class SwitchTask extends Task {
      *
      * @return true if this switch task is currently turned on, false otherwise.
      */
-    public boolean isOn() {
+    public final boolean isOn() {
         synchronized (this) {
             return on;
         }
