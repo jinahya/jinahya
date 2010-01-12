@@ -28,11 +28,6 @@ import java.util.Vector;
 public class Machine {
 
 
-    private static final int STARTED = 0x01;
-
-    private static final int FINISHED = STARTED << 1;
-
-
     /**
      * Creates a new instance.
      *
@@ -84,13 +79,17 @@ public class Machine {
         throws MachineException {
 
         // ------------------------------------------------------ CHECK FINISHED
-        if (isFinished()) {
-            return;
+        if (finished) {
+            throw new IllegalStateException("already finished");
         }
 
         // --------------------------------------------------- CREATE TRANSITION
         final int sourceState = this.state;
         final int targetState = state;
+        final int[] previousStates = new int[states.size()];
+        for (int i = 0; i < previousStates.length; i++) {
+            previousStates[i] = ((Integer) states.elementAt(i)).intValue();
+        }
         final Transition transition = new Transition() {
             //@Override
             public int getSourceState() {
@@ -101,13 +100,11 @@ public class Machine {
                 return targetState;
             }
             //@Override
-            public boolean checkPreviousState(final int depth,
-                                              final int state) {
-                try {
-                    return (((Integer) states.elementAt(depth)).intValue() ==
-                            state);
-                } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    return false;
+            public int getPreviousState(final int depth) {
+                if (depth < previousStates.length) {
+                    return previousStates[depth];
+                } else {
+                    return State.UNKNOWN;
                 }
             }
             //@Override
@@ -125,12 +122,12 @@ public class Machine {
 
 
         // ------------------------------------------------------ CHECK STARTING
-        if (spec.isStartingTransition(transition)) {
-            start();
+        if (!started && spec.isStartingTransition(transition)) {
+            started = Boolean.TRUE.booleanValue();
         }
 
 
-        if (isStarted()) {
+        if (started) {
 
 
             // --------------------------------------------------------- PERFORM
@@ -160,8 +157,8 @@ public class Machine {
 
 
         // ----------------------------------------------------- CHECK FINISHING
-        if (spec.isFinishingTransition(transition)) {
-            finish();
+        if (!finished && spec.isFinishingTransition(transition)) {
+            finished = Boolean.TRUE.booleanValue();
         }
 
 
@@ -196,8 +193,8 @@ public class Machine {
 
         // prepare a copy of task list
         final Vector tmp = new Vector();
-        for (int i = 0; i < taskVector.size(); i++) {
-            tmp.addElement(taskVector.elementAt(i));
+        for (int i = 0; i < tasks.size(); i++) {
+            tmp.addElement(tasks.elementAt(i));
         }
 
         final int maximumPoolSize =
@@ -243,86 +240,35 @@ public class Machine {
     }
 
 
-    public final synchronized boolean isStarted() {
-        return ((modifier & STARTED) != 0);
-    }
-
-
-    public final synchronized void start() throws MachineException {
-        if (isStarted() || isFinished()) {
-            return;
-        }
-
-        modifier |= STARTED;
-
-        synchronized (taskVector) {
-            for (int i = 0; i < taskVector.size(); i++) {
-                try {
-                    ((Task) taskVector.elementAt(i)).initialize();
-                } catch (MachineException me) {
-                    me.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    public final synchronized boolean isFinished() {
-        return ((modifier & FINISHED) != 0);
-    }
-
-
-    public final synchronized void finish() throws MachineException {
-        if (isFinished()) {
-            return;
-        }
-
-        modifier |= FINISHED;
-
-        if (isStarted()) {
-            synchronized (taskVector) {
-                for (int i = taskVector.size() - 1; i >= 0; i--) {
-                    try {
-                        ((Task) taskVector.elementAt(i)).destroy();
-                    } catch (MachineException me) {
-                        me.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-
-    public final void submit(final Task task) {
+    public synchronized final void submit(final Task task) {
 
         if (task == null) {
             throw new NullPointerException("task");
         }
 
         synchronized (this) {
-            if (isStarted()) {
+            if (started) {
                 throw new IllegalStateException("already started");
             }
 
-            if (isFinished()) {
+            if (finished) {
                 throw new IllegalStateException("already finished");
             }
 
-            taskVector.addElement(task);
+            tasks.addElement(task);
         }
     }
 
 
+
     private MachineSpec spec;
 
-    private final Vector taskVector = new Vector();
+    private final Vector tasks = new Vector();
 
     private volatile int state = State.UNKNOWN;
 
     private final Vector states = new Vector();
 
-    private volatile int modifier = 0x00;
-
-    //private volatile boolean started = Boolean.FALSE.booleanValue();
-    //private volatile boolean finished = Boolean.FALSE.booleanValue();
+    private volatile boolean started = Boolean.FALSE.booleanValue();
+    private volatile boolean finished = Boolean.FALSE.booleanValue();
 }

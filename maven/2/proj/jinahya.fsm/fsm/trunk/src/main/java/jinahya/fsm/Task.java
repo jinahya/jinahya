@@ -25,17 +25,6 @@ public abstract class Task {
 
 
     /**
-     * Initialize this task.
-     * Override this method if you need to.
-     *
-     * @throws MachineException if any error occurs.
-     */
-    public void initialize() throws MachineException {
-        // empty
-    }
-
-
-    /**
      * Do any desired jobs.
      *
      * @param transition transition
@@ -45,15 +34,4 @@ public abstract class Task {
     public abstract void perform(final Transition transition,
                                  final int precedence)
         throws MachineException;
-
-
-    /**
-     * Destroys this task.
-     * Override this method if you need to.
-     *
-     * @throws MachineException if any error occurs.
-     */
-    public void destroy() throws MachineException {
-        // empty
-    }
 }

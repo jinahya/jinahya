@@ -40,5 +40,11 @@ public interface Transition {
     int getTargetState();
 
 
-    boolean checkPreviousState(int depth, int state);
+    /**
+     * Returns previous state.
+     *
+     * @param depth distance from the source state.
+     * @return old state @ <code>depth</code>
+     */
+    int getPreviousState(int depth);
 }
