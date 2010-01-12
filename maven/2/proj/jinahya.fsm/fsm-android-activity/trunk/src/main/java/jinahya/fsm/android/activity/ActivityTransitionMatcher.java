@@ -87,7 +87,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == PAUSED &&
-                    transition.getTargetState() == STOPPED);
+                    transition.getTargetState() == SUSPENDED);
         }
     },
 
@@ -98,7 +98,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
     ON_DESTROY {
         @Override
         public boolean matches(final Transition transition) {
-            return (transition.getSourceState() == STOPPED &&
+            return (transition.getSourceState() == SUSPENDED &&
                     transition.getTargetState() == DESTROYED);
         }
     },
@@ -110,92 +110,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
     ON_RESTART {
         @Override
         public boolean matches(final Transition transition) {
-            return (transition.getSourceState() == STOPPED &&
+            return (transition.getSourceState() == SUSPENDED &&
                     transition.getTargetState() == SUSPENDED);
         }
-    },
-
-
-    /**
-     * <code>UNKNOWN -> SUSPENDED || STOPPED -> SUSPENDED</code>.
-     */
-    _SUSPENDED {
-        @Override
-        public boolean matches(final Transition transition) {
-            return (ON_CREATE.matches(transition) ||
-                    ON_RESTART.matches(transition));
-            /*
-            final int sourceState = transition.getSourceState();
-            final int targetState = transition.getTargetState();
-            return (sourceState == UNKNOWN && targetState == SUSPENDED) ||
-                   (sourceState == STOPPED && targetState == SUSPENDED);
-             */
-        }
-    },
-
-
-    /**
-     * <code>SUSPENDED -> PAUSED || ACTIVE -> PAUSED</code>.
-     */
-    _PAUSED {
-        @Override
-        public boolean matches(final Transition transition) {
-            return ON_START.matches(transition) || ON_PAUSE.matches(transition);
-            /*
-            final int sourceState = transition.getSourceState();
-            final int targetState = transition.getTargetState();
-            return (sourceState == SUSPENDED && targetState == PAUSED) ||
-                   (sourceState == ACTIVE && targetState == PAUSED);
-             */
-        }
-    },
-
-
-    /**
-     * <code>PAUSED -> ACTIVE</code>.
-     */
-    _ACTIVE {
-        @Override
-        public boolean matches(final Transition transition) {
-            return ON_RESUME.matches(transition);
-            /*
-            final int sourceState = transition.getSourceState();
-            final int targetState = transition.getTargetState();
-            return (sourceState == PAUSED && targetState == ACTIVE);
-             */
-        }
-    },
-
-
-    /**
-     * <code>PAUSED -> STOPPED</code>.
-     */
-    _STOPPED {
-        @Override
-        public boolean matches(final Transition transition) {
-            return ON_STOP.matches(transition);
-            /*
-            final int sourceState = transition.getSourceState();
-            final int targetState = transition.getTargetState();
-            return (sourceState == PAUSED && targetState == STOPPED);
-             */
-        }
-    },
-
-
-    /**
-     * <code>STOPPED -> DESTROYED</code>.
-     */
-    _DESTROYED {
-        @Override
-        public boolean matches(final Transition transition) {
-            return ON_DESTROY.matches(transition);
-            /*
-            final int sourceState = transition.getSourceState();
-            final int targetState = transition.getTargetState();
-            return (sourceState == STOPPED && targetState == DESTROYED);
-             */
-        }
     };
-
 }

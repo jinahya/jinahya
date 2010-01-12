@@ -32,7 +32,7 @@ public class ActivityMachineSpec implements MachineSpec {
 
 
     /**
-     * <code>UNKNOWN -> SUSPENDED</code>.
+     * {@link jinahya.fsm.State#UNKNOWN} &#8594; {@link ActivityState#SUSPENDED}.
      *
      * @param transition {@inheritDoc}
      * @return {@inheritDoc}
@@ -45,14 +45,22 @@ public class ActivityMachineSpec implements MachineSpec {
 
 
     /**
-     * 
+     * {@inheritDoc}
+     *
+     * <ul>
+     * <li>{@link jinahya.fsm.State#UNKNOWN} &#8594; {@link ActivityState#SUSPENDED}</li>
+     * <li>{@link ActivityState#SUSPENDED} &#8596; {@link ActivityState#PAUSED}</li>
+     * <li>{@link ActivityState#PAUSED} &#8596; {@link ActivityState#ACTIVE}</li>
+     * <li>{@link ActivityState#SUSPENDED} &#8594; {@link ActivityState#DESTROYED}</li>
+     * </ul>
+     *
      * @param transition {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
     public boolean isTransitionAllowed(final Transition transition) {
 
-        boolean allowed = false;
+        boolean allowed = Boolean.FALSE.booleanValue();
 
         final int targetState = transition.getTargetState();
 
@@ -61,17 +69,13 @@ public class ActivityMachineSpec implements MachineSpec {
                 allowed = (targetState == SUSPENDED);
                 break;
             case SUSPENDED:
-                allowed = (targetState == PAUSED);
+                allowed = (targetState == PAUSED || targetState == DESTROYED);
                 break;
             case PAUSED:
-                allowed = (targetState == ACTIVE || targetState == STOPPED);
+                allowed = (targetState == ACTIVE || targetState == SUSPENDED);
                 break;
             case ACTIVE:
                 allowed = (targetState == PAUSED);
-                break;
-            case STOPPED:
-                allowed = (targetState == SUSPENDED ||
-                           targetState == DESTROYED);
                 break;
             default:
                 break;
@@ -82,14 +86,14 @@ public class ActivityMachineSpec implements MachineSpec {
 
 
     /**
-     * <code>STOPPED -> DESTROYED</code>.
+     * {@link ActivityState#SUSPENDED} &#8594; {@link ActivityState#DESTROYED}.
      *
      * @param transition {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
     public boolean isFinishingTransition(final Transition transition) {
-        return (transition.getSourceState() == STOPPED &&
+        return (transition.getSourceState() == SUSPENDED &&
                 transition.getTargetState() == DESTROYED);
     }
 }

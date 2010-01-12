@@ -17,6 +17,9 @@
 package jinahya.fsm.android.activity;
 
 
+import static jinahya.fsm.State.UNKNOWN;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -25,33 +28,30 @@ public final class ActivityState {
 
 
     /**
-     * <code>UNKNOWN -> onCreate() | STOPPED -> onRestart()</code>.
+     * <ul>
+     * <li> {@link jinahya.fsm.State#UNKNOWN} &#8594; <code>onCreate()<code></li>
+     * <li> {@link ActivityState#PAUSED} &#8594; <code>onRestart()</code></li>
+     * </ul>
      */
-    public static final int SUSPENDED = 0x01;
+    public static final int SUSPENDED = UNKNOWN >>> 1;
 
 
     /**
-     * <code>SUSPENDED -> onStart() | ACTIVE -> onPause()</code>.
+     * <code>STOPPED -> onStart() | ACTIVE -> onPause()</code>.
      */
-    public static final int PAUSED = SUSPENDED << 1;
+    public static final int PAUSED = SUSPENDED >> 1;
 
 
     /**
      * <code>PAUSED -> onResume()</code>.
      */
-    public static final int ACTIVE = PAUSED << 1;
-
-
-    /**
-     * <code>PAUSED -> onStop()</code>.
-     */
-    public static final int STOPPED = ACTIVE << 1;
+    public static final int ACTIVE = PAUSED >> 1;
 
 
     /**
      * <code>STOPPED -> onDestroy()</code>.
      */
-    public static final int DESTROYED = STOPPED << 1;
+    public static final int DESTROYED = SUSPENDED >> 1;
 
 
     private ActivityState() {
