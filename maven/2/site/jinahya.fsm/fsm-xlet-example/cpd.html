@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2010-01-06
+        Last Published: 2010-01-12
                       </div>
             <div class="xright">            <a href="${project.url}">fsm-xlet-example</a>
             
@@ -178,25 +178,12 @@
 <th>Line</th>
 </tr>
 <tr class="b"><td>xlet/Impl.java</td>
-<td><a href="./xref/xlet/Impl.html#60">60</a></td>
+<td><a href="./xref/xlet/Impl.html#81">81</a></td>
 </tr>
 <tr class="a"><td>xlet/Impl2.java</td>
-<td><a href="./xref/xlet/Impl2.html#60">60</a></td>
+<td><a href="./xref/xlet/Impl2.html#77">77</a></td>
 </tr>
-<tr class="b"><td colspan='2'><div class="source"><pre>        xsm.setPoolSize(20);
-        xsm.setHistorySize(10);
-
-        try {
-            xsm.setState(XletState.LOADED);
-        } catch (MachineException fsme) {
-            fsme.printStackTrace();
-        }
-    }
-
-
-    //@Override
-    public void initXlet(XletContext ctx) throws XletStateChangeException {
-        try {
+<tr class="b"><td colspan='2'><div class="source"><pre>        try {
             xsm.setState(XletState.PAUSED);
         } catch (MachineException fsme) {
             fsme.printStackTrace();
@@ -207,7 +194,7 @@
     //@Override
     public void startXlet() throws XletStateChangeException {
         try {
-            xsm.setState(XletState.STARTED);
+            xsm.setState(XletState.ACTIVE);
         } catch (MachineException fsme) {
             fsme.printStackTrace();
         }
