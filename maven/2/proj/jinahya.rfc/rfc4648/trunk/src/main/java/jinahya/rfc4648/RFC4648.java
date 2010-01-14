@@ -35,6 +35,9 @@ import jinahya.bitio.BitOutput;
 public class RFC4648 {
 
 
+    private static final char PAD = '=';
+
+
     private static final int OCTET_SIZE = 8;
 
 
@@ -122,7 +125,7 @@ public class RFC4648 {
                         output.write(encode[unsigned]);
                         if (padding) {
                             for (int j = i + 1; j < charsPerWord; j++) {
-                                output.write(RFC4648Constants.PAD);
+                                output.write(PAD);
                             }
                         }
                         break outer;
@@ -182,7 +185,7 @@ public class RFC4648 {
 
                     throw new EOFException("not finished properly");
 
-                } else if (c == RFC4648Constants.PAD) {
+                } else if (c == PAD) {
 
                     if (!padding) {
                         throw new  IOException("bad padding; no pad allowed");
@@ -201,7 +204,7 @@ public class RFC4648 {
                         if (c == -1) { // end of stream?
                             throw new EOFException("not finished properly");
                         }
-                        if (c != RFC4648Constants.PAD) { // not the pad char?
+                        if (c != PAD) { // not the pad char?
                             throw new IOException("bad padding");
                         }
                     }
