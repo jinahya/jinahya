@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.bitio;
@@ -85,7 +84,7 @@ public class BitOutput {
      * @param value boolean value
      * @throws IOException if an I/O error occurs.
      */
-    public void writeBoolean(boolean value) throws IOException {
+    public final void writeBoolean(boolean value) throws IOException {
         writeUnsignedByte(1, value ? 0x01 : 0x00);
     }
 
@@ -96,7 +95,7 @@ public class BitOutput {
      * @param value value to be written
      * @throws IOException if an I/O error occurs.
      */
-    public void writeBytes(byte[] value) throws IOException {
+    public final void writeBytes(byte[] value) throws IOException {
         writeBytes(value, 0, value.length);
     }
 
@@ -336,30 +335,31 @@ public class BitOutput {
      *
      * @return number of bits written so far.
      */
-    public long getCount() {
+    public final long getCount() {
         return count;
     }
 
 
     /**
-     * Writes some (if required) dummy bits for octet alignemnt.
+     * Writes some (if required) dummy bits for alignemnt.
      *
-     * @param octetLength number of bytes to be aligned
+     * @param length number of bits to be aligned
      * @throws IOException if an I/O error occurs.
      */
-    public void alignOctets(int octetLength) throws IOException {
-        if (octetLength <= 0x00) {
-            throw new IllegalArgumentException
-                ("illegal octet length: " + octetLength);
-        }
-        int length = (octetLength * 8) - (int) (count % 8);
+    public final void align(final int length) throws IOException {
 
-        int quotient = length / 7;
+        if (length <= 0x00) {
+            throw new IllegalArgumentException("illegal length: " + length);
+        }
+
+        int required = (int) (length - (count % length));
+
+        int quotient = required / 7;
         for (int i = 0; i < quotient; i++) {
             writeUnsignedByte(7, 0x00);
         }
 
-        int remainder = length % 7;
+        int remainder = required % 7;
         if (remainder > 0) {
             writeUnsignedByte(remainder, 0x00);
         }

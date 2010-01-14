@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.bitio;
@@ -47,9 +46,10 @@ public class UnsignedLongTest {
 
         BitOutput output = new BitOutput(baos);
         output.writeUnsignedLong(length, expected);
-        output.alignOctets(1);
+        output.align(8);
 
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readUnsignedLong(length);
         input.alignOctets(1);
 

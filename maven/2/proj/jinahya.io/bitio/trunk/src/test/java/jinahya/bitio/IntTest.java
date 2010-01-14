@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.bitio;
@@ -72,7 +71,7 @@ public class IntTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeIntLE(length, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readIntLE(length);
@@ -95,7 +94,7 @@ public class IntTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeIntLE(4, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readIntLE(4);
@@ -113,7 +112,7 @@ public class IntTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeInt(length, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readInt(length);

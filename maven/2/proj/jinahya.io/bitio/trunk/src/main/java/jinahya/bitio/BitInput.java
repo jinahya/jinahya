@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.bitio;
@@ -381,25 +380,25 @@ public class BitInput {
 
 
     /**
-     * Reads some (if required) dummy bits for octet alignment.
+     * Reads some (if required) dummy bits for alignment.
      *
-     * @param octetLength number of octets to be aligned
+     * @param length number of bits to be aligned
      * @throws IOException if an I/O error occurs
      */
-    public void alignOctets(int octetLength) throws IOException {
-        if (octetLength <= 0x00) {
-            throw new IllegalArgumentException
-                ("illegal octet length: " + octetLength);
+    public final void alignOctets(final int length) throws IOException {
+
+        if (length <= 0x00) {
+            throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int length = 8 - ((int) (count % (octetLength * 8)));
+        int required = (int) (length - (count % length));
 
-        int quotient = length / 7;
+        int quotient = required / 7;
         for (int i = 0; i < quotient; i++) {
             readUnsignedByte(7);
         }
 
-        int remainder = length % 7;
+        int remainder = required % 7;
         if (remainder > 0) {
             readUnsignedByte(remainder);
         }
@@ -470,6 +469,13 @@ public class BitInput {
     }
 
 
+    /**
+     *
+     * @param m
+     * @param n
+     * @return an unsigned fixed point number denoted Q(m, n)
+     * @throws IOException if an I/O error occurs.
+     */
     public float readUnsignedFixedPoint(int m, int n) throws IOException {
 
         if (m < 0) {

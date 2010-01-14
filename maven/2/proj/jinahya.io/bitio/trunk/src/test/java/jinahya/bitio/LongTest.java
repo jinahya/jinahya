@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.bitio;
@@ -73,7 +72,7 @@ public class LongTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeLongLE(length, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLongLE(length);
@@ -96,7 +95,7 @@ public class LongTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeLongLE(8, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLongLE(8);
@@ -114,7 +113,7 @@ public class LongTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
         output.writeLong(length, expected);
-        output.alignOctets(1);
+        output.align(8);
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLong(length);
