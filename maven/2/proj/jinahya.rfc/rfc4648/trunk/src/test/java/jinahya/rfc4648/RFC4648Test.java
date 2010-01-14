@@ -59,17 +59,19 @@ public abstract class RFC4648Test<T extends RFC4648> {
         T t = newCodec();
 
         byte[] expected = newBytes();
+        /*
         for (byte b : expected) {
             System.out.printf(" %1$02x", b);
         }
         System.out.println();
+         */
 
         ByteArrayInputStream encodeInput = new ByteArrayInputStream(expected);
         CharArrayWriter encodeOutput = new CharArrayWriter();
 
         t.encode(encodeInput, encodeOutput);
 
-        System.out.println(new String(encodeOutput.toCharArray()));
+        //System.out.println(new String(encodeOutput.toCharArray()));
 
         CharArrayReader decodeReader =
             new CharArrayReader(encodeOutput.toCharArray());
@@ -78,10 +80,12 @@ public abstract class RFC4648Test<T extends RFC4648> {
         t.decode(decodeReader, decodeOutput);
 
         byte[] actual = decodeOutput.toByteArray();
+        /*
         for (byte b : actual) {
             System.out.printf(" %1$02x", b);
         }
         System.out.println();
+         */
 
 
         Assert.assertArrayEquals(expected, actual);
