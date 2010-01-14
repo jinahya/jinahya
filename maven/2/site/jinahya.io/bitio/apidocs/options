@@ -1,17 +1,17 @@
 -classpath
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.io/bitio/trunk/target/classes'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.io/bitio/trunk/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.io/bitio/trunk/src/main/java'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.io/bitio/trunk/src/main/java'
 -author
 -bottom
-'Copyright &#169; 2008-2009. All Rights Reserved.'
+'Copyright &#169; 2008-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.io/bitio/trunk/target/site/apidocs'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.io/bitio/trunk/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
