@@ -18,8 +18,6 @@
 package jinahya.rfc4648;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.CharArrayReader;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
@@ -33,17 +31,10 @@ import jinahya.bitio.BitOutput;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class RFC4648Decoder {
+abstract class RFC4648Decoder {
 
 
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @param output
-     * @throws IOException if an I/O error occurs
-     */
+    /*
     public static void decode(final String alphabet, final Reader input,
                               final OutputStream output)
         throws IOException {
@@ -52,14 +43,6 @@ public final class RFC4648Decoder {
     }
 
 
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @return decoded byte array
-     * @throws IOException if an I/O error occurs
-     */
     public static byte[] decode(final String alphabet, final Reader input)
         throws IOException {
 
@@ -73,15 +56,6 @@ public final class RFC4648Decoder {
         }
     }
 
-
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @param output
-     * @throws IOException if an I/O error occurs
-     */
     public static void decode(final String alphabet, final char[] input,
                               final OutputStream output)
         throws IOException {
@@ -94,15 +68,6 @@ public final class RFC4648Decoder {
         }
     }
 
-
-    /**
-     *
-     *
-     * @param alphabet
-     * @param input
-     * @return decoded byte array
-     * @throws IOException if an I/O error occurs
-     */
     public static byte[] decode(final String alphabet, final char[] input)
         throws IOException {
 
@@ -113,50 +78,72 @@ public final class RFC4648Decoder {
             in.close();
         }
     }
+     */
 
 
     /**
      *
      *
      * @param alphabet
+     * @param padding
      * @param input
      * @param output
      */
-    private RFC4648Decoder(final String alphabet, final Reader input,
-                           final OutputStream output) {
+    protected RFC4648Decoder(final byte[] alphabet, final boolean padding,
+                             final Reader input, final OutputStream output) {
 
         super();
 
-        this.alphabet = alphabet;
+        for (int i = 0; i < this.alphabet.length; i++) {
+            this.alphabet[i] = -1;
+        }
+
+        for (byte i = 0; i < alphabet.length; i++) {
+            this.alphabet[alphabet[i] & 0xFF] = i;
+        }
+
+        this.padding = padding;
 
         this.input = input;
         this.output = new BitOutput(output);
     }
 
 
-    private void decode() throws IOException {
+    public final void decode() throws IOException {
 
         int bitsPerChar = RFC4648Utils.bitsPerChar(alphabet);
         int bytesPerWord = RFC4648Utils.bytesPerWord(bitsPerChar);
         int charsPerWord = RFC4648Utils.charsPerWord(bytesPerWord, bitsPerChar);
 
+        outer:
         while (true) {
 
             for (int i = 0; i < charsPerWord; i++) {
+
                 int c = input.read();
+
                 if (c == -1) { // end of stream
-                    if (i == 0) {
-                        return;
+
+                    if (i == 0) { // first character in a word
+                        break outer;
+                    } else if (((i * bitsPerChar) % 8) >= bitsPerChar) {
+                        throw new IOException("not finished properly");
                     }
+
                     throw new EOFException("not finished properly");
-                }
-                if (c == RFC4648Constants.PAD) {
-                    if (i == 0) { // :(
+
+                } else if (c == RFC4648Constants.PAD) {
+
+                    if (!padding) {
+                        throw new  IOException("bad padding; no pad allowed");
+                    }
+
+                    if (i == 0) { // first character in a word
+                        throw new IOException("bad padding");
+                    } else if (((i * bitsPerChar) % 8) >= bitsPerChar) {
                         throw new IOException("bad padding");
                     }
-                    if (((i * bitsPerChar) % 8) >= bitsPerChar) {
-                        throw new IOException("bad padding");
-                    }
+
                     for (int j = i + 1; j < charsPerWord; j++) {
                         c = input.read(); // pad
                         if (c == -1) { // end of stream?
@@ -166,20 +153,26 @@ public final class RFC4648Decoder {
                             throw new IOException("bad padding");
                         }
                     }
-                    return;
-                }
 
-                int index = alphabet.indexOf(c);
-                if (index == -1) {
-                    throw new IOException("bad character: " + c);
+                    break outer;
+
+                } else {
+
+                    int value = alphabet[c];
+                    if (value == -1) {
+                        throw new IOException("bad character: " + c);
+                    }
+                    output.writeUnsignedInt(bitsPerChar, value);
                 }
-                output.writeUnsignedInt(bitsPerChar, index);
             }
         }
+
+        output.alignOctets(1);
     }
 
 
-    private String alphabet;
+    private byte[] alphabet = new byte[128];
+    private boolean padding;
 
     private Reader input;
     private BitOutput output;

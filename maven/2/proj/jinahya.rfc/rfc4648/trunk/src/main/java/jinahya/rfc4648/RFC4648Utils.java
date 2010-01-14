@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.rfc4648;
@@ -26,7 +25,7 @@ package jinahya.rfc4648;
 final class RFC4648Utils {
 
 
-    public static final int OCTET_SIZE = 8;
+    private static final int OCTET_SIZE = 8;
 
 
     /**
@@ -63,8 +62,8 @@ final class RFC4648Utils {
      * @param alphabet
      * @return number of bits per character
      */
-    public static int bitsPerChar(final String alphabet) {
-        return (int) (Math.log(alphabet.length()) / Math.log(2.0d));
+    public static int bitsPerChar(final byte[] alphabet) {
+        return (int) (Math.log(alphabet.length) / Math.log(2.0d));
     }
 
 
