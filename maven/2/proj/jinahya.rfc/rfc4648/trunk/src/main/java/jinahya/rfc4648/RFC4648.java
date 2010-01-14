@@ -38,23 +38,35 @@ public class RFC4648 {
     private static final int OCTET_SIZE = 8;
 
 
+    /**
+     *
+     * @param a
+     * @param b
+     * @return calculated least common multiple
+     */
     private static int LCM(final int a, final int b) {
         return ((a * b) / GCD(a, b));
     }
 
 
+    /**
+     *
+     * @param a
+     * @param b
+     * @return calculated greate common devisor
+     */
     private static int GCD(final int a, final int b) {
         return (b == 0 ? a : GCD(b, a % b));
     }
 
 
-    protected RFC4648(final byte[] alphabet, boolean padding) {
+    protected RFC4648(final byte[] alphabet, final boolean padding) {
         super();
 
         encode = new byte[alphabet.length];
         System.arraycopy(alphabet, 0, encode, 0, encode.length);
 
-        decode = new byte[94]; // number of visible characters in ascii
+        decode = new byte[128]; // number of visible characters in ascii
         for (int i = 0; i < decode.length; i++) {
             decode[i] = -1;
         }
@@ -127,7 +139,7 @@ public class RFC4648 {
      *
      * @param input
      * @param output
-     * @throws IOException
+     * @throws IOException if I/O error occurs
      */
     public final void decode(final Reader input, final OutputStream output)
         throws IOException {
@@ -137,6 +149,12 @@ public class RFC4648 {
     }
 
 
+    /**
+     *
+     * @param input
+     * @param output
+     * @throws IOException if I/O error occurs
+     */
     private void decode(Reader input, BitOutput output) throws IOException {
 
         int c;
@@ -201,17 +219,12 @@ public class RFC4648 {
             }
         }
 
-        output.alignOctets(1);
-    }
 
-
-    protected final byte getEncodeChar(int b) {
-        return encode[b];
-    }
-
-
-    protected final byte getDecodeByte(int c) {
-        return decode[c];
+        /*
+        System.out.println(output.getCount());
+        output.align(8);
+        System.out.println(output.getCount());
+         */
     }
 
 

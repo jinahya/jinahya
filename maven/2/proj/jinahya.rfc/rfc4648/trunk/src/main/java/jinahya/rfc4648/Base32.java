@@ -17,22 +17,22 @@
 package jinahya.rfc4648;
 
 
-import org.apache.commons.codec.binary.Base64;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64Test extends RFC4648Test<jinahya.rfc4648.Base64> {
+public class Base32 extends RFC4648 {
 
 
-    @Override
-    protected jinahya.rfc4648.Base64 newCodec() {
-        return new jinahya.rfc4648.Base64();
-    }
-
-    public void testEncodingWithCommonsCodec() {
-
+    /**
+     *
+     */
+    public Base32() {
+        super(new byte[] {
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                'Y', 'Z', '2', '3', '4', '5', '6', '7'},
+              true);
     }
 }

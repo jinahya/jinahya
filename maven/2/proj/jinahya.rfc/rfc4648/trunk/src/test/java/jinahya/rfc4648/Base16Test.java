@@ -24,12 +24,12 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64Test extends RFC4648Test<jinahya.rfc4648.Base64> {
+public class Base16Test extends RFC4648Test<jinahya.rfc4648.Base16> {
 
 
     @Override
-    protected jinahya.rfc4648.Base64 newCodec() {
-        return new jinahya.rfc4648.Base64();
+    protected jinahya.rfc4648.Base16 newCodec() {
+        return new jinahya.rfc4648.Base16();
     }
 
     public void testEncodingWithCommonsCodec() {
