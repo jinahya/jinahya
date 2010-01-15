@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,32 +17,26 @@
 package jinahya.rfc4648;
 
 
-import org.apache.commons.codec.BinaryEncoder;
-import org.apache.commons.codec.BinaryDecoder;
-import org.apache.commons.codec.binary.Base64;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.InitializationError;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLTest extends RFC4648Test<Base64URL> {
+public class RFC4648TestClassRunner extends BlockJUnit4ClassRunner {
 
-
-    @Override
-    protected Base64URL getCodec() {
-        return new Base64URL();
+    public RFC4648TestClassRunner(Class<?> klass) throws InitializationError {
+        super(klass);
     }
 
 
     @Override
-    protected final BinaryEncoder getCommonsCodecBinaryEncoder() {
-        return new Base64(-1, new byte[0], true);
-    }
-
-
-    @Override
-    protected final BinaryDecoder getCommonsCodecBinaryDecoder() {
-        return new Base64(-1, new byte[0], true);
+    public void run(RunNotifier notifier) {
+        for (int i = 0; i < 10; i++) {
+            super.run(notifier);
+        }
     }
 }

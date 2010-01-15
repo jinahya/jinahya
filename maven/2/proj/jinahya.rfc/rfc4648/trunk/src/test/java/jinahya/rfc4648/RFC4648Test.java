@@ -24,14 +24,14 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.util.Random;
 
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.junit.Assert;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 import org.junit.Test;
 
 
@@ -39,12 +39,13 @@ import org.junit.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <T>
  */
+@RunWith(RFC4648TestClassRunner.class)
 public abstract class RFC4648Test<T extends RFC4648> {
 
 
     protected final byte[] getBytes() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int length = (int) (Math.random() * 1024.d);
+        int length = (int) (Math.random() * 256.d);
         Random random = new Random();
         for (int i = 0; i < length; i++) {
            baos.write(random.nextInt());
@@ -53,6 +54,10 @@ public abstract class RFC4648Test<T extends RFC4648> {
     }
 
 
+    /**
+     *
+     * @return an instance of typed codec.
+     */
     protected abstract T getCodec();
 
 
@@ -61,37 +66,32 @@ public abstract class RFC4648Test<T extends RFC4648> {
 
         T t = getCodec();
 
-        byte[] expected = getBytes();
-        /*
-        for (byte b : expected) {
-            System.out.printf(" %1$02x", b);
-        }
-        System.out.println();
-         */
+        byte[] expecteds = getBytes();
+        print(t.getClass().getSimpleName() + ".expecteds", expecteds);
 
-        ByteArrayInputStream encodeInput = new ByteArrayInputStream(expected);
+
+        // -------------------------------------------------------------- ENCODE
+        ByteArrayInputStream encodeInput = new ByteArrayInputStream(expecteds);
         CharArrayWriter encodeOutput = new CharArrayWriter();
 
         t.encode(encodeInput, encodeOutput);
+        print(t.getClass().getSimpleName() + ".encoded",
+              encodeOutput.toCharArray());
 
-        //System.out.println(new String(encodeOutput.toCharArray()));
 
+        // -------------------------------------------------------------- DECODE
         CharArrayReader decodeReader =
             new CharArrayReader(encodeOutput.toCharArray());
         ByteArrayOutputStream decodeOutput = new ByteArrayOutputStream();
 
         t.decode(decodeReader, decodeOutput);
 
-        byte[] actual = decodeOutput.toByteArray();
-        /*
-        for (byte b : actual) {
-            System.out.printf(" %1$02x", b);
-        }
-        System.out.println();
-         */
+        byte[] actuals = decodeOutput.toByteArray();
+        print(t.getClass().getSimpleName() + ".actuals", actuals);
 
 
-        assertArrayEquals(expected, actual);
+        // ------------------------------------------------------- ASSERT EQUALS
+        Assert.assertArrayEquals(expecteds, actuals);
     }
 
 
@@ -179,5 +179,25 @@ public abstract class RFC4648Test<T extends RFC4648> {
         throws DecoderException {
 
         return decoder.decode(encoded);
+    }
+
+
+    private void print(String head, byte[] bytes) {
+        System.out.println("\n" + head + " (" + bytes.length + ")");
+        System.out.println("----------------------------------------");
+        for (byte b : bytes) {
+            System.out.printf("%02x", b);
+        }
+        System.out.println("\n----------------------------------------");
+    }
+
+
+    private void print(String head, char[] chars) {
+        System.out.println("\n" + head + " (" + chars.length + ")");
+        System.out.println("----------------------------------------");
+        for (char c : chars) {
+            System.out.printf("%c", c);
+        }
+        System.out.println("\n----------------------------------------");
     }
 }
