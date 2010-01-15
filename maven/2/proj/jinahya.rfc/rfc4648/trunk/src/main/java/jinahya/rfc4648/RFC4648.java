@@ -35,61 +35,83 @@ import jinahya.bitio.BitOutput;
 public class RFC4648 {
 
 
+    /** Default pad character. */
     private static final char PAD = '=';
 
 
-    private static final int OCTET_SIZE = 8;
+    /** MAGIC NUMBER: OCTET SIZE. */
+    private static final int MN_OS = 8;
+
+
+    /** MAGIC NUMBER: ASCII SIZE. */
+    private static final int MN_AS = 128;
+
+
+    /** MAGIC NUMBER: SMALLEST VISIBLE ASCII. */
+    private static final int MN_SVA = 33;
 
 
     /**
+     * Returns the Least Common Muliple value for given two operands.
      *
-     * @param a
-     * @param b
+     * @param a the first operand
+     * @param b the second operand
      * @return calculated least common multiple
      */
-    private static int LCM(final int a, final int b) {
-        return ((a * b) / GCD(a, b));
+    private static int lcm(final int a, final int b) {
+        return ((a * b) / gcd(a, b));
     }
 
 
     /**
+     * Returns the Greatest Common Divisor for given two operands.
      *
-     * @param a
-     * @param b
+     * @param a the first operand
+     * @param b the second operand
      * @return calculated greate common devisor
      */
-    private static int GCD(final int a, final int b) {
-        return (b == 0 ? a : GCD(b, a % b));
+    private static int gcd(final int a, final int b) {
+        if (b == 0) {
+            return a;
+        } else {
+            return gcd(b, a % b);
+        }
     }
 
 
+    /**
+     * Create a new instance.
+     *
+     * @param alphabet alphabe to be used
+     * @param padding flag for padding
+     */
     protected RFC4648(final byte[] alphabet, final boolean padding) {
         super();
 
         encode = new byte[alphabet.length];
         System.arraycopy(alphabet, 0, encode, 0, encode.length);
 
-        decode = new byte[128]; // number of visible characters in ascii
+        decode = new byte[MN_AS - MN_SVA + 1];
         for (int i = 0; i < decode.length; i++) {
             decode[i] = -1;
         }
         for (byte i = 0; i < encode.length; i++) {
-            decode[encode[i]] = i;
+            decode[encode[i] - MN_SVA] = i;
         }
 
         this.padding = padding;
 
         bitsPerChar = (int) (Math.log(encode.length) / Math.log(2.0d));
-        bytesPerWord = LCM(OCTET_SIZE, bitsPerChar) / OCTET_SIZE;
-        charsPerWord = bytesPerWord * OCTET_SIZE / bitsPerChar;
+        bytesPerWord = lcm(MN_OS, bitsPerChar) / MN_OS;
+        charsPerWord = bytesPerWord * MN_OS / bitsPerChar;
     }
 
 
     /**
      *
-     * @param input
-     * @param output
-     * @throws IOException
+     * @param input binary input
+     * @param output character output
+     * @throws IOException if an I/O error occurs
      */
     public final void encode(final InputStream input, final Writer output)
         throws IOException {
@@ -98,14 +120,21 @@ public class RFC4648 {
     }
 
 
-    private void encode(BitInput input, Writer output) throws IOException {
+    /**
+     *
+     * @param input binary input
+     * @param output character output
+     * @throws IOException if an I/O error occurs
+     */
+    private void encode(final BitInput input, final Writer output)
+        throws IOException {
 
         outer:
         while (true) {
 
             for (int i = 0; i < charsPerWord; i++) {
 
-                int available = 8 - ((bitsPerChar * i) % 8);
+                int available = MN_OS - ((bitsPerChar * i) % MN_OS);
 
                 if (available >= bitsPerChar) {
                     try {
@@ -140,8 +169,8 @@ public class RFC4648 {
 
     /**
      *
-     * @param input
-     * @param output
+     * @param input character input
+     * @param output binary output
      * @throws IOException if I/O error occurs
      */
     public final void decode(final Reader input, final OutputStream output)
@@ -154,11 +183,12 @@ public class RFC4648 {
 
     /**
      *
-     * @param input
-     * @param output
+     * @param input character input
+     * @param output binary output
      * @throws IOException if I/O error occurs
      */
-    private void decode(Reader input, BitOutput output) throws IOException {
+    private void decode(final Reader input, final BitOutput output)
+        throws IOException {
 
         int c;
 
@@ -175,7 +205,7 @@ public class RFC4648 {
                         break outer;
                     }
 
-                    if (((i * bitsPerChar) % OCTET_SIZE) >= bitsPerChar) {
+                    if (((i * bitsPerChar) % MN_OS) >= bitsPerChar) {
                         throw new IOException("not finished properly");
                     }
 
@@ -195,7 +225,7 @@ public class RFC4648 {
                         throw new IOException("bad padding");
                     }
 
-                    if (((i * bitsPerChar) % 8) >= bitsPerChar) {
+                    if (((i * bitsPerChar) % MN_OS) >= bitsPerChar) {
                         throw new IOException("bad padding");
                     }
 
@@ -213,30 +243,32 @@ public class RFC4648 {
 
                 } else {
 
-                    int value = decode[c];
+                    int value = decode[c - MN_SVA];
                     if (value == -1) {
-                        throw new IOException("bad character: " + c);
+                        throw new IOException("bad character: " + (char) c);
                     }
                     output.writeUnsignedInt(bitsPerChar, value);
                 }
             }
         }
-
-
-        /*
-        System.out.println(output.getCount());
-        output.align(8);
-        System.out.println(output.getCount());
-         */
     }
 
 
+    /** Characters for encoding. */
     private byte[] encode;
+
+    /** Characters for decoding. */
     private byte[] decode;
 
+    /** Boolean flag for padding. */
     private boolean padding;
 
-    protected final int bitsPerChar;
-    protected final int bytesPerWord;
-    protected final int charsPerWord;
+    /** number of bits for a character. */
+    private final int bitsPerChar;
+
+    /** number of bytes for a word. */
+    private final int bytesPerWord;
+
+    /** number of characters for a word. */
+    private final int charsPerWord;
 }

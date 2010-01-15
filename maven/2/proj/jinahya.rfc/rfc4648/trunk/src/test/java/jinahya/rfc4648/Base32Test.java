@@ -28,7 +28,7 @@ public class Base32Test extends RFC4648Test<jinahya.rfc4648.Base32> {
 
 
     @Override
-    protected jinahya.rfc4648.Base32 newCodec() {
+    protected jinahya.rfc4648.Base32 getCodec() {
         return new jinahya.rfc4648.Base32();
     }
 

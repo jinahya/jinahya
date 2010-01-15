@@ -17,6 +17,8 @@
 package jinahya.rfc4648;
 
 
+import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.binary.Base64;
 
 
@@ -28,11 +30,19 @@ public class Base64Test extends RFC4648Test<jinahya.rfc4648.Base64> {
 
 
     @Override
-    protected jinahya.rfc4648.Base64 newCodec() {
+    protected jinahya.rfc4648.Base64 getCodec() {
         return new jinahya.rfc4648.Base64();
     }
 
-    public void testEncodingWithCommonsCodec() {
 
+    @Override
+    protected final BinaryEncoder getCommonsCodecBinaryEncoder() {
+        return new Base64(-1, new byte[0], false);
+    }
+
+
+    @Override
+    protected final BinaryDecoder getCommonsCodecBinaryDecoder() {
+        return new Base64(-1, new byte[0], false);
     }
 }

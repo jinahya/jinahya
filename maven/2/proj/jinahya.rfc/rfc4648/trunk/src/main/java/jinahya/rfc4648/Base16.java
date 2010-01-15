@@ -25,7 +25,7 @@ public class Base16 extends RFC4648 {
 
 
     /**
-     *
+     * Creates a new intance.
      */
     public Base16() {
         super(new byte[] {

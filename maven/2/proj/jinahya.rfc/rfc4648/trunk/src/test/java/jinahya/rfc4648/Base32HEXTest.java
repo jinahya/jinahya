@@ -28,7 +28,7 @@ public class Base32HEXTest extends RFC4648Test<jinahya.rfc4648.Base32HEX> {
 
 
     @Override
-    protected jinahya.rfc4648.Base32HEX newCodec() {
+    protected jinahya.rfc4648.Base32HEX getCodec() {
         return new jinahya.rfc4648.Base32HEX();
     }
 

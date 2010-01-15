@@ -24,6 +24,9 @@ package jinahya.rfc4648;
 public class Base64 extends RFC4648 {
 
 
+    /**
+     * Create a new instance.
+     */
     public Base64() {
         super(new byte[] {
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',

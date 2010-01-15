@@ -25,7 +25,7 @@ public class Base32 extends RFC4648 {
 
 
     /**
-     *
+     * Create a new instance.
      */
     public Base32() {
         super(new byte[] {

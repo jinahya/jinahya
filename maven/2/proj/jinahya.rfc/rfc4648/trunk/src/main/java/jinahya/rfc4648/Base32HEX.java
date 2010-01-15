@@ -25,7 +25,7 @@ public class Base32HEX extends RFC4648 {
 
 
     /**
-     *
+     * Create a new instance.
      */
     public Base32HEX() {
         super(new byte[] {

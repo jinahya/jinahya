@@ -17,22 +17,48 @@
 package jinahya.rfc4648;
 
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.BinaryDecoder;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.binary.Hex;
+
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base16Test extends RFC4648Test<jinahya.rfc4648.Base16> {
+public class Base16Test extends RFC4648Test<Base16> {
 
 
     @Override
-    protected jinahya.rfc4648.Base16 newCodec() {
+    protected Base16 getCodec() {
         return new jinahya.rfc4648.Base16();
     }
 
-    public void testEncodingWithCommonsCodec() {
 
+    @Override
+    protected final BinaryEncoder getCommonsCodecBinaryEncoder() {
+        return new Hex();
+    }
+
+
+    @Override
+    protected byte[] encodeWithCommonsCodecBinaryEncoder(
+        final BinaryEncoder encoder, final byte[] original)
+        throws EncoderException {
+
+        char[] encoded = Hex.encodeHex(original, false);
+        byte[] result = new byte[encoded.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (byte) encoded[i];
+        }
+        return result;
+    }
+
+
+    @Override
+    protected final BinaryDecoder getCommonsCodecBinaryDecoder() {
+        return new Hex();
     }
 }
