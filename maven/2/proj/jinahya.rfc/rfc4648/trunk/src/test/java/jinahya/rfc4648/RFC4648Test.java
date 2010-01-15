@@ -67,7 +67,7 @@ public abstract class RFC4648Test<T extends RFC4648> {
         T t = getCodec();
 
         byte[] expecteds = getBytes();
-        print(t.getClass().getSimpleName() + ".expecteds", expecteds);
+        print("original", expecteds);
 
 
         // -------------------------------------------------------------- ENCODE
@@ -75,19 +75,18 @@ public abstract class RFC4648Test<T extends RFC4648> {
         CharArrayWriter encodeOutput = new CharArrayWriter();
 
         t.encode(encodeInput, encodeOutput);
-        print(t.getClass().getSimpleName() + ".encoded",
-              encodeOutput.toCharArray());
+        char[] encoded = encodeOutput.toCharArray();
+        print("encoded by " + t.getClass(), encoded);
 
 
         // -------------------------------------------------------------- DECODE
-        CharArrayReader decodeReader =
-            new CharArrayReader(encodeOutput.toCharArray());
+        CharArrayReader decodeReader = new CharArrayReader(encoded);
         ByteArrayOutputStream decodeOutput = new ByteArrayOutputStream();
 
         t.decode(decodeReader, decodeOutput);
 
         byte[] actuals = decodeOutput.toByteArray();
-        print(t.getClass().getSimpleName() + ".actuals", actuals);
+        print("decoded by " + t.getClass(), actuals);
 
 
         // ------------------------------------------------------- ASSERT EQUALS
@@ -104,16 +103,18 @@ public abstract class RFC4648Test<T extends RFC4648> {
     public final void testWithCommonsCodecBinaryEncoder()
         throws IOException, EncoderException {
 
-        BinaryEncoder binaryEncoder = getCommonsCodecBinaryEncoder();
-        if (binaryEncoder == null) {
+        BinaryEncoder encoder = getCommonsCodecBinaryEncoder();
+        if (encoder == null) {
             return;
         }
 
         byte[] expecteds = getBytes();
+        print("original", expecteds);
 
         // -------------------------------------------------------------- ENCODE
         byte[] encoded = encodeWithCommonsCodecBinaryEncoder(
-            binaryEncoder, expecteds);
+            encoder, expecteds);
+        print("encoded by " + encoder.getClass(), encoded);
 
 
         // -------------------------------------------------------------- DECODE
@@ -124,6 +125,7 @@ public abstract class RFC4648Test<T extends RFC4648> {
             new ByteArrayInputStream(encoded), "US-ASCII"), decodeOutput);
 
         byte[] actuals = decodeOutput.toByteArray();
+        print("decoded by " + t.getClass(), actuals);
 
 
         // ------------------------------------------------------- ASSERT EQUALS
@@ -148,12 +150,13 @@ public abstract class RFC4648Test<T extends RFC4648> {
     public void testWithCommonsCodecBinaryDecoder()
         throws IOException, DecoderException {
 
-        BinaryDecoder binaryDecoder = getCommonsCodecBinaryDecoder();
-        if (binaryDecoder == null) {
+        BinaryDecoder decoder = getCommonsCodecBinaryDecoder();
+        if (decoder == null) {
             return;
         }
 
         byte[] expecteds = getBytes();
+        print("original", expecteds);
 
 
         // -------------------------------------------------------------- ENCODE
@@ -162,11 +165,13 @@ public abstract class RFC4648Test<T extends RFC4648> {
         ByteArrayOutputStream encodeOutput = new ByteArrayOutputStream();
         t.encode(new ByteArrayInputStream(expecteds),
                  new OutputStreamWriter(encodeOutput, "US-ASCII"));
+        byte[] encoded = encodeOutput.toByteArray();
+        print("encoded by " + t.getClass(), encoded);
 
 
         // -------------------------------------------------------------- DECODE
-        byte[] actuals = decodeWithCommonsCodecBinaryDecoder(
-            binaryDecoder, encodeOutput.toByteArray());
+        byte[] actuals = decodeWithCommonsCodecBinaryDecoder(decoder, encoded);
+        print("decoded by " + decoder.getClass(), actuals);
 
 
         // ------------------------------------------------------- ASSERT EQUALS
