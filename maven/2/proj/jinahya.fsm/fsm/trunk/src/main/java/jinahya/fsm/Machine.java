@@ -40,7 +40,7 @@ public class Machine {
             throw new NullPointerException("spec");
         }
 
-        this.spec = spec;
+        _spec = spec;
     }
 
 
@@ -80,7 +80,7 @@ public class Machine {
 
         // ------------------------------------------------------ CHECK FINISHED
         if (finished) {
-            throw new IllegalStateException("already finished");
+            return;
         }
 
         // --------------------------------------------------- CREATE TRANSITION
@@ -120,29 +120,28 @@ public class Machine {
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!spec.isTransitionAllowed(transition)) {
+        if (!_spec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed: " + transition);
         }
 
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && spec.isStartingTransition(transition)) {
+        if (!started && _spec.isStartingTransition(transition)) {
             started = Boolean.TRUE.booleanValue();
         }
 
 
         if (started) {
 
-
             // --------------------------------------------------------- PERFORM
 
             final int minimumPrecedence =
-                Math.max(0x00, spec.getMinimumPrecedence(transition));
+                Math.max(0x00, _spec.getMinimumPrecedence(transition));
 
             Thread[] threads = null;
 
-            for (int p = 0; p <= minimumPrecedence; p++) {
-                threads = perform(threads, transition, p);
+            for (int i = 0; i <= minimumPrecedence; i++) {
+                threads = perform(threads, transition, i);
             }
 
             // wait for all threads in last group end
@@ -161,7 +160,7 @@ public class Machine {
 
 
         // ----------------------------------------------------- CHECK FINISHING
-        if (!finished && spec.isFinishingTransition(transition)) {
+        if (!finished && _spec.isFinishingTransition(transition)) {
             finished = Boolean.TRUE.booleanValue();
         }
 
@@ -169,7 +168,7 @@ public class Machine {
         // ------------------------------------------------------------- HISTORY
         states.insertElementAt(new Integer(this.state), 0);
         final int maximumHistorySize =
-            Math.max(0x00, spec.getMaximumHistorySize());
+            Math.max(0x00, _spec.getMaximumHistorySize());
         states.setSize
             (Math.min(states.size(), maximumHistorySize));
 
@@ -204,12 +203,14 @@ public class Machine {
 
         // prepare a copy of task list
         final Vector tmp = new Vector();
-        for (int i = 0; i < tasks.size(); i++) {
-            tmp.addElement(tasks.elementAt(i));
+        synchronized (tasks) {
+            for (int i = 0; i < tasks.size(); i++) {
+                tmp.addElement(tasks.elementAt(i));
+            }
         }
 
         final int maximumPoolSize =
-            Math.max(0x01, spec.getMaximumPoolSize(transition, precedence));
+            Math.max(0x01, _spec.getMaximumPoolSize(transition, precedence));
 
         Thread[] children = new Thread[maximumPoolSize];
         for (int i = 0; i < children.length; i++) {
@@ -251,18 +252,10 @@ public class Machine {
     }
 
 
-    public synchronized final void submit(final Task task) {
+    public final void submit(final Task task) {
 
         if (task == null) {
             throw new NullPointerException("task");
-        }
-
-        if (started) {
-            throw new IllegalStateException("already started");
-        }
-
-        if (finished) {
-            throw new IllegalStateException("already finished");
         }
 
         tasks.addElement(task);
@@ -270,7 +263,7 @@ public class Machine {
 
 
 
-    private MachineSpec spec;
+    private MachineSpec _spec;
 
     private final Vector tasks = new Vector();
 

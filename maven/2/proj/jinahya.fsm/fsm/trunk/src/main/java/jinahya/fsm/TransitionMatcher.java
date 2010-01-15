@@ -30,5 +30,5 @@ public interface TransitionMatcher {
      * @param transition transition to be matched
      * @return true if given <code>transition</code> matches, false otherwise.
      */
-    boolean matches(Transition transition);
+    boolean matches(final Transition transition);
 }

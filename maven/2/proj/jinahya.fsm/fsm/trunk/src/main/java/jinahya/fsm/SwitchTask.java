@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -71,7 +71,7 @@ public abstract class SwitchTask extends Task {
                         off(precedence);
                     } finally {
                         synchronized (this) {
-                            on = Boolean.FALSE.booleanValue();
+                            on = false;
                         }
                     }
                     break;
@@ -84,7 +84,7 @@ public abstract class SwitchTask extends Task {
                         on(precedence);
                     } finally {
                         synchronized (this) {
-                            on = Boolean.TRUE.booleanValue();
+                            on = true;
                         }
                     }
                     break;
@@ -95,7 +95,7 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * Performes when this switch task is on.
+     * Performes when this switch task is turned on.
      *
      * @param precedence task precedence
      * @throws MachineException if any error occurs.
@@ -104,7 +104,7 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * Performes when this switch task is off.
+     * Performes when this switch task is turned off.
      *
      * @param precedence task precedence
      * @throws MachineException if any error occurs.
@@ -113,7 +113,7 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * Returns whether this task is currently turned on or not.
+     * Returns whether this task is currently turned on or off.
      *
      * @return true if this switch task is currently turned on, false otherwise.
      */
