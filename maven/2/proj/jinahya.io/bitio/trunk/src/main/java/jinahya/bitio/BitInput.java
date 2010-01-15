@@ -385,13 +385,18 @@ public class BitInput {
      * @param length number of bits to be aligned
      * @throws IOException if an I/O error occurs
      */
-    public final void alignOctets(final int length) throws IOException {
+    public final void align(final int length) throws IOException {
 
         if (length <= 0x00) {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int required = (int) (length - (count % length));
+        long mod = count % length;
+        if (mod == 0L) {
+            return;
+        }
+
+        int required = (int) (length - mod);
 
         int quotient = required / 7;
         for (int i = 0; i < quotient; i++) {

@@ -47,7 +47,7 @@ public class BooleanTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         boolean actual = input.readBoolean();
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }

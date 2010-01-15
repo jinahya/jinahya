@@ -75,7 +75,7 @@ public class IntTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readIntLE(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -98,7 +98,7 @@ public class IntTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readIntLE(4);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -116,7 +116,7 @@ public class IntTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readInt(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }

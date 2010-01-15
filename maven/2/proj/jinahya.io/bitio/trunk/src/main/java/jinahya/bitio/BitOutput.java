@@ -352,7 +352,12 @@ public class BitOutput {
             throw new IllegalArgumentException("illegal length: " + length);
         }
 
-        int required = (int) (length - (count % length));
+        long mod = count % length;
+        if (mod == 0L) {
+            return;
+        }
+
+        int required = (int) (length - mod);
 
         int quotient = required / 7;
         for (int i = 0; i < quotient; i++) {

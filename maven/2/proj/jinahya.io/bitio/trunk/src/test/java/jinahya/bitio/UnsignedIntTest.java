@@ -50,7 +50,7 @@ public class UnsignedIntTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         int actual = input.readUnsignedInt(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }

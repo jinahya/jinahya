@@ -76,7 +76,7 @@ public class LongTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLongLE(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -99,7 +99,7 @@ public class LongTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLongLE(8);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -117,7 +117,7 @@ public class LongTest {
 
         BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readLong(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }

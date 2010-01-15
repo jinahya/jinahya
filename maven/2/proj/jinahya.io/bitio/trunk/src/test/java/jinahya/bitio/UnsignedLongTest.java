@@ -51,7 +51,7 @@ public class UnsignedLongTest {
         BitInput input =
             new BitInput(new ByteArrayInputStream(baos.toByteArray()));
         long actual = input.readUnsignedLong(length);
-        input.alignOctets(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
