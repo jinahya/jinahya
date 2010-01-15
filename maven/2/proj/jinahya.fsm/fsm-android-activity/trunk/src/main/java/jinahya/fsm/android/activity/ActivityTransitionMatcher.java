@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
 
 
     /**
-     * <code>UNKNOWN -> SUSPENDED</code>.
+     * {@link jinahya.fsm.State#UNKNOWN} &#8594;
+     * {@link ActivityState#SUSPENDED}.
      */
     ON_CREATE {
         @Override
@@ -50,8 +51,29 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
     ON_START {
         @Override
         public boolean matches(final Transition transition) {
-            return (transition.getSourceState() == SUSPENDED &&
-                    transition.getTargetState() == PAUSED);
+
+            if (!(transition.getSourceState() == SUSPENDED &&
+                  transition.getTargetState() == PAUSED)) {
+
+                return false;
+            }
+
+            boolean matches = false;
+
+            switch (transition.getPreviousState(0)) {
+                case UNKNOWN:
+                    // following onCreate()
+                    matches = Boolean.TRUE.booleanValue();
+                    break;
+                case SUSPENDED:
+                    // following onRestart()
+                    matches = transition.getPreviousState(1) == SUSPENDED;
+                    break;
+                default:
+                    break;
+            }
+
+            return matches;
         }
     },
 
@@ -63,7 +85,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == PAUSED &&
-                    transition.getTargetState() == ACTIVE);
+                    transition.getTargetState() == ACTIVE &&
+                    transition.getPreviousState(0) == SUSPENDED);
         }
     },
 
@@ -87,7 +110,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == PAUSED &&
-                    transition.getTargetState() == SUSPENDED);
+                    transition.getTargetState() == SUSPENDED &&
+                    transition.getPreviousState(0) == ACTIVE);
         }
     },
 
@@ -99,7 +123,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == SUSPENDED &&
-                    transition.getTargetState() == DESTROYED);
+                    transition.getTargetState() == DESTROYED &&
+                    transition.getPreviousState(0) == PAUSED);
         }
     },
 
@@ -111,7 +136,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == SUSPENDED &&
-                    transition.getTargetState() == SUSPENDED);
+                    transition.getTargetState() == SUSPENDED &&
+                    transition.getPreviousState(0) == PAUSED);
         }
     };
 }

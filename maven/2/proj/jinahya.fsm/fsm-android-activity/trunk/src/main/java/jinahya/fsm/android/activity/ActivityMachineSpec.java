@@ -1,12 +1,12 @@
 /*
  *  Copyright 2009 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,29 +18,38 @@ package jinahya.fsm.android.activity;
 
 
 import jinahya.fsm.MachineSpec;
-import static jinahya.fsm.State.UNKNOWN;
 import jinahya.fsm.Transition;
-
-import static jinahya.fsm.android.activity.ActivityState.*;
+import jinahya.fsm.TransitionMatcher;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmailcom">Jin Kwon</a>
  */
-public class ActivityMachineSpec implements MachineSpec {
+public class ActivityMachineSpec extends MachineSpec {
 
 
     /**
      * {@link jinahya.fsm.State#UNKNOWN} &#8594; {@link ActivityState#SUSPENDED}.
+     *
+     * @return 2
+     */
+    @Override
+    public int getMaximumHistorySize() {
+        return 0x02;
+    }
+
+
+    /**
+     * Returns true if and only if {@link jinahya.fsm.State#UNKNOWN} &#8594;
+     * {@link ActivityState#SUSPENDED}.
      *
      * @param transition {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
     public boolean isStartingTransition(final Transition transition) {
-        return (transition.getSourceState() == UNKNOWN &&
-                transition.getTargetState() == SUSPENDED);
+        return ActivityTransitionMatcher.ON_CREATE.matches(transition);
     }
 
 
@@ -60,28 +69,13 @@ public class ActivityMachineSpec implements MachineSpec {
     @Override
     public boolean isTransitionAllowed(final Transition transition) {
 
-        boolean allowed = Boolean.FALSE.booleanValue();
-
-        final int targetState = transition.getTargetState();
-
-        switch (transition.getSourceState()) {
-            case UNKNOWN:
-                allowed = (targetState == SUSPENDED);
-                break;
-            case SUSPENDED:
-                allowed = (targetState == PAUSED || targetState == DESTROYED);
-                break;
-            case PAUSED:
-                allowed = (targetState == ACTIVE || targetState == SUSPENDED);
-                break;
-            case ACTIVE:
-                allowed = (targetState == PAUSED);
-                break;
-            default:
-                break;
+        for (TransitionMatcher matcher : ActivityTransitionMatcher.values()) {
+            if (matcher.matches(transition)) {
+                return true;
+            }
         }
 
-        return allowed;
+        return false;
     }
 
 
@@ -93,7 +87,6 @@ public class ActivityMachineSpec implements MachineSpec {
      */
     @Override
     public boolean isFinishingTransition(final Transition transition) {
-        return (transition.getSourceState() == SUSPENDED &&
-                transition.getTargetState() == DESTROYED);
+        return ActivityTransitionMatcher.ON_DESTROY.matches(transition);
     }
 }
