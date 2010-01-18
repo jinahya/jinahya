@@ -17,7 +17,6 @@
 
 package jinahya.util.els;
 
-
 import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Hashtable;
@@ -170,6 +169,37 @@ public class EventListenerSupport {
             if (instances != null) {
                 instances.removeElement(l);
             }
+        }
+    }
+
+
+    /**
+     * Checks if this support contains specified listener.
+     *
+     * @param c listener class
+     * @param l listener instance
+     * @return true if specified entry exist, false otheriwse
+     */
+    public final boolean contains(final Class c, final EventListener l) {
+
+        /*
+        if (!EventListener.class.isAssignableFrom(c)) { // NullPointerException
+            throw new ClassCastException(
+                c + " is not assignable to " + EventListener.class);
+        }
+         */
+
+        if (!c.isInstance(l)) { // false for null
+            throw new IllegalArgumentException(
+                l + " is not an instance of " + c);
+        }
+
+        synchronized (table) {
+            Vector instances = (Vector) table.get(c);
+            if (instances != null) {
+                return instances.contains(l);
+            }
+            return false;
         }
     }
 
