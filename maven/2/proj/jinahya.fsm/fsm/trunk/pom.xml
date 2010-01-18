@@ -170,7 +170,7 @@
     <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm/trunk/</url>
   </scm>
   <!--prerequisites/-->
-  <!--repositories>
+  <repositories>
     <repository>
       <id>googlecode:jinahya</id>
       <name>googlecode:jinahya</name>
@@ -192,7 +192,7 @@
       <name>Java.net Repository for Maven2</name>
       <url>http://download.java.net/maven/2</url>
     </repository>
-  </repositories-->
+  </repositories>
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
