@@ -15,13 +15,11 @@
       <version>4.7</version>
       <scope>test</scope>
     </dependency>
-    <!--dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <classifier>jdk14</classifier>
-      <version>5.9</version>
-      <scope>test</scope>
-    </dependency-->
+    <dependency>
+      <groupId>jinahya.util</groupId>
+      <artifactId>event-listener-support</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

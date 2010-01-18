@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Jin Kwon.
+ *  Copyright 2010 onacit.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,21 +14,24 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm;
+package jinahya.fsm.event;
+
+
+import java.util.EventListener;
 
 
 /**
+ * An interface for listening state transition from a machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface TransitionMatcher {
+public interface TransitionEventListener extends EventListener {
 
 
     /**
-     * Matches specified <code>transition</code>.
+     * Notifies the state transition.
      *
-     * @param transition transition to be matched
-     * @return true if given <code>transition</code> matches, false otherwise.
+     * @param event transition event
      */
-    boolean matches(final Transition transition);
+    void transited(TransitionEvent event);
 }

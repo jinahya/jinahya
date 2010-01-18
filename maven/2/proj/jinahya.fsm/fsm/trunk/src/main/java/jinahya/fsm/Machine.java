@@ -19,6 +19,11 @@ package jinahya.fsm;
 
 import java.util.Vector;
 
+import jinahya.fsm.event.TransitionEvent;
+import jinahya.fsm.event.TransitionEventListener;
+
+import jinahya.util.els.EventListenerSupport;
+
 
 /**
  * Represents a finite state machine.
@@ -40,7 +45,7 @@ public class Machine {
             throw new NullPointerException("spec");
         }
 
-        _spec = spec;
+        this.spec = spec;
     }
 
 
@@ -120,13 +125,13 @@ public class Machine {
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!_spec.isTransitionAllowed(transition)) {
+        if (!spec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed: " + transition);
         }
 
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && _spec.isStartingTransition(transition)) {
+        if (!started && spec.isStartingTransition(transition)) {
             started = Boolean.TRUE.booleanValue();
         }
 
@@ -136,7 +141,7 @@ public class Machine {
             // --------------------------------------------------------- PERFORM
 
             final int minimumPrecedence =
-                Math.max(0x00, _spec.getMinimumPrecedence(transition));
+                Math.max(0x00, spec.getMinimumPrecedence(transition));
 
             Thread[] threads = null;
 
@@ -160,7 +165,7 @@ public class Machine {
 
 
         // ----------------------------------------------------- CHECK FINISHING
-        if (!finished && _spec.isFinishingTransition(transition)) {
+        if (!finished && spec.isFinishingTransition(transition)) {
             finished = Boolean.TRUE.booleanValue();
         }
 
@@ -168,12 +173,14 @@ public class Machine {
         // ------------------------------------------------------------- HISTORY
         states.insertElementAt(new Integer(this.state), 0);
         final int maximumHistorySize =
-            Math.max(0x00, _spec.getMaximumHistorySize());
+            Math.max(0x00, spec.getMaximumHistorySize());
         states.setSize
             (Math.min(states.size(), maximumHistorySize));
 
 
         this.state = state;
+
+        processTransitionEvent(new TransitionEvent(this, transition));
     }
 
 
@@ -210,7 +217,7 @@ public class Machine {
         }
 
         final int maximumPoolSize =
-            Math.max(0x01, _spec.getMaximumPoolSize(transition, precedence));
+            Math.max(0x01, spec.getMaximumPoolSize(transition, precedence));
 
         Thread[] children = new Thread[maximumPoolSize];
         for (int i = 0; i < children.length; i++) {
@@ -262,8 +269,45 @@ public class Machine {
     }
 
 
+    /**
+     *
+     * @param l
+     */
+    public final void addTransitionEventListener(
+        final TransitionEventListener l) {
 
-    private MachineSpec _spec;
+        els.add(TransitionEventListener.class, l);
+    }
+
+
+    /**
+     *
+     * @param l
+     */
+    public final void removeTransitionEventListener(
+        final TransitionEventListener l) {
+
+        els.remove(TransitionEventListener.class, l);
+    }
+
+
+    /**
+     *
+     * @param event
+     */
+    protected void processTransitionEvent(final TransitionEvent event) {
+        Object[] listeners = els.getListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            try {
+                ((TransitionEventListener) listeners[i]).transited(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private MachineSpec spec;
 
     private final Vector tasks = new Vector();
 
@@ -273,4 +317,6 @@ public class Machine {
 
     private volatile boolean started = Boolean.FALSE.booleanValue();
     private volatile boolean finished = Boolean.FALSE.booleanValue();
+
+    private final EventListenerSupport els = new EventListenerSupport();
 }
