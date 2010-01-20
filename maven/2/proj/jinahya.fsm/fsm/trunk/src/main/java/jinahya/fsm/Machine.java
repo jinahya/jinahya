@@ -270,8 +270,9 @@ public class Machine {
 
 
     /**
+     * Adds specified TransitionListener.
      *
-     * @param l
+     * @param l listener
      */
     public final void addTransitionEventListener(
         final TransitionEventListener l) {
@@ -281,8 +282,9 @@ public class Machine {
 
 
     /**
+     * Removes specified transition listener.
      *
-     * @param l
+     * @param l listener
      */
     public final void removeTransitionEventListener(
         final TransitionEventListener l) {

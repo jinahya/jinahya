@@ -18,6 +18,7 @@ package jinahya.fsm;
 
 
 /**
+ * A specification how machine works.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -25,12 +26,30 @@ public class MachineSpec {
 
 
     /**
+     * Default value for maximumHistorySize.
+     */
+    private static final int DEFAULT_MAXIMUM_HISTORY_SIZE = 0x0A;
+
+
+    /**
+     * Default value for minimumPrecedence.
+     */
+    private static final int DEFAULT_MINIMUM_PRECEDENCE = 0x00;
+
+
+    /**
+     * Default value for maximumPoolSize.
+     */
+    private static final int DEFAULT_MAXIMUM_POOL_SIZE = 0x01;
+
+
+    /**
      * Return the maximum number of old states that machine can hold.
      *
-     * @return 0
+     * @return {@value #DEFAULT_MAXIMUM_HISTORY_SIZE}
      */
     public int getMaximumHistorySize() {
-        return 0x0A;
+        return DEFAULT_MAXIMUM_HISTORY_SIZE;
     }
 
 
@@ -38,10 +57,10 @@ public class MachineSpec {
      * Returns the minimum task precedence for given transition.
      *
      * @param transition state transition
-     * @return 0
+     * @return {@value #DEFAULT_MINIMUM_PRECEDENCE}
      */
     public int getMinimumPrecedence(final Transition transition) {
-        return 0x00;
+        return DEFAULT_MINIMUM_PRECEDENCE;
     }
 
 
@@ -50,11 +69,11 @@ public class MachineSpec {
      *
      * @param transition state transition
      * @param precedence task precedence
-     * @return 1
+     * @return {@value #DEFAULT_MAXIMUM_POOL_SIZE}
      */
     public int getMaximumPoolSize(final Transition transition,
                                   final int precedence) {
-        return 0x01;
+        return DEFAULT_MAXIMUM_POOL_SIZE;
     }
 
 
@@ -87,7 +106,7 @@ public class MachineSpec {
      * this method returns true, this method is never going to be invoked.
      *
      * @param transition transition to be checked
-     * @return fasle
+     * @return false
      */
     public boolean isFinishingTransition(final Transition transition) {
         return Boolean.FALSE.booleanValue();
