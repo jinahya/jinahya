@@ -10,13 +10,13 @@
 
 <a name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
 <a name="2" href="#2">2</a>   <em class="jxr_comment"> *  Copyright 2009 Jin Kwon.</em>
-<a name="3" href="#3">3</a>   <em class="jxr_comment"> * </em>
+<a name="3" href="#3">3</a>   <em class="jxr_comment"> *</em>
 <a name="4" href="#4">4</a>   <em class="jxr_comment"> *  Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a name="5" href="#5">5</a>   <em class="jxr_comment"> *  you may not use this file except in compliance with the License.</em>
 <a name="6" href="#6">6</a>   <em class="jxr_comment"> *  You may obtain a copy of the License at</em>
-<a name="7" href="#7">7</a>   <em class="jxr_comment"> * </em>
+<a name="7" href="#7">7</a>   <em class="jxr_comment"> *</em>
 <a name="8" href="#8">8</a>   <em class="jxr_comment"> *       <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
-<a name="9" href="#9">9</a>   <em class="jxr_comment"> * </em>
+<a name="9" href="#9">9</a>   <em class="jxr_comment"> *</em>
 <a name="10" href="#10">10</a>  <em class="jxr_comment"> *  Unless required by applicable law or agreed to in writing, software</em>
 <a name="11" href="#11">11</a>  <em class="jxr_comment"> *  distributed under the License is distributed on an "AS IS" BASIS,</em>
 <a name="12" href="#12">12</a>  <em class="jxr_comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
@@ -81,7 +81,7 @@
 <a name="71" href="#71">71</a>                          off(precedence);
 <a name="72" href="#72">72</a>                      } <strong class="jxr_keyword">finally</strong> {
 <a name="73" href="#73">73</a>                          <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="74" href="#74">74</a>                              on = Boolean.FALSE.booleanValue();
+<a name="74" href="#74">74</a>                              on = false;
 <a name="75" href="#75">75</a>                          }
 <a name="76" href="#76">76</a>                      }
 <a name="77" href="#77">77</a>                      <strong class="jxr_keyword">break</strong>;
@@ -94,7 +94,7 @@
 <a name="84" href="#84">84</a>                          on(precedence);
 <a name="85" href="#85">85</a>                      } <strong class="jxr_keyword">finally</strong> {
 <a name="86" href="#86">86</a>                          <strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a name="87" href="#87">87</a>                              on = Boolean.TRUE.booleanValue();
+<a name="87" href="#87">87</a>                              on = <strong class="jxr_keyword">true</strong>;
 <a name="88" href="#88">88</a>                          }
 <a name="89" href="#89">89</a>                      }
 <a name="90" href="#90">90</a>                      <strong class="jxr_keyword">break</strong>;
@@ -105,7 +105,7 @@
 <a name="95" href="#95">95</a>  
 <a name="96" href="#96">96</a>  
 <a name="97" href="#97">97</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="98" href="#98">98</a>  <em class="jxr_javadoccomment">     * Performes when this switch task is on.</em>
+<a name="98" href="#98">98</a>  <em class="jxr_javadoccomment">     * Performes when this switch task is turned on.</em>
 <a name="99" href="#99">99</a>  <em class="jxr_javadoccomment">     *</em>
 <a name="100" href="#100">100</a> <em class="jxr_javadoccomment">     * @param precedence task precedence</em>
 <a name="101" href="#101">101</a> <em class="jxr_javadoccomment">     * @throws MachineException if any error occurs.</em>
@@ -114,7 +114,7 @@
 <a name="104" href="#104">104</a> 
 <a name="105" href="#105">105</a> 
 <a name="106" href="#106">106</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="107" href="#107">107</a> <em class="jxr_javadoccomment">     * Performes when this switch task is off.</em>
+<a name="107" href="#107">107</a> <em class="jxr_javadoccomment">     * Performes when this switch task is turned off.</em>
 <a name="108" href="#108">108</a> <em class="jxr_javadoccomment">     *</em>
 <a name="109" href="#109">109</a> <em class="jxr_javadoccomment">     * @param precedence task precedence</em>
 <a name="110" href="#110">110</a> <em class="jxr_javadoccomment">     * @throws MachineException if any error occurs.</em>
@@ -123,7 +123,7 @@
 <a name="113" href="#113">113</a> 
 <a name="114" href="#114">114</a> 
 <a name="115" href="#115">115</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="116" href="#116">116</a> <em class="jxr_javadoccomment">     * Returns whether this task is currently turned on or not.</em>
+<a name="116" href="#116">116</a> <em class="jxr_javadoccomment">     * Returns whether this task is currently turned on or off.</em>
 <a name="117" href="#117">117</a> <em class="jxr_javadoccomment">     *</em>
 <a name="118" href="#118">118</a> <em class="jxr_javadoccomment">     * @return true if this switch task is currently turned on, false otherwise.</em>
 <a name="119" href="#119">119</a> <em class="jxr_javadoccomment">     */</em>

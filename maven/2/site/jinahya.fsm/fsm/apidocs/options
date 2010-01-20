@@ -1,5 +1,5 @@
 -classpath
-'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/classes'
+'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/util/event-listener-support/1.0-SNAPSHOT/event-listener-support-1.0-SNAPSHOT.jar'
 -encoding
 'UTF-8'
 -protected

@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2010-01-12
+        Last Published: 2010-01-20
                       </div>
             <div class="xright">            <a href="">fsm</a>
             
@@ -179,6 +179,20 @@
     <div id="bodyColumn">
       <div id="contentBox">
         <div class="section"><h2>Project Dependencies</h2>
+<div class="section"><h3>compile</h3>
+<p>The following is a list of compile dependencies for this project. These dependencies are required to compile and run the application:</p>
+<table class="bodyTable"><tr class="a"><th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th>
+<th>Type</th>
+</tr>
+<tr class="b"><td>jinahya.util</td>
+<td>event-listener-support</td>
+<td>1.0-SNAPSHOT</td>
+<td>jar</td>
+</tr>
+</table>
+</div>
 <div class="section"><h3>test</h3>
 <p>The following is a list of test dependencies for this project. These dependencies are only required to compile and run unit tests for the application:</p>
 <table class="bodyTable"><tr class="a"><th>GroupId</th>
@@ -187,7 +201,7 @@
 <th>Type</th>
 </tr>
 <tr class="b"><td>junit</td>
-<td><a href="http://junit.org" class="externalLink">junit</a></td>
+<td><a class="externalLink" href="http://junit.org">junit</a></td>
 <td>4.7</td>
 <td>jar</td>
 </tr>
@@ -216,19 +230,27 @@
       }
 </script>
 <div class="section"><h3>Dependency Tree</h3>
-<ul><li>jinahya.fsm:fsm:jar:1.0-SNAPSHOT <img id="_824827951" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_598497401', '_824827951' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_598497401" style="display:none"><table class="bodyTable"><tr class="a"><th>fsm</th>
+<ul><li>jinahya.fsm:fsm:jar:1.0-SNAPSHOT <img id="_1739534605" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1406800241', '_1739534605' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1406800241" style="display:none"><table class="bodyTable"><tr class="a"><th>fsm</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>State Machine Support</p>
-<p><b>URL: </b><a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/" class="externalLink">http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/</a></p>
-<p><b>Project License: </b><a href="http://www.apache.org/licenses/LICENSE-2.0.txt" class="externalLink">Apache 2</a></p>
+<p><b>URL: </b><a class="externalLink" href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/">http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/</a></p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></p>
 </td>
 </tr>
 </table>
-</div><ul><li>junit:junit:jar:4.7 (test) <img id="_772270935" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1628133023', '_772270935' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1628133023" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
+</div><ul><li>junit:junit:jar:4.7 (test) <img id="_2106494282" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_216281970', '_2106494282' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_216281970" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>JUnit is a regression testing framework written by Erich Gamma and Kent Beck. It is used by the developer who implements unit tests in Java.</p>
-<p><b>URL: </b><a href="http://junit.org" class="externalLink">http://junit.org</a></p>
-<p><b>Project License: </b><a href="http://www.opensource.org/licenses/cpl1.0.txt" class="externalLink">Common Public License Version 1.0</a></p>
+<p><b>URL: </b><a class="externalLink" href="http://junit.org">http://junit.org</a></p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/cpl1.0.txt">Common Public License Version 1.0</a></p>
+</td>
+</tr>
+</table>
+</div></li>
+<li>jinahya.util:event-listener-support:jar:1.0-SNAPSHOT (compile) <img id="_1703159672" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_237575494', '_1703159672' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_237575494" style="display:none"><table class="bodyTable"><tr class="a"><th>event-listener-support</th>
+</tr>
+<tr class="b"><td><p><b>Description: </b>Event Listener Support</p>
+<p><b>Project License: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></p>
 </td>
 </tr>
 </table>
@@ -239,7 +261,7 @@
 </div>
 </div>
 <div class="section"><h2>Licenses</h2>
-<p><b>Apache 2: </b>fsm</p>
+<p><b>Apache 2: </b>event-listener-support, fsm</p>
 <p><b>Common Public License Version 1.0: </b>JUnit</p>
 </div>
 <div class="section"><h2>Dependency File Details</h2>
@@ -251,7 +273,15 @@
 <th align="center">JDK Rev</th>
 <th align="center">Debug</th>
 </tr>
-<tr class="b"><td align="left">junit-4.7.jar</td>
+<tr class="b"><td align="left">event-listener-support-1.0-SNAPSHOT.jar</td>
+<td align="right">4.70 kB</td>
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="center">1.1</td>
+<td align="center">debug</td>
+</tr>
+<tr class="a"><td align="left">junit-4.7.jar</td>
 <td align="right">226.91 kB</td>
 <td align="right">261</td>
 <td align="right">225</td>
@@ -259,7 +289,7 @@
 <td align="center">1.5</td>
 <td align="center">debug</td>
 </tr>
-<tr class="a"><th align="left">Total</th>
+<tr class="b"><th align="left">Total</th>
 <th align="right">Size</th>
 <th align="right">Entries</th>
 <th align="right">Classes</th>
@@ -267,13 +297,21 @@
 <th align="center">JDK Rev</th>
 <th align="center">Debug</th>
 </tr>
-<tr class="b"><td align="right">1</td>
-<td align="right">226.91 kB</td>
-<td align="right">261</td>
-<td align="right">225</td>
-<td align="right">29</td>
+<tr class="a"><td align="right">2</td>
+<td align="right">231.60 kB</td>
+<td align="right">272</td>
+<td align="right">226</td>
+<td align="right">30</td>
 <td align="center">1.5</td>
-<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="b"><td align="right">compile: 1</td>
+<td align="right">compile: 4.70 kB</td>
+<td align="right">compile: 11</td>
+<td align="right">compile: 1</td>
+<td align="right">compile: 1</td>
+<td align="center">-</td>
+<td align="right">compile: 1</td>
 </tr>
 <tr class="a"><td align="right">test: 1</td>
 <td align="right">test: 226.91 kB</td>
@@ -292,8 +330,28 @@
 <th align="center">Release</th>
 <th align="center">Snapshot</th>
 </tr>
+<tr class="a"><td align="left">googlecode:jinahya</td>
+<td align="left"><a class="externalLink" href="http://jinahya.googlecode.com/svn/maven/2/repo">http://jinahya.googlecode.com/svn/maven/2/repo</a></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr class="b"><td align="left">maven1-repository.dev.java.net</td>
+<td align="left"><a class="externalLink" href="http://download.java.net/maven/1">http://download.java.net/maven/1</a></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr class="a"><td align="left">maven2-repository.dev.java.net</td>
+<td align="left"><a class="externalLink" href="http://download.java.net/maven/2">http://download.java.net/maven/2</a></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr class="b"><td align="left">googlecode:jinahya-files</td>
+<td align="left"><a class="externalLink" href="http://jinahya-files.googlecode.com/svn/maven/2/repo">http://jinahya-files.googlecode.com/svn/maven/2/repo</a></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
 <tr class="a"><td align="left">central</td>
-<td align="left"><a href="http://repo1.maven.org/maven2" class="externalLink">http://repo1.maven.org/maven2</a></td>
+<td align="left"><a class="externalLink" href="http://repo1.maven.org/maven2">http://repo1.maven.org/maven2</a></td>
 <td align="center">Yes</td>
 <td align="center">-</td>
 </tr>
@@ -301,15 +359,38 @@
 </table>
 <p>Repository locations for each of the Dependencies.</p>
 <table class="bodyTable"><tbody><tr class="b"><th align="left">Artifact</th>
+<th align="center">googlecode:jinahya</th>
+<th align="center">maven1-repository.dev.java.net</th>
+<th align="center">maven2-repository.dev.java.net</th>
+<th align="center">googlecode:jinahya-files</th>
 <th align="center">central</th>
 </tr>
-<tr class="a"><td align="left">junit:junit:jar:4.7</td>
-<td align="center"><a href="http://repo1.maven.org/maven2/junit/junit/4.7/junit-4.7.jar" class="externalLink"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
+<tr class="a"><td align="left">jinahya.util:event-listener-support:jar:1.0-SNAPSHOT</td>
+<td align="center"><a class="externalLink" href="http://jinahya.googlecode.com/svn/maven/2/repo/jinahya/util/event-listener-support/1.0-SNAPSHOT/event-listener-support-1.0-SNAPSHOT.jar"><img alt="Found at http://jinahya.googlecode.com/svn/maven/2/repo" src="images/icon_success_sml.gif" /></a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
 </tr>
-<tr class="b"><th align="left">Total</th>
+<tr class="b"><td align="left">junit:junit:jar:4.7</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center"><a class="externalLink" href="http://repo1.maven.org/maven2/junit/junit/4.7/junit-4.7.jar"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
+</tr>
+<tr class="a"><th align="left">Total</th>
+<th align="center">googlecode:jinahya</th>
+<th align="center">maven1-repository.dev.java.net</th>
+<th align="center">maven2-repository.dev.java.net</th>
+<th align="center">googlecode:jinahya-files</th>
 <th align="center">central</th>
 </tr>
-<tr class="a"><td align="left">1 (test: 1)</td>
+<tr class="b"><td align="left">2 (compile: 1, test: 1)</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
 <td align="center">1</td>
 </tr>
 </tbody>
