@@ -125,7 +125,7 @@ public final class XletTask {
 
 
     /**
-     * 
+     * Task performed when xlet's state changes to ACTIVE.
      */
     public abstract static class PlayTask extends Task {
 
@@ -169,7 +169,6 @@ public final class XletTask {
                     XletTransitionMatcher.DESTROY_XLET});
         }
     }
-
 
 
     /**
