@@ -52,6 +52,9 @@ public final class XletState {
     public static final int DESTROYED = ACTIVE >> 1;
 
 
+    /**
+     *
+     */
     private XletState() {
         super();
     }
