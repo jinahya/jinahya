@@ -186,13 +186,6 @@ public class Machine {
     }
 
 
-    /**
-     *
-     * @param parents
-     * @param transition
-     * @param precedence
-     * @return
-     */
     private Thread[] perform(final Thread[] parents,
                              final Transition transition,
                              final int precedence) {
