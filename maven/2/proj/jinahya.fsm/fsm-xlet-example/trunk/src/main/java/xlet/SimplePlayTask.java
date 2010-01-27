@@ -20,7 +20,7 @@ package xlet;
 
 import jinahya.fsm.MachineException;
 
-import jinahya.fsm.xlet.PlaySwitchTask;
+import jinahya.fsm.xlet.XletTask.PlaySwitchTask;
 
 
 /**
