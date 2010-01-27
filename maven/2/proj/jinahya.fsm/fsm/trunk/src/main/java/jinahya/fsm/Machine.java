@@ -171,11 +171,13 @@ public class Machine {
 
 
         // ------------------------------------------------------------- HISTORY
-        states.insertElementAt(new Integer(this.state), 0);
-        final int maximumHistorySize =
-            Math.max(0x00, spec.getMaximumHistorySize());
-        states.setSize
-            (Math.min(states.size(), maximumHistorySize));
+        synchronized (states) {
+            states.insertElementAt(new Integer(this.state), 0);
+            final int maximumHistorySize =
+                Math.max(0x00, spec.getMaximumHistorySize());
+            states.setSize
+                (Math.min(states.size(), maximumHistorySize));
+        }
 
 
         this.state = state;
