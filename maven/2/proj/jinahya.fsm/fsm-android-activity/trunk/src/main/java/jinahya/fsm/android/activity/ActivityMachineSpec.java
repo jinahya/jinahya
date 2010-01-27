@@ -21,6 +21,8 @@ import jinahya.fsm.MachineSpec;
 import jinahya.fsm.Transition;
 import jinahya.fsm.TransitionMatcher;
 
+import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
+
 
 /**
  *
@@ -49,7 +51,7 @@ public class ActivityMachineSpec extends MachineSpec {
      */
     @Override
     public boolean isStartingTransition(final Transition transition) {
-        return ActivityTransitionMatcher.ON_CREATE.matches(transition);
+        return ON_CREATE.matches(transition);
     }
 
 
@@ -87,6 +89,6 @@ public class ActivityMachineSpec extends MachineSpec {
      */
     @Override
     public boolean isFinishingTransition(final Transition transition) {
-        return ActivityTransitionMatcher.ON_DESTROY.matches(transition);
+        return ON_DESTROY.matches(transition);
     }
 }
