@@ -157,10 +157,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.rfc/rfc4648/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.rfc/rfc4648/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.rfc/rfc4648/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>

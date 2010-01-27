@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.fsm.xlet;
@@ -42,7 +41,7 @@ public abstract class InitTask extends Task {
 
 
     /**
-     * Performs when <code>initXlet<code> method invoked.
+     * Performs when <code>initXlet</code> method invoked.
      *
      * @param precedence task precedence
      * @throws MachineException if any error occurs.

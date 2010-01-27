@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya.fsm</groupId>
-  <artifactId>fsm-android-activity-c</artifactId>
+  <artifactId>fsm-android-activity</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
@@ -102,9 +102,9 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>fsm-android-activity-c</name>
-  <description>Android-Activity-C State Machine Support</description>
-  <url>https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-android-activity-c/</url>
+  <name>fsm-android-activity</name>
+  <description>Android-Activity State Machine Support</description>
+  <url>https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-android-activity/</url>
   <inceptionYear>2009</inceptionYear>
   <licenses>
     <license>
@@ -134,10 +134,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity-c/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity-c/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity-c/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-android-activity/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -168,7 +168,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-android-activity-c/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-android-activity/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>

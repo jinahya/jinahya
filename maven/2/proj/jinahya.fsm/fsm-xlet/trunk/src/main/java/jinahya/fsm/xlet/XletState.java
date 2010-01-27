@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.fsm.xlet;
@@ -28,21 +27,15 @@ import jinahya.fsm.State;
 public final class XletState {
 
 
+
     /**
-     * Xlet object has not even loaded yet.
-     * INFORMATIVE
+     * Xlet instance is just created.
      */
-    public static final int NOT_LOADED = State.UNKNOWN >>> 1;
+    public static final int LOADED = State.UNKNOWN >>> 1;
 
 
     /**
-     * Xlet instance created.
-     */
-    public static final int LOADED = NOT_LOADED >> 1;
-
-
-    /**
-     * <code>initXlet()</code> or pauseXlet() invoked.
+     * <code>initXlet()</code> or <code>pauseXlet()</code> invoked.
      */
     public static final int PAUSED = LOADED >> 1;
 
@@ -57,13 +50,6 @@ public final class XletState {
      * <code>destroyXlet()</code> invoked.
      */
     public static final int DESTROYED = ACTIVE >> 1;
-
-
-    /**
-     * Destroyed but the Xlet object has not yet been garbage collected.
-     * INFORMATIVE
-     */
-    public static final int INVALID = DESTROYED >> 1;
 
 
     private XletState() {
