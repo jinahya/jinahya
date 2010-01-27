@@ -18,7 +18,6 @@ package jinahya.fsm.android.activity;
 
 
 import jinahya.fsm.SwitchTask;
-import jinahya.fsm.Task;
 import jinahya.fsm.TransitionMatcher;
 
 import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
