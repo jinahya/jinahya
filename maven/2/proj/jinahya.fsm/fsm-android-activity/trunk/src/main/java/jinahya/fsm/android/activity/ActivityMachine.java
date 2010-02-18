@@ -32,9 +32,9 @@ public abstract class ActivityMachine extends Machine {
      *
      * @param spec spec
      */
-    public ActivityMachine(ActivityMachineSpec spec) {
+    public ActivityMachine(final ActivityMachineSpec spec) {
         super(spec);
 
-        setMaximumHistorySize(0x03);
+        setMaximumHistorySize(0x02);
     }
 }
