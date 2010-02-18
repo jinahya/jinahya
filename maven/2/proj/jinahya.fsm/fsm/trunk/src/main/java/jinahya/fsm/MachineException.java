@@ -25,7 +25,6 @@ package jinahya.fsm;
 public class MachineException extends Exception {
 
 
-    /** GENERATED. */
     private static final long serialVersionUID = -5925728381873724134L;
 
 
@@ -72,6 +71,5 @@ public class MachineException extends Exception {
     }
 
 
-    /** cause. */
     private Throwable cause;
 }

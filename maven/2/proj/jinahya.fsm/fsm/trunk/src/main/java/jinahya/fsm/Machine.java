@@ -64,8 +64,8 @@ public class Machine {
             throw new IllegalArgumentException("maximumHistorySize < 0");
         }
 
-        _spec = spec;
-        _maximumHistorySize = maximumHistorySize;
+        this.spec = spec;
+        this.maximumHistorySize = maximumHistorySize;
     }
 
 
@@ -145,13 +145,13 @@ public class Machine {
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!_spec.isTransitionAllowed(transition)) {
+        if (!spec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed by spec: " + transition);
         }
 
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && _spec.isStartingTransition(transition)) {
+        if (!started && spec.isStartingTransition(transition)) {
             started = Boolean.TRUE.booleanValue();
         }
 
@@ -187,14 +187,14 @@ public class Machine {
 
 
         // ----------------------------------------------------- CHECK FINISHING
-        if (!finished && _spec.isFinishingTransition(transition)) {
+        if (!finished && spec.isFinishingTransition(transition)) {
             finished = Boolean.TRUE.booleanValue();
         }
 
 
         // ------------------------------------ PUT CURRENT STATE TO THE HISTORY
         states.insertElementAt(new Integer(this.state), 0);
-        states.setSize(Math.min(states.size(), _maximumHistorySize));
+        states.setSize(Math.min(states.size(), maximumHistorySize));
 
 
         // ------------------------------------------------ CHANGE CURRENT STATE
@@ -347,8 +347,8 @@ public class Machine {
     }
 
 
-    private final MachineSpec _spec;
-    private final int _maximumHistorySize;
+    private final MachineSpec spec;
+    private final int maximumHistorySize;
 
     private volatile int state = State.UNKNOWN;
 
