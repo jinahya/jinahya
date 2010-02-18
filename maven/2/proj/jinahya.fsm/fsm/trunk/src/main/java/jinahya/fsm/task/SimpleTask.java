@@ -50,7 +50,7 @@ public abstract class SimpleTask extends Task {
 
 
     //@Override
-    protected final boolean matches(final Transition transition) {
+    public final boolean matches(final Transition transition) {
         for (int i = 0; i < matchers.length; i++) {
             if (matchers[i].matches(transition)) {
                 return true;

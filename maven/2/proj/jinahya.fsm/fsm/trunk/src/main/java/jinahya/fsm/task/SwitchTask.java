@@ -65,7 +65,7 @@ public abstract class SwitchTask extends Task {
 
 
     //@Override
-    protected final boolean matches(final Transition transition) {
+    public final boolean matches(final Transition transition) {
         if (on) {
             for (int i = 0; i < offMatchers.length; i++) {
                 if (offMatchers[i].matches(transition)) {
