@@ -106,11 +106,11 @@ public class Machine {
             }
             //@Override
             public int getPreviousState(final int depth) {
-                if (depth < 0) {
-                    throw new IllegalArgumentException
-                        ("depth(" + depth + ") < 0") ;
-                }
-                if (depth < previousStates.length) {
+                if (depth == -1) {
+                    return targetState;
+                } else if (depth == 0) {
+                    return sourceState;
+                } else if (depth < previousStates.length) {
                     return previousStates[depth];
                 } else {
                     return State.UNKNOWN;
@@ -126,7 +126,7 @@ public class Machine {
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
         if (!spec.isTransitionAllowed(transition)) {
-            throw new MachineException("not allowed: " + transition);
+            throw new MachineException("not allowed by spec: " + transition);
         }
 
 
@@ -136,6 +136,7 @@ public class Machine {
         }
 
 
+        /*
         if (started) {
 
             // --------------------------------------------------------- PERFORM
@@ -162,6 +163,7 @@ public class Machine {
                 }
             }
         }
+         */
 
 
         // ----------------------------------------------------- CHECK FINISHING
@@ -182,10 +184,15 @@ public class Machine {
 
         this.state = state;
 
-        processTransitionEvent(new TransitionEvent(this, transition));
+
+        if (started && !finished) {
+            processTransitionEvent(new TransitionEvent(this, transition));
+        }
+
     }
 
 
+    /*
     private Thread[] perform(final Thread[] parents,
                              final Transition transition,
                              final int precedence) {
@@ -252,8 +259,10 @@ public class Machine {
 
         return children;
     }
+     */
 
 
+    /*
     public final void submit(final Task task) {
 
         if (task == null) {
@@ -262,6 +271,7 @@ public class Machine {
 
         tasks.addElement(task);
     }
+     */
 
 
     /**
@@ -289,8 +299,9 @@ public class Machine {
 
 
     /**
+     * Process given transition event.
      *
-     * @param event
+     * @param event the transition event.
      */
     protected void processTransitionEvent(final TransitionEvent event) {
         Object[] listeners = els.getListeners();
@@ -305,8 +316,6 @@ public class Machine {
 
 
     private MachineSpec spec;
-
-    private final Vector tasks = new Vector();
 
     private volatile int state = State.UNKNOWN;
 

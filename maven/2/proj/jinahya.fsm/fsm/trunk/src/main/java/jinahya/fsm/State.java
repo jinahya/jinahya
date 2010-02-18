@@ -18,6 +18,7 @@ package jinahya.fsm;
 
 
 /**
+ * A class for defining state values.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

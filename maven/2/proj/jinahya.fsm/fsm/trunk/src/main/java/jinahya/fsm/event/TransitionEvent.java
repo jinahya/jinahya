@@ -30,6 +30,7 @@ import jinahya.fsm.Transition;
 public class TransitionEvent extends EventObject {
 
 
+    /** GENERATED. */
     private static final long serialVersionUID = 9136728627536178799L;
 
 
@@ -66,5 +67,6 @@ public class TransitionEvent extends EventObject {
     }
 
 
+    /** transition. */
     private Transition transition;
 }

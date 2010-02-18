@@ -27,18 +27,21 @@ public class MachineSpec {
 
     /**
      * Default value for maximumHistorySize.
+     * {@value #DEFAULT_MAXIMUM_HISTORY_SIZE}
      */
     private static final int DEFAULT_MAXIMUM_HISTORY_SIZE = 0x0A;
 
 
     /**
      * Default value for minimumPrecedence.
+     * {@value #DEFAULT_MAXIMUM_PRECEDENCE}
      */
     private static final int DEFAULT_MINIMUM_PRECEDENCE = 0x00;
 
 
     /**
      * Default value for maximumPoolSize.
+     * {@value #DEFAULT_MAXIMUM_POOL_SIZE}
      */
     private static final int DEFAULT_MAXIMUM_POOL_SIZE = 0x01;
 

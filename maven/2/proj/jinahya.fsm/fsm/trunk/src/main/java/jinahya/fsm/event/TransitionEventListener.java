@@ -21,7 +21,7 @@ import java.util.EventListener;
 
 
 /**
- * An interface for listening state transition from a machine.
+ * An interface for listening state transition event from a machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
