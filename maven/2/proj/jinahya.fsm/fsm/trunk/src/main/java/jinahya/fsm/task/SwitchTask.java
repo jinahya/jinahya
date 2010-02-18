@@ -54,41 +54,53 @@ public abstract class SwitchTask extends Task {
         }
 
 
-        _onMatchers = new TransitionMatcher[onMatchers.length];
-        System.arraycopy(onMatchers, 0, _onMatchers, 0, _onMatchers.length);
+        this.onMatchers = new TransitionMatcher[onMatchers.length];
+        System.arraycopy(onMatchers, 0, this.onMatchers, 0,
+                         this.onMatchers.length);
 
-        _offMatchers = new TransitionMatcher[offMatchers.length];
-        System.arraycopy(offMatchers, 0, _offMatchers, 0, _offMatchers.length);
+        this.offMatchers = new TransitionMatcher[offMatchers.length];
+        System.arraycopy(offMatchers, 0, this.offMatchers, 0,
+                         this.offMatchers.length);
     }
 
 
     //@Override
-    public void perform(final Transition transition) throws MachineException {
-
+    protected final boolean matches(final Transition transition) {
         if (on) {
-            for (int i = 0; i < _offMatchers.length; i++) {
-                if (_offMatchers[i].matches(transition)) {
-                    try {
-                        off();
-                    } finally {
-                        synchronized (this) {
-                            on = Boolean.FALSE.booleanValue();
-                        }
-                    }
-                    return;
+            for (int i = 0; i < offMatchers.length; i++) {
+                if (offMatchers[i].matches(transition)) {
+                    return Boolean.TRUE.booleanValue();
                 }
             }
         } else { // off
-            for (int i = 0; i < _onMatchers.length; i++) {
-                if (_onMatchers[i].matches(transition)) {
-                    try {
-                        on();
-                    } finally {
-                        synchronized (this) {
-                            on = Boolean.TRUE.booleanValue();
-                        }
-                    }
-                    return;
+            for (int i = 0; i < onMatchers.length; i++) {
+                if (onMatchers[i].matches(transition)) {
+                    return Boolean.TRUE.booleanValue();
+                }
+            }
+        }
+        return Boolean.FALSE.booleanValue();
+    }
+
+
+    //@Override
+    protected final void perform(Transition transition)
+        throws MachineException {
+
+        if (on) {
+            try {
+                off();
+            } finally {
+                synchronized (this) {
+                    on = Boolean.FALSE.booleanValue();
+                }
+            }
+        } else {
+            try {
+                on();
+            } finally {
+                synchronized (this) {
+                    on = Boolean.TRUE.booleanValue();
                 }
             }
         }
@@ -123,8 +135,8 @@ public abstract class SwitchTask extends Task {
     }
 
 
-    private TransitionMatcher[] _onMatchers;
-    private TransitionMatcher[] _offMatchers;
+    private TransitionMatcher[] onMatchers;
+    private TransitionMatcher[] offMatchers;
 
     private volatile boolean on = Boolean.FALSE.booleanValue();
 }

@@ -1,12 +1,12 @@
 /*
- *  Copyright 2009 Jin Kwon.
- *
+ *  Copyright 2010 onacit.
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,7 @@ import jinahya.fsm.event.TransitionEventListener;
 
 
 /**
+ * Represents a execution unit.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -31,16 +32,31 @@ public abstract class Task implements TransitionEventListener {
 
 
     /**
+     * Transition notification callback.
      *
-     * @param event
+     * @param event event
      */
-    public void transited(TransitionEvent event) {
-        try {
-            perform(event.getTransition());
-        } catch (MachineException me) {
-            me.printStackTrace();
+    //@Override
+    public final void transited(TransitionEvent event) {
+        final Transition transition = event.getTransition();
+        if (matches(transition)) {
+            try {
+                perform(transition);
+            } catch (MachineException me) {
+                me.printStackTrace();
+            }
         }
     }
+
+
+    /**
+     * Checks whether given <code>transition</code> is this task's target.
+     *
+     * @param transition transition
+     * @return true if {@link #perform(jinahya.fsm.Transition)} has to be
+     *         invoked, false otherwise.
+     */
+    protected abstract boolean matches(Transition transition);
 
 
     /**
@@ -49,5 +65,6 @@ public abstract class Task implements TransitionEventListener {
      * @param transition transition
      * @throws MachineException if any error occurs
      */
-    public abstract void perform(Transition transition) throws MachineException;
+    protected abstract void perform(Transition transition)
+        throws MachineException;
 }
