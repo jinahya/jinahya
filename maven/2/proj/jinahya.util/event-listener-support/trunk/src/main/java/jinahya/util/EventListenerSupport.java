@@ -12,10 +12,9 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
-package jinahya.util.els;
+package jinahya.util;
 
 import java.util.Enumeration;
 import java.util.EventListener;
@@ -54,13 +53,6 @@ public class EventListenerSupport {
      * @return the total number of listeners of the given type.
      */
     public final int getListenerCount(final Class c) {
-        /*
-        if (!EventListener.class.isAssignableFrom(c)) {
-            throw new ClassCastException(
-                c + " is not assignable to " + EventListener.class);
-        }
-         */
-
         synchronized (table) {
             Vector instances = (Vector) table.get(c);
             if (instances == null) {
@@ -97,12 +89,6 @@ public class EventListenerSupport {
      * @return all listeners of the given type.
      */
     public final Object[] getListeners(final Class c) {
-        /*
-        if (!EventListener.class.isAssignableFrom(c)) {
-            throw new ClassCastException(
-                c + " is not assignable to " + EventListener.class);
-        }
-         */
         synchronized (table) {
             Vector instances = (Vector) table.get(c);
             if (instances == null) {
@@ -120,13 +106,6 @@ public class EventListenerSupport {
      * @param l listener instance
      */
     public final void add(final Class c, final EventListener l) {
-
-        /*
-        if (!EventListener.class.isAssignableFrom(c)) { // NullPointerException
-            throw new ClassCastException(
-                c + " is not assignable to " + EventListener.class);
-        }
-         */
 
         if (!c.isInstance(l)) { // false for null
             throw new IllegalArgumentException(
@@ -151,13 +130,6 @@ public class EventListenerSupport {
      * @param l listener instance
      */
     public final void remove(final Class c, final EventListener l) {
-
-        /*
-        if (!EventListener.class.isAssignableFrom(c)) { // NullPointerException
-            throw new ClassCastException(
-                c + " is not assignable to " + EventListener.class);
-        }
-         */
 
         if (!c.isInstance(l)) { // false for null
             throw new IllegalArgumentException(
@@ -204,6 +176,6 @@ public class EventListenerSupport {
     }
 
 
-    //<Class<T extends EventListener>, T>
+    //<Class<T extends EventListener>, Vector<T>>
     private final Hashtable table = new Hashtable();
 }
