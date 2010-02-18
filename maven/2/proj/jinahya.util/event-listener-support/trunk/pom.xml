@@ -7,7 +7,7 @@
   <groupId>jinahya.util</groupId>
   <artifactId>event-listener-support</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
