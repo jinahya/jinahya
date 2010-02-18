@@ -64,6 +64,22 @@ public class EventListenerSupport {
 
 
     /**
+     * Returns an array of class.
+     *
+     * @return listener classes
+     */
+    public final Class[] getListenerClasses() {
+        Vector vector = new Vector();
+        for (Enumeration e = table.keys(); e.hasMoreElements(); ) {
+            vector.addElement(e.nextElement());
+        }
+        Class[] classes = new Class[vector.size()];
+        vector.toArray(classes);
+        return classes;
+    }
+
+
+    /**
      * Returns all listener instances.
      *
      * @return all listeners
