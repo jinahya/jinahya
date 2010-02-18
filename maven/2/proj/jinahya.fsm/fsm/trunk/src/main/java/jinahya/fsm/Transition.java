@@ -43,8 +43,9 @@ public interface Transition {
     /**
      * Returns previous state.
      *
-     * @param depth distance from the source state.
-     * @return old state at <code>depth</code>
+     * @param depth distance from the source state. positive integer.
+     * @return previous state at <code>depth</code> or {@link State#UNKNOWN} if
+     *         depth is out of range.
      */
     int getPreviousState(int depth);
 }

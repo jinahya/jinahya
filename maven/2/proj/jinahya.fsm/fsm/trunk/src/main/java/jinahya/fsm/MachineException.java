@@ -18,12 +18,14 @@ package jinahya.fsm;
 
 
 /**
+ * The Exception for machines.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class MachineException extends Exception {
 
 
+    /** GENERATED. */
     private static final long serialVersionUID = -5925728381873724134L;
 
 
@@ -70,5 +72,6 @@ public class MachineException extends Exception {
     }
 
 
+    /** cause. */
     private Throwable cause;
 }

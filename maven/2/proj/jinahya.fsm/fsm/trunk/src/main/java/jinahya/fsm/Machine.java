@@ -33,19 +33,39 @@ import jinahya.util.els.EventListenerSupport;
 public class Machine {
 
 
+    /** the default value for maximumHistorySize. */
+    private static final int DEFAULT_MAXIMUM_HISTORY_SIZE = 0x0A;
+
+
     /**
-     * Creates a new instance.
+     * Creates a new instance with a spec. The maximumHistorySize is 0x0A.
      *
      * @param spec machine spec
      */
     public Machine(final MachineSpec spec) {
+        this(spec, DEFAULT_MAXIMUM_HISTORY_SIZE);
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param spec machine spec
+     * @param maximumHistorySize maximum history size
+     */
+    public Machine(final MachineSpec spec, final int maximumHistorySize) {
         super();
 
         if (spec == null) {
             throw new NullPointerException("spec");
         }
 
-        this.spec = spec;
+        if (maximumHistorySize < 0) {
+            throw new IllegalArgumentException("maximumHistorySize < 0");
+        }
+
+        _spec = spec;
+        _maximumHistorySize = maximumHistorySize;
     }
 
 
@@ -95,6 +115,7 @@ public class Machine {
         for (int i = 0; i < previousStates.length; i++) {
             previousStates[i] = ((Integer) states.elementAt(i)).intValue();
         }
+
         final Transition transition = new Transition() {
             //@Override
             public int getSourceState() {
@@ -106,11 +127,10 @@ public class Machine {
             }
             //@Override
             public int getPreviousState(final int depth) {
-                if (depth == -1) {
-                    return targetState;
-                } else if (depth == 0) {
-                    return sourceState;
-                } else if (depth < previousStates.length) {
+                if (depth <= 0) {
+                    throw new IllegalArgumentException("depth <= 0");
+                }
+                if (depth < previousStates.length) {
                     return previousStates[depth];
                 } else {
                     return State.UNKNOWN;
@@ -125,13 +145,13 @@ public class Machine {
 
 
         // -------------------------------------------- CHECK TRANSITION ALLOWED
-        if (!spec.isTransitionAllowed(transition)) {
+        if (!_spec.isTransitionAllowed(transition)) {
             throw new MachineException("not allowed by spec: " + transition);
         }
 
 
         // ------------------------------------------------------ CHECK STARTING
-        if (!started && spec.isStartingTransition(transition)) {
+        if (!started && _spec.isStartingTransition(transition)) {
             started = Boolean.TRUE.booleanValue();
         }
 
@@ -167,26 +187,25 @@ public class Machine {
 
 
         // ----------------------------------------------------- CHECK FINISHING
-        if (!finished && spec.isFinishingTransition(transition)) {
+        if (!finished && _spec.isFinishingTransition(transition)) {
             finished = Boolean.TRUE.booleanValue();
         }
 
 
-        // ------------------------------------------------------------- HISTORY
-        synchronized (states) {
-            states.insertElementAt(new Integer(this.state), 0);
-            final int maximumHistorySize =
-                Math.max(0x00, spec.getMaximumHistorySize());
-            states.setSize
-                (Math.min(states.size(), maximumHistorySize));
-        }
+        // ------------------------------------ PUT CURRENT STATE TO THE HISTORY
+        states.insertElementAt(new Integer(this.state), 0);
+        states.setSize(Math.min(states.size(), _maximumHistorySize));
 
 
+        // ------------------------------------------------ CHANGE CURRENT STATE
         this.state = state;
 
 
-        if (started && !finished) {
-            processTransitionEvent(new TransitionEvent(this, transition));
+        // ---------------------------------------------------------- FIRE EVENT
+        final TransitionEvent event = new TransitionEvent(this, transition);
+        final Object[] listeners = els.getListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            ((TransitionEventListener) listeners[i]).transited(event);
         }
 
     }
@@ -275,7 +294,7 @@ public class Machine {
 
 
     /**
-     * Adds specified TransitionListener.
+     * Adds specified transition listener.
      *
      * @param l listener
      */
@@ -299,23 +318,37 @@ public class Machine {
 
 
     /**
-     * Process given transition event.
+     * Checks whether this machine has been started or not.
      *
-     * @param event the transition event.
+     * @return true if this machine has been stated, false otherwise.
      */
-    protected void processTransitionEvent(final TransitionEvent event) {
-        Object[] listeners = els.getListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            try {
-                ((TransitionEventListener) listeners[i]).transited(event);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public synchronized final boolean isStarted() {
+        return started;
     }
 
 
-    private MachineSpec spec;
+    /**
+     * Checks whether this machine has been finished or not.
+     *
+     * @return true if this machine has been finished, false otherwise.
+     */
+    public synchronized final boolean isFinished() {
+        return finished;
+    }
+
+
+    /**
+     * Check whether this machine has been started and not finished yet.
+     *
+     * @return true if this machine has been started and not finished yet.
+     */
+    public synchronized final boolean isValid() {
+        return started && !finished;
+    }
+
+
+    private final MachineSpec _spec;
+    private final int _maximumHistorySize;
 
     private volatile int state = State.UNKNOWN;
 

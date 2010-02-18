@@ -53,7 +53,7 @@ public class TransitionEvent extends EventObject {
      * @return source machine
      */
     public final Machine getMachine() {
-        return (Machine) getSource();
+        return (Machine) source;
     }
 
 

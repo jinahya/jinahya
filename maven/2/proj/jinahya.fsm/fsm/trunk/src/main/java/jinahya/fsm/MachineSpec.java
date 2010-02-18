@@ -26,61 +26,6 @@ public class MachineSpec {
 
 
     /**
-     * Default value for maximumHistorySize.
-     * {@value #DEFAULT_MAXIMUM_HISTORY_SIZE}
-     */
-    private static final int DEFAULT_MAXIMUM_HISTORY_SIZE = 0x0A;
-
-
-    /**
-     * Default value for minimumPrecedence.
-     * {@value #DEFAULT_MAXIMUM_PRECEDENCE}
-     */
-    private static final int DEFAULT_MINIMUM_PRECEDENCE = 0x00;
-
-
-    /**
-     * Default value for maximumPoolSize.
-     * {@value #DEFAULT_MAXIMUM_POOL_SIZE}
-     */
-    private static final int DEFAULT_MAXIMUM_POOL_SIZE = 0x01;
-
-
-    /**
-     * Return the maximum number of old states that machine can hold.
-     *
-     * @return {@value #DEFAULT_MAXIMUM_HISTORY_SIZE}
-     */
-    public int getMaximumHistorySize() {
-        return DEFAULT_MAXIMUM_HISTORY_SIZE;
-    }
-
-
-    /**
-     * Returns the minimum task precedence for given transition.
-     *
-     * @param transition state transition
-     * @return {@value #DEFAULT_MINIMUM_PRECEDENCE}
-     */
-    public int getMinimumPrecedence(final Transition transition) {
-        return DEFAULT_MINIMUM_PRECEDENCE;
-    }
-
-
-    /**
-     * Returns the maximum number of threads for given values.
-     *
-     * @param transition state transition
-     * @param precedence task precedence
-     * @return {@value #DEFAULT_MAXIMUM_POOL_SIZE}
-     */
-    public int getMaximumPoolSize(final Transition transition,
-                                  final int precedence) {
-        return DEFAULT_MAXIMUM_POOL_SIZE;
-    }
-
-
-    /**
      * Checks if specifed <code>transition</code> is a starting condition or
      * not. Once this method returns true, this method is never going to be
      * invoked.
