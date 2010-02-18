@@ -17,11 +17,17 @@
 package jinahya.fsm;
 
 
+import java.io.Serializable;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Transition {
+public interface Transition extends Serializable {
+
+
+    static final long serialVersionUID = -6850544414392282590L;
 
 
     /**
@@ -41,11 +47,18 @@ public interface Transition {
 
 
     /**
+     * Returns the number of previous states.
+     *
+     * @return number of previous states.
+     */
+    int getPreviousStateCount();
+
+
+    /**
      * Returns previous state.
      *
-     * @param depth distance from the source state. positive integer.
-     * @return previous state at <code>depth</code> or {@link State#UNKNOWN} if
-     *         depth is out of range.
+     * @param index previous state index
+     * @return previous state at <code>index</code>
      */
-    int getPreviousState(int depth);
+    int getPreviousStateAt(int index);
 }

@@ -23,7 +23,7 @@ import jinahya.fsm.event.TransitionEvent;
 import jinahya.fsm.event.TransitionEventListener;
 import jinahya.fsm.task.Task;
 
-import jinahya.util.els.EventListenerSupport;
+import jinahya.util.EventListenerSupport;
 
 
 /**
@@ -33,40 +33,19 @@ import jinahya.util.els.EventListenerSupport;
  */
 public class Machine {
 
-
-    /** the default value for maximumHistorySize. */
-    private static final int DEFAULT_MAXIMUM_HISTORY_SIZE = 0x0A;
-
-
     /**
      * Creates a new instance with a spec. The maximumHistorySize is 0x0A.
      *
      * @param spec machine spec
      */
     public Machine(final MachineSpec spec) {
-        this(spec, DEFAULT_MAXIMUM_HISTORY_SIZE);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param spec machine spec
-     * @param maximumHistorySize maximum history size
-     */
-    public Machine(final MachineSpec spec, final int maximumHistorySize) {
         super();
 
         if (spec == null) {
             throw new NullPointerException("spec");
         }
 
-        if (maximumHistorySize < 0) {
-            throw new IllegalArgumentException("maximumHistorySize < 0");
-        }
-
         this.spec = spec;
-        this.maximumHistorySize = maximumHistorySize;
     }
 
 
@@ -118,25 +97,29 @@ public class Machine {
         }
 
         final Transition transition = new Transition() {
+
+            private static final long serialVersionUID = -3638658218680618735L;
+
             //@Override
             public int getSourceState() {
                 return sourceState;
             }
+
             //@Override
             public int getTargetState() {
                 return targetState;
             }
+
             //@Override
-            public int getPreviousState(final int depth) {
-                if (depth <= 0) {
-                    throw new IllegalArgumentException("depth <= 0");
-                }
-                if (depth <= previousStates.length) {
-                    return previousStates[depth - 1];
-                } else {
-                    return State.UNKNOWN;
-                }
+            public int getPreviousStateCount() {
+                return previousStates.length;
             }
+
+            //@Override
+            public int getPreviousStateAt(final int index) {
+                return previousStates[index];
+            }
+
             //@Override
             public String toString() {
                 return "[TRANSITION: " + sourceState + " -> " +
@@ -319,8 +302,9 @@ public class Machine {
 
 
     /**
+     * Adds given <code>task</code> to this machine.
      *
-     * @param task
+     * @param task task to be added.
      */
     public final void addTask(final Task task) {
         addTransitionEventListener(task);
@@ -328,7 +312,9 @@ public class Machine {
 
 
     /**
+     * Removes given <code>task</code> from this machine.
      *
+     * @param task task to be removed
      */
     public final void removeTask(final Task task) {
         this.removeTransitionEventListener(task);
@@ -365,8 +351,25 @@ public class Machine {
     }
 
 
+
+    /**
+     * Sets the value of maximumHistorySize.
+     *
+     * @param maximumHistorySize maximum history size
+     */
+    protected final void setMaximumHistorySize(int maximumHistorySize) {
+        if (maximumHistorySize < 0) {
+            throw new IllegalArgumentException("maximumHistorySize < 0");
+        }
+
+        synchronized (this) {
+            this.maximumHistorySize = maximumHistorySize;
+        }
+    }
+
+
     private final MachineSpec spec;
-    private final int maximumHistorySize;
+    private volatile int maximumHistorySize = 0x00;
 
     private volatile int state = State.UNKNOWN;
 
