@@ -17,11 +17,9 @@
 package jinahya.fsm.xlet;
 
 
-import jinahya.fsm.MachineException;
-import jinahya.fsm.SwitchTask;
-import jinahya.fsm.Task;
-import jinahya.fsm.Transition;
 import jinahya.fsm.TransitionMatcher;
+import jinahya.fsm.task.SwitchTask;
+import jinahya.fsm.task.SimpleTask;
 
 
 /**
@@ -34,28 +32,14 @@ public final class XletTask {
     /**
      * 
      */
-    public abstract static class LoadTask extends Task {
-
-
-        //@Override
-        public final void perform(final Transition transition,
-                                  final int precedence)
-            throws MachineException {
-
-            if (XletTransitionMatcher.INIT_XLET.matches(transition)) {
-                perform(precedence);
-            }
-        }
-
+    public abstract static class LoadTask extends SimpleTask {
 
         /**
-         * Performs when <code>initXlet</code> method invoked.
-         *
-         * @param precedence task precedence
-         * @throws MachineException if any error occurs.
+         * Creates a new instance.
          */
-        protected abstract void perform(final int precedence)
-            throws MachineException;
+        public LoadTask() {
+            super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET});
+        }
     }
 
 
@@ -70,10 +54,8 @@ public final class XletTask {
          * Creates a new instance.
          */
         public LoadSwitchTask() {
-            super(new TransitionMatcher[] {
-                    XletTransitionMatcher.LOAD_XLET},
-                new TransitionMatcher[] {
-                    XletTransitionMatcher.DESTROY_XLET});
+            super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET},
+                  new TransitionMatcher[] {XletTransitionMatcher.DESTROY_XLET});
         }
     }
 
@@ -81,28 +63,11 @@ public final class XletTask {
     /**
      *
      */
-    public abstract static class InitTask extends Task {
+    public abstract static class InitTask extends SimpleTask {
 
-
-        //@Override
-        public final void perform(final Transition transition,
-                                  final int precedence)
-            throws MachineException {
-
-            if (XletTransitionMatcher.INIT_XLET.matches(transition)) {
-                perform(precedence);
-            }
+        public InitTask() {
+            super(new TransitionMatcher[] {XletTransitionMatcher.INIT_XLET});
         }
-
-
-        /**
-         * Performs when <code>initXlet</code> method invoked.
-         *
-         * @param precedence task precedence
-         * @throws MachineException if any error occurs.
-         */
-        protected abstract void perform(final int precedence)
-            throws MachineException;
     }
 
 
@@ -116,10 +81,8 @@ public final class XletTask {
          * Creates a new instance.
          */
         public InitSwitchTask() {
-            super(new TransitionMatcher[] {
-                    XletTransitionMatcher.INIT_XLET},
-                new TransitionMatcher[] {
-                    XletTransitionMatcher.DESTROY_XLET});
+            super(new TransitionMatcher[] {XletTransitionMatcher.INIT_XLET},
+                  new TransitionMatcher[] {XletTransitionMatcher.DESTROY_XLET});
         }
     }
 
@@ -127,28 +90,14 @@ public final class XletTask {
     /**
      * Task performed when xlet's state changes to ACTIVE.
      */
-    public abstract static class PlayTask extends Task {
-
-
-        //@Override
-        public final void perform(final Transition transition,
-                                  final int precedence)
-            throws MachineException {
-
-            if (XletTransitionMatcher.START_XLET.matches(transition)) {
-                perform(precedence);
-            }
-        }
-
+    public abstract static class PlayTask extends SimpleTask {
 
         /**
-         * Performs when xlet <code>startXlet</code> method invoked.
-         *
-         * @param precedence task precedence
-         * @throws MachineException if any error occurs
+         * Creates a new instance.
          */
-        protected abstract void perform(final int precedence)
-            throws MachineException;
+        public PlayTask() {
+            super(new TransitionMatcher[] {XletTransitionMatcher.START_XLET});
+        }
     }
 
 
@@ -163,10 +112,10 @@ public final class XletTask {
          */
         public PlaySwitchTask() {
             super(new TransitionMatcher[] {
-                    XletTransitionMatcher.START_XLET},
-                new TransitionMatcher[] {
-                    XletTransitionMatcher.PAUSE_XLET,
-                    XletTransitionMatcher.DESTROY_XLET});
+                      XletTransitionMatcher.START_XLET},
+                  new TransitionMatcher[] {
+                      XletTransitionMatcher.PAUSE_XLET,
+                      XletTransitionMatcher.DESTROY_XLET});
         }
     }
 

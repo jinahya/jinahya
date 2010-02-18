@@ -19,8 +19,8 @@ package xlet;
 
 
 import jinahya.fsm.MachineException;
-import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
+import jinahya.fsm.task.Task;
 
 
 
@@ -31,16 +31,19 @@ import jinahya.fsm.Transition;
 class HistoryTask extends Task {
 
 
+    public boolean matches(final Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
+
+
     //@Override
-    public void perform(final Transition transition, final int precedence)
+    protected void perform(final Transition transition)
         throws MachineException {
 
-        if (precedence == 0) {
-            System.out.print(transition.getTargetState() + " / " + transition.getSourceState());
-            for (int i = 0; i < 10; i++) {
-                System.out.print(" / " + transition.getPreviousState(i));
-            }
-            System.out.println();
+        System.out.print(transition.getTargetState() + " / " + transition.getSourceState());
+        for (int i = 1; i <= 10; i++) {
+            System.out.print(" / " + transition.getPreviousState(i));
         }
+        System.out.println();
     }
 }

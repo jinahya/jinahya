@@ -17,8 +17,8 @@
 package jinahya.fsm.android.activity;
 
 
-import jinahya.fsm.SwitchTask;
 import jinahya.fsm.TransitionMatcher;
+import jinahya.fsm.task.SwitchTask;
 
 import static jinahya.fsm.android.activity.ActivityTransitionMatcher.*;
 
@@ -40,10 +40,8 @@ public final class ActivityTask {
          * Creates a new instance.
          */
         public BackgroundSwitchTask() {
-            super(new TransitionMatcher[] {
-                    ON_START},
-                new TransitionMatcher[] {
-                    ON_STOP});
+            super(new TransitionMatcher[] {ON_START},
+                  new TransitionMatcher[] {ON_STOP});
         }
     }
 
@@ -58,10 +56,8 @@ public final class ActivityTask {
          * Creates a new instance.
          */
         public ForegroundSwitchTask() {
-            super(new TransitionMatcher[] {
-                    ON_RESUME},
-                new TransitionMatcher[] {
-                    ON_PAUSE});
+            super(new TransitionMatcher[] {ON_RESUME},
+                  new TransitionMatcher[] {ON_PAUSE});
         }
     }
 
@@ -76,10 +72,8 @@ public final class ActivityTask {
          * Creates a new instance.
          */
         public SuspensionSwitchTask() {
-            super(new TransitionMatcher[] {
-                    ON_CREATE},
-                new TransitionMatcher[] {
-                    ON_DESTROY});
+            super(new TransitionMatcher[] {ON_CREATE},
+                  new TransitionMatcher[] {ON_DESTROY});
         }
     }
 

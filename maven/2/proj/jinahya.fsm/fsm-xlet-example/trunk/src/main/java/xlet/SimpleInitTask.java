@@ -32,19 +32,13 @@ class SimpleInitTask extends InitSwitchTask {
 
 
     //@Override
-    public void on(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("INIT: ON @ " + precedence);
+    protected void on() throws MachineException {
+        System.out.println("INIT: ON");
     }
 
 
     //@Override
-    public void off(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("INIT: OFF @ " + precedence);
+    protected void off() throws MachineException {
+        System.out.println("INIT: OFF");
     }
 }

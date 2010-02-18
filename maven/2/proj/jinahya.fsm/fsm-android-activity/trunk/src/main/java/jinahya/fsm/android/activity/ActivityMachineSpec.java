@@ -32,17 +32,6 @@ public class ActivityMachineSpec extends MachineSpec {
 
 
     /**
-     * {@link jinahya.fsm.State#UNKNOWN} &#8594; {@link ActivityState#SUSPENDED}.
-     *
-     * @return 2
-     */
-    @Override
-    public int getMaximumHistorySize() {
-        return 0x02;
-    }
-
-
-    /**
      * Returns true if and only if {@link jinahya.fsm.State#UNKNOWN} &#8594;
      * {@link ActivityState#SUSPENDED}.
      *

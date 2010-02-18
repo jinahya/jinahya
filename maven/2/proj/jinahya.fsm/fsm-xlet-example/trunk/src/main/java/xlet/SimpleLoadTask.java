@@ -32,19 +32,13 @@ class SimpleLoadTask extends LoadSwitchTask {
 
 
     //@Override
-    public void on(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("LOAD: START @ " + precedence);
+    protected void on() throws MachineException {
+        System.out.println("LOAD: START");
     }
 
 
     //@Override
-    public void off(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("LOAD: FINISH @ " + precedence);
+    protected void off() throws MachineException {
+        System.out.println("LOAD: FINISH");
     }
 }

@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import jinahya.fsm.event.TransitionEvent;
 import jinahya.fsm.event.TransitionEventListener;
+import jinahya.fsm.task.Task;
 
 import jinahya.util.els.EventListenerSupport;
 
@@ -130,8 +131,8 @@ public class Machine {
                 if (depth <= 0) {
                     throw new IllegalArgumentException("depth <= 0");
                 }
-                if (depth < previousStates.length) {
-                    return previousStates[depth];
+                if (depth <= previousStates.length) {
+                    return previousStates[depth - 1];
                 } else {
                     return State.UNKNOWN;
                 }
@@ -314,6 +315,23 @@ public class Machine {
         final TransitionEventListener l) {
 
         els.remove(TransitionEventListener.class, l);
+    }
+
+
+    /**
+     *
+     * @param task
+     */
+    public final void addTask(final Task task) {
+        addTransitionEventListener(task);
+    }
+
+
+    /**
+     *
+     */
+    public final void removeTask(final Task task) {
+        this.removeTransitionEventListener(task);
     }
 
 

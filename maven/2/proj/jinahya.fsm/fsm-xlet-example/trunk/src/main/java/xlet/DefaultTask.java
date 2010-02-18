@@ -19,8 +19,8 @@ package xlet;
 
 
 import jinahya.fsm.MachineException;
-import jinahya.fsm.Task;
 import jinahya.fsm.Transition;
+import jinahya.fsm.task.Task;
 
 
 /**
@@ -30,8 +30,13 @@ import jinahya.fsm.Transition;
 class DefaultTask extends Task {
 
 
+    public boolean matches(Transition transition) {
+        return Boolean.TRUE.booleanValue();
+    }
+
+
     //@Override
-    public void perform(final Transition transition, final int precedence)
+    protected void perform(final Transition transition)
         throws MachineException {
 
         try {

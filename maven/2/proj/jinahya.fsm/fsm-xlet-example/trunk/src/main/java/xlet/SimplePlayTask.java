@@ -32,19 +32,13 @@ class SimplePlayTask extends PlaySwitchTask {
 
 
     //@Override
-    public void on(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("PLAY: START @ " + precedence);
+    protected void on() throws MachineException {
+        System.out.println("PLAY: START");
     }
 
 
     //@Override
-    public void off(int precedence) throws MachineException {
-        if (precedence != 0) {
-            return;
-        }
-        //System.out.println("PLAY: FINISH @ " + precedence);
+   protected void off() throws MachineException {
+        System.out.println("PLAY: FINISH");
     }
 }

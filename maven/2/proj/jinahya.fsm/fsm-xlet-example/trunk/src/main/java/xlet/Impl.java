@@ -61,12 +61,12 @@ public class Impl implements Xlet {
         });
 
         for (int i = 0; i < 100; i++) {
-            xsm.submit(new DefaultTask());
+            xsm.addTask(new DefaultTask());
         }
-        xsm.submit(new SimpleLoadTask());
-        xsm.submit(new SimpleInitTask());
-        xsm.submit(new SimplePlayTask());
-        xsm.submit(new HistoryTask());
+        xsm.addTask(new SimpleLoadTask());
+        xsm.addTask(new SimpleInitTask());
+        xsm.addTask(new SimplePlayTask());
+        xsm.addTask(new HistoryTask());
 
         try {
             xsm.setState(XletState.LOADED);
