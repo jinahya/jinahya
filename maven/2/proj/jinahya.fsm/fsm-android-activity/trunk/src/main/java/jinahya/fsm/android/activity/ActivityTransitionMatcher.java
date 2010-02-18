@@ -60,14 +60,14 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
 
             boolean matches = false;
 
-            switch (transition.getPreviousState(0)) {
+            switch (transition.getPreviousStateAt(0)) {
                 case UNKNOWN:
                     // following onCreate()
                     matches = Boolean.TRUE.booleanValue();
                     break;
                 case SUSPENDED:
                     // following onRestart()
-                    matches = transition.getPreviousState(1) == SUSPENDED;
+                    matches = transition.getPreviousStateAt(1) == SUSPENDED;
                     break;
                 default:
                     break;
@@ -86,7 +86,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == PAUSED &&
                     transition.getTargetState() == ACTIVE &&
-                    transition.getPreviousState(0) == SUSPENDED);
+                    transition.getPreviousStateAt(0) == SUSPENDED);
         }
     },
 
@@ -111,7 +111,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == PAUSED &&
                     transition.getTargetState() == SUSPENDED &&
-                    transition.getPreviousState(0) == ACTIVE);
+                    transition.getPreviousStateAt(0) == ACTIVE);
         }
     },
 
@@ -124,7 +124,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == SUSPENDED &&
                     transition.getTargetState() == DESTROYED &&
-                    transition.getPreviousState(0) == PAUSED);
+                    transition.getPreviousStateAt(0) == PAUSED);
         }
     },
 
@@ -137,7 +137,7 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
         public boolean matches(final Transition transition) {
             return (transition.getSourceState() == SUSPENDED &&
                     transition.getTargetState() == SUSPENDED &&
-                    transition.getPreviousState(0) == PAUSED);
+                    transition.getPreviousStateAt(0) == PAUSED);
         }
     };
 }
