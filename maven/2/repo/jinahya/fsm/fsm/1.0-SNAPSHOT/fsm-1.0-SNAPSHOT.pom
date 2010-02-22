@@ -108,7 +108,7 @@
   <!-- More Project Information -->
   <name>fsm</name>
   <description>State Machine Support</description>
-  <url>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/</url>
+  <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/index.html</url>
   <inceptionYear>2009</inceptionYear>
   <licenses>
     <license>
@@ -138,10 +138,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm/trunk/</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -172,7 +172,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
