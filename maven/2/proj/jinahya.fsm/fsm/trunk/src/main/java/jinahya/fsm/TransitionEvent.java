@@ -14,23 +14,20 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.event;
+package jinahya.fsm;
 
 
 import java.util.EventObject;
 
-import jinahya.fsm.Machine;
-import jinahya.fsm.Transition;
-
 
 /**
+ * An event for state transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class TransitionEvent extends EventObject {
 
 
-    /** GENERATED. */
     private static final long serialVersionUID = 9136728627536178799L;
 
 
@@ -67,6 +64,5 @@ public class TransitionEvent extends EventObject {
     }
 
 
-    /** transition. */
     private Transition transition;
 }

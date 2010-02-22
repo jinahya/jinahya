@@ -19,9 +19,7 @@ package jinahya.fsm;
 
 import java.util.Vector;
 
-import jinahya.fsm.event.TransitionEvent;
-import jinahya.fsm.event.TransitionEventListener;
-import jinahya.fsm.task.Task;
+//import jinahya.fsm.task.Task;
 
 import jinahya.util.EventListenerSupport;
 
@@ -32,6 +30,7 @@ import jinahya.util.EventListenerSupport;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class Machine {
+
 
     /**
      * Creates a new instance with a spec. The maximumHistorySize is 0x0A.
@@ -121,7 +120,7 @@ public class Machine {
             }
 
             //@Override
-            public String toString() {
+            public final String toString() {
                 return "[TRANSITION: " + sourceState + " -> " +
                         targetState + "]";
             }
@@ -301,24 +300,25 @@ public class Machine {
     }
 
 
-    /**
+    /*
      * Adds given <code>task</code> to this machine.
      *
      * @param task task to be added.
-     */
+
     public final void addTask(final Task task) {
         addTransitionEventListener(task);
     }
+     */
 
 
-    /**
+    /*
      * Removes given <code>task</code> from this machine.
      *
      * @param task task to be removed
-     */
     public final void removeTask(final Task task) {
         this.removeTransitionEventListener(task);
     }
+     */
 
 
     /**
@@ -339,17 +339,6 @@ public class Machine {
     public synchronized final boolean isFinished() {
         return finished;
     }
-
-
-    /**
-     * Check whether this machine has been started and not finished yet.
-     *
-     * @return true if this machine has been started and not finished yet.
-     */
-    public synchronized final boolean isValid() {
-        return started && !finished;
-    }
-
 
 
     /**

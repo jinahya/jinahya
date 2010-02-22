@@ -14,11 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.task;
-
-import jinahya.fsm.MachineException;
-import jinahya.fsm.Transition;
-import jinahya.fsm.TransitionMatcher;
+package jinahya.fsm;
 
 
 /**
@@ -85,7 +81,7 @@ public abstract class SwitchTask extends Task {
 
 
     //@Override
-    protected final void perform(Transition transition)
+    protected final void perform(final Transition transition)
         throws MachineException {
 
         if (on) {

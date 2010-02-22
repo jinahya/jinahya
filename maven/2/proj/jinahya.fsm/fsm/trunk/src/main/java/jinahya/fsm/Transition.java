@@ -24,10 +24,10 @@ import java.io.Serializable;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Transition extends Serializable {
+public abstract class Transition implements Serializable {
 
 
-    static final long serialVersionUID = -6850544414392282590L;
+    private static final long serialVersionUID = -6850544414392282590L;
 
 
     /**
@@ -35,7 +35,7 @@ public interface Transition extends Serializable {
      *
      * @return source state
      */
-    int getSourceState();
+    public abstract int getSourceState();
 
 
     /**
@@ -43,7 +43,7 @@ public interface Transition extends Serializable {
      *
      * @return target state
      */
-    int getTargetState();
+    public abstract int getTargetState();
 
 
     /**
@@ -51,7 +51,7 @@ public interface Transition extends Serializable {
      *
      * @return number of previous states.
      */
-    int getPreviousStateCount();
+    public abstract int getPreviousStateCount();
 
 
     /**
@@ -60,5 +60,5 @@ public interface Transition extends Serializable {
      * @param index previous state index
      * @return previous state at <code>index</code>
      */
-    int getPreviousStateAt(int index);
+    public abstract int getPreviousStateAt(int index);
 }

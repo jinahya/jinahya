@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.event;
+package jinahya.fsm;
 
 
 import java.util.EventListener;

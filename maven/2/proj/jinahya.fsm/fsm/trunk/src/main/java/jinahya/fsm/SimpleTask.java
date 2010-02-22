@@ -14,11 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.task;
-
-
-import jinahya.fsm.Transition;
-import jinahya.fsm.TransitionMatcher;
+package jinahya.fsm;
 
 
 /**
