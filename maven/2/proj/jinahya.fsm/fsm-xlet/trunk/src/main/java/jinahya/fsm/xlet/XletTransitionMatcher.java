@@ -30,12 +30,14 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>UNKNOWN -> LOADED</code>.
+     * A TransitionMatcher for [{@link State#UNKNOWN} &rarr;
+     * {@link XletState#LOADED}].
      *
-     * @see jinahya.fsm.State#UNKNOWN
+     * @see State#UNKNOWN
      * @see XletState#LOADED
      */
-    public static final TransitionMatcher LOAD_XLET = new TransitionMatcher() {
+    public static final TransitionMatcher LOAD_XLET =
+        new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 return (transition.getSourceState() == State.UNKNOWN &&
@@ -45,13 +47,15 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>(UNKNOWN|LOADED) -> PAUSED</code>.
+     * A transition matcher for [({@link State#UNKNOWN} ||
+     * {@link XletState#LOADED}) &rarr; {@link XletState#PAUSED}].
      *
-     * @see jinahya.fsm.State#UNKNOWN
+     * @see State#UNKNOWN
      * @see XletState#LOADED
      * @see XletState#PAUSED
      */
-    public static final TransitionMatcher INIT_XLET = new TransitionMatcher() {
+    public static final TransitionMatcher INIT_XLET =
+        new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 final int sourceState = transition.getSourceState();
@@ -65,12 +69,14 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>PAUSED -> ACTIVE</code>.
+     * A transition matcher for [{@link XletState#PAUSED} &rarr;
+     * {@link XletState#ACTIVE}].
      *
      * @see XletState#PAUSED
      * @see XletState#ACTIVE
      */
-    public static final TransitionMatcher START_XLET = new TransitionMatcher() {
+    public static final TransitionMatcher START_XLET =
+        new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 return (transition.getSourceState() == XletState.PAUSED &&
@@ -80,12 +86,14 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * <code>ACTIVE -> PAUSED</code>.
+     * A transition matcher for [{@link XletState#ACTIVE} &rarr;
+     * {@link XletState#PAUSED}].
      *
      * @see XletState#ACTIVE
      * @see XletState#PAUSED
      */
-    public static final TransitionMatcher PAUSE_XLET = new TransitionMatcher() {
+    public static final TransitionMatcher PAUSE_XLET =
+        new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
                 return (transition.getSourceState() == XletState.ACTIVE &&
@@ -95,9 +103,9 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * {@link XletState#LOADED} &#8594; {@link XletState#DESTROYED} ||
-     * {@link XletState#PAUSED} &#8594; {@link XletState#DESTROYED} ||
-     * {@link XletState#ACTIVE) &#8594; {@link XletState#DESTROYED}.
+     * A transition matcher for [({@link XletState#LOADED} ||
+     * {@link XletState#PAUSED} || {@link XletState#ACTIVE}) &rarr;
+     * {@link XletState#DESTROYED}].
      *
      * @see XletState#LOADED
      * @see XletState#PAUSED
@@ -116,9 +124,7 @@ public final class XletTransitionMatcher {
         };
 
 
-    /**
-     * Marked as private.
-     */
+    /** . */
     private XletTransitionMatcher() {
         super();
     }

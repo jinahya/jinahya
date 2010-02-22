@@ -18,8 +18,8 @@ package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.TransitionMatcher;
-import jinahya.fsm.task.SwitchTask;
-import jinahya.fsm.task.SimpleTask;
+import jinahya.fsm.SwitchTask;
+import jinahya.fsm.SimpleTask;
 
 
 /**
@@ -30,29 +30,24 @@ public final class XletTask {
 
 
     /**
-     * 
+     * A task executes for {@link XletTransitionMatcher#LOAD_XLET}.
      */
     public abstract static class LoadTask extends SimpleTask {
 
-        /**
-         * Creates a new instance.
-         */
+        /** Creates a new instance. */
         public LoadTask() {
             super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET});
         }
     }
 
 
-
     /**
-     * 
+     * A switch task turns on {@link XletTransitionMatcher#LOAD_XLET} and turns
+     * off {@link XletTransitionMatcher#DESTROY_XLET}.
      */
     public abstract static class LoadSwitchTask extends SwitchTask {
 
-
-        /**
-         * Creates a new instance.
-         */
+        /** Creates a new instance. */
         public LoadSwitchTask() {
             super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET},
                   new TransitionMatcher[] {XletTransitionMatcher.DESTROY_XLET});
@@ -61,40 +56,40 @@ public final class XletTask {
 
 
     /**
-     *
+     * A simple task executes for {@link XletTransitionMatcher#INIT_XLET}.
      */
     public abstract static class InitTask extends SimpleTask {
 
+        /** Creates an instance. */
         public InitTask() {
-            super(new TransitionMatcher[] {XletTransitionMatcher.INIT_XLET});
+            super(new TransitionMatcher[] {
+                      XletTransitionMatcher.INIT_XLET});
         }
     }
 
 
     /**
-     *
+     * A switch task turns on {@link XletTransitionMatcher#INIT_XLET} and turns
+     * off {@link XletTransitionMatcher#DESTROY_XLET}.
      */
     public abstract static class InitSwitchTask extends SwitchTask {
 
-
-        /**
-         * Creates a new instance.
-         */
+        /** Creates a new instance. */
         public InitSwitchTask() {
-            super(new TransitionMatcher[] {XletTransitionMatcher.INIT_XLET},
-                  new TransitionMatcher[] {XletTransitionMatcher.DESTROY_XLET});
+            super(new TransitionMatcher[] {
+                      XletTransitionMatcher.INIT_XLET},
+                  new TransitionMatcher[] {
+                      XletTransitionMatcher.DESTROY_XLET});
         }
     }
 
 
     /**
-     * Task performed when xlet's state changes to ACTIVE.
+     * A simple task executes for {@link XletTransitionMatcher#START_XLET}.
      */
     public abstract static class PlayTask extends SimpleTask {
 
-        /**
-         * Creates a new instance.
-         */
+        /** Creates a new instance. */
         public PlayTask() {
             super(new TransitionMatcher[] {XletTransitionMatcher.START_XLET});
         }
@@ -102,14 +97,14 @@ public final class XletTask {
 
 
     /**
-     *
+     * A switch task turns on for
+     * {@link XletTransitionMatcher#START_XLET} and turned off for
+     * {@link XletTransitionMatcher#PAUSE_XLET} or
+     * {@link XletTransitionMatcher#DESTROY_XLET}.
      */
     public abstract static class PlaySwitchTask extends SwitchTask {
 
-
-        /**
-         * Creates a new instance.
-         */
+        /** Creates a new instance. */
         public PlaySwitchTask() {
             super(new TransitionMatcher[] {
                       XletTransitionMatcher.START_XLET},
@@ -121,7 +116,7 @@ public final class XletTask {
 
 
     /**
-     *
+     * .
      */
     private XletTask() {
         super();
