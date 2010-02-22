@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2009 - 2010</copyright>
     <item>
-      <title>File: 10,
-             Errors: 42,
+      <title>File: 4,
+             Errors: 24,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,26 +38,12 @@
                   0
                 </td>
                 <td>
-                  4
+                  0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.PlayTask.java">jinahya/fsm/xlet/PlayTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.PlaySwitchTask.java">jinahya/fsm/xlet/PlaySwitchTask.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletTask.java">jinahya/fsm/xlet/XletTask.java</a>
                 </td>
                 <td>
                   0
@@ -80,21 +66,7 @@
                   0
                 </td>
                 <td>
-                  12
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.InitTask.java">jinahya/fsm/xlet/InitTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
+                  8
                 </td>
               </tr>
                           <tr>
@@ -108,63 +80,7 @@
                   0
                 </td>
                 <td>
-                  18
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.package.html">jinahya/fsm/xlet/package.html</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.LoadTask.java">jinahya/fsm/xlet/LoadTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.LoadSwitchTask.java">jinahya/fsm/xlet/LoadSwitchTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.InitSwitchTask.java">jinahya/fsm/xlet/InitSwitchTask.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  16
                 </td>
               </tr>
                       </tbody>
