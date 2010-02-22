@@ -1,17 +1,17 @@
 -classpath
-'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/util/event-listener-support/1.0-SNAPSHOT/event-listener-support-1.0-SNAPSHOT.jar'
+'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/util/event-listener-support/1.0/event-listener-support-1.0.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/src/main/java'
+'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2009-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Volumes/1394/Documents/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/site/apidocs'
+'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm/trunk/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
