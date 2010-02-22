@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Jin Kwon.
+ *  Copyright 2010 Jin Kwon.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,22 +14,4 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm;
-
-
-/**
- * An interface for matching transition.
- *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- */
-public interface TransitionMatcher {
-
-
-    /**
-     * Matches specified <code>transition</code>.
-     *
-     * @param transition transition to be matched
-     * @return true if given <code>transition</code> matches, false otherwise.
-     */
-    boolean matches(final Transition transition);
-}
+package jinahya.fsm.task;

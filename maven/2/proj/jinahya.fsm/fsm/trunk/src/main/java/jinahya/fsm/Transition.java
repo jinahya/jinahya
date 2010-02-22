@@ -55,7 +55,7 @@ public interface Transition extends Serializable {
 
 
     /**
-     * Returns previous state.
+     * Returns previous state at given <code>index</code>.
      *
      * @param index previous state index
      * @return previous state at <code>index</code>

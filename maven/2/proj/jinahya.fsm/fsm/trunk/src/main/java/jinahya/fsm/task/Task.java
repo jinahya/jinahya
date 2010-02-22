@@ -1,5 +1,5 @@
 /*
- *  Copyright 2010 onacit.
+ *  Copyright 2010 Jin Kwon.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import jinahya.fsm.event.TransitionEventListener;
 
 
 /**
- * Represents a execution unit.
+ * Represents an execution unit.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

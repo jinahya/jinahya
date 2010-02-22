@@ -31,6 +31,9 @@ public final class State {
     public static final int UNKNOWN = 0xFFFFFFFF;
 
 
+    /**
+     * .
+     */
     private State() {
         super();
     }

@@ -22,6 +22,7 @@ import jinahya.fsm.TransitionMatcher;
 
 
 /**
+ * A task which can be on and off.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

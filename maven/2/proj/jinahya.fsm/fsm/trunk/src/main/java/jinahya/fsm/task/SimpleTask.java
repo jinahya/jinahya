@@ -53,10 +53,10 @@ public abstract class SimpleTask extends Task {
     public final boolean matches(final Transition transition) {
         for (int i = 0; i < matchers.length; i++) {
             if (matchers[i].matches(transition)) {
-                return true;
+                return Boolean.TRUE.booleanValue();
             }
         }
-        return false;
+        return Boolean.FALSE.booleanValue();
     }
 
 
