@@ -16,6 +16,7 @@
 
 package jinahya.util.els;
 
+
 import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Hashtable;
@@ -34,7 +35,7 @@ public class EventListenerSupport {
      *
      * @return the total number of listeners.
      */
-    public final int getListenerCount() {
+    public int getListenerCount() {
         int count = 0;
         synchronized (table) {
             for (Enumeration e = table.elements(); e.hasMoreElements();) {
@@ -49,12 +50,22 @@ public class EventListenerSupport {
      * Returns the total number of listeners of the supplied type for this
      * listener list.
      *
-     * @param c listener class
+     * @param listenerClass listener class
      * @return the total number of listeners of the given type.
      */
-    public final int getListenerCount(final Class c) {
+    public int getListenerCount(final Class listenerClass) {
+
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
+            throw new IllegalArgumentException(
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
         synchronized (table) {
-            Vector instances = (Vector) table.get(c);
+            Vector instances = (Vector) table.get(listenerClass);
             if (instances == null) {
                 return 0;
             }
@@ -70,11 +81,12 @@ public class EventListenerSupport {
      */
     public final Class[] getListenerClasses() {
         Vector vector = new Vector();
-        for (Enumeration e = table.keys(); e.hasMoreElements(); ) {
+        for (Enumeration e = table.keys(); e.hasMoreElements();) {
             vector.addElement(e.nextElement());
         }
         Class[] classes = new Class[vector.size()];
-        vector.toArray(classes);
+        vector.copyInto(classes); // 1.1
+        //vector.toArray(classes); // 1.2
         return classes;
     }
 
@@ -94,23 +106,40 @@ public class EventListenerSupport {
                 }
             }
         }
-        return all.toArray();
+
+        Object[] result = new Object[all.size()];
+        all.copyInto(result);
+        //all.toArray(result); // 1.2
+        return result;
     }
 
 
     /**
      * Return an array of all the listeners of the given type.
      *
-     * @param c listener class
+     * @param listenerClass listener class
      * @return all listeners of the given type.
      */
-    public final Object[] getListeners(final Class c) {
+    public final Object[] getListeners(final Class listenerClass) {
+
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
+            throw new IllegalArgumentException(
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
         synchronized (table) {
-            Vector instances = (Vector) table.get(c);
+            Vector instances = (Vector) table.get(listenerClass);
             if (instances == null) {
                 return new Object[0];
             }
-            return instances.toArray();
+            Object[] result = new Object[instances.size()];
+            instances.copyInto(result);
+            //instances.toArray(result); // 1.2
+            return result;
         }
     }
 
@@ -118,23 +147,37 @@ public class EventListenerSupport {
     /**
      * Adds listener to this support.
      *
-     * @param c listener class
-     * @param l listener instance
+     * @param listenerClass listener class
+     * @param listenerInstance listener instance
      */
-    public final void add(final Class c, final EventListener l) {
+    public final void add(final Class listenerClass,
+                          final EventListener listenerInstance) {
 
-        if (!c.isInstance(l)) { // false for null
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
             throw new IllegalArgumentException(
-                l + " is not an instance of " + c);
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
+        if (listenerInstance == null) {
+            throw new NullPointerException("listenerInstance");
+        }
+
+        if (!listenerClass.isInstance(listenerInstance)) {
+            throw new IllegalArgumentException(
+                listenerInstance + " is not an instance of " + listenerClass);
         }
 
         synchronized (table) {
-            Vector instances = (Vector) table.get(c);
+            Vector instances = (Vector) table.get(listenerClass);
             if (instances == null) {
                 instances = new Vector();
-                table.put(c, instances);
+                table.put(listenerClass, instances);
             }
-            instances.addElement(l);
+            instances.addElement(listenerInstance);
         }
     }
 
@@ -142,52 +185,91 @@ public class EventListenerSupport {
     /**
      * Removes the listener as a listener of the specified type.
      *
-     * @param c listener class
-     * @param l listener instance
+     * @param listenerClass listener class
+     * @param listenerInstance listener instance
+     * @return true if support contained the specifed listener.
      */
-    public final void remove(final Class c, final EventListener l) {
+    public boolean remove(final Class listenerClass,
+                          final EventListener listenerInstance) {
 
-        if (!c.isInstance(l)) { // false for null
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
             throw new IllegalArgumentException(
-                l + " is not an instance of " + c);
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
+        if (listenerInstance == null) {
+            throw new NullPointerException("listenerInstance");
+        }
+
+        if (!listenerClass.isInstance(listenerInstance)) {
+            throw new IllegalArgumentException(
+                listenerInstance + " is not an instance of " + listenerClass);
         }
 
         synchronized (table) {
-            Vector instances = (Vector) table.get(c);
+            Vector instances = (Vector) table.get(listenerClass);
             if (instances != null) {
-                instances.removeElement(l);
+                boolean result = instances.removeElement(listenerInstance);
+                if (result && instances.isEmpty()) {
+                    table.remove(listenerClass);
+                }
+                return result;
             }
         }
+
+        return false;
     }
 
 
     /**
      * Checks if this support contains specified listener.
      *
-     * @param c listener class
-     * @param l listener instance
-     * @return true if specified entry exist, false otheriwse
+     * @param listenerClass listener class
+     * @param listenerInstance listener instance
+     * @return true if support contained the specifed listener.
      */
-    public final boolean contains(final Class c, final EventListener l) {
+    public boolean contains(final Class listenerClass,
+                            final EventListener listenerInstance) {
 
-        /*
-        if (!EventListener.class.isAssignableFrom(c)) { // NullPointerException
-            throw new ClassCastException(
-                c + " is not assignable to " + EventListener.class);
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
         }
-         */
 
-        if (!c.isInstance(l)) { // false for null
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
             throw new IllegalArgumentException(
-                l + " is not an instance of " + c);
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
+        if (listenerInstance == null) {
+            throw new NullPointerException("listenerInstance");
+        }
+
+        if (!listenerClass.isInstance(listenerInstance)) {
+            throw new IllegalArgumentException(
+                listenerInstance + " is not an instance of " + listenerClass);
         }
 
         synchronized (table) {
-            Vector instances = (Vector) table.get(c);
+            Vector instances = (Vector) table.get(listenerClass);
             if (instances != null) {
-                return instances.contains(l);
+                return instances.contains(listenerInstance);
             }
-            return false;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Remove all classes and listeners from this support.
+     */
+    public void clear() {
+        synchronized (table) {
+            table.clear();
         }
     }
 
