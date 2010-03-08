@@ -42,6 +42,12 @@ public class EventListenerSupportTest {
 
 
     // --------------------------------------------------------------------- ADD
+    @Test
+    public void testAdd() {
+        support.add(MyEventListener.class, new MyEventListener());
+    }
+
+
     @Test(expected = NullPointerException.class)
     public void testAddWithNullClass() {
         support.add(null, null);
@@ -54,10 +60,7 @@ public class EventListenerSupportTest {
     }
 
 
-    @Test
-    public void testAdd() {
-        support.add(EventListener.class, new MyEventListener());
-    }
+
 
 
     // ------------------------------------------------------------------- CLEAR

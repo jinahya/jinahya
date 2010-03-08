@@ -54,6 +54,7 @@ public class EventListenerSupport {
 
         synchronized (map) {
             List<T> instances = (List<T>) map.get(listenerClass);
+
             if (instances == null) {
                 instances = new ArrayList<T>();
                 map.put(listenerClass, instances);
@@ -63,32 +64,26 @@ public class EventListenerSupport {
     }
 
 
-    /*
+    /**
      * Remove all clases and listeners from this support.
+     */
     public void clear() {
         synchronized (map) {
             map.clear();
         }
     }
-     */
 
 
-    /*
-     * Returns listener classes.
+    /**
+     * Removes listeners of specified type.
      *
-     * @return an array of listener classes.
-    public Class<?>[] getListenerClasses() {
-        List<Class<?>> listenerClasses = new ArrayList<Class<?>>();
-        synchronized (map) {
-            for (Class<? extends EventListener> listenerClass : map.keySet()) {
-                listenerClasses.add(listenerClass);
-            }
-        }
-        Class<?>[] result = new Class<?>[listenerClasses.size()];
-        listenerClasses.toArray(result);
-        return result;
-    }
+     * @param listenerClass listener type
      */
+    public void clear(final Class<?> listenerClass) {
+        synchronized (map) {
+            map.remove(listenerClass);
+        }
+    }
 
 
     /**
@@ -119,45 +114,57 @@ public class EventListenerSupport {
     }
 
 
-    /*
+    /**
+     * Returns all listener classes.
+     *
+     * @return listener classes
+     */
+    public Class<?>[] getListenerClasses() {
+        synchronized (map) {
+            Class<?>[] listenerClasses = new Class<?>[map.size()];
+            map.keySet().toArray(listenerClasses);
+            return listenerClasses;
+        }
+    }
+
+
+    /**
      * Returns the total number of listeners for this listener suppoert.
      *
      * @return the total number of listeners.
+     */
     public int getListenerCount() {
         int count = 0;
         synchronized (map) {
-            for (List<? extends EventListener> list : map.values()) {
+            for (List<?> list : map.values()) {
                 count += list.size();
             }
         }
         return count;
     }
-     */
 
 
-    /*
+    /**
      * Returns the total number of listeners of the supplied type for this
      * listener list.
      *
-     * @param <T>
      * @param listenerClass
      * @return the number of listener instances of given type.
-    public <T extends EventListener> int getListenerCount(
-        final Class<T> listenerClass) {
+     */
+    public int getListenerCount(final Class<?> listenerClass) {
 
         if (listenerClass == null) {
             throw new NullPointerException("listenerClass");
         }
 
         synchronized (map) {
-            List<? extends EventListener> instances = map.get(listenerClass);
+            List<?> instances = map.get(listenerClass);
             if (instances == null) {
                 return 0;
             }
             return instances.size();
         }
     }
-     */
 
 
     /*
