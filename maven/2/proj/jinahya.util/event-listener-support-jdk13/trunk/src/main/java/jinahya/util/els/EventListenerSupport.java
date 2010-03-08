@@ -17,6 +17,7 @@
 package jinahya.util.els;
 
 
+import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -115,10 +116,11 @@ public class EventListenerSupport {
     }
 
 
-    /*
+    /**
      * Returns listener class array.
      *
      * @return listener class array.
+     */
     public Class[] getListenerClasses() {
         Vector classes = new Vector();
         synchronized (table) {
@@ -130,7 +132,6 @@ public class EventListenerSupport {
         classes.copyInto(result);
         return result;
     }
-     */
 
 
     /*
