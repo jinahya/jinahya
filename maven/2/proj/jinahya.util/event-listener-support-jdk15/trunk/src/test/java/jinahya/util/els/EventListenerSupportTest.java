@@ -18,11 +18,9 @@ package jinahya.util.els;
 
 
 import java.util.EventListener;
-import java.util.Random;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -50,26 +48,15 @@ public class EventListenerSupportTest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddWithNoneEventListenerClass() {
-        support.add(Object.class, null);
-    }
-
-
     @Test(expected = NullPointerException.class)
     public void testAddWithNullInstance() {
         support.add(EventListener.class, null);
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddWithIllegalInstance() {
-        support.add(MyEventListener.class, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                // empty
-            }
-        });
+    @Test
+    public void testAdd() {
+        support.add(EventListener.class, new MyEventListener());
     }
 
 

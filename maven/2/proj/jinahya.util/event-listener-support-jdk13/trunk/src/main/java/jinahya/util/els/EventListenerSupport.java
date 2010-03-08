@@ -17,7 +17,6 @@
 package jinahya.util.els;
 
 
-import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -31,10 +30,113 @@ public class EventListenerSupport {
 
 
     /**
+     * Adds listener to this support.
+     *
+     * @param listenerClass listener class
+     * @param listenerInstance listener instance
+     */
+    public void add(final Class listenerClass,
+                    final EventListener listenerInstance) {
+
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
+            throw new IllegalArgumentException(
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
+        if (listenerInstance == null) {
+            throw new NullPointerException("listenerInstance");
+        }
+
+        if (!listenerClass.isInstance(listenerInstance)) {
+            throw new IllegalArgumentException(
+                listenerInstance + " is not an instance of " + listenerClass);
+        }
+
+        synchronized (table) {
+            Vector instances = (Vector) table.get(listenerClass);
+            if (instances == null) {
+                instances = new Vector();
+                table.put(listenerClass, instances);
+            }
+            instances.addElement(listenerInstance);
+        }
+    }
+
+
+    /*
+     * Remove all classes and listeners from this support.
+    public void clear() {
+        synchronized (table) {
+            table.clear();
+        }
+    }
+    */
+
+
+    /**
+     * Checks if this support contains specified listener.
+     *
+     * @param listenerClass listener class
+     * @param listenerInstance listener instance
+     * @return true if support contained the specifed listener.
+     */
+    public boolean contains(final Class listenerClass,
+                            final EventListener listenerInstance) {
+
+        if (listenerClass == null) {
+            throw new NullPointerException("listenerClass");
+        }
+
+        if (!EventListener.class.isAssignableFrom(listenerClass)) {
+            throw new IllegalArgumentException(
+                listenerClass + " is not assignable to " + EventListener.class);
+        }
+
+        if (listenerInstance == null) {
+            throw new NullPointerException("listenerInstance");
+        }
+
+        if (!listenerClass.isInstance(listenerInstance)) {
+            throw new IllegalArgumentException(
+                listenerInstance + " is not an instance of " + listenerClass);
+        }
+
+        synchronized (table) {
+            Vector instances = (Vector) table.get(listenerClass);
+            if (instances == null) {
+                return false;
+            }
+            return instances.contains(listenerInstance);
+        }
+    }
+
+
+    /*
+     * Returns listener class array.
+     *
+     * @return listener class array.
+    public Class[] getListenerClasses() {
+        Vector classes = new Vector();
+        synchronized (table) {
+            for (Enumeration e = table.keys(); e.hasMoreElements();) {
+                classes.addElement(e.nextElement());
+            }
+        }
+        Class[] result = new Class[classes.size()];
+        classes.copyInto(result);
+        return result;
+    }
+     */
+
+
+    /*
      * Returns the total number of listeners for this listener suppoert.
      *
      * @return the total number of listeners.
-     */
     public int getListenerCount() {
         int count = 0;
         synchronized (table) {
@@ -44,15 +146,15 @@ public class EventListenerSupport {
         }
         return count;
     }
+     */
 
 
-    /**
+    /*
      * Returns the total number of listeners of the supplied type for this
      * listener list.
      *
      * @param listenerClass listener class
      * @return the total number of listeners of the given type.
-     */
     public int getListenerCount(final Class listenerClass) {
 
         if (listenerClass == null) {
@@ -72,46 +174,7 @@ public class EventListenerSupport {
             return instances.size();
         }
     }
-
-
-    /**
-     * Returns an array of class.
-     *
-     * @return listener classes
      */
-    public final Class[] getListenerClasses() {
-        Vector vector = new Vector();
-        for (Enumeration e = table.keys(); e.hasMoreElements();) {
-            vector.addElement(e.nextElement());
-        }
-        Class[] classes = new Class[vector.size()];
-        vector.copyInto(classes); // 1.1
-        //vector.toArray(classes); // 1.2
-        return classes;
-    }
-
-
-    /**
-     * Returns all listener instances.
-     *
-     * @return all listeners
-     */
-    public final Object[] getListeners() {
-        Vector all = new Vector();
-        synchronized (table) {
-            for (Enumeration e = table.elements(); e.hasMoreElements();) {
-                Vector instances = (Vector) e.nextElement();
-                for (int i = 0; i < instances.size(); i++) {
-                    all.addElement(instances.elementAt(i));
-                }
-            }
-        }
-
-        Object[] result = new Object[all.size()];
-        all.copyInto(result);
-        //all.toArray(result); // 1.2
-        return result;
-    }
 
 
     /**
@@ -140,44 +203,6 @@ public class EventListenerSupport {
             instances.copyInto(result);
             //instances.toArray(result); // 1.2
             return result;
-        }
-    }
-
-
-    /**
-     * Adds listener to this support.
-     *
-     * @param listenerClass listener class
-     * @param listenerInstance listener instance
-     */
-    public final void add(final Class listenerClass,
-                          final EventListener listenerInstance) {
-
-        if (listenerClass == null) {
-            throw new NullPointerException("listenerClass");
-        }
-
-        if (!EventListener.class.isAssignableFrom(listenerClass)) {
-            throw new IllegalArgumentException(
-                listenerClass + " is not assignable to " + EventListener.class);
-        }
-
-        if (listenerInstance == null) {
-            throw new NullPointerException("listenerInstance");
-        }
-
-        if (!listenerClass.isInstance(listenerInstance)) {
-            throw new IllegalArgumentException(
-                listenerInstance + " is not an instance of " + listenerClass);
-        }
-
-        synchronized (table) {
-            Vector instances = (Vector) table.get(listenerClass);
-            if (instances == null) {
-                instances = new Vector();
-                table.put(listenerClass, instances);
-            }
-            instances.addElement(listenerInstance);
         }
     }
 
@@ -222,55 +247,6 @@ public class EventListenerSupport {
         }
 
         return false;
-    }
-
-
-    /**
-     * Checks if this support contains specified listener.
-     *
-     * @param listenerClass listener class
-     * @param listenerInstance listener instance
-     * @return true if support contained the specifed listener.
-     */
-    public boolean contains(final Class listenerClass,
-                            final EventListener listenerInstance) {
-
-        if (listenerClass == null) {
-            throw new NullPointerException("listenerClass");
-        }
-
-        if (!EventListener.class.isAssignableFrom(listenerClass)) {
-            throw new IllegalArgumentException(
-                listenerClass + " is not assignable to " + EventListener.class);
-        }
-
-        if (listenerInstance == null) {
-            throw new NullPointerException("listenerInstance");
-        }
-
-        if (!listenerClass.isInstance(listenerInstance)) {
-            throw new IllegalArgumentException(
-                listenerInstance + " is not an instance of " + listenerClass);
-        }
-
-        synchronized (table) {
-            Vector instances = (Vector) table.get(listenerClass);
-            if (instances != null) {
-                return instances.contains(listenerInstance);
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Remove all classes and listeners from this support.
-     */
-    public void clear() {
-        synchronized (table) {
-            table.clear();
-        }
     }
 
 
