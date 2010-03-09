@@ -40,30 +40,6 @@
           <target>${maven.compiler.target}</target>
           <showWarnings>true</showWarnings>
         </configuration>
-        <!--executions>
-          <execution>
-            <id>compile-java-1.5</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <source>1.5</source>
-              <target>${maven.compiler.target}</target>
-            </configuration>
-          </execution>
-          <execution>
-            <id>testCompile-java-1.6</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-            <configuration>
-              <source>1.6</source>
-              <target>1.6</target>
-            </configuration>
-          </execution>
-        </executions-->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -81,7 +57,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
           </links>
         </configuration>
       </plugin>
@@ -146,7 +122,7 @@
   <!--mailingLists/-->
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
     <url>http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</url>
   </scm>
