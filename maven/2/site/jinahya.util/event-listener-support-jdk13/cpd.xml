@@ -2,7 +2,7 @@
 <pmd-cpd>
 <duplication lines="24" tokens="110">
 <file line="39" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
-<file line="88" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
+<file line="98" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
 <codefragment>
 <![CDATA[
     public boolean contains(final Class listenerClass,
@@ -34,7 +34,7 @@
 </duplication>
 <duplication lines="24" tokens="106">
 <file line="39" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
-<file line="218" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
+<file line="228" path="/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java/jinahya/util/els/EventListenerSupport.java"/>
 <codefragment>
 <![CDATA[
     public boolean remove(final Class listenerClass,
