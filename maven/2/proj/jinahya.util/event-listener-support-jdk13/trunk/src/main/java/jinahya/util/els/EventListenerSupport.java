@@ -68,14 +68,24 @@ public class EventListenerSupport {
     }
 
 
-    /*
+    /**
      * Remove all classes and listeners from this support.
+     */
     public void clear() {
         synchronized (table) {
             table.clear();
         }
     }
-    */
+
+
+    /**
+     * Remove all listeners of given type.
+     *
+     * @param listenerClass listener class
+     */
+    public void clear(Class listenerClass) {
+        table.remove(listenerClass);
+    }
 
 
     /**
@@ -134,10 +144,11 @@ public class EventListenerSupport {
     }
 
 
-    /*
+    /**
      * Returns the total number of listeners for this listener suppoert.
      *
      * @return the total number of listeners.
+     */
     public int getListenerCount() {
         int count = 0;
         synchronized (table) {
@@ -147,15 +158,15 @@ public class EventListenerSupport {
         }
         return count;
     }
-     */
 
 
-    /*
+    /**
      * Returns the total number of listeners of the supplied type for this
      * listener list.
      *
      * @param listenerClass listener class
      * @return the total number of listeners of the given type.
+     */
     public int getListenerCount(final Class listenerClass) {
 
         if (listenerClass == null) {
@@ -175,7 +186,6 @@ public class EventListenerSupport {
             return instances.size();
         }
     }
-     */
 
 
     /**
