@@ -1,17 +1,17 @@
 -classpath
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/target/classes'
+'/home/onacit/.hudson/jobs/jinahya.util event-listener-support-jdk13 build.sh/workspace/trunk/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/src/main/java'
+'/home/onacit/.hudson/jobs/jinahya.util event-listener-support-jdk13 build.sh/workspace/trunk/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2009-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk13/trunk/target/site/apidocs'
+'/home/onacit/.hudson/jobs/jinahya.util event-listener-support-jdk13 build.sh/workspace/trunk/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
