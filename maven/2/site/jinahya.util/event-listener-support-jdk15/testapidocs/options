@@ -1,17 +1,17 @@
 -classpath
-'/Volumes/1394/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk15/trunk/target/classes:/Volumes/1394/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk15/trunk/target/test-classes:/Users/onacit/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar'
+'/usr/local/var/.hudson/jobs/jinahya.util event-listener-support-jdk15 build.sh/workspace/target/classes:/usr/local/var/.hudson/jobs/jinahya.util event-listener-support-jdk15 build.sh/workspace/target/test-classes:/home/onacit/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Volumes/1394/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk15/trunk/src/test/java'
+'/usr/local/var/.hudson/jobs/jinahya.util event-listener-support-jdk15 build.sh/workspace/src/test/java'
 -author
 -bottom
 'Copyright &#169; 2009-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Volumes/1394/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.util/event-listener-support-jdk15/trunk/target/site/testapidocs'
+'/usr/local/var/.hudson/jobs/jinahya.util event-listener-support-jdk15 build.sh/workspace/target/site/testapidocs'
 -docencoding
 'UTF-8'
 -doctitle
