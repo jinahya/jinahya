@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.util.kvs;
@@ -43,13 +42,16 @@ import jinahya.util.els.EventListenerSupport;
 public final class KeyValueSupport {
 
 
-    private static final String EXTENSION = "kvs";
-
-
     // <Class, KeyValueSupport>
     private static final Hashtable INSTANCES = new Hashtable();
 
 
+    /**
+     * Returns mapped instance for given <code>owner</code>.
+     *
+     * @param owner instance owner
+     * @return the instance owned by given <code>owner</code>
+     */
     public static KeyValueSupport getInstance(final Class owner) {
         synchronized (INSTANCES) {
             KeyValueSupport instance = (KeyValueSupport) INSTANCES.get(owner);
@@ -62,122 +64,21 @@ public final class KeyValueSupport {
     }
 
 
-    public static File[] readAllIn(final File dir) {
-
+    /**
+     * Returns all classes for created instances.
+     *
+     * @return an array <code>Class</code>
+     */
+    public static Class[] getOwners() {
+        final Vector owners = new Vector();
         synchronized (INSTANCES) {
-
-            String[] list = dir.list(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.endsWith("." + EXTENSION);
-                }
-            });
-
-            if (list == null) {
-                // this abstract pathname does not denote a directory,
-                // or if an I/O error occurs
-                return new File[0];
-            }
-
-            Vector skippedFileVector = new Vector();
-
-            for (int i = 0; i < list.length; i++) {
-
-                File file = new File(dir, list[i]);
-
-                if (!file.isFile()) {
-                    continue;
-                }
-
-                Class owner = null;
-                try {
-                    String filename = file.getName();
-                    int lastDotIndex = filename.lastIndexOf('.');
-                    owner = Class.forName(filename.substring(0, lastDotIndex));
-                } catch (ClassNotFoundException cnfe) {
-                    cnfe.printStackTrace();
-                    skippedFileVector.addElement(file);
-                    continue;
-                }
-
-                KeyValueSupport support = getInstance(owner);
-                try {
-                    support.read(file);
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
-
-            File[] skippedFiles = new File[skippedFileVector.size()];
-            skippedFileVector.toArray(skippedFiles);
-            return skippedFiles;
-        }
-    }
-
-
-    public static void readAll(File file) throws IOException {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-        try {
-            readAll(in);
-        } finally {
-            in.close();
-        }
-    }
-
-
-    public static void readAll(ObjectInput in) throws IOException {
-        synchronized (INSTANCES) {
-            int size = in.readInt();
-            for (int i = 0; i < size; i++) {
-
-                Class owner = null;
-                try {
-                    owner = Class.forName(in.readUTF());
-                } catch (ClassNotFoundException cnfe) {
-                    cnfe.printStackTrace();
-                    continue;
-                }
-
-                KeyValueSupport support = getInstance(owner);
-                try {
-                    support.read(in);
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
+            for (Enumeration e = INSTANCES.keys(); e.hasMoreElements();) {
+                owners.addElement(e.nextElement());
             }
         }
-    }
-
-
-    public static void writeAllIn(File dir) throws IOException {
-        synchronized (INSTANCES) {
-            for (Enumeration e = INSTANCES.elements(); e.hasMoreElements();) {
-                ((KeyValueSupport) e.nextElement()).writeIn(dir);
-            }
-        }
-    }
-
-
-    public static void writeAll(File file) throws IOException {
-        ObjectOutputStream out =
-            new ObjectOutputStream(new FileOutputStream(file));
-        try {
-            writeAll(out);
-            out.flush();
-        } finally {
-            out.close();
-        }
-    }
-
-
-    public static void writeAll(ObjectOutput out) throws IOException {
-        synchronized (INSTANCES) {
-            out.writeInt(INSTANCES.size());
-            for (Enumeration e = INSTANCES.elements(); e.hasMoreElements();) {
-                KeyValueSupport support = (KeyValueSupport) e.nextElement();
-                out.writeUTF(support.getOwner().getName());
-                support.write(out);
-            }
-        }
+        Class[] result = new Class[owners.size()];
+        owners.copyInto(result);
+        return result;
     }
 
 
@@ -193,147 +94,175 @@ public final class KeyValueSupport {
     }
 
 
+    /**
+     * Removes all entries regardless of type.
+     */
     public void clear() {
         values.clear();
     }
 
 
+    /**
+     * Remove all entries of given <code>type</code>.
+     *
+     * @param type entry type
+     */
+    public void clear(Class type) {
+        values.remove(type);
+    }
+
+
+    /**
+     * Returns the total number of entries regardless of type.
+     *
+     * @return the total number of entries of this support.
+     */
     public int size() {
         return values.size();
     }
 
 
-    public void readIn(File dir) throws IOException {
-        read(new File(dir, owner.getName() + "." + EXTENSION));
-    }
-
-
-    public void read(File file) throws IOException {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-        try {
-            read(in);
-        } finally {
-            in.close();
-        }
-    }
-
-
-    public void read(ObjectInput in) throws IOException {
-        int size = in.readInt();
+    /**
+     * Returns the total number of entries of given <code>type</code>.
+     *
+     * @param type entry type
+     * @return the number of entries of given <code>type</code>
+     */
+    public int size(Class type) {
         synchronized (values) {
-            for (int i = 0; i < size; i++) {
-                String key = in.readUTF();
-                try {
-                    values.put(key, in.readObject());
-                } catch (ClassNotFoundException cnfe) {
-                    cnfe.printStackTrace();
-                    continue;
-                }
+            Hashtable classified = (Hashtable) values.get(type);
+            if (classified == null) {
+                return 0;
             }
+            return classified.size();
         }
     }
 
 
-    public void writeIn(File dir) throws IOException {
-        write(new File(dir, owner.getName() + "." + EXTENSION));
-    }
-
-
-    public void write(File file) throws IOException {
-        ObjectOutputStream out =
-            new ObjectOutputStream(new FileOutputStream(file));
-        try {
-            write(out);
-            out.flush();
-        } finally {
-            out.close();
-        }
-    }
-
-
-    public void write(ObjectOutput out) throws IOException {
-        synchronized (values) {
-            out.writeInt(values.size());
-            for (Enumeration e = values.keys(); e.hasMoreElements();) {
-                String key = (String) e.nextElement();
-                out.writeUTF(key);
-                out.writeObject(values.get(key));
-            }
-        }
-    }
-
-
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
     public int getInt(String key, int def) {
-        Object val = get(key, null);
-        return val != null ? ((Integer) val).intValue() : def;
+        return ((Integer) get(Integer.class, key, new Integer(def))).intValue();
     }
 
 
+    /**
+     *
+     * @param key
+     * @param val
+     */
     public void putInt(String key, int val) {
-        put(key, new Integer(val));
+        put(Integer.class, key, new Integer(val));
     }
 
 
+    /**
+     * 
+     * @param key
+     */
+    public void ridInt(String key) {
+        rid(Integer.class, key);
+    }
+
+
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
     public float getFloat(String key, float def) {
-        Object val = get(key, null);
-        return val != null ? ((Float) val).floatValue() : def;
+        return ((Float) get(Float.class, key, new Float(def))).floatValue();
     }
 
 
+    /**
+     *
+     * @param key
+     * @param val
+     */
     public void putFloat(String key, float val) {
-        put(key, new Float(val));
+        put(Float.class, key, new Float(val));
     }
 
 
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
     public long getLong(String key, long def) {
-        Object val = get(key, null);
-        return val != null ? ((Long) val).longValue() : def;
+        return ((Long) get(Long.class, key, new Long(def))).longValue();
     }
 
 
+    /**
+     *
+     * @param key
+     * @param val
+     */
     public void putLong(String key, long val) {
-        put(key, new Long(val));
+        put(Long.class, key, new Long(val));
     }
 
 
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
     public double getDouble(String key, double def) {
-        Object val = get(key, null);
-        return val != null ? ((Double)val).doubleValue() : def;
+        return ((Double) get(Double.class, key, new Double(def))).doubleValue();
     }
 
 
+    /**
+     *
+     * @param key
+     * @param val
+     */
     public void putDouble(String key, double val) {
-        put(key, new Double(val));
+        put(Double.class, key, new Double(val));
     }
 
 
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
     public String getString(String key, String def) {
-        return (String) get(key, def);
+        return (String) get(String.class, key, def);
     }
 
 
+    /**
+     *
+     * @param key
+     */
+    public void ridString(String key) {
+        rid(String.class, key);
+    }
+
+
+    /**
+     *
+     * @param key
+     * @param val
+     */
     public void putString(String key, String val) {
-        put(key, val);
+        put(String.class, key, val);
     }
 
 
-    public Object get(String key, Object def) {
-        Object val = values.get(key);
-        return val != null ? val : def;
-    }
-
-
-    public void put(final String key, final Object val) {
-        synchronized (values) {
-            Object old = values.get(key);
-            values.put(key, val);
-
-            firePropertyChangeEvent(key, old, val);
-        }
-    }
-
-
-    public void remove(final String key) {
+    public void remove(final Class type, final String key) {
         Object old = values.remove(key);
 
         firePropertyChangeEvent(key, old, null);
@@ -351,19 +280,102 @@ public final class KeyValueSupport {
     }
 
 
-    public void addPropertyChangeListener(final PropertyChangeListener l) {
-        els.addIfNotAdded(PropertyChangeListener.class, l);
+    /**
+     * Put value.
+     *
+     * @param type value type
+     * @param key value key
+     * @param val value
+     */
+    public void put(final Class type, final String key, final Object val) {
+
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
+
+        if (key == null) {
+            throw new NullPointerException("key");
+        }
+
+        if (val == null) {
+            throw new NullPointerException("val");
+        }
+
+        if (!type.isInstance(val)) {
+            throw new IllegalArgumentException(
+                val + " is not an instnace of " + type);
+        }
+
+        synchronized (values) {
+            Hashtable classified = (Hashtable) values.get(type);
+            if (classified == null) {
+                classified = new Hashtable();
+                values.put(type, classified);
+            }
+        }
     }
 
 
-    public void removePropertyChangeListener(final PropertyChangeListener l) {
-        els.removeIfAdded(PropertyChangeListener.class, l);
+    /**
+     *
+     * @param type
+     * @param key
+     * @param def
+     * @return
+     */
+    public Object get(Class type, String key, Object def) {
+
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
+
+        if (key == null) {
+            throw new NullPointerException("key");
+        }
+
+        if (def != null && !type.isInstance(def)) {
+            throw new IllegalArgumentException(
+                def + " is not an instnace of " + type);
+        }
+
+        synchronized (values) {
+            Hashtable classified = (Hashtable) values.get(type);
+            if (classified == null) {
+                return def;
+            }
+            return classified.get(key);
+        }
+    }
+
+
+    /**
+     * Remove specified entry of given type.
+     *
+     * @param type entry type
+     * @param key entry name
+     */
+    public void rid(Class type, String key) {
+
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
+
+        if (key == null) {
+            throw new NullPointerException("key");
+        }
+
+        synchronized (values) {
+            Hashtable classified = (Hashtable) values.get(type);
+            if (classified != null) {
+                classified.remove(key);
+            }
+        }
     }
 
 
     private Class owner;
 
-    // <String, Object>
+    // <Class, Hashtable<String, Object>>
     private final Hashtable values = new Hashtable();
 
     private final EventListenerSupport els = new EventListenerSupport();
