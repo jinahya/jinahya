@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya.util</groupId>
-  <artifactId>key-value-support</artifactId>
+  <artifactId>key-value-support-jdk15</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
@@ -17,9 +17,9 @@
     </dependency>
     <dependency>
       <groupId>jinahya.util</groupId>
-      <artifactId>event-listener-support</artifactId>
+      <artifactId>event-listener-support-jdk15</artifactId>
       <version>1.0-SNAPSHOT</version>
-      <classifier>jdk11</classifier>
+      <classifier>${maven.jar.classifier}</classifier>
     </dependency>
   </dependencies>
   <properties>
@@ -42,39 +42,21 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <!--
-          <source>1.3</source>
-          <target>1.1</target>
-          -->
+          <source>1.5</source>
+          <target>${maven.compiler.target}</target>
+          <showWarnings>true</showWarnings>
         </configuration>
-        <executions>
-          <execution>
-            <id>java-1.4-compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <source>1.3</source>
-              <target>1.1</target>
-            </configuration>
-          </execution>
-          <execution>
-            <id>java-1.5-compile</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-            <configuration>
-              <source>1.5</source>
-              <target>1.5</target>
-            </configuration>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <classifier>${maven.jar.classifier}</classifier>
+        </configuration>
       </plugin>
     </plugins>
   </build>
+
   <reporting>
     <plugins>
       <plugin>
@@ -82,22 +64,8 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>http://java.sun.com/j2se/1.3/docs/api/</link>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
           </links>
-          <!--
-          <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
-          <docletArtifact>
-            <groupId>gr.spinellis</groupId>
-            <artifactId>UmlGraph</artifactId>
-            <version>4.6</version>
-          </docletArtifact>
-          <additionalparam>
-            -inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify
-            -postfixpackage -nodefontsize 9
-            -nodefontpackagesize 7
-            -all
-          </additionalparam>
-          -->
         </configuration>
       </plugin>
       <plugin>
@@ -126,7 +94,7 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>key-value-support</name>
+  <name>key-value-support-jdk15</name>
   <description>Event Listener Support</description>
   <!--url/-->
   <inceptionYear>2009</inceptionYear>
@@ -158,43 +126,25 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/key-value-support/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/key-value-support/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.util/key-value-support/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
     <repository>
-      <id>googlecode:jinahya</id>
-      <name>googlecode:jinahya</name>
+      <id>jinahya.googlecode.com_svn_maven_2_repo</id>
+      <name>jinahya.googlecode.com_svn_maven_2_repo</name>
       <url>http://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
-    <!--
-    <repository>
-      <id>googlecode:jinahya-files</id>
-      <name>googlecode:jinahya-files</name>
-      <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
-    </repository>
-    <repository>
-      <id>maven1-repository.dev.java.net</id>
-      <name>Java.net Repository for Maven</name>
-      <url>http://download.java.net/maven/1</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <id>maven2-repository.dev.java.net</id>
-      <name>Java.net Repository for Maven2</name>
-      <url>http://download.java.net/maven/2</url>
-    </repository>
-    -->
   </repositories>
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/key-value-support/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
@@ -202,5 +152,25 @@
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
-  <!--profiles/-->
+
+  <profiles>
+    <profile>
+      <id>jdk15</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <maven.compiler.target>1.5</maven.compiler.target>
+        <maven.jar.classifier>jdk15</maven.jar.classifier>
+      </properties>
+    </profile>
+    <profile>
+      <id>jdk16</id>
+      <properties>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.jar.classifier>jdk16</maven.jar.classifier>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>
