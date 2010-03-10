@@ -20,7 +20,8 @@ package jinahya.bitio;
 import java.io.*;
 import java.util.*;
 
-import org.testng.Assert;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 /**
@@ -30,11 +31,7 @@ import org.testng.Assert;
 public class IntTest {
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test() throws IOException {
         System.out.println("--------------------------------------------- INT");
 
@@ -45,11 +42,7 @@ public class IntTest {
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test32() throws IOException {
         System.out.println("----------------------------------------- INT(32)");
 
@@ -57,11 +50,7 @@ public class IntTest {
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void testLE() throws IOException {
         System.out.println("------------------------------------------ INT LE");
 
@@ -77,15 +66,11 @@ public class IntTest {
         int actual = input.readIntLE(length);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void testLE32() throws IOException {
         System.out.println("-------------------------------------- INT LE(32)");
 
@@ -100,14 +85,10 @@ public class IntTest {
         int actual = input.readIntLE(4);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
-    /**
-     *
-     * @throws IOException
-     */
     private void test(final int length, final int expected) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
@@ -118,7 +99,7 @@ public class IntTest {
         int actual = input.readInt(length);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 

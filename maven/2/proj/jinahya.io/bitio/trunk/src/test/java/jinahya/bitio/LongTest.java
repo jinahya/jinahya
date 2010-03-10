@@ -20,7 +20,8 @@ package jinahya.bitio;
 import java.io.*;
 import java.util.*;
 
-import org.testng.Assert;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 /**
@@ -30,11 +31,7 @@ import org.testng.Assert;
 public class LongTest {
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test() throws IOException {
         System.out.println("-------------------------------------------- LONG");
 
@@ -46,11 +43,7 @@ public class LongTest {
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test64() throws IOException {
         System.out.println("---------------------------------------- Long(64)");
 
@@ -58,11 +51,7 @@ public class LongTest {
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void testLE() throws IOException {
         System.out.println("----------------------------------------- LONG LE");
 
@@ -78,15 +67,11 @@ public class LongTest {
         long actual = input.readLongLE(length);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void testLE64() throws IOException {
         System.out.println("------------------------------------- LONG LE(64)");
 
@@ -101,14 +86,10 @@ public class LongTest {
         long actual = input.readLongLE(8);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
-    /**
-     *
-     * @throws IOException
-     */
     private void test(final int length, final long expected) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitOutput output = new BitOutput(baos);
@@ -119,7 +100,7 @@ public class LongTest {
         long actual = input.readLong(length);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 

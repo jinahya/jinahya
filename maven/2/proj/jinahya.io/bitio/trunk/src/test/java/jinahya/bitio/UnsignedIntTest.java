@@ -20,7 +20,8 @@ package jinahya.bitio;
 import java.io.*;
 import java.util.*;
 
-import org.testng.Assert;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 /**
@@ -30,11 +31,7 @@ import org.testng.Assert;
 public class UnsignedIntTest {
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test() throws IOException {
 
         System.out.println("------------------------------------ UNSIGNED INT");
@@ -52,7 +49,7 @@ public class UnsignedIntTest {
         int actual = input.readUnsignedInt(length);
         input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 

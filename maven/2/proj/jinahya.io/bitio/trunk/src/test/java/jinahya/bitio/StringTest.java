@@ -21,7 +21,8 @@ package jinahya.bitio;
 import java.io.*;
 import java.util.*;
 
-import org.testng.Assert;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 /**
@@ -31,11 +32,7 @@ import org.testng.Assert;
 public class StringTest {
 
 
-    /**
-     *
-     * @throws IOException
-     * @testng.test invocationCount="1024"
-     */
+    @Test
     public void test() throws IOException {
 
         System.out.println("------------------------------------------ STRING");
@@ -60,16 +57,16 @@ public class StringTest {
         BitOutput bo = new BitOutput(baos);
         bo.writeUTF(expected);
 
-        Assert.assertEquals(new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF(), expected);
+        assertEquals(expected, new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF());
 
-        Assert.assertEquals(new DataInputStream(new ByteArrayInputStream(baos.toByteArray())).readUTF(), expected);
+        assertEquals(expected, new DataInputStream(new ByteArrayInputStream(baos.toByteArray())).readUTF());
 
         baos.reset();
 
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeUTF(expected);
 
-        Assert.assertEquals(new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF(), expected);
+        assertEquals(expected, new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF());
     }
 
 
