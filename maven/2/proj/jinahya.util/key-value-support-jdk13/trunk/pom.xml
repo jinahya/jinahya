@@ -17,7 +17,7 @@
     </dependency>
     <dependency>
       <groupId>jinahya.util</groupId>
-      <artifactId>event-listener-support</artifactId>
+      <artifactId>event-listener-support-jdk13</artifactId>
       <version>1.0-SNAPSHOT</version>
       <classifier>${maven.jar.classifier}</classifier>
     </dependency>

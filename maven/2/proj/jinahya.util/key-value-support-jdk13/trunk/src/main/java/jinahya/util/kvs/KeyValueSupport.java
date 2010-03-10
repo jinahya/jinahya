@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.util.kvs;
 
 
@@ -40,7 +39,6 @@ import jinahya.util.els.EventListenerSupport;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public final class KeyValueSupport {
-
 
     // <Class, KeyValueSupport>
     private static final Hashtable INSTANCES = new Hashtable();
@@ -69,7 +67,7 @@ public final class KeyValueSupport {
      *
      * @return an array <code>Class</code>
      */
-    public static Class[] getOwners() {
+    public static Class[] getInstanceOwners() {
         final Vector owners = new Vector();
         synchronized (INSTANCES) {
             for (Enumeration e = INSTANCES.keys(); e.hasMoreElements();) {
@@ -88,7 +86,7 @@ public final class KeyValueSupport {
      * @param owner support owner
      * @return previous instance mapped with given <code>owner</code> or null.
      */
-    public static KeyValueSupport ridInstance(Class owner) {
+    public static KeyValueSupport removeInstance(Class owner) {
         synchronized (INSTANCES) {
             return (KeyValueSupport) INSTANCES.remove(owner);
         }
@@ -136,7 +134,13 @@ public final class KeyValueSupport {
      * @return the total number of entries of this support.
      */
     public int size() {
-        return values.size();
+        int size = 0;
+        synchronized (values) {
+            for (Enumeration e = values.elements(); e.hasMoreElements();) {
+                size += ((Hashtable) (e.nextElement())).size();
+            }
+        }
+        return size;
     }
 
 
@@ -163,8 +167,8 @@ public final class KeyValueSupport {
      * @param def
      * @return
      */
-    public int getInt(String key, int def) {
-        return ((Integer) get(Integer.class, key, new Integer(def))).intValue();
+    public boolean getBoolean(final String key, final boolean def) {
+        return ((Boolean) get(Boolean.TYPE, key, Boolean.valueOf(def))).booleanValue();
     }
 
 
@@ -173,17 +177,8 @@ public final class KeyValueSupport {
      * @param key
      * @param val
      */
-    public void putInt(String key, int val) {
-        put(Integer.class, key, new Integer(val));
-    }
-
-
-    /**
-     * 
-     * @param key
-     */
-    public void ridInt(String key) {
-        rid(Integer.class, key);
+    public void putBoolean(final String key, final boolean val) {
+        put(Boolean.TYPE, key, Boolean.valueOf(val));
     }
 
 
@@ -193,8 +188,8 @@ public final class KeyValueSupport {
      * @param def
      * @return
      */
-    public float getFloat(String key, float def) {
-        return ((Float) get(Float.class, key, new Float(def))).floatValue();
+    public int getInt(final String key, final int def) {
+        return ((Integer) get(Integer.TYPE, key, new Integer(def))).intValue();
     }
 
 
@@ -203,8 +198,47 @@ public final class KeyValueSupport {
      * @param key
      * @param val
      */
-    public void putFloat(String key, float val) {
-        put(Float.class, key, new Float(val));
+    public void putInt(final String key, final int val) {
+        put(Integer.TYPE, key, new Integer(val));
+    }
+
+
+    /**
+     * 
+     * @param key
+     */
+    public void ridInt(final String key) {
+        rid(Integer.TYPE, key);
+    }
+
+
+    /**
+     *
+     * @param key
+     * @param def
+     * @return
+     */
+    public float getFloat(final String key, final float def) {
+        return ((Float) get(Float.TYPE, key, new Float(def))).floatValue();
+    }
+
+
+    /**
+     *
+     * @param key
+     * @param val
+     */
+    public void putFloat(final String key, final float val) {
+        put(Float.TYPE, key, new Float(val));
+    }
+
+
+    /**
+     *
+     * @param key
+     */
+    public void ridFloat(final String key) {
+        rid(Float.TYPE, key);
     }
 
 
@@ -280,24 +314,6 @@ public final class KeyValueSupport {
     }
 
 
-    public void remove(final Class type, final String key) {
-        Object old = values.remove(key);
-
-        firePropertyChangeEvent(key, old, null);
-    }
-
-
-    private void firePropertyChangeEvent(String propertyName, Object oldValue,
-                                         Object newValue) {
-        PropertyChangeEvent event =
-            new PropertyChangeEvent(this, propertyName, oldValue, newValue);
-        Object[] listeners = els.getListeners(PropertyChangeListener.class);
-        for (int i = 0; i < listeners.length; i++) {
-            ((PropertyChangeListener) listeners[i]).propertyChange(event);
-        }
-    }
-
-
     /**
      * Put value.
      *
@@ -341,7 +357,7 @@ public final class KeyValueSupport {
      * @param def
      * @return
      */
-    public Object get(Class type, String key, Object def) {
+    public Object get(final Class type, final String key, final Object def) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -357,8 +373,11 @@ public final class KeyValueSupport {
         }
 
         synchronized (values) {
+            if (!values.contains(type)) {
+                return null;
+            }
             Hashtable classified = (Hashtable) values.get(type);
-            if (classified == null) {
+            if (!classified.contains(key)) {
                 return def;
             }
             return classified.get(key);
@@ -372,7 +391,7 @@ public final class KeyValueSupport {
      * @param type entry type
      * @param key entry name
      */
-    public void rid(Class type, String key) {
+    public void remove(final Class type, final String key) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -392,7 +411,6 @@ public final class KeyValueSupport {
 
 
     private Class owner;
-
     // <Class, Hashtable<String, Object>>
     private final Hashtable values = new Hashtable();
 
