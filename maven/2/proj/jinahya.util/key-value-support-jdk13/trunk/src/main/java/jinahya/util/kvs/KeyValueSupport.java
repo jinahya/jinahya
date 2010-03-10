@@ -82,6 +82,19 @@ public final class KeyValueSupport {
     }
 
 
+    /**
+     * Removes the instance mapped with specifed <code>owner</code>.
+     *
+     * @param owner support owner
+     * @return previous instance mapped with given <code>owner</code> or null.
+     */
+    public static KeyValueSupport ridInstance(Class owner) {
+        synchronized (INSTANCES) {
+            return (KeyValueSupport) INSTANCES.remove(owner);
+        }
+    }
+
+
     private KeyValueSupport(final Class owner) {
         super();
 
@@ -89,6 +102,11 @@ public final class KeyValueSupport {
     }
 
 
+    /**
+     * Returns the current owner of this support.
+     *
+     * @return owner
+     */
     public Class getOwner() {
         return owner;
     }
