@@ -17,8 +17,7 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -28,27 +27,17 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BooleanTest {
+public class BooleanTest extends AbstractTest {
 
 
     @Test
     public void test() throws IOException {
-        System.out.println("----------------------------------------- BOOLEAN");
-
-        boolean expected = random.nextBoolean();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitOutput output = new BitOutput(baos);
-        output.writeBoolean(expected);
-        output.align(8);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        boolean actual = input.readBoolean();
-        input.align(1);
-
-        assertEquals(expected, actual);
+        System.out.println("testing boolean...");
+        for (int i = 0; i < COUNT; i++) {
+            final boolean expected = RANDOM.nextBoolean();
+            output.writeBoolean(expected);
+            alignAndFlush();
+            assertEquals(expected, input.align().readBoolean());
+        }
     }
-
-
-    private Random random = new Random();
 }

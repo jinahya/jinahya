@@ -17,8 +17,7 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -28,30 +27,18 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class UnsignedIntTest {
+public class UnsignedIntTest extends AbstractTest {
 
 
     @Test
     public void test() throws IOException {
-
-        System.out.println("------------------------------------ UNSIGNED INT");
-
-        final int length = random.nextInt(31) + 1; // 1 - 31;
-        int expected = random.nextInt((int) Math.pow(2, length));
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        BitOutput output = new BitOutput(baos);
-        output.writeUnsignedInt(length, expected);
-        output.align(8);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        int actual = input.readUnsignedInt(length);
-        input.align(1);
-
-        assertEquals(expected, actual);
+        System.out.println("testing unsigned int");
+        for (int i = 0; i < COUNT; i++) {
+            final int length = RANDOM.nextInt(31) + 1; // 1 - 31;
+            final int expected = RANDOM.nextInt() & (-1 >>> (32 - length));
+            output.writeUnsignedInt(length, expected);
+            alignAndFlush();
+            assertEquals(expected, input.align().readUnsignedInt(length));
+        }
     }
-
-
-    private Random random = new Random();
 }

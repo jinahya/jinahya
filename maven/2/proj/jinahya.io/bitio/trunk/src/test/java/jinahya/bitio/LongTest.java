@@ -17,8 +17,7 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -28,81 +27,18 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class LongTest {
+public class LongTest extends AbstractTest {
 
 
     @Test
     public void test() throws IOException {
-        System.out.println("-------------------------------------------- LONG");
-
-        final int length = random.nextInt(63) + 2; // 2 - 64;
-        long max = (long) Math.pow(2, length - 1);
-        long expected = (random.nextLong() & max) - max;
-
-        test(length, expected);
+        System.out.println("testing long");
+        for (int i = 0; i < COUNT; i++) {
+            final int length = RANDOM.nextInt(63) + 2; // 2 - 64;
+            final long expected = RANDOM.nextLong() >> (64 - length);
+            output.writeLong(length, expected);
+            alignAndFlush();
+            assertEquals(expected, input.align().readLong(length));
+        }
     }
-
-
-    @Test
-    public void test64() throws IOException {
-        System.out.println("---------------------------------------- Long(64)");
-
-        test(64, random.nextLong());
-    }
-
-
-    @Test
-    public void testLE() throws IOException {
-        System.out.println("----------------------------------------- LONG LE");
-
-        final int length = random.nextInt(7) + 1; // 1 - 7;
-        long expected = (long) (Math.random() * Math.pow(2, length * 8));
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitOutput output = new BitOutput(baos);
-        output.writeLongLE(length, expected);
-        output.align(8);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        long actual = input.readLongLE(length);
-        input.align(1);
-
-        assertEquals(expected, actual);
-    }
-
-
-    @Test
-    public void testLE64() throws IOException {
-        System.out.println("------------------------------------- LONG LE(64)");
-
-        long expected = random.nextLong();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitOutput output = new BitOutput(baos);
-        output.writeLongLE(8, expected);
-        output.align(8);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        long actual = input.readLongLE(8);
-        input.align(1);
-
-        assertEquals(expected, actual);
-    }
-
-
-    private void test(final int length, final long expected) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitOutput output = new BitOutput(baos);
-        output.writeLong(length, expected);
-        output.align(8);
-
-        BitInput input = new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        long actual = input.readLong(length);
-        input.align(1);
-
-        assertEquals(expected, actual);
-    }
-
-
-    private Random random = new Random();
 }

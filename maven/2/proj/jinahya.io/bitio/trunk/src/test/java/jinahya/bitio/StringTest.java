@@ -18,8 +18,8 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.StringWriter;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -29,46 +29,29 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class StringTest {
+public class StringTest extends AbstractTest {
 
 
     @Test
     public void test() throws IOException {
+        System.out.println("testing string");
+        for (int i = 0; i < COUNT; i++) {
+            final StringWriter writer = new StringWriter();
+            try {
+                final int length = RANDOM.nextInt(21845);
+                for (int j = 0; j < length; j++) {
+                    writer.write(RANDOM.nextInt(65535));
+                }
+                writer.flush();
+                final String expected = writer.toString();
+                output.writeUTF(expected);
 
-        System.out.println("------------------------------------------ STRING");
+                alignAndFlush();
 
-        StringWriter writer = new StringWriter();
-        try {
-            int length = random.nextInt(21845);
-            for (int i = 0; i < length; i++) {
-                writer.write(random.nextInt(65535));
+                assertEquals(expected, input.align().readUTF());
+            } finally {
+                writer.close();
             }
-            test(writer.toString());
-        } finally {
-            writer.close();
         }
     }
-
-
-    private void test(final String expected) throws IOException {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        BitOutput bo = new BitOutput(baos);
-        bo.writeUTF(expected);
-
-        assertEquals(expected, new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF());
-
-        assertEquals(expected, new DataInputStream(new ByteArrayInputStream(baos.toByteArray())).readUTF());
-
-        baos.reset();
-
-        DataOutputStream dos = new DataOutputStream(baos);
-        dos.writeUTF(expected);
-
-        assertEquals(expected, new BitInput(new ByteArrayInputStream(baos.toByteArray())).readUTF());
-    }
-
-
-    private Random random = new Random();
 }

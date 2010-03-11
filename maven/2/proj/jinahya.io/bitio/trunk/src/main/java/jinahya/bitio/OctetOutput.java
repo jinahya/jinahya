@@ -21,6 +21,7 @@ import java.io.IOException;
 
 
 /**
+ * An interface to consume octets from {@link BitOutput}.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -30,8 +31,8 @@ public interface OctetOutput {
     /**
      * Writes a composed octet to desired output.
      *
-     * @param b octet 0-255
+     * @param octet the octet value between 0 and 255.
      * @throws IOException if an I/O error occurs
      */
-    public void writeOctet(int b) throws IOException;
+    void writeOctet(int octet) throws IOException;
 }

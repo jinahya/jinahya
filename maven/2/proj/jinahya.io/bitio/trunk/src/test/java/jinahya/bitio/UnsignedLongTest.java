@@ -17,8 +17,7 @@
 package jinahya.bitio;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -28,31 +27,18 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class UnsignedLongTest {
+public class UnsignedLongTest extends AbstractTest {
 
 
     @Test
     public void test() throws IOException {
-
-        System.out.println("----------------------------------- UNSIGNED LONG");
-
-        int length = random.nextInt(63) + 1; // 1 - 63;
-        long expected = (random.nextLong() & (long) Math.pow(2, length - 1));
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        BitOutput output = new BitOutput(baos);
-        output.writeUnsignedLong(length, expected);
-        output.align(8);
-
-        BitInput input =
-            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-        long actual = input.readUnsignedLong(length);
-        input.align(1);
-
-        assertEquals(expected, actual);
+        System.out.println("testing unsigned long...");
+        for (int i = 0; i < COUNT; i++) {
+            final int length = RANDOM.nextInt(63) + 1; // 1 - 63;
+            final long expected = RANDOM.nextLong() & (-1L >>> (64 - length));
+            output.writeUnsignedLong(length, expected);
+            alignAndFlush();
+            assertEquals(expected, input.align().readUnsignedLong(length));
+        }
     }
-
-
-    private Random random = new Random();
 }

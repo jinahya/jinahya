@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 Jin Kwon.
+ *  Copyright 2010 Jin Kwon.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package jinahya.bitio;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 
@@ -27,19 +26,10 @@ import org.junit.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class IntTest extends AbstractTest {
+public class BitInputTest {
 
 
     @Test
-    public void test() throws IOException {
-        System.out.println("testing int...");
-        for (int i = 0; i < COUNT; i++) {
-            final int length = RANDOM.nextInt(31) + 2; // 2 - 32;
-            //assert length > 0 && length <= 32;
-            final int expected = RANDOM.nextInt() >> (32 - length);
-            output.writeInt(length, expected);
-            alignAndFlush();
-            assertEquals(expected, input.align().readInt(length));
-        }
+    public void testInt() throws IOException {
     }
 }

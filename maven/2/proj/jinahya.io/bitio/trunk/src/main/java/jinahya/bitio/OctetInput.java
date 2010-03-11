@@ -21,6 +21,7 @@ import java.io.IOException;
 
 
 /**
+ * An interface for supplying octets to {@link BitInput}.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -33,5 +34,5 @@ public interface OctetInput {
      * @return octet value 0-255 or -1 if EOF
      * @throws IOException if an I/O error occurs
      */
-    public int readOctet() throws IOException;
+    int readOctet() throws IOException;
 }
