@@ -42,9 +42,9 @@
   
     
             <div class="xleft">
-        Last Published: 2010-01-14
+        Last Published: 2010-03-11
                       </div>
-            <div class="xright">            <a href="${project.url}">bitio</a>
+            <div class="xright">            <a href="">bitio</a>
             
   
 
@@ -101,6 +101,8 @@
               
                 
               
+      
+            
             
             
       
@@ -118,6 +120,10 @@
             <li class="expanded">
                     <a href="project-reports.html">Project Reports</a>
                   <ul>
+                  
+    <li class="none">
+                    <a href="checkstyle.html">Checkstyle</a>
+          </li>
                   
     <li class="none">
               <strong>CPD Report</strong>
@@ -168,7 +174,47 @@
 <p>The following document contains the results of PMD's  <a href="http://pmd.sourceforge.net/cpd.html" class="externalLink">CPD</a> 4.2.2.</p>
 </div>
 <div class="section"><h2>Duplications</h2>
-CPD found no problems in your source code.</div>
+<p><table class="bodyTable"><tr class="a"><th>File</th>
+<th>Line</th>
+</tr>
+<tr class="b"><td>jinahya/bitio/BitInput.java</td>
+<td><a href="./xref/jinahya/bitio/BitInput.html#112">112</a></td>
+</tr>
+<tr class="a"><td>jinahya/bitio/BitOutput.java</td>
+<td><a href="./xref/jinahya/bitio/BitOutput.html#110">110</a></td>
+</tr>
+<tr class="b"><td colspan='2'><div class="source"><pre>    public final void writeBytes(final byte[] value, final int offset,
+                                 final int length)
+        throws IOException {
+
+        /*
+        System.out.println(
+            &quot;writeBytes(&quot; + value + &quot;, &quot; + offset + &quot;, &quot; + length + &quot;)&quot;);
+         */
+
+        if (value == null) {
+            throw new NullPointerException(&quot;value&quot;);
+        }
+
+        if (offset &lt; 0) {
+            throw new IndexOutOfBoundsException(&quot;offset(&quot; + offset + &quot;) &lt; 0&quot;);
+        }
+
+        if (length &lt; 0) {
+            throw new IndexOutOfBoundsException(&quot;length(&quot; + length + &quot;) &lt; 0&quot;);
+        }
+
+        if ((offset + length) &gt; value.length) {
+            throw new IndexOutOfBoundsException(
+                &quot;offset(&quot; + offset + &quot;) + length(&quot; + length +
+                &quot;) &gt; value.length(&quot; + value.length + &quot;)&quot;);
+        }
+
+        for (int i = 0; i &lt; length; i++) {</pre>
+</div>
+</td></tr>
+<table class="bodyTable"></p>
+</div>
 
       </div>
     </div>
