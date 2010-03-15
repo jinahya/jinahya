@@ -40,73 +40,14 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class KeyValueSupport {
-
-
-    /**
-     *
-     */
-    private static final Map<Class<?>, KeyValueSupport> INSTANCES =
-        Collections.synchronizedMap(new HashMap<Class<?>, KeyValueSupport>());
-
-
-    /**
-     * Returns mapped instance for given <code>owner</code>.
-     *
-     * @param owner instance owner
-     * @return the instance owned by given <code>owner</code>
-     */
-    public static KeyValueSupport getInstance(final Class<?> owner) {
-        synchronized (INSTANCES) {
-            KeyValueSupport instance = INSTANCES.get(owner);
-            if (instance == null) {
-                instance = new KeyValueSupport(owner);
-                INSTANCES.put(owner, instance);
-            }
-            return instance;
-        }
-    }
-
-
-    /**
-     * Returns all classes for created instances.
-     *
-     * @return an array <code>Class</code>
-     */
-    public static Class<?>[] getOwners() {
-        synchronized (INSTANCES) {
-            return (Class<?>[]) INSTANCES.keySet().toArray();
-        }
-    }
-
-
-    /**
-     * Remove instance mapped to given <code>owner</code>.
-     *
-     * @param owner support owner
-     * @return previous instance mapped with specified <code>owner</code>
-     */
-    public static KeyValueSupport ridInstance(final Class<?> owner) {
-        synchronized (INSTANCES) {
-            return INSTANCES.remove(owner);
-        }
-    }
+public class KeyValueSupport {
 
 
     /**
      * Creates a new instance.
-     *
-     * @param owner support owner
      */
-    private KeyValueSupport(final Class<?> owner) {
+    public KeyValueSupport() {
         super();
-
-        this.owner = owner;
-    }
-
-
-    public Class<?> getOwner() {
-        return owner;
     }
 
 
@@ -155,14 +96,11 @@ public final class KeyValueSupport {
      * @return the number of entries of given <code>type</code>
      */
     public int size(final Class<?> type) {
-        //System.out.println("size(" + type + ")");
         synchronized (values) {
-            Map<String, ?> classified = values.get(type);
-            if (classified == null) {
-                System.out.println("\tnull?");
+            if (!values.containsKey(type)) {
                 return 0;
             }
-            return classified.size();
+            return values.get(type).size();
         }
     }
 
@@ -191,15 +129,6 @@ public final class KeyValueSupport {
     /**
      *
      * @param key
-     */
-    public void ridBoolean(final String key) {
-        rid(Boolean.TYPE, key);
-    }
-
-
-    /**
-     *
-     * @param key
      * @param def
      * @return
      */
@@ -215,15 +144,6 @@ public final class KeyValueSupport {
      */
     public void putByteArray(final String key, final byte[] val) {
         put(byte[].class, key, val);
-    }
-
-
-    /**
-     *
-     * @param key
-     */
-    public void ridByteArray(final String key) {
-        rid(byte[].class, key);
     }
 
 
@@ -246,15 +166,6 @@ public final class KeyValueSupport {
      */
     public void putInt(final String key, final int val) {
         put(Integer.TYPE, key, val);
-    }
-
-
-    /**
-     * 
-     * @param key
-     */
-    public void ridInt(final String key) {
-        rid(Integer.TYPE, key);
     }
 
 
@@ -327,17 +238,8 @@ public final class KeyValueSupport {
      * @param def
      * @return
      */
-    public String getString(String key, String def) {
-        return (String) get(String.class, key, def);
-    }
-
-
-    /**
-     *
-     * @param key
-     */
-    public void ridString(String key) {
-        rid(String.class, key);
+    public String getString(final String key, final String def) {
+        return get(String.class, key, def);
     }
 
 
@@ -346,7 +248,7 @@ public final class KeyValueSupport {
      * @param key
      * @param val
      */
-    public void putString(String key, String val) {
+    public void putString(final String key, final String val) {
         put(String.class, key, val);
     }
 
@@ -359,10 +261,7 @@ public final class KeyValueSupport {
      * @param key entry name
      * @param val entry value
      */
-    @SuppressWarnings("unchecked")
     public <T> void put(final Class<T> type, final String key, final T val) {
-
-        //System.out.println("put(" + type + ", " + key + ", " + val + ")");
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -377,6 +276,7 @@ public final class KeyValueSupport {
         }
 
         synchronized (values) {
+            @SuppressWarnings("unchecked")
             Map<String, T> classified = (Map<String, T>) values.get(type);
             if (classified == null) {
                 classified = new HashMap<String, T>();
@@ -396,7 +296,6 @@ public final class KeyValueSupport {
      * @param def default value
      * @return value for given key of given type or def if not found
      */
-    @SuppressWarnings("unchecked")
     public <T> T get(final Class<T> type, final String key, final T def) {
 
         if (type == null) {
@@ -408,11 +307,18 @@ public final class KeyValueSupport {
         }
 
         synchronized (values) {
-            Map<String, ?> classified = values.get(type);
-            if (classified == null) {
+            if (!values.containsKey(type)) {
                 return def;
             }
-            return (T) classified.get(key);
+
+            Map<String, ?> classified = values.get(type);
+            if (!classified.containsKey(key)) {
+                return def;
+            }
+
+            @SuppressWarnings("unchecked")
+            T result = (T) classified.get(key);
+            return result;
         }
     }
 
@@ -420,10 +326,11 @@ public final class KeyValueSupport {
     /**
      * Remove specified entry of given type.
      *
-     * @param type entry type
-     * @param key entry name
+     * @param <T>
+     * @param type
+     * @param key
      */
-    public void rid(final Class<?> type, final String key) {
+    public <T> void remove(final Class<T> type, final String key) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -434,27 +341,25 @@ public final class KeyValueSupport {
         }
 
         synchronized (values) {
+            if (!values.containsKey(type)) {
+                return;
+            }
+
             Map<String, ?> classified = values.get(type);
-            if (classified != null) {
-                classified.remove(key);
+            if (classified.remove(key) == null) {
+                return;
+            }
+
+            if (classified.isEmpty()) {
+                values.remove(type);
             }
         }
     }
 
 
-    public void print() {
-        synchronized (values) {
-            for (Map.Entry<Class<?>, Map<String, ?>> entry : values.entrySet()) {
-                System.out.println("type: " + entry.getKey());
-                for (Map.Entry<String, ?> e : entry.getValue().entrySet()) {
-                    System.out.println("\t" + e.getKey() + ": " + e.getValue());
-                }
-            }
-        }
-    }
-
-    private Class owner;
-
+    /**
+     *
+     */
     private final Map<Class<?>, Map<String, ?>> values =
         Collections.synchronizedMap(new HashMap<Class<?>, Map<String, ?>>());
 }

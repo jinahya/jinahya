@@ -87,7 +87,7 @@ public class KeyValueSupportTest {
             }
         }
 
-        // ----------------------------------------------------------------- rid
+        // ----------------------------------------------------------------- remove
         {
             support.clear();
             final int count = RANDOM.nextInt(100);
@@ -96,7 +96,7 @@ public class KeyValueSupportTest {
             }
             assertEquals(count, support.size(type));
             for (int i = 0; i < count; i++) {
-                support.rid(type, String.valueOf(i));
+                support.remove(type, String.valueOf(i));
             }
             assertEquals(0, support.size(type));
         }

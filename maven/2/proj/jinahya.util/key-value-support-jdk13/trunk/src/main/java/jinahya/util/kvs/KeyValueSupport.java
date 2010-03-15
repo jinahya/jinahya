@@ -38,94 +38,25 @@ import jinahya.util.els.EventListenerSupport;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class KeyValueSupport {
-
-    // <Class, KeyValueSupport>
-    private static final Hashtable INSTANCES = new Hashtable();
-
-
-    /**
-     * Returns mapped instance for given <code>owner</code>.
-     *
-     * @param owner instance owner
-     * @return the instance owned by given <code>owner</code>
-     */
-    public static KeyValueSupport getInstance(final Class owner) {
-        synchronized (INSTANCES) {
-            KeyValueSupport instance = (KeyValueSupport) INSTANCES.get(owner);
-            if (instance == null) {
-                instance = new KeyValueSupport(owner);
-                INSTANCES.put(owner, instance);
-            }
-            return instance;
-        }
-    }
-
-
-    /**
-     * Returns all classes for created instances.
-     *
-     * @return an array <code>Class</code>
-     */
-    public static Class[] getInstanceOwners() {
-        final Vector owners = new Vector();
-        synchronized (INSTANCES) {
-            for (Enumeration e = INSTANCES.keys(); e.hasMoreElements();) {
-                owners.addElement(e.nextElement());
-            }
-        }
-        Class[] result = new Class[owners.size()];
-        owners.copyInto(result);
-        return result;
-    }
-
-
-    /**
-     * Removes the instance mapped with specifed <code>owner</code>.
-     *
-     * @param owner support owner
-     * @return previous instance mapped with given <code>owner</code> or null.
-     */
-    public static KeyValueSupport removeInstance(Class owner) {
-        synchronized (INSTANCES) {
-            return (KeyValueSupport) INSTANCES.remove(owner);
-        }
-    }
-
-
-    private KeyValueSupport(final Class owner) {
-        super();
-
-        this.owner = owner;
-    }
-
-
-    /**
-     * Returns the current owner of this support.
-     *
-     * @return owner
-     */
-    public Class getOwner() {
-        return owner;
-    }
+public class KeyValueSupport {
 
 
     /**
      * Removes all entries regardless of type.
      */
-    public void clear() {
-        values.clear();
+    public final void clear() {
+        entries.clear();
     }
 
 
-    /**
+    /*
      * Remove all entries of given <code>type</code>.
      *
      * @param type entry type
-     */
-    public void clear(Class type) {
-        values.remove(type);
+    public final void clear(final Class type) {
+        entries.remove(type);
     }
+     */
 
 
     /**
@@ -133,10 +64,10 @@ public final class KeyValueSupport {
      *
      * @return the total number of entries of this support.
      */
-    public int size() {
+    public final int size() {
         int size = 0;
-        synchronized (values) {
-            for (Enumeration e = values.elements(); e.hasMoreElements();) {
+        synchronized (entries) {
+            for (Enumeration e = entries.elements(); e.hasMoreElements();) {
                 size += ((Hashtable) (e.nextElement())).size();
             }
         }
@@ -144,31 +75,35 @@ public final class KeyValueSupport {
     }
 
 
-    /**
+    /*
      * Returns the total number of entries of given <code>type</code>.
      *
      * @param type entry type
      * @return the number of entries of given <code>type</code>
-     */
-    public int size(Class type) {
-        synchronized (values) {
-            Hashtable classified = (Hashtable) values.get(type);
-            if (classified == null) {
+    public final int size(final Class type) {
+        synchronized (entries) {
+            if (!entries.contains(type)) {
                 return 0;
             }
-            return classified.size();
+            return ((Hashtable) entries.get(type)).size();
         }
     }
+     */
 
 
     /**
      *
      * @param key
      * @param def
+     * @param putIfAbsent
      * @return
      */
-    public boolean getBoolean(final String key, final boolean def) {
-        return ((Boolean) get(Boolean.TYPE, key, Boolean.valueOf(def))).booleanValue();
+    public boolean getBoolean(final String key, final boolean def,
+                              final boolean putIfAbsent) {
+
+        return Boolean.parseBoolean(
+            get(key, (def ? Boolean.TRUE : Boolean.FALSE).toString(),
+                putIfAbsent));
     }
 
 
@@ -178,7 +113,12 @@ public final class KeyValueSupport {
      * @param val
      */
     public void putBoolean(final String key, final boolean val) {
-        put(Boolean.TYPE, key, Boolean.valueOf(val));
+        put(key, (val ? Boolean.TRUE : Boolean.FALSE).toString());
+    }
+
+
+    public void putByteArray(final String key, final byte[] bytes) {
+
     }
 
 
@@ -186,10 +126,21 @@ public final class KeyValueSupport {
      *
      * @param key
      * @param def
+     * @param putIfAbsent
+     * @param putIfInvalid
      * @return
      */
-    public int getInt(final String key, final int def) {
-        return ((Integer) get(Integer.TYPE, key, new Integer(def))).intValue();
+    public int getInt(final String key, final int def,
+                      final boolean putIfAbsent, final boolean putIfInvalid) {
+        try {
+            return Integer.parseInt(
+                get(key, Integer.toString(def), putIfAbsent));
+        } catch (NumberFormatException nfe) {
+            if (putIfInvalid) {
+                putInt(key, def);
+            }
+            return def;
+        }
     }
 
 
@@ -199,16 +150,7 @@ public final class KeyValueSupport {
      * @param val
      */
     public void putInt(final String key, final int val) {
-        put(Integer.TYPE, key, new Integer(val));
-    }
-
-
-    /**
-     * 
-     * @param key
-     */
-    public void ridInt(final String key) {
-        rid(Integer.TYPE, key);
+        put(key, Integer.toString(val));
     }
 
 
@@ -216,10 +158,31 @@ public final class KeyValueSupport {
      *
      * @param key
      * @param def
+     * @param putIfAbsent
+     * @param putIfInvalid
      * @return
      */
-    public float getFloat(final String key, final float def) {
-        return ((Float) get(Float.TYPE, key, new Float(def))).floatValue();
+    public long getLong(final String key, final long def,
+                        final boolean putIfAbsent, final boolean putIfInvalid) {
+
+        try {
+            return Long.parseLong(get(key, Long.toString(def), putIfAbsent));
+        } catch (NumberFormatException nfe) {
+            if (putIfInvalid) {
+                putLong(key, def);
+            }
+            return def;
+        }
+    }
+
+
+    /**
+     *
+     * @param key
+     * @param val
+     */
+    public final void putLong(final String key, final long val) {
+        put(key, Long.toString(val));
     }
 
 
@@ -229,16 +192,7 @@ public final class KeyValueSupport {
      * @param val
      */
     public void putFloat(final String key, final float val) {
-        put(Float.TYPE, key, new Float(val));
-    }
-
-
-    /**
-     *
-     * @param key
-     */
-    public void ridFloat(final String key) {
-        rid(Float.TYPE, key);
+        put(key, Float.toString(val));
     }
 
 
@@ -246,10 +200,22 @@ public final class KeyValueSupport {
      *
      * @param key
      * @param def
+     * @param putIfAbsent
+     * @param putIfInvalid
      * @return
      */
-    public long getLong(String key, long def) {
-        return ((Long) get(Long.class, key, new Long(def))).longValue();
+    public float getFloat(final String key, final float def,
+                          final boolean putIfAbsent,
+                          final boolean putIfInvalid) {
+
+        try {
+            return Float.parseFloat(get(key, Float.toString(def), putIfAbsent));
+        } catch (NumberFormatException nfe) {
+            if (putIfInvalid) {
+                putFloat(key, def);
+            }
+            return def;
+        }
     }
 
 
@@ -258,8 +224,8 @@ public final class KeyValueSupport {
      * @param key
      * @param val
      */
-    public void putLong(String key, long val) {
-        put(Long.class, key, new Long(val));
+    public void putDouble(final String key, final double val) {
+        put(key, Double.toString(val));
     }
 
 
@@ -267,50 +233,101 @@ public final class KeyValueSupport {
      *
      * @param key
      * @param def
+     * @param putIfAbsent
+     * @param putIfInvalid
      * @return
      */
-    public double getDouble(String key, double def) {
-        return ((Double) get(Double.class, key, new Double(def))).doubleValue();
+    public double getDouble(final String key, final double def,
+                            final boolean putIfAbsent,
+                            final boolean putIfInvalid) {
+
+        try {
+            return Double.parseDouble(
+                get(key, Double.toString(def), putIfAbsent));
+        } catch (NumberFormatException nfe) {
+            if (putIfInvalid) {
+                putDouble(key, def);
+            }
+            return def;
+        }
     }
 
 
     /**
+     * Checks whether an entry for specified <code>key</code> exits or not.
      *
-     * @param key
-     * @param val
+     * @param key entry name
+     * @return true if an entry for given <code>key</code> exists.
      */
-    public void putDouble(String key, double val) {
-        put(Double.class, key, new Double(val));
+    public boolean contains(final String key) {
+        return entries.containsKey(key);
     }
 
 
     /**
+     * Returns entry value for given <code>key</code>.
      *
-     * @param key
-     * @param def
+     * @param key entry name
+     * @param def default value for return if not found
+     * @param putIfAbsent flag for put <code>def</code> if no entry found. This
+     *        flag will be silently ignored if <code>def</code> is nul.
      * @return
      */
-    public String getString(String key, String def) {
-        return (String) get(String.class, key, def);
+    public String get(final String key, final String def,
+                      final boolean putIfAbsent) {
+
+        synchronized (entries) {
+            Object val = entries.get(key);
+            if (val != null) {
+                return (String) val;
+            } else {
+                if (def != null && putIfAbsent) {
+                    put(key, def);
+                }
+                return def;
+            }
+        }
     }
 
 
     /**
      *
-     * @param key
+     * @param key entry name
+     * @param val new value
+     * @return old value
      */
-    public void ridString(String key) {
-        rid(String.class, key);
+    public String put(final String key, final String val) {
+
+        if (key == null) {
+            throw new NullPointerException("key");
+        }
+
+        if (val == null) {
+            throw new NullPointerException("val");
+        }
+
+        synchronized (entries) {
+            String oldValue = (String) entries.put(key, val);
+            this.fireEntryChangeEvent(key, oldValue, val);
+            return oldValue;
+        }
     }
 
 
     /**
+     * Removes entry for the specifed <code>key</code>.
      *
-     * @param key
-     * @param val
+     * @param key entry name
+     * @return true if entry for specified <code>key</code> exists and removed.
      */
-    public void putString(String key, String val) {
-        put(String.class, key, val);
+    public boolean remove(final String key) {
+        synchronized (entries) {
+            String oldValue = (String) entries.remove(key);
+            if (oldValue != null) {
+                this.fireEntryChangeEvent(key, oldValue, null);
+            }
+            return oldValue != null;
+        }
     }
 
 
@@ -321,7 +338,9 @@ public final class KeyValueSupport {
      * @param key value key
      * @param val value
      */
-    public void put(final Class type, final String key, final Object val) {
+    /*
+    public final void put(final Class type, final String key,
+                          final Object val) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -340,14 +359,16 @@ public final class KeyValueSupport {
                 val + " is not an instnace of " + type);
         }
 
-        synchronized (values) {
-            Hashtable classified = (Hashtable) values.get(type);
+        synchronized (entries) {
+            Hashtable classified = (Hashtable) entries.get(type);
             if (classified == null) {
                 classified = new Hashtable();
-                values.put(type, classified);
+                entries.put(type, classified);
             }
+            classified.put(key, val);
         }
     }
+     */
 
 
     /**
@@ -357,7 +378,9 @@ public final class KeyValueSupport {
      * @param def
      * @return
      */
-    public Object get(final Class type, final String key, final Object def) {
+    /*
+    public final Object get(final Class type, final String key,
+                            final Object def) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -372,17 +395,18 @@ public final class KeyValueSupport {
                 def + " is not an instnace of " + type);
         }
 
-        synchronized (values) {
-            if (!values.contains(type)) {
-                return null;
+        synchronized (entries) {
+            if (!entries.contains(type)) {
+                return def;
             }
-            Hashtable classified = (Hashtable) values.get(type);
+            Hashtable classified = (Hashtable) entries.get(type);
             if (!classified.contains(key)) {
                 return def;
             }
             return classified.get(key);
         }
     }
+     */
 
 
     /**
@@ -391,7 +415,8 @@ public final class KeyValueSupport {
      * @param type entry type
      * @param key entry name
      */
-    public void remove(final Class type, final String key) {
+    /*
+    public final void remove(final Class type, final String key) {
 
         if (type == null) {
             throw new NullPointerException("type");
@@ -401,18 +426,84 @@ public final class KeyValueSupport {
             throw new NullPointerException("key");
         }
 
-        synchronized (values) {
-            Hashtable classified = (Hashtable) values.get(type);
+        synchronized (entries) {
+            Hashtable classified = (Hashtable) entries.get(type);
             if (classified != null) {
-                classified.remove(key);
+                if (classified.remove(key) != null) {
+                    if (classified.isEmpty()) {
+                        entries.remove(type);
+                    }
+                }
+            }
+        }
+    }
+     */
+
+
+    /**
+     * 
+     * @param enumerator
+     */
+    public void enumerate(final EntryEnumerator enumerator) {
+        synchronized (entries) {
+            enumerator.enumerationStarting();
+            for (Enumeration e = entries.keys(); e.hasMoreElements();) {
+                final String key = (String) e.nextElement();
+                final String val = (String) entries.get(key);
+                enumerator.enumerate(key, val);
+            }
+            enumerator.enumerationFinished();
+        }
+    }
+
+
+    /**
+     * 
+     * @param e
+     */
+    protected void fireEntryChangeEvent(final EntryChangeEvent e) {
+        synchronized (els) {
+            Object[] listeners = els.getListeners(EntryChangeListener.class);
+            for (int i = 0; i < listeners.length; i++) {
+                ((EntryChangeListener) listeners[i]).entryChanged(e);
             }
         }
     }
 
 
-    private Class owner;
-    // <Class, Hashtable<String, Object>>
-    private final Hashtable values = new Hashtable();
+    /**
+     *
+     * @param key
+     * @param oldValue
+     * @param newValue
+     */
+    protected void fireEntryChangeEvent(final String key, final String oldValue,
+                                        final String newValue) {
+
+        fireEntryChangeEvent(
+            new EntryChangeEvent(this, key, oldValue, newValue));
+    }
+
+
+    /**
+     *
+     * @param l
+     */
+    public void addEntryChangeListener(final EntryChangeListener l) {
+        els.add(EntryChangeListener.class, l);
+    }
+
+    /**
+     * 
+     * @param l
+     */
+    public void removeEntryChangeListener(final EntryChangeListener l) {
+        els.remove(EntryChangeListener.class, l);
+    }
+
+
+    // <String, String>
+    private final Hashtable entries = new Hashtable();
 
     private final EventListenerSupport els = new EventListenerSupport();
 }
