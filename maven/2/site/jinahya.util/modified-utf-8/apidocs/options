@@ -1,0 +1,26 @@
+-classpath
+'/usr/local/var/.hudson/jobs/jinahya.util modified-utf-8/workspace/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/usr/local/var/.hudson/jobs/jinahya.util modified-utf-8/workspace/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/usr/local/var/.hudson/jobs/jinahya.util modified-utf-8/workspace/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'modified-utf-8 1.0 API'
+-link
+'http://java.sun.com/j2se/1.3/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'modified-utf-8 1.0 API'
