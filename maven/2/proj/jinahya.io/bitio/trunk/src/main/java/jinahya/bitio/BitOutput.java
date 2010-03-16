@@ -24,6 +24,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UTFDataFormatException;
 
+import jinahya.util.ModifiedUTF8;
+
 
 /**
  * Class for bit level output.
@@ -135,25 +137,25 @@ public class BitOutput {
         }
 
         for (int i = 0; i < length; i++) {
-            writeUnsignedByte(8, value[offset + i] & 0xFF);
+            writeUnsignedByte(8, value[offset + i]);
         }
     }
 
 
     /**
-     * Writes an <code>length</code> bit unsigned byte.
+     * Writes the <code>length</code> low-order bits is of the argument
+     * <code>value</code>. The 32 - <code>length</code> high-order bits of
+     * <code>value</code> are ignored.
      *
-     * @param length bit length between 0 (exclusive) and 8 (inclusive).
+     * @param length bit length between 1 (inclusive) and 8 (inclusive).
      * @param value value
      * @throws IOException if an I/O error occurs
      */
     private void writeUnsignedByte(final int length, final int value)
         throws IOException {
 
-        //System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length > 8) {
@@ -167,7 +169,7 @@ public class BitOutput {
             avail -= length;
             if (avail == 0) {
                 output.writeOctet(octet);
-                //System.out.println("OctetOutput.writeOctet(" + octet + ")");
+                //System.out.println("write octet: " + octet);
                 octet = 0;
                 avail = 8;
             }
@@ -182,15 +184,15 @@ public class BitOutput {
     /**
      * Writes an unsigned <code>length</code> bit short.
      *
-     * @param length bit length between 0 (exclusive) and 16 (inclusive)
+     * @param length bit length between 1 (inclusive) and 16 (inclusive)
      * @param value value
      * @throws IOException if an I/O error occurs
      */
     private void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length > 16) {
@@ -211,17 +213,15 @@ public class BitOutput {
     /**
      * Writes an unsigned <code>length</code> bit integer.
      *
-     * @param length bit length between 0 (exclusive) and 32 (exclusive)
+     * @param length bit length between 1 (inclusive) and 32 (exclusive)
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public final void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        //System.out.println("writeUnsignedInt(" + length + ", " + value + ")");
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length < 1");
         }
 
         if (length >= 32) {
@@ -307,15 +307,15 @@ public class BitOutput {
     /**
      * Writes an unsigned <code>length</code> long.
      *
-     * @param length bit length between 0 (exclusive) and 64 (exclusive).
+     * @param length bit length between 1 (inclusive) and 64 (exclusive).
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public final void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length >= 64) {
@@ -411,32 +411,34 @@ public class BitOutput {
     /**
      * Align to <code>length</code> bits by writing some dummy bits if required.
      *
-     * @param length number of bits to be aligned
+     * @param length number of bits to be aligned; non-zero positive
      * @throws IOException if an I/O error occurs.
      * @return this object
      */
-    public final BitOutput align(final int length) throws IOException {
+    public final int align(final int length) throws IOException {
 
         if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         final int mod = (int) (count % length);
-        if (mod > 0) {
-            final int required = length - mod;
 
-            final int quotient = required / 8;
-            for (int i = 0; i < quotient; i++) {
-                writeUnsignedByte(8, 0x00);
-            }
-
-            final int remainder = required % 8;
-            if (remainder > 0) {
-                writeUnsignedByte(remainder, 0x00);
-            }
+        if (mod == 0) {
+            return mod;
         }
 
-        return this;
+        final int required = length - mod;
+
+        final int quotient = required / 8;
+        for (int i = 0; i < quotient; i++) {
+            writeUnsignedByte(8, 0x00);
+        }
+
+        final int remainder = required % 8;
+        if (remainder > 0) {
+            writeUnsignedByte(remainder, 0x00);
+        }
+        return required;
     }
 
 
@@ -446,61 +448,22 @@ public class BitOutput {
      * @return this object
      * @throws IOException if an I/O error occurs
      */
-    public final BitOutput align() throws IOException {
+    public final int align() throws IOException {
         return align(8);
     }
 
 
     /**
-     * Writes a string in modified UTF-8 encoding.
+     * Writes a string in modified UTF-8.
      *
-     * @param value String to be written
+     * @param value string to be written
      * @throws IOException if an I/O error occurs.
+     * @see java.io.DataOutput#writeUTF(java.lang.String)
      */
     public final void writeUTF(final String value) throws IOException {
-        final Reader reader = new StringReader(value);
-        try {
-            writeUTF(reader);
-        } finally {
-            reader.close();
-        }
-    }
-
-
-    /**
-     * Writes a sequence of characters in modifed UTF-8 encoding.
-     *
-     * @param reader character source
-     * @throws IOException if an I/O error occurs
-     */
-    public void writeUTF(final Reader reader) throws IOException {
-        //System.out.println("writeUTF(" + reader + ")");
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            for (int c = -1; (c = reader.read()) != -1;) {
-                if (c >= '\u0001' && c <= '\u007F') {
-                    baos.write(c);
-                } else if (c == '\u0000' || c <= '\u07FF') {
-                    baos.write(0xC0 | (0x1F & (c >> 6)));
-                    baos.write(0x80 | (0x3F & c));
-                } else { // if (c <= '\uFFFF') {
-                    baos.write(0xE0 | (0x0F & (c >> 12)));
-                    baos.write(0x80 | (0x3F & (c >> 6)));
-                    baos.write(0x80 | (0x3F & c));
-                }
-                if (baos.size() > 65535) {
-                    throw new UTFDataFormatException(
-                        "length(" + baos.size() + ") > 65535");
-                }
-            }
-            baos.flush();
-
-            writeUnsignedInt(16, baos.size());
-            writeBytes(baos.toByteArray());
-
-        } finally {
-            baos.close();
-        }
+        byte[] encoded = ModifiedUTF8.encode(value.toCharArray());
+        writeUnsignedShort(16, encoded.length);
+        writeBytes(encoded);
     }
 
 

@@ -16,6 +16,11 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>jinahya.util</groupId>
+      <artifactId>modified-utf-8</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
   <!--parent/-->
   <!--dependencyManagement/-->
@@ -34,7 +39,6 @@
         <version>1.9</version>
       </extension>
     </extensions>
-
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -48,7 +52,8 @@
             </goals>
             <configuration>
               <source>1.3</source>
-              <target>${maven.compiler.target}</target>
+              <!--target>${maven.compiler.target}</target-->
+              <target>1.1</target>
             </configuration>
           </execution>
           <execution>
@@ -68,17 +73,17 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <forkMode>always</forkMode> 
+          <!--forkMode>always</forkMode--> 
           <argLine>-Xms256m -Xmx512m -XX:MaxPermSize=256m</argLine>
         </configuration>
       </plugin>
-      <plugin>
+      <!--plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <classifier>${maven.jar.classifier}</classifier>
         </configuration>
-      </plugin>
+      </plugin-->
     </plugins>
   </build>
   <reporting>
@@ -90,6 +95,13 @@
           <links>
             <link>http://java.sun.com/j2se/1.3/docs/api/</link>
           </links>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <useFile>false</useFile>
         </configuration>
       </plugin>
       <plugin>
@@ -176,7 +188,7 @@
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
-  <profiles>
+  <!--profiles>
     <profile>
       <id>jdk11</id>
       <activation>
@@ -208,5 +220,5 @@
         <maven.jar.classifier>jdk14</maven.jar.classifier>
       </properties>
     </profile>
-  </profiles>
+  </profiles-->
 </project>

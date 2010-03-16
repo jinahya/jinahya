@@ -19,11 +19,14 @@ package jinahya.bitio;
 
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UTFDataFormatException;
 import java.io.Writer;
+
+import jinahya.util.ModifiedUTF8;
 
 
 /**
@@ -140,16 +143,14 @@ public class BitInput {
     /**
      * Reads an unsigned <code>length</code> bit byte.
      *
-     * @param length bit length between 0 (exclusive) and 8 (inclusive).
+     * @param length bit length between 1 (inclusive) and 8 (inclusive).
      * @return an unsigned <code>length</code> bit integer.
      * @throws IOException if an I/O error occurs.
      */
     private final int readUnsignedByte(final int length) throws IOException {
 
-        //System.out.println("readUnsignedByte(" + length + ")");
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length > 8) {
@@ -158,7 +159,7 @@ public class BitInput {
 
         if (avail == 0) {
             octet = input.readOctet();
-            //System.out.println("OctetInput.readOctet: " + octet);
+            //System.out.println("read octet: " + octet);
             if (octet == -1) {
                 throw new EOFException("EOF");
             }
@@ -182,14 +183,14 @@ public class BitInput {
     /**
      * Reads an unsigned <code>length</code> bit short.
      *
-     * @param length bit length between 0 (exclusive) and 16 (inclusive).
+     * @param length bit length between 1 (inclusive) and 16 (inclusive).
      * @return an unsigned <code>length</code> bit integer.
      * @throws IOException if an I/O error occurs
      */
     private final int readUnsignedShort(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length > 16) {
@@ -217,14 +218,14 @@ public class BitInput {
     /**
      * Reads an unsigned <code>length</code> bit int.
      *
-     * @param length bit length between 0 (exclusive) and 32 (exclusive)
+     * @param length bit length between 1 (inclusive) and 32 (exclusive)
      * @return an unsigned int
      * @throws IOException if an I/O error occurs
      */
     public final int readUnsignedInt(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length >= 32) {
@@ -252,14 +253,14 @@ public class BitInput {
     /**
      * Reads a <code>length</code> bit signed integer.
      *
-     * @param length bit length between 0 (exclusive) and 32 (inclusive).
+     * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @return a signed int
      * @throws IOException if an I/O error occurs.
      */
     public final int readInt(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length +") <= 0");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length +") <= 1");
         }
 
         if (length > 32) {
@@ -268,7 +269,7 @@ public class BitInput {
 
         int value = 0;
         if (readBoolean()) {
-            value = -1 << (length - 1);
+            value = (-1 << (length - 1));
         }
 
         value |= readUnsignedInt(length - 1);
@@ -321,7 +322,7 @@ public class BitInput {
      * @throws IOException if an I/O error occurs.
      */
     public final float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt(32));
+        return Float.intBitsToFloat(readInt());
     }
 
 
@@ -361,16 +362,16 @@ public class BitInput {
 
 
     /**
-     * Reads a <code>length</code> signed long.
+     * Reads a <code>length</code> bit signed long.
      *
-     * @param length bit length between 0 (exclusive) and 64 (inclusive)
+     * @param length bit length between 1 (exclusive) and 64 (inclusive)
      * @return a signed long
      * @throws IOException if an I/O error occurs.
      */
     public final long readLong(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 64) {
@@ -379,7 +380,7 @@ public class BitInput {
 
         long value = 0L;
         if (readBoolean()) {
-            value = -1L << (length - 1);
+            value = (-1L << (length - 1));
         }
 
         value |= readUnsignedLong(length - 1);
@@ -451,30 +452,32 @@ public class BitInput {
      *
      * @param length bit length greater than 0
      * @throws IOException if an I/O error occurs
-     * @return this object
+     * @return the number bits padded for octet alignment
      */
-    public final BitInput align(final int length) throws IOException {
+    public final int align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         final int mod = (int) (count % length);
-        if (mod > 0) {
-            final int required = length - mod;
-
-            final int quotient = required / 8;
-            for (int i = 0; i < quotient; i++) {
-                readUnsignedByte(8);
-            }
-
-            final int remainder = required % 8;
-            if (remainder > 0) {
-                readUnsignedByte(remainder);
-            }
+        if (mod == 0) {
+            return 0;
         }
 
-        return this;
+        final int required = length - mod;
+
+        final int quotient = required / 8;
+        for (int i = 0; i < quotient; i++) {
+            readUnsignedByte(8);
+        }
+
+        final int remainder = required % 8;
+        if (remainder > 0) {
+            readUnsignedByte(remainder);
+        }
+
+        return mod;
     }
 
 
@@ -484,7 +487,7 @@ public class BitInput {
      * @return this object
      * @throws IOException if an I/O error occurs
      */
-    public final BitInput align() throws IOException {
+    public final int align() throws IOException {
         return align(8);
     }
 
@@ -496,61 +499,9 @@ public class BitInput {
      * @throws IOException if an I/O error occurs.
      */
     public final String readUTF() throws IOException {
-        final Writer writer = new StringWriter();
-        try {
-            readUTF(writer);
-            writer.flush();
-            return writer.toString();
-        } finally {
-            writer.close();
-        }
-    }
-
-
-    /**
-     * Reads a sequence of characters in modified UTF-8 encoding and write to
-     * given <code>writer</code>.
-     *
-     * @param writer character output
-     * @throws IOException if an I/O error occurs.
-     */
-    public final void readUTF(final Writer writer) throws IOException {
-
-        final byte[] bytes = new byte[readUnsignedShort(16)];
-        readBytes(bytes);
-
-        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        try {
-            for (int a = -1; (a = bais.read()) != -1;) {
-                if ((a >> 4) == 0x0F || // 1111xxxx
-                    (a >> 6) == 0x02) { // 10xxxxxx
-                    throw new UTFDataFormatException("a: " + a);
-                }
-                if ((a >> 7) == 0x00) { // 0xxxxxxxx
-                    writer.append((char) a);
-                } else if ((a >> 5) == 0x06) { // 110xxxxx
-                    int b = bais.read();
-                    if (b == -1 || (b >> 6) != 0x02) { // NOT(10xxxxxx)
-                        throw new UTFDataFormatException("2b: " + b);
-                    }
-                    writer.append((char) (((a & 0x1F) << 6) | (b & 0x3F)));
-                } else if (a >> 4 == 0x0E) { // 1110xxxx
-                    int b = bais.read();
-                    if (b == -1 || (b >> 6) != 0x02) { // NOT(10xxxxxx)
-                        throw new UTFDataFormatException("3b: " + b);
-                    }
-                    int c = bais.read();
-                    if (c == -1 || (c >> 6) != 0x02) { // NOT(10xxxxxx)
-                        throw new UTFDataFormatException("3c: " + b);
-                    }
-                    writer.write((char) (((a & 0x0F) << 12) |
-                                         ((b & 0x3F) << 6) |
-                                          (c & 0x3F)));
-                }
-            }
-        } finally {
-            bais.close();
-        }
+        final byte[] encoded = new byte[readUnsignedShort(16)];
+        readBytes(encoded);
+        return new String(ModifiedUTF8.decode(encoded));
     }
 
 
