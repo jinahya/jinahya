@@ -14,17 +14,12 @@
  *  limitations under the License.
  */
 
-package jinahya.bitio;
+package jinahya.io;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.EOFException;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.UTFDataFormatException;
-import java.io.Writer;
 
 import jinahya.util.ModifiedUTF8;
 
@@ -35,6 +30,22 @@ import jinahya.util.ModifiedUTF8;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitInput {
+
+
+    /**
+     * The interface for octet input.
+     */
+    public static interface OctetInput {
+
+
+        /**
+         * Reads an octet from desired input.
+         *
+         * @return octet value 0-255 or -1 if EOF
+         * @throws IOException if an I/O error occurs
+         */
+        int readOctet() throws IOException;
+    }
 
 
     /**

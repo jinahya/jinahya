@@ -14,15 +14,11 @@
  *  limitations under the License.
  */
 
-package jinahya.bitio;
+package jinahya.io;
 
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UTFDataFormatException;
 
 import jinahya.util.ModifiedUTF8;
 
@@ -33,6 +29,22 @@ import jinahya.util.ModifiedUTF8;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitOutput {
+
+
+    /**
+     * An interface to consume octets from {@link BitOutput}.
+     */
+    public interface OctetOutput {
+
+
+        /**
+         * Writes a composed octet to desired output.
+         *
+         * @param octet the octet value between 0 and 255.
+         * @throws IOException if an I/O error occurs
+         */
+        void writeOctet(int octet) throws IOException;
+    }
 
 
     /**

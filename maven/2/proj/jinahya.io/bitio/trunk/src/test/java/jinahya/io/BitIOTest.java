@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.bitio;
+package jinahya.io;
 
 
 import java.io.IOException;

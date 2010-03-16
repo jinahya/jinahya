@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.bitio;
+package jinahya.io;
 
 
 import java.io.DataInputStream;
@@ -24,7 +24,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Random;
 
-import org.junit.After;
+//import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
