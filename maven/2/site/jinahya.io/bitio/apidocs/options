@@ -1,5 +1,5 @@
 -classpath
-'/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/target/classes'
+'/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/target/classes:/home/onacit/.m2/repository/jinahya/util/modified-utf-8/1.0/modified-utf-8-1.0.jar'
 -encoding
 'UTF-8'
 -protected

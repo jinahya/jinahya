@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="28" tokens="115">
-<file line="112" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/bitio/BitInput.java"/>
-<file line="110" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/bitio/BitOutput.java"/>
+<file line="126" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitInput.java"/>
+<file line="124" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitOutput.java"/>
 <codefragment>
 <![CDATA[
     public final void writeBytes(final byte[] value, final int offset,
