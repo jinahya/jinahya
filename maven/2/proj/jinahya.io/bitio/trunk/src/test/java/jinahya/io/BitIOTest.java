@@ -70,6 +70,40 @@ public class BitIOTest extends AbstractTest {
     }
 
 
+    @Test
+    public void testFloat() throws IOException {
+        for (int i = 0; i < COUNT; i++) {
+            final float expected = RANDOM.nextFloat();
+
+            output.writeFloat(expected);
+            assertEquals(expected, input.readFloat(), .0f);
+
+            output.writeFloat(expected);
+            assertEquals(expected, dis.readFloat(), .0f);
+
+            dos.writeFloat(expected);
+            assertEquals(expected, input.readFloat(), .0f);
+        }
+    }
+
+
+    @Test
+    public void testDouble() throws IOException {
+        for (int i = 0; i < COUNT; i++) {
+            final double expected = RANDOM.nextDouble();
+
+            output.writeDouble(expected);
+            assertEquals(expected, input.readDouble(), .0d);
+
+            output.writeDouble(expected);
+            assertEquals(expected, dis.readDouble(), .0d);
+
+            dos.writeDouble(expected);
+            assertEquals(expected, input.readDouble(), .0d);
+        }
+    }
+
+
     //@org.junit.Ignore
     @Test
     public void testInt() throws IOException {
