@@ -216,17 +216,17 @@ public class BitIOTest extends AbstractTest {
         for (int i = 0; i < COUNT; i++) {
             final String expected = generateModifiedUTF8String();
 
-            output.writeUTF(expected);
+            output.writeModifiedUTF8String(expected);
             alignAndFlush();
-            assertEquals(expected, input.readUTF());
+            assertEquals(expected, input.readModifiedUTF8String());
 
-            output.writeUTF(expected);
+            output.writeModifiedUTF8String(expected);
             alignAndFlush();
             assertEquals(expected, dis.readUTF());
 
             dos.writeUTF(expected);
             alignAndFlush();
-            assertEquals(expected, input.readUTF());
+            assertEquals(expected, input.readModifiedUTF8String());
         }
     }
 

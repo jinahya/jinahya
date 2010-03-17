@@ -102,9 +102,9 @@ public class BitOutput {
 
 
     /**
-     * Same as <code>writeBytes(value, 0, value.length)</code>.
+     * See {@link java.io.DataOutput#write(byte[])}.
      *
-     * @param value value to be written
+     * @param value the data.
      * @throws IOException if an I/O error occurs.
      * @see #writeBytes(byte[], int, int)
      */
@@ -114,21 +114,16 @@ public class BitOutput {
 
 
     /**
-     * Writes an array of bytes.
+     * See {@link java.io.DataOutput#write(byte[], int, int)}.
      *
-     * @param value byte array
-     * @param offset offset
-     * @param length length
+     * @param value the data.
+     * @param offset the start offset in the data.
+     * @param length the number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     public final void writeBytes(final byte[] value, final int offset,
                                  final int length)
         throws IOException {
-
-        /*
-        System.out.println(
-            "writeBytes(" + value + ", " + offset + ", " + length + ")");
-         */
 
         if (value == null) {
             throw new NullPointerException("value");
@@ -462,21 +457,6 @@ public class BitOutput {
      */
     public final int align() throws IOException {
         return align(8);
-    }
-
-
-    /**
-     * <b>Deprecated</b>;use {@link #writeModifiedUTF8String(java.lang.String)}.
-     * Writes a string in modified UTF-8 encoding.
-     *
-     * @param value string to be written
-     * @throws IOException if an I/O error occurs.
-     * @see java.io.DataOutput#writeUTF(java.lang.String)
-     */
-    public final void writeUTF(final String value) throws IOException {
-        byte[] encoded = ModifiedUTF8.encode(value.toCharArray());
-        writeUnsignedShort(16, encoded.length);
-        writeBytes(encoded);
     }
 
 

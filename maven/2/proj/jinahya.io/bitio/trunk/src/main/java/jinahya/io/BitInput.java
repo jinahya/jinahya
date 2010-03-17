@@ -103,9 +103,9 @@ public class BitInput {
 
 
     /**
-     * Same as <code>writeBytes(value, 0, value.length)</code>.
+     * See {@link java.io.DataInput#readFully(byte[])}.
      *
-     * @param value byte array to which octets are stored
+     * @param value the buffer into which data is read.
      * @throws IOException if an I/O error occurs.
      * @see #readBytes(byte[], int, int)
      */
@@ -115,11 +115,11 @@ public class BitInput {
 
 
     /**
-     * See comemnts from {@link java.io.DataInput#readFully(byte[], int, int)}.
+     * See {@link java.io.DataInput#readFully(byte[], int, int)}.
      *
-     * @param value byte array to which octets are stored
-     * @param offset the offset to start
-     * @param length the number of octets to read.
+     * @param value the buffet into which data is read.
+     * @param offset in int specifying the offset into the data.
+     * @param length an int specifying the number of bytes to read.
      * @throws IOException if an I/O error occurs.
      * @see java.io.DataInput#readFully(byte[], int, int)
      */
@@ -500,19 +500,6 @@ public class BitInput {
      */
     public final int align() throws IOException {
         return align(8);
-    }
-
-
-    /**
-     * <b>Deprecated</b>;use {@link #readModifiedUTF8String()}.
-     * Reads a string in modifed UTF-8 encoding.
-     *
-     * @return a string
-     * @throws IOException if an I/O error occurs.
-     * @see java.io.DataInput#readUTF()
-     */
-    public final String readUTF() throws IOException {
-        return readModifiedUTF8String();
     }
 
 
