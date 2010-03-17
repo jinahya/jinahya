@@ -8,7 +8,7 @@
   <groupId>jinahya.io</groupId>
   <artifactId>bitio</artifactId>
   <packaging>jar</packaging>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
