@@ -30,25 +30,49 @@ public class BitOutputTest extends AbstractTest {
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testUnsignedIntIllegalLength() throws IOException {
+    public void testWriteUnsignedIntIllegalLength() throws IOException {
         output.writeUnsignedInt(invalidLengthForUnsignedInt(), 0x00);
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testIntWithIllegalLength() throws IOException {
+    public void testWriteIntWithIllegalLength() throws IOException {
         output.writeInt(super.invalidLengthForInt(), 0x00);
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testUnsignedLongWithIllegalLength() throws IOException {
+    public void testWriteUnsignedLongWithIllegalLength() throws IOException {
         output.writeUnsignedLong(invalidLengthForUnsignedLong(), 0x00);
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testLongWithIllegalLength() throws IOException {
+    public void testWriteLongWithIllegalLength() throws IOException {
         output.writeLong(invalidLengthForLong(), 0x00);
+    }
+
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void testWriteBytesWithNullValue() throws IOException {
+        output.writeBytes(null);
+    }
+
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void testWriteModifedUTF8StringWithNullValue() throws IOException {
+        output.writeModifiedUTF8String(null);
+    }
+
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void testWriteUSASCIIBytesWithNullValue() throws IOException {
+        output.writeUSASCIIBytes(null);
+    }
+
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void testWriteUSASCIIStringWithNullValue() throws IOException {
+        output.writeUSASCIIString(null);
     }
 }

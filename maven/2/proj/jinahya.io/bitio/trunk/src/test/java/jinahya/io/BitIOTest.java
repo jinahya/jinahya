@@ -214,8 +214,7 @@ public class BitIOTest extends AbstractTest {
     @Test
     public void testModifiedUTF8String() throws IOException {
         for (int i = 0; i < COUNT; i++) {
-            final String expected =
-                ModifiedUTF8.generateString(RANDOM.nextInt(65536));
+            final String expected = generateModifiedUTF8String();
 
             output.writeUTF(expected);
             alignAndFlush();
@@ -232,21 +231,11 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-    private void fillUSASCIIBytes(final byte[] bytes) {
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) RANDOM.nextInt(128);
-        }
-    }
-
-
     @Test
     public void testUSASCIIBytes() throws IOException {
 
-        final byte[] expected = new byte[RANDOM.nextInt(1024)];
-
         for (int i = 0; i < COUNT; i++) {
-
-            fillUSASCIIBytes(expected);
+            byte[] expected = generateUSASCIIBytes();
 
             output.writeUSASCIIBytes(expected);
             alignAndFlush();
@@ -260,13 +249,9 @@ public class BitIOTest extends AbstractTest {
     @Test
     public void testUSASCIIString() throws IOException {
 
-        final byte[] bytes = new byte[RANDOM.nextInt(1024)];
-
         for (int i = 0; i < COUNT; i++) {
 
-            fillUSASCIIBytes(bytes);
-
-            final String expected = new String(bytes, "US-ASCII");
+            final String expected = generateUSASCIIString();
 
             output.writeUSASCIIString(expected);
             alignAndFlush();

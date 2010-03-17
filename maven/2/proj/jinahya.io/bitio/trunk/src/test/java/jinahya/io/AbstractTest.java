@@ -25,10 +25,10 @@ import java.io.PipedOutputStream;
 import java.util.Random;
 
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
+//import org.junit.Test;
 
 import jinahya.util.ModifiedUTF8;
 
@@ -131,5 +131,24 @@ public abstract class AbstractTest {
         } else {
             return RANDOM.nextInt(64) + 64 + 1; // length > 64
         }
+    }
+
+
+    protected final String generateModifiedUTF8String() throws IOException {
+        return ModifiedUTF8.generateString(RANDOM.nextInt(1024));
+    }
+
+
+    protected final byte[] generateUSASCIIBytes() throws IOException {
+        byte[] value = new byte[RANDOM.nextInt(1024)];
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) RANDOM.nextInt(128);
+        }
+        return value;
+    }
+
+
+    protected final String generateUSASCIIString() throws IOException {
+        return new String(generateUSASCIIBytes(), "US-ASCII");
     }
 }

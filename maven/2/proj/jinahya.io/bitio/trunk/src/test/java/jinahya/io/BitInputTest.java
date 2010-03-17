@@ -30,25 +30,25 @@ public class BitInputTest extends AbstractTest {
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testUnsignedIntIllegalLength() throws IOException {
+    public void testReadUnsignedIntIllegalLength() throws IOException {
         input.readUnsignedInt(invalidLengthForUnsignedInt());
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testIntWithIllegalLength() throws IOException {
-        input.readInt(super.invalidLengthForInt());
+    public void testReadIntWithIllegalLength() throws IOException {
+        input.readInt(invalidLengthForInt());
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testUnsignedLongWithIllegalLength() throws IOException {
+    public void testReadUnsignedLongWithIllegalLength() throws IOException {
         input.readUnsignedLong(invalidLengthForUnsignedLong());
     }
 
 
     @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testLongWithIllegalLength() throws IOException {
+    public void testReadLongWithIllegalLength() throws IOException {
         input.readLong(invalidLengthForLong());
     }
 }
