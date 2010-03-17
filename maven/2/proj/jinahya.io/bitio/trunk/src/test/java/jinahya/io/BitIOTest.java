@@ -17,17 +17,9 @@
 package jinahya.io;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.Random;
 
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import jinahya.util.ModifiedUTF8;
@@ -37,64 +29,7 @@ import jinahya.util.ModifiedUTF8;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitIOTest {
-
-
-    protected static final int COUNT = 1;
-
-    protected static final Random RANDOM = new Random();
-
-
-    protected static DataInputStream dis;
-    protected static DataOutputStream dos;
-
-    private static PipedInputStream pis;
-    private static PipedOutputStream pos;
-
-    protected static BitInput input;
-    protected static BitOutput output;
-
-
-    @BeforeClass
-    public static void openStreamsBeforeClass() throws IOException {
-
-        pis = new PipedInputStream(1048576);
-        dis = new DataInputStream(pis);
-        input = new BitInput(pis);
-
-        pos = new PipedOutputStream();
-        dos = new DataOutputStream(pos);
-        output = new BitOutput(pos);
-
-        pis.connect(pos);
-    }
-
-
-    @Before
-    public void alignBitIOBeforeTest() throws IOException {
-        //System.out.println("output aligned with " + output.align() + " bits");
-        //System.out.println("input aligned with " + input.align() + " bits");
-        output.align();
-        input.align();
-    }
-
-
-    protected final void alignAndFlush() throws IOException {
-        //System.out.println("output aligned with " + output.align() + " bits");
-        output.align();
-
-        dos.flush();
-        pos.flush();
-    }
-
-
-    @AfterClass
-    public static void closeStreamsAfterClass() throws IOException {
-        pis.close();
-        dis.close();
-        pos.close();
-        dos.close();
-    }
+public class BitIOTest extends AbstractTest {
 
 
     //@org.junit.Ignore
@@ -277,18 +212,21 @@ public class BitIOTest {
 
     //@org.junit.Ignore
     @Test
-    public void testStrings() throws IOException {
+    public void testModifiedUTF8String() throws IOException {
         for (int i = 0; i < COUNT; i++) {
             final String expected =
                 ModifiedUTF8.generateString(RANDOM.nextInt(65536));
 
             output.writeUTF(expected);
+            alignAndFlush();
             assertEquals(expected, input.readUTF());
 
             output.writeUTF(expected);
+            alignAndFlush();
             assertEquals(expected, dis.readUTF());
 
             dos.writeUTF(expected);
+            alignAndFlush();
             assertEquals(expected, input.readUTF());
         }
     }
@@ -314,6 +252,7 @@ public class BitIOTest {
             alignAndFlush();
 
             assertArrayEquals(expected, input.readUSASCIIBytes());
+            input.align();
         }
     }
 
@@ -333,6 +272,7 @@ public class BitIOTest {
             alignAndFlush();
 
             assertEquals(expected, input.readUSASCIIString());
+            input.align();
         }
     }
 }

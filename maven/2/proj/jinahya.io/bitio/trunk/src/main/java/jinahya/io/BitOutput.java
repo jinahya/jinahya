@@ -466,7 +466,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a string in modified UTF-8.
+     * <b>Deprecated</b>;use {@link #writeModifiedUTF8String(java.lang.String)}.
+     * Writes a string in modified UTF-8 encoding.
      *
      * @param value string to be written
      * @throws IOException if an I/O error occurs.
@@ -480,9 +481,26 @@ public class BitOutput {
 
 
     /**
+     * Writes a string in modified UTF-8 encoding.
      *
-     * @param value
-     * @throws IOException
+     * @param value string to be written
+     * @throws IOException if an I/O error occurs.
+     * @see java.io.DataOutput#writeUTF(java.lang.String)
+     */
+    public final void writeModifiedUTF8String(final String value)
+        throws IOException {
+
+        byte[] encoded = ModifiedUTF8.encode(value.toCharArray());
+        writeUnsignedShort(16, encoded.length);
+        writeBytes(encoded);
+    }
+
+
+    /**
+     * Writes a string in US-ASCII encoding.
+     *
+     * @param value string to be written
+     * @throws IOException if an I/O error occurs.
      */
     public final void writeUSASCIIString(final String value)
         throws IOException {
@@ -492,9 +510,11 @@ public class BitOutput {
 
 
     /**
+     * Writes 31 bits of length information to the octet output, followed by the
+     * 7 bit representation of every byte in the array <code>value</code>.
      *
-     * @param value
-     * @throws IOException
+     * @param value the byte array to be written
+     * @throws IOException if an I/O error occurs.
      */
     public final void writeUSASCIIBytes(final byte[] value) throws IOException {
 
@@ -502,16 +522,13 @@ public class BitOutput {
             throw new NullPointerException("value");
         }
 
+        writeUnsignedInt(31, value.length);
+
         for (int i = 0; i < value.length; i++) {
             if (value[i] < 0) {
                 throw new IllegalArgumentException(
                     "illegal ascii value[" + i + "](" + value[i] + ")");
             }
-        }
-
-        writeUnsignedInt(31, value.length);
-
-        for (int i = 0; i < value.length; i++) {
             writeUnsignedByte(7, value[i]);
         }
     }

@@ -504,12 +504,26 @@ public class BitInput {
 
 
     /**
+     * <b>Deprecated</b>;use {@link #readModifiedUTF8String()}.
      * Reads a string in modifed UTF-8 encoding.
      *
      * @return a string
      * @throws IOException if an I/O error occurs.
+     * @see java.io.DataInput#readUTF()
      */
     public final String readUTF() throws IOException {
+        return readModifiedUTF8String();
+    }
+
+
+    /**
+     * Reads a string in modified UTF-8 encoding.
+     *
+     * @return a string
+     * @throws IOException if an I/O error occurs.
+     * @see java.io.DataInput#readUTF()
+     */
+    public final String readModifiedUTF8String() throws IOException {
         final byte[] encoded = new byte[readUnsignedShort(16)];
         readBytes(encoded);
         return new String(ModifiedUTF8.decode(encoded));
