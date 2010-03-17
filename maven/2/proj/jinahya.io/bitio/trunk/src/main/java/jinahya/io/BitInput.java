@@ -516,6 +516,35 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads a String encoded in US-ASCII.
+     *
+     * @return a String
+     * @throws IOException if an I/O error occurs.
+     */
+    public final String readUSASCIIString() throws IOException {
+        return new String(readUSASCIIBytes(), "US-ASCII");
+    }
+
+
+    /**
+     * Reads a sequence of US-ASCII bytes.
+     *
+     * @return an array of bytes
+     * @throws IOException if an I/O error occurs.
+     */
+    public final byte[] readUSASCIIBytes() throws IOException {
+
+        final byte[] value = new byte[readUnsignedInt(31)];
+
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) readUnsignedByte(7);
+        }
+
+        return value;
+    }
+
+
     /*
      *
      * @param m

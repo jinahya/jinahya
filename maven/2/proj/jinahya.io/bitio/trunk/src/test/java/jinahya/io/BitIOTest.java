@@ -17,9 +17,17 @@
 package jinahya.io;
 
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.Random;
 
+import org.junit.AfterClass;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import jinahya.util.ModifiedUTF8;
@@ -29,7 +37,64 @@ import jinahya.util.ModifiedUTF8;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitIOTest extends AbstractTest {
+public class BitIOTest {
+
+
+    protected static final int COUNT = 1;
+
+    protected static final Random RANDOM = new Random();
+
+
+    protected static DataInputStream dis;
+    protected static DataOutputStream dos;
+
+    private static PipedInputStream pis;
+    private static PipedOutputStream pos;
+
+    protected static BitInput input;
+    protected static BitOutput output;
+
+
+    @BeforeClass
+    public static void openStreamsBeforeClass() throws IOException {
+
+        pis = new PipedInputStream(1048576);
+        dis = new DataInputStream(pis);
+        input = new BitInput(pis);
+
+        pos = new PipedOutputStream();
+        dos = new DataOutputStream(pos);
+        output = new BitOutput(pos);
+
+        pis.connect(pos);
+    }
+
+
+    @Before
+    public void alignBitIOBeforeTest() throws IOException {
+        //System.out.println("output aligned with " + output.align() + " bits");
+        //System.out.println("input aligned with " + input.align() + " bits");
+        output.align();
+        input.align();
+    }
+
+
+    protected final void alignAndFlush() throws IOException {
+        //System.out.println("output aligned with " + output.align() + " bits");
+        output.align();
+
+        dos.flush();
+        pos.flush();
+    }
+
+
+    @AfterClass
+    public static void closeStreamsAfterClass() throws IOException {
+        pis.close();
+        dis.close();
+        pos.close();
+        dos.close();
+    }
 
 
     //@org.junit.Ignore
@@ -43,7 +108,6 @@ public class BitIOTest extends AbstractTest {
             //System.out.println("output.count: " + output.getCount());
 
             alignAndFlush();
-
 
             assertEquals(expected, input.readBoolean());
             input.align();
@@ -62,9 +126,15 @@ public class BitIOTest extends AbstractTest {
             RANDOM.nextBytes(expected);
 
             output.writeBytes(expected);
-
             input.readBytes(actual);
+            assertArrayEquals(expected, actual);
 
+            output.writeBytes(expected);
+            dis.readFully(actual);
+            assertArrayEquals(expected, actual);
+
+            dos.write(expected);
+            input.readBytes(actual);
             assertArrayEquals(expected, actual);
         }
     }
@@ -213,9 +283,56 @@ public class BitIOTest extends AbstractTest {
                 ModifiedUTF8.generateString(RANDOM.nextInt(65536));
 
             output.writeUTF(expected);
+            assertEquals(expected, input.readUTF());
 
+            output.writeUTF(expected);
+            assertEquals(expected, dis.readUTF());
+
+            dos.writeUTF(expected);
             assertEquals(expected, input.readUTF());
         }
     }
 
+
+    private void fillUSASCIIBytes(final byte[] bytes) {
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) RANDOM.nextInt(128);
+        }
+    }
+
+
+    @Test
+    public void testUSASCIIBytes() throws IOException {
+
+        final byte[] expected = new byte[RANDOM.nextInt(1024)];
+
+        for (int i = 0; i < COUNT; i++) {
+
+            fillUSASCIIBytes(expected);
+
+            output.writeUSASCIIBytes(expected);
+            alignAndFlush();
+
+            assertArrayEquals(expected, input.readUSASCIIBytes());
+        }
+    }
+
+
+    @Test
+    public void testUSASCIIString() throws IOException {
+
+        final byte[] bytes = new byte[RANDOM.nextInt(1024)];
+
+        for (int i = 0; i < COUNT; i++) {
+
+            fillUSASCIIBytes(bytes);
+
+            final String expected = new String(bytes, "US-ASCII");
+
+            output.writeUSASCIIString(expected);
+            alignAndFlush();
+
+            assertEquals(expected, input.readUSASCIIString());
+        }
+    }
 }

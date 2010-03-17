@@ -479,6 +479,44 @@ public class BitOutput {
     }
 
 
+    /**
+     *
+     * @param value
+     * @throws IOException
+     */
+    public final void writeUSASCIIString(final String value)
+        throws IOException {
+
+        writeUSASCIIBytes(value.getBytes("US-ASCII"));
+    }
+
+
+    /**
+     *
+     * @param value
+     * @throws IOException
+     */
+    public final void writeUSASCIIBytes(final byte[] value) throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        for (int i = 0; i < value.length; i++) {
+            if (value[i] < 0) {
+                throw new IllegalArgumentException(
+                    "illegal ascii value[" + i + "](" + value[i] + ")");
+            }
+        }
+
+        writeUnsignedInt(31, value.length);
+
+        for (int i = 0; i < value.length; i++) {
+            writeUnsignedByte(7, value[i]);
+        }
+    }
+
+
     /*
     public void writeUnsignedFixedPoint(final int m, final int n,
                                         final float value)
