@@ -55,7 +55,6 @@ public abstract class AbstractTest {
     protected static BitOutput output;
 
 
-    @BeforeClass
     @org.testng.annotations.BeforeClass
     public static void openStreamsBeforeClass() throws IOException {
 
@@ -71,7 +70,6 @@ public abstract class AbstractTest {
     }
 
 
-    @BeforeMethod
     @org.testng.annotations.BeforeMethod
     public void alignBitIOBeforeTest() throws IOException {
         //System.out.println("output aligned with " + output.align() + " bits");
@@ -90,7 +88,6 @@ public abstract class AbstractTest {
     }
 
 
-    @AfterClass
     @org.testng.annotations.AfterClass
     public static void closeStreamsAfterClass() throws IOException {
         pis.close();

@@ -19,12 +19,8 @@ package jinahya.io;
 
 import java.io.IOException;
 
-<<<<<<< .mine
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-=======
-import static org.junit.Assert.*;
->>>>>>> .r3047
 
 
 /**
@@ -34,49 +30,17 @@ import static org.junit.Assert.*;
 public class BitIOTest extends AbstractTest {
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    //@org.junit.Ignore
-    @org.junit.Test
->>>>>>> .r3047
     public void testBoolean() throws IOException {
-<<<<<<< .mine
         final boolean expected = RANDOM.nextBoolean();
         output.writeBoolean(expected);
         alignAndFlush();
-=======
-        for (int i = 0; i < COUNT; i++) {
-            _testBoolean();
-        }
-    }
->>>>>>> .r3047
-
-<<<<<<< .mine
         assertEquals(expected, input.readBoolean());
         input.align();
-=======
-
-    @org.testng.annotations.Test(invocationCount = 1024)
-    public void _testBoolean() throws IOException {
-        final boolean expected = RANDOM.nextBoolean();
-
-        output.writeBoolean(expected);
-
-        alignAndFlush();
-
-        assertEquals(expected, input.readBoolean());
-        input.align();
->>>>>>> .r3047
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    //@org.junit.Ignore
-    @org.junit.Test
->>>>>>> .r3047
     public void testBytes() throws IOException {
 
         final byte[] expected = new byte[RANDOM.nextInt(65536)];
@@ -98,11 +62,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    @org.junit.Test
->>>>>>> .r3047
     public void testFloat() throws IOException {
         final float expected = RANDOM.nextFloat();
 
@@ -117,11 +77,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    @org.junit.Test
->>>>>>> .r3047
     public void testDouble() throws IOException {
         final double expected = RANDOM.nextDouble();
 
@@ -136,12 +92,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    //@org.junit.Ignore
-    @org.junit.Test
->>>>>>> .r3047
     public void testInt() throws IOException {
 
         int expected = RANDOM.nextInt();
@@ -190,12 +141,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    //@org.junit.Ignore
-    @org.junit.Test
->>>>>>> .r3047
     public void testLong() throws IOException {
 
         long expected = RANDOM.nextLong();
@@ -240,12 +186,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    //@org.junit.Ignore
-    @org.junit.Test
->>>>>>> .r3047
     public void testModifiedUTF8String() throws IOException {
         final String expected = generateModifiedUTF8String();
 
@@ -263,14 +204,10 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    @org.junit.Test
->>>>>>> .r3047
     public void testUSASCIIBytes() throws IOException {
 
-        byte[] expected = generateUSASCIIBytes();
+        final byte[] expected = generateUSASCIIBytes();
 
         output.writeUSASCIIBytes(expected);
         alignAndFlush();
@@ -280,11 +217,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-<<<<<<< .mine
     @Test(invocationCount = 1024)
-=======
-    @org.junit.Test
->>>>>>> .r3047
     public void testUSASCIIString() throws IOException {
 
         final String expected = generateUSASCIIString();

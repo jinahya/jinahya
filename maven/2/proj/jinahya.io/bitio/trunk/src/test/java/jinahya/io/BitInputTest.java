@@ -18,6 +18,8 @@ package jinahya.io;
 
 import java.io.IOException;
 
+import org.testng.annotations.Test;
+
 
 /**
  *
@@ -26,49 +28,25 @@ import java.io.IOException;
 public class BitInputTest extends AbstractTest {
 
 
-<<<<<<< .mine
-    @org.testng.annotations.Test(
-        expectedExceptions = {IllegalArgumentException.class})
-=======
-    @org.junit.Test(expected = IllegalArgumentException.class)
-    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
->>>>>>> .r3047
+    @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadUnsignedIntIllegalLength() throws IOException {
         input.readUnsignedInt(invalidLengthForUnsignedInt());
     }
 
 
-<<<<<<< .mine
-    @org.testng.annotations.Test(
-        expectedExceptions = {IllegalArgumentException.class})
-=======
-    @org.junit.Test(expected = IllegalArgumentException.class)
-    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
->>>>>>> .r3047
+    @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadIntWithIllegalLength() throws IOException {
         input.readInt(invalidLengthForInt());
     }
 
 
-<<<<<<< .mine
-    @org.testng.annotations.Test(
-        expectedExceptions = {IllegalArgumentException.class})
-=======
-    @org.junit.Test(expected = IllegalArgumentException.class)
-    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
->>>>>>> .r3047
+    @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadUnsignedLongWithIllegalLength() throws IOException {
         input.readUnsignedLong(invalidLengthForUnsignedLong());
     }
 
 
-<<<<<<< .mine
-    @org.testng.annotations.Test(
-        expectedExceptions = {IllegalArgumentException.class})
-=======
-    @org.junit.Test(expected = IllegalArgumentException.class)
-    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
->>>>>>> .r3047
+    @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadLongWithIllegalLength() throws IOException {
         input.readLong(invalidLengthForLong());
     }
