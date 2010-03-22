@@ -470,7 +470,7 @@ public class BitOutput {
     public final void writeModifiedUTF8String(final String value)
         throws IOException {
 
-        byte[] encoded = ModifiedUTF8.encode(value.toCharArray());
+        byte[] encoded = ModifiedUTF8.encodeRaw(value.toCharArray());
         writeUnsignedShort(16, encoded.length);
         writeBytes(encoded);
     }

@@ -19,7 +19,12 @@ package jinahya.io;
 
 import java.io.IOException;
 
+<<<<<<< .mine
+import static org.testng.Assert.*;
+import org.testng.annotations.Test;
+=======
 import static org.junit.Assert.*;
+>>>>>>> .r3047
 
 
 /**
@@ -29,14 +34,28 @@ import static org.junit.Assert.*;
 public class BitIOTest extends AbstractTest {
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     //@org.junit.Ignore
     @org.junit.Test
+>>>>>>> .r3047
     public void testBoolean() throws IOException {
+<<<<<<< .mine
+        final boolean expected = RANDOM.nextBoolean();
+        output.writeBoolean(expected);
+        alignAndFlush();
+=======
         for (int i = 0; i < COUNT; i++) {
             _testBoolean();
         }
     }
+>>>>>>> .r3047
 
+<<<<<<< .mine
+        assertEquals(expected, input.readBoolean());
+        input.align();
+=======
 
     @org.testng.annotations.Test(invocationCount = 1024)
     public void _testBoolean() throws IOException {
@@ -48,217 +67,232 @@ public class BitIOTest extends AbstractTest {
 
         assertEquals(expected, input.readBoolean());
         input.align();
+>>>>>>> .r3047
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     //@org.junit.Ignore
     @org.junit.Test
+>>>>>>> .r3047
     public void testBytes() throws IOException {
 
         final byte[] expected = new byte[RANDOM.nextInt(65536)];
         final byte[] actual = new byte[expected.length];
 
-        for (int i = 0; i < COUNT; i++) {
-            RANDOM.nextBytes(expected);
+        RANDOM.nextBytes(expected);
 
-            output.writeBytes(expected);
-            input.readBytes(actual);
-            assertArrayEquals(expected, actual);
+        output.writeBytes(expected);
+        input.readBytes(actual);
+        assertEquals(expected, actual);
 
-            output.writeBytes(expected);
-            dis.readFully(actual);
-            assertArrayEquals(expected, actual);
+        output.writeBytes(expected);
+        dis.readFully(actual);
+        assertEquals(expected, actual);
 
-            dos.write(expected);
-            input.readBytes(actual);
-            assertArrayEquals(expected, actual);
-        }
+        dos.write(expected);
+        input.readBytes(actual);
+        assertEquals(expected, actual);
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     @org.junit.Test
+>>>>>>> .r3047
     public void testFloat() throws IOException {
-        for (int i = 0; i < COUNT; i++) {
-            final float expected = RANDOM.nextFloat();
+        final float expected = RANDOM.nextFloat();
 
-            output.writeFloat(expected);
-            assertEquals(expected, input.readFloat(), .0f);
+        output.writeFloat(expected);
+        assertEquals(expected, input.readFloat(), .0f);
 
-            output.writeFloat(expected);
-            assertEquals(expected, dis.readFloat(), .0f);
+        output.writeFloat(expected);
+        assertEquals(expected, dis.readFloat(), .0f);
 
-            dos.writeFloat(expected);
-            assertEquals(expected, input.readFloat(), .0f);
-        }
+        dos.writeFloat(expected);
+        assertEquals(expected, input.readFloat(), .0f);
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     @org.junit.Test
+>>>>>>> .r3047
     public void testDouble() throws IOException {
-        for (int i = 0; i < COUNT; i++) {
-            final double expected = RANDOM.nextDouble();
+        final double expected = RANDOM.nextDouble();
 
-            output.writeDouble(expected);
-            assertEquals(expected, input.readDouble(), .0d);
+        output.writeDouble(expected);
+        assertEquals(expected, input.readDouble(), .0d);
 
-            output.writeDouble(expected);
-            assertEquals(expected, dis.readDouble(), .0d);
+        output.writeDouble(expected);
+        assertEquals(expected, dis.readDouble(), .0d);
 
-            dos.writeDouble(expected);
-            assertEquals(expected, input.readDouble(), .0d);
-        }
+        dos.writeDouble(expected);
+        assertEquals(expected, input.readDouble(), .0d);
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     //@org.junit.Ignore
     @org.junit.Test
+>>>>>>> .r3047
     public void testInt() throws IOException {
 
-        for (int i = 0; i < COUNT; i++) {
+        int expected = RANDOM.nextInt();
 
-            int expected = RANDOM.nextInt();
+        final int length = RANDOM.nextInt(32) + 1; // 1 - 32
 
-            final int length = RANDOM.nextInt(32) + 1; // 1 - 32
+        if (length == 1) { // unsigned int
+            expected &= 0x01;
 
-            if (length == 1) { // unsigned int
-                expected &= 0x01;
+            output.writeUnsignedInt(length, expected);
+            alignAndFlush(); // 8
+            assertEquals(expected, input.readUnsignedInt(length));
+            input.align();
 
+        } else if (length == 32) { // signed int
+            dos.writeInt(expected);
+            dos.flush();
+            assertEquals(expected, input.readInt());
+
+            output.writeInt(expected);
+            alignAndFlush();
+            assertEquals(expected, input.readInt());
+
+            output.writeInt(expected);
+            alignAndFlush();
+            assertEquals(expected, dis.readInt());
+
+        } else {
+            final int upper = 32 - length;
+            expected <<= upper;
+            expected >>= upper;
+
+            if (expected >= 0) { // unsigned
                 output.writeUnsignedInt(length, expected);
-                alignAndFlush(); // 8
+                alignAndFlush();
                 assertEquals(expected, input.readUnsignedInt(length));
                 input.align();
 
-            } else if (length == 32) { // signed int
-                dos.writeInt(expected);
-                dos.flush();
-                assertEquals(expected, input.readInt());
-
-                output.writeInt(expected);
+            } else { // sigend
+                output.writeInt(length, expected);
                 alignAndFlush();
-                assertEquals(expected, input.readInt());
-
-                output.writeInt(expected);
-                alignAndFlush();
-                assertEquals(expected, dis.readInt());
-
-            } else {
-                final int upper = 32 - length;
-                expected <<= upper;
-                expected >>= upper;
-
-                if (expected >= 0) { // unsigned
-                    output.writeUnsignedInt(length, expected);
-                    alignAndFlush();
-                    assertEquals(expected, input.readUnsignedInt(length));
-                    input.align();
-
-                } else { // sigend
-                    output.writeInt(length, expected);
-                    alignAndFlush();
-                    assertEquals(expected, input.readInt(length));
-                    input.align();
-                }
+                assertEquals(expected, input.readInt(length));
+                input.align();
             }
         }
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     //@org.junit.Ignore
     @org.junit.Test
+>>>>>>> .r3047
     public void testLong() throws IOException {
 
-        for (int i = 0; i < COUNT; i++) {
+        long expected = RANDOM.nextLong();
 
-            long expected = RANDOM.nextLong();
+        final int length = RANDOM.nextInt(64) + 1; // 1 - 64
 
-            final int length = RANDOM.nextInt(64) + 1; // 1 - 64
+        if (length == 1) { // unsigned long
+            expected &= 0x01L;
 
-            if (length == 1) { // unsigned long
-                expected &= 0x01L;
+            output.writeUnsignedLong(length, expected);
+            alignAndFlush(); // 8
+            assertEquals(expected, input.readUnsignedLong(length));
+            input.align();
 
+        } else if (length == 64) { // signed long
+            dos.writeLong(expected);
+            dos.flush();
+            assertEquals(expected, input.readLong());
+
+            output.writeLong(expected);
+            alignAndFlush();
+            assertEquals(expected, input.readLong());
+
+        } else {
+            final int upper = 64 - length;
+            expected <<= upper;
+            expected >>= upper;
+
+            if (expected >= 0) { // unsigned
                 output.writeUnsignedLong(length, expected);
-                alignAndFlush(); // 8
+                alignAndFlush();
                 assertEquals(expected, input.readUnsignedLong(length));
                 input.align();
 
-            } else if (length == 64) { // signed long
-                dos.writeLong(expected);
-                dos.flush();
-                assertEquals(expected, input.readLong());
-
-                output.writeLong(expected);
+            } else { // sigend
+                output.writeLong(length, expected);
                 alignAndFlush();
-                assertEquals(expected, input.readLong());
-
-            } else {
-                final int upper = 64 - length;
-                expected <<= upper;
-                expected >>= upper;
-
-                if (expected >= 0) { // unsigned
-                    output.writeUnsignedLong(length, expected);
-                    alignAndFlush();
-                    assertEquals(expected, input.readUnsignedLong(length));
-                    input.align();
-                } else { // sigend
-                    output.writeLong(length, expected);
-                    alignAndFlush();
-                    assertEquals(expected, input.readLong(length));
-                    input.align();
-                }
+                assertEquals(expected, input.readLong(length));
+                input.align();
             }
         }
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     //@org.junit.Ignore
     @org.junit.Test
+>>>>>>> .r3047
     public void testModifiedUTF8String() throws IOException {
-        for (int i = 0; i < COUNT; i++) {
-            final String expected = generateModifiedUTF8String();
+        final String expected = generateModifiedUTF8String();
 
-            output.writeModifiedUTF8String(expected);
-            alignAndFlush();
-            assertEquals(expected, input.readModifiedUTF8String());
+        output.writeModifiedUTF8String(expected);
+        alignAndFlush();
+        assertEquals(expected, input.readModifiedUTF8String());
 
-            output.writeModifiedUTF8String(expected);
-            alignAndFlush();
-            assertEquals(expected, dis.readUTF());
+        output.writeModifiedUTF8String(expected);
+        alignAndFlush();
+        assertEquals(expected, dis.readUTF());
 
-            dos.writeUTF(expected);
-            alignAndFlush();
-            assertEquals(expected, input.readModifiedUTF8String());
-        }
+        dos.writeUTF(expected);
+        alignAndFlush();
+        assertEquals(expected, input.readModifiedUTF8String());
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     @org.junit.Test
+>>>>>>> .r3047
     public void testUSASCIIBytes() throws IOException {
 
-        for (int i = 0; i < COUNT; i++) {
-            byte[] expected = generateUSASCIIBytes();
+        byte[] expected = generateUSASCIIBytes();
 
-            output.writeUSASCIIBytes(expected);
-            alignAndFlush();
+        output.writeUSASCIIBytes(expected);
+        alignAndFlush();
 
-            assertArrayEquals(expected, input.readUSASCIIBytes());
-            input.align();
-        }
+        assertEquals(expected, input.readUSASCIIBytes());
+        input.align();
     }
 
 
+<<<<<<< .mine
+    @Test(invocationCount = 1024)
+=======
     @org.junit.Test
+>>>>>>> .r3047
     public void testUSASCIIString() throws IOException {
 
-        for (int i = 0; i < COUNT; i++) {
+        final String expected = generateUSASCIIString();
 
-            final String expected = generateUSASCIIString();
+        output.writeUSASCIIString(expected);
+        alignAndFlush();
 
-            output.writeUSASCIIString(expected);
-            alignAndFlush();
-
-            assertEquals(expected, input.readUSASCIIString());
-            input.align();
-        }
+        assertEquals(expected, input.readUSASCIIString());
+        input.align();
     }
 }

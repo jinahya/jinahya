@@ -24,13 +24,12 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Random;
 
-import org.junit.AfterClass;
-//import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-//import org.junit.Test;
-
 import jinahya.util.ModifiedUTF8;
+import jinahya.util.ModifiedUTF8.Acceptor;
+
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
 
 /**
@@ -39,7 +38,7 @@ import jinahya.util.ModifiedUTF8;
  */
 public abstract class AbstractTest {
 
-    protected static final int COUNT = 1024;
+    //protected static final int COUNT = 1024;
 
     //protected static final int COUNT = 1;
 
@@ -72,7 +71,7 @@ public abstract class AbstractTest {
     }
 
 
-    @Before
+    @BeforeMethod
     @org.testng.annotations.BeforeMethod
     public void alignBitIOBeforeTest() throws IOException {
         //System.out.println("output aligned with " + output.align() + " bits");
@@ -138,7 +137,19 @@ public abstract class AbstractTest {
 
 
     protected final String generateModifiedUTF8String() throws IOException {
-        return ModifiedUTF8.generateString(RANDOM.nextInt(1024));
+        return ModifiedUTF8.generateString(
+            RANDOM.nextInt(1024), new Acceptor() {
+
+            @Override
+            public boolean accept(char c) {
+                return !Character.isISOControl(c);
+            }
+
+            @Override
+            public char generate() {
+                return 126;
+            }
+        });
     }
 
 

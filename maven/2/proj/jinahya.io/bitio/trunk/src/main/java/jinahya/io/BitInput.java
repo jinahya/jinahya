@@ -513,7 +513,7 @@ public class BitInput {
     public final String readModifiedUTF8String() throws IOException {
         final byte[] encoded = new byte[readUnsignedShort(16)];
         readBytes(encoded);
-        return new String(ModifiedUTF8.decode(encoded));
+        return new String(ModifiedUTF8.decodeRaw(encoded));
     }
 
 
