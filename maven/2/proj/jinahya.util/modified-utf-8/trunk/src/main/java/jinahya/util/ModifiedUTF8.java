@@ -28,11 +28,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.UTFDataFormatException;
 import java.io.Writer;
+import java.io.UTFDataFormatException;
 
 
 /**
@@ -43,104 +40,269 @@ public final class ModifiedUTF8 {
 
 
     /**
-     * Generates a string encoded in Modified UTF-8.
+     * Generates a string encoded in Modifed UTF-8. The byte length is going to
+     * be randomly choosen between 0(inclusive) and 65536(exclusive).
      *
-     * @param length the maximum length in bytes between 0 (inclusive) and 65536
-     *        (exclusive)
-     * @return a generated string
+     * @param acceptor a character acceptor.
+     * @return a randomly generated string.
      * @throws IOException if an I/O error occurs.
+     * @see #generateString(int, jinahya.util.ModifiedUTF8.Acceptor)
      */
-    public static String generateString(final int length) throws IOException {
-        final CharArrayWriter caw = new CharArrayWriter();
-        try {
-            generateString(length, caw);
-            caw.flush();
-            return caw.toString();
-        } finally {
-            caw.close();
-        }
+    public static String generateString(final Acceptor acceptor)
+        throws IOException {
+
+        return generateString((int) (Math.random() * 65536.0d), acceptor);
     }
 
 
     /**
      * Generates a string encoded in Modified UTF-8.
      *
+     * @param length the maximum length in bytes between 0(inclusive) and 65536
+     *        (exclusive)
+     * @param acceptor a character acceptor
+     * @return a generated string
+     * @throws IOException if an I/O error occurs.
+     */
+    public static String generateString(final int length,
+                                        final Acceptor acceptor)
+        throws IOException {
+
+        final CharArrayWriter target = new CharArrayWriter();
+        generateString(length, acceptor, target);
+        target.flush();
+        return target.toString();
+
+    }
+
+
+    /**
+     * Generates a string encoded in Modified UTF-8 and writes to specifed
+     * <code>target</code>.
+     *
      * @param length the maximum number of bytes between 0 (inclusive) and 65536
      *        (exclusive)
+     * @param acceptor character acceptor
      * @param target a writer to which generated character sequence is write
      * @throws IOException if an I/O error occurs.
      */
-    public static void generateString(final int length, final Writer target)
+    public static void generateString(final int length, final Acceptor acceptor,
+                                      final Writer target)
         throws IOException {
 
-        int _length = Math.max(0, length);
-        _length = Math.min(_length, 65535);
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
 
-        int first;
-        int second;
-        int third;
+        if (length > 65535) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > 65535");
+        }
 
-        int count = 0;
-        while (count < _length - 2) {
-            first = (int) (Math.random() * 256);
+        if (acceptor == null) {
+            throw new NullPointerException("acceptor");
+        }
 
-            switch ((first >> 4)) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    /* 0xxx xxxx */
-                    char ch1 = (char) first;
-                    if (Character.isISOControl(ch1)) {
-                        break;
-                    }
-                    target.write(ch1);
-                    count++;
+        if (target == null) {
+            throw new NullPointerException("target");
+        }
+
+        int byteCount = 0;
+        final int[] bytes = new int[3];
+
+        char ch;
+
+        int totalByteCount = 0;
+        while (totalByteCount < length - 2) {
+
+            while (true) {
+                bytes[0] = (int) (Math.random() * 256);
+
+                final int shifted = bytes[0] >> 4;
+
+                if (shifted <= 7) { // 0xxx xxxx
+                    byteCount = 1;
                     break;
 
-                case 12:
-                case 13:
-                    /* 110x xxxx */
-                    second = ((int) (Math.random() * 64)) + 128;
-                    char ch2 = (char) (((first & 0x1F) << 6)
-                        | (second & 0x3F));
-                    if (Character.isISOControl(ch2)) {
-                        break;
-                    }
-                    target.write(ch2);
-                    count += 2;
+                } else if (shifted <= 11) { // 10xx xxxx
+                    continue;
+
+                } else if (shifted <= 13) { // 110x xxxx
+                    bytes[1] = (byte) ((Math.random() * 64) + 128);
+                    byteCount = 2;
                     break;
 
-                case 14:
-                    /* 1110 xxxx */
-                    second = ((int) (Math.random() * 64)) + 128;
-                    third = ((int) (Math.random() * 64)) + 128;
-                    char ch3 = (char) (((first & 0x0F) << 12)
-                        | ((second & 0x3F) << 6)
-                        | (third & 0x3F));
-                    if (Character.isISOControl(ch3)) {
-                        break;
-                    }
-                    target.write(ch3);
-                    count += 3;
+                } else if (shifted <= 14) { // 1110 xxxx
+                    bytes[1] = (byte) ((Math.random() * 64) + 128);
+                    bytes[2] = (byte) ((Math.random() * 64) + 128);
+                    byteCount = 3;
                     break;
 
-                default:
-                    /* 10xx xxxx, 1111 xxxx */
-                    break;
+                } else { // shifted = 15 // 1111 xxxx
+                    continue;
+                }
+            }
+
+            ch = toChar(bytes, byteCount);
+
+            if (acceptor.accept(ch)) {
+                target.write(ch);
+                totalByteCount += byteCount;
             }
         }
 
-        // zero padding
-        while (count < _length) {
-            target.write(0);
-            count++;
+        // padding
+        while (totalByteCount < length) {
+            target.write(acceptor.generate()); // '~'
+            totalByteCount++;
         }
     }
+
+
+    /**
+     * The interface for the character accepting function.
+     */
+    public static interface Acceptor {
+
+        /**
+         * Check whether the specified <code>ch</code> is acceptable or not.
+         *
+         * @param c the char to be checked.
+         * @return true if given <code>ch</code> is acceptable, false otherwise.
+         */
+        boolean accept(char c);
+
+
+        /**
+         * Generatea a character for padding.
+         *
+         * @return any char acceptable to this acceptor.
+         */
+        char generate();
+    }
+
+
+    /*
+    private static char generateAChar(final Acceptor acceptor) {
+
+        final int[] bytes = new int[3];
+        int count;
+        char ch;
+
+        do {
+            count = generateBytesForAChar(bytes);
+            ch = toChar(count, bytes);
+        } while (!acceptor.accept(ch));
+
+        return ch;
+    }
+     */
+
+
+    /**
+     * Convert given <code>ch</code> into a byte sequence.
+     *
+     * @param ch char to be converted.
+     * @param bytes byte array into which each bytes are write
+     * @return the number of valid octets in <code>bytes</code>
+     * @throws UTFDataFormatException if any illegal bytes detected.
+     * @see java.io.DataOutput#writeUTF(java.lang.String);
+     */
+    private static int toBytes(final char ch, final int[] bytes)
+        throws UTFDataFormatException {
+
+        if (bytes == null) {
+            throw new NullPointerException("bytes");
+        }
+
+        if (bytes.length != 3) {
+            throw new IllegalArgumentException(
+                "bytes.length(" + bytes.length + ") != 3");
+        }
+
+        if (ch >= '\u0001' && ch <= '\u007F') {
+            bytes[0] = ch;
+            return 1;
+
+        } else if (ch == '\u0000' || ch <= '\u07FF') {
+            bytes[0] = (0xC0 | (0x1F & (ch >> 6)));
+            bytes[1] = (0x80 | (0x3F & ch));
+            return 2;
+
+        } else { // if (c <= '\uFFFF') {
+            bytes[0] = (0xE0 | (0x0F & (ch >> 12)));
+            bytes[1] = (0x80 | (0x3F & (ch >> 6)));
+            bytes[2] = (0x80 | (0x3F & ch));
+            return 3;
+        }
+    }
+
+
+    /**
+     * Compose a character with first <code>count</code> bytes in
+     * <code>bytes</code>.
+     *
+     * @param bytes a 3 byte long array
+     * @param count number of valid bytes in <code>word</code>.
+     * @return a character.
+     * @see java.io.DataInput#readUTF()
+     */
+    private static char toChar(final int[] bytes, final int count) {
+        if (count == 1) {
+            return (char) bytes[0];
+        } else if (count == 2) {
+            return (char) (((bytes[0] & 0x1F) << 6) | (bytes[1] & 0x3F));
+        } else { // count = 3
+            return (char) (((bytes[0] & 0x0F) << 12) | ((bytes[1] & 0x3F) << 6)
+                           | (bytes[2] & 0x3F));
+        }
+    }
+
+
+
+    /*
+     * Generates a sequence of bytes for a single character.
+     *
+     * @param bytes a 3 length int array for generated bytes.
+     * @return the number of valid bytes in given <code>bytes</code>.
+    private static int generateBytesForAChar(final int[] bytes) {
+
+        if (bytes == null) {
+            throw new NullPointerException("bytes");
+        }
+
+        if (bytes.length != 3) {
+            throw new IllegalArgumentException(
+                "bytes.length(" + bytes.length + ") != 3");
+        }
+
+        while (true) {
+
+            bytes[0] = (int) (Math.random() * 256);
+
+            final int shifted = bytes[0] >> 4;
+
+            if (shifted <= 7) { // 0xxx xxxx
+                return 1;
+
+            } else if (shifted <= 11) { // 10xx xxxx
+                continue;
+
+            } else if (shifted <= 13) { // 110x xxxx
+                bytes[1] = (byte) ((Math.random() * 64) + 128);
+                return 2;
+
+            } else if (shifted <= 14) { // 1110 xxxx
+                bytes[1] = (byte) ((Math.random() * 64) + 128);
+                bytes[2] = (byte) ((Math.random() * 64) + 128);
+                return 3;
+
+            } else { // shifted = 15 // 1111 xxxx
+                continue;
+            }
+        }
+    }
+     */
 
 
     /**
@@ -149,6 +311,7 @@ public final class ModifiedUTF8 {
      * @param in input stream
      * @return decoded string
      * @throws IOException if an I/O error occur.
+     * @see java.io.DataInput#readUTF()
      */
     public static String readString(final InputStream in) throws IOException {
 
@@ -168,7 +331,7 @@ public final class ModifiedUTF8 {
             offset += read;
         }
 
-        return new String(decode(encoded));
+        return new String(decodeRaw(encoded));
     }
 
 
@@ -178,17 +341,138 @@ public final class ModifiedUTF8 {
      * @param s string
      * @param out outputs stream
      * @throws IOException if an I/O error occurs.
+     * @see java.io.DataOutput#writeUTF(java.lang.String)
      */
     public static void writeString(final String s, final OutputStream out)
         throws IOException {
 
-        final byte[] encoded = encode(s.toCharArray());
+        final byte[] encoded = encodeRaw(s.toCharArray());
 
+        // write UTF length
         out.write(encoded.length >> 8);
-        out.write(encoded.length & 0xFF);
+        out.write(encoded.length);
 
         out.write(encoded);
     }
+
+
+    /*
+     * Decodes from a sequence of bytes into a sequence of characters.
+     * First 2 bytes are read for <i>UTF length</i>.
+     *
+     * @param input byte input.
+     * @param output char output.
+     * @return the number of decoded characters.
+     * @throws IOException if an I/O error occurs.
+     * @see java.io.DataInput#readUTF()
+     * @see java.io.DataOutput#writeUTF(java.lang.String)
+    private static int decode(final InputStream input, final Writer output)
+        throws IOException {
+
+        final int length = (input.read() << 8) | input.read();
+        return decode(length, input, output);
+    }
+     */
+
+
+    /*
+     * Decodes from a sequence of bytes into a sequence of characters.
+     *
+     * @param length the number of bytes to read; <i>UTF length</i>.
+     * @param input byte input
+     * @param output char output
+     * @return the number of decoded characters
+     * @throws IOException if an I/O error occurs
+    private static int decode(final int length, final InputStream input,
+                              final Writer output)
+        throws IOException {
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
+        if (length > 65535) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > 65535");
+        }
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("output");
+        }
+
+
+        final int[] bytes = new int[3];
+
+        int charCount = 0;
+
+        for (int byteCount = 0; byteCount < length;) {
+
+            if ((bytes[0] = input.read()) == -1) {
+                throw new EOFException("EOF at byte count(" + byteCount + ")");
+            }
+
+            final int shifted = bytes[0] >> 4;
+            if (shifted <= 7) { // 0xxx xxxx
+                output.write(toChar(bytes, 1));
+                charCount++;
+
+            } else if (shifted <= 11) { // 10xx xxxx
+                throw new UTFDataFormatException(
+                    "illegal byte a: " + Integer.toBinaryString(bytes[0]));
+
+            } else if (shifted <= 13) { // 110x xxxx
+                if ((bytes[1] = input.read()) == -1) {
+                    throw new EOFException(
+                        "EOF at byte count(" + byteCount + ")");
+                }
+                if ((bytes[1] >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte b: " + Integer.toBinaryString(bytes[1]));
+                }
+                byteCount++;
+                output.write(toChar(bytes, 2));
+                charCount++;
+
+            } else if (shifted <= 14) { // 1110 xxxx
+                if ((bytes[1] = input.read()) == -1) {
+                    throw new EOFException(
+                        "EOF at byte count(" + byteCount + ")");
+                }
+                if ((bytes[1] >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte b: " + Integer.toBinaryString(bytes[1]));
+                }
+                byteCount++;
+
+                if ((bytes[2] = input.read()) == -1) {
+                    throw new EOFException(
+                        "EOF at byte count(" + byteCount + ")");
+                }
+                if ((bytes[2] >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte c: " + Integer.toBinaryString(bytes[2]));
+                }
+                byteCount++;
+
+                output.write(toChar(bytes, 3));
+                charCount++;
+
+            } else { // shifted = 15 // 1111 xxxx
+                throw new UTFDataFormatException(
+                    "illegal byte a:" + Integer.toBinaryString(bytes[0]));
+            }
+
+            byteCount++; // byteCount increment for byte a
+
+        }
+
+        return charCount;
+    }
+    */
 
 
     /**
@@ -198,99 +482,88 @@ public final class ModifiedUTF8 {
      * @return decoded char array
      * @throws IOException if an I/O error occurs
      */
-    public static char[] decode(final byte[] encoded) throws IOException {
+    public static char[] decodeRaw(final byte[] encoded) throws IOException {
 
-        final CharArrayWriter caw = new CharArrayWriter();
-        try {
-            int byte1;
-            int byte2;
-            int byte3;
-            for (int i = 0; i < encoded.length;) {
-                byte1 = encoded[i++] & 0xFF;
-                switch ((byte1 >> 4)) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                        /* 0xxx xxxx */
-
-                        caw.write(byte1);
-
-                        break;
-
-                    case 12:
-                    case 13:
-                        /* 110x xxxx */
-
-                        try {
-                            byte2 = encoded[i++] & 0xFF;
-                        } catch (ArrayIndexOutOfBoundsException aioobe) {
-                            throw new EOFException("EOF at " + i);
-                        }
-                        if (byte2 >> 6 != 0x02) { // !(10xx xxxx)
-                            throw new UTFDataFormatException(
-                                "illegal byte2 byte("
-                                + Integer.toBinaryString(byte2) + ")");
-                        }
-
-                        char ch2 = (char) (((byte1 & 0x1F) << 6) | (byte2 & 0x3F));
-                        caw.write(ch2);
-
-                        break;
-
-                    case 14:
-                        /* 1110 xxxx */
-
-                        try {
-                            byte2 = encoded[i++] & 0xFF;
-                        } catch (ArrayIndexOutOfBoundsException aioobe) {
-                            throw new EOFException("EOF at " + i);
-                        }
-                        if (byte2 >> 6 != 0x02) { // !(10xx xxxx)
-                            throw new UTFDataFormatException(
-                                "illegal byte2(" + Integer.toBinaryString(byte2)
-                                + ")");
-                        }
-
-                        try {
-                            byte3 = encoded[i++] & 0xFF;
-                        } catch (ArrayIndexOutOfBoundsException aioobe) {
-                            throw new EOFException("EOF at " + i);
-                        }
-                        if (byte3 >> 6 != 0x02) { // !(10xx xxxx)
-                            throw new UTFDataFormatException(
-                                "illegal byte3(" + Integer.toBinaryString(byte3)
-                                + ")");
-                        }
-
-                        char ch3 = (char) (((byte1 & 0x0F) << 12)
-                                           | ((byte2 & 0x3F) << 6)
-                                           | (byte3 & 0x3F));
-                        caw.write(ch3);
-                        break;
-
-                    default:
-                        /* 10xx xxxx, 1111 xxxx */
-                        throw new UTFDataFormatException(
-                            "illegal byte1(" + Integer.toBinaryString(byte1)
-                            + ")");
-                }
-            }
-
-            caw.flush();
-            return caw.toCharArray();
-
-        } finally {
-            caw.close();
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
         }
+
+        if (encoded.length > 65535) {
+            throw new IllegalArgumentException(
+                "encoded.length(" + encoded.length + ") > 65535");
+        }
+
+        //final InputStream input = new ByteArrayInputStream(encoded);
+        final CharArrayWriter output = new CharArrayWriter();
+
+        byte bytea;
+        byte byteb;
+        byte bytec;
+
+        for (int index = 0; index < encoded.length;) {
+
+            bytea = encoded[index++];
+
+            final int shifted = (bytea & 0xFF) >> 4;
+            if (shifted <= 7) { // 0xxx xxxx
+                output.write((byte) bytea);
+
+            } else if (shifted <= 11) { // 10xx xxxx
+                throw new UTFDataFormatException(
+                    "illegal byte a: " + Integer.toBinaryString(bytea));
+
+            } else if (shifted <= 13) { // 110x xxxx
+                try {
+                    byteb = encoded[index++];
+                } catch (ArrayIndexOutOfBoundsException aioobe) {
+                    throw new EOFException(
+                        "EOF at byte index(" + index + ")");
+                }
+                if (((byteb & 0xFF) >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte b: " + Integer.toBinaryString(byteb));
+                }
+                output.write((char) (((bytea & 0x1F) << 6) | (byteb & 0x3F)));
+
+            } else if (shifted <= 14) { // 1110 xxxx
+
+                try {
+                    byteb = encoded[index++];
+                } catch (ArrayIndexOutOfBoundsException aioobe) {
+                    throw new EOFException(
+                        "EOF at byte index(" + index + ")");
+                }
+                if (((byteb & 0xFF) >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte b: " + Integer.toBinaryString(byteb));
+                }
+
+                try {
+                    bytec = encoded[index++];
+                } catch (ArrayIndexOutOfBoundsException aioobe) {
+                    throw new EOFException(
+                        "EOF at byte index(" + index + ")");
+                }
+                if (((bytec & 0xFF) >> 6) != 2) { // NOT 10xx xxxx
+                    throw new UTFDataFormatException(
+                        "illegal byte b: " + Integer.toBinaryString(byteb));
+                }
+                output.write((char) (((bytea & 0x0F) << 12)
+                                     | ((byteb & 0x3F) << 6)
+                                     | (bytec & 0x3F)));
+
+            } else { // shifted = 15 // 1111 xxxx
+                throw new UTFDataFormatException(
+                    "illegal byte a:" + Integer.toBinaryString(bytea));
+            }
+        }
+
+        //decode(encoded.length, input, output);
+
+        output.flush();
+
+        return output.toCharArray();
     }
-
-
-
 
 
     /**
@@ -301,33 +574,40 @@ public final class ModifiedUTF8 {
      * @return encoded byte array
      * @throws IOException if an I/O error occurs.
      */
-    public static byte[] encode(final char[] decoded) throws IOException {
+    public static byte[] encodeRaw(final char[] decoded) throws IOException {
+
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
+        }
+
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            for (int i = 0; i < decoded.length; i++) {
-                char c = decoded[i];
-                if (c >= '\u0001' && c <= '\u007F') {
-                    baos.write(c);
-                } else if (c == '\u0000' || c <= '\u07FF') {
-                    baos.write(0xC0 | (0x1F & (c >> 6)));
-                    baos.write(0x80 | (0x3F & c));
-                } else { // if (c <= '\uFFFF') {
-                    baos.write(0xE0 | (0x0F & (c >> 12)));
-                    baos.write(0x80 | (0x3F & (c >> 6)));
-                    baos.write(0x80 | (0x3F & c));
-                }
-                if (baos.size() > 65535) {
-                    throw new UTFDataFormatException(
-                        "length(" + baos.size() + ") > 65535");
-                }
+
+        int byteCount;
+        final int[] bytes = new int[3];
+
+        for (int i = 0; i < decoded.length; i++) {
+
+            byteCount = toBytes(decoded[i], bytes);
+            for (int j = 0; j < byteCount; j++) {
+                baos.write(bytes[j]);
             }
 
-            baos.flush();
-            return baos.toByteArray();
-        } finally {
-            baos.close();
+            if (baos.size() > 65535) {
+                throw new UTFDataFormatException(
+                    "length(" + baos.size() + ") > 65535");
+            }
         }
+
+        baos.flush();
+
+        return baos.toByteArray();
     }
 
 
+    /**
+     *
+     */
+    private ModifiedUTF8() {
+        super();
+    }
 }

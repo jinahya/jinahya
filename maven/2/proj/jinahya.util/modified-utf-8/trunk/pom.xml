@@ -8,12 +8,19 @@
   <groupId>jinahya.util</groupId>
   <artifactId>modified-utf-8</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <dependencies>
-    <dependency>
+    <!--dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency-->
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <classifier>jdk15</classifier>
+      <version>5.9</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
