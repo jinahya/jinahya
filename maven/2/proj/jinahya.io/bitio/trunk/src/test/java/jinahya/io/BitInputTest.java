@@ -13,13 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.io;
 
 
 import java.io.IOException;
-
-import org.junit.Test;
 
 
 /**
@@ -29,25 +26,29 @@ import org.junit.Test;
 public class BitInputTest extends AbstractTest {
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadUnsignedIntIllegalLength() throws IOException {
         input.readUnsignedInt(invalidLengthForUnsignedInt());
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadIntWithIllegalLength() throws IOException {
         input.readInt(invalidLengthForInt());
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadUnsignedLongWithIllegalLength() throws IOException {
         input.readUnsignedLong(invalidLengthForUnsignedLong());
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadLongWithIllegalLength() throws IOException {
         input.readLong(invalidLengthForLong());
     }

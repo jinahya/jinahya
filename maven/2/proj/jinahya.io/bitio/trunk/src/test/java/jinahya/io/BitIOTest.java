@@ -20,9 +20,6 @@ package jinahya.io;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-import org.junit.Test;
-
-import jinahya.util.ModifiedUTF8;
 
 
 /**
@@ -33,25 +30,29 @@ public class BitIOTest extends AbstractTest {
 
 
     //@org.junit.Ignore
-    @Test
+    @org.junit.Test
     public void testBoolean() throws IOException {
         for (int i = 0; i < COUNT; i++) {
-            final boolean expected = RANDOM.nextBoolean();
-            //System.out.println("boolean.expected: " + expected);
-
-            output.writeBoolean(expected);
-            //System.out.println("output.count: " + output.getCount());
-
-            alignAndFlush();
-
-            assertEquals(expected, input.readBoolean());
-            input.align();
+            _testBoolean();
         }
     }
 
 
+    @org.testng.annotations.Test(invocationCount = 1024)
+    public void _testBoolean() throws IOException {
+        final boolean expected = RANDOM.nextBoolean();
+
+        output.writeBoolean(expected);
+
+        alignAndFlush();
+
+        assertEquals(expected, input.readBoolean());
+        input.align();
+    }
+
+
     //@org.junit.Ignore
-    @Test
+    @org.junit.Test
     public void testBytes() throws IOException {
 
         final byte[] expected = new byte[RANDOM.nextInt(65536)];
@@ -75,7 +76,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-    @Test
+    @org.junit.Test
     public void testFloat() throws IOException {
         for (int i = 0; i < COUNT; i++) {
             final float expected = RANDOM.nextFloat();
@@ -92,7 +93,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-    @Test
+    @org.junit.Test
     public void testDouble() throws IOException {
         for (int i = 0; i < COUNT; i++) {
             final double expected = RANDOM.nextDouble();
@@ -110,7 +111,7 @@ public class BitIOTest extends AbstractTest {
 
 
     //@org.junit.Ignore
-    @Test
+    @org.junit.Test
     public void testInt() throws IOException {
 
         for (int i = 0; i < COUNT; i++) {
@@ -163,7 +164,7 @@ public class BitIOTest extends AbstractTest {
 
 
     //@org.junit.Ignore
-    @Test
+    @org.junit.Test
     public void testLong() throws IOException {
 
         for (int i = 0; i < COUNT; i++) {
@@ -211,7 +212,7 @@ public class BitIOTest extends AbstractTest {
 
 
     //@org.junit.Ignore
-    @Test
+    @org.junit.Test
     public void testModifiedUTF8String() throws IOException {
         for (int i = 0; i < COUNT; i++) {
             final String expected = generateModifiedUTF8String();
@@ -231,7 +232,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-    @Test
+    @org.junit.Test
     public void testUSASCIIBytes() throws IOException {
 
         for (int i = 0; i < COUNT; i++) {
@@ -246,7 +247,7 @@ public class BitIOTest extends AbstractTest {
     }
 
 
-    @Test
+    @org.junit.Test
     public void testUSASCIIString() throws IOException {
 
         for (int i = 0; i < COUNT; i++) {

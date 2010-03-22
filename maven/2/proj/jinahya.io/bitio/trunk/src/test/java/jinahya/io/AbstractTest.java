@@ -57,6 +57,7 @@ public abstract class AbstractTest {
 
 
     @BeforeClass
+    @org.testng.annotations.BeforeClass
     public static void openStreamsBeforeClass() throws IOException {
 
         pis = new PipedInputStream(1048576);
@@ -72,6 +73,7 @@ public abstract class AbstractTest {
 
 
     @Before
+    @org.testng.annotations.BeforeMethod
     public void alignBitIOBeforeTest() throws IOException {
         //System.out.println("output aligned with " + output.align() + " bits");
         //System.out.println("input aligned with " + input.align() + " bits");
@@ -90,6 +92,7 @@ public abstract class AbstractTest {
 
 
     @AfterClass
+    @org.testng.annotations.AfterClass
     public static void closeStreamsAfterClass() throws IOException {
         pis.close();
         dis.close();

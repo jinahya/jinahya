@@ -19,8 +19,6 @@ package jinahya.io;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
 
 /**
  *
@@ -29,49 +27,57 @@ import org.junit.Test;
 public class BitOutputTest extends AbstractTest {
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteUnsignedIntIllegalLength() throws IOException {
         output.writeUnsignedInt(invalidLengthForUnsignedInt(), 0x00);
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = java.lang.IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteIntWithIllegalLength() throws IOException {
         output.writeInt(super.invalidLengthForInt(), 0x00);
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = java.lang.IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteUnsignedLongWithIllegalLength() throws IOException {
         output.writeUnsignedLong(invalidLengthForUnsignedLong(), 0x00);
     }
 
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
+    @org.junit.Test(expected = java.lang.IllegalArgumentException.class)
+    @org.testng.annotations.Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteLongWithIllegalLength() throws IOException {
         output.writeLong(invalidLengthForLong(), 0x00);
     }
 
 
-    @Test(expected = java.lang.NullPointerException.class)
+    @org.junit.Test(expected = java.lang.NullPointerException.class)
+    @org.testng.annotations.Test(expectedExceptions = {NullPointerException.class})
     public void testWriteBytesWithNullValue() throws IOException {
         output.writeBytes(null);
     }
 
 
-    @Test(expected = java.lang.NullPointerException.class)
+    @org.junit.Test(expected = java.lang.NullPointerException.class)
+    @org.testng.annotations.Test(expectedExceptions = {NullPointerException.class})
     public void testWriteModifedUTF8StringWithNullValue() throws IOException {
         output.writeModifiedUTF8String(null);
     }
 
 
-    @Test(expected = java.lang.NullPointerException.class)
+    @org.junit.Test(expected = java.lang.NullPointerException.class)
+    @org.testng.annotations.Test(expectedExceptions = {NullPointerException.class})
     public void testWriteUSASCIIBytesWithNullValue() throws IOException {
         output.writeUSASCIIBytes(null);
     }
 
 
-    @Test(expected = java.lang.NullPointerException.class)
+    @org.junit.Test(expected = java.lang.NullPointerException.class)
+    @org.testng.annotations.Test(expectedExceptions = {NullPointerException.class})
     public void testWriteUSASCIIStringWithNullValue() throws IOException {
         output.writeUSASCIIString(null);
     }
