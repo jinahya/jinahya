@@ -113,9 +113,9 @@
 <a name="103" href="#103">103</a> 
 <a name="104" href="#104">104</a> 
 <a name="105" href="#105">105</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="106" href="#106">106</a> <em class="jxr_javadoccomment">     * Same as &lt;code&gt;writeBytes(value, 0, value.length)&lt;/code&gt;.</em>
+<a name="106" href="#106">106</a> <em class="jxr_javadoccomment">     * See {@link java.io.DataInput#readFully(byte[])}.</em>
 <a name="107" href="#107">107</a> <em class="jxr_javadoccomment">     *</em>
-<a name="108" href="#108">108</a> <em class="jxr_javadoccomment">     * @param value byte array to which octets are stored</em>
+<a name="108" href="#108">108</a> <em class="jxr_javadoccomment">     * @param value the buffer into which data is read.</em>
 <a name="109" href="#109">109</a> <em class="jxr_javadoccomment">     * @throws IOException if an I/O error occurs.</em>
 <a name="110" href="#110">110</a> <em class="jxr_javadoccomment">     * @see #readBytes(byte[], int, int)</em>
 <a name="111" href="#111">111</a> <em class="jxr_javadoccomment">     */</em>
@@ -125,11 +125,11 @@
 <a name="115" href="#115">115</a> 
 <a name="116" href="#116">116</a> 
 <a name="117" href="#117">117</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="118" href="#118">118</a> <em class="jxr_javadoccomment">     * See comemnts from {@link java.io.DataInput#readFully(byte[], int, int)}.</em>
+<a name="118" href="#118">118</a> <em class="jxr_javadoccomment">     * See {@link java.io.DataInput#readFully(byte[], int, int)}.</em>
 <a name="119" href="#119">119</a> <em class="jxr_javadoccomment">     *</em>
-<a name="120" href="#120">120</a> <em class="jxr_javadoccomment">     * @param value byte array to which octets are stored</em>
-<a name="121" href="#121">121</a> <em class="jxr_javadoccomment">     * @param offset the offset to start</em>
-<a name="122" href="#122">122</a> <em class="jxr_javadoccomment">     * @param length the number of octets to read.</em>
+<a name="120" href="#120">120</a> <em class="jxr_javadoccomment">     * @param value the buffet into which data is read.</em>
+<a name="121" href="#121">121</a> <em class="jxr_javadoccomment">     * @param offset in int specifying the offset into the data.</em>
+<a name="122" href="#122">122</a> <em class="jxr_javadoccomment">     * @param length an int specifying the number of bytes to read.</em>
 <a name="123" href="#123">123</a> <em class="jxr_javadoccomment">     * @throws IOException if an I/O error occurs.</em>
 <a name="124" href="#124">124</a> <em class="jxr_javadoccomment">     * @see java.io.DataInput#readFully(byte[], int, int)</em>
 <a name="125" href="#125">125</a> <em class="jxr_javadoccomment">     */</em>
@@ -514,165 +514,195 @@
 <a name="504" href="#504">504</a> 
 <a name="505" href="#505">505</a> 
 <a name="506" href="#506">506</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="507" href="#507">507</a> <em class="jxr_javadoccomment">     * Reads a string in modifed UTF-8 encoding.</em>
+<a name="507" href="#507">507</a> <em class="jxr_javadoccomment">     * Reads a string in modified UTF-8 encoding.</em>
 <a name="508" href="#508">508</a> <em class="jxr_javadoccomment">     *</em>
 <a name="509" href="#509">509</a> <em class="jxr_javadoccomment">     * @return a string</em>
 <a name="510" href="#510">510</a> <em class="jxr_javadoccomment">     * @throws IOException if an I/O error occurs.</em>
-<a name="511" href="#511">511</a> <em class="jxr_javadoccomment">     */</em>
-<a name="512" href="#512">512</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String readUTF() <strong class="jxr_keyword">throws</strong> IOException {
-<a name="513" href="#513">513</a>         <strong class="jxr_keyword">final</strong> byte[] encoded = <strong class="jxr_keyword">new</strong> byte[readUnsignedShort(16)];
-<a name="514" href="#514">514</a>         readBytes(encoded);
-<a name="515" href="#515">515</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(ModifiedUTF8.decode(encoded));
-<a name="516" href="#516">516</a>     }
-<a name="517" href="#517">517</a> 
+<a name="511" href="#511">511</a> <em class="jxr_javadoccomment">     * @see java.io.DataInput#readUTF()</em>
+<a name="512" href="#512">512</a> <em class="jxr_javadoccomment">     */</em>
+<a name="513" href="#513">513</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String readModifiedUTF8String() <strong class="jxr_keyword">throws</strong> IOException {
+<a name="514" href="#514">514</a>         <strong class="jxr_keyword">final</strong> byte[] encoded = <strong class="jxr_keyword">new</strong> byte[readUnsignedShort(16)];
+<a name="515" href="#515">515</a>         readBytes(encoded);
+<a name="516" href="#516">516</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(ModifiedUTF8.decodeRaw(encoded));
+<a name="517" href="#517">517</a>     }
 <a name="518" href="#518">518</a> 
-<a name="519" href="#519">519</a>     <em class="jxr_comment">/*</em>
-<a name="520" href="#520">520</a> <em class="jxr_comment">     *</em>
-<a name="521" href="#521">521</a> <em class="jxr_comment">     * @param m</em>
-<a name="522" href="#522">522</a> <em class="jxr_comment">     * @param n</em>
-<a name="523" href="#523">523</a> <em class="jxr_comment">     * @return an unsigned fixed point number denoted Q(m, n)</em>
-<a name="524" href="#524">524</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs.</em>
-<a name="525" href="#525">525</a> <em class="jxr_comment">    public float readUnsignedFixedPoint(int m, int n) throws IOException {</em>
-<a name="526" href="#526">526</a> 
-<a name="527" href="#527">527</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
-<a name="528" href="#528">528</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
-<a name="529" href="#529">529</a> <em class="jxr_comment">        }</em>
+<a name="519" href="#519">519</a> 
+<a name="520" href="#520">520</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="521" href="#521">521</a> <em class="jxr_javadoccomment">     * Reads a String encoded in US-ASCII.</em>
+<a name="522" href="#522">522</a> <em class="jxr_javadoccomment">     *</em>
+<a name="523" href="#523">523</a> <em class="jxr_javadoccomment">     * @return a String</em>
+<a name="524" href="#524">524</a> <em class="jxr_javadoccomment">     * @throws IOException if an I/O error occurs.</em>
+<a name="525" href="#525">525</a> <em class="jxr_javadoccomment">     */</em>
+<a name="526" href="#526">526</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String readUSASCIIString() <strong class="jxr_keyword">throws</strong> IOException {
+<a name="527" href="#527">527</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(readUSASCIIBytes(), <span class="jxr_string">"US-ASCII"</span>);
+<a name="528" href="#528">528</a>     }
+<a name="529" href="#529">529</a> 
 <a name="530" href="#530">530</a> 
-<a name="531" href="#531">531</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
-<a name="532" href="#532">532</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
-<a name="533" href="#533">533</a> <em class="jxr_comment">        }</em>
-<a name="534" href="#534">534</a> 
-<a name="535" href="#535">535</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
-<a name="536" href="#536">536</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
-<a name="537" href="#537">537</a> <em class="jxr_comment">        }</em>
+<a name="531" href="#531">531</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="532" href="#532">532</a> <em class="jxr_javadoccomment">     * Reads a sequence of US-ASCII bytes.</em>
+<a name="533" href="#533">533</a> <em class="jxr_javadoccomment">     *</em>
+<a name="534" href="#534">534</a> <em class="jxr_javadoccomment">     * @return an array of bytes</em>
+<a name="535" href="#535">535</a> <em class="jxr_javadoccomment">     * @throws IOException if an I/O error occurs.</em>
+<a name="536" href="#536">536</a> <em class="jxr_javadoccomment">     */</em>
+<a name="537" href="#537">537</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> byte[] readUSASCIIBytes() <strong class="jxr_keyword">throws</strong> IOException {
 <a name="538" href="#538">538</a> 
-<a name="539" href="#539">539</a> <em class="jxr_comment">        if (m + n &gt; 0x20) {</em>
-<a name="540" href="#540">540</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
-<a name="541" href="#541">541</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt; 0x20");</em>
-<a name="542" href="#542">542</a> <em class="jxr_comment">        }</em>
-<a name="543" href="#543">543</a> 
-<a name="544" href="#544">544</a> <em class="jxr_comment">        return readUnsignedInt(m + n) / new Double(Math.pow(2, n)).floatValue();</em>
-<a name="545" href="#545">545</a> <em class="jxr_comment">    }</em>
-<a name="546" href="#546">546</a> <em class="jxr_comment">     */</em>
+<a name="539" href="#539">539</a>         <strong class="jxr_keyword">final</strong> byte[] value = <strong class="jxr_keyword">new</strong> byte[readUnsignedInt(31)];
+<a name="540" href="#540">540</a> 
+<a name="541" href="#541">541</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; value.length; i++) {
+<a name="542" href="#542">542</a>             value[i] = (byte) readUnsignedByte(7);
+<a name="543" href="#543">543</a>         }
+<a name="544" href="#544">544</a> 
+<a name="545" href="#545">545</a>         <strong class="jxr_keyword">return</strong> value;
+<a name="546" href="#546">546</a>     }
 <a name="547" href="#547">547</a> 
 <a name="548" href="#548">548</a> 
 <a name="549" href="#549">549</a>     <em class="jxr_comment">/*</em>
-<a name="550" href="#550">550</a> <em class="jxr_comment">     * Reads a signed fixed-point.</em>
-<a name="551" href="#551">551</a> <em class="jxr_comment">     *</em>
-<a name="552" href="#552">552</a> <em class="jxr_comment">     * @param m integer bit length (excluding the sign bit) (m &gt;= 0)</em>
-<a name="553" href="#553">553</a> <em class="jxr_comment">     * @param n fraction bit length (n &gt;= 0)</em>
-<a name="554" href="#554">554</a> <em class="jxr_comment">     * @return Q(m, n)</em>
-<a name="555" href="#555">555</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs</em>
-<a name="556" href="#556">556</a> <em class="jxr_comment">    public float readFixedPoint(int m, int n) throws IOException {</em>
-<a name="557" href="#557">557</a> 
-<a name="558" href="#558">558</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
-<a name="559" href="#559">559</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
-<a name="560" href="#560">560</a> <em class="jxr_comment">        }</em>
-<a name="561" href="#561">561</a> 
-<a name="562" href="#562">562</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
-<a name="563" href="#563">563</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
-<a name="564" href="#564">564</a> <em class="jxr_comment">        }</em>
-<a name="565" href="#565">565</a> 
-<a name="566" href="#566">566</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
-<a name="567" href="#567">567</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
-<a name="568" href="#568">568</a> <em class="jxr_comment">        }</em>
-<a name="569" href="#569">569</a> 
-<a name="570" href="#570">570</a> <em class="jxr_comment">        if (m + n &gt;= 0x20) {</em>
-<a name="571" href="#571">571</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
-<a name="572" href="#572">572</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt;= 0x20");</em>
-<a name="573" href="#573">573</a> <em class="jxr_comment">        }</em>
-<a name="574" href="#574">574</a> 
-<a name="575" href="#575">575</a> <em class="jxr_comment">        return readInt(1 + m + n) / new Double(Math.pow(2, n)).floatValue();</em>
-<a name="576" href="#576">576</a> <em class="jxr_comment">    }</em>
-<a name="577" href="#577">577</a> <em class="jxr_comment">     */</em>
+<a name="550" href="#550">550</a> <em class="jxr_comment">     *</em>
+<a name="551" href="#551">551</a> <em class="jxr_comment">     * @param m</em>
+<a name="552" href="#552">552</a> <em class="jxr_comment">     * @param n</em>
+<a name="553" href="#553">553</a> <em class="jxr_comment">     * @return an unsigned fixed point number denoted Q(m, n)</em>
+<a name="554" href="#554">554</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs.</em>
+<a name="555" href="#555">555</a> <em class="jxr_comment">    public float readUnsignedFixedPoint(int m, int n) throws IOException {</em>
+<a name="556" href="#556">556</a> 
+<a name="557" href="#557">557</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
+<a name="558" href="#558">558</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
+<a name="559" href="#559">559</a> <em class="jxr_comment">        }</em>
+<a name="560" href="#560">560</a> 
+<a name="561" href="#561">561</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
+<a name="562" href="#562">562</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
+<a name="563" href="#563">563</a> <em class="jxr_comment">        }</em>
+<a name="564" href="#564">564</a> 
+<a name="565" href="#565">565</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
+<a name="566" href="#566">566</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
+<a name="567" href="#567">567</a> <em class="jxr_comment">        }</em>
+<a name="568" href="#568">568</a> 
+<a name="569" href="#569">569</a> <em class="jxr_comment">        if (m + n &gt; 0x20) {</em>
+<a name="570" href="#570">570</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
+<a name="571" href="#571">571</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt; 0x20");</em>
+<a name="572" href="#572">572</a> <em class="jxr_comment">        }</em>
+<a name="573" href="#573">573</a> 
+<a name="574" href="#574">574</a> <em class="jxr_comment">        return readUnsignedInt(m + n) / new Double(Math.pow(2, n)).floatValue();</em>
+<a name="575" href="#575">575</a> <em class="jxr_comment">    }</em>
+<a name="576" href="#576">576</a> <em class="jxr_comment">     */</em>
+<a name="577" href="#577">577</a> 
 <a name="578" href="#578">578</a> 
-<a name="579" href="#579">579</a> 
-<a name="580" href="#580">580</a> 
-<a name="581" href="#581">581</a>     <em class="jxr_comment">/*</em>
-<a name="582" href="#582">582</a> <em class="jxr_comment">    public double readUnsignedLongFixedPoint(int m, int n) throws IOException {</em>
-<a name="583" href="#583">583</a> 
-<a name="584" href="#584">584</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
-<a name="585" href="#585">585</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
-<a name="586" href="#586">586</a> <em class="jxr_comment">        }</em>
+<a name="579" href="#579">579</a>     <em class="jxr_comment">/*</em>
+<a name="580" href="#580">580</a> <em class="jxr_comment">     * Reads a signed fixed-point.</em>
+<a name="581" href="#581">581</a> <em class="jxr_comment">     *</em>
+<a name="582" href="#582">582</a> <em class="jxr_comment">     * @param m integer bit length (excluding the sign bit) (m &gt;= 0)</em>
+<a name="583" href="#583">583</a> <em class="jxr_comment">     * @param n fraction bit length (n &gt;= 0)</em>
+<a name="584" href="#584">584</a> <em class="jxr_comment">     * @return Q(m, n)</em>
+<a name="585" href="#585">585</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs</em>
+<a name="586" href="#586">586</a> <em class="jxr_comment">    public float readFixedPoint(int m, int n) throws IOException {</em>
 <a name="587" href="#587">587</a> 
-<a name="588" href="#588">588</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
-<a name="589" href="#589">589</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
+<a name="588" href="#588">588</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
+<a name="589" href="#589">589</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
 <a name="590" href="#590">590</a> <em class="jxr_comment">        }</em>
 <a name="591" href="#591">591</a> 
-<a name="592" href="#592">592</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
-<a name="593" href="#593">593</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
+<a name="592" href="#592">592</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
+<a name="593" href="#593">593</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
 <a name="594" href="#594">594</a> <em class="jxr_comment">        }</em>
 <a name="595" href="#595">595</a> 
-<a name="596" href="#596">596</a> <em class="jxr_comment">        if (m + n &gt; 0x40) {</em>
-<a name="597" href="#597">597</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
-<a name="598" href="#598">598</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt; 0x40");</em>
-<a name="599" href="#599">599</a> <em class="jxr_comment">        }</em>
-<a name="600" href="#600">600</a> 
-<a name="601" href="#601">601</a> <em class="jxr_comment">        return readUnsignedLong(m + n) / Math.pow(2, n);</em>
-<a name="602" href="#602">602</a> <em class="jxr_comment">    }</em>
-<a name="603" href="#603">603</a> <em class="jxr_comment">     */</em>
+<a name="596" href="#596">596</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
+<a name="597" href="#597">597</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
+<a name="598" href="#598">598</a> <em class="jxr_comment">        }</em>
+<a name="599" href="#599">599</a> 
+<a name="600" href="#600">600</a> <em class="jxr_comment">        if (m + n &gt;= 0x20) {</em>
+<a name="601" href="#601">601</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
+<a name="602" href="#602">602</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt;= 0x20");</em>
+<a name="603" href="#603">603</a> <em class="jxr_comment">        }</em>
 <a name="604" href="#604">604</a> 
-<a name="605" href="#605">605</a> 
-<a name="606" href="#606">606</a>     <em class="jxr_comment">/*</em>
-<a name="607" href="#607">607</a> <em class="jxr_comment">     * Reads a signed fixed-point.</em>
-<a name="608" href="#608">608</a> <em class="jxr_comment">     *</em>
-<a name="609" href="#609">609</a> <em class="jxr_comment">     * @param m integer bit length (excluding the sign bit) (m &gt;= 0)</em>
-<a name="610" href="#610">610</a> <em class="jxr_comment">     * @param n fraction bit length (n &gt;= 0)</em>
-<a name="611" href="#611">611</a> <em class="jxr_comment">     * @return Q(m, n)</em>
-<a name="612" href="#612">612</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs</em>
-<a name="613" href="#613">613</a> <em class="jxr_comment">    public double readLongFixedPoint(int m, int n) throws IOException {</em>
-<a name="614" href="#614">614</a> 
-<a name="615" href="#615">615</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
-<a name="616" href="#616">616</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
-<a name="617" href="#617">617</a> <em class="jxr_comment">        }</em>
-<a name="618" href="#618">618</a> 
-<a name="619" href="#619">619</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
-<a name="620" href="#620">620</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
-<a name="621" href="#621">621</a> <em class="jxr_comment">        }</em>
-<a name="622" href="#622">622</a> 
-<a name="623" href="#623">623</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
-<a name="624" href="#624">624</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
-<a name="625" href="#625">625</a> <em class="jxr_comment">        }</em>
-<a name="626" href="#626">626</a> 
-<a name="627" href="#627">627</a> <em class="jxr_comment">        if (m + n &gt;= 0x40) {</em>
-<a name="628" href="#628">628</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
-<a name="629" href="#629">629</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt;= 0x40");</em>
-<a name="630" href="#630">630</a> <em class="jxr_comment">        }</em>
-<a name="631" href="#631">631</a> 
-<a name="632" href="#632">632</a> <em class="jxr_comment">        return readLong(1 + m + n) / Math.pow(2, n);</em>
-<a name="633" href="#633">633</a> <em class="jxr_comment">    }</em>
-<a name="634" href="#634">634</a> <em class="jxr_comment">     */</em>
+<a name="605" href="#605">605</a> <em class="jxr_comment">        return readInt(1 + m + n) / new Double(Math.pow(2, n)).floatValue();</em>
+<a name="606" href="#606">606</a> <em class="jxr_comment">    }</em>
+<a name="607" href="#607">607</a> <em class="jxr_comment">     */</em>
+<a name="608" href="#608">608</a> 
+<a name="609" href="#609">609</a> 
+<a name="610" href="#610">610</a> 
+<a name="611" href="#611">611</a>     <em class="jxr_comment">/*</em>
+<a name="612" href="#612">612</a> <em class="jxr_comment">    public double readUnsignedLongFixedPoint(int m, int n) throws IOException {</em>
+<a name="613" href="#613">613</a> 
+<a name="614" href="#614">614</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
+<a name="615" href="#615">615</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
+<a name="616" href="#616">616</a> <em class="jxr_comment">        }</em>
+<a name="617" href="#617">617</a> 
+<a name="618" href="#618">618</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
+<a name="619" href="#619">619</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
+<a name="620" href="#620">620</a> <em class="jxr_comment">        }</em>
+<a name="621" href="#621">621</a> 
+<a name="622" href="#622">622</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
+<a name="623" href="#623">623</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
+<a name="624" href="#624">624</a> <em class="jxr_comment">        }</em>
+<a name="625" href="#625">625</a> 
+<a name="626" href="#626">626</a> <em class="jxr_comment">        if (m + n &gt; 0x40) {</em>
+<a name="627" href="#627">627</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
+<a name="628" href="#628">628</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt; 0x40");</em>
+<a name="629" href="#629">629</a> <em class="jxr_comment">        }</em>
+<a name="630" href="#630">630</a> 
+<a name="631" href="#631">631</a> <em class="jxr_comment">        return readUnsignedLong(m + n) / Math.pow(2, n);</em>
+<a name="632" href="#632">632</a> <em class="jxr_comment">    }</em>
+<a name="633" href="#633">633</a> <em class="jxr_comment">     */</em>
+<a name="634" href="#634">634</a> 
 <a name="635" href="#635">635</a> 
-<a name="636" href="#636">636</a> 
-<a name="637" href="#637">637</a>     <em class="jxr_comment">/*</em>
-<a name="638" href="#638">638</a> <em class="jxr_comment">    private float readFraction(int n) throws IOException {</em>
-<a name="639" href="#639">639</a> <em class="jxr_comment">        float value = .0f;</em>
-<a name="640" href="#640">640</a> 
-<a name="641" href="#641">641</a> <em class="jxr_comment">        float fraction = .5f;</em>
-<a name="642" href="#642">642</a> <em class="jxr_comment">        for (int i = 0; i &lt; n; i++) {</em>
-<a name="643" href="#643">643</a> <em class="jxr_comment">            if (readBoolean()) {</em>
-<a name="644" href="#644">644</a> <em class="jxr_comment">                value += fraction;</em>
-<a name="645" href="#645">645</a> <em class="jxr_comment">            }</em>
-<a name="646" href="#646">646</a> <em class="jxr_comment">            fraction /= 2.0f;</em>
+<a name="636" href="#636">636</a>     <em class="jxr_comment">/*</em>
+<a name="637" href="#637">637</a> <em class="jxr_comment">     * Reads a signed fixed-point.</em>
+<a name="638" href="#638">638</a> <em class="jxr_comment">     *</em>
+<a name="639" href="#639">639</a> <em class="jxr_comment">     * @param m integer bit length (excluding the sign bit) (m &gt;= 0)</em>
+<a name="640" href="#640">640</a> <em class="jxr_comment">     * @param n fraction bit length (n &gt;= 0)</em>
+<a name="641" href="#641">641</a> <em class="jxr_comment">     * @return Q(m, n)</em>
+<a name="642" href="#642">642</a> <em class="jxr_comment">     * @throws IOException if an I/O error occurs</em>
+<a name="643" href="#643">643</a> <em class="jxr_comment">    public double readLongFixedPoint(int m, int n) throws IOException {</em>
+<a name="644" href="#644">644</a> 
+<a name="645" href="#645">645</a> <em class="jxr_comment">        if (m &lt; 0) {</em>
+<a name="646" href="#646">646</a> <em class="jxr_comment">            throw new IllegalArgumentException("m(" + m + ") &lt; 0");</em>
 <a name="647" href="#647">647</a> <em class="jxr_comment">        }</em>
 <a name="648" href="#648">648</a> 
-<a name="649" href="#649">649</a> <em class="jxr_comment">        return value;</em>
-<a name="650" href="#650">650</a> <em class="jxr_comment">    }</em>
-<a name="651" href="#651">651</a> <em class="jxr_comment">     */</em>
+<a name="649" href="#649">649</a> <em class="jxr_comment">        if (n &lt; 0) {</em>
+<a name="650" href="#650">650</a> <em class="jxr_comment">            throw new IllegalArgumentException("n(" + n + ") &lt; 0");</em>
+<a name="651" href="#651">651</a> <em class="jxr_comment">        }</em>
 <a name="652" href="#652">652</a> 
-<a name="653" href="#653">653</a> 
-<a name="654" href="#654">654</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the underlying octet input. */</em>
-<a name="655" href="#655">655</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/io/BitInput.html">OctetInput</a> input;
+<a name="653" href="#653">653</a> <em class="jxr_comment">        if (m == 0 &amp;&amp; n == 0) {</em>
+<a name="654" href="#654">654</a> <em class="jxr_comment">            throw new IllegalArgumentException("m == 0 &amp;&amp; n == 0");</em>
+<a name="655" href="#655">655</a> <em class="jxr_comment">        }</em>
 <a name="656" href="#656">656</a> 
-<a name="657" href="#657">657</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the current octet. */</em>
-<a name="658" href="#658">658</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> octet = 0x00;
-<a name="659" href="#659">659</a> 
-<a name="660" href="#660">660</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the number of available bits in current octet. */</em>
-<a name="661" href="#661">661</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> avail = 0x00;
-<a name="662" href="#662">662</a> 
-<a name="663" href="#663">663</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the number of bits consumed so far. */</em>
-<a name="664" href="#664">664</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> count = 0L;
-<a name="665" href="#665">665</a> }
+<a name="657" href="#657">657</a> <em class="jxr_comment">        if (m + n &gt;= 0x40) {</em>
+<a name="658" href="#658">658</a> <em class="jxr_comment">            throw new IllegalArgumentException</em>
+<a name="659" href="#659">659</a> <em class="jxr_comment">                ("m(" + m + ") + n(" + n + ") &gt;= 0x40");</em>
+<a name="660" href="#660">660</a> <em class="jxr_comment">        }</em>
+<a name="661" href="#661">661</a> 
+<a name="662" href="#662">662</a> <em class="jxr_comment">        return readLong(1 + m + n) / Math.pow(2, n);</em>
+<a name="663" href="#663">663</a> <em class="jxr_comment">    }</em>
+<a name="664" href="#664">664</a> <em class="jxr_comment">     */</em>
+<a name="665" href="#665">665</a> 
+<a name="666" href="#666">666</a> 
+<a name="667" href="#667">667</a>     <em class="jxr_comment">/*</em>
+<a name="668" href="#668">668</a> <em class="jxr_comment">    private float readFraction(int n) throws IOException {</em>
+<a name="669" href="#669">669</a> <em class="jxr_comment">        float value = .0f;</em>
+<a name="670" href="#670">670</a> 
+<a name="671" href="#671">671</a> <em class="jxr_comment">        float fraction = .5f;</em>
+<a name="672" href="#672">672</a> <em class="jxr_comment">        for (int i = 0; i &lt; n; i++) {</em>
+<a name="673" href="#673">673</a> <em class="jxr_comment">            if (readBoolean()) {</em>
+<a name="674" href="#674">674</a> <em class="jxr_comment">                value += fraction;</em>
+<a name="675" href="#675">675</a> <em class="jxr_comment">            }</em>
+<a name="676" href="#676">676</a> <em class="jxr_comment">            fraction /= 2.0f;</em>
+<a name="677" href="#677">677</a> <em class="jxr_comment">        }</em>
+<a name="678" href="#678">678</a> 
+<a name="679" href="#679">679</a> <em class="jxr_comment">        return value;</em>
+<a name="680" href="#680">680</a> <em class="jxr_comment">    }</em>
+<a name="681" href="#681">681</a> <em class="jxr_comment">     */</em>
+<a name="682" href="#682">682</a> 
+<a name="683" href="#683">683</a> 
+<a name="684" href="#684">684</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the underlying octet input. */</em>
+<a name="685" href="#685">685</a>     <strong class="jxr_keyword">private</strong> <a href="../../jinahya/io/BitInput.html">OctetInput</a> input;
+<a name="686" href="#686">686</a> 
+<a name="687" href="#687">687</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the current octet. */</em>
+<a name="688" href="#688">688</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> octet = 0x00;
+<a name="689" href="#689">689</a> 
+<a name="690" href="#690">690</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the number of available bits in current octet. */</em>
+<a name="691" href="#691">691</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> avail = 0x00;
+<a name="692" href="#692">692</a> 
+<a name="693" href="#693">693</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> the number of bits consumed so far. */</em>
+<a name="694" href="#694">694</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> count = 0L;
+<a name="695" href="#695">695</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

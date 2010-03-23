@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="28" tokens="115">
+<duplication lines="23" tokens="115">
 <file line="126" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitInput.java"/>
 <file line="124" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitOutput.java"/>
 <codefragment>
@@ -8,11 +8,6 @@
     public final void writeBytes(final byte[] value, final int offset,
                                  final int length)
         throws IOException {
-
-        /*
-        System.out.println(
-            "writeBytes(" + value + ", " + offset + ", " + length + ")");
-         */
 
         if (value == null) {
             throw new NullPointerException("value");
