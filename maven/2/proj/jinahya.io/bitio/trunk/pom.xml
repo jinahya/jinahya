@@ -146,7 +146,7 @@
     <license>
       <name>Apache 2</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>manual</distribution>
+      <distribution>repo</distribution>
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
@@ -179,19 +179,19 @@
     <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.io/bitio/trunk/</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.io/bitio/trunk</url>
   </scm>
   <!--prerequisites/-->
   <!--repositories/-->
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
-      <id>jinahya_googlecode</id>
+      <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>jinahya_googlecode</id>
+      <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
