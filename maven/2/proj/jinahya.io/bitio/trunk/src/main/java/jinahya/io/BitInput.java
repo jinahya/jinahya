@@ -34,6 +34,8 @@ public class BitInput {
 
     /**
      * The interface for octet input.
+     *
+     * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
      */
     public static interface OctetInput {
 
@@ -41,7 +43,8 @@ public class BitInput {
         /**
          * Reads an octet from desired input.
          *
-         * @return octet value 0-255 or -1 if EOF
+         * @return octet value between 0(inclusive) and 255(inclusive) or -1 if
+         *         EOF
          * @throws IOException if an I/O error occurs
          */
         int readOctet() throws IOException;

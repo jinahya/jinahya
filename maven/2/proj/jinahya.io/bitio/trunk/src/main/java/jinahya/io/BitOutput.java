@@ -32,9 +32,9 @@ public class BitOutput {
 
 
     /**
-     * An interface to consume octets from {@link BitOutput}.
+     *
      */
-    public interface OctetOutput {
+    public static interface OctetOutput {
 
 
         /**
