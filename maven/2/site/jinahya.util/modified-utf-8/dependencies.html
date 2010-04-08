@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2010-03-15
+        Last Published: 2010-04-08
                       </div>
             <div class="xright">            <a href="">modified-utf-8</a>
             
@@ -188,18 +188,34 @@
 <table class="bodyTable"><tr class="a"><th>GroupId</th>
 <th>ArtifactId</th>
 <th>Version</th>
+<th>Classifier</th>
 <th>Type</th>
 </tr>
-<tr class="b"><td>junit</td>
-<td><a href="http://junit.org" class="externalLink">junit</a></td>
-<td>4.8.1</td>
+<tr class="b"><td>org.testng</td>
+<td><a href="http://testng.org" class="externalLink">testng</a></td>
+<td>5.9</td>
+<td>jdk15</td>
 <td>jar</td>
 </tr>
 </table>
 </div>
 </div>
 <div class="section"><h2>Project Transitive Dependencies</h2>
-<p>No transitive dependencies are required for this project.</p>
+<p>The following is a list of transitive dependencies for this project. Transitive dependencies are the dependencies of the project dependencies.</p>
+<div class="section"><h3>test</h3>
+<p>The following is a list of test dependencies for this project. These dependencies are only required to compile and run unit tests for the application:</p>
+<table class="bodyTable"><tr class="a"><th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th>
+<th>Type</th>
+</tr>
+<tr class="b"><td>junit</td>
+<td><a href="http://junit.org" class="externalLink">junit</a></td>
+<td>3.8.1</td>
+<td>jar</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="section"><h2>Project Dependency Graph</h2>
 <script language="javascript" type="text/javascript">
@@ -220,7 +236,7 @@
       }
 </script>
 <div class="section"><h3>Dependency Tree</h3>
-<ul><li>jinahya.util:modified-utf-8:jar:1.0 <img id="_1498571129" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_125352450', '_1498571129' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_125352450" style="display:none"><table class="bodyTable"><tr class="a"><th>modified-utf-8</th>
+<ul><li>jinahya.util:modified-utf-8:jar:1.1-SNAPSHOT <img id="_1212700800" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1847603986', '_1212700800' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1847603986" style="display:none"><table class="bodyTable"><tr class="a"><th>modified-utf-8</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>Utility for Modified UTF-8</p>
 <p><b>URL: </b><a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/modified-utf-8/index.html" class="externalLink">http://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/modified-utf-8/index.html</a></p>
@@ -228,7 +244,15 @@
 </td>
 </tr>
 </table>
-</div><ul><li>junit:junit:jar:4.8.1 (test) <img id="_1654798267" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1974865321', '_1654798267' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1974865321" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
+</div><ul><li>org.testng:testng:jar:jdk15:5.9 (test) <img id="_811193194" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_523273888', '_811193194' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_523273888" style="display:none"><table class="bodyTable"><tr class="a"><th>TestNG</th>
+</tr>
+<tr class="b"><td><p><b>Description: </b>TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use.</p>
+<p><b>URL: </b><a href="http://testng.org" class="externalLink">http://testng.org</a></p>
+<p><b>Project License: </b><a href="http://apache.org/licenses/LICENSE-2.0" class="externalLink">Apache License, Version 2.0</a></p>
+</td>
+</tr>
+</table>
+</div><ul><li>junit:junit:jar:3.8.1 (test) <img id="_2081326690" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1161074601', '_2081326690' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1161074601" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>JUnit is a regression testing framework written by Erich Gamma and Kent Beck. It is used by the developer who implements unit tests in Java.</p>
 <p><b>URL: </b><a href="http://junit.org" class="externalLink">http://junit.org</a></p>
@@ -240,10 +264,13 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 </div>
 </div>
 <div class="section"><h2>Licenses</h2>
 <p><b>Apache 2: </b>modified-utf-8</p>
+<p><b>Apache License, Version 2.0: </b>TestNG</p>
 <p><b>Common Public License Version 1.0: </b>JUnit</p>
 </div>
 <div class="section"><h2>Dependency File Details</h2>
@@ -255,15 +282,23 @@
 <th align="center">JDK Rev</th>
 <th align="center">Debug</th>
 </tr>
-<tr class="b"><td align="left">junit-4.8.1.jar</td>
-<td align="right">231.49 kB</td>
-<td align="right">267</td>
-<td align="right">230</td>
-<td align="right">30</td>
+<tr class="b"><td align="left">junit-3.8.1.jar</td>
+<td align="right">118.23 kB</td>
+<td align="right">119</td>
+<td align="right">100</td>
+<td align="right">6</td>
+<td align="center">1.1</td>
+<td align="center">debug</td>
+</tr>
+<tr class="a"><td align="left">testng-5.9-jdk15.jar</td>
+<td align="right">833.24 kB</td>
+<td align="right">616</td>
+<td align="right">502</td>
+<td align="right">34</td>
 <td align="center">1.5</td>
 <td align="center">debug</td>
 </tr>
-<tr class="a"><th align="left">Total</th>
+<tr class="b"><th align="left">Total</th>
 <th align="right">Size</th>
 <th align="right">Entries</th>
 <th align="right">Classes</th>
@@ -271,32 +306,32 @@
 <th align="center">JDK Rev</th>
 <th align="center">Debug</th>
 </tr>
-<tr class="b"><td align="right">1</td>
-<td align="right">231.49 kB</td>
-<td align="right">267</td>
-<td align="right">230</td>
-<td align="right">30</td>
+<tr class="a"><td align="right">2</td>
+<td align="right">951.47 kB</td>
+<td align="right">735</td>
+<td align="right">602</td>
+<td align="right">40</td>
 <td align="center">1.5</td>
-<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr class="a"><td align="right">test: 1</td>
-<td align="right">test: 231.49 kB</td>
-<td align="right">test: 267</td>
-<td align="right">test: 230</td>
-<td align="right">test: 30</td>
+<tr class="b"><td align="right">test: 2</td>
+<td align="right">test: 951.47 kB</td>
+<td align="right">test: 735</td>
+<td align="right">test: 602</td>
+<td align="right">test: 40</td>
 <td align="center">-</td>
-<td align="right">test: 1</td>
+<td align="right">test: 2</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section"><h2>Dependency Repository Locations</h2>
-<table class="bodyTable"><tbody><tr class="b"><th align="left">Repo ID</th>
+<table class="bodyTable"><tbody><tr class="a"><th align="left">Repo ID</th>
 <th align="left">URL</th>
 <th align="center">Release</th>
 <th align="center">Snapshot</th>
 </tr>
-<tr class="a"><td align="left">central</td>
+<tr class="b"><td align="left">central</td>
 <td align="left"><a href="http://repo1.maven.org/maven2" class="externalLink">http://repo1.maven.org/maven2</a></td>
 <td align="center">Yes</td>
 <td align="center">-</td>
@@ -304,17 +339,20 @@
 </tbody>
 </table>
 <p>Repository locations for each of the Dependencies.</p>
-<table class="bodyTable"><tbody><tr class="b"><th align="left">Artifact</th>
+<table class="bodyTable"><tbody><tr class="a"><th align="left">Artifact</th>
 <th align="center">central</th>
 </tr>
-<tr class="a"><td align="left">junit:junit:jar:4.8.1</td>
-<td align="center"><a href="http://repo1.maven.org/maven2/junit/junit/4.8.1/junit-4.8.1.jar" class="externalLink"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
+<tr class="b"><td align="left">junit:junit:jar:3.8.1</td>
+<td align="center"><a href="http://repo1.maven.org/maven2/junit/junit/3.8.1/junit-3.8.1.jar" class="externalLink"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
+</tr>
+<tr class="a"><td align="left">org.testng:testng:jar:jdk15:5.9</td>
+<td align="center"><a href="http://repo1.maven.org/maven2/org/testng/testng/5.9/testng-5.9-jdk15.jar" class="externalLink"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
 </tr>
 <tr class="b"><th align="left">Total</th>
 <th align="center">central</th>
 </tr>
-<tr class="a"><td align="left">1 (test: 1)</td>
-<td align="center">1</td>
+<tr class="a"><td align="left">2 (test: 2)</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>

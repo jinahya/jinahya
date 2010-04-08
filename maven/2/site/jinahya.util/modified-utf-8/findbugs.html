@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2010-03-15
+        Last Published: 2010-04-08
                       </div>
             <div class="xright">            <a href="">modified-utf-8</a>
             
@@ -182,8 +182,8 @@
 <th>Errors</th>
 <th>Missing Classes</th>
 </tr>
-<tr class="b"><td>1</td>
-<td>1</td>
+<tr class="b"><td>2</td>
+<td>2</td>
 <td>0</td>
 <td>0</td>
 </tr>
@@ -194,7 +194,7 @@
 <th>Bugs</th>
 </tr>
 <tr class="b"><td><a href="#jinahya.util.ModifiedUTF8">jinahya.util.ModifiedUTF8</a></td>
-<td>1</td>
+<td>2</td>
 </tr>
 </table>
 </div>
@@ -205,10 +205,16 @@
 <th>Line</th>
 <th>Priority</th>
 </tr>
-<tr class="b"><td>Method jinahya.util.ModifiedUTF8.generateString(int, Writer) uses the nextDouble method of Random to generate a random integer; using nextInt is more efficient</td>
+<tr class="b"><td>Method jinahya.util.ModifiedUTF8.generateString(int, ModifiedUTF8$Acceptor, Writer) uses the nextDouble method of Random to generate a random integer; using nextInt is more efficient</td>
 <td>PERFORMANCE</td>
 <td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_NEXTINT_VIA_NEXTDOUBLE" class="externalLink">DM_NEXTINT_VIA_NEXTDOUBLE</a></td>
-<td><a href="./xref/jinahya/util/ModifiedUTF8.html#85">85</a></td>
+<td><a href="./xref/jinahya/util/ModifiedUTF8.html#119">119</a></td>
+<td>Medium</td>
+</tr>
+<tr class="a"><td>Method jinahya.util.ModifiedUTF8.generateString(ModifiedUTF8$Acceptor) uses the nextDouble method of Random to generate a random integer; using nextInt is more efficient</td>
+<td>PERFORMANCE</td>
+<td><a href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_NEXTINT_VIA_NEXTDOUBLE" class="externalLink">DM_NEXTINT_VIA_NEXTDOUBLE</a></td>
+<td><a href="./xref/jinahya/util/ModifiedUTF8.html#54">54</a></td>
 <td>Medium</td>
 </tr>
 </table>
