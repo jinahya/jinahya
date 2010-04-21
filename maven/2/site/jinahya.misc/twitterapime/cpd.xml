@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="16" tokens="101">
+<file line="410" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
+<file line="486" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
+<codefragment>
+<![CDATA[
+	public boolean isBlocking(UserAccount ua) throws IOException,
+		LimitExceededException {
+		if (ua == null) {
+			throw new IllegalArgumentException(
+				"UserAccount object must not me null.");
+		}
+		String id = ua.getString(MetadataSet.USERACCOUNT_ID);
+		if (id == null || (id = id.trim()).length() == 0) {
+			id = ua.getString(MetadataSet.USERACCOUNT_USER_NAME);
+			if (id == null || (id = id.trim()).length() == 0) {
+				throw new IllegalArgumentException(
+					"Username or ID must not be empty/null.");
+			}
+		}
+		//
+		checkVerified();
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>
