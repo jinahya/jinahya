@@ -113,7 +113,7 @@
       </plugin>
     </plugins>
   </reporting>
-  <name>twitterapime</name>
+  <name>${groupId}:${artifactId}:${version}</name>
   <description>TwitterAPIME Mavenized</description>
   <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/index.html</url>
   <inceptionYear>2008</inceptionYear>
