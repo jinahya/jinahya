@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>jinahya.rfc</groupId>
@@ -43,6 +44,50 @@
   </properties>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.6.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <extensions>
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
@@ -117,7 +162,7 @@
     </plugins>
   </reporting>
 
-  <name>rfc4648</name>
+  <name>${groupId}:${artifactId}:${version}</name>
   <description>RFC 4648 Implementation</description>
   <!--
   <url>http://jinahya.googlecode.com/svn/maven/2/site/rfc4648</url>
@@ -157,10 +202,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/bitio/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -184,13 +229,13 @@
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
-      <id>jinahya.googlecode.com</id>
+      <id>googlecode</id>
       <name>jinahya.googlecode.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/rfc4648/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>jinahya.googlecode.com</id>
+      <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
