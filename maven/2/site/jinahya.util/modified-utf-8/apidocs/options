@@ -15,7 +15,7 @@
 -docencoding
 'UTF-8'
 -doctitle
-'modified-utf-8 1.1-SNAPSHOT API'
+'jinahya.util:modified-utf-8:1.1-SNAPSHOT 1.1-SNAPSHOT API'
 -link
 'http://java.sun.com/j2se/1.3/docs/api'
 -link
@@ -23,4 +23,4 @@
 -use
 -version
 -windowtitle
-'modified-utf-8 1.1-SNAPSHOT API'
+'jinahya.util:modified-utf-8:1.1-SNAPSHOT 1.1-SNAPSHOT API'
