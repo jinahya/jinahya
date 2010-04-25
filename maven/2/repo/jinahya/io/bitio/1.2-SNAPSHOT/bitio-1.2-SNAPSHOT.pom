@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
@@ -10,12 +11,6 @@
   <packaging>jar</packaging>
   <version>1.2-SNAPSHOT</version>
   <dependencies>
-    <!--dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency-->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -39,6 +34,50 @@
 
   <!-- Build Setting -->
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.6.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <extensions>
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
@@ -59,7 +98,6 @@
             </goals>
             <configuration>
               <source>1.3</source>
-              <!--target>${maven.compiler.target}</target-->
               <target>1.1</target>
             </configuration>
           </execution>
@@ -84,13 +122,6 @@
           <argLine>-Xms256m -Xmx512m -XX:MaxPermSize=256m</argLine>
         </configuration>
       </plugin>
-      <!--plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <classifier>${maven.jar.classifier}</classifier>
-        </configuration>
-      </plugin-->
     </plugins>
   </build>
   <reporting>
@@ -179,7 +210,7 @@
     <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.io/bitio/trunk</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/${groupId}/${artifactId}/trunk</url>
   </scm>
   <!--prerequisites/-->
   <!--repositories/-->
@@ -195,37 +226,5 @@
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
-  <!--profiles>
-    <profile>
-      <id>jdk11</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <maven.compiler.target>1.1</maven.compiler.target>
-        <maven.jar.classifier>jdk11</maven.jar.classifier>
-      </properties>
-    </profile>
-    <profile>
-      <id>jdk12</id>
-      <properties>
-        <maven.compiler.target>1.2</maven.compiler.target>
-        <maven.jar.classifier>jdk12</maven.jar.classifier>
-      </properties>
-    </profile>
-    <profile>
-      <id>jdk13</id>
-      <properties>
-        <maven.compiler.target>1.3</maven.compiler.target>
-        <maven.jar.classifier>jdk13</maven.jar.classifier>
-      </properties>
-    </profile>
-    <profile>
-      <id>jdk14</id>
-      <properties>
-        <maven.compiler.target>1.4</maven.compiler.target>
-        <maven.jar.classifier>jdk14</maven.jar.classifier>
-      </properties>
-    </profile>
-  </profiles-->
+  <!--profiles/-->
 </project>
