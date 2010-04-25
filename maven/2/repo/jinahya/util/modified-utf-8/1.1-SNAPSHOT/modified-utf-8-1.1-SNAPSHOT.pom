@@ -119,7 +119,7 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>modified-utf-8</name>
+  <name>${groupId}:${artifactId}:${version}</name>
   <description>Utility for Modified UTF-8</description>
   <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/index.html</url>
   <inceptionYear>2010</inceptionYear>
@@ -167,12 +167,12 @@
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
-      <id>onacit_googlecode</id>
+      <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>onacit_googlecode</id>
+      <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
