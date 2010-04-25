@@ -138,7 +138,7 @@
     </plugins>
   </reporting>
 
-  <name>bitio</name>
+  <name>${groupId}:${artifactId}:${version}</name>
   <description>Library for bit level I/O</description>
   <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/index.html</url>
   <inceptionYear>2008</inceptionYear>
