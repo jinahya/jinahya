@@ -24,8 +24,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-import jinahya.bitio.BitInput;
-import jinahya.bitio.BitOutput;
+import jinahya.io.BitInput;
+import jinahya.io.BitOutput;
 
 
 /**
