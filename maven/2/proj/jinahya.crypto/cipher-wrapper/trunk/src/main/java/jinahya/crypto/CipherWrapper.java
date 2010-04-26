@@ -31,7 +31,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.ShortBufferException;
 
 
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -62,11 +61,12 @@ public class CipherWrapper {
 
 
     /**
+     * Encrypts given <code>input</code>.
      *
-     * @param key
-     * @param params
-     * @param input
-     * @return
+     * @param key the encryption key.
+     * @param params the algorithm parameters.
+     * @param input input
+     * @return encrypted output
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
@@ -77,7 +77,9 @@ public class CipherWrapper {
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
      *         is not a multiple of block size.
-     * @throws BadPaddingException
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes
      */
     public byte[] encrypt(final Key key, final AlgorithmParameterSpec params,
                           final byte[] input)
@@ -89,11 +91,12 @@ public class CipherWrapper {
 
 
     /**
+     * Decrypts given <code>input</code>.
      *
-     * @param key
-     * @param params
-     * @param input
-     * @return
+     * @param key the encryption key.
+     * @param params the algorithm parameters.
+     * @param input input to be decrypted.
+     * @return an array of decrypted bytes.
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
@@ -104,7 +107,9 @@ public class CipherWrapper {
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
      *         is not a multiple of block size.
-     * @throws BadPaddingException
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes
      */
     public byte[] decrypt(final Key key, final AlgorithmParameterSpec params,
                           final byte[] input)
@@ -116,23 +121,27 @@ public class CipherWrapper {
 
 
     /**
+     * DoFinal.
      *
-     * @param opmode
-     * @param key
-     * @param params
-     * @param input
-     * @return
+     * @param opmode the operation mode of the wrapped cipher (this is one of
+     *        the following: ENCRYPT_MODE or DECRYPT_MODE)
+     * @param key the encryption key.
+     * @param params the algorithm paramters.
+     * @param input input to be processed.
+     * @return output
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
      *         cannot be determined from the given key, or if the given key has
      *         a keysize that exceeds the maximum allowable keysize.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if the wrapped cipher is a block
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
      *         is not a multiple of block size.
-     * @throws BadPaddingException
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes
      */
     private byte[] doFinal(final int opmode, final Key key,
                            final AlgorithmParameterSpec params,
@@ -168,7 +177,9 @@ public class CipherWrapper {
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
      *         is not a multiple of block size.
-     * @throws BadPaddingException
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes
      */
     public void encrypt(final Key key, final AlgorithmParameterSpec params,
                         final InputStream input, final OutputStream output)
@@ -195,7 +206,9 @@ public class CipherWrapper {
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
      *         is not a multiple of block size.
-     * @throws BadPaddingException
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes
      */
     public void decrypt(final Key key, final AlgorithmParameterSpec params,
                         final InputStream input, final OutputStream output)
