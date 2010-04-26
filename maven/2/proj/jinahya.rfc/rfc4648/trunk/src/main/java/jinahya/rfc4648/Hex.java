@@ -21,17 +21,5 @@ package jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base32 extends RFC4648 {
-
-
-    /**
-     * Create a new instance.
-     */
-    public Base32() {
-        super(new byte[] {
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                'Y', 'Z', '2', '3', '4', '5', '6', '7'}, true);
-    }
+public class Hex extends Base16 {
 }
