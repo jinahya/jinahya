@@ -72,7 +72,7 @@ public class CipherWrapper {
      *         initialized for decryption and requires algorithm parameters that
      *         cannot be determined from the given key, or if the given key has
      *         a keysize that exceeds the maximum allowable keysize.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if the wrapped cipher is a block
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
@@ -102,7 +102,7 @@ public class CipherWrapper {
      *         initialized for decryption and requires algorithm parameters that
      *         cannot be determined from the given key, or if the given key has
      *         a keysize that exceeds the maximum allowable keysize.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if the wrapped cipher is a block
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
@@ -128,7 +128,7 @@ public class CipherWrapper {
      * @param key the encryption key.
      * @param params the algorithm paramters.
      * @param input input to be processed.
-     * @return output
+     * @return output output
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
@@ -162,17 +162,18 @@ public class CipherWrapper {
 
 
     /**
+     * Encrypts given <code>input</code>.
      *
-     * @param key
-     * @param params
-     * @param input
-     * @param output
+     * @param key the encryption key.
+     * @param params the algorithm paramters.
+     * @param input input to be processed.
+     * @param output processed output.
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
      *         cannot be determined from the given key, or if the given key has
      *         a keysize that exceeds the maximum allowable keysize.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if the wrapped cipher is a block
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
@@ -191,17 +192,18 @@ public class CipherWrapper {
 
 
     /**
+     * Decrypts given <code>input</code>.
      *
-     * @param key
-     * @pram params
-     * @param input
-     * @param output
+     * @param key the encryption key.
+     * @pram params the algorithm paramters.
+     * @param input input to be processed.
+     * @param output processed output.
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing this cipher, or if the wrapped cipher is being
      *         initialized for decryption and requires algorithm parameters that
      *         cannot be determined from the given key, or if the given key has
      *         a keysize that exceeds the maximum allowable keysize.
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if the wrapped cipher is a block
      *         cipher, no padding has been requested (only in encryption mode),
      *         and the total input length of the data processed by this cipher
@@ -226,8 +228,8 @@ public class CipherWrapper {
      *        the following: ENCRYPT_MODE or DECRYPT_MODE)
      * @param key the encryption key.
      * @param params the algorithm parameters.
-     * @param input input
-     * @param output output
+     * @param input input to be processed
+     * @param output processed output
      * @throws InvalidKeyException if the given key is inappropriate for
      *         initializing the wrapped cipher, or its keysize exceeds the
      *         maximum allowable keysize.
@@ -253,9 +255,7 @@ public class CipherWrapper {
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
-        /*
-         * InvalidKeyException, InvalidAlgorithmParameterException
-         */
+        /* InvalidKeyException, InvalidAlgorithmParameterException */
         cipher.init(opmode, key);
 
         byte[] outputBuffer = new byte[outputBufferSize];
@@ -277,9 +277,7 @@ public class CipherWrapper {
 
         while (true) {
             try {
-                /*
-                 * IllegalBlockSizeException, BadPaddingException
-                 */
+                /* IllegalBlockSizeException, BadPaddingException */
                 final int length =
                     cipher.doFinal(inputBuffer, 0, 0, outputBuffer, 0);
                 output.write(outputBuffer, 0, length);
