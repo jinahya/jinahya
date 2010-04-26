@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-04-26T00:05:32.444">
+<pmd version="4.2.2" timestamp="2010-04-27T00:15:18.836">
 <file name="/usr/local/var/.hudson/jobs/jinahya.util modified-utf-8/workspace/src/main/java/jinahya/util/ModifiedUTF8.java">
 <violation beginline="24" endline="24" begincolumn="1" endcolumn="36" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.io.ByteArrayInputStream'
