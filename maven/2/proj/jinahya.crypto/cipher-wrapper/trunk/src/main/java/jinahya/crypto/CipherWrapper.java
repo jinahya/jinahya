@@ -40,89 +40,101 @@ public class CipherWrapper {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param input
-     * @return
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
+     * @param cipher the cipher to be wrapped.
+     * @param inputBufferSize input buffer size
+     * @param initialOutputBufferSize initial output buffer size
+     * @param outputBufferIncrementSize output buffer increment size
      */
-    public byte[] encrypt(final byte[] input)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException,
-               BadPaddingException {
+    public CipherWrapper(final Cipher cipher, final int inputBufferSize,
+                         final int initialOutputBufferSize,
+                         final int outputBufferIncrementSize) {
 
-        return encrypt(null, input);
+        super();
+
+        this.cipher = cipher;
+
+        this.inputBuffer = new byte[inputBufferSize];
+        this.outputBufferSize = initialOutputBufferSize;
+        this.outputBufferIncrementSize = outputBufferIncrementSize;
     }
 
 
     /**
      *
+     * @param key
      * @param params
      * @param input
      * @return
-     * @throws InvalidKeyException
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing this cipher, or if the wrapped cipher is being
+     *         initialized for decryption and requires algorithm parameters that
+     *         cannot be determined from the given key, or if the given key has
+     *         a keysize that exceeds the maximum allowable keysize.
      * @throws IOException
-     * @throws IllegalBlockSizeException
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
      * @throws BadPaddingException
      */
-    public byte[] encrypt(final AlgorithmParameterSpec params,
+    public byte[] encrypt(final Key key, final AlgorithmParameterSpec params,
                           final byte[] input)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
-        return doFinal(Cipher.ENCRYPT_MODE, params, input);
-    }
-
-
-    /**
-     * 
-     * @param input
-     * @return
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     */
-    public byte[] decrypt(final byte[] input)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException,
-               BadPaddingException {
-
-        return decrypt(null, input);
+        return doFinal(Cipher.ENCRYPT_MODE, key, params, input);
     }
 
 
     /**
      *
+     * @param key
      * @param params
      * @param input
      * @return
-     * @throws InvalidKeyException
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing this cipher, or if the wrapped cipher is being
+     *         initialized for decryption and requires algorithm parameters that
+     *         cannot be determined from the given key, or if the given key has
+     *         a keysize that exceeds the maximum allowable keysize.
      * @throws IOException
-     * @throws IllegalBlockSizeException
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
      * @throws BadPaddingException
      */
-    public byte[] decrypt(final AlgorithmParameterSpec params,
+    public byte[] decrypt(final Key key, final AlgorithmParameterSpec params,
                           final byte[] input)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
-        return doFinal(Cipher.DECRYPT_MODE, params, input);
+        return doFinal(Cipher.DECRYPT_MODE, key, params, input);
     }
 
 
     /**
      *
      * @param opmode
+     * @param key
      * @param params
      * @param input
      * @return
-     * @throws InvalidKeyException
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing this cipher, or if the wrapped cipher is being
+     *         initialized for decryption and requires algorithm parameters that
+     *         cannot be determined from the given key, or if the given key has
+     *         a keysize that exceeds the maximum allowable keysize.
      * @throws IOException
-     * @throws IllegalBlockSizeException
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
      * @throws BadPaddingException
      */
-    private byte[] doFinal(final int opmode,
+    private byte[] doFinal(final int opmode, final Key key,
                            final AlgorithmParameterSpec params,
                            final byte[] input)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
@@ -130,7 +142,8 @@ public class CipherWrapper {
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
-            doFinal(opmode, params, new ByteArrayInputStream(input), output);
+            doFinal(opmode, key, params, new ByteArrayInputStream(input),
+                    output);
             output.flush();
             return output.toByteArray();
         } finally {
@@ -141,98 +154,98 @@ public class CipherWrapper {
 
     /**
      *
-     * @param input
-     * @param output
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     */
-    public void encrypt(final InputStream input, final OutputStream output)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException,
-               BadPaddingException {
-
-        encrypt(null, input, output);
-    }
-
-
-    /**
-     *
+     * @param key
      * @param params
      * @param input
      * @param output
-     * @throws InvalidKeyException
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing this cipher, or if the wrapped cipher is being
+     *         initialized for decryption and requires algorithm parameters that
+     *         cannot be determined from the given key, or if the given key has
+     *         a keysize that exceeds the maximum allowable keysize.
      * @throws IOException
-     * @throws IllegalBlockSizeException
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
      * @throws BadPaddingException
      */
-    public void encrypt(final AlgorithmParameterSpec params,
+    public void encrypt(final Key key, final AlgorithmParameterSpec params,
                         final InputStream input, final OutputStream output)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
-        doFinal(Cipher.ENCRYPT_MODE, params, input, output);
+        doFinal(Cipher.ENCRYPT_MODE, key, params, input, output);
     }
 
 
     /**
      *
-     * @param input
-     * @param output
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     */
-    public void decrypt(final InputStream input, final OutputStream output)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException,
-               BadPaddingException {
-
-        decrypt(null, input, output);
-    }
-
-
-    /**
-     *
+     * @param key
      * @pram params
      * @param input
      * @param output
-     * @throws InvalidKeyException
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing this cipher, or if the wrapped cipher is being
+     *         initialized for decryption and requires algorithm parameters that
+     *         cannot be determined from the given key, or if the given key has
+     *         a keysize that exceeds the maximum allowable keysize.
      * @throws IOException
-     * @throws IllegalBlockSizeException
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
      * @throws BadPaddingException
      */
-    public void decrypt(final AlgorithmParameterSpec params,
+    public void decrypt(final Key key, final AlgorithmParameterSpec params,
                         final InputStream input, final OutputStream output)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
-        doFinal(Cipher.DECRYPT_MODE, params, input, output);
+        doFinal(Cipher.DECRYPT_MODE, key, params, input, output);
     }
 
 
     /**
+     * Encrypts or Decrypts.
      *
-     * @param opmode
-     * @param params
-     * @param input
-     * @param output
-     * @throws InvalidKeyException
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
+     * @param opmode the operation mode of the wrapped cipher (this is one of
+     *        the following: ENCRYPT_MODE or DECRYPT_MODE)
+     * @param key the encryption key.
+     * @param params the algorithm parameters.
+     * @param input input
+     * @param output output
+     * @throws InvalidKeyException if the given key is inappropriate for
+     *         initializing the wrapped cipher, or its keysize exceeds the
+     *         maximum allowable keysize.
+     * @throws InvalidAlgorithmParameterException if the given algorithm
+     *         parameters are inappropriate for the wrapped cipher, or the
+     *         wrapped cipher is being initialized for decryption and requires
+     *         algorithm parameters and params is null, or the given algorithm
+     *         parameters imply a cryptographic strength that would exceed the
+     *         legal limits.
+     * @throws IOException if an I/O error occurs.
+     * @throws IllegalBlockSizeException if the wrapped cipher is a block
+     *         cipher, no padding has been requested (only in encryption mode),
+     *         and the total input length of the data processed by this cipher
+     *         is not a multiple of block size.
+     * @throws BadPaddingException if the wrapped cipher is in decryption mode,
+     *         and (un)padding has been requested, but the decrypted data is not
+     *         bounded by the appropriate padding bytes.
      */
-    private synchronized void doFinal(final int opmode,
+    private synchronized void doFinal(final int opmode, final Key key,
                                       final AlgorithmParameterSpec params,
                                       final InputStream input,
                                       final OutputStream output)
         throws InvalidKeyException, IOException, IllegalBlockSizeException,
                BadPaddingException {
 
+        /*
+         * InvalidKeyException, InvalidAlgorithmParameterException
+         */
         cipher.init(opmode, key);
 
-        final byte[] inputBuffer = new byte[inputBufferSize];
-        byte[] outputBuffer = new byte[initialOutputBufferSize];
+        byte[] outputBuffer = new byte[outputBufferSize];
 
         outer:
         for (int read = -1; (read = input.read(inputBuffer)) != -1;) {
@@ -243,8 +256,7 @@ public class CipherWrapper {
                     output.write(outputBuffer, 0, length);
                     continue outer;
                 } catch (ShortBufferException sbe) {
-                    final int outputBufferSize =
-                        (outputBuffer.length + outputBufferIncrementSize);
+                    outputBufferSize += outputBufferIncrementSize;
                     outputBuffer = new byte[outputBufferSize];
                 }
             }
@@ -252,23 +264,26 @@ public class CipherWrapper {
 
         while (true) {
             try {
+                /*
+                 * IllegalBlockSizeException, BadPaddingException
+                 */
                 final int length =
                     cipher.doFinal(inputBuffer, 0, 0, outputBuffer, 0);
                 output.write(outputBuffer, 0, length);
                 break;
             } catch (ShortBufferException sbe) {
-                outputBuffer = new byte[outputBuffer.length
-                    + outputBufferIncrementSize];
+                outputBufferSize += outputBufferIncrementSize;
+                outputBuffer = new byte[outputBufferSize];
             }
         }
 
     }
 
 
-    Key key;
-    Cipher cipher;
+    private Cipher cipher;
 
-    int inputBufferSize;
-    int initialOutputBufferSize;
-    int outputBufferIncrementSize;
+    private byte[] inputBuffer;
+
+    private int outputBufferSize;
+    private int outputBufferIncrementSize;
 }
