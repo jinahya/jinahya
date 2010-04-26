@@ -1,17 +1,17 @@
 -classpath
-'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/cipher-wrapper/trunk/target/classes'
+'/usr/local/var/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/cipher-wrapper/trunk/src/main/java'
+'/usr/local/var/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/cipher-wrapper/trunk/target/site/apidocs'
+'/usr/local/var/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
