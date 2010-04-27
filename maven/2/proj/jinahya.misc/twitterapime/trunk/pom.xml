@@ -1,6 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>jinahya.misc</groupId>
   <artifactId>twitterapime</artifactId>
   <packaging>jar</packaging>
@@ -50,7 +52,6 @@
             </goals>
             <configuration>
               <source>1.3</source>
-              <!--target>${maven.compiler.target}</target-->
               <target>1.1</target>
             </configuration>
           </execution>
