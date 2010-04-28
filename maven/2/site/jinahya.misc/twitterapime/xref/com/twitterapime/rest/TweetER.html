@@ -109,46 +109,46 @@
 <a name="99" href="#99">99</a>  <em class="jxr_javadoccomment">	 * Release the objects which account is no longer authenticated.</em>
 <a name="100" href="#100">100</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a name="101" href="#101">101</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="102" href="#102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> cleanPool() {
-<a name="103" href="#103">103</a> 		Enumeration keys = tweetERPool.keys();
-<a name="104" href="#104">104</a> 		Object key;
-<a name="105" href="#105">105</a> 		TweetER value;
-<a name="106" href="#106">106</a> 		<em class="jxr_comment">//</em>
-<a name="107" href="#107">107</a> 		<strong class="jxr_keyword">while</strong> (keys.hasMoreElements()) {
-<a name="108" href="#108">108</a> 			key = keys.nextElement();
-<a name="109" href="#109">109</a> 			value = (TweetER)tweetERPool.get(key);
-<a name="110" href="#110">110</a> 			<em class="jxr_comment">//</em>
-<a name="111" href="#111">111</a> 			<strong class="jxr_keyword">if</strong> (!value.userAccountMngr.isVerified()) {
-<a name="112" href="#112">112</a> 				tweetERPool.remove(key);
-<a name="113" href="#113">113</a> 			}
-<a name="114" href="#114">114</a> 		}
-<a name="115" href="#115">115</a> 	}
-<a name="116" href="#116">116</a> 	
-<a name="117" href="#117">117</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="118" href="#118">118</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="119" href="#119">119</a> <em class="jxr_javadoccomment">	 * Get an instance of TweetER class and associate it to a given user</em>
-<a name="120" href="#120">120</a> <em class="jxr_javadoccomment">	 * account.</em>
-<a name="121" href="#121">121</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="122" href="#122">122</a> <em class="jxr_javadoccomment">	 * @param uam User account manager.</em>
-<a name="123" href="#123">123</a> <em class="jxr_javadoccomment">	 * @return TweetER instance.</em>
-<a name="124" href="#124">124</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If UserAccountManager is null.</em>
-<a name="125" href="#125">125</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If UserAccountManager is not verified.</em>
-<a name="126" href="#126">126</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="127" href="#127">127</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">static</strong> <a href="../../../com/twitterapime/rest/TweetER.html">TweetER</a> getInstance(<a href="../../../com/twitterapime/rest/UserAccountManager.html">UserAccountManager</a> uam) {
-<a name="128" href="#128">128</a> 		<strong class="jxr_keyword">if</strong> (uam == <strong class="jxr_keyword">null</strong>) {
-<a name="129" href="#129">129</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a name="130" href="#130">130</a> 				<span class="jxr_string">"UserAccountManager must not be null."</span>);
-<a name="131" href="#131">131</a> 		}
-<a name="132" href="#132">132</a> 		<em class="jxr_comment">//</em>
-<a name="133" href="#133">133</a> 		<strong class="jxr_keyword">if</strong> (!uam.isVerified()) {
-<a name="134" href="#134">134</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(<span class="jxr_string">"User's credential must be verified."</span>);
-<a name="135" href="#135">135</a> 		}
-<a name="136" href="#136">136</a> 		<em class="jxr_comment">//</em>
-<a name="137" href="#137">137</a> 		<strong class="jxr_keyword">if</strong> (tweetERPool == <strong class="jxr_keyword">null</strong>) {
-<a name="138" href="#138">138</a> 			tweetERPool = <strong class="jxr_keyword">new</strong> Hashtable();
-<a name="139" href="#139">139</a> 		}
-<a name="140" href="#140">140</a> 		<em class="jxr_comment">//</em>
-<a name="141" href="#141">141</a> 		cleanPool();
+<a name="102" href="#102">102</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> cleanPool() {
+<a name="103" href="#103">103</a> 		<strong class="jxr_keyword">if</strong> (tweetERPool != <strong class="jxr_keyword">null</strong>) {
+<a name="104" href="#104">104</a> 			Enumeration keys = tweetERPool.keys();
+<a name="105" href="#105">105</a> 			Object key;
+<a name="106" href="#106">106</a> 			TweetER value;
+<a name="107" href="#107">107</a> 			<em class="jxr_comment">//</em>
+<a name="108" href="#108">108</a> 			<strong class="jxr_keyword">while</strong> (keys.hasMoreElements()) {
+<a name="109" href="#109">109</a> 				key = keys.nextElement();
+<a name="110" href="#110">110</a> 				value = (TweetER)tweetERPool.get(key);
+<a name="111" href="#111">111</a> 				<em class="jxr_comment">//</em>
+<a name="112" href="#112">112</a> 				<strong class="jxr_keyword">if</strong> (!value.userAccountMngr.isVerified()) {
+<a name="113" href="#113">113</a> 					tweetERPool.remove(key);
+<a name="114" href="#114">114</a> 				}
+<a name="115" href="#115">115</a> 			}
+<a name="116" href="#116">116</a> 		}
+<a name="117" href="#117">117</a> 	}
+<a name="118" href="#118">118</a> 	
+<a name="119" href="#119">119</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="120" href="#120">120</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="121" href="#121">121</a> <em class="jxr_javadoccomment">	 * Get an instance of TweetER class and associate it to a given user</em>
+<a name="122" href="#122">122</a> <em class="jxr_javadoccomment">	 * account.</em>
+<a name="123" href="#123">123</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="124" href="#124">124</a> <em class="jxr_javadoccomment">	 * @param uam User account manager.</em>
+<a name="125" href="#125">125</a> <em class="jxr_javadoccomment">	 * @return TweetER instance.</em>
+<a name="126" href="#126">126</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If UserAccountManager is null.</em>
+<a name="127" href="#127">127</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If UserAccountManager is not verified.</em>
+<a name="128" href="#128">128</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="129" href="#129">129</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">static</strong> <a href="../../../com/twitterapime/rest/TweetER.html">TweetER</a> getInstance(<a href="../../../com/twitterapime/rest/UserAccountManager.html">UserAccountManager</a> uam) {
+<a name="130" href="#130">130</a> 		<strong class="jxr_keyword">if</strong> (uam == <strong class="jxr_keyword">null</strong>) {
+<a name="131" href="#131">131</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a name="132" href="#132">132</a> 				<span class="jxr_string">"UserAccountManager must not be null."</span>);
+<a name="133" href="#133">133</a> 		}
+<a name="134" href="#134">134</a> 		<em class="jxr_comment">//</em>
+<a name="135" href="#135">135</a> 		<strong class="jxr_keyword">if</strong> (!uam.isVerified()) {
+<a name="136" href="#136">136</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(<span class="jxr_string">"User's credential must be verified."</span>);
+<a name="137" href="#137">137</a> 		}
+<a name="138" href="#138">138</a> 		<em class="jxr_comment">//</em>
+<a name="139" href="#139">139</a> 		<strong class="jxr_keyword">if</strong> (tweetERPool == <strong class="jxr_keyword">null</strong>) {
+<a name="140" href="#140">140</a> 			tweetERPool = <strong class="jxr_keyword">new</strong> Hashtable();
+<a name="141" href="#141">141</a> 		}
 <a name="142" href="#142">142</a> 		<em class="jxr_comment">//</em>
 <a name="143" href="#143">143</a> 		TweetER ter = (TweetER)tweetERPool.get(uam);
 <a name="144" href="#144">144</a> 		<strong class="jxr_keyword">if</strong> (ter == <strong class="jxr_keyword">null</strong>) {
@@ -216,7 +216,7 @@
 <a name="206" href="#206">206</a> <em class="jxr_javadoccomment">	 * @return Tweet.</em>
 <a name="207" href="#207">207</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If the limit of access is exceeded.</em>
 <a name="208" href="#208">208</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a name="209" href="#209">209</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If the request tweet is protected.</em>
+<a name="209" href="#209">209</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If the requested tweet is protected.</em>
 <a name="210" href="#210">210</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given ID is empty/null.</em>
 <a name="211" href="#211">211</a> <em class="jxr_javadoccomment">	 */</em>
 <a name="212" href="#212">212</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> findByID(String id) <strong class="jxr_keyword">throws</strong> LimitExceededException,
@@ -236,224 +236,220 @@
 <a name="226" href="#226">226</a> 		HttpConnection conn = UserAccountManager.getHttpConn(url, credential);
 <a name="227" href="#227">227</a> 		<em class="jxr_comment">//</em>
 <a name="228" href="#228">228</a> 		<strong class="jxr_keyword">try</strong> {
-<a name="229" href="#229">229</a> 			HttpResponseCodeInterpreter.perform(conn);
+<a name="229" href="#229">229</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> repCode = conn.getResponseCode();
 <a name="230" href="#230">230</a> 			<em class="jxr_comment">//</em>
-<a name="231" href="#231">231</a> 			Parser parser = ParserFactory.getDefaultParser();
-<a name="232" href="#232">232</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
-<a name="233" href="#233">233</a> 			parser.parse(conn.openInputStream(), handler);
-<a name="234" href="#234">234</a> 			<em class="jxr_comment">//</em>
-<a name="235" href="#235">235</a> 			<strong class="jxr_keyword">return</strong> handler.getParsedTweet();
-<a name="236" href="#236">236</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
-<a name="237" href="#237">237</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
-<a name="238" href="#238">238</a> 		} <strong class="jxr_keyword">catch</strong> (InvalidQueryException e) {
-<a name="239" href="#239">239</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> repCode = conn.getResponseCode();
-<a name="240" href="#240">240</a> 			<em class="jxr_comment">//</em>
-<a name="241" href="#241">241</a> 			<strong class="jxr_keyword">if</strong> (repCode == HttpConnection.HTTP_FORBIDDEN) {
-<a name="242" href="#242">242</a> 				<em class="jxr_comment">//the refered tweet id is protected.</em>
-<a name="243" href="#243">243</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(e.getMessage());
-<a name="244" href="#244">244</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (repCode == HttpConnection.HTTP_NOT_FOUND) {
-<a name="245" href="#245">245</a> 				<em class="jxr_comment">//tweet id not found.</em>
-<a name="246" href="#246">246</a> 				<strong class="jxr_keyword">return</strong> (Tweet)<strong class="jxr_keyword">null</strong>;
-<a name="247" href="#247">247</a> 			} <strong class="jxr_keyword">else</strong> {
-<a name="248" href="#248">248</a> 				<strong class="jxr_keyword">throw</strong> e;
+<a name="231" href="#231">231</a> 			<strong class="jxr_keyword">if</strong> (repCode == HttpConnection.HTTP_FORBIDDEN) {
+<a name="232" href="#232">232</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(); <em class="jxr_comment">//the refereed tweet id is protected.</em>
+<a name="233" href="#233">233</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (repCode == HttpConnection.HTTP_NOT_FOUND) {
+<a name="234" href="#234">234</a> 				<strong class="jxr_keyword">return</strong> (Tweet)<strong class="jxr_keyword">null</strong>; <em class="jxr_comment">//tweet id not found.</em>
+<a name="235" href="#235">235</a> 			}
+<a name="236" href="#236">236</a> 			<em class="jxr_comment">//</em>
+<a name="237" href="#237">237</a> 			HttpResponseCodeInterpreter.perform(conn);
+<a name="238" href="#238">238</a> 			<em class="jxr_comment">//</em>
+<a name="239" href="#239">239</a> 			Parser parser = ParserFactory.getDefaultParser();
+<a name="240" href="#240">240</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
+<a name="241" href="#241">241</a> 			parser.parse(conn.openInputStream(), handler);
+<a name="242" href="#242">242</a> 			<em class="jxr_comment">//</em>
+<a name="243" href="#243">243</a> 			<strong class="jxr_keyword">return</strong> handler.getParsedTweet();
+<a name="244" href="#244">244</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
+<a name="245" href="#245">245</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
+<a name="246" href="#246">246</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a name="247" href="#247">247</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
+<a name="248" href="#248">248</a> 				conn.close();
 <a name="249" href="#249">249</a> 			}
-<a name="250" href="#250">250</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a name="251" href="#251">251</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
-<a name="252" href="#252">252</a> 				conn.close();
-<a name="253" href="#253">253</a> 			}
-<a name="254" href="#254">254</a> 		}
-<a name="255" href="#255">255</a> 	}
-<a name="256" href="#256">256</a> 
-<a name="257" href="#257">257</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="258" href="#258">258</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="259" href="#259">259</a> <em class="jxr_javadoccomment">	 * Post a given tweet to Twitter. The tweet's content must be up to 140</em>
-<a name="260" href="#260">260</a> <em class="jxr_javadoccomment">	 * characters and must be properly logged in ({@link UserAccountManager}).</em>
-<a name="261" href="#261">261</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="262" href="#262">262</a> <em class="jxr_javadoccomment">	 * @param tweet Tweet to be posted.</em>
-<a name="263" href="#263">263</a> <em class="jxr_javadoccomment">	 * @return Tweet post with some additional data.</em>
-<a name="264" href="#264">264</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a name="265" href="#265">265</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
-<a name="266" href="#266">266</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
-<a name="267" href="#267">267</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given tweet is null/empty, etc.</em>
-<a name="268" href="#268">268</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="269" href="#269">269</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> post(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> tweet) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException {
-<a name="270" href="#270">270</a> 		<strong class="jxr_keyword">if</strong> (tweet == <strong class="jxr_keyword">null</strong>) {
-<a name="271" href="#271">271</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Tweet must not be null."</span>);
-<a name="272" href="#272">272</a> 		}
+<a name="250" href="#250">250</a> 		}
+<a name="251" href="#251">251</a> 	}
+<a name="252" href="#252">252</a> 
+<a name="253" href="#253">253</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="254" href="#254">254</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="255" href="#255">255</a> <em class="jxr_javadoccomment">	 * Post a given tweet to Twitter. The tweet's content must be up to 140</em>
+<a name="256" href="#256">256</a> <em class="jxr_javadoccomment">	 * characters and must be properly logged in ({@link UserAccountManager}).</em>
+<a name="257" href="#257">257</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="258" href="#258">258</a> <em class="jxr_javadoccomment">	 * @param tweet Tweet to be posted.</em>
+<a name="259" href="#259">259</a> <em class="jxr_javadoccomment">	 * @return Tweet post with some additional data.</em>
+<a name="260" href="#260">260</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
+<a name="261" href="#261">261</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
+<a name="262" href="#262">262</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
+<a name="263" href="#263">263</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given tweet is null/empty, etc.</em>
+<a name="264" href="#264">264</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="265" href="#265">265</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> post(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> tweet) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException {
+<a name="266" href="#266">266</a> 		<strong class="jxr_keyword">if</strong> (tweet == <strong class="jxr_keyword">null</strong>) {
+<a name="267" href="#267">267</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Tweet must not be null."</span>);
+<a name="268" href="#268">268</a> 		}
+<a name="269" href="#269">269</a> 		<em class="jxr_comment">//</em>
+<a name="270" href="#270">270</a> 		tweet.validateContent();
+<a name="271" href="#271">271</a> 		<em class="jxr_comment">//</em>
+<a name="272" href="#272">272</a> 		checkUserAuth();
 <a name="273" href="#273">273</a> 		<em class="jxr_comment">//</em>
-<a name="274" href="#274">274</a> 		tweet.validateContent();
+<a name="274" href="#274">274</a> 		HttpConnection conn = getConn(TWITTER_URL_UPDATE_STATUS);
 <a name="275" href="#275">275</a> 		<em class="jxr_comment">//</em>
-<a name="276" href="#276">276</a> 		checkUserAuth();
-<a name="277" href="#277">277</a> 		<em class="jxr_comment">//</em>
-<a name="278" href="#278">278</a> 		HttpConnection conn = getConn(TWITTER_URL_UPDATE_STATUS);
-<a name="279" href="#279">279</a> 		<em class="jxr_comment">//</em>
-<a name="280" href="#280">280</a> 		<strong class="jxr_keyword">try</strong> {
-<a name="281" href="#281">281</a> 			<strong class="jxr_keyword">final</strong> String content = tweet.getString(MetadataSet.TWEET_CONTENT);
-<a name="282" href="#282">282</a> 			<em class="jxr_comment">//</em>
-<a name="283" href="#283">283</a> 			conn.setRequestMethod(HttpConnection.POST);
-<a name="284" href="#284">284</a> 			<em class="jxr_comment">//</em>
-<a name="285" href="#285">285</a> 			OutputStream out = conn.openOutputStream();
-<a name="286" href="#286">286</a> 			out.write((<span class="jxr_string">"status="</span> + content).getBytes());
-<a name="287" href="#287">287</a> 			out.flush();
-<a name="288" href="#288">288</a> 			out.close();
-<a name="289" href="#289">289</a> 			<em class="jxr_comment">//</em>
-<a name="290" href="#290">290</a> 			HttpResponseCodeInterpreter.perform(conn);
-<a name="291" href="#291">291</a> 			<em class="jxr_comment">//</em>
-<a name="292" href="#292">292</a> 			Parser parser = ParserFactory.getDefaultParser();
-<a name="293" href="#293">293</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
-<a name="294" href="#294">294</a> 			parser.parse(conn.openInputStream(), handler);
-<a name="295" href="#295">295</a> 			handler.loadParsedTweet(tweet);
-<a name="296" href="#296">296</a> 			<em class="jxr_comment">//</em>
-<a name="297" href="#297">297</a> 			<strong class="jxr_keyword">return</strong> tweet;
-<a name="298" href="#298">298</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
-<a name="299" href="#299">299</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
-<a name="300" href="#300">300</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a name="301" href="#301">301</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
-<a name="302" href="#302">302</a> 				conn.close();
-<a name="303" href="#303">303</a> 			}
-<a name="304" href="#304">304</a> 		}
-<a name="305" href="#305">305</a> 	}
-<a name="306" href="#306">306</a> 	
-<a name="307" href="#307">307</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="308" href="#308">308</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="309" href="#309">309</a> <em class="jxr_javadoccomment">	 * Repost a given tweet to Twitter.</em>
-<a name="310" href="#310">310</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="311" href="#311">311</a> <em class="jxr_javadoccomment">	 * @param tweet Tweet to be reposted.</em>
-<a name="312" href="#312">312</a> <em class="jxr_javadoccomment">	 * @return Tweet reposted.</em>
-<a name="313" href="#313">313</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a name="314" href="#314">314</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
-<a name="315" href="#315">315</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
-<a name="316" href="#316">316</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given tweet is null/empty, etc.</em>
-<a name="317" href="#317">317</a> <em class="jxr_javadoccomment">	 * @throws InvalidQueryException If tweet's ID is invalid.</em>
-<a name="318" href="#318">318</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="319" href="#319">319</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> repost(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> tweet) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException{
-<a name="320" href="#320">320</a> 		<strong class="jxr_keyword">if</strong> (tweet == <strong class="jxr_keyword">null</strong>) {
-<a name="321" href="#321">321</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Tweet must not be null."</span>);
-<a name="322" href="#322">322</a> 		}
-<a name="323" href="#323">323</a> 		<em class="jxr_comment">//</em>
-<a name="324" href="#324">324</a> 		String id = tweet.getString(MetadataSet.TWEET_ID);
-<a name="325" href="#325">325</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || (id = id.trim()).length() == 0) {
-<a name="326" href="#326">326</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a name="327" href="#327">327</a> 				<span class="jxr_string">"Tweet ID must not be empty/null."</span>);
-<a name="328" href="#328">328</a> 		}
+<a name="276" href="#276">276</a> 		<strong class="jxr_keyword">try</strong> {
+<a name="277" href="#277">277</a> 			<strong class="jxr_keyword">final</strong> String content = tweet.getString(MetadataSet.TWEET_CONTENT);
+<a name="278" href="#278">278</a> 			<em class="jxr_comment">//</em>
+<a name="279" href="#279">279</a> 			conn.setRequestMethod(HttpConnection.POST);
+<a name="280" href="#280">280</a> 			<em class="jxr_comment">//</em>
+<a name="281" href="#281">281</a> 			OutputStream out = conn.openOutputStream();
+<a name="282" href="#282">282</a> 			out.write((<span class="jxr_string">"status="</span> + content).getBytes());
+<a name="283" href="#283">283</a> 			out.flush();
+<a name="284" href="#284">284</a> 			out.close();
+<a name="285" href="#285">285</a> 			<em class="jxr_comment">//</em>
+<a name="286" href="#286">286</a> 			HttpResponseCodeInterpreter.perform(conn);
+<a name="287" href="#287">287</a> 			<em class="jxr_comment">//</em>
+<a name="288" href="#288">288</a> 			Parser parser = ParserFactory.getDefaultParser();
+<a name="289" href="#289">289</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
+<a name="290" href="#290">290</a> 			parser.parse(conn.openInputStream(), handler);
+<a name="291" href="#291">291</a> 			handler.loadParsedTweet(tweet);
+<a name="292" href="#292">292</a> 			<em class="jxr_comment">//</em>
+<a name="293" href="#293">293</a> 			<strong class="jxr_keyword">return</strong> tweet;
+<a name="294" href="#294">294</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
+<a name="295" href="#295">295</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
+<a name="296" href="#296">296</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a name="297" href="#297">297</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
+<a name="298" href="#298">298</a> 				conn.close();
+<a name="299" href="#299">299</a> 			}
+<a name="300" href="#300">300</a> 		}
+<a name="301" href="#301">301</a> 	}
+<a name="302" href="#302">302</a> 	
+<a name="303" href="#303">303</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="304" href="#304">304</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="305" href="#305">305</a> <em class="jxr_javadoccomment">	 * Repost a given tweet to Twitter.</em>
+<a name="306" href="#306">306</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="307" href="#307">307</a> <em class="jxr_javadoccomment">	 * @param tweet Tweet to be reposted.</em>
+<a name="308" href="#308">308</a> <em class="jxr_javadoccomment">	 * @return Tweet reposted.</em>
+<a name="309" href="#309">309</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
+<a name="310" href="#310">310</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
+<a name="311" href="#311">311</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
+<a name="312" href="#312">312</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given tweet is null/empty, etc.</em>
+<a name="313" href="#313">313</a> <em class="jxr_javadoccomment">	 * @throws InvalidQueryException If tweet's ID is invalid.</em>
+<a name="314" href="#314">314</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="315" href="#315">315</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> repost(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> tweet) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException{
+<a name="316" href="#316">316</a> 		<strong class="jxr_keyword">if</strong> (tweet == <strong class="jxr_keyword">null</strong>) {
+<a name="317" href="#317">317</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Tweet must not be null."</span>);
+<a name="318" href="#318">318</a> 		}
+<a name="319" href="#319">319</a> 		<em class="jxr_comment">//</em>
+<a name="320" href="#320">320</a> 		String id = tweet.getString(MetadataSet.TWEET_ID);
+<a name="321" href="#321">321</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || (id = id.trim()).length() == 0) {
+<a name="322" href="#322">322</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a name="323" href="#323">323</a> 				<span class="jxr_string">"Tweet ID must not be empty/null."</span>);
+<a name="324" href="#324">324</a> 		}
+<a name="325" href="#325">325</a> 		<em class="jxr_comment">//</em>
+<a name="326" href="#326">326</a> 		checkUserAuth();
+<a name="327" href="#327">327</a> 		<em class="jxr_comment">//</em>
+<a name="328" href="#328">328</a> 		HttpConnection conn = getConn(TWITTER_URL_REPOST_STATUS + id + <span class="jxr_string">".xml"</span>);
 <a name="329" href="#329">329</a> 		<em class="jxr_comment">//</em>
-<a name="330" href="#330">330</a> 		checkUserAuth();
-<a name="331" href="#331">331</a> 		<em class="jxr_comment">//</em>
-<a name="332" href="#332">332</a> 		HttpConnection conn = getConn(TWITTER_URL_REPOST_STATUS + id + <span class="jxr_string">".xml"</span>);
-<a name="333" href="#333">333</a> 		<em class="jxr_comment">//</em>
-<a name="334" href="#334">334</a> 		<strong class="jxr_keyword">try</strong> {
-<a name="335" href="#335">335</a> 			conn.setRequestMethod(HttpConnection.POST);
-<a name="336" href="#336">336</a> 			<em class="jxr_comment">//</em>
-<a name="337" href="#337">337</a> 			HttpResponseCodeInterpreter.perform(conn);
-<a name="338" href="#338">338</a> 			<em class="jxr_comment">//</em>
-<a name="339" href="#339">339</a> 			Parser parser = ParserFactory.getDefaultParser();
-<a name="340" href="#340">340</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
-<a name="341" href="#341">341</a> 			parser.parse(conn.openInputStream(), handler);
-<a name="342" href="#342">342</a> 			handler.loadParsedTweet(tweet);
-<a name="343" href="#343">343</a> 			<em class="jxr_comment">//</em>
-<a name="344" href="#344">344</a> 			<strong class="jxr_keyword">return</strong> tweet;
-<a name="345" href="#345">345</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
-<a name="346" href="#346">346</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
-<a name="347" href="#347">347</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a name="348" href="#348">348</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
-<a name="349" href="#349">349</a> 				conn.close();
-<a name="350" href="#350">350</a> 			}
-<a name="351" href="#351">351</a> 		}
-<a name="352" href="#352">352</a> 	}
-<a name="353" href="#353">353</a> 	
-<a name="354" href="#354">354</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="355" href="#355">355</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="356" href="#356">356</a> <em class="jxr_javadoccomment">	 * Send a given Direct Message to a given recipient. The DM's content must</em>
-<a name="357" href="#357">357</a> <em class="jxr_javadoccomment">	 * be up to 140 characters, addressed to a proper user (he/she must also</em>
-<a name="358" href="#358">358</a> <em class="jxr_javadoccomment">	 * follow you) and must be properly logged in ({@link UserAccountManager}).</em>
-<a name="359" href="#359">359</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="360" href="#360">360</a> <em class="jxr_javadoccomment">	 * @param dm Direct Message to be sent.</em>
-<a name="361" href="#361">361</a> <em class="jxr_javadoccomment">	 * @return Sent Direct Message.</em>
-<a name="362" href="#362">362</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a name="363" href="#363">363</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
-<a name="364" href="#364">364</a> <em class="jxr_javadoccomment">	 * @throws InvalidQueryException If recipient does not exist or the sender</em>
-<a name="365" href="#365">365</a> <em class="jxr_javadoccomment">	 *         does not follow the recipient and vice versa.</em>
-<a name="366" href="#366">366</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
-<a name="367" href="#367">367</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given DM is null/empty, etc.</em>
-<a name="368" href="#368">368</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="369" href="#369">369</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> send(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> dm) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException {
-<a name="370" href="#370">370</a> 		<strong class="jxr_keyword">if</strong> (dm == <strong class="jxr_keyword">null</strong>) {
-<a name="371" href="#371">371</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"DM must not be null."</span>);
-<a name="372" href="#372">372</a> 		}
-<a name="373" href="#373">373</a> 		<em class="jxr_comment">//</em>
-<a name="374" href="#374">374</a> 		dm.validateRecipient();
-<a name="375" href="#375">375</a> 		dm.validateContent();
+<a name="330" href="#330">330</a> 		<strong class="jxr_keyword">try</strong> {
+<a name="331" href="#331">331</a> 			conn.setRequestMethod(HttpConnection.POST);
+<a name="332" href="#332">332</a> 			<em class="jxr_comment">//</em>
+<a name="333" href="#333">333</a> 			HttpResponseCodeInterpreter.perform(conn);
+<a name="334" href="#334">334</a> 			<em class="jxr_comment">//</em>
+<a name="335" href="#335">335</a> 			Parser parser = ParserFactory.getDefaultParser();
+<a name="336" href="#336">336</a> 			StatusHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/StatusHandler.html">StatusHandler</a>();
+<a name="337" href="#337">337</a> 			parser.parse(conn.openInputStream(), handler);
+<a name="338" href="#338">338</a> 			handler.loadParsedTweet(tweet);
+<a name="339" href="#339">339</a> 			<em class="jxr_comment">//</em>
+<a name="340" href="#340">340</a> 			<strong class="jxr_keyword">return</strong> tweet;
+<a name="341" href="#341">341</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
+<a name="342" href="#342">342</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
+<a name="343" href="#343">343</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a name="344" href="#344">344</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
+<a name="345" href="#345">345</a> 				conn.close();
+<a name="346" href="#346">346</a> 			}
+<a name="347" href="#347">347</a> 		}
+<a name="348" href="#348">348</a> 	}
+<a name="349" href="#349">349</a> 	
+<a name="350" href="#350">350</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="351" href="#351">351</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="352" href="#352">352</a> <em class="jxr_javadoccomment">	 * Send a given Direct Message to a given recipient. The DM's content must</em>
+<a name="353" href="#353">353</a> <em class="jxr_javadoccomment">	 * be up to 140 characters, addressed to a proper user (he/she must also</em>
+<a name="354" href="#354">354</a> <em class="jxr_javadoccomment">	 * follow you) and must be properly logged in ({@link UserAccountManager}).</em>
+<a name="355" href="#355">355</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="356" href="#356">356</a> <em class="jxr_javadoccomment">	 * @param dm Direct Message to be sent.</em>
+<a name="357" href="#357">357</a> <em class="jxr_javadoccomment">	 * @return Sent Direct Message.</em>
+<a name="358" href="#358">358</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
+<a name="359" href="#359">359</a> <em class="jxr_javadoccomment">	 * @throws LimitExceededException If limit has been hit.</em>
+<a name="360" href="#360">360</a> <em class="jxr_javadoccomment">	 * @throws InvalidQueryException If recipient does not exist or the sender</em>
+<a name="361" href="#361">361</a> <em class="jxr_javadoccomment">	 *         does not follow the recipient and vice versa.</em>
+<a name="362" href="#362">362</a> <em class="jxr_javadoccomment">	 * @throws SecurityException If it is not properly logged in.</em>
+<a name="363" href="#363">363</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the given DM is null/empty, etc.</em>
+<a name="364" href="#364">364</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="365" href="#365">365</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> send(<a href="../../../com/twitterapime/search/Tweet.html">Tweet</a> dm) <strong class="jxr_keyword">throws</strong> IOException, LimitExceededException {
+<a name="366" href="#366">366</a> 		<strong class="jxr_keyword">if</strong> (dm == <strong class="jxr_keyword">null</strong>) {
+<a name="367" href="#367">367</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"DM must not be null."</span>);
+<a name="368" href="#368">368</a> 		}
+<a name="369" href="#369">369</a> 		<em class="jxr_comment">//</em>
+<a name="370" href="#370">370</a> 		dm.validateRecipient();
+<a name="371" href="#371">371</a> 		dm.validateContent();
+<a name="372" href="#372">372</a> 		<em class="jxr_comment">//</em>
+<a name="373" href="#373">373</a> 		checkUserAuth();
+<a name="374" href="#374">374</a> 		<em class="jxr_comment">//</em>
+<a name="375" href="#375">375</a> 		HttpConnection conn = getConn(TWITTER_URL_SEND_DIRECT_MESSAGE);
 <a name="376" href="#376">376</a> 		<em class="jxr_comment">//</em>
-<a name="377" href="#377">377</a> 		checkUserAuth();
-<a name="378" href="#378">378</a> 		<em class="jxr_comment">//</em>
-<a name="379" href="#379">379</a> 		HttpConnection conn = getConn(TWITTER_URL_SEND_DIRECT_MESSAGE);
-<a name="380" href="#380">380</a> 		<em class="jxr_comment">//</em>
-<a name="381" href="#381">381</a> 		<strong class="jxr_keyword">try</strong> {
-<a name="382" href="#382">382</a> 			<strong class="jxr_keyword">final</strong> String content = dm.getString(MetadataSet.TWEET_CONTENT);
-<a name="383" href="#383">383</a> 			String recipient = dm.getString(MetadataSet.USERACCOUNT_ID);
-<a name="384" href="#384">384</a> 			<em class="jxr_comment">//</em>
-<a name="385" href="#385">385</a> 			<strong class="jxr_keyword">if</strong> (recipient == <strong class="jxr_keyword">null</strong>) {
-<a name="386" href="#386">386</a> 				recipient = dm.getString(MetadataSet.USERACCOUNT_USER_NAME);
-<a name="387" href="#387">387</a> 				<strong class="jxr_keyword">if</strong> (recipient == <strong class="jxr_keyword">null</strong>) {
-<a name="388" href="#388">388</a> 					recipient =	dm.getString(MetadataSet.TWEET_AUTHOR_USERNAME);
-<a name="389" href="#389">389</a> 				}
-<a name="390" href="#390">390</a> 			}
-<a name="391" href="#391">391</a> 			<em class="jxr_comment">//</em>
-<a name="392" href="#392">392</a> 			conn.setRequestMethod(HttpConnection.POST);
-<a name="393" href="#393">393</a> 			<em class="jxr_comment">//</em>
-<a name="394" href="#394">394</a> 			OutputStream out = conn.openOutputStream();
-<a name="395" href="#395">395</a> 			out.write((<span class="jxr_string">"user="</span> + recipient).getBytes());
-<a name="396" href="#396">396</a> 			out.write((<span class="jxr_string">"&amp;text="</span> + content).getBytes());
-<a name="397" href="#397">397</a> 			out.flush();
-<a name="398" href="#398">398</a> 			out.close();
-<a name="399" href="#399">399</a> 			<em class="jxr_comment">//</em>
-<a name="400" href="#400">400</a> 			HttpResponseCodeInterpreter.perform(conn);
-<a name="401" href="#401">401</a> 			<em class="jxr_comment">//</em>
-<a name="402" href="#402">402</a> 			Parser parser = ParserFactory.getDefaultParser();
-<a name="403" href="#403">403</a> 			DirectMessageHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/DirectMessageHandler.html">DirectMessageHandler</a>();
-<a name="404" href="#404">404</a> 			parser.parse(conn.openInputStream(), handler);
-<a name="405" href="#405">405</a> 			handler.loadParsedTweet(dm, 0);
-<a name="406" href="#406">406</a> 			<em class="jxr_comment">//</em>
-<a name="407" href="#407">407</a> 			<strong class="jxr_keyword">return</strong> dm;
-<a name="408" href="#408">408</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
-<a name="409" href="#409">409</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
-<a name="410" href="#410">410</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a name="411" href="#411">411</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
-<a name="412" href="#412">412</a> 				conn.close();
-<a name="413" href="#413">413</a> 			}
-<a name="414" href="#414">414</a> 		}
-<a name="415" href="#415">415</a> 	}
-<a name="416" href="#416">416</a> 	
-<a name="417" href="#417">417</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="418" href="#418">418</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="419" href="#419">419</a> <em class="jxr_javadoccomment">	 * Check if the user's is authenticated.</em>
-<a name="420" href="#420">420</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="421" href="#421">421</a> <em class="jxr_javadoccomment">	 * @throws SecurityException User is not authenticated.</em>
-<a name="422" href="#422">422</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="423" href="#423">423</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkUserAuth() {
-<a name="424" href="#424">424</a> 		<strong class="jxr_keyword">if</strong> (userAccountMngr == <strong class="jxr_keyword">null</strong> || !userAccountMngr.isVerified()) {
-<a name="425" href="#425">425</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(
-<a name="426" href="#426">426</a> 			    <span class="jxr_string">"User's credential must be entered to perform this operation."</span>);
-<a name="427" href="#427">427</a> 		}
-<a name="428" href="#428">428</a> 	}
-<a name="429" href="#429">429</a> 	
-<a name="430" href="#430">430</a> 	<em class="jxr_javadoccomment">/**</em>
-<a name="431" href="#431">431</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a name="432" href="#432">432</a> <em class="jxr_javadoccomment">	 * Get HTTP connection for the given URL.</em>
-<a name="433" href="#433">433</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a name="434" href="#434">434</a> <em class="jxr_javadoccomment">	 * @param url URL.</em>
-<a name="435" href="#435">435</a> <em class="jxr_javadoccomment">	 * @return Connection.</em>
-<a name="436" href="#436">436</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
-<a name="437" href="#437">437</a> <em class="jxr_javadoccomment">	 */</em>
-<a name="438" href="#438">438</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../com/twitterapime/io/HttpConnection.html">HttpConnection</a> getConn(String url) <strong class="jxr_keyword">throws</strong> IOException {
-<a name="439" href="#439">439</a> 		<strong class="jxr_keyword">if</strong> (userAccountMngr != <strong class="jxr_keyword">null</strong>) {
-<a name="440" href="#440">440</a> 			<strong class="jxr_keyword">return</strong> UserAccountManager.getHttpConn(
-<a name="441" href="#441">441</a> 				url, userAccountMngr.getCredential());
-<a name="442" href="#442">442</a> 		} <strong class="jxr_keyword">else</strong> {
-<a name="443" href="#443">443</a> 			<strong class="jxr_keyword">return</strong> UserAccountManager.getHttpConn(url, <strong class="jxr_keyword">null</strong>);
-<a name="444" href="#444">444</a> 		}
-<a name="445" href="#445">445</a> 	}
-<a name="446" href="#446">446</a> }
+<a name="377" href="#377">377</a> 		<strong class="jxr_keyword">try</strong> {
+<a name="378" href="#378">378</a> 			<strong class="jxr_keyword">final</strong> String content = dm.getString(MetadataSet.TWEET_CONTENT);
+<a name="379" href="#379">379</a> 			String recipient = dm.getString(MetadataSet.TWEET_AUTHOR_USERNAME);
+<a name="380" href="#380">380</a> 			<strong class="jxr_keyword">if</strong> (recipient == <strong class="jxr_keyword">null</strong>) {
+<a name="381" href="#381">381</a> 				UserAccount ua = dm.getUserAccount();
+<a name="382" href="#382">382</a> 				recipient = ua.getString(MetadataSet.USERACCOUNT_ID);
+<a name="383" href="#383">383</a> 				<strong class="jxr_keyword">if</strong> (recipient == <strong class="jxr_keyword">null</strong>) {
+<a name="384" href="#384">384</a> 					recipient =	ua.getString(MetadataSet.USERACCOUNT_USER_NAME);
+<a name="385" href="#385">385</a> 				}
+<a name="386" href="#386">386</a> 			}
+<a name="387" href="#387">387</a> 			<em class="jxr_comment">//</em>
+<a name="388" href="#388">388</a> 			conn.setRequestMethod(HttpConnection.POST);
+<a name="389" href="#389">389</a> 			<em class="jxr_comment">//</em>
+<a name="390" href="#390">390</a> 			OutputStream out = conn.openOutputStream();
+<a name="391" href="#391">391</a> 			out.write((<span class="jxr_string">"user="</span> + recipient).getBytes());
+<a name="392" href="#392">392</a> 			out.write((<span class="jxr_string">"&amp;text="</span> + content).getBytes());
+<a name="393" href="#393">393</a> 			out.flush();
+<a name="394" href="#394">394</a> 			out.close();
+<a name="395" href="#395">395</a> 			<em class="jxr_comment">//</em>
+<a name="396" href="#396">396</a> 			HttpResponseCodeInterpreter.perform(conn);
+<a name="397" href="#397">397</a> 			<em class="jxr_comment">//</em>
+<a name="398" href="#398">398</a> 			Parser parser = ParserFactory.getDefaultParser();
+<a name="399" href="#399">399</a> 			DirectMessageHandler handler = <strong class="jxr_keyword">new</strong> <a href="../../../com/twitterapime/rest/handler/DirectMessageHandler.html">DirectMessageHandler</a>();
+<a name="400" href="#400">400</a> 			parser.parse(conn.openInputStream(), handler);
+<a name="401" href="#401">401</a> 			handler.loadParsedTweet(dm, 0);
+<a name="402" href="#402">402</a> 			<em class="jxr_comment">//</em>
+<a name="403" href="#403">403</a> 			<strong class="jxr_keyword">return</strong> dm;
+<a name="404" href="#404">404</a> 		} <strong class="jxr_keyword">catch</strong> (ParserException e) {
+<a name="405" href="#405">405</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e.getMessage());
+<a name="406" href="#406">406</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a name="407" href="#407">407</a> 			<strong class="jxr_keyword">if</strong> (conn != <strong class="jxr_keyword">null</strong>) {
+<a name="408" href="#408">408</a> 				conn.close();
+<a name="409" href="#409">409</a> 			}
+<a name="410" href="#410">410</a> 		}
+<a name="411" href="#411">411</a> 	}
+<a name="412" href="#412">412</a> 	
+<a name="413" href="#413">413</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="414" href="#414">414</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="415" href="#415">415</a> <em class="jxr_javadoccomment">	 * Check if the user's is authenticated.</em>
+<a name="416" href="#416">416</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="417" href="#417">417</a> <em class="jxr_javadoccomment">	 * @throws SecurityException User is not authenticated.</em>
+<a name="418" href="#418">418</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="419" href="#419">419</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkUserAuth() {
+<a name="420" href="#420">420</a> 		<strong class="jxr_keyword">if</strong> (userAccountMngr == <strong class="jxr_keyword">null</strong> || !userAccountMngr.isVerified()) {
+<a name="421" href="#421">421</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> SecurityException(
+<a name="422" href="#422">422</a> 			    <span class="jxr_string">"User's credential must be entered to perform this operation."</span>);
+<a name="423" href="#423">423</a> 		}
+<a name="424" href="#424">424</a> 	}
+<a name="425" href="#425">425</a> 	
+<a name="426" href="#426">426</a> 	<em class="jxr_javadoccomment">/**</em>
+<a name="427" href="#427">427</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a name="428" href="#428">428</a> <em class="jxr_javadoccomment">	 * Get HTTP connection for the given URL.</em>
+<a name="429" href="#429">429</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a name="430" href="#430">430</a> <em class="jxr_javadoccomment">	 * @param url URL.</em>
+<a name="431" href="#431">431</a> <em class="jxr_javadoccomment">	 * @return Connection.</em>
+<a name="432" href="#432">432</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs.</em>
+<a name="433" href="#433">433</a> <em class="jxr_javadoccomment">	 */</em>
+<a name="434" href="#434">434</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../com/twitterapime/io/HttpConnection.html">HttpConnection</a> getConn(String url) <strong class="jxr_keyword">throws</strong> IOException {
+<a name="435" href="#435">435</a> 		<strong class="jxr_keyword">if</strong> (userAccountMngr != <strong class="jxr_keyword">null</strong>) {
+<a name="436" href="#436">436</a> 			<strong class="jxr_keyword">return</strong> UserAccountManager.getHttpConn(
+<a name="437" href="#437">437</a> 				url, userAccountMngr.getCredential());
+<a name="438" href="#438">438</a> 		} <strong class="jxr_keyword">else</strong> {
+<a name="439" href="#439">439</a> 			<strong class="jxr_keyword">return</strong> UserAccountManager.getHttpConn(url, <strong class="jxr_keyword">null</strong>);
+<a name="440" href="#440">440</a> 		}
+<a name="441" href="#441">441</a> 	}
+<a name="442" href="#442">442</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

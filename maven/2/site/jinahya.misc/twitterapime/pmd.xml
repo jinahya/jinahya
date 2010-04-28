@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-04-21T10:41:52.235">
+<pmd version="4.2.2" timestamp="2010-04-28T17:21:54.177">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\io\HttpConnector.java">
 <violation beginline="251" endline="252" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.io" class="HttpConnector" method="newInstance" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
@@ -23,16 +23,13 @@ Avoid empty catch blocks
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\Timeline.java">
-<violation beginline="404" endline="404" begincolumn="51" endcolumn="74" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="Timeline" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+<violation beginline="421" endline="421" begincolumn="51" endcolumn="74" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="Timeline" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java">
-<violation beginline="25" endline="25" begincolumn="1" endcolumn="53" rule="UnusedImports" ruleset="Import Statement Rules" package="com.twitterapime.rest" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\TweetER.java">
+<violation beginline="23" endline="23" begincolumn="1" endcolumn="53" rule="UnusedImports" ruleset="Import Statement Rules" package="com.twitterapime.rest" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'com.twitterapime.search.InvalidQueryException'
-</violation>
-<violation beginline="325" endline="328" begincolumn="35" endcolumn="33" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="UserAccountManager" method="verifyCredential" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
-Avoid empty catch blocks
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\util\StringUtil.java">
