@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="20" tokens="108">
-<file line="500" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
-<file line="593" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
+<file line="500" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
+<file line="593" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
 <codefragment>
 <![CDATA[
 	private UserAccount manageFriendship(String actionUrl, UserAccount ua)
@@ -29,8 +29,8 @@
 </codefragment>
 </duplication>
 <duplication lines="18" tokens="104">
-<file line="412" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
-<file line="500" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
+<file line="412" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
+<file line="500" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
 <codefragment>
 <![CDATA[
 	public boolean isBlocking(UserAccount ua) throws IOException,
@@ -55,8 +55,8 @@
 </codefragment>
 </duplication>
 <duplication lines="18" tokens="103">
-<file line="412" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
-<file line="593" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\UserAccountManager.java"/>
+<file line="412" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
+<file line="593" path="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/UserAccountManager.java"/>
 <codefragment>
 <![CDATA[
 	private UserAccount manageFriendship(String actionUrl, UserAccount ua)

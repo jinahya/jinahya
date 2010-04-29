@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-04-29T11:19:15.637">
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\io\HttpConnector.java">
+<pmd version="4.2.2" timestamp="2010-04-29T17:58:30.052">
+<file name="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/io/HttpConnector.java">
 <violation beginline="251" endline="252" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.io" class="HttpConnector" method="newInstance" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -11,7 +11,7 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\parser\ParserFactory.java">
+<file name="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/parser/ParserFactory.java">
 <violation beginline="62" endline="63" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.parser" class="ParserFactory" method="newInstance" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -22,17 +22,17 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\Timeline.java">
+<file name="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/Timeline.java">
 <violation beginline="424" endline="424" begincolumn="51" endcolumn="74" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="Timeline" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\rest\TweetER.java">
+<file name="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/rest/TweetER.java">
 <violation beginline="23" endline="23" begincolumn="1" endcolumn="53" rule="UnusedImports" ruleset="Import Statement Rules" package="com.twitterapime.rest" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'com.twitterapime.search.InvalidQueryException'
 </violation>
 </file>
-<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime-v12\trunk\src\main\java\com\twitterapime\util\StringUtil.java">
+<file name="/usr/local/var/.hudson/jobs/jinahya.misc twitterapime/workspace/tags/1.2/src/main/java/com/twitterapime/util/StringUtil.java">
 <violation beginline="90" endline="109" begincolumn="25" endcolumn="5" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="com.twitterapime.util" class="StringUtil" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
