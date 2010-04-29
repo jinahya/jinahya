@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -57,7 +58,9 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>http://java.sun.com/j2se/1.3/docs/api/</link>
+	    <link>http://java.sun.com/javame/reference/apis/jsr139/</link> <!-- CLDC 1.1 -->
+	    <link>http://java.sun.com/javame/reference/apis/jsr218/</link> <!-- CDC 1.1 -->
+            <link>http://developer.android.com/reference/</link> <!-- Android -->
           </links>
         </configuration>
       </plugin>
@@ -88,13 +91,19 @@
     </plugins>
   </reporting>
   <name>${groupId}:${artifactId}:${version}</name>
-  <description>TwitterAPIME 1.2 Mavenized</description>
-  <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/index.html</url>
+  <description>TwitterAPIME Mavenized</description>
+  <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/${version}/index.html</url>
+  <licenses>
+    <license>
+      <name>GNU General Public License, version 2</name>
+      <url>http://www.gnu.org/licenses/gpl-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/${groupId}/${artifactId}/trunk</url>
   </scm>
   <distributionManagement>
     <site>
@@ -102,7 +111,7 @@
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/${version}</url>
     </site>
     <repository>
-      <uniqueVersion>false</uniqueVersion>
+      <uniqueVersion>true</uniqueVersion>
       <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
