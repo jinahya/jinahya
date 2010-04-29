@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-04-28T17:21:54.177">
+<pmd version="4.2.2" timestamp="2010-04-29T09:58:19.865">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\io\HttpConnector.java">
 <violation beginline="251" endline="252" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.io" class="HttpConnector" method="newInstance" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
@@ -23,7 +23,7 @@ Avoid empty catch blocks
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.misc\twitterapime\trunk\src\main\java\com\twitterapime\rest\Timeline.java">
-<violation beginline="421" endline="421" begincolumn="51" endcolumn="74" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="Timeline" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+<violation beginline="424" endline="424" begincolumn="51" endcolumn="74" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.twitterapime.rest" class="Timeline" method="run" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
