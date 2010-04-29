@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -58,7 +58,9 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-	    <link>http://java.sun.com/javame/reference/apis/jsr118/</link>
+	    <link>http://java.sun.com/javame/reference/apis/jsr139/</link> <!-- CLDC 1.1 -->
+	    <link>http://java.sun.com/javame/reference/apis/jsr218/</link> <!-- CDC 1.1 -->
+            <link>http://developer.android.com/reference/</link> <!-- Android -->
           </links>
         </configuration>
       </plugin>
@@ -102,7 +104,6 @@
     <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.misc/twitterapime/trunk%3Fstate%3Dclosed</url>
   </scm>
   <distributionManagement>
     <site>
