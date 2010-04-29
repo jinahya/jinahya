@@ -163,7 +163,7 @@
           <links>
 	    <link>http://java.sun.com/javame/reference/apis/jsr139/</link> <!-- CLDC 1.1 -->
 	    <link>http://java.sun.com/javame/reference/apis/jsr218/</link> <!-- CDC 1.1 -->
-            <link>http://developer.android.com/reference/</link> <!-- Android -->
+            <!--link>http://developer.android.com/reference/</link--> <!-- Android -->
           </links>
         </configuration>
       </plugin>
