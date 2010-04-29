@@ -13,7 +13,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -89,7 +89,7 @@
     </plugins>
   </reporting>
   <name>${groupId}:${artifactId}:${version}</name>
-  <description>TwitterAPIME trunk Mavenized</description>
+  <description>TwitterAPIME Mavenized</description>
   <url>http://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/${version}/index.html</url>
   <licenses>
     <license>
@@ -99,10 +99,10 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/${version}/trunk/</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/${version}/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/${groupId}/${artifactId}/trunk</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.misc/twitterapime/trunk%3Fstate%3Dclosed</url>
   </scm>
   <distributionManagement>
     <site>
@@ -110,7 +110,7 @@
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/${version}</url>
     </site>
     <repository>
-      <uniqueVersion>false</uniqueVersion>
+      <uniqueVersion>true</uniqueVersion>
       <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
