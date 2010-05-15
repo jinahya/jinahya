@@ -17,14 +17,12 @@ package jinahya.rfc2616;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -43,7 +41,33 @@ public abstract class GenericMessage {
 
 
     /** NEW LINE. */
-    public static final byte[] CRLF = new byte[] {0x0D, 0x0A};
+    private static final byte[] CRLF = new byte[] {0x0D, 0x0A};
+
+
+    /** CHARACTER BUFFER. */
+    private static final StringBuffer BUFFER = new StringBuffer();
+
+
+    /**
+     * .
+     * @param stream sdfdsaf
+     * @return sdfds
+     * @throws IOException safasdf
+     */
+    private static final String readLine(final InputStream stream)
+        throws IOException {
+
+        BUFFER.delete(0, BUFFER.length());
+        while (true) {
+            int ch = stream.read();
+            if (ch == 0x0D) { // CR
+                stream.read(); // LF
+                break;
+            }
+            BUFFER.append((char) ch);
+        }
+        return BUFFER.toString();
+    }
 
 
     /**
@@ -72,15 +96,13 @@ public abstract class GenericMessage {
          * @param stream
          * @throws IOException
          */
-        public void read(final InputStream stream) throws IOException {
+        private void read(final InputStream stream) throws IOException {
 
-            final BufferedReader reader =
-                new BufferedReader(new InputStreamReader(stream, "US-ASCII"));
             final List<String> lines = new ArrayList<String>();
 
             // ----------------------------------------------------------- LINES
             while (true) {
-                String line = reader.readLine();
+                String line = readLine(stream);
                 if (line == null) {
                     throw new EOFException("EOF in headers");
                 }
@@ -131,19 +153,17 @@ public abstract class GenericMessage {
          * @param stream
          * @throws IOException
          */
-        public void write(final OutputStream stream) throws IOException {
-            Writer writer = new OutputStreamWriter(stream, "US-ASCII");
+        private void write(final OutputStream stream) throws IOException {
             for (String fieldName : fieldMap.keySet()) {
-                writer.write(fieldName + ":");
+                stream.write((fieldName + ":").getBytes());
                 Iterator<String> fieldValues =
                     fieldMap.get(fieldName).iterator();
                 if (fieldValues.hasNext()) {
-                    writer.write(fieldValues.next());
+                    stream.write(fieldValues.next().getBytes());
                 }
                 while (fieldValues.hasNext()) {
-                    writer.write("," + fieldValues.next());
+                    stream.write(("," + fieldValues.next()).getBytes());
                 }
-                writer.flush();
                 stream.write(CRLF);
             }
             stream.write(CRLF);
@@ -227,11 +247,9 @@ public abstract class GenericMessage {
      * @throws IOException
      */
     public void read(final InputStream stream) throws IOException {
-        BufferedReader reader =
-            new BufferedReader(new InputStreamReader(stream));
 
         // ---------------------------------------------------------- START LINE
-        startLine = reader.readLine();
+        startLine = readLine(stream);
 
         // ----------------------------------------------------- MESSAGE HEADERs
         getMessageHeaders().read(stream);
@@ -247,11 +265,9 @@ public abstract class GenericMessage {
      * @throws IOException
      */
     public void write(final OutputStream stream) throws IOException {
-        Writer writer = new OutputStreamWriter(stream);
 
         // ---------------------------------------------------------- START LINE
-        writer.write(startLine);
-        writer.flush();
+        stream.write(startLine.getBytes());
         stream.write(CRLF);
 
         // ----------------------------------------------------- MESSAGE HEADERs
@@ -281,6 +297,20 @@ public abstract class GenericMessage {
                 "bufferSize(" + bufferSize + ") <= 0");
         }
         this.bufferSize = bufferSize;
+    }
+
+
+    @Override
+    public String toString() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            write(baos);
+            return new String(baos.toByteArray(), "US-ASCII");
+        } catch (IOException ioe) {
+            //ioe.printStackTrace();
+        }
+
+        return super.toString();
     }
 
 

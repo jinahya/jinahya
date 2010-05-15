@@ -1,5 +1,5 @@
 /*
- *  Copyright 2010 onacit.
+ *  Copyright 2010 Jin Kwon.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -69,12 +69,12 @@ public class ResponseMessage extends GenericMessage {
     }
 
 
-    public final String getRequestURI() {
+    public final String getReasonPhrase() {
         return reasonPhrase;
     }
 
 
-    public final void setRequestURI(final String reasonPhrase) {
+    public final void setReasonPhrase(final String reasonPhrase) {
         this.reasonPhrase = reasonPhrase;
     }
 
