@@ -189,7 +189,7 @@ public abstract class GenericMessage {
          * @param fieldName
          * @return
          */
-        public final boolean containsMessageHeader(final Object fieldName) {
+        public final boolean containsField(final Object fieldName) {
             return fieldMap.containsKey(fieldName);
         }
 
