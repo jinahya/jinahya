@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimpleClientTest {
+public class SingleConnectionClientTest {
 
 
     @Test
@@ -47,7 +47,7 @@ public class SimpleClientTest {
         final ResponseMessage response = new ResponseMessage();
 
         final SocketAddress address = new InetSocketAddress("www.daum.net", 80);
-        new SimpleClient().request(address, request, response);
+        new SingleConnectionClient().request(address, request, response);
         System.out.println("-------------------------------------------------");
         System.out.println(response.toString());
     }

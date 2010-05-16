@@ -32,7 +32,7 @@ import java.net.SocketException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SimpleClient {
+public class SingleConnectionClient {
 
 
     private static final int DEFAULT_TIMEOUT = 5000;

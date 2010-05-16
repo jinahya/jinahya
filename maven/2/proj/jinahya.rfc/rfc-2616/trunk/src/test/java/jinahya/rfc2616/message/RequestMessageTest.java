@@ -17,11 +17,10 @@
 package jinahya.rfc2616.message;
 
 
-import jinahya.rfc2616.message.RequestMessage;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.testng.Assert;
+//import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
