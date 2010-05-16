@@ -79,8 +79,8 @@ public abstract class GenericMessage {
          *
          * @return
          */
-        public String[] getFieldNames() {
-            return fieldMap.keySet().toArray(new String[fieldMap.size()]);
+        public Object[] getFieldNames() {
+            return fieldMap.keySet().toArray();
         }
 
 
@@ -89,10 +89,10 @@ public abstract class GenericMessage {
          * @param fieldName
          * @return
          */
-        public Set<String> getFieldValues(final String fieldName) {
-            Set<String> fieldValues = fieldMap.get(fieldName);
+        public Set getFieldValues(final Object fieldName) {
+            Set fieldValues = (Set) fieldMap.get(fieldName);
             if (fieldValues == null) {
-                fieldValues = new LinkedHashSet<String>();
+                fieldValues = new LinkedHashSet();
                 fieldMap.put(fieldName, fieldValues);
             }
             return fieldValues;
@@ -108,7 +108,7 @@ public abstract class GenericMessage {
 
             fieldMap.clear();
 
-            final List<String> lines = new ArrayList<String>();
+            final List lines = new ArrayList();
 
             // ----------------------------------------------------------- LINES
             while (true) {
@@ -129,9 +129,9 @@ public abstract class GenericMessage {
                 buffer.append(lines.remove(0));
                 size--;
                 while (size > 0) {
-                    final char c = lines.get(0).charAt(0);
+                    final char c = ((String) lines.get(0)).charAt(0);
                     if (c == 0x20 || c == 0x09) {
-                        buffer.append(" " + lines.remove(0).trim());
+                        buffer.append(" " + ((String) lines.remove(0)).trim());
                         size--;
                     } else {
                         break;
@@ -141,14 +141,15 @@ public abstract class GenericMessage {
             }
 
             // -------------------------------------------------------- TOKENIZE
-            for (String line : lines) {
+            for (int i = 0; i < lines.size(); i++) {
+                String line = (String) lines.get(i);
                 int colon = line.indexOf(':');
                 if (colon == -1) {
                     System.err.println("Unacceptable message-header: " + line);
                     continue;
                 }
                 final String fieldName = line.substring(0, colon);
-                final Set<String> fieldValues = getFieldValues(fieldName);
+                final Set fieldValues = getFieldValues(fieldName);
                 final String fieldValue = line.substring(colon + 1);
                 StringTokenizer tokenizer =
                     new StringTokenizer(fieldValue, ",");
@@ -165,12 +166,14 @@ public abstract class GenericMessage {
          * @throws IOException
          */
         private void write(final OutputStream stream) throws IOException {
-            for (String fieldName : fieldMap.keySet()) {
+            Iterator fieldNames = fieldMap.keySet().iterator();
+            while (fieldNames.hasNext()) {
+                String fieldName = (String) fieldNames.next();
                 stream.write((fieldName + ":").getBytes());
-                Iterator<String> fieldValues =
-                    fieldMap.get(fieldName).iterator();
+                Iterator fieldValues =
+                    ((Set) fieldMap.get(fieldName)).iterator();
                 if (fieldValues.hasNext()) {
-                    stream.write(fieldValues.next().getBytes());
+                    stream.write(((String) fieldValues.next()).getBytes());
                 }
                 while (fieldValues.hasNext()) {
                     stream.write(("," + fieldValues.next()).getBytes());
@@ -186,13 +189,13 @@ public abstract class GenericMessage {
          * @param fieldName
          * @return
          */
-        public final boolean containsMessageHeader(final String fieldName) {
+        public final boolean containsMessageHeader(final Object fieldName) {
             return fieldMap.containsKey(fieldName);
         }
 
 
-        private Map<String, Set<String>> fieldMap =
-            new LinkedHashMap<String, Set<String>>();
+        // <String, Set<String>>
+        private Map fieldMap = new LinkedHashMap();
     }
 
 

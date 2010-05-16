@@ -54,7 +54,7 @@ public class BufferedMessageBody implements MessageBody {
     }
 
 
-    @Override
+    //@Override
     public final void read(final GenericMessage message,
                            final InputStream stream)
         throws IOException {
@@ -67,7 +67,7 @@ public class BufferedMessageBody implements MessageBody {
     }
 
 
-    @Override
+    //@Override
     public final void write(final GenericMessage message,
                             final OutputStream stream)
         throws IOException {

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 //import org.testng.Assert;
-import org.testng.annotations.Test;
+//import org.testng.annotations.Test;
 
 
 /**
@@ -33,11 +33,16 @@ public class ResponseMessageTest extends GenericMessageTest {
 
     private ResponseMessage read() throws IOException {
         InputStream stream = getClass().getResourceAsStream("/response.bin");
-        return new ResponseMessage().read(stream);
+        return (ResponseMessage) new ResponseMessage().read(stream);
     }
 
 
-    @Test
+    /**
+     *
+     * @throws IOException
+     * @testng.test
+     */
+    //@Test
     public void readSample() throws IOException {
         ResponseMessage message = read();
 

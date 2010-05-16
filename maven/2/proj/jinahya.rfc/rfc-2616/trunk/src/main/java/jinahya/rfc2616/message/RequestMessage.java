@@ -30,13 +30,13 @@ import java.util.StringTokenizer;
 public class RequestMessage extends GenericMessage {
 
 
-    @Override
+    //@Override
     public String getStartLine() {
         return method + " " + requestUri + " " + httpVersion;
     }
 
 
-    @Override
+    //@Override
     protected void setStartLine(final String startLine) {
         final StringTokenizer tokenizer = new StringTokenizer(startLine);
         method = tokenizer.nextToken();
@@ -45,14 +45,14 @@ public class RequestMessage extends GenericMessage {
     }
 
 
-    @Override
-    public RequestMessage read(final InputStream stream) throws IOException {
+    //@Override
+    public GenericMessage read(final InputStream stream) throws IOException {
         return (RequestMessage) super.read(stream);
     }
 
 
-    @Override
-    public RequestMessage write(OutputStream stream) throws IOException {
+    //@Override
+    public GenericMessage write(OutputStream stream) throws IOException {
         return (RequestMessage) super.write(stream);
     }
 

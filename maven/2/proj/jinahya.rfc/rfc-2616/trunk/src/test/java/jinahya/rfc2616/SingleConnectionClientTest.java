@@ -24,7 +24,7 @@ import java.net.SocketAddress;
 import jinahya.rfc2616.message.RequestMessage;
 import jinahya.rfc2616.message.ResponseMessage;
 
-import org.testng.annotations.Test;
+//import org.testng.annotations.Test;
 
 
 /**
@@ -34,7 +34,12 @@ import org.testng.annotations.Test;
 public class SingleConnectionClientTest {
 
 
-    @Test
+    /**
+     *
+     * @throws IOException
+     * @testng.test
+     */
+    //@Test
     public void testDaum() throws IOException {
 
         final RequestMessage request = new RequestMessage();

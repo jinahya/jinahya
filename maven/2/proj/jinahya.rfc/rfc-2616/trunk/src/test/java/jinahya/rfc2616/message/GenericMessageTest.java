@@ -19,6 +19,7 @@ package jinahya.rfc2616.message;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 
 import jinahya.rfc2616.message.GenericMessage.MessageHeaders;
 
@@ -42,14 +43,19 @@ public class GenericMessageTest {
         out.println(message.getStartLine());
 
         final MessageHeaders headers = message.getMessageHeaders();
-        for (String fieldName : headers.getFieldNames()) {
-            out.print(fieldName + ":");
+        final Object[] fieldNames = headers.getFieldNames();
+        for (int i = 0; i < fieldNames.length; i++) {
+        //for (String fieldName : headers.getFieldNames()) {
+            out.print(fieldNames[i] + ":");
             boolean first = true;
-            for (String fieldValue : headers.getFieldValues(fieldName)) {
+            Iterator fieldValues =
+                headers.getFieldValues(fieldNames[i]).iterator();
+            while (fieldValues.hasNext()) {
+            //for (String fieldValue : headers.getFieldValues(fieldName)) {
                 if (!first) {
                     out.print(",");
                 }
-                out.print(fieldValue);
+                out.print(fieldValues.next());
                 if (first) {
                     first = false;
                 }
