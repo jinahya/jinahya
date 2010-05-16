@@ -189,6 +189,16 @@ public abstract class GenericMessage {
         }
 
 
+        /**
+         * 
+         * @param fieldName
+         * @return
+         */
+        public final boolean containsMessageHeader(final String fieldName) {
+            return fieldMap.containsKey(fieldName);
+        }
+
+
         private Map<String, Set<String>> fieldMap =
             new LinkedHashMap<String, Set<String>>();
     }
@@ -263,6 +273,7 @@ public abstract class GenericMessage {
     /**
      *
      * @param stream
+     * @return
      * @throws IOException
      */
     public GenericMessage read(final InputStream stream) throws IOException {
@@ -283,6 +294,7 @@ public abstract class GenericMessage {
     /**
      *
      * @param stream
+     * @return
      * @throws IOException
      */
     public GenericMessage write(final OutputStream stream) throws IOException {
@@ -295,7 +307,9 @@ public abstract class GenericMessage {
         getMessageHeaders().write(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        stream.write(messageBody);
+        if (messageBody != null) {
+            stream.write(messageBody);
+        }
 
         return this;
     }

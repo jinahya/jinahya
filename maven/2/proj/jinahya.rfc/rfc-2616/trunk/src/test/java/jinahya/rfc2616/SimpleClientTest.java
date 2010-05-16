@@ -18,9 +18,9 @@ package jinahya.rfc2616;
 
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -28,30 +28,24 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class RequestMessageTest {
-
-
-    private RequestMessage read() throws IOException {
-        InputStream stream = getClass().getResourceAsStream("/request.bin");
-        return new RequestMessage().read(stream);
-    }
+public class SimpleClientTest {
 
 
     @Test
-    public void readSample() throws IOException {
-        RequestMessage message = read();
+    public void testDaum() throws IOException {
 
+        final RequestMessage request = new RequestMessage();
+        request.setMethod("GET");
+        request.setRequestURI("/index.html");
+        request.setHTTPVersion("HTTP/1.1");
         System.out.println("-------------------------------------------------");
-        System.out.println(message);
-        System.out.println("method: " + message.getMethod());
-        System.out.println("requestURI: " + message.getRequestURI());
-        System.out.println("HTTPVersion: " + message.getHTTPVersion());
+        System.out.println(request);
+
+        final ResponseMessage response = new ResponseMessage();
+
+        final SocketAddress address = new InetSocketAddress("www.daum.net", 80);
+        new SimpleClient().request(address, request, response);
+        System.out.println("-------------------------------------------------");
+        System.out.println(response.toString());
     }
-
-
-    @Test
-    public void testEquals() throws IOException {
-        Assert.assertEquals(read(), read());
-    }
-
 }

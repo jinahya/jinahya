@@ -41,10 +41,11 @@ public class ResponseMessageTest {
     public void readSample() throws IOException {
         ResponseMessage message = read();
 
+        System.out.println("-------------------------------------------------");
         System.out.println(message);
-        System.out.println(message.getHTTPVersion());
-        System.out.println(message.getStatusCode());
-        System.out.println(message.getReasonPhrase());
+        System.out.println("HTTPVersion: " + message.getHTTPVersion());
+        System.out.println("statusCode: " + message.getStatusCode());
+        System.out.println("reasonPhrase: " + message.getReasonPhrase());
     }
 
 
