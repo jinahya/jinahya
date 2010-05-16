@@ -14,9 +14,10 @@
  *  limitations under the License.
  */
 
-package jinahya.rfc2616;
+package jinahya.rfc2616.message;
 
 
+import jinahya.rfc2616.message.ResponseMessage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,11 +47,5 @@ public class ResponseMessageTest {
         System.out.println("HTTPVersion: " + message.getHTTPVersion());
         System.out.println("statusCode: " + message.getStatusCode());
         System.out.println("reasonPhrase: " + message.getReasonPhrase());
-    }
-
-
-    @Test
-    public void testEquals() throws IOException {
-        Assert.assertEquals(read(), read());
     }
 }

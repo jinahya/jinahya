@@ -14,9 +14,10 @@
  *  limitations under the License.
  */
 
-package jinahya.rfc2616;
+package jinahya.rfc2616.message;
 
 
+import jinahya.rfc2616.message.RequestMessage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -47,11 +48,4 @@ public class RequestMessageTest {
         System.out.println("requestURI: " + message.getRequestURI());
         System.out.println("HTTPVersion: " + message.getHTTPVersion());
     }
-
-
-    @Test
-    public void testEquals() throws IOException {
-        Assert.assertEquals(read(), read());
-    }
-
 }

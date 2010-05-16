@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import jinahya.rfc2616.message.RequestMessage;
+import jinahya.rfc2616.message.ResponseMessage;
+
 import org.testng.annotations.Test;
 
 

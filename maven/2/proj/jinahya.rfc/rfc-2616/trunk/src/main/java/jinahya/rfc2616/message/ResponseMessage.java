@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.rfc2616;
+package jinahya.rfc2616.message;
 
 
 import java.io.IOException;
@@ -27,52 +27,29 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class RequestMessage extends GenericMessage {
+public class ResponseMessage extends GenericMessage {
 
 
     @Override
-    public RequestMessage read(final InputStream stream) throws IOException {
+    public ResponseMessage read(final InputStream stream) throws IOException {
         super.read(stream);
 
         StringTokenizer tokenizer = new StringTokenizer(getStartLine());
-        if (tokenizer.countTokens() != 3) {
-            throw new IOException("Illegal requestLine: " + getStartLine());
-        }
-        method = tokenizer.nextToken();
-        reasonPhrase = tokenizer.nextToken();
         HTTPVersion = tokenizer.nextToken();
+        statusCode = Integer.parseInt(tokenizer.nextToken());
+        reasonPhrase = tokenizer.nextToken();
 
         return this;
     }
 
 
     @Override
-    public RequestMessage write(OutputStream stream) throws IOException {
-        setStartLine(method + " " + reasonPhrase + " " + HTTPVersion);
+    public ResponseMessage write(OutputStream stream) throws IOException {
+        setStartLine(HTTPVersion + " " + statusCode + " " + reasonPhrase);
 
         super.write(stream);
 
         return this;
-    }
-
-
-    public final String getMethod() {
-        return method;
-    }
-
-
-    public final void setMethod(final String method) {
-        this.method = method;
-    }
-
-
-    public final String getRequestURI() {
-        return reasonPhrase;
-    }
-
-
-    public final void setRequestURI(final String requestURI) {
-        this.reasonPhrase = requestURI;
     }
 
 
@@ -86,7 +63,27 @@ public class RequestMessage extends GenericMessage {
     }
 
 
-    private String method;
+    public final int getStatusCode() {
+        return statusCode;
+    }
+
+
+    public final void setStatusCode(final int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+
+    public final String getReasonPhrase() {
+        return reasonPhrase;
+    }
+
+
+    public final void setReasonPhrase(final String reasonPhrase) {
+        this.reasonPhrase = reasonPhrase;
+    }
+
+
+    private String HTTPVersion = "HTTP/1.1";
+    private int statusCode;
     private String reasonPhrase;
-    private String HTTPVersion;
 }

@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package jinahya.rfc2616;
+package jinahya.rfc2616.message;
 
 
 import java.io.ByteArrayOutputStream;
@@ -236,9 +236,18 @@ public abstract class GenericMessage {
 
     /**
      *
+     * @param messageHeaders
+     */
+    public final void setMessageHeaders(final MessageHeaders messageHeaders) {
+        this.messageHeaders = messageHeaders;
+    }
+
+
+    /**
+     *
      * @return
      */
-    public final byte[] getMessageBody() {
+    public final MessageBody getMessageBody() {
         return messageBody;
     }
 
@@ -247,26 +256,11 @@ public abstract class GenericMessage {
      *
      * @param messageBody
      */
-    public final void setMessageBody(final byte[] messageBody) {
-        this.messageBody = messageBody;
-    }
-
-
-    /**
-     *
-     * @param messageBody
-     * @throws IOException
-     */
-    public final void setMessageBody(final InputStream messageBody)
-        throws IOException {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[bufferSize];
-        int read = -1;
-        while ((read = messageBody.read(buffer)) != -1) {
-            baos.write(buffer, 0, read);
+    public final void setMessageBody(final MessageBody messageBody) {
+        if (messageBody == null) {
+            throw new NullPointerException("messageBody");
         }
-        this.messageBody = baos.toByteArray();
+        this.messageBody = messageBody;
     }
 
 
@@ -285,7 +279,7 @@ public abstract class GenericMessage {
         getMessageHeaders().read(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        setMessageBody(stream);
+        messageBody.read(getMessageHeaders(), stream);
 
         return this;
     }
@@ -307,121 +301,13 @@ public abstract class GenericMessage {
         getMessageHeaders().write(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        if (messageBody != null) {
-            stream.write(messageBody);
-        }
+        messageBody.write(getMessageHeaders(), stream);
 
         return this;
     }
 
 
-    /**
-     *
-     * @return
-     */
-    public final int getBuffereSize() {
-        return bufferSize;
-    }
-
-
-    /**
-     *
-     * @param bufferSize
-     */
-    public final void setBuffereSize(final int bufferSize) {
-        if (bufferSize <= 0) {
-            throw new IllegalArgumentException(
-                "bufferSize(" + bufferSize + ") <= 0");
-        }
-        this.bufferSize = bufferSize;
-    }
-
-
-    @Override
-    public String toString() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            write(baos);
-            return new String(baos.toByteArray(), "US-ASCII");
-        } catch (IOException ioe) {
-            //ioe.printStackTrace();
-        }
-
-        return super.toString();
-    }
-
-
-    @Override
-    public int hashCode() {
-        int result = 17;
-
-        if (startLine == null) {
-            result = 37 * result + 0;
-        } else {
-            result = 37 * result + startLine.hashCode();
-        }
-
-        if (messageHeaders == null) {
-            result = 37 * result + 0;
-        } else {
-            result = 37 * result + messageHeaders.hashCode();
-        }
-
-        if (messageBody == null) {
-            result = 37 * result + 0;
-        } else {
-            for (byte b : messageBody) {
-                result = 37 * result + b;
-            }
-        }
-
-        return result;
-    }
-
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == this) {
-            return true;
-        }
-
-        if (!(obj instanceof GenericMessage)) {
-            return false;
-        }
-
-        GenericMessage casted = (GenericMessage) obj;
-
-        if (startLine == null) {
-            if (casted.startLine != null) {
-                return false;
-            }
-        } else {
-            if (!startLine.equals(casted.startLine)) {
-                return false;
-            }
-        }
-
-        if (messageHeaders == null) {
-            if (casted.messageHeaders != null) {
-                return false;
-            }
-        } else {
-            if (!messageHeaders.equals(casted.messageHeaders)) {
-                return false;
-            }
-        }
-
-        if (!Arrays.equals(messageBody, casted.messageBody)) {
-            return false;
-        }
-
-        return true;
-    }
-
-
     private String startLine;
     private MessageHeaders messageHeaders;
-    private byte[] messageBody;
-
-    private transient int bufferSize = 1024;
+    private MessageBody messageBody = new BufferedMessageBody();
 }
