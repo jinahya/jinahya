@@ -208,18 +208,14 @@ public abstract class GenericMessage {
      *
      * @return
      */
-    protected final String getStartLine() {
-        return startLine;
-    }
+    protected abstract String getStartLine();
 
 
     /**
      *
      * @param startLine
      */
-    protected final void setStartLine(final String startLine) {
-        this.startLine = startLine;
-    }
+    protected abstract void setStartLine(final String startLine);
 
 
     /**
@@ -273,7 +269,7 @@ public abstract class GenericMessage {
     public GenericMessage read(final InputStream stream) throws IOException {
 
         // ---------------------------------------------------------- START LINE
-        startLine = readLine(stream);
+        setStartLine(readLine(stream));
 
         // ----------------------------------------------------- MESSAGE HEADERs
         getMessageHeaders().read(stream);
@@ -294,7 +290,7 @@ public abstract class GenericMessage {
     public GenericMessage write(final OutputStream stream) throws IOException {
 
         // ---------------------------------------------------------- START LINE
-        stream.write(startLine.getBytes());
+        stream.write(getStartLine().getBytes());
         stream.write(CRLF);
 
         // ----------------------------------------------------- MESSAGE HEADERs
@@ -307,7 +303,6 @@ public abstract class GenericMessage {
     }
 
 
-    private String startLine;
     private MessageHeaders messageHeaders;
     private MessageBody messageBody = new BufferedMessageBody();
 }

@@ -31,28 +31,29 @@ public class RequestMessage extends GenericMessage {
 
 
     @Override
-    public RequestMessage read(final InputStream stream) throws IOException {
-        super.read(stream);
+    protected String getStartLine() {
+        return method + " " + reasonPhrase + " " + HTTPVersion;
+    }
 
-        StringTokenizer tokenizer = new StringTokenizer(getStartLine());
-        if (tokenizer.countTokens() != 3) {
-            throw new IOException("Illegal requestLine: " + getStartLine());
-        }
+
+    @Override
+    protected void setStartLine(final String startLine) {
+        final StringTokenizer tokenizer = new StringTokenizer(getStartLine());
         method = tokenizer.nextToken();
         reasonPhrase = tokenizer.nextToken();
         HTTPVersion = tokenizer.nextToken();
+    }
 
-        return this;
+
+    @Override
+    public RequestMessage read(final InputStream stream) throws IOException {
+        return (RequestMessage) super.read(stream);
     }
 
 
     @Override
     public RequestMessage write(OutputStream stream) throws IOException {
-        setStartLine(method + " " + reasonPhrase + " " + HTTPVersion);
-
-        super.write(stream);
-
-        return this;
+        return (RequestMessage) super.write(stream);
     }
 
 

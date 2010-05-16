@@ -31,25 +31,29 @@ public class ResponseMessage extends GenericMessage {
 
 
     @Override
-    public ResponseMessage read(final InputStream stream) throws IOException {
-        super.read(stream);
+    protected String getStartLine() {
+        return HTTPVersion + " " + statusCode + " " + reasonPhrase;
+    }
 
-        StringTokenizer tokenizer = new StringTokenizer(getStartLine());
+
+    @Override
+    protected void setStartLine(final String startLine) {
+        final StringTokenizer tokenizer = new StringTokenizer(getStartLine());
         HTTPVersion = tokenizer.nextToken();
         statusCode = Integer.parseInt(tokenizer.nextToken());
         reasonPhrase = tokenizer.nextToken();
+    }
 
-        return this;
+
+    @Override
+    public ResponseMessage read(final InputStream stream) throws IOException {
+        return (ResponseMessage) super.read(stream);
     }
 
 
     @Override
     public ResponseMessage write(OutputStream stream) throws IOException {
-        setStartLine(HTTPVersion + " " + statusCode + " " + reasonPhrase);
-
-        super.write(stream);
-
-        return this;
+        return (ResponseMessage) super.write(stream);
     }
 
 
