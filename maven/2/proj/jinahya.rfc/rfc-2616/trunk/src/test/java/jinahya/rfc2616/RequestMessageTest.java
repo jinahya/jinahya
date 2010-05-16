@@ -20,6 +20,7 @@ package jinahya.rfc2616;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -30,14 +31,26 @@ import org.testng.annotations.Test;
 public class RequestMessageTest {
 
 
+    private RequestMessage read() throws IOException {
+        InputStream stream = getClass().getResourceAsStream("/request.bin");
+        return new RequestMessage().read(stream);
+    }
+
+
     @Test
     public void readSample() throws IOException {
-        InputStream stream = getClass().getResourceAsStream("/request.bin");
-        RequestMessage message = new RequestMessage();
-        message.read(stream);
+        RequestMessage message = read();
+
         System.out.println(message);
         System.out.println(message.getMethod());
         System.out.println(message.getRequestURI());
         System.out.println(message.getHTTPVersion());
     }
+
+
+    @Test
+    public void testEquals() throws IOException {
+        Assert.assertEquals(read(), read());
+    }
+
 }

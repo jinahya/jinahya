@@ -31,7 +31,7 @@ public class RequestMessage extends GenericMessage {
 
 
     @Override
-    public void read(final InputStream stream) throws IOException {
+    public RequestMessage read(final InputStream stream) throws IOException {
         super.read(stream);
 
         StringTokenizer tokenizer = new StringTokenizer(getStartLine());
@@ -41,14 +41,18 @@ public class RequestMessage extends GenericMessage {
         method = tokenizer.nextToken();
         reasonPhrase = tokenizer.nextToken();
         HTTPVersion = tokenizer.nextToken();
+
+        return this;
     }
 
 
     @Override
-    public void write(OutputStream stream) throws IOException {
+    public RequestMessage write(OutputStream stream) throws IOException {
         setStartLine(method + " " + reasonPhrase + " " + HTTPVersion);
 
         super.write(stream);
+
+        return this;
     }
 
 

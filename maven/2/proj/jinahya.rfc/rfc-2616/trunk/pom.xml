@@ -30,11 +30,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
+    <!--dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -196,6 +196,12 @@
         <pluginManagement>
           <plugins>
             <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <target>jsr14</target>
+              </configuration>
+            </plugin>
+            <plugin>
               <artifactId>maven-antrun-plugin</artifactId>
               <dependencies>
                 <dependency>
@@ -249,6 +255,12 @@
       <build>
         <pluginManagement>
           <plugins>
+            <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <target>jsr14</target>
+              </configuration>
+            </plugin>
             <plugin>
               <artifactId>maven-antrun-plugin</artifactId>
               <dependencies>

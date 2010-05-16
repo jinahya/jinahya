@@ -18,12 +18,11 @@ package jinahya.rfc2616;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -60,7 +59,7 @@ public abstract class GenericMessage {
         BUFFER.delete(0, BUFFER.length());
         while (true) {
             int ch = stream.read();
-            if (ch == 0x0D) { // CR
+            if (ch == CRLF[0]) { // CR
                 stream.read(); // LF
                 break;
             }
@@ -140,7 +139,8 @@ public abstract class GenericMessage {
                 final String fieldName = line.substring(0, colon);
                 final Set<String> fieldValues = getFieldValues(fieldName);
                 final String fieldValue = line.substring(colon + 1);
-                StringTokenizer tokenizer = new StringTokenizer(fieldValue, ",");
+                StringTokenizer tokenizer =
+                    new StringTokenizer(fieldValue, ",");
                 while (tokenizer.hasMoreTokens()) {
                     fieldValues.add(tokenizer.nextToken().trim());
                 }
@@ -167,6 +167,25 @@ public abstract class GenericMessage {
                 stream.write(CRLF);
             }
             stream.write(CRLF);
+        }
+
+
+        @Override
+        public int hashCode() {
+            return 37 * 17 + fieldMap.hashCode();
+        }
+
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof MessageHeaders)) {
+                return false;
+            }
+            MessageHeaders casted = (MessageHeaders) obj;
+            return fieldMap.equals(casted.fieldMap);
         }
 
 
@@ -246,7 +265,7 @@ public abstract class GenericMessage {
      * @param stream
      * @throws IOException
      */
-    public void read(final InputStream stream) throws IOException {
+    public GenericMessage read(final InputStream stream) throws IOException {
 
         // ---------------------------------------------------------- START LINE
         startLine = readLine(stream);
@@ -256,6 +275,8 @@ public abstract class GenericMessage {
 
         // -------------------------------------------------------- MESSAGE BODY
         setMessageBody(stream);
+
+        return this;
     }
 
 
@@ -264,7 +285,7 @@ public abstract class GenericMessage {
      * @param stream
      * @throws IOException
      */
-    public void write(final OutputStream stream) throws IOException {
+    public GenericMessage write(final OutputStream stream) throws IOException {
 
         // ---------------------------------------------------------- START LINE
         stream.write(startLine.getBytes());
@@ -275,6 +296,8 @@ public abstract class GenericMessage {
 
         // -------------------------------------------------------- MESSAGE BODY
         stream.write(messageBody);
+
+        return this;
     }
 
 
@@ -314,9 +337,77 @@ public abstract class GenericMessage {
     }
 
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+
+        if (startLine == null) {
+            result = 37 * result + 0;
+        } else {
+            result = 37 * result + startLine.hashCode();
+        }
+
+        if (messageHeaders == null) {
+            result = 37 * result + 0;
+        } else {
+            result = 37 * result + messageHeaders.hashCode();
+        }
+
+        if (messageBody == null) {
+            result = 37 * result + 0;
+        } else {
+            for (byte b : messageBody) {
+                result = 37 * result + b;
+            }
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof GenericMessage)) {
+            return false;
+        }
+
+        GenericMessage casted = (GenericMessage) obj;
+
+        if (startLine == null) {
+            if (casted.startLine != null) {
+                return false;
+            }
+        } else {
+            if (!startLine.equals(casted.startLine)) {
+                return false;
+            }
+        }
+
+        if (messageHeaders == null) {
+            if (casted.messageHeaders != null) {
+                return false;
+            }
+        } else {
+            if (!messageHeaders.equals(casted.messageHeaders)) {
+                return false;
+            }
+        }
+
+        if (!Arrays.equals(messageBody, casted.messageBody)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     private String startLine;
     private MessageHeaders messageHeaders;
     private byte[] messageBody;
 
-    private int bufferSize = 1024;
+    private transient int bufferSize = 1024;
 }
