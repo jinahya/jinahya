@@ -72,7 +72,16 @@ public abstract class GenericMessage {
     /**
      *
      */
-    public static class MessageHeaders {
+    public static final class MessageHeaders {
+
+
+        /**
+         *
+         * @return
+         */
+        public String[] getFieldNames() {
+            return fieldMap.keySet().toArray(new String[fieldMap.size()]);
+        }
 
 
         /**
@@ -80,7 +89,7 @@ public abstract class GenericMessage {
          * @param fieldName
          * @return
          */
-        public final Set<String> getFieldValues(final String fieldName) {
+        public Set<String> getFieldValues(final String fieldName) {
             Set<String> fieldValues = fieldMap.get(fieldName);
             if (fieldValues == null) {
                 fieldValues = new LinkedHashSet<String>();
@@ -96,6 +105,8 @@ public abstract class GenericMessage {
          * @throws IOException
          */
         private void read(final InputStream stream) throws IOException {
+
+            fieldMap.clear();
 
             final List<String> lines = new ArrayList<String>();
 
@@ -170,25 +181,6 @@ public abstract class GenericMessage {
         }
 
 
-        @Override
-        public int hashCode() {
-            return 37 * 17 + fieldMap.hashCode();
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof MessageHeaders)) {
-                return false;
-            }
-            MessageHeaders casted = (MessageHeaders) obj;
-            return fieldMap.equals(casted.fieldMap);
-        }
-
-
         /**
          * 
          * @param fieldName
@@ -208,7 +200,7 @@ public abstract class GenericMessage {
      *
      * @return
      */
-    protected abstract String getStartLine();
+    public abstract String getStartLine();
 
 
     /**
@@ -275,7 +267,7 @@ public abstract class GenericMessage {
         getMessageHeaders().read(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        messageBody.read(getMessageHeaders(), stream);
+        messageBody.read(this, stream);
 
         return this;
     }
@@ -297,7 +289,7 @@ public abstract class GenericMessage {
         getMessageHeaders().write(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        messageBody.write(getMessageHeaders(), stream);
+        messageBody.write(this, stream);
 
         return this;
     }

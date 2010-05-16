@@ -31,17 +31,17 @@ public class RequestMessage extends GenericMessage {
 
 
     @Override
-    protected String getStartLine() {
-        return method + " " + reasonPhrase + " " + HTTPVersion;
+    public String getStartLine() {
+        return method + " " + requestUri + " " + httpVersion;
     }
 
 
     @Override
     protected void setStartLine(final String startLine) {
-        final StringTokenizer tokenizer = new StringTokenizer(getStartLine());
+        final StringTokenizer tokenizer = new StringTokenizer(startLine);
         method = tokenizer.nextToken();
-        reasonPhrase = tokenizer.nextToken();
-        HTTPVersion = tokenizer.nextToken();
+        requestUri = tokenizer.nextToken();
+        httpVersion = tokenizer.nextToken();
     }
 
 
@@ -67,23 +67,23 @@ public class RequestMessage extends GenericMessage {
     }
 
 
-    public final String getRequestURI() {
-        return reasonPhrase;
+    public final String getRequestUri() {
+        return requestUri;
     }
 
 
-    public final void setRequestURI(final String requestURI) {
-        this.reasonPhrase = requestURI;
+    public final void setRequestUri(final String requestUri) {
+        this.requestUri = requestUri;
     }
 
 
-    public final String getHTTPVersion() {
-        return HTTPVersion;
+    public final String getHttpVersion() {
+        return httpVersion;
     }
 
 
-    public final void setHTTPVersion(final String HTTPVersion) {
-        this.HTTPVersion = HTTPVersion;
+    public final void setHttpVersion(final String httpVersion) {
+        this.httpVersion = httpVersion;
     }
 
 
@@ -109,6 +109,6 @@ public class RequestMessage extends GenericMessage {
 
 
     private String method;
-    private String reasonPhrase;
-    private String HTTPVersion = "HTTP/1.1";
+    private String requestUri;
+    private String httpVersion;
 }

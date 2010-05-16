@@ -31,15 +31,15 @@ public class ResponseMessage extends GenericMessage {
 
 
     @Override
-    protected String getStartLine() {
-        return HTTPVersion + " " + statusCode + " " + reasonPhrase;
+    public String getStartLine() {
+        return httpVersion + " " + statusCode + " " + reasonPhrase;
     }
 
 
     @Override
     protected void setStartLine(final String startLine) {
-        final StringTokenizer tokenizer = new StringTokenizer(getStartLine());
-        HTTPVersion = tokenizer.nextToken();
+        final StringTokenizer tokenizer = new StringTokenizer(startLine);
+        httpVersion = tokenizer.nextToken();
         statusCode = Integer.parseInt(tokenizer.nextToken());
         reasonPhrase = tokenizer.nextToken();
     }
@@ -57,13 +57,13 @@ public class ResponseMessage extends GenericMessage {
     }
 
 
-    public final String getHTTPVersion() {
-        return HTTPVersion;
+    public final String getHttpVersion() {
+        return httpVersion;
     }
 
 
-    public final void setHTTPVersion(final String HTTPVersion) {
-        this.HTTPVersion = HTTPVersion;
+    public final void setHttpVersion(final String HTTPVersion) {
+        this.httpVersion = HTTPVersion;
     }
 
 
@@ -87,7 +87,7 @@ public class ResponseMessage extends GenericMessage {
     }
 
 
-    private String HTTPVersion = "HTTP/1.1";
+    private String httpVersion = "HTTP/1.1";
     private int statusCode;
     private String reasonPhrase;
 }

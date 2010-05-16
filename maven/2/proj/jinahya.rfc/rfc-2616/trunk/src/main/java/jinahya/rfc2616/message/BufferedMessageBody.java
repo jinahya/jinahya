@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import jinahya.rfc2616.message.GenericMessage.MessageHeaders;
-
 
 /**
  *
@@ -57,7 +55,7 @@ public class BufferedMessageBody implements MessageBody {
 
 
     @Override
-    public final void read(final MessageHeaders headers,
+    public final void read(final GenericMessage message,
                            final InputStream stream)
         throws IOException {
 
@@ -70,7 +68,7 @@ public class BufferedMessageBody implements MessageBody {
 
 
     @Override
-    public final void write(final MessageHeaders headers,
+    public final void write(final GenericMessage message,
                             final OutputStream stream)
         throws IOException {
 

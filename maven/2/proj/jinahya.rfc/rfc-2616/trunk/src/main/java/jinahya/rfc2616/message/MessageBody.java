@@ -22,9 +22,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-import jinahya.rfc2616.message.GenericMessage.MessageHeaders;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -33,18 +30,18 @@ public interface MessageBody {
 
     /**
      *
-     * @param headers
+     * @param message
      * @param stream
      * @throws IOException
      */
-    void read(MessageHeaders headers, InputStream stream) throws IOException;
+    void read(GenericMessage message, InputStream stream) throws IOException;
 
 
     /**
      * 
-     * @param header
+     * @param message
      * @param stream
      * @throws IOException
      */
-    void write(MessageHeaders header, OutputStream stream) throws IOException;
+    void write(GenericMessage message, OutputStream stream) throws IOException;
 }

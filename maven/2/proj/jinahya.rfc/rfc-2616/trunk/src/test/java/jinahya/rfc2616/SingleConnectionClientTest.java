@@ -39,8 +39,8 @@ public class SingleConnectionClientTest {
 
         final RequestMessage request = new RequestMessage();
         request.setMethod("GET");
-        request.setRequestURI("/index.html");
-        request.setHTTPVersion("HTTP/1.1");
+        request.setRequestUri("/index.html");
+        request.setHttpVersion("HTTP/1.1");
         System.out.println("-------------------------------------------------");
         System.out.println(request);
 

@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ResponseMessageTest {
+public class ResponseMessageTest extends GenericMessageTest {
 
 
     private ResponseMessage read() throws IOException {
@@ -42,9 +42,6 @@ public class ResponseMessageTest {
         ResponseMessage message = read();
 
         System.out.println("-------------------------------------------------");
-        System.out.println(message);
-        System.out.println("HTTPVersion: " + message.getHTTPVersion());
-        System.out.println("statusCode: " + message.getStatusCode());
-        System.out.println("reasonPhrase: " + message.getReasonPhrase());
+        print(message);
     }
 }
