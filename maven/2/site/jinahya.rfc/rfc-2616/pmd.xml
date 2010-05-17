@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-05-17T09:52:13.872">
+<pmd version="4.2.2" timestamp="2010-05-17T10:08:37.474">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.rfc\rfc-2616\trunk\src\main\java\jinahya\rfc2616\message\BufferedMessageBody.java">
 <violation beginline="100" endline="102" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="jinahya.rfc2616.message" class="BufferedMessageBody" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
