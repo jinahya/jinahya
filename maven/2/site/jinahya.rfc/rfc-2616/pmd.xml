@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-05-17T10:28:18.178">
+<pmd version="4.2.2" timestamp="2010-05-17T14:59:03.883">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.rfc\rfc-2616\trunk\src\main\java\jinahya\rfc2616\message\BufferedMessageBody.java">
 <violation beginline="100" endline="102" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="jinahya.rfc2616.message" class="BufferedMessageBody" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.rfc\rfc-2616\trunk\src\main\java\jinahya\rfc2616\message\GenericMessage.java">
-<violation beginline="190" endline="192" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="jinahya.rfc2616.message" class="GenericMessage$MessageHeaders" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+<violation beginline="194" endline="196" begincolumn="22" endcolumn="9" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="jinahya.rfc2616.message" class="GenericMessage$MessageHeaders" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
 </violation>
 </file>
