@@ -38,7 +38,7 @@ public class SingleConnectionClient {
     private static final int DEFAULT_TIMEOUT = 5000;
 
 
-    public static interface SocketOptionEnabler {
+    public static interface SocketOptionHandler {
 
         /**
          *
@@ -46,16 +46,16 @@ public class SingleConnectionClient {
          * @return
          * @throws SocketException
          */
-        public Socket enableOptions(Socket socket) throws SocketException;
+        public Socket handleOptions(Socket socket) throws SocketException;
     }
 
 
     /**
      *
      */
-    private static final SocketOptionEnabler DEFAULT_ENABLER =
-        new SocketOptionEnabler() {
-            public Socket enableOptions(final Socket socket)
+    private static final SocketOptionHandler DEFAULT_HANDLER =
+        new SocketOptionHandler() {
+            public Socket handleOptions(final Socket socket)
                 throws SocketException {
 
                 socket.setSoTimeout(5000);
@@ -77,17 +77,16 @@ public class SingleConnectionClient {
                         final ResponseMessage response)
         throws IOException {
 
-        final Socket socket = enabler.enableOptions(new Socket());
+        if (!request.getMessageHeaders().containsField("Host") &&
+            address instanceof InetSocketAddress) {
+
+            final InetSocketAddress addr = (InetSocketAddress) address;
+            request.getMessageHeaders().getFieldValues("Host").
+                add(addr.getHostName() + ":" + addr.getPort());
+        }
+
+        final Socket socket = enabler.handleOptions(new Socket());
         try {
-
-            if (!request.getMessageHeaders().containsMessageHeader("Host") &&
-                address instanceof InetSocketAddress) {
-
-                final InetSocketAddress addr = (InetSocketAddress) address;
-                request.getMessageHeaders().getFieldValues("Host").
-                    add(addr.getHostName() + ":" + addr.getPort());
-            }
-
             socket.connect(address, timeout);
 
             final OutputStream output = socket.getOutputStream();
@@ -111,19 +110,19 @@ public class SingleConnectionClient {
 
 
     public final void setTimeout(int timeout) {
-        if (timeout <= 0L) {
-            throw new IllegalArgumentException("timeout(" + timeout + ") <= 0");
+        if (timeout < 0L) {
+            throw new IllegalArgumentException("timeout(" + timeout + ") < 0");
         }
         this.timeout = timeout;
     }
 
 
-    public SocketOptionEnabler getEnabler() {
+    public SocketOptionHandler getEnabler() {
         return enabler;
     }
 
 
-    public void setEnabler(final SocketOptionEnabler enabler) {
+    public void setEnabler(final SocketOptionHandler enabler) {
         if (enabler == null) {
             throw new NullPointerException("enabler");
         }
@@ -131,6 +130,6 @@ public class SingleConnectionClient {
     }
 
 
-    private SocketOptionEnabler enabler = DEFAULT_ENABLER;
+    private SocketOptionHandler enabler = DEFAULT_HANDLER;
     private int timeout = DEFAULT_TIMEOUT;
 }
