@@ -52,21 +52,6 @@ public class SingleConnectionClient {
 
     /**
      *
-     */
-    private static final SocketOptionHandler DEFAULT_HANDLER =
-        new SocketOptionHandler() {
-            public Socket handleOptions(final Socket socket)
-                throws SocketException {
-
-                socket.setSoTimeout(5000);
-
-                return socket;
-            }
-        };
-
-
-    /**
-     *
      * @param address
      * @param request
      * @param response
@@ -85,7 +70,10 @@ public class SingleConnectionClient {
                 add(addr.getHostName() + ":" + addr.getPort());
         }
 
-        final Socket socket = enabler.handleOptions(new Socket());
+        Socket socket = new Socket();
+        if (handler != null) {
+            socket = handler.handleOptions(socket);
+        }
         try {
             socket.connect(address, timeout);
 
@@ -104,32 +92,29 @@ public class SingleConnectionClient {
     }
 
 
-    public final long getTimeout() {
+    public final int getTimeout() {
         return timeout;
     }
 
 
     public final void setTimeout(int timeout) {
-        if (timeout < 0L) {
+        if (timeout < 0) {
             throw new IllegalArgumentException("timeout(" + timeout + ") < 0");
         }
         this.timeout = timeout;
     }
 
 
-    public SocketOptionHandler getEnabler() {
-        return enabler;
+    public final SocketOptionHandler getHandler() {
+        return handler;
     }
 
 
-    public void setEnabler(final SocketOptionHandler enabler) {
-        if (enabler == null) {
-            throw new NullPointerException("enabler");
-        }
-        this.enabler = enabler;
+    public final void setHandler(final SocketOptionHandler handler) {
+        this.handler = handler;
     }
 
 
-    private SocketOptionHandler enabler = DEFAULT_HANDLER;
+    private SocketOptionHandler handler = null;
     private int timeout = DEFAULT_TIMEOUT;
 }
