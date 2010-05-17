@@ -72,6 +72,10 @@ public abstract class GenericMessage {
      */
     public static final class MessageHeaders {
 
+        public void clear() {
+            fieldMap.clear();
+        }
+
 
         /**
          *
@@ -104,7 +108,7 @@ public abstract class GenericMessage {
          */
         private void read(final InputStream stream) throws IOException {
 
-            fieldMap.clear();
+            clear();
 
             final List lines = new ArrayList();
 
