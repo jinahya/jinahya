@@ -25,8 +25,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.util.Set;
 
 import jinahya.rfc2616.message.GenericMessage;
+import jinahya.rfc2616.message.GenericMessage.MessageHeaders;
 import jinahya.rfc2616.message.MessageBody;
 import jinahya.rfc2616.message.ResponseMessage;
 import jinahya.rfc2616.message.RequestMessage;
@@ -141,15 +143,22 @@ public class SingleConnectionClient {
                         final ResponseMessage response)
         throws IOException {
 
-        if (!request.getMessageHeaders().containsField("Host") &&
+        final MessageHeaders requestMessageHeaders =
+            request.getMessageHeaders();
+
+        if (!requestMessageHeaders.containsField("Host") &&
             address instanceof InetSocketAddress) {
 
             final InetSocketAddress addr = (InetSocketAddress) address;
-            request.getMessageHeaders().getFieldValues("Host").
+            requestMessageHeaders.getFieldValues("Host").
                 add(addr.getHostName() + ":" + addr.getPort());
         }
 
-
+        final Set connectionFieldValues =
+            requestMessageHeaders.getFieldValues("Connection");
+        if (connectionFieldValues.isEmpty()) {
+            connectionFieldValues.add("close");
+        }
 
         Socket socket = new Socket();
         if (handler != null) {

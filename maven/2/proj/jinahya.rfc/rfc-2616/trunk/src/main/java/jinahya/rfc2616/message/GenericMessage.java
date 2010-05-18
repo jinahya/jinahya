@@ -166,15 +166,20 @@ public abstract class GenericMessage {
         private void write(final OutputStream stream) throws IOException {
             Iterator fieldNames = fieldMap.keySet().iterator();
             while (fieldNames.hasNext()) {
-                String fieldName = (String) fieldNames.next();
-                stream.write((fieldName + ":").getBytes());
-                Iterator fieldValues =
-                    ((Set) fieldMap.get(fieldName)).iterator();
-                if (fieldValues.hasNext()) {
-                    stream.write(((String) fieldValues.next()).getBytes());
+                final String fieldName = (String) fieldNames.next();
+                final Set fieldValues = (Set) fieldMap.get(fieldName);
+                if (fieldValues.isEmpty()) {
+                    continue;
                 }
-                while (fieldValues.hasNext()) {
-                    stream.write(("," + fieldValues.next()).getBytes());
+                stream.write((fieldName + ":").getBytes());
+                Iterator fieldValueIterator =
+                    ((Set) fieldMap.get(fieldName)).iterator();
+                if (fieldValueIterator.hasNext()) {
+                    stream.write(
+                        ((String) fieldValueIterator.next()).getBytes());
+                }
+                while (fieldValueIterator.hasNext()) {
+                    stream.write(("," + fieldValueIterator.next()).getBytes());
                 }
                 stream.write(CRLF);
             }
