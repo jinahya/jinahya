@@ -162,7 +162,7 @@ public class Machine {
 
         // ---------------------------------------------------------- FIRE EVENT
         final TransitionEvent event = new TransitionEvent(this, transition);
-        final Object[] listeners = els.getListeners();
+        final Object[] listeners = els.getListeners(TransitionListener.class);
         for (int i = 0; i < listeners.length; i++) {
             ((TransitionListener) listeners[i]).transited(event);
         }
