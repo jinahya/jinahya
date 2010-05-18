@@ -20,6 +20,8 @@ package jinahya.rfc2616.message;
 import java.io.IOException;
 import java.io.InputStream;
 
+import jinahya.rfc2616.SingleConnectionClient.BufferedMessageBody;
+
 //import org.testng.Assert;
 //import org.testng.annotations.Test;
 

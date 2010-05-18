@@ -272,7 +272,9 @@ public abstract class GenericMessage {
         getMessageHeaders().read(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        messageBody.read(this, stream);
+        if (messageBody != null) {
+            messageBody.read(this, stream);
+        }
 
         return this;
     }
@@ -294,12 +296,14 @@ public abstract class GenericMessage {
         getMessageHeaders().write(stream);
 
         // -------------------------------------------------------- MESSAGE BODY
-        messageBody.write(this, stream);
+        if (messageBody != null) {
+            messageBody.write(this, stream);
+        }
 
         return this;
     }
 
 
     private MessageHeaders messageHeaders;
-    private MessageBody messageBody = new BufferedMessageBody();
+    private MessageBody messageBody;
 }

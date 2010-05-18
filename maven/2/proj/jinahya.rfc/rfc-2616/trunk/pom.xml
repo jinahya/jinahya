@@ -21,6 +21,11 @@
         <artifactId>retrotranslator-transformer</artifactId>
         <version>1.2.9</version>
       </dependency>
+      <!--dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20090211</version>
+      </dependency-->
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
@@ -42,6 +47,10 @@
       <classifier>jdk14</classifier>
       <scope>test</scope>
     </dependency>
+    <!--dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+    </dependency-->
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

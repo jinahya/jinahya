@@ -17,8 +17,7 @@
 package jinahya.rfc2616;
 
 
-import jinahya.rfc2616.message.ResponseMessage;
-import jinahya.rfc2616.message.RequestMessage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +25,11 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+
+import jinahya.rfc2616.message.GenericMessage;
+import jinahya.rfc2616.message.MessageBody;
+import jinahya.rfc2616.message.ResponseMessage;
+import jinahya.rfc2616.message.RequestMessage;
 
 
 /**
@@ -38,6 +42,9 @@ public class SingleConnectionClient {
     private static final int DEFAULT_TIMEOUT = 5000;
 
 
+    /**
+     *
+     */
     public static interface SocketOptionHandler {
 
         /**
@@ -47,6 +54,78 @@ public class SingleConnectionClient {
          * @throws SocketException
          */
         public Socket handleOptions(Socket socket) throws SocketException;
+    }
+
+
+    /**
+     *
+     */
+    public static class BufferedMessageBody implements MessageBody {
+
+
+        //@Override
+        public final void read(final GenericMessage message,
+                               final InputStream stream)
+            throws IOException {
+
+            setContent(stream);
+        }
+
+
+        //@Override
+        public final void write(final GenericMessage message,
+                                final OutputStream stream)
+            throws IOException {
+
+            stream.write(content.toByteArray());
+        }
+
+
+        /**
+         *
+         * @return
+         */
+        public byte[] getContent() {
+            return content.toByteArray();
+        }
+
+
+        /**
+         *
+         * @param content
+         */
+        public void setContent(final byte[] content) {
+            if (content == null) {
+                throw new NullPointerException("content");
+            }
+
+            this.content.reset();
+            try {
+                this.content.write(content);
+            } catch (IOException ioe) {
+                // no gonna happen
+            }
+        }
+
+
+        public void setContent(final InputStream content) throws IOException {
+            this.content.reset();
+            final byte[] buffer = new byte[1024];
+            int read = -1;
+            while ((read = content.read(buffer)) != -1) {
+                this.content.write(buffer, 0, read);
+            }
+        }
+
+
+        public OutputStream getContentAsStream() {
+            content.reset();
+            return content;
+        }
+
+
+        private final ByteArrayOutputStream content =
+            new ByteArrayOutputStream();
     }
 
 
@@ -70,6 +149,8 @@ public class SingleConnectionClient {
                 add(addr.getHostName() + ":" + addr.getPort());
         }
 
+
+
         Socket socket = new Socket();
         if (handler != null) {
             socket = handler.handleOptions(socket);
@@ -77,11 +158,17 @@ public class SingleConnectionClient {
         try {
             socket.connect(address, timeout);
 
+            if (request.getMessageBody() == null) {
+                request.setMessageBody(new BufferedMessageBody());
+            }
             final OutputStream output = socket.getOutputStream();
             request.write(output);
             output.flush();
             socket.shutdownOutput();
 
+            if (response.getMessageBody() == null) {
+                response.setMessageBody(new BufferedMessageBody());
+            }
             final InputStream input = socket.getInputStream();
             response.read(input);
             socket.shutdownInput();
