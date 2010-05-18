@@ -172,7 +172,7 @@
 <a name="162" href="#162">162</a> 
 <a name="163" href="#163">163</a>         <em class="jxr_comment">// ---------------------------------------------------------- FIRE EVENT</em>
 <a name="164" href="#164">164</a>         <strong class="jxr_keyword">final</strong> <a href="../../jinahya/fsm/event/TransitionEvent.html">TransitionEvent</a> event = <strong class="jxr_keyword">new</strong> <a href="../../jinahya/fsm/event/TransitionEvent.html">TransitionEvent</a>(<strong class="jxr_keyword">this</strong>, transition);
-<a name="165" href="#165">165</a>         <strong class="jxr_keyword">final</strong> Object[] listeners = els.getListeners();
+<a name="165" href="#165">165</a>         <strong class="jxr_keyword">final</strong> Object[] listeners = els.getListeners(TransitionListener.<strong class="jxr_keyword">class</strong>);
 <a name="166" href="#166">166</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; listeners.length; i++) {
 <a name="167" href="#167">167</a>             ((<a href="../../jinahya/fsm/event/TransitionListener.html">TransitionListener</a>) listeners[i]).transited(event);
 <a name="168" href="#168">168</a>         }
