@@ -18,7 +18,7 @@ package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.MachineSpec;
-import jinahya.fsm.States;
+import jinahya.fsm.Machine;
 import jinahya.fsm.Transition;
 
 
@@ -32,9 +32,9 @@ public class XletMachineSpec implements MachineSpec {
     //@Override
     public boolean isStartingTransition(final Transition transition) {
         // UNKNOWN -> (LOADED | PAUSED)
-        return (transition.getSourceState() == States.UNKNOWN
-                && (transition.getTargetState() == XletStates.LOADED
-                    || transition.getTargetState() == XletStates.PAUSED));
+        return (transition.getSourceState() == Machine.UNKNOWN
+                && (transition.getTargetState() == XletMachine.LOADED
+                    || transition.getTargetState() == XletMachine.PAUSED));
     }
 
 
@@ -46,21 +46,21 @@ public class XletMachineSpec implements MachineSpec {
         final int targetState = transition.getTargetState();
 
         switch (transition.getSourceState()) {
-            case States.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
-                allowed = (targetState == XletStates.LOADED
-                           || targetState == XletStates.PAUSED);
+            case Machine.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
+                allowed = (targetState == XletMachine.LOADED
+                           || targetState == XletMachine.PAUSED);
                 break;
-            case XletStates.LOADED: // LOADED -> (PAUSED | DESTROYED)
-                allowed = (targetState == XletStates.PAUSED
-                           || targetState == XletStates.DESTROYED);
+            case XletMachine.LOADED: // LOADED -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletMachine.PAUSED
+                           || targetState == XletMachine.DESTROYED);
                 break;
-            case XletStates.PAUSED: // PAUSED -> (ACTIVE | DESTROYED)
-                allowed = (targetState == XletStates.ACTIVE
-                           || targetState == XletStates.DESTROYED);
+            case XletMachine.PAUSED: // PAUSED -> (ACTIVE | DESTROYED)
+                allowed = (targetState == XletMachine.ACTIVE
+                           || targetState == XletMachine.DESTROYED);
                 break;
-            case XletStates.ACTIVE: // ACTIVE -> (PAUSED | DESTROYED)
-                allowed = (targetState == XletStates.PAUSED
-                           || targetState == XletStates.DESTROYED);
+            case XletMachine.ACTIVE: // ACTIVE -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletMachine.PAUSED
+                           || targetState == XletMachine.DESTROYED);
                 break;
             default:
                 break;
@@ -73,9 +73,9 @@ public class XletMachineSpec implements MachineSpec {
     //@Override
     public boolean isFinishingTransition(final Transition transition) {
         // (LOADED | PAUSED | ACTIVE) -> DESTROYED
-        return ((transition.getSourceState() == XletStates.LOADED
-                 || transition.getSourceState() == XletStates.PAUSED
-                 || transition.getSourceState() == XletStates.ACTIVE)
-                && transition.getTargetState() == XletStates.DESTROYED);
+        return ((transition.getSourceState() == XletMachine.LOADED
+                 || transition.getSourceState() == XletMachine.PAUSED
+                 || transition.getSourceState() == XletMachine.ACTIVE)
+                && transition.getTargetState() == XletMachine.DESTROYED);
     }
 }

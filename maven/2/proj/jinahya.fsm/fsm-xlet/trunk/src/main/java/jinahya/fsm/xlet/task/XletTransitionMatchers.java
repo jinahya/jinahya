@@ -17,10 +17,10 @@
 package jinahya.fsm.xlet.task;
 
 
-import jinahya.fsm.States;
+import jinahya.fsm.Machine;
 import jinahya.fsm.Transition;
 import jinahya.fsm.task.TransitionMatcher;
-import jinahya.fsm.xlet.XletStates;
+import jinahya.fsm.xlet.XletMachine;
 
 
 /**
@@ -41,8 +41,8 @@ public final class XletTransitionMatchers {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                return (transition.getSourceState() == States.UNKNOWN &&
-                        transition.getTargetState() == XletStates.LOADED);
+                return (transition.getSourceState() == Machine.UNKNOWN
+                        && transition.getTargetState() == XletMachine.LOADED);
             }
         };
 
@@ -61,9 +61,9 @@ public final class XletTransitionMatchers {
             public boolean matches(final Transition transition) {
                 final int sourceState = transition.getSourceState();
                 final int targetState = transition.getTargetState();
-                return ((sourceState == States.UNKNOWN ||
-                         sourceState == XletStates.LOADED) &&
-                        targetState == XletStates.PAUSED);
+                return ((sourceState == Machine.UNKNOWN
+                         ||  sourceState == XletMachine.LOADED)
+                        && targetState == XletMachine.PAUSED);
             }
         };
 
@@ -80,8 +80,8 @@ public final class XletTransitionMatchers {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                return (transition.getSourceState() == XletStates.PAUSED &&
-                        transition.getTargetState() == XletStates.ACTIVE);
+                return (transition.getSourceState() == XletMachine.PAUSED
+                        && transition.getTargetState() == XletMachine.ACTIVE);
             }
     };
 
@@ -97,8 +97,8 @@ public final class XletTransitionMatchers {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                return (transition.getSourceState() == XletStates.ACTIVE &&
-                        transition.getTargetState() == XletStates.PAUSED);
+                return (transition.getSourceState() == XletMachine.ACTIVE
+                        && transition.getTargetState() == XletMachine.PAUSED);
             }
     };
 
@@ -117,10 +117,11 @@ public final class XletTransitionMatchers {
         new TransitionMatcher() {
             //@Override
             public boolean matches(final Transition transition) {
-                return ((transition.getSourceState() == XletStates.LOADED ||
-                         transition.getSourceState() == XletStates.PAUSED ||
-                         transition.getSourceState() == XletStates.ACTIVE) &&
-                        transition.getTargetState() == XletStates.DESTROYED);
+                return
+                    ((transition.getSourceState() == XletMachine.LOADED
+                      || transition.getSourceState() == XletMachine.PAUSED
+                      || transition.getSourceState() == XletMachine.ACTIVE)
+                     && transition.getTargetState() == XletMachine.DESTROYED);
             }
         };
 
