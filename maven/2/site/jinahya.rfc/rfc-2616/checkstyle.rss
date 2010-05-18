@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 6,
-             Errors: 127,
+      <title>File: 5,
+             Errors: 130,
              Warnings: 0,
              Infos: 0
       </title>
@@ -27,20 +27,6 @@
             </tr>
           </thead>
           <tbody>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#jinahya.rfc2616.message.BufferedMessageBody.java">jinahya/rfc2616/message/BufferedMessageBody.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
-                </td>
-              </tr>
                           <tr>
                 <td>
                   <a href="http://maven.apache.org/checkstyle.html#jinahya.rfc2616.message.ResponseMessage.java">jinahya/rfc2616/message/ResponseMessage.java</a>
@@ -66,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  23
+                  37
                 </td>
               </tr>
                           <tr>
@@ -94,7 +80,7 @@
                   0
                 </td>
                 <td>
-                  35
+                  36
                 </td>
               </tr>
                           <tr>
