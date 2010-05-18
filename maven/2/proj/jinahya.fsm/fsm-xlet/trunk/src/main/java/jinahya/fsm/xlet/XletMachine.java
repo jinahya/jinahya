@@ -52,8 +52,9 @@ public class XletMachine extends Machine {
 
 
     /**
+     * Creates a new Instance.
      *
-     * @param spec
+     * @param spec the machine spec
      */
     public XletMachine(final XletMachineSpec spec) {
         super(spec);

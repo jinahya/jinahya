@@ -31,11 +31,11 @@ public final class XletTransitionMatchers {
 
 
     /**
-     * A TransitionMatcher for [{@link States#UNKNOWN} &rarr;
-     * {@link XletStates#LOADED}].
+     * A TransitionMatcher for [{@link Machine#UNKNOWN} &rarr;
+     * {@link XletMachine#LOADED}].
      *
-     * @see States#UNKNOWN
-     * @see XletStates#LOADED
+     * @see Machine#UNKNOWN
+     * @see XletMachine#LOADED
      */
     public static final TransitionMatcher LOAD_XLET =
         new TransitionMatcher() {
@@ -48,12 +48,12 @@ public final class XletTransitionMatchers {
 
 
     /**
-     * A transition matcher for [({@link States#UNKNOWN} ||
-     * {@link XletStates#LOADED}) &rarr; {@link XletStates#PAUSED}].
+     * A transition matcher for [({@link Machine#UNKNOWN} ||
+     * {@link XletMachine#LOADED}) &rarr; {@link XletMachine#PAUSED}].
      *
-     * @see States#UNKNOWN
-     * @see XletStates#LOADED
-     * @see XletStates#PAUSED
+     * @see Machine#UNKNOWN
+     * @see XletMachine#LOADED
+     * @see XletMachine#PAUSED
      */
     public static final TransitionMatcher INIT_XLET =
         new TransitionMatcher() {
@@ -62,7 +62,7 @@ public final class XletTransitionMatchers {
                 final int sourceState = transition.getSourceState();
                 final int targetState = transition.getTargetState();
                 return ((sourceState == Machine.UNKNOWN
-                         ||  sourceState == XletMachine.LOADED)
+                         || sourceState == XletMachine.LOADED)
                         && targetState == XletMachine.PAUSED);
             }
         };
@@ -70,11 +70,11 @@ public final class XletTransitionMatchers {
 
 
     /**
-     * A transition matcher for [{@link XletStates#PAUSED} &rarr;
-     * {@link XletStates#ACTIVE}].
+     * A transition matcher for [{@link XletMachine#PAUSED} &rarr;
+     * {@link XletMachine#ACTIVE}].
      *
-     * @see XletStates#PAUSED
-     * @see XletStates#ACTIVE
+     * @see XletMachine#PAUSED
+     * @see XletMachine#ACTIVE
      */
     public static final TransitionMatcher START_XLET =
         new TransitionMatcher() {
@@ -87,11 +87,11 @@ public final class XletTransitionMatchers {
 
 
     /**
-     * A transition matcher for [{@link XletStates#ACTIVE} &rarr;
-     * {@link XletStates#PAUSED}].
+     * A transition matcher for [{@link XletMachine#ACTIVE} &rarr;
+     * {@link XletMachine#PAUSED}].
      *
-     * @see XletStates#ACTIVE
-     * @see XletStates#PAUSED
+     * @see XletMachine#ACTIVE
+     * @see XletMachine#PAUSED
      */
     public static final TransitionMatcher PAUSE_XLET =
         new TransitionMatcher() {
@@ -104,14 +104,14 @@ public final class XletTransitionMatchers {
 
 
     /**
-     * A transition matcher for [({@link XletStates#LOADED} ||
-     * {@link XletStates#PAUSED} || {@link XletStates#ACTIVE}) &rarr;
-     * {@link XletStates#DESTROYED}].
+     * A transition matcher for [({@link XletMachine#LOADED} ||
+     * {@link XletMachine#PAUSED} || {@link XletMachine#ACTIVE}) &rarr;
+     * {@link XletMachine#DESTROYED}].
      *
-     * @see XletStates#LOADED
-     * @see XletStates#PAUSED
-     * @see XletStates#ACTIVE
-     * @see XletStates#DESTROYED
+     * @see XletMachine#LOADED
+     * @see XletMachine#PAUSED
+     * @see XletMachine#ACTIVE
+     * @see XletMachine#DESTROYED
      */
     public static final TransitionMatcher DESTROY_XLET =
         new TransitionMatcher() {
