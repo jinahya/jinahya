@@ -18,7 +18,7 @@ package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.MachineSpec;
-import jinahya.fsm.State;
+import jinahya.fsm.States;
 import jinahya.fsm.Transition;
 
 
@@ -26,41 +26,41 @@ import jinahya.fsm.Transition;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletMachineSpec extends MachineSpec {
+public class XletMachineSpec implements MachineSpec {
 
 
     //@Override
     public boolean isStartingTransition(final Transition transition) {
         // UNKNOWN -> (LOADED | PAUSED)
-        return (transition.getSourceState() == State.UNKNOWN &&
-                (transition.getTargetState() == XletState.LOADED ||
-                 transition.getTargetState() == XletState.PAUSED));
+        return (transition.getSourceState() == States.UNKNOWN
+                && (transition.getTargetState() == XletStates.LOADED
+                    || transition.getTargetState() == XletStates.PAUSED));
     }
 
 
     //@Override
     public boolean isTransitionAllowed(final Transition transition) {
 
-        boolean allowed = super.isTransitionAllowed(transition);
+        boolean allowed = false;
 
         final int targetState = transition.getTargetState();
 
         switch (transition.getSourceState()) {
-            case State.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
-                allowed = (targetState == XletState.LOADED ||
-                           targetState == XletState.PAUSED);
+            case States.UNKNOWN: // UNKNOWN -> (LOADED | PAUSED)
+                allowed = (targetState == XletStates.LOADED
+                           || targetState == XletStates.PAUSED);
                 break;
-            case XletState.LOADED: // LOADED -> (PAUSED | DESTROYED)
-                allowed = (targetState == XletState.PAUSED ||
-                           targetState == XletState.DESTROYED);
+            case XletStates.LOADED: // LOADED -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletStates.PAUSED
+                           || targetState == XletStates.DESTROYED);
                 break;
-            case XletState.PAUSED: // PAUSED -> (ACTIVE | DESTROYED)
-                allowed = (targetState == XletState.ACTIVE ||
-                           targetState == XletState.DESTROYED);
+            case XletStates.PAUSED: // PAUSED -> (ACTIVE | DESTROYED)
+                allowed = (targetState == XletStates.ACTIVE
+                           || targetState == XletStates.DESTROYED);
                 break;
-            case XletState.ACTIVE: // ACTIVE -> (PAUSED | DESTROYED)
-                allowed = (targetState == XletState.PAUSED ||
-                           targetState == XletState.DESTROYED);
+            case XletStates.ACTIVE: // ACTIVE -> (PAUSED | DESTROYED)
+                allowed = (targetState == XletStates.PAUSED
+                           || targetState == XletStates.DESTROYED);
                 break;
             default:
                 break;
@@ -73,9 +73,9 @@ public class XletMachineSpec extends MachineSpec {
     //@Override
     public boolean isFinishingTransition(final Transition transition) {
         // (LOADED | PAUSED | ACTIVE) -> DESTROYED
-        return ((transition.getSourceState() == XletState.LOADED ||
-                 transition.getSourceState() == XletState.PAUSED ||
-                 transition.getSourceState() == XletState.ACTIVE) &&
-                transition.getTargetState() == XletState.DESTROYED);
+        return ((transition.getSourceState() == XletStates.LOADED
+                 || transition.getSourceState() == XletStates.PAUSED
+                 || transition.getSourceState() == XletStates.ACTIVE)
+                && transition.getTargetState() == XletStates.DESTROYED);
     }
 }

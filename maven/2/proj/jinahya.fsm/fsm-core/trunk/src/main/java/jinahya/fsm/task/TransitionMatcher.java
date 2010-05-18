@@ -14,48 +14,24 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.xlet;
+package jinahya.fsm.task;
 
-
-import jinahya.fsm.State;
+import jinahya.fsm.Transition;
 
 
 /**
+ * An interface for matching transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class XletState {
-
-
-
-    /**
-     * Xlet instance is just created.
-     */
-    public static final int LOADED = State.UNKNOWN >>> 1;
+public interface TransitionMatcher {
 
 
     /**
-     * <code>initXlet()</code> or <code>pauseXlet()</code> invoked.
-     */
-    public static final int PAUSED = LOADED >> 1;
-
-
-    /**
-     * <code>startXlet()</code> invoked.
-     */
-    public static final int ACTIVE = PAUSED >> 1;
-
-
-    /**
-     * <code>destroyXlet()</code> invoked.
-     */
-    public static final int DESTROYED = ACTIVE >> 1;
-
-
-    /**
+     * Matches specified <code>transition</code>.
      *
+     * @param transition transition to be matched
+     * @return true if given <code>transition</code> matches, false otherwise.
      */
-    private XletState() {
-        super();
-    }
+    boolean matches(final Transition transition);
 }

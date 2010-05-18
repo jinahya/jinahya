@@ -14,103 +14,103 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.xlet;
+package jinahya.fsm.xlet.task;
 
 
-import jinahya.fsm.TransitionMatcher;
-import jinahya.fsm.SwitchTask;
-import jinahya.fsm.SimpleTask;
+import jinahya.fsm.task.TransitionMatcher;
+import jinahya.fsm.task.SwitchTask;
+import jinahya.fsm.task.SimpleTask;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class XletTask {
+public final class XletTasks {
 
 
     /**
-     * A task executes for {@link XletTransitionMatcher#LOAD_XLET}.
+     * A task executes for {@link XletTransitionMatchers#LOAD_XLET}.
      */
     public abstract static class LoadTask extends SimpleTask {
 
         /** Creates a new instance. */
         public LoadTask() {
-            super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET});
+            super(new TransitionMatcher[] {XletTransitionMatchers.LOAD_XLET});
         }
     }
 
 
     /**
-     * A switch task turns on {@link XletTransitionMatcher#LOAD_XLET} and turns
-     * off {@link XletTransitionMatcher#DESTROY_XLET}.
+     * A switch task turns on {@link XletTransitionMatchers#LOAD_XLET} and turns
+     * off {@link XletTransitionMatchers#DESTROY_XLET}.
      */
     public abstract static class LoadSwitchTask extends SwitchTask {
 
         /** Creates a new instance. */
         public LoadSwitchTask() {
-            super(new TransitionMatcher[] {XletTransitionMatcher.LOAD_XLET},
-                  new TransitionMatcher[] {XletTransitionMatcher.DESTROY_XLET});
+            super(new TransitionMatcher[] {XletTransitionMatchers.LOAD_XLET},
+                  new TransitionMatcher[] {XletTransitionMatchers.DESTROY_XLET});
         }
     }
 
 
     /**
-     * A simple task executes for {@link XletTransitionMatcher#INIT_XLET}.
+     * A simple task executes for {@link XletTransitionMatchers#INIT_XLET}.
      */
     public abstract static class InitTask extends SimpleTask {
 
         /** Creates an instance. */
         public InitTask() {
             super(new TransitionMatcher[] {
-                      XletTransitionMatcher.INIT_XLET});
+                      XletTransitionMatchers.INIT_XLET});
         }
     }
 
 
     /**
-     * A switch task turns on {@link XletTransitionMatcher#INIT_XLET} and turns
-     * off {@link XletTransitionMatcher#DESTROY_XLET}.
+     * A switch task turns on {@link XletTransitionMatchers#INIT_XLET} and turns
+     * off {@link XletTransitionMatchers#DESTROY_XLET}.
      */
     public abstract static class InitSwitchTask extends SwitchTask {
 
         /** Creates a new instance. */
         public InitSwitchTask() {
             super(new TransitionMatcher[] {
-                      XletTransitionMatcher.INIT_XLET},
+                      XletTransitionMatchers.INIT_XLET},
                   new TransitionMatcher[] {
-                      XletTransitionMatcher.DESTROY_XLET});
+                      XletTransitionMatchers.DESTROY_XLET});
         }
     }
 
 
     /**
-     * A simple task executes for {@link XletTransitionMatcher#START_XLET}.
+     * A simple task executes for {@link XletTransitionMatchers#START_XLET}.
      */
     public abstract static class PlayTask extends SimpleTask {
 
         /** Creates a new instance. */
         public PlayTask() {
-            super(new TransitionMatcher[] {XletTransitionMatcher.START_XLET});
+            super(new TransitionMatcher[] {XletTransitionMatchers.START_XLET});
         }
     }
 
 
     /**
      * A switch task turns on for
-     * {@link XletTransitionMatcher#START_XLET} and turned off for
-     * {@link XletTransitionMatcher#PAUSE_XLET} or
-     * {@link XletTransitionMatcher#DESTROY_XLET}.
+     * {@link XletTransitionMatchers#START_XLET} and turned off for
+     * {@link XletTransitionMatchers#PAUSE_XLET} or
+     * {@link XletTransitionMatchers#DESTROY_XLET}.
      */
     public abstract static class PlaySwitchTask extends SwitchTask {
 
         /** Creates a new instance. */
         public PlaySwitchTask() {
             super(new TransitionMatcher[] {
-                      XletTransitionMatcher.START_XLET},
+                      XletTransitionMatchers.START_XLET},
                   new TransitionMatcher[] {
-                      XletTransitionMatcher.PAUSE_XLET,
-                      XletTransitionMatcher.DESTROY_XLET});
+                      XletTransitionMatchers.PAUSE_XLET,
+                      XletTransitionMatchers.DESTROY_XLET});
         }
     }
 
@@ -118,7 +118,7 @@ public final class XletTask {
     /**
      * .
      */
-    private XletTask() {
+    private XletTasks() {
         super();
     }
 }
