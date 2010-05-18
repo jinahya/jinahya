@@ -41,10 +41,6 @@ public abstract class GenericMessage {
     private static final byte[] CRLF = new byte[] {0x0D, 0x0A};
 
 
-    /** CHARACTER BUFFER. */
-    private static final StringBuffer BUFFER = new StringBuffer();
-
-
     /**
      * .
      * @param stream sdfdsaf
@@ -54,16 +50,16 @@ public abstract class GenericMessage {
     private static final String readLine(final InputStream stream)
         throws IOException {
 
-        BUFFER.delete(0, BUFFER.length());
+        final StringBuffer buffer = new StringBuffer();
         while (true) {
             int ch = stream.read();
             if (ch == CRLF[0]) { // CR
                 stream.read(); // LF
                 break;
             }
-            BUFFER.append((char) ch);
+            buffer.append((char) ch);
         }
-        return BUFFER.toString();
+        return buffer.toString();
     }
 
 
