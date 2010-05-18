@@ -27,8 +27,7 @@ import jinahya.fsm.event.TransitionListener;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Task
-    implements TransitionListener, TransitionMatcher {
+public abstract class Task implements TransitionListener, TransitionMatcher {
 
 
     /**
