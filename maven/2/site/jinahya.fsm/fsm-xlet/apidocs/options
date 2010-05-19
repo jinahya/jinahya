@@ -1,21 +1,21 @@
 -classpath
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/target/classes:/Users/onacit/.m2/repository/jinahya/fsm/fsm/1.0-SNAPSHOT/fsm-1.0-SNAPSHOT.jar:/Users/onacit/.m2/repository/jinahya/util/event-listener-support/1.0/event-listener-support-1.0.jar'
+'C:/Users/onacit/.hudson/jobs/jinahya.fsm fsm-xlet site/workspace/target/classes;C:/Users/onacit/.m2/repository/jinahya/util/event-listener-support/1.0-SNAPSHOT/event-listener-support-1.0-SNAPSHOT.jar;C:/Users/onacit/.m2/repository/jinahya/fsm/fsm-core/1.0-SNAPSHOT/fsm-core-1.0-SNAPSHOT.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/src/main/java'
+'C:/Users/onacit/.hudson/jobs/jinahya.fsm fsm-xlet site/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2009-2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/Volumes/1394/svnwc/jinahya/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/target/site/apidocs'
+'C:/Users/onacit/.hudson/jobs/jinahya.fsm fsm-xlet site/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
-'fsm-xlet 1.0-SNAPSHOT API'
+'jinahya.fsm:fsm-xlet:1.0-SNAPSHOT 1.0-SNAPSHOT API'
 -link
 'http://java.sun.com/j2se/1.3/docs/api'
 -link
@@ -23,4 +23,4 @@
 -use
 -version
 -windowtitle
-'fsm-xlet 1.0-SNAPSHOT API'
+'jinahya.fsm:fsm-xlet:1.0-SNAPSHOT 1.0-SNAPSHOT API'

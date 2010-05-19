@@ -2,14 +2,14 @@
 
 <rss version="0.91">
   <channel>
-    <title>fsm-xlet - Checkstyle report</title>
+    <title>jinahya.fsm:fsm-xlet:1.0-SNAPSHOT - Checkstyle report</title>
     <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet/</link>
-    <description>fsm-xlet - Checkstyle report</description>
+    <description>jinahya.fsm:fsm-xlet:1.0-SNAPSHOT - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2009 - 2010</copyright>
     <item>
-      <title>File: 4,
-             Errors: 24,
+      <title>File: 9,
+             Errors: 11,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,21 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletState.java">jinahya/fsm/xlet/XletState.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletMachine.java">jinahya/fsm/xlet/XletMachine.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.LoadTask.java">jinahya/fsm/xlet/task/LoadTask.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletTask.java">jinahya/fsm/xlet/XletTask.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.XletTransitionMatchers.java">jinahya/fsm/xlet/task/XletTransitionMatchers.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletTransitionMatcher.java">jinahya/fsm/xlet/XletTransitionMatcher.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.InitSwitchTask.java">jinahya/fsm/xlet/task/InitSwitchTask.java</a>
                 </td>
                 <td>
                   0
@@ -66,7 +80,35 @@
                   0
                 </td>
                 <td>
-                  8
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.PlayTask.java">jinahya/fsm/xlet/task/PlayTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.InitTask.java">jinahya/fsm/xlet/task/InitTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -80,7 +122,35 @@
                   0
                 </td>
                 <td>
-                  16
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.LoadSwitchTask.java">jinahya/fsm/xlet/task/LoadSwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.PlaySwitchTask.java">jinahya/fsm/xlet/task/PlaySwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                       </tbody>
