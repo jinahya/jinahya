@@ -10,21 +10,15 @@
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.7</version>
-      <scope>test</scope>
-    </dependency>
-    <!--dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <classifier>jdk14</classifier>
       <version>5.9</version>
       <scope>test</scope>
-    </dependency-->
+    </dependency>
     <dependency>
       <groupId>jinahya.fsm</groupId>
-      <artifactId>fsm</artifactId>
+      <artifactId>fsm-core</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
@@ -107,7 +101,7 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>fsm-xlet</name>
+  <name>${groupId}:${artifactId}:${version}</name>
   <description>Xlet State Machine Support</description>
   <url>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet/</url>
   <inceptionYear>2009</inceptionYear>
@@ -139,10 +133,10 @@
   <!--ciManagement/-->
   <!--mailingLists/-->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</developerConnection>
     <tag>HEAD</tag>
-    <url>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.fsm/fsm-xlet/trunk/</url>
+    <url>http://jinahya.googlecode.com/svn/maven/2/proj/${groupId}/${artifactId}/trunk/</url>
   </scm>
   <!--prerequisites/-->
   <repositories>
@@ -173,7 +167,7 @@
     <site>
       <id>jinahya.googlecode.com</id>
       <name>jinahya.google.com</name>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
