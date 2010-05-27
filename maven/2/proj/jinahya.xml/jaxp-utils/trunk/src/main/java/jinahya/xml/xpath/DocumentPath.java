@@ -1,26 +1,16 @@
-package jinahya.xml.jaxp;
+package jinahya.xml.xpath;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -31,107 +21,15 @@ public final class DocumentPath {
 
 
     /**
-     *
-     */
-    private static DocumentBuilder documentBuilder = null;
-
-
-    /**
-     *
-     * @return
-     * @throws ParserConfigurationException
-     */
-    private static synchronized DocumentBuilder getDocumentBuilder()
-        throws ParserConfigurationException {
-
-        if (documentBuilder == null) {
-
-            final DocumentBuilderFactory documentBuilderFactory =
-                DocumentBuilderFactory.newInstance();
-
-            documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        }
-
-        return documentBuilder;
-    }
-
-
-    /**
-     *
-     * @param source
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public static DocumentPath newInstance(final File source)
-        throws ParserConfigurationException, SAXException, IOException {
-
-        return new DocumentPath(getDocumentBuilder().parse(source));
-    }
-
-
-    /**
-     *
-     * @param source
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public static DocumentPath newInstance(final InputStream source)
-        throws ParserConfigurationException, SAXException, IOException {
-
-        return new DocumentPath(getDocumentBuilder().parse(source));
-    }
-
-
-    /**
-     *
-     * @param source
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public static DocumentPath newInstance(final InputSource source)
-        throws ParserConfigurationException, SAXException, IOException {
-
-        return new DocumentPath(getDocumentBuilder().parse(source));
-    }
-
-
-    /**
-     * XPathFactory singleton instance.
-     */
-    private static XPathFactory xPathFactory;
-
-
-    /**
-     * Returns a new XPath instance.
-     *
-     * @return a new XPath instance.
-     */
-    private static synchronized XPath newXPath() {
-        if (xPathFactory == null) {
-            xPathFactory = XPathFactory.newInstance();
-            //xPathFactory = new org.apache.xpath.jaxp.XPathFactoryImpl();
-        }
-        return xPathFactory.newXPath();
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param document widget document.
      */
-    private DocumentPath(final Document document) {
+    public DocumentPath(final Document document, final XPath xPath) {
         super();
 
         this.document = document;
-
-        xPath = newXPath();
+        this.xPath = xPath;
     }
 
 

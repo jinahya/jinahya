@@ -4,19 +4,11 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>jinahya.xml</groupId>
   <artifactId>jaxp-utils</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
-  <name>jaxp-utils</name>
-  <url>http://maven.apache.org</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -25,7 +17,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement/>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
 
+  <!-- Build Settings -->
   <build>
     <pluginManagement>
     <plugins>
@@ -66,4 +64,47 @@
     </plugins>
   </build>
 
+  <!-- More Project Information -->
+  <name>jaxp-utils</name>
+  <description/>
+  <url>http://maven.apache.org</url>
+  <inceptionYear>2010</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <organization/>
+  <developers>
+    <developer>
+      <id>jinahya</id>
+      <name>Jin Kwon</name>
+      <email>jinahya@gmail.com</email>
+    </developer>
+  </developers>
+  <contributors/>
+
+  <!-- Environment Settings -->
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
+  <scm>
+  </scm>
+  <prerequisites/>
+  <repositories/>
+  <pluginRepositories/>
+  <distributionManagement>
+    <repository>
+      <id>jinahya.googlecode.com_svn_maven_2_repo</id>
+      <url>https://jinahya.googlecode.com/svn/maven/2/repo</url>
+    </repository>
+    <site>
+      <id>jinahya.googlecode.com_svn_maven_2_site</id>
+      <url>https://jinahya.googlecode.com/svn/maven/2/site</url>
+    </site>
+  </distributionManagement>
+  <profiles/>
 </project>
