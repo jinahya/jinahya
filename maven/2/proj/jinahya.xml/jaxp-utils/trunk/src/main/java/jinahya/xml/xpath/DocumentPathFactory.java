@@ -67,7 +67,7 @@ public class DocumentPathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final DocumentPath newInstance(final InputStream source)
+    public final DocumentPath newDocumentPath(final InputStream source)
         throws ParserConfigurationException, SAXException, IOException {
 
         final Document document =
@@ -87,7 +87,7 @@ public class DocumentPathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final DocumentPath newInstance(final InputSource source)
+    public final DocumentPath newDocumentPath(final InputSource source)
         throws ParserConfigurationException, SAXException, IOException {
 
         final Document document =
@@ -103,7 +103,7 @@ public class DocumentPathFactory {
      *
      * @return
      */
-    protected DocumentBuilderFactory getDocumentBuilderFactory() {
+    public DocumentBuilderFactory getDocumentBuilderFactory() {
         if (dbf == null) {
             dbf = DocumentBuilderFactory.newInstance();
         }
@@ -126,7 +126,7 @@ public class DocumentPathFactory {
      *
      * @return
      */
-    protected XPathFactory getXPathFactory() {
+    public XPathFactory getXPathFactory() {
         if (xpf == null) {
             xpf = XPathFactory.newInstance();
         }
