@@ -133,10 +133,9 @@ def filter_walk(autoprop_lines, dirname, filenames):
 
       for f in matching_filenames:
         command += ["%s/%s" % (dirname, f)]
-        file_path += (dirname + f)
+        file_path += ("%s/%s" % (dirname, f))
 
-      print file_path
-      if os.path.isDir(file_path):
+      if os.path.isdir(file_path):
         continue
 
       status = os.spawnvp(os.P_WAIT, 'svn', command)
