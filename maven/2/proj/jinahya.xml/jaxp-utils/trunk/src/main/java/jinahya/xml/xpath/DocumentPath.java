@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
  *
  * @author <a href="mailto:support@minigate.net">Jin Kwon</a>
  */
-public final class DocumentPath {
+public class DocumentPath {
 
 
     /**
