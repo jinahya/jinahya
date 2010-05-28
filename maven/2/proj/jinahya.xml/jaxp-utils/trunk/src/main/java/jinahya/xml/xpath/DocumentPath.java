@@ -117,8 +117,8 @@ public class DocumentPath {
     }
 
 
-    private Document document;
-    private XPath xPath;
+    protected Document document;
+    protected XPath xPath;
 
     private final Map<String, XPathExpression> expressions =
         Collections.synchronizedMap(new HashMap<String, XPathExpression>());
