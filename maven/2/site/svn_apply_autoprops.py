@@ -129,8 +129,15 @@ def filter_walk(autoprop_lines, dirname, filenames):
 
     for prop in prop_list:
       command = ['svn', 'propset', prop[0], prop[1]]
+      file_path = ''
+
       for f in matching_filenames:
         command += ["%s/%s" % (dirname, f)]
+        file_path += (dirname + f)
+
+      print file_path
+      if os.path.isDir(file_path):
+        continue
 
       status = os.spawnvp(os.P_WAIT, 'svn', command)
       if status:
