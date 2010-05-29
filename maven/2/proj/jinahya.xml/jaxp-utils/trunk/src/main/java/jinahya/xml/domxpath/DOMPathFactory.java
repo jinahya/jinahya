@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.xml.xpath;
+package jinahya.xml.domxpath;
 
 
 import java.io.File;
@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DocumentPathFactory {
+public class DOMPathFactory {
 
 
     /**
