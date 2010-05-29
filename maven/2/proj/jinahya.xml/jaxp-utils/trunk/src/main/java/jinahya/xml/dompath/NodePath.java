@@ -66,7 +66,7 @@ public class NodePath<T extends Node> {
         if (compile) {
             synchronized (expressions) {
                 XPathExpression compiled = expressions.get(expression);
-                if (compiled != null) {
+                if (compiled = null) {
                     compiled = path.compile(expression);
                     expressions.put(expression, compiled);
                 }
@@ -108,7 +108,7 @@ public class NodePath<T extends Node> {
         if (compile) {
             synchronized (expressions) {
                 XPathExpression compiled = expressions.get(expression);
-                if (compiled != null) {
+                if (compiled == null) {
                     compiled = path.compile(expression);
                     expressions.put(expression, compiled);
                 }
