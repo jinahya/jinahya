@@ -78,15 +78,30 @@ public class NodePath<T extends Node> {
     }
 
 
-    public Node evaluateNode(final String expression, final boolean compile)
+    public boolean evaluateBOOLEAN(final String expression,
+                                   final boolean compile)
+        throws XPathExpressionException {
+
+        return (Boolean) evaluate(expression, XPathConstants.BOOLEAN, compile);
+    }
+
+
+    public double evaluateNUMBER(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return (Double) evaluate(expression, XPathConstants.NUMBER, compile);
+    }
+
+
+    public Node evaluateNODE(final String expression, final boolean compile)
         throws XPathExpressionException {
 
         return (Node) evaluate(expression, XPathConstants.NODE, compile);
     }
 
 
-    public NodeList evaluateNodeList(final String expression,
-                                     final boolean compile)
+    public NodeList evaluateNODESET(final String expression,
+                                    final boolean compile)
         throws XPathExpressionException {
 
         return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
