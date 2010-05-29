@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.xml.dompath;
+package jinahya.xml.xapth.dom;
 
 
 import java.io.File;
