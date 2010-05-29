@@ -200,7 +200,7 @@ public class NamespaceContextSupport implements NamespaceContext {
     }
 
 
-    // <URI, List<prefix>
+    // <URI, List<prefix>>
     private final Map<String, List<String>> namespaces =
         Collections.synchronizedMap(new HashMap<String, List<String>>());
 }
