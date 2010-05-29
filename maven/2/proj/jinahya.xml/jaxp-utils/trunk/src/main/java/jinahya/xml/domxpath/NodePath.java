@@ -103,7 +103,7 @@ public class NodePath<T extends Node> {
     }
 
 
-    protected Document getDocument() {
+    protected final Document getDocument() {
         if (item instanceof Document) {
             return (Document) item;
         }
@@ -111,6 +111,11 @@ public class NodePath<T extends Node> {
             return null;
         }
         return parent.getDocument();
+    }
+
+
+    protected final XPath getPath() {
+        return path;
     }
 
 
