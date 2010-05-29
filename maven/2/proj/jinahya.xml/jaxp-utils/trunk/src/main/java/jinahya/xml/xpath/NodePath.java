@@ -27,6 +27,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 
@@ -42,10 +43,11 @@ public class NodePath<T extends Node> {
      *
      * @param document widget document.
      */
-    public NodePath(final T node, final XPath path) {
+    public NodePath(final Document document, final T item, final XPath path) {
         super();
 
-        this.node = node;
+        this.document = document;
+        this.item = item;
         this.path = path;
     }
 
@@ -67,11 +69,11 @@ public class NodePath<T extends Node> {
                     compiled = path.compile(expression);
                     expressions.put(expression, compiled);
                 }
-                return compiled.evaluate(node);
+                return compiled.evaluate(item);
             }
         }
 
-        return path.evaluate(expression, node);
+        return path.evaluate(expression, item);
     }
 
 
@@ -94,15 +96,16 @@ public class NodePath<T extends Node> {
                     compiled = path.compile(expression);
                     expressions.put(expression, compiled);
                 }
-                return compiled.evaluate(node, returnType);
+                return compiled.evaluate(item, returnType);
             }
         }
 
-        return path.evaluate(expression, node, returnType);
+        return path.evaluate(expression, item, returnType);
     }
 
 
-    protected T node;
+    protected Document document;
+    protected T item;
     protected XPath path;
 
     private final Map<String, XPathExpression> expressions =

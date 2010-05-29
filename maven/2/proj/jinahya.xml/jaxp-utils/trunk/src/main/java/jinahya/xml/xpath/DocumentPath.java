@@ -36,6 +36,6 @@ public class DocumentPath extends NodePath<Document> {
      * @param document widget document.
      */
     public DocumentPath(final Document document, final XPath path) {
-        super(document, path);
+        super(document, document, path);
     }
 }
