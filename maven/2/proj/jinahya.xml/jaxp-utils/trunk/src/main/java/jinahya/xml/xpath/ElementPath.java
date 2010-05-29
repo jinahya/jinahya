@@ -20,7 +20,6 @@ package jinahya.xml.xpath;
 
 import javax.xml.xpath.XPath;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 
@@ -31,8 +30,7 @@ import org.w3c.dom.Element;
 public class ElementPath extends NodePath<Element> {
 
 
-    public ElementPath(final Document document, final Element element,
-                       final XPath path) {
-        super(document, element, path);
+    public ElementPath(final Element element, final XPath path) {
+        super(element, path);
     }
 }

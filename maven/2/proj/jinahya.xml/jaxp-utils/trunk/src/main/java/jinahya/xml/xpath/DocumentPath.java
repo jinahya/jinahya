@@ -31,11 +31,11 @@ public class DocumentPath extends NodePath<Document> {
 
 
     /**
-     * Creates a new instance.
      *
-     * @param document widget document.
+     * @param document
+     * @param path
      */
     public DocumentPath(final Document document, final XPath path) {
-        super(document, document, path);
+        super(document, path);
     }
 }

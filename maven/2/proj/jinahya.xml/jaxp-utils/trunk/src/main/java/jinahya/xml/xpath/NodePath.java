@@ -39,14 +39,13 @@ public class NodePath<T extends Node> {
 
 
     /**
-     * Creates a new instance.
      *
-     * @param document widget document.
+     * @param item
+     * @param path
      */
-    public NodePath(final Document document, final T item, final XPath path) {
+    public NodePath(final T item, final XPath path) {
         super();
 
-        this.document = document;
         this.item = item;
         this.path = path;
     }
@@ -104,9 +103,21 @@ public class NodePath<T extends Node> {
     }
 
 
-    protected Document document;
-    protected T item;
-    protected XPath path;
+    protected Document getDocument() {
+        if (item instanceof Document) {
+            return (Document) item;
+        }
+        if (parent == null) {
+            return null;
+        }
+        return parent.getDocument();
+    }
+
+
+    private NodePath parent;
+
+    private T item;
+    private XPath path;
 
     private final Map<String, XPathExpression> expressions =
         Collections.synchronizedMap(new HashMap<String, XPathExpression>());
