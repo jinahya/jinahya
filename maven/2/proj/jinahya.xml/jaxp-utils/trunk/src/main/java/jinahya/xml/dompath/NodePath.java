@@ -114,6 +114,11 @@ public class NodePath<T extends Node> {
     }
 
 
+    protected final T getItem() {
+        return item;
+    }
+
+
     protected final XPath getPath() {
         return path;
     }
