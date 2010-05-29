@@ -24,11 +24,13 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -73,6 +75,21 @@ public class NodePath<T extends Node> {
         }
 
         return path.evaluate(expression, item);
+    }
+
+
+    public Node evaluateNode(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return (Node) evaluate(expression, XPathConstants.NODE, compile);
+    }
+
+
+    public NodeList evaluateNodeList(final String expression,
+                                     final boolean compile)
+        throws XPathExpressionException {
+
+        return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
     }
 
 
