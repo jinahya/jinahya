@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.xml.domxpath;
+package jinahya.xml.dompath;
 
 
 import java.util.Collections;
