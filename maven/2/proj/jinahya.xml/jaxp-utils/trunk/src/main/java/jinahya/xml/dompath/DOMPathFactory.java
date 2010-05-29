@@ -106,7 +106,7 @@ public class DOMPathFactory {
     public DocumentBuilderFactory getDocumentBuilderFactory() {
         if (dbf == null) {
             dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
+            //dbf.setNamespaceAware(true);
         }
         return dbf;
     }
