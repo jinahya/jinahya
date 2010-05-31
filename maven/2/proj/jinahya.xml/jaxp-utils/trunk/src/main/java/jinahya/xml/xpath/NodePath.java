@@ -220,7 +220,8 @@ public class NodePath<T extends Node> {
     }
 
 
-    public <E extends Node> NodePath<E> getChildPath(final String expression,
+    public <E extends Node> NodePath<E> getChildPath(final Class<E> clazz,
+                                                     final String expression,
                                                      final boolean compile)
         throws XPathExpressionException {
 

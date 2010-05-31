@@ -60,7 +60,7 @@ public class NodePathTest {
 
         NodePath<Document> docpath = new NodePath(document, path);
 
-        NodePath<Element> b = docpath.getChildPath("/a/b", true);
+        NodePath<Element> b = docpath.getChildPath(Element.class, "/a/b", true);
         System.out.println(b.evaluate("text()", true));
     }
 }
