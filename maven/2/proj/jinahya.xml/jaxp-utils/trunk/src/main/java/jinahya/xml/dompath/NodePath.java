@@ -29,6 +29,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -100,10 +101,40 @@ public class NodePath<T extends Node> {
      * @return
      * @throws XPathExpressionException
      */
+    public boolean evaluateBoolean(final String expression,
+                                   final boolean compile)
+        throws XPathExpressionException {
+
+        return evaluateBOOLEAN(expression, compile).booleanValue();
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
     public Double evaluateNUMBER(final String expression, final boolean compile)
         throws XPathExpressionException {
 
         return (Double) evaluate(expression, XPathConstants.NUMBER, compile);
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public double evaluateDouble(final String expression,
+                                 final boolean compile)
+        throws XPathExpressionException {
+
+        return evaluateNUMBER(expression, compile).doubleValue();
     }
 
 
@@ -132,6 +163,21 @@ public class NodePath<T extends Node> {
         throws XPathExpressionException {
 
         return (Node) evaluate(expression, XPathConstants.NODE, compile);
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public Element evaluateElement(final String expression,
+                                   final boolean compile)
+        throws XPathExpressionException {
+
+        return (Element) evaluateNODE(expression, compile);
     }
 
 
