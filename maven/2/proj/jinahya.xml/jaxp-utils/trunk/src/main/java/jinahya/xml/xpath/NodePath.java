@@ -18,26 +18,19 @@
 package jinahya.xml.xpath;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -48,7 +41,7 @@ public class NodePath<T extends Node> {
 
 
 
-    public NodePath(NodePath<? extends T> path) {
+    protected NodePath(NodePath<? extends T> path) {
         this(path.node, path.path);
     }
 
@@ -58,7 +51,7 @@ public class NodePath<T extends Node> {
      * @param node
      * @param path
      */
-    public NodePath(final T node, final XPath path) {
+    protected NodePath(final T node, final XPath path) {
         super();
 
         if (node == null) {
