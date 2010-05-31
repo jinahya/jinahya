@@ -41,7 +41,6 @@ import org.xml.sax.SAXException;
 public class NodePathFactory {
 
 
-
     /**
      *
      * @return
