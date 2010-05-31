@@ -84,11 +84,11 @@ public class NamespaceContextImpl implements NamespaceContext {
         }
 
         synchronized (namespaces) {
-            final List<String> bounds = namespaces.get(namespaceURI);
-            if (bounds == null) {
+            final List<String> prefixes = namespaces.get(namespaceURI);
+            if (prefixes == null) {
                 return null;
             }
-            return bounds.get(0);
+            return prefixes.get(prefixes.size() - 1);
         }
     }
 

@@ -18,19 +18,26 @@
 package jinahya.xml.xpath;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -38,6 +45,7 @@ import org.w3c.dom.NodeList;
  * @author <a href="mailto:support@minigate.net">Jin Kwon</a>
  */
 public class NodePath<T extends Node> {
+
 
 
     public NodePath(NodePath<? extends T> path) {
@@ -53,6 +61,14 @@ public class NodePath<T extends Node> {
     public NodePath(final T node, final XPath path) {
         super();
 
+        if (node == null) {
+            throw new IllegalArgumentException("node is null");
+        }
+
+        if (path == null) {
+            throw new IllegalArgumentException("path is null");
+        }
+
         this.node = node;
         this.path = path;
     }
@@ -67,6 +83,8 @@ public class NodePath<T extends Node> {
      */
     public String evaluate(final String expression, final boolean compile)
         throws XPathExpressionException {
+
+        System.out.println("expression: " + expression);
 
         if (compile) {
             synchronized (expressions) {
@@ -225,7 +243,8 @@ public class NodePath<T extends Node> {
                                                      final boolean compile)
         throws XPathExpressionException {
 
-        return new NodePath<E>((E) evaluateNODE(expression, compile), path);
+        //return getChildPath(clazz.cast(evaluateNODE(expression, compile)));
+        return getChildPath((E) evaluateNODE(expression, compile));
     }
 
 
@@ -244,13 +263,23 @@ public class NodePath<T extends Node> {
     }
 
 
+    /*
     protected final T getNode() {
         return node;
     }
+     */
 
 
+    /*
     protected final XPath getPath() {
         return path;
+    }
+     */
+
+
+    @Override
+    public String toString() {
+        return "NodePath<" + node.getClass() + ">: {" + node.getNamespaceURI() + "}" + node.getNodeName() + ": " + node.getNodeValue();
     }
 
 
