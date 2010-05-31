@@ -34,7 +34,7 @@ import javax.xml.namespace.NamespaceContext;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class NamespaceContextSupport implements NamespaceContext {
+public class NamespaceContextImpl implements NamespaceContext {
 
 
     @Override
