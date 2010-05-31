@@ -78,7 +78,14 @@ public class NodePath<T extends Node> {
     }
 
 
-    public boolean evaluateBOOLEAN(final String expression,
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public Boolean evaluateBOOLEAN(final String expression,
                                    final boolean compile)
         throws XPathExpressionException {
 
@@ -86,13 +93,41 @@ public class NodePath<T extends Node> {
     }
 
 
-    public double evaluateNUMBER(final String expression, final boolean compile)
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public Double evaluateNUMBER(final String expression, final boolean compile)
         throws XPathExpressionException {
 
         return (Double) evaluate(expression, XPathConstants.NUMBER, compile);
     }
 
 
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public int evaluateInt(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return evaluateNUMBER(expression, compile).intValue();
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
     public Node evaluateNODE(final String expression, final boolean compile)
         throws XPathExpressionException {
 
