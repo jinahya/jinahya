@@ -74,7 +74,7 @@ public class NodePathTest {
         "</a:a>";
 
 
-    //@Test
+    @Test
     public void test()
         throws ParserConfigurationException, SAXException, IOException,
                XPathExpressionException {
@@ -113,6 +113,7 @@ public class NodePathTest {
 
         NodePath<Element> a =
             path.getChildPath(Element.class, prefix + "a", true);
+
         System.out.println("a: " + a);
 
         Assert.assertEquals(a.evaluate("@b", true), "c");

@@ -254,12 +254,15 @@ public class NodePath<T extends Node> {
             throw new IllegalArgumentException("child");
         }
 
-        if (child.getParentNode().equals(node)) {
-            throw new IllegalArgumentException(
-                child + " is not a child of " + node);
+
+        for (Node iter = child; iter != null; iter = iter.getParentNode()) {
+            if (iter.getParentNode().equals(node)) {
+                return new NodePath(child, path);
+            }
         }
 
-        return new NodePath(child, path);
+        throw new IllegalArgumentException(
+            child + " is not a child of " + node);
     }
 
 
