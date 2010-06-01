@@ -16,8 +16,10 @@
 
 package jinahya.fsm.task;
 
+
 import jinahya.fsm.MachineException;
 import jinahya.fsm.Transition;
+import jinahya.fsm.TransitionMatcher;
 import jinahya.fsm.event.TransitionEvent;
 import jinahya.fsm.event.TransitionListener;
 
