@@ -17,8 +17,10 @@
 package jinahya.fsm.xlet.task;
 
 
+import jinahya.fsm.TransitionMatcher;
 import jinahya.fsm.task.SwitchTask;
-import jinahya.fsm.task.TransitionMatcher;
+import jinahya.fsm.xlet.XletTransitionMatchers;
+
 
 
 /**

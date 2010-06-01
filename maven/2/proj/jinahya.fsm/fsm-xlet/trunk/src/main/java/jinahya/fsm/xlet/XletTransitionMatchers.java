@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-package jinahya.fsm.xlet.task;
+package jinahya.fsm.xlet;
 
 
 import jinahya.fsm.Machine;
 import jinahya.fsm.Transition;
-import jinahya.fsm.task.TransitionMatcher;
-import jinahya.fsm.xlet.XletMachine;
+import jinahya.fsm.TransitionMatcher;
 
 
 /**
