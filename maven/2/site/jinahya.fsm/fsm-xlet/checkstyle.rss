@@ -57,20 +57,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.XletTransitionMatchers.java">jinahya/fsm/xlet/task/XletTransitionMatchers.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.InitSwitchTask.java">jinahya/fsm/xlet/task/InitSwitchTask.java</a>
                 </td>
                 <td>
@@ -128,6 +114,20 @@
                           <tr>
                 <td>
                   <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.task.LoadSwitchTask.java">jinahya/fsm/xlet/task/LoadSwitchTask.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/fsm-xlet//checkstyle.html#jinahya.fsm.xlet.XletTransitionMatchers.java">jinahya/fsm/xlet/XletTransitionMatchers.java</a>
                 </td>
                 <td>
                   0
