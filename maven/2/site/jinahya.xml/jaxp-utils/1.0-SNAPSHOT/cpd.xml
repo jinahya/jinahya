@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="134" tokens="296">
-<file line="78" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\dompath\NodePath.java"/>
-<file line="93" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\xpath\NodePath.java"/>
+<file line="78" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils site\workspace\src\main\java\jinahya\xml\dompath\NodePath.java"/>
+<file line="93" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils site\workspace\src\main\java\jinahya\xml\xpath\NodePath.java"/>
 <codefragment>
 <![CDATA[
         return path.evaluate(expression, node);
