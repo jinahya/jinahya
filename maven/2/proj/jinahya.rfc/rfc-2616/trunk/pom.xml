@@ -224,7 +224,7 @@
   <distributionManagement>
     <site>
       <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/</url>
+      <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${groupId}/${artifactId}/${version}</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
