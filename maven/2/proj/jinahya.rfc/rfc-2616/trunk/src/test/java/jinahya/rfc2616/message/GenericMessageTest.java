@@ -39,7 +39,9 @@ public class GenericMessageTest {
 
 
     protected void print(final GenericMessage message, final PrintStream out) {
+        out.println(message.toString());
 
+        /*
         out.println(message.getStartLine());
 
         final MessageHeaders headers = message.getMessageHeaders();
@@ -62,5 +64,6 @@ public class GenericMessageTest {
             }
             out.println();
         }
+         */
     }
 }

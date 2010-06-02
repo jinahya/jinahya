@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import jinahya.rfc2616.SingleConnectionClient.BufferedMessageBody;
 import jinahya.rfc2616.message.RequestMessage;
 import jinahya.rfc2616.message.ResponseMessage;
 
@@ -42,16 +43,23 @@ public class SingleConnectionClientTest {
     //@Test
     public void testDaum() throws IOException {
 
+        final String host = "www.daum.net";
+        final int port = 80;
+
+
         final RequestMessage request = new RequestMessage();
         request.setMethod("GET");
         request.setRequestUri("/index.html");
         request.setHttpVersion("HTTP/1.1");
+        request.getMessageHeaders().
+            getFieldValues("Host").add(host + ":" + port);
         System.out.println("-------------------------------------------------");
         System.out.println(request);
 
         final ResponseMessage response = new ResponseMessage();
+        response.setMessageBody(new BufferedMessageBody());
 
-        final SocketAddress address = new InetSocketAddress("www.daum.net", 80);
+        final SocketAddress address = new InetSocketAddress(host, port);
         new SingleConnectionClient().request(address, request, response);
         System.out.println("-------------------------------------------------");
         System.out.println(response.toString());

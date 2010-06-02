@@ -16,10 +16,12 @@
 package jinahya.rfc2616.message;
 
 
+//import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -39,6 +41,16 @@ public abstract class GenericMessage {
 
     /** NEW LINE. */
     private static final byte[] CRLF = new byte[] {0x0D, 0x0A};
+
+
+    private static String LINE_SEPARATOR;
+
+    static {
+        LINE_SEPARATOR = System.getProperty("line.separator");
+        if (LINE_SEPARATOR == null) {
+            LINE_SEPARATOR = new String(CRLF);
+        }
+    }
 
 
     /**
@@ -68,8 +80,12 @@ public abstract class GenericMessage {
      */
     public static final class MessageHeaders {
 
+
+        /**
+         *
+         */
         public void clear() {
-            fieldMap.clear();
+            fields.clear();
         }
 
 
@@ -77,23 +93,23 @@ public abstract class GenericMessage {
          *
          * @return
          */
-        public Object[] getFieldNames() {
-            return fieldMap.keySet().toArray();
+        public String[] getFieldNames() {
+            return (String[]) fields.keySet().toArray();
         }
 
 
         /**
          *
-         * @param fieldName
+         * @param name
          * @return
          */
-        public Set getFieldValues(final Object fieldName) {
-            Set fieldValues = (Set) fieldMap.get(fieldName);
-            if (fieldValues == null) {
-                fieldValues = new LinkedHashSet();
-                fieldMap.put(fieldName, fieldValues);
+        public Set<String> getFieldValues(final String name) {
+            Set<String> values = fields.get(name);
+            if (values == null) {
+                values = new LinkedHashSet<String>();
+                fields.put(name, values);
             }
-            return fieldValues;
+            return values;
         }
 
 
@@ -106,11 +122,11 @@ public abstract class GenericMessage {
 
             clear();
 
-            final List lines = new ArrayList();
+            final List<String> lines = new ArrayList<String>();
 
             // ----------------------------------------------------------- LINES
             while (true) {
-                String line = readLine(stream);
+                final String line = readLine(stream);
                 if (line == null) {
                     throw new EOFException("EOF in headers");
                 }
@@ -127,9 +143,9 @@ public abstract class GenericMessage {
                 buffer.append(lines.remove(0));
                 size--;
                 while (size > 0) {
-                    final char c = ((String) lines.get(0)).charAt(0);
+                    final char c = lines.get(0).charAt(0);
                     if (c == 0x20 || c == 0x09) {
-                        buffer.append(" " + ((String) lines.remove(0)).trim());
+                        buffer.append(" " + lines.remove(0).trim());
                         size--;
                     } else {
                         break;
@@ -139,17 +155,16 @@ public abstract class GenericMessage {
             }
 
             // -------------------------------------------------------- TOKENIZE
-            for (int i = 0; i < lines.size(); i++) {
-                String line = (String) lines.get(i);
-                int colon = line.indexOf(':');
+            for (String line : lines) {
+                final int colon = line.indexOf(':');
                 if (colon == -1) {
                     System.err.println("Unacceptable message-header: " + line);
                     continue;
                 }
-                final String fieldName = line.substring(0, colon);
-                final Set fieldValues = getFieldValues(fieldName);
+                final String name = line.substring(0, colon);
+                final Set<String> fieldValues = getFieldValues(name);
                 final String fieldValue = line.substring(colon + 1);
-                StringTokenizer tokenizer =
+                final StringTokenizer tokenizer =
                     new StringTokenizer(fieldValue, ",");
                 while (tokenizer.hasMoreTokens()) {
                     fieldValues.add(tokenizer.nextToken().trim());
@@ -164,22 +179,22 @@ public abstract class GenericMessage {
          * @throws IOException
          */
         private void write(final OutputStream stream) throws IOException {
-            Iterator fieldNames = fieldMap.keySet().iterator();
-            while (fieldNames.hasNext()) {
-                final String fieldName = (String) fieldNames.next();
-                final Set fieldValues = (Set) fieldMap.get(fieldName);
-                if (fieldValues.isEmpty()) {
+            final Iterator<String> nameIter = fields.keySet().iterator();
+            while (nameIter.hasNext()) {
+                final String name = nameIter.next();
+                final Set<String> values = fields.get(name);
+                if (values.isEmpty()) {
                     continue;
                 }
-                stream.write((fieldName + ":").getBytes());
-                Iterator fieldValueIterator =
-                    ((Set) fieldMap.get(fieldName)).iterator();
-                if (fieldValueIterator.hasNext()) {
-                    stream.write(
-                        ((String) fieldValueIterator.next()).getBytes());
+                stream.write((name + ":").getBytes());
+
+                final Iterator<String> valueIter = values.iterator();
+
+                if (valueIter.hasNext()) {
+                    stream.write((valueIter.next()).getBytes());
                 }
-                while (fieldValueIterator.hasNext()) {
-                    stream.write(("," + fieldValueIterator.next()).getBytes());
+                while (valueIter.hasNext()) {
+                    stream.write(("," + valueIter.next()).getBytes());
                 }
                 stream.write(CRLF);
             }
@@ -187,18 +202,47 @@ public abstract class GenericMessage {
         }
 
 
+        @Override
+        public String toString() {
+            final StringBuffer buffer = new StringBuffer();
+            final Iterator<String> nameIter = fields.keySet().iterator();
+            while (nameIter.hasNext()) {
+                final String name = nameIter.next();
+                final Set<String> values = fields.get(name);
+                if (values.isEmpty()) {
+                    continue;
+                }
+                buffer.append(name + ":");
+
+                final Iterator<String> valueIter = values.iterator();
+
+                if (valueIter.hasNext()) {
+                    buffer.append(valueIter.next());
+                }
+                while (valueIter.hasNext()) {
+                    buffer.append("," + valueIter.next());
+                }
+                buffer.append(LINE_SEPARATOR);
+            }
+            buffer.append(LINE_SEPARATOR);
+
+            return buffer.toString();
+        }
+
+
         /**
          * 
-         * @param fieldName
+         * @param name
          * @return
          */
-        public final boolean containsField(final Object fieldName) {
-            return fieldMap.containsKey(fieldName);
+        public final boolean containsField(final String name) {
+            return fields.containsKey(name);
         }
 
 
         // <String, Set<String>>
-        private Map fieldMap = new LinkedHashMap();
+        private Map<String, Set<String>> fields =
+            new LinkedHashMap<String, Set<String>>();
     }
 
 
@@ -302,6 +346,13 @@ public abstract class GenericMessage {
         }
 
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return (getStartLine() + LINE_SEPARATOR + getMessageHeaders().toString()
+                + String.valueOf(messageBody));
     }
 
 

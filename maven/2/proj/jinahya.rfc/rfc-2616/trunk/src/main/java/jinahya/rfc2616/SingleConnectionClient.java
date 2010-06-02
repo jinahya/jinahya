@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
+//import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
@@ -41,13 +41,16 @@ import jinahya.rfc2616.message.RequestMessage;
 public class SingleConnectionClient {
 
 
-    private static final int DEFAULT_TIMEOUT = 5000;
+    /**
+     *
+     */
+    private static final int DEFAULT_CONNECT_TIMEOUT = 2000;
 
 
     /**
      *
      */
-    public static interface SocketOptionHandler {
+    public static interface SocketConfigurator {
 
         /**
          *
@@ -55,31 +58,45 @@ public class SingleConnectionClient {
          * @return
          * @throws SocketException
          */
-        public Socket handleOptions(Socket socket) throws SocketException;
+        Socket configure(Socket socket) throws SocketException;
     }
 
 
     /**
      *
      */
+    private static final SocketConfigurator DEFAULT_SOCKET_CONFIGURATOR =
+        new SocketConfigurator() {
+
+            @Override
+            public Socket configure(final Socket socket)
+                throws SocketException {
+
+                return socket;
+            }
+        };
+
+
+        /**
+     *
+     */
     public static class BufferedMessageBody implements MessageBody {
 
 
-        //@Override
-        public final void read(final GenericMessage message,
-                               final InputStream stream)
+        @Override
+        public void read(final GenericMessage message, final InputStream stream)
             throws IOException {
 
             setContent(stream);
         }
 
 
-        //@Override
-        public final void write(final GenericMessage message,
-                                final OutputStream stream)
+        @Override
+        public void write(final GenericMessage message,
+                          final OutputStream stream)
             throws IOException {
 
-            stream.write(content.toByteArray());
+            stream.write(content);
         }
 
 
@@ -88,7 +105,7 @@ public class SingleConnectionClient {
          * @return
          */
         public byte[] getContent() {
-            return content.toByteArray();
+            return content;
         }
 
 
@@ -97,37 +114,47 @@ public class SingleConnectionClient {
          * @param content
          */
         public void setContent(final byte[] content) {
+
             if (content == null) {
-                throw new NullPointerException("content");
+                throw new IllegalArgumentException("content is null");
             }
 
-            this.content.reset();
-            try {
-                this.content.write(content);
-            } catch (IOException ioe) {
-                // no gonna happen
-            }
+            this.content = content;
         }
 
 
+        /**
+         *
+         * @param content
+         * @throws IOException
+         */
         public void setContent(final InputStream content) throws IOException {
-            this.content.reset();
-            final byte[] buffer = new byte[1024];
-            int read = -1;
-            while ((read = content.read(buffer)) != -1) {
-                this.content.write(buffer, 0, read);
+
+            if (content == null) {
+                throw new IllegalArgumentException("content is null");
+            }
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                final byte[] buffer = new byte[1024];
+                for (int read = -1; (read = content.read(buffer)) != -1;) {
+                    baos.write(buffer, 0, read);
+                }
+                baos.flush();
+                this.content = baos.toByteArray();
+            } finally {
+                baos.close();
             }
         }
 
 
-        public OutputStream getContentAsStream() {
-            content.reset();
-            return content;
+        @Override
+        public String toString() {
+            return new String(content);
         }
 
 
-        private final ByteArrayOutputStream content =
-            new ByteArrayOutputStream();
+        private byte[] content = new byte[0];
     }
 
 
@@ -146,6 +173,7 @@ public class SingleConnectionClient {
         final MessageHeaders requestMessageHeaders =
             request.getMessageHeaders();
 
+        /*
         if (!requestMessageHeaders.containsField("Host") &&
             address instanceof InetSocketAddress) {
 
@@ -153,6 +181,7 @@ public class SingleConnectionClient {
             requestMessageHeaders.getFieldValues("Host").
                 add(addr.getHostName() + ":" + addr.getPort());
         }
+         */
 
         final Set connectionFieldValues =
             requestMessageHeaders.getFieldValues("Connection");
@@ -160,57 +189,93 @@ public class SingleConnectionClient {
             connectionFieldValues.add("close");
         }
 
-        Socket socket = new Socket();
-        if (handler != null) {
-            socket = handler.handleOptions(socket);
-        }
-        try {
-            socket.connect(address, timeout);
 
-            if (request.getMessageBody() == null) {
-                request.setMessageBody(new BufferedMessageBody());
-            }
+        final Socket socket = socketConfigurator.configure(new Socket());
+
+        try {
+            socket.connect(address, connectTimeout);
+
+            // ------------------------------------------------------------ SEND
             final OutputStream output = socket.getOutputStream();
             request.write(output);
             output.flush();
-            socket.shutdownOutput();
 
-            if (response.getMessageBody() == null) {
-                response.setMessageBody(new BufferedMessageBody());
+            try {
+                socket.shutdownOutput();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
             }
+
+            // --------------------------------------------------------- RECEIVE
             final InputStream input = socket.getInputStream();
             response.read(input);
-            socket.shutdownInput();
+
+            try {
+                socket.shutdownInput();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
 
         } finally {
-            socket.close();
+            try {
+                socket.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
         }
     }
 
 
-    public final int getTimeout() {
-        return timeout;
+    /**
+     * Returns the current value of <code>connectTimeout</code>.
+     *
+     * @return connectTimeout
+     */
+    public int getConnectTimeout() {
+        return connectTimeout;
     }
 
 
-    public final void setTimeout(int timeout) {
-        if (timeout < 0) {
-            throw new IllegalArgumentException("timeout(" + timeout + ") < 0");
+    /**
+     * Sets new <code>connectTimeout</code>.
+     *
+     * @param connectTimeout new connect timeout.
+     */
+    public void setConnectTimeout(int connectTimeout) {
+
+        if (connectTimeout < 0) {
+            throw new IllegalArgumentException(
+                "connectTimeout(" + connectTimeout + ") < 0");
         }
-        this.timeout = timeout;
+
+        this.connectTimeout = connectTimeout;
     }
 
 
-    public final SocketOptionHandler getHandler() {
-        return handler;
+    /**
+     *
+     * @return
+     */
+    public SocketConfigurator getSocketConfigurator() {
+        return socketConfigurator;
     }
 
 
-    public final void setHandler(final SocketOptionHandler handler) {
-        this.handler = handler;
+    /**
+     *
+     * @param socketConfigurator
+     */
+    public void setSocketConfigurator(
+        final SocketConfigurator socketConfigurator) {
+
+        if (socketConfigurator == null) {
+            throw new IllegalArgumentException("socketConfigurator is null");
+        }
+
+        this.socketConfigurator = socketConfigurator;
     }
 
 
-    private SocketOptionHandler handler = null;
-    private int timeout = DEFAULT_TIMEOUT;
+    private SocketConfigurator socketConfigurator = DEFAULT_SOCKET_CONFIGURATOR;
+    private int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 }
