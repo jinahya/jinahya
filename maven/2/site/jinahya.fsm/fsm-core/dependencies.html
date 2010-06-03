@@ -42,7 +42,7 @@
   
     
             <div class="xleft">
-        Last Published: 2010-06-03
+        Last Published: 2010-06-04
                       </div>
             <div class="xright">            <a href="">jinahya.fsm:fsm-core:1.0-SNAPSHOT</a>
             
@@ -230,7 +230,7 @@
       }
 </script>
 <div class="section"><h3>Dependency Tree</h3>
-<ul><li>jinahya.fsm:fsm-core:jar:1.0-SNAPSHOT <img id="_1800283450" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1468843925', '_1800283450' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1468843925" style="display:none"><table class="bodyTable"><tr class="a"><th>jinahya.fsm:fsm-core:1.0-SNAPSHOT</th>
+<ul><li>jinahya.fsm:fsm-core:jar:1.0-SNAPSHOT <img id="_582170109" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_1621381361', '_582170109' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_1621381361" style="display:none"><table class="bodyTable"><tr class="a"><th>jinahya.fsm:fsm-core:1.0-SNAPSHOT</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>State Machine Support Core</p>
 <p><b>URL: </b><a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/" class="externalLink">http://jinahya.googlecode.com/svn/maven/2/site/jinahya.fsm/</a></p>
@@ -238,7 +238,7 @@
 </td>
 </tr>
 </table>
-</div><ul><li>junit:junit:jar:4.7 (test) <img id="_2035685543" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_2095715322', '_2035685543' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_2095715322" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
+</div><ul><li>junit:junit:jar:4.7 (test) <img id="_1097207652" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_689325877', '_1097207652' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_689325877" style="display:none"><table class="bodyTable"><tr class="a"><th>JUnit</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>JUnit is a regression testing framework written by Erich Gamma and Kent Beck. It is used by the developer who implements unit tests in Java.</p>
 <p><b>URL: </b><a href="http://junit.org" class="externalLink">http://junit.org</a></p>
@@ -247,7 +247,7 @@
 </tr>
 </table>
 </div></li>
-<li>jinahya.util:event-listener-support:jar:1.0-SNAPSHOT (compile) <img id="_159547641" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_705436002', '_159547641' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_705436002" style="display:none"><table class="bodyTable"><tr class="a"><th>jinahya.util:event-listener-support:1.0-SNAPSHOT</th>
+<li>jinahya.util:event-listener-support:jar:1.0-SNAPSHOT (compile) <img id="_661267669" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_893402701', '_661267669' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_893402701" style="display:none"><table class="bodyTable"><tr class="a"><th>jinahya.util:event-listener-support:1.0-SNAPSHOT</th>
 </tr>
 <tr class="b"><td><p><b>Description: </b>Event Listener Support</p>
 <p><b>URL: </b>svn:https://jinahya.googlecode.com/svn/maven/2/site/jinahya.util/event-listener-support/</p>
@@ -330,30 +330,36 @@
 <th align="left">URL</th>
 <th align="center">Release</th>
 <th align="center">Snapshot</th>
+<th align="center">Blacklisted</th>
 </tr>
 <tr class="a"><td align="left">jinahya-files</td>
 <td align="left"><a href="http://jinahya-files.googlecode.com/svn/maven/2/repo" class="externalLink">http://jinahya-files.googlecode.com/svn/maven/2/repo</a></td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
+<td align="center">-</td>
 </tr>
 <tr class="b"><td align="left">maven1-repository.dev.java.net</td>
 <td align="left"><a href="http://download.java.net/maven/1" class="externalLink">http://download.java.net/maven/1</a></td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
+<td align="center">-</td>
 </tr>
 <tr class="a"><td align="left">jinahya</td>
-<td align="left"><a href="http://jinahya.googlecode.com/svn/maven/2/repo" class="externalLink">http://jinahya.googlecode.com/svn/maven/2/repo</a></td>
+<td align="left">http://jinahya.googlecode.com/svn/maven/2/repo</td>
+<td align="center">Yes</td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="b"><td align="left">maven2-repository.dev.java.net</td>
-<td align="left"><a href="http://download.java.net/maven/2" class="externalLink">http://download.java.net/maven/2</a></td>
+<td align="left">http://download.java.net/maven/2</td>
+<td align="center">Yes</td>
 <td align="center">Yes</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="a"><td align="left">central</td>
 <td align="left"><a href="http://repo1.maven.org/maven2" class="externalLink">http://repo1.maven.org/maven2</a></td>
 <td align="center">Yes</td>
+<td align="center">-</td>
 <td align="center">-</td>
 </tr>
 </tbody>
@@ -362,20 +368,14 @@
 <table class="bodyTable"><tbody><tr class="b"><th align="left">Artifact</th>
 <th align="center">jinahya-files</th>
 <th align="center">maven1-repository.dev.java.net</th>
-<th align="center">jinahya</th>
-<th align="center">maven2-repository.dev.java.net</th>
 <th align="center">central</th>
 </tr>
 <tr class="a"><td align="left">jinahya.util:event-listener-support:jar:1.0-SNAPSHOT</td>
 <td align="center">-</td>
 <td align="center">-</td>
-<td align="center"><a href="http://jinahya.googlecode.com/svn/maven/2/repo/jinahya/util/event-listener-support/1.0-SNAPSHOT/event-listener-support-1.0-SNAPSHOT.jar" class="externalLink"><img alt="Found at http://jinahya.googlecode.com/svn/maven/2/repo" src="images/icon_success_sml.gif" /></a></td>
-<td align="center">-</td>
 <td align="center">-</td>
 </tr>
 <tr class="b"><td align="left">junit:junit:jar:4.7</td>
-<td align="center">-</td>
-<td align="center">-</td>
 <td align="center">-</td>
 <td align="center">-</td>
 <td align="center"><a href="http://repo1.maven.org/maven2/junit/junit/4.7/junit-4.7.jar" class="externalLink"><img alt="Found at http://repo1.maven.org/maven2" src="images/icon_success_sml.gif" /></a></td>
@@ -383,14 +383,10 @@
 <tr class="a"><th align="left">Total</th>
 <th align="center">jinahya-files</th>
 <th align="center">maven1-repository.dev.java.net</th>
-<th align="center">jinahya</th>
-<th align="center">maven2-repository.dev.java.net</th>
 <th align="center">central</th>
 </tr>
 <tr class="b"><td align="left">2 (compile: 1, test: 1)</td>
 <td align="center">0</td>
-<td align="center">0</td>
-<td align="center">1</td>
 <td align="center">0</td>
 <td align="center">1</td>
 </tr>
