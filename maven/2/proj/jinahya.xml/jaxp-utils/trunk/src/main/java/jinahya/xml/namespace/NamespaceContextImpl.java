@@ -119,6 +119,12 @@ public class NamespaceContextImpl implements NamespaceContext {
     }
 
 
+    /**
+     *
+     * @param namespaceURI
+     * @param prefix
+     * @return true if added, false otherwise.
+     */
     public void bind(final String namespaceURI, final String prefix) {
         synchronized (namespaces) {
             List<String> prefixes = namespaces.get(namespaceURI);
@@ -147,12 +153,21 @@ public class NamespaceContextImpl implements NamespaceContext {
                     return entry.getKey();
                 }
             }
+            return XMLConstants.NULL_NS_URI;
         }
-        return XMLConstants.NULL_NS_URI;
     }
 
 
+    /**
+     *
+     * @param defaultNamespaceURI
+     */
     public void setDefaultNamespaceURI(final String defaultNamespaceURI) {
+
+        if (defaultNamespaceURI == null) {
+            throw new IllegalArgumentException("'defaultNamespaceURI' is null");
+        }
+
         synchronized (namespaces) {
             for (List<String> value : namespaces.values()) {
                 if (value.remove(XMLConstants.DEFAULT_NS_PREFIX)) {
@@ -164,14 +179,20 @@ public class NamespaceContextImpl implements NamespaceContext {
     }
 
 
+    /**
+     *
+     * @param namespaceURI
+     * @param prefix
+     * @return
+     */
     public boolean unbind(final String namespaceURI, final String prefix) {
 
         if (namespaceURI == null) {
-            throw new IllegalArgumentException("namespaceURI");
+            throw new IllegalArgumentException("'namespaceURI' is null");
         }
 
         if (prefix == null) {
-            throw new IllegalArgumentException("prefix");
+            throw new IllegalArgumentException("'prefix' is null");
         }
 
         synchronized (namespaces) {
@@ -188,6 +209,11 @@ public class NamespaceContextImpl implements NamespaceContext {
     }
 
 
+    /**
+     *
+     * @param namespaceURI
+     * @return
+     */
     public boolean unbindAll(final String namespaceURI) {
 
         if (namespaceURI == null) {

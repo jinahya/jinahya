@@ -36,12 +36,17 @@ import org.w3c.dom.NodeList;
 /**
  *
  * @author <a href="mailto:support@minigate.net">Jin Kwon</a>
+ * @param <T>
  */
 public class NodePath<T extends Node> {
 
 
 
-    protected NodePath(NodePath<? extends T> path) {
+    /**
+     *
+     * @param path
+     */
+    protected NodePath(final NodePath<? extends T> path) {
         this(path.node, path.path);
     }
 
@@ -55,11 +60,11 @@ public class NodePath<T extends Node> {
         super();
 
         if (node == null) {
-            throw new IllegalArgumentException("node is null");
+            throw new IllegalArgumentException("'node' is null");
         }
 
         if (path == null) {
-            throw new IllegalArgumentException("path is null");
+            throw new IllegalArgumentException("'path' is null");
         }
 
         this.node = node;
@@ -76,8 +81,6 @@ public class NodePath<T extends Node> {
      */
     public String evaluate(final String expression, final boolean compile)
         throws XPathExpressionException {
-
-        System.out.println("expression: " + expression);
 
         if (compile) {
             synchronized (expressions) {
@@ -160,10 +163,11 @@ public class NodePath<T extends Node> {
      * @return
      * @throws XPathExpressionException
      */
-    public int evaluateInt(final String expression, final boolean compile)
+    public float evaluateFloat(final String expression, final boolean compile)
         throws XPathExpressionException {
 
-        return evaluateNUMBER(expression, compile).intValue();
+        return evaluateNUMBER(expression, compile).floatValue();
+
     }
 
 
@@ -173,6 +177,34 @@ public class NodePath<T extends Node> {
      * @param compile
      * @return
      * @throws XPathExpressionException
+     */
+    public int evaluateInt(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return evaluateNUMBER(expression, compile).intValue();
+    }
+
+
+    /**
+     * 
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public long evaluateLong(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return evaluateNUMBER(expression, compile).longValue();
+    }
+
+
+    /**
+     *
+     * @param expression xpath expression
+     * @param compile the boolean flag for pre-compilation
+     * @return a Node matches given <code>expression</code>
+     * @throws XPathExpressionException if xpath expression error occurs.
      */
     public Node evaluateNODE(final String expression, final boolean compile)
         throws XPathExpressionException {
@@ -196,6 +228,13 @@ public class NodePath<T extends Node> {
     }
 
 
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
     public NodeList evaluateNODESET(final String expression,
                                     final boolean compile)
         throws XPathExpressionException {
@@ -231,6 +270,15 @@ public class NodePath<T extends Node> {
     }
 
 
+    /**
+     *
+     * @param <E> Type extends {@link org.w3c.dom.Node}.
+     * @param clazz node class
+     * @param expression xpath expression
+     * @param compile boolean flag for pre-compilation for future use.
+     * @return the child path
+     * @throws XPathExpressionException if xpath expression error occurs
+     */
     public <E extends Node> NodePath<E> getChildPath(final Class<E> clazz,
                                                      final String expression,
                                                      final boolean compile)
@@ -241,7 +289,13 @@ public class NodePath<T extends Node> {
     }
 
 
-    public <E extends Node> NodePath<E> getChildPath(E child) {
+    /**
+     *
+     * @param <E>
+     * @param child
+     * @return
+     */
+    public <E extends Node> NodePath<E> getChildPath(final E child) {
 
         if (child == null) {
             throw new IllegalArgumentException("child");
@@ -275,7 +329,8 @@ public class NodePath<T extends Node> {
 
     @Override
     public String toString() {
-        return "NodePath<" + node.getClass() + ">: {" + node.getNamespaceURI() + "}" + node.getNodeName() + ": " + node.getNodeValue();
+        return ("NodePath<" + node.getClass() + ">: {" + node.getNamespaceURI()
+                + "}" + node.getNodeName() + ": " + node.getNodeValue());
     }
 
 

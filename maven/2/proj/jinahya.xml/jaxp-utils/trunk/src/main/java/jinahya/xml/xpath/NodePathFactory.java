@@ -68,6 +68,12 @@ public class NodePathFactory {
      */
     private static class DocumentPath extends NodePath<Document> {
 
+
+        /**
+         *
+         * @param node
+         * @param path
+         */
         private DocumentPath(final Document node, final XPath path) {
             super(node, path);
         }
