@@ -121,11 +121,19 @@ public class NamespaceContextImpl implements NamespaceContext {
 
     /**
      *
-     * @param namespaceURI
-     * @param prefix
-     * @return true if added, false otherwise.
+     * @param namespaceURI namespace uri
+     * @param prefix namespece prefix
      */
     public void bind(final String namespaceURI, final String prefix) {
+
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("'namespaceURI' is null");
+        }
+
+        if (prefix == null) {
+            throw new IllegalArgumentException("'prefix' is null");
+        }
+
         synchronized (namespaces) {
             List<String> prefixes = namespaces.get(namespaceURI);
             if (prefixes == null) {

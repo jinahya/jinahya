@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.xml.xpath;
+package jinahya.xml.nodepath;
 
 
 import java.io.File;

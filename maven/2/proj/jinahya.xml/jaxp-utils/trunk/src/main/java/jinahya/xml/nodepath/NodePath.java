@@ -15,7 +15,7 @@
  *  under the License.
  */
 
-package jinahya.xml.xpath;
+package jinahya.xml.nodepath;
 
 
 import java.util.Collections;
@@ -82,6 +82,10 @@ public class NodePath<T extends Node> {
     public String evaluate(final String expression, final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         if (compile) {
             synchronized (expressions) {
                 XPathExpression compiled = expressions.get(expression);
@@ -108,6 +112,10 @@ public class NodePath<T extends Node> {
                                    final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return (Boolean) evaluate(expression, XPathConstants.BOOLEAN, compile);
     }
 
@@ -123,6 +131,10 @@ public class NodePath<T extends Node> {
                                    final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return evaluateBOOLEAN(expression, compile).booleanValue();
     }
 
@@ -136,6 +148,10 @@ public class NodePath<T extends Node> {
      */
     public Double evaluateNUMBER(final String expression, final boolean compile)
         throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
 
         return (Double) evaluate(expression, XPathConstants.NUMBER, compile);
     }
@@ -152,6 +168,10 @@ public class NodePath<T extends Node> {
                                  final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return evaluateNUMBER(expression, compile).doubleValue();
     }
 
@@ -166,8 +186,11 @@ public class NodePath<T extends Node> {
     public float evaluateFloat(final String expression, final boolean compile)
         throws XPathExpressionException {
 
-        return evaluateNUMBER(expression, compile).floatValue();
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
 
+        return evaluateNUMBER(expression, compile).floatValue();
     }
 
 
@@ -180,6 +203,10 @@ public class NodePath<T extends Node> {
      */
     public int evaluateInt(final String expression, final boolean compile)
         throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
 
         return evaluateNUMBER(expression, compile).intValue();
     }
@@ -195,6 +222,10 @@ public class NodePath<T extends Node> {
     public long evaluateLong(final String expression, final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return evaluateNUMBER(expression, compile).longValue();
     }
 
@@ -208,6 +239,10 @@ public class NodePath<T extends Node> {
      */
     public Node evaluateNODE(final String expression, final boolean compile)
         throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
 
         return (Node) evaluate(expression, XPathConstants.NODE, compile);
     }
@@ -224,6 +259,10 @@ public class NodePath<T extends Node> {
                                    final boolean compile)
         throws XPathExpressionException {
 
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return (Element) evaluateNODE(expression, compile);
     }
 
@@ -238,6 +277,10 @@ public class NodePath<T extends Node> {
     public NodeList evaluateNODESET(final String expression,
                                     final boolean compile)
         throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
 
         return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
     }
@@ -254,6 +297,14 @@ public class NodePath<T extends Node> {
     public Object evaluate(final String expression, final QName returnType,
                            final boolean compile)
         throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
+        if (returnType == null) {
+            throw new IllegalArgumentException("'returnType' is null");
+        }
 
         if (compile) {
             synchronized (expressions) {
@@ -284,8 +335,30 @@ public class NodePath<T extends Node> {
                                                      final boolean compile)
         throws XPathExpressionException {
 
-        //return getChildPath(clazz.cast(evaluateNODE(expression, compile)));
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
         return getChildPath((E) evaluateNODE(expression, compile));
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public NodePath<Node> getChildPath(final String expression,
+                                       final boolean compile)
+        throws XPathExpressionException {
+
+        if (expression == null) {
+            throw new IllegalArgumentException("'expression' is null");
+        }
+
+        return getChildPath(Node.class, expression, compile);
     }
 
 
@@ -301,7 +374,6 @@ public class NodePath<T extends Node> {
             throw new IllegalArgumentException("child");
         }
 
-
         for (Node iter = child; iter != null; iter = iter.getParentNode()) {
             if (iter.getParentNode().equals(node)) {
                 return new NodePath(child, path);
@@ -313,18 +385,35 @@ public class NodePath<T extends Node> {
     }
 
 
-    /*
-    protected final T getNode() {
-        return node;
-    }
+    /**
+     *
+     * @param <E>
+     * @param clazz
+     * @return
      */
+    public <E extends Node> NodePath<E> getParentPath(final Class<E> clazz) {
+
+        if (clazz == null) {
+            throw new IllegalArgumentException("'clazz' is null");
+        }
+
+        final E parent = (E) node.getParentNode();
+
+        if (parent == null) {
+            return null;
+        }
+
+        return new NodePath(parent, path);
+    }
 
 
-    /*
-    protected final XPath getPath() {
-        return path;
-    }
+    /**
+     *
+     * @return
      */
+    public NodePath<Node> getParentPath() {
+        return getParentPath(Node.class);
+    }
 
 
     @Override
