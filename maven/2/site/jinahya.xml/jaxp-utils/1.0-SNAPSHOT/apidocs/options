@@ -1,17 +1,17 @@
 -classpath
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/target/classes'
+'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/src/main/java'
+'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/target/site/apidocs'
+'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
