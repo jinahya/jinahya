@@ -31,15 +31,6 @@
 
   <!-- Build Settings -->
   <build>
-    <!--
-    <extensions>
-      <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-        <version>1.9</version>
-      </extension>
-    </extensions>
-    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -150,6 +141,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <targetJdk>1.6</targetJdk>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -206,12 +200,10 @@
     <repository>
       <id>onacit_at_googlecode</id>
       <uniqueVersion>false</uniqueVersion>
-      <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
       <url>dav:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
     <site>
       <id>onacit_at_googlecode</id>
-      <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
       <url>dav:https://jinahya.googlecode.com/svn/maven/2/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
   </distributionManagement>

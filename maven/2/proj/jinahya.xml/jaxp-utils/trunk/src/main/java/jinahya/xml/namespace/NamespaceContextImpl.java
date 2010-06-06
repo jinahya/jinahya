@@ -150,7 +150,7 @@ public class NamespaceContextImpl implements NamespaceContext {
     /**
      * The default Namespace URI in the current scope or
      * XMLConstants.NULL_NS_URI("") when there is no default Namespace URI in
-     * the current scope
+     * the current scope.
      *
      * @return the default Namespace URI
      */
