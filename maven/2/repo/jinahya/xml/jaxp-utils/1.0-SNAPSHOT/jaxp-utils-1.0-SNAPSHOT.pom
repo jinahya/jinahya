@@ -194,8 +194,8 @@
   <ciManagement/>
   <mailingLists/>
   <scm>
-    <connection>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</connection>
-    <developerConnection>http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</developerConnection>
     <tag>HEAD</tag>
     <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</url>
   </scm>
