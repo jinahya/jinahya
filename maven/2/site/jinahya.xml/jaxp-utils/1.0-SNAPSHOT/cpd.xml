@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="68" tokens="156">
-<file line="151" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\dompath\NodePath.java"/>
-<file line="198" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\xpath\NodePath.java"/>
+<file line="151" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\dompath\NodePath.java"/>
+<file line="198" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\xpath\NodePath.java"/>
 <codefragment>
 <![CDATA[
         return evaluateNUMBER(expression, compile).longValue();
@@ -77,8 +77,8 @@
 </codefragment>
 </duplication>
 <duplication lines="71" tokens="117">
-<file line="78" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\dompath\NodePath.java"/>
-<file line="96" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\xpath\NodePath.java"/>
+<file line="78" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\dompath\NodePath.java"/>
+<file line="96" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils\workspace\src\main\java\jinahya\xml\xpath\NodePath.java"/>
 <codefragment>
 <![CDATA[
         return path.evaluate(expression, node);
