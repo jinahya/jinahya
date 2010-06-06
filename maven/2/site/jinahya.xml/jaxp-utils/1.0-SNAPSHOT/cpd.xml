@@ -1,8 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="134" tokens="296">
-<file line="78" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils site\workspace\src\main\java\jinahya\xml\dompath\NodePath.java"/>
-<file line="93" path="C:\Users\onacit\.hudson\jobs\jinahya.xml jaxp-utils site\workspace\src\main\java\jinahya\xml\xpath\NodePath.java"/>
+<duplication lines="68" tokens="156">
+<file line="151" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\dompath\NodePath.java"/>
+<file line="198" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\xpath\NodePath.java"/>
+<codefragment>
+<![CDATA[
+        return evaluateNUMBER(expression, compile).longValue();
+    }
+
+
+    /**
+     *
+     * @param expression xpath expression
+     * @param compile the boolean flag for pre-compilation
+     * @return a Node matches given <code>expression</code>
+     * @throws XPathExpressionException if xpath expression error occurs.
+     */
+    public Node evaluateNODE(final String expression, final boolean compile)
+        throws XPathExpressionException {
+
+        return (Node) evaluate(expression, XPathConstants.NODE, compile);
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public Element evaluateElement(final String expression,
+                                   final boolean compile)
+        throws XPathExpressionException {
+
+        return (Element) evaluateNODE(expression, compile);
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public NodeList evaluateNODESET(final String expression,
+                                    final boolean compile)
+        throws XPathExpressionException {
+
+        return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
+    }
+
+
+    /**
+     *
+     * @param expression
+     * @param returnType
+     * @param compile
+     * @return
+     * @throws XPathExpressionException
+     */
+    public Object evaluate(final String expression, final QName returnType,
+                           final boolean compile)
+        throws XPathExpressionException {
+
+        if (compile) {
+            synchronized (expressions) {
+                XPathExpression compiled = expressions.get(expression);
+                if (compiled == null) {
+                    compiled = path.compile(expression);
+                    expressions.put(expression, compiled);
+                }
+                return compiled.evaluate(node, returnType);
+]]>
+</codefragment>
+</duplication>
+<duplication lines="71" tokens="117">
+<file line="78" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\dompath\NodePath.java"/>
+<file line="96" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\jaxp-utils\trunk\src\main\java\jinahya\xml\xpath\NodePath.java"/>
 <codefragment>
 <![CDATA[
         return path.evaluate(expression, node);
@@ -75,70 +151,7 @@
      * @return
      * @throws XPathExpressionException
      */
-    public int evaluateInt(final String expression, final boolean compile)
-        throws XPathExpressionException {
-
-        return evaluateNUMBER(expression, compile).intValue();
-    }
-
-
-    /**
-     *
-     * @param expression
-     * @param compile
-     * @return
-     * @throws XPathExpressionException
-     */
-    public Node evaluateNODE(final String expression, final boolean compile)
-        throws XPathExpressionException {
-
-        return (Node) evaluate(expression, XPathConstants.NODE, compile);
-    }
-
-
-    /**
-     *
-     * @param expression
-     * @param compile
-     * @return
-     * @throws XPathExpressionException
-     */
-    public Element evaluateElement(final String expression,
-                                   final boolean compile)
-        throws XPathExpressionException {
-
-        return (Element) evaluateNODE(expression, compile);
-    }
-
-
-    public NodeList evaluateNODESET(final String expression,
-                                    final boolean compile)
-        throws XPathExpressionException {
-
-        return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
-    }
-
-
-    /**
-     *
-     * @param expression
-     * @param returnType
-     * @param compile
-     * @return
-     * @throws XPathExpressionException
-     */
-    public Object evaluate(final String expression, final QName returnType,
-                           final boolean compile)
-        throws XPathExpressionException {
-
-        if (compile) {
-            synchronized (expressions) {
-                XPathExpression compiled = expressions.get(expression);
-                if (compiled == null) {
-                    compiled = path.compile(expression);
-                    expressions.put(expression, compiled);
-                }
-                return compiled.evaluate(node, returnType);
+    public float evaluateFloat(final String expression, final boolean compile)
 ]]>
 </codefragment>
 </duplication>
