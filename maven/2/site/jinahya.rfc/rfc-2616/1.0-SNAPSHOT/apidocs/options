@@ -1,21 +1,23 @@
 -classpath
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616 site/workspace/target/classes'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616/workspace/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616 site/workspace/src/main/java'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616 site/workspace/target/site/apidocs'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-2616/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'jinahya.rfc:rfc-2616:1.0-SNAPSHOT 1.0-SNAPSHOT API'
+-link
+'http://java.sun.com/javase/6/docs/api'
 -use
 -version
 -windowtitle
