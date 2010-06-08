@@ -1025,7 +1025,6 @@
       <method modifiers="public" return="[Ljava.lang.StackTraceElement;" name="getStackTrace"/>
       <method modifiers="public" return="void" name="setStackTrace" parameters="[Ljava.lang.StackTraceElement;"/>
     </class>
-    <class name="javax.media.Errors" found="false"/>
     <class modifiers="public" name="javax.media.ClockStartedError" superClass="javax.media.MediaError">
       <constructor modifiers="public" parameters="java.lang.String" declared="true"/>
       <constructor modifiers="public" declared="true"/>
