@@ -45,7 +45,6 @@ javax.media.IncompatibleTimeBaseException
 javax.media.MediaException 
 javax.media.NoDataSourceException 
 javax.media.NoPlayerException
-javax.media.Errors  
 javax.media.ClockStartedError 
 javax.media.MediaError 
 javax.media.NotPrefetchedError 
