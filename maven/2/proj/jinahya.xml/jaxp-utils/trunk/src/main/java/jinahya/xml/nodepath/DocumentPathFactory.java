@@ -42,8 +42,9 @@ public class DocumentPathFactory {
 
 
     /**
+     * Creates a new instance.
      *
-     * @return
+     * @return a new instance
      */
     public static DocumentPathFactory newInstance() {
         return newInstance(null, null);
@@ -51,10 +52,11 @@ public class DocumentPathFactory {
 
 
     /**
+     * Creates a new instance with given parameters.
      *
-     * @param documentBuilder
-     * @param xPath
-     * @return
+     * @param documentBuilder the document builder
+     * @param xPath the xpath
+     * @return a new instance
      */
     public static DocumentPathFactory newInstance(
         final DocumentBuilder documentBuilder, final XPath xPath) {
@@ -69,7 +71,7 @@ public class DocumentPathFactory {
      * @param xPath
      */
     protected DocumentPathFactory(final DocumentBuilder documentBuilder,
-                              final XPath xPath) {
+                                  final XPath xPath) {
 
         super();
 
