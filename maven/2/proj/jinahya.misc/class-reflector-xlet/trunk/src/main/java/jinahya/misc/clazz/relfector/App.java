@@ -56,6 +56,8 @@ public class App implements Xlet {
                     new BufferedReader(new FileReader(file));
                 try {
                     String line = null;
+                    int total = 0;
+                    int found = 0;
                     while ((line = br.readLine()) != null) {
                         line = line.trim();
                         if (line.length() == 0) {
@@ -64,8 +66,16 @@ public class App implements Xlet {
                         if (line.startsWith("#")) {
                             continue;
                         }
-                        reflect(line);
+                        if (reflect(line)) {
+                            found++;
+                        }
+                        total++;
                     }
+
+                    if (total > 0) {
+                        print("<result name=\"" + name + "\" total=\"" + total + "\" found=\"" + ((float) found / (float) total) + "\"/>");
+                    }
+
                 } finally {
                     br.close();
                 }
@@ -90,7 +100,7 @@ public class App implements Xlet {
     }
 
 
-    private void reflect(final String className) {
+    private boolean reflect(final String className) {
         BUFFER.delete(0, BUFFER.length());
 
         try {
@@ -155,9 +165,11 @@ public class App implements Xlet {
                     BUFFER.append("\"");
                 }
 
+                /*
                 if (constructor.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
+                 */
 
                 BUFFER.append("/>");
                 print(BUFFER.toString());
@@ -194,10 +206,11 @@ public class App implements Xlet {
                     BUFFER.append("\"");
                 }
 
-
+                /*
                 if (method.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
+                 */
 
                 checkBoolean(Method.class, method, "isBridge");
                 checkBoolean(Method.class, method, "isSynthetic");
@@ -216,9 +229,11 @@ public class App implements Xlet {
                 BUFFER.append(" type=\"" + field.getType().getName() + "\"");
                 BUFFER.append(" name=\"" + field.getName() + "\"");
 
+                /*
                 if (field.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
+                 */
 
                 checkBoolean(Field.class, field, "isEnumConstant");
                 checkBoolean(Field.class, field, "isSynthetic");
@@ -228,9 +243,13 @@ public class App implements Xlet {
             }
 
             print("</class>");
+
+            return true;
         } catch (ClassNotFoundException cnfe) {
             print("<class name=\"" + className + "\" found=\"false\"/>");
         }
+
+        return false;
     }
 
 
