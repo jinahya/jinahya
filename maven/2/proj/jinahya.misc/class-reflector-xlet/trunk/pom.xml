@@ -166,7 +166,7 @@
   </reporting>
   <profiles>
     <profile>
-      <id>emul</id>
+      <id>kt-iptv-emul</id>
       <build>
         <resources>
           <resource>
@@ -180,7 +180,7 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <configuration>
-              <classifier>emul</classifier>
+              <classifier>kt-iptv-emul</classifier>
             </configuration>
           </plugin>
         </plugins>

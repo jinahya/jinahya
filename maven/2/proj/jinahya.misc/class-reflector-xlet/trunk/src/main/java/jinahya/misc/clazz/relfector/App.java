@@ -126,7 +126,8 @@ public class App implements Xlet {
 
             print(BUFFER.toString());
 
-            for (Constructor constructor : c.getConstructors()) {
+            //for (Constructor constructor : c.getConstructors()) {
+            for (Constructor constructor : c.getDeclaredConstructors()) {
                 BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<constructor");
 
@@ -163,7 +164,8 @@ public class App implements Xlet {
             }
 
 
-            for (Method method : c.getMethods()) {
+            //for (Method method : c.getMethods()) {
+            for (Method method : c.getDeclaredMethods()) {
                 BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<method");
 
@@ -206,7 +208,8 @@ public class App implements Xlet {
             }
 
 
-            for (Field field : c.getFields()) {
+            //for (Field field : c.getFields()) {
+            for (Field field : c.getDeclaredFields()) {
                 BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<field");
                 BUFFER.append(" modifiers=\"" + Modifier.toString(field.getModifiers()) + "\"");

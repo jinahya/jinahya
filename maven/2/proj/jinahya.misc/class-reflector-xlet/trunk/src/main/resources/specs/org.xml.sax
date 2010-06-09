@@ -1,0 +1,38 @@
+# ------------------------------------------------------------------ org.xml.sax
+org.xml.sax.AttributeList
+org.xml.sax.Attributes
+org.xml.sax.ContentHandler
+org.xml.sax.DocumentHandler
+org.xml.sax.DTDHandler
+org.xml.sax.EntityResolver
+org.xml.sax.ErrorHandler
+org.xml.sax.Locator
+org.xml.sax.Parser
+org.xml.sax.XMLFilter
+org.xml.sax.XMLReader
+org.xml.sax.HandlerBase
+org.xml.sax.InputSource
+org.xml.sax.SAXException
+org.xml.sax.SAXNotRecognizedException
+org.xml.sax.SAXNotSupportedException
+org.xml.sax.SAXParseException
+# -------------------------------------------------------------- org.xml.sax.ext
+org.xml.sax.ext.Attributes2
+org.xml.sax.ext.DeclHandler
+org.xml.sax.ext.EntityResolver2
+org.xml.sax.ext.LexicalHandler
+org.xml.sax.ext.Locator2
+org.xml.sax.ext.Attributes2Impl
+org.xml.sax.ext.DefaultHandler2
+org.xml.sax.ext.Locator2Impl
+# ---------------------------------------------------------- org.xml.sax.helpers
+org.xml.sax.helpers.AttributeListImpl
+org.xml.sax.helpers.AttributesImpl
+org.xml.sax.helpers.DefaultHandler
+org.xml.sax.helpers.LocatorImpl
+org.xml.sax.helpers.NamespaceSupport
+org.xml.sax.helpers.ParserAdapter
+org.xml.sax.helpers.ParserFactory
+org.xml.sax.helpers.XMLFilterImpl
+org.xml.sax.helpers.XMLReaderAdapter
+org.xml.sax.helpers.XMLReaderFactory
