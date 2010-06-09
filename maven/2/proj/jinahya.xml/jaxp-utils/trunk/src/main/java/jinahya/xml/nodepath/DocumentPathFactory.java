@@ -38,60 +38,43 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class NodePathFactory {
+public class DocumentPathFactory {
 
 
     /**
      *
      * @return
      */
-    public static NodePathFactory newInstance() {
+    public static DocumentPathFactory newInstance() {
         return newInstance(null, null);
     }
 
 
     /**
      *
-     * @param builder
+     * @param documentBuilder
      * @param xPath
      * @return
      */
-    public static NodePathFactory newInstance(final DocumentBuilder builder,
-                                              final XPath xPath) {
+    public static DocumentPathFactory newInstance(
+        final DocumentBuilder documentBuilder, final XPath xPath) {
 
-        return new NodePathFactory(builder, xPath);
+        return new DocumentPathFactory(documentBuilder, xPath);
     }
 
 
     /**
      *
-     */
-    private static class DocumentPath extends NodePath<Document> {
-
-
-        /**
-         *
-         * @param node
-         * @param path
-         */
-        private DocumentPath(final Document node, final XPath path) {
-            super(node, path);
-        }
-    }
-
-
-    /**
-     *
-     * @param builder
+     * @param documentBuilder
      * @param xPath
      */
-    protected NodePathFactory(final DocumentBuilder builder,
+    protected DocumentPathFactory(final DocumentBuilder documentBuilder,
                               final XPath xPath) {
 
         super();
 
-        db = builder;
-        xp = xPath;
+        this.documentBuilder = documentBuilder;
+        this.xPath = xPath;
     }
 
 
@@ -103,10 +86,11 @@ public class NodePathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final NodePath<Document> newDocumentPath(final File source)
+    public final DocumentPath newDocumentPath(final File source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        return newDocumentPath(getDocumentBuilder().parse(source));
+        final Document document = getDocumentBuilder().parse(source);
+        return new DocumentPath(document, getXPath());
     }
 
 
@@ -118,10 +102,11 @@ public class NodePathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final NodePath<Document> newDocumentPath(final InputStream source)
+    public final DocumentPath newDocumentPath(final InputStream source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        return newDocumentPath(getDocumentBuilder().parse(source));
+        final Document document = getDocumentBuilder().parse(source);
+        return new DocumentPath(document, getXPath());
     }
 
 
@@ -133,24 +118,10 @@ public class NodePathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final NodePath<Document> newDocumentPath(final InputSource source)
+    public final DocumentPath newDocumentPath(final InputSource source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        return newDocumentPath(getDocumentBuilder().parse(source));
-    }
-
-
-    /**
-     *
-     * @param document
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public final NodePath<Document> newDocumentPath(final Document document)
-        throws ParserConfigurationException, SAXException, IOException {
-
+        final Document document = getDocumentBuilder().parse(source);
         return new DocumentPath(document, getXPath());
     }
 
@@ -162,20 +133,23 @@ public class NodePathFactory {
     public synchronized DocumentBuilder getDocumentBuilder()
         throws ParserConfigurationException {
 
-        if (db == null) {
-            db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        if (documentBuilder == null) {
+            documentBuilder =
+                DocumentBuilderFactory.newInstance().newDocumentBuilder();
         }
 
-        return db;
+        return documentBuilder;
     }
 
 
     /**
      *
-     * @param factory
+     * @param documentBuilder
      */
-    public synchronized void setDocumentBuilder(final DocumentBuilder builder) {
-        db = builder;
+    public synchronized void setDocumentBuilder(
+        final DocumentBuilder documentBuilder) {
+
+        this.documentBuilder = documentBuilder;
     }
 
 
@@ -184,23 +158,23 @@ public class NodePathFactory {
      * @return
      */
     public synchronized XPath getXPath() {
-        if (xp == null) {
-            xp = XPathFactory.newInstance().newXPath();
+        if (xPath == null) {
+            xPath = XPathFactory.newInstance().newXPath();
         }
-        return xp;
+        return xPath;
     }
 
 
     /**
      *
-     * @param factory
+     * @param xPath
      */
     public synchronized void setXPath(final XPath xPath) {
-        xp = xPath;
+        this.xPath = xPath;
     }
 
 
-    private DocumentBuilder db;
+    private volatile DocumentBuilder documentBuilder;
 
-    private XPath xp;
+    private volatile XPath xPath;
 }

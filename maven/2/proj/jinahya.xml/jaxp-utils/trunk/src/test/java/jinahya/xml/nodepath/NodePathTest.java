@@ -62,7 +62,7 @@ public class NodePathTest {
         + "<a xmlns=\"" + NS + "\" b=\"c\">"
         + "  <d e=\"f\">"
         + "    <g>h</g>"
-        + "    <b>true<b>"
+        + "    <b>true</b>"
         + "  </d>"
         + "</a>";
 
@@ -75,7 +75,7 @@ public class NodePathTest {
     public static void createDocumentNodePath()
         throws ParserConfigurationException, SAXException, IOException {
 
-        documentPath = NodePathFactory.newInstance().newDocumentPath(
+        documentPath = DocumentPathFactory.newInstance().newDocumentPath(
             new InputSource(new StringReader(XML)));
     }
 
@@ -84,7 +84,7 @@ public class NodePathTest {
     public void testEvaluateWithNullExpression()
         throws XPathExpressionException {
 
-        documentPath.evaluate(null, true);
+        documentPath.evaluate(null);
     }
 
 
@@ -92,6 +92,6 @@ public class NodePathTest {
     public void testEvaluateWithNullReturnType()
         throws XPathExpressionException {
 
-        documentPath.evaluate("/", null, true);
+        documentPath.evaluate("/", null);
     }
 }

@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class NodePathFactoryTest {
+public class DocumentPathFactoryTest {
 
 
     /**
@@ -55,8 +55,8 @@ public class NodePathFactoryTest {
                                           final XPath xPath, final String xml)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final NodePathFactory factory =
-            NodePathFactory.newInstance(builder, xPath);
+        final DocumentPathFactory factory =
+            DocumentPathFactory.newInstance(builder, xPath);
 
         return factory.newDocumentPath(new InputSource(new StringReader(xml)));
     }

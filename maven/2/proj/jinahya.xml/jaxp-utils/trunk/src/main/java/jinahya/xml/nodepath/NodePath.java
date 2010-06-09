@@ -41,12 +41,11 @@ import org.w3c.dom.NodeList;
 public class NodePath<T extends Node> {
 
 
-
     /**
      *
      * @param path
      */
-    protected NodePath(final NodePath<? extends T> path) {
+    public NodePath(final NodePath<? extends T> path) {
         this(path.node, path.path);
     }
 
@@ -56,7 +55,7 @@ public class NodePath<T extends Node> {
      * @param node
      * @param path
      */
-    protected NodePath(final T node, final XPath path) {
+    public NodePath(final T node, final XPath path) {
         super();
 
         if (node == null) {
@@ -75,11 +74,10 @@ public class NodePath<T extends Node> {
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public String evaluate(final String expression, final boolean compile)
+    public String evaluate(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
@@ -104,185 +102,170 @@ public class NodePath<T extends Node> {
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public Boolean evaluateBOOLEAN(final String expression,
-                                   final boolean compile)
+    public Boolean evaluateBOOLEAN(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return (Boolean) evaluate(expression, XPathConstants.BOOLEAN, compile);
+        return (Boolean) evaluate(expression, XPathConstants.BOOLEAN);
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public boolean evaluateBoolean(final String expression,
-                                   final boolean compile)
+    public boolean evaluateBoolean(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return evaluateBOOLEAN(expression, compile).booleanValue();
+        return evaluateBOOLEAN(expression).booleanValue();
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public Double evaluateNUMBER(final String expression, final boolean compile)
+    public Double evaluateNUMBER(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return (Double) evaluate(expression, XPathConstants.NUMBER, compile);
+        return (Double) evaluate(expression, XPathConstants.NUMBER);
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public double evaluateDouble(final String expression,
-                                 final boolean compile)
+    public double evaluateDouble(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return evaluateNUMBER(expression, compile).doubleValue();
+        return evaluateNUMBER(expression).doubleValue();
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public float evaluateFloat(final String expression, final boolean compile)
+    public float evaluateFloat(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return evaluateNUMBER(expression, compile).floatValue();
+        return evaluateNUMBER(expression).floatValue();
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public int evaluateInt(final String expression, final boolean compile)
+    public int evaluateInt(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return evaluateNUMBER(expression, compile).intValue();
+        return evaluateNUMBER(expression).intValue();
     }
 
 
     /**
      * 
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public long evaluateLong(final String expression, final boolean compile)
+    public long evaluateLong(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return evaluateNUMBER(expression, compile).longValue();
+        return evaluateNUMBER(expression).longValue();
     }
 
 
     /**
      *
      * @param expression xpath expression
-     * @param compile the boolean flag for pre-compilation
      * @return a Node matches given <code>expression</code>
      * @throws XPathExpressionException if xpath expression error occurs.
      */
-    public Node evaluateNODE(final String expression, final boolean compile)
+    public Node evaluateNODE(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return (Node) evaluate(expression, XPathConstants.NODE, compile);
+        return (Node) evaluate(expression, XPathConstants.NODE);
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public Element evaluateElement(final String expression,
-                                   final boolean compile)
+    public Element evaluateElement(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return (Element) evaluateNODE(expression, compile);
+        return (Element) evaluateNODE(expression);
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public NodeList evaluateNODESET(final String expression,
-                                    final boolean compile)
+    public NodeList evaluateNODESET(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return (NodeList) evaluate(expression, XPathConstants.NODESET, compile);
+        return (NodeList) evaluate(expression, XPathConstants.NODESET);
     }
 
 
@@ -290,12 +273,10 @@ public class NodePath<T extends Node> {
      *
      * @param expression
      * @param returnType
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public Object evaluate(final String expression, final QName returnType,
-                           final boolean compile)
+    public Object evaluate(final String expression, final QName returnType)
         throws XPathExpressionException {
 
         if (expression == null) {
@@ -326,39 +307,35 @@ public class NodePath<T extends Node> {
      * @param <E> Type extends {@link org.w3c.dom.Node}.
      * @param clazz node class
      * @param expression xpath expression
-     * @param compile boolean flag for pre-compilation for future use.
      * @return the child path
      * @throws XPathExpressionException if xpath expression error occurs
      */
     public <E extends Node> NodePath<E> getChildPath(final Class<E> clazz,
-                                                     final String expression,
-                                                     final boolean compile)
+                                                     final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return getChildPath((E) evaluateNODE(expression, compile));
+        return getChildPath((E) evaluateNODE(expression));
     }
 
 
     /**
      *
      * @param expression
-     * @param compile
      * @return
      * @throws XPathExpressionException
      */
-    public NodePath<Node> getChildPath(final String expression,
-                                       final boolean compile)
+    public NodePath<Node> getChildPath(final String expression)
         throws XPathExpressionException {
 
         if (expression == null) {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        return getChildPath(Node.class, expression, compile);
+        return getChildPath(Node.class, expression);
     }
 
 
@@ -423,8 +400,30 @@ public class NodePath<T extends Node> {
     }
 
 
+    /**
+     * Gets the <code>compile</code> value.
+     *
+     * @return the current compile vlaue
+     */
+    public final synchronized boolean getCompile() {
+        return compile;
+    }
+
+
+    /**
+     * Sets the <code>compile</code> value.
+     *
+     * @param compile new compile value
+     */
+    public final synchronized void setCompile(final boolean compile) {
+        this.compile = compile;
+    }
+
+
     private T node;
     private XPath path;
+
+    private volatile boolean compile = false;
 
     private final Map<String, XPathExpression> expressions =
         Collections.synchronizedMap(new HashMap<String, XPathExpression>());
