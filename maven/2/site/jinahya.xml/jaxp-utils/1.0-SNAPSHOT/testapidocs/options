@@ -1,17 +1,17 @@
 -classpath
-'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/target/classes;C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/target/test-classes;C:/Users/onacit/.m2/repository/org/testng/testng/5.12.1/testng-5.12.1.jar;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/target/classes;D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/target/test-classes;C:/Users/onacit/.m2/repository/org/testng/testng/5.12.1/testng-5.12.1.jar;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/src/test/java'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/src/test/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'C:/Users/onacit/.hudson/jobs/jinahya.xml jaxp-utils/workspace/target/site/testapidocs'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/jaxp-utils/trunk/target/site/testapidocs'
 -docencoding
 'UTF-8'
 -doctitle
