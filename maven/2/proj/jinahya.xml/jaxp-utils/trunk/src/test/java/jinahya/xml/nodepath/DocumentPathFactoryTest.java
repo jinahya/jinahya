@@ -18,7 +18,12 @@
 package jinahya.xml.nodepath;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -26,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import org.w3c.dom.Document;
@@ -39,6 +45,15 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class DocumentPathFactoryTest {
+
+
+    private static DocumentPathFactory instance;
+
+
+    @BeforeClass
+    public static void testNewInstance() {
+        instance = DocumentPathFactory.newInstance();
+    }
 
 
     /**
@@ -70,5 +85,64 @@ public class DocumentPathFactoryTest {
             load(null, null, NodePathTest.XML);
 
         Assert.assertNotNull(documentPath);
+    }
+
+
+    @Test
+    public void testNewDocumentPathWithFile()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        instance.newDocumentPath(new File("src/test/resources/sample.xml"));
+    }
+
+
+    @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
+    public void testNewDocumentPathWithNullFile()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        instance.newDocumentPath((File) null);
+    }
+
+
+    @Test
+    public void testNewDocumentPathWithInputStream()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        final InputStream source =
+            new FileInputStream("src/test/resources/sample.xml");
+        try {
+            instance.newDocumentPath(source);
+        } finally {
+            source.close();
+        }
+    }
+
+
+    @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
+    public void testNewDocumentPathWithNullInputStream()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        instance.newDocumentPath((InputStream) null);
+    }
+
+
+    @Test
+    public void testNewDocumentPathWithInputSource()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        final Reader source = new FileReader("src/test/resources/sample.xml");
+        try {
+            instance.newDocumentPath(new InputSource(source));
+        } finally {
+            source.close();
+        }
+    }
+
+
+    @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
+    public void testNewDocumentPathWithNullInputSource()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        instance.newDocumentPath((InputSource) null);
     }
 }

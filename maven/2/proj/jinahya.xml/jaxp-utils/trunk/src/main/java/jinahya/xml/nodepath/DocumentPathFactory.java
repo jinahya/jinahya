@@ -81,18 +81,50 @@ public class DocumentPathFactory {
 
 
     /**
+     * Creates a new instance of {@link jinahya.xml.nodepath.DocumentPath} with
+     * a {@link org.w3c.dom.Document} parsed from given <code>source</code>.
      *
-     * @param source
-     * @return
+     * @param source document source
+     * @return a new instance of {@link jinahya.xml.nodepath.DocumentPath}
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
+     * @see javax.xml.parsers.DocumentBuilder#parse(java.io.File)
      */
     public final DocumentPath newDocumentPath(final File source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final Document document = getDocumentBuilder().parse(source);
-        return new DocumentPath(document, getXPath());
+        /*
+        if (source == null) {
+            throw new IllegalArgumentException("'file' is null");
+        }
+         */
+
+        return newDocumentPath(getDocumentBuilder().parse(source));
+    }
+
+
+    /**
+     * Creates a new instance of {@link jinahya.xml.nodepath.DocumentPath} with
+     * a {@link org.w3c.dom.Document} parsed from given <code>source</code>.
+     *
+     * @param source the document source
+     * @return a new instance of {@link jinahya.xml.nodepath.DocumentPath}
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @see javax.xml.parsers.DocumentBuilder#parse(org.xml.sax.InputSource)
+     */
+    public final DocumentPath newDocumentPath(final InputSource source)
+        throws ParserConfigurationException, SAXException, IOException {
+
+        /*
+        if (source == null) {
+            throw new IllegalArgumentException("'source' is null");
+        }
+         */
+
+        return newDocumentPath(getDocumentBuilder().parse(source));
     }
 
 
@@ -107,23 +139,45 @@ public class DocumentPathFactory {
     public final DocumentPath newDocumentPath(final InputStream source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final Document document = getDocumentBuilder().parse(source);
-        return new DocumentPath(document, getXPath());
+        /*
+        if (source == null) {
+            throw new IllegalArgumentException("'source' is null");
+        }
+         */
+
+        return newDocumentPath(getDocumentBuilder().parse(source));
     }
 
 
     /**
      *
      * @param source
+     * @param systemId
      * @return
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      */
-    public final DocumentPath newDocumentPath(final InputSource source)
+    public final DocumentPath newDocumentPath(final InputStream source,
+                                              final String systemId)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final Document document = getDocumentBuilder().parse(source);
+        /*
+        if (source == null) {
+            throw new IllegalArgumentException("'source' is null");
+        }
+         */
+
+        return newDocumentPath(getDocumentBuilder().parse(source, systemId));
+    }
+
+
+    /**
+     *
+     * @param document
+     * @return
+     */
+    public final DocumentPath newDocumentPath(final Document document) {
         return new DocumentPath(document, getXPath());
     }
 

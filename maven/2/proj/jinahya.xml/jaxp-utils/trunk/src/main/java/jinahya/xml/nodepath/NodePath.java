@@ -84,12 +84,12 @@ public class NodePath<T extends Node> {
             throw new IllegalArgumentException("'expression' is null");
         }
 
-        if (compile) {
-            synchronized (expressions) {
-                XPathExpression compiled = expressions.get(expression);
+        if (compileExpressions) {
+            synchronized (compiledExpressions) {
+                XPathExpression compiled = compiledExpressions.get(expression);
                 if (compiled == null) {
                     compiled = path.compile(expression);
-                    expressions.put(expression, compiled);
+                    compiledExpressions.put(expression, compiled);
                 }
                 return compiled.evaluate(node);
             }
@@ -287,12 +287,12 @@ public class NodePath<T extends Node> {
             throw new IllegalArgumentException("'returnType' is null");
         }
 
-        if (compile) {
-            synchronized (expressions) {
-                XPathExpression compiled = expressions.get(expression);
+        if (compileExpressions) {
+            synchronized (compiledExpressions) {
+                XPathExpression compiled = compiledExpressions.get(expression);
                 if (compiled == null) {
                     compiled = path.compile(expression);
-                    expressions.put(expression, compiled);
+                    compiledExpressions.put(expression, compiled);
                 }
                 return compiled.evaluate(node, returnType);
             }
@@ -405,8 +405,8 @@ public class NodePath<T extends Node> {
      *
      * @return the current compile vlaue
      */
-    public final synchronized boolean getCompile() {
-        return compile;
+    public final boolean getCompileExpressions() {
+        return compileExpressions;
     }
 
 
@@ -415,16 +415,58 @@ public class NodePath<T extends Node> {
      *
      * @param compile new compile value
      */
-    public final synchronized void setCompile(final boolean compile) {
-        this.compile = compile;
+    public final void setCompileExpressions(final boolean compileExpressions) {
+        this.compileExpressions = compileExpressions;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public final T getNode() {
+        return node;
+    }
+
+
+    /**
+     *
+     * @param node
+     */
+    public final void setNode(final T node) {
+        if (node == null) {
+            throw new IllegalArgumentException("node is null");
+        }
+        this.node = node;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public final XPath getPath() {
+        return path;
+    }
+
+
+    /**
+     *
+     * @param path
+     */
+    public final void setPath(final XPath path) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null");
+        }
+        this.path = path;
     }
 
 
     private T node;
     private XPath path;
 
-    private volatile boolean compile = false;
+    private boolean compileExpressions = false;
 
-    private final Map<String, XPathExpression> expressions =
+    private final Map<String, XPathExpression> compiledExpressions =
         Collections.synchronizedMap(new HashMap<String, XPathExpression>());
 }
