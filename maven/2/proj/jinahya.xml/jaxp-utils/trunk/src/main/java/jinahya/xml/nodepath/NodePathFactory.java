@@ -38,7 +38,34 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DocumentPathFactory {
+public class NodePathFactory {
+
+
+    /**
+     * .
+     */
+    private static NodePathFactory defaultInstance;
+
+
+    /**
+     * .
+     * @return the default instance.
+     */
+    public static final synchronized NodePathFactory getDefaultInstance() {
+        if (defaultInstance == null) {
+            defaultInstance = new NodePathFactory(null, null) {
+                @Override
+                public final void setDocumentBuilder(final DocumentBuilder db) {
+                    // do nothing
+                }
+                @Override
+                public final void setXPath(final XPath xp) {
+                    // do nothing
+                }
+            };
+        }
+        return defaultInstance;
+    }
 
 
     /**
@@ -46,7 +73,7 @@ public class DocumentPathFactory {
      *
      * @return a new instance
      */
-    public static DocumentPathFactory newInstance() {
+    public static NodePathFactory newInstance() {
         return newInstance(null, null);
     }
 
@@ -58,10 +85,27 @@ public class DocumentPathFactory {
      * @param xPath the xpath
      * @return a new instance
      */
-    public static DocumentPathFactory newInstance(
+    public static NodePathFactory newInstance(
         final DocumentBuilder documentBuilder, final XPath xPath) {
 
-        return new DocumentPathFactory(documentBuilder, xPath);
+        return new NodePathFactory(documentBuilder, xPath);
+    }
+
+
+    /**
+     *
+     */
+    private static class DocumentPath extends NodePath<Document> {
+
+
+        /**
+         *
+         * @param node
+         * @param path
+         */
+        private DocumentPath(final Document node, final XPath path) {
+            super(node, path);
+        }
     }
 
 
@@ -70,8 +114,8 @@ public class DocumentPathFactory {
      * @param documentBuilder
      * @param xPath
      */
-    protected DocumentPathFactory(final DocumentBuilder documentBuilder,
-                                  final XPath xPath) {
+    protected NodePathFactory(final DocumentBuilder documentBuilder,
+                              final XPath xPath) {
 
         super();
 
@@ -91,16 +135,10 @@ public class DocumentPathFactory {
      * @throws IOException
      * @see javax.xml.parsers.DocumentBuilder#parse(java.io.File)
      */
-    public final DocumentPath newDocumentPath(final File source)
+    public final DocumentPath parseRootPath(final File source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        /*
-        if (source == null) {
-            throw new IllegalArgumentException("'file' is null");
-        }
-         */
-
-        return newDocumentPath(getDocumentBuilder().parse(source));
+        return new DocumentPath(getDocumentBuilder().parse(source), getXPath());
     }
 
 
@@ -115,16 +153,10 @@ public class DocumentPathFactory {
      * @throws IOException
      * @see javax.xml.parsers.DocumentBuilder#parse(org.xml.sax.InputSource)
      */
-    public final DocumentPath newDocumentPath(final InputSource source)
+    public final DocumentPath parseRootPath(final InputSource source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        /*
-        if (source == null) {
-            throw new IllegalArgumentException("'source' is null");
-        }
-         */
-
-        return newDocumentPath(getDocumentBuilder().parse(source));
+        return new DocumentPath(getDocumentBuilder().parse(source), getXPath());
     }
 
 
@@ -136,16 +168,10 @@ public class DocumentPathFactory {
      * @throws SAXException
      * @throws IOException
      */
-    public final DocumentPath newDocumentPath(final InputStream source)
+    public final NodePath<Document> parseRootPath(final InputStream source)
         throws ParserConfigurationException, SAXException, IOException {
 
-        /*
-        if (source == null) {
-            throw new IllegalArgumentException("'source' is null");
-        }
-         */
-
-        return newDocumentPath(getDocumentBuilder().parse(source));
+        return new DocumentPath(getDocumentBuilder().parse(source), getXPath());
     }
 
 
@@ -157,28 +183,15 @@ public class DocumentPathFactory {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
+     * @see javax.xml.parsers.DocumentBuilder#parse(java.io.InputStream,
+     *                                              java.lang.String)
      */
-    public final DocumentPath newDocumentPath(final InputStream source,
-                                              final String systemId)
+    public final NodePath<Document> parseRootPath(final InputStream source,
+                                                  final String systemId)
         throws ParserConfigurationException, SAXException, IOException {
 
-        /*
-        if (source == null) {
-            throw new IllegalArgumentException("'source' is null");
-        }
-         */
-
-        return newDocumentPath(getDocumentBuilder().parse(source, systemId));
-    }
-
-
-    /**
-     *
-     * @param document
-     * @return
-     */
-    public final DocumentPath newDocumentPath(final Document document) {
-        return new DocumentPath(document, getXPath());
+        return new DocumentPath(getDocumentBuilder().parse(source, systemId),
+                                getXPath());
     }
 
 

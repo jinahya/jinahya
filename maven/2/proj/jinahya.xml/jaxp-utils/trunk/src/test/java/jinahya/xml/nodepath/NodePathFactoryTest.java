@@ -44,15 +44,15 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DocumentPathFactoryTest {
+public class NodePathFactoryTest {
 
 
-    private static DocumentPathFactory instance;
+    private static NodePathFactory instance;
 
 
     @BeforeClass
     public static void testNewInstance() {
-        instance = DocumentPathFactory.newInstance();
+        instance = NodePathFactory.newInstance();
     }
 
 
@@ -70,10 +70,10 @@ public class DocumentPathFactoryTest {
                                           final XPath xPath, final String xml)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final DocumentPathFactory factory =
-            DocumentPathFactory.newInstance(builder, xPath);
+        final NodePathFactory factory =
+            NodePathFactory.newInstance(builder, xPath);
 
-        return factory.newDocumentPath(new InputSource(new StringReader(xml)));
+        return factory.parseRootPath(new InputSource(new StringReader(xml)));
     }
 
 
@@ -89,29 +89,29 @@ public class DocumentPathFactoryTest {
 
 
     @Test
-    public void testNewDocumentPathWithFile()
+    public void testParseRootPathWithFile()
         throws ParserConfigurationException, SAXException, IOException {
 
-        instance.newDocumentPath(new File("src/test/resources/sample.xml"));
+        instance.parseRootPath(new File("src/test/resources/sample.xml"));
     }
 
 
     @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
-    public void testNewDocumentPathWithNullFile()
+    public void testParseRootPathWithNullFile()
         throws ParserConfigurationException, SAXException, IOException {
 
-        instance.newDocumentPath((File) null);
+        instance.parseRootPath((File) null);
     }
 
 
     @Test
-    public void testNewDocumentPathWithInputStream()
+    public void testParseRootWithInputStream()
         throws ParserConfigurationException, SAXException, IOException {
 
         final InputStream source =
             new FileInputStream("src/test/resources/sample.xml");
         try {
-            instance.newDocumentPath(source);
+            instance.parseRootPath(source);
         } finally {
             source.close();
         }
@@ -119,20 +119,20 @@ public class DocumentPathFactoryTest {
 
 
     @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
-    public void testNewDocumentPathWithNullInputStream()
+    public void testParseRootPathWithNullInputStream()
         throws ParserConfigurationException, SAXException, IOException {
 
-        instance.newDocumentPath((InputStream) null);
+        instance.parseRootPath((InputStream) null);
     }
 
 
     @Test
-    public void testNewDocumentPathWithInputSource()
+    public void testParseRootPathWithInputSource()
         throws ParserConfigurationException, SAXException, IOException {
 
         final Reader source = new FileReader("src/test/resources/sample.xml");
         try {
-            instance.newDocumentPath(new InputSource(source));
+            instance.parseRootPath(new InputSource(source));
         } finally {
             source.close();
         }
@@ -140,9 +140,9 @@ public class DocumentPathFactoryTest {
 
 
     @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
-    public void testNewDocumentPathWithNullInputSource()
+    public void testParseRootPathWithNullInputSource()
         throws ParserConfigurationException, SAXException, IOException {
 
-        instance.newDocumentPath((InputSource) null);
+        instance.parseRootPath((InputSource) null);
     }
 }

@@ -75,7 +75,7 @@ public class NodePathTest {
     public static void createDocumentNodePath()
         throws ParserConfigurationException, SAXException, IOException {
 
-        documentPath = DocumentPathFactory.newInstance().newDocumentPath(
+        documentPath = NodePathFactory.newInstance().parseRootPath(
             new InputSource(new StringReader(XML)));
     }
 
