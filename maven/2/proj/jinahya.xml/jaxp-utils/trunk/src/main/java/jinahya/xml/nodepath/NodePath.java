@@ -434,9 +434,11 @@ public class NodePath<T extends Node> {
      * @param node
      */
     public final void setNode(final T node) {
+        /*
         if (node == null) {
             throw new IllegalArgumentException("node is null");
         }
+         */
         this.node = node;
     }
 
@@ -455,9 +457,11 @@ public class NodePath<T extends Node> {
      * @param path
      */
     public final void setPath(final XPath path) {
+        /*
         if (path == null) {
             throw new IllegalArgumentException("path is null");
         }
+         */
         this.path = path;
     }
 
