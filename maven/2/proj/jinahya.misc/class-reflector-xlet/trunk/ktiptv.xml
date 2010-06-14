@@ -1,6 +1,56 @@
 <?xml version="1.0"?>
 <classes>
-  <spec name="jsr172">
+  <spec name="JSR-000172 J2METM Web Services Specification">
+    <class modifiers="public abstract interface" name="java.rmi.Remote" isInterface="true=">
+    </class>
+    <class name="java.rmi.MarshalException" found="false"/>
+    <class modifiers="public" name="java.rmi.RemoteException" superClass="java.io.IOException">
+      <constructor modifiers="public" parameters="java.lang.String, java.lang.Throwable"/>
+      <constructor modifiers="public" parameters="java.lang.String"/>
+      <constructor modifiers="public"/>
+      <method modifiers="public" return="java.lang.Throwable" name="getCause"/>
+      <method modifiers="public" return="java.lang.String" name="getMessage"/>
+      <field modifiers="public" type="java.lang.Throwable" name="detail"/>
+      <field modifiers="private static final" type="long" name="serialVersionUID"/>
+    </class>
+    <class name="java.rmi.ServerException" found="false"/>
+    <class name="javax.microedition.xml.rpc.FaultDetailHandler" found="false"/>
+    <class name="javax.microedition.xml.rpc.ComplexType" found="false"/>
+    <class name="javax.microedition.xml.rpc.Element" found="false"/>
+    <class name="javax.microedition.xml.rpc.Operation" found="false"/>
+    <class name="javax.microedition.xml.rpc.Type" found="false"/>
+    <class name="javax.microedition.xml.rpc.FaultDetailException" found="false"/>
+    <class name="javax.xml.namespace.QName" found="false"/>
+    <class modifiers="public abstract" name="javax.xml.parsers.SAXParser" superClass="java.lang.Object">
+      <constructor modifiers="protected"/>
+      <method modifiers="public abstract" return="boolean" name="isValidating"/>
+      <method modifiers="public abstract" return="boolean" name="isNamespaceAware"/>
+      <method modifiers="public abstract" return="void" name="parse" parameters="org.xml.sax.InputSource, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
+      <method modifiers="public abstract" return="void" name="parse" parameters="java.io.InputStream, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
+    </class>
+    <class modifiers="public abstract" name="javax.xml.parsers.SAXParserFactory" superClass="java.lang.Object">
+      <constructor modifiers="protected"/>
+      <method modifiers="public abstract" return="boolean" name="getFeature" parameters="java.lang.String" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
+      <method modifiers="public abstract" return="void" name="setFeature" parameters="java.lang.String, boolean" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
+      <method modifiers="public" return="boolean" name="isValidating"/>
+      <method modifiers="public" return="boolean" name="isNamespaceAware"/>
+      <method modifiers="public" return="void" name="setValidating" parameters="boolean"/>
+      <method modifiers="public" return="void" name="setNamespaceAware" parameters="boolean"/>
+      <method modifiers="public abstract" return="javax.xml.parsers.SAXParser" name="newSAXParser" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException"/>
+      <method modifiers="public static" return="javax.xml.parsers.SAXParserFactory" name="newInstance" exceptions="javax.xml.parsers.FactoryConfigurationError"/>
+      <field modifiers="private" type="boolean" name="namespaceAware"/>
+      <field modifiers="private" type="boolean" name="validating"/>
+    </class>
+    <class modifiers="public" name="javax.xml.parsers.ParserConfigurationException" superClass="java.lang.Exception">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+      <constructor modifiers="public"/>
+    </class>
+    <class modifiers="public" name="javax.xml.parsers.FactoryConfigurationError" superClass="java.lang.Error">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class name="javax.xml.rpc.Stub" found="false"/>
+    <class name="javax.xml.rpc.NamespaceConstants" found="false"/>
+    <class name="javax.xml.rpc.JAXRPCException" found="false"/>
     <class modifiers="public abstract interface" name="org.xml.sax.Attributes" isInterface="true=">
       <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="java.lang.String"/>
       <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="java.lang.String, java.lang.String"/>
@@ -15,33 +65,12 @@
       <method modifiers="public abstract" return="java.lang.String" name="getURI" parameters="int"/>
       <method modifiers="public abstract" return="int" name="getLength"/>
     </class>
-    <class name="javax.microedition.xml.rpc.ComplexType" found="false"/>
-    <class modifiers="public" name="org.xml.sax.helpers.DefaultHandler" superClass="java.lang.Object">
-      <constructor modifiers="public"/>
-      <method modifiers="public" return="void" name="fatalError" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="error" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="warning" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="skippedEntity" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="processingInstruction" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="ignorableWhitespace" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="characters" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="endElement" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="startElement" parameters="java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="endPrefixMapping" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="startPrefixMapping" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="endDocument" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="startDocument" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="setDocumentLocator" parameters="org.xml.sax.Locator"/>
-      <method modifiers="public" return="void" name="unparsedEntityDecl" parameters="java.lang.String, java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="void" name="notationDecl" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
-      <method modifiers="public" return="org.xml.sax.InputSource" name="resolveEntity" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+    <class modifiers="public abstract interface" name="org.xml.sax.Locator" isInterface="true=">
+      <method modifiers="public abstract" return="int" name="getColumnNumber"/>
+      <method modifiers="public abstract" return="int" name="getLineNumber"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getPublicId"/>
     </class>
-    <class name="javax.microedition.xml.rpc.Element" found="false"/>
-    <class modifiers="public" name="javax.xml.parsers.FactoryConfigurationError" superClass="java.lang.Error">
-      <constructor modifiers="public" parameters="java.lang.String"/>
-    </class>
-    <class name="javax.microedition.xml.rpc.FaultDetailException" found="false"/>
-    <class name="javax.microedition.xml.rpc.FaultDetailHandler" found="false"/>
     <class modifiers="public" name="org.xml.sax.InputSource" superClass="java.lang.Object">
       <constructor modifiers="public" parameters="java.io.Reader"/>
       <constructor modifiers="public" parameters="java.io.InputStream"/>
@@ -62,32 +91,6 @@
       <field modifiers="private" type="java.io.InputStream" name="byteStream"/>
       <field modifiers="private" type="java.lang.String" name="systemId"/>
       <field modifiers="private" type="java.lang.String" name="publicId"/>
-    </class>
-    <class name="javax.xml.rpc.JAXRPCException" found="false"/>
-    <class modifiers="public abstract interface" name="org.xml.sax.Locator" isInterface="true=">
-      <method modifiers="public abstract" return="int" name="getColumnNumber"/>
-      <method modifiers="public abstract" return="int" name="getLineNumber"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getSystemId"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getPublicId"/>
-    </class>
-    <class name="java.rmi.MarshalException" found="false"/>
-    <class name="javax.xml.rpc.NamespaceConstants" found="false"/>
-    <class name="javax.microedition.xml.rpc.Operation" found="false"/>
-    <class modifiers="public" name="javax.xml.parsers.ParserConfigurationException" superClass="java.lang.Exception">
-      <constructor modifiers="public" parameters="java.lang.String"/>
-      <constructor modifiers="public"/>
-    </class>
-    <class name="javax.xml.namespace.QName" found="false"/>
-    <class modifiers="public abstract interface" name="java.rmi.Remote" isInterface="true=">
-    </class>
-    <class modifiers="public" name="java.rmi.RemoteException" superClass="java.io.IOException">
-      <constructor modifiers="public" parameters="java.lang.String, java.lang.Throwable"/>
-      <constructor modifiers="public" parameters="java.lang.String"/>
-      <constructor modifiers="public"/>
-      <method modifiers="public" return="java.lang.Throwable" name="getCause"/>
-      <method modifiers="public" return="java.lang.String" name="getMessage"/>
-      <field modifiers="public" type="java.lang.Throwable" name="detail"/>
-      <field modifiers="private static final" type="long" name="serialVersionUID"/>
     </class>
     <class modifiers="public" name="org.xml.sax.SAXException" superClass="java.lang.Exception">
       <constructor modifiers="public" parameters="java.lang.String"/>
@@ -110,32 +113,29 @@
       <field modifiers="private" type="java.lang.String" name="systemId"/>
       <field modifiers="private" type="java.lang.String" name="publicId"/>
     </class>
-    <class modifiers="public abstract" name="javax.xml.parsers.SAXParser" superClass="java.lang.Object">
-      <constructor modifiers="protected"/>
-      <method modifiers="public abstract" return="boolean" name="isValidating"/>
-      <method modifiers="public abstract" return="boolean" name="isNamespaceAware"/>
-      <method modifiers="public abstract" return="void" name="parse" parameters="org.xml.sax.InputSource, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
-      <method modifiers="public abstract" return="void" name="parse" parameters="java.io.InputStream, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
+    <class modifiers="public" name="org.xml.sax.helpers.DefaultHandler" superClass="java.lang.Object">
+      <constructor modifiers="public"/>
+      <method modifiers="public" return="void" name="fatalError" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="error" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="warning" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="skippedEntity" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="processingInstruction" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="ignorableWhitespace" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="characters" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endElement" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startElement" parameters="java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endPrefixMapping" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startPrefixMapping" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endDocument" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startDocument" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="setDocumentLocator" parameters="org.xml.sax.Locator"/>
+      <method modifiers="public" return="void" name="unparsedEntityDecl" parameters="java.lang.String, java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="notationDecl" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="org.xml.sax.InputSource" name="resolveEntity" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
     </class>
-    <class modifiers="public abstract" name="javax.xml.parsers.SAXParserFactory" superClass="java.lang.Object">
-      <constructor modifiers="protected"/>
-      <method modifiers="public abstract" return="boolean" name="getFeature" parameters="java.lang.String" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
-      <method modifiers="public abstract" return="void" name="setFeature" parameters="java.lang.String, boolean" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
-      <method modifiers="public" return="boolean" name="isValidating"/>
-      <method modifiers="public" return="boolean" name="isNamespaceAware"/>
-      <method modifiers="public" return="void" name="setValidating" parameters="boolean"/>
-      <method modifiers="public" return="void" name="setNamespaceAware" parameters="boolean"/>
-      <method modifiers="public abstract" return="javax.xml.parsers.SAXParser" name="newSAXParser" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException"/>
-      <method modifiers="public static" return="javax.xml.parsers.SAXParserFactory" name="newInstance" exceptions="javax.xml.parsers.FactoryConfigurationError"/>
-      <field modifiers="private" type="boolean" name="namespaceAware"/>
-      <field modifiers="private" type="boolean" name="validating"/>
-    </class>
-    <class name="java.rmi.ServerException" found="false"/>
-    <class name="javax.xml.rpc.Stub" found="false"/>
-    <class name="javax.microedition.xml.rpc.Type" found="false"/>
-    <result name="jsr172" total="26" found="0.53846157"/>
+    <result name="JSR-000172 J2METM Web Services Specification" total="26" found="0.53846157"/>
   </spec>
-  <spec name="jsr177">
+  <spec name="JSR-000177 Security and Trust Services API for J2METM">
     <class modifiers="public" name="java.lang.UnsupportedOperationException" superClass="java.lang.RuntimeException">
       <constructor modifiers="public" parameters="java.lang.String"/>
       <constructor modifiers="public"/>
@@ -267,9 +267,9 @@
       <constructor modifiers="public"/>
     </class>
     <class modifiers="public abstract interface" name="java.security.spec.AlgorithmParameterSpec" isInterface="true=">
-</class>
+    </class>
     <class modifiers="public abstract interface" name="java.security.spec.KeySpec" isInterface="true=">
-</class>
+    </class>
     <class modifiers="public abstract" name="java.security.spec.EncodedKeySpec" superClass="java.lang.Object" interfaces="java.security.spec.KeySpec">
       <constructor modifiers="public" parameters="[B"/>
       <method modifiers="public abstract" return="java.lang.String" name="getFormat"/>
@@ -361,9 +361,177 @@
     <class name="javax.microedition.pki.UserCredentialManagerException" found="false"/>
     <class name="javax.microedition.securityservice.CMSMessageSignatureService" found="false"/>
     <class name="javax.microedition.securityservice.CMSMessageSignatureServiceException" found="false"/>
-    <result name="jsr177" total="43" found="0.55813956"/>
+    <result name="JSR-000177 Security and Trust Services API for J2METM" total="43" found="0.55813956"/>
   </spec>
-  <spec name="jsr927">
+  <spec name="JSR-000280 XML API for Java ME">
+    <class name="javax.xml.XMLConstants" found="false"/>
+    <class name="javax.xml.parsers.DocumentBuilder" found="false"/>
+    <class name="javax.xml.parsers.DocumentBuilderFactory" found="false"/>
+    <class modifiers="public abstract" name="javax.xml.parsers.SAXParser" superClass="java.lang.Object">
+      <constructor modifiers="protected"/>
+      <method modifiers="public abstract" return="boolean" name="isValidating"/>
+      <method modifiers="public abstract" return="boolean" name="isNamespaceAware"/>
+      <method modifiers="public abstract" return="void" name="parse" parameters="org.xml.sax.InputSource, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
+      <method modifiers="public abstract" return="void" name="parse" parameters="java.io.InputStream, org.xml.sax.helpers.DefaultHandler" exceptions="org.xml.sax.SAXException, java.io.IOException"/>
+    </class>
+    <class modifiers="public abstract" name="javax.xml.parsers.SAXParserFactory" superClass="java.lang.Object">
+      <constructor modifiers="protected"/>
+      <method modifiers="public abstract" return="boolean" name="getFeature" parameters="java.lang.String" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
+      <method modifiers="public abstract" return="void" name="setFeature" parameters="java.lang.String, boolean" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException"/>
+      <method modifiers="public" return="boolean" name="isValidating"/>
+      <method modifiers="public" return="boolean" name="isNamespaceAware"/>
+      <method modifiers="public" return="void" name="setValidating" parameters="boolean"/>
+      <method modifiers="public" return="void" name="setNamespaceAware" parameters="boolean"/>
+      <method modifiers="public abstract" return="javax.xml.parsers.SAXParser" name="newSAXParser" exceptions="javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException"/>
+      <method modifiers="public static" return="javax.xml.parsers.SAXParserFactory" name="newInstance" exceptions="javax.xml.parsers.FactoryConfigurationError"/>
+      <field modifiers="private" type="boolean" name="namespaceAware"/>
+      <field modifiers="private" type="boolean" name="validating"/>
+    </class>
+    <class modifiers="public" name="javax.xml.parsers.ParserConfigurationException" superClass="java.lang.Exception">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+      <constructor modifiers="public"/>
+    </class>
+    <class modifiers="public" name="javax.xml.parsers.FactoryConfigurationError" superClass="java.lang.Error">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class name="javax.xml.stream.DTDStreamReader" found="false"/>
+    <class name="javax.xml.stream.Location" found="false"/>
+    <class name="javax.xml.stream.StreamFilter" found="false"/>
+    <class name="javax.xml.stream.XMLResolver" found="false"/>
+    <class name="javax.xml.stream.XMLStreamConstants" found="false"/>
+    <class name="javax.xml.stream.XMLStreamReader" found="false"/>
+    <class name="javax.xml.stream.XMLStreamWriter" found="false"/>
+    <class name="javax.xml.stream.XMLInputFactory" found="false"/>
+    <class name="javax.xml.stream.XMLOutputFactory" found="false"/>
+    <class name="javax.xml.stream.XMLStreamException" found="false"/>
+    <class name="javax.xml.stream.FactoryConfigurationError" found="false"/>
+    <class name="org.w3c.dom.Attr" found="false"/>
+    <class name="org.w3c.dom.CDATASection" found="false"/>
+    <class name="org.w3c.dom.CharacterData" found="false"/>
+    <class name="org.w3c.dom.Comment" found="false"/>
+    <class name="org.w3c.dom.Document" found="false"/>
+    <class name="org.w3c.dom.DocumentFragment" found="false"/>
+    <class name="org.w3c.dom.DocumentType" found="false"/>
+    <class name="org.w3c.dom.DOMImplementation" found="false"/>
+    <class name="org.w3c.dom.Element" found="false"/>
+    <class name="org.w3c.dom.ElementTraversal" found="false"/>
+    <class name="org.w3c.dom.Entity" found="false"/>
+    <class name="org.w3c.dom.EntityReference" found="false"/>
+    <class name="org.w3c.dom.NamedNodeMap" found="false"/>
+    <class name="org.w3c.dom.Node" found="false"/>
+    <class name="org.w3c.dom.NodeList" found="false"/>
+    <class name="org.w3c.dom.Notation" found="false"/>
+    <class name="org.w3c.dom.ProcessingInstruction" found="false"/>
+    <class name="org.w3c.dom.Text" found="false"/>
+    <class name="org.w3c.dom.UserDataHandler" found="false"/>
+    <class name="org.w3c.dom.DOMException" found="false"/>
+    <class name="org.w3c.dom.events.CustomEvent" found="false"/>
+    <class name="org.w3c.dom.events.DocumentEvent" found="false"/>
+    <class name="org.w3c.dom.events.Event" found="false"/>
+    <class name="org.w3c.dom.events.EventListener" found="false"/>
+    <class name="org.w3c.dom.events.EventTarget" found="false"/>
+    <class name="org.w3c.dom.events.KeyboardEvent" found="false"/>
+    <class name="org.w3c.dom.events.MouseEvent" found="false"/>
+    <class name="org.w3c.dom.events.MouseWheelEvent" found="false"/>
+    <class name="org.w3c.dom.events.MutationEvent" found="false"/>
+    <class name="org.w3c.dom.events.ProgressEvent" found="false"/>
+    <class name="org.w3c.dom.events.TextEvent" found="false"/>
+    <class name="org.w3c.dom.events.UIEvent" found="false"/>
+    <class name="org.w3c.dom.events.EventException" found="false"/>
+    <class name="org.w3c.dom.views.AbstractView" found="false"/>
+    <class name="org.w3c.dom.views.DocumentView" found="false"/>
+    <class modifiers="public abstract interface" name="org.xml.sax.Attributes" isInterface="true=">
+      <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="java.lang.String"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="java.lang.String, java.lang.String"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getType" parameters="java.lang.String"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getType" parameters="java.lang.String, java.lang.String"/>
+      <method modifiers="public abstract" return="int" name="getIndex" parameters="java.lang.String"/>
+      <method modifiers="public abstract" return="int" name="getIndex" parameters="java.lang.String, java.lang.String"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="int"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getType" parameters="int"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getQName" parameters="int"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getLocalName" parameters="int"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getURI" parameters="int"/>
+      <method modifiers="public abstract" return="int" name="getLength"/>
+    </class>
+    <class name="org.xml.sax.ContentHandler" found="false"/>
+    <class name="org.xml.sax.DTDHandler" found="false"/>
+    <class name="org.xml.sax.EntityResolver" found="false"/>
+    <class name="org.xml.sax.ErrorHandler" found="false"/>
+    <class modifiers="public abstract interface" name="org.xml.sax.Locator" isInterface="true=">
+      <method modifiers="public abstract" return="int" name="getColumnNumber"/>
+      <method modifiers="public abstract" return="int" name="getLineNumber"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getPublicId"/>
+    </class>
+    <class name="org.xml.sax.XMLFilter" found="false"/>
+    <class name="org.xml.sax.XMLReader" found="false"/>
+    <class modifiers="public" name="org.xml.sax.InputSource" superClass="java.lang.Object">
+      <constructor modifiers="public" parameters="java.io.Reader"/>
+      <constructor modifiers="public" parameters="java.io.InputStream"/>
+      <constructor modifiers="public" parameters="java.lang.String"/>
+      <constructor modifiers="public"/>
+      <method modifiers="public" return="java.io.Reader" name="getCharacterStream"/>
+      <method modifiers="public" return="void" name="setCharacterStream" parameters="java.io.Reader"/>
+      <method modifiers="public" return="java.lang.String" name="getEncoding"/>
+      <method modifiers="public" return="void" name="setEncoding" parameters="java.lang.String"/>
+      <method modifiers="public" return="java.io.InputStream" name="getByteStream"/>
+      <method modifiers="public" return="void" name="setByteStream" parameters="java.io.InputStream"/>
+      <method modifiers="public" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public" return="void" name="setSystemId" parameters="java.lang.String"/>
+      <method modifiers="public" return="java.lang.String" name="getPublicId"/>
+      <method modifiers="public" return="void" name="setPublicId" parameters="java.lang.String"/>
+      <field modifiers="private" type="java.io.Reader" name="characterStream"/>
+      <field modifiers="private" type="java.lang.String" name="encoding"/>
+      <field modifiers="private" type="java.io.InputStream" name="byteStream"/>
+      <field modifiers="private" type="java.lang.String" name="systemId"/>
+      <field modifiers="private" type="java.lang.String" name="publicId"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXException" superClass="java.lang.Exception">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXNotRecognizedException" superClass="org.xml.sax.SAXException">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXNotSupportedException" superClass="org.xml.sax.SAXException">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXParseException" superClass="org.xml.sax.SAXException">
+      <constructor modifiers="public" parameters="java.lang.String, org.xml.sax.Locator"/>
+      <method modifiers="public" return="int" name="getColumnNumber"/>
+      <method modifiers="public" return="int" name="getLineNumber"/>
+      <method modifiers="public" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public" return="java.lang.String" name="getPublicId"/>
+      <method modifiers="private" return="void" name="init" parameters="java.lang.String, java.lang.String, int, int"/>
+      <field modifiers="private" type="int" name="columnNumber"/>
+      <field modifiers="private" type="int" name="lineNumber"/>
+      <field modifiers="private" type="java.lang.String" name="systemId"/>
+      <field modifiers="private" type="java.lang.String" name="publicId"/>
+    </class>
+    <class name="org.xml.sax.ext.Attributes2" found="false"/>
+    <class modifiers="public" name="org.xml.sax.helpers.DefaultHandler" superClass="java.lang.Object">
+      <constructor modifiers="public"/>
+      <method modifiers="public" return="void" name="fatalError" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="error" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="warning" parameters="org.xml.sax.SAXParseException" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="skippedEntity" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="processingInstruction" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="ignorableWhitespace" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="characters" parameters="[C, int, int" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endElement" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startElement" parameters="java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endPrefixMapping" parameters="java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startPrefixMapping" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="endDocument" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="startDocument" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="setDocumentLocator" parameters="org.xml.sax.Locator"/>
+      <method modifiers="public" return="void" name="unparsedEntityDecl" parameters="java.lang.String, java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="void" name="notationDecl" parameters="java.lang.String, java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+      <method modifiers="public" return="org.xml.sax.InputSource" name="resolveEntity" parameters="java.lang.String, java.lang.String" exceptions="org.xml.sax.SAXException"/>
+    </class>
+    <result name="JSR-000280 XML API for Java ME" total="68" found="0.1764706"/>
+  </spec>
+  <spec name="JSR-000927 JavaTM TV API 1.1.1">
     <class modifiers="public abstract interface" name="javax.media.CachingControl" interfaces="javax.media.Control" isInterface="true=">
       <method modifiers="public abstract" return="boolean" name="isDownloading"/>
       <method modifiers="public abstract" return="java.awt.Component" name="getProgressBarComponent"/>
@@ -657,7 +825,7 @@
       <constructor modifiers="public" parameters="java.lang.String"/>
     </class>
     <class modifiers="public abstract interface" name="javax.media.protocol.Controls" interfaces="javax.media.Controls" isInterface="true=">
-</class>
+    </class>
     <class modifiers="public abstract interface" name="javax.media.protocol.Positionable" isInterface="true=">
       <method modifiers="public abstract" return="javax.media.Time" name="setPosition" parameters="javax.media.Time, int"/>
       <method modifiers="public abstract" return="boolean" name="isRandomAccess"/>
@@ -813,161 +981,150 @@
       <method modifiers="public abstract" return="void" name="addMediaSelectListener" parameters="javax.tv.media.MediaSelectListener"/>
       <method modifiers="public abstract" return="void" name="replace" parameters="javax.tv.locator.Locator, javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, javax.tv.service.selection.InvalidServiceComponentException, javax.tv.service.selection.InsufficientResourcesException, java.lang.SecurityException"/>
       <method modifiers="public abstract" return="void" name="remove" parameters="javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, javax.tv.service.selection.InvalidServiceComponentException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="void" name="add" parameters="javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, javax.tv.service.selection.InvalidServiceComponentException, javax.tv.service.selection.InsufficientResourcesException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="void" name="select" parameters="[Ljavax.tv.locator.Locator;" exceptions="javax.tv.locator.InvalidLocatorException, javax.tv.service.selection.InvalidServiceComponentException, javax.tv.service.selection.InsufficientResourcesException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="void" name="select" parameters="javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, javax.tv.service.selection.InvalidServiceComponentException, javax.tv.service.selection.InsufficientResourcesException, java.lang.SecurityException"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.media.MediaSelectListener" interfaces="java.util.EventListener" isInterface="true=">
-      <method modifiers="public abstract" return="void" name="selectionComplete" parameters="javax.tv.media.MediaSelectEvent"/>
-    </class>
-    <class modifiers="public" name="javax.tv.media.AWTVideoSize" superClass="java.lang.Object">
-      <constructor modifiers="public" parameters="java.awt.Rectangle, java.awt.Rectangle"/>
-      <method modifiers="public" return="java.lang.String" name="toString"/>
-      <method modifiers="public" return="float" name="getYScale"/>
-      <method modifiers="public" return="float" name="getXScale"/>
-      <method modifiers="public" return="java.awt.Rectangle" name="getDestination"/>
-      <method modifiers="public" return="java.awt.Rectangle" name="getSource"/>
-      <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public" return="int" name="hashCode"/>
-      <field modifiers="private" type="java.awt.Rectangle" name="_dest"/>
-      <field modifiers="private" type="java.awt.Rectangle" name="_source"/>
-    </class>
-    <class modifiers="public" name="javax.tv.media.MediaSelectCARefusedEvent" superClass="javax.tv.media.MediaSelectFailedEvent">
-      <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
-    </class>
-    <class modifiers="public abstract" name="javax.tv.media.MediaSelectEvent" superClass="java.util.EventObject">
-      <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
-      <method modifiers="public" return="[Ljavax.tv.locator.Locator;" name="getSelection"/>
-      <method modifiers="public" return="javax.media.Controller" name="getController"/>
-      <field modifiers="protected" type="javax.media.Controller" name="controller"/>
-      <field modifiers="protected" type="[Ljavax.tv.locator.Locator;" name="selection"/>
-    </class>
-    <class modifiers="public" name="javax.tv.media.MediaSelectFailedEvent" superClass="javax.tv.media.MediaSelectEvent">
-      <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
-    </class>
-    <class modifiers="public final" name="javax.tv.media.MediaSelectPermission" superClass="java.security.Permission">
-      <constructor modifiers="public" parameters="java.lang.String, java.lang.String"/>
-      <constructor modifiers="public" parameters="javax.tv.locator.Locator"/>
-      <method modifiers="public" return="java.lang.String" name="getActions"/>
-      <method modifiers="public" return="int" name="hashCode"/>
-      <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public" return="boolean" name="implies" parameters="java.security.Permission"/>
-      <field modifiers="private" type="java.lang.String" name="actions"/>
-    </class>
-    <class modifiers="public" name="javax.tv.media.MediaSelectSucceededEvent" superClass="javax.tv.media.MediaSelectEvent">
-      <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
-    </class>
-    <class name="javax.tv.net.InterfaceMap" found="false"/>
-    <class modifiers="public abstract interface" name="javax.tv.service.RatingDimension" isInterface="true=">
-      <method modifiers="public abstract" return="[Ljava.lang.String;" name="getRatingLevelDescription" parameters="short" exceptions="javax.tv.service.SIException"/>
-      <method modifiers="public abstract" return="short" name="getNumberOfLevels"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getDimensionName"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.Service" isInterface="true=">
-      <method modifiers="public abstract" return="int" name="hashCode"/>
-      <method modifiers="public abstract" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public abstract" return="javax.tv.locator.Locator" name="getLocator"/>
-      <method modifiers="public abstract" return="javax.tv.service.ServiceType" name="getServiceType"/>
-      <method modifiers="public abstract" return="boolean" name="hasMultipleInstances"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getName"/>
-      <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveDetails" parameters="javax.tv.service.SIRequestor"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.ServiceMinorNumber" interfaces="javax.tv.service.ServiceNumber" isInterface="true=">
-      <method modifiers="public abstract" return="int" name="getMinorNumber"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.ServiceNumber" isInterface="true=">
-      <method modifiers="public abstract" return="int" name="getServiceNumber"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.SIChangeListener" interfaces="java.util.EventListener" isInterface="true=">
-</class>
-    <class modifiers="public abstract interface" name="javax.tv.service.SIElement" interfaces="javax.tv.service.SIRetrievable" isInterface="true=">
-      <method modifiers="public abstract" return="javax.tv.service.ServiceInformationType" name="getServiceInformationType"/>
-      <method modifiers="public abstract" return="int" name="hashCode"/>
-      <method modifiers="public abstract" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public abstract" return="javax.tv.locator.Locator" name="getLocator"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.SIRequest" isInterface="true=">
-      <method modifiers="public abstract" return="boolean" name="cancel"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.SIRequestor" isInterface="true=">
-      <method modifiers="public abstract" return="void" name="notifyFailure" parameters="javax.tv.service.SIRequestFailureType"/>
-      <method modifiers="public abstract" return="void" name="notifySuccess" parameters="[Ljavax.tv.service.SIRetrievable;"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.SIRetrievable" isInterface="true=">
-      <method modifiers="public abstract" return="java.util.Date" name="getUpdateTime"/>
-    </class>
-    <class modifiers="public final" name="javax.tv.service.ReadPermission" superClass="java.security.Permission" interfaces="java.io.Serializable">
-      <constructor modifiers="public" parameters="java.lang.String, java.lang.String"/>
-      <constructor modifiers="public" parameters="javax.tv.locator.Locator"/>
-      <method modifiers="public" return="java.lang.String" name="getActions"/>
-      <method modifiers="public" return="int" name="hashCode"/>
-      <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public" return="boolean" name="implies" parameters="java.security.Permission"/>
-      <field modifiers="" type="java.lang.String" name="actions"/>
-    </class>
-    <class modifiers="public" name="javax.tv.service.ServiceInformationType" superClass="java.lang.Object">
-      <constructor modifiers="protected" parameters="java.lang.String"/>
-      <method modifiers="public" return="java.lang.String" name="toString"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="IP"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="UNKNOWN"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="SCTE_SI"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="DVB_SI"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="ATSC_PSIP"/>
-      <field modifiers="private" type="java.lang.String" name="name"/>
-    </class>
-    <class modifiers="public" name="javax.tv.service.ServiceType" superClass="java.lang.Object">
-      <constructor modifiers="protected" parameters="java.lang.String"/>
-      <method modifiers="public" return="java.lang.String" name="toString"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="UNKNOWN"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DATA_APPLICATION"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DATA_BROADCAST"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="ANALOG_RADIO"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="ANALOG_TV"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="NVOD_TIME_SHIFTED"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="NVOD_REFERENCE"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DIGITAL_RADIO"/>
-      <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DIGITAL_TV"/>
-      <field modifiers="private" type="java.lang.String" name="name"/>
-    </class>
-    <class modifiers="public abstract" name="javax.tv.service.SIChangeEvent" superClass="java.util.EventObject">
-      <constructor modifiers="public" parameters="java.lang.Object, javax.tv.service.SIChangeType, javax.tv.service.SIElement"/>
-      <method modifiers="public" return="javax.tv.service.SIChangeType" name="getChangeType"/>
-      <method modifiers="public" return="javax.tv.service.SIElement" name="getSIElement"/>
-      <field modifiers="" type="javax.tv.service.SIElement" name="element"/>
-      <field modifiers="" type="javax.tv.service.SIChangeType" name="type"/>
-    </class>
-    <class modifiers="public" name="javax.tv.service.SIChangeType" superClass="java.lang.Object">
-      <constructor modifiers="protected" parameters="java.lang.String"/>
-      <method modifiers="public" return="java.lang.String" name="toString"/>
-      <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="MODIFY"/>
-      <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="REMOVE"/>
-      <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="ADD"/>
-      <field modifiers="private" type="java.lang.String" name="name"/>
-    </class>
-    <class modifiers="public abstract" name="javax.tv.service.SIManager" superClass="java.lang.Object">
-      <constructor modifiers="protected"/>
-      <method modifiers="public abstract" return="javax.tv.service.navigation.ServiceList" name="filterServices" parameters="javax.tv.service.navigation.ServiceFilter"/>
-      <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveProgramEvent" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveServiceDetails" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="javax.tv.service.Service" name="getService" parameters="javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveSIElement" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="[Ljavax.tv.service.transport.Transport;" name="getTransports"/>
-      <method modifiers="public abstract" return="javax.tv.service.RatingDimension" name="getRatingDimension" parameters="java.lang.String" exceptions="javax.tv.service.SIException"/>
-      <method modifiers="public abstract" return="[Ljava.lang.String;" name="getSupportedDimensions"/>
-      <method modifiers="public abstract" return="void" name="registerInterest" parameters="javax.tv.locator.Locator, boolean" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getPreferredLanguage"/>
-      <method modifiers="public abstract" return="void" name="setPreferredLanguage" parameters="java.lang.String"/>
-      <method modifiers="public static" return="javax.tv.service.SIManager" name="createInstanceForInternal"/>
-      <method modifiers="public static" return="javax.tv.service.SIManager" name="createInstance"/>
-      <field modifiers="private static" type="javax.tv.service.SIManager" name="manager"/>
-    </class>
-    <class modifiers="public" name="javax.tv.service.SIRequestFailureType" superClass="java.lang.Object">
-      <constructor modifiers="protected" parameters="java.lang.String"/>
-      <method modifiers="public" return="java.lang.String" name="toString"/>
-      <field modifiers="public static final" type="javax.tv.service.SIRequestFailureType" name="UNKNOWN"/>
-      <field modifiers="public static final" type="javax.tv.service.SIRequestFailureType" name="DATA_UNAVAILABLE"/>
-      <field modifiers="public static final" type="javax.tv.service.SIRequestFailureType" name="INSUFFICIENT_RESOURCES"/>
-      <field modifiers="public static final" type="javax.tv.service.SIRequestFailureType" name="CANCELED"/>
+      <class modifiers="public abstract interface" name="javax.tv.media.MediaSelectListener" interfaces="java.util.EventListener" isInterface="true=">
+        <method modifiers="public abstract" return="void" name="selectionComplete" parameters="javax.tv.media.MediaSelectEvent"/>
+      </class>
+      <class modifiers="public" name="javax.tv.media.AWTVideoSize" superClass="java.lang.Object">
+        <constructor modifiers="public" parameters="java.awt.Rectangle, java.awt.Rectangle"/>
+        <method modifiers="public" return="java.lang.String" name="toString"/>
+        <method modifiers="public" return="float" name="getYScale"/>
+        <method modifiers="public" return="float" name="getXScale"/>
+        <method modifiers="public" return="java.awt.Rectangle" name="getDestination"/>
+        <method modifiers="public" return="java.awt.Rectangle" name="getSource"/>
+        <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
+        <method modifiers="public" return="int" name="hashCode"/>
+        <field modifiers="private" type="java.awt.Rectangle" name="_dest"/>
+        <field modifiers="private" type="java.awt.Rectangle" name="_source"/>
+      </class>
+      <class modifiers="public" name="javax.tv.media.MediaSelectCARefusedEvent" superClass="javax.tv.media.MediaSelectFailedEvent">
+        <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
+      </class>
+      <class modifiers="public abstract" name="javax.tv.media.MediaSelectEvent" superClass="java.util.EventObject">
+        <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
+        <method modifiers="public" return="[Ljavax.tv.locator.Locator;" name="getSelection"/>
+        <method modifiers="public" return="javax.media.Controller" name="getController"/>
+        <field modifiers="protected" type="javax.media.Controller" name="controller"/>
+        <field modifiers="protected" type="[Ljavax.tv.locator.Locator;" name="selection"/>
+      </class>
+      <class modifiers="public" name="javax.tv.media.MediaSelectFailedEvent" superClass="javax.tv.media.MediaSelectEvent">
+        <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
+      </class>
+      <class modifiers="public final" name="javax.tv.media.MediaSelectPermission" superClass="java.security.Permission">
+        <constructor modifiers="public" parameters="java.lang.String, java.lang.String"/>
+        <constructor modifiers="public" parameters="javax.tv.locator.Locator"/>
+        <method modifiers="public" return="java.lang.String" name="getActions"/>
+        <method modifiers="public" return="int" name="hashCode"/>
+        <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
+        <method modifiers="public" return="boolean" name="implies" parameters="java.security.Permission"/>
+        <field modifiers="private" type="java.lang.String" name="actions"/>
+      </class>
+      <class modifiers="public" name="javax.tv.media.MediaSelectSucceededEvent" superClass="javax.tv.media.MediaSelectEvent">
+        <constructor modifiers="public" parameters="javax.media.Controller, [Ljavax.tv.locator.Locator;"/>
+      </class>
+      <class name="javax.tv.net.InterfaceMap" found="false"/>
+      <class modifiers="public abstract interface" name="javax.tv.service.RatingDimension" isInterface="true=">
+        <method modifiers="public abstract" return="[Ljava.lang.String;" name="getRatingLevelDescription" parameters="short" exceptions="javax.tv.service.SIException"/>
+        <method modifiers="public abstract" return="short" name="getNumberOfLevels"/>
+        <method modifiers="public abstract" return="java.lang.String" name="getDimensionName"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.Service" isInterface="true=">
+        <method modifiers="public abstract" return="int" name="hashCode"/>
+        <method modifiers="public abstract" return="boolean" name="equals" parameters="java.lang.Object"/>
+        <method modifiers="public abstract" return="javax.tv.locator.Locator" name="getLocator"/>
+        <method modifiers="public abstract" return="javax.tv.service.ServiceType" name="getServiceType"/>
+        <method modifiers="public abstract" return="boolean" name="hasMultipleInstances"/>
+        <method modifiers="public abstract" return="java.lang.String" name="getName"/>
+        <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveDetails" parameters="javax.tv.service.SIRequestor"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.ServiceMinorNumber" interfaces="javax.tv.service.ServiceNumber" isInterface="true=">
+        <method modifiers="public abstract" return="int" name="getMinorNumber"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.ServiceNumber" isInterface="true=">
+        <method modifiers="public abstract" return="int" name="getServiceNumber"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.SIChangeListener" interfaces="java.util.EventListener" isInterface="true=">
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.SIElement" interfaces="javax.tv.service.SIRetrievable" isInterface="true=">
+        <method modifiers="public abstract" return="javax.tv.service.ServiceInformationType" name="getServiceInformationType"/>
+        <method modifiers="public abstract" return="int" name="hashCode"/>
+        <method modifiers="public abstract" return="boolean" name="equals" parameters="java.lang.Object"/>
+        <method modifiers="public abstract" return="javax.tv.locator.Locator" name="getLocator"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.SIRequest" isInterface="true=">
+        <method modifiers="public abstract" return="boolean" name="cancel"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.SIRequestor" isInterface="true=">
+        <method modifiers="public abstract" return="void" name="notifyFailure" parameters="javax.tv.service.SIRequestFailureType"/>
+        <method modifiers="public abstract" return="void" name="notifySuccess" parameters="[Ljavax.tv.service.SIRetrievable;"/>
+      </class>
+      <class modifiers="public abstract interface" name="javax.tv.service.SIRetrievable" isInterface="true=">
+        <method modifiers="public abstract" return="java.util.Date" name="getUpdateTime"/>
+      </class>
+      <class modifiers="public final" name="javax.tv.service.ReadPermission" superClass="java.security.Permission" interfaces="java.io.Serializable">
+        <constructor modifiers="public" parameters="java.lang.String, java.lang.String"/>
+        <constructor modifiers="public" parameters="javax.tv.locator.Locator"/>
+        <method modifiers="public" return="java.lang.String" name="getActions"/>
+        <method modifiers="public" return="int" name="hashCode"/>
+        <method modifiers="public" return="boolean" name="equals" parameters="java.lang.Object"/>
+        <method modifiers="public" return="boolean" name="implies" parameters="java.security.Permission"/>
+        <field modifiers="" type="java.lang.String" name="actions"/>
+      </class>
+      <class modifiers="public" name="javax.tv.service.ServiceInformationType" superClass="java.lang.Object">
+        <constructor modifiers="protected" parameters="java.lang.String"/>
+        <method modifiers="public" return="java.lang.String" name="toString"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="IP"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="UNKNOWN"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="SCTE_SI"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="DVB_SI"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceInformationType" name="ATSC_PSIP"/>
+        <field modifiers="private" type="java.lang.String" name="name"/>
+      </class>
+      <class modifiers="public" name="javax.tv.service.ServiceType" superClass="java.lang.Object">
+        <constructor modifiers="protected" parameters="java.lang.String"/>
+        <method modifiers="public" return="java.lang.String" name="toString"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="UNKNOWN"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DATA_APPLICATION"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DATA_BROADCAST"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="ANALOG_RADIO"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="ANALOG_TV"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="NVOD_TIME_SHIFTED"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="NVOD_REFERENCE"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DIGITAL_RADIO"/>
+        <field modifiers="public static final" type="javax.tv.service.ServiceType" name="DIGITAL_TV"/>
+        <field modifiers="private" type="java.lang.String" name="name"/>
+      </class>
+      <class modifiers="public abstract" name="javax.tv.service.SIChangeEvent" superClass="java.util.EventObject">
+        <constructor modifiers="public" parameters="java.lang.Object, javax.tv.service.SIChangeType, javax.tv.service.SIElement"/>
+        <method modifiers="public" return="javax.tv.service.SIChangeType" name="getChangeType"/>
+        <method modifiers="public" return="javax.tv.service.SIElement" name="getSIElement"/>
+        <field modifiers="" type="javax.tv.service.SIElement" name="element"/>
+        <field modifiers="" type="javax.tv.service.SIChangeType" name="type"/>
+      </class>
+      <class modifiers="public" name="javax.tv.service.SIChangeType" superClass="java.lang.Object">
+        <constructor modifiers="protected" parameters="java.lang.String"/>
+        <method modifiers="public" return="java.lang.String" name="toString"/>
+        <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="MODIFY"/>
+        <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="REMOVE"/>
+        <field modifiers="public static final" type="javax.tv.service.SIChangeType" name="ADD"/>
+        <field modifiers="private" type="java.lang.String" name="name"/>
+      </class>
+      <class modifiers="public abstract" name="javax.tv.service.SIManager" superClass="java.lang.Object">
+        <constructor modifiers="protected"/>
+        <method modifiers="public abstract" return="javax.tv.service.navigation.ServiceList" name="filterServices" parameters="javax.tv.service.navigation.ServiceFilter"/>
+        <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveProgramEvent" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
+        <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveServiceDetails" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
+        <method modifiers="public abstract" return="javax.tv.service.Service" name="getService" parameters="javax.tv.locator.Locator" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
+        <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveSIElement" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
+        <method modifiers="public abstract" return="[Ljavax.tv.service.transport.Transport;" name="getTransports"/>
+        <method modifiers="public abstract" return="javax.tv.service.RatingDimension" name="getRatingDimension" parameters="java.lang.String" exceptions="javax.tv.service.SIException"/>
+        <method modifiers="public abstract" return="[Ljava.lang.String;" name="getSupportedDimensions"/>
+        <method modifiers="public abstract" return="void" name="registerInterest" parameters="javax.tv.locator.Locator, boolean" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
+        <method modifiers="public abstract" return="java.lang.String" name="getPreferredLanguage"/>
+        <method modifiers="public abstract" return="void" name="setPreferredLanguage" parameters="java.lang.String"/>
+        <method modifiers="public static" return="javax.tv.service.SIManager" name="createInstanceForInternal"/>
+        <method modifiers="public static" return="javax.tv.service.SIManager" name="createInstance"/>
+        <field modifiers="private static" type="javax.tv.service.SIManager" name="manager"/>
+      </class>
       <field modifiers="private" type="java.lang.String" name="name"/>
     </class>
     <class modifiers="public" name="javax.tv.service.SIException" superClass="java.lang.Exception">
@@ -1026,8 +1183,6 @@
     </class>
     <class modifiers="public abstract interface" name="javax.tv.service.navigation.ServiceComponent" interfaces="javax.tv.service.SIElement" isInterface="true=">
       <method modifiers="public abstract" return="javax.tv.service.Service" name="getService"/>
-      <method modifiers="public abstract" return="javax.tv.service.navigation.StreamType" name="getStreamType"/>
-      <method modifiers="public abstract" return="java.lang.String" name="getAssociatedLanguage"/>
       <method modifiers="public abstract" return="java.lang.String" name="getName"/>
     </class>
     <class modifiers="public abstract interface" name="javax.tv.service.navigation.ServiceComponentChangeListener" interfaces="javax.tv.service.SIChangeListener" isInterface="true=">
@@ -1058,7 +1213,6 @@
     <class modifiers="public abstract interface" name="javax.tv.service.navigation.ServiceList" isInterface="true=">
       <method modifiers="public abstract" return="int" name="hashCode"/>
       <method modifiers="public abstract" return="boolean" name="equals" parameters="java.lang.Object"/>
-      <method modifiers="public abstract" return="javax.tv.service.Service" name="getService" parameters="int"/>
       <method modifiers="public abstract" return="int" name="size"/>
       <method modifiers="public abstract" return="int" name="indexOf" parameters="javax.tv.service.Service"/>
       <method modifiers="public abstract" return="boolean" name="contains" parameters="javax.tv.service.Service"/>
@@ -1154,7 +1308,7 @@
       <method modifiers="public abstract" return="void" name="receiveServiceContextEvent" parameters="javax.tv.service.selection.ServiceContextEvent"/>
     </class>
     <class modifiers="public abstract interface" name="javax.tv.service.selection.ServiceMediaHandler" interfaces="javax.media.Player,javax.tv.service.selection.ServiceContentHandler" isInterface="true=">
-</class>
+    </class>
     <class modifiers="public" name="javax.tv.service.selection.AlternativeContentEvent" superClass="javax.tv.service.selection.PresentationChangedEvent">
       <constructor modifiers="public" parameters="javax.tv.service.selection.ServiceContext"/>
     </class>
@@ -1258,9 +1412,6 @@
       <method modifiers="public abstract" return="void" name="removeNetworkChangeListener" parameters="javax.tv.service.transport.NetworkChangeListener"/>
       <method modifiers="public abstract" return="void" name="addNetworkChangeListener" parameters="javax.tv.service.transport.NetworkChangeListener"/>
       <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveNetworks" parameters="javax.tv.service.SIRequestor"/>
-      <method modifiers="public abstract" return="javax.tv.service.SIRequest" name="retrieveNetwork" parameters="javax.tv.locator.Locator, javax.tv.service.SIRequestor" exceptions="javax.tv.locator.InvalidLocatorException, java.lang.SecurityException"/>
-    </class>
-    <class modifiers="public abstract interface" name="javax.tv.service.transport.ServiceDetailsChangeListener" interfaces="javax.tv.service.SIChangeListener" isInterface="true=">
       <method modifiers="public abstract" return="void" name="notifyChange" parameters="javax.tv.service.transport.ServiceDetailsChangeEvent"/>
     </class>
     <class modifiers="public abstract interface" name="javax.tv.service.transport.Transport" isInterface="true=">
@@ -1288,8 +1439,6 @@
     </class>
     <class modifiers="public" name="javax.tv.service.transport.NetworkChangeEvent" superClass="javax.tv.service.transport.TransportSIChangeEvent">
       <constructor modifiers="public" parameters="javax.tv.service.transport.NetworkCollection, javax.tv.service.SIChangeType, javax.tv.service.transport.Network"/>
-      <method modifiers="public" return="javax.tv.service.transport.Network" name="getNetwork"/>
-      <method modifiers="public" return="javax.tv.service.transport.NetworkCollection" name="getNetworkCollection"/>
     </class>
     <class modifiers="public" name="javax.tv.service.transport.ServiceDetailsChangeEvent" superClass="javax.tv.service.transport.TransportSIChangeEvent">
       <constructor modifiers="public" parameters="javax.tv.service.transport.Transport, javax.tv.service.SIChangeType, javax.tv.service.navigation.ServiceDetails"/>
@@ -1366,9 +1515,64 @@
       <constructor modifiers="public" parameters="java.lang.String"/>
       <constructor modifiers="public"/>
     </class>
-    <result name="jsr927" total="167" found="0.994012"/>
+    <result name="JSR-000927 JavaTM TV API 1.1.1" total="167" found="0.994012"/>
   </spec>
-  <spec name="org.xml.sax">
+  <spec name="SAX 1.0">
+    <class name="org.xml.sax.AttributeList" found="false"/>
+    <class name="org.xml.sax.DocumentHandler" found="false"/>
+    <class name="org.xml.sax.DTDHandler" found="false"/>
+    <class name="org.xml.sax.EntityResolver" found="false"/>
+    <class name="org.xml.sax.ErrorHandler" found="false"/>
+    <class modifiers="public abstract interface" name="org.xml.sax.Locator" isInterface="true=">
+      <method modifiers="public abstract" return="int" name="getColumnNumber"/>
+      <method modifiers="public abstract" return="int" name="getLineNumber"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public abstract" return="java.lang.String" name="getPublicId"/>
+    </class>
+    <class name="org.xml.sax.Parser" found="false"/>
+    <class name="org.xml.sax.HandlerBase" found="false"/>
+    <class modifiers="public" name="org.xml.sax.InputSource" superClass="java.lang.Object">
+      <constructor modifiers="public" parameters="java.io.Reader"/>
+      <constructor modifiers="public" parameters="java.io.InputStream"/>
+      <constructor modifiers="public" parameters="java.lang.String"/>
+      <constructor modifiers="public"/>
+      <method modifiers="public" return="java.io.Reader" name="getCharacterStream"/>
+      <method modifiers="public" return="void" name="setCharacterStream" parameters="java.io.Reader"/>
+      <method modifiers="public" return="java.lang.String" name="getEncoding"/>
+      <method modifiers="public" return="void" name="setEncoding" parameters="java.lang.String"/>
+      <method modifiers="public" return="java.io.InputStream" name="getByteStream"/>
+      <method modifiers="public" return="void" name="setByteStream" parameters="java.io.InputStream"/>
+      <method modifiers="public" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public" return="void" name="setSystemId" parameters="java.lang.String"/>
+      <method modifiers="public" return="java.lang.String" name="getPublicId"/>
+      <method modifiers="public" return="void" name="setPublicId" parameters="java.lang.String"/>
+      <field modifiers="private" type="java.io.Reader" name="characterStream"/>
+      <field modifiers="private" type="java.lang.String" name="encoding"/>
+      <field modifiers="private" type="java.io.InputStream" name="byteStream"/>
+      <field modifiers="private" type="java.lang.String" name="systemId"/>
+      <field modifiers="private" type="java.lang.String" name="publicId"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXException" superClass="java.lang.Exception">
+      <constructor modifiers="public" parameters="java.lang.String"/>
+    </class>
+    <class modifiers="public" name="org.xml.sax.SAXParseException" superClass="org.xml.sax.SAXException">
+      <constructor modifiers="public" parameters="java.lang.String, org.xml.sax.Locator"/>
+      <method modifiers="public" return="int" name="getColumnNumber"/>
+      <method modifiers="public" return="int" name="getLineNumber"/>
+      <method modifiers="public" return="java.lang.String" name="getSystemId"/>
+      <method modifiers="public" return="java.lang.String" name="getPublicId"/>
+      <method modifiers="private" return="void" name="init" parameters="java.lang.String, java.lang.String, int, int"/>
+      <field modifiers="private" type="int" name="columnNumber"/>
+      <field modifiers="private" type="int" name="lineNumber"/>
+      <field modifiers="private" type="java.lang.String" name="systemId"/>
+      <field modifiers="private" type="java.lang.String" name="publicId"/>
+    </class>
+    <class name="org.xml.sax.helpers.AttributeListImpl" found="false"/>
+    <class name="org.xml.sax.helpers.LocatorImpl" found="false"/>
+    <class name="org.xml.sax.helpers.ParserFactory" found="false"/>
+    <result name="SAX 1.0" total="14" found="0.2857143"/>
+  </spec>
+  <spec name="SAX 2.0.2">
     <class name="org.xml.sax.AttributeList" found="false"/>
     <class modifiers="public abstract interface" name="org.xml.sax.Attributes" isInterface="true=">
       <method modifiers="public abstract" return="java.lang.String" name="getValue" parameters="java.lang.String"/>
@@ -1478,6 +1682,6 @@
     <class name="org.xml.sax.helpers.XMLFilterImpl" found="false"/>
     <class name="org.xml.sax.helpers.XMLReaderAdapter" found="false"/>
     <class name="org.xml.sax.helpers.XMLReaderFactory" found="false"/>
-    <result name="org.xml.sax" total="35" found="0.22857143"/>
+    <result name="SAX 2.0.2" total="35" found="0.22857143"/>
   </spec>
 </classes>

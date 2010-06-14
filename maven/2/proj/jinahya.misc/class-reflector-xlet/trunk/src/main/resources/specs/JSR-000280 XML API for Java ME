@@ -1,0 +1,106 @@
+# JSR 280: XML API for JavaTM ME
+# http://jcp.org/en/jsr/detail?id=280
+
+
+# -------------------------------------------------------------------- javax.xml
+
+javax.xml.XMLConstants
+
+
+# ------------------------------------------------------------ javax.xml.parsers
+
+javax.xml.parsers.DocumentBuilder 
+javax.xml.parsers.DocumentBuilderFactory 
+javax.xml.parsers.SAXParser 
+javax.xml.parsers.SAXParserFactory
+javax.xml.parsers.ParserConfigurationException
+javax.xml.parsers.FactoryConfigurationError
+
+
+# ------------------------------------------------------------- javax.xml.stream
+
+javax.xml.stream.DTDStreamReader 
+javax.xml.stream.Location 
+javax.xml.stream.StreamFilter 
+javax.xml.stream.XMLResolver 
+javax.xml.stream.XMLStreamConstants 
+javax.xml.stream.XMLStreamReader 
+javax.xml.stream.XMLStreamWriter
+javax.xml.stream.XMLInputFactory 
+javax.xml.stream.XMLOutputFactory
+javax.xml.stream.XMLStreamException
+javax.xml.stream.FactoryConfigurationError
+
+
+# ------------------------------------------------------------------ org.w3c.dom
+
+org.w3c.dom.Attr 
+org.w3c.dom.CDATASection 
+org.w3c.dom.CharacterData 
+org.w3c.dom.Comment 
+org.w3c.dom.Document 
+org.w3c.dom.DocumentFragment 
+org.w3c.dom.DocumentType 
+org.w3c.dom.DOMImplementation 
+org.w3c.dom.Element 
+org.w3c.dom.ElementTraversal 
+org.w3c.dom.Entity 
+org.w3c.dom.EntityReference 
+org.w3c.dom.NamedNodeMap 
+org.w3c.dom.Node 
+org.w3c.dom.NodeList 
+org.w3c.dom.Notation 
+org.w3c.dom.ProcessingInstruction 
+org.w3c.dom.Text 
+org.w3c.dom.UserDataHandler
+org.w3c.dom.DOMException
+
+
+# ----------------------------------------------------------- org.w3c.dom.events
+
+org.w3c.dom.events.CustomEvent 
+org.w3c.dom.events.DocumentEvent 
+org.w3c.dom.events.Event 
+org.w3c.dom.events.EventListener 
+org.w3c.dom.events.EventTarget 
+org.w3c.dom.events.KeyboardEvent 
+org.w3c.dom.events.MouseEvent 
+org.w3c.dom.events.MouseWheelEvent 
+org.w3c.dom.events.MutationEvent 
+org.w3c.dom.events.ProgressEvent 
+org.w3c.dom.events.TextEvent 
+org.w3c.dom.events.UIEvent
+org.w3c.dom.events.EventException
+
+
+# ------------------------------------------------------------ org.w3c.dom.views
+
+org.w3c.dom.views.AbstractView 
+org.w3c.dom.views.DocumentView
+
+
+# ------------------------------------------------------------------ org.xml.sax
+
+org.xml.sax.Attributes 
+org.xml.sax.ContentHandler 
+org.xml.sax.DTDHandler 
+org.xml.sax.EntityResolver 
+org.xml.sax.ErrorHandler 
+org.xml.sax.Locator 
+org.xml.sax.XMLFilter 
+org.xml.sax.XMLReader
+org.xml.sax.InputSource
+org.xml.sax.SAXException 
+org.xml.sax.SAXNotRecognizedException 
+org.xml.sax.SAXNotSupportedException 
+org.xml.sax.SAXParseException
+
+
+# -------------------------------------------------------------- org.xml.sax.ext
+
+org.xml.sax.ext.Attributes2
+
+
+# ---------------------------------------------------------- org.xml.sax.helpers
+
+org.xml.sax.helpers.DefaultHandler
