@@ -1,4 +1,4 @@
-package jinahya.misc.clazz.relfector;
+package jinahya.misc.clazz.reflector;
 
 
 import java.lang.reflect.Constructor;

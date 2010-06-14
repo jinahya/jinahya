@@ -79,7 +79,7 @@
     </class>
     <class name="javax.xml.namespace.QName" found="false"/>
     <class modifiers="public abstract interface" name="java.rmi.Remote" isInterface="true=">
-</class>
+    </class>
     <class modifiers="public" name="java.rmi.RemoteException" superClass="java.io.IOException">
       <constructor modifiers="public" parameters="java.lang.String, java.lang.Throwable"/>
       <constructor modifiers="public" parameters="java.lang.String"/>
