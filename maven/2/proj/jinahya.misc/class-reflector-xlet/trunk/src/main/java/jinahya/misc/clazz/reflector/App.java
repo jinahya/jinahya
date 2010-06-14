@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
@@ -22,6 +24,9 @@ import javax.tv.xlet.XletStateChangeException;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class App implements Xlet {
+
+
+    private static final Set<String> CLASS_NAME_SET = new HashSet<String>();
 
 
     private static void print(final String string) {
@@ -73,7 +78,7 @@ public class App implements Xlet {
                     }
 
                     if (total > 0) {
-                        print("<result name=\"" + name + "\" total=\"" + total + "\" found=\"" + ((float) found / (float) total) + "\"/>");
+                        print("<result name=\"" + name + "\" total=\"" + total + "\" found=\"" + found + "\" compatibility=\"" + ((float) found / (float) total) + "\"/>");
                     }
 
                 } finally {
@@ -106,6 +111,11 @@ public class App implements Xlet {
         try {
             final Class c = Class.forName(className);
 
+            if (CLASS_NAME_SET.contains(className)) {
+                return true;
+            }
+            CLASS_NAME_SET.add(className);
+
             BUFFER.append("<class");
             BUFFER.append(" modifiers=\"" + Modifier.toString(c.getModifiers()) + "\"");
             BUFFER.append(" name=\"" + className + "\"");
@@ -136,14 +146,13 @@ public class App implements Xlet {
 
             print(BUFFER.toString());
 
+            /*
             //for (Constructor constructor : c.getConstructors()) {
             for (Constructor constructor : c.getDeclaredConstructors()) {
                 BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<constructor");
 
                 BUFFER.append(" modifiers=\"" + Modifier.toString(constructor.getModifiers()) + "\"");
-
-                //BUFFER.append(" name=\"" + constructor.getName() + "\"");
 
                 final Class[] parameterTypes = constructor.getParameterTypes();
                 if (parameterTypes.length > 0) {
@@ -165,17 +174,17 @@ public class App implements Xlet {
                     BUFFER.append("\"");
                 }
 
-                /*
-                if (constructor.getDeclaringClass().equals(c)) {
+                if (false && constructor.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
-                 */
 
                 BUFFER.append("/>");
                 print(BUFFER.toString());
             }
+             */
 
 
+            /*
             //for (Method method : c.getMethods()) {
             for (Method method : c.getDeclaredMethods()) {
                 BUFFER.delete(0, BUFFER.length());
@@ -206,11 +215,9 @@ public class App implements Xlet {
                     BUFFER.append("\"");
                 }
 
-                /*
-                if (method.getDeclaringClass().equals(c)) {
+                if (false && method.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
-                 */
 
                 checkBoolean(Method.class, method, "isBridge");
                 checkBoolean(Method.class, method, "isSynthetic");
@@ -219,8 +226,10 @@ public class App implements Xlet {
                 BUFFER.append("/>");
                 print(BUFFER.toString());
             }
+             */
 
 
+            /*
             //for (Field field : c.getFields()) {
             for (Field field : c.getDeclaredFields()) {
                 BUFFER.delete(0, BUFFER.length());
@@ -229,11 +238,9 @@ public class App implements Xlet {
                 BUFFER.append(" type=\"" + field.getType().getName() + "\"");
                 BUFFER.append(" name=\"" + field.getName() + "\"");
 
-                /*
-                if (field.getDeclaringClass().equals(c)) {
+                if (false && field.getDeclaringClass().equals(c)) {
                     BUFFER.append(" declared=\"true\"");
                 }
-                 */
 
                 checkBoolean(Field.class, field, "isEnumConstant");
                 checkBoolean(Field.class, field, "isSynthetic");
@@ -241,11 +248,18 @@ public class App implements Xlet {
                 BUFFER.append("/>");
                 print(BUFFER.toString());
             }
+             */
 
             print("</class>");
 
             return true;
         } catch (ClassNotFoundException cnfe) {
+
+            if (CLASS_NAME_SET.contains(className)) {
+                return false;
+            }
+            CLASS_NAME_SET.add(className);
+
             print("<class name=\"" + className + "\" found=\"false\"/>");
         }
 
