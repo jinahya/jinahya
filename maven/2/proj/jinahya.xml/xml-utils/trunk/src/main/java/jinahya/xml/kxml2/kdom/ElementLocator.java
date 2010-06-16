@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.kxml2.kdom;
+package jinahya.xml.kxml2.kdom;
 
 
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ import org.kxml2.kdom.Node;
 public class ElementLocator {
 
 
+    /*
     public static ElementLocator newInstance(final String rootElementNamespace,
                                              final String rootElementName) {
 
@@ -39,15 +40,23 @@ public class ElementLocator {
         document.addChild(Node.ELEMENT, document.createElement(
             rootElementNamespace, rootElementName));
         return new ElementLocator(document);
-
     }
+     */
 
 
+    /*
+     *
+     * @param document
     public ElementLocator(final Document document) {
         this(document.getRootElement());
     }
+     */
 
 
+    /**
+     *
+     * @param element
+     */
     public ElementLocator(final Element element) {
         super();
 
@@ -105,6 +114,15 @@ public class ElementLocator {
     }
 
 
+    public ElementLocator locateParent() {
+        Node parent = element.getParent();
+        if (parent != null && (parent instanceof Element)) {
+            element = (Element) parent;
+        }
+        return this;
+    }
+
+
     /**
      *
      * @param name
@@ -143,8 +161,8 @@ public class ElementLocator {
      * @param name
      * @return
      */
-    public List<Element> findChildren(final String namespace,
-                                      final String name) {
+    public List<Element> getChildren(final String namespace,
+                                     final String name) {
 
         final List<Element> children = new ArrayList<Element>();
         final int childCount = element.getChildCount();
@@ -168,6 +186,12 @@ public class ElementLocator {
      * @return the document instance of null
      */
     public Document getDocument() {
+        Node root = element.getRoot();
+        if (root instanceof Document) {
+            return (Document) root;
+        }
+
+        /*
         Node parent = element.getParent();
         while (parent != null) {
             if (parent instanceof Element) {
@@ -178,8 +202,61 @@ public class ElementLocator {
                 return (Document) parent;
             }
         }
+         */
 
         return null;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public Element getElement() {
+        return element;
+    }
+
+
+    public String getAttributeValue(final String namespace, final String name) {
+        return element.getAttributeValue(namespace, name);
+    }
+
+
+    public void setAttribute(final String namespace, final String name,
+                             final String value) {
+
+        element.setAttribute(namespace, name, value);
+    }
+
+
+    public String getText() {
+        final int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (element.isText(i)) {
+                return element.getText(i);
+            }
+        }
+        return null;
+    }
+
+
+    public void setText(final String text) {
+        element.addChild(Node.TEXT, text);
+    }
+
+
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @return
+     */
+    public ElementLocator fork(final String namespace, final String name) {
+        final Element child = this.findChild(namespace, name);
+        if (child == null) {
+            return null;
+        }
+        return new ElementLocator(child);
     }
 
 
