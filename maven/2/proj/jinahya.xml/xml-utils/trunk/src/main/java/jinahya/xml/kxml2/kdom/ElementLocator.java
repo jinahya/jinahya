@@ -217,8 +217,19 @@ public class ElementLocator {
     }
 
 
-    public String getAttributeValue(final String namespace, final String name) {
-        return element.getAttributeValue(namespace, name);
+    public String getAttribute(final String namespace, final String name) {
+        return getAttribute(namespace, name, null);
+    }
+
+
+    public String getAttribute(final String namespace, final String name,
+                               final String defaultValue) {
+
+        final String value = element.getAttributeValue(namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+        return value;
     }
 
 
