@@ -69,9 +69,9 @@ public class ElementLocatorTest {
     }
 
 
-    //@Test
+    @Test
     public void testGetChildCount() throws XmlPullParserException {
-                final Document document = new Document();
+        final Document document = new Document();
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
         final ElementLocator locator = new ElementLocator(document);
 
@@ -87,7 +87,7 @@ public class ElementLocatorTest {
 
     @Test
     public void testLocateChild() throws XmlPullParserException {
-                final Document document = new Document();
+        final Document document = new Document();
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
         final ElementLocator locator = new ElementLocator(document);
 
@@ -112,7 +112,7 @@ public class ElementLocatorTest {
 
     //@Test
     public void testGetText() {
-                final Document document = new Document();
+        final Document document = new Document();
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
         final ElementLocator locator = new ElementLocator(document);
         assertNull(locator.getText());
@@ -157,7 +157,6 @@ public class ElementLocatorTest {
         for (int i = 0; i < count; i++) {
             final int childCount =
                 locator.getChildCount(XmlPullParser.NO_NAMESPACE, "child");
-//            System.out.println("childCount: " + childCount);
             locator.locateChild(
                 XmlPullParser.NO_NAMESPACE, "child", childCount - 1);
             locator.removeAndLocateParent();
