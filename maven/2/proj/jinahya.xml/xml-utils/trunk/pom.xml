@@ -158,6 +158,12 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>http://kxml.sourceforge.net/kxml2/javadoc/</link>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
+          </links>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jxr-plugin</artifactId>

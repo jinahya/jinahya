@@ -90,7 +90,7 @@ public class ElementLocatorTest {
     }
 
 
-
+    @Test
     public void testLocateChild() throws XmlPullParserException {
 
         final int count = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
