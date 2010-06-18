@@ -68,15 +68,10 @@ public class ElementLocatorTest {
 
 
     @BeforeTest
-    public void removeAllChildrenFromTheRootElement()
+    public void locateRoot()
         throws XmlPullParserException {
 
         instance.locateRoot();
-        /*
-        while (!instance.atRoot()) {
-            instance.locateParent();
-        }
-         */
     }
 
 
@@ -101,20 +96,11 @@ public class ElementLocatorTest {
         final String[] texts = new String[count];
 
         for (int i = 0; i < texts.length; i++) {
+            texts[i] = Integer.toString(i);
             instance.addAndLocateChild(NAMESPACE, NAME);
-            instance.setText(texts[i] = Integer.toString(i));
+            instance.setText(texts[i]);
             instance.locateParent();
         }
-
-        /*
-        XmlSerializer s = new KXmlSerializer();
-        try {
-            s.setOutput(System.out, null);
-            ((Document) rootElement.getRoot()).write(s);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-         */
 
         for (int i = 0; i < texts.length; i++) {
             instance.locateChild(NAMESPACE, NAME, i);

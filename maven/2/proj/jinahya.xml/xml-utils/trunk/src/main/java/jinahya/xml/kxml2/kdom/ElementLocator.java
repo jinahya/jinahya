@@ -20,6 +20,7 @@ package jinahya.xml.kxml2.kdom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -48,23 +49,9 @@ public class ElementLocator {
         if ((element = document.getRootElement()) == null) {
             throw new IllegalArgumentException("no root element");
         }
+
+        qNameChildrenMap = new HashMap<String, Map<Element, Integer>>();
     }
-
-
-    /*
-     *
-     * @param namespace
-     * @param name
-     * @param index
-     * @return
-    public boolean hasChild(final String namespace, final String name,
-                            final int index) {
-
-        synchronized (childrenMap) {
-            return (getChildren(namespace, name).size() > index);
-        }
-    }
-     */
 
 
     /**
@@ -88,7 +75,7 @@ public class ElementLocator {
             throw new IllegalArgumentException("index(" + index + ") < 0");
         }
 
-        setElement(getChildren(namespace, name).get(index));
+        setElement(getChildrenArray(namespace, name)[index]);
     }
 
 
@@ -163,7 +150,7 @@ public class ElementLocator {
             throw new IllegalArgumentException("'name' is null");
         }
 
-        return getChildren(namespace, name).size();
+        return getChildrenMap(namespace, name).size();
     }
 
 
@@ -238,46 +225,58 @@ public class ElementLocator {
      *
      * @param element
      */
-    protected void setElement(final Element element) {
+    private void setElement(final Element element) {
+
         if (element == null) {
             throw new IllegalArgumentException("'element' is null");
         }
-        synchronized (childrenMap) {
-            childrenMap.clear();
-            this.element = element;
-        }
+
+        this.element = element;
+        qNameChildrenMap.clear();
     }
 
 
-    protected List<Element> getChildren(final String namespace,
-                                        final String name) {
+    private Element[] getChildrenArray(final String namespace,
+                                       final String name) {
+
+        final Map<Element, Integer> childrenMap =
+            getChildrenMap(namespace, name);
+
+        final Element[] childrenArray = new Element[childrenMap.size()];
+        childrenMap.keySet().toArray(childrenArray);
+        return childrenArray;
+    }
+
+
+    private Map<Element, Integer> getChildrenMap(final String namespace,
+                                                 final String name) {
 
         final String key = "{" + namespace + "}" + name;
-        synchronized (childrenMap) {
-            List<Element> children = childrenMap.get(key);
-            if (children == null) {
-                children = new ArrayList<Element>();
-                final int childCount = element.getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    if (Node.ELEMENT != element.getType(i)) {
-                        continue;
-                    }
-                    final Element child = element.getElement(i);
-                    if (!namespace.equals(child.getNamespace())
-                        || !name.equals(child.getName())) {
-                        continue;
-                    }
-                    children.add(child);
+
+        Map<Element, Integer> children = qNameChildrenMap.get(key);
+
+        if (children == null) {
+            children = new LinkedHashMap<Element, Integer>();
+            final int childCount = element.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                if (Node.ELEMENT != element.getType(i)) {
+                    continue;
                 }
-                childrenMap.put(key, children);
+                final Element child = element.getElement(i);
+                if (!namespace.equals(child.getNamespace())
+                    || !name.equals(child.getName())) {
+                    continue;
+                }
+                children.put(child, i);
             }
-            return children;
+            qNameChildrenMap.put(key, children);
         }
+
+        return children;
     }
 
 
     private Element element;
 
-    private final Map<String, List<Element>> childrenMap =
-        Collections.synchronizedMap(new HashMap<String, List<Element>>());
+    private Map<String, Map<Element, Integer>> qNameChildrenMap;
 }
