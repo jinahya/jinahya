@@ -29,6 +29,7 @@ import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 
@@ -37,6 +38,31 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class ElementLocator {
+
+
+    private static String key(final Element element) {
+        if (element == null) {
+            throw new IllegalArgumentException(
+                "param(0:" + Element.class + ") is null");
+        }
+
+        return key(element.getNamespace(), element.getName());
+    }
+
+
+    private static String key(final String namespace, final String name) {
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param(0:" + String.class + ") is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param(1:" + String.class + ") is null");
+        }
+
+        return "{" + namespace + "}" + name;
+    }
 
 
     /**
@@ -60,25 +86,78 @@ public class ElementLocator {
      * @param name
      * @param index
      */
-    public void locateChild(final String namespace, final String name,
-                            final int index) {
-
-        if (namespace == null) {
-            throw new IllegalArgumentException("'namespace' is null");
-        }
+    public ElementLocator locateChild(final String name, final int index) {
 
         if (name == null) {
-            throw new IllegalArgumentException("'name' is null");
+            throw new IllegalArgumentException(
+                "param(0:name:" + String.class + ") is null");
         }
 
         if (index < 0) {
-            throw new IllegalArgumentException("index(" + index + ") < 0");
+            throw new IllegalArgumentException(
+                "param(1:index(" + index + ")) < 0");
         }
 
-        setElement(getChildrenArray(namespace, name)[index]);
+        return locateChild(XmlPullParser.NO_NAMESPACE, name, index);
     }
 
 
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @param index
+     */
+    public ElementLocator locateChild(final String namespace, final String name,
+                                      final int index) {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param(0:namespace:" + String.class + ") is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param(1:name:" + String.class + ") is null");
+        }
+
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "param(2:index(" + index + ")) < 0");
+        }
+
+        setElement(getChildrenArray(namespace, name)[index]);
+
+        return this;
+    }
+
+
+    /**
+     * Identical to <code>addAndLocateChild(
+     * {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE},
+     * java.lang.String)</code>.
+     *
+     * @param name child element's name
+     * @return self whilc is located to the newly created child element.
+     * @see #addAndLocateChild(java.lang.String, java.lang.String)
+     */
+    public ElementLocator addAndLocateChild(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param(0:" + String.class + " is null");
+        }
+
+        return addAndLocateChild(XmlPullParser.NO_NAMESPACE, name);
+    }
+
+
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @return
+     */
     public ElementLocator addAndLocateChild(final String namespace,
                                             final String name) {
 
@@ -111,10 +190,12 @@ public class ElementLocator {
      *
      * @throws XmlPullParserException
      */
-    public void locateRoot() throws XmlPullParserException {
+    public ElementLocator locateRoot() throws XmlPullParserException {
         while (!atRoot()) {
             locateParent();
         }
+
+        return this;
     }
 
 
@@ -122,7 +203,7 @@ public class ElementLocator {
      *
      * @throws XmlPullParserException
      */
-    public void locateParent() throws XmlPullParserException {
+    public ElementLocator locateParent() throws XmlPullParserException {
 
         final Node parent = element.getParent();
 
@@ -130,7 +211,7 @@ public class ElementLocator {
             throw new XmlPullParserException("no parent element");
         }
 
-        setElement((Element) parent);
+        return setElement((Element) parent);
     }
 
 
@@ -151,6 +232,85 @@ public class ElementLocator {
         }
 
         return getChildrenMap(namespace, name).size();
+    }
+
+
+    /**
+     * Identical to <code>getChildText(XmlPullParser.NO_NAMESPACE, name)</code>.
+     *
+     * @param name child element name.
+     * @return specified child element's text.
+     * @throws XmlPullParserException if any error occurs.
+     * @see #getChildText(java.lang.String, java.lang.String, int)
+     */
+    public String getChildText(final String name, int index)
+        throws XmlPullParserException {
+
+        return getChildText(XmlPullParser.NO_NAMESPACE, name, index);
+    }
+
+
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @param index
+     * @return
+     * @throws XmlPullParserException
+     */
+    public String getChildText(final String namespace, final String name,
+                               final int index)
+        throws XmlPullParserException {
+
+        locateChild(namespace, name, index);
+        String text = getText();
+        locateParent();
+        return text;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public String getNamespace() {
+        return element.getNamespace();
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public String getName() {
+        return element.getName();
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @throws XmlPullParserException
+     */
+    public void require(final String namespace, final String name)
+        throws XmlPullParserException {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException("parameter(namespace) is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException("parameter(name) is null");
+        }
+
+        if (!namespace.equals(element.getNamespace())
+            || !name.equals(element.getName())) {
+
+            throw new XmlPullParserException(
+                "{" + element.getNamespace() + "}" + element.getName()
+                + " <> {" + namespace + "}" + name);
+        }
     }
 
 
@@ -194,18 +354,16 @@ public class ElementLocator {
      * @return
      */
     public String getText() {
-        String text = null;
+        final StringBuffer buffer = new StringBuffer();
 
         final int childCount = element.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (element.isText(i)) {
-                text = element.getText(i);
-                break;
+                buffer.append(element.getText(i));
             }
         }
 
-        setText(text);
-        return text;
+        return buffer.toString();
     }
 
 
@@ -225,7 +383,7 @@ public class ElementLocator {
      *
      * @param element
      */
-    private void setElement(final Element element) {
+    private ElementLocator setElement(final Element element) {
 
         if (element == null) {
             throw new IllegalArgumentException("'element' is null");
@@ -233,6 +391,8 @@ public class ElementLocator {
 
         this.element = element;
         qNameChildrenMap.clear();
+
+        return this;
     }
 
 
@@ -273,6 +433,34 @@ public class ElementLocator {
         }
 
         return children;
+    }
+
+
+    /**
+     * Removes current element and locate to the parent.
+     *
+     * @return
+     * @throws XmlPullParserException
+     */
+    public ElementLocator removeAndLocateParent()
+        throws XmlPullParserException {
+
+        if (atRoot()) {
+            throw new XmlPullParserException("root element can't be removed");
+        }
+
+        final Element toBeRemoved = element;
+        final String key = key(toBeRemoved);
+
+        locateParent();
+
+        final Map<Element, Integer> childrenMap =
+            getChildrenMap(toBeRemoved.getNamespace(), toBeRemoved.getName());
+
+        element.removeChild(childrenMap.get(toBeRemoved));
+        childrenMap.remove(toBeRemoved);
+
+        return this;
     }
 
 
