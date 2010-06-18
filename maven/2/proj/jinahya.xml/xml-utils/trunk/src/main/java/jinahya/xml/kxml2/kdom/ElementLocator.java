@@ -116,7 +116,18 @@ public class ElementLocator {
      */
     public boolean atRoot() {
         final Node parent = element.getParent();
-        return (parent == null || parent instanceof Document);
+        return !(parent instanceof Element);
+    }
+
+
+    /**
+     *
+     * @throws XmlPullParserException
+     */
+    public void locateRoot() throws XmlPullParserException {
+        while (!atRoot()) {
+            locateParent();
+        }
     }
 
 

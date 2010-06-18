@@ -71,9 +71,12 @@ public class ElementLocatorTest {
     public void removeAllChildrenFromTheRootElement()
         throws XmlPullParserException {
 
+        instance.locateRoot();
+        /*
         while (!instance.atRoot()) {
             instance.locateParent();
         }
+         */
     }
 
 
