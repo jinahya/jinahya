@@ -49,7 +49,7 @@ public class DependencyResolver<T> {
      *
      */
     public void reset() {
-        dependencies.clear();
+        dependencyMap.clear();
     }
 
 
@@ -79,7 +79,7 @@ public class DependencyResolver<T> {
                 "self dependency: " + source + ", " + target);
         }
 
-        synchronized (dependencies) {
+        synchronized (dependencyMap) {
 
             if (target != null) {
                 /*
@@ -101,10 +101,10 @@ public class DependencyResolver<T> {
                 }
             }
 
-            List<T> targetList = dependencies.get(source);
+            List<T> targetList = dependencyMap.get(source);
             if (targetList == null) {
                 targetList = new ArrayList<T>();
-                dependencies.put(source, targetList);
+                dependencyMap.put(source, targetList);
             }
             if (target != null) {
                 targetList.add(target);
@@ -113,8 +113,35 @@ public class DependencyResolver<T> {
     }
 
 
+    public List<T> getDependencies(final T source) {
+        final List<T> dependencies = new ArrayList<T>();
+        getDependencies(dependencies, source);
+        return dependencies;
+    }
+
+
+    private void getDependencies(final List<T> dependencies, final T source) {
+        synchronized (dependencyMap) {
+
+            final List<T> targets = dependencyMap.get(source);
+
+            if (targets == null) {
+                return;
+            }
+
+            for (T target : targets) {
+                getDependencies(dependencies, target);
+                if (!dependencies.contains(target)) {
+                    dependencies.add(target);
+                }
+            }
+        }
+    }
+
+
+    /*
     public List<T> getDependency(final T source, final T target) {
-        synchronized (dependencies) {
+        synchronized (dependencyMap) {
 
             final List<T> path = new ArrayList<T>();
             path.add(source);
@@ -124,16 +151,18 @@ public class DependencyResolver<T> {
             return null;
         }
     }
+     */
 
 
+    /*
     private boolean getDependency(final List<T> path, final T target) {
 
-        synchronized (dependencies) {
+        synchronized (dependencyMap) {
 
-            final List<T> targetList =
-                dependencies.get(path.get(path.size() - 1));
+            final List<T> targets =
+                dependencyMap.get(path.get(path.size() - 1));
 
-            if (targetList == null) {
+            if (targets == null) {
                 return false;
             }
 
@@ -141,12 +170,12 @@ public class DependencyResolver<T> {
                 return true;
             }
 
-            if (targetList.contains(target)) {
+            if (targets.contains(target)) {
                 path.add(target);
                 return true;
             }
 
-            for (T auxiliary : targetList) {
+            for (T auxiliary : targets) {
                 path.add(auxiliary);
                 if (getDependency(path, target)) {
                     return true;
@@ -156,6 +185,7 @@ public class DependencyResolver<T> {
             return false;
         }
     }
+     */
 
 
     /**
@@ -171,8 +201,8 @@ public class DependencyResolver<T> {
                 "param(0:source: " + clazz + ") is null");
         }
 
-        synchronized (dependencies) {
-            final List<T> targetList = dependencies.get(source);
+        synchronized (dependencyMap) {
+            final List<T> targetList = dependencyMap.get(source);
             if (targetList == null) {
                 return false;
             }
@@ -199,8 +229,8 @@ public class DependencyResolver<T> {
      * @return
      */
     public boolean removeDependency(final T source, final T target) {
-        synchronized (dependencies) {
-            final List<T> targetList = dependencies.get(source);
+        synchronized (dependencyMap) {
+            final List<T> targetList = dependencyMap.get(source);
             if (targetList == null) {
                 return false;
             }
@@ -212,7 +242,7 @@ public class DependencyResolver<T> {
             }
 
             if (result && targetList.isEmpty()) {
-                dependencies.remove(source);
+                dependencyMap.remove(source);
             }
 
             return result;
@@ -226,13 +256,13 @@ public class DependencyResolver<T> {
      * @param source
      */
     private void flatten(final List<T> flatten, final T source) {
-        synchronized (dependencies) {
+        synchronized (dependencyMap) {
             if (flatten.contains(source)) {
                 return;
             }
-            final List<T> targets = dependencies.get(source);
+            final List<T> targets = dependencyMap.get(source);
             if (targets != null) {
-                for (T target : dependencies.get(source)) {
+                for (T target : dependencyMap.get(source)) {
                     flatten(flatten, target);
                 }
             }
@@ -249,8 +279,8 @@ public class DependencyResolver<T> {
 
         final List<T> flatten = new ArrayList<T>();
 
-        synchronized (dependencies) {
-            for (T source : dependencies.keySet()) {
+        synchronized (dependencyMap) {
+            for (T source : dependencyMap.keySet()) {
                 flatten(flatten, source);
             }
             System.out.println(flatten);
@@ -300,8 +330,8 @@ public class DependencyResolver<T> {
 
     void print(final PrintStream out) {
         System.out.println("-------------------------------------------------");
-        synchronized (dependencies) {
-            for (Entry<T, List<T>> entry : dependencies.entrySet()) {
+        synchronized (dependencyMap) {
+            for (Entry<T, List<T>> entry : dependencyMap.entrySet()) {
                 out.println(entry.getKey() + " -> " + entry.getValue());
             }
         }
@@ -314,6 +344,6 @@ public class DependencyResolver<T> {
 
     private Class<T> clazz;
 
-    private final Map<T, List<T>> dependencies =
+    private final Map<T, List<T>> dependencyMap =
         synchronizedMap(new HashMap<T, List<T>>());
 }

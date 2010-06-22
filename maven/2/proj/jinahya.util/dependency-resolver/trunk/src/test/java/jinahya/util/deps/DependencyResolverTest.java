@@ -169,28 +169,30 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testGetDependencyForNonExistingSource() {
+    public void testGetDependenciesForNonExistingSource() {
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>(String.class);
 
-        final List<String> actual = resolver.getDependency("A", "B");
-        Assert.assertNull(actual);
+        final List<String> actual = resolver.getDependencies("A");
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(actual.size(), 0);
     }
 
 
     @Test
-    public void testGetDependencyForNullTarget()
-        throws DependencyResolverException {
+    public void testGetDependencies() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>(String.class);
 
         resolver.addDependency("A", null);
         resolver.addDependency("A", "B");
+        resolver.addDependency("B", "C");
 
-        final List<String> actual = resolver.getDependency("A", null);
+        final List<String> actual = resolver.getDependencies("A");
 
-        Assert.assertEquals(actual.size(), 1);
-        Assert.assertEquals(actual.get(0), "A");
+        Assert.assertEquals(actual.size(), 2);
+        Assert.assertEquals(actual.get(0), "C");
+        Assert.assertEquals(actual.get(1), "B");
     }
 }
