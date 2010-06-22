@@ -1,0 +1,28 @@
+-classpath
+'C:/Users/onacit/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/target/classes;C:/Users/onacit/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/target/test-classes;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar;C:/Users/onacit/.m2/repository/org/testng/testng/5.9/testng-5.9-jdk15.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'C:/Users/onacit/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/onacit/.hudson/jobs/jinahya.crypto cipher-wrapper/workspace/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.crypto:cipher-wrapper 1.0-SNAPSHOT Test API'
+-link
+'http://java.sun.com/j2se/1.3/docs/api'
+-link
+'../apidocs'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.crypto:cipher-wrapper 1.0-SNAPSHOT Test API'
