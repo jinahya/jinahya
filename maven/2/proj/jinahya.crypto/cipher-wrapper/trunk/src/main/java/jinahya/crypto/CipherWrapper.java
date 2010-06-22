@@ -55,25 +55,24 @@ public class CipherWrapper {
 
         if (cipher == null) {
             throw new IllegalArgumentException(
-                "param:0:cipher:" + Cipher.class + " is null");
+                "param:0:" + Cipher.class + " is null");
         }
 
         if (inputBufferSize <= 0) {
             throw new IllegalArgumentException(
-                "param:1:inputBufferSize:" + Integer.TYPE + "("
-                + inputBufferSize + ") <= 0");
+                "param:1:" + Integer.TYPE + "(" + inputBufferSize + ") <= 0");
         }
 
         if (initialOutputBufferSize <= 0) {
             throw new IllegalArgumentException(
-                "param:1:initialOutputBufferSize:" + Integer.TYPE + "("
-                + initialOutputBufferSize + ") <= 0");
+                "param:2:" + Integer.TYPE + "(" + initialOutputBufferSize
+                + ") <= 0");
         }
 
         if (outputBufferIncrementSize <= 0) {
             throw new IllegalArgumentException(
-                "param:1:outputBufferIncrementSize:" + Integer.TYPE + "("
-                + outputBufferIncrementSize + ") <= 0");
+                "param:3:" + Integer.TYPE + "(" + outputBufferIncrementSize
+                + ") <= 0");
         }
 
 
