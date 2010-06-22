@@ -75,13 +75,13 @@ public class ElementLocatorTest {
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
         final ElementLocator locator = new ElementLocator(document);
 
-        assertEquals(locator.getChildCount(NAMESPACE, NAME), 0);
+        assertEquals(locator.count(NAMESPACE, NAME), 0);
 
         final int expected = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
         for (int i = 0; i < expected; i++) {
-            locator.addAndLocateChild(NAMESPACE, NAME).locateParent();
+            locator.child(NAMESPACE, NAME).parent();
         }
-        assertEquals(locator.getChildCount(NAMESPACE, NAME), expected);
+        assertEquals(locator.count(NAMESPACE, NAME), expected);
     }
 
 
@@ -97,15 +97,15 @@ public class ElementLocatorTest {
 
         for (int i = 0; i < texts.length; i++) {
             texts[i] = Integer.toString(i);
-            locator.addAndLocateChild(NAMESPACE, NAME);
+            locator.child(NAMESPACE, NAME);
             locator.setText(texts[i]);
-            locator.locateParent();
+            locator.parent();
         }
 
         for (int i = 0; i < texts.length; i++) {
-            locator.locateChild(NAMESPACE, NAME, i);
+            locator.child(NAMESPACE, NAME, i);
             assertEquals(locator.getText(), texts[i]);
-            locator.locateParent();
+            locator.parent();
         }
     }
 
@@ -148,18 +148,18 @@ public class ElementLocatorTest {
         final int count = RANDOM.nextInt(MAXIMUM_CHILD_COUNT) + 1;
 
         for (int i = 0; i < count; i++) {
-            locator.addAndLocateChild(XmlPullParser.NO_NAMESPACE, "child");
-            locator.locateParent();
+            locator.child(XmlPullParser.NO_NAMESPACE, "child");
+            locator.parent();
         }
 
         //print(document);
 
         for (int i = 0; i < count; i++) {
             final int childCount =
-                locator.getChildCount(XmlPullParser.NO_NAMESPACE, "child");
-            locator.locateChild(
+                locator.count(XmlPullParser.NO_NAMESPACE, "child");
+            locator.child(
                 XmlPullParser.NO_NAMESPACE, "child", childCount - 1);
-            locator.removeAndLocateParent();
+            locator.remove();
         }
 
         //print(document);
