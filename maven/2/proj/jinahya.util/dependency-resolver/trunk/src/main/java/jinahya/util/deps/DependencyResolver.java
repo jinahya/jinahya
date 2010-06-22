@@ -113,12 +113,12 @@ public class DependencyResolver<T> {
     }
 
 
-    /*
-    private List<T> checkDependency(final T source, final T target) {
-        synchronized (dependencyMap) {
-            final LinkedList<T> path = new LinkedList<T>();
+    public List<T> getDependency(final T source, final T target) {
+        synchronized (dependencies) {
+
+            final List<T> path = new ArrayList<T>();
             path.add(source);
-            if (checkDependency(path, target)) {
+            if (getDependency(path, target)) {
                 return path;
             }
             return null;
@@ -126,12 +126,19 @@ public class DependencyResolver<T> {
     }
 
 
-    private boolean checkDependency(final LinkedList<T> path, final T target) {
+    private boolean getDependency(final List<T> path, final T target) {
 
-        synchronized (dependencyMap) {
-            final List<T> targetList = dependencyMap.get(path.getLast());
+        synchronized (dependencies) {
+
+            final List<T> targetList =
+                dependencies.get(path.get(path.size() - 1));
+
             if (targetList == null) {
                 return false;
+            }
+
+            if (target == null) {
+                return true;
             }
 
             if (targetList.contains(target)) {
@@ -141,7 +148,7 @@ public class DependencyResolver<T> {
 
             for (T auxiliary : targetList) {
                 path.add(auxiliary);
-                if (checkDependency(path, target)) {
+                if (getDependency(path, target)) {
                     return true;
                 }
             }
@@ -149,9 +156,14 @@ public class DependencyResolver<T> {
             return false;
         }
     }
+
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @return
      */
-
-
     public boolean hasDependency(final T source, final T target) {
 
         if (source == null) {
