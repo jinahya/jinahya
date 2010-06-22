@@ -53,6 +53,30 @@ public class CipherWrapper {
 
         super();
 
+        if (cipher == null) {
+            throw new IllegalArgumentException(
+                "param:0:cipher:" + Cipher.class + " is null");
+        }
+
+        if (inputBufferSize <= 0) {
+            throw new IllegalArgumentException(
+                "param:1:inputBufferSize:" + Integer.TYPE + "("
+                + inputBufferSize + ") <= 0");
+        }
+
+        if (initialOutputBufferSize <= 0) {
+            throw new IllegalArgumentException(
+                "param:1:initialOutputBufferSize:" + Integer.TYPE + "("
+                + initialOutputBufferSize + ") <= 0");
+        }
+
+        if (outputBufferIncrementSize <= 0) {
+            throw new IllegalArgumentException(
+                "param:1:outputBufferIncrementSize:" + Integer.TYPE + "("
+                + outputBufferIncrementSize + ") <= 0");
+        }
+
+
         this.cipher = cipher;
 
         this.inputBuffer = new byte[inputBufferSize];
