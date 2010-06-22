@@ -49,7 +49,7 @@ public class DependencyResolver<T> {
      *
      */
     public void reset() {
-        dependencyMap.clear();
+        dependencies.clear();
     }
 
 
@@ -75,14 +75,11 @@ public class DependencyResolver<T> {
          */
 
         if (source.equals(target)) {
-            if (!silentlyIgnoreSelfDependency) {
-                throw new DependencyResolverException(
-                    "self dependency: " + source + ", " + target);
-            }
-            return;
+            throw new DependencyResolverException(
+                "self dependency: " + source + ", " + target);
         }
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
             if (target != null) {
                 /*
@@ -90,12 +87,8 @@ public class DependencyResolver<T> {
                 if (forward != null) {
                  */
                 if (hasDependency(source, target)) {
-                    if (!silentlyIgnoreDuplicateDependency) {
-                        throw new DependencyResolverException(
-                            "duplicated dependency: " + source + " -> "
-                            + target);
-                    }
-                    return;
+                    throw new DependencyResolverException(
+                        "duplicated dependency: " + source + " -> " + target);
                 }
 
                 /*
@@ -103,18 +96,15 @@ public class DependencyResolver<T> {
                 if (backward != null) {
                  */
                 if (hasDependency(target, source)) {
-                    if (!silentlyIgnoreCyclicDependency) {
-                        throw new DependencyResolverException(
-                            "cyclic dependency: " + target + " -> " + source);
-                    }
-                    return;
+                    throw new DependencyResolverException(
+                        "cyclic dependency: " + target + " -> " + source);
                 }
             }
 
-            List<T> targetList = dependencyMap.get(source);
+            List<T> targetList = dependencies.get(source);
             if (targetList == null) {
                 targetList = new ArrayList<T>();
-                dependencyMap.put(source, targetList);
+                dependencies.put(source, targetList);
             }
             if (target != null) {
                 targetList.add(target);
@@ -169,8 +159,8 @@ public class DependencyResolver<T> {
                 "param(0:source: " + clazz + ") is null");
         }
 
-        synchronized (dependencyMap) {
-            final List<T> targetList = dependencyMap.get(source);
+        synchronized (dependencies) {
+            final List<T> targetList = dependencies.get(source);
             if (targetList == null) {
                 return false;
             }
@@ -197,8 +187,8 @@ public class DependencyResolver<T> {
      * @return
      */
     public boolean removeDependency(final T source, final T target) {
-        synchronized (dependencyMap) {
-            final List<T> targetList = dependencyMap.get(source);
+        synchronized (dependencies) {
+            final List<T> targetList = dependencies.get(source);
             if (targetList == null) {
                 return false;
             }
@@ -210,7 +200,7 @@ public class DependencyResolver<T> {
             }
 
             if (result && targetList.isEmpty()) {
-                dependencyMap.remove(source);
+                dependencies.remove(source);
             }
 
             return result;
@@ -220,78 +210,17 @@ public class DependencyResolver<T> {
 
     /**
      *
-     * @return
-     */
-    public boolean getSilentlyIgnoreSelfDependency() {
-        return silentlyIgnoreSelfDependency;
-    }
-
-
-    /**
-     *
-     * @param silentlyIgnoreSelfDependency
-     */
-    public void setSilentlyIgnoreSelfDependency(
-        final boolean silentlyIgnoreSelfDependency) {
-
-        this.silentlyIgnoreSelfDependency = silentlyIgnoreSelfDependency;
-    }
-
-
-    /**
-     *
-     * @return
-     */
-    public boolean getSilentlyIgnoreDuplicateDependency() {
-        return silentlyIgnoreDuplicateDependency;
-    }
-
-
-    /**
-     *
-     * @param silentlyIgnoreDuplicateDependency
-     */
-    public void setSilentlyIgnoreDuplicateDependency(
-        final boolean silentlyIgnoreDuplicateDependency) {
-
-        this.silentlyIgnoreDuplicateDependency =
-            silentlyIgnoreDuplicateDependency;
-    }
-
-
-    /**
-     *
-     * @return
-     */
-    public boolean getSilentlyIgnoreCyclicDependency() {
-        return silentlyIgnoreCyclicDependency;
-    }
-
-
-    /**
-     *
-     * @param silentlyIgnoreCyclicDependency
-     */
-    public void setSilentlyIgnoreCyclicDependency(
-        final boolean silentlyIgnoreCyclicDependency) {
-
-        this.silentlyIgnoreCyclicDependency = silentlyIgnoreCyclicDependency;
-    }
-
-
-    /**
-     *
      * @param flatten
      * @param source
      */
     private void flatten(final List<T> flatten, final T source) {
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
             if (flatten.contains(source)) {
                 return;
             }
-            final List<T> targets = dependencyMap.get(source);
+            final List<T> targets = dependencies.get(source);
             if (targets != null) {
-                for (T target : dependencyMap.get(source)) {
+                for (T target : dependencies.get(source)) {
                     flatten(flatten, target);
                 }
             }
@@ -308,8 +237,8 @@ public class DependencyResolver<T> {
 
         final List<T> flatten = new ArrayList<T>();
 
-        synchronized (dependencyMap) {
-            for (T source : dependencyMap.keySet()) {
+        synchronized (dependencies) {
+            for (T source : dependencies.keySet()) {
                 flatten(flatten, source);
             }
             System.out.println(flatten);
@@ -359,8 +288,8 @@ public class DependencyResolver<T> {
 
     void print(final PrintStream out) {
         System.out.println("-------------------------------------------------");
-        synchronized (dependencyMap) {
-            for (Entry<T, List<T>> entry : dependencyMap.entrySet()) {
+        synchronized (dependencies) {
+            for (Entry<T, List<T>> entry : dependencies.entrySet()) {
                 out.println(entry.getKey() + " -> " + entry.getValue());
             }
         }
@@ -373,10 +302,6 @@ public class DependencyResolver<T> {
 
     private Class<T> clazz;
 
-    private final Map<T, List<T>> dependencyMap =
+    private final Map<T, List<T>> dependencies =
         synchronizedMap(new HashMap<T, List<T>>());
-
-    private boolean silentlyIgnoreSelfDependency = false;
-    private boolean silentlyIgnoreDuplicateDependency = true;
-    private boolean silentlyIgnoreCyclicDependency = false;
 }

@@ -81,6 +81,8 @@ public class DependencyResolverTest {
 
         resolver.addDependency("H", "K");
 
+        resolver.addDependency("L", null);
+
         resolver.print(System.out);
     }
 
@@ -102,6 +104,7 @@ public class DependencyResolverTest {
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>(String.class);
 
+        resolver.addDependency("A", null);
         resolver.addDependency("A", null);
         Assert.assertEquals(resolver.hasDependency("A", null), true, null);
     }
