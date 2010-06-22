@@ -1,16 +1,11 @@
 # -------------------------------------------------------------------- java.lang
-
 java.lang.UnsupportedOperationException
 
-
 # --------------------------------------------------------------------- java.rmi
-
 java.rmi.Rmote
 java.rmi.RemoteException
 
-
 # ---------------------------------------------------------------- java.security
-
 java.security.Key
 java.security.PublicKey
 java.security.KeyFactory
@@ -24,18 +19,14 @@ java.security.KeyException
 java.security.NoSuchAlgorithmException
 java.security.SignatureException
 
-
 # ----------------------------------------------------------- java.security.spec
-
 java.security.spec.AlgorithmParameterSpec
 java.security.spec.KeySpec
 java.security.spec.EncodedKeySpec
 java.security.spec.X509EncodedKeySpec
 java.security.spec.InvalidKeySpecException
 
-
 # ----------------------------------------------------------- javacard.framework
-
 javacard.framework.APDUException
 javacard.framework.CardException
 javacard.framework.CardRuntimeException
@@ -45,46 +36,36 @@ javacard.framework.SystemException
 javacard.framework.TransactionException
 javacard.framework.UserException
 
-
 # --------------------------------------------------- javacard.framework.service
 javacard.framework.service.ServiceException
-
 
 # ------------------------------------------------------------ javacard.security
 javacard.security.CryptoException
 
-
 # ----------------------------------------------------------------- javax.crypto
-
 javax.crypto.Cipher
 javax.crypto.BadPaddingException
 javax.crypto.IllegalBlockSizeException
 javax.crypto.NoSuchPaddingException
 javax.crypto.ShortBufferException
 
+# ------------------------------------------------------------ javax.crypto.spec
+javax.crypto.spec.IvParameterSpec 
+javax.crypto.spec.SecretKeySpec
 
 # ------------------------------------------------------ javax.microedition.apdu
-
 javax.microedition.apdu.APDUConnection
 
-
 # ----------------------------------------------------- javax.microedition.jcrmi
-
 javax.microedition.jcrmi.JavaCardRMIConnection
 javax.microedition.jcrmi.RemoteRef
 javax.microedition.jcrmi.RemoteStub
 
-
-
 # ------------------------------------------------------- javax.microedition.pki
-
 javax.microedition.pki.UserCredentialManager
 javax.microedition.pki.UserCredentialManagerException
 
-
-
 # ------------------------------------------- javax.microedition.securityservice
-
 javax.microedition.securityservice.CMSMessageSignatureService
 javax.microedition.securityservice.CMSMessageSignatureServiceException
 

@@ -10,7 +10,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,11 +28,27 @@ import javax.tv.xlet.XletStateChangeException;
 public class App implements Xlet {
 
 
-    private static final Set<String> CLASS_NAME_SET = new HashSet<String>();
+    private static final Set<String> FOUND_CLASSNAMES = new HashSet<String>();
+
+    private static final Set<String> NOT_FOUND_CLASSNAMES =
+        new HashSet<String>();
 
 
-    private static void print(final String string) {
-        System.out.println("[REFLECT]" + string);
+    private static final String PREFIX = "";
+    //private static final String PREFIX = "[REFLECT]";
+
+
+
+    private static void print(final PrintStream out,
+                              final StringBuffer buffer) {
+
+        print(out, buffer.toString());
+        buffer.delete(0, buffer.length());
+    }
+
+
+    private static void print(final PrintStream out, final String string) {
+        out.println(PREFIX + string);
     }
 
     private static final StringBuffer BUFFER = new StringBuffer();
@@ -45,8 +63,17 @@ public class App implements Xlet {
 
     @Override
     public void startXlet() throws XletStateChangeException {
-        print("<?xml version=\"1.0\"?>");
-        print("<classes>");
+
+        PrintStream out = System.out;
+
+        try {
+            out = new PrintStream(new FileOutputStream("out.txt"));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        print(out, "<?xml version=\"1.0\"?>");
+        print(out, "<classes>");
         for (File file : new File("specs").listFiles(new FileFilter() {
             @Override
             public boolean accept(final File pathname) {
@@ -54,7 +81,7 @@ public class App implements Xlet {
             }
         })) {
             final String name = file.getName();
-            print("<spec name=\"" + name + "\">");
+            print(out, "<spec name=\"" + name + "\">");
 
             try {
                 final BufferedReader br =
@@ -71,14 +98,14 @@ public class App implements Xlet {
                         if (line.startsWith("#")) {
                             continue;
                         }
-                        if (reflect(line)) {
+                        if (reflect(out, line)) {
                             found++;
                         }
                         total++;
                     }
 
                     if (total > 0) {
-                        print("<result name=\"" + name + "\" total=\"" + total + "\" found=\"" + found + "\" compatibility=\"" + ((float) found / (float) total) + "\"/>");
+                        print(out, "<result name=\"" + name + "\" total=\"" + total + "\" found=\"" + found + "\" compatibility=\"" + ((float) found / (float) total) + "\"/>");
                     }
 
                 } finally {
@@ -87,9 +114,12 @@ public class App implements Xlet {
             } catch (IOException ioe) {
                 //ioe.printStackTrace();
             }
-            print("</spec>");
+            print(out, "</spec>");
         }
-        print("</classes>");
+        print(out, "</classes>");
+
+
+        out.flush();
     }
 
 
@@ -105,16 +135,21 @@ public class App implements Xlet {
     }
 
 
-    private boolean reflect(final String className) {
-        BUFFER.delete(0, BUFFER.length());
+    private boolean reflect(final PrintStream out, final String className) {
+
+        if (FOUND_CLASSNAMES.contains(className)) {
+            return true;
+        }
+
+        if (NOT_FOUND_CLASSNAMES.contains(className)) {
+            return false;
+        }
+
 
         try {
             final Class c = Class.forName(className);
 
-            if (CLASS_NAME_SET.contains(className)) {
-                return true;
-            }
-            CLASS_NAME_SET.add(className);
+            FOUND_CLASSNAMES.add(className);
 
             BUFFER.append("<class");
             BUFFER.append(" modifiers=\"" + Modifier.toString(c.getModifiers()) + "\"");
@@ -144,12 +179,10 @@ public class App implements Xlet {
 
             BUFFER.append(">");
 
-            print(BUFFER.toString());
+            print(out, BUFFER);
 
-            /*
             //for (Constructor constructor : c.getConstructors()) {
             for (Constructor constructor : c.getDeclaredConstructors()) {
-                BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<constructor");
 
                 BUFFER.append(" modifiers=\"" + Modifier.toString(constructor.getModifiers()) + "\"");
@@ -179,15 +212,12 @@ public class App implements Xlet {
                 }
 
                 BUFFER.append("/>");
-                print(BUFFER.toString());
+                print(out, BUFFER);
             }
-             */
 
 
-            /*
             //for (Method method : c.getMethods()) {
             for (Method method : c.getDeclaredMethods()) {
-                BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<method");
 
                 BUFFER.append(" modifiers=\"" + Modifier.toString(method.getModifiers()) + "\"");
@@ -224,15 +254,12 @@ public class App implements Xlet {
                 checkBoolean(Method.class, method, "isVarArgs");
 
                 BUFFER.append("/>");
-                print(BUFFER.toString());
+                print(out, BUFFER);
             }
-             */
 
 
-            /*
             //for (Field field : c.getFields()) {
             for (Field field : c.getDeclaredFields()) {
-                BUFFER.delete(0, BUFFER.length());
                 BUFFER.append("<field");
                 BUFFER.append(" modifiers=\"" + Modifier.toString(field.getModifiers()) + "\"");
                 BUFFER.append(" type=\"" + field.getType().getName() + "\"");
@@ -246,24 +273,20 @@ public class App implements Xlet {
                 checkBoolean(Field.class, field, "isSynthetic");
 
                 BUFFER.append("/>");
-                print(BUFFER.toString());
+                print(out, BUFFER);
             }
-             */
 
-            print("</class>");
+            print(out, "</class>");
 
             return true;
         } catch (ClassNotFoundException cnfe) {
 
-            if (CLASS_NAME_SET.contains(className)) {
-                return false;
-            }
-            CLASS_NAME_SET.add(className);
+            NOT_FOUND_CLASSNAMES.add(className);
 
-            print("<class name=\"" + className + "\" found=\"false\"/>");
+            print(out, "<class name=\"" + className + "\" found=\"false\"/>");
+
+            return false;
         }
-
-        return false;
     }
 
 
