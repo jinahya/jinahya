@@ -168,7 +168,8 @@
   </reporting>
 
   <!-- More Project Information -->
-  <name>${project.groupId}:${project.artifactId}:${project.version}</name>
+  <!--name>${project.groupId}:${project.artifactId}:${project.version}</name-->
+  <name>${project.groupId}:${project.artifactId}</name>
   <description/>
   <url>http://maven.apache.org</url>
   <inceptionYear>2010</inceptionYear>

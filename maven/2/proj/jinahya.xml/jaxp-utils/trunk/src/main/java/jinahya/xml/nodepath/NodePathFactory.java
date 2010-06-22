@@ -42,33 +42,6 @@ public class NodePathFactory {
 
 
     /**
-     * .
-     */
-    private static NodePathFactory defaultInstance;
-
-
-    /**
-     * .
-     * @return the default instance.
-     */
-    public static final synchronized NodePathFactory getDefaultInstance() {
-        if (defaultInstance == null) {
-            defaultInstance = new NodePathFactory(null, null) {
-                @Override
-                public final void setDocumentBuilder(final DocumentBuilder db) {
-                    // do nothing
-                }
-                @Override
-                public final void setXPath(final XPath xp) {
-                    // do nothing
-                }
-            };
-        }
-        return defaultInstance;
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @return a new instance
@@ -135,7 +108,7 @@ public class NodePathFactory {
      * @throws IOException
      * @see javax.xml.parsers.DocumentBuilder#parse(java.io.File)
      */
-    public final DocumentPath parseRootPath(final File source)
+    public final NodePath<Document> parseRootPath(final File source)
         throws ParserConfigurationException, SAXException, IOException {
 
         return new DocumentPath(getDocumentBuilder().parse(source), getXPath());
@@ -153,7 +126,7 @@ public class NodePathFactory {
      * @throws IOException
      * @see javax.xml.parsers.DocumentBuilder#parse(org.xml.sax.InputSource)
      */
-    public final DocumentPath parseRootPath(final InputSource source)
+    public final NodePath<Document> parseRootPath(final InputSource source)
         throws ParserConfigurationException, SAXException, IOException {
 
         return new DocumentPath(getDocumentBuilder().parse(source), getXPath());
