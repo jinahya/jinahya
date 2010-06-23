@@ -17,14 +17,18 @@
 package jinahya.xml.kxml2.kdom;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
+import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
@@ -38,6 +42,93 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class ElementLocator {
+
+
+    /**
+     *
+     * @param url
+     * @return
+     */
+    public ElementLocator newInstance(final File file)
+        throws XmlPullParserException, IOException {
+
+        final InputStream in = new FileInputStream(file);
+        try {
+            return newInstance(in, null);
+        } finally {
+            in.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param url
+     * @return
+     */
+    public ElementLocator newInstance(final URL url)
+        throws XmlPullParserException, IOException {
+
+        if (url == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + URL.class + " is null");
+        }
+        return newInstance(url.openStream(), null);
+    }
+
+    /**
+     *
+     * @param in
+     * @param enc
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    public ElementLocator newInstance(final InputStream in, final String enc)
+        throws XmlPullParserException, IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + InputStream.class + " is null");
+        }
+
+        if (enc != null) {
+            return newInstance(new InputStreamReader(in, enc));
+        }
+
+        final XmlPullParser parser = new KXmlParser();
+        parser.setInput(in, enc);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        return new ElementLocator(document);
+    }
+
+
+    /**
+     *
+     * @param in
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    public ElementLocator newInstance(final Reader in)
+        throws XmlPullParserException, IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Reader.class + " is null");
+        }
+
+        final XmlPullParser parser = new KXmlParser();
+        parser.setInput(in);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        return new ElementLocator(document);
+    }
 
 
     private static String key(final Element element) {
@@ -396,6 +487,7 @@ public class ElementLocator {
     }
 
 
+    /*
     private Element[] getChildrenArray(final String namespace,
                                        final String name) {
 
@@ -406,6 +498,7 @@ public class ElementLocator {
         childrenMap.keySet().toArray(childrenArray);
         return childrenArray;
     }
+     */
 
 
     private Map<Element, Integer> getChildrenMap(final String namespace,

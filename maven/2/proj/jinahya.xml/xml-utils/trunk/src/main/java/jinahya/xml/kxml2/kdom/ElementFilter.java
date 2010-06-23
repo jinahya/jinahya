@@ -55,7 +55,6 @@ public abstract class ElementFilter {
      */
     private void filter(final Element element) throws XmlPullParserException {
 
-
         if (element == null) {
             throw new IllegalArgumentException("parameter(element) is null");
         }
