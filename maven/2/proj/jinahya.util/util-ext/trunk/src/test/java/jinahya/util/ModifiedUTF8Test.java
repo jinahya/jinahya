@@ -52,6 +52,6 @@ public class ModifiedUTF8Test {
         final PrintStream out = new PrintStream(System.out, true, "UTF-8");
         final Random random = new Random();
         out.println("GENERATED: " + ModifiedUTF8.generate(
-            random.nextInt(80) + 1, random, NON_ISO_CONTROL));
+            random.nextInt(76) + 1, random, NON_ISO_CONTROL));
     }
 }
