@@ -1,0 +1,26 @@
+-classpath
+'C:/Users/onacit/.hudson/jobs/jinahya.util util-ext/workspace/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'C:/Users/onacit/.hudson/jobs/jinahya.util util-ext/workspace/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/onacit/.hudson/jobs/jinahya.util util-ext/workspace/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.util:util-ext 1.0-SNAPSHOT API'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.util:util-ext 1.0-SNAPSHOT API'

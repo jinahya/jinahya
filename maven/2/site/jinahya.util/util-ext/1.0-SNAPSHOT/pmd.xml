@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2010-06-24T13:21:38.891">
+<file name="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\ModifiedUTF8.java">
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.ByteArrayOutputStream'
+</violation>
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="31" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.CharArrayWriter'
+</violation>
+<violation beginline="22" endline="22" begincolumn="1" endcolumn="28" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.EOFException'
+</violation>
+<violation beginline="27" endline="27" begincolumn="1" endcolumn="28" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.util" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.StringWriter'
+</violation>
+</file>
+</pmd>
