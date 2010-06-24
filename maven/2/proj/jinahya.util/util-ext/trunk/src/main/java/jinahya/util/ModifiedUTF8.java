@@ -17,13 +17,13 @@
 package jinahya.util;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.CharArrayWriter;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.io.UTFDataFormatException;
@@ -170,6 +170,40 @@ public final class ModifiedUTF8 {
     /**
      *
      * @param in
+     * @return
+     * @throws IOException
+     */
+    public static byte[] encode(final Reader in) throws IOException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            encode(in, out);
+            out.flush();
+            return out.toByteArray();
+        } finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static byte[] encode(final String string) throws IOException {
+        final Reader in = new StringReader(string);
+        try {
+            return encode(in);
+        } finally {
+            in.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param in
      * @param out
      * @throws IOException
      */
@@ -190,8 +224,47 @@ public final class ModifiedUTF8 {
         }
     }
 
+    /**
+     *
+     * @param bytes
+     * @return
+     * @throws IOException
+     */
+    public static String decode(final byte[] bytes) throws IOException {
+        final InputStream in = new ByteArrayInputStream(bytes);
+        try {
+            return decode(in);
+        } finally {
+           in.close();
+        }
+    }
 
-    public static void decode(final InputStream in, final OutputStream out)
+
+    /**
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static String decode(final InputStream in) throws IOException {
+        final Writer out = new StringWriter();
+        try {
+            decode(in, out);
+            out.flush();
+            return out.toString();
+        } finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void decode(final InputStream in, final Writer out)
         throws IOException {
 
         for (int a = -1; (a = in.read()) != -1;) {
