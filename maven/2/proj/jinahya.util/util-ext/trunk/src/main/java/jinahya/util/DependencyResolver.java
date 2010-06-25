@@ -1,12 +1,12 @@
 /*
- *  Copyright 2010 onacit.
- * 
+ *  Copyright 2010 Jin Kwon.
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -46,6 +45,15 @@ public class DependencyResolver<T> {
     /**
      *
      * @param source
+     */
+    public void addSource(final T source) {
+        addDependency(source, null);
+    }
+
+
+    /**
+     *
+     * @param source
      * @param target
      * @throws DependencyResolverException
      */
@@ -59,7 +67,6 @@ public class DependencyResolver<T> {
             throw new IllegalArgumentException("param:0 equals to param:1");
         }
 
-
         synchronized (dependencyMap) {
 
             List<T> targets = dependencyMap.get(source);
@@ -71,6 +78,58 @@ public class DependencyResolver<T> {
             if (target != null && !targets.contains(target)) {
                 targets.add(target);
             }
+        }
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public List<List<T>> getDependencyGroups(final T source, final T target) {
+
+        if (source == null) {
+            throw new IllegalArgumentException("param:0 is null");
+        }
+
+        if (source.equals(target)) {
+            throw new IllegalArgumentException("param:0 equals to param:1");
+        }
+
+
+
+        synchronized (dependencyMap){
+
+            if (!dependencyMap.containsKey(source)) {
+                return Collections.EMPTY_LIST;
+            }
+
+            final List<List<T>> groups = new ArrayList<List<T>>();
+
+            if (target == null) {
+                final List<T> group = new ArrayList<T>();
+                groups.add(group);
+                group.add(source);
+                return groups;
+            }
+
+            final List<T> targets = dependencyMap.get(source);
+
+            for (T auxiliary : targets) {
+                if (auxiliary.equals(target)) {
+                    final List<T> group = new ArrayList<T>();
+                    groups.add(group);
+                    group.add(source);
+                    group.add(auxiliary);
+                    continue;
+                }
+                for (List<T> group : getDependencyGroups(auxiliary, target)) {
+                    groups.add(group);
+                    group.add(0, source);
+                }
+            }
+
+            return groups;
         }
     }
 
@@ -192,11 +251,22 @@ public class DependencyResolver<T> {
     }
 
 
-    /*
+    /**
+     * 
+     * @param source
+     * @return
+     */
+    public boolean removeSource(final T source) {
+        return removeDependency(source, null);
+    }
+
+
+    /**
      *
      * @param source
      * @param target
      * @return
+     */
     public boolean removeDependency(final T source, final T target) {
         synchronized (dependencyMap) {
 
@@ -218,7 +288,6 @@ public class DependencyResolver<T> {
             return result;
         }
     }
-     */
 
 
     /**
@@ -268,46 +337,46 @@ public class DependencyResolver<T> {
      *
      * @param maximum
      */
-    public List<List<T>> getFlattens(final int maximum) {
+    public List<List<T>> getHorizontalGroups(final int maximum) {
 
         if (maximum <= 0) {
             throw new IllegalArgumentException(
-                "param:0:" + Integer.TYPE + " is null");
+                "param:0:" + Integer.TYPE + "(" + maximum + ") <= 0");
         }
 
         final List<T> remains = getFlatten();
 
-        final List<List<T>> flattens = new ArrayList<List<T>>();
+        final List<List<T>> groups = new ArrayList<List<T>>();
 
         while (!remains.isEmpty()) {
 
-            if (flattens.size() == maximum - 1) {
+            if (groups.size() == (maximum - 1)) {
                 break;
             }
 
-            final List<T> flatten = new ArrayList<T>();
+            final List<T> group = new ArrayList<T>();
 
-            flattens.add(flatten);
-            flatten.add(remains.remove(0));
+            groups.add(group);
+            group.add(remains.remove(0));
 
             for (int i = 0; i < remains.size(); i++) {
 
-                for (T p : flatten) {
+                for (T p : group) {
                     if (hasDependency(remains.get(i), p)) {
-                        flatten.add(remains.get(i));
+                        group.add(remains.get(i));
                         break;
                     }
                 }
 
-                if (!flatten.contains(remains.get(i))) {
+                if (!group.contains(remains.get(i))) {
                     outer:
                     for (int j = i + 1; j < remains.size(); j++) {
                         if (!hasDependency(remains.get(j), remains.get(i))) {
                             continue;
                         }
-                        for (T p : flatten) {
+                        for (T p : group) {
                             if (hasDependency(remains.get(j), p)) {
-                                flatten.add(remains.get(i));
+                                group.add(remains.get(i));
                                 break outer;
                             }
                         }
@@ -315,14 +384,60 @@ public class DependencyResolver<T> {
                 }
             }
 
-            remains.removeAll(flatten);
+            remains.removeAll(group);
         }
 
         if (!remains.isEmpty()) {
-            flattens.add(remains);
+            groups.add(remains);
         }
 
-        return flattens;
+        return groups;
+    }
+
+
+    /**
+     *
+     * @param maximum
+     */
+    public List<List<T>> getVerticalGroups(final int maximum) {
+
+        if (maximum <= 0) {
+            throw new IllegalArgumentException(
+                "param:0:" + Integer.TYPE + "(" + maximum + ") <= 0");
+        }
+
+        final List<T> remains = getFlatten();
+
+        final List<List<T>> groups = new ArrayList<List<T>>();
+
+        while (!remains.isEmpty()) {
+
+            if (groups.size() == (maximum - 1)) {
+                break;
+            }
+
+            final List<T> group = new ArrayList<T>();
+
+            groups.add(group);
+
+            outer:
+            for (int i = 0; i < remains.size(); i++) {
+                for (int j = 0; j < i; j++) {
+                    if (hasDependency(remains.get(i), remains.get(j))) {
+                        continue outer;
+                    }
+                }
+                group.add(remains.get(i));
+            }
+
+            remains.removeAll(group);
+        }
+
+        if (!remains.isEmpty()) {
+            groups.add(remains);
+        }
+
+        return groups;
     }
 
 
@@ -369,18 +484,25 @@ public class DependencyResolver<T> {
 
 
     void print(final PrintStream out) {
+
         System.out.println("DEPENDENCIES ------------------------------------");
         synchronized (dependencyMap) {
             for (Entry<T, List<T>> entry : dependencyMap.entrySet()) {
                 out.println("\t" + entry.getKey() + " -> " + entry.getValue());
             }
         }
-        System.out.println("-------------------------------------------------");
-        getFlatten();
-        System.out.println("-------------------------------------------------");
 
-        System.out.println("FLATTEN: " + getFlatten());
-        System.out.println("GROUPS ------------------------------------------");
+        System.out.println("FLATTEN -----------------------------------------");
+        System.out.println("\t" + getFlatten());
+
+        System.out.println("HRIZONTAL ---------------------------------------");
+        for (List<T> group: getHorizontalGroups(Integer.MAX_VALUE)) {
+            System.out.println("\t" + group);
+        }
+        System.out.println("VERTICAL ----------------------------------------");
+        for (List<T> group: getVerticalGroups(Integer.MAX_VALUE)) {
+            System.out.println("\t" + group);
+        }
     }
 
 

@@ -40,6 +40,7 @@ public class DependencyResolverTest {
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "B");
+
         resolver.print(System.out);
     }
 
@@ -84,11 +85,114 @@ public class DependencyResolverTest {
         resolver.addDependency("T", "P");
         resolver.addDependency("U", "Q");
 
+        resolver.print(System.out);
+        /*
         for (int i = 1; i < 10; i++) {
             System.out.println("---------------------------------------- " + i);
-            for (List<String> flatten : resolver.getFlattens(i)) {
+            for (List<String> flatten : resolver.getHorizontalGroups(i)) {
                 System.out.println(flatten);
             }
+        }
+         */
+    }
+
+
+    @Test
+    public void removeDependency() {
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        final String source = "A";
+        final String target = "B";
+
+        resolver.addDependency(source, target);
+
+        Assert.assertEquals(
+            resolver.removeDependency(source, target), true, null);
+
+        Assert.assertEquals(
+            resolver.removeDependency(source, target), false, null);
+    }
+
+
+    @Test
+    public void removeDependencyWithNullTarget() {
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        final String source = "A";
+        final String target = null;
+
+        resolver.addDependency(source, target);
+
+        Assert.assertEquals(
+            resolver.removeDependency(source, target), true, null);
+
+        Assert.assertEquals(
+            resolver.removeDependency(source, target), false, null);
+    }
+
+
+    @Test
+    public void testDependencyGroups() {
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        final String source = "A";
+        final String target = null;
+
+        resolver.addDependency("A", "B");
+        resolver.addDependency("A", "C");
+        resolver.addDependency("A", "D");
+
+        resolver.addDependency("B", "D");
+
+        resolver.addDependency("C", "D");
+        resolver.addDependency("C", "E");
+        resolver.addDependency("C", "I");
+
+        resolver.addDependency("E", "F");
+        resolver.addDependency("I", "F");
+
+        for (List<String> group : resolver.getDependencyGroups("A", "F")) {
+            System.out.println("\tDEPENDENCY(A->F)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("A", "D")) {
+            System.out.println("\tDEPENDENCY(A->D)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("A", "E")) {
+            System.out.println("\tDEPENDENCY(A->E)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("A", "F")) {
+            System.out.println("\tDEPENDENCY(A->F)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("A", "G")) {
+            System.out.println("\tDEPENDENCY(A->G)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("I", "F")) {
+            System.out.println("\tDEPENDENCY(I->F)" + group);
+        }
+    }
+
+
+    @Test
+    public void testDependencyGroupsWithNullTarget() {
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        resolver.addDependency("A", null);
+
+        for (List<String> group : resolver.getDependencyGroups("A", null)) {
+            System.out.println("\tDEPENDENCY(A->null)" + group);
+        }
+
+        for (List<String> group : resolver.getDependencyGroups("B", null)) {
+            System.out.println("\tDEPENDENCY(B->null)" + group);
         }
     }
 }
