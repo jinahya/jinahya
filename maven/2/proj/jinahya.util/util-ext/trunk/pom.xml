@@ -112,6 +112,7 @@
             <configuration>
               <source>1.6</source>
               <target>jsr14</target>
+              <showWarnings>true</showWarnings>
             </configuration>
           </execution>
           <execution>
