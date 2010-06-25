@@ -45,15 +45,6 @@ public class DependencyResolver<T> {
     /**
      *
      * @param source
-     */
-    public void addSource(final T source) {
-        addDependency(source, null);
-    }
-
-
-    /**
-     *
-     * @param source
      * @param target
      * @throws DependencyResolverException
      */
@@ -248,16 +239,6 @@ public class DependencyResolver<T> {
 
             return false;
         }
-    }
-
-
-    /**
-     * 
-     * @param source
-     * @return
-     */
-    public boolean removeSource(final T source) {
-        return removeDependency(source, null);
     }
 
 

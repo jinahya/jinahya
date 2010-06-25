@@ -25,13 +25,26 @@ public abstract class Processor<T> {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param id
+     * @param id processor id.
+     * @param prerequisites the prerequisite processors' id array or null.
      */
-    public Processor(final String id) {
+    public Processor(final String id, final String[] prerequisites) {
         super();
 
+        if (id == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + " is null");
+        }
+
+        if (prerequisites == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String[].class + " is null");
+        }
+
         this.id = id;
+        this.prerequisites = prerequisites;
     }
 
 
@@ -46,6 +59,15 @@ public abstract class Processor<T> {
 
     /**
      *
+     * @return
+     */
+    public final String[] getPrerequisites() {
+        return prerequisites;
+    }
+
+
+    /**
+     *
      * @param unit
      * @throws ProcessorException
      */
@@ -53,4 +75,5 @@ public abstract class Processor<T> {
 
 
     private String id;
+    private String[] prerequisites;
 }

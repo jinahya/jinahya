@@ -25,7 +25,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import jinahya.util.DependencyResolver;
 
 
 /**
@@ -35,24 +38,29 @@ import java.util.Set;
 public class ProcessorChain<T> {
 
 
-    /**
-     * Creates a new instnace.
-     *
-     * @param spec the processor spec or null for no spec.
-     */
-    public ProcessorChain(final ProcessorChainSpec spec) {
-        super();
-
-        this.spec = spec;
-    }
-
 
     /**
      *
-     * @throws ProcessorChainException
+     * @param unit
+     * @throws ProcessorException
      */
-    public void invoke() throws ProcessorException {
+    public void invoke(final T unit) throws ProcessorException {
         synchronized (processorMap) {
+
+            for (Processor<T> processor : processorMap.values()) {
+                for (String prerequisite : processor.getPrerequisites()) {
+                    if (!processorMap.containsKey(prerequisite)) {
+                        throw new ProcessorException(
+                            "a processor(" + prerequisite
+                            + ") prerequsite to the processor("
+                            + processor.getId() + " is missing");
+                    }
+                }
+            }
+
+            for (String processorId : resolver.getFlatten()) {
+                processorMap.get(processorId).process(unit);
+            }
         }
     }
 
@@ -63,20 +71,25 @@ public class ProcessorChain<T> {
      * @return
      * @throws ProcessorException
      */
-    public Processor<T> addProcessor(final Processor<T> processor)
-        throws ProcessorException {
+    public final Processor<T> add(final Processor<T> processor) {
 
         if (processor == null) {
             throw new IllegalArgumentException(
                 "param:0:" + Processor.class + " is null");
         }
 
-        if (spec != null && !spec.isAllowed(processor.getId())) {
-            throw new ProcessorException(processor + " is not allowed by spec");
-        }
+        synchronized (processorMap) {
 
-        synchronized (processorMap) { // Do I really have to do this?
-            return processorMap.put(processor.getId(), processor);
+            final Processor<T> removed = remove(processor.getId());
+
+            resolver.addDependency(processor.getId(), null);
+            for (String prerequisite: processor.getPrerequisites()) {
+                resolver.addDependency(processor.getId(), prerequisite);
+            }
+
+            processorMap.put(processor.getId(), processor);
+
+            return removed;
         }
     }
 
@@ -84,9 +97,22 @@ public class ProcessorChain<T> {
     /**
      *
      */
-    public Processor<T> removeProcessor(final String processorId) {
-        synchronized (processorMap) { // Do I really have to do this?
-            return processorMap.remove(processorId);
+    public final Processor<T> remove(final String processorId) {
+
+        if (processorId == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + " is null");
+        }
+
+        synchronized (processorMap) {
+            final Processor removed =  processorMap.remove(processorId);
+            if (removed != null) {
+                for (String prerequisite : removed.getPrerequisites()) {
+                    resolver.removeDependency(removed.getId(), prerequisite);
+                }
+                resolver.removeDependency(removed.getId(), null);
+            }
+            return removed;
         }
     }
 
@@ -95,7 +121,7 @@ public class ProcessorChain<T> {
      *
      * @return
      */
-    public String[] getProcessorIds() {
+    public final String[] getProcessorIds() {
         synchronized (processorMap) {
             return processorMap.keySet().toArray(
                 new String[processorMap.size()]);
@@ -103,8 +129,30 @@ public class ProcessorChain<T> {
     }
 
 
-    private ProcessorChainSpec spec;
+
+    public final void clear() {
+        synchronized (processorMap) {
+            processorMap.clear();
+            resolver.reset();
+        }
+    }
+
+
+    public final boolean hasProcessor(final String processorId) {
+        if (processorId == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + " is null");
+        }
+
+        synchronized (processorMap) {
+            return processorMap.containsKey(processorId);
+        }
+    }
+
 
     private final Map<String, Processor<T>> processorMap =
         Collections.synchronizedMap(new HashMap<String, Processor<T>>());
+
+    private final DependencyResolver<String> resolver =
+        new DependencyResolver<String>();
 }
