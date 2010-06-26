@@ -307,16 +307,22 @@ public class KeyValueSupport {
 
         if (cls == null) {
             throw new IllegalArgumentException(
-                "param:0:" + Class.class + " is null");
+                "param:0:" + Class.class + ": is null");
         }
 
         if (key == null) {
             throw new IllegalArgumentException(
-                "param:1:" + String.class + " is null");
+                "param:1:" + String.class + ": is null");
         }
 
         if (val == null) {
             throw new IllegalArgumentException("param:2::" + val + " is null");
+        }
+
+        if (!cls.isInstance(val)) {
+            throw new IllegalArgumentException(
+                "param:2:" + val.getClass() + ":" + val
+                + " is not an instance of param:0:" + Class.class + ":" + cls);
         }
 
         synchronized (classified) {

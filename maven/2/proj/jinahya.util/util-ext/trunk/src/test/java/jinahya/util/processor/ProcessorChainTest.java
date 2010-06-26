@@ -18,6 +18,12 @@
 package jinahya.util.processor;
 
 
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+
+import jinahya.util.logging.VerySimpleFormatter;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -27,6 +33,21 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class ProcessorChainTest {
+
+
+    private static final Logger LOGGER =
+        //        Logger.getLogger("jinahya.util.processor");
+        Logger.getLogger(ProcessorChainTest.class.getPackage().getName());
+
+
+    static {
+        for (Handler handler : LOGGER.getHandlers()) {
+            if (handler instanceof ConsoleHandler) {
+                handler.setFormatter(new VerySimpleFormatter());
+                break;
+            }
+        }
+    }
 
 
     /**
@@ -139,4 +160,11 @@ public class ProcessorChainTest {
 
         chain.invoke("unit");
     }
+
+
+    @Test
+    public void testClear() {
+        LOGGER.info("LOGGING...................");
+    }
 }
+

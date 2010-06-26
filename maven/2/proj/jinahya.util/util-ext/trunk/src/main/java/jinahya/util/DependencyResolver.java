@@ -20,11 +20,14 @@ package jinahya.util;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Hashtable;
+//import java.util.LinkedList;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Map.Entry;
+import java.util.Vector;
 
 
 /**
@@ -34,12 +37,23 @@ import java.util.Map.Entry;
 public class DependencyResolver<T> {
 
 
+
+    /**
+     *
+     * @param type
+     */
+    public DependencyResolver(final Class<T> type) {
+        this(type, new Hashtable<T, Vector<T>>());
+    }
+
+
     /**
      * Creates a new instance.
      *
      * @param type processing unit type
      */
-    public DependencyResolver(final Class<T> type) {
+    public DependencyResolver(final Class<T> type,
+                              final Hashtable<T, Vector<T>> dependencies) {
         super();
 
         if (type == null) {
@@ -47,9 +61,15 @@ public class DependencyResolver<T> {
                 "param:0:" + Class.class + ": is null");
         }
 
+        if (dependencies == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + Hashtable.class + ": is null");
+        }
+
+
         this.type = type;
 
-        dependencies = Collections.synchronizedMap(new HashMap<T, List<T>>());
+        this.dependencies = dependencies;
     }
 
 
@@ -57,7 +77,9 @@ public class DependencyResolver<T> {
      *
      */
     public void reset() {
-        dependencies.clear();
+        synchronized (dependencies) {
+            dependencies.clear();
+        }
     }
 
 
@@ -105,9 +127,9 @@ public class DependencyResolver<T> {
 
         synchronized (dependencies) {
 
-            List<T> targets = dependencies.get(source);
+            Vector<T> targets = dependencies.get(source);
             if (targets == null) {
-                targets = new LinkedList<T>();
+                targets = new Vector<T>();
                 dependencies.put(source, targets);
             }
 
@@ -122,38 +144,39 @@ public class DependencyResolver<T> {
      *
      * @return
      */
-    public List<List<T>> getDependencyGroups(final T source, final T target) {
+    public Vector<Vector<T>> getDependencyGroups(final T source,
+                                                 final T target) {
 
         checkParameters(source, target);
 
         synchronized (dependencies) {
 
             if (!dependencies.containsKey(source)) {
-                return Collections.EMPTY_LIST;
+                return new Vector();
             }
 
-            final List<List<T>> groups = new LinkedList<List<T>>();
+            final Vector<Vector<T>> groups = new Vector<Vector<T>>();
 
             if (target == null) {
-                final List<T> group = new LinkedList<T>();
-                groups.add(0, group);
-                group.add(0, source);
+                final Vector<T> group = new Vector<T>();
+                groups.addElement(group);
+                group.addElement(source);
                 return groups;
             }
 
-            final List<T> targets = dependencies.get(source);
+            final Vector<T> targets = dependencies.get(source);
 
             for (T auxiliary : targets) {
                 if (auxiliary.equals(target)) {
-                    final List<T> group = new LinkedList<T>();
-                    groups.add(0, group);
-                    group.add(0, auxiliary);
-                    group.add(0, source);
+                    final Vector<T> group = new Vector<T>();
+                    groups.addElement(group);
+                    group.addElement(source);
+                    group.addElement(auxiliary);
                     continue;
                 }
-                for (List<T> group : getDependencyGroups(auxiliary, target)) {
-                    groups.add(0, group);
-                    group.add(0, source);
+                for (Vector<T> group : getDependencyGroups(auxiliary, target)) {
+                    groups.addElement(group);
+                    group.insertElementAt(source, 0);
                 }
             }
 
@@ -174,7 +197,7 @@ public class DependencyResolver<T> {
 
         synchronized (dependencies) {
 
-            final List<T> targets = dependencies.get(source);
+            final Vector<T> targets = dependencies.get(source);
 
             if (targets == null) {
                 return false;
@@ -207,7 +230,7 @@ public class DependencyResolver<T> {
 
         synchronized (dependencies) {
 
-            final List<T> targets = dependencies.get(source);
+            final Vector<T> targets = dependencies.get(source);
 
             if (targets == null) {
                 return false;
@@ -216,7 +239,7 @@ public class DependencyResolver<T> {
             boolean result = true;
 
             if (target != null) {
-                result = targets.remove(target);
+                result = targets.removeElement(target);
             }
 
             if (result && targets.isEmpty()) {
@@ -233,7 +256,7 @@ public class DependencyResolver<T> {
      * @param flatten
      * @param source
      */
-    private void getFlatten(final T source, final List<T> flatten) {
+    private void getFlatten(final T source, final Vector<T> flatten) {
 
         synchronized (dependencies) {
 
@@ -241,14 +264,14 @@ public class DependencyResolver<T> {
                 return;
             }
 
-            final List<T> targets = dependencies.get(source);
+            final Vector<T> targets = dependencies.get(source);
             if (targets != null) {
                 for (T target : targets) {
                     getFlatten(target, flatten);
                 }
             }
 
-            flatten.add(source);
+            flatten.addElement(source);
         }
     }
 
@@ -257,9 +280,9 @@ public class DependencyResolver<T> {
      *
      * @return
      */
-    public List<T> getFlatten() {
+    public Vector<T> getFlatten() {
 
-        final List<T> flatten = new ArrayList<T>();
+        final Vector<T> flatten = new Vector<T>();
 
         synchronized (dependencies) {
             for (T source : dependencies.keySet()) {
@@ -276,16 +299,16 @@ public class DependencyResolver<T> {
      *
      * @param maximum
      */
-    public List<List<T>> getHorizontalGroups(final int maximum) {
+    public Vector<Vector<T>> getHorizontalGroups(final int maximum) {
 
         if (maximum <= 0) {
             throw new IllegalArgumentException(
                 "param:0:" + Integer.TYPE + ":" + maximum + " <= 0");
         }
 
-        final List<T> remains = getFlatten();
+        final Vector<T> remains = getFlatten();
 
-        final List<List<T>> groups = new LinkedList<List<T>>();
+        final Vector<Vector<T>> groups = new Vector<Vector<T>>();
 
         while (!remains.isEmpty()) {
 
@@ -293,28 +316,35 @@ public class DependencyResolver<T> {
                 break;
             }
 
-            final List<T> group = new ArrayList<T>();
-            groups.add(0, group);
-            group.add(remains.remove(0));
+            final Vector<T> group = new Vector<T>();
+
+            groups.addElement(group);
+
+            group.addElement(remains.elementAt(0));
+            remains.removeElementAt(0);
 
             for (int i = 0; i < remains.size(); i++) {
 
+                boolean added = false;
+
                 for (T p : group) {
-                    if (hasDependency(remains.get(i), p)) {
-                        group.add(remains.get(i));
+                    if (hasDependency(remains.elementAt(i), p)) {
+                        group.addElement(remains.elementAt(i));
+                        added = true;
                         break;
                     }
                 }
 
-                if (!group.contains(remains.get(i))) {
+                if (!added) {
                     outer:
                     for (int j = i + 1; j < remains.size(); j++) {
-                        if (!hasDependency(remains.get(j), remains.get(i))) {
+                        if (!hasDependency(remains.elementAt(j),
+                                           remains.elementAt(i))) {
                             continue;
                         }
                         for (T p : group) {
-                            if (hasDependency(remains.get(j), p)) {
-                                group.add(remains.get(i));
+                            if (hasDependency(remains.elementAt(j), p)) {
+                                group.addElement(remains.elementAt(i));
                                 break outer;
                             }
                         }
@@ -322,11 +352,14 @@ public class DependencyResolver<T> {
                 }
             }
 
-            remains.removeAll(group);
+            for (int i = 0; i < group.size(); i++) {
+                remains.removeElement(group.elementAt(i));
+            }
+
         }
 
         if (!remains.isEmpty()) {
-            groups.add(0, remains);
+            groups.addElement(remains);
         }
 
         return groups;
@@ -337,16 +370,16 @@ public class DependencyResolver<T> {
      *
      * @param maximum
      */
-    public List<List<T>> getVerticalGroups(final int maximum) {
+    public Vector<Vector<T>> getVerticalGroups(final int maximum) {
 
         if (maximum <= 0) {
             throw new IllegalArgumentException(
                 "param:0:" + Integer.TYPE + ":" + maximum + " <= 0");
         }
 
-        final List<T> remains = getFlatten();
+        final Vector<T> remains = getFlatten();
 
-        final List<List<T>> groups = new LinkedList<List<T>>();
+        final Vector<Vector<T>> groups = new Vector<Vector<T>>();
 
         while (!remains.isEmpty()) {
 
@@ -354,25 +387,25 @@ public class DependencyResolver<T> {
                 break;
             }
 
-            final List<T> group = new ArrayList<T>();
+            final Vector<T> group = new Vector<T>();
 
-            groups.add(0, group);
+            groups.addElement(group);
 
             outer:
-            for (int i = 0; i < remains.size(); i++) {
+            for (int i = remains.size() - 1; i > 0; i--) {
                 for (int j = 0; j < i; j++) {
-                    if (hasDependency(remains.get(i), remains.get(j))) {
+                    if (hasDependency(remains.elementAt(i),
+                                      remains.elementAt(j))) {
                         continue outer;
                     }
                 }
-                group.add(remains.get(i));
+                group.addElement(remains.elementAt(i));
+                remains.removeElementAt(i);
             }
-
-            remains.removeAll(group);
         }
 
         if (!remains.isEmpty()) {
-            groups.add(0, remains);
+            groups.addElement(remains);
         }
 
         return groups;
@@ -381,8 +414,10 @@ public class DependencyResolver<T> {
 
     void print(final PrintStream out) {
         synchronized (dependencies) {
-            for (Entry<T, List<T>> entry : dependencies.entrySet()) {
-                out.println(entry.getKey() + " -> " + entry.getValue());
+            final Enumeration<T> e = dependencies.keys();
+            while (e.hasMoreElements()) {
+                final T key = e.nextElement();
+                out.println(key + " -> " + dependencies.get(key));
             }
         }
     }
@@ -390,5 +425,5 @@ public class DependencyResolver<T> {
 
     private Class<T> type;
 
-    private final Map<T, List<T>> dependencies;
+    private final Hashtable<T, Vector<T>> dependencies;
 }

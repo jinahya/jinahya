@@ -18,9 +18,8 @@
 package jinahya.util.processor;
 
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import jinahya.util.DependencyResolver;
 
@@ -33,6 +32,10 @@ import jinahya.util.DependencyResolver;
 public class ProcessorChain<T> {
 
 
+    /**
+     *
+     * @param type
+     */
     public ProcessorChain(final Class<T> type) {
         super();
 
@@ -43,8 +46,7 @@ public class ProcessorChain<T> {
 
         this.type = type;
 
-        processors =
-            Collections.synchronizedMap(new HashMap<String, Processor<T>>());
+        processors = new Hashtable<String, Processor<T>>();
 
         resolver = new DependencyResolver<String>(String.class);
     }
@@ -86,7 +88,7 @@ public class ProcessorChain<T> {
 
         if (processor == null) {
             throw new IllegalArgumentException(
-                "param:0:" + Processor.class + " is null");
+                "param:0:" + Processor.class + ": is null");
         }
 
         if (!type.equals(processor.getType())) {
@@ -138,7 +140,12 @@ public class ProcessorChain<T> {
      */
     public final String[] getProcessorIds() {
         synchronized (processors) {
-            return processors.keySet().toArray(new String[processors.size()]);
+            final String[] processorIds = new String[processors.size()];
+            final Enumeration<String> keys = processors.keys();
+            for (int i = 0; i < processorIds.length; i++) {
+                processorIds[i] = keys.nextElement();
+            }
+            return processorIds;
         }
     }
 
@@ -181,9 +188,18 @@ public class ProcessorChain<T> {
     }
 
 
+    void print(final java.io.PrintStream out) {
+        final Enumeration<String> keys = processors.keys();
+        while (keys.hasMoreElements()) {
+            final String key = keys.nextElement();
+            out.print(key + " -> " + processors.get(key));
+        }
+    }
+
+
     private final Class<T> type;
 
-    private final Map<String, Processor<T>> processors;
+    private final Hashtable<String, Processor<T>> processors;
 
     private final DependencyResolver<String> resolver;
 }
