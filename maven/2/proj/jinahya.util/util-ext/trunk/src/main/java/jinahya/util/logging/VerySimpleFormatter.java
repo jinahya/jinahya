@@ -56,6 +56,8 @@ public class VerySimpleFormatter extends Formatter {
 
         buffer.append(record.getMessage());
 
+        buffer.append(System.getProperty("line.separator"));
+
         return buffer.toString();
     }
 
@@ -105,7 +107,7 @@ public class VerySimpleFormatter extends Formatter {
     private boolean formatLevel = false;
 
     private DateFormat dateFormat =
-        new SimpleDateFormat("YYYY.MM.DD HH:mm:ss.SSS");
+        new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
 
     private boolean formatSourceClassName = true;
     private boolean formatSourceMethodName = true;

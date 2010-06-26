@@ -36,17 +36,14 @@ public class ProcessorChainTest {
 
 
     private static final Logger LOGGER =
-        //        Logger.getLogger("jinahya.util.processor");
         Logger.getLogger(ProcessorChainTest.class.getPackage().getName());
 
 
     static {
-        for (Handler handler : LOGGER.getHandlers()) {
-            if (handler instanceof ConsoleHandler) {
-                handler.setFormatter(new VerySimpleFormatter());
-                break;
-            }
-        }
+        LOGGER.setUseParentHandlers(false);
+        final Handler handler = new ConsoleHandler();
+        handler.setFormatter(new VerySimpleFormatter());
+        LOGGER.addHandler(handler);
     }
 
 
