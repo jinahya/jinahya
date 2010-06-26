@@ -19,6 +19,7 @@ package jinahya.util;
 
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EventListener;
@@ -35,6 +36,13 @@ import java.util.Map;
 public class EventListenerSupport {
 
 
+    public EventListenerSupport() {
+        super();
+
+        classified = Collections.synchronizedMap(new HashMap<Class, List>());
+    }
+
+
     /**
      *
      * @param <T>
@@ -42,25 +50,35 @@ public class EventListenerSupport {
      * @param instance
      * @return
      */
-    public <T extends EventListener> boolean add(
-        final Class<T> type, final T instance) {
+    public <T extends EventListener> boolean add(final Class<T> type,
+                                                 final T instance) {
 
-        if (type == null || !EventListener.class.isAssignableFrom(type)) {
+        if (type == null) {
             throw new IllegalArgumentException(
-                "param:0:" + type + " is not assignable to "
+                "param:0:" + Class.class + ": is null");
+        }
+
+        if (!EventListener.class.isAssignableFrom(type)) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ":" + type + " is not assignable to "
                 + EventListener.class);
+        }
+
+        if (instance == null) {
+            throw new IllegalArgumentException("param:1:?: is null");
         }
 
         if (!type.isInstance(instance)) {
             throw new IllegalArgumentException(
-                "param:1:" + instance + " is not an instance of " + type);
+                "param:1:" + instance.getClass() + ":" + instance
+                + " is not an instance of " + type);
         }
 
-        synchronized (listenerMap) {
-            List<Object> instances = listenerMap.get(type);
+        synchronized (classified) {
+            List<Object> instances = classified.get(type);
             if (instances == null) {
                 instances = new LinkedList();
-                listenerMap.put(type, instances);
+                classified.put(type, instances);
             }
 
             if (instances.contains(instance)) {
@@ -80,28 +98,45 @@ public class EventListenerSupport {
      * @param instance
      * @return
      */
-    public <T extends EventListener> boolean remove(
-        final Class<T> type, final T instance) {
+    public <T extends EventListener> boolean remove(final Class<T> type,
+                                                    final T instance) {
 
-        if (type == null || !EventListener.class.isAssignableFrom(type)) {
+        if (type == null) {
             throw new IllegalArgumentException(
-                "param:0:" + type + " is not assignable to "
+                "param:0:" + Class.class + ": is null");
+        }
+
+        if (!EventListener.class.isAssignableFrom(type)) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ":" + type + " is not assignable to "
                 + EventListener.class);
+        }
+
+        if (instance == null) {
+            throw new IllegalArgumentException("param:1:?: is null");
         }
 
         if (!type.isInstance(instance)) {
             throw new IllegalArgumentException(
-                "param:1:" + instance + " is not an instance of " + type);
+                "param:1:" + instance.getClass() + ":" + instance
+                + " is not an instance of " + type);
         }
 
-        synchronized (listenerMap) {
+        synchronized (classified) {
 
-            if (!listenerMap.containsKey(type)) {
-                System.out.println("not contained");
+            final List instances = classified.get(type);
+
+            if (instances == null) {
                 return false;
             }
 
-            return listenerMap.get(type).remove(instance);
+            final boolean result = instances.add(instance);
+
+            if (result && instances.isEmpty()) {
+                classified.remove(type);
+            }
+
+            return result;
         }
     }
 
@@ -115,35 +150,29 @@ public class EventListenerSupport {
      */
     public <T extends EventListener> T[] get(final Class<T> type) {
 
-        if (type == null || !EventListener.class.isAssignableFrom(type)) {
+        if (type == null) {
             throw new IllegalArgumentException(
-                "param:0:" + type + " is not assignable to "
+                "param:0:" + Class.class + ": is null");
+        }
+
+        if (!EventListener.class.isAssignableFrom(type)) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ":" + type + " is not assignable to "
                 + EventListener.class);
         }
 
-        synchronized (listenerMap) {
+        synchronized (classified) {
 
-            if (!listenerMap.containsKey(type)) {
-                return (T[]) Collections.EMPTY_LIST.toArray();
+            List instances = classified.get(type);
+            if (instances == null) {
+                instances = Collections.EMPTY_LIST;
             }
 
-            final List listeners = listenerMap.get(type);
-            final T[] array = (T[]) Array.newInstance(type, listeners.size());
-            return (T[]) listeners.toArray(array);
+            final T[] array = (T[]) Array.newInstance(type, instances.size());
+            return (T[]) instances.toArray(array);
         }
     }
 
 
-    /**
-     *
-     */
-    public void clear() {
-        synchronized (listenerMap) {
-            listenerMap.clear();
-        }
-    }
-
-
-    private final Map<Class, List> listenerMap =
-        Collections.synchronizedMap(new HashMap<Class, List>());
+    private final Map<Class, List> classified;
 }

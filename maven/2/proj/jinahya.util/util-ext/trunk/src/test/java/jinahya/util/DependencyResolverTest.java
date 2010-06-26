@@ -34,7 +34,7 @@ public class DependencyResolverTest {
     @Test
     public void testAddDependency() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "B");
@@ -48,7 +48,7 @@ public class DependencyResolverTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddDependencyWithNullSource() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         resolver.addDependency(null, "B");
     }
@@ -57,7 +57,7 @@ public class DependencyResolverTest {
     @Test
     public void testGetFlatten() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "C");
@@ -100,7 +100,7 @@ public class DependencyResolverTest {
     @Test
     public void removeDependency() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         final String source = "A";
         final String target = "B";
@@ -118,7 +118,7 @@ public class DependencyResolverTest {
     @Test
     public void removeDependencyWithNullTarget() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         final String source = "A";
         final String target = null;
@@ -136,7 +136,7 @@ public class DependencyResolverTest {
     @Test
     public void testDependencyGroups() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         final String source = "A";
         final String target = null;
@@ -183,7 +183,7 @@ public class DependencyResolverTest {
     @Test
     public void testDependencyGroupsWithNullTarget() {
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new DependencyResolver<String>(String.class);
 
         resolver.addDependency("A", null);
 

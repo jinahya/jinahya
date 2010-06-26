@@ -32,7 +32,7 @@ public class ProcessorChainTest {
     /**
      *
      */
-    private static class EchoProcessor extends Processor<Object> {
+    private static class EchoProcessor extends Processor<String> {
 
 
         /**
@@ -41,7 +41,7 @@ public class ProcessorChainTest {
          * @param prerequisites
          */
         public EchoProcessor(final String id, final String... prerequisites) {
-            super(id, prerequisites);
+            super(String.class, id, prerequisites);
         }
 
 
@@ -51,8 +51,8 @@ public class ProcessorChainTest {
          * @throws ProcessorException
          */
         @Override
-        public void process(final Object unit) throws ProcessorException {
-            System.out.println("processing " + getId());
+        public void process(final String unit) throws ProcessorException {
+            System.out.println(getId() + ": processing " + unit);
         }
     }
 
@@ -60,16 +60,12 @@ public class ProcessorChainTest {
     @Test
     public void testAdd() {
 
-        final ProcessorChain<Object> chain = new ProcessorChain<Object>();
+        final ProcessorChain<String> chain =
+            new ProcessorChain<String>(String.class);
 
         final String id = "A";
 
-        final Processor<Object> processor =
-            new Processor<Object>(id, new String[] {"B", "C"}) {
-                @Override
-                public void process(final Object unit) {
-                }
-            };
+        final Processor<String> processor = new EchoProcessor(id, "B", "C");
 
         chain.add(processor);
 
@@ -84,16 +80,12 @@ public class ProcessorChainTest {
     @Test
     public void testHasProcessor() {
 
-        final ProcessorChain<Object> chain = new ProcessorChain<Object>();
+        final ProcessorChain<String> chain =
+            new ProcessorChain<String>(String.class);
 
         final String id = "A";
 
-        final Processor<Object> processor =
-            new Processor<Object>(id, new String[] {"B", "C"}) {
-                @Override
-                public void process(final Object unit) {
-                }
-            };
+        final Processor<String> processor = new EchoProcessor(id, "B", "C");
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
@@ -106,16 +98,12 @@ public class ProcessorChainTest {
     @Test
     public void testRemoveProcessor() {
 
-        final ProcessorChain<Object> chain = new ProcessorChain<Object>();
+        final ProcessorChain<String> chain =
+            new ProcessorChain<String>(String.class);
 
         final String id = "A";
 
-        final Processor<Object> processor =
-            new Processor<Object>(id, new String[] {"B", "C"}) {
-                @Override
-                public void process(final Object unit) {
-                }
-            };
+        final EchoProcessor processor = new EchoProcessor(id, "B", "C");
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
@@ -132,7 +120,8 @@ public class ProcessorChainTest {
     @Test
     public void testInvoke() throws ProcessorException {
 
-        final ProcessorChain<Object> chain = new ProcessorChain<Object>();
+        final ProcessorChain<String> chain =
+            new ProcessorChain<String>(String.class);
 
         chain.add(new EchoProcessor("A", "B", "C", "D"));
 

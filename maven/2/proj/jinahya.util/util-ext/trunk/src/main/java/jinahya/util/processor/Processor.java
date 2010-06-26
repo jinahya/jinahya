@@ -20,6 +20,7 @@ package jinahya.util.processor;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <T> processing unit type
  */
 public abstract class Processor<T> {
 
@@ -27,24 +28,52 @@ public abstract class Processor<T> {
     /**
      * Creates a new instance.
      *
+     * @param type processing unit type
      * @param id processor id.
      * @param prerequisites the prerequisite processors' id array or null.
      */
-    public Processor(final String id, final String[] prerequisites) {
+    public Processor(final Class<T> type, final String id,
+                     final String[] prerequisites) {
+
         super();
+
+        if (type == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ": is null");
+        }
 
         if (id == null) {
             throw new IllegalArgumentException(
-                "param:0:" + String.class + " is null");
+                "param:0:" + String.class + ": is null");
         }
 
         if (prerequisites == null) {
             throw new IllegalArgumentException(
-                "param:1:" + String[].class + " is null");
+                "param:1:" + String[].class + ": is null");
         }
 
+        for (int i = 0; i < prerequisites.length; i++) {
+            if (prerequisites[i] == null) {
+                throw new IllegalArgumentException(
+                    "param:1:" + String[].class + ":[" + i + "] is null");
+            }
+        }
+
+        this.type = type;
         this.id = id;
-        this.prerequisites = prerequisites;
+
+        this.prerequisites = new String[prerequisites.length];
+        System.arraycopy(prerequisites, 0, this.prerequisites, 0,
+                         this.prerequisites.length);
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public final Class<T> getType() {
+        return type;
     }
 
 
@@ -68,12 +97,13 @@ public abstract class Processor<T> {
 
     /**
      *
-     * @param unit
-     * @throws ProcessorException
+     * @param unit processing unit
+     * @throws ProcessorException if any error occurs.
      */
     public abstract void process(T unit) throws ProcessorException;
 
 
+    private Class<T> type;
     private String id;
     private String[] prerequisites;
 }
