@@ -48,8 +48,8 @@ public class DependencyResolver<T> {
         }
 
         this.type = type;
-        
-        dependencyMap = Collections.synchronizedMap(new HashMap<T, List<T>>());
+
+        dependencies = Collections.synchronizedMap(new HashMap<T, List<T>>());
     }
 
 
@@ -57,7 +57,7 @@ public class DependencyResolver<T> {
      *
      */
     public void reset() {
-        dependencyMap.clear();
+        dependencies.clear();
     }
 
 
@@ -103,12 +103,12 @@ public class DependencyResolver<T> {
 
         checkParameters(source, target);
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
-            List<T> targets = dependencyMap.get(source);
+            List<T> targets = dependencies.get(source);
             if (targets == null) {
                 targets = new LinkedList<T>();
-                dependencyMap.put(source, targets);
+                dependencies.put(source, targets);
             }
 
             if (target != null && !targets.contains(target)) {
@@ -126,9 +126,9 @@ public class DependencyResolver<T> {
 
         checkParameters(source, target);
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
-            if (!dependencyMap.containsKey(source)) {
+            if (!dependencies.containsKey(source)) {
                 return Collections.EMPTY_LIST;
             }
 
@@ -141,7 +141,7 @@ public class DependencyResolver<T> {
                 return groups;
             }
 
-            final List<T> targets = dependencyMap.get(source);
+            final List<T> targets = dependencies.get(source);
 
             for (T auxiliary : targets) {
                 if (auxiliary.equals(target)) {
@@ -172,9 +172,9 @@ public class DependencyResolver<T> {
 
         checkParameters(source, target);
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
-            final List<T> targets = dependencyMap.get(source);
+            final List<T> targets = dependencies.get(source);
 
             if (targets == null) {
                 return false;
@@ -205,9 +205,9 @@ public class DependencyResolver<T> {
 
         checkParameters(source, target);
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
-            final List<T> targets = dependencyMap.get(source);
+            final List<T> targets = dependencies.get(source);
 
             if (targets == null) {
                 return false;
@@ -220,7 +220,7 @@ public class DependencyResolver<T> {
             }
 
             if (result && targets.isEmpty()) {
-                dependencyMap.remove(source);
+                dependencies.remove(source);
             }
 
             return result;
@@ -230,25 +230,25 @@ public class DependencyResolver<T> {
 
     /**
      *
-     * @param dependencies
+     * @param flatten
      * @param source
      */
-    private void getFlatten(final T source, final List<T> dependencies) {
+    private void getFlatten(final T source, final List<T> flatten) {
 
-        synchronized (dependencyMap) {
+        synchronized (dependencies) {
 
-            if (dependencies.contains(source)) {
+            if (flatten.contains(source)) {
                 return;
             }
 
-            final List<T> targets = dependencyMap.get(source);
+            final List<T> targets = dependencies.get(source);
             if (targets != null) {
                 for (T target : targets) {
-                    getFlatten(target, dependencies);
+                    getFlatten(target, flatten);
                 }
             }
 
-            dependencies.add(source);
+            flatten.add(source);
         }
     }
 
@@ -261,8 +261,8 @@ public class DependencyResolver<T> {
 
         final List<T> flatten = new ArrayList<T>();
 
-        synchronized (dependencyMap) {
-            for (T source : dependencyMap.keySet()) {
+        synchronized (dependencies) {
+            for (T source : dependencies.keySet()) {
                 getFlatten(source, flatten);
             }
         }
@@ -379,9 +379,9 @@ public class DependencyResolver<T> {
     }
 
 
-    public void print(final PrintStream out) {
-        synchronized (dependencyMap) {
-            for (Entry<T, List<T>> entry : dependencyMap.entrySet()) {
+    void print(final PrintStream out) {
+        synchronized (dependencies) {
+            for (Entry<T, List<T>> entry : dependencies.entrySet()) {
                 out.println(entry.getKey() + " -> " + entry.getValue());
             }
         }
@@ -390,5 +390,5 @@ public class DependencyResolver<T> {
 
     private Class<T> type;
 
-    private final Map<T, List<T>> dependencyMap;
+    private final Map<T, List<T>> dependencies;
 }
