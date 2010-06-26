@@ -1,3 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="25" tokens="118">
+<file line="53" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\EventListenerSupport.java"/>
+<file line="101" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\EventListenerSupport.java"/>
+<codefragment>
+<![CDATA[
+    public <T extends EventListener> boolean remove(final Class<T> type,
+                                                    final T instance) {
+
+        if (type == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ": is null");
+        }
+
+        if (!EventListener.class.isAssignableFrom(type)) {
+            throw new IllegalArgumentException(
+                "param:0:" + Class.class + ":" + type + " is not assignable to "
+                + EventListener.class);
+        }
+
+        if (instance == null) {
+            throw new IllegalArgumentException("param:1:?: is null");
+        }
+
+        if (!type.isInstance(instance)) {
+            throw new IllegalArgumentException(
+                "param:1:" + instance.getClass() + ":" + instance
+                + " is not an instance of " + type);
+        }
+
+        synchronized (classified) {
+]]>
+</codefragment>
+</duplication>
+<duplication lines="20" tokens="107">
+<file line="302" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\DependencyResolver.java"/>
+<file line="373" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\DependencyResolver.java"/>
+<codefragment>
+<![CDATA[
+    public Vector<Vector<T>> getVerticalGroups(final int maximum) {
+
+        if (maximum <= 0) {
+            throw new IllegalArgumentException(
+                "param:0:" + Integer.TYPE + ":" + maximum + " <= 0");
+        }
+
+        final Vector<T> remains = getFlatten();
+
+        final Vector<Vector<T>> groups = new Vector<Vector<T>>();
+
+        while (!remains.isEmpty()) {
+
+            if (groups.size() == (maximum - 1)) {
+                break;
+            }
+
+            final Vector<T> group = new Vector<T>();
+
+            groups.addElement(group);
+]]>
+</codefragment>
+</duplication>
 </pmd-cpd>
