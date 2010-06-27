@@ -87,9 +87,10 @@ public class DependencyResolver<T> {
      *
      * @param source
      * @param target
+     * @return true if ok, false otherwise
      * @throws IllegalArgumentException if any source or target is wrong
      */
-    private void checkParameters(final T source, final T target) {
+    private boolean checkParameters(final T source, final T target) {
 
         if (source == null) {
             throw new IllegalArgumentException("param:0:: is null");
@@ -110,7 +111,47 @@ public class DependencyResolver<T> {
             }
 
             if (source.equals(target)) {
-                throw new IllegalArgumentException("self dependency");
+                return false;
+                //throw new IllegalArgumentException("self dependency");
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     *
+     * @param source
+     * @param target
+     */
+    public void addDependencies(final T source, final T... targets) {
+
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
+
+        if (targets == null) {
+            throw new IllegalArgumentException("param:1:: is null");
+        }
+
+        for (int i = 0; i < targets.length; i++) {
+            if (targets[i] != null && !type.isInstance(targets[i])) {
+                throw new IllegalArgumentException(
+                    "param:1[" + i + "]:" + targets[i].getClass() + ":"
+                    + targets[i] + " is not an instance of " + type);
+            }
+        }
+
+        synchronized (dependencies) {
+            for (T target : targets) {
+                addDependency(source, target);
             }
         }
     }
@@ -123,7 +164,29 @@ public class DependencyResolver<T> {
      */
     public void addDependency(final T source, final T target) {
 
-        checkParameters(source, target);
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
+
+        if (target != null) {
+
+            if (!type.isInstance(target)) {
+                throw new IllegalArgumentException(
+                "param:1:" + target.getClass() + ":" + target
+                + " is not an instance of " + type);
+            }
+
+            if (source.equals(target)) {
+                return;
+                //throw new IllegalArgumentException("self dependency");
+            }
+        }
 
         synchronized (dependencies) {
 
@@ -222,19 +285,77 @@ public class DependencyResolver<T> {
      *
      * @param source
      * @param target
-     * @return
      */
-    public boolean removeDependency(final T source, final T target) {
+    public void removeDependencies(final T source, final T... targets) {
 
-        checkParameters(source, target);
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
+
+        if (targets == null) {
+            throw new IllegalArgumentException("param:1:: is null");
+        }
+
+        for (int i = 0; i < targets.length; i++) {
+            if (targets[i] != null && !type.isInstance(targets[i])) {
+                throw new IllegalArgumentException(
+                    "param:1[" + i + "]:" + targets[i].getClass() + ":"
+                    + targets[i] + " is not an instance of " + type);
+            }
+        }
+
+        synchronized (dependencies) {
+            for (T target : targets) {
+                removeDependency(source, target);
+            }
+        }
+    }
+
+
+    /**
+     *
+     * @param source
+     * @param target
+     */
+    public void removeDependency(final T source, final T target) {
+
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
+
+        if (target != null) {
+
+            if (!type.isInstance(target)) {
+                throw new IllegalArgumentException(
+                "param:1:" + target.getClass() + ":" + target
+                + " is not an instance of " + type);
+            }
+
+            if (source.equals(target)) {
+                return;
+                //throw new IllegalArgumentException("self dependency");
+            }
+        }
 
         synchronized (dependencies) {
 
-            final Vector<T> targets = dependencies.get(source);
-
-            if (targets == null) {
-                return false;
+            if (!dependencies.containsKey(source)) {
+                return;
             }
+
+            final Vector<T> targets = dependencies.get(source);
 
             boolean result = true;
 
@@ -245,8 +366,6 @@ public class DependencyResolver<T> {
             if (result && targets.isEmpty()) {
                 dependencies.remove(source);
             }
-
-            return result;
         }
     }
 
@@ -294,6 +413,15 @@ public class DependencyResolver<T> {
     }
 
 
+    /**
+     * 
+     * @param maximum
+     * @return
+     */
+    public Vector<Vector<T>> getHorizontalGroups() {
+        return getHorizontalGroups(Integer.MAX_VALUE);
+    }
+
 
     /**
      *
@@ -310,26 +438,23 @@ public class DependencyResolver<T> {
 
         final Vector<Vector<T>> groups = new Vector<Vector<T>>();
 
-        while (!remains.isEmpty()) {
-
-            if (groups.size() == (maximum - 1)) {
-                break;
-            }
+        while (!remains.isEmpty() && (groups.size() < (maximum - 1))) {
 
             final Vector<T> group = new Vector<T>();
 
             groups.addElement(group);
 
-            group.addElement(remains.elementAt(0));
+            group.addElement(remains.firstElement());
             remains.removeElementAt(0);
 
-            for (int i = 0; i < remains.size(); i++) {
+            for (int i = 0; i < remains.size();) {
 
                 boolean added = false;
 
                 for (T p : group) {
                     if (hasDependency(remains.elementAt(i), p)) {
                         group.addElement(remains.elementAt(i));
+                        remains.removeElementAt(i);
                         added = true;
                         break;
                     }
@@ -345,16 +470,24 @@ public class DependencyResolver<T> {
                         for (T p : group) {
                             if (hasDependency(remains.elementAt(j), p)) {
                                 group.addElement(remains.elementAt(i));
+                                remains.removeElementAt(i);
+                                added = true;
                                 break outer;
                             }
                         }
                     }
                 }
+
+                if (!added) {
+                    i++;
+                }
             }
 
+            /*
             for (int i = 0; i < group.size(); i++) {
                 remains.removeElement(group.elementAt(i));
             }
+             */
 
         }
 
@@ -363,6 +496,15 @@ public class DependencyResolver<T> {
         }
 
         return groups;
+    }
+
+
+    /**
+     *
+     * @param maximum
+     */
+    public Vector<Vector<T>> getVerticalGroups() {
+        return getVerticalGroups(Integer.MAX_VALUE);
     }
 
 

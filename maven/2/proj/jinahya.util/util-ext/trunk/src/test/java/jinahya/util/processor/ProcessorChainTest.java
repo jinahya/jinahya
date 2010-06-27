@@ -85,11 +85,11 @@ public class ProcessorChainTest {
 
         final Processor<String> processor = new EchoProcessor(id, "B", "C");
 
-        chain.add(processor);
+        chain.addProcessor(processor);
 
         Assert.assertEquals(chain.hasProcessor(id), true);
 
-        Assert.assertEquals(chain.remove(id), processor);
+        Assert.assertEquals(chain.removeProcessor(id), processor);
 
         Assert.assertEquals(chain.hasProcessor(id), false);
     }
@@ -107,14 +107,14 @@ public class ProcessorChainTest {
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
-        Assert.assertNull(chain.add(processor));
+        Assert.assertNull(chain.addProcessor(processor));
 
         Assert.assertEquals(chain.hasProcessor(id), true);
     }
 
 
     @Test
-    public void testRemoveProcessor() {
+    public void testRemove() {
 
         final ProcessorChain<String> chain =
             new ProcessorChain<String>(String.class);
@@ -125,13 +125,13 @@ public class ProcessorChainTest {
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
-        Assert.assertNull(chain.remove(id));
+        Assert.assertNull(chain.removeProcessor(id));
 
-        chain.add(processor);
+        chain.addProcessor(processor);
 
         Assert.assertEquals(chain.hasProcessor(id), true);
 
-        Assert.assertEquals(chain.remove(id), processor);
+        Assert.assertEquals(chain.removeProcessor(id), processor);
     }
 
 
@@ -141,19 +141,19 @@ public class ProcessorChainTest {
         final ProcessorChain<String> chain =
             new ProcessorChain<String>(String.class);
 
-        chain.add(new EchoProcessor("A", "B", "C", "D"));
+        chain.addProcessor(new EchoProcessor("A", "B", "C", "D"));
 
-        chain.add(new EchoProcessor("B", "D"));
+        chain.addProcessor(new EchoProcessor("B", "D"));
 
-        chain.add(new EchoProcessor("C", "D", "E", "I"));
+        chain.addProcessor(new EchoProcessor("C", "D", "E", "I"));
 
-        chain.add(new EchoProcessor("E", "F"));
+        chain.addProcessor(new EchoProcessor("E", "F"));
 
-        chain.add(new EchoProcessor("I", "F"));
+        chain.addProcessor(new EchoProcessor("I", "F"));
 
-        chain.add(new EchoProcessor("D"));
+        chain.addProcessor(new EchoProcessor("D"));
 
-        chain.add(new EchoProcessor("F"));
+        chain.addProcessor(new EchoProcessor("F"));
 
         chain.invoke("unit");
     }

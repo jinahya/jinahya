@@ -84,7 +84,7 @@ public class ProcessorChain<T> {
      * @return
      * @throws ProcessorException
      */
-    public final Processor<T> add(final Processor<T> processor) {
+    public final Processor<T> addProcessor(final Processor<T> processor) {
 
         if (processor == null) {
             throw new IllegalArgumentException(
@@ -97,13 +97,11 @@ public class ProcessorChain<T> {
 
         synchronized (processors) {
 
-            final Processor<T> removed = remove(processor.getId());
+            final Processor<T> removed = removeProcessor(processor.getId());
 
             resolver.addDependency(processor.getId(), null);
-            for (String prerequisite: processor.getPrerequisites()) {
-                resolver.addDependency(processor.getId(), prerequisite);
-            }
-
+            resolver.addDependencies(processor.getId(),
+                                     processor.getPrerequisites());
             processors.put(processor.getId(), processor);
 
             return removed;
@@ -114,7 +112,7 @@ public class ProcessorChain<T> {
     /**
      *
      */
-    public final Processor<T> remove(final String processorId) {
+    public final Processor<T> removeProcessor(final String processorId) {
 
         if (processorId == null) {
             throw new IllegalArgumentException(
@@ -124,9 +122,8 @@ public class ProcessorChain<T> {
         synchronized (processors) {
             final Processor removed =  processors.remove(processorId);
             if (removed != null) {
-                for (String prerequisite : removed.getPrerequisites()) {
-                    resolver.removeDependency(removed.getId(), prerequisite);
-                }
+                resolver.removeDependencies(removed.getId(),
+                                            removed.getPrerequisites());
                 resolver.removeDependency(removed.getId(), null);
             }
             return removed;

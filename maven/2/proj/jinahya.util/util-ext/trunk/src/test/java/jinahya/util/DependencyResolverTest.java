@@ -18,6 +18,7 @@ package jinahya.util;
 
 
 import java.util.List;
+import java.util.Vector;
 
 import org.testng.Assert;
 //import org.testng.annotations.BeforeTest;
@@ -107,11 +108,8 @@ public class DependencyResolverTest {
 
         resolver.addDependency(source, target);
 
-        Assert.assertEquals(
-            resolver.removeDependency(source, target), true, null);
-
-        Assert.assertEquals(
-            resolver.removeDependency(source, target), false, null);
+        resolver.removeDependency(source, target);
+        resolver.removeDependency(source, target);
     }
 
 
@@ -125,11 +123,9 @@ public class DependencyResolverTest {
 
         resolver.addDependency(source, target);
 
-        Assert.assertEquals(
-            resolver.removeDependency(source, target), true, null);
+        resolver.removeDependency(source, target);
 
-        Assert.assertEquals(
-            resolver.removeDependency(source, target), false, null);
+        resolver.removeDependency(source, target);
     }
 
 
@@ -193,6 +189,26 @@ public class DependencyResolverTest {
 
         for (List<String> group : resolver.getDependencyGroups("B", null)) {
             System.out.println("\tDEPENDENCY(B->null)" + group);
+        }
+    }
+
+
+    @Test
+    public void testGetHorizontalGroups() {
+        System.out.println("testGetHorizontalGroups -------------------------");
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>(String.class);
+
+        resolver.addDependencies("A", "B", "C");
+        resolver.addDependencies("B", "C", "D");
+        resolver.addDependency("E", "F");
+        resolver.addDependency("G", "F");
+
+        resolver.print(System.out);
+
+        for (Vector<String> group : resolver.getHorizontalGroups(3)) {
+            System.out.println("H: " + group);
         }
     }
 }
