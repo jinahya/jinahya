@@ -18,15 +18,8 @@ package jinahya.util;
 
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
-//import java.util.LinkedList;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Map.Entry;
 import java.util.Vector;
 
 
@@ -415,7 +408,6 @@ public class DependencyResolver<T> {
 
     /**
      * 
-     * @param maximum
      * @return
      */
     public Vector<Vector<T>> getHorizontalGroups() {
@@ -501,7 +493,6 @@ public class DependencyResolver<T> {
 
     /**
      *
-     * @param maximum
      */
     public Vector<Vector<T>> getVerticalGroups() {
         return getVerticalGroups(Integer.MAX_VALUE);

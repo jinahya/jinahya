@@ -12,7 +12,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.util.processor;
@@ -26,7 +25,7 @@ import jinahya.util.DependencyResolver;
 
 /**
  *
- * @author onacit
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <T> processing unit type
  */
 public class ProcessorChain<T> {
@@ -58,6 +57,17 @@ public class ProcessorChain<T> {
      * @throws ProcessorException
      */
     public void invoke(final T unit) throws ProcessorException {
+
+        if (unit == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(unit)) {
+            throw new IllegalArgumentException(
+                "param:0:" + unit.getClass() + ":" + unit
+                + " is not an instance of " + type);
+        }
+
         synchronized (processors) {
 
             for (Processor<T> processor : processors.values()) {
@@ -66,7 +76,7 @@ public class ProcessorChain<T> {
                         throw new ProcessorException(
                             "a processor(" + prerequisite
                             + ") prerequsite to the processor("
-                            + processor.getId() + " is missing");
+                            + processor.getId() + ") is missing");
                     }
                 }
             }
