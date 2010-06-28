@@ -24,10 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import org.kxml2.io.KXmlParser;
@@ -290,31 +287,6 @@ public class ElementLocator {
     }
 
 
-    private static String key(final Element element) {
-        if (element == null) {
-            throw new IllegalArgumentException(
-                "param(0:" + Element.class + ") is null");
-        }
-
-        return key(element.getNamespace(), element.getName());
-    }
-
-
-    private static String key(final String namespace, final String name) {
-        if (namespace == null) {
-            throw new IllegalArgumentException(
-                "param(0:" + String.class + ") is null");
-        }
-
-        if (name == null) {
-            throw new IllegalArgumentException(
-                "param(1:" + String.class + ") is null");
-        }
-
-        return "{" + namespace + "}" + name;
-    }
-
-
     /**
      *
      * @param element
@@ -352,6 +324,59 @@ public class ElementLocator {
         throws XmlPullParserException {
 
         return child(name, index);
+    }
+
+
+    /**
+     *
+     * @param name
+     * @return
+     * @throws XmlPullParserException
+     */
+    public ElementLocator locateFirstChild(final String name)
+        throws XmlPullParserException {
+
+        return locateChild(name, 0);
+    }
+
+
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @return
+     * @throws XmlPullParserException
+     */
+    public ElementLocator locateFirstChild(final String namespace,
+                                           final String name)
+        throws XmlPullParserException {
+
+        return locateChild(namespace, name, 0);
+    }
+
+
+    /**
+     *
+     */
+    public ElementLocator locateLastChild(final String name)
+        throws XmlPullParserException {
+
+        return child(name, count(name) - 1);
+    }
+
+
+    /**
+     *
+     * @param namespace
+     * @param name
+     * @return
+     * @throws XmlPullParserException
+     */
+    public ElementLocator locateLastChild(final String namespace,
+                                          final String name)
+        throws XmlPullParserException {
+
+        return child(namespace, name, count(name) - 1);
     }
 
 
@@ -416,7 +441,7 @@ public class ElementLocator {
 
         if (children.size() <= index) {
             throw new XmlPullParserException(
-                "{" + namespace + "}name[" + index + "] is not fount");
+                "{" + namespace + "}name[" + index + "] is not found");
         }
 
         path.addElement(children.elementAt(index));
@@ -430,7 +455,7 @@ public class ElementLocator {
      * @return
      */
     public int getDepth() {
-        return path.size();
+        return path.size() - 1;
     }
 
 
@@ -502,6 +527,7 @@ public class ElementLocator {
 
 
         final int count = count(namespace, name);
+
         final Node current = path.lastElement().element;
         current.addChild(Node.ELEMENT, current.createElement(namespace, name));
 
@@ -537,6 +563,16 @@ public class ElementLocator {
      * @return
      * @throws XmlPullParserException
      */
+    public ElementLocator locateRoot() throws XmlPullParserException {
+        return root();
+    }
+
+
+    /**
+     *
+     * @return
+     * @throws XmlPullParserException
+     */
     public ElementLocator locateParent() throws XmlPullParserException {
         return parent();
     }
@@ -559,6 +595,16 @@ public class ElementLocator {
 
 
     /**
+     *
+     * @param name
+     * @return
+     */
+    public int getChildCount(final String name) {
+        return count(name);
+    }
+
+
+    /**
      * 
      * @param namespace
      * @param name
@@ -566,6 +612,14 @@ public class ElementLocator {
      */
     public int getChildCount(final String namespace, final String name) {
         return count(namespace, name);
+    }
+
+
+    /**
+     * 
+     */
+    public int count(final String name) {
+        return count(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -658,12 +712,11 @@ public class ElementLocator {
     }
 
 
-    /**
+    /*
      * 
      * @param namespace
      * @param name
      * @throws XmlPullParserException
-     */
     public void require(final String namespace, final String name)
         throws XmlPullParserException {
 
@@ -686,6 +739,7 @@ public class ElementLocator {
                 + " / expected: {" + namespace + "}" + name);
         }
     }
+     */
 
 
     /**
@@ -806,21 +860,31 @@ public class ElementLocator {
 
 
     /**
+     * Returns text value.
      *
-     * @return
+     * @param appendIgnorableWhiteSpaces
+     * @return text value of the current element or null.
      */
     public String getText() {
 
         final Element current = path.lastElement().element;
 
-        final StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = null;
 
         final int childCount = current.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            if (current.isText(i)
-                && (Node.IGNORABLE_WHITESPACE != current.getType(i))) {
-                buffer.append(current.getText(i));
+            if (!current.isText(i)
+                || (Node.IGNORABLE_WHITESPACE == current.getType(i))) {
+                continue;
             }
+            if (buffer == null) {
+                buffer = new StringBuffer();
+            }
+            buffer.append(current.getText(i));
+        }
+
+        if (buffer == null) {
+            return null;
         }
 
         return buffer.toString();
@@ -831,12 +895,13 @@ public class ElementLocator {
      *
      * @param text
      */
-    public void setText(final String text) {
+    public ElementLocator setText(final String text) {
         path.lastElement().element.clear();
         path.lastElement().table.clear();
         if (text != null) {
             path.lastElement().element.addChild(Node.TEXT, text);
         }
+        return this;
     }
 
 
@@ -856,6 +921,27 @@ public class ElementLocator {
         path.removeElementAt(path.size() - 1);
 
         return this;
+    }
+
+
+    /**
+     *
+     * @return
+     * @throws XmlPullParserException
+     */
+    public ElementLocator removeCurrentAndLocateParent()
+        throws XmlPullParserException {
+
+        return remove();
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public Document getDocument() {
+        return (Document) path.elementAt(0).element.getParent();
     }
 
 

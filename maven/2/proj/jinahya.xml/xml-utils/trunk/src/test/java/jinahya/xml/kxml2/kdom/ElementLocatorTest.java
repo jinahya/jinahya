@@ -12,31 +12,19 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  under the License.
  */
 
 package jinahya.xml.kxml2.kdom;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
 
 import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 
 import org.testng.Assert;
-import static org.testng.Assert.*;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -85,7 +73,7 @@ public class ElementLocatorTest {
     public void testConstructor() throws XmlPullParserException {
         final ElementLocator locator = newInstance();
 
-        Assert.assertEquals(locator.getDepth(), 1);
+        Assert.assertEquals(locator.getDepth(), 0);
 
         Assert.assertEquals(locator.getNamespace(), ROOT_NAMESPACE);
         Assert.assertEquals(locator.getName(), ROOT_NAME);
@@ -105,12 +93,12 @@ public class ElementLocatorTest {
 
         final ElementLocator locator = newInstance();
 
-        Assert.assertEquals(locator.getDepth(), 1);
+        Assert.assertEquals(locator.getDepth(), 0);
 
         locator.addAndLocateChild(NAMESPACE, NAME);
         Assert.assertEquals(locator.getNamespace(), NAMESPACE);
         Assert.assertEquals(locator.getName(), NAME);
-        Assert.assertEquals(locator.getDepth(), 2);
+        Assert.assertEquals(locator.getDepth(), 1);
     }
 
 
@@ -120,12 +108,12 @@ public class ElementLocatorTest {
 
         final ElementLocator locator = newInstance();
 
-        Assert.assertEquals(locator.getDepth(), 1);
+        Assert.assertEquals(locator.getDepth(), 0);
 
         locator.addAndLocateChild(NAME);
         Assert.assertEquals(locator.getNamespace(), XmlPullParser.NO_NAMESPACE);
         Assert.assertEquals(locator.getName(), NAME);
-        Assert.assertEquals(locator.getDepth(), 2);
+        Assert.assertEquals(locator.getDepth(), 1);
     }
 
 
@@ -145,27 +133,26 @@ public class ElementLocatorTest {
 
 
     @Test
-    public void testLocateChild() throws XmlPullParserException {
-        final Document document = new Document();
-        document.addChild(Node.ELEMENT, document.createElement("root", "root"));
-        final ElementLocator locator = new ElementLocator(document);
+    public void testLocateChild() throws XmlPullParserException, IOException {
+
+        final ElementLocator locator = newInstance();
 
         final int count = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
 
         final String[] texts = new String[count];
 
         for (int i = 0; i < texts.length; i++) {
-            texts[i] = Integer.toString(i);
-            locator.child(NAMESPACE, NAME);
-            locator.setText(texts[i]);
-            locator.parent();
+            texts[i] = "<" + Integer.toString(i) + ">&";
+            locator.child(NAME).setText(texts[i]).parent();
         }
 
         for (int i = 0; i < texts.length; i++) {
-            locator.child(NAMESPACE, NAME, i);
-            assertEquals(locator.getText(), texts[i]);
+            locator.child(NAME, i);
+            Assert.assertEquals(locator.getText(), texts[i]);
             locator.parent();
         }
+
+        print(locator.getDocument());
     }
 
 
@@ -201,56 +188,58 @@ public class ElementLocatorTest {
 
     //@Test
     public void testGetText() throws XmlPullParserException {
-        final Document document = new Document();
-        document.addChild(Node.ELEMENT, document.createElement("root", "root"));
-        final ElementLocator locator = new ElementLocator(document);
-        assertNull(locator.getText());
+        final ElementLocator locator = newInstance();
+        Assert.assertNull(locator.getText());
     }
 
 
     @Test
     public void testSetText() throws XmlPullParserException {
 
-        final Document document = new Document();
-        document.addChild(Node.ELEMENT, document.createElement("root", "root"));
-        final ElementLocator locator = new ElementLocator(document);
+        final ElementLocator locator = newInstance();
+
+        final String text = "<text>&";
+        locator.setText(text);
+
+        Assert.assertEquals(locator.getText(), text);
+    }
+
+
+    @Test
+    public void testSetTextWithNull() throws XmlPullParserException {
+
+        final ElementLocator locator = newInstance();
 
         String text = null;
         locator.setText(text);
 
-        text = "&lt;text&gt;";
-        locator.setText(text);
-        assertEquals(locator.getText(), text);
+        Assert.assertEquals(locator.getText(), null);
     }
 
 
     @Test
     public void testRemove() throws XmlPullParserException, IOException {
-        System.out.println("\ntestRemove\n");
 
-        final Document document = new Document();
-        document.addChild(
-            Node.ELEMENT,
-            document.createElement(XmlPullParser.NO_NAMESPACE, "root"));
-        final ElementLocator locator = new ElementLocator(document);
+        final ElementLocator locator = newInstance();
 
-        final int count = RANDOM.nextInt(MAXIMUM_CHILD_COUNT) + 1;
+        final int expected = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
 
-        for (int i = 0; i < count; i++) {
-            locator.child(XmlPullParser.NO_NAMESPACE, "child");
-            locator.parent();
+        for (int i = 0; i < expected; i++) {
+            locator.child(NAMESPACE, NAME).parent();
         }
+        Assert.assertEquals(locator.count(NAMESPACE, NAME), expected);
 
-        //print(document);
-
-        for (int i = 0; i < count; i++) {
-            final int childCount =
-                locator.count(XmlPullParser.NO_NAMESPACE, "child");
-            locator.child(
-                XmlPullParser.NO_NAMESPACE, "child", childCount - 1);
+        for (int i = 0; i < expected; i++) {
+            final int childCount = locator.count(NAMESPACE, NAME);
+            locator.child(NAMESPACE, NAME, childCount - 1);
             locator.remove();
         }
+    }
 
-        //print(document);
+
+    @Test(expectedExceptions = XmlPullParserException.class)
+    public void testRemoveAtRoot() throws XmlPullParserException {
+        final ElementLocator locator = newInstance();
+        locator.remove();
     }
 }
