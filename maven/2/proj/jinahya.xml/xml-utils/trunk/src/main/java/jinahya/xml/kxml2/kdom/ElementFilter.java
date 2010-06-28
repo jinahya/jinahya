@@ -40,7 +40,8 @@ public abstract class ElementFilter {
     public void filter(final Document document) throws XmlPullParserException {
 
         if (document == null) {
-            throw new IllegalArgumentException("document is null");
+            throw new IllegalArgumentException(
+                "param:0:" + Document.class + ": is null");
         }
 
         filter(document.getRootElement());
@@ -56,16 +57,16 @@ public abstract class ElementFilter {
     private void filter(final Element element) throws XmlPullParserException {
 
         if (element == null) {
-            throw new IllegalArgumentException("parameter(element) is null");
+            throw new IllegalArgumentException(
+                "param:0:" + Element.class + ": is null");
         }
 
         if (startFiltering(element)) {
             final int childCount = element.getChildCount();
             for (int i = 0; i < childCount; i++) {
-                if (Node.ELEMENT != element.getType(i)) {
-                    continue;
+                if (Node.ELEMENT == element.getType(i)) {
+                    filter(element.getElement(i));
                 }
-                filter(element.getElement(i));
             }
         }
 

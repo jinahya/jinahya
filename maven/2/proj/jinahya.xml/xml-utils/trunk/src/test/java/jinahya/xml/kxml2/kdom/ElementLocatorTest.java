@@ -59,6 +59,10 @@ public class ElementLocatorTest {
 
     private static final String NAME = "b";
 
+    private static final String ROOT_NAMESPACE = "root";
+
+    private static final String ROOT_NAME = "root";
+
 
     private static void print(final Document document) throws IOException {
         System.out.println("-------------------------------------------------");
@@ -69,19 +73,74 @@ public class ElementLocatorTest {
     }
 
 
+    private static ElementLocator newInstance() throws XmlPullParserException {
+        final Document document = new Document();
+        document.addChild(
+            Node.ELEMENT, document.createElement(ROOT_NAMESPACE, ROOT_NAME));
+        return new ElementLocator(document);
+    }
+
+
+    @Test
+    public void testConstructor() throws XmlPullParserException {
+        final ElementLocator locator = newInstance();
+
+        Assert.assertEquals(locator.getDepth(), 1);
+
+        Assert.assertEquals(locator.getNamespace(), ROOT_NAMESPACE);
+        Assert.assertEquals(locator.getName(), ROOT_NAME);
+    }
+
+
+    @Test(expectedExceptions = XmlPullParserException.class)
+    public void testConstructorWithEmptyDocument()
+        throws XmlPullParserException {
+
+        new ElementLocator(new Document());
+    }
+
+
+    @Test
+    public void testAddAndLocateChild() throws XmlPullParserException {
+
+        final ElementLocator locator = newInstance();
+
+        Assert.assertEquals(locator.getDepth(), 1);
+
+        locator.addAndLocateChild(NAMESPACE, NAME);
+        Assert.assertEquals(locator.getNamespace(), NAMESPACE);
+        Assert.assertEquals(locator.getName(), NAME);
+        Assert.assertEquals(locator.getDepth(), 2);
+    }
+
+
+    @Test
+    public void testAddAndLocateChildWithoutNamespace()
+        throws XmlPullParserException {
+
+        final ElementLocator locator = newInstance();
+
+        Assert.assertEquals(locator.getDepth(), 1);
+
+        locator.addAndLocateChild(NAME);
+        Assert.assertEquals(locator.getNamespace(), XmlPullParser.NO_NAMESPACE);
+        Assert.assertEquals(locator.getName(), NAME);
+        Assert.assertEquals(locator.getDepth(), 2);
+    }
+
+
     @Test
     public void testGetChildCount() throws XmlPullParserException {
-        final Document document = new Document();
-        document.addChild(Node.ELEMENT, document.createElement("root", "root"));
-        final ElementLocator locator = new ElementLocator(document);
 
-        assertEquals(locator.count(NAMESPACE, NAME), 0);
+        final ElementLocator locator = newInstance();
+
+        Assert.assertEquals(locator.count(NAMESPACE, NAME), 0);
 
         final int expected = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
         for (int i = 0; i < expected; i++) {
             locator.child(NAMESPACE, NAME).parent();
         }
-        assertEquals(locator.count(NAMESPACE, NAME), expected);
+        Assert.assertEquals(locator.count(NAMESPACE, NAME), expected);
     }
 
 
@@ -110,8 +169,38 @@ public class ElementLocatorTest {
     }
 
 
+    @Test
+    public void testGetAttribute() throws XmlPullParserException {
+        final ElementLocator locator = newInstance();
+
+        Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+
+        final String value = "value";
+        locator.setAttribute(NAMESPACE, NAME, value);
+
+        Assert.assertEquals(locator.getAttribute(NAMESPACE, NAME), value);
+    }
+
+
+    @Test
+    public void testSetAttribute() throws XmlPullParserException {
+        final ElementLocator locator = newInstance();
+
+        Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+
+        final String value = "value";
+        locator.setAttribute(NAMESPACE, NAME, value);
+
+        Assert.assertEquals(locator.getAttribute(NAMESPACE, NAME), value);
+
+        locator.setAttribute(NAMESPACE, NAME, null);
+
+        Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+    }
+
+
     //@Test
-    public void testGetText() {
+    public void testGetText() throws XmlPullParserException {
         final Document document = new Document();
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
         final ElementLocator locator = new ElementLocator(document);
@@ -120,7 +209,7 @@ public class ElementLocatorTest {
 
 
     @Test
-    public void testSetText() {
+    public void testSetText() throws XmlPullParserException {
 
         final Document document = new Document();
         document.addChild(Node.ELEMENT, document.createElement("root", "root"));
