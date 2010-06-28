@@ -1,63 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="25" tokens="118">
-<file line="53" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\EventListenerSupport.java"/>
-<file line="101" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\EventListenerSupport.java"/>
+<duplication lines="26" tokens="152">
+<file line="105" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
+<file line="266" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
 <codefragment>
 <![CDATA[
-    public <T extends EventListener> boolean remove(final Class<T> type,
-                                                    final T instance) {
+    public void removeDependencies(final T source, final T... targets) {
 
-        if (type == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + Class.class + ": is null");
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
         }
 
-        if (!EventListener.class.isAssignableFrom(type)) {
+        if (!type.isInstance(source)) {
             throw new IllegalArgumentException(
-                "param:0:" + Class.class + ":" + type + " is not assignable to "
-                + EventListener.class);
-        }
-
-        if (instance == null) {
-            throw new IllegalArgumentException("param:1:?: is null");
-        }
-
-        if (!type.isInstance(instance)) {
-            throw new IllegalArgumentException(
-                "param:1:" + instance.getClass() + ":" + instance
+                "param:0:" + source.getClass() + ":" + source
                 + " is not an instance of " + type);
         }
 
-        synchronized (classified) {
+        if (targets == null) {
+            throw new IllegalArgumentException("param:1:: is null");
+        }
+
+        for (int i = 0; i < targets.length; i++) {
+            if (targets[i] != null && !type.isInstance(targets[i])) {
+                throw new IllegalArgumentException(
+                    "param:1[" + i + "]:" + targets[i].getClass() + ":"
+                    + targets[i] + " is not an instance of " + type);
+            }
+        }
+
+        synchronized (dependencies) {
+            for (T target : targets) {
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="20" tokens="107">
-<file line="302" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\DependencyResolver.java"/>
-<file line="373" path="C:\Users\onacit\.hudson\jobs\jinahya.util util-ext\workspace\src\main\java\jinahya\util\DependencyResolver.java"/>
+<duplication lines="27" tokens="113">
+<file line="142" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
+<file line="303" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
 <codefragment>
 <![CDATA[
-    public Vector<Vector<T>> getVerticalGroups(final int maximum) {
+    public void removeDependency(final T source, final T target) {
 
-        if (maximum <= 0) {
-            throw new IllegalArgumentException(
-                "param:0:" + Integer.TYPE + ":" + maximum + " <= 0");
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
         }
 
-        final Vector<T> remains = getFlatten();
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
 
-        final Vector<Vector<T>> groups = new Vector<Vector<T>>();
+        if (target != null) {
 
-        while (!remains.isEmpty()) {
-
-            if (groups.size() == (maximum - 1)) {
-                break;
+            if (!type.isInstance(target)) {
+                throw new IllegalArgumentException(
+                "param:1:" + target.getClass() + ":" + target
+                + " is not an instance of " + type);
             }
 
-            final Vector<T> group = new Vector<T>();
+            if (source.equals(target)) {
+                return;
+                //throw new IllegalArgumentException("self dependency");
+            }
+        }
 
-            groups.addElement(group);
+        synchronized (dependencies) {
+]]>
+</codefragment>
+</duplication>
+<duplication lines="22" tokens="106">
+<file line="70" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
+<file line="142" path="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.util\util-ext\trunk\src\main\java\jinahya\util\DependencyResolver.java"/>
+<codefragment>
+<![CDATA[
+    public void addDependency(final T source, final T target) {
+
+        if (source == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        if (!type.isInstance(source)) {
+            throw new IllegalArgumentException(
+                "param:0:" + source.getClass() + ":" + source
+                + " is not an instance of " + type);
+        }
+
+        if (target != null) {
+
+            if (!type.isInstance(target)) {
+                throw new IllegalArgumentException(
+                "param:1:" + target.getClass() + ":" + target
+                + " is not an instance of " + type);
+            }
+
+            if (source.equals(target)) {
+                return;
 ]]>
 </codefragment>
 </duplication>
