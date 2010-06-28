@@ -3,12 +3,11 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>jinahya.util</groupId>
   <artifactId>util-ext</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>${project.groupId}:${project.artifactId}</name>
-  <url>http://maven.apache.org</url>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -28,8 +27,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.bootstrap.classes>${java.home}/lib/rt.jar</java.bootstrap.classes>
   </properties>
+
+  <!-- Build Settings -->
   <build>
     <extensions>
       <extension>
@@ -155,6 +155,10 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <!-- More Project Information -->
+  <name>${project.groupId}:${project.artifactId}</name>
+  <url>http://maven.apache.org</url>
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -163,6 +167,26 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <id>onacit</id>
+      <name>Jin Kwon</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>cooltk9</id>
+      <name>Daegyeong Kim</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>+9</timezone>
+    </developer>
+  </developers>
+
+  <!-- Environment Settings -->
   <distributionManagement>
     <site>
       <id>googlecode</id>
