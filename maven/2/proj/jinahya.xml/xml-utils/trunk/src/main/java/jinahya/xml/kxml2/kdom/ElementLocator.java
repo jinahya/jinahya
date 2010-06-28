@@ -45,8 +45,62 @@ public class ElementLocator {
 
     /**
      *
+     * @param namespace
+     * @param name
+     * @return
      */
-    private static class IElement {
+    private static String key(final String namespace, final String name) {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        return "{" + namespace + "}" + name;
+    }
+
+
+    /**
+     *
+     * @param element
+     * @return
+     */
+    static String key(final Element element) {
+
+        if (element == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Element.class + ": is null");
+        }
+
+        return key(element.getNamespace(), element.getName());
+    }
+
+
+    /**
+     *
+     */
+    static final class IElement {
+
+
+        /**
+         * 
+         * @param element
+         * @return
+         */
+        static String key(final IElement element) {
+
+            if (element == null) {
+                throw new IllegalArgumentException(
+                    "param:0:" + IElement.class + ": is null");
+            }
+
+            return ElementLocator.key(element.element);
+        }
 
 
         /**
@@ -54,7 +108,7 @@ public class ElementLocator {
          * @param element
          * @param index
          */
-        public IElement(final Element element, final int index) {
+        IElement(final Element element, final int index) {
             super();
 
             if (element == null) {
@@ -75,12 +129,14 @@ public class ElementLocator {
 
 
         /**
+         * Returns child elements.
          *
-         * @param namespace
-         * @param name
-         * @return
+         * @param namespace child element's namespace.
+         * @param name child element's name
+         * @return children
          */
-        private String key(final String namespace, final String name) {
+        Vector<IElement> getChildren(final String namespace,
+                                     final String name) {
 
             if (namespace == null) {
                 throw new IllegalArgumentException(
@@ -92,55 +148,11 @@ public class ElementLocator {
                     "param:1:" + String.class + ": is null");
             }
 
-            return "{" + namespace + "}" + name;
-        }
-
-
-        private String key(final Element element) {
-
-            if (element == null) {
-                throw new IllegalArgumentException(
-                    "param:0:" + Element.class + ": is null");
-            }
-
-            return key(element.getNamespace(), element.getName());
-        }
-
-
-        private String key(final IElement element) {
-
-            if (element == null) {
-                throw new IllegalArgumentException(
-                    "param:0:" + IElement.class + ": is null");
-            }
-
-            return key(element.element);
-        }
-
-
-        /**
-         *
-         * @param namespace
-         * @param name
-         * @return
-         */
-        private Vector<IElement> getChildren(final String namespace,
-                                             final String name) {
-
-            if (namespace == null) {
-                throw new IllegalArgumentException(
-                    "param:0:" + String.class + ": is null");
-            }
-
-            if (name == null) {
-                throw new IllegalArgumentException(
-                    "param:1:" + String.class + ": is null");
-            }
-
-            final String key = key(namespace, name);
+            final String key = ElementLocator.key(namespace, name);
             Vector<IElement> children = table.get(key);
             if (children == null) {
                 children = new Vector<IElement>();
+                table.put(key, children);
                 final int childCount  = element.getChildCount();
                 for (int i = 0; i < childCount; i++) {
                     if (Node.ELEMENT != element.getType(i)) {
@@ -163,7 +175,7 @@ public class ElementLocator {
          * @param element
          * @return
          */
-        private Vector<IElement> getChildren(final IElement element) {
+        Vector<IElement> getSiblings(final IElement element) {
             return getChildren(element.element.getNamespace(),
                                element.element.getName());
         }
@@ -175,7 +187,7 @@ public class ElementLocator {
          * @param name
          * @param index
          */
-        private void removeChild(final IElement child) {
+        void removeChild(final IElement child) {
 
             if (child == null) {
                 throw new IllegalArgumentException(
@@ -183,7 +195,32 @@ public class ElementLocator {
             }
 
             element.removeChild(child.index);
-            getChildren(child).remove(child);
+            getSiblings(child).remove(child);
+        }
+
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (!(obj instanceof IElement)) {
+                return false;
+            }
+            final IElement casted = (IElement) obj;
+            return (casted.element.equals(element)) && (casted.index == index);
+        }
+
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            result = 37 * result + element.hashCode();
+            result = 37 * result + index;
+            return result;
+        }
+
+
+        @Override
+        public String toString() {
+            return (key(this) + "[" + index + "]");
         }
 
 
@@ -288,8 +325,12 @@ public class ElementLocator {
 
 
     /**
+     * Creates a new instance. An <code>IllegalArgumentException</code> will be
+     * thrown if specified <code>document</code> is null.
      *
-     * @param element
+     * @param document document instance
+     * @throws XmlPullParserException if given <code>document</code> doesn't
+     *         have any child element. (no root element)
      */
     public ElementLocator(final Document document)
         throws XmlPullParserException {
@@ -315,33 +356,6 @@ public class ElementLocator {
 
     /**
      *
-     * @param name
-     * @param index
-     * @return
-     * @throws XmlPullParserException
-     */
-    public ElementLocator locateChild(final String name, final int index)
-        throws XmlPullParserException {
-
-        return child(name, index);
-    }
-
-
-    /**
-     *
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     */
-    public ElementLocator locateFirstChild(final String name)
-        throws XmlPullParserException {
-
-        return locateChild(name, 0);
-    }
-
-
-    /**
-     *
      * @param namespace
      * @param name
      * @return
@@ -357,16 +371,6 @@ public class ElementLocator {
 
     /**
      *
-     */
-    public ElementLocator locateLastChild(final String name)
-        throws XmlPullParserException {
-
-        return child(name, count(name) - 1);
-    }
-
-
-    /**
-     *
      * @param namespace
      * @param name
      * @return
@@ -376,7 +380,13 @@ public class ElementLocator {
                                           final String name)
         throws XmlPullParserException {
 
-        return child(namespace, name, count(name) - 1);
+        final int childCount = getChildCount(namespace, name);
+
+        if (childCount == 0) {
+            throw new XmlPullParserException("no " + key(namespace, name));
+        }
+
+        return child(name, childCount - 1);
     }
 
 
@@ -390,35 +400,6 @@ public class ElementLocator {
      */
     public ElementLocator locateChild(final String namespace, final String name,
                                       final int index)
-        throws XmlPullParserException {
-
-        return child(namespace, name, index);
-    }
-
-
-    /**
-     *
-     * @param name
-     * @param index
-     * @throws XmlPullParserException if child not found
-     */
-    public ElementLocator child(final String name, final int index)
-        throws XmlPullParserException {
-
-        return child(XmlPullParser.NO_NAMESPACE, name, index);
-    }
-
-
-    /**
-     * Locates child identified by given parameters.
-     *
-     * @param namespace child's namespace
-     * @param name child's name
-     * @param index child's index
-     * @throw XmlPullParserException if given child is not found
-     */
-    public ElementLocator child(final String namespace, final String name,
-                                final int index)
         throws XmlPullParserException {
 
         if (namespace == null) {
@@ -452,23 +433,23 @@ public class ElementLocator {
 
     /**
      *
-     * @return
+     * @param name
+     * @param index
+     * @throws XmlPullParserException if child not found
      */
-    public int getDepth() {
-        return path.size() - 1;
+    public ElementLocator child(final String name, final int index)
+        throws XmlPullParserException {
+
+        return locateChild(XmlPullParser.NO_NAMESPACE, name, index);
     }
 
 
     /**
      *
-     * @param name
      * @return
-     * @throws XmlPullParserException
      */
-    public ElementLocator addAndLocateChild(final String name)
-        throws XmlPullParserException {
-
-        return addAndLocateChild(XmlPullParser.NO_NAMESPACE, name);
+    public int getDepth() {
+        return path.size() - 1;
     }
 
 
@@ -483,55 +464,41 @@ public class ElementLocator {
                                             final String name)
         throws XmlPullParserException {
 
-        return child(namespace, name);
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        final int childCount = getChildCount(namespace, name);
+
+        final Node current = path.lastElement().element;
+        current.addChild(Node.ELEMENT, current.createElement(namespace, name));
+        path.lastElement().table.remove(key(namespace, name));
+
+        return locateChild(namespace, name, childCount);
     }
 
 
     /**
-     * Add and locate a new child element with
-     * {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE} as namespace.
+     * Calls {@link #addAndLocateChild(java.lang.String, java.lang.String)} with
+     * {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE} as
+     * <code>namespace</code> value.
      *
      * @param name new child element's name
      * @return self
      * @throws XmlPullParserException
-     * @see #child(java.lang.String, java.lang.String)
+     * @see #addAndLocateChild(java.lang.String, java.lang.String)
      * @see org.xmlpull.v1.XmlPullParser#NO_NAMESPACE
      */
     public ElementLocator child(final String name)
         throws XmlPullParserException {
 
-        return child(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     * Add and locate a new child element.
-     *
-     * @param namespace new child element's namespace
-     * @param name new child element's name
-     * @return self
-     * @throws XmlPullParserException
-     */
-    public ElementLocator child(final String namespace, final String name)
-        throws XmlPullParserException {
-
-        if (namespace == null) {
-            throw new IllegalArgumentException(
-                "param:0:namespace:" + String.class + ": is null");
-        }
-
-        if (name == null) {
-            throw new IllegalArgumentException(
-                "param:1:name:" + String.class + ": is null");
-        }
-
-
-        final int count = count(namespace, name);
-
-        final Node current = path.lastElement().element;
-        current.addChild(Node.ELEMENT, current.createElement(namespace, name));
-
-        return child(namespace, name, count);
+        return addAndLocateChild(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -595,41 +562,12 @@ public class ElementLocator {
 
 
     /**
-     *
-     * @param name
-     * @return
-     */
-    public int getChildCount(final String name) {
-        return count(name);
-    }
-
-
-    /**
      * 
      * @param namespace
      * @param name
      * @return
      */
     public int getChildCount(final String namespace, final String name) {
-        return count(namespace, name);
-    }
-
-
-    /**
-     * 
-     */
-    public int count(final String name) {
-        return count(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     *
-     * @param namespace
-     * @param name
-     * @return
-     */
-    public int count(final String namespace, final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -646,27 +584,23 @@ public class ElementLocator {
 
 
     /**
-     * Identical to <code>getChildText(XmlPullParser.NO_NAMESPACE, name)</code>.
-     *
-     * @param name child element name.
-     * @return specified child element's text.
-     * @throws XmlPullParserException if any error occurs.
-     * @see #getChildText(java.lang.String, java.lang.String, int)
+     * 
      */
-    public String getChildText(final String name, int index)
-        throws XmlPullParserException {
-
-        return getChildText(XmlPullParser.NO_NAMESPACE, name, index);
+    public int count(final String name) {
+        return getChildCount(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
     /**
+     * Find a child element denoted by given parameters and return (iif found)
+     * its text value. The location won't be changed.
      *
-     * @param namespace
-     * @param name
-     * @param index
-     * @return
-     * @throws XmlPullParserException
+     * @param namespace child element's namespace.
+     * @param name child element's name
+     * @param index child element's index.
+     * @return child's element's text value.
+     * @throws XmlPullParserException if there is no child element denoted by
+     *         given parameters.
      */
     public String getChildText(final String namespace, final String name,
                                final int index)
@@ -679,7 +613,7 @@ public class ElementLocator {
 
         if (name == null) {
             throw new IllegalArgumentException(
-                "param:1:" + String.class +": is null");
+                "param:1:" + String.class + ": is null");
         }
 
         if (index < 0) {
@@ -687,7 +621,7 @@ public class ElementLocator {
                 "param:2:" + Integer.TYPE + ":" + index + " < 0");
         }
 
-        child(namespace, name, index);
+        locateChild(namespace, name, index);
         final String text = getText();
         parent();
         return text;
@@ -695,29 +629,20 @@ public class ElementLocator {
 
 
     /**
+     * Find a child element denoted by parameters and (iif found) append text
+     * value to given <code>buffer</code>.
      *
-     * @return
+     * @param namespace child element's namespace
+     * @param name child element's name
+     * @param index child element's index
+     * @param buffer a buffer to which located child element's text value will
+     *        appended.
+     * @return self
+     * @throws XmlPullParserException if no child element found.
      */
-    public String getNamespace() {
-        return path.lastElement().element.getNamespace();
-    }
-
-
-    /**
-     *
-     * @return
-     */
-    public String getName() {
-        return path.lastElement().element.getName();
-    }
-
-
-    /*
-     * 
-     * @param namespace
-     * @param name
-     * @throws XmlPullParserException
-    public void require(final String namespace, final String name)
+    public ElementLocator getChildText(final String namespace,
+                                       final String name, final int index,
+                                       final StringBuffer buffer)
         throws XmlPullParserException {
 
         if (namespace == null) {
@@ -730,60 +655,74 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        if (!namespace.equals(path.lastElement().element.getNamespace())
-            || !name.equals(path.lastElement().element.getName())) {
-
-            throw new XmlPullParserException(
-                "actual: {" + path.lastElement().element.getNamespace() + "}"
-                + path.lastElement().element.getName()
-                + " / expected: {" + namespace + "}" + name);
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                "param:2:" + Integer.TYPE + ":" + index + " < 0");
         }
+
+        if (buffer == null) {
+            throw new IllegalArgumentException(
+                "param:3:" + StringBuffer.class + ": is null");
+        }
+
+        locateChild(namespace, name, index);
+        this.getText(buffer);
+        parent();
+
+        return this;
     }
-     */
 
 
     /**
      *
-     * @param name
      * @return
      */
-    public String getAttribute(final String name) {
-        return getAttr(name);
+    public String getCurrentNamespace() {
+        return path.lastElement().element.getNamespace();
     }
 
 
     /**
+     * Returns the current element's name.
      *
-     * @param namespace
-     * @param name
-     * @return
+     * @return current element's name
+     */
+    public String getCurrentName() {
+        return path.lastElement().element.getName();
+    }
+
+
+    /**
+     * Find an attribute and (iif found) append its value to given
+     * <code>buffer</code>.
+     *
+     * @param namespace attribute's namespace
+     * @param name attribute's name
+     * @param buffer buffer to which attribute's value will be appended.
+     * @return self.
+     */
+    public ElementLocator getAttribute(final String namespace,
+                                       final String name,
+                                       final StringBuffer buffer) {
+
+        final String attribute = getAttribute(namespace, name);
+        if (attribute != null) {
+            buffer.append(attribute);
+        }
+        return this;
+    }
+
+
+    /**
+     * Returns an attribute's value.
+     *
+     * @param namespace attribute's namespace
+     * @param name attribute's name
+     * @return attribute's value
+     * @see org.kxml2.kdom.Element#getAttributeValue(
+     *      java.lang.String, java.lang.String)
      */
     public String getAttribute(final String namespace, final String name) {
-        return getAttr(namespace, name);
-    }
-
-
-    /**
-     *
-     * @param name
-     * @return
-     * @see org.kxml2.kdom.Element#getAttributeValue(
-     *      java.lang.String, java.lang.String)
-     */
-    public String getAttr(final String name) {
-        return getAttr(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     *
-     * @param namespace
-     * @param name
-     * @return
-     * @see org.kxml2.kdom.Element#getAttributeValue(
-     *      java.lang.String, java.lang.String)
-     */
-    public String getAttr(final String namespace, final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -800,50 +739,29 @@ public class ElementLocator {
 
 
     /**
-     * 
-     * @param name
-     * @param value
+     * A shortened of {@link #getAttribute(java.lang.String, java.lang.String)}
+     * with {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE} as namespace.
+     *
+     * @param name attribute's name
+     * @return attribute's value
+     * @see {@link #getAttribute(java.lang.String, java.lang.String)}
      */
-    public void setAttribute(final String name, final String value) {
-        setAttr(name, value);
+    public String attribute(final String name) {
+        return getAttribute(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @param value
+     * Sets new attribute value.
+     *
+     * @param namespace attribute's namespace
+     * @param name attribute's name
+     * @param value attribute's new value or null.
+     * @see {@link org.kxml2.kdom.Element#setAttribute(java.lang.String,
+     *      java.lang.String, java.lang.String)}
      */
     public void setAttribute(final String namespace, final String name,
                              final String value) {
-
-        setAttr(namespace, name, value);
-    }
-
-
-    /**
-     *
-     * @param name
-     * @param value
-     * @see org.kxml2.kdom.Element#setAttribute(
-     *      java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void setAttr(final String name, final String value) {
-        setAttr(XmlPullParser.NO_NAMESPACE, name, value);
-    }
-
-
-    /**
-     *
-     * @param namespace
-     * @param name
-     * @param value
-     * @see org.kxml2.kdom.Element#setAttribute(
-     *      java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void setAttr(final String namespace, final String name,
-                        final String value) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -860,10 +778,45 @@ public class ElementLocator {
 
 
     /**
+     * A shortened of {@link #setAttribute(java.lang.String, java.lang.String,
+     * java.lang.String)} with {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE}
+     * as namespace.
+     *
+     * @param name attribute's name
+     * @param value attribute's new value or null.
+     * @see #setAttribute(java.lang.String, java.lang.String, java.lang.String)
+     */
+    public void attribute(final String name, final String value) {
+        setAttribute(XmlPullParser.NO_NAMESPACE, name, value);
+    }
+
+
+    /**
+     * Find text value and (iif found) append it to given <code>buffer</code>.
+     *
+     * @param buffer a buffer to which text value will be appended.
+     * @return self
+     */
+    public ElementLocator getText(final StringBuffer buffer) {
+
+        if (buffer == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + StringBuffer.class + ": is null");
+        }
+
+        final String text = getText();
+        if (text != null) {
+            buffer.append(text);
+        }
+        return this;
+    }
+
+
+    /**
      * Returns text value.
      *
      * @param appendIgnorableWhiteSpaces
-     * @return text value of the current element or null.
+     * @return current element's text value or null if there is no text node.
      */
     public String getText() {
 
@@ -892,8 +845,22 @@ public class ElementLocator {
 
 
     /**
+     * A shortened of {@link #getText()}.
      *
-     * @param text
+     * @return current element's text value or null if there is no text node.
+     * @see #getText()
+     */
+    public String text() {
+        return getText();
+    }
+
+
+    /**
+     * Removes all child elements and set text. Calling this method with null
+     * value will just make the current element empty.
+     *
+     * @return self
+     * @param text text value
      */
     public ElementLocator setText(final String text) {
         path.lastElement().element.clear();
@@ -906,12 +873,37 @@ public class ElementLocator {
 
 
     /**
-     * Removes current element and locate to the parent.
+     * A shortened of {@link #setText(java.lang.String)}.
      *
-     * @return
-     * @throws XmlPullParserException
+     * @param text new text value
+     * @return self
+     * @see #setText(java.lang.String)
+     */
+    public ElementLocator text(final String text) {
+        return setText(text);
+    }
+
+
+    /**
+     * A shortened of {@link #removeCurrentAndLocateParent()}.
+     *
+     * @return self
+     * @throws XmlPullParserException if currently at root.
+     * @see #removeCurrentAndLocateParent()
      */
     public ElementLocator remove() throws XmlPullParserException {
+        return removeCurrentAndLocateParent();
+    }
+
+
+    /**
+     * Removes current element from its parent and locate to the parent.
+     *
+     * @return self
+     * @throws XmlPullParserException if currently at root.
+     */
+    public ElementLocator removeCurrentAndLocateParent()
+        throws XmlPullParserException {
 
         if (atRoot()) {
             throw new XmlPullParserException("root element can't be removed");
@@ -925,24 +917,33 @@ public class ElementLocator {
 
 
     /**
+     * Returns the document instance.
      *
-     * @return
-     * @throws XmlPullParserException
-     */
-    public ElementLocator removeCurrentAndLocateParent()
-        throws XmlPullParserException {
-
-        return remove();
-    }
-
-
-    /**
-     *
-     * @return
+     * @return the document instance or null
      */
     public Document getDocument() {
         return (Document) path.elementAt(0).element.getParent();
     }
+
+
+    /*
+     * Returns the current value of {@link #cacheChildren}.
+     *
+     * @return current value fo {@link #cacheChildren}.
+    public boolean getCacheChildren() {
+        return cacheChildren;
+    }
+     */
+
+
+    /*
+     * Sets new value of {@link #cacheChildren}.
+     *
+     * @param cacheChildren new value for {@link #cacheChildren}.
+    public void setCacheChildren(final boolean cacheChildren) {
+        this.cacheChildren = cacheChildren;
+    }
+     */
 
 
     private final Vector<IElement> path;

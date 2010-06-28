@@ -75,8 +75,8 @@ public class ElementLocatorTest {
 
         Assert.assertEquals(locator.getDepth(), 0);
 
-        Assert.assertEquals(locator.getNamespace(), ROOT_NAMESPACE);
-        Assert.assertEquals(locator.getName(), ROOT_NAME);
+        Assert.assertEquals(locator.getCurrentNamespace(), ROOT_NAMESPACE);
+        Assert.assertEquals(locator.getCurrentName(), ROOT_NAME);
     }
 
 
@@ -96,23 +96,9 @@ public class ElementLocatorTest {
         Assert.assertEquals(locator.getDepth(), 0);
 
         locator.addAndLocateChild(NAMESPACE, NAME);
-        Assert.assertEquals(locator.getNamespace(), NAMESPACE);
-        Assert.assertEquals(locator.getName(), NAME);
-        Assert.assertEquals(locator.getDepth(), 1);
-    }
+        Assert.assertEquals(locator.getCurrentNamespace(), NAMESPACE);
+        Assert.assertEquals(locator.getCurrentName(), NAME);
 
-
-    @Test
-    public void testAddAndLocateChildWithoutNamespace()
-        throws XmlPullParserException {
-
-        final ElementLocator locator = newInstance();
-
-        Assert.assertEquals(locator.getDepth(), 0);
-
-        locator.addAndLocateChild(NAME);
-        Assert.assertEquals(locator.getNamespace(), XmlPullParser.NO_NAMESPACE);
-        Assert.assertEquals(locator.getName(), NAME);
         Assert.assertEquals(locator.getDepth(), 1);
     }
 
@@ -122,13 +108,13 @@ public class ElementLocatorTest {
 
         final ElementLocator locator = newInstance();
 
-        Assert.assertEquals(locator.count(NAMESPACE, NAME), 0);
+        Assert.assertEquals(locator.getChildCount(NAMESPACE, NAME), 0);
 
         final int expected = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
         for (int i = 0; i < expected; i++) {
-            locator.child(NAMESPACE, NAME).parent();
+            locator.addAndLocateChild(NAMESPACE, NAME).parent();
         }
-        Assert.assertEquals(locator.count(NAMESPACE, NAME), expected);
+        Assert.assertEquals(locator.getChildCount(NAMESPACE, NAME), expected);
     }
 
 
@@ -143,11 +129,12 @@ public class ElementLocatorTest {
 
         for (int i = 0; i < texts.length; i++) {
             texts[i] = "<" + Integer.toString(i) + ">&";
-            locator.child(NAME).setText(texts[i]).parent();
+            locator.addAndLocateChild(NAMESPACE, NAME).
+                setText(texts[i]).locateParent();
         }
 
         for (int i = 0; i < texts.length; i++) {
-            locator.child(NAME, i);
+            locator.locateChild(NAMESPACE, NAME, i);
             Assert.assertEquals(locator.getText(), texts[i]);
             locator.parent();
         }
@@ -225,21 +212,25 @@ public class ElementLocatorTest {
         final int expected = RANDOM.nextInt(MAXIMUM_CHILD_COUNT);
 
         for (int i = 0; i < expected; i++) {
-            locator.child(NAMESPACE, NAME).parent();
+            locator.addAndLocateChild(NAMESPACE, NAME).parent();
         }
-        Assert.assertEquals(locator.count(NAMESPACE, NAME), expected);
+        Assert.assertEquals(locator.getChildCount(NAMESPACE, NAME), expected);
 
         for (int i = 0; i < expected; i++) {
-            final int childCount = locator.count(NAMESPACE, NAME);
-            locator.child(NAMESPACE, NAME, childCount - 1);
-            locator.remove();
+            final int childCount = locator.getChildCount(NAMESPACE, NAME);
+            locator.locateChild(NAMESPACE, NAME, childCount - 1);
+            locator.removeCurrentAndLocateParent();
         }
     }
 
 
     @Test(expectedExceptions = XmlPullParserException.class)
     public void testRemoveAtRoot() throws XmlPullParserException {
+
         final ElementLocator locator = newInstance();
-        locator.remove();
+
+        Assert.assertEquals(locator.atRoot(), true);
+
+        locator.removeCurrentAndLocateParent();
     }
 }
