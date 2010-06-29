@@ -161,8 +161,8 @@
         <configuration>
           <links>
             <link>http://www.xmlpull.org/v1/doc/api</link>
-            <link>http://kxml.sourceforge.net/kxml2/javadoc/</link>
-            <link>http://java.sun.com/javase/6/docs/api/</link>
+            <link>http://kxml.sourceforge.net/kxml2/javadoc</link>
+            <link>http://java.sun.com/javase/6/docs/api</link>
           </links>
         </configuration>
       </plugin>

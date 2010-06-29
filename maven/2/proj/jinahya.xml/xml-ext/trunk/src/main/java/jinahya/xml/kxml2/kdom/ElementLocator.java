@@ -44,12 +44,14 @@ public class ElementLocator {
 
 
     /**
+     * Returns an universal name.
      *
-     * @param namespace
-     * @param name
-     * @return
+     * @param namespace namespace
+     * @param name name
+     * @return the universal name
+     * @see <a href="http://www.jclark.com/xml/xmlns.htm">XML Namespaces</a>
      */
-    private static String key(final String namespace, final String name) {
+    static String key(final String namespace, final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -66,9 +68,10 @@ public class ElementLocator {
 
 
     /**
+     * Returns an universal name.
      *
-     * @param element
-     * @return
+     * @param element element to be expressed
+     * @return the universal name
      */
     static String key(final Element element) {
 
@@ -233,7 +236,7 @@ public class ElementLocator {
 
     /**
      *
-     * @param url
+     * @param file
      * @return
      */
     public ElementLocator newInstance(final File file)
@@ -719,8 +722,7 @@ public class ElementLocator {
      * @param namespace attribute's namespace
      * @param name attribute's name
      * @return attribute's value
-     * @see org.kxml2.kdom.Element#getAttributeValue(
-     *      java.lang.String, java.lang.String)
+     * @see Element#getAttributeValue(String, String)
      */
     public String getAttribute(final String namespace, final String name) {
 
@@ -739,12 +741,12 @@ public class ElementLocator {
 
 
     /**
-     * A shortened of {@link #getAttribute(java.lang.String, java.lang.String)}
-     * with {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE} as namespace.
+     * A shortened of {@link #getAttribute(String, String)} with
+     * {@link XmlPullParser#NO_NAMESPACE} as namespace.
      *
      * @param name attribute's name
      * @return attribute's value
-     * @see {@link #getAttribute(java.lang.String, java.lang.String)}
+     * @see #getAttribute(String, String)
      */
     public String attribute(final String name) {
         return getAttribute(XmlPullParser.NO_NAMESPACE, name);
@@ -757,8 +759,7 @@ public class ElementLocator {
      * @param namespace attribute's namespace
      * @param name attribute's name
      * @param value attribute's new value or null.
-     * @see {@link org.kxml2.kdom.Element#setAttribute(java.lang.String,
-     *      java.lang.String, java.lang.String)}
+     * @see org.kxml2.kdom.Element#setAttribute(String, String, String)
      */
     public void setAttribute(final String namespace, final String name,
                              final String value) {
@@ -778,13 +779,12 @@ public class ElementLocator {
 
 
     /**
-     * A shortened of {@link #setAttribute(java.lang.String, java.lang.String,
-     * java.lang.String)} with {@link org.xmlpull.v1.XmlPullParser#NO_NAMESPACE}
-     * as namespace.
+     * A shortened of {@link #setAttribute(String, String, String)} with
+     * {@link XmlPullParser#NO_NAMESPACE} as namespace.
      *
      * @param name attribute's name
      * @param value attribute's new value or null.
-     * @see #setAttribute(java.lang.String, java.lang.String, java.lang.String)
+     * @see #setAttribute(String, String, String)
      */
     public void attribute(final String name, final String value) {
         setAttribute(XmlPullParser.NO_NAMESPACE, name, value);
@@ -793,6 +793,7 @@ public class ElementLocator {
 
     /**
      * Find text value and (iif found) append it to given <code>buffer</code>.
+     * link  {@link XmlPullParser XmlPullParser} link
      *
      * @param buffer a buffer to which text value will be appended.
      * @return self
@@ -924,26 +925,6 @@ public class ElementLocator {
     public Document getDocument() {
         return (Document) path.elementAt(0).element.getParent();
     }
-
-
-    /*
-     * Returns the current value of {@link #cacheChildren}.
-     *
-     * @return current value fo {@link #cacheChildren}.
-    public boolean getCacheChildren() {
-        return cacheChildren;
-    }
-     */
-
-
-    /*
-     * Sets new value of {@link #cacheChildren}.
-     *
-     * @param cacheChildren new value for {@link #cacheChildren}.
-    public void setCacheChildren(final boolean cacheChildren) {
-        this.cacheChildren = cacheChildren;
-    }
-     */
 
 
     private final Vector<IElement> path;
