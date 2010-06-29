@@ -30,7 +30,7 @@ public abstract class Processor<T> {
      *
      * @param type processing unit type
      * @param id processor id.
-     * @param prerequisites the prerequisite processors' id array or null.
+     * @param prerequisiteIds the prerequisite processors' id array or null.
      */
     public Processor(final Class<T> type, final String id,
                      final String[] prerequisiteIds) {
