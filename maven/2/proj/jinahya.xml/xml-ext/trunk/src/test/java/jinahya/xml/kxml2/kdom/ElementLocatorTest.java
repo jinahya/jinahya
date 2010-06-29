@@ -61,7 +61,7 @@ public class ElementLocatorTest {
     }
 
 
-    private static ElementLocator newInstance() throws XmlPullParserException {
+    private static ElementLocator newInstance() {
         final Document document = new Document();
         document.addChild(
             Node.ELEMENT, document.createElement(ROOT_NAMESPACE, ROOT_NAME));
@@ -80,7 +80,7 @@ public class ElementLocatorTest {
     }
 
 
-    @Test(expectedExceptions = XmlPullParserException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorWithEmptyDocument()
         throws XmlPullParserException {
 
@@ -140,6 +140,19 @@ public class ElementLocatorTest {
         }
 
         print(locator.getDocument());
+    }
+
+
+    @Test
+    public void testLocateRoot() {
+
+        final ElementLocator locator = newInstance();
+
+        final int count = RANDOM.nextInt(100) + 100;
+
+        for (int i = 0; i < count; i++) {
+            locator.locateRoot();
+        }
     }
 
 

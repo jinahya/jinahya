@@ -332,11 +332,8 @@ public class ElementLocator {
      * thrown if specified <code>document</code> is null.
      *
      * @param document document instance
-     * @throws XmlPullParserException if given <code>document</code> doesn't
-     *         have any child element. (no root element)
      */
-    public ElementLocator(final Document document)
-        throws XmlPullParserException {
+    public ElementLocator(final Document document) {
 
         super();
 
@@ -352,7 +349,7 @@ public class ElementLocator {
         }
 
         if (path.isEmpty()) {
-            throw new XmlPullParserException("no root element found");
+            throw new IllegalArgumentException("no root element found");
         }
     }
 
@@ -516,9 +513,20 @@ public class ElementLocator {
 
     /**
      *
-     * @throws XmlPullParserException
+     * @return self
+     * @see #locateRoot()
      */
-    public ElementLocator root() throws XmlPullParserException {
+    public ElementLocator root() {
+
+        return locateRoot();
+    }
+
+
+    /**
+     *
+     * @return self
+     */
+    public ElementLocator locateRoot() {
 
         while (!atRoot()) {
             parent();
@@ -530,37 +538,25 @@ public class ElementLocator {
 
     /**
      *
-     * @return
-     * @throws XmlPullParserException
+     * @return self
      */
-    public ElementLocator locateRoot() throws XmlPullParserException {
-        return root();
-    }
+    public ElementLocator locateParent() {
 
-
-    /**
-     *
-     * @return
-     * @throws XmlPullParserException
-     */
-    public ElementLocator locateParent() throws XmlPullParserException {
-        return parent();
-    }
-
-
-    /**
-     *
-     * @throws XmlPullParserException
-     */
-    public ElementLocator parent() throws XmlPullParserException {
-
-        if (atRoot()) {
-            throw new XmlPullParserException("no parent");
+        if (!atRoot()) {
+            path.removeElementAt(path.size() - 1);
         }
 
-        path.removeElementAt(path.size() - 1);
-
         return this;
+    }
+
+
+    /**
+     *
+     * @return self
+     */
+    public ElementLocator parent() {
+
+        return locateParent();
     }
 
 
