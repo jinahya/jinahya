@@ -33,7 +33,7 @@ public abstract class Processor<T> {
      * @param prerequisites the prerequisite processors' id array or null.
      */
     public Processor(final Class<T> type, final String id,
-                     final String[] prerequisites) {
+                     final String[] prerequisiteIds) {
 
         super();
 
@@ -47,13 +47,13 @@ public abstract class Processor<T> {
                 "param:0:" + String.class + ": is null");
         }
 
-        if (prerequisites == null) {
+        if (prerequisiteIds == null) {
             throw new IllegalArgumentException(
                 "param:1:" + String[].class + ": is null");
         }
 
-        for (int i = 0; i < prerequisites.length; i++) {
-            if (prerequisites[i] == null) {
+        for (int i = 0; i < prerequisiteIds.length; i++) {
+            if (prerequisiteIds[i] == null) {
                 throw new IllegalArgumentException(
                     "param:1:" + String[].class + ":[" + i + "] is null");
             }
@@ -62,9 +62,9 @@ public abstract class Processor<T> {
         this.type = type;
         this.id = id;
 
-        this.prerequisites = new String[prerequisites.length];
-        System.arraycopy(prerequisites, 0, this.prerequisites, 0,
-                         this.prerequisites.length);
+        this.prerequisiteIds = new String[prerequisiteIds.length];
+        System.arraycopy(prerequisiteIds, 0, this.prerequisiteIds, 0,
+                         this.prerequisiteIds.length);
     }
 
 
@@ -90,8 +90,10 @@ public abstract class Processor<T> {
      *
      * @return
      */
-    public final String[] getPrerequisites() {
-        return prerequisites;
+    public final String[] getPrerequisiteIds() {
+        final String[] copy = new String[this.prerequisiteIds.length];
+        System.arraycopy(this.prerequisiteIds, 0, copy, 0, copy.length);
+        return copy;
     }
 
 
@@ -105,5 +107,5 @@ public abstract class Processor<T> {
 
     private Class<T> type;
     private String id;
-    private String[] prerequisites;
+    private String[] prerequisiteIds;
 }

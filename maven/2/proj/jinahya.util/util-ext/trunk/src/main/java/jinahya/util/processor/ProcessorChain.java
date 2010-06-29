@@ -71,7 +71,7 @@ public class ProcessorChain<T> {
         synchronized (processors) {
 
             for (Processor<T> processor : processors.values()) {
-                for (String prerequisite : processor.getPrerequisites()) {
+                for (String prerequisite : processor.getPrerequisiteIds()) {
                     if (!processors.containsKey(prerequisite)) {
                         throw new ProcessorException(
                             "a processor(" + prerequisite
@@ -111,7 +111,7 @@ public class ProcessorChain<T> {
 
             resolver.addDependency(processor.getId(), null);
             resolver.addDependencies(processor.getId(),
-                                     processor.getPrerequisites());
+                                     processor.getPrerequisiteIds());
             processors.put(processor.getId(), processor);
 
             return removed;
@@ -133,7 +133,7 @@ public class ProcessorChain<T> {
             final Processor removed =  processors.remove(processorId);
             if (removed != null) {
                 resolver.removeDependencies(removed.getId(),
-                                            removed.getPrerequisites());
+                                            removed.getPrerequisiteIds());
                 resolver.removeDependency(removed.getId(), null);
             }
             return removed;

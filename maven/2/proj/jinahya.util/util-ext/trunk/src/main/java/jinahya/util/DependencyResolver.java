@@ -32,21 +32,11 @@ public class DependencyResolver<T> {
 
 
     /**
-     *
-     * @param type
-     */
-    public DependencyResolver(final Class<T> type) {
-        this(type, new Hashtable<T, Vector<T>>());
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param type processing unit type
      */
-    public DependencyResolver(final Class<T> type,
-                              final Hashtable<T, Vector<T>> dependencies) {
+    public DependencyResolver(final Class<T> type) {
         super();
 
         if (type == null) {
@@ -54,15 +44,9 @@ public class DependencyResolver<T> {
                 "param:0:" + Class.class + ": is null");
         }
 
-        if (dependencies == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + Hashtable.class + ": is null");
-        }
-
-
         this.type = type;
 
-        this.dependencies = dependencies;
+        this.dependencies = new Hashtable<T, Vector<T>>();
     }
 
 
