@@ -218,7 +218,8 @@ public class ElementLocatorTest {
 
 
     @Test
-    public void testRemove() throws XmlPullParserException, IOException {
+    public void testRemoveAndLocateParent()
+        throws XmlPullParserException, IOException {
 
         final ElementLocator locator = newInstance();
 
@@ -231,6 +232,8 @@ public class ElementLocatorTest {
 
         for (int i = 0; i < expected; i++) {
             final int childCount = locator.getChildCount(NAMESPACE, NAME);
+            System.out.println("CHILD COUNT: " + childCount);
+            Assert.assertTrue(childCount > 0);
             locator.locateChild(NAMESPACE, NAME, childCount - 1);
             locator.removeCurrentAndLocateParent();
         }
@@ -238,11 +241,12 @@ public class ElementLocatorTest {
 
 
     @Test(expectedExceptions = XmlPullParserException.class)
-    public void testRemoveAtRoot() throws XmlPullParserException {
+    public void testRemoveAndLocateParentAtRoot()
+        throws XmlPullParserException {
 
         final ElementLocator locator = newInstance();
 
-        Assert.assertEquals(locator.atRoot(), true);
+        Assert.assertEquals(locator.hasParent(), false);
 
         locator.removeCurrentAndLocateParent();
     }
