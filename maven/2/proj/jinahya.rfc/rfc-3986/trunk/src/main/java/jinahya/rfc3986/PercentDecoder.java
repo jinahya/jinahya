@@ -41,6 +41,12 @@ public class PercentDecoder {
      * @throws IOException
      */
     public static String decode(final String s) throws IOException {
+
+        if (s == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             decode(new StringReader(s), out);
@@ -61,6 +67,16 @@ public class PercentDecoder {
     public static void decode(final InputStream in, final OutputStream out)
         throws IOException {
 
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + InputStream.class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + OutputStream.class + ": is null");
+        }
+
         final Reader reader = new InputStreamReader(in, "UTF-8");
         try {
             decode(reader, out);
@@ -79,16 +95,16 @@ public class PercentDecoder {
     public static void decode(final Reader in, final OutputStream out)
         throws IOException {
 
-
         if (in == null) {
             throw new IllegalArgumentException(
-                "param:0:" + Reader.class + " is null");
+                "param:0:" + Reader.class + ": is null");
         }
 
         if (out == null) {
             throw new IllegalArgumentException(
-                "param:1:" + OutputStream.class + " is null");
+                "param:1:" + OutputStream.class + ": is null");
         }
+
 
         for (int c = -1; (c = in.read()) != -1; ) {
 

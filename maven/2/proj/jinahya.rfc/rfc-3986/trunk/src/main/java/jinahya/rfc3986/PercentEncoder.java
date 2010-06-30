@@ -40,6 +40,12 @@ public class PercentEncoder {
      * @throws IOException
      */
     public static String encode(final String s) throws IOException {
+
+        if (s == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
         final StringWriter out = new StringWriter();
         try {
             encode(new ByteArrayInputStream(s.getBytes("UTF-8")), out);
@@ -59,6 +65,16 @@ public class PercentEncoder {
      */
     public static void encode(final InputStream in, final OutputStream out)
         throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + InputStream.class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + OutputStream.class + ": is null");
+        }
 
         final Writer writer = new OutputStreamWriter(out, "UTF-8");
         try {
@@ -81,12 +97,12 @@ public class PercentEncoder {
 
         if (in == null) {
             throw new IllegalArgumentException(
-                "param:0:" + InputStream.class + " is null");
+                "param:0:" + InputStream.class + ": is null");
         }
 
         if (out == null) {
             throw new IllegalArgumentException(
-                "param:1:" + Writer.class + " is null");
+                "param:1:" + Writer.class + ": is null");
         }
 
         for (int b = -1; (b = in.read()) != -1; ) {
