@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-06-30T14:04:50.912">
+<pmd version="4.2.2" timestamp="2010-06-30T15:04:49.684">
 <file name="C:\Users\onacit\.hudson\jobs\jinahya.rfc rfc-3986\workspace\src\main\java\jinahya\rfc3986\PercentDecoder.java">
 <violation beginline="83" endline="85" begincolumn="11" endcolumn="9" rule="EmptyFinallyBlock" ruleset="Basic Rules" package="jinahya.rfc3986" class="PercentDecoder" method="decode" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyFinallyBlock" priority="3">
 Avoid empty finally blocks
