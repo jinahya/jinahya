@@ -17,6 +17,7 @@
 package jinahya.rfc3986;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
@@ -24,7 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringReader;
 
 
 /**
@@ -36,25 +36,65 @@ public class PercentDecoder {
 
     /**
      *
-     * @param s
+     * @param in
      * @return
      * @throws IOException
      */
-    public static String decode(final String s) throws IOException {
+    public static byte[] decode(final byte[] in) throws IOException {
 
-        if (s == null) {
+        if (in == null) {
             throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
+                "param:0:" + byte[].class + ": is null");
         }
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            decode(new StringReader(s), out);
+            decode(new ByteArrayInputStream(in), out);
             out.flush();
-            return new String(out.toByteArray(), "UTF-8");
+            return out.toByteArray();
         } finally {
             out.close();
         }
+    }
+
+
+    /**
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static byte[] decode(final String in) throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        return decode(in.getBytes("US-ASCII"));
+    }
+
+
+    /**
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void decode(final String in, final OutputStream out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + OutputStream.class + ": is null");
+        }
+
+        decode(new ByteArrayInputStream(in.getBytes("US-ASCII")), out);
     }
 
 
@@ -77,11 +117,11 @@ public class PercentDecoder {
                 "param:1:" + OutputStream.class + ": is null");
         }
 
-        final Reader reader = new InputStreamReader(in, "UTF-8");
+        final Reader reader = new InputStreamReader(in, "US-ASCII");
         try {
             decode(reader, out);
         } finally {
-            //reader.close();
+            reader.close();
         }
     }
 
@@ -105,6 +145,7 @@ public class PercentDecoder {
                 "param:1:" + OutputStream.class + ": is null");
         }
 
+        final char[] ch = new char[2];
 
         for (int c = -1; (c = in.read()) != -1; ) {
 
@@ -130,18 +171,15 @@ public class PercentDecoder {
 
             if (c == 0x25) { // '%'
 
-                final int h = in.read();
-                if (h == -1) {
+                if ((ch[0] = (char) in.read()) == -1) {
                     throw new EOFException("eof");
                 }
 
-                final int l = in.read();
-                if (l == -1) {
+                if ((ch[1] = (char) in.read()) == -1) {
                     throw new EOFException("eof");
                 }
 
-                final String s = new String(new char[]{(char) h, (char) l});
-                out.write(Integer.parseInt(s, 16));
+                out.write(Integer.parseInt(new String(ch), 16));
                 continue;
             }
 

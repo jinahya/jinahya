@@ -18,11 +18,11 @@ package jinahya.rfc3986;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 
 
@@ -35,25 +35,88 @@ public class PercentEncoder {
 
     /**
      *
-     * @param s
+     * @param in
      * @return
      * @throws IOException
      */
-    public static String encode(final String s) throws IOException {
+    public static byte[] encode(final byte[] in) throws IOException {
 
-        if (s == null) {
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + byte[].class + ": is null");
+        }
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            encode(new ByteArrayInputStream(in), out);
+            out.flush();
+            return out.toByteArray();
+        } finally {
+            out.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static byte[] encode(final String in) throws IOException {
+
+        if (in == null) {
             throw new IllegalArgumentException(
                 "param:0:" + String.class + ": is null");
         }
 
-        final StringWriter out = new StringWriter();
-        try {
-            encode(new ByteArrayInputStream(s.getBytes("UTF-8")), out);
-            out.flush();
-            return out.toString();
-        } finally {
-            out.close();
+        return encode(in.getBytes("UTF-8"));
+    }
+
+
+    /**
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void encode(final String in, final OutputStream out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
         }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + OutputStream.class + ": is null");
+        }
+
+        encode(new ByteArrayInputStream(in.getBytes("UTF-8")), out);
+    }
+
+
+    /**
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void encode(final String in, final Writer out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + Writer.class + ": is null");
+        }
+
+        encode(new ByteArrayInputStream(in.getBytes("UTF-8")), out);
     }
 
 
@@ -76,12 +139,12 @@ public class PercentEncoder {
                 "param:1:" + OutputStream.class + ": is null");
         }
 
-        final Writer writer = new OutputStreamWriter(out, "UTF-8");
+        final Writer writer = new OutputStreamWriter(out, "US-ASCII");
         try {
             encode(in, writer);
             writer.flush();
         } finally {
-            //writer.close();
+            writer.close();
         }
     }
 
@@ -127,11 +190,9 @@ public class PercentEncoder {
                 continue;
             }
 
-            out.write(0x25);     // '%'
-            if (b < 0x10) {
-                out.write(0x30); // '0'
-            }
-            out.write(Integer.toHexString(b).toUpperCase());
+            out.write(0x25);                                       // %
+            out.write(Integer.toHexString(b >> 4).toUpperCase());  // high
+            out.write(Integer.toHexString(b & 0xF).toUpperCase()); // low
         }
     }
 }

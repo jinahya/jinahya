@@ -39,7 +39,7 @@ public class PercentEncodingTest {
 
     @Test
     public void testEncode() throws IOException {
-        final String actual = PercentEncoder.encode(ORIGINAL);
+        final String actual = new String(PercentEncoder.encode(ORIGINAL));
 
         Assert.assertEquals(actual, ENCODED);
     }
@@ -47,7 +47,7 @@ public class PercentEncodingTest {
 
     @Test
     public void testDecode() throws IOException {
-        final String actual = PercentDecoder.decode(ENCODED);
+        final String actual = new String(PercentDecoder.decode(ENCODED));
 
         Assert.assertEquals(actual, ORIGINAL);
     }
@@ -61,8 +61,10 @@ public class PercentEncodingTest {
         try {
             String expected = null;
             while ((expected = reader.readLine()) != null) {
-                final String encoded = PercentEncoder.encode(expected);
-                final String actual = PercentDecoder.decode(encoded);
+                final String encoded =
+                    new String(PercentEncoder.encode(expected));
+                final String actual =
+                    new String(PercentDecoder.decode(encoded.getBytes("US-ASCII")), "UTF-8");
                 Assert.assertEquals(actual, expected);
             }
         } finally {
