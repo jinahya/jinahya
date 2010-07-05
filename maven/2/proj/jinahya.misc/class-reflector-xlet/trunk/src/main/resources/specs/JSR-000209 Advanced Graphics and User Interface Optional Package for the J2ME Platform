@@ -358,10 +358,10 @@ javax.swing.table.TableColumn
 javax.swing.text.AbstractDocument.AttributeContext 
 javax.swing.text.AbstractDocument.Content 
 javax.swing.text.AttributeSet 
-javax.swing.text.AttributeSet.CharacterAttribute 
-javax.swing.text.AttributeSet.ColorAttribute 
-javax.swing.text.AttributeSet.FontAttribute 
-javax.swing.text.AttributeSet.ParagraphAttribute 
+#javax.swing.text.AttributeSet.CharacterAttribute 
+#javax.swing.text.AttributeSet.ColorAttribute 
+#javax.swing.text.AttributeSet.FontAttribute 
+#javax.swing.text.AttributeSet.ParagraphAttribute 
 javax.swing.text.Caret 
 javax.swing.text.Document 
 javax.swing.text.Element 
