@@ -11,9 +11,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -37,12 +38,12 @@ public class Reflector {
 
     public synchronized void startReflect() throws SAXException {
         handler.startDocument();
-        handler.startElement("", "classes", "", attributes);
+        handler.startElement("", "machine", "", attributes);
     }
 
 
     public void endReflect() throws SAXException {
-        handler.endElement("", "classes", "");
+        handler.endElement("", "machine", "");
         handler.endDocument();
     }
 
@@ -75,8 +76,8 @@ public class Reflector {
         attributes.add("found", Integer.toString(found));
         attributes.add("compatibility",
                        Float.toString(((float) found) / ((float) total)));
-        handler.startElement("", "result", "", attributes);
-        handler.endElement("", "result", "");
+        handler.startElement("", "result", "", attributes, true);
+        //handler.endElement("", "result", "");
 
         handler.endElement("", "spec", "");
     }
@@ -84,10 +85,22 @@ public class Reflector {
 
     private boolean reflectClass(final String className) throws SAXException {
 
+        /*
+        if (foundNames.contains(className)) {
+            return true;
+        }
+
+        if (notFoundNames.contains(className)) {
+            return false;
+        }
+         */
+
         attributes.clear();
 
         try {
             final Class cls = Class.forName(className);
+
+            //foundNames.add(className);
 
             attributes.add("modifiers", Modifier.toString(cls.getModifiers()));
             attributes.add("name", cls.getName());
@@ -109,15 +122,18 @@ public class Reflector {
 
             handler.startElement("", "class", "", attributes);
 
-            for (Constructor c : cls.getConstructors()) {
+            //for (Constructor c : cls.getConstructors()) {
+            for (Constructor c : cls.getDeclaredConstructors()) {
                 reflectConstructor(cls, c);
             }
 
-            for (Method m : cls.getMethods()) {
+            //for (Method m : cls.getMethods()) {
+            for (Method m : cls.getDeclaredMethods()) {
                 reflectMethod(cls, m);
             }
 
-            for (Field f : cls.getFields()) {
+            //for (Field f : cls.getFields()) {
+            for (Field f : cls.getDeclaredFields()) {
                 reflectField(cls, f);
             }
 
@@ -126,6 +142,9 @@ public class Reflector {
             return true;
 
         } catch (ClassNotFoundException cnfe) {
+
+            //notFoundNames.add(className);
+
             attributes.add("name", className);
             attributes.add("found", "false");
             handler.startElement("", "class", "", attributes, true);
@@ -146,11 +165,11 @@ public class Reflector {
         checkClasses("exceptions", c.getExceptionTypes());
 
         if (c.getDeclaringClass().equals(cls)) {
-            attributes.add("declared", "true");
+            //attributes.add("declared", "true");
         }
 
-        handler.startElement("", "class", "", attributes, true);
-        //handler.endElement("", "class", "");
+        handler.startElement("", "constructor", "", attributes, true);
+        //handler.endElement("", "constructor", "");
     }
 
 
@@ -168,7 +187,7 @@ public class Reflector {
         checkClasses("exceptions", m.getExceptionTypes());
 
         if (m.getDeclaringClass().equals(cls)) {
-            attributes.add("declared", "true");
+            //attributes.add("declared", "true");
         }
 
         checkBoolean(Method.class, m, "isBridge");
@@ -191,7 +210,7 @@ public class Reflector {
         attributes.add("name", f.getName());
 
         if (f.getDeclaringClass().equals(cls)) {
-            attributes.add("declared", "true");
+            //attributes.add("declared", "true");
         }
 
         checkBoolean(Field.class, f, "isEnumConstant");
@@ -208,13 +227,15 @@ public class Reflector {
 
         if (classes.length > 0) {
             buffer.append(classes[0].getName());
-            for (int i = 1; i < classes.length; i++) {
-                buffer.append(", ");
-                buffer.append(classes[i].getName());
-            }
-            attributes.add(name, buffer.toString());
         }
+
+        for (int i = 1; i < classes.length; i++) {
+            buffer.append(", ");
+            buffer.append(classes[i].getName());
         }
+
+        attributes.add(name, buffer.toString());
+    }
 
 
     private void checkBoolean(final Class c, final Object o, String name) {
@@ -240,4 +261,7 @@ public class Reflector {
 
     private transient AttributesImpl attributes = new AttributesImpl();
     private transient StringBuffer buffer = new StringBuffer();
+
+    private transient Set<String> foundNames = new HashSet<String>();
+    private transient Set<String> notFoundNames = new HashSet<String>();
 }
