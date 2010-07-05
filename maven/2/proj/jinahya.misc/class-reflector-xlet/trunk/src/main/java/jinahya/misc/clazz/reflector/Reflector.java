@@ -61,13 +61,14 @@ public class Reflector {
         int total = 0;
         int found = 0;
 
-        for (String line = null; (line = in.readLine()) != null; total++) {
+        for (String line = null; (line = in.readLine()) != null;) {
             if (line.trim().length() == 0 || line.trim().startsWith("#")) {
                 continue;
             }
             if (reflectClass(line.trim())) {
                 found++;
             }
+            total++;
         }
 
         attributes.clear();
@@ -102,42 +103,7 @@ public class Reflector {
 
             //foundNames.add(className);
 
-            attributes.add("modifiers", Modifier.toString(cls.getModifiers()));
-            attributes.add("name", cls.getName());
-
-            final Class superClass = cls.getSuperclass();
-            if (superClass != null) {
-                attributes.add("superClass", superClass.getName());
-            }
-
-            checkClasses("interfaces", cls.getInterfaces());
-
-            checkBoolean(Class.class, cls, "isArray");
-            checkBoolean(Class.class, cls, "isEnum");
-            checkBoolean(Class.class, cls, "isInterface");
-            checkBoolean(Class.class, cls, "isLocalClass");
-            checkBoolean(Class.class, cls, "isMemberClass");
-            checkBoolean(Class.class, cls, "isPrimitive");
-            checkBoolean(Class.class, cls, "isSynthetic");
-
-            handler.startElement("", "class", "", attributes);
-
-            //for (Constructor c : cls.getConstructors()) {
-            for (Constructor c : cls.getDeclaredConstructors()) {
-                reflectConstructor(cls, c);
-            }
-
-            //for (Method m : cls.getMethods()) {
-            for (Method m : cls.getDeclaredMethods()) {
-                reflectMethod(cls, m);
-            }
-
-            //for (Field f : cls.getFields()) {
-            for (Field f : cls.getDeclaredFields()) {
-                reflectField(cls, f);
-            }
-
-            handler.endElement("", "class", "");
+            reflectClass(cls);
 
             return true;
 
@@ -151,6 +117,59 @@ public class Reflector {
             //handler.endElement("", "class", "");
             return false;
         }
+    }
+
+
+    private void reflectClass(final Class cls) throws SAXException {
+
+        attributes.clear();
+
+        attributes.add("modifiers", Modifier.toString(cls.getModifiers()));
+        attributes.add("name", cls.getName());
+
+        final Class superClass = cls.getSuperclass();
+        if (superClass != null) {
+            attributes.add("superClass", superClass.getName());
+        }
+
+        checkClasses("interfaces", cls.getInterfaces());
+
+        checkBoolean(Class.class, cls, "isArray");
+        checkBoolean(Class.class, cls, "isEnum");
+        checkBoolean(Class.class, cls, "isInterface");
+        checkBoolean(Class.class, cls, "isLocalClass");
+        checkBoolean(Class.class, cls, "isMemberClass");
+        checkBoolean(Class.class, cls, "isPrimitive");
+        checkBoolean(Class.class, cls, "isSynthetic");
+
+        handler.startElement("", "class", "", attributes);
+
+        //for (Constructor c : cls.getConstructors()) {
+        for (Constructor c : cls.getDeclaredConstructors()) {
+            reflectConstructor(cls, c);
+        }
+
+        //for (Method m : cls.getMethods()) {
+        for (Method m : cls.getDeclaredMethods()) {
+            reflectMethod(cls, m);
+        }
+
+        //for (Field f : cls.getFields()) {
+        for (Field f : cls.getDeclaredFields()) {
+            reflectField(cls, f);
+        }
+
+        final Class[] members = cls.getClasses();
+        if (members.length > 0) {
+            attributes.clear();
+            handler.startElement("", "members", "", attributes);
+            for (int i = 0; i < members.length; i++) {
+                reflectClass(members[i]);
+            }
+            handler.endElement("", "members", "");
+        }
+
+        handler.endElement("", "class", "");
     }
 
 

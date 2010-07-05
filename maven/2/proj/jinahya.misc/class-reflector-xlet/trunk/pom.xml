@@ -21,6 +21,11 @@
         <artifactId>iptv</artifactId>
         <version>1.0.1</version>
       </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>pbp</artifactId>
+        <version>1.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -34,6 +39,11 @@
       <artifactId>iptv</artifactId>
       <scope>provided</scope>
     </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>pbp</artifactId>
+        <scope>provided</scope>
+      </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,6 +52,7 @@
     <java.bootstrap.classes>${java.home}/lib/rt.jar</java.bootstrap.classes>
     -->
   </properties>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -164,6 +175,18 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <repositories>
+    <repository>
+      <id>jinahya</id>
+      <url>http://jinahya.googlecode.com/svn/maven/2/repo</url>
+    </repository>
+    <repository>
+      <id>jinahya-files</id>
+      <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
+    </repository>
+  </repositories>
+
   <profiles>
     <profile>
       <id>kt-iptv-emul</id>
