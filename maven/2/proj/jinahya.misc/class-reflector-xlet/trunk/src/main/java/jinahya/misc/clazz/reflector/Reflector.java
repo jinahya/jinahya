@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.xml.sax.SAXException;
 
@@ -24,11 +22,20 @@ import org.xml.sax.SAXException;
 public class Reflector {
 
 
+    /**
+     *
+     * @param out
+     * @throws IOException
+     */
     public Reflector(final OutputStream out) throws IOException {
         this(new OutputStreamWriter(out, "UTF-8"));
     }
 
 
+    /**
+     *
+     * @param out
+     */
     public Reflector(final Writer out) {
         super();
 
@@ -36,18 +43,33 @@ public class Reflector {
     }
 
 
-    public synchronized void startReflect() throws SAXException {
+    /**
+     *
+     * @throws SAXException
+     */
+    public void startReflect() throws SAXException {
         handler.startDocument();
         handler.startElement("", "machine", "", attributes);
     }
 
 
+    /**
+     *
+     * @throws SAXException
+     */
     public void endReflect() throws SAXException {
         handler.endElement("", "machine", "");
         handler.endDocument();
     }
 
 
+    /**
+     *
+     * @param in
+     * @param name
+     * @throws SAXException
+     * @throws IOException
+     */
     public void reflectSpec(final BufferedReader in, final String name)
         throws SAXException, IOException {
 
@@ -86,30 +108,16 @@ public class Reflector {
 
     private boolean reflectClass(final String className) throws SAXException {
 
-        /*
-        if (foundNames.contains(className)) {
-            return true;
-        }
-
-        if (notFoundNames.contains(className)) {
-            return false;
-        }
-         */
-
         attributes.clear();
 
         try {
             final Class cls = Class.forName(className);
-
-            //foundNames.add(className);
 
             reflectClass(cls);
 
             return true;
 
         } catch (ClassNotFoundException cnfe) {
-
-            //notFoundNames.add(className);
 
             attributes.add("name", className);
             attributes.add("found", "false");
@@ -280,7 +288,4 @@ public class Reflector {
 
     private transient AttributesImpl attributes = new AttributesImpl();
     private transient StringBuffer buffer = new StringBuffer();
-
-    private transient Set<String> foundNames = new HashSet<String>();
-    private transient Set<String> notFoundNames = new HashSet<String>();
 }
