@@ -27,7 +27,7 @@ import org.kxml2.kdom.Node;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-//import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
@@ -61,6 +61,11 @@ public class ElementLocatorTest {
     }
 
 
+    private static void print(final ElementLocator locator) throws IOException {
+        print(locator.getDocument());
+    }
+
+
     private static ElementLocator newInstance() {
         final Document document = new Document();
         document.addChild(
@@ -68,6 +73,15 @@ public class ElementLocatorTest {
         return new ElementLocator(document);
     }
 
+
+    private static ElementLocator newInstance(final String namespace,
+                                              final String name) {
+
+        final Document document = new Document();
+        document.addChild(Node.ELEMENT,
+                          document.createElement(namespace, name));
+        return new ElementLocator(document);
+    }
 
     @Test
     public void testConstructor() throws XmlPullParserException {
@@ -170,19 +184,35 @@ public class ElementLocatorTest {
 
 
     @Test
-    public void testSetAttribute() throws XmlPullParserException {
-        final ElementLocator locator = newInstance();
+    public void testSetAttribute() throws XmlPullParserException, IOException {
 
-        Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+        ElementLocator locator = newInstance();
 
         final String value = "value";
-        locator.setAttribute(NAMESPACE, NAME, value);
-
-        Assert.assertEquals(locator.getAttribute(NAMESPACE, NAME), value);
-
-        locator.setAttribute(NAMESPACE, NAME, null);
 
         Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+
+        locator.setAttribute(NAMESPACE, NAME, value);
+        Assert.assertEquals(locator.getAttribute(NAMESPACE, NAME), value);
+
+        print(locator);
+
+        locator.setAttribute(NAMESPACE, NAME, null);
+        Assert.assertNull(locator.getAttribute(NAMESPACE, NAME));
+
+        // ---------------------------------------------------------------------
+
+        locator = newInstance(XmlPullParser.NO_NAMESPACE, "root");
+
+        Assert.assertNull(locator.getAttribute(XmlPullParser.NO_NAMESPACE, "attr"));
+
+        locator.setAttribute(XmlPullParser.NO_NAMESPACE, "attr", value);
+        Assert.assertEquals(locator.getAttribute(XmlPullParser.NO_NAMESPACE, "attr"), value);
+
+        print(locator);
+
+        locator.setAttribute(XmlPullParser.NO_NAMESPACE, "attr", null);
+        Assert.assertNull(locator.getAttribute(XmlPullParser.NO_NAMESPACE, "attr"));
     }
 
 
