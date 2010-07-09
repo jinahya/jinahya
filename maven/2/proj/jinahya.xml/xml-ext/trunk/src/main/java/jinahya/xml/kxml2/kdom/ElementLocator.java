@@ -814,6 +814,19 @@ public class ElementLocator {
 
     /**
      *
+     * @param namespace
+     * @param name
+     * @param value
+     */
+    public void attribute(final String namespace, final String name,
+                          final String value) {
+
+        setAttribute(namespace, name, value);
+    }
+
+
+    /**
+     *
      * @param name
      * @param value
      * @return self
