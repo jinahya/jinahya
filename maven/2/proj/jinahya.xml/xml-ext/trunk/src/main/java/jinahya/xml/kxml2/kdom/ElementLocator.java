@@ -246,7 +246,7 @@ public class ElementLocator {
      * @param file
      * @return
      */
-    public ElementLocator newInstance(final File file)
+    public static ElementLocator newInstance(final File file)
         throws XmlPullParserException, IOException {
 
         if (file == null) {
@@ -268,7 +268,7 @@ public class ElementLocator {
      * @param url
      * @return
      */
-    public ElementLocator newInstance(final URL url)
+    public static ElementLocator newInstance(final URL url)
         throws XmlPullParserException, IOException {
 
         if (url == null) {
@@ -287,7 +287,8 @@ public class ElementLocator {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    public ElementLocator newInstance(final InputStream in, final String enc)
+    public static ElementLocator newInstance(final InputStream in,
+                                             final String enc)
         throws XmlPullParserException, IOException {
 
         if (in == null) {
@@ -316,7 +317,7 @@ public class ElementLocator {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    public ElementLocator newInstance(final Reader in)
+    public static ElementLocator newInstance(final Reader in)
         throws XmlPullParserException, IOException {
 
         if (in == null) {
