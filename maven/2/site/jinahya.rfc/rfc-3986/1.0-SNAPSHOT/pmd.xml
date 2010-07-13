@@ -1,13 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-07-01T13:05:04.558">
-<file name="C:\Users\onacit\.hudson\jobs\jinahya.rfc rfc-3986\workspace\src\main\java\jinahya\rfc3986\PercentDecoder.java">
-<violation beginline="83" endline="85" begincolumn="11" endcolumn="9" rule="EmptyFinallyBlock" ruleset="Basic Rules" package="jinahya.rfc3986" class="PercentDecoder" method="decode" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyFinallyBlock" priority="3">
-Avoid empty finally blocks
-</violation>
-</file>
-<file name="C:\Users\onacit\.hudson\jobs\jinahya.rfc rfc-3986\workspace\src\main\java\jinahya\rfc3986\PercentEncoder.java">
-<violation beginline="83" endline="85" begincolumn="11" endcolumn="9" rule="EmptyFinallyBlock" ruleset="Basic Rules" package="jinahya.rfc3986" class="PercentEncoder" method="encode" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyFinallyBlock" priority="3">
-Avoid empty finally blocks
-</violation>
-</file>
+<pmd version="4.2.2" timestamp="2010-07-13T17:04:09.618">
 </pmd>
