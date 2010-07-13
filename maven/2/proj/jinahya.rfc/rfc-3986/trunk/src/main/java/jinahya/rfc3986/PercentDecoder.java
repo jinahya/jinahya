@@ -58,20 +58,38 @@ public class PercentDecoder {
     }
 
 
+    public static void decode(final byte[] in, final OutputStream out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + byte[].class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + OutputStream.class + ": is null");
+        }
+
+        decode(new ByteArrayInputStream(in), out);
+    }
+
+
+
     /**
      *
      * @param in
      * @return
      * @throws IOException
      */
-    public static byte[] decode(final String in) throws IOException {
+    public static String decode(final String in) throws IOException {
 
         if (in == null) {
             throw new IllegalArgumentException(
                 "param:0:" + String.class + ": is null");
         }
 
-        return decode(in.getBytes("US-ASCII"));
+        return new String(decode(in.getBytes("US-ASCII")), "UTF-8");
     }
 
 
@@ -94,7 +112,7 @@ public class PercentDecoder {
                 "param:0:" + OutputStream.class + ": is null");
         }
 
-        decode(new ByteArrayInputStream(in.getBytes("US-ASCII")), out);
+        decode(in.getBytes("US-ASCII"), out);
     }
 
 

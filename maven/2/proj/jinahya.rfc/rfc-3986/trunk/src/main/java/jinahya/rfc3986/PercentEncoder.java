@@ -48,7 +48,7 @@ public class PercentEncoder {
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            encode(new ByteArrayInputStream(in), out);
+            encode(in, out);
             out.flush();
             return out.toByteArray();
         } finally {
@@ -60,17 +60,63 @@ public class PercentEncoder {
     /**
      *
      * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void encode(final byte[] in, final OutputStream out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + byte[].class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + OutputStream.class + ": is null");
+        }
+
+        encode(new ByteArrayInputStream(in), out);
+    }
+
+
+    /**
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void encode(final byte[] in, final Writer out)
+        throws IOException {
+
+        if (in == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + byte[].class + ": is null");
+        }
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + OutputStream.class + ": is null");
+        }
+
+        encode(new ByteArrayInputStream(in), out);
+    }
+
+
+    /**
+     *
+     * @param in
      * @return
      * @throws IOException
      */
-    public static byte[] encode(final String in) throws IOException {
+    public static String encode(final String in) throws IOException {
 
         if (in == null) {
             throw new IllegalArgumentException(
                 "param:0:" + String.class + ": is null");
         }
 
-        return encode(in.getBytes("UTF-8"));
+        return new String(encode(in.getBytes("UTF-8")), "US-ASCII");
     }
 
 
@@ -93,7 +139,7 @@ public class PercentEncoder {
                 "param:1:" + OutputStream.class + ": is null");
         }
 
-        encode(new ByteArrayInputStream(in.getBytes("UTF-8")), out);
+        encode(in.getBytes("UTF-8"), out);
     }
 
 
@@ -116,7 +162,7 @@ public class PercentEncoder {
                 "param:1:" + Writer.class + ": is null");
         }
 
-        encode(new ByteArrayInputStream(in.getBytes("UTF-8")), out);
+        encode(in.getBytes("UTF-8"), out);
     }
 
 
