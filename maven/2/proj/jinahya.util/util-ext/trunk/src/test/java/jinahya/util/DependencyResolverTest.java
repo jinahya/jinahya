@@ -34,6 +34,7 @@ public class DependencyResolverTest {
 
     @Test
     public void testAddDependency() {
+
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>(String.class);
 
@@ -41,6 +42,18 @@ public class DependencyResolverTest {
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "B");
         resolver.addDependency("A", "B");
+
+        resolver.print(System.out);
+    }
+
+
+    @Test
+    public void testAddDependencyForSelfDependency() {
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>(String.class);
+
+        resolver.addDependency("A", "A");
 
         resolver.print(System.out);
     }

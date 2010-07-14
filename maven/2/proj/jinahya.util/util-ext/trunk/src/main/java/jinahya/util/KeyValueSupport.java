@@ -44,11 +44,8 @@ public class KeyValueSupport {
      * @return
      */
     public boolean getBoolean(final String key, final boolean def) {
-        final Boolean val = get(Boolean.class, key, def);
-        if (val != null) {
-            return val.booleanValue();
-        }
-        return def;
+
+        return get(Boolean.class, key, def);
     }
 
 
@@ -59,9 +56,10 @@ public class KeyValueSupport {
      * @return
      */
     public boolean putBoolean(final String key, final boolean val) {
+
         final Boolean pre = put(Boolean.class, key, val);
         if (pre != null) {
-            return pre.booleanValue();
+            return pre;
         }
         return false;
     }
@@ -74,9 +72,10 @@ public class KeyValueSupport {
      * @return
      */
     public boolean ridtBoolean(final String key) {
+
         final Boolean rid = rid(Boolean.class, key);
         if (rid != null) {
-            return rid.booleanValue();
+            return rid;
         }
         return false;
     }
@@ -89,11 +88,8 @@ public class KeyValueSupport {
      * @return
      */
     public float getFloat(final String key, final float def) {
-        final Float val = get(float.class, key, def);
-        if (val != null) {
-            return val.floatValue();
-        }
-        return def;
+
+        return get(float.class, key, def);
     }
 
 
@@ -104,6 +100,7 @@ public class KeyValueSupport {
      * @return
      */
     public float putFloat(final String key, final float val) {
+
         final Float pre = put(Float.class, key, val);
         if (pre != null) {
             return pre.floatValue();
@@ -119,6 +116,7 @@ public class KeyValueSupport {
      * @return
      */
     public float ridFloat(final String key) {
+
         final Float rid = rid(Float.class, key);
         if (rid != null) {
             return rid.floatValue();
@@ -133,11 +131,8 @@ public class KeyValueSupport {
      * @return
      */
     public double getDouble(final String key, final double def) {
-        final Double val = get(double.class, key, def);
-        if (val != null) {
-            return val.doubleValue();
-        }
-        return def;
+
+        return get(double.class, key, def);
     }
 
 
@@ -148,6 +143,7 @@ public class KeyValueSupport {
      * @return
      */
     public double putDouble(final String key, final double val) {
+
         final Double pre = put(Double.class, key, val);
         if (pre != null) {
             return pre.doubleValue();
@@ -163,6 +159,7 @@ public class KeyValueSupport {
      * @return
      */
     public double ridDouble(final String key) {
+
         final Double rid = rid(Double.class, key);
         if (rid != null) {
             return rid.doubleValue();
@@ -178,11 +175,8 @@ public class KeyValueSupport {
      * @return
      */
     public String getString(final String key, final String def) {
-        final String val = get(String.class, key, def);
-        if (val != null) {
-            return val;
-        }
-        return def;
+
+        return get(String.class, key, def);
     }
 
 
@@ -193,6 +187,7 @@ public class KeyValueSupport {
      * @return
      */
     public String putString(final String key, final String val) {
+
         return put(String.class, key, val);
     }
 
@@ -204,6 +199,7 @@ public class KeyValueSupport {
      * @return
      */
     public String ridString(final String key) {
+
         return rid(String.class, key);
     }
 
@@ -215,11 +211,8 @@ public class KeyValueSupport {
      * @return
      */
     public int getInt(final String key, final int def) {
-        final Integer val = get(Integer.class, key, def);
-        if (val != null) {
-            return val.intValue();
-        }
-        return def;
+
+        return get(Integer.class, key, def);
     }
 
 
@@ -230,6 +223,7 @@ public class KeyValueSupport {
      * @return
      */
     public int putInt(final String key, final int val) {
+
         final Integer pre = put(Integer.class, key, val);
         if (pre != null) {
             return pre;
@@ -259,11 +253,8 @@ public class KeyValueSupport {
      * @return
      */
     public char getChar(final String key, final char def) {
-        final Character val = get(Character.class, key, def);
-        if (val != null) {
-            return val.charValue();
-        }
-        return def;
+
+        return get(Character.class, key, def);
     }
 
 
@@ -274,6 +265,7 @@ public class KeyValueSupport {
      * @return
      */
     public char putChar(final String key, final char val) {
+
         final Character pre = put(Character.class, key, val);
         if (pre != null) {
             return pre;
@@ -288,6 +280,7 @@ public class KeyValueSupport {
      * @return
      */
     public char ridChar(final String key) {
+
         final Character rid = rid(Character.class, key);
         if (rid != null) {
             return rid;

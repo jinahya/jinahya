@@ -51,22 +51,11 @@ public class ProcessorChainTest {
      */
     private static class EchoProcessor extends Processor<String> {
 
-
-        /**
-         * 
-         * @param id
-         * @param prerequisites
-         */
         public EchoProcessor(final String id, final String... prerequisites) {
             super(String.class, id, prerequisites);
         }
 
 
-        /**
-         * 
-         * @param unit
-         * @throws ProcessorException
-         */
         @Override
         public void process(final String unit) throws ProcessorException {
             System.out.println(getId() + ": processing " + unit);
@@ -75,7 +64,7 @@ public class ProcessorChainTest {
 
 
     @Test
-    public void testAdd() {
+    public void testAddProcessor() {
 
         final ProcessorChain<String> chain =
             new ProcessorChain<String>(String.class);
@@ -94,6 +83,12 @@ public class ProcessorChainTest {
     }
 
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddProcessorWithNull() {
+        new ProcessorChain<String>(String.class).addProcessor(null);
+    }
+
+
     @Test
     public void testHasProcessor() {
 
@@ -109,11 +104,13 @@ public class ProcessorChainTest {
         Assert.assertNull(chain.addProcessor(processor));
 
         Assert.assertEquals(chain.hasProcessor(id), true);
+
+        Assert.assertNotNull(chain.addProcessor(processor));
     }
 
 
     @Test
-    public void testRemove() {
+    public void testRemoveProcessor() {
 
         final ProcessorChain<String> chain =
             new ProcessorChain<String>(String.class);

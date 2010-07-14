@@ -19,6 +19,7 @@ package jinahya.util.processor;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import jinahya.util.DependencyResolver;
 
@@ -64,25 +65,61 @@ public class ProcessorChain<T> {
 
         if (!type.isInstance(unit)) {
             throw new IllegalArgumentException(
-                "param:0:" + unit.getClass() + ":" + unit
-                + " is not an instance of " + type);
+                "param:0:" + unit.getClass() + ": is not an instance of "
+                + type);
         }
 
         synchronized (processors) {
 
-            for (Processor<T> processor : processors.values()) {
-                for (String prerequisite : processor.getPrerequisiteIds()) {
-                    if (!processors.containsKey(prerequisite)) {
-                        throw new ProcessorException(
-                            "a processor(" + prerequisite
-                            + ") prerequsite to the processor("
-                            + processor.getId() + ") is missing");
-                    }
+            getRequiredProcessorIds(false);
+
+            final Vector<Vector<String>> processorIDGroups =
+                resolver.getHorizontalGroups();
+
+            final Vector<Processor[]> processorGroups =
+                new Vector<Processor[]>();
+
+            for (int i = 0; i < processorIDGroups.size(); i++) {
+
+                final Vector<String> processorIdGroup =
+                    processorIDGroups.elementAt(i);
+
+                final Processor[] processorGroup =
+                    new Processor[processorIdGroup.size()];
+
+                for (int j = 0; j < processorGroup.length; j++) {
+                    processorGroup[j] =
+                        processors.get(processorIdGroup.elementAt(j));
                 }
+
+                processorGroups.addElement(processorGroup);
             }
 
+            invoke(processorGroups, unit);
+
+            /*
             for (String processorId : resolver.getFlatten()) {
                 processors.get(processorId).process(unit);
+            }
+             */
+        }
+    }
+
+
+    /**
+     *
+     * @param group
+     * @param processor
+     * @param unit
+     * @throws ProcessorException
+     */
+    protected void invoke(final Vector<Processor[]> processorGroups,
+                          final T unit)
+        throws ProcessorException {
+
+        for (int i = 0; i < processorGroups.size(); i++) {
+            for (int j = 0; j < processorGroups.elementAt(i).length; j++) {
+                processorGroups.elementAt(i)[j].process(unit);
             }
         }
     }
@@ -110,8 +147,10 @@ public class ProcessorChain<T> {
             final Processor<T> removed = removeProcessor(processor.getId());
 
             resolver.addDependency(processor.getId(), null);
-            resolver.addDependencies(processor.getId(),
-                                     processor.getPrerequisiteIds());
+            if (processor.getPrerequisiteIds() != null) {
+                resolver.addDependencies(processor.getId(),
+                                         processor.getPrerequisiteIds());
+            }
             processors.put(processor.getId(), processor);
 
             return removed;
@@ -130,10 +169,12 @@ public class ProcessorChain<T> {
         }
 
         synchronized (processors) {
-            final Processor removed =  processors.remove(processorId);
+            final Processor removed = processors.remove(processorId);
             if (removed != null) {
-                resolver.removeDependencies(removed.getId(),
-                                            removed.getPrerequisiteIds());
+                if (removed.getPrerequisiteIds() != null) {
+                    resolver.removeDependencies(removed.getId(),
+                                                removed.getPrerequisiteIds());
+                }
                 resolver.removeDependency(removed.getId(), null);
             }
             return removed;
@@ -201,6 +242,49 @@ public class ProcessorChain<T> {
             final String key = keys.nextElement();
             out.print(key + " -> " + processors.get(key));
         }
+    }
+
+
+    Vector<Vector<String>> getHorizontalGroups() {
+        return resolver.getHorizontalGroups();
+    }
+
+
+    /**
+     *
+     * @param suppress
+     * @return
+     * @throws ProcessorException
+     */
+    public Vector<String> getRequiredProcessorIds() throws ProcessorException {
+
+        return getRequiredProcessorIds(true);
+    }
+
+
+    private Vector<String> getRequiredProcessorIds(final boolean suppress)
+        throws ProcessorException {
+
+        final Vector<String> requiredProcessorIds = new Vector<String>();
+
+        synchronized (processors) {
+            for (Processor<T> processor : processors.values()) {
+                for (String prerequisiteId : processor.getPrerequisiteIds()) {
+                    if (!processors.containsKey(prerequisiteId)) {
+                        if (!suppress) {
+                            throw new ProcessorException(
+                                "a required processor(" + prerequisiteId +
+                                ") is missing");
+                        }
+                        if (!requiredProcessorIds.contains(prerequisiteId)) {
+                            requiredProcessorIds.add(prerequisiteId);
+                        }
+                    }
+                }
+            }
+        }
+
+        return requiredProcessorIds;
     }
 
 

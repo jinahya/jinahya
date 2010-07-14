@@ -28,7 +28,7 @@ public abstract class Processor<T> {
     /**
      * Creates a new instance.
      *
-     * @param type processing unit type
+     * @param type processing unit type.
      * @param id processor id.
      * @param prerequisiteIds the prerequisite processors' id array or null.
      */
@@ -47,24 +47,14 @@ public abstract class Processor<T> {
                 "param:0:" + String.class + ": is null");
         }
 
-        if (prerequisiteIds == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + String[].class + ": is null");
-        }
-
-        for (int i = 0; i < prerequisiteIds.length; i++) {
-            if (prerequisiteIds[i] == null) {
-                throw new IllegalArgumentException(
-                    "param:1:" + String[].class + ":[" + i + "] is null");
-            }
-        }
-
         this.type = type;
         this.id = id;
 
-        this.prerequisiteIds = new String[prerequisiteIds.length];
-        System.arraycopy(prerequisiteIds, 0, this.prerequisiteIds, 0,
-                         this.prerequisiteIds.length);
+        if (prerequisiteIds == null) {
+            this.prerequisiteIds = new String[0];
+        } else {
+            this.prerequisiteIds = prerequisiteIds;
+        }
     }
 
 
@@ -91,9 +81,7 @@ public abstract class Processor<T> {
      * @return
      */
     public final String[] getPrerequisiteIds() {
-        final String[] copy = new String[this.prerequisiteIds.length];
-        System.arraycopy(this.prerequisiteIds, 0, copy, 0, copy.length);
-        return copy;
+        return this.prerequisiteIds;
     }
 
 

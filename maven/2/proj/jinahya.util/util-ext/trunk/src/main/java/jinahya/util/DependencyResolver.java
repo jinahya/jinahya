@@ -155,11 +155,12 @@ public class DependencyResolver<T> {
 
             if (!type.isInstance(target)) {
                 throw new IllegalArgumentException(
-                "param:1:" + target.getClass() + ":" + target
-                + " is not an instance of " + type);
+                    "param:1:" + target.getClass() + ":" + target
+                    + " is not an instance of " + type);
             }
 
             if (source.equals(target)) {
+                System.out.println("self dependency");
                 return;
                 //throw new IllegalArgumentException("self dependency");
             }
@@ -174,7 +175,7 @@ public class DependencyResolver<T> {
             }
 
             if (target != null && !targets.contains(target)) {
-                targets.add(0, target);
+                targets.addElement(target);
             }
         }
     }
@@ -347,6 +348,9 @@ public class DependencyResolver<T> {
     }
 
 
+    //private static int depth = 0;
+
+
     /**
      *
      * @param flatten
@@ -362,7 +366,9 @@ public class DependencyResolver<T> {
 
             final Vector<T> targets = dependencies.get(source);
             if (targets != null) {
+                //System.out.println("depth: " + depth++);
                 for (T target : targets) {
+                    //System.out.println("source:" + source + " -> target: " + target);
                     getFlatten(target, flatten);
                 }
             }
