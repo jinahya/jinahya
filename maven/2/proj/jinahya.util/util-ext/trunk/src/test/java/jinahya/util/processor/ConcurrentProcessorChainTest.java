@@ -18,7 +18,6 @@ package jinahya.util.processor;
 
 
 import java.util.Random;
-import java.util.Vector;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -38,44 +37,22 @@ public class ConcurrentProcessorChainTest {
     public void test() throws ProcessorException {
 
         final ConcurrentProcessorChain<HitCounter> chain =
-            new ConcurrentProcessorChain(HitCounter.class, 1);
+            new ConcurrentProcessorChain(HitCounter.class, 2);
 
-        final int count = RANDOM.nextInt(128);
-        for (int i = 0; i < count; i++) {
-            Processor<HitCounter> processor = HitCounterProcessor.newInstance();
-            chain.addProcessor(processor);
+        for (int i = 1; i < 5; i++) {
+            chain.addProcessor(new HitCounterProcessor(
+                Integer.toString(i), Integer.toString(i - 1)));
         }
 
-        for (String requiredId : chain.getRequiredProcessorIds()) {
-            chain.addProcessor(new HitCounterProcessor(requiredId, null));
+        for (int i = 6; i < 10; i++) {
+            chain.addProcessor(new HitCounterProcessor(
+                Integer.toString(i), Integer.toString(i - 1)));
         }
 
-        final Vector<Vector<String>> groups = chain.getHorizontalGroups();
+        for (String requiredProcessorId : chain.getRequiredProcessorIds()) {
+            chain.addProcessor(new HitCounterProcessor(requiredProcessorId));
+        }
 
-        final int size1 = groups.size();
-        chain.setSize(size1);
-
-        long start1 = System.currentTimeMillis();
         chain.invoke(new HitCounter());
-
-        final long elapsed1 = System.currentTimeMillis() - start1;
-
-
-        int size2 = RANDOM.nextInt(size1) + 1;
-        if (size2 > 1) {
-            size2--;
-        }
-        chain.setSize(size2);
-
-        long start2 = System.currentTimeMillis();
-        chain.invoke(new HitCounter());
-        final long elapsed2 = System.currentTimeMillis() - start2;
-
-
-        System.out.println(groups.size());
-        System.out.println(
-            size1 + ":" + elapsed1 + " / " + size2 + ":" + elapsed2);
-
-        //Assert.assertTrue((elapsed1 <= elapsed2));
     }
 }

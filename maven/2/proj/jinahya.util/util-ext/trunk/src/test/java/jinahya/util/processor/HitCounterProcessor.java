@@ -52,7 +52,7 @@ public class HitCounterProcessor extends Processor<HitCounter> {
 
 
     public HitCounterProcessor(final String id,
-                               final String[] prerequisiteIds) {
+                               final String... prerequisiteIds) {
 
         super(HitCounter.class, id, prerequisiteIds);
     }
@@ -60,6 +60,14 @@ public class HitCounterProcessor extends Processor<HitCounter> {
 
     @Override
     public void process(final HitCounter unit) throws ProcessorException {
+
+        System.out.println(getId() + " hitting the unit");
         unit.hit();
+
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 }

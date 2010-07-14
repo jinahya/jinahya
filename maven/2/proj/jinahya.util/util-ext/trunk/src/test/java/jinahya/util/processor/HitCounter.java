@@ -26,10 +26,6 @@ public class HitCounter {
 
     public synchronized void hit() throws ProcessorException {
         count++;
-
-        for (int i = 0; i < 1024; i++) {
-            System.out.println();
-        }
     }
 
 
