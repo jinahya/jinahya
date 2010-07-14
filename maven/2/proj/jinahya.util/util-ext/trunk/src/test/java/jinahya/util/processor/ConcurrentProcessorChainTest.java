@@ -53,6 +53,14 @@ public class ConcurrentProcessorChainTest {
             chain.addProcessor(new HitCounterProcessor(requiredProcessorId));
         }
 
-        chain.invoke(new HitCounter());
+        final HitCounter unit = new HitCounter();
+
+        System.out.println("------------------------ invoking with one thread");
+        chain.setSize(1);
+        chain.invoke(unit);
+
+        System.out.println("----------------------- invoking with two threads");
+        chain.setSize(2);
+        chain.invoke(unit);
     }
 }
