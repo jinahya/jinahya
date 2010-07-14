@@ -23,6 +23,7 @@ import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Node;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlSerializer;
@@ -39,15 +40,21 @@ public class LinkedElementTest {
                                              final String name) {
 
         final Document document = new Document();
-        document.addChild(Node.ELEMENT, document.createElement(namespace, name));
+        document.addChild(
+            Node.ELEMENT, document.createElement(namespace, name));
         return LinkedElement.newInstance(document);
     }
 
 
-    private static void print(final LinkedElement element) throws IOException {
+    private static void print(final LinkedElement element) {
         final XmlSerializer serializer = new KXmlSerializer();
-        serializer.setOutput(System.out, "UTF-8");
-        element.document().write(serializer);
+        try {
+            serializer.setOutput(System.out, "UTF-8");
+            element.document().write(serializer);
+            System.out.println();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
 
@@ -64,9 +71,44 @@ public class LinkedElementTest {
 
 
     @Test
-    public void testAttributeIn() throws IOException {
+    public void testAttributeSet() throws IOException {
         final LinkedElement element = newInstance("a", "b");
         element.attribute("c", "d", "v");
         print(element);
+    }
+
+
+    @Test
+    public void testAttributeGet() throws IOException {
+
+        final LinkedElement element = newInstance("a", "b");
+
+        Assert.assertNull(element.attribute("a", "b"));
+
+        element.attribute("a", "b", "c");
+
+        Assert.assertEquals(element.attribute("a", "b"), "c");
+    }
+
+
+    @Test
+    public void testHashCode() {
+
+        final LinkedElement parent = newInstance("a", "b");
+        System.out.println("parent.hashCode: " + parent.hashCode());
+
+        final LinkedElement child = parent.child("a", "b");
+        System.out.println("child.hashCode: " + child.hashCode());
+    }
+
+
+    @Test
+    public void testEquals() {
+
+        final LinkedElement parent = newInstance("a", "b");
+
+        final LinkedElement child = parent.child("a", "b");
+
+        Assert.assertEquals(parent.child("a", "b", 0), child);
     }
 }

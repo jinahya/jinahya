@@ -37,12 +37,14 @@ public class LinkedElement {
      *
      * @param document
      * @return
+     * @throws IllegalArgumentException if given <code>document</code> is null
+     *         or has no child element.
      */
     public static LinkedElement newInstance(final Document document) {
 
         if (document == null) {
             throw new IllegalArgumentException(
-                "param:0:document:" + Document.class + ": is null");
+                "param:0:" + Document.class + ": is null");
         }
 
         final int childCount = document.getChildCount();
@@ -53,7 +55,7 @@ public class LinkedElement {
         }
 
         throw new IllegalArgumentException(
-            "param:0:document:" + Document.class + ":" + document +
+            "param:0:" + Document.class + ":" + document +
             " has no child elements");
     }
 
@@ -64,8 +66,8 @@ public class LinkedElement {
      * @param element
      * @param index
      */
-    private LinkedElement(final LinkedElement parent,
-                             final Element element, final int index) {
+    private LinkedElement(final LinkedElement parent, final Element element,
+                          final int index) {
 
         super();
 
@@ -136,7 +138,7 @@ public class LinkedElement {
      *         less than the children count of given kind.
      */
     public LinkedElement child(final String namespace, final String name,
-                                  final int index) {
+                               final int index) {
 
         return children(namespace, name).elementAt(index);
     }
@@ -149,7 +151,7 @@ public class LinkedElement {
      * @return
      */
     private Vector<LinkedElement> children(final String namespace,
-                                              final String name) {
+                                           final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -354,9 +356,48 @@ public class LinkedElement {
     }
 
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+
+        result = 37 * result + (parent == null ? 0 : parent.hashCode());
+        result = 37 * result + element.hashCode();
+        result = 37 * result + index;
+
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (!(obj instanceof LinkedElement)) {
+            return false;
+        }
+
+        final LinkedElement casted = (LinkedElement) obj;
+
+        if (!(parent == casted.parent
+              || (parent != null && parent.equals(casted.parent)))) {
+            return false;
+        }
+
+        if (!(element == casted.element
+              || (element != null && element.equals(casted.element)))) {
+            return false;
+        }
+
+        if (index != casted.index) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     private LinkedElement parent;
     private Element element;
     private int index;
 
-    private volatile Hashtable<String, Vector<LinkedElement>> classes;
+    private transient Hashtable<String, Vector<LinkedElement>> classes;
 }

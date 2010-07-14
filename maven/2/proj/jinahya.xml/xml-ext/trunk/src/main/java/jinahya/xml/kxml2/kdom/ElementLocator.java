@@ -24,14 +24,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -78,6 +74,7 @@ public class ElementLocator {
             throw new IllegalArgumentException(
                 "param:0:" + URL.class + ": is null");
         }
+
         return newInstance(url.openStream(), null);
     }
 
@@ -148,16 +145,21 @@ public class ElementLocator {
 
         super();
 
+        if (document == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Document.class + ": is null");
+        }
+
         current = LinkedElement.newInstance(document);
     }
 
 
     /**
+     * Adds a new child element with no namespace.
      *
-     * @param namespace
-     * @param name
-     * @param index
-     * @return
+     * @param name new element's name
+     * @return self
+     * @see #child(String, String)
      */
     public ElementLocator child(final String name) {
         return child(XmlPullParser.NO_NAMESPACE, name);
@@ -165,11 +167,11 @@ public class ElementLocator {
 
 
     /**
+     * Adds a new child element and locate it.
      *
-     * @param namespace
-     * @param name
-     * @param index
-     * @return
+     * @param namespace new element's namespace
+     * @param name new element's name
+     * @return self
      */
     public ElementLocator child(final String namespace, final String name) {
         current = current.child(namespace, name);
@@ -179,28 +181,33 @@ public class ElementLocator {
 
 
     /**
-     * 
-     * @param name
-     * @param index
-     * @return
+     * Locates a child element with no namespace.
+     *
+     * @param name child element's name
+     * @param index child element's index
+     * @return self
+     * @see #child(String, String, int)
      */
     public ElementLocator child(final String name, final int index) {
         return child(XmlPullParser.NO_NAMESPACE, name, index);
     }
 
 
-
-
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @param index
-     * @return
+     * Locates child element by given conditions.
+     *
+     * @param namespace child element's namespace
+     * @param name child element's name
+     * @param index child element's index
+     * @return self
+     * @throws ArrayIndexOutOfBoundsException
+     * @see LinkedElement#child(String, String, int)
      */
     public ElementLocator child(final String namespace, final String name,
                                 final int index) {
+
         current = current.child(namespace, name, index);
+
         return this;
     }
 
@@ -222,6 +229,7 @@ public class ElementLocator {
      * @return
      */
     public ElementLocator first(final String namespace, final String name) {
+
         current = current.first(namespace, name);
 
         return this;
@@ -258,7 +266,9 @@ public class ElementLocator {
      * @return self
      */
     public ElementLocator root() {
+
         current = current.root();
+
         return this;
     }
 
@@ -269,7 +279,9 @@ public class ElementLocator {
      * @throws IllegalStateException if there is no parent
      */
     public ElementLocator parent() {
+
         current = current.parent(false);
+
         return this;
     }
 
@@ -279,6 +291,7 @@ public class ElementLocator {
      * @param namespace
      * @param name
      * @return
+     * @see #count(String, String)
      */
     public int count(final String name) {
         return count(XmlPullParser.NO_NAMESPACE, name);
