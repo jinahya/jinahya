@@ -280,7 +280,7 @@ public class ElementLocator {
      */
     public ElementLocator parent() {
 
-        current = current.parent(false);
+        current = current.parent();
 
         return this;
     }
@@ -418,7 +418,7 @@ public class ElementLocator {
      */
     public ElementLocator remove() {
 
-        current = current.parent(true);
+        current = current.remove();
 
         return this;
     }

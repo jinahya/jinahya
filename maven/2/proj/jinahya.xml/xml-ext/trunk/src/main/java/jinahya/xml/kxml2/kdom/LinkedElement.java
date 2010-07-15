@@ -237,12 +237,21 @@ public class LinkedElement {
 
 
     /**
+     *
+     * @return
+     */
+    public LinkedElement parent() {
+        return parent(false);
+    }
+
+
+    /**
      * 
      * @param remove
      * @return
      * @throws IllegalStateException if there is no parent
      */
-    public LinkedElement parent(final boolean remove) {
+    private LinkedElement parent(final boolean remove) {
 
         if (parent == null) {
             throw new IllegalStateException("no parent");
@@ -253,6 +262,14 @@ public class LinkedElement {
         }
 
         return parent;
+    }
+
+
+    /**
+     * 
+     */
+    public LinkedElement remove() {
+        return parent(true);
     }
 
 
