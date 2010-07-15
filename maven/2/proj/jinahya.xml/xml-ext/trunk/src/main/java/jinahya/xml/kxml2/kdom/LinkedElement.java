@@ -304,23 +304,6 @@ public class LinkedElement {
 
         final StringBuffer buffer = new StringBuffer();
 
-        if (text(buffer)) {
-            return buffer.toString();
-        }
-
-        return null;
-    }
-
-
-    /**
-     *
-     * @param buffer
-     * @return
-     */
-    public boolean text(final StringBuffer buffer) {
-
-        boolean appended = false;
-
         final int childCount = element.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (!element.isText(i)
@@ -328,10 +311,9 @@ public class LinkedElement {
 
             }
             buffer.append(element.getText(i));
-            appended = true;
         }
 
-        return appended;
+        return buffer.toString();
     }
 
 

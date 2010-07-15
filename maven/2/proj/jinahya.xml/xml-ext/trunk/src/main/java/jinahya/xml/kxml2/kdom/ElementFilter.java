@@ -60,7 +60,7 @@ public abstract class ElementFilter {
                 "param:0:" + Element.class + ": is null");
         }
 
-        if (startFiltering(element)) {
+        if (!startFiltering(element)) {
             final int childCount = element.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 if (Node.ELEMENT == element.getType(i)) {

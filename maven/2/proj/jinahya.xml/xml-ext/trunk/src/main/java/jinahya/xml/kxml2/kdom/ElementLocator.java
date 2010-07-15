@@ -386,26 +386,6 @@ public class ElementLocator {
 
 
     /**
-     * Find text value and (iif found) append it to given <code>buffer</code>.
-     * link  {@link XmlPullParser XmlPullParser} link
-     *
-     * @param buffer a buffer to which text value will be appended.
-     * @return self
-     */
-    public ElementLocator text(final StringBuffer buffer) {
-
-        if (buffer == null) {
-            throw new IllegalArgumentException(
-                "param:0:buffer:" + StringBuffer.class + ": is null");
-        }
-
-        current.text(buffer);
-
-        return this;
-    }
-
-
-    /**
      * Returns text value.
      *
      * @param appendIgnorableWhiteSpaces
