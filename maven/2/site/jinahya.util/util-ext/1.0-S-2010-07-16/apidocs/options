@@ -1,0 +1,26 @@
+-classpath
+'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.util/util-ext/tags/1.0-S-2010-07-16/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.util/util-ext/tags/1.0-S-2010-07-16/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.util/util-ext/tags/1.0-S-2010-07-16/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.util:util-ext 1.0-S-2010-07-16 API'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.util:util-ext 1.0-S-2010-07-16 API'

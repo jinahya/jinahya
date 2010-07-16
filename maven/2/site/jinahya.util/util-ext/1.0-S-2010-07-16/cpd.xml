@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="16" tokens="104">
+<file line="378" path="/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.util/util-ext/tags/1.0-S-2010-07-16/src/main/java/jinahya/util/DependencyResolver.java"/>
+<file line="455" path="/Volumes/1394/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.util/util-ext/tags/1.0-S-2010-07-16/src/main/java/jinahya/util/DependencyResolver.java"/>
+<codefragment>
+<![CDATA[
+    public Vector<Vector<T>> getVerticalGroups(final int maximum) {
+
+        if (maximum <= 0) {
+            throw new IllegalArgumentException(
+                "param:0:" + Integer.TYPE + ":" + maximum + " <= 0");
+        }
+
+        final Vector<T> remains = getFlatten();
+
+        final Vector<Vector<T>> groups = new Vector<Vector<T>>();
+
+        while (!remains.isEmpty() && (groups.size() < (maximum - 1)))  {
+
+            final Vector<T> group = new Vector<T>();
+
+            groups.addElement(group);
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>
