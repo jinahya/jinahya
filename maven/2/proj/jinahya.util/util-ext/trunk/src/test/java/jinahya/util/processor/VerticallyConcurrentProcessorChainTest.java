@@ -67,8 +67,6 @@ public class VerticallyConcurrentProcessorChainTest {
 
         System.out.println("---------- VerticallyConcurrentProcessorChainTest");
 
-        newChain(1).print(System.out);
-
         for (int i = 1; i < 10; i++) {
             System.out.print("---------------------------- thread count: " + i);
             final long start = System.currentTimeMillis();
