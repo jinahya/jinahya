@@ -34,44 +34,16 @@ import org.testng.annotations.Test;
 public class ProcessorChainTest {
 
 
-    private static final Logger LOGGER =
-        Logger.getLogger(ProcessorChainTest.class.getPackage().getName());
-
-
-    static {
-        LOGGER.setUseParentHandlers(false);
-        final Handler handler = new ConsoleHandler();
-        handler.setFormatter(new VerySimpleFormatter());
-        LOGGER.addHandler(handler);
-    }
-
-
-    /**
-     *
-     */
-    private static class EchoProcessor extends Processor<String> {
-
-        public EchoProcessor(final String id, final String... prerequisites) {
-            super(String.class, id, prerequisites);
-        }
-
-
-        @Override
-        public void process(final String unit) throws ProcessorException {
-            System.out.println(getId() + ": processing " + unit);
-        }
-    }
-
-
     @Test
     public void testAddProcessor() {
 
-        final ProcessorChain<String> chain =
-            new ProcessorChain<String>(String.class);
+        final ProcessorChain<EchoProcessingUnit> chain =
+            new FlattenProcessorChain<EchoProcessingUnit>();
 
         final String id = "A";
 
-        final Processor<String> processor = new EchoProcessor(id, "B", "C");
+        final Processor<EchoProcessingUnit> processor =
+            new EchoProcessor(id, "B", "C");
 
         chain.addProcessor(processor);
 
@@ -85,19 +57,20 @@ public class ProcessorChainTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddProcessorWithNull() {
-        new ProcessorChain<String>(String.class).addProcessor(null);
+        new FlattenProcessorChain<EchoProcessingUnit>().addProcessor(null);
     }
 
 
     @Test
     public void testHasProcessor() {
 
-        final ProcessorChain<String> chain =
-            new ProcessorChain<String>(String.class);
+        final ProcessorChain<EchoProcessingUnit> chain =
+            new FlattenProcessorChain<EchoProcessingUnit>();
 
         final String id = "A";
 
-        final Processor<String> processor = new EchoProcessor(id, "B", "C");
+        final Processor<EchoProcessingUnit> processor =
+            new EchoProcessor(id, "B", "C");
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
@@ -112,12 +85,13 @@ public class ProcessorChainTest {
     @Test
     public void testRemoveProcessor() {
 
-        final ProcessorChain<String> chain =
-            new ProcessorChain<String>(String.class);
+        final ProcessorChain<EchoProcessingUnit> chain =
+            new FlattenProcessorChain<EchoProcessingUnit>();
 
         final String id = "A";
 
-        final EchoProcessor processor = new EchoProcessor(id, "B", "C");
+        final Processor<EchoProcessingUnit> processor =
+            new EchoProcessor(id, "B", "C");
 
         Assert.assertEquals(chain.hasProcessor(id), false);
 
@@ -134,8 +108,8 @@ public class ProcessorChainTest {
     @Test
     public void testInvoke() throws ProcessorException {
 
-        final ProcessorChain<String> chain =
-            new ProcessorChain<String>(String.class);
+        final ProcessorChain<EchoProcessingUnit> chain =
+            new FlattenProcessorChain<EchoProcessingUnit>();
 
         chain.addProcessor(new EchoProcessor("A", "B", "C", "D"));
 
@@ -151,13 +125,17 @@ public class ProcessorChainTest {
 
         chain.addProcessor(new EchoProcessor("F"));
 
-        chain.invoke("unit");
+        chain.invoke(new EchoProcessingUnit());
     }
 
 
     @Test
     public void testClear() {
-        LOGGER.info("LOGGING...................");
+
+        final ProcessorChain<EchoProcessingUnit> chain =
+            new FlattenProcessorChain<EchoProcessingUnit>();
+
+        chain.clear();
     }
 }
 

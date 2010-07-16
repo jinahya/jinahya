@@ -26,7 +26,7 @@ import java.util.Random;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class HitCounterProcessor extends Processor<HitCounter> {
+public class HitCounterProcessor extends Processor<HitCounterUnit> {
 
 
     private static final Random RANDOM = new Random();
@@ -54,20 +54,25 @@ public class HitCounterProcessor extends Processor<HitCounter> {
     public HitCounterProcessor(final String id,
                                final String... prerequisiteIds) {
 
-        super(HitCounter.class, id, prerequisiteIds);
+        super(id, prerequisiteIds);
     }
 
 
     @Override
-    public void process(final HitCounter unit) throws ProcessorException {
-
-        System.out.println(getId() + " hitting the unit");
-        unit.hit();
+    public void process(final HitCounterUnit unit) throws ProcessorException {
 
         try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            Thread.sleep(100L);
+        } catch (final InterruptedException ie) {
+            throw new ProcessorException(ie);
+        }
+
+        unit.execute(new HitCounterProcedure());
+
+        try {
+            Thread.sleep(100L);
+        } catch (final InterruptedException ie) {
+            throw new ProcessorException(ie);
         }
     }
 }

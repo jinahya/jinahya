@@ -22,7 +22,7 @@ package jinahya.util.processor;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <T> processing unit type
  */
-public abstract class Processor<T> {
+public abstract class Processor<U extends ProcessingUnit> {
 
 
     /**
@@ -32,38 +32,22 @@ public abstract class Processor<T> {
      * @param id processor id.
      * @param prerequisiteIds the prerequisite processors' id array or null.
      */
-    public Processor(final Class<T> type, final String id,
-                     final String[] prerequisiteIds) {
+    public Processor(final String id, final String[] prerequisiteIds) {
 
         super();
-
-        if (type == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + Class.class + ": is null");
-        }
 
         if (id == null) {
             throw new IllegalArgumentException(
                 "param:0:" + String.class + ": is null");
         }
 
-        this.type = type;
-        this.id = id;
-
         if (prerequisiteIds == null) {
-            this.prerequisiteIds = new String[0];
-        } else {
-            this.prerequisiteIds = prerequisiteIds;
+            throw new IllegalArgumentException(
+                "param:1:" + String[].class + ": is null");
         }
-    }
 
-
-    /**
-     *
-     * @return
-     */
-    public final Class<T> getType() {
-        return type;
+        this.id = id;
+        this.prerequisiteIds = prerequisiteIds;
     }
 
 
@@ -81,7 +65,7 @@ public abstract class Processor<T> {
      * @return
      */
     public final String[] getPrerequisiteIds() {
-        return this.prerequisiteIds;
+        return prerequisiteIds;
     }
 
 
@@ -90,10 +74,9 @@ public abstract class Processor<T> {
      * @param unit processing unit
      * @throws ProcessorException if any error occurs.
      */
-    public abstract void process(T unit) throws ProcessorException;
+    public abstract void process(U unit) throws ProcessorException;
 
 
-    private Class<T> type;
     private String id;
     private String[] prerequisiteIds;
 }

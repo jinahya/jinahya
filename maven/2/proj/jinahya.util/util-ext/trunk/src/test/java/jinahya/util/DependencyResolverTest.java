@@ -32,196 +32,126 @@ import org.testng.annotations.Test;
 public class DependencyResolverTest {
 
 
-    @Test
-    public void testAddDependency() {
+    public void testAddDependencies() {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
+            new DependencyResolver<String>();
 
-        resolver.addDependency("A", "B");
-        resolver.addDependency("A", "B");
-        resolver.addDependency("A", "B");
-        resolver.addDependency("A", "B");
+        resolver.addDependencies("A");
+        resolver.addDependencies("A", "B");
+        resolver.addDependencies("A", "B", "C");
+    }
 
-        resolver.print(System.out);
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddDependenciesWithNullSource() {
+        new DependencyResolver<String>().addDependencies(null, new String[0]);
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddDependenciesWithNullTargets() {
+        final String[] targets = null;
+        new DependencyResolver<String>().addDependencies("A", targets);
     }
 
 
     @Test
-    public void testAddDependencyForSelfDependency() {
-
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
-
-        resolver.addDependency("A", "A");
-
-        resolver.print(System.out);
+    public void testAddDependency() {
+        new DependencyResolver<String>().addDependency("A", "B");
     }
 
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddDependencyWithNullSource() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
-
-        resolver.addDependency(null, "B");
+        new DependencyResolver<String>().addDependency(null, "B");
     }
 
 
-    @Test
-    public void testGetFlatten() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
-
-        resolver.addDependency("A", "B");
-        resolver.addDependency("A", "C");
-
-        resolver.addDependency("B", "C");
-        resolver.addDependency("B", "D");
-
-        resolver.addDependency("D", "E");
-        resolver.addDependency("D", "F");
-
-        resolver.addDependency("H", "I");
-
-        resolver.addDependency("J", "I");
-
-        resolver.addDependency("K", null);
-        resolver.addDependency("L", "K");
-
-        resolver.addDependency("M", null);
-
-        resolver.addDependency("N", null);
-
-        resolver.addDependency("O", "P");
-        resolver.addDependency("Q", "R");
-        resolver.addDependency("S", "T");
-        resolver.addDependency("T", "P");
-        resolver.addDependency("U", "Q");
-
-        resolver.print(System.out);
-        /*
-        for (int i = 1; i < 10; i++) {
-            System.out.println("---------------------------------------- " + i);
-            for (List<String> flatten : resolver.getHorizontalGroups(i)) {
-                System.out.println(flatten);
-            }
-        }
-         */
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddDependencyWithNullTarget() {
+        new DependencyResolver<String>().addDependency("A", null);
     }
 
 
-    @Test
-    public void removeDependency() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
-
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddDependencyForSelfDependency() {
         final String source = "A";
-        final String target = "B";
-
-        resolver.addDependency(source, target);
-
-        resolver.removeDependency(source, target);
-        resolver.removeDependency(source, target);
+        final String target = source;
+        new DependencyResolver<String>().addDependency(source, target);
     }
 
 
     @Test
-    public void removeDependencyWithNullTarget() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
+    public void testAddSource() {
+        new DependencyResolver<String>().addSource("A");
+    }
 
-        final String source = "A";
-        final String target = null;
 
-        resolver.addDependency(source, target);
-
-        resolver.removeDependency(source, target);
-
-        resolver.removeDependency(source, target);
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddSourceWithNull() {
+        new DependencyResolver<String>().addSource(null);
     }
 
 
     @Test
-    public void testDependencyGroups() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
+    public void testRemoveSource() {
+        new DependencyResolver<String>().addSource("A");
+    }
 
-        final String source = "A";
-        final String target = null;
 
-        resolver.addDependency("A", "B");
-        resolver.addDependency("A", "C");
-        resolver.addDependency("A", "D");
-
-        resolver.addDependency("B", "D");
-
-        resolver.addDependency("C", "D");
-        resolver.addDependency("C", "E");
-        resolver.addDependency("C", "I");
-
-        resolver.addDependency("E", "F");
-        resolver.addDependency("I", "F");
-
-        for (List<String> group : resolver.getDependencyGroups("A", "F")) {
-            System.out.println("\tDEPENDENCY(A->F)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("A", "D")) {
-            System.out.println("\tDEPENDENCY(A->D)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("A", "E")) {
-            System.out.println("\tDEPENDENCY(A->E)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("A", "F")) {
-            System.out.println("\tDEPENDENCY(A->F)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("A", "G")) {
-            System.out.println("\tDEPENDENCY(A->G)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("I", "F")) {
-            System.out.println("\tDEPENDENCY(I->F)" + group);
-        }
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testRemoveSourceWithNull() {
+        new DependencyResolver<String>().addSource(null);
     }
 
 
     @Test
-    public void testDependencyGroupsWithNullTarget() {
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
-
-        resolver.addDependency("A", null);
-
-        for (List<String> group : resolver.getDependencyGroups("A", null)) {
-            System.out.println("\tDEPENDENCY(A->null)" + group);
-        }
-
-        for (List<String> group : resolver.getDependencyGroups("B", null)) {
-            System.out.println("\tDEPENDENCY(B->null)" + group);
-        }
-    }
-
-
-    @Test
-    public void testGetHorizontalGroups() {
-        System.out.println("testGetHorizontalGroups -------------------------");
+    public void testGetDependencyGroups() {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>(String.class);
+            new DependencyResolver<String>();
 
         resolver.addDependencies("A", "B", "C");
-        resolver.addDependencies("B", "C", "D");
-        resolver.addDependency("E", "F");
-        resolver.addDependency("G", "F");
+        resolver.addDependencies("B", "C");
 
-        resolver.print(System.out);
 
-        for (Vector<String> group : resolver.getHorizontalGroups(3)) {
-            System.out.println("H: " + group);
+        final Vector<Vector<String>> groups =
+            resolver.getDependencyGroups("A", "C");
+
+        for (Vector<String> group : groups) {
+            Assert.assertEquals(group.firstElement(), "A");
+            Assert.assertEquals(group.lastElement(), "C");
+            System.out.println(group);
         }
+
+        Assert.assertEquals(groups.size(), 2);
+
+        Assert.assertEquals(groups.elementAt(1).size(), 2);
+
+        Assert.assertEquals(groups.elementAt(0).size(), 3);
+        Assert.assertEquals(groups.elementAt(0).elementAt(1), "B");
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetDependencyGroupsWithNullSource() {
+        new DependencyResolver<String>().getDependencyGroups(null, "B");
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetDependencyGroupsWithNullTarget() {
+        new DependencyResolver<String>().getDependencyGroups("A", null);
+    }
+
+
+    @Test
+    public void testClear() {
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        resolver.clear();
     }
 }
