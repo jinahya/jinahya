@@ -29,10 +29,5 @@ public class HitCounter {
     }
 
 
-    public synchronized long getCount() {
-        return count;
-    }
-
-
     private volatile long count = 0;
 }

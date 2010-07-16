@@ -26,6 +26,5 @@ public class EchoProcedure implements Procedure<String> {
 
     @Override
     public void process(final String value) throws ProcessorException {
-        System.out.println(value);
     }
 }

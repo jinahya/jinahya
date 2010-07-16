@@ -63,9 +63,11 @@ public class HorizontallyConcurrentProcessorChainTest {
 
 
     @Test
-    public void test() throws ProcessorException {
+    public void testHorizontalConcurrency() throws ProcessorException {
 
         System.out.println("-------- HorizontallyConcurrentProcessorChainTest");
+
+        newChain(1).print(System.out);
 
         for (int i = 1; i < 10; i++) {
             System.out.print("---------------------------- thread count: " + i);
