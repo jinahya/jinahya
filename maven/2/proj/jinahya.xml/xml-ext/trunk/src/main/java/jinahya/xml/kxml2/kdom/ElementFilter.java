@@ -17,6 +17,8 @@
 package jinahya.xml.kxml2.kdom;
 
 
+import java.util.Vector;
+
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
@@ -36,14 +38,14 @@ public abstract class ElementFilter {
      * @param document
      * @throws XmlPullParserException
      */
-    public void filter(final Document document) throws XmlPullParserException {
+    public void filter(final Document document) {
 
         if (document == null) {
             throw new IllegalArgumentException(
                 "param:0:" + Document.class + ": is null");
         }
 
-        filter(document.getRootElement());
+        filter(LinkedElement.newInstance(document));
     }
 
 
@@ -53,19 +55,17 @@ public abstract class ElementFilter {
      * @param element element to be filtered
      * @throws XmlPullParserException if any error occurs
      */
-    private void filter(final Element element) throws XmlPullParserException {
+    private void filter(final LinkedElement element) {
 
         if (element == null) {
             throw new IllegalArgumentException(
                 "param:0:" + Element.class + ": is null");
         }
 
-        if (!startFiltering(element)) {
-            final int childCount = element.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                if (Node.ELEMENT == element.getType(i)) {
-                    filter(element.getElement(i));
-                }
+        if (startFiltering(element)) {
+            final Vector<LinkedElement> children = element.children();
+            for (int i = 0; i < children.size(); i++) {
+                filter(children.elementAt(i));
             }
         }
 
@@ -78,18 +78,14 @@ public abstract class ElementFilter {
      *
      * @param element element to be filtered.
      * @return true if child elements have to be filtered. false otherwise.
-     * @throws XmlPullParserException if any error occurs.
      */
-    protected abstract boolean startFiltering(Element element)
-        throws XmlPullParserException;
+    protected abstract boolean startFiltering(LinkedElement element);
 
 
     /**
      * Finishes filtering for given <code>element</code>.
      *
      * @param element the element to be filtered.
-     * @throws XmlPullParserException if any error occurs.
      */
-    protected abstract void finishFiltering(Element element)
-        throws XmlPullParserException;
+    protected abstract void finishFiltering(LinkedElement element);
 }

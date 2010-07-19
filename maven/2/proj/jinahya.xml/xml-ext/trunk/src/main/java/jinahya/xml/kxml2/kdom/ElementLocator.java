@@ -401,6 +401,18 @@ public class ElementLocator {
 
 
     /**
+     *
+     * @param buffer
+     * @return
+     */
+    public ElementLocator text(final StringBuffer buffer) {
+        current.text(buffer);
+
+        return this;
+    }
+
+
+    /**
      * Removes all child elements and set text. Calling this method with null
      * value will just make the current element empty.
      *

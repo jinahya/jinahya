@@ -19,11 +19,12 @@ package jinahya.xml.kxml2.kdom;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
 
 import org.testng.annotations.Test;
 
@@ -40,43 +41,40 @@ public class ElementFilterTest {
 
     public static class ElementPrinter extends ElementFilter {
 
-        private static final StringBuilder BUILDER = new StringBuilder();
+        private static final StringBuffer BUFFER = new StringBuffer();
+
 
         @Override
-        public boolean startFiltering(final Element element)
-            throws XmlPullParserException {
+        public boolean startFiltering(final LinkedElement element) {
 
             System.out.print("<" + element.getName());
-            final int attributeCount = element.getAttributeCount();
-            for (int i = 0; i < attributeCount; i++) {
-                System.out.print(" " + element.getAttributeName(i) + "=\""
-                                 + element.getAttributeValue(i) + "\"");
+
+            final Hashtable<String, Vector<String>> attributes =
+                element.attributes();
+            final Enumeration<String> namespaces = attributes.keys();
+            while (namespaces.hasMoreElements()) {
+                final String namespace = namespaces.nextElement();
+                if (XmlPullParser.NO_NAMESPACE.equals(namespace)) {
+                }
+                final Vector<String> names = attributes.get(namespace);
+                for (int i = 0; i < names.size(); i++) {
+                    final String name = names.elementAt(i);
+                    System.out.print(" " + name + "=\""
+                                     + element.attribute(namespace, name)
+                                     + "\"");
+                }
             }
             System.out.print(">");
 
-            BUILDER.delete(0, BUILDER.length());
-            boolean hasElements = false;
-            final int childCount = element.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                if (Node.ELEMENT == element.getType(i)) {
-                    hasElements = true;
-                    break;
-                }
-                if (element.isText(i)) {
-                    BUILDER.append(element.getText(i));
-                }
-            }
-            if (!hasElements) {
-                System.out.print(BUILDER.toString());
-            }
+            element.text(BUFFER.delete(0, BUFFER.length()));
+            System.out.print(BUFFER.toString());
+
             return true;
         }
 
 
         @Override
-        public void finishFiltering(final Element element)
-            throws XmlPullParserException {
-
+        public void finishFiltering(final LinkedElement element) {
             System.out.print("</" + element.getName() + ">");
         }
     }

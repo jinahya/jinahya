@@ -81,6 +81,41 @@ public class LinkedElement {
 
     /**
      *
+     * @return
+     */
+    public Hashtable<String, Vector<String>> attributes() {
+        return attributes(new Hashtable<String, Vector<String>>());
+    }
+
+
+    /**
+     *
+     * @param attributes
+     * @return given <code>attributes</code>
+     */
+    public Hashtable<String, Vector<String>> attributes(
+        final Hashtable<String, Vector<String>> attributes) {
+
+        final int attributeCount = element.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
+
+            final String namespace = element.getAttributeNamespace(i);
+            final String name = element.getAttributeName(i);
+
+            Vector<String> names = attributes.get(namespace);
+            if (names == null) {
+                names = new Vector<String>();
+                attributes.put(namespace, names);
+            }
+            names.addElement(name);
+        }
+
+        return attributes;
+    }
+
+
+    /**
+     *
      * @param namespace
      * @param name
      * @return
@@ -141,6 +176,23 @@ public class LinkedElement {
                                final int index) {
 
         return children(namespace, name).elementAt(index);
+    }
+
+
+    Vector<LinkedElement> children() {
+
+        final Vector<LinkedElement> children = new Vector<LinkedElement>();
+
+        final int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (Node.ELEMENT != element.getType(i)) {
+                continue;
+            }
+            final Element child = element.getElement(i);
+            children.addElement(new LinkedElement(this, child, i));
+        }
+
+        return children;
     }
 
 
@@ -315,22 +367,45 @@ public class LinkedElement {
 
     /**
      *
-     * @return
+     * @return text value or null
      */
     public String text() {
 
         final StringBuffer buffer = new StringBuffer();
 
-        final int childCount = element.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            if (!element.isText(i)
-                || (Node.IGNORABLE_WHITESPACE == element.getType(i))) {
-
-            }
-            buffer.append(element.getText(i));
+        if (text(buffer)) {
+            return buffer.toString();
         }
 
-        return buffer.toString();
+        return null;
+    }
+
+
+    /**
+     *
+     * @param buffer a buffer to which text values are appended.
+     * @return true if any text value appended to given <code>buffer</code>,
+     *         false otherwise.
+     */
+    public boolean text(final StringBuffer buffer) {
+
+        if (buffer == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + StringBuffer.class + ": is null");
+        }
+
+        boolean appended = false;
+        final int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (element.isText(i)
+                && (Node.IGNORABLE_WHITESPACE != element.getType(i))) {
+
+                buffer.append(element.getText(i));
+                appended = true;
+            }
+        }
+
+        return appended;
     }
 
 
@@ -391,6 +466,16 @@ public class LinkedElement {
         }
 
         return true;
+    }
+
+
+    public String getNamespace() {
+        return element.getNamespace();
+    }
+
+
+    public String getName() {
+        return element.getName();
     }
 
 
