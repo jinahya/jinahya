@@ -22,11 +22,13 @@
   </dependencies>
   <dependencyManagement>
     <dependencies>
+      <!--
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.8.1</version>
       </dependency>
+      -->
       <dependency>
         <groupId>net.sf.kxml</groupId>
         <artifactId>kxml2</artifactId>
@@ -218,10 +220,10 @@
   <ciManagement/>
   <mailingLists/>
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${project.groupId}/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/${project.groupId}/${project.artifactId}/trunk</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya.xml/jaxp-utils/trunk</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/${project.groupId}/${project.artifactId}/trunk</url>
   </scm>
   <prerequisites/>
   <repositories/>
