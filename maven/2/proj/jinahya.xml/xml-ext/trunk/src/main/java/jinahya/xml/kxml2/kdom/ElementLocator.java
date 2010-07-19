@@ -23,13 +23,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.Writer;
+
 import java.net.URL;
 
 import org.kxml2.io.KXmlParser;
+import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
 import org.xmlpull.v1.XmlPullParserException;
 
 
@@ -431,6 +435,25 @@ public class ElementLocator {
      */
     public Document document() {
         return current.document();
+    }
+
+
+    /**
+     *
+     * @param out
+     * @throws IOException
+     */
+    public void print(final Writer out) throws IOException {
+
+        if (out == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Writer.class + ": is null");
+        }
+
+        final XmlSerializer serializer = new KXmlSerializer();
+        serializer.setOutput(out);
+
+        document().write(serializer);
     }
 
 
