@@ -469,12 +469,12 @@ public class LinkedElement {
     }
 
 
-    public String getNamespace() {
+    public String namespace() {
         return element.getNamespace();
     }
 
 
-    public String getName() {
+    public String name() {
         return element.getName();
     }
 

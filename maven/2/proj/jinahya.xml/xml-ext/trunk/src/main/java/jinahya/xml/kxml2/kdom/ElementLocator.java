@@ -450,6 +450,14 @@ public class ElementLocator {
     }
 
 
+    public String namespace() {
+        return current.namespace();
+    }
+
+    public String name() {
+        return current.name();
+    }
+
     /**
      *
      * @param out

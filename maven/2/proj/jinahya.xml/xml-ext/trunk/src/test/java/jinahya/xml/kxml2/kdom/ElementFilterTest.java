@@ -47,7 +47,7 @@ public class ElementFilterTest {
         @Override
         public boolean startFiltering(final LinkedElement element) {
 
-            System.out.print("<" + element.getName());
+            System.out.print("<" + element.name());
 
             final Hashtable<String, Vector<String>> attributes =
                 element.attributes();
@@ -75,7 +75,7 @@ public class ElementFilterTest {
 
         @Override
         public void finishFiltering(final LinkedElement element) {
-            System.out.print("</" + element.getName() + ">");
+            System.out.print("</" + element.name() + ">");
         }
     }
 
