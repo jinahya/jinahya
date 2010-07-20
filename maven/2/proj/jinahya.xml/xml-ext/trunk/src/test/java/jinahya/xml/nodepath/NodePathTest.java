@@ -58,32 +58,4 @@ public class NodePathTest {
         + "  </d>"
         + "</a>";
 
-
-    /** PRIVATE. */
-    private static NodePath<Document> documentPath;
-
-
-    @BeforeClass
-    public static void createDocumentNodePath()
-        throws ParserConfigurationException, SAXException, IOException {
-
-        documentPath = NodePathFactory.newInstance().parseRootPath(
-            new InputSource(new StringReader(XML)));
-    }
-
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEvaluateWithNullExpression()
-        throws XPathExpressionException {
-
-        documentPath.evaluate(null);
-    }
-
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEvaluateWithNullReturnType()
-        throws XPathExpressionException {
-
-        documentPath.evaluate("/", null);
-    }
 }

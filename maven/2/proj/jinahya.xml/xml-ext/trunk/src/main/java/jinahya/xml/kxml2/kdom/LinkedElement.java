@@ -516,11 +516,19 @@ public class LinkedElement {
     }
 
 
+    /**
+     *
+     * @return
+     */
     public String namespace() {
         return element.getNamespace();
     }
 
 
+    /**
+     *
+     * @return
+     */
     public String name() {
         return element.getName();
     }
