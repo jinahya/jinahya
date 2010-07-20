@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2010-07-20T11:40:49.128">
+<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\xml-ext\tags\1.0-S-2010.07.20\src\main\java\jinahya\xml\kxml2\kdom\ElementFilter.java">
+<violation beginline="24" endline="24" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.kxml2.kdom.Node'
+</violation>
+<violation beginline="26" endline="26" begincolumn="1" endcolumn="45" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.xmlpull.v1.XmlPullParserException'
+</violation>
+</file>
+</pmd>
