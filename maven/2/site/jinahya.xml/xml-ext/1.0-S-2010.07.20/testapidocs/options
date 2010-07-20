@@ -1,0 +1,32 @@
+-classpath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.20/target/classes;D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.20/target/test-classes;C:/Users/onacit/.m2/repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar;C:/Users/onacit/.m2/repository/org/testng/testng/5.12.1/testng-5.12.1.jar;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.20/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.20/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.xml:xml-ext 1.0-S-2010.07.20 Test API'
+-link
+'http://www.xmlpull.org/v1/doc/api'
+-link
+'http://kxml.sourceforge.net/kxml2/javadoc'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-link
+'../apidocs'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.xml:xml-ext 1.0-S-2010.07.20 Test API'
