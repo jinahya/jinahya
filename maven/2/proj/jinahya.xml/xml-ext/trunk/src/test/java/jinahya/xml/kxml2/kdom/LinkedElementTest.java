@@ -73,7 +73,7 @@ public class LinkedElementTest {
     @Test
     public void testAttributeSet() throws IOException {
         final LinkedElement element = newInstance("a", "b");
-        element.attribute("c", "d", "v");
+        element.attributeNS("c", "d", "v");
         print(element);
     }
 
@@ -83,11 +83,11 @@ public class LinkedElementTest {
 
         final LinkedElement element = newInstance("a", "b");
 
-        Assert.assertNull(element.attribute("a", "b"));
+        Assert.assertNull(element.attributeNS("a", "b"));
 
-        element.attribute("a", "b", "c");
+        element.attributeNS("a", "b", "c");
 
-        Assert.assertEquals(element.attribute("a", "b"), "c");
+        Assert.assertEquals(element.attributeNS("a", "b"), "c");
     }
 
 
@@ -97,7 +97,7 @@ public class LinkedElementTest {
         final LinkedElement parent = newInstance("a", "b");
         System.out.println("parent.hashCode: " + parent.hashCode());
 
-        final LinkedElement child = parent.child("a", "b");
+        final LinkedElement child = parent.childNS("a", "b");
         System.out.println("child.hashCode: " + child.hashCode());
     }
 
@@ -107,8 +107,8 @@ public class LinkedElementTest {
 
         final LinkedElement parent = newInstance("a", "b");
 
-        final LinkedElement child = parent.child("a", "b");
+        final LinkedElement child = parent.childNS("a", "b");
 
-        Assert.assertEquals(parent.child("a", "b", 0), child);
+        Assert.assertEquals(parent.childNS("a", "b", 0), child);
     }
 }

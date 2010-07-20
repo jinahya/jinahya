@@ -60,7 +60,7 @@ public class ElementFilterTest {
                 for (int i = 0; i < names.size(); i++) {
                     final String name = names.elementAt(i);
                     System.out.print(" " + name + "=\""
-                                     + element.attribute(namespace, name)
+                                     + element.attributeNS(namespace, name)
                                      + "\"");
                 }
             }

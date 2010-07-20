@@ -25,6 +25,8 @@ import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 
+import org.xmlpull.v1.XmlPullParser;
+
 
 /**
  *
@@ -115,14 +117,36 @@ public class LinkedElement {
 
 
     /**
+     * 
+     * @param namespace
+     * @param name
+     * @return
+     */
+    public String attribute(final String name) {
+        return attributeNS(XmlPullParser.NO_NAMESPACE, name);
+    }
+
+
+    /**
      *
      * @param namespace
      * @param name
      * @return
      * @see org.kxml2.kdom.Element#getAttributeValue(String, String)
      */
-    public String attribute(final String namespace, final String name) {
+    public String attributeNS(final String namespace, final String name) {
         return element.getAttributeValue(namespace, name);
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @param value
+     */
+    public void attribute(final String name, final String value) {
+        attributeNS(XmlPullParser.NO_NAMESPACE, name, value);
     }
 
 
@@ -133,10 +157,21 @@ public class LinkedElement {
      * @param value
      * @see org.kxml2.kdom.Element#setAttribute(String, String, String)
      */
-    public void attribute(final String namespace, final String name,
-                          final String value) {
+    public void attributeNS(final String namespace, final String name,
+                            final String value) {
 
         element.setAttribute(namespace, name, value);
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @return
+     */
+    public LinkedElement child(final String name) {
+        return childNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -146,7 +181,7 @@ public class LinkedElement {
      * @param name
      * @return
      */
-    public LinkedElement child(final String namespace, final String name) {
+    public LinkedElement childNS(final String namespace, final String name) {
 
         final Vector<LinkedElement> children = children(namespace, name);
 
@@ -164,6 +199,18 @@ public class LinkedElement {
 
 
     /**
+     * 
+     * @param namespace
+     * @param name
+     * @param index
+     * @return
+     */
+    public LinkedElement child(final String name, final int index) {
+        return childNS(XmlPullParser.NO_NAMESPACE, name, index);
+    }
+
+
+    /**
      *
      * @param namespace
      * @param name
@@ -172,8 +219,8 @@ public class LinkedElement {
      * @throws ArrayIndexOutOfBoundsException if the index is negative or not
      *         less than the children count of given kind.
      */
-    public LinkedElement child(final String namespace, final String name,
-                               final int index) {
+    public LinkedElement childNS(final String namespace, final String name,
+                                 final int index) {
 
         return children(namespace, name).elementAt(index);
     }

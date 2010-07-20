@@ -166,7 +166,7 @@ public class ElementLocator {
      * @see #child(String, String)
      */
     public ElementLocator child(final String name) {
-        return child(XmlPullParser.NO_NAMESPACE, name);
+        return childNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -177,8 +177,8 @@ public class ElementLocator {
      * @param name new element's name
      * @return self
      */
-    public ElementLocator child(final String namespace, final String name) {
-        current = current.child(namespace, name);
+    public ElementLocator childNS(final String namespace, final String name) {
+        current = current.childNS(namespace, name);
 
         return this;
     }
@@ -193,7 +193,7 @@ public class ElementLocator {
      * @see #child(String, String, int)
      */
     public ElementLocator child(final String name, final int index) {
-        return child(XmlPullParser.NO_NAMESPACE, name, index);
+        return childNS(XmlPullParser.NO_NAMESPACE, name, index);
     }
 
 
@@ -207,10 +207,10 @@ public class ElementLocator {
      * @throws ArrayIndexOutOfBoundsException
      * @see LinkedElement#child(String, String, int)
      */
-    public ElementLocator child(final String namespace, final String name,
-                                final int index) {
+    public ElementLocator childNS(final String namespace, final String name,
+                                  final int index) {
 
-        current = current.child(namespace, name, index);
+        current = current.childNS(namespace, name, index);
 
         return this;
     }
@@ -333,7 +333,7 @@ public class ElementLocator {
      * @see Element#getAttributeValue(String, String)
      */
     public String attribute(final String name) {
-        return attribute(XmlPullParser.NO_NAMESPACE, name);
+        return attributeNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -345,7 +345,7 @@ public class ElementLocator {
      * @return attribute's value
      * @see Element#getAttributeValue(String, String)
      */
-    public String attribute(final String namespace, final String name) {
+    public String attributeNS(final String namespace, final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -357,7 +357,13 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        return current.attribute(namespace, name);
+        return current.attributeNS(namespace, name);
+    }
+
+
+    public ElementLocator attribute(final String name, final String value) {
+
+        return attributeNS(XmlPullParser.NO_NAMESPACE, name, value);
     }
 
 
@@ -370,8 +376,8 @@ public class ElementLocator {
      * @return self
      * @see org.kxml2.kdom.Element#setAttribute(String, String, String)
      */
-    public ElementLocator attribute(final String namespace, final String name,
-                                    final String value) {
+    public ElementLocator attributeNS(final String namespace, final String name,
+                                      final String value) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -383,7 +389,7 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        current.attribute(namespace, name, value);
+        current.attributeNS(namespace, name, value);
 
         return this;
     }
