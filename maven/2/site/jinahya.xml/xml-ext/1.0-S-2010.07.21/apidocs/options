@@ -1,0 +1,30 @@
+-classpath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.21/target/classes;C:/Users/onacit/.m2/repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.21/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.xml/xml-ext/tags/1.0-S-2010.07.21/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.xml:xml-ext 1.0-S-2010.07.21 API'
+-link
+'http://www.xmlpull.org/v1/doc/api'
+-link
+'http://kxml.sourceforge.net/kxml2/javadoc'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.xml:xml-ext 1.0-S-2010.07.21 API'
