@@ -255,6 +255,32 @@ public class NodePath {
 
     /**
      *
+     * @param node
+     * @return new child node path
+     * @throws IllegalArguementException if given <code>node</code> is null
+     *         or not a descendent of current node.
+     */
+    public NodePath child(final Node node) {
+
+        if (node == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Node.class + ": is null");
+        }
+
+        for (Node parent = null; (parent = node.getParentNode()) != null;) {
+            if (parent.equals(node)) {
+                return new NodePath(node, path);
+            }
+        }
+
+        throw new IllegalArgumentException(
+            "param:0:" + Node.class + ":" + node
+            + " is not a descendent of current node");
+    }
+
+
+    /**
+     *
      * @param <E>
      * @param clazz
      * @return
