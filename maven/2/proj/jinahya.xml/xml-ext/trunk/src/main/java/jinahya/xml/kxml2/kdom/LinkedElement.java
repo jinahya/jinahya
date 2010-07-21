@@ -37,6 +37,29 @@ public class LinkedElement {
 
     /**
      *
+     * @param namespace
+     * @param name
+     * @return
+     * @see <a href="http://www.jclark.com/xml/xmlns.htm">XML Namespaces</a>
+     */
+    public static String jamesClark(final String namespace, final String name) {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        return "{" + namespace + "}" + name;
+    }
+
+
+    /**
+     *
      * @param document
      * @return
      * @throws IllegalArgumentException if given <code>document</code> is null
@@ -531,6 +554,55 @@ public class LinkedElement {
      */
     public String name() {
         return element.getName();
+    }
+
+
+    public String jamesClark() {
+        return jamesClark(element.getNamespace(), element.getName());
+    }
+
+
+    /**
+     *
+     * @param name
+     */
+    public void require(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        requireNS(XmlPullParser.NO_NAMESPACE, name);
+    }
+
+
+    /**
+     * Checks if current location matches with specified URI and local name.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @throws IllegalArgumentException either one of arguments is null
+     * @throws RuntimeException if not matches
+     */
+    public void requireNS(final String namespace, final String name) {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        if (!element.getNamespace().equals(namespace)
+            || !element.getName().equals(name)) {
+
+            throw new RuntimeException(
+                jamesClark() + " <> " + jamesClark(namespace, name));
+        }
     }
 
 

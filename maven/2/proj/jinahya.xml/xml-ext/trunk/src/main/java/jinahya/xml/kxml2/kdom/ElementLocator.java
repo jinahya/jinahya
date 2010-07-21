@@ -123,6 +123,7 @@ public class ElementLocator {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
+     * @see org.xmlpull.v1.XmlPullParser#setInput(java.io.Reader)
      */
     public static ElementLocator newInstance(final Reader in)
         throws XmlPullParserException, IOException {
@@ -223,9 +224,10 @@ public class ElementLocator {
      *
      * @param name
      * @return
+     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
      */
     public ElementLocator first(final String name) {
-        return first(XmlPullParser.NO_NAMESPACE, name);
+        return firstNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -234,8 +236,9 @@ public class ElementLocator {
      * @param namespace
      * @param name
      * @return
+     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
      */
-    public ElementLocator first(final String namespace, final String name) {
+    public ElementLocator firstNS(final String namespace, final String name) {
 
         current = current.first(namespace, name);
 
@@ -247,9 +250,10 @@ public class ElementLocator {
      *
      * @param name
      * @return
+     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
      */
     public ElementLocator last(final String name) {
-        return last(XmlPullParser.NO_NAMESPACE, name);
+        return lastNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -258,9 +262,9 @@ public class ElementLocator {
      * @param namespace
      * @param name
      * @return
-     * @throws XmlPullParserException
+     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
      */
-    public ElementLocator last(final String namespace, final String name) {
+    public ElementLocator lastNS(final String namespace, final String name) {
 
         current = current.last(namespace, name);
 
@@ -301,7 +305,7 @@ public class ElementLocator {
      * @see #count(String, String)
      */
     public int count(final String name) {
-        return count(XmlPullParser.NO_NAMESPACE, name);
+        return countNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
@@ -311,7 +315,7 @@ public class ElementLocator {
      * @param name
      * @return
      */
-    public int count(final String namespace, final String name) {
+    public int countNS(final String namespace, final String name) {
 
         if (namespace == null) {
             throw new IllegalArgumentException(
@@ -466,6 +470,42 @@ public class ElementLocator {
     public String name() {
         return current.name();
     }
+
+
+    public void require(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        requireNS(XmlPullParser.NO_NAMESPACE, name);
+    }
+
+
+    /**
+     * Checks if current location matches with specified URI and local name.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @throws IllegalArgumentException either one of arguments is null
+     * @throws RuntimeException if not matches
+     */
+    public void requireNS(final String namespace, final String name) {
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        current.requireNS(namespace, name);
+    }
+
 
     /**
      *
