@@ -45,9 +45,10 @@ public class ElementLocator {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param file
-     * @return
+     * @param file xml file
+     * @return a new instance
      */
     public static ElementLocator newInstance(final File file)
         throws XmlPullParserException, IOException {
@@ -67,9 +68,10 @@ public class ElementLocator {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param url
-     * @return
+     * @param url xml url
+     * @return a new instance.
      */
     public static ElementLocator newInstance(final URL url)
         throws XmlPullParserException, IOException {
@@ -90,6 +92,7 @@ public class ElementLocator {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
+     * @see org.xmlpull.v1.XmlPullParser#setInput(java.io.InputStream, String)
      */
     public static ElementLocator newInstance(final InputStream in,
                                              final String enc)
