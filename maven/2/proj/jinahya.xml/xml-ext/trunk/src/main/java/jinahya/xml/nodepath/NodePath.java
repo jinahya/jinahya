@@ -267,11 +267,21 @@ public class NodePath {
                 "param:0:" + Node.class + ": is null");
         }
 
-        for (Node parent = null; (parent = node.getParentNode()) != null;) {
+        for (Node parent = node.getParentNode(); parent != null;
+             parent = parent.getParentNode()) {
+
             if (parent.equals(this.node)) {
                 return new NodePath(node, path);
             }
         }
+
+        /*
+         * Billie Jean is not my lover
+         * She's just a girl who claims that I am the one
+         * But the kid is not my son
+         * She says I am the one, but the kid is not my son
+         * (Don't think twice)
+         */
 
         throw new IllegalArgumentException(
             "param:0:" + Node.class + ":" + node
