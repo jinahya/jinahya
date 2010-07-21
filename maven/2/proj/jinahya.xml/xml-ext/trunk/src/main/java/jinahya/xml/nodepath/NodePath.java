@@ -268,7 +268,7 @@ public class NodePath {
         }
 
         for (Node parent = null; (parent = node.getParentNode()) != null;) {
-            if (parent.equals(node)) {
+            if (parent.equals(this.node)) {
                 return new NodePath(node, path);
             }
         }
