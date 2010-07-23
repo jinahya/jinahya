@@ -24,6 +24,7 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathExpressionException;
@@ -66,23 +67,28 @@ public class NodePathTest {
         + "</a>";
 
 
+    private Document newDocument(final String name)
+        throws ParserConfigurationException, SAXException, IOException {
+
+        return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
+            NodePathTest.class.getResourceAsStream(name));
+    }
+
+
+    private NodePath newInstance(final String name)
+        throws ParserConfigurationException, SAXException, IOException {
+
+        return new NodePath(newDocument(name),
+                            XPathFactory.newInstance().newXPath());
+    }
+
+
     @Test
     public void printBooks2DotXml()
         throws ParserConfigurationException, SAXException, IOException,
                XPathExpressionException {
 
-        final InputStream books2DotXmlStream =
-            NodePathTest.class.getResourceAsStream("/books2.xml");
-
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder db = dbf.newDocumentBuilder();
-
-        final XPathFactory xpf = XPathFactory.newInstance();
-
-        final Node n = db.parse(books2DotXmlStream);
-        final XPath xp = xpf.newXPath();
-
-        final NodePath np = new NodePath(n, xp);
+        final NodePath np = newInstance("/books2.xml");
 
         final NodeList bookNodeList = np.NODESET("/catalog/book");
         final int length = bookNodeList.getLength();
@@ -95,10 +101,42 @@ public class NodePathTest {
             System.out.println("title: " + bookPath.STRING("title/text()"));
             System.out.println("genre: " + bookPath.STRING("genre/text()"));
             System.out.println("price: " + bookPath.FLOAT("price/text()"));
-            System.out.println("publish_date: " + bookPath.STRING("publish_date/text()"));
-            System.out.println("description: " + bookPath.STRING("description/text()"));
-
-
+            System.out.println("publish_date: "
+                               + bookPath.STRING("publish_date/text()"));
+            System.out.println("description: "
+                               + bookPath.STRING("description/text()"));
         }
+    }
+
+
+    @Test
+    public void testChild()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        final Document parentNode = DocumentBuilderFactory.newInstance().
+            newDocumentBuilder().newDocument();
+
+        final NodePath parentPath = new NodePath(parentNode);
+
+        final Node childNode = parentNode.createElement("root");
+        parentNode.appendChild(childNode);
+
+        final NodePath childPath = parentPath.child(childNode);
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testChildWithIllegalDescendant()
+        throws ParserConfigurationException, SAXException, IOException {
+
+        final Document parentNode = DocumentBuilderFactory.newInstance().
+            newDocumentBuilder().newDocument();
+
+        final NodePath parentPath = new NodePath(parentNode);
+
+        final Node childNode = parentNode.createElement("root");
+        //parentNode.appendChild(childNode);
+
+        final NodePath childPath = parentPath.child(childNode);
     }
 }
