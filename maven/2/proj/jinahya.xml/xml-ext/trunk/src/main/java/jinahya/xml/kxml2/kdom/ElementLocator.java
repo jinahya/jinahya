@@ -27,9 +27,14 @@ import java.io.Writer;
 
 import java.net.URL;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import org.kxml2.io.KXmlParser;
 import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Node;
 import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -45,101 +50,95 @@ public class ElementLocator {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param file xml file
-     * @return a new instance
+     * 
      */
-    public static ElementLocator newInstance(final File file)
-        throws XmlPullParserException, IOException {
+    private static class LinkedElement {
 
-        if (file == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + File.class + ": is null");
+
+        Vector<LinkedElement> children(final String namespace,
+                                       final String name) {
+
+            if (namespace == null) {
+                throw new IllegalArgumentException(
+                    "param:0:namespace:" + String.class + ": is null");
+            }
+
+            if (name == null) {
+                throw new IllegalArgumentException(
+                    "param:1:name:" + String.class + ": is null");
+            }
+
+            final String key = "{" + namespace + "}" + name;
+
+            Vector<LinkedElement> children = classes().get(key);
+
+            if (children == null) {
+
+                children = new Vector<LinkedElement>();
+                classes().put(key, children);
+
+                final int childCount = element.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    if (Node.ELEMENT != element.getType(i)) {
+                        continue;
+                    }
+                    final Element childElement = element.getElement(i);
+                    if (namespace.equals(childElement.getNamespace())
+                        && name.equals(childElement.getName())) {
+                        final LinkedElement child = new LinkedElement();
+                        child.parent = this;
+                        child.element = childElement;
+                        child.index = i;
+                        children.addElement(child);
+                    }
+                }
+            }
+
+            return children;
         }
 
-        final InputStream in = new FileInputStream(file);
-        try {
-            return newInstance(in, null);
-        } finally {
-            in.close();
-        }
-    }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param url xml url
-     * @return a new instance.
-     */
-    public static ElementLocator newInstance(final URL url)
-        throws XmlPullParserException, IOException {
+        LinkedElement remove(final int index) {
 
-        if (url == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + URL.class + ": is null");
-        }
+            element.removeChild(index);
 
-        return newInstance(url.openStream(), null);
-    }
+            final Enumeration<Vector<LinkedElement>> e = classes().elements();
 
+            while (e.hasMoreElements()) {
 
-    /**
-     *
-     * @param in
-     * @param enc
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @see org.xmlpull.v1.XmlPullParser#setInput(java.io.InputStream, String)
-     */
-    public static ElementLocator newInstance(final InputStream in,
-                                             final String enc)
-        throws XmlPullParserException, IOException {
+                final Vector<LinkedElement> children = e.nextElement();
 
-        if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + InputStream.class + ": is null");
+                for (int i = children.size() - 1; i >= 0; i--) {
+                    if (children.elementAt(i).index < index) {
+                        continue;
+                    }
+                    if (children.elementAt(i).index == index) {
+                        children.removeElementAt(i);
+                    } else {
+                        children.elementAt(i).index--;
+                    }
+                }
+            }
+
+            return this;
         }
 
-        if (enc != null) {
-            return newInstance(new InputStreamReader(in, enc));
+
+        Hashtable<String, Vector<LinkedElement>> classes() {
+            if (classes == null) {
+                classes = new Hashtable<String, Vector<LinkedElement>>();
+            }
+
+            return classes;
         }
 
-        final XmlPullParser parser = new KXmlParser();
-        parser.setInput(in, enc);
 
-        final Document document = new Document();
-        document.parse(parser);
+        private LinkedElement parent;
+        private Element element;
+        private int index;
 
-        return new ElementLocator(document);
-    }
-
-
-    /**
-     *
-     * @param in
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @see org.xmlpull.v1.XmlPullParser#setInput(java.io.Reader)
-     */
-    public static ElementLocator newInstance(final Reader in)
-        throws XmlPullParserException, IOException {
-
-        if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + Reader.class + ": is null");
-        }
-
-        final XmlPullParser parser = new KXmlParser();
-        parser.setInput(in);
-
-        final Document document = new Document();
-        document.parse(parser);
-
-        return new ElementLocator(document);
+        private Hashtable<String, Vector<LinkedElement>> classes;
     }
 
 
@@ -158,7 +157,38 @@ public class ElementLocator {
                 "param:0:" + Document.class + ": is null");
         }
 
-        current = LinkedElement.newInstance(document);
+        final int childCount = document.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (Node.ELEMENT == document.getType(i)) {
+                current = new LinkedElement();
+                current.parent = null;
+                current.element = document.getElement(i);
+                current.index = i;
+                break;
+            }
+        }
+
+        if (current == null) {
+            throw new IllegalArgumentException("no root element");
+        }
+    }
+
+
+    /**
+     *
+     * @param element
+     */
+    public ElementLocator(final Element element) {
+
+        if (element == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + Element.class + ": is null");
+        }
+
+        current = new LinkedElement();
+        current.parent = null;
+        current.element = element;
+        current.index = -1;
     }
 
 
@@ -170,6 +200,12 @@ public class ElementLocator {
      * @see #child(String, String)
      */
     public ElementLocator child(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
         return childNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
@@ -182,7 +218,30 @@ public class ElementLocator {
      * @return self
      */
     public ElementLocator childNS(final String namespace, final String name) {
-        current = current.childNS(namespace, name);
+
+        if (namespace == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:1:" + String.class + ": is null");
+        }
+
+        final Vector<LinkedElement> children = current.children(namespace, name);
+
+        final int childCount = current.element.getChildCount();
+
+        current.element.addChild(
+            Node.ELEMENT, current.element.createElement(namespace, name));
+
+        final LinkedElement child = new LinkedElement();
+        child.parent = current;
+        child.element = current.element.getElement(childCount);
+        child.index = childCount;
+
+        children.addElement(child);
 
         return this;
     }
@@ -214,59 +273,7 @@ public class ElementLocator {
     public ElementLocator childNS(final String namespace, final String name,
                                   final int index) {
 
-        current = current.childNS(namespace, name, index);
-
-        return this;
-    }
-
-
-    /**
-     *
-     * @param name
-     * @return
-     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
-     */
-    public ElementLocator first(final String name) {
-        return firstNS(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     *
-     * @param namespace
-     * @param name
-     * @return
-     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
-     */
-    public ElementLocator firstNS(final String namespace, final String name) {
-
-        current = current.first(namespace, name);
-
-        return this;
-    }
-
-
-    /**
-     *
-     * @param name
-     * @return
-     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
-     */
-    public ElementLocator last(final String name) {
-        return lastNS(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     *
-     * @param namespace
-     * @param name
-     * @return
-     * @throws ArrayIndexOutOfBoundsException if there is not child elements.
-     */
-    public ElementLocator lastNS(final String namespace, final String name) {
-
-        current = current.last(namespace, name);
+        current = current.children(namespace, name).elementAt(index);
 
         return this;
     }
@@ -278,7 +285,9 @@ public class ElementLocator {
      */
     public ElementLocator root() {
 
-        current = current.root();
+        while (current.parent != null) {
+            current = current.parent;
+        }
 
         return this;
     }
@@ -291,9 +300,12 @@ public class ElementLocator {
      */
     public ElementLocator parent() {
 
-        current = current.parent();
+        if (current.parent != null) {
+            current = current.parent;
+            return this;
+        }
 
-        return this;
+        throw new IllegalStateException("no parent");
     }
 
 
@@ -327,7 +339,7 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        return current.count(namespace, name);
+        return current.children(namespace, name).size();
     }
 
 
@@ -340,6 +352,12 @@ public class ElementLocator {
      * @see Element#getAttributeValue(String, String)
      */
     public String attribute(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
+
         return attributeNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
@@ -364,11 +382,22 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        return current.attributeNS(namespace, name);
+        return current.element.getAttributeValue(namespace, name);
     }
 
 
+    /**
+     *
+     * @param name
+     * @param value
+     * @return
+     */
     public ElementLocator attribute(final String name, final String value) {
+
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
+        }
 
         return attributeNS(XmlPullParser.NO_NAMESPACE, name, value);
     }
@@ -381,7 +410,7 @@ public class ElementLocator {
      * @param name attribute's name
      * @param value attribute's new value or null.
      * @return self
-     * @see org.kxml2.kdom.Element#setAttribute(String, String, String)
+     * @see Element#setAttribute(String, String, String)
      */
     public ElementLocator attributeNS(final String namespace, final String name,
                                       final String value) {
@@ -396,46 +425,48 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        current.attributeNS(namespace, name, value);
+        current.element.setAttribute(namespace, name, value);
 
         return this;
     }
 
 
-    /**
-     * Returns text value.
+   /**
      *
-     * @param appendIgnorableWhiteSpaces
-     * @return current element's text value or null if there is no text nodes.
+     * @return text value or null
      */
     public String text() {
-        return current.text();
+        final StringBuffer buffer = new StringBuffer();
+        final int childCount = current.element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (current.element.isText(i)
+                && (Node.IGNORABLE_WHITESPACE != current.element.getType(i))) {
+
+                buffer.append(current.element.getText(i));
+            }
+        }
+
+        return buffer.toString();
     }
 
 
     /**
      *
-     * @param buffer
-     * @return
+     * @param text
      */
-    public ElementLocator text(final StringBuffer buffer) {
-        current.text(buffer);
+    public void text(final String text) {
 
-        return this;
-    }
+        final int childCount = current.element.getChildCount();
+        for (int i = childCount - 1; i >= 0; i--) {
+            if (Node.TEXT == current.element.getType(i)
+                || Node.IGNORABLE_WHITESPACE == current.element.getType(i)) {
+                current.element.removeChild(i);
+            }
+        }
 
-
-    /**
-     * Removes all child elements and set text. Calling this method with null
-     * value will just make the current element empty.
-     *
-     * @return self
-     * @param text text value
-     */
-    public ElementLocator text(final String text) {
-        current.text(text);
-
-        return this;
+        if (text != null) {
+            current.element.addChild(Node.TEXT, text);
+        }
     }
 
 
@@ -443,86 +474,17 @@ public class ElementLocator {
      * Removes current element from its parent and locate to the parent.
      *
      * @return self
-     * @throws XmlPullParserException if currently at root.
+     * @throws IllegalStateException if there is no parent
      */
     public ElementLocator remove() {
 
-        current = current.remove();
+        if (current.parent == null) {
+            throw new IllegalArgumentException("no parent");
+        }
+
+        current = current.parent.remove(current.index);
 
         return this;
-    }
-
-
-    /**
-     * Returns the document instance.
-     *
-     * @return the document instance or null
-     */
-    public Document document() {
-        return current.document();
-    }
-
-
-    public String namespace() {
-        return current.namespace();
-    }
-
-    public String name() {
-        return current.name();
-    }
-
-
-    public void require(final String name) {
-
-        if (name == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
-        }
-
-        requireNS(XmlPullParser.NO_NAMESPACE, name);
-    }
-
-
-    /**
-     * Checks if current location matches with specified URI and local name.
-     *
-     * @param namespace namespace
-     * @param name name
-     * @throws IllegalArgumentException either one of arguments is null
-     * @throws RuntimeException if not matches
-     */
-    public void requireNS(final String namespace, final String name) {
-
-        if (namespace == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
-        }
-
-        if (name == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + String.class + ": is null");
-        }
-
-        current.requireNS(namespace, name);
-    }
-
-
-    /**
-     *
-     * @param out
-     * @throws IOException
-     */
-    public void print(final Writer out) throws IOException {
-
-        if (out == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + Writer.class + ": is null");
-        }
-
-        final XmlSerializer serializer = new KXmlSerializer();
-        serializer.setOutput(out);
-
-        document().write(serializer);
     }
 
 

@@ -17,13 +17,9 @@
 package jinahya.xml.kxml2.kdom;
 
 
-import java.util.Vector;
-
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
-
-import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
@@ -36,7 +32,6 @@ public abstract class ElementFilter {
     /**
      *
      * @param document
-     * @throws XmlPullParserException
      */
     public void filter(final Document document) {
 
@@ -45,7 +40,7 @@ public abstract class ElementFilter {
                 "param:0:" + Document.class + ": is null");
         }
 
-        filter(LinkedElement.newInstance(document));
+        filter(document.getRootElement());
     }
 
 
@@ -53,9 +48,8 @@ public abstract class ElementFilter {
      * Pass given <code>element</code> through given <code>filter</code>.
      *
      * @param element element to be filtered
-     * @throws XmlPullParserException if any error occurs
      */
-    private void filter(final LinkedElement element) {
+    public void filter(final Element element) {
 
         if (element == null) {
             throw new IllegalArgumentException(
@@ -63,9 +57,11 @@ public abstract class ElementFilter {
         }
 
         if (startFiltering(element)) {
-            final Vector<LinkedElement> children = element.children();
-            for (int i = 0; i < children.size(); i++) {
-                filter(children.elementAt(i));
+            final int childCount = element.getChildCount();
+            for (int i = childCount - 1; i >= 0; i--) {
+                if (Node.ELEMENT == element.getType(i)) {
+                    filter(element.getElement(i));
+                }
             }
         }
 
@@ -79,7 +75,7 @@ public abstract class ElementFilter {
      * @param element element to be filtered.
      * @return true if child elements have to be filtered. false otherwise.
      */
-    protected abstract boolean startFiltering(LinkedElement element);
+    protected abstract boolean startFiltering(Element element);
 
 
     /**
@@ -87,5 +83,5 @@ public abstract class ElementFilter {
      *
      * @param element the element to be filtered.
      */
-    protected abstract void finishFiltering(LinkedElement element);
+    protected abstract void finishFiltering(Element element);
 }

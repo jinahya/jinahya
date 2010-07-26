@@ -19,12 +19,11 @@ package jinahya.xml.kxml2.kdom;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 
 import org.testng.annotations.Test;
 
@@ -41,41 +40,34 @@ public class ElementFilterTest {
 
     public static class ElementPrinter extends ElementFilter {
 
-        private static final StringBuffer BUFFER = new StringBuffer();
-
 
         @Override
-        public boolean startFiltering(final LinkedElement element) {
+        public boolean startFiltering(final Element element) {
 
-            System.out.print("<" + element.name());
+            System.out.print("<" + element.getName());
 
-            final Hashtable<String, Vector<String>> attributes =
-                element.attributes();
-            final Enumeration<String> namespaces = attributes.keys();
-            while (namespaces.hasMoreElements()) {
-                final String namespace = namespaces.nextElement();
-                if (XmlPullParser.NO_NAMESPACE.equals(namespace)) {
-                }
-                final Vector<String> names = attributes.get(namespace);
-                for (int i = 0; i < names.size(); i++) {
-                    final String name = names.elementAt(i);
-                    System.out.print(" " + name + "=\""
-                                     + element.attributeNS(namespace, name)
-                                     + "\"");
-                }
+            final int attributeCount = element.getAttributeCount();
+            for (int i = 0; i < attributeCount; i++) {
+                System.out.print(" " + element.getAttributeName(i) + "=\""
+                                 + element.getAttributeValue(i) + "\"");
             }
             System.out.print(">");
 
-            element.text(BUFFER.delete(0, BUFFER.length()));
-            System.out.print(BUFFER.toString());
+            final int childCount = element.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                if (element.isText(i)
+                    && Node.IGNORABLE_WHITESPACE != element.getType(i)) {
+                    System.out.print(" " + element.getText(i));
+                }
+            }
 
             return true;
         }
 
 
         @Override
-        public void finishFiltering(final LinkedElement element) {
-            System.out.print("</" + element.name() + ">");
+        public void finishFiltering(final Element element) {
+            System.out.print("</" + element.getName() + ">");
         }
     }
 
