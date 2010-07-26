@@ -488,5 +488,15 @@ public class ElementLocator {
     }
 
 
+
+    /**
+     *
+     * @return
+     */
+    public Element current() {
+        return current.element;
+    }
+
+
     private LinkedElement current;
 }
