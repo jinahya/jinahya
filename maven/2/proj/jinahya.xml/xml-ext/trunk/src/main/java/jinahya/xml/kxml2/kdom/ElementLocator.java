@@ -461,7 +461,8 @@ public class ElementLocator {
         for (int i = childCount - 1; i >= 0; i--) {
             if (Node.TEXT == current.element.getType(i)
                 || Node.IGNORABLE_WHITESPACE == current.element.getType(i)) {
-                current.element.removeChild(i);
+
+                current.remove(i);
             }
         }
 
