@@ -244,6 +244,8 @@ public class ElementLocator {
 
         children.addElement(child);
 
+        current = child;
+
         return this;
     }
 
