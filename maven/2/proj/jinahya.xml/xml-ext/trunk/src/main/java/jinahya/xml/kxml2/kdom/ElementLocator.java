@@ -229,7 +229,8 @@ public class ElementLocator {
                 "param:1:" + String.class + ": is null");
         }
 
-        final Vector<LinkedElement> children = current.children(namespace, name);
+        final Vector<LinkedElement> children =
+            current.children(namespace, name);
 
         final int childCount = current.element.getChildCount();
 
@@ -454,7 +455,7 @@ public class ElementLocator {
      *
      * @param text
      */
-    public void text(final String text) {
+    public ElementLocator text(final String text) {
 
         final int childCount = current.element.getChildCount();
         for (int i = childCount - 1; i >= 0; i--) {
@@ -467,6 +468,8 @@ public class ElementLocator {
         if (text != null) {
             current.element.addChild(Node.TEXT, text);
         }
+
+        return this;
     }
 
 
