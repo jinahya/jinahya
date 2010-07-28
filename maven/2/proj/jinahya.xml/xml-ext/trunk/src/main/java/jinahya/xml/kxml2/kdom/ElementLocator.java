@@ -434,11 +434,23 @@ public class ElementLocator {
     }
 
 
-   /**
+
+    /**
      *
-     * @return text value or null
+     * @return
      */
     public String text() {
+        return text(false);
+    }
+
+
+    /**
+     *
+     * @param parent locate parent before returning value.
+     * @return text value or null
+     */
+    public String text(final boolean parent) {
+
         final StringBuffer buffer = new StringBuffer();
         final int childCount = current.element.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -447,6 +459,10 @@ public class ElementLocator {
 
                 buffer.append(current.element.getText(i));
             }
+        }
+
+        if (parent) {
+            parent();
         }
 
         return buffer.toString();
