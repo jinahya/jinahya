@@ -17,29 +17,15 @@
 package jinahya.xml.kxml2.kdom;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
-
-import java.net.URL;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.kxml2.io.KXmlParser;
-import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Node;
 import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlSerializer;
-import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
@@ -509,6 +495,71 @@ public class ElementLocator {
         return this;
     }
 
+
+    /**
+     *
+     * @return given <code>buffer</code>.
+     * @throws IllegalArgumentException if buffer is null.
+     */
+    public StringBuffer print(StringBuffer buffer) {
+
+        if (buffer == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        return print(current.element, buffer);
+    }
+
+
+    /**
+     *
+     * @param element
+     * @param buffer
+     * @return given <code>buffer</code>
+     */
+    StringBuffer print(final Element element, final StringBuffer buffer) {
+
+        buffer.append(("<" + element.getName()));
+        final int attributeCount = element.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
+            buffer.append((" " + element.getAttributeName(i) + "=\""
+                           + element.getAttributeValue(i) + "\""));
+        }
+
+        final Vector<Element> children = new Vector<Element>();
+        final int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (Node.ELEMENT == element.getType(i)) {
+                children.addElement(element.getElement(i));
+            }
+        }
+
+        if (children.isEmpty()) {
+            final int offset = buffer.length();
+            boolean appended = false;
+            for (int i = 0; i < childCount; i++) {
+                final int type = element.getType(i);
+                if (Node.TEXT == type && Node.IGNORABLE_WHITESPACE != type) {
+                    buffer.append(element.getText(i));
+                    appended = true;
+                }
+            }
+            if (appended) {
+                buffer.insert(offset, '>');
+                buffer.append(("</" + element.getName() + ">"));
+            } else {
+                buffer.append("/>");
+            }
+        } else {
+            buffer.append('>');
+            for (int i = 0; i < children.size(); i++) {
+                print(children.elementAt(i), buffer);
+            }
+            buffer.append(("</" + element.getName() + ">"));
+        }
+
+        return buffer;
+    }
 
 
     /**
