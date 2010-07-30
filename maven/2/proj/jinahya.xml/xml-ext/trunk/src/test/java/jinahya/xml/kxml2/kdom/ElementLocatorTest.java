@@ -17,19 +17,21 @@
 package jinahya.xml.kxml2.kdom;
 
 
-import java.io.IOException;
-import java.util.Random;
 
-import org.kxml2.io.KXmlSerializer;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 
 
 /**
@@ -284,4 +286,52 @@ public class ElementLocatorTest {
         locator.removeCurrentAndLocateParent();
     }
      */
+
+
+    @Test
+    public void testPrint() throws XmlPullParserException, IOException {
+
+        InputStream resource =
+            ElementLocatorTest.class.getResourceAsStream("/sample.xml");
+
+        final XmlPullParser parser =
+            XmlPullParserFactory.newInstance().newPullParser();
+        parser.setFeature(
+            "http://xmlpull.org/v1/doc/features.html#process-namespaces", true);
+        parser.setInput(resource, null);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        final ElementLocator locator = new ElementLocator(document);
+
+        final StringBuffer buffer = new StringBuffer();
+
+        locator.root().childNS("ns:family", "parent", 0);
+        System.out.println(locator.print(new StringBuffer()).toString());
+
+        {
+            final Element current = locator.current();
+            final int childCount = current.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                if (current.getType(i) == Node.ELEMENT) {
+                    final Element child = current.getElement(i);
+                    System.out.println(
+                        "{" + child.getNamespace() + "}" + child.getName());
+                }
+            }
+        }
+
+        final int femaleChildCount = locator.countNS("ns:female", "child");
+        for (int i = 0; i < femaleChildCount; i++) {
+            System.out.println(locator.childNS("ns:female", "child", i).
+                print(buffer.delete(0, buffer.length()), true));
+        }
+
+        final int maleChildCount = locator.countNS("ns:male", "child");
+        for (int i = 0; i < maleChildCount; i++) {
+            System.out.println(locator.childNS("ns:male", "child", i).
+                print(buffer.delete(0, buffer.length()), true));
+        }
+    }
 }

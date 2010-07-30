@@ -440,9 +440,7 @@ public class ElementLocator {
         final StringBuffer buffer = new StringBuffer();
         final int childCount = current.element.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            if (current.element.isText(i)
-                && (Node.IGNORABLE_WHITESPACE != current.element.getType(i))) {
-
+            if (current.element.getType(i) == Node.TEXT) {
                 buffer.append(current.element.getText(i));
             }
         }
@@ -498,16 +496,36 @@ public class ElementLocator {
 
     /**
      *
+     * @param buffer
+     * @return
+     * @throws IllegalArgumentException if the buffer is null.
+     */
+    public StringBuffer print(final StringBuffer buffer) {
+        return print(buffer, false);
+    }
+
+
+    /**
+     *
+     * @param buffer
+     * @param parent
      * @return given <code>buffer</code>.
      * @throws IllegalArgumentException if buffer is null.
+     * @throws IllegalStateException if there is no parent to locate.
      */
-    public StringBuffer print(StringBuffer buffer) {
+    public StringBuffer print(StringBuffer buffer, final boolean parent) {
 
         if (buffer == null) {
             throw new IllegalArgumentException("param:0:: is null");
         }
 
-        return print(current.element, buffer);
+        try {
+            return print(current.element, buffer);
+        } finally {
+            if (parent) {
+                parent();
+            }
+        }
     }
 
 
@@ -538,8 +556,7 @@ public class ElementLocator {
             final int offset = buffer.length();
             boolean appended = false;
             for (int i = 0; i < childCount; i++) {
-                final int type = element.getType(i);
-                if (Node.TEXT == type && Node.IGNORABLE_WHITESPACE != type) {
+                if (element.getType(i) == Node.TEXT) {
                     buffer.append(element.getText(i));
                     appended = true;
                 }

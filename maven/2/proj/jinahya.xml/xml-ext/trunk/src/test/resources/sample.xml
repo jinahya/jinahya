@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<a xmlns="http://www.test.com/sample">
-  <b c="d">
-    <e>f</e>
-  </b>
-</a>
+<root xmlns="ns:family">
+  <parent>
+    <f:child gender="F" xmlns:f="ns:female">
+      <name>first</name>
+      <age>19</age>
+    </f:child>
+    <m:child gender="M" xmlns:m="ns:male">
+      <name>second</name>
+      <age>16</age>
+    </m:child>
+    <f:child gender="F" xmlns:f="ns:female">
+      <name>fourth</name>
+      <age>14</age>
+    </f:child>
+    <m:child gender="M" xmlns:m="ns:male">
+      <name>fifth</name>
+      <age>10</age>
+    </m:child>
+  </parent>
+</root>
