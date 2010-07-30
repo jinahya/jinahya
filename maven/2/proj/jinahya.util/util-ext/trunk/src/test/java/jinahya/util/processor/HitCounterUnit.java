@@ -25,6 +25,12 @@ public class HitCounterUnit implements ProcessingUnit<HitCounter> {
 
 
     @Override
+    public HitCounter getValue() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
     public void execute(final Procedure<HitCounter> procedure)
         throws ProcessorException {
     }

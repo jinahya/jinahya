@@ -31,4 +31,11 @@ public interface ProcessingUnit<V> {
      * @throws ProcessorException
      */
     void execute(final Procedure<V> procedure) throws ProcessorException;
+
+
+    /**
+     * 
+     * @return
+     */
+    V getValue();
 }

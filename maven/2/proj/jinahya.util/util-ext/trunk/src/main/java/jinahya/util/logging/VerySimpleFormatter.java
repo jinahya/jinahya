@@ -37,20 +37,26 @@ public class VerySimpleFormatter extends Formatter {
 
 
         if (formatLevel) {
-            buffer.append(record.getLevel().getName() + " ");
+            buffer.append(record.getLevel().getName());
+            buffer.append(" ");
         }
 
-        if (dateFormat != null) {
-            buffer.append(
-                dateFormat.format(new Date(record.getMillis())) + " ");
+        synchronized (this) {
+            if (dateFormat != null) {
+                date.setTime(record.getMillis());
+                buffer.append(dateFormat.format(date));
+                buffer.append(" ");
+            }
         }
 
         if (formatSourceClassName) {
-            buffer.append(record.getSourceClassName() + " ");
+            buffer.append(record.getSourceClassName());
+            buffer.append(" ");
         }
 
         if (formatSourceMethodName) {
-            buffer.append(record.getSourceMethodName() + " ");
+            buffer.append(record.getSourceMethodName());
+            buffer.append(" ");
         }
 
         buffer.append(record.getMessage());
@@ -105,9 +111,10 @@ public class VerySimpleFormatter extends Formatter {
 
     private boolean formatLevel = false;
 
-    private DateFormat dateFormat =
+    private volatile DateFormat dateFormat =
         new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
+    private Date date = new Date();
 
-    private boolean formatSourceClassName = true;
-    private boolean formatSourceMethodName = true;
+    private boolean formatSourceClassName = false;
+    private boolean formatSourceMethodName = false;
 }

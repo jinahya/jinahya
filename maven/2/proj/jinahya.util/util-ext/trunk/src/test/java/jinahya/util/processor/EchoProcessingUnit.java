@@ -25,9 +25,16 @@ public class EchoProcessingUnit implements ProcessingUnit<String> {
 
 
     @Override
+    public String getValue() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
     public void execute(final Procedure<String> procedure)
         throws ProcessorException {
 
         procedure.process("A".intern());
     }
+
 }
