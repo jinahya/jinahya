@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 5,
-             Errors: 277,
+      <title>File: 4,
+             Errors: 164,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  7
+                  5
                 </td>
               </tr>
                           <tr>
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  77
+                  60
                 </td>
               </tr>
                           <tr>
@@ -81,20 +81,6 @@
                 </td>
                 <td>
                   82
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#jinahya.xml.kxml2.kdom.LinkedElement.java">jinahya/xml/kxml2/kdom/LinkedElement.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  94
                 </td>
               </tr>
                       </tbody>
