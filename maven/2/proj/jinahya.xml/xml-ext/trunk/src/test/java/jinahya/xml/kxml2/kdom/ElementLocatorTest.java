@@ -17,8 +17,6 @@
 package jinahya.xml.kxml2.kdom;
 
 
-
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,7 +29,6 @@ import org.testng.annotations.Test;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 
 
 /**
@@ -333,5 +330,27 @@ public class ElementLocatorTest {
             System.out.println(locator.childNS("ns:male", "child", i).
                 print(buffer.delete(0, buffer.length()), true));
         }
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testPrintWithNullBuffer()
+        throws XmlPullParserException, IOException {
+
+        InputStream resource =
+            ElementLocatorTest.class.getResourceAsStream("/sample.xml");
+
+        final XmlPullParser parser =
+            XmlPullParserFactory.newInstance().newPullParser();
+        parser.setFeature(
+            "http://xmlpull.org/v1/doc/features.html#process-namespaces", true);
+        parser.setInput(resource, null);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        final ElementLocator locator = new ElementLocator(document);
+
+        locator.print(null);
     }
 }
