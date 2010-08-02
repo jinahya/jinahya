@@ -1,17 +1,17 @@
 -classpath
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/target/classes'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/src/main/java'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/target/site/apidocs'
+'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
