@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-08-02T17:32:41.893">
+<pmd version="4.2.2" timestamp="2010-08-02T18:05:16.256">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya.xml\xml-ext\trunk\src\main\java\jinahya\xml\kxml2\kdom\ElementLocator.java">
-<violation beginline="33" endline="33" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
-Avoid unused imports such as 'org.xmlpull.v1.XmlPullParserFactory'
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.ByteArrayOutputStream'
+</violation>
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.IOException'
+</violation>
+<violation beginline="32" endline="32" begincolumn="1" endcolumn="45" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.xmlpull.v1.XmlPullParserException'
+</violation>
+<violation beginline="33" endline="33" begincolumn="1" endcolumn="36" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.xml.kxml2.kdom" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.xmlpull.v1.XmlSerializer'
 </violation>
 </file>
 </pmd>
