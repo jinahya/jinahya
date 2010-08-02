@@ -1,17 +1,17 @@
 -classpath
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/target/classes;C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/target/test-classes;C:/Users/onacit/.m2/repository/org/testng/testng/5.12.1/testng-5.12.1.jar;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/target/classes;D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/target/test-classes;C:/Users/onacit/.m2/repository/org/testng/testng/5.12.1/testng-5.12.1.jar;C:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/src/test/java'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/src/test/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'C:/Users/onacit/.hudson/jobs/jinahya.rfc rfc-3986/workspace/target/site/testapidocs'
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.rfc/rfc-3986/trunk/target/site/testapidocs'
 -docencoding
 'UTF-8'
 -doctitle
