@@ -241,5 +241,14 @@ public class PercentEncoder {
             out.write(Integer.toHexString(b & 0xF).toUpperCase()); // low
         }
     }
+
+
+    /**
+     * 
+     * @param args
+     */
+    public static void main(final String[] args) throws IOException {
+        System.out.println(encode(args[0]));
+    }
 }
 

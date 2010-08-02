@@ -204,5 +204,14 @@ public class PercentDecoder {
             throw new IOException("illegal octet: " + (char) c);
         }
     }
+
+
+    /**
+     *
+     * @param args
+     */
+    public static void main(final String[] args) throws IOException {
+        System.out.println(decode(args[0]));
+    }
 }
 
