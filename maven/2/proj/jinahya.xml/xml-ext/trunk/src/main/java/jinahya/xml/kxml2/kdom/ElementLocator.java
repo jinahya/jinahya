@@ -30,7 +30,6 @@ import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 
@@ -39,20 +38,6 @@ import org.xmlpull.v1.XmlSerializer;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class ElementLocator {
-
-
-    /*
-    private static final XmlPullParserFactory FACTORY;
-
-
-    static {
-        try {
-            FACTORY = XmlPullParserFactory.newInstance();
-        } catch (XmlPullParserException xppe) {
-            throw new InstantiationError(xppe.getMessage());
-        }
-    }
-     */
 
 
     /**
@@ -560,7 +545,7 @@ public class ElementLocator {
      * @throws IllegalArgumentException if buffer is null.
      * @throws IllegalStateException if there is no parent to locate.
      */
-    public StringBuffer print(StringBuffer buffer, final boolean parent) {
+    public StringBuffer print(final StringBuffer buffer, final boolean parent) {
 
         if (buffer == null) {
             throw new IllegalArgumentException("param:0:: is null");
@@ -623,52 +608,6 @@ public class ElementLocator {
         }
 
         return buffer;
-    }
-
-
-    public byte[] print(final XmlSerializer serializer)
-        throws XmlPullParserException, IOException {
-
-        if (serializer == null) {
-            throw new IllegalArgumentException("param:0:: is null");
-        }
-
-        return print(serializer, true);
-    }
-
-
-    /**
-     *
-     * @param encoding
-     * @param parent
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     */
-    public byte[] print(final XmlSerializer serializer, final boolean parent)
-        throws XmlPullParserException, IOException {
-
-        if (serializer == null) {
-            throw new IllegalArgumentException("param:0:: is null");
-        }
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        serializer.setOutput(baos, null);
-
-        serializer.startDocument(null, null);
-        current.element.write(serializer);
-        serializer.endDocument();
-
-        serializer.flush();
-
-        baos.flush();
-
-        if (parent) {
-            parent();
-        }
-
-        return baos.toByteArray();
     }
 
 
