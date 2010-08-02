@@ -304,9 +304,10 @@ public class ElementLocatorTest {
 
         final StringBuffer buffer = new StringBuffer();
 
-        locator.root().childNS("ns:family", "parent", 0);
-        System.out.println(locator.print(new StringBuffer()).toString());
+        locator.childNS("ns:family", "parent", 0);
+        //System.out.println(locator.print(new StringBuffer()).toString());
 
+        /*
         {
             final Element current = locator.current();
             final int childCount = current.getChildCount();
@@ -318,6 +319,7 @@ public class ElementLocatorTest {
                 }
             }
         }
+         */
 
         final int femaleChildCount = locator.countNS("ns:female", "child");
         for (int i = 0; i < femaleChildCount; i++) {
@@ -330,6 +332,26 @@ public class ElementLocatorTest {
             System.out.println(locator.childNS("ns:male", "child", i).
                 print(buffer.delete(0, buffer.length()), true));
         }
+
+
+
+        System.out.println("------------------------------------------- write");
+        System.out.println("name: " + locator.current().getName());
+        //System.out.println(locator.print(new StringBuffer()).toString());
+        org.xmlpull.v1.XmlSerializer serializer = XmlPullParserFactory.newInstance().newSerializer();
+        //org.xmlpull.v1.XmlSerializer serializer = new org.kxml2.io.KXmlSerializer();
+        serializer.setOutput(System.out, "UTF-8");
+
+        locator.childNS("ns:male", "child", 0);
+
+        serializer.startDocument(null, null);
+
+        locator.current().write(serializer);
+
+        serializer.endDocument();
+
+        System.out.flush();
+        System.out.println("------------------------------------------- write");
     }
 
 
@@ -351,6 +373,6 @@ public class ElementLocatorTest {
 
         final ElementLocator locator = new ElementLocator(document);
 
-        locator.print(null);
+        locator.print((StringBuffer) null);
     }
 }

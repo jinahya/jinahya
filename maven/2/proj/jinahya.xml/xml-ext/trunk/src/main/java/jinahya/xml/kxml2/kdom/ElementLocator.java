@@ -17,6 +17,9 @@
 package jinahya.xml.kxml2.kdom;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -26,6 +29,9 @@ import org.kxml2.kdom.Node;
 import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -33,6 +39,21 @@ import org.xmlpull.v1.XmlPullParser;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class ElementLocator {
+
+
+    /**
+     *
+     */
+    private static final XmlPullParserFactory FACTORY;
+
+
+    static {
+        try {
+            FACTORY = XmlPullParserFactory.newInstance();
+        } catch (XmlPullParserException xppe) {
+            throw new InstantiationError(xppe.getMessage());
+        }
+    }
 
 
     /**
@@ -299,6 +320,37 @@ public class ElementLocator {
 
 
     /**
+     * Removes all child nodes from the current element.
+     *
+     * @return self
+     */
+    public ElementLocator clear() {
+        final int childCount = current.element.getChildCount();
+        for (int i = childCount - 1; i >= 0; i--) {
+            current.remove(i);
+        }
+        return this;
+    }
+
+
+    /**
+     * Removes all child which type is equals to given <code>type</code>.
+     *
+     * @param type node type
+     * @return self
+     */
+    public ElementLocator clear(final int type) {
+        final int childCount = current.element.getChildCount();
+        for (int i = childCount - 1; i >= 0; i--) {
+            if (current.element.getType(i) == type) {
+                current.remove(i);
+            }
+        }
+        return this;
+    }
+
+
+    /**
      * 
      * @param namespace
      * @param name
@@ -426,7 +478,7 @@ public class ElementLocator {
      * @return
      */
     public String text() {
-        return text(false);
+        return text(true);
     }
 
 
@@ -459,18 +511,12 @@ public class ElementLocator {
      */
     public ElementLocator text(final String text) {
 
-        final int childCount = current.element.getChildCount();
-        for (int i = childCount - 1; i >= 0; i--) {
-            if (Node.TEXT == current.element.getType(i)
-                || Node.IGNORABLE_WHITESPACE == current.element.getType(i)) {
-
-                current.remove(i);
-            }
+        if (text == null) {
+            throw new IllegalArgumentException(
+                "param:0:" + String.class + ": is null");
         }
 
-        if (text != null) {
-            current.element.addChild(Node.TEXT, text);
-        }
+        current.element.addChild(Node.TEXT, text);
 
         return this;
     }
@@ -484,24 +530,26 @@ public class ElementLocator {
      */
     public ElementLocator remove() {
 
-        if (current.parent == null) {
-            throw new IllegalArgumentException("no parent");
-        }
+        final int indexToRemove = current.index;
 
-        current = current.parent.remove(current.index);
+        parent(); // IllegalStateException
+
+        current.remove(indexToRemove);
 
         return this;
     }
 
 
     /**
+     * Prints child elements and texts to given buffer and locate parent.
+     * Identical to <code>print(buffer, true)</code>.
      *
      * @param buffer
      * @return
      * @throws IllegalArgumentException if the buffer is null.
      */
     public StringBuffer print(final StringBuffer buffer) {
-        return print(buffer, false);
+        return print(buffer, true);
     }
 
 
@@ -576,6 +624,56 @@ public class ElementLocator {
         }
 
         return buffer;
+    }
+
+
+    public byte[] print(final String encoding)
+        throws XmlPullParserException, IOException {
+
+        return print(encoding, true);
+    }
+
+
+    /**
+     *
+     * @param encoding
+     * @param parent
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    public byte[] print(final String encoding, final boolean parent)
+        throws XmlPullParserException, IOException {
+
+        /*
+        if (encoding == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+         */
+
+        final XmlSerializer serializer;
+
+        synchronized (FACTORY) {
+            serializer = FACTORY.newSerializer();
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        serializer.setOutput(baos, encoding);
+
+        serializer.startDocument(encoding, null);
+        current.element.write(serializer);
+        serializer.endDocument();
+
+        serializer.flush();
+
+        baos.flush();
+
+        if (parent) {
+            parent();
+        }
+
+        return baos.toByteArray();
     }
 
 
