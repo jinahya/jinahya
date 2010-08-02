@@ -17,9 +17,6 @@
 package jinahya.xml.kxml2.kdom;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -29,8 +26,6 @@ import org.kxml2.kdom.Node;
 import org.kxml2.kdom.Element;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -46,6 +41,21 @@ public class ElementLocator {
     private static class LinkedElement {
 
 
+        String key(final Element element) {
+            return key(element.getNamespace(), element.getName());
+        }
+
+
+        String key(final String namespace, final String name) {
+            return "{" + namespace + "}" + name;
+        }
+
+
+        Vector<LinkedElement> children(final Element element) {
+            return children(element.getNamespace(), element.getName());
+        }
+
+
         Vector<LinkedElement> children(final String namespace,
                                        final String name) {
 
@@ -59,7 +69,7 @@ public class ElementLocator {
                     "param:1:name:" + String.class + ": is null");
             }
 
-            final String key = "{" + namespace + "}" + name;
+            final String key = key(namespace, name);
 
             Vector<LinkedElement> children = classes().get(key);
 
@@ -92,6 +102,11 @@ public class ElementLocator {
 
         LinkedElement remove(final int index) {
 
+            String key = null;
+            if (element.getType(index) == Node.ELEMENT) {
+                key = key(element.getElement(index));
+            }
+
             element.removeChild(index);
 
             final Enumeration<Vector<LinkedElement>> e = classes().elements();
@@ -109,6 +124,13 @@ public class ElementLocator {
                     } else {
                         children.elementAt(i).index--;
                     }
+                }
+            }
+
+            if (key != null) {
+                Vector<LinkedElement> children = classes.get(key);
+                if (children.isEmpty()) {
+                    classes.remove(key);
                 }
             }
 
