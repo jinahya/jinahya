@@ -41,9 +41,7 @@ import org.xmlpull.v1.XmlSerializer;
 public class ElementLocator {
 
 
-    /**
-     *
-     */
+    /*
     private static final XmlPullParserFactory FACTORY;
 
 
@@ -54,6 +52,7 @@ public class ElementLocator {
             throw new InstantiationError(xppe.getMessage());
         }
     }
+     */
 
 
     /**
@@ -627,10 +626,14 @@ public class ElementLocator {
     }
 
 
-    public byte[] print(final String encoding)
+    public byte[] print(final XmlSerializer serializer)
         throws XmlPullParserException, IOException {
 
-        return print(encoding, true);
+        if (serializer == null) {
+            throw new IllegalArgumentException("param:0:: is null");
+        }
+
+        return print(serializer, true);
     }
 
 
@@ -642,26 +645,18 @@ public class ElementLocator {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    public byte[] print(final String encoding, final boolean parent)
+    public byte[] print(final XmlSerializer serializer, final boolean parent)
         throws XmlPullParserException, IOException {
 
-        /*
-        if (encoding == null) {
+        if (serializer == null) {
             throw new IllegalArgumentException("param:0:: is null");
-        }
-         */
-
-        final XmlSerializer serializer;
-
-        synchronized (FACTORY) {
-            serializer = FACTORY.newSerializer();
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        serializer.setOutput(baos, encoding);
+        serializer.setOutput(baos, null);
 
-        serializer.startDocument(encoding, null);
+        serializer.startDocument(null, null);
         current.element.write(serializer);
         serializer.endDocument();
 
