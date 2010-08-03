@@ -127,11 +127,10 @@ public class ElementLocator {
                 }
             }
 
-            if (key != null) {
-                Vector<LinkedElement> children = classes.get(key);
-                if (children.isEmpty()) {
-                    classes.remove(key);
-                }
+            if (key != null && classes.containsKey(key)
+                && classes.get(key).isEmpty()) {
+
+                classes.remove(key);
             }
 
             return this;
@@ -481,7 +480,9 @@ public class ElementLocator {
 
     /**
      * Returns text value. Identical to <code>text(false></code>
+     *
      * @return text value or null.
+     * @see #text(boolean)
      */
     public String text() {
         return text(false);
@@ -489,6 +490,7 @@ public class ElementLocator {
 
 
     /**
+     * Returns text value.
      *
      * @param parent locate parent before returning value.
      * @return text value or null
