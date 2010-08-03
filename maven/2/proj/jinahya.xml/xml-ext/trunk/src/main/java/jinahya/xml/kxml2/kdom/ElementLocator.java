@@ -480,8 +480,8 @@ public class ElementLocator {
 
 
     /**
-     *
-     * @return text value or null
+     * Returns text value. Identical to <code>text(false></code>
+     * @return text value or null.
      */
     public String text() {
         return text(false);
@@ -552,7 +552,7 @@ public class ElementLocator {
 
     /**
      * Prints child elements and texts to given buffer and locate parent.
-     * Identical to <code>print(buffer, true)</code>.
+     * Identical to <code>print(buffer, false)</code>.
      *
      * @param buffer
      * @return
