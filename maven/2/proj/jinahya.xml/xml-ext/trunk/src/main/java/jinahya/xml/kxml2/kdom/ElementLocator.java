@@ -481,7 +481,7 @@ public class ElementLocator {
 
     /**
      *
-     * @return
+     * @return text value or null
      */
     public String text() {
         return text(true);
@@ -495,11 +495,13 @@ public class ElementLocator {
      */
     public String text(final boolean parent) {
 
+        boolean appended = false;
         final StringBuffer buffer = new StringBuffer();
         final int childCount = current.element.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (current.element.getType(i) == Node.TEXT) {
                 buffer.append(current.element.getText(i));
+                appended = true;
             }
         }
 
@@ -507,13 +509,15 @@ public class ElementLocator {
             parent();
         }
 
-        return buffer.toString();
+        return (appended ? buffer.toString() : null);
     }
 
 
     /**
      *
-     * @param text
+     * @param text text value to be added
+     * @return self
+     * @throws IllegalArgumentException if text is null
      */
     public ElementLocator text(final String text) {
 
