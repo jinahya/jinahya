@@ -491,7 +491,7 @@
 <a name="481" href="#481">481</a> 
 <a name="482" href="#482">482</a>     <em class="jxr_javadoccomment">/**</em>
 <a name="483" href="#483">483</a> <em class="jxr_javadoccomment">     *</em>
-<a name="484" href="#484">484</a> <em class="jxr_javadoccomment">     * @return</em>
+<a name="484" href="#484">484</a> <em class="jxr_javadoccomment">     * @return text value or null</em>
 <a name="485" href="#485">485</a> <em class="jxr_javadoccomment">     */</em>
 <a name="486" href="#486">486</a>     <strong class="jxr_keyword">public</strong> String text() {
 <a name="487" href="#487">487</a>         <strong class="jxr_keyword">return</strong> text(<strong class="jxr_keyword">true</strong>);
@@ -505,155 +505,159 @@
 <a name="495" href="#495">495</a> <em class="jxr_javadoccomment">     */</em>
 <a name="496" href="#496">496</a>     <strong class="jxr_keyword">public</strong> String text(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> parent) {
 <a name="497" href="#497">497</a> 
-<a name="498" href="#498">498</a>         <strong class="jxr_keyword">final</strong> StringBuffer buffer = <strong class="jxr_keyword">new</strong> StringBuffer();
-<a name="499" href="#499">499</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> childCount = current.element.getChildCount();
-<a name="500" href="#500">500</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
-<a name="501" href="#501">501</a>             <strong class="jxr_keyword">if</strong> (current.element.getType(i) == Node.TEXT) {
-<a name="502" href="#502">502</a>                 buffer.append(current.element.getText(i));
-<a name="503" href="#503">503</a>             }
-<a name="504" href="#504">504</a>         }
-<a name="505" href="#505">505</a> 
-<a name="506" href="#506">506</a>         <strong class="jxr_keyword">if</strong> (parent) {
-<a name="507" href="#507">507</a>             parent();
-<a name="508" href="#508">508</a>         }
-<a name="509" href="#509">509</a> 
-<a name="510" href="#510">510</a>         <strong class="jxr_keyword">return</strong> buffer.toString();
-<a name="511" href="#511">511</a>     }
-<a name="512" href="#512">512</a> 
-<a name="513" href="#513">513</a> 
-<a name="514" href="#514">514</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="515" href="#515">515</a> <em class="jxr_javadoccomment">     *</em>
-<a name="516" href="#516">516</a> <em class="jxr_javadoccomment">     * @param text</em>
-<a name="517" href="#517">517</a> <em class="jxr_javadoccomment">     */</em>
-<a name="518" href="#518">518</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">ElementLocator</a> text(<strong class="jxr_keyword">final</strong> String text) {
-<a name="519" href="#519">519</a> 
-<a name="520" href="#520">520</a>         <strong class="jxr_keyword">if</strong> (text == <strong class="jxr_keyword">null</strong>) {
-<a name="521" href="#521">521</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a name="522" href="#522">522</a>                 <span class="jxr_string">"param:0:"</span> + String.<strong class="jxr_keyword">class</strong> + <span class="jxr_string">": is null"</span>);
-<a name="523" href="#523">523</a>         }
-<a name="524" href="#524">524</a> 
-<a name="525" href="#525">525</a>         current.element.addChild(Node.TEXT, text);
-<a name="526" href="#526">526</a> 
-<a name="527" href="#527">527</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a name="528" href="#528">528</a>     }
-<a name="529" href="#529">529</a> 
+<a name="498" href="#498">498</a>         <strong class="jxr_keyword">boolean</strong> appended = false;
+<a name="499" href="#499">499</a>         <strong class="jxr_keyword">final</strong> StringBuffer buffer = <strong class="jxr_keyword">new</strong> StringBuffer();
+<a name="500" href="#500">500</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> childCount = current.element.getChildCount();
+<a name="501" href="#501">501</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
+<a name="502" href="#502">502</a>             <strong class="jxr_keyword">if</strong> (current.element.getType(i) == Node.TEXT) {
+<a name="503" href="#503">503</a>                 buffer.append(current.element.getText(i));
+<a name="504" href="#504">504</a>                 appended = <strong class="jxr_keyword">true</strong>;
+<a name="505" href="#505">505</a>             }
+<a name="506" href="#506">506</a>         }
+<a name="507" href="#507">507</a> 
+<a name="508" href="#508">508</a>         <strong class="jxr_keyword">if</strong> (parent) {
+<a name="509" href="#509">509</a>             parent();
+<a name="510" href="#510">510</a>         }
+<a name="511" href="#511">511</a> 
+<a name="512" href="#512">512</a>         <strong class="jxr_keyword">return</strong> (appended ? buffer.toString() : <strong class="jxr_keyword">null</strong>);
+<a name="513" href="#513">513</a>     }
+<a name="514" href="#514">514</a> 
+<a name="515" href="#515">515</a> 
+<a name="516" href="#516">516</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="517" href="#517">517</a> <em class="jxr_javadoccomment">     *</em>
+<a name="518" href="#518">518</a> <em class="jxr_javadoccomment">     * @param text text value to be added</em>
+<a name="519" href="#519">519</a> <em class="jxr_javadoccomment">     * @return self</em>
+<a name="520" href="#520">520</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if text is null</em>
+<a name="521" href="#521">521</a> <em class="jxr_javadoccomment">     */</em>
+<a name="522" href="#522">522</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">ElementLocator</a> text(<strong class="jxr_keyword">final</strong> String text) {
+<a name="523" href="#523">523</a> 
+<a name="524" href="#524">524</a>         <strong class="jxr_keyword">if</strong> (text == <strong class="jxr_keyword">null</strong>) {
+<a name="525" href="#525">525</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a name="526" href="#526">526</a>                 <span class="jxr_string">"param:0:"</span> + String.<strong class="jxr_keyword">class</strong> + <span class="jxr_string">": is null"</span>);
+<a name="527" href="#527">527</a>         }
+<a name="528" href="#528">528</a> 
+<a name="529" href="#529">529</a>         current.element.addChild(Node.TEXT, text);
 <a name="530" href="#530">530</a> 
-<a name="531" href="#531">531</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="532" href="#532">532</a> <em class="jxr_javadoccomment">     * Removes current element from its parent and locate to the parent.</em>
-<a name="533" href="#533">533</a> <em class="jxr_javadoccomment">     *</em>
-<a name="534" href="#534">534</a> <em class="jxr_javadoccomment">     * @return self</em>
-<a name="535" href="#535">535</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException if there is no parent</em>
-<a name="536" href="#536">536</a> <em class="jxr_javadoccomment">     */</em>
-<a name="537" href="#537">537</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">ElementLocator</a> remove() {
-<a name="538" href="#538">538</a> 
-<a name="539" href="#539">539</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> indexToRemove = current.index;
-<a name="540" href="#540">540</a> 
-<a name="541" href="#541">541</a>         parent(); <em class="jxr_comment">// IllegalStateException</em>
+<a name="531" href="#531">531</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="532" href="#532">532</a>     }
+<a name="533" href="#533">533</a> 
+<a name="534" href="#534">534</a> 
+<a name="535" href="#535">535</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="536" href="#536">536</a> <em class="jxr_javadoccomment">     * Removes current element from its parent and locate to the parent.</em>
+<a name="537" href="#537">537</a> <em class="jxr_javadoccomment">     *</em>
+<a name="538" href="#538">538</a> <em class="jxr_javadoccomment">     * @return self</em>
+<a name="539" href="#539">539</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException if there is no parent</em>
+<a name="540" href="#540">540</a> <em class="jxr_javadoccomment">     */</em>
+<a name="541" href="#541">541</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">ElementLocator</a> remove() {
 <a name="542" href="#542">542</a> 
-<a name="543" href="#543">543</a>         current.remove(indexToRemove);
+<a name="543" href="#543">543</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> indexToRemove = current.index;
 <a name="544" href="#544">544</a> 
-<a name="545" href="#545">545</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a name="546" href="#546">546</a>     }
-<a name="547" href="#547">547</a> 
+<a name="545" href="#545">545</a>         parent(); <em class="jxr_comment">// IllegalStateException</em>
+<a name="546" href="#546">546</a> 
+<a name="547" href="#547">547</a>         current.remove(indexToRemove);
 <a name="548" href="#548">548</a> 
-<a name="549" href="#549">549</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="550" href="#550">550</a> <em class="jxr_javadoccomment">     * Prints child elements and texts to given buffer and locate parent.</em>
-<a name="551" href="#551">551</a> <em class="jxr_javadoccomment">     * Identical to &lt;code&gt;print(buffer, true)&lt;/code&gt;.</em>
-<a name="552" href="#552">552</a> <em class="jxr_javadoccomment">     *</em>
-<a name="553" href="#553">553</a> <em class="jxr_javadoccomment">     * @param buffer</em>
-<a name="554" href="#554">554</a> <em class="jxr_javadoccomment">     * @return</em>
-<a name="555" href="#555">555</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if the buffer is null.</em>
-<a name="556" href="#556">556</a> <em class="jxr_javadoccomment">     */</em>
-<a name="557" href="#557">557</a>     <strong class="jxr_keyword">public</strong> StringBuffer print(<strong class="jxr_keyword">final</strong> StringBuffer buffer) {
-<a name="558" href="#558">558</a>         <strong class="jxr_keyword">return</strong> print(buffer, <strong class="jxr_keyword">true</strong>);
-<a name="559" href="#559">559</a>     }
-<a name="560" href="#560">560</a> 
-<a name="561" href="#561">561</a> 
-<a name="562" href="#562">562</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="563" href="#563">563</a> <em class="jxr_javadoccomment">     *</em>
-<a name="564" href="#564">564</a> <em class="jxr_javadoccomment">     * @param buffer</em>
-<a name="565" href="#565">565</a> <em class="jxr_javadoccomment">     * @param parent</em>
-<a name="566" href="#566">566</a> <em class="jxr_javadoccomment">     * @return given &lt;code&gt;buffer&lt;/code&gt;.</em>
-<a name="567" href="#567">567</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if buffer is null.</em>
-<a name="568" href="#568">568</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException if there is no parent to locate.</em>
-<a name="569" href="#569">569</a> <em class="jxr_javadoccomment">     */</em>
-<a name="570" href="#570">570</a>     <strong class="jxr_keyword">public</strong> StringBuffer print(<strong class="jxr_keyword">final</strong> StringBuffer buffer, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> parent) {
-<a name="571" href="#571">571</a> 
-<a name="572" href="#572">572</a>         <strong class="jxr_keyword">if</strong> (buffer == <strong class="jxr_keyword">null</strong>) {
-<a name="573" href="#573">573</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"param:0:: is null"</span>);
-<a name="574" href="#574">574</a>         }
+<a name="549" href="#549">549</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="550" href="#550">550</a>     }
+<a name="551" href="#551">551</a> 
+<a name="552" href="#552">552</a> 
+<a name="553" href="#553">553</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="554" href="#554">554</a> <em class="jxr_javadoccomment">     * Prints child elements and texts to given buffer and locate parent.</em>
+<a name="555" href="#555">555</a> <em class="jxr_javadoccomment">     * Identical to &lt;code&gt;print(buffer, true)&lt;/code&gt;.</em>
+<a name="556" href="#556">556</a> <em class="jxr_javadoccomment">     *</em>
+<a name="557" href="#557">557</a> <em class="jxr_javadoccomment">     * @param buffer</em>
+<a name="558" href="#558">558</a> <em class="jxr_javadoccomment">     * @return</em>
+<a name="559" href="#559">559</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if the buffer is null.</em>
+<a name="560" href="#560">560</a> <em class="jxr_javadoccomment">     */</em>
+<a name="561" href="#561">561</a>     <strong class="jxr_keyword">public</strong> StringBuffer print(<strong class="jxr_keyword">final</strong> StringBuffer buffer) {
+<a name="562" href="#562">562</a>         <strong class="jxr_keyword">return</strong> print(buffer, <strong class="jxr_keyword">true</strong>);
+<a name="563" href="#563">563</a>     }
+<a name="564" href="#564">564</a> 
+<a name="565" href="#565">565</a> 
+<a name="566" href="#566">566</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="567" href="#567">567</a> <em class="jxr_javadoccomment">     *</em>
+<a name="568" href="#568">568</a> <em class="jxr_javadoccomment">     * @param buffer</em>
+<a name="569" href="#569">569</a> <em class="jxr_javadoccomment">     * @param parent</em>
+<a name="570" href="#570">570</a> <em class="jxr_javadoccomment">     * @return given &lt;code&gt;buffer&lt;/code&gt;.</em>
+<a name="571" href="#571">571</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if buffer is null.</em>
+<a name="572" href="#572">572</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException if there is no parent to locate.</em>
+<a name="573" href="#573">573</a> <em class="jxr_javadoccomment">     */</em>
+<a name="574" href="#574">574</a>     <strong class="jxr_keyword">public</strong> StringBuffer print(<strong class="jxr_keyword">final</strong> StringBuffer buffer, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> parent) {
 <a name="575" href="#575">575</a> 
-<a name="576" href="#576">576</a>         <strong class="jxr_keyword">try</strong> {
-<a name="577" href="#577">577</a>             <strong class="jxr_keyword">return</strong> print(current.element, buffer);
-<a name="578" href="#578">578</a>         } <strong class="jxr_keyword">finally</strong> {
-<a name="579" href="#579">579</a>             <strong class="jxr_keyword">if</strong> (parent) {
-<a name="580" href="#580">580</a>                 parent();
-<a name="581" href="#581">581</a>             }
-<a name="582" href="#582">582</a>         }
-<a name="583" href="#583">583</a>     }
-<a name="584" href="#584">584</a> 
-<a name="585" href="#585">585</a> 
-<a name="586" href="#586">586</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="587" href="#587">587</a> <em class="jxr_javadoccomment">     *</em>
-<a name="588" href="#588">588</a> <em class="jxr_javadoccomment">     * @param element</em>
-<a name="589" href="#589">589</a> <em class="jxr_javadoccomment">     * @param buffer</em>
-<a name="590" href="#590">590</a> <em class="jxr_javadoccomment">     * @return given &lt;code&gt;buffer&lt;/code&gt;</em>
-<a name="591" href="#591">591</a> <em class="jxr_javadoccomment">     */</em>
-<a name="592" href="#592">592</a>     StringBuffer print(<strong class="jxr_keyword">final</strong> Element element, <strong class="jxr_keyword">final</strong> StringBuffer buffer) {
-<a name="593" href="#593">593</a> 
-<a name="594" href="#594">594</a>         buffer.append((<span class="jxr_string">"&lt;"</span> + element.getName()));
-<a name="595" href="#595">595</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> attributeCount = element.getAttributeCount();
-<a name="596" href="#596">596</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; attributeCount; i++) {
-<a name="597" href="#597">597</a>             buffer.append((<span class="jxr_string">" "</span> + element.getAttributeName(i) + <span class="jxr_string">"=\&quot;"</span>
-<a name="598" href="#598">598</a>                            + element.getAttributeValue(i) + <span class="jxr_string">"\&quot;"</span>));
-<a name="599" href="#599">599</a>         }
-<a name="600" href="#600">600</a> 
-<a name="601" href="#601">601</a>         <strong class="jxr_keyword">final</strong> Vector&lt;Element&gt; children = <strong class="jxr_keyword">new</strong> Vector&lt;Element&gt;();
-<a name="602" href="#602">602</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> childCount = element.getChildCount();
-<a name="603" href="#603">603</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
-<a name="604" href="#604">604</a>             <strong class="jxr_keyword">if</strong> (Node.ELEMENT == element.getType(i)) {
-<a name="605" href="#605">605</a>                 children.addElement(element.getElement(i));
-<a name="606" href="#606">606</a>             }
-<a name="607" href="#607">607</a>         }
-<a name="608" href="#608">608</a> 
-<a name="609" href="#609">609</a>         <strong class="jxr_keyword">if</strong> (children.isEmpty()) {
-<a name="610" href="#610">610</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> offset = buffer.length();
-<a name="611" href="#611">611</a>             <strong class="jxr_keyword">boolean</strong> appended = false;
-<a name="612" href="#612">612</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
-<a name="613" href="#613">613</a>                 <strong class="jxr_keyword">if</strong> (element.getType(i) == Node.TEXT) {
-<a name="614" href="#614">614</a>                     buffer.append(element.getText(i));
-<a name="615" href="#615">615</a>                     appended = <strong class="jxr_keyword">true</strong>;
-<a name="616" href="#616">616</a>                 }
-<a name="617" href="#617">617</a>             }
-<a name="618" href="#618">618</a>             <strong class="jxr_keyword">if</strong> (appended) {
-<a name="619" href="#619">619</a>                 buffer.insert(offset, '&gt;');
-<a name="620" href="#620">620</a>                 buffer.append((<span class="jxr_string">"&lt;/"</span> + element.getName() + <span class="jxr_string">"&gt;"</span>));
-<a name="621" href="#621">621</a>             } <strong class="jxr_keyword">else</strong> {
-<a name="622" href="#622">622</a>                 buffer.append(<span class="jxr_string">"/&gt;"</span>);
-<a name="623" href="#623">623</a>             }
-<a name="624" href="#624">624</a>         } <strong class="jxr_keyword">else</strong> {
-<a name="625" href="#625">625</a>             buffer.append('&gt;');
-<a name="626" href="#626">626</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.size(); i++) {
-<a name="627" href="#627">627</a>                 print(children.elementAt(i), buffer);
-<a name="628" href="#628">628</a>             }
-<a name="629" href="#629">629</a>             buffer.append((<span class="jxr_string">"&lt;/"</span> + element.getName() + <span class="jxr_string">"&gt;"</span>));
-<a name="630" href="#630">630</a>         }
-<a name="631" href="#631">631</a> 
-<a name="632" href="#632">632</a>         <strong class="jxr_keyword">return</strong> buffer;
-<a name="633" href="#633">633</a>     }
-<a name="634" href="#634">634</a> 
+<a name="576" href="#576">576</a>         <strong class="jxr_keyword">if</strong> (buffer == <strong class="jxr_keyword">null</strong>) {
+<a name="577" href="#577">577</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"param:0:: is null"</span>);
+<a name="578" href="#578">578</a>         }
+<a name="579" href="#579">579</a> 
+<a name="580" href="#580">580</a>         <strong class="jxr_keyword">try</strong> {
+<a name="581" href="#581">581</a>             <strong class="jxr_keyword">return</strong> print(current.element, buffer);
+<a name="582" href="#582">582</a>         } <strong class="jxr_keyword">finally</strong> {
+<a name="583" href="#583">583</a>             <strong class="jxr_keyword">if</strong> (parent) {
+<a name="584" href="#584">584</a>                 parent();
+<a name="585" href="#585">585</a>             }
+<a name="586" href="#586">586</a>         }
+<a name="587" href="#587">587</a>     }
+<a name="588" href="#588">588</a> 
+<a name="589" href="#589">589</a> 
+<a name="590" href="#590">590</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="591" href="#591">591</a> <em class="jxr_javadoccomment">     *</em>
+<a name="592" href="#592">592</a> <em class="jxr_javadoccomment">     * @param element</em>
+<a name="593" href="#593">593</a> <em class="jxr_javadoccomment">     * @param buffer</em>
+<a name="594" href="#594">594</a> <em class="jxr_javadoccomment">     * @return given &lt;code&gt;buffer&lt;/code&gt;</em>
+<a name="595" href="#595">595</a> <em class="jxr_javadoccomment">     */</em>
+<a name="596" href="#596">596</a>     StringBuffer print(<strong class="jxr_keyword">final</strong> Element element, <strong class="jxr_keyword">final</strong> StringBuffer buffer) {
+<a name="597" href="#597">597</a> 
+<a name="598" href="#598">598</a>         buffer.append((<span class="jxr_string">"&lt;"</span> + element.getName()));
+<a name="599" href="#599">599</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> attributeCount = element.getAttributeCount();
+<a name="600" href="#600">600</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; attributeCount; i++) {
+<a name="601" href="#601">601</a>             buffer.append((<span class="jxr_string">" "</span> + element.getAttributeName(i) + <span class="jxr_string">"=\&quot;"</span>
+<a name="602" href="#602">602</a>                            + element.getAttributeValue(i) + <span class="jxr_string">"\&quot;"</span>));
+<a name="603" href="#603">603</a>         }
+<a name="604" href="#604">604</a> 
+<a name="605" href="#605">605</a>         <strong class="jxr_keyword">final</strong> Vector&lt;Element&gt; children = <strong class="jxr_keyword">new</strong> Vector&lt;Element&gt;();
+<a name="606" href="#606">606</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> childCount = element.getChildCount();
+<a name="607" href="#607">607</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
+<a name="608" href="#608">608</a>             <strong class="jxr_keyword">if</strong> (Node.ELEMENT == element.getType(i)) {
+<a name="609" href="#609">609</a>                 children.addElement(element.getElement(i));
+<a name="610" href="#610">610</a>             }
+<a name="611" href="#611">611</a>         }
+<a name="612" href="#612">612</a> 
+<a name="613" href="#613">613</a>         <strong class="jxr_keyword">if</strong> (children.isEmpty()) {
+<a name="614" href="#614">614</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> offset = buffer.length();
+<a name="615" href="#615">615</a>             <strong class="jxr_keyword">boolean</strong> appended = false;
+<a name="616" href="#616">616</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; childCount; i++) {
+<a name="617" href="#617">617</a>                 <strong class="jxr_keyword">if</strong> (element.getType(i) == Node.TEXT) {
+<a name="618" href="#618">618</a>                     buffer.append(element.getText(i));
+<a name="619" href="#619">619</a>                     appended = <strong class="jxr_keyword">true</strong>;
+<a name="620" href="#620">620</a>                 }
+<a name="621" href="#621">621</a>             }
+<a name="622" href="#622">622</a>             <strong class="jxr_keyword">if</strong> (appended) {
+<a name="623" href="#623">623</a>                 buffer.insert(offset, '&gt;');
+<a name="624" href="#624">624</a>                 buffer.append((<span class="jxr_string">"&lt;/"</span> + element.getName() + <span class="jxr_string">"&gt;"</span>));
+<a name="625" href="#625">625</a>             } <strong class="jxr_keyword">else</strong> {
+<a name="626" href="#626">626</a>                 buffer.append(<span class="jxr_string">"/&gt;"</span>);
+<a name="627" href="#627">627</a>             }
+<a name="628" href="#628">628</a>         } <strong class="jxr_keyword">else</strong> {
+<a name="629" href="#629">629</a>             buffer.append('&gt;');
+<a name="630" href="#630">630</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; children.size(); i++) {
+<a name="631" href="#631">631</a>                 print(children.elementAt(i), buffer);
+<a name="632" href="#632">632</a>             }
+<a name="633" href="#633">633</a>             buffer.append((<span class="jxr_string">"&lt;/"</span> + element.getName() + <span class="jxr_string">"&gt;"</span>));
+<a name="634" href="#634">634</a>         }
 <a name="635" href="#635">635</a> 
-<a name="636" href="#636">636</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="637" href="#637">637</a> <em class="jxr_javadoccomment">     *</em>
-<a name="638" href="#638">638</a> <em class="jxr_javadoccomment">     * @return</em>
-<a name="639" href="#639">639</a> <em class="jxr_javadoccomment">     */</em>
-<a name="640" href="#640">640</a>     <strong class="jxr_keyword">public</strong> Element current() {
-<a name="641" href="#641">641</a>         <strong class="jxr_keyword">return</strong> current.element;
-<a name="642" href="#642">642</a>     }
-<a name="643" href="#643">643</a> 
-<a name="644" href="#644">644</a> 
-<a name="645" href="#645">645</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">LinkedElement</a> current;
-<a name="646" href="#646">646</a> }
+<a name="636" href="#636">636</a>         <strong class="jxr_keyword">return</strong> buffer;
+<a name="637" href="#637">637</a>     }
+<a name="638" href="#638">638</a> 
+<a name="639" href="#639">639</a> 
+<a name="640" href="#640">640</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="641" href="#641">641</a> <em class="jxr_javadoccomment">     *</em>
+<a name="642" href="#642">642</a> <em class="jxr_javadoccomment">     * @return</em>
+<a name="643" href="#643">643</a> <em class="jxr_javadoccomment">     */</em>
+<a name="644" href="#644">644</a>     <strong class="jxr_keyword">public</strong> Element current() {
+<a name="645" href="#645">645</a>         <strong class="jxr_keyword">return</strong> current.element;
+<a name="646" href="#646">646</a>     }
+<a name="647" href="#647">647</a> 
+<a name="648" href="#648">648</a> 
+<a name="649" href="#649">649</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../jinahya/xml/kxml2/kdom/ElementLocator.html">LinkedElement</a> current;
+<a name="650" href="#650">650</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
