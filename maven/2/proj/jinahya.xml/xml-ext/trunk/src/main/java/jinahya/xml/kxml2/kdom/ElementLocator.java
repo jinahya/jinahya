@@ -484,7 +484,7 @@ public class ElementLocator {
      * @return text value or null
      */
     public String text() {
-        return text(true);
+        return text(false);
     }
 
 
@@ -559,7 +559,7 @@ public class ElementLocator {
      * @throws IllegalArgumentException if the buffer is null.
      */
     public StringBuffer print(final StringBuffer buffer) {
-        return print(buffer, true);
+        return print(buffer, false);
     }
 
 
