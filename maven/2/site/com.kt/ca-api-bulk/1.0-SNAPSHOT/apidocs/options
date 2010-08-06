@@ -1,0 +1,26 @@
+-classpath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/com.kt/ca-api-bulk/trunk/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/com.kt/ca-api-bulk/trunk/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/com.kt/ca-api-bulk/trunk/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'com.kt:ca-api-bulk 1.0-SNAPSHOT API'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'com.kt:ca-api-bulk 1.0-SNAPSHOT API'
