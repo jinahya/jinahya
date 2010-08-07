@@ -1,0 +1,19 @@
+# JSR 268: JavaTM Smart Card I/O API
+# http://jcp.org/en/jsr/summary?id=268
+
+
+# ------------------------------------------------------------ javax.smartcardio
+
+javax.smartcardio.ATR 
+javax.smartcardio.Card 
+javax.smartcardio.CardChannel 
+javax.smartcardio.CardException 
+javax.smartcardio.CardNotPresentException 
+javax.smartcardio.CardPermission 
+javax.smartcardio.CardTerminal 
+javax.smartcardio.CardTerminals 
+javax.smartcardio.CardTerminals.State 
+javax.smartcardio.CommandAPDU 
+javax.smartcardio.ResponseAPDU 
+javax.smartcardio.TerminalFactory 
+javax.smartcardio.TerminalFactorySpi 
