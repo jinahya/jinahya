@@ -250,5 +250,13 @@ public class PercentEncoder {
     public static void main(final String[] args) throws IOException {
         System.out.println(encode(args[0]));
     }
+
+
+    /**
+     * 
+     */
+    private PercentEncoder() {
+        super();
+    }
 }
 

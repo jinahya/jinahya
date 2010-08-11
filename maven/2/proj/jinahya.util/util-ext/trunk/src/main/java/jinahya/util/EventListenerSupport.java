@@ -18,14 +18,12 @@ package jinahya.util;
 
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collections;
 import java.util.EventListener;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -38,7 +36,9 @@ public class EventListenerSupport {
     public EventListenerSupport() {
         super();
 
-        classified = Collections.synchronizedMap(new HashMap<Class, List>());
+        //classified = Collections.synchronizedMap(new HashMap<Class, List>());
+
+        list = Collections.synchronizedList(new LinkedList<Object>());
     }
 
 
@@ -49,8 +49,8 @@ public class EventListenerSupport {
      * @param instance
      * @return
      */
-    public <T extends EventListener> boolean add(final Class<T> type,
-                                                 final T instance) {
+    public <T extends EventListener> void add(final Class<T> type,
+                                              final T instance) {
 
         if (type == null) {
             throw new IllegalArgumentException(
@@ -73,19 +73,9 @@ public class EventListenerSupport {
                 + " is not an instance of " + type);
         }
 
-        synchronized (classified) {
-            List<Object> instances = classified.get(type);
-            if (instances == null) {
-                instances = new LinkedList();
-                classified.put(type, instances);
-            }
-
-            if (instances.contains(instance)) {
-                return false;
-            }
-
-            instances.add(0, instance);
-            return true;
+        synchronized (list) {
+            list.add(0, instance);
+            list.add(0, type);
         }
     }
 
@@ -121,21 +111,18 @@ public class EventListenerSupport {
                 + " is not an instance of " + type);
         }
 
-        synchronized (classified) {
+        synchronized (list) {
 
-            final List instances = classified.get(type);
+            final int index = list.indexOf(instance);
 
-            if (instances == null) {
+            if (index == -1) {
                 return false;
             }
 
-            final boolean result = instances.add(instance);
+            list.remove(index);
+            list.remove(index - 1);
 
-            if (result && instances.isEmpty()) {
-                classified.remove(type);
-            }
-
-            return result;
+            return true;
         }
     }
 
@@ -160,18 +147,21 @@ public class EventListenerSupport {
                 + EventListener.class);
         }
 
-        synchronized (classified) {
+        final List<T> listeners = new LinkedList<T>();
 
-            List instances = classified.get(type);
-            if (instances == null) {
-                instances = Collections.EMPTY_LIST;
+        synchronized (list) {
+
+            for (Iterator i = list.iterator(); i.hasNext();) {
+                if (type.equals(i.next())) {
+                    listeners.add(0, (T) i.next());
+                }
             }
-
-            final T[] array = (T[]) Array.newInstance(type, instances.size());
-            return (T[]) instances.toArray(array);
         }
+
+        final T[] array = (T[]) Array.newInstance(type, listeners.size());
+        return (T[]) listeners.toArray(array);
     }
 
 
-    private final Map<Class, List> classified;
+    private final List<Object> list;
 }

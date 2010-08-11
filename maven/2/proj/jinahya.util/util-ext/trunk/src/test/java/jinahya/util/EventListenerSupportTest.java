@@ -71,7 +71,7 @@ public class EventListenerSupportTest {
 
         Assert.assertEquals(support.remove(B.class, b), false);
 
-        Assert.assertEquals(support.add(B.class, b), true);
+        support.add(B.class, b);
 
         Assert.assertEquals(support.remove(B.class, b), true);
     }

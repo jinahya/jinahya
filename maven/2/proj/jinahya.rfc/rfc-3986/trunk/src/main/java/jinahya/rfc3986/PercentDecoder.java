@@ -213,5 +213,13 @@ public class PercentDecoder {
     public static void main(final String[] args) throws IOException {
         System.out.println(decode(args[0]));
     }
+
+
+    /**
+     * 
+     */
+    private PercentDecoder() {
+        super();
+    }
 }
 

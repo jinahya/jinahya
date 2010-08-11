@@ -9,25 +9,6 @@
   <artifactId>twitterapime</artifactId>
   <version>trunk</version>
   <packaging>jar</packaging>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.kxml</groupId>
-      <artifactId>kxml2-min</artifactId>
-      <version>2.3.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.microemu</groupId>
-      <artifactId>midpapi20</artifactId>
-      <version>2.0.4</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -47,6 +28,22 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.kxml</groupId>
+      <artifactId>kxml2-min</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.microemu</groupId>
+      <artifactId>midpapi20</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -157,15 +154,21 @@
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
 	    <link>http://java.sun.com/javame/reference/apis/jsr139/</link> <!-- CLDC 1.1 -->
 	    <link>http://java.sun.com/javame/reference/apis/jsr218/</link> <!-- CDC 1.1 -->
             <link>http://java.sun.com/javase/6/docs/api/</link>
-            <!--link>http://developer.android.com/reference/</link--> <!-- Android -->
           </links>
+          <!--
+          <offlineLinks>
+            <offlineLink>
+              <url>http://developer.android.com/reference/</url>
+              <location>${env.ANDROID_HOME}/docs/reference/</location>
+            </offlineLink>
+          </offlineLinks>
+          -->
         </configuration>
       </plugin>
       <plugin>
