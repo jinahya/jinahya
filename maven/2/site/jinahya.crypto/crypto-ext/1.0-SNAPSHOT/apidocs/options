@@ -1,0 +1,28 @@
+-classpath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/crypto-ext/trunk/target/classes;C:/Users/onacit/.m2/repository/org/bouncycastle/bcprov-jdk14/1.45/bcprov-jdk14-1.45.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/crypto-ext/trunk/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2010. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'D:/svnwc/jinahya.googlecode.com/maven/2/proj/jinahya.crypto/crypto-ext/trunk/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya.crypto:crypto-ext 1.0-SNAPSHOT API'
+-link
+'http://download-llnw.oracle.com/javase/6/docs/api'
+-link
+'http://www.bouncycastle.org/docs/docs1.6'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-use
+-version
+-windowtitle
+'jinahya.crypto:crypto-ext 1.0-SNAPSHOT API'
