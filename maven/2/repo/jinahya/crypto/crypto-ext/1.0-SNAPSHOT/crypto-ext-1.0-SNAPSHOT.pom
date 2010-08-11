@@ -44,18 +44,18 @@
   <!-- Build Settings -->
   <build>
     <extensions>
-      <!--
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
         <artifactId>wagon-svn</artifactId>
         <version>1.9</version>
       </extension>
-      -->
+      <!--
       <extension>
         <groupId>com.google.code.maven-svn-wagon</groupId>
         <artifactId>maven-svn-wagon</artifactId>
         <version>1.1</version>
       </extension>
+      -->
     </extensions>
     <pluginManagement>
       <plugins>
