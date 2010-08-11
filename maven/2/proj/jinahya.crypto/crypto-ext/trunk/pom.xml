@@ -43,6 +43,20 @@
 
   <!-- Build Settings -->
   <build>
+    <extensions>
+      <!--
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.9</version>
+      </extension>
+      -->
+      <extension>
+        <groupId>com.google.code.maven-svn-wagon</groupId>
+        <artifactId>maven-svn-wagon</artifactId>
+        <version>1.1</version>
+      </extension>
+    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -100,13 +114,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <extensions>
-      <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-        <version>1.9</version>
-      </extension>
-    </extensions>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -221,13 +228,13 @@
   <!--pluginRepositories/-->
   <distributionManagement>
     <site>
-      <id>googlecode</id>
+      <id>onacit_googlecode</id>
       <name>jinahya.googlecode.com</name>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>googlecode</id>
+      <id>onacit_googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
   </distributionManagement>
