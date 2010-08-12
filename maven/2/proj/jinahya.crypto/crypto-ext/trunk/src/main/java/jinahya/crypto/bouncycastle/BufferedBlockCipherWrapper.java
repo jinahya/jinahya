@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.bouncycastle.crypto;
+package jinahya.crypto.bouncycastle;
 
 
 import java.io.InputStream;
