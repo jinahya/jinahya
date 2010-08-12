@@ -17,9 +17,15 @@
 package jinahya.io;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static org.testng.Assert.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -27,205 +33,37 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitIOTest extends AbstractTest {
+public class BitIOTest {
 
 
-    @Test(invocationCount = 1024)
+    private static final Random RANDOM = new Random();
+
+
+    //@Test(invocationCount = 1024)
+    @Test
     public void testBoolean() throws IOException {
-        final boolean expected = RANDOM.nextBoolean();
-        output.writeBoolean(expected);
-        alignAndFlush();
-        assertEquals(expected, input.readBoolean());
-        input.align();
-    }
 
+        System.out.println("here");
 
-    @Test(invocationCount = 1024)
-    public void testBytes() throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        final byte[] expected = new byte[RANDOM.nextInt(65536)];
-        final byte[] actual = new byte[expected.length];
+        final BitOutput output = new BitOutput(baos);
 
-        RANDOM.nextBytes(expected);
+        final List<Boolean> list = new LinkedList<Boolean>();
 
-        output.writeBytes(expected);
-        input.readBytes(actual);
-        assertEquals(expected, actual);
-
-        output.writeBytes(expected);
-        dis.readFully(actual);
-        assertEquals(expected, actual);
-
-        dos.write(expected);
-        input.readBytes(actual);
-        assertEquals(expected, actual);
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testFloat() throws IOException {
-        final float expected = RANDOM.nextFloat();
-
-        output.writeFloat(expected);
-        assertEquals(expected, input.readFloat(), .0f);
-
-        output.writeFloat(expected);
-        assertEquals(expected, dis.readFloat(), .0f);
-
-        dos.writeFloat(expected);
-        assertEquals(expected, input.readFloat(), .0f);
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testDouble() throws IOException {
-        final double expected = RANDOM.nextDouble();
-
-        output.writeDouble(expected);
-        assertEquals(expected, input.readDouble(), .0d);
-
-        output.writeDouble(expected);
-        assertEquals(expected, dis.readDouble(), .0d);
-
-        dos.writeDouble(expected);
-        assertEquals(expected, input.readDouble(), .0d);
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testInt() throws IOException {
-
-        int expected = RANDOM.nextInt();
-
-        final int length = RANDOM.nextInt(32) + 1; // 1 - 32
-
-        if (length == 1) { // unsigned int
-            expected &= 0x01;
-
-            output.writeUnsignedInt(length, expected);
-            alignAndFlush(); // 8
-            assertEquals(expected, input.readUnsignedInt(length));
-            input.align();
-
-        } else if (length == 32) { // signed int
-            dos.writeInt(expected);
-            dos.flush();
-            assertEquals(expected, input.readInt());
-
-            output.writeInt(expected);
-            alignAndFlush();
-            assertEquals(expected, input.readInt());
-
-            output.writeInt(expected);
-            alignAndFlush();
-            assertEquals(expected, dis.readInt());
-
-        } else {
-            final int upper = 32 - length;
-            expected <<= upper;
-            expected >>= upper;
-
-            if (expected >= 0) { // unsigned
-                output.writeUnsignedInt(length, expected);
-                alignAndFlush();
-                assertEquals(expected, input.readUnsignedInt(length));
-                input.align();
-
-            } else { // sigend
-                output.writeInt(length, expected);
-                alignAndFlush();
-                assertEquals(expected, input.readInt(length));
-                input.align();
-            }
+        final int count = RANDOM.nextInt(1024) + 1024;
+        for (int i = 0; i < count; i++) {
+            list.add(0, RANDOM.nextBoolean());
+            output.writeBoolean(list.get(0));
         }
-    }
 
+        output.align();
 
-    @Test(invocationCount = 1024)
-    public void testLong() throws IOException {
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
 
-        long expected = RANDOM.nextLong();
-
-        final int length = RANDOM.nextInt(64) + 1; // 1 - 64
-
-        if (length == 1) { // unsigned long
-            expected &= 0x01L;
-
-            output.writeUnsignedLong(length, expected);
-            alignAndFlush(); // 8
-            assertEquals(expected, input.readUnsignedLong(length));
-            input.align();
-
-        } else if (length == 64) { // signed long
-            dos.writeLong(expected);
-            dos.flush();
-            assertEquals(expected, input.readLong());
-
-            output.writeLong(expected);
-            alignAndFlush();
-            assertEquals(expected, input.readLong());
-
-        } else {
-            final int upper = 64 - length;
-            expected <<= upper;
-            expected >>= upper;
-
-            if (expected >= 0) { // unsigned
-                output.writeUnsignedLong(length, expected);
-                alignAndFlush();
-                assertEquals(expected, input.readUnsignedLong(length));
-                input.align();
-
-            } else { // sigend
-                output.writeLong(length, expected);
-                alignAndFlush();
-                assertEquals(expected, input.readLong(length));
-                input.align();
-            }
+        for (int i = 0; i < count; i++) {
+            Assert.assertEquals(input.readBoolean(), (boolean) list.remove(0));
         }
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testModifiedUTF8String() throws IOException {
-        final String expected = generateModifiedUTF8String();
-
-        output.writeModifiedUTF8String(expected);
-        alignAndFlush();
-        assertEquals(expected, input.readModifiedUTF8String());
-
-        output.writeModifiedUTF8String(expected);
-        alignAndFlush();
-        assertEquals(expected, dis.readUTF());
-
-        dos.writeUTF(expected);
-        alignAndFlush();
-        assertEquals(expected, input.readModifiedUTF8String());
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testUSASCIIBytes() throws IOException {
-
-        final byte[] expected = generateUSASCIIBytes();
-
-        output.writeUSASCIIBytes(expected);
-        alignAndFlush();
-
-        assertEquals(expected, input.readUSASCIIBytes());
-        input.align();
-    }
-
-
-    @Test(invocationCount = 1024)
-    public void testUSASCIIString() throws IOException {
-
-        final String expected = generateUSASCIIString();
-
-        output.writeUSASCIIString(expected);
-        alignAndFlush();
-
-        assertEquals(expected, input.readUSASCIIString());
-        input.align();
     }
 }
