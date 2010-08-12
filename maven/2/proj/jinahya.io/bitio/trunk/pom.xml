@@ -86,6 +86,10 @@
           <version>2.5</version>
         </plugin>
         <plugin>
+          <artifactId>maven-surefire-report-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.3.1</version>
@@ -103,25 +107,26 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <!--
         <configuration>
           <source>1.6</source>
           <target>jsr14</target>
         </configuration>
-        <!--
+        -->
         <executions>
           <execution>
-            <id>java-1.3-compile</id>
+            <id>compile-jsr14</id>
             <phase>compile</phase>
             <goals>
               <goal>compile</goal>
             </goals>
             <configuration>
-              <source>1.3</source>
-              <target>1.1</target>
+              <source>1.6</source>
+              <target>jsr14</target>
             </configuration>
           </execution>
           <execution>
-            <id>java-1.6-compile</id>
+            <id>process-test-sources-1.6</id>
             <phase>process-test-sources</phase>
             <goals>
               <goal>testCompile</goal>
@@ -132,7 +137,6 @@
             </configuration>
           </execution>
         </executions>
-        -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -177,6 +181,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.5</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

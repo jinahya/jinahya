@@ -142,8 +142,7 @@ public class BitInput {
             return value;
         } else {
             final int requi = length - avail;
-            return ((read8(avail) << requi)
-                    | read8(requi));
+            return ((read8(avail) << requi) | read8(requi));
         }
     }
 
@@ -157,24 +156,24 @@ public class BitInput {
      */
     private int read16(final int length) throws IOException {
 
-        if (length < 1) {
+        if (length < 0x01) {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        if (length > 16) {
+        if (length > 0x10) { // 16
             throw new IllegalArgumentException("length(" + length + ") > 16");
         }
 
         int value = 0x00;
 
-        int quotient = length / 8;
+        int quotient = length / 0x08;
         for (int i = 0; i < quotient; i++) {
-            value <<= 8;
-            value |= read8(8);
+            value <<= 0x08;
+            value |= read8(0x08);
         }
 
-        int remainder = length % 8;
-        if (remainder > 0) {
+        int remainder = length % 0x08;
+        if (remainder > 0x00) {
             value <<= remainder;
             value |= read8(remainder);
         }
@@ -228,11 +227,13 @@ public class BitInput {
     public int readInt(final int length) throws IOException {
 
         if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length +") <= 1");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " <= 1");
         }
 
         if (length > 32) {
-            throw new IllegalArgumentException("length(" + length +") > 32");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " > 32");
         }
 
         int value = 0;
@@ -313,11 +314,13 @@ public class BitInput {
     public long readLong(final int length) throws IOException {
 
         if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length + ") <= 1");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " <= 1");
         }
 
         if (length > 64) {
-            throw new IllegalArgumentException("length(" + length + ") > 64");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " > 64");
         }
 
         long value = 0L;
