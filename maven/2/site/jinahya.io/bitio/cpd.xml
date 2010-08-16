@@ -1,34 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="23" tokens="115">
-<file line="129" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitInput.java"/>
-<file line="124" path="/usr/local/var/.hudson/jobs/jinahya.io bitio/workspace/src/main/java/jinahya/io/BitOutput.java"/>
-<codefragment>
-<![CDATA[
-    public final void writeBytes(final byte[] value, final int offset,
-                                 final int length)
-        throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("value");
-        }
-
-        if (offset < 0) {
-            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
-        }
-
-        if (length < 0) {
-            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
-        }
-
-        if ((offset + length) > value.length) {
-            throw new IndexOutOfBoundsException(
-                "offset(" + offset + ") + length(" + length +
-                ") > value.length(" + value.length + ")");
-        }
-
-        for (int i = 0; i < length; i++) {
-]]>
-</codefragment>
-</duplication>
 </pmd-cpd>

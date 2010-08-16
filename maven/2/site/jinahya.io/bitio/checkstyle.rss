@@ -2,14 +2,14 @@
 
 <rss version="0.91">
   <channel>
-    <title>jinahya.io:bitio:1.2-SNAPSHOT - Checkstyle report</title>
+    <title>jinahya.io:bitio - Checkstyle report</title>
     <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio/index.html</link>
-    <description>jinahya.io:bitio:1.2-SNAPSHOT - Checkstyle report</description>
+    <description>jinahya.io:bitio - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2008 - 2010</copyright>
     <item>
       <title>File: 2,
-             Errors: 79,
+             Errors: 109,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  35
+                  49
                 </td>
               </tr>
                           <tr>
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  44
+                  60
                 </td>
               </tr>
                       </tbody>
