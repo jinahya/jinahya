@@ -192,11 +192,13 @@ public class BitInput {
     public int readUnsignedInt(final int length) throws IOException {
 
         if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " < 1");
         }
 
         if (length >= 32) {
-            throw new IllegalArgumentException("length(" + length + ") >= 32");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " >= 32");
         }
 
         int value = 0;
