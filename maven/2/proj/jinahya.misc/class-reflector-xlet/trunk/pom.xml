@@ -7,7 +7,7 @@
   <artifactId>class-reflector-xlet</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>${groupId}:${artifactId}:${version}</name>
+  <name>${groupId}:${artifactId}</name>
   <url>http://maven.apache.org</url>
   <dependencyManagement>
     <dependencies>

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.xml.sax.SAXException;
 
@@ -152,19 +154,39 @@ public class Reflector {
 
         handler.startElement("", "class", "", attributes);
 
-        //for (Constructor c : cls.getConstructors()) {
-        for (Constructor c : cls.getDeclaredConstructors()) {
-            reflectConstructor(cls, c);
+        final Constructor[] constructors = cls.getDeclaredConstructors();
+        for (Constructor constructor : constructors) {
+            reflectConstructor(cls, constructor);
         }
 
-        //for (Method m : cls.getMethods()) {
-        for (Method m : cls.getDeclaredMethods()) {
-            reflectMethod(cls, m);
+        final Method[] methods = cls.getDeclaredMethods();
+        Arrays.sort(methods, new Comparator<Method>(){
+            @Override
+            public int compare(Method o1, Method o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+            @Override
+            public boolean equals(final Object obj) {
+                return false;
+            }
+        });
+        for (Method method : methods) {
+            reflectMethod(cls, method);
         }
 
-        //for (Field f : cls.getFields()) {
-        for (Field f : cls.getDeclaredFields()) {
-            reflectField(cls, f);
+        final Field[] fields = cls.getDeclaredFields();
+        Arrays.sort(fields, new Comparator<Field>() {
+            @Override
+            public int compare(Field o1, Field o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+            @Override
+            public boolean equals(final Object obj) {
+                return false;
+            }
+        });
+        for (Field field : fields) {
+            reflectField(cls, field);
         }
 
         final Class[] members = cls.getClasses();
