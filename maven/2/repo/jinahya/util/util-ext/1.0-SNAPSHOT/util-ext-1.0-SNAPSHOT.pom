@@ -11,6 +11,16 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>jinahya.rfc</groupId>
+        <artifactId>rfc-4648</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>jinahya.rfc</groupId>
+        <artifactId>rfc-3986</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>5.12.1</version>
@@ -18,6 +28,14 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>jinahya.rfc</groupId>
+      <artifactId>rfc-4648</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jinahya.rfc</groupId>
+      <artifactId>rfc-3986</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -187,6 +205,12 @@
   </developers>
 
   <!-- Environment Settings -->
+  <repositories>
+    <repository>
+      <id>jinahya.googlecode.com</id>
+      <url>http://jinahya.googlecode.com/svn/maven/2/repo/</url>
+    </repository>
+  </repositories>
   <distributionManagement>
     <site>
       <id>googlecode</id>
