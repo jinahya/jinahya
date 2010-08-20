@@ -9,7 +9,7 @@
     <copyright>&#169;2008 - 2010</copyright>
     <item>
       <title>File: 2,
-             Errors: 109,
+             Errors: 117,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio/index.html/checkstyle.html#jinahya.io.BitInput.java">jinahya/io/BitInput.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio/index.html/checkstyle.html#jinahya.io.bitio.BitInput.java">jinahya/io/bitio/BitInput.java</a>
                 </td>
                 <td>
                   0
@@ -38,12 +38,12 @@
                   0
                 </td>
                 <td>
-                  49
+                  54
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio/index.html/checkstyle.html#jinahya.io.BitOutput.java">jinahya/io/BitOutput.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya.io/bitio/index.html/checkstyle.html#jinahya.io.bitio.BitOutput.java">jinahya/io/bitio/BitOutput.java</a>
                 </td>
                 <td>
                   0
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  60
+                  63
                 </td>
               </tr>
                       </tbody>
