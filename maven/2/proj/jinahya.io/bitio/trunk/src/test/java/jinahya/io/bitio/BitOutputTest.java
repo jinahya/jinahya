@@ -92,6 +92,22 @@ public class BitOutputTest extends AbstractTest {
     }
 
 
+    @Test(invocationCount = INVOCATION_COUNT,
+          expectedExceptions = IllegalArgumentException.class)
+    public void testUnsignedIntWithNegativeLength() throws IOException {
+        new BitOutput(new ByteArrayOutputStream()).writeUnsignedInt(
+            0 - RANDOM.nextInt(Integer.MAX_VALUE), 0);
+    }
+
+
+    @Test(invocationCount = INVOCATION_COUNT,
+          expectedExceptions = IllegalArgumentException.class)
+    public void testUnsignedIntWithLongLength() throws IOException {
+        new BitOutput(new ByteArrayOutputStream()).writeUnsignedInt(
+            RANDOM.nextInt(32) + 32, 0);
+    }
+
+
     @Test(invocationCount = INVOCATION_COUNT)
     public void testSignedInt() throws IOException {
 
