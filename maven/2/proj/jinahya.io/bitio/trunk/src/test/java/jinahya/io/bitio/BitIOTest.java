@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.io;
+package jinahya.io.bitio;
 
 
 import java.io.ByteArrayInputStream;

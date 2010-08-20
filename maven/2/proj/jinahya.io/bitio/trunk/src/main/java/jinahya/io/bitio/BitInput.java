@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.io;
+package jinahya.io.bitio;
 
 
 import java.io.EOFException;
@@ -116,6 +116,7 @@ public class BitInput {
      */
     private int read8(final int length) throws IOException {
 
+        /*
         if (length < 0x01) {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " < 1");
@@ -125,21 +126,19 @@ public class BitInput {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " > 8");
         }
+         */
 
         if (avail == 0x00) {
-            octet = input.readOctet();
-            if (octet == -1) {
+            if ((octet = input.readOctet()) == -1) {
                 throw new EOFException("EOF");
             }
             avail = 0x08;
         }
 
         if (avail >= length) {
-            int value = octet >> (avail - length);
             avail -= length;
             count += length;
-            octet ^= (value << avail);
-            return value;
+            return ((octet >> avail) & (0xFF >> (8 - length)));
         } else {
             final int requi = length - avail;
             return ((read8(avail) << requi) | read8(requi));
@@ -156,13 +155,17 @@ public class BitInput {
      */
     private int read16(final int length) throws IOException {
 
+        /*
         if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " < 1");
         }
 
         if (length > 0x10) { // 16
-            throw new IllegalArgumentException("length(" + length + ") > 16");
+            throw new IllegalArgumentException(
+                "illegal length:" + length + " > 16");
         }
+         */
 
         int value = 0x00;
 
@@ -201,7 +204,7 @@ public class BitInput {
                 "illegal length: " + length + " >= 32");
         }
 
-        int value = 0;
+        int value = 0x00;
 
         final int quotient = length / 16;
         for (int i = 0; i < quotient; i++) {
@@ -239,6 +242,7 @@ public class BitInput {
         }
 
         int value = 0;
+
         if (readBoolean()) {
             value = (-1 << (length - 1));
         }
@@ -281,11 +285,13 @@ public class BitInput {
     public long readUnsignedLong(final int length) throws IOException {
 
         if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " <= 0");
         }
 
-        if (length >= 64) {
-            throw new IllegalArgumentException("length(" + length + ") >= 64");
+        if (length >= 64) { // 64
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " >= 64");
         }
 
         long value = 0L;
@@ -320,7 +326,7 @@ public class BitInput {
                 "illegal length: " + length + " <= 1");
         }
 
-        if (length > 64) {
+        if (length > 0x40) { // 64
             throw new IllegalArgumentException(
                 "illegal length: " + length + " > 64");
         }
@@ -343,7 +349,7 @@ public class BitInput {
      * @throws IOException if an I/O error occurs.
      */
     public long readLong() throws IOException {
-        return readLong(64);
+        return readLong(0x40);
     }
 
 
@@ -377,8 +383,9 @@ public class BitInput {
      */
     public int align(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length <= 0x00) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " <= 0");
         }
 
         final int mod = (int) (count % length);
@@ -398,7 +405,7 @@ public class BitInput {
             read8(remainder);
         }
 
-        return mod;
+        return required;
     }
 
 

@@ -14,15 +14,14 @@
  *  limitations under the License.
  */
 
-package jinahya.io;
+package jinahya.io.bitio;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import org.testng.Assert;
-
 import org.testng.annotations.Test;
 
 
@@ -30,26 +29,26 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitOutputTest extends AbstractTest {
+public class BitInputTest extends AbstractTest {
 
 
     @Test(invocationCount = INVOCATION_COUNT)
     public void testBoolean() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
-        final BitOutput output = new BitOutput(baos);
         final boolean expected = RANDOM.nextBoolean();
-        output.writeUnsignedInt(7, 0);
-        output.writeBoolean(expected);
 
-        baos.flush();
+        dos.writeBoolean(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final boolean actual = input.readBoolean();
+        dos.flush();
 
-        Assert.assertEquals(actual, expected);
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+
+        input.readInt(7);
+        Assert.assertEquals(input.readBoolean(), expected);
     }
 
 
@@ -57,19 +56,20 @@ public class BitOutputTest extends AbstractTest {
     public void testBytes() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
-        final byte[] expected = bytesValue();
-        final BitOutput output = new BitOutput(baos);
-        output.writeBytes(expected);
+        final byte[] expected = new byte[RANDOM.nextInt(BYTE_ARRAY_LENGTH)];
+        RANDOM.nextBytes(expected);
 
-        baos.flush();
+        dos.writeInt(expected.length);
+        dos.write(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final byte[] actual = new byte[input.readInt()];
-        input.readFully(actual);
+        dos.flush();
 
-        Assert.assertEquals(actual, expected);
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+
+        Assert.assertEquals(input.readBytes(), expected);
     }
 
 
@@ -77,16 +77,18 @@ public class BitOutputTest extends AbstractTest {
     public void testUnsignedInt() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final int length = unsignedIntLength();
         final int expected = unsignedIntValue(length);
-        final BitOutput output = new BitOutput(baos);
-        output.writeUnsignedInt(32 - length, 0);
-        output.writeUnsignedInt(length, expected);
+        dos.writeInt(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final int actual = input.readInt();
+        dos.flush();
+
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        input.readUnsignedInt(32 - length);
+        final int actual = input.readUnsignedInt(length);
 
         Assert.assertEquals(actual, expected);
     }
@@ -96,16 +98,21 @@ public class BitOutputTest extends AbstractTest {
     public void testSignedInt() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final int length = signedIntLength();
         final int expected = signedIntValue(length);
-        final BitOutput output = new BitOutput(baos);
-        final int shift = 32 - length;
-        output.writeInt((expected << shift) >> shift);
+        dos.writeInt(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final int actual = input.readInt();
+        dos.flush();
+        baos.flush();
+
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        if (length != 32) {
+            input.readUnsignedInt(32 - length);
+        }
+        final int actual = input.readInt(length);
 
         Assert.assertEquals(actual, expected);
     }
@@ -115,16 +122,18 @@ public class BitOutputTest extends AbstractTest {
     public void testFloat() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final float expected = RANDOM.nextFloat();
-        final BitOutput output = new BitOutput(baos);
-        output.writeFloat(expected);
+        dos.writeFloat(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final float actual = input.readFloat();
+        dos.flush();
+        baos.flush();
 
-        Assert.assertEquals(actual, expected);
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+
+        Assert.assertEquals(input.readFloat(), expected);
     }
 
 
@@ -132,16 +141,19 @@ public class BitOutputTest extends AbstractTest {
     public void testUnsignedLong() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final int length = unsignedLongLength();
         final long expected = unsignedLongValue(length);
-        final BitOutput output = new BitOutput(baos);
-        output.writeUnsignedLong(64 - length, 0L);
-        output.writeUnsignedLong(length, expected);
+        dos.writeLong(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final long actual = input.readLong();
+        dos.flush();
+        baos.flush();
+
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        input.readUnsignedLong(64 - length);
+        final long actual = input.readUnsignedLong(length);
 
         Assert.assertEquals(actual, expected);
     }
@@ -151,16 +163,20 @@ public class BitOutputTest extends AbstractTest {
     public void testSignedLong() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final int length = signedLongLength();
         final long expected = signedLongValue(length);
-        final BitOutput output = new BitOutput(baos);
-        final int shift = 64 - length;
-        output.writeLong((expected << shift) >> shift);
+        dos.writeLong(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final long actual = input.readLong();
+        dos.flush();
+
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        if (length != 64) {
+            input.readUnsignedLong(64 - length);
+        }
+        final long actual = input.readLong(length);
 
         Assert.assertEquals(actual, expected);
     }
@@ -170,15 +186,17 @@ public class BitOutputTest extends AbstractTest {
     public void testDouble() throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
 
         final double expected = RANDOM.nextDouble();
-        final BitOutput output = new BitOutput(baos);
-        output.writeDouble(expected);
+        dos.writeDouble(expected);
 
-        final DataInputStream input =
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        final double actual = input.readDouble();
+        dos.flush();
+        baos.flush();
 
-        Assert.assertEquals(actual, expected);
+        final BitInput input =
+            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+
+        Assert.assertEquals(input.readDouble(), expected);
     }
 }

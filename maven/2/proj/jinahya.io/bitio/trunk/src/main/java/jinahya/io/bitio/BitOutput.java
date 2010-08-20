@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package jinahya.io;
+package jinahya.io.bitio;
 
 
 import java.io.IOException;
@@ -59,13 +59,13 @@ public class BitOutput {
     /**
      * Creates a new instance with specifed output.
      *
-     * @param out output to which octets are write
+     * @param output output to which octets are write
      */
-    public BitOutput(final OutputStream out) {
+    public BitOutput(final OutputStream output) {
         this(new OctetOutput() {
             @Override
             public void writeOctet(final int octet) throws IOException {
-                out.write(octet);
+                output.write(octet);
             }
         });
     }
@@ -129,22 +129,23 @@ public class BitOutput {
      */
     private void write8(final int length, final int value) throws IOException {
 
-        if (length < 1) {
+        /*
+        if (length < 0x01) {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " < 1");
         }
 
-        if (length > 8) {
+        if (length > 0x08) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " > " + 8);
+                "illegal length: " + length + " > 8");
         }
+         */
 
         if (avail >= length) {
             octet <<= length;
             octet |= (value & (0xFF >> (8 - length)));
-            //octet |= (value & FF[length - 1]);
-            count += length;
             avail -= length;
+            count += length;
             if (avail == 0) {
                 output.writeOctet(octet);
                 octet = 0x00;
@@ -167,6 +168,7 @@ public class BitOutput {
      */
     private void write16(final int length, final int value) throws IOException {
 
+        /*
         if (length < 1) {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " < 1");
@@ -176,14 +178,66 @@ public class BitOutput {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " > 16");
         }
+         */
 
-        int quotient = length / 8;
-        int remainder = length % 8;
+        final int quotient = length / 8;
+        final int remainder = length % 8;
         if (remainder > 0) {
             write8(remainder, (value >> (quotient * 8)));
         }
         for (int i = quotient - 1; i >= 0; i--) {
             write8(8, (value >> (i * 8)));
+        }
+    }
+
+
+    private void write31(final int length, final int value) throws IOException {
+
+        /*
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " < 1");
+        }
+
+        if (length >= 32) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " >= 32");
+        }
+         */
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
+        if (remainder > 0) {
+            write16(remainder, (value >> (quotient * 16)));
+        }
+        for (int i = quotient -1; i >= 0; i--) {
+            write16(16, (value >> (i * 16)));
+        }
+    }
+
+
+    private void write63(final int length, final long value)
+        throws IOException {
+
+        /*
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " < 1");
+        }
+
+        if (length >= 64) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " >= 64");
+        }
+         */
+
+        final int quotient = length / 31;
+        final int remainder = length % 31;
+        if (remainder > 0) {
+            write31(remainder, (int) (value >> (quotient * 31)));
+        }
+        for (int i = quotient - 1; i >= 0; i--) {
+            write31(31, (int) (value >> (i * 31)));
         }
     }
 
@@ -198,7 +252,7 @@ public class BitOutput {
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        if (length < 1) {
+        if (length < 0x01) {
             throw new IllegalArgumentException(
                 "illegal length: " + length + " < 1");
         }
@@ -208,14 +262,11 @@ public class BitOutput {
                 "illegal length: " + length + " >= 32");
         }
 
-        int quotient = length / 16;
-        int remainder = length % 16;
-        if (remainder > 0) {
-            write16(remainder, (value >> (quotient * 16)));
+        if (value < 0 || ((value >> length) != 0)) {
+            throw new IllegalArgumentException("illegal value: " + value);
         }
-        for (int i = quotient -1; i >= 0; i--) {
-            write16(16, (value >> (i * 16)));
-        }
+
+        write31(length, value);
     }
 
 
@@ -238,8 +289,15 @@ public class BitOutput {
                 "illegal length: " + length + " > 32");
         }
 
+        if (value != 0) {
+            final int shifted = (value >> (length - 1));
+            if (shifted != -1 && shifted != 0) {
+                throw new IllegalArgumentException("illegal value: " + value);
+            }
+        }
+
         writeBoolean(value < 0);
-        writeUnsignedInt(length - 1, value);
+        write31(length - 1, value);
     }
 
 
@@ -276,21 +334,20 @@ public class BitOutput {
         throws IOException {
 
         if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " < 1");
         }
 
         if (length >= 64) {
-            throw new IllegalArgumentException("length(" + length + ") >= 64");
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " >= 64");
         }
 
-        final int quotient = length / 31;
-        final int remainder = length % 31;
-        if (remainder > 0) {
-            writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
+        if (value < 0L || (value >> length) != 0L) {
+            throw new IllegalArgumentException("illegal value : " + value);
         }
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedInt(31, (int) (value >> (i * 31)));
-        }
+
+        write63(length, value);
     }
 
 
@@ -312,8 +369,15 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") > 64");
         }
 
-        writeBoolean(value < 0L);
-        writeUnsignedLong(length - 1, value);
+        if (value != 0L) {
+            final long shifted = (value >> (length - 1));
+            if (shifted != -1L && shifted != 0L) {
+                throw new IllegalArgumentException("illegal value: " + value);
+            }
+        }
+
+        writeBoolean(value < 0);
+        write63(length - 1, value);
     }
 
 
@@ -358,12 +422,12 @@ public class BitOutput {
      */
     public int align(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length <= 0x00) {
+            throw new IllegalArgumentException(
+                "illegal length: " + length + " <= 0");
         }
 
         final int mod = (int) (count % length);
-
         if (mod == 0) {
             return mod;
         }
@@ -379,6 +443,7 @@ public class BitOutput {
         if (remainder > 0) {
             write8(remainder, 0x00);
         }
+
         return required;
     }
 
@@ -394,11 +459,13 @@ public class BitOutput {
     }
 
 
+    /*
     protected void reset() {
         octet = 0x00;
         avail = 0x08;
         count = 0L;
     }
+     */
 
 
     private OctetOutput output;
