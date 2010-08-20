@@ -21,7 +21,7 @@ package jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base32HEXTest extends RFC4648Test<Base32HEX> {
+public class Base32HEXTest extends BaseTest<Base32HEX> {
 
 
     @Override

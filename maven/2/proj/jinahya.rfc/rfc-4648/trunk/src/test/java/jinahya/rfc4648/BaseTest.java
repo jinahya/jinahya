@@ -24,12 +24,14 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
 import java.util.Random;
 
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
+
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.Test;
@@ -39,8 +41,8 @@ import org.junit.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <T>
  */
-@RunWith(RFC4648TestClassRunner.class)
-public abstract class RFC4648Test<T extends RFC4648> {
+@RunWith(BaseTestClassRunner.class)
+public abstract class BaseTest<T extends Base> {
 
 
     protected final byte[] getBytes() {

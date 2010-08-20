@@ -26,7 +26,7 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64Test extends RFC4648Test<jinahya.rfc4648.Base64> {
+public class Base64Test extends BaseTest<jinahya.rfc4648.Base64> {
 
 
     @Override

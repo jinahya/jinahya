@@ -26,9 +26,9 @@ import org.junit.runners.model.InitializationError;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class RFC4648TestClassRunner extends BlockJUnit4ClassRunner {
+public class BaseTestClassRunner extends BlockJUnit4ClassRunner {
 
-    public RFC4648TestClassRunner(Class<?> klass) throws InitializationError {
+    public BaseTestClassRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
 

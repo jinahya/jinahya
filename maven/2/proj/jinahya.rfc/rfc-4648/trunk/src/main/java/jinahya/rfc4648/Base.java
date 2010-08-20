@@ -28,15 +28,15 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
-import jinahya.io.BitInput;
-import jinahya.io.BitOutput;
+import jinahya.io.bitio.BitInput;
+import jinahya.io.bitio.BitOutput;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class RFC4648 {
+public class Base {
 
 
     /** Default pad character. */
@@ -89,7 +89,7 @@ public class RFC4648 {
      * @param alphabet alphabe to be used
      * @param padding flag for padding
      */
-    protected RFC4648(final byte[] alphabet, final boolean padding) {
+    protected Base(final byte[] alphabet, final boolean padding) {
         super();
 
         encode = new byte[alphabet.length];
@@ -316,7 +316,7 @@ public class RFC4648 {
     /** Characters for decoding. */
     private byte[] decode;
 
-    /** Boolean flag for padding. */
+    /** flag for padding. */
     private boolean padding;
 
     /** number of bits for a character. */

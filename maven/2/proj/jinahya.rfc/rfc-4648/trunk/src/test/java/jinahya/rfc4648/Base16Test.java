@@ -28,7 +28,7 @@ import org.apache.commons.codec.binary.Hex;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base16Test extends RFC4648Test<Base16> {
+public class Base16Test extends BaseTest<Base16> {
 
 
     @Override

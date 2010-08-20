@@ -21,7 +21,7 @@ package jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URL extends RFC4648 {
+public class Base64URL extends Base {
 
 
     /** Create a new instance. */
