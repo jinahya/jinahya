@@ -42,8 +42,7 @@ public class PercentEncoder {
     public static byte[] encode(final byte[] in) throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + byte[].class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -67,13 +66,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + byte[].class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + OutputStream.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         encode(new ByteArrayInputStream(in), out);
@@ -90,13 +87,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + byte[].class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + OutputStream.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         encode(new ByteArrayInputStream(in), out);
@@ -112,8 +107,7 @@ public class PercentEncoder {
     public static String encode(final String in) throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         return new String(encode(in.getBytes("UTF-8")), "US-ASCII");
@@ -130,13 +124,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + OutputStream.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         encode(in.getBytes("UTF-8"), out);
@@ -153,13 +145,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + String.class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + Writer.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         encode(in.getBytes("UTF-8"), out);
@@ -176,13 +166,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + InputStream.class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + OutputStream.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
@@ -205,13 +193,11 @@ public class PercentEncoder {
         throws IOException {
 
         if (in == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + InputStream.class + ": is null");
+            throw new IllegalArgumentException("null input");
         }
 
         if (out == null) {
-            throw new IllegalArgumentException(
-                "param:1:" + Writer.class + ": is null");
+            throw new IllegalArgumentException("null output");
         }
 
         for (int b = -1; (b = in.read()) != -1; ) {
