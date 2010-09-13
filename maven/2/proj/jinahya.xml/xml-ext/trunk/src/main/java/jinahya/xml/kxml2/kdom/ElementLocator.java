@@ -60,13 +60,11 @@ public class ElementLocator {
                                        final String name) {
 
             if (namespace == null) {
-                throw new IllegalArgumentException(
-                    "param:0:namespace:" + String.class + ": is null");
+                throw new IllegalArgumentException("null namespace");
             }
 
             if (name == null) {
-                throw new IllegalArgumentException(
-                    "param:1:name:" + String.class + ": is null");
+                throw new IllegalArgumentException("null name");
             }
 
             final String key = key(namespace, name);
@@ -497,13 +495,16 @@ public class ElementLocator {
      */
     public String text(final boolean parent) {
 
-        boolean appended = false;
-        final StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = null;
         final int childCount = current.element.getChildCount();
+        int type;
         for (int i = 0; i < childCount; i++) {
-            if (current.element.getType(i) == Node.TEXT) {
+            type = current.element.getType(i);
+            if (type == Node.TEXT || type == Node.CDSECT) {
+                if (buffer == null) {
+                    buffer = new StringBuffer();
+                }
                 buffer.append(current.element.getText(i));
-                appended = true;
             }
         }
 
@@ -511,7 +512,7 @@ public class ElementLocator {
             parent();
         }
 
-        return (appended ? buffer.toString() : null);
+        return (buffer == null ? null : buffer.toString());
     }
 
 

@@ -19,10 +19,11 @@ package jinahya.xml.kxml2.kdom;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 
 import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
+import org.testng.Assert;
 
 import org.testng.annotations.Test;
 
@@ -359,20 +360,31 @@ public class ElementLocatorTest {
     public void testPrintWithNullBuffer()
         throws XmlPullParserException, IOException {
 
-        InputStream resource =
-            ElementLocatorTest.class.getResourceAsStream("/sample.xml");
+        final Document document = new Document();
+        document.addChild(Node.ELEMENT, document.createElement(XmlPullParser.NO_NAMESPACE, "root"));
+
+        final ElementLocator locator = new ElementLocator(document);
+
+        locator.print((StringBuffer) null);
+    }
+
+
+    @Test
+    public void testCDATA() throws XmlPullParserException, IOException {
 
         final XmlPullParser parser =
             XmlPullParserFactory.newInstance().newPullParser();
-        parser.setFeature(
-            "http://xmlpull.org/v1/doc/features.html#process-namespaces", true);
-        parser.setInput(resource, null);
+
+        final String expected = "<a><b>c</b></a>";
+
+        parser.setInput(new StringReader(
+            "<?xml version=\"1.0\"?><a><![CDATA[" + expected + "]]></a>"));
 
         final Document document = new Document();
         document.parse(parser);
 
         final ElementLocator locator = new ElementLocator(document);
 
-        locator.print((StringBuffer) null);
+        Assert.assertEquals(locator.text(), expected);
     }
 }
