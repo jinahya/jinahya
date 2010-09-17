@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 4,
-             Errors: 169,
+      <title>File: 6,
+             Errors: 189,
              Warnings: 0,
              Infos: 0
       </title>
@@ -43,6 +43,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.xmlpull.v1.XmlPullParsable.java">jinahya/xmlpull/v1/XmlPullParsable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://maven.apache.org/checkstyle.html#jinahya.xml.kxml2.kdom.ElementLocator.java">jinahya/xml/kxml2/kdom/ElementLocator.java</a>
                 </td>
                 <td>
@@ -52,7 +66,21 @@
                   0
                 </td>
                 <td>
-                  65
+                  64
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.xmlpull.v1.XmlPullParsableRoot.java">jinahya/xmlpull/v1/XmlPullParsableRoot.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
                 </td>
               </tr>
                           <tr>
