@@ -71,7 +71,7 @@ public class BufferedAsymmetricBlockCipherWrapper
                            final InputStream in, final OutputStream out)
         throws Exception {
 
-        final byte[] inbuf = getBuffer();
+        final byte[] inbuf = buffer();
 
         for (int inlen = -1; true; ) {
             inlen = cipher.getInputBlockSize() - cipher.getBufferPosition();
@@ -84,6 +84,9 @@ public class BufferedAsymmetricBlockCipherWrapper
             }
             inlen = in.read(inbuf, 0, inlen);
             if (inlen == -1) {
+                if (cipher.getBufferPosition() > 0) {
+                    out.write(cipher.doFinal());
+                }
                 break;
             }
             if (inlen > 0) {

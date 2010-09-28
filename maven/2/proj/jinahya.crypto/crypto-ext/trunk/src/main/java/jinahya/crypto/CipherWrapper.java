@@ -38,7 +38,7 @@ public class CipherWrapper extends AbstractCipherWrapper<Cipher> {
      * @param initializer
      */
     public CipherWrapper(final Cipher cipher,
-                            final Initializer<Cipher> initializer) {
+                         final Initializer<Cipher> initializer) {
 
         super(cipher, initializer);
     }
@@ -50,7 +50,7 @@ public class CipherWrapper extends AbstractCipherWrapper<Cipher> {
                                         final OutputStream output)
         throws Exception {
 
-        final byte[] inbuf = getBuffer();
+        final byte[] inbuf = buffer();
         byte[] outbuf = new byte[inbuf.length];
 
         int outlen;
@@ -85,10 +85,4 @@ public class CipherWrapper extends AbstractCipherWrapper<Cipher> {
         }
 
     }
-
-
-    private Cipher cipher;
-    //private Key key;
-
-    private Initializer initializer;
 }

@@ -97,28 +97,22 @@ public class EventListenerSupportTest {
 
         final Random random = new Random();
 
-        final A[] a = new A[random.nextInt(100)];
-        for (int i = 0; i < a.length; i++) {
-            support.add(A.class, a[i] = new A());
-        }
+        final A a = new A();
+        support.add(A.class, a);
 
-        final B[] b = new B[random.nextInt(100)];
-        for (int i = 0; i < b.length; i++) {
-            support.add(B.class, b[i] = new B());
-        }
+        final B b = new B();
+        support.add(B.class, b);
 
         final List a1 = Arrays.asList(support.get(A.class));
         Collections.reverse(a1);
-        Assert.assertEquals(a1.size(), a.length);
         for (int i = 0; i < a1.size(); i++) {
-            Assert.assertEquals(a1.get(i), a[i]);
+            Assert.assertEquals(a1.get(i), a);
         }
 
         final List b1 = Arrays.asList(support.get(B.class));
         Collections.reverse(b1);
-        Assert.assertEquals(b1.size(), b.length);
         for (int i = 0; i < b1.size(); i++) {
-            Assert.assertEquals(b1.get(i), b[i]);
+            Assert.assertEquals(b1.get(i), b);
         }
     }
 }

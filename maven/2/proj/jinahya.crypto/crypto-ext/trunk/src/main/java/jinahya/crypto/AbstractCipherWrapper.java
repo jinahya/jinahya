@@ -232,21 +232,25 @@ public abstract class AbstractCipherWrapper<T> {
 
 
     /**
+     * Process all input from <code>in</code> and write output to
+     * <code>out</code>.
      *
-     * @param cipher
-     * @param in
-     * @param out
-     * @throws Exception
+     * @param cipher cipher instance
+     * @param in input
+     * @param out output
+     * @throws Exception if any error occurs.
      */
     protected abstract void process(T cipher, InputStream in, OutputStream out)
         throws Exception;
 
 
     /**
+     * Sets a new input buffer.
      *
-     * @param buffer
+     * @param buffer buffer
+     * @throws IllegalArgumentException if buffer's length is zero.
      */
-    public final synchronized void setBuffer(byte[] buffer) {
+    public final synchronized void buffer(final byte[] buffer) {
 
         if (buffer == null) {
             // OK
@@ -264,10 +268,12 @@ public abstract class AbstractCipherWrapper<T> {
      *
      * @return
      */
-    protected final synchronized byte[] getBuffer() {
+    protected final synchronized byte[] buffer() {
+
         if (buffer == null) {
             buffer = new byte[DEFAULT_BUFFER_LENGTH];
         }
+
         return buffer;
     }
 

@@ -68,7 +68,7 @@ public class BufferedBlockCipherWrapper
                                         final OutputStream output)
         throws Exception {
 
-        final byte[] inbuf = getBuffer();
+        final byte[] inbuf = buffer();
         final byte[] outbuf = new byte[cipher.getOutputSize(inbuf.length)];
 
         int outlen;

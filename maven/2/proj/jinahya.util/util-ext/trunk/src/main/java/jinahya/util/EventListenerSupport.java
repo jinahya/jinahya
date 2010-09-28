@@ -33,48 +33,36 @@ import java.util.List;
 public class EventListenerSupport {
 
 
-    public EventListenerSupport() {
-        super();
-
-        //classified = Collections.synchronizedMap(new HashMap<Class, List>());
-
-        list = Collections.synchronizedList(new LinkedList<Object>());
-    }
-
-
     /**
      *
      * @param <T>
      * @param type
-     * @param instance
+     * @param listener
      * @return
      */
     public <T extends EventListener> void add(final Class<T> type,
-                                              final T instance) {
+                                              final T listener) {
 
         if (type == null) {
-            throw new IllegalArgumentException(
-                "param:0:" + Class.class + ": is null");
+            throw new IllegalArgumentException("null type");
         }
 
         if (!EventListener.class.isAssignableFrom(type)) {
             throw new IllegalArgumentException(
-                "param:0:" + Class.class + ":" + type + " is not assignable to "
-                + EventListener.class);
+                type + " is not assignable to " + EventListener.class);
         }
 
-        if (instance == null) {
-            throw new IllegalArgumentException("param:1:: is null");
+        if (listener == null) {
+            throw new IllegalArgumentException("null listener");
         }
 
-        if (!type.isInstance(instance)) {
+        if (!type.isInstance(listener)) {
             throw new IllegalArgumentException(
-                "param:1:" + instance.getClass() + ":" + instance
-                + " is not an instance of " + type);
+                listener + " is not an instance of " + type);
         }
 
         synchronized (list) {
-            list.add(0, instance);
+            list.add(0, listener);
             list.add(0, type);
         }
     }
@@ -143,8 +131,7 @@ public class EventListenerSupport {
 
         if (!EventListener.class.isAssignableFrom(type)) {
             throw new IllegalArgumentException(
-                "param:0:" + Class.class + ":" + type + " is not assignable to "
-                + EventListener.class);
+                type + " is not assignable to " + EventListener.class);
         }
 
         final List<T> listeners = new LinkedList<T>();
@@ -163,5 +150,6 @@ public class EventListenerSupport {
     }
 
 
-    private final List<Object> list;
+    private final List<Object> list =
+        Collections.synchronizedList(new LinkedList<Object>());
 }
