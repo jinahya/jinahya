@@ -14,6 +14,11 @@
         <value>1.0-20101001.024303-11</value>
         <updated>20101001024303</updated>
       </snapshotVersion>
+      <snapshotVersion>
+        <classifier>jsr14</classifier>
+        <value>1.0-20101001.024303-11</value>
+        <updated>20101001024303</updated>
+      </snapshotVersion>
     </snapshotVersions>
   </versioning>
 </metadata>
