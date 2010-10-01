@@ -214,7 +214,7 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
+            <artifactId>maven-jar-plugin</artifactId>
             <configuration>
               <classifier>${javac.targetVersion}</classifier>
             </configuration>
