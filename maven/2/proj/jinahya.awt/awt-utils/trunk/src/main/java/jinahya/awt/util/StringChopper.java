@@ -95,6 +95,7 @@ public final class StringChopper {
 
         offsets.add(0);
 
+
         /*
         int sum = 0;
         for (int i = 0; i < string.length(); i++) {
@@ -111,6 +112,7 @@ public final class StringChopper {
          */
 
 
+        /*
         outer:
         while (true) {
 
@@ -127,6 +129,28 @@ public final class StringChopper {
             }
 
             break;
+        }
+         */
+
+
+        int sum = 0; // 128
+        for (int i = 0; i < string.length(); i++) {
+            sum += metrics.charWidth(string.charAt(i));
+            if (sum > width) {
+                final int l = offsets.get(offsets.size() - 1);
+                while (i > l) {
+                    if (metrics.stringWidth(string.substring(l, i)) <= width) {
+                        break;
+                    }
+                    i--;
+                }
+                if (i == offsets.get(offsets.size() - 1)) {
+                    throw new IllegalArgumentException(
+                        "illegal width: " + width + " is too small");
+                }
+                offsets.add(i);
+                sum = 0;
+            }
         }
 
 
