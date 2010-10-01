@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<metadata>
+<metadata modelVersion="1.1.0">
   <groupId>jinahya.awt</groupId>
   <artifactId>awt-utils</artifactId>
   <version>1.0-SNAPSHOT</version>
   <versioning>
     <snapshot>
-      <buildNumber>9</buildNumber>
+      <timestamp>20101001.024032</timestamp>
+      <buildNumber>10</buildNumber>
     </snapshot>
-    <lastUpdated>20100928045133</lastUpdated>
+    <lastUpdated>20101001024032</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <value>1.0-20101001.024032-10</value>
+        <updated>20101001024032</updated>
+      </snapshotVersion>
+    </snapshotVersions>
   </versioning>
 </metadata>
