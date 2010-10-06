@@ -346,6 +346,23 @@ public class ImagePool {
     }
 
 
+    /**
+     *
+     */
+    public final synchronized boolean hasEntry(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        if (map == null) {
+            throw new IllegalStateException("closed");
+        }
+
+        return map.containsKey(name);
+    }    
+
+
     private final ImageCreator creator;
 
     private volatile Map<String, Image> map = null;
