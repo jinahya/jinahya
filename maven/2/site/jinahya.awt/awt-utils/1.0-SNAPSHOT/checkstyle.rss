@@ -9,7 +9,7 @@
     <copyright>&#169;2010</copyright>
     <item>
       <title>File: 3,
-             Errors: 48,
+             Errors: 54,
              Warnings: 0,
              Infos: 0
       </title>
@@ -27,20 +27,6 @@
             </tr>
           </thead>
           <tbody>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#jinahya.awt.util.ListModel.java">jinahya/awt/util/ListModel.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  28
-                </td>
-              </tr>
                           <tr>
                 <td>
                   <a href="http://maven.apache.org/checkstyle.html#jinahya.awt.util.StringChopper.java">jinahya/awt/util/StringChopper.java</a>
@@ -67,6 +53,20 @@
                 </td>
                 <td>
                   19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.awt.util.IndexedArray.java">jinahya/awt/util/IndexedArray.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  34
                 </td>
               </tr>
                       </tbody>
