@@ -26,8 +26,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -304,6 +302,12 @@ public class ImagePool {
     }
 
 
+    /**
+     * Put an entry.
+     *
+     * @param name entry name
+     * @param image entry value
+     */
     public final synchronized void putImage(final String name,
                                             final Image image) {
 
@@ -348,8 +352,10 @@ public class ImagePool {
 
     /**
      *
+     * @param name the entry name
+     * @return true if given <code>name</code>d entry exists, false otherwise.
      */
-    public final synchronized boolean hasEntry(final String name) {
+    public final synchronized boolean hasImage(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -361,6 +367,32 @@ public class ImagePool {
 
         return map.containsKey(name);
     }    
+
+
+    /**
+     *
+     * @param name entry name
+     * @return true if given named entry exists and removed, false otherwise.
+     */
+    public final synchronized boolean ridImage(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        if (map == null) {
+            throw new IllegalStateException("closed");
+        }
+
+        final Image ridded = map.remove(name);
+
+        if (ridded == null) {
+            return false;
+        }
+
+        ridded.flush();
+        return true;
+   }
 
 
     private final ImageCreator creator;
