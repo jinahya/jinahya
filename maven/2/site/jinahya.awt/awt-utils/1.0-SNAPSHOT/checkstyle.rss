@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 3,
-             Errors: 54,
+      <title>File: 2,
+             Errors: 20,
              Warnings: 0,
              Infos: 0
       </title>
@@ -53,20 +53,6 @@
                 </td>
                 <td>
                   19
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#jinahya.awt.util.IndexedArray.java">jinahya/awt/util/IndexedArray.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  34
                 </td>
               </tr>
                       </tbody>
