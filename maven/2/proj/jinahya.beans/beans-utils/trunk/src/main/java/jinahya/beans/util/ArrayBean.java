@@ -21,9 +21,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -41,10 +39,6 @@ public class ArrayBean<E> {
     public static final String PROPERTY_NAME_ELEMENTS = "elements";
 
 
-    /** default arraylist's capacity. */
-    private static final int DEFAULT_INITIAL_CAPACITY = 10;
-
-
     public static interface ElementFilter<E> {
 
 
@@ -60,25 +54,16 @@ public class ArrayBean<E> {
 
     /**
      *
-     * @param elementType element type
+     * @param elementType
      */
+    @SuppressWarnings("unchecked")
     public ArrayBean(final Class<E> elementType) {
-        this(elementType, new ArrayList<E>(DEFAULT_INITIAL_CAPACITY));
-    }
-
-
-    /**
-     *
-     * @param elementType element type
-     * @param elementList element list
-     */
-    public ArrayBean(final Class<E> elementType,
-                        final List<E> elementList) {
         super();
 
         this.elementType = elementType;
-        this.elements = elementList;
-        index = elements.isEmpty() ? -1 : 0;
+
+        elements = (E[]) Array.newInstance(this.elementType, 0);
+        index = -1;
 
         pcs = new PropertyChangeSupport(this);
     }
@@ -99,9 +84,9 @@ public class ArrayBean<E> {
      */
     public void setIndex(final int newIndex) {
 
-        if (index != -1 && index >= elements.size()) {
+        if (index != -1 && index >= elements.length) {
             throw new ArrayIndexOutOfBoundsException(
-                newIndex + " >= " + elements.size());
+                newIndex + " >= " + elements.length);
         }
 
         final Object oldIndex = index;
@@ -115,11 +100,28 @@ public class ArrayBean<E> {
      * @return
      */
     public E[] getElements() {
-        @SuppressWarnings("unchecked")
-        final E[] array = (E[]) Array.newInstance(elementType, elements.size());
-        return elements.toArray(array);
+        return elements;
     }
 
+
+    /**
+     *
+     * @param index
+     * @return
+     */
+    public E getElementAt(final int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("negative index");
+        }
+
+        if (index >= elements.length) {
+            throw new ArrayIndexOutOfBoundsException(
+                index + " >= " + elements.length);
+        }
+
+        return elements[index];
+    }
 
     /**
      *
@@ -128,32 +130,30 @@ public class ArrayBean<E> {
     public void setElements(final E[] newElements) {
 
         if (newElements == null) {
-            throw new IllegalArgumentException("null elements");
+            throw new IllegalArgumentException("null newElements");
         }
 
-        setElements(Arrays.asList(newElements));
+        setElements(newElements, false);
     }
 
 
-    /**
-     *
-     * @param newElements
-     */
-    public void setElements(final Collection<? extends E> newElements) {
+    public void setElements(final E[] newElements, final boolean indexToLast) {
 
         if (newElements == null) {
-            throw new IllegalArgumentException("null elements");
+            throw new IllegalArgumentException("null newElements");
         }
 
-        final E[] oldValue = getElements();
-        setIndex(-1);
-        elements.clear();
+        final Object oldValue = elements;
 
-        elements.addAll(newElements);
+        elements = newElements;
 
-        setIndex(elements.isEmpty() ? -1 : 0);
+        if (elements.length == 0) {
+            setIndex(-1);
+        } else {
+            setIndex(indexToLast ? elements.length - 1 : 0);
+        }
 
-        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, elements);
     }
 
 
@@ -161,41 +161,60 @@ public class ArrayBean<E> {
      * Copy all alements to given <code>model</code>.
      * Specified <code>model</code> will be cleared first.
      *
-     * @param array model to copy
+     * @param bean model to copy
      * @param filter filter to be used or null.
      */
-    public void copyTo(final ArrayBean<? super E> array,
+    public void copyTo(final ArrayBean<? super E> bean,
                        final ElementFilter<E> filter) {
 
-        final Collection<E> newElements = new ArrayList<E>();
+        if (filter == null || elements.length == 0) {
+            bean.setElements(elements);
+            return;
+        }
+
+        final Collection<E> newElementList = new ArrayList<E>();
 
         for (E element : elements) {
-            if (filter == null || filter.filter(element)) {
-                newElements.add(element);
+            if (filter.filter(element)) {
+                newElementList.add(element);
             }
         }
 
-        array.setElements(newElements);
+        @SuppressWarnings("unchecked")
+        final E[] newElements = (E[]) Array.newInstance(
+            elementType, newElementList.size());
+        newElementList.toArray(newElements);
+
+        bean.setElements(newElements);
     }
 
 
     /**
      *
      * @param <T>
-     * @param array
+     * @param bean
      * @param filter
      */
-    public <T extends E> void copyFrom(final ArrayBean<T> array,
+    public <T extends E> void copyFrom(final ArrayBean<T> bean,
                                        final ElementFilter<T> filter) {
 
+        if (filter == null || elements.length == 0) {
+            setElements(bean.elements);
+            return;
+        }
 
-        final Collection<T> newElements = new ArrayList<T>();
+        final Collection<T> newElementList = new ArrayList<T>();
 
-        for (T element : array.elements) {
-            if (filter == null || filter.filter(element)) {
-                newElements.add(element);
+        for (T element : bean.elements) {
+            if (filter.filter(element)) {
+                newElementList.add(element);
             }
         }
+
+        @SuppressWarnings("unchecked")
+        final E[] newElements = (E[]) Array.newInstance(
+            elementType, newElementList.size());
+        newElementList.toArray(newElements);
 
         setElements(newElements);
     }
@@ -205,17 +224,22 @@ public class ArrayBean<E> {
      *
      * @param roll
      */
-    public void decreaseIndex(final boolean roll) {
+    public boolean decreaseIndex(final boolean roll) {
 
         if (index == -1) {
-            return;
+            return false;
         }
 
         if (index > 0) {
             setIndex(index - 1);
-        } else if (roll) {
-            setIndex(elements.size() - 1);
+        } else {
+            if (!roll) {
+                return false;
+            }
+            setIndex(elements.length - 1);
         }
+
+        return true;
     }
 
 
@@ -223,17 +247,22 @@ public class ArrayBean<E> {
      *
      * @param roll
      */
-    public void increaseIndex(final boolean roll) {
+    public boolean increaseIndex(final boolean roll) {
 
         if (index == -1) {
-            return;
+            return false;
         }
 
-        if (index < elements.size() - 1) {
+        if (index < elements.length - 1) {
             setIndex(index + 1);
-        } else if (roll) {
+        } else {
+            if (!roll) {
+                return false;
+            }
             setIndex(0);
         }
+
+        return true;
     }
 
 
@@ -259,10 +288,10 @@ public class ArrayBean<E> {
     }
 
 
-
     private final Class<E> elementType;
-    private final List<E> elements;
-    private int index = -1;
+
+    private E[] elements;
+    private int index;
 
     private final PropertyChangeSupport pcs;
 }
