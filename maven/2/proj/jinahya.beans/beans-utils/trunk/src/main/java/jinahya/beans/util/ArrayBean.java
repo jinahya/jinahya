@@ -60,9 +60,9 @@ public class ArrayBean<E> {
     public ArrayBean(final Class<E> elementType) {
         super();
 
-        this.elementType = elementType;
+        type = elementType;
 
-        elements = (E[]) Array.newInstance(this.elementType, 0);
+        elements = (E[]) Array.newInstance(type, 0);
         index = -1;
 
         pcs = new PropertyChangeSupport(this);
@@ -84,7 +84,7 @@ public class ArrayBean<E> {
      */
     public void setIndex(final int newIndex) {
 
-        if (index != -1 && index >= elements.length) {
+        if (newIndex != -1 && newIndex >= elements.length) {
             throw new ArrayIndexOutOfBoundsException(
                 newIndex + " >= " + elements.length);
         }
@@ -182,7 +182,7 @@ public class ArrayBean<E> {
 
         @SuppressWarnings("unchecked")
         final E[] newElements = (E[]) Array.newInstance(
-            elementType, newElementList.size());
+            type, newElementList.size());
         newElementList.toArray(newElements);
 
         bean.setElements(newElements);
@@ -213,7 +213,7 @@ public class ArrayBean<E> {
 
         @SuppressWarnings("unchecked")
         final E[] newElements = (E[]) Array.newInstance(
-            elementType, newElementList.size());
+            type, newElementList.size());
         newElementList.toArray(newElements);
 
         setElements(newElements);
@@ -288,7 +288,16 @@ public class ArrayBean<E> {
     }
 
 
-    private final Class<E> elementType;
+    /**
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    public void clear() {
+        setElements((E[]) Array.newInstance(type, 0));
+    }
+
+
+    private final Class<E> type;
 
     private E[] elements;
     private int index;
