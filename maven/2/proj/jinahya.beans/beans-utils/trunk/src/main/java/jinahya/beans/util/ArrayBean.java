@@ -297,6 +297,15 @@ public class ArrayBean<E> {
     }
 
 
+    /**
+     *
+     * @return
+     */
+    public int size() {
+        return elements.length;
+    }
+
+
     private final Class<E> type;
 
     private E[] elements;
