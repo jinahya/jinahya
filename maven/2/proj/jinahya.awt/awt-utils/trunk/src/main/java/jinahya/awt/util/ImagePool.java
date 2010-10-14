@@ -86,7 +86,28 @@ public class ImagePool {
      * @return an instance of image pool.
      */
     public static ImagePool newToolkitImagePool() {
-        return new ImagePool(new ToolkitImageCreator());
+
+        return new ImagePool(new ToolkitImageCreator()) {
+
+            @Override
+            public synchronized void put(final String name, final URL imageurl)
+                throws IOException {
+
+                if (name == null) {
+                    throw new IllegalArgumentException("null name");
+                }
+
+                if (imageurl == null) {
+                    throw new IllegalArgumentException("null imageurl");
+                }
+
+                if (super.map == null) {
+                    throw new IllegalStateException("closed");
+                }
+
+                put(name, ToolkitImageCreator.TOOLKIT.createImage(imageurl));
+            }
+        };
     }
 
 
@@ -151,7 +172,12 @@ public class ImagePool {
     }
 
 
-    public final synchronized void putImages(final ZipFile zipfile)
+    /**
+     *
+     * @param zipfile
+     * @throws IOException
+     */
+    public final synchronized void put(final ZipFile zipfile)
         throws IOException {
 
         if (zipfile == null) {
@@ -181,7 +207,7 @@ public class ImagePool {
                     baos.write(buffer, 0, read);
                 }
                 baos.flush();
-                putImage(entry.getName(), baos.toByteArray());
+                put(entry.getName(), baos.toByteArray());
             } finally {
                 imagestream.close();
             }
@@ -189,7 +215,12 @@ public class ImagePool {
     }
 
 
-    public final synchronized void putImages(final ZipInputStream zipstream)
+    /**
+     *
+     * @param zipstream
+     * @throws IOException
+     */
+    public final synchronized void put(final ZipInputStream zipstream)
         throws IOException {
 
         if (zipstream == null) {
@@ -201,7 +232,7 @@ public class ImagePool {
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[1024];
+        final byte[] buffer = new byte[8192];
         int read = -1;
 
         for (ZipEntry entry = null; (entry = zipstream.getNextEntry()) != null;
@@ -221,13 +252,18 @@ public class ImagePool {
             }
             baos.toByteArray();
 
-            putImage(entry.getName(), baos.toByteArray());
+            put(entry.getName(), baos.toByteArray());
         }
     }
 
 
-    public final synchronized void putImage(final String name,
-                                            final URL imageurl)
+    /**
+     *
+     * @param name
+     * @param imageurl
+     * @throws IOException
+     */
+    public synchronized void put(final String name, final URL imageurl)
         throws IOException {
 
         if (name == null) {
@@ -242,13 +278,18 @@ public class ImagePool {
             throw new IllegalStateException("closed");
         }
 
-        putImage(name, imageurl.openStream());
+        put(name, imageurl.openStream());
     }
 
 
-
-    public final synchronized void putImage(final String name,
-                                            final InputStream imagestream)
+    /**
+     *
+     * @param name
+     * @param imagestream
+     * @throws IOException
+     */
+    public final synchronized void put(final String name,
+                                       final InputStream imagestream)
         throws IOException {
 
         if (name == null) {
@@ -264,13 +305,13 @@ public class ImagePool {
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[1024];
+        final byte[] buffer = new byte[8192];
         for (int read = -1; (read = imagestream.read(buffer)) != -1;) {
             baos.write(buffer, 0, read);
         }
         baos.flush();
 
-        putImage(name, baos.toByteArray());
+        put(name, baos.toByteArray());
     }
 
 
@@ -280,8 +321,8 @@ public class ImagePool {
      * @param imagedata
      * @throws WidgetException
      */
-    public final synchronized void putImage(final String name,
-                                            final byte[] imagedata) {
+    public final synchronized void put(final String name,
+                                       final byte[] imagedata) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -297,7 +338,7 @@ public class ImagePool {
 
         final Image image = creator.createImage(imagedata);
         if (image != null) {
-            putImage(name, image);
+            put(name, image);
         }
     }
 
@@ -308,8 +349,7 @@ public class ImagePool {
      * @param name entry name
      * @param image entry value
      */
-    public final synchronized void putImage(final String name,
-                                            final Image image) {
+    public final synchronized void put(final String name, final Image image) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -336,7 +376,7 @@ public class ImagePool {
      * @param name image name
      * @return the image mapped to given <code>name</code> or null.
      */
-    public final synchronized Image getImage(final String name) {
+    public final synchronized Image get(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -355,7 +395,7 @@ public class ImagePool {
      * @param name the entry name
      * @return true if given <code>name</code>d entry exists, false otherwise.
      */
-    public final synchronized boolean hasImage(final String name) {
+    public final synchronized boolean has(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -374,7 +414,7 @@ public class ImagePool {
      * @param name entry name
      * @return true if given named entry exists and removed, false otherwise.
      */
-    public final synchronized boolean ridImage(final String name) {
+    public final synchronized boolean rid(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -392,7 +432,18 @@ public class ImagePool {
 
         ridded.flush();
         return true;
-   }
+    }
+
+
+    public String[] getNames() {
+
+        if (map == null) {
+            throw new IllegalStateException("closed");
+        }
+
+        final String[] names = new String[map.size()];
+        return map.keySet().toArray(names);
+    }
 
 
     private final ImageCreator creator;
