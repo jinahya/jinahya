@@ -1,3 +1,3 @@
 #!/bin/sh
-mvn -Pjsr14 clean install deploy;mvn clean install deploy site-deploy
+mvn -P jsr14 clean install deploy;mvn clean install deploy site-deploy
 
