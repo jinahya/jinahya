@@ -100,7 +100,7 @@ public class ArrayBean<E> {
         }
 
         if ((elements.length == 0 && index != -1)
-            || (index < 0 || index >= elements.length)) {
+            || (index < 0 && index >= elements.length)) {
 
             throw new IllegalArgumentException(
                 "illegal index(" + index + ") for elements.length("
