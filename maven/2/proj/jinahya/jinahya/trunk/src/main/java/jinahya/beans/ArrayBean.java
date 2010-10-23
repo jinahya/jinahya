@@ -27,6 +27,7 @@ import java.util.Collection;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <E>
  */
 public class ArrayBean<E> {
 

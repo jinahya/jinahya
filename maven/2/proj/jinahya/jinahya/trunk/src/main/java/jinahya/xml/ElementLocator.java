@@ -72,9 +72,9 @@ public interface ElementLocator<T> {
 
     /**
      *
-     * @param namespace
-     * @param name
-     * @param index
+     * @param namespace child element namespace
+     * @param name child element's name
+     * @param index child element index
      * @return self
      */
     ElementLocator<T> childNS(String namespace, String name, int index);
@@ -141,31 +141,34 @@ public interface ElementLocator<T> {
     /**
      * Set attribute.
      *
-     * @param namespace attribute namespace
-     * @param name attribute name
-     * @param value attribute value
+     * @param namespace attribute's namespace
+     * @param name attribute's name
+     * @param value attribute's value
      * @return self
      */
     ElementLocator<T> attributeNS(String namespace, String name, String value);
 
 
     /**
+     * Return the current element's namespace.
      *
-     * @return
+     * @return current element's namespace
      */
     String namespace();
 
 
     /**
+     * Returns the current element's name.
      *
-     * @return
+     * @return current element's name
      */
     String name();
 
 
     /**
+     * Returns the current element.
      *
-     * @return
+     * @return current element
      */
     T current();
 }
