@@ -53,7 +53,7 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
     @Override
     public KDOMElementLocator root() {
-        for (int i = elements.size() - 1; i > 1; i--) {
+        for (int i = elements.size() - 1; i > 0; i--) {
             elements.removeElementAt(i);
         }
         return this;
@@ -100,7 +100,7 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public KDOMElementLocator child(final String name, int index) {
+    public KDOMElementLocator child(final String name, final int index) {
         return childNS(XmlPullParser.NO_NAMESPACE, name, index);
     }
 

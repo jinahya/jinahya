@@ -435,7 +435,28 @@ public class ImagePool {
     }
 
 
+    /**
+     *
+     * @return
+     * @deprecated use {@link #names()} instead.
+     */
     public String[] getNames() {
+
+        if (map == null) {
+            throw new IllegalStateException("closed");
+        }
+
+        final String[] names = new String[map.size()];
+        return map.keySet().toArray(names);
+    }
+
+
+    /**
+     * Returns all image names.
+     *
+     * @return image names.
+     */
+    public String[] names() {
 
         if (map == null) {
             throw new IllegalStateException("closed");
