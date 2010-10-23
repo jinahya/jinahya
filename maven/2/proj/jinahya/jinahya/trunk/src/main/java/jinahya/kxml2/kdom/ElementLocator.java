@@ -31,6 +31,7 @@ import org.xmlpull.v1.XmlPullParser;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @deprecated use {@link KDOMElementLocator} instead
  */
 public class ElementLocator {
 
