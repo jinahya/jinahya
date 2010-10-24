@@ -20,6 +20,8 @@ package jinahya.awt;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -90,7 +92,7 @@ public class ImagePool {
         return new ImagePool(new ToolkitImageCreator()) {
 
             @Override
-            public synchronized void put(final String name, final URL imageurl)
+            public ImagePool put(final String name, final URL imageurl)
                 throws IOException {
 
                 if (name == null) {
@@ -105,7 +107,8 @@ public class ImagePool {
                     throw new IllegalStateException("closed");
                 }
 
-                put(name, ToolkitImageCreator.TOOLKIT.createImage(imageurl));
+                return put(name, ToolkitImageCreator.TOOLKIT.
+                        createImage(imageurl));
             }
         };
     }
@@ -114,15 +117,17 @@ public class ImagePool {
     /**
      * Creates a new instace.
      *
-     * @param imagecreator image creator
+     * @param creator image creator
      */
-    public ImagePool(final ImageCreator imagecreator) {
+    public ImagePool(final ImageCreator creator) {
         super();
 
-        creator = imagecreator;
         if (creator == null) {
             throw new IllegalArgumentException("null creator");
         }
+
+        this.creator = creator;
+
     }
 
 
@@ -131,13 +136,11 @@ public class ImagePool {
      *
      * @return self
      */
-    public final synchronized ImagePool open() {
+    public ImagePool open() {
 
-        if (map != null) {
-            throw new IllegalStateException("already open");
+        if (map == null) {
+            map = new HashMap<String, Image>();
         }
-
-        map = new HashMap<String, Image>();
 
         return this;
     }
@@ -148,7 +151,7 @@ public class ImagePool {
      *
      * @return self
      */
-    public final synchronized ImagePool reopen() {
+    public ImagePool reopen() {
         return close().open();
     }
 
@@ -158,7 +161,7 @@ public class ImagePool {
      *
      * @return self
      */
-    public final synchronized ImagePool close() {
+    public ImagePool close() {
 
         if (map != null) {
             for (Image image : map.values()) {
@@ -174,11 +177,30 @@ public class ImagePool {
 
     /**
      *
-     * @param zipfile
+     * @param name
+     * @param file
+     * @return self
      * @throws IOException
      */
-    public final synchronized void put(final ZipFile zipfile)
-        throws IOException {
+    public ImagePool put(final String name, final File file)
+            throws IOException {
+
+        final InputStream imagestream = new FileInputStream(file);
+        try {
+            return put(name, imagestream);
+        } finally {
+            imagestream.close();
+        }
+    }
+
+
+    /**
+     *
+     * @param zipfile
+     * @return self
+     * @throws IOException
+     */
+    public ImagePool put(final ZipFile zipfile) throws IOException {
 
         if (zipfile == null) {
             throw new IllegalArgumentException("null zipfile");
@@ -212,16 +234,18 @@ public class ImagePool {
                 imagestream.close();
             }
         }
+
+        return this;
     }
 
 
     /**
      *
      * @param zipstream
+     * @return self
      * @throws IOException
      */
-    public final synchronized void put(final ZipInputStream zipstream)
-        throws IOException {
+    public ImagePool put(final ZipInputStream zipstream) throws IOException {
 
         if (zipstream == null) {
             throw new IllegalArgumentException("null zipstream");
@@ -254,6 +278,8 @@ public class ImagePool {
 
             put(entry.getName(), baos.toByteArray());
         }
+
+        return this;
     }
 
 
@@ -261,9 +287,10 @@ public class ImagePool {
      *
      * @param name
      * @param imageurl
+     * @self
      * @throws IOException
      */
-    public synchronized void put(final String name, final URL imageurl)
+    public ImagePool put(final String name, final URL imageurl)
         throws IOException {
 
         if (name == null) {
@@ -278,7 +305,7 @@ public class ImagePool {
             throw new IllegalStateException("closed");
         }
 
-        put(name, imageurl.openStream());
+        return put(name, imageurl.openStream());
     }
 
 
@@ -286,10 +313,10 @@ public class ImagePool {
      *
      * @param name
      * @param imagestream
+     * @return self
      * @throws IOException
      */
-    public final synchronized void put(final String name,
-                                       final InputStream imagestream)
+    public ImagePool put(final String name, final InputStream imagestream)
         throws IOException {
 
         if (name == null) {
@@ -311,7 +338,7 @@ public class ImagePool {
         }
         baos.flush();
 
-        put(name, baos.toByteArray());
+        return put(name, baos.toByteArray());
     }
 
 
@@ -319,10 +346,10 @@ public class ImagePool {
      *
      * @param name
      * @param imagedata
+     * @return self
      * @throws WidgetException
      */
-    public final synchronized void put(final String name,
-                                       final byte[] imagedata) {
+    public ImagePool put(final String name, final byte[] imagedata) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -340,6 +367,8 @@ public class ImagePool {
         if (image != null) {
             put(name, image);
         }
+
+        return this;
     }
 
 
@@ -348,8 +377,9 @@ public class ImagePool {
      *
      * @param name entry name
      * @param image entry value
+     * @return self
      */
-    public final synchronized void put(final String name, final Image image) {
+    public ImagePool put(final String name, final Image image) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -367,6 +397,8 @@ public class ImagePool {
         if (previous != null) {
             previous.flush();
         }
+
+        return this;
     }
 
 
@@ -376,7 +408,7 @@ public class ImagePool {
      * @param name image name
      * @return the image mapped to given <code>name</code> or null.
      */
-    public final synchronized Image get(final String name) {
+    public Image get(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -395,7 +427,7 @@ public class ImagePool {
      * @param name the entry name
      * @return true if given <code>name</code>d entry exists, false otherwise.
      */
-    public final synchronized boolean has(final String name) {
+    public boolean has(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -414,7 +446,7 @@ public class ImagePool {
      * @param name entry name
      * @return true if given named entry exists and removed, false otherwise.
      */
-    public final synchronized boolean rid(final String name) {
+    public boolean rid(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
