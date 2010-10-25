@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 6,
-             Errors: 159,
+      <title>File: 9,
+             Errors: 218,
              Warnings: 0,
              Infos: 0
       </title>
@@ -27,6 +27,34 @@
             </tr>
           </thead>
           <tbody>
+                          <tr>
+                <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.xml.ElementLocator.java">jinahya/xml/ElementLocator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.w3c.dom.DOMElementLocator.java">jinahya/w3c/dom/DOMElementLocator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
                           <tr>
                 <td>
                   <a href="http://maven.apache.org/checkstyle.html#jinahya.xmlpull.v1.XmlPullParsable.java">jinahya/xmlpull/v1/XmlPullParsable.java</a>
@@ -94,7 +122,21 @@
                   0
                 </td>
                 <td>
-                  28
+                  46
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://maven.apache.org/checkstyle.html#jinahya.kxml2.kdom.KDOMElementLocator.java">jinahya/kxml2/kdom/KDOMElementLocator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
                 </td>
               </tr>
                           <tr>
@@ -108,7 +150,7 @@
                   0
                 </td>
                 <td>
-                  52
+                  51
                 </td>
               </tr>
                       </tbody>
