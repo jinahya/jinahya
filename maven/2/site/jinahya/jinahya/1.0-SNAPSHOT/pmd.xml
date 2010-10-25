@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2010-10-23T17:49:50.053">
+<pmd version="4.2.5" timestamp="2010-10-25T11:38:22.874">
+<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\kxml2\kdom\KDOMElementLocator.java">
+<violation beginline="120" endline="123" begincolumn="21" endcolumn="21" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="jinahya.kxml2.kdom" class="KDOMElementLocator" method="childNS" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
 </pmd>
