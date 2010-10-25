@@ -17,7 +17,9 @@
 package jinahya.awt;
 
 
+import java.awt.Component;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,12 +34,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import jinahya.util.Closeable;
+import jinahya.util.CloseableSupport;
+
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ImagePool {
+public class ImagePool implements Closeable<ImagePool> {
 
 
     /**
@@ -128,6 +133,8 @@ public class ImagePool {
 
         this.creator = creator;
 
+        support = new CloseableSupport<ImagePool>(this);
+        map = new HashMap<String, Image>();
     }
 
 
@@ -136,13 +143,13 @@ public class ImagePool {
      *
      * @return self
      */
+    @Override
     public ImagePool open() {
 
-        if (map == null) {
-            map = new HashMap<String, Image>();
+        synchronized (support) {
+            // do anyting here
+            return support.open();
         }
-
-        return this;
     }
 
 
@@ -152,7 +159,10 @@ public class ImagePool {
      * @return self
      */
     public ImagePool reopen() {
-        return close().open();
+
+        synchronized (support) {
+            return close().open();
+        }
     }
 
 
@@ -161,17 +171,26 @@ public class ImagePool {
      *
      * @return self
      */
+    @Override
     public ImagePool close() {
 
-        if (map != null) {
+        synchronized (support) {
             for (Image image : map.values()) {
                 image.flush();
             }
             map.clear();
-            map = null;
-        }
 
-        return this;
+            return support.close();
+        }
+    }
+
+
+    @Override
+    public boolean isClosed() {
+
+        synchronized (support) {
+            return support.isClosed();
+        }
     }
 
 
@@ -183,13 +202,30 @@ public class ImagePool {
      * @throws IOException
      */
     public ImagePool put(final String name, final File file)
-            throws IOException {
+        throws IOException {
 
-        final InputStream imagestream = new FileInputStream(file);
-        try {
-            return put(name, imagestream);
-        } finally {
-            imagestream.close();
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        if (file == null) {
+            throw new IllegalArgumentException("null file");
+        }
+
+        if (!file.isFile()) {
+            throw new IllegalArgumentException("file not exist");
+        }
+
+        synchronized (support) {
+
+            support.check();
+
+            final InputStream imagestream = new FileInputStream(file);
+            try {
+                return put(name, imagestream);
+            } finally {
+                imagestream.close();
+            }
         }
     }
 
@@ -206,36 +242,30 @@ public class ImagePool {
             throw new IllegalArgumentException("null zipfile");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[1024];
-        int read = -1;
+            support.check();
 
-        final Enumeration<? extends ZipEntry> entries = zipfile.entries();
-        while (entries.hasMoreElements()) {
+            final Enumeration<? extends ZipEntry> entries = zipfile.entries();
+            while (entries.hasMoreElements()) {
 
-            ZipEntry entry = entries.nextElement();
-            if (entry.isDirectory()) {
-                continue;
-            }
+                final ZipEntry entry = entries.nextElement();
 
-            final InputStream imagestream = zipfile.getInputStream(entry);
-            try {
-                baos.reset();
-                for (read = -1; (read = imagestream.read(buffer)) != -1;) {
-                    baos.write(buffer, 0, read);
+                if (entry.isDirectory()
+                    || entry.getName().equals("META-INF/MANIFEST.MF")) {
+                    continue;
                 }
-                baos.flush();
-                put(entry.getName(), baos.toByteArray());
-            } finally {
-                imagestream.close();
-            }
-        }
 
-        return this;
+                final InputStream imagestream = zipfile.getInputStream(entry);
+                try {
+                    put(entry.getName(), imagestream);
+                } finally {
+                    imagestream.close();
+                }
+            }
+
+            return this;
+        }
     }
 
 
@@ -251,35 +281,24 @@ public class ImagePool {
             throw new IllegalArgumentException("null zipstream");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
+        synchronized (support) {
+
+            support.check();
+
+            for (ZipEntry entry = null;
+                 (entry = zipstream.getNextEntry()) != null;
+                 zipstream.closeEntry()) {
+
+                if (entry.isDirectory()
+                    || entry.getName().equals("META-INF/MANIFEST.MF")) {
+                    continue;
+                }
+
+                put(entry.getName(), zipstream);
+            }
+
+            return this;
         }
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[8192];
-        int read = -1;
-
-        for (ZipEntry entry = null; (entry = zipstream.getNextEntry()) != null;
-             zipstream.closeEntry()) {
-
-            if (entry.isDirectory()) {
-                continue;
-            }
-
-            if (entry.getName().equals("META-INF/MANIFEST.MF")) {
-                continue;
-            }
-
-            baos.reset();
-            for (read= -1; (read = zipstream.read(buffer)) != -1;) {
-                baos.write(buffer, 0, read);
-            }
-            baos.toByteArray();
-
-            put(entry.getName(), baos.toByteArray());
-        }
-
-        return this;
     }
 
 
@@ -301,11 +320,12 @@ public class ImagePool {
             throw new IllegalArgumentException("null imageurl");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        return put(name, imageurl.openStream());
+            support.check();
+
+            return put(name, imageurl.openStream());
+        }
     }
 
 
@@ -327,18 +347,19 @@ public class ImagePool {
             throw new IllegalArgumentException("null imagestream");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[8192];
-        for (int read = -1; (read = imagestream.read(buffer)) != -1;) {
-            baos.write(buffer, 0, read);
-        }
-        baos.flush();
+            support.check();
 
-        return put(name, baos.toByteArray());
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final byte[] buffer = new byte[8192];
+            for (int read = -1; (read = imagestream.read(buffer)) != -1;) {
+                baos.write(buffer, 0, read);
+            }
+            baos.flush();
+
+            return put(name, baos.toByteArray());
+        }
     }
 
 
@@ -359,16 +380,17 @@ public class ImagePool {
             throw new IllegalArgumentException("null imagedata");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        final Image image = creator.createImage(imagedata);
-        if (image != null) {
-            put(name, image);
-        }
+            support.check();
 
-        return this;
+            final Image image = creator.createImage(imagedata);
+            if (image != null) {
+                put(name, image);
+            }
+
+            return this;
+        }
     }
 
 
@@ -389,16 +411,17 @@ public class ImagePool {
             throw new IllegalArgumentException("null image");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        final Image previous = map.put(name, image);
-        if (previous != null) {
-            previous.flush();
-        }
+            support.check();
 
-        return this;
+            final Image previous = map.put(name, image);
+            if (previous != null) {
+                previous.flush();
+            }
+
+            return this;
+        }
     }
 
 
@@ -414,11 +437,12 @@ public class ImagePool {
             throw new IllegalArgumentException("null name");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        return map.get(name);
+            support.check();
+
+            return map.get(name);
+        }
     }
 
 
@@ -433,15 +457,17 @@ public class ImagePool {
             throw new IllegalArgumentException("null name");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
 
-        return map.containsKey(name);
-    }    
+            support.check();
+
+            return map.containsKey(name);
+        }
+    }
 
 
     /**
+     * Remove image mapped to given <code>name</code>.
      *
      * @param name entry name
      * @return true if given named entry exists and removed, false otherwise.
@@ -452,18 +478,18 @@ public class ImagePool {
             throw new IllegalArgumentException("null name");
         }
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
+        synchronized (support) {
+
+            support.check();
+
+            if (!map.containsKey(name)) {
+                return false;
+            }
+
+            map.remove(name).flush();
+
+            return true;
         }
-
-        final Image ridded = map.remove(name);
-
-        if (ridded == null) {
-            return false;
-        }
-
-        ridded.flush();
-        return true;
     }
 
 
@@ -474,12 +500,7 @@ public class ImagePool {
      */
     public String[] getNames() {
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
-
-        final String[] names = new String[map.size()];
-        return map.keySet().toArray(names);
+        return names();
     }
 
 
@@ -490,16 +511,68 @@ public class ImagePool {
      */
     public String[] names() {
 
-        if (map == null) {
-            throw new IllegalStateException("closed");
-        }
+        synchronized (support) {
+            support.check();
 
-        final String[] names = new String[map.size()];
-        return map.keySet().toArray(names);
+            final String[] names = new String[map.size()];
+            return map.keySet().toArray(names);
+        }
+    }
+
+
+    /**
+     *
+     * @param tracker
+     * @param id
+     * @return self
+     */
+    public ImagePool load(final MediaTracker tracker, final int id)
+        throws InterruptedException {
+
+        synchronized (support) {
+
+            support.check();
+
+            for (String name : names()) {
+                tracker.addImage(map.get(name), id);
+            }
+
+            try {
+                tracker.waitForID(id);
+            } finally {
+                for (String name : names()) {
+                    tracker.removeImage(map.get(name), id);
+                }
+            }
+
+            return this;
+        }
+    }
+
+
+    /**
+     *
+     * @param component
+     * @return self
+     * @throws InterruptedException
+     */
+    public ImagePool load(final Component component)
+        throws InterruptedException {
+
+        synchronized (support) {
+
+            support.check();
+
+            if (component == null) {
+                throw new IllegalArgumentException("null component");
+            }
+
+            return load(new MediaTracker(component), 0);
+        }
     }
 
 
     private final ImageCreator creator;
-
-    private volatile Map<String, Image> map = null;
+    private final CloseableSupport<ImagePool> support;
+    private final Map<String, Image> map;
 }
