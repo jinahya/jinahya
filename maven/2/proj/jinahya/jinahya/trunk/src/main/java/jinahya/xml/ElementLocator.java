@@ -20,9 +20,9 @@ package jinahya.xml;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <T>
+ * @param <E>
  */
-public interface ElementLocator<T> {
+public interface ElementLocator<E> {
 
 
     /**
@@ -49,7 +49,7 @@ public interface ElementLocator<T> {
      *
      * @return self
      */
-    ElementLocator<T> root();
+    ElementLocator<E> root();
 
 
     /**
@@ -57,7 +57,7 @@ public interface ElementLocator<T> {
      *
      * @return self
      */
-    ElementLocator<T> parent();
+    ElementLocator<E> parent();
 
 
     /**
@@ -67,7 +67,7 @@ public interface ElementLocator<T> {
      * @param index child index
      * @return self
      */
-    ElementLocator<T> child(String name, int index);
+    ElementLocator<E> child(String name, int index);
 
 
     /**
@@ -77,17 +77,16 @@ public interface ElementLocator<T> {
      * @param index child element index
      * @return self
      */
-    ElementLocator<T> childNS(String namespace, String name, int index);
+    ElementLocator<E> childNS(String namespace, String name, int index);
 
 
     /**
      * Append new child with value.
      *
      * @param name child element name
-     * @param value child element text value
      * @return self
      */
-    ElementLocator<T> child(String name, String value);
+    ElementLocator<E> child(String name);
 
 
     /**
@@ -95,18 +94,42 @@ public interface ElementLocator<T> {
      *
      * @param namespace child element namespace
      * @param name child element name
-     * @param value child element text value
+     * @param value child element text value maybe null
      * @return self
      */
-    ElementLocator<T> childNS(String namespace, String name, String value);
+    ElementLocator<E> childNS(String namespace, String name);
 
 
     /**
      * Returns the text value.
      *
-     * @return text value
+     * @return text content or null
      */
     String text();
+
+
+    /**
+     *
+     * @param parent
+     * @return text content or null
+     */
+    String text(boolean parent);
+
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    ElementLocator<E> text(String value);
+
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    ElementLocator<E> text(String value, boolean parent);
 
 
     /**
@@ -135,7 +158,7 @@ public interface ElementLocator<T> {
      * @param value attribute value
      * @return self
      */
-    ElementLocator<T> attribute(String name, String value);
+    ElementLocator<E> attribute(String name, String value);
 
 
     /**
@@ -146,7 +169,7 @@ public interface ElementLocator<T> {
      * @param value attribute's value
      * @return self
      */
-    ElementLocator<T> attributeNS(String namespace, String name, String value);
+    ElementLocator<E> attributeNS(String namespace, String name, String value);
 
 
     /**
@@ -170,5 +193,5 @@ public interface ElementLocator<T> {
      *
      * @return current element
      */
-    T current();
+    E current();
 }

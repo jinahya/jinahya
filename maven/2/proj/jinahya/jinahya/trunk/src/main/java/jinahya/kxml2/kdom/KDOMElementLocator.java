@@ -109,12 +109,15 @@ public class KDOMElementLocator implements ElementLocator<Element> {
     public KDOMElementLocator childNS(final String namespace, final String name,
                                       final int index) {
 
+        System.out.println("childNS(" + namespace + ", " + name + "," + index + ")");
+
         int count = 0;
 
         final int childCount = current().getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT == current().getType(i)) {
                 final Element child = current().getElement(i);
+                System.out.println("{" + child.getNamespace() + "}" + child.getName());
                 if (child.getNamespace().equals(namespace)
                     && child.getName().equals(name)) {
                     if (count++ == index) {
@@ -130,19 +133,18 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public KDOMElementLocator child(final String name, final String value) {
-        return childNS(XmlPullParser.NO_NAMESPACE, name, value);
+    public KDOMElementLocator child(final String name) {
+        return childNS(XmlPullParser.NO_NAMESPACE, name);
     }
 
 
     @Override
-    public KDOMElementLocator childNS(final String namespace, final String name,
-                                      final String value) {
+    public KDOMElementLocator childNS(final String namespace,
+                                      final String name) {
 
         final Element child = current().createElement(namespace, name);
         current().addChild(Node.ELEMENT, child);
         elements.addElement(child);
-        current().addChild(Node.TEXT, value);
         return this;
     }
 
@@ -182,6 +184,12 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
     @Override
     public String text() {
+        return text(false);
+    }
+
+
+    @Override
+    public String text(final boolean parent) {
 
         final int childCount = current().getChildCount();
         if (childCount == 0) {
@@ -200,11 +208,43 @@ public class KDOMElementLocator implements ElementLocator<Element> {
             }
         }
 
+        if (parent) {
+            parent();
+        }
+
         if (buffer == null) {
             return null;
         }
 
         return buffer.toString();
+    }
+
+
+    @Override
+    public KDOMElementLocator text(final String value) {
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return text(value, false);
+    }
+
+
+    @Override
+    public KDOMElementLocator text(final String value, final boolean parent) {
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        current().addChild(Node.TEXT, value);
+
+        if (parent) {
+            return parent();
+        }
+
+        return this;
     }
 
 

@@ -21,11 +21,12 @@ import java.util.LinkedList;
 import javax.xml.XMLConstants;
 
 import jinahya.xml.ElementLocator;
-import org.w3c.dom.Document;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 
 /**
@@ -35,6 +36,11 @@ import org.w3c.dom.NodeList;
 public class DOMElementLocator implements ElementLocator<Element> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param root root element
+     */
     public DOMElementLocator(final Element root) {
         super();
 
@@ -115,18 +121,18 @@ public class DOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public DOMElementLocator child(final String name, final String value) {
-        return childNS(XMLConstants.NULL_NS_URI, name, value);
+    public DOMElementLocator child(final String name) {
+        return childNS(XMLConstants.NULL_NS_URI, name);
     }
 
 
     @Override
-    public DOMElementLocator childNS(final String namespace, final String name,
-                                     final String value) {
+    public DOMElementLocator childNS(final String namespace,
+                                     final String name) {
+
 
         final Element child = document.createElementNS(namespace, name);
         elements.add((Element) current().appendChild(child));
-        current().appendChild(document.createTextNode(value));
 
         return this;
     }
@@ -167,7 +173,46 @@ public class DOMElementLocator implements ElementLocator<Element> {
 
     @Override
     public String text() {
-        return current().getTextContent();
+        return text(false);
+    }
+
+
+    @Override
+    public String text(final boolean parent) {
+        final String text = current().getTextContent();
+        if (parent) {
+            parent();
+        }
+        return text;
+    }
+
+
+    @Override
+    public DOMElementLocator text(final String value) {
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return text(value, false);
+    }
+
+
+    @Override
+    public DOMElementLocator text(final String value, final boolean parent) {
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        final Text text = document.createTextNode(value);
+        current().appendChild(text);
+
+        if (parent) {
+            return parent();
+        }
+
+        return this;
     }
 
 
