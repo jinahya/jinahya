@@ -2,11 +2,10 @@
 <metadata>
   <groupId>jinahya</groupId>
   <artifactId>jinahya</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <versioning>
     <versions>
       <version>1.0-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20101025052953</lastUpdated>
+    <lastUpdated>20101025055229</lastUpdated>
   </versioning>
 </metadata>
