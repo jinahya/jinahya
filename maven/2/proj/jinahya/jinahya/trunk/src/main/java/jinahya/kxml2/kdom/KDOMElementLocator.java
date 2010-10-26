@@ -109,15 +109,12 @@ public class KDOMElementLocator implements ElementLocator<Element> {
     public KDOMElementLocator childNS(final String namespace, final String name,
                                       final int index) {
 
-        System.out.println("childNS(" + namespace + ", " + name + "," + index + ")");
-
         int count = 0;
 
         final int childCount = current().getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT == current().getType(i)) {
                 final Element child = current().getElement(i);
-                System.out.println("{" + child.getNamespace() + "}" + child.getName());
                 if (child.getNamespace().equals(namespace)
                     && child.getName().equals(name)) {
                     if (count++ == index) {

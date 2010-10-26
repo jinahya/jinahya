@@ -259,7 +259,6 @@
   <distributionManagement>
     <repository>
       <id>googlecode</id>
-      <uniqueVersion>false</uniqueVersion>
       <url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
     <site>
