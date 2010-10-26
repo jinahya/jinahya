@@ -94,7 +94,6 @@ public interface ElementLocator<E> {
      *
      * @param namespace child element namespace
      * @param name child element name
-     * @param value child element text value maybe null
      * @return self
      */
     ElementLocator<E> childNS(String namespace, String name);
