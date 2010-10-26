@@ -38,11 +38,12 @@ public final class StringChopper {
      * @param string string to be calculated.
      * @param metrics font metrics
      * @param width target width
+     * @param max the maximum number of offsets, 0 for unlimited
      * @return an list of offsets
      */
     public static List<Integer> offsets(final String string,
                                         final FontMetrics metrics,
-                                        final int width) {
+                                        final int width, final int max) {
 
         if (string == null) {
             throw new IllegalArgumentException("null string");
@@ -57,7 +58,11 @@ public final class StringChopper {
                 "illegal width: " + width + " <= 0");
         }
 
-        return offsets(string, metrics, width, new ArrayList<Integer>());
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
+        }
+
+        return offsets(string, metrics, width, new ArrayList<Integer>(), max);
     }
 
 
@@ -68,12 +73,14 @@ public final class StringChopper {
      * @param metrics font metrics
      * @param width target width
      * @param offsets list to which offsets are added
+     * @param max the maximum number of offsets, 0 for unlimited
      * @return given <code>offset</code>
      */
     public static List<Integer> offsets(final String string,
                                         final FontMetrics metrics,
                                         final int width,
-                                        final List<Integer> offsets) {
+                                        final List<Integer> offsets,
+                                        final int max) {
 
         if (string == null) {
             throw new IllegalArgumentException("null string");
@@ -90,6 +97,10 @@ public final class StringChopper {
 
         if (offsets == null) {
             throw new IllegalArgumentException("null offsets");
+        }
+
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
         }
 
         offsets.add(0);
@@ -148,6 +159,9 @@ public final class StringChopper {
                         "illegal width: " + width + " is too small");
                 }
                 offsets.add(i);
+                if (max != 0 && offsets.size() == max) {
+                    break;
+                }
                 sum = 0;
             }
         }
@@ -163,11 +177,12 @@ public final class StringChopper {
      * @param string string to be chopped
      * @param metrics metrics
      * @param width width
+     * @param max the maximum number of chopped strings, 0 for unlimited
      * @return a list of chopped strings
      */
     public static List<String> chop(final String string,
                                     final FontMetrics metrics,
-                                    final int width) {
+                                    final int width, final int max) {
 
         if (string == null) {
             throw new IllegalArgumentException("null string");
@@ -182,7 +197,11 @@ public final class StringChopper {
                 "illegal width: " + width + " <= 0");
         }
 
-        return chop(string, metrics, width, new ArrayList<String>());
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
+        }
+
+        return chop(string, metrics, width, new ArrayList<String>(), max);
     }
 
 
@@ -192,18 +211,17 @@ public final class StringChopper {
      * @param string string to be chopped
      * @param metrics the font metrics
      * @param width target width
+     * @param max the maximum number of chopped strings, 0 for unlimited
      * @param chopped the list to which chopped strings are added
      * @return given <code>chopped</code>
      */
     public static List<String> chop(final String string,
                                     final FontMetrics metrics, final int width,
-                                    final List<String> chopped) {
+                                    final List<String> chopped, final int max) {
 
         if (string == null) {
             throw new IllegalArgumentException("null string");
         }
-
-
 
         if (metrics == null) {
             throw new IllegalArgumentException("null metrics");
@@ -218,7 +236,11 @@ public final class StringChopper {
             throw new IllegalArgumentException("null chopped");
         }
 
-        final List<Integer> offsets = offsets(string, metrics, width);
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
+        }
+
+        final List<Integer> offsets = offsets(string, metrics, width, max);
         for (int i = 0; i < offsets.size() - 1; i++) {
             chopped.add(string.substring(offsets.get(i), offsets.get(i + 1)));
         }
@@ -233,11 +255,13 @@ public final class StringChopper {
      * @param reader reader
      * @param metrics metrics
      * @param width width
+     * @param max the maximum number of chopped strings, 0 for unlimited
      * @return a list of chopped strings
      * @throws IOException if an I/O error occurs
      */
     public static List<String> chop(final BufferedReader reader,
-                                    final FontMetrics metrics, final int width)
+                                    final FontMetrics metrics, final int width,
+                                    final int max)
         throws IOException {
 
         if (reader == null) {
@@ -253,7 +277,11 @@ public final class StringChopper {
                 "illegal width: " + width + " <= 0");
         }
 
-        return chop(reader, metrics, width, new ArrayList<String>());
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
+        }
+
+        return chop(reader, metrics, width, new ArrayList<String>(), max);
     }
 
 
@@ -263,12 +291,13 @@ public final class StringChopper {
      * @param metrics metrics
      * @param width width
      * @param chopped list for chopped strings
+     * @param max maximum number of chopped strings, 0 for unlimited
      * @return given <code>chopped</code>
      * @throws IOException if an I/O error occurs
      */
     public static List<String> chop(final BufferedReader reader,
                                     final FontMetrics metrics, final int width,
-                                    final List<String> chopped)
+                                    final List<String> chopped, final int max)
         throws IOException {
 
         if (reader == null) {
@@ -288,9 +317,22 @@ public final class StringChopper {
                 "illegal width: " + width + " <= 0");
         }
 
+        if (max < 0) {
+            throw new IllegalArgumentException("negative max");
+        }
+
         String string = null;
         while ((string = reader.readLine()) != null) {
-            chop(string, metrics, width, chopped);
+            chop(string, metrics, width, chopped, max);
+            if (max != 0 && chopped.size() >= max) {
+                break;
+            }
+        }
+
+        if (max != 0) {
+            while (chopped.size() > max) {
+                chopped.remove(chopped.size() - 1);
+            }
         }
 
         return chopped;
