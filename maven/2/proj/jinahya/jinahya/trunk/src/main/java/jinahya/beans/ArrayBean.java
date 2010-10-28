@@ -131,15 +131,12 @@ public class ArrayBean<E> {
      */
     public void setIndex(final int newIndex) {
 
-        if (elements.length == 0 && newIndex != -1) {
-            throw new IllegalArgumentException(
-                "negative index(" + newIndex + ")");
-        }
+        if ((elements.length == 0 && newIndex != -1)
+            || (newIndex < 0 || newIndex >= elements.length)) {
 
-        if (newIndex >= elements.length) {
-            throw new ArrayIndexOutOfBoundsException(
-                "index(" + newIndex + ") >= elements.length(" + elements.length
-                + ")");
+            throw new IllegalArgumentException(
+                "illegal index(" + newIndex + ") for elements.length("
+                + elements.length + ")");
         }
 
         final Object oldIndex = index;
@@ -158,24 +155,16 @@ public class ArrayBean<E> {
 
 
     /**
+     * Returns the element at given <code>index</code>.
      *
-     * @param index
-     * @return
+     * @param index element index
+     * @return element at <code>index</code>
      */
     public E getElementAt(final int index) {
 
-        if (index < 0) {
-            throw new IllegalArgumentException("negative index");
-        }
-
-        if (index >= elements.length) {
-            throw new ArrayIndexOutOfBoundsException(
-                "index(" + index + ") >= elements.length(" + elements.length
-                + ")");
-        }
-
         return elements[index];
     }
+
 
     /**
      *
@@ -353,6 +342,14 @@ public class ArrayBean<E> {
     @SuppressWarnings("unchecked")
     public void clear() {
         setElements((E[]) Array.newInstance(type, 0));
+    }
+
+
+    protected void firePropertyEvent(final String propertyName,
+                                     final Object oldValue,
+                                     final Object newValue) {
+
+        pcs.firePropertyChange(propertyName, oldValue, newValue);
     }
 
 
