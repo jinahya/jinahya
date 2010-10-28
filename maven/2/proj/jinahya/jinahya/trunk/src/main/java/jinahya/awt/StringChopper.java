@@ -103,8 +103,6 @@ public final class StringChopper {
             throw new IllegalArgumentException("negative max");
         }
 
-        offsets.add(0);
-
 
         /*
         int sum = 0;
@@ -143,6 +141,8 @@ public final class StringChopper {
          */
 
 
+        /*
+        offsets.add(0);
         int sum = 0; // 128
         for (int i = 0; i < string.length(); i++) {
             sum += metrics.charWidth(string.charAt(i));
@@ -165,7 +165,35 @@ public final class StringChopper {
                 sum = 0;
             }
         }
+         */
 
+
+        int sum = 0;
+        int start = 0;
+        for (int i = start; i < string.length(); i++) {
+            sum += metrics.charWidth(string.charAt(i));
+            if (sum >= width) {
+                for (; i > start; i--) {
+                    if (metrics.stringWidth(
+                        string.substring(start, i + 1)) <= width) {
+                        break;
+                    }
+                }
+                if (i == start) {
+                    throw new IllegalArgumentException("too small width");
+                }
+                offsets.add(i + 1);
+                sum = 0;
+                start = i + 1;
+                if (max != 0 && offsets.size() == max) {
+                    break;
+                }
+            }
+        }
+
+        if (max == 0 && start < string.length()) {
+            offsets.add(string.length());
+        }
 
         return offsets;
     }
@@ -241,10 +269,11 @@ public final class StringChopper {
         }
 
         final List<Integer> offsets = offsets(string, metrics, width, max);
-        for (int i = 0; i < offsets.size() - 1; i++) {
-            chopped.add(string.substring(offsets.get(i), offsets.get(i + 1)));
+        int start = 0;
+        for (int i = 0; i < offsets.size(); i++) {
+            chopped.add(string.substring(start, offsets.get(i)));
+            start = offsets.get(i);
         }
-        chopped.add(string.substring(offsets.get(offsets.size() - 1)));
 
         return chopped;
     }
@@ -321,18 +350,8 @@ public final class StringChopper {
             throw new IllegalArgumentException("negative max");
         }
 
-        String string = null;
-        while ((string = reader.readLine()) != null) {
+        for (String string = null; (string = reader.readLine()) != null;) {
             chop(string, metrics, width, chopped, max);
-            if (max != 0 && chopped.size() >= max) {
-                break;
-            }
-        }
-
-        if (max != 0) {
-            while (chopped.size() > max) {
-                chopped.remove(chopped.size() - 1);
-            }
         }
 
         return chopped;
