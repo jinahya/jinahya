@@ -279,11 +279,9 @@ public final class StringChopper {
         }
 
         final List<Integer> offsets = offsets(string, metrics, width, max);
-        System.out.println("offsets: " + offsets);
         int start = 0;
         for (int i = 0; i < offsets.size(); i++) {
             chopped.add(string.substring(start, offsets.get(i)));
-            System.out.println("chop: " + string.substring(start, offsets.get(i)));
             start = offsets.get(i);
         }
 
