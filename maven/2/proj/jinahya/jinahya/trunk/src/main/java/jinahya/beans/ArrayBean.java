@@ -100,9 +100,14 @@ public class ArrayBean<E> {
                 "elements is not assignable to type");
         }
 
-        if ((elements.length == 0 && index != -1)
-            || (index < 0 && index >= elements.length)) {
+        if (elements.length == 0 && index != -1) {
+            throw new IllegalArgumentException(
+                "illegal index(" + index + ") for elements.length("
+                + elements.length + ")");
+        }
 
+        if (elements.length > 0
+            && (index < 0 || index >= elements.length)) {
             throw new IllegalArgumentException(
                 "illegal index(" + index + ") for elements.length("
                 + elements.length + ")");
@@ -131,9 +136,14 @@ public class ArrayBean<E> {
      */
     public void setIndex(final int newIndex) {
 
-        if ((elements.length == 0 && newIndex != -1)
-            || (newIndex < 0 || newIndex >= elements.length)) {
+        if (elements.length == 0 && newIndex != -1) {
+            throw new IllegalArgumentException(
+                "illegal index(" + newIndex + ") for elements.length("
+                + elements.length + ")");
+        }
 
+        if (elements.length > 0
+            && (newIndex < 0 || newIndex >= elements.length)) {
             throw new IllegalArgumentException(
                 "illegal index(" + newIndex + ") for elements.length("
                 + elements.length + ")");

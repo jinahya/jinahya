@@ -172,7 +172,7 @@ public final class StringChopper {
         int start = 0;
         for (int i = start; i < string.length(); i++) {
             sum += metrics.charWidth(string.charAt(i));
-            if (sum >= width) {
+            if (sum > width) {
                 for (; i > start; i--) {
                     if (metrics.stringWidth(
                         string.substring(start, i + 1)) <= width) {
@@ -183,16 +183,26 @@ public final class StringChopper {
                     throw new IllegalArgumentException("too small width");
                 }
                 offsets.add(i + 1);
-                sum = 0;
-                start = i + 1;
                 if (max != 0 && offsets.size() == max) {
                     break;
                 }
+                sum = 0;
+                start = i + 1;
             }
         }
 
-        if (max == 0 && start < string.length()) {
+        if (offsets.isEmpty()) {
             offsets.add(string.length());
+        } else {
+            if (offsets.get(offsets.size() - 1) != string.length()) {
+                if (max == 0) {
+                    offsets.add(string.length());
+                } else {
+                    if (offsets.size() < max) {
+                        offsets.add(string.length());
+                    }
+                }
+            }
         }
 
         return offsets;
