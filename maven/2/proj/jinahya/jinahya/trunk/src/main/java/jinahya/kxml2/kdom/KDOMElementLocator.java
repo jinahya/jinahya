@@ -109,7 +109,7 @@ public class KDOMElementLocator implements ElementLocator<Element> {
     public KDOMElementLocator childNS(final String namespace, final String name,
                                       final int index) {
 
-        int count = 0;
+        int count = -1;
 
         final int childCount = current().getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -117,7 +117,7 @@ public class KDOMElementLocator implements ElementLocator<Element> {
                 final Element child = current().getElement(i);
                 if (child.getNamespace().equals(namespace)
                     && child.getName().equals(name)) {
-                    if (count++ == index) {
+                    if (++count == index) {
                         elements.addElement(child);
                         return this;
                     }
@@ -125,7 +125,8 @@ public class KDOMElementLocator implements ElementLocator<Element> {
             }
         }
 
-        throw new IndexOutOfBoundsException("no child at " + index);
+        throw new IndexOutOfBoundsException(
+            "no {" + namespace + "}" + name + " at " + index);
     }
 
 
@@ -189,14 +190,10 @@ public class KDOMElementLocator implements ElementLocator<Element> {
     public String text(final boolean parent) {
 
         final int childCount = current().getChildCount();
-        if (childCount == 0) {
-            return null;
-        }
 
         StringBuffer buffer = null;
-        int type;
         for (int i = 0; i < childCount; i++) {
-            type = current().getType(i);
+            final int type = current().getType(i);
             if (type == Node.TEXT || type == Node.CDSECT) {
                 if (buffer == null) {
                     buffer = new StringBuffer();
