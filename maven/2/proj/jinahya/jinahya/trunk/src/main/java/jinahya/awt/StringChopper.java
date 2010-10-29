@@ -168,11 +168,11 @@ public final class StringChopper {
          */
 
 
-        int sum = 0;
         int start = 0;
+        int sum = 0;
         for (int i = start; i < string.length(); i++) {
             sum += metrics.charWidth(string.charAt(i));
-            if (sum > width) {
+            if (sum >= width) {
                 for (; i > start; i--) {
                     if (metrics.stringWidth(
                         string.substring(start, i + 1)) <= width) {
@@ -186,8 +186,8 @@ public final class StringChopper {
                 if (max != 0 && offsets.size() == max) {
                     break;
                 }
-                sum = 0;
                 start = i + 1;
+                sum = 0;
             }
         }
 
@@ -279,9 +279,11 @@ public final class StringChopper {
         }
 
         final List<Integer> offsets = offsets(string, metrics, width, max);
+        System.out.println("offsets: " + offsets);
         int start = 0;
         for (int i = 0; i < offsets.size(); i++) {
             chopped.add(string.substring(start, offsets.get(i)));
+            System.out.println("chop: " + string.substring(start, offsets.get(i)));
             start = offsets.get(i);
         }
 
