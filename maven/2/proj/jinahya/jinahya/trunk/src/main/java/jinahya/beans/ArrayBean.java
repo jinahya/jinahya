@@ -20,8 +20,14 @@ package jinahya.beans;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -114,7 +120,7 @@ public class ArrayBean<E> {
         }
 
         this.type = type;
-        this.elements = elements;
+        this.elements = new LinkedList<E>();
         this.index = index;
 
         pcs = new PropertyChangeSupport(this);
@@ -125,28 +131,29 @@ public class ArrayBean<E> {
      *
      * @return
      */
-    public int getIndex() {
+    public final int getIndex() {
         return index;
     }
 
 
     /**
+     * Sets index.
      *
-     * @param newIndex
+     * @param newIndex new index
      */
-    public void setIndex(final int newIndex) {
+    public final void setIndex(final int newIndex) {
 
-        if (elements.length == 0 && newIndex != -1) {
-            throw new IllegalArgumentException(
-                "illegal index(" + newIndex + ") for elements.length("
-                + elements.length + ")");
-        }
-
-        if (elements.length > 0
-            && (newIndex < 0 || newIndex >= elements.length)) {
-            throw new IllegalArgumentException(
-                "illegal index(" + newIndex + ") for elements.length("
-                + elements.length + ")");
+        if (elements.isEmpty()) {
+            if (newIndex != -1) {
+                throw new IllegalArgumentException(
+                    "illegal index(" + newIndex + ") for empty elements");
+            }
+        } else {
+            if (newIndex < 0 || newIndex >= elements.size()) {
+                throw new IllegalArgumentException(
+                    "illegal index(" + newIndex + ") for elements.length("
+                    + elements.size() + ")");
+            }
         }
 
         final Object oldIndex = index;
@@ -156,29 +163,83 @@ public class ArrayBean<E> {
 
 
     /**
+     * Returns elements.
      *
-     * @return
+     * @return elements
      */
+    @SuppressWarnings("unchecked")
     public E[] getElements() {
-        return elements;
+        return elements.toArray((E[]) Array.newInstance(type, elements.size()));
     }
 
 
     /**
-     * Returns the element at given <code>index</code>.
+     * Returns element at given <code>index</code>.
      *
      * @param index element index
      * @return element at <code>index</code>
      */
-    public E getElementAt(final int index) {
-
-        return elements[index];
+    public final E getElementAt(final int index) {
+        return elements.get(index);
     }
 
 
     /**
+     * Returns currently indexed element.
      *
-     * @param newElements
+     * @return indexed element
+     */
+    public final E getIndexedElement() {
+        return getElementAt(index);
+    }
+
+
+    /**
+     * Returns elements' size.
+     *
+     * @return elements' size
+     */
+    public final int getSize() {
+        return elements.size();
+    }
+
+
+    /**
+     * Removes element at given <code>index</code>.
+     *
+     * @param index index to be removed
+     * @return removed element
+     */
+    public final E removeElementAt(final int index) {
+
+        final E[] oldValue = getElements();
+
+        final E removed = elements.remove(index); // IOOBE
+
+        if (this.index >= elements.size() - 1) {
+            setIndex(this.index - 1);
+        }
+
+        fireElementsChange(oldValue);
+
+        return removed;
+    }
+
+
+    /**
+     * Removes currently indexed element.
+     *
+     * @return remove element.
+     */
+    public final E removeIndexedElement() {
+        return removeElementAt(index);
+    }
+
+
+    /**
+     * Sets given <code>newElements</code> with false for honorCurrentIndex.
+     *
+     * @param newElements new elements
      */
     public void setElements(final E[] newElements) {
 
@@ -191,144 +252,163 @@ public class ArrayBean<E> {
 
 
     /**
+     * Sets given <code>newElements</code>.
      *
-     * @param newElements
-     * @param indexToLast
+     * @param newElements new elements
+     * @param honorCurrentIndex honor-current-index flag
      */
-    public void setElements(final E[] newElements, final boolean indexToLast) {
+    public void setElements(final E[] newElements,
+                            final boolean honorCurrentIndex) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
         }
 
-        final Object oldValue = elements;
-
-        elements = newElements;
-
-        if (elements.length == 0) {
-            setIndex(-1);
-        } else {
-            setIndex(indexToLast ? elements.length - 1 : 0);
-        }
-
-        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, elements);
+        setElements(Arrays.asList(newElements), honorCurrentIndex);
     }
 
 
     /**
-     * Copy all alements to given <code>model</code>.
-     * Specified <code>model</code> will be cleared first.
+     * Sets given <code>newElements</code>.
      *
-     * @param bean model to copy
-     * @param filter filter to be used or null.
+     * @param newElements new elements
+     * @param hanorCurrentIndex honor-current-index flag
      */
-    public void copyTo(final ArrayBean<? super E> bean,
-                       final ElementFilter<E> filter) {
+    public void setElements(final Collection<? extends E> newElements,
+                            final boolean hanorCurrentIndex) {
 
-        if (filter == null || elements.length == 0) {
-            bean.setElements(elements);
+        if (newElements == null) {
+            throw new IllegalArgumentException("null newElements");
+        }
+
+        final E[] oldValue = getElements();
+
+        elements.clear();
+        elements.addAll(newElements);
+
+        if (hanorCurrentIndex) {
+            if (index >= elements.size()) {
+                setIndex(elements.size() - 1);
+            }
+        } else {
+            setIndex(elements.isEmpty() ? -1 : 0);
+        }
+
+        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+    }
+
+
+    /**
+     * Copy alements to given <code>bean</code>.
+     *
+     * @param bean target bean.
+     * @param filter element filter. can be null.
+     * @param honorCurrentIndex honor-current-index flag
+     */
+    public final void copyTo(final ArrayBean<? super E> bean,
+                             final ElementFilter<E> filter,
+                             final boolean honorCurrentIndex) {
+
+        if (filter == null || elements.isEmpty()) {
+            bean.setElements(elements, honorCurrentIndex);
             return;
         }
 
-        final Collection<E> newElementList = new ArrayList<E>();
-
+        final Collection<E> newElements = new ArrayList<E>();
         for (E element : elements) {
             if (filter.filter(element)) {
-                newElementList.add(element);
+                newElements.add(element);
             }
         }
-
-        @SuppressWarnings("unchecked")
-        final E[] newElements = (E[]) Array.newInstance(
-            type, newElementList.size());
-        newElementList.toArray(newElements);
-
-        bean.setElements(newElements);
+        bean.setElements(newElements, honorCurrentIndex);
     }
 
 
     /**
+     * Copy elements from given <code>bean</code>.
      *
-     * @param <T>
-     * @param bean
-     * @param filter
+     * @param <T> source bean's element type
+     * @param bean source bean
+     * @param filter element filter. can be null.
+     * @param honorCurrentIndex honor-current-index flag
      */
-    public <T extends E> void copyFrom(final ArrayBean<T> bean,
-                                       final ElementFilter<T> filter) {
+    public final <T extends E> void copyFrom(final ArrayBean<T> bean,
+                                             final ElementFilter<T> filter,
+                                             final boolean honorCurrentIndex) {
 
-        if (filter == null || elements.length == 0) {
-            setElements(bean.elements);
+        if (filter == null || bean.elements.isEmpty()) {
+            setElements(bean.elements, honorCurrentIndex);
             return;
         }
 
-        final Collection<T> newElementList = new ArrayList<T>();
-
+        final Collection<T> newElements = new ArrayList<T>();
         for (T element : bean.elements) {
             if (filter.filter(element)) {
-                newElementList.add(element);
+                newElements.add(element);
             }
         }
-
-        @SuppressWarnings("unchecked")
-        final E[] newElements = (E[]) Array.newInstance(
-            type, newElementList.size());
-        newElementList.toArray(newElements);
-
-        setElements(newElements);
+        setElements(newElements, honorCurrentIndex);
     }
 
 
     /**
+     * Decreases index value.
      *
-     * @param roll
+     * @param roll roll-to-the-last flag
+     * @return true if decreased, false otherwise
      */
-    public boolean decreaseIndex(final boolean roll) {
+    public final boolean decreaseIndex(final boolean roll) {
 
-        if (index == -1) {
+        if (elements.size() <= 1) {
             return false;
         }
 
-        if (index > 0) {
+        if (index == 0) { // first
+            if (roll) {
+                setIndex(elements.size() - 1);
+                return true;
+            }
+        } else { // index > 0
             setIndex(index - 1);
-        } else {
-            if (!roll) {
-                return false;
-            }
-            setIndex(elements.length - 1);
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 
     /**
+     * Increases index value.
      *
-     * @param roll
+     * @param roll roll-to-the-first flag
+     * @return true if increased, false otherwise.
      */
-    public boolean increaseIndex(final boolean roll) {
+    public final boolean increaseIndex(final boolean roll) {
 
-        if (index == -1) {
+        if (elements.size() <= 1) {
             return false;
         }
 
-        if (index < elements.length - 1) {
-            setIndex(index + 1);
-        } else {
-            if (!roll) {
-                return false;
+        if (index == elements.size() - 1) { // last
+            if (roll) {
+                setIndex(0);
+                return true;
             }
-            setIndex(0);
+        } else { // index < elements.size() - 1
+            setIndex(index + 1);
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 
     /**
+     * Adds given <code>listener</code> to this bean.
      *
-     * @param listener
+     * @param listener listener to be added.
      */
-    public void addPropertyChangeListener(
+    public final void addPropertyChangeListener(
         final PropertyChangeListener listener) {
 
         pcs.addPropertyChangeListener(listener);
@@ -336,10 +416,11 @@ public class ArrayBean<E> {
 
 
     /**
+     * Removes given <code>listener</code> from this bean.
      *
-     * @param listener
+     * @param listener listener to be removed.
      */
-    public void removePropertyChangeListener(
+    public final void removePropertyChangeListener(
         final PropertyChangeListener listener) {
 
         pcs.removePropertyChangeListener(listener);
@@ -347,25 +428,71 @@ public class ArrayBean<E> {
 
 
     /**
-     *
+     * Clear this bean.
      */
-    @SuppressWarnings("unchecked")
-    public void clear() {
-        setElements((E[]) Array.newInstance(type, 0));
+    public final void clear() {
+        setElements(Collections.<E>emptyList(), false);
     }
 
 
-    protected void firePropertyEvent(final String propertyName,
-                                     final Object oldValue,
-                                     final Object newValue) {
+    /**
+     * Fires property change for {@link #PROPERTY_NAME_ELEMENTS}.
+     *
+     * @param oldValue old value
+     */
+    private void fireElementsChange(final E[] oldValue) {
+        firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+    }
+
+
+    /**
+     * Fire a property change event.
+     *
+     * @param propertyName property name
+     * @param oldValue old value
+     * @param newValue new value
+     */
+    protected final void firePropertyChange(final String propertyName,
+                                            final Object oldValue,
+                                            final Object newValue) {
 
         pcs.firePropertyChange(propertyName, oldValue, newValue);
     }
 
 
+    /**
+     *
+     * @param propertyName
+     * @param index
+     * @param oldValue
+     * @param newValue
+     */
+    protected final void fireIndexedPropertyChange(final String propertyName,
+                                                   final int index,
+                                                   final Object oldValue,
+                                                   final Object newValue) {
+
+        try {
+            final Method method = PropertyChangeSupport.class.getMethod(
+                "fireIndexedPropertyChange", new Class<?>[]{
+                    String.class, Integer.TYPE, Object.class, Object.class});
+            try {
+                method.invoke(pcs, new Object[]{
+                        propertyName, index, oldValue, newValue});
+            } catch (IllegalAccessException iae) {
+                iae.printStackTrace(System.err);
+            } catch (InvocationTargetException ite) {
+                ite.printStackTrace(System.err);
+            }
+        } catch (NoSuchMethodException nsme) {
+            nsme.printStackTrace(System.err);
+        }
+    }
+
+
     private final Class<E> type;
 
-    private E[] elements;
+    private final List<E> elements;
     private int index;
 
     private final PropertyChangeSupport pcs;
