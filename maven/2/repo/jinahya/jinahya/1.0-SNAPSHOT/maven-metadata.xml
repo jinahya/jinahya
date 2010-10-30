@@ -29,8 +29,8 @@
       <snapshotVersion>
         <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>1.0-20101030.130016-51</value>
-        <updated>20101030130016</updated>
+        <value>1.0-20101030.130429-53</value>
+        <updated>20101030130429</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>javadoc</classifier>
