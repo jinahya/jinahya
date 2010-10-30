@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2010-10-30T21:38:08.346">
+<pmd version="4.2.5" timestamp="2010-10-30T22:05:47.640">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\awt\StringChopper.java">
 <violation beginline="176" endline="181" begincolumn="17" endcolumn="17" rule="JumbledIncrementer" ruleset="Basic Rules" package="jinahya.awt" class="StringChopper" method="offsets" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
 Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+</file>
+<file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\beans\ArrayBean.java">
+<violation beginline="28" endline="28" begincolumn="1" endcolumn="29" rule="UnusedImports" ruleset="Import Statement Rules" package="jinahya.beans" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Collections'
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\kxml2\kdom\KDOMElementLocator.java">
