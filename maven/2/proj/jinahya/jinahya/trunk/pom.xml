@@ -37,7 +37,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!--compiler.target>1.6</compiler.target-->
+    <compiler.target>1.6</compiler.target>
   </properties>
 
   <!-- Build Settings -->
@@ -141,8 +141,7 @@
             </goals>
             <configuration>
               <source>1.6</source>
-              <target>jsr14</target>
-              <!--target>${compiler.target}</target-->
+              <target>${compiler.target}</target>
             </configuration>
           </execution>
           <execution>
@@ -277,7 +276,6 @@
     </site>
   </distributionManagement>
   <profiles>
-    <!--
     <profile>
       <id>jsr14</id>
       <build>
@@ -294,6 +292,5 @@
         <compiler.target>jsr14</compiler.target>
       </properties>
     </profile>
-    -->
   </profiles>
 </project>

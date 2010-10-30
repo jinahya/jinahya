@@ -431,7 +431,10 @@ public class ArrayBean<E> {
      * Clear this bean.
      */
     public final void clear() {
-        setElements(Collections.<E>emptyList(), false);
+        final E[] oldValue = getElements();
+        elements.clear();
+        setIndex(-1);
+        fireElementsChange(oldValue);
     }
 
 
