@@ -43,13 +43,11 @@
   <!-- Build Settings -->
   <build>
     <extensions>
-      <extensions>
-        <extension>
-          <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-webdav-jackrabbit</artifactId>
-          <version>1.0-beta-6</version>
-        </extension>
-      </extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
       <!--
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
