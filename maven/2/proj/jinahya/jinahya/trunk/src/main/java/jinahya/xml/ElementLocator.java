@@ -28,7 +28,7 @@ public interface ElementLocator<E> {
     /**
      * Counts child elements.
      *
-     * @param name child element name
+     * @param name child element's name
      * @return children count
      */
     int count(String name);
@@ -37,8 +37,8 @@ public interface ElementLocator<E> {
     /**
      * Counts child elements.
      *
-     * @param namespace child element namespace
-     * @param name child element name
+     * @param namespace child element's namespace
+     * @param name child element's name
      * @return children count
      */
     int countNS(String namespace, String name);
@@ -61,9 +61,9 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Locate to the given child element.
+     * Locate to a child.
      *
-     * @param name child element name
+     * @param name child element's name
      * @param index child index
      * @return self
      */
@@ -71,8 +71,9 @@ public interface ElementLocator<E> {
 
 
     /**
+     * Locate to a child.
      *
-     * @param namespace child element namespace
+     * @param namespace child element's namespace
      * @param name child element's name
      * @param index child element index
      * @return self
@@ -81,26 +82,26 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Append new child with value.
+     * Append a new child element and locate it.
      *
-     * @param name child element name
+     * @param name child element's name
      * @return self
      */
     ElementLocator<E> child(String name);
 
 
     /**
-     * Append new child element with value.
+     * Append a new child element and locate it.
      *
-     * @param namespace child element namespace
-     * @param name child element name
+     * @param namespace child element's namespace
+     * @param name child element's name
      * @return self
      */
     ElementLocator<E> childNS(String namespace, String name);
 
 
     /**
-     * Returns the text value.
+     * Returns current element's text value.
      *
      * @return text content or null
      */
@@ -108,52 +109,57 @@ public interface ElementLocator<E> {
 
 
     /**
+     * Returns current elements's text value. Locate to parent if
+     * <code>parent</code> is true.
      *
-     * @param parent
+     * @param parent flag for locating parent
      * @return text content or null
      */
     String text(boolean parent);
 
 
     /**
+     * Sets current element's text content.
      *
-     * @param value
-     * @return
+     * @param value text content value.
+     * @return self
      */
     ElementLocator<E> text(String value);
 
 
     /**
+     * Sets current element's text content. Locate to parent if
+     * <code>parent</code> is true.
      *
-     * @param value
-     * @return
+     * @param value text content value
+     * @return self
      */
     ElementLocator<E> text(String value, boolean parent);
 
 
     /**
-     * Gets attribute value.
+     * Returns attribute value.
      *
-     * @param name attribute name
+     * @param name attribute's name
      * @return attribute value
      */
     String attribute(String name);
 
 
     /**
-     * Gets attribute value.
+     * Returns attribute value.
      *
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespace attribute's namespace
+     * @param name attribute's name
      * @return attribute value
      */
     String attributeNS(String namespace, String name);
 
 
     /**
-     * Set attribute value.
+     * Sets attribute value.
      *
-     * @param name attribute name
+     * @param name attribute's name
      * @param value attribute value
      * @return self
      */
@@ -161,7 +167,7 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Set attribute.
+     * Set attribute value.
      *
      * @param namespace attribute's namespace
      * @param name attribute's name
@@ -172,7 +178,7 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Return the current element's namespace.
+     * Returns current element's namespace.
      *
      * @return current element's namespace
      */
@@ -180,7 +186,7 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Returns the current element's name.
+     * Returns current element's name.
      *
      * @return current element's name
      */
@@ -188,7 +194,7 @@ public interface ElementLocator<E> {
 
 
     /**
-     * Returns the current element.
+     * Returns current element.
      *
      * @return current element
      */

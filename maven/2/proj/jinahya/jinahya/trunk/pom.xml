@@ -37,7 +37,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <compiler.target>1.6</compiler.target>
+    <!--compiler.target>1.6</compiler.target-->
   </properties>
 
   <!-- Build Settings -->
@@ -141,8 +141,8 @@
             </goals>
             <configuration>
               <source>1.6</source>
-              <!--target>jsr14</target-->
-              <target>${compiler.target}</target>
+              <target>jsr14</target>
+              <!--target>${compiler.target}</target-->
             </configuration>
           </execution>
           <execution>
@@ -268,7 +268,7 @@
     <repository>
       <id>onacit_googlecode</id>
       <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
-      <url>dav:https://jinahya.googlecode.com/svn/maven/2/repo</url>
+      <url>https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
     <site>
       <id>onacit_googlecode</id>
@@ -277,6 +277,7 @@
     </site>
   </distributionManagement>
   <profiles>
+    <!--
     <profile>
       <id>jsr14</id>
       <build>
@@ -293,5 +294,6 @@
         <compiler.target>jsr14</compiler.target>
       </properties>
     </profile>
+    -->
   </profiles>
 </project>
