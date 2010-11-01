@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -239,7 +238,7 @@ public class ArrayBean<E> {
             setIndex(this.index - 1);
         }
 
-        fireElementsChange(oldValue);
+        firePropertyChangeForElements(oldValue);
 
         return removed;
     }
@@ -329,7 +328,7 @@ public class ArrayBean<E> {
             }
         }
 
-        fireElementsChange(oldValue);
+        firePropertyChangeForElements(oldValue);
     }
 
 
@@ -469,7 +468,7 @@ public class ArrayBean<E> {
         final E[] oldValue = getElements();
         elements.clear();
         setIndex(-1);
-        fireElementsChange(oldValue);
+        firePropertyChangeForElements(oldValue);
     }
 
 
@@ -478,8 +477,17 @@ public class ArrayBean<E> {
      *
      * @param oldValue old value
      */
-    private void fireElementsChange(final E[] oldValue) {
+    private void firePropertyChangeForElements(final E[] oldValue) {
         firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+    }
+
+
+    /**
+     *
+     * @param oldIndex
+     */
+    private void firePropertyChangeForIndex(final Object oldIndex) {
+        this.firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, index);
     }
 
 
