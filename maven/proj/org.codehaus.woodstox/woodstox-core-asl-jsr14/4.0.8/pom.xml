@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.woodstox</groupId>
+  <artifactId>woodstox-core-asl-jsr14</artifactId>
+  <packaging>jar</packaging>
+  <version>4.0.8</version>
+  <dependencies>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax-api</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+  </dependencies>
+  <properties>
+    <project.build.sourceEncdding>UTF-8</project.build.sourceEncdding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>jsr14</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- More Project Information -->
+  <name>woodstox-core-asl-jsr14</name>
+  <description/>
+  <url>http://woodstox.codehaus.org</url>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <!-- Environment Settings -->
+  <distributionManagement>
+    <repository>
+      <id>onacit_googlecode</id>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
+    </repository>
+    <site>
+      <id>onacit_googlecode</id>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
+</project>
