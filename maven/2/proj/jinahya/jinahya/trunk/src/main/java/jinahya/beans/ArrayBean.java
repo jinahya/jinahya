@@ -48,6 +48,24 @@ public class ArrayBean<E> {
 
     /**
      *
+     */
+    public static final int INDEX_FIRST = 0x01;
+
+
+    /**
+     * 
+     */
+    public static final int INDEX_CURRENT = INDEX_FIRST << 1;
+
+
+    /**
+     * 
+     */
+    public static final int INDEX_LAST = INDEX_CURRENT << 1;
+
+
+    /**
+     *
      * @param <E>
      */
     public static interface ElementFilter<E> {
@@ -188,8 +206,9 @@ public class ArrayBean<E> {
      * Returns currently indexed element.
      *
      * @return indexed element
+     * @see #getElementAt(int)
      */
-    public final E getIndexedElement() {
+    public final E getElementAtIndex() {
         return getElementAt(index);
     }
 
@@ -230,8 +249,9 @@ public class ArrayBean<E> {
      * Removes currently indexed element.
      *
      * @return remove element.
+     * @see #removeElementAt(int)
      */
-    public final E removeIndexedElement() {
+    public final E removeElementAtIndex() {
         return removeElementAt(index);
     }
 
@@ -247,7 +267,7 @@ public class ArrayBean<E> {
             throw new IllegalArgumentException("null newElements");
         }
 
-        setElements(newElements, false);
+        setElements(newElements, INDEX_FIRST);
     }
 
 
@@ -255,16 +275,15 @@ public class ArrayBean<E> {
      * Sets given <code>newElements</code>.
      *
      * @param newElements new elements
-     * @param honorCurrentIndex honor-current-index flag
+     * @param indexPolicy index policy
      */
-    public void setElements(final E[] newElements,
-                            final boolean honorCurrentIndex) {
+    public void setElements(final E[] newElements, final int indexPolicy) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
         }
 
-        setElements(Arrays.asList(newElements), honorCurrentIndex);
+        setElements(Arrays.asList(newElements), indexPolicy);
     }
 
 
@@ -272,10 +291,10 @@ public class ArrayBean<E> {
      * Sets given <code>newElements</code>.
      *
      * @param newElements new elements
-     * @param hanorCurrentIndex honor-current-index flag
+     * @param indexPolicy honor-current-index flag
      */
     public void setElements(final Collection<? extends E> newElements,
-                            final boolean hanorCurrentIndex) {
+                            final int indexPolicy) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
@@ -286,15 +305,31 @@ public class ArrayBean<E> {
         elements.clear();
         elements.addAll(newElements);
 
-        if (hanorCurrentIndex) {
-            if (index >= elements.size()) {
-                setIndex(elements.size() - 1);
-            }
+        if (elements.isEmpty()) {
+            setIndex(-1);
         } else {
-            setIndex(elements.isEmpty() ? -1 : 0);
+            switch (indexPolicy) {
+                case INDEX_FIRST:
+                    setIndex(0);
+                    break;
+                case INDEX_CURRENT:
+                    if (index == -1) {
+                        setIndex(0);
+                    } else {
+                        if (index >= elements.size()) {
+                            setIndex(elements.size() - 1);
+                        }
+                    }
+                    break;
+                case INDEX_LAST:
+                    setIndex(elements.size() - 1);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+        fireElementsChange(oldValue);
     }
 
 
@@ -303,14 +338,14 @@ public class ArrayBean<E> {
      *
      * @param bean target bean.
      * @param filter element filter. can be null.
-     * @param honorCurrentIndex honor-current-index flag
+     * @param indexPolicy index policy
      */
     public final void copyTo(final ArrayBean<? super E> bean,
                              final ElementFilter<E> filter,
-                             final boolean honorCurrentIndex) {
+                             final int indexPolicy) {
 
         if (filter == null || elements.isEmpty()) {
-            bean.setElements(elements, honorCurrentIndex);
+            bean.setElements(elements, indexPolicy);
             return;
         }
 
@@ -320,7 +355,7 @@ public class ArrayBean<E> {
                 newElements.add(element);
             }
         }
-        bean.setElements(newElements, honorCurrentIndex);
+        bean.setElements(newElements, indexPolicy);
     }
 
 
@@ -330,14 +365,14 @@ public class ArrayBean<E> {
      * @param <T> source bean's element type
      * @param bean source bean
      * @param filter element filter. can be null.
-     * @param honorCurrentIndex honor-current-index flag
+     * @param indexPolicy honor-current-index flag
      */
     public final <T extends E> void copyFrom(final ArrayBean<T> bean,
                                              final ElementFilter<T> filter,
-                                             final boolean honorCurrentIndex) {
+                                             final int indexPolicy) {
 
         if (filter == null || bean.elements.isEmpty()) {
-            setElements(bean.elements, honorCurrentIndex);
+            setElements(bean.elements, indexPolicy);
             return;
         }
 
@@ -347,7 +382,7 @@ public class ArrayBean<E> {
                 newElements.add(element);
             }
         }
-        setElements(newElements, honorCurrentIndex);
+        setElements(newElements, indexPolicy);
     }
 
 
