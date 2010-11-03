@@ -5,26 +5,26 @@
   <version>1.0-SNAPSHOT</version>
   <versioning>
     <snapshot>
-      <timestamp>20101103.051507</timestamp>
+      <timestamp>20101103.051556</timestamp>
       <buildNumber>61</buildNumber>
     </snapshot>
-    <lastUpdated>20101103051507</lastUpdated>
+    <lastUpdated>20101103051556</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>pom</extension>
-        <value>1.0-20101103.051507-61</value>
-        <updated>20101103051507</updated>
+        <extension>jar</extension>
+        <value>1.0-20101103.051556-61</value>
+        <updated>20101103051556</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>jar</extension>
-        <value>1.0-20101101.121619-60</value>
-        <updated>20101101121619</updated>
+        <extension>pom</extension>
+        <value>1.0-20101103.051556-61</value>
+        <updated>20101103051556</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>jsr14</classifier>
         <extension>jar</extension>
-        <value>1.0-20101103.051507-61</value>
-        <updated>20101103051507</updated>
+        <value>1.0-20101101.084022-59</value>
+        <updated>20101101084022</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>sources</classifier>
