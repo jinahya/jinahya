@@ -43,6 +43,7 @@
     <reporting.maven-javadoc-plugin.version>2.7</reporting.maven-javadoc-plugin.version>
     <reporting.maven-jxr-plugin.version>2.2</reporting.maven-jxr-plugin.version>
     <reporting.maven-pmd-plugin.version>2.5</reporting.maven-pmd-plugin.version>
+    <reporting.maven-project-info-reports-plugin.version>2.2</reporting.maven-project-info-reports-plugin.version>
 
     <reporting.codehaus.cobertura-maven-plugin.version>2.4</reporting.codehaus.cobertura-maven-plugin.version>
     <reporting.codehaus.findbugs-maven-plugin.version>2.3.1</reporting.codehaus.findbugs-maven-plugin.version>
@@ -94,6 +95,10 @@
         <plugin>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${reporting.maven-pmd-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>${reporting.maven-project-info-reports-plugin.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -185,6 +190,10 @@
         <configuration>
           <targetJdk>1.6</targetJdk>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${reporting.maven-project-info-reports-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
