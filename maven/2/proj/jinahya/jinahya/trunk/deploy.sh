@@ -1,6 +1,6 @@
 #!/bin/sh
 svn up
-mvn clean test
+mvn dependency:purge-local-repository clean test
 if [ "$?" == "0" ]; then
     svn ci -m updated
 else
@@ -8,5 +8,5 @@ else
     exit $?
 fi
 mvn -Pjsr14 clean deploy
-mvn clean jar:jar javadoc:jar source:jar deploy
+mvn clean javadoc:jar source:jar deploy
 exit 0
