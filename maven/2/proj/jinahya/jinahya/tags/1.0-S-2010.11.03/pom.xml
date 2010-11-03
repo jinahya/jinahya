@@ -43,13 +43,11 @@
   <!-- Build Settings -->
   <build>
     <extensions>
-      <!--
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>1.0-beta-6</version>
       </extension>
-      -->
       <!--
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
@@ -269,7 +267,7 @@
     <repository>
       <id>onacit_googlecode</id>
       <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
-      <url>https://jinahya.googlecode.com/svn/maven/2/repo</url>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/2/repo</url>
     </repository>
     <site>
       <id>onacit_googlecode</id>
