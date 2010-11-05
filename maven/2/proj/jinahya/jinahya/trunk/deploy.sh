@@ -10,5 +10,5 @@ else
     exit $?
 fi
 mvn -Pjsr14 clean deploy
-mvn clean javadoc:jar source:jar deploy
+mvn clean javadoc:jar source:jar deploy site-deploy
 exit 0

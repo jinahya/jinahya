@@ -193,7 +193,7 @@ public class ArrayBean<E> {
      *
      * @return index
      */
-    public final int getIndex() {
+    public int getIndex() {
         return index;
     }
 
@@ -203,7 +203,7 @@ public class ArrayBean<E> {
      *
      * @param newIndex new index
      */
-    public final void setIndex(final int newIndex) {
+    public void setIndex(final int newIndex) {
 
         if (elements.isEmpty()) {
             if (newIndex != -1) {
@@ -242,7 +242,7 @@ public class ArrayBean<E> {
      * @param index element index
      * @return element at <code>index</code>
      */
-    public final E getElementAt(final int index) {
+    public E getElementAt(final int index) {
         return elements.get(index);
     }
 
@@ -253,7 +253,7 @@ public class ArrayBean<E> {
      * @return indexed element
      * @see #getElementAt(int)
      */
-    public final E getElementAtIndex() {
+    public E getElementAtIndex() {
         return getElementAt(index);
     }
 
@@ -263,7 +263,7 @@ public class ArrayBean<E> {
      *
      * @return elements' size
      */
-    public final int getSize() {
+    public int getSize() {
         return elements.size();
     }
 
@@ -274,7 +274,7 @@ public class ArrayBean<E> {
      * @param index index to be removed
      * @return removed element
      */
-    public final E removeElementAt(final int index) {
+    public E removeElementAt(final int index) {
 
         final E[] oldValue = getElements();
 
@@ -296,7 +296,7 @@ public class ArrayBean<E> {
      * @return remove element.
      * @see #removeElementAt(int)
      */
-    public final E removeElementAtIndex() {
+    public E removeElementAtIndex() {
         return removeElementAt(index);
     }
 
@@ -387,9 +387,8 @@ public class ArrayBean<E> {
      * @param filter element filter. can be null.
      * @param indexPolicy index policy
      */
-    public final void copyTo(final ArrayBean<? super E> bean,
-                             final ElementFilter<E> filter,
-                             final int indexPolicy) {
+    public void copyTo(final ArrayBean<? super E> bean,
+                       final ElementFilter<E> filter, final int indexPolicy) {
 
         if (filter == null || elements.isEmpty()) {
             bean.setElements(elements, indexPolicy);
@@ -414,9 +413,9 @@ public class ArrayBean<E> {
      * @param filter element filter. can be null.
      * @param indexPolicy honor-current-index flag
      */
-    public final <T extends E> void copyFrom(final ArrayBean<T> bean,
-                                             final ElementFilter<T> filter,
-                                             final int indexPolicy) {
+    public <T extends E> void copyFrom(final ArrayBean<T> bean,
+                                       final ElementFilter<T> filter,
+                                       final int indexPolicy) {
 
         if (filter == null || bean.elements.isEmpty()) {
             setElements(bean.elements, indexPolicy);
@@ -439,7 +438,7 @@ public class ArrayBean<E> {
      * @param roll roll-to-the-last flag
      * @return true if decreased, false otherwise
      */
-    public final boolean decreaseIndex(final boolean roll) {
+    public boolean decreaseIndex(final boolean roll) {
 
         if (elements.size() <= 1) {
             return false;
@@ -465,7 +464,7 @@ public class ArrayBean<E> {
      * @param roll roll-to-the-first flag
      * @return true if increased, false otherwise.
      */
-    public final boolean increaseIndex(final boolean roll) {
+    public boolean increaseIndex(final boolean roll) {
 
         if (elements.size() <= 1) {
             return false;
@@ -490,7 +489,7 @@ public class ArrayBean<E> {
      *
      * @param listener listener to be added.
      */
-    public final void addPropertyChangeListener(
+    public void addPropertyChangeListener(
         final PropertyChangeListener listener) {
 
         pcs.addPropertyChangeListener(listener);
@@ -502,7 +501,7 @@ public class ArrayBean<E> {
      *
      * @param listener listener to be removed.
      */
-    public final void removePropertyChangeListener(
+    public void removePropertyChangeListener(
         final PropertyChangeListener listener) {
 
         pcs.removePropertyChangeListener(listener);
@@ -512,7 +511,7 @@ public class ArrayBean<E> {
     /**
      * Clear this bean.
      */
-    public final void clear() {
+    public void clear() {
         final E[] oldValue = getElements();
         elements.clear();
         setIndex(-1);
@@ -546,9 +545,9 @@ public class ArrayBean<E> {
      * @param oldValue old value
      * @param newValue new value
      */
-    protected final void firePropertyChange(final String propertyName,
-                                            final Object oldValue,
-                                            final Object newValue) {
+    protected void firePropertyChange(final String propertyName,
+                                      final Object oldValue,
+                                      final Object newValue) {
 
         pcs.firePropertyChange(propertyName, oldValue, newValue);
     }
@@ -561,10 +560,10 @@ public class ArrayBean<E> {
      * @param oldValue
      * @param newValue
      */
-    protected final void fireIndexedPropertyChange(final String propertyName,
-                                                   final int index,
-                                                   final Object oldValue,
-                                                   final Object newValue) {
+    protected void fireIndexedPropertyChange(final String propertyName,
+                                             final int index,
+                                             final Object oldValue,
+                                             final Object newValue) {
 
         try {
             final Method method = PropertyChangeSupport.class.getMethod(
