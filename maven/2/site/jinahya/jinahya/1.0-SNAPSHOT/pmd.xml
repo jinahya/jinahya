@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2010-11-03T18:42:26.180">
+<pmd version="4.2.5" timestamp="2010-11-05T11:32:21.137">
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\awt\StringChopper.java">
 <violation beginline="176" endline="181" begincolumn="17" endcolumn="17" rule="JumbledIncrementer" ruleset="Basic Rules" package="jinahya.awt" class="StringChopper" method="offsets" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
 Avoid modifying an outer loop incrementer in an inner loop for update expression
 </violation>
 </file>
 <file name="D:\svnwc\jinahya.googlecode.com\maven\2\proj\jinahya\jinahya\trunk\src\main\java\jinahya\beans\ArrayBean.java">
-<violation beginline="489" endline="489" begincolumn="18" endcolumn="66" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="jinahya.beans" class="ArrayBean" method="firePropertyChangeForIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
+<violation beginline="234" endline="234" begincolumn="22" endcolumn="39" rule="ClassCastExceptionWithToArray" ruleset="Basic Rules" package="jinahya.beans" class="ArrayBean" method="getElements" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#ClassCastExceptionWithToArray" priority="3">
+This usage of the Collection.toArray() method will throw a ClassCastException.
+</violation>
+<violation beginline="536" endline="536" begincolumn="18" endcolumn="66" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="jinahya.beans" class="ArrayBean" method="firePropertyChangeForIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
 Avoid unused private methods such as 'firePropertyChangeForIndex(Object)'.
 </violation>
 </file>
