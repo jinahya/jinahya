@@ -19,7 +19,6 @@ package jinahya.beans;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -80,32 +79,31 @@ public class ArrayBean<E> {
     }
 
 
-    /**
+    /*
      *
      * @param type
-     */
     @SuppressWarnings("unchecked")
     public ArrayBean(final Class<E> type) {
         this(type, (E[]) Array.newInstance(type, 0), -1);
     }
+     */
 
 
-    /**
+    /*
      *
      * @param type
      * @param elements
-     */
     public ArrayBean(final Class<E> type, final E[] elements) {
         this(type, elements, elements.length == 0 ? -1 : 0);
     }
+     */
 
 
-    /**
+    /*
      *
      * @param type
      * @param elements
      * @param index
-     */
     public ArrayBean(final Class<E> type, final E[] elements, final int index) {
         super();
 
@@ -142,11 +140,58 @@ public class ArrayBean<E> {
 
         pcs = new PropertyChangeSupport(this);
     }
+     */
 
 
     /**
+     * 
+     * @param elements
+     * @param index
+     */
+    public ArrayBean(final E[] elements) {
+        this(elements, elements.length == 0 ? -1 : 0);
+    }
+
+
+    /**
+     * 
+     * @param type
+     * @param elements
+     * @param index
+     */
+    public ArrayBean(final E[] elements, final int index) {
+        super();
+
+        if (elements == null) {
+            throw new IllegalArgumentException("null elements");
+        }
+
+        if (elements.length == 0) {
+            if (index != -1) {
+                throw new IllegalArgumentException(
+                    "illegal index(" + index + ") for elements.length("
+                    + elements.length + ")");
+            }
+        } else {
+            if ((index < 0 || index >= elements.length)) {
+                throw new IllegalArgumentException(
+                    "illegal index(" + index + ") for elements.length("
+                    + elements.length + ")");
+            }
+        }
+
+        //this.type = type;
+        this.elements = new LinkedList<E>();
+        this.index = index;
+
+        pcs = new PropertyChangeSupport(this);
+    }
+
+
+    /**
+     * Returns current index value.
      *
-     * @return
+     * @return index
      */
     public final int getIndex() {
         return index;
@@ -186,7 +231,8 @@ public class ArrayBean<E> {
      */
     @SuppressWarnings("unchecked")
     public E[] getElements() {
-        return elements.toArray((E[]) Array.newInstance(type, elements.size()));
+        return (E[]) elements.toArray();
+        //return elements.toArray((E[]) Array.newInstance(type, elements.size()));
     }
 
 
@@ -234,8 +280,8 @@ public class ArrayBean<E> {
 
         final E removed = elements.remove(index); // IOOBE
 
-        if (this.index >= elements.size() - 1) {
-            setIndex(this.index - 1);
+        if (this.index >= elements.size()) {
+            setIndex(elements.size() - 1);
         }
 
         firePropertyChangeForElements(oldValue);
@@ -324,7 +370,9 @@ public class ArrayBean<E> {
                     setIndex(elements.size() - 1);
                     break;
                 default:
-                    break;
+                    throw new IllegalArgumentException(
+                        "unknown index policy: " + indexPolicy);
+                    //break;
             }
         }
 
@@ -536,7 +584,7 @@ public class ArrayBean<E> {
     }
 
 
-    private final Class<E> type;
+    //private final Class<E> type;
 
     private final List<E> elements;
     private int index;
