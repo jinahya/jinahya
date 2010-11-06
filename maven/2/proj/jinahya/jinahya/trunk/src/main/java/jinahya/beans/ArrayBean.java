@@ -82,6 +82,16 @@ public class ArrayBean<E> {
 
     /**
      * 
+     * @param type
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayBean(final Class<E> type) {
+        this((E[]) Array.newInstance(type, 0));
+    }
+    
+    
+    /**
+     * 
      * @param elements
      * @param index
      */
@@ -119,6 +129,8 @@ public class ArrayBean<E> {
 
         //this.type = type;
         this.elements = new LinkedList<E>();
+        this.elements.addAll(Arrays.asList(elements));
+
         this.index = index;
 
         pcs = new PropertyChangeSupport(this);
@@ -239,6 +251,21 @@ public class ArrayBean<E> {
     }
 
 
+
+    public void addElementAt(final int index, final E element) {
+
+        if (element == null) {
+            throw new IllegalArgumentException("null element");
+        }
+
+        final E[] oldValue = getElements();
+
+        elements.add(index, element);
+
+        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
+    }
+
+    
     /**
      * Sets given <code>newElements</code> with false for honorCurrentIndex.
      *
