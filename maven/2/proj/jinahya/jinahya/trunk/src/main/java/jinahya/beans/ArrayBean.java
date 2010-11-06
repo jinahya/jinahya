@@ -19,6 +19,7 @@ package jinahya.beans;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -276,7 +277,7 @@ public class ArrayBean<E> {
      */
     public E removeElementAt(final int index) {
 
-        final E[] oldValue = getElements();
+        final E[] oldElements = getElements();
 
         final E removed = elements.remove(index); // IOOBE
 
@@ -284,7 +285,8 @@ public class ArrayBean<E> {
             setIndex(elements.size() - 1);
         }
 
-        firePropertyChangeForElements(oldValue);
+        pcs.firePropertyChange(
+            PROPERTY_NAME_ELEMENTS, oldElements, getElements());
 
         return removed;
     }
@@ -345,7 +347,7 @@ public class ArrayBean<E> {
             throw new IllegalArgumentException("null newElements");
         }
 
-        final E[] oldValue = getElements();
+        final E[] oldElements = getElements();
 
         elements.clear();
         elements.addAll(newElements);
@@ -376,10 +378,11 @@ public class ArrayBean<E> {
             }
         }
 
-        firePropertyChangeForElements(oldValue);
+        pcs.firePropertyChange(
+            PROPERTY_NAME_ELEMENTS, oldElements, getElements());
     }
 
-
+    
     /**
      * Copy alements to given <code>bean</code>.
      *
@@ -512,29 +515,11 @@ public class ArrayBean<E> {
      * Clear this bean.
      */
     public void clear() {
-        final E[] oldValue = getElements();
-        elements.clear();
-        setIndex(-1);
-        firePropertyChangeForElements(oldValue);
-    }
-
-
-    /**
-     * Fires property change for {@link #PROPERTY_NAME_ELEMENTS}.
-     *
-     * @param oldValue old value
-     */
-    private void firePropertyChangeForElements(final E[] oldValue) {
-        firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
-    }
-
-
-    /**
-     *
-     * @param oldIndex
-     */
-    private void firePropertyChangeForIndex(final Object oldIndex) {
-        this.firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, index);
+        final E[] oldElements = getElements();
+        @SuppressWarnings("unchecked")
+        final E[] newElements = (E[]) Array.newInstance(
+            oldElements.getClass().getComponentType(), 0);
+        setElements(newElements);
     }
 
 
