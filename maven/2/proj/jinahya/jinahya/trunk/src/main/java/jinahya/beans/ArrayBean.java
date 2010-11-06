@@ -80,70 +80,6 @@ public class ArrayBean<E> {
     }
 
 
-    /*
-     *
-     * @param type
-    @SuppressWarnings("unchecked")
-    public ArrayBean(final Class<E> type) {
-        this(type, (E[]) Array.newInstance(type, 0), -1);
-    }
-     */
-
-
-    /*
-     *
-     * @param type
-     * @param elements
-    public ArrayBean(final Class<E> type, final E[] elements) {
-        this(type, elements, elements.length == 0 ? -1 : 0);
-    }
-     */
-
-
-    /*
-     *
-     * @param type
-     * @param elements
-     * @param index
-    public ArrayBean(final Class<E> type, final E[] elements, final int index) {
-        super();
-
-
-        if (type == null) {
-            throw new IllegalArgumentException("null type");
-        }
-
-        if (elements == null) {
-            throw new IllegalArgumentException("null elements");
-        }
-
-        if (!type.isAssignableFrom(elements.getClass().getComponentType())) {
-            throw new IllegalArgumentException(
-                "elements is not assignable to type");
-        }
-
-        if (elements.length == 0 && index != -1) {
-            throw new IllegalArgumentException(
-                "illegal index(" + index + ") for elements.length("
-                + elements.length + ")");
-        }
-
-        if (elements.length > 0
-            && (index < 0 || index >= elements.length)) {
-            throw new IllegalArgumentException(
-                "illegal index(" + index + ") for elements.length("
-                + elements.length + ")");
-        }
-
-        this.type = type;
-        this.elements = new LinkedList<E>();
-        this.index = index;
-
-        pcs = new PropertyChangeSupport(this);
-    }
-     */
-
-
     /**
      * 
      * @param elements
@@ -308,7 +244,7 @@ public class ArrayBean<E> {
      *
      * @param newElements new elements
      */
-    public void setElements(final E[] newElements) {
+    public <T extends E> void setElements(final T[] newElements) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
@@ -324,7 +260,8 @@ public class ArrayBean<E> {
      * @param newElements new elements
      * @param indexPolicy index policy
      */
-    public void setElements(final E[] newElements, final int indexPolicy) {
+    public <T extends E> void setElements(final T[] newElements,
+                                          final int indexPolicy) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
@@ -340,8 +277,8 @@ public class ArrayBean<E> {
      * @param newElements new elements
      * @param indexPolicy honor-current-index flag
      */
-    public void setElements(final Collection<? extends E> newElements,
-                            final int indexPolicy) {
+    private void setElements(final Collection<? extends E> newElements,
+                             final int indexPolicy) {
 
         if (newElements == null) {
             throw new IllegalArgumentException("null newElements");
