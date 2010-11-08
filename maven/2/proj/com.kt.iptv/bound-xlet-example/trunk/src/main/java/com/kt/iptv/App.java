@@ -24,7 +24,7 @@ public class App implements Xlet {
     @Override
     public void startXlet() throws XletStateChangeException {
         
-        new ObfuscateMe().secret();
+        new Madonna().secret();
     }
 
 
