@@ -23,8 +23,8 @@
       <snapshotVersion>
         <classifier>jsr14</classifier>
         <extension>jar</extension>
-        <value>1.0-20101108.093827-79</value>
-        <updated>20101108093827</updated>
+        <value>1.0-20101108.095910-81</value>
+        <updated>20101108095910</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>sources</classifier>
