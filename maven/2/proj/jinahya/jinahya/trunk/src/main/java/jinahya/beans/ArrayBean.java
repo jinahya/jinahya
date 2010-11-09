@@ -480,10 +480,10 @@ public class ArrayBean<E> {
      */
     public void clear() {
         final E[] oldElements = getElements();
-        @SuppressWarnings("unchecked")
-        final E[] newElements = (E[]) Array.newInstance(
-            oldElements.getClass().getComponentType(), 0);
-        setElements(newElements);
+        elements.clear();
+        setIndex(-1);
+        pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldElements,
+                               getElements());
     }
 
 
@@ -531,8 +531,6 @@ public class ArrayBean<E> {
         }
     }
 
-
-    //private final Class<E> type;
 
     private final List<E> elements;
     private int index;
