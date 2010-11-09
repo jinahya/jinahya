@@ -208,11 +208,11 @@ public class ArrayBean<E> {
 
 
     /**
-     * Returns elements' size.
+     * Returns elements' length.
      *
-     * @return elements' size
+     * @return elements' length
      */
-    public int getSize() {
+    public int getLength() {
         return elements.size();
     }
 
