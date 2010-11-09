@@ -13,6 +13,7 @@
     <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
