@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,42 +14,33 @@
  *  limitations under the License.
  */
 
-package jinahya.xmlpull.v1;
+package jinahya.xml;
 
 
-import java.io.IOException;
-import jinahya.xml.XMLParsable;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
+import java.io.Serializable;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface XmlPullParsable
-    extends XMLParsable<XmlPullParser, XmlSerializer>{
+public interface XMLParsable<R, W> extends Serializable {
 
 
     /**
+     * Reads values from given <code>reader</code>.
      *
-     * @param parser
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @deprecated
+     * @param reader XML reader
+     * @throws Exception if any error occurs
      */
-    void parse(XmlPullParser parser) throws XmlPullParserException, IOException;
+    void read(R reader) throws Exception;
 
 
     /**
+     * Writes values to given <code>writer</code>.
      *
-     * @param serializer
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @deprecated
+     * @param writer XML writer
+     * @throws Exception if any error occurs.
      */
-    void serialize(XmlSerializer serializer)
-        throws XmlPullParserException, IOException;
+    void write(W writer) throws Exception;
 }

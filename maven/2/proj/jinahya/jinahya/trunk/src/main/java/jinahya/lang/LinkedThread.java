@@ -21,17 +21,29 @@ package jinahya.lang;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class LinkedThread extends Thread {
+public abstract class LinkedThread<B, A> extends Thread {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param parent parent thread to join
+     */
+    public LinkedThread(final Thread parent) {
+        this(parent, 0L);
+    }
 
 
     /**
      * 
-     * @param parent
+     * @param parent parent thread to join
+     * @param millis the time to wait in milliseconds
      */
-    public LinkedThread(final Thread parent) {
+    public LinkedThread(final Thread parent, final long millis) {
         super();
 
         this.parent = parent;
+        this.millis = millis;
     }
 
 
@@ -39,17 +51,24 @@ public abstract class LinkedThread extends Thread {
     public final void run() {
 
         try {
-            runThread();
+            runBeforeResult = runBefore();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            runBeforeThrown = e;
         }
 
         if (parent != null) {
             try {
-                parent.join();
+                parent.join(millis);
+                joined = true;
             } catch (InterruptedException ie) {
                 ie.printStackTrace(System.out);
             }
+        }
+
+        try {
+            runAfterResult = runAfter();
+        } catch (Exception e) {
+            runAfterThrown = e;
         }
     }
 
@@ -66,10 +85,75 @@ public abstract class LinkedThread extends Thread {
 
     
     /**
-     * 
+     * Executes desired tasks before joining parent.
      */
-    protected abstract void runThread();
+    protected abstract B runBefore();
+
+
+    /**
+     * Executes desired tasks after joining parent.
+     */
+    protected abstract A runAfter();
+
+    
+    /**
+     * Returns any thrown exception while executing {@link #runBefore()}.
+     *
+     * @return thrown exception
+     */
+    public Throwable getRunBeforeThrown() {
+        return runBeforeThrown;
+    }
+
+
+    /**
+     * 
+     * @return
+     */
+    public Throwable getRunAfterThrown() {
+        return runAfterThrown;
+    }
+
+
+    /**
+     * Returns whether successfully joined or not.
+     *
+     * @return joined
+     */
+    public boolean getJoined() {
+        return joined;
+    }
+
+
+    /**
+     * Returns the return value of {@link #runBefore()}.
+     *
+     * @return runBefore result
+     * @see #runBefore()
+     */
+    public B getRunBeforeResult() {
+        return runBeforeResult;
+    }
+
+
+    /**
+     * Returns the return value of {@link #runAfter()}.
+     *
+     * @return runAfter result
+     * @see #runAfter()
+     */
+    public A getRunAfterResult() {
+        return runAfterResult;
+    }
 
 
     private final Thread parent;
+    private final long millis;
+
+    private volatile Exception runBeforeThrown = null;
+    private volatile Exception runAfterThrown = null;
+    private volatile boolean joined = false;
+
+    private B runBeforeResult = null;
+    private A runAfterResult = null;
 }

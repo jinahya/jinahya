@@ -21,14 +21,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import jinahya.xml.XMLParsableRoot;
+
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface XmlPullParsableRoot extends XmlPullParsable {
+public interface XmlPullParsableRoot
+    extends XmlPullParsable, XMLParsableRoot<XmlPullParser, XmlSerializer> {
 
 
     /**
@@ -36,6 +41,7 @@ public interface XmlPullParsableRoot extends XmlPullParsable {
      * @param input
      * @throws XmlPullParserException
      * @throws IOException
+     * @deprecated
      */
     void parse(InputStream input) throws XmlPullParserException, IOException;
 
@@ -45,6 +51,7 @@ public interface XmlPullParsableRoot extends XmlPullParsable {
      * @param output
      * @throws XmlPullParserException
      * @throws IOException
+     * @deprecated
      */
     void serialize(OutputStream output)
         throws XmlPullParserException, IOException;
