@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class PercentEncoderTest {
+public class PercentDecoderTest {
 
 
     private static final String DECODED = "~!@#$%^&*()_+";
@@ -39,16 +39,14 @@ public class PercentEncoderTest {
 
 
     @Test
-    public void testEncode() throws IOException {
+    public void testDecode() throws IOException {
 
-        final InputStream input = new ByteArrayInputStream(DECODED.getBytes());
+        final InputStream input = new ByteArrayInputStream(ENCODED.getBytes());
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        PercentEncoder.encode(input, output);
-        output.flush();
+        PercentDecoder.decode(input, output);
 
         final String actual = new String(output.toByteArray());
 
-        Assert.assertEquals(actual, ENCODED);
+        Assert.assertEquals(actual, DECODED);
     }
 }

@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,13 +14,14 @@
  *  limitations under the License.
  */
 
-package jinahya.rfc3986;
+package jinahya.net;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -30,25 +31,26 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class PercentEncoderTest {
-
-
-    private static final String DECODED = "~!@#$%^&*()_+";
-
-    private static final String ENCODED = "~%21%40%23%24%25%5E%26%2A%28%29_%2B";
+public class URLDecodingInputStreamTest {
 
 
     @Test
-    public void testEncode() throws IOException {
+    public void testDecoding() throws IOException {
 
-        final InputStream input = new ByteArrayInputStream(DECODED.getBytes());
+        final String expected = " `1234567890-=~!@#$%^&*()_+";
+        final byte[] encoded =
+            URLEncoder.encode(expected, "UTF-8").getBytes("US-ASCII");
+
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final InputStream input = new URLDecodingInputStream(
+            new ByteArrayInputStream(encoded));
+        final byte[] buffer = new byte[1024];
+        for (int read = -1; (read = input.read(buffer)) != -1;) {
+            output.write(buffer, 0, read);
+        }
 
-        PercentEncoder.encode(input, output);
-        output.flush();
-
-        final String actual = new String(output.toByteArray());
-
-        Assert.assertEquals(actual, ENCODED);
+        final byte[] decoded = output.toByteArray();
+        
+        Assert.assertEquals(new String(decoded, "UTF-8"), expected);
     }
 }

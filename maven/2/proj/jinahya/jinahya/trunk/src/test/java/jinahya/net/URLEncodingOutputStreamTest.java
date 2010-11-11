@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- *
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-package jinahya.rfc3986;
+package jinahya.net;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLDecoder;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -30,25 +30,25 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class PercentEncoderTest {
-
-
-    private static final String DECODED = "~!@#$%^&*()_+";
-
-    private static final String ENCODED = "~%21%40%23%24%25%5E%26%2A%28%29_%2B";
+public class URLEncodingOutputStreamTest {
 
 
     @Test
-    public void testEncode() throws IOException {
+    public void testEncoding() throws IOException {
 
-        final InputStream input = new ByteArrayInputStream(DECODED.getBytes());
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final String expected = " `1234567890-=~!@#$%^&*()_+";
 
-        PercentEncoder.encode(input, output);
-        output.flush();
+        final byte[] decoded = expected.getBytes("UTF-8");
 
-        final String actual = new String(output.toByteArray());
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final OutputStream output = new URLEncodingOutputStream(baos);
+        output.write(decoded);
 
-        Assert.assertEquals(actual, ENCODED);
+        final byte[] encoded = baos.toByteArray();
+
+        final String actual = URLDecoder.decode(
+            new String(encoded, "US-ASCII"), "UTF-8");
+
+        Assert.assertEquals(actual, expected);
     }
 }
