@@ -176,4 +176,29 @@ public class XMLStreamHelperTest {
             writer.close();
         }
     }
+
+
+    @Test
+    public void copyElement() throws XMLStreamException {
+
+        final String expected = "<a><b c=\"d\">e</b></a>";
+
+        
+        final XMLStreamReader reader = XML_INPUT_FACTORY.createXMLStreamReader(
+            new StringReader(expected));
+
+        reader.nextTag();
+        
+        final StringWriter stream = new StringWriter();
+
+        final XMLStreamWriter writer =
+            XML_OUTPUT_FACTORY.createXMLStreamWriter(stream);
+
+        XMLStreamHelper.copyElement(reader, writer);
+
+        writer.flush();
+        stream.flush();
+
+        Assert.assertEquals(stream.toString(), expected);
+    }
 }

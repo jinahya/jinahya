@@ -186,4 +186,93 @@ public class XMLStreamHelper {
             writer.writeEndElement();
         }
     }
+
+
+    /**
+     * 
+     * @param reader
+     * @param writer
+     * @throws XMLStreamException
+     */
+    public static void copyElement(final XMLStreamReader reader,
+                                   final XMLStreamWriter writer)
+        throws XMLStreamException {
+
+        reader.require(XMLStreamConstants.START_ELEMENT, null, null);
+
+        final String namespaceURI = reader.getNamespaceURI();
+        final String localName = reader.getLocalName();
+
+        if (namespaceURI == null) {
+            writer.writeStartElement(localName);
+        } else {
+            writer.writeStartElement(namespaceURI, localName);
+        }
+
+        final int attributeCount = reader.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
+            final String namespace = reader.getAttributeNamespace(i);
+            if (namespace == null) {
+                writer.writeAttribute(reader.getAttributeLocalName(i),
+                                      reader.getAttributeValue(i));
+            } else {
+                writer.writeAttribute(namespace,
+                                      reader.getAttributeLocalName(i),
+                                      reader.getAttributeValue(i));
+            }
+        }
+
+        final int namespaceCount = reader.getNamespaceCount();
+        for (int i = 0; i < namespaceCount; i++) {
+            writer.writeNamespace(reader.getNamespacePrefix(i),
+                                  reader.getNamespaceURI(i));
+        }
+        
+        while (reader.next() != XMLStreamConstants.END_ELEMENT) {
+            switch (reader.getEventType()) {
+                case XMLStreamConstants.ATTRIBUTE:
+                    break;
+                case XMLStreamConstants.CDATA:
+                    writer.writeCData(reader.getText());
+                    break;
+                case XMLStreamConstants.CHARACTERS:
+                    writer.writeCharacters(reader.getText());
+                    break;
+                case XMLStreamConstants.DTD:
+                    writer.writeDTD(reader.getText());
+                    break;
+                case XMLStreamConstants.END_DOCUMENT:
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    break;
+                case XMLStreamConstants.ENTITY_DECLARATION:
+                    // ??
+                    break;
+                case XMLStreamConstants.ENTITY_REFERENCE:
+                    writer.writeEntityRef(reader.getText());
+                    break;
+                case XMLStreamConstants.NAMESPACE:
+                    break;
+                case XMLStreamConstants.NOTATION_DECLARATION:
+                    break;
+                case XMLStreamConstants.PROCESSING_INSTRUCTION:
+                    writer.writeProcessingInstruction(
+                        reader.getPITarget(), reader.getPIData());
+                    break;
+                case XMLStreamConstants.SPACE:
+                    break;
+                case XMLStreamConstants.START_DOCUMENT:
+                    break;
+                case XMLStreamConstants.START_ELEMENT:
+                    copyElement(reader, writer);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        writer.writeEndElement();
+
+        reader.require(XMLStreamConstants.END_ELEMENT, namespaceURI, localName);
+    }
 }
