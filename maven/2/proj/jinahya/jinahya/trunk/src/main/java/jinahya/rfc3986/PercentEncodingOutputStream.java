@@ -24,7 +24,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class PercentEncodingOutputStream extends FilterOutputStream {
 
