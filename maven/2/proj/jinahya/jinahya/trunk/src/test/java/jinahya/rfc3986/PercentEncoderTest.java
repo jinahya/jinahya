@@ -58,7 +58,7 @@ public class PercentEncoderTest {
 
         final InputStream input = new ByteArrayInputStream(ENCODED.getBytes());
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PercentEncoder.decode(input, output);
+        PercentDecoder.decode(input, output);
 
         final String actual = new String(output.toByteArray());
 

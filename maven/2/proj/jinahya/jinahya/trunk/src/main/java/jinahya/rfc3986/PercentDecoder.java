@@ -17,6 +17,7 @@
 package jinahya.rfc3986;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,7 +27,7 @@ import java.io.OutputStream;
  *
  * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
  */
-public class PercentEncoder {
+public class PercentDecoder {
 
 
     /**
@@ -35,7 +36,7 @@ public class PercentEncoder {
      * @param output
      * @throws IOException
      */
-    public static void encode(final InputStream input,
+    public static void decode(final InputStream input,
                               final OutputStream output)
         throws IOException {
 
@@ -47,34 +48,37 @@ public class PercentEncoder {
             throw new IllegalArgumentException("null output");
         }
 
-        for (int b = -1; (b = input.read()) != -1; ) {
-            encode(b, output);
+        for (int b = -1; (b = input.read()) != -1;) {
+            output.write(decode(b, input));
         }
     }
 
 
-    static void encode(final int input, final OutputStream output)
+    static int decode(final int b, final InputStream input)
         throws IOException {
 
-        if (input >= 0x30 && input <= 0x39) { // digit
-            output.write(input);
-        } else if (input >= 0x41 && input <= 0x5A) { // upper case alpha
-            output.write(input);
-        } else if (input >= 0x61 && input <= 0x7A) { // lower case alpha
-            output.write(input);
-        } else if (input == 0x2D || input == 0x5F || input == 0x2E
-            || input == 0x7E) {
+        if (b >= 0x30 && b <= 0x39) { // digit
+            return b;
+        } else if (b >= 0x41 && b <= 0x5A) { // upper case alpha
+            return b;
+        } else if (b >= 0x61 && b <= 0x7A) { // lower case alpha
+            return b;
+        } else if (b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) {
             // - _ . ~
-            output.write(input);
+            return b;
+        } else if (b == 0x25) { // '%'
+            return ((decode(input.read()) << 4)
+                    | (decode(input.read()) & 0x0F));
         } else {
-            output.write(0x25);
-            output.write(encode(input >> 4));
-            output.write(encode(input & 0xF));
+            throw new IOException("illegal octet: " + b);
         }
     }
 
 
-    private static int encode(final int i) {
-        return i + (i < 0x0A ? 0x30 : 0x37);
+    private static int decode(final int i) throws EOFException {
+        if (i == -1) {
+            throw new EOFException("eof");
+        }
+        return i - (i >= 0x41 ? 0x37 : 0x30);
     }
 }
