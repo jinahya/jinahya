@@ -11,6 +11,7 @@ Add your content here.
 == Dependency ==
 {{{<dependency>}}}
   {{{<id>jinahya</id>}}}
+  {{{<url>http://jinahya.googlecode.com/svn/maven/2/repo/</url>}}}
 {{{</dependency>}}}
 == Repository ==
 Add your content here.  Format your content with:
