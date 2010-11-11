@@ -9,10 +9,10 @@ Add your content here.
 = Details =
 
 == Dependency ==
-'{<dependency>}}}
-  {{{<id>jinahya</id>}}}
-  {{{<url>http://jinahya.googlecode.com/svn/maven/2/repo/</url>}}}
-{{{</dependency>}}}'
+'{<dependency>
+ <id>jinahya</id>
+  <url&gthttp://jinahya.googlecode.com/svn/maven/2/repo/</url>
+</dependency>'
 
 == Repository ==
 Add your content here.  Format your content with:
