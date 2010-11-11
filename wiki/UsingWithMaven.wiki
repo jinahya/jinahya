@@ -9,8 +9,9 @@ Add your content here.
 = Details =
 
 == Dependency ==
-'<dependency>
-</dependency'
+{{{<dependency>}}}
+  {{{<id>jinahya</id>}}}
+{{{</dependency>}}}
 == Repository ==
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
