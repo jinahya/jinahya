@@ -51,13 +51,13 @@ public class URLEncodingOutputStream extends FilterOutputStream {
             super.write(0x2B);
         } else {
             super.write(0x25);
-            super.write(encode(b >> 4));
-            super.write(encode(b & 0xF));
+            super.write(itoa(b >> 4));
+            super.write(itoa(b & 0xF));
         }
     }
 
 
-    private int encode(final int i) {
+    private int itoa(final int i) {
         return i + (i < 0x0A ? 0x30 : 0x37);
     }
 }

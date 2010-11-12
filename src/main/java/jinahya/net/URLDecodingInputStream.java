@@ -48,18 +48,21 @@ public class URLDecodingInputStream extends FilterInputStream {
             || (b >= 0x61 && b <= 0x7A) // lower case alpha
             || (b == 0x2E || b == 0x2D || b == 0x2A || b == 0x5F)) { // . - * _
             return b;
-        } else if (b == 0x2B) { // +
-            return 0x20; // SPACE
-        } else if (b == 0x25) { // %
-            return ((decode(super.read()) << 4)
-                    | (decode(super.read()) & 0x0F));
-        } else {
-            throw new IOException("illegal octet: " + b);
         }
+
+        if (b == 0x2B) { // +
+            return 0x20; // SPACE
+        }
+
+        if (b == 0x25) { // %
+            return ((atoi(super.read()) << 4) | (atoi(super.read()) & 0x0F));
+        }
+
+        throw new IOException("illegal octet: " + b);
     }
 
 
-    private int decode(final int i) throws EOFException {
+    private int atoi(final int i) throws EOFException {
         if (i == -1) {
             throw new EOFException("eof");
         }
