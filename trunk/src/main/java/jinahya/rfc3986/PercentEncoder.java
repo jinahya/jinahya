@@ -94,21 +94,20 @@ public class PercentEncoder {
     }
 
 
-    static void encode(final int input, final OutputStream output)
+    static void encode(final int b, final OutputStream output)
         throws IOException {
 
-        if ((input >= 0x30 && input <= 0x39)  // digit
-            || (input >= 0x41 && input <= 0x5A) // upper case alpha
-            || (input >= 0x61 && input <= 0x7A) // lower case alpha
-            || (input == 0x2D || input == 0x5F || input == 0x2E
-                || input == 0x7E)) { // - _ . ~
-            output.write(input);
+        if ((b >= 0x30 && b <= 0x39)  // digit
+            || (b >= 0x41 && b <= 0x5A) // upper case alpha
+            || (b >= 0x61 && b <= 0x7A) // lower case alpha
+            || (b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E)) { // - _ . ~
+            output.write(b);
             return;
         }
 
         output.write(0x25);
-        output.write(itoa(input >> 4));
-        output.write(itoa(input & 0xF));
+        output.write(itoa(b >> 4));
+        output.write(itoa(b & 0xF));
     }
 
 

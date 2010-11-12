@@ -98,20 +98,18 @@ public class PercentDecoder {
     static int decode(final int b, final InputStream input)
         throws IOException {
 
-        if (b >= 0x30 && b <= 0x39) { // digit
+        if ((b >= 0x30 && b <= 0x39)  // digit
+            || (b >= 0x41 && b <= 0x5A) // upper case alpha
+            || (b >= 0x61 && b <= 0x7A) // lower case alpha
+            || (b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E)) { // - _ . ~
             return b;
-        } else if (b >= 0x41 && b <= 0x5A) { // upper case alpha
-            return b;
-        } else if (b >= 0x61 && b <= 0x7A) { // lower case alpha
-            return b;
-        } else if (b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) {
-            // - _ . ~
-            return b;
-        } else if (b == 0x25) { // '%'
-            return ((atoi(input.read()) << 4) | (atoi(input.read()) & 0x0F));
-        } else {
-            throw new IOException("illegal octet: " + b);
         }
+
+        if (b == 0x25) { // '%'
+            return ((atoi(input.read()) << 4) | (atoi(input.read()) & 0x0F));
+        }
+
+        throw new IOException("illegal octet: " + b);
     }
 
 
