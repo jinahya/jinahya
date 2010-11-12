@@ -1,3 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="39" tokens="155">
+<file line="69" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\net\URLDecodingInputStream.java"/>
+<file line="43" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\rfc3986\PercentDecodingInputStream.java"/>
+<codefragment>
+<![CDATA[
+        return PercentDecoder.decode(b, in);
+    }
+
+
+    @Override
+    public int read(byte[] b) throws IOException {
+        return read(b, 0, b.length);
+    }
+
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        for (int i = 0; i < len; i++) {
+            if ((b[off + i] = (byte) read()) == -1) {
+                return i == 0 ? -1 : i;
+            }
+        }
+        return len;
+    }
+
+
+    @Override
+    public boolean markSupported() {
+        return false;
+    }
+
+
+    @Override
+    public long skip(long n) throws IOException {
+        long l = 0;
+        for (; l < n; l++) {
+            int b = read();
+            if (b == -1) {
+                return l;
+            }
+        }
+        return l;
+    }
+}
+]]>
+</codefragment>
+</duplication>
 </pmd-cpd>
