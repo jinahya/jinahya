@@ -17,6 +17,8 @@
 package jinahya.rfc3986;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +30,34 @@ import java.io.OutputStream;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class PercentDecoder {
+
+
+    /**
+     * 
+     * @param encoded
+     * @return
+     * @throws IOException
+     */
+    public static String decode(final String encoded) throws IOException {
+        return decode(encoded, "UTF-8");
+    }
+
+
+    /**
+     * 
+     * @param encoded
+     * @param encoding
+     * @return
+     * @throws IOException
+     */
+    public static String decode(final String encoded, final String encoding)
+        throws IOException {
+
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        decode(new ByteArrayInputStream(encoded.getBytes("US-ASCII")), output);
+        output.flush();
+        return new String(output.toByteArray(), encoding);
+    }
 
 
     /**
@@ -67,15 +97,14 @@ public class PercentDecoder {
             // - _ . ~
             return b;
         } else if (b == 0x25) { // '%'
-            return ((decode(input.read()) << 4)
-                    | (decode(input.read()) & 0x0F));
+            return ((atoi(input.read()) << 4) | (atoi(input.read()) & 0x0F));
         } else {
             throw new IOException("illegal octet: " + b);
         }
     }
 
 
-    private static int decode(final int i) throws EOFException {
+    static int atoi(final int i) throws EOFException {
         if (i == -1) {
             throw new EOFException("eof");
         }

@@ -54,12 +54,28 @@ public class PercentDecodingInputStream extends FilterInputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             if ((b[off + i] = (byte) read()) == -1) {
-                if (i == 0)  {
-                    return -1;
-                }
-                return i;
+                return i == 0 ? -1 : i;
             }
         }
         return len;
+    }
+
+
+    @Override
+    public boolean markSupported() {
+        return false;
+    }
+
+
+    @Override
+    public long skip(long n) throws IOException {
+        long l = 0;
+        for (; l < n; l++) {
+            int b = read();
+            if (b == -1) {
+                return l;
+            }
+        }
+        return l;
     }
 }

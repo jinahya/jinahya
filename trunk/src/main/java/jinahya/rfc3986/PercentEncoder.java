@@ -17,6 +17,8 @@
 package jinahya.rfc3986;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +29,34 @@ import java.io.OutputStream;
  * @author <a href="jinahya@gmail.com">Jin Kwon</a>
  */
 public class PercentEncoder {
+
+
+    /**
+     * 
+     * @param decoded
+     * @return
+     * @throws IOException
+     */
+    public static String encode(final String decoded) throws IOException {
+        return encode(decoded, "UTF-8");
+    }
+
+
+    /**
+     * 
+     * @param decoded
+     * @param encoding
+     * @return
+     * @throws IOException
+     */
+    public static String encode(final String decoded, final String encoding)
+        throws IOException {
+
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        encode(new ByteArrayInputStream(decoded.getBytes(encoding)), output);
+        output.flush();
+        return new String(output.toByteArray(), "US-ASCII");
+    }
 
 
     /**
@@ -68,13 +98,13 @@ public class PercentEncoder {
             output.write(input);
         } else {
             output.write(0x25);
-            output.write(encode(input >> 4));
-            output.write(encode(input & 0xF));
+            output.write(itoa(input >> 4));
+            output.write(itoa(input & 0xF));
         }
     }
 
 
-    private static int encode(final int i) {
+    static int itoa(final int i) {
         return i + (i < 0x0A ? 0x30 : 0x37);
     }
 }
