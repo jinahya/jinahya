@@ -53,10 +53,21 @@ public class PercentDecoder {
     public static String decode(final String encoded, final String encoding)
         throws IOException {
 
+        return new String(decode(encoded.getBytes("US-ASCII")), encoding);
+    }
+
+
+    /**
+     * 
+     * @param encoded
+     * @return
+     * @throws IOException
+     */
+    public static byte[] decode(final byte[] encoded) throws IOException {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        decode(new ByteArrayInputStream(encoded.getBytes("US-ASCII")), output);
+        decode(new ByteArrayInputStream(encoded), output);
         output.flush();
-        return new String(output.toByteArray(), encoding);
+        return output.toByteArray();
     }
 
 

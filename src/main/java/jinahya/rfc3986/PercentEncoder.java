@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,10 +52,21 @@ public class PercentEncoder {
     public static String encode(final String decoded, final String encoding)
         throws IOException {
 
+        return new String(encode(decoded.getBytes(encoding)), "US-ASCII");
+    }
+
+
+    /**
+     * 
+     * @param decoded
+     * @return
+     * @throws IOException
+     */
+    public static byte[] encode(final byte[] decoded) throws IOException {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        encode(new ByteArrayInputStream(decoded.getBytes(encoding)), output);
+        encode(new ByteArrayInputStream(decoded), output);
         output.flush();
-        return new String(output.toByteArray(), "US-ASCII");
+        return output.toByteArray();
     }
 
 
@@ -86,21 +97,18 @@ public class PercentEncoder {
     static void encode(final int input, final OutputStream output)
         throws IOException {
 
-        if (input >= 0x30 && input <= 0x39) { // digit
+        if ((input >= 0x30 && input <= 0x39)  // digit
+            || (input >= 0x41 && input <= 0x5A) // upper case alpha
+            || (input >= 0x61 && input <= 0x7A) // lower case alpha
+            || (input == 0x2D || input == 0x5F || input == 0x2E
+                || input == 0x7E)) { // - _ . ~
             output.write(input);
-        } else if (input >= 0x41 && input <= 0x5A) { // upper case alpha
-            output.write(input);
-        } else if (input >= 0x61 && input <= 0x7A) { // lower case alpha
-            output.write(input);
-        } else if (input == 0x2D || input == 0x5F || input == 0x2E
-            || input == 0x7E) {
-            // - _ . ~
-            output.write(input);
-        } else {
-            output.write(0x25);
-            output.write(itoa(input >> 4));
-            output.write(itoa(input & 0xF));
+            return;
         }
+
+        output.write(0x25);
+        output.write(itoa(input >> 4));
+        output.write(itoa(input & 0xF));
     }
 
 
