@@ -68,7 +68,7 @@ public class CloseableSupport<T extends Closeable<T>> implements Closeable<T> {
 
 
     /**
-     * This method throws an IllegalArgumentException if this support is closed.
+     * This method throws an IllegalStateException if this support is closed.
      */
     public synchronized void check() {
         if (closed) {
