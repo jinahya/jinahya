@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya</groupId>
+  <artifactId>jinahya-jsr14</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20101113071452</lastUpdated>
+  </versioning>
+</metadata>
