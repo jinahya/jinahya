@@ -58,31 +58,51 @@ public class ImagePool implements Closeable<ImagePool> {
          * @return an image or null.
          */
         Image createImage(byte[] imagedata);
+
+
+        /**
+         * 
+         * @param imagedata
+         * @param imageoffset
+         * @param imagelength
+         * @return
+         */
+        Image createImage(byte[] imagedata, int imageoffset, int imagelength);
     }
 
 
     /**
      * An ImageCreator implementation using the Toolkit.
      */
-    private static final class ToolkitImageCreator implements ImageCreator {
+    private static final class TC implements ImageCreator {
 
 
         /** default toolkit. */
         private static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();
 
 
-        @Override
-        public Image createImage(final byte[] imagedata) {
-            if (imagedata == null) {
-                throw new IllegalArgumentException("null imagedata");
-            }
-            return TOOLKIT.createImage(imagedata);
+        /** private. */
+        private TC() {
+            super();
         }
 
 
-        /** private. */
-        private ToolkitImageCreator() {
-            super();
+        @Override
+        public Image createImage(final byte[] imagedata) {
+
+            return createImage(imagedata, 0, imagedata.length);
+        }
+
+
+        @Override
+        public Image createImage(final byte[] imagedata, final int imageoffset,
+                                 final int imagelength) {
+
+            if (imagedata == null) {
+                throw new IllegalArgumentException("null imagedata");
+            }
+
+            return TOOLKIT.createImage(imagedata, imageoffset, imagelength);
         }
     }
 
@@ -94,7 +114,7 @@ public class ImagePool implements Closeable<ImagePool> {
      */
     public static ImagePool newToolkitImagePool() {
 
-        return new ImagePool(new ToolkitImageCreator()) {
+        return new ImagePool(new TC()) {
 
             @Override
             public ImagePool put(final String name, final URL imageurl)
@@ -108,12 +128,12 @@ public class ImagePool implements Closeable<ImagePool> {
                     throw new IllegalArgumentException("null imageurl");
                 }
 
-                if (super.map == null) {
-                    throw new IllegalStateException("closed");
-                }
+                synchronized (super.support) {
 
-                return put(name, ToolkitImageCreator.TOOLKIT.
-                        createImage(imageurl));
+                    super.support.check();
+
+                    return put(name, TC.TOOLKIT.createImage(imageurl));
+                }
             }
         };
     }
@@ -147,7 +167,7 @@ public class ImagePool implements Closeable<ImagePool> {
     public ImagePool open() {
 
         synchronized (support) {
-            // do anyting here
+
             return support.open();
         }
     }
@@ -175,9 +195,11 @@ public class ImagePool implements Closeable<ImagePool> {
     public ImagePool close() {
 
         synchronized (support) {
+
             for (Image image : map.values()) {
                 image.flush();
             }
+
             map.clear();
 
             return support.close();
@@ -372,6 +394,21 @@ public class ImagePool implements Closeable<ImagePool> {
      */
     public ImagePool put(final String name, final byte[] imagedata) {
 
+        return put(name, imagedata, 0, imagedata.length);
+    }
+
+
+    /**
+     * 
+     * @param name
+     * @param imagedata
+     * @param imageoffset
+     * @param imagelength
+     * @return
+     */
+    public ImagePool put(final String name, final byte[] imagedata,
+                         final int imageoffset, final int imagelength) {
+
         if (name == null) {
             throw new IllegalArgumentException("null name");
         }
@@ -384,7 +421,9 @@ public class ImagePool implements Closeable<ImagePool> {
 
             support.check();
 
-            final Image image = creator.createImage(imagedata);
+            final Image image = creator.createImage(
+                imagedata, imageoffset, imagelength);
+
             if (image != null) {
                 put(name, image);
             }
@@ -416,6 +455,7 @@ public class ImagePool implements Closeable<ImagePool> {
             support.check();
 
             final Image previous = map.put(name, image);
+
             if (previous != null) {
                 previous.flush();
             }
@@ -512,10 +552,10 @@ public class ImagePool implements Closeable<ImagePool> {
     public String[] names() {
 
         synchronized (support) {
+
             support.check();
 
-            final String[] names = new String[map.size()];
-            return map.keySet().toArray(names);
+            return map.keySet().toArray(new String[map.size()]);
         }
     }
 
@@ -528,6 +568,10 @@ public class ImagePool implements Closeable<ImagePool> {
      */
     public ImagePool load(final MediaTracker tracker, final int id)
         throws InterruptedException {
+
+        if (tracker == null) {
+            throw new IllegalArgumentException("null tracker");
+        }
 
         synchronized (support) {
 
@@ -559,13 +603,13 @@ public class ImagePool implements Closeable<ImagePool> {
     public ImagePool load(final Component component)
         throws InterruptedException {
 
+        if (component == null) {
+            throw new IllegalArgumentException("null component");
+        }
+
         synchronized (support) {
 
             support.check();
-
-            if (component == null) {
-                throw new IllegalArgumentException("null component");
-            }
 
             return load(new MediaTracker(component), 0);
         }

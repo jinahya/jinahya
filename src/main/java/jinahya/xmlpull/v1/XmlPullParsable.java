@@ -18,6 +18,7 @@ package jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
+
 import jinahya.xml.XMLParsable;
 
 import org.xmlpull.v1.XmlPullParser;

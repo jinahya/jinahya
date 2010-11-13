@@ -9,6 +9,6 @@ else
     echo "--- NG ---"
     exit $?
 fi
-mvn -Pjsr14 clean deploy
+#mvn -Pjsr14 clean deploy
 mvn clean javadoc:jar source:jar deploy
 exit 0

@@ -13,7 +13,6 @@
     <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -38,7 +37,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <build.maven-compiler-plugin.target>1.6</build.maven-compiler-plugin.target>
+
+    <project.build.maven-compiler-plugin.source>1.6</project.build.maven-compiler-plugin.source>
+    <project.build.maven-compiler-plugin.target>1.6</project.build.maven-compiler-plugin.target>
 
     <reporting.maven-checkstyle-plugin.version>2.6</reporting.maven-checkstyle-plugin.version>
     <reporting.maven-javadoc-plugin.version>2.7</reporting.maven-javadoc-plugin.version>
@@ -150,8 +151,8 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <source>1.6</source>
-              <target>${build.maven-compiler-plugin.target}</target>
+              <source>${project.build.maven-compiler-plugin.source}</source>
+              <target>${project.build.maven-compiler-plugin.target}</target>
             </configuration>
           </execution>
           <execution>
@@ -266,6 +267,7 @@
     </site>
   </distributionManagement>
   <profiles>
+    <!--
     <profile>
       <id>jsr14</id>
       <build>
@@ -282,6 +284,7 @@
         <build.maven-compiler-plugin.target>jsr14</build.maven-compiler-plugin.target>
       </properties>
     </profile>
+    -->
     <profile>
       <id>wagon-svn</id>
       <distributionManagement>
