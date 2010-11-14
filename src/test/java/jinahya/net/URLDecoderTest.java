@@ -17,42 +17,46 @@
 package jinahya.net;
 
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Random;
+
 import jinahya.lang.ModifiedUTF8;
+import jinahya.lang.ModifiedUTF8.Acceptor;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class URLEncodingOutputStreamTest {
+public class URLDecoderTest {
 
 
     private static final Random RANDOM = new Random();
 
 
+    private static final Acceptor ACCEPTOR = new Acceptor() {
+        @Override
+        public boolean accept(final char c) {
+            return !Character.isISOControl(c) && !Character.isWhitespace(c);
+        }
+    };
+
+
     @Test(invocationCount = 128)
-    public void testEncoding() throws IOException {
+    public void testDecoding() throws IOException {
 
         final String generated = ModifiedUTF8.generate(RANDOM.nextInt(128) + 1);
 
-        final byte[] expected = java.net.URLEncoder.encode(
-            generated, "UTF-8").getBytes("US-ASCII");
-        
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final OutputStream output = new URLEncodingOutputStream(baos);
-        output.write(generated.getBytes("UTF-8"));
-        output.flush();
+        final String encoded = java.net.URLEncoder.encode(generated, "UTF-8");
 
-        final byte[] actual = baos.toByteArray();
-        
-        Assert.assertEquals(actual, expected);
+        final String decoded = URLDecoder.decode(encoded, "UTF-8");
+
+        Assert.assertEquals(decoded.getBytes("UTF-8"),
+                            generated.getBytes("UTF-8"));
     }
 
 
@@ -60,12 +64,11 @@ public class URLEncodingOutputStreamTest {
         System.out.print(name + ": ");
         for (byte b : bytes) {
             final int i = b & 0xFF;
-            System.out.print(" ");
             if (i < 0x0A) {
                 System.out.print("0");
             }
             System.out.print(Integer.toHexString(i).toUpperCase());
         }
-        System.out.println(" (" + bytes.length + ")");
+        System.out.println();
     }
 }

@@ -40,24 +40,6 @@ public class URLEncodingOutputStream extends FilterOutputStream {
 
     @Override
     public void write(final int b) throws IOException {
-
-        if ((b >= 0x30 && b <= 0x39) // digit
-            || (b >= 0x41 && b <= 0x5A) // upper case alpha
-            || (b >= 0x61 && b <= 0x7A) // lower case alpha
-            || (b == 0x2E || b == 0x2D || b == 0x2A || b == 0x5F)) {
-            // . - * _
-            super.write(b);
-        } else if (b == 0x20) {
-            super.write(0x2B);
-        } else {
-            super.write(0x25);
-            super.write(itoa(b >> 4));
-            super.write(itoa(b & 0xF));
-        }
-    }
-
-
-    private int itoa(final int i) {
-        return i + (i < 0x0A ? 0x30 : 0x37);
+        URLEncoder.encode(b & 0xFF, out);
     }
 }
