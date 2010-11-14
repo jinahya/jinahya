@@ -22,6 +22,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.Random;
+
+import jinahya.lang.ModifiedUTF8;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,23 +37,28 @@ import org.testng.annotations.Test;
 public class URLDecodingInputStreamTest {
 
 
-    @Test
+    private static final Random RANDOM = new Random();
+
+
+    @Test(invocationCount = 128)
     public void testDecoding() throws IOException {
 
-        final String expected = " `1234567890-=~!@#$%^&*()_+";
-        final byte[] encoded =
-            URLEncoder.encode(expected, "UTF-8").getBytes("US-ASCII");
+        final String generated =
+            ModifiedUTF8.generate(RANDOM.nextInt(128) + 1, RANDOM, null);
+
+        final String encoded = URLEncoder.encode(generated, "UTF-8");
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         final InputStream input = new URLDecodingInputStream(
-            new ByteArrayInputStream(encoded));
+            new ByteArrayInputStream(encoded.getBytes("US-ASCII")));
         final byte[] buffer = new byte[1024];
         for (int read = -1; (read = input.read(buffer)) != -1;) {
             output.write(buffer, 0, read);
         }
+        output.flush();
 
-        final byte[] decoded = output.toByteArray();
+        final byte[] actual = output.toByteArray();
         
-        Assert.assertEquals(new String(decoded, "UTF-8"), expected);
+        Assert.assertEquals(actual, generated.getBytes("UTF-8"));
     }
 }

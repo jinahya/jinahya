@@ -40,6 +40,6 @@ public class PercentEncodingOutputStream extends FilterOutputStream {
 
     @Override
     public void write(final int b) throws IOException {
-        PercentEncoder.encode(b, out);
+        PercentEncoder.encode(b & 0xFF, out);
     }
 }
