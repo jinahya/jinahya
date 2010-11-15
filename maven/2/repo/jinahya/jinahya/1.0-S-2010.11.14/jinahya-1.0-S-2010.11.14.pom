@@ -267,24 +267,6 @@
     </site>
   </distributionManagement>
   <profiles>
-    <!--
-    <profile>
-      <id>jsr14</id>
-      <build>
-        <plugins>
-          <plugin>
-           <artifactId>maven-jar-plugin</artifactId>
-           <configuration>
-             <classifier>${build.maven-compiler-plugin.target}</classifier>
-           </configuration>
-          </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <build.maven-compiler-plugin.target>jsr14</build.maven-compiler-plugin.target>
-      </properties>
-    </profile>
-    -->
     <profile>
       <id>wagon-svn</id>
       <distributionManagement>
