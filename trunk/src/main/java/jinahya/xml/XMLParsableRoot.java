@@ -24,12 +24,25 @@ import java.io.OutputStream;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <R> input reader type
+ * @param <W> output writer type
  */
 public interface XMLParsableRoot<R, W> extends XMLParsable<R, W> {
 
 
+    /**
+     * Reads document from given <code>input</code>.
+     *
+     * @param input input stream to read document
+     * @throws Exception if any error occurs
+     */
     void readDocument(final InputStream input) throws Exception;
 
 
+    /**
+     * 
+     * @param output output stream to write document
+     * @throws Exception if any error occurs
+     */
     void writeDocument(final OutputStream output) throws Exception;
 }

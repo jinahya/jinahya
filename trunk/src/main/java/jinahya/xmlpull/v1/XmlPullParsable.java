@@ -39,7 +39,7 @@ public interface XmlPullParsable
      * @param parser
      * @throws XmlPullParserException
      * @throws IOException
-     * @deprecated
+     * @deprecated use {@link #read(java.lang.Object)}
      */
     void parse(XmlPullParser parser) throws XmlPullParserException, IOException;
 
@@ -49,7 +49,7 @@ public interface XmlPullParsable
      * @param serializer
      * @throws XmlPullParserException
      * @throws IOException
-     * @deprecated
+     * @deprecated use {@link #write(java.lang.Object)}
      */
     void serialize(XmlSerializer serializer)
         throws XmlPullParserException, IOException;
