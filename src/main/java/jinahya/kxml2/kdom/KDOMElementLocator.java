@@ -74,13 +74,13 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public int count(final String name) {
-        return countNS(XmlPullParser.NO_NAMESPACE, name);
+    public int count(final String localName) {
+        return countNS(XmlPullParser.NO_NAMESPACE, localName);
     }
 
 
     @Override
-    public int countNS(final String namespace, final String name) {
+    public int countNS(final String namespaceURI, final String localName) {
 
         int count = 0;
 
@@ -88,8 +88,8 @@ public class KDOMElementLocator implements ElementLocator<Element> {
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT == current().getType(i)) {
                 final Element child = current().getElement(i);
-                if (child.getNamespace().equals(namespace)
-                    && child.getName().equals(name)) {
+                if (child.getNamespace().equals(namespaceURI)
+                    && child.getName().equals(localName)) {
                     count++;
                 }
             }
@@ -100,14 +100,14 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public KDOMElementLocator child(final String name, final int index) {
-        return childNS(XmlPullParser.NO_NAMESPACE, name, index);
+    public KDOMElementLocator child(final String localName, final int index) {
+        return childNS(XmlPullParser.NO_NAMESPACE, localName, index);
     }
 
 
     @Override
-    public KDOMElementLocator childNS(final String namespace, final String name,
-                                      final int index) {
+    public KDOMElementLocator childNS(final String namespaceURI,
+                                      final String localName, final int index) {
 
         int count = -1;
 
@@ -115,8 +115,8 @@ public class KDOMElementLocator implements ElementLocator<Element> {
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT == current().getType(i)) {
                 final Element child = current().getElement(i);
-                if (child.getNamespace().equals(namespace)
-                    && child.getName().equals(name)) {
+                if (child.getNamespace().equals(namespaceURI)
+                    && child.getName().equals(localName)) {
                     if (++count == index) {
                         elements.addElement(child);
                         return this;
@@ -126,21 +126,21 @@ public class KDOMElementLocator implements ElementLocator<Element> {
         }
 
         throw new IndexOutOfBoundsException(
-            "no {" + namespace + "}" + name + " at " + index);
+            "no {" + namespaceURI + "}" + localName + " at " + index);
     }
 
 
     @Override
-    public KDOMElementLocator child(final String name) {
-        return childNS(XmlPullParser.NO_NAMESPACE, name);
+    public KDOMElementLocator child(final String localName) {
+        return childNS(XmlPullParser.NO_NAMESPACE, localName);
     }
 
 
     @Override
-    public KDOMElementLocator childNS(final String namespace,
-                                      final String name) {
+    public KDOMElementLocator childNS(final String namespaceURI,
+                                      final String localName) {
 
-        final Element child = current().createElement(namespace, name);
+        final Element child = current().createElement(namespaceURI, localName);
         current().addChild(Node.ELEMENT, child);
         elements.addElement(child);
         return this;
@@ -148,33 +148,37 @@ public class KDOMElementLocator implements ElementLocator<Element> {
 
 
     @Override
-    public String attribute(final String name) {
-        return attributeNS(XmlPullParser.NO_NAMESPACE, name);
+    public String attribute(final String localName) {
+        return attributeNS(XmlPullParser.NO_NAMESPACE, localName);
     }
 
 
     @Override
-    public String attributeNS(final String namespace, final String name) {
-        return current().getAttributeValue(namespace, name);
+    public String attributeNS(final String namespaceURI,
+                              final String localName) {
+
+        return current().getAttributeValue(namespaceURI, localName);
     }
 
 
     @Override
-    public KDOMElementLocator attribute(final String name, final String value) {
-        return attributeNS(XmlPullParser.NO_NAMESPACE, name, value);
+    public KDOMElementLocator attribute(final String localName,
+                                        final String value) {
+
+        return attributeNS(XmlPullParser.NO_NAMESPACE, localName, value);
     }
 
 
     @Override
-    public KDOMElementLocator attributeNS(final String namespace,
-                                          final String name,
+    public KDOMElementLocator attributeNS(final String namespaceURI,
+                                          final String localName,
                                           final String value) {
 
         if (value == null) {
             throw new IllegalArgumentException("null value");
         }
 
-        current().setAttribute(namespace, name, value);
+        current().setAttribute(namespaceURI, localName, value);
 
         return this;
     }

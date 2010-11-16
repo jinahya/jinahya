@@ -28,20 +28,20 @@ public interface ElementLocator<E> {
     /**
      * Counts child elements.
      *
-     * @param name child element's name
+     * @param localName child element's name
      * @return children count
      */
-    int count(String name);
+    int count(String localName);
 
 
     /**
      * Counts child elements.
      *
-     * @param namespace child element's namespace
-     * @param name child element's name
+     * @param namespaceURI child element's namespace
+     * @param localName child element's name
      * @return children count
      */
-    int countNS(String namespace, String name);
+    int countNS(String namespaceURI, String localName);
 
 
     /**
@@ -63,41 +63,41 @@ public interface ElementLocator<E> {
     /**
      * Locate to a child.
      *
-     * @param name child element's name
+     * @param localName child element's name
      * @param index child index
      * @return self
      */
-    ElementLocator<E> child(String name, int index);
+    ElementLocator<E> child(String localName, int index);
 
 
     /**
      * Locate to a child.
      *
-     * @param namespace child element's namespace
-     * @param name child element's name
+     * @param namespaceURI child element's namespace
+     * @param localName child element's name
      * @param index child element index
      * @return self
      */
-    ElementLocator<E> childNS(String namespace, String name, int index);
+    ElementLocator<E> childNS(String namespaceURI, String localName, int index);
 
 
     /**
      * Append a new child element and locate it.
      *
-     * @param name child element's name
+     * @param localName child element's name
      * @return self
      */
-    ElementLocator<E> child(String name);
+    ElementLocator<E> child(String localName);
 
 
     /**
      * Append a new child element and locate it.
      *
-     * @param namespace child element's namespace
-     * @param name child element's name
+     * @param namespaceURI child element's namespace
+     * @param localName child element's name
      * @return self
      */
-    ElementLocator<E> childNS(String namespace, String name);
+    ElementLocator<E> childNS(String namespaceURI, String localName);
 
 
     /**
@@ -140,41 +140,42 @@ public interface ElementLocator<E> {
     /**
      * Returns attribute value.
      *
-     * @param name attribute's name
+     * @param localName attribute's name
      * @return attribute value
      */
-    String attribute(String name);
+    String attribute(String localName);
 
 
     /**
      * Returns attribute value.
      *
-     * @param namespace attribute's namespace
-     * @param name attribute's name
+     * @param namespaceURI attribute's namespace
+     * @param localName attribute's name
      * @return attribute value
      */
-    String attributeNS(String namespace, String name);
+    String attributeNS(String namespaceURI, String localName);
 
 
     /**
      * Sets attribute value.
      *
-     * @param name attribute's name
+     * @param localName attribute's name
      * @param value attribute value
      * @return self
      */
-    ElementLocator<E> attribute(String name, String value);
+    ElementLocator<E> attribute(String localName, String value);
 
 
     /**
      * Set attribute value.
      *
-     * @param namespace attribute's namespace
-     * @param name attribute's name
+     * @param namespaceURI attribute's namespace
+     * @param localName attribute's name
      * @param value attribute's value
      * @return self
      */
-    ElementLocator<E> attributeNS(String namespace, String name, String value);
+    ElementLocator<E> attributeNS(String namespaceURI, String localName,
+                                  String value);
 
 
     /**
