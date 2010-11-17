@@ -17,16 +17,13 @@
 package jinahya.xml;
 
 
-import java.io.Serializable;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <R> input reader type
  * @param <W> output writer type
  */
-public interface XMLParsable<R, W> extends Serializable {
+public interface XMLParsable<R, W> {
 
 
     /**
