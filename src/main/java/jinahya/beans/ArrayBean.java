@@ -81,19 +81,20 @@ public class ArrayBean<E> {
 
 
     /**
-     * 
-     * @param type
+     * Creates an empty instance.
+     *
+     * @param type element type
      */
     @SuppressWarnings("unchecked")
     public ArrayBean(final Class<E> type) {
         this((E[]) Array.newInstance(type, 0));
     }
-    
-    
+
+
     /**
-     * 
-     * @param elements
-     * @param index
+     * Creates an instance.
+     *
+     * @param elements elements
      */
     public ArrayBean(final E[] elements) {
         this(elements, elements.length == 0 ? -1 : 0);
@@ -101,10 +102,10 @@ public class ArrayBean<E> {
 
 
     /**
-     * 
-     * @param type
-     * @param elements
-     * @param index
+     * Creates an instance.
+     *
+     * @param elements elements
+     * @param index index
      */
     public ArrayBean(final E[] elements, final int index) {
         super();
@@ -127,7 +128,6 @@ public class ArrayBean<E> {
             }
         }
 
-        //this.type = type;
         this.elements = new LinkedList<E>();
         this.elements.addAll(Arrays.asList(elements));
 
@@ -150,26 +150,26 @@ public class ArrayBean<E> {
     /**
      * Sets index.
      *
-     * @param newIndex new index
+     * @param index new index
      */
-    public void setIndex(final int newIndex) {
+    public void setIndex(final int index) {
 
         if (elements.isEmpty()) {
-            if (newIndex != -1) {
+            if (index != -1) {
                 throw new IllegalArgumentException(
-                    "illegal index(" + newIndex + ") for empty elements");
+                    "illegal index(" + index + ") for empty elements");
             }
         } else {
-            if (newIndex < 0 || newIndex >= elements.size()) {
+            if (index < 0 || index >= elements.size()) {
                 throw new IllegalArgumentException(
-                    "illegal index(" + newIndex + ") for elements.length("
+                    "illegal index(" + index + ") for elements.length("
                     + elements.size() + ")");
             }
         }
 
-        final Object oldIndex = index;
-        index = newIndex;
-        pcs.firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, index);
+        final Object oldIndex = this.index;
+        this.index = index;
+        pcs.firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, this.index);
     }
 
 
@@ -181,7 +181,6 @@ public class ArrayBean<E> {
     @SuppressWarnings("unchecked")
     public E[] getElements() {
         return (E[]) elements.toArray();
-        //return elements.toArray((E[]) Array.newInstance(type, elements.size()));
     }
 
 
@@ -193,17 +192,6 @@ public class ArrayBean<E> {
      */
     public E getElementAt(final int index) {
         return elements.get(index);
-    }
-
-
-    /**
-     * Returns currently indexed element.
-     *
-     * @return indexed element
-     * @see #getElementAt(int)
-     */
-    public E getElementAtIndex() {
-        return getElementAt(index);
     }
 
 
@@ -241,17 +229,11 @@ public class ArrayBean<E> {
 
 
     /**
-     * Removes currently indexed element.
+     * Add given <code>element</code> at specified <code>index</code>.
      *
-     * @return remove element.
-     * @see #removeElementAt(int)
+     * @param index index
+     * @param element element
      */
-    public E removeElementAtIndex() {
-        return removeElementAt(index);
-    }
-
-
-
     public void addElementAt(final int index, final E element) {
 
         if (element == null) {
@@ -265,7 +247,7 @@ public class ArrayBean<E> {
         pcs.firePropertyChange(PROPERTY_NAME_ELEMENTS, oldValue, getElements());
     }
 
-    
+
     /**
      * Sets given <code>newElements</code> with false for honorCurrentIndex.
      *
