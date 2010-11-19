@@ -20,8 +20,7 @@ package jinahya.net;
 import java.io.IOException;
 import java.util.Random;
 
-import jinahya.lang.ModifiedUTF8;
-import jinahya.lang.ModifiedUTF8.Acceptor;
+import org.apache.commons.lang.RandomStringUtils;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -38,25 +37,16 @@ public class URLEncoderTest {
     private static final Random RANDOM = new Random();
 
 
-    private static final Acceptor ACCEPTOR = new Acceptor() {
-        @Override
-        public boolean accept(final char c) {
-            return !Character.isISOControl(c) && !Character.isWhitespace(c);
-        }
-    };
-
-
     @Test(invocationCount = 128)
     public void testEncoding() throws IOException {
 
-        final String generated = ModifiedUTF8.generate(RANDOM.nextInt(128) + 1);
+        final String expected = RandomStringUtils.random(RANDOM.nextInt(1024));
 
-        final String encoded = URLEncoder.encode(generated, "UTF-8");
+        final String encoded = URLEncoder.encode(expected, "UTF-8");
 
-        final String decoded = java.net.URLDecoder.decode(encoded, "UTF-8");
+        final String actual = java.net.URLDecoder.decode(encoded, "UTF-8");
 
-        Assert.assertEquals(decoded.getBytes("US-ASCII"),
-                            generated.getBytes("US-ASCII"));
+        Assert.assertEquals(actual, expected);
     }
 
 

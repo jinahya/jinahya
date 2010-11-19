@@ -51,35 +51,33 @@ public class URLDecodingInputStream extends FilterInputStream {
 
 
     @Override
-    public int read(byte[] b) throws IOException {
+    public int read(final byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(final byte[] b, final int off, final int len)
+        throws IOException {
+
         for (int i = 0; i < len; i++) {
-            if ((b[off + i] = (byte)read()) == -1) {
+            int r = read();
+            if (r == -1) {
                 return i == 0 ? -1 : i;
             }
+            b[off + i] = (byte) r;
         }
         return len;
     }
 
 
     @Override
-    public boolean markSupported() {
-        return false;
-    }
-
-
-    @Override
-    public long skip(long n) throws IOException {
+    public long skip(final long n) throws IOException {
         long l = 0;
         for (; l < n; l++) {
             int b = read();
             if (b == -1) {
-                return l;
+                break;
             }
         }
         return l;
