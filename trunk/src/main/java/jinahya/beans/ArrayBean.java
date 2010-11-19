@@ -46,19 +46,19 @@ public class ArrayBean<E> {
 
 
     /**
-     *
+     * Policy for setting index to the first.
      */
     public static final int INDEX_FIRST = 0x01;
 
 
     /**
-     * 
+     * Policy for setting index to current.
      */
     public static final int INDEX_CURRENT = INDEX_FIRST << 1;
 
 
     /**
-     * 
+     * Policy for setting index to the last.
      */
     public static final int INDEX_LAST = INDEX_CURRENT << 1;
 
