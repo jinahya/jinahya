@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="73" tokens="228">
-<file line="32" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\net\URLDecoder.java"/>
-<file line="32" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\rfc3986\PercentDecoder.java"/>
+<file line="32" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/net/URLDecoder.java"/>
+<file line="32" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/rfc3986/PercentDecoder.java"/>
 <codefragment>
 <![CDATA[
 public class PercentDecoder {
@@ -82,8 +82,8 @@ public class PercentDecoder {
 </codefragment>
 </duplication>
 <duplication lines="39" tokens="161">
-<file line="49" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\net\URLDecodingInputStream.java"/>
-<file line="43" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\rfc3986\PercentDecodingInputStream.java"/>
+<file line="49" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/net/URLDecodingInputStream.java"/>
+<file line="43" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/rfc3986/PercentDecodingInputStream.java"/>
 <codefragment>
 <![CDATA[
         return PercentDecoder.decode(b, in);
@@ -129,8 +129,8 @@ public class PercentDecoder {
 </codefragment>
 </duplication>
 <duplication lines="43" tokens="131">
-<file line="48" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\net\URLEncoder.java"/>
-<file line="55" path="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\rfc3986\PercentEncoder.java"/>
+<file line="48" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/net/URLEncoder.java"/>
+<file line="55" path="/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java/jinahya/rfc3986/PercentEncoder.java"/>
 <codefragment>
 <![CDATA[
         return new String(encode(decoded.getBytes(encoding)), "US-ASCII");

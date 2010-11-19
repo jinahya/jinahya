@@ -1,17 +1,17 @@
 -classpath
-'D:/svnwc/jinahya.googlecode.com/trunk/target/classes;C:/Users/onacit/.m2/repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar'
+'/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/target/classes:/Users/onacit/.m2/repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'D:/svnwc/jinahya.googlecode.com/trunk/src/main/java'
+'/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2010. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'D:/svnwc/jinahya.googlecode.com/trunk/target/site/apidocs'
+'/Volumes/1394/svnwc/jinahya.googlecode.com/trunk/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
@@ -20,6 +20,8 @@
 'http://kxml.sourceforge.net/kxml2/javadoc'
 -link
 'http://download.oracle.com/javase/6/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
 -use
 -version
 -windowtitle
