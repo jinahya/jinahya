@@ -19,12 +19,12 @@ package jinahya.lang;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.io.UTFDataFormatException;
 import java.util.Random;
@@ -38,88 +38,48 @@ public final class ModifiedUTF8 {
 
 
     /**
-     * 
+     *
      * @param length
-     * @return
-     */
-    public static String generate(final int length) {
-
-        return generate(length, new Random(), null);
-    }
-
-
-    /**
-     * Generates a string.
-     *
-     * @param length the number of chars to be generated
-     * @param random the random to be used
-     * @param acceptor the char acceptor or null
-     * @return a genearated string
-     */
-    public static String generate(final int length, final Random random,
-                                  final Acceptor acceptor) {
-
-        if (length <= 0) {
-            throw new IllegalArgumentException(
-                "illega llength(" + length + ")<=0");
-        }
-
-        if (random == null) {
-            throw new IllegalArgumentException("null random");
-        }
-
-        final StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < length;) {
-            final char c = generate(random);
-            if (acceptor == null || acceptor.accept(c)) {
-                buffer.append(c);
-                i++;
-            }
-        }
-
-        return buffer.toString();
-    }
-
-
-    /**
-     *
-     * @param length the number of characters to generate
-     * @param random the random to be used
-     * @param acceptor the char acceptor or null
-     * @param writer the writer to which generated chars be written
-     * @throws IOException
-     */
-    public static void generate(final int length, final Random random,
-                                final Acceptor acceptor, final Writer writer)
-        throws IOException {
-
-        if (length <= 0) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") <=0");
-        }
-
-        if (random == null) {
-            throw new IllegalArgumentException("null random");
-        }
-
-        if (writer == null) {
-            throw new IllegalArgumentException(" null writer");
-        }
-
-        for (int i = 0; i < length;) {
-            final char c = generate(random);
-            if (acceptor == null || acceptor.accept(c)) {
-                writer.write(c);
-                i++;
-            }
-        }
-    }
-
-
-    /**
-     * 
      * @param random
      * @return
+     */
+    public static char[] generate(final int length, final Random random) {
+        return generate(new char[length], random);
+    }
+
+
+    /**
+     *
+     * @param chars
+     * @param random
+     */
+    public static char[] generate(final char[] chars, final Random random) {
+        return generate(chars, 0, chars.length, random);
+    }
+
+
+    /**
+     *
+     * @param length
+     * @param random
+     * @return
+     */
+    public static char[] generate(final char[] chars, final int offset,
+                                  final int length, final Random random) {
+
+        for (int i = 0; i < length; i++) {
+            chars[offset + i] = generate(random);
+        }
+
+        return chars;
+    }
+
+
+    /**
+     * Generates a single char.
+     *
+     * @param random random
+     * @return a generated char
      */
     public static char generate(final Random random) {
 
@@ -145,24 +105,19 @@ public final class ModifiedUTF8 {
     }
 
 
-
     /**
-     * The interface for the character accepting function.
+     *
+     * @param in
+     * @return
+     * @throws IOException
      */
-    public static interface Acceptor {
-
-        /**
-         * Check whether the specified <code>ch</code> is acceptable or not.
-         *
-         * @param c the char to be checked.
-         * @return true if given <code>ch</code> is acceptable, false otherwise.
-         */
-        boolean accept(char c);
+    public static byte[] encode(final char[] decoded) throws IOException {
+        return encode(new CharArrayReader(decoded));
     }
 
 
     /**
-     *
+     * 
      * @param in
      * @return
      * @throws IOException
@@ -175,22 +130,6 @@ public final class ModifiedUTF8 {
             return out.toByteArray();
         } finally {
             out.close();
-        }
-    }
-
-
-    /**
-     *
-     * @param in
-     * @return
-     * @throws IOException
-     */
-    public static byte[] encode(final String string) throws IOException {
-        final Reader in = new StringReader(string);
-        try {
-            return encode(in);
-        } finally {
-            in.close();
         }
     }
 
@@ -220,17 +159,12 @@ public final class ModifiedUTF8 {
 
     /**
      *
-     * @param bytes
+     * @param encoded
      * @return
      * @throws IOException
      */
-    public static String decode(final byte[] bytes) throws IOException {
-        final InputStream in = new ByteArrayInputStream(bytes);
-        try {
-            return decode(in);
-        } finally {
-           in.close();
-        }
+    public static char[] decode(final byte[] encoded) throws IOException {
+        return decode(new ByteArrayInputStream(encoded));
     }
 
 
@@ -240,12 +174,12 @@ public final class ModifiedUTF8 {
      * @return
      * @throws IOException
      */
-    public static String decode(final InputStream in) throws IOException {
-        final Writer out = new StringWriter();
+    public static char[] decode(final InputStream in) throws IOException {
+        final CharArrayWriter out = new CharArrayWriter();
         try {
             decode(in, out);
             out.flush();
-            return out.toString();
+            return out.toCharArray();
         } finally {
             out.close();
         }

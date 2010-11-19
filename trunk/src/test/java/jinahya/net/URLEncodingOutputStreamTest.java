@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 import jinahya.lang.ModifiedUTF8;
+import org.apache.commons.lang.RandomStringUtils;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -40,18 +41,17 @@ public class URLEncodingOutputStreamTest {
     @Test(invocationCount = 128)
     public void testEncoding() throws IOException {
 
-        final String generated = ModifiedUTF8.generate(RANDOM.nextInt(128) + 1);
+        final String generated = RandomStringUtils.random(RANDOM.nextInt(1024));
 
-        final byte[] expected = java.net.URLEncoder.encode(
-            generated, "UTF-8").getBytes("US-ASCII");
-        
+        final String expected = URLEncoder.encode(generated, "UTF-8");
+
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final OutputStream output = new URLEncodingOutputStream(baos);
         output.write(generated.getBytes("UTF-8"));
         output.flush();
 
-        final byte[] actual = baos.toByteArray();
-        
+        final String actual = new String(baos.toByteArray(), "US-ASCII");
+
         Assert.assertEquals(actual, expected);
     }
 
