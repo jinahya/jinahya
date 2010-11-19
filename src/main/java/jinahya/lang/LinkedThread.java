@@ -20,8 +20,18 @@ package jinahya.lang;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <B> result type of {@link #runBefore()}
+ * @param <A> result type of {@link #runAfter()}
  */
 public abstract class LinkedThread<B, A> extends Thread {
+
+
+    /**
+     * Creates a new instance.
+     */
+    public LinkedThread() {
+        this(null);
+    }
 
 
     /**
@@ -48,7 +58,7 @@ public abstract class LinkedThread<B, A> extends Thread {
 
 
     @Override
-    public final void run() {
+    public void run() {
 
         try {
             runBeforeResult = runBefore();
