@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2009-10-29T14:50:14.805">
-<file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/jinahya.util/state-machine-support/trunk/src/main/java/jinahya/util/state/StateMachineException.java">
-<violation beginline="54" endline="56" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="jinahya.util.state" class="StateMachineException" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
-Avoid unused constructor parameters such as 'cause'.
-</violation>
-</file>
-</pmd>
