@@ -35,8 +35,8 @@
       <snapshotVersion>
         <classifier>javadoc</classifier>
         <extension>jar</extension>
-        <value>1.0-20101119.020149-118</value>
-        <updated>20101119020149</updated>
+        <value>1.0-20101121.091125-119</value>
+        <updated>20101121091125</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
