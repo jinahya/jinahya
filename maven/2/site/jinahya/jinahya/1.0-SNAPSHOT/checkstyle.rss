@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 21,
-             Errors: 479,
+      <title>File: 23,
+             Errors: 559,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
               </tr>
                           <tr>
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  44
+                  45
                 </td>
               </tr>
                           <tr>
@@ -66,7 +66,21 @@
                   0
                 </td>
                 <td>
-                  74
+                  80
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.io.BitInput.java">jinahya/io/BitInput.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
                 </td>
               </tr>
                           <tr>
@@ -80,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  1
+                  2
                 </td>
               </tr>
                           <tr>
@@ -94,7 +108,7 @@
                   0
                 </td>
                 <td>
-                  18
+                  11
                 </td>
               </tr>
                           <tr>
@@ -108,7 +122,7 @@
                   0
                 </td>
                 <td>
-                  60
+                  61
                 </td>
               </tr>
                           <tr>
@@ -122,7 +136,7 @@
                   0
                 </td>
                 <td>
-                  28
+                  29
                 </td>
               </tr>
                           <tr>
@@ -136,7 +150,7 @@
                   0
                 </td>
                 <td>
-                  9
+                  10
                 </td>
               </tr>
                           <tr>
@@ -150,7 +164,7 @@
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
               </tr>
                           <tr>
@@ -164,7 +178,7 @@
                   0
                 </td>
                 <td>
-                  38
+                  39
                 </td>
               </tr>
                           <tr>
@@ -178,7 +192,7 @@
                   0
                 </td>
                 <td>
-                  13
+                  7
                 </td>
               </tr>
                           <tr>
@@ -192,7 +206,7 @@
                   0
                 </td>
                 <td>
-                  4
+                  5
                 </td>
               </tr>
                           <tr>
@@ -206,7 +220,7 @@
                   0
                 </td>
                 <td>
-                  23
+                  24
                 </td>
               </tr>
                           <tr>
@@ -220,7 +234,7 @@
                   0
                 </td>
                 <td>
-                  41
+                  42
                 </td>
               </tr>
                           <tr>
@@ -234,68 +248,12 @@
                   0
                 </td>
                 <td>
-                  8
+                  9
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.XMLParsable.java">jinahya/xml/XMLParsable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncodingOutputStream.java">jinahya/net/URLEncodingOutputStream.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncodingOutputStream.java">jinahya/rfc3986/PercentEncodingOutputStream.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.kxml2.kdom.KDOMElementLocator.java">jinahya/kxml2/kdom/KDOMElementLocator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  21
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncoder.java">jinahya/rfc3986/PercentEncoder.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.io.BitOutput.java">jinahya/io/BitOutput.java</a>
                 </td>
                 <td>
                   0
@@ -309,6 +267,76 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.XMLParsable.java">jinahya/xml/XMLParsable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncodingOutputStream.java">jinahya/net/URLEncodingOutputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncodingOutputStream.java">jinahya/rfc3986/PercentEncodingOutputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.kxml2.kdom.KDOMElementLocator.java">jinahya/kxml2/kdom/KDOMElementLocator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncoder.java">jinahya/rfc3986/PercentEncoder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  40
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentDecoder.java">jinahya/rfc3986/PercentDecoder.java</a>
                 </td>
                 <td>
@@ -318,7 +346,7 @@
                   0
                 </td>
                 <td>
-                  42
+                  43
                 </td>
               </tr>
                       </tbody>
