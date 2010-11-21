@@ -3,19 +3,19 @@
 <rss version="0.91">
   <channel>
     <title>jinahya-jsr14 - Checkstyle report</title>
-    <link>../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT</link>
+    <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT</link>
     <description>jinahya-jsr14 - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2010</copyright>
     <item>
-      <title>File: 21,
-             Errors: 469,
+      <title>File: 23,
+             Errors: 536,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html</link>
+            <link>http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html</link>
       <description>
-        <p>Click <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.ElementLocator.java">jinahya/xml/ElementLocator.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.ElementLocator.java">jinahya/xml/ElementLocator.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLDecoder.java">jinahya/net/URLDecoder.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLDecoder.java">jinahya/net/URLDecoder.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +57,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.lang.ModifiedUTF8.java">jinahya/lang/ModifiedUTF8.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.lang.ModifiedUTF8.java">jinahya/lang/ModifiedUTF8.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +71,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.awt.StringChopper.java">jinahya/awt/StringChopper.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.io.BitInput.java">jinahya/io/BitInput.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.awt.StringChopper.java">jinahya/awt/StringChopper.java</a>
                 </td>
                 <td>
                   0
@@ -85,7 +99,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLDecodingInputStream.java">jinahya/net/URLDecodingInputStream.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLDecodingInputStream.java">jinahya/net/URLDecodingInputStream.java</a>
                 </td>
                 <td>
                   0
@@ -99,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.awt.ImagePool.java">jinahya/awt/ImagePool.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.awt.ImagePool.java">jinahya/awt/ImagePool.java</a>
                 </td>
                 <td>
                   0
@@ -113,7 +127,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.lang.LinkedThread.java">jinahya/lang/LinkedThread.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.lang.LinkedThread.java">jinahya/lang/LinkedThread.java</a>
                 </td>
                 <td>
                   0
@@ -127,7 +141,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.util.CloseableSupport.java">jinahya/util/CloseableSupport.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.util.CloseableSupport.java">jinahya/util/CloseableSupport.java</a>
                 </td>
                 <td>
                   0
@@ -141,7 +155,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.util.Closeable.java">jinahya/util/Closeable.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.util.Closeable.java">jinahya/util/Closeable.java</a>
                 </td>
                 <td>
                   0
@@ -155,7 +169,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.beans.ArrayBean.java">jinahya/beans/ArrayBean.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.beans.ArrayBean.java">jinahya/beans/ArrayBean.java</a>
                 </td>
                 <td>
                   0
@@ -169,7 +183,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentDecodingInputStream.java">jinahya/rfc3986/PercentDecodingInputStream.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentDecodingInputStream.java">jinahya/rfc3986/PercentDecodingInputStream.java</a>
                 </td>
                 <td>
                   0
@@ -183,7 +197,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.stream.XMLStreamParsable.java">jinahya/xml/stream/XMLStreamParsable.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.stream.XMLStreamParsable.java">jinahya/xml/stream/XMLStreamParsable.java</a>
                 </td>
                 <td>
                   0
@@ -197,7 +211,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.w3c.dom.DOMElementLocator.java">jinahya/w3c/dom/DOMElementLocator.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.w3c.dom.DOMElementLocator.java">jinahya/w3c/dom/DOMElementLocator.java</a>
                 </td>
                 <td>
                   0
@@ -211,7 +225,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncoder.java">jinahya/net/URLEncoder.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncoder.java">jinahya/net/URLEncoder.java</a>
                 </td>
                 <td>
                   0
@@ -225,7 +239,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xmlpull.v1.XmlPullParsable.java">jinahya/xmlpull/v1/XmlPullParsable.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xmlpull.v1.XmlPullParsable.java">jinahya/xmlpull/v1/XmlPullParsable.java</a>
                 </td>
                 <td>
                   0
@@ -239,7 +253,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.XMLParsable.java">jinahya/xml/XMLParsable.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.io.BitOutput.java">jinahya/io/BitOutput.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  38
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.xml.XMLParsable.java">jinahya/xml/XMLParsable.java</a>
                 </td>
                 <td>
                   0
@@ -253,7 +281,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncodingOutputStream.java">jinahya/net/URLEncodingOutputStream.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.net.URLEncodingOutputStream.java">jinahya/net/URLEncodingOutputStream.java</a>
                 </td>
                 <td>
                   0
@@ -267,7 +295,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncodingOutputStream.java">jinahya/rfc3986/PercentEncodingOutputStream.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncodingOutputStream.java">jinahya/rfc3986/PercentEncodingOutputStream.java</a>
                 </td>
                 <td>
                   0
@@ -281,7 +309,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.kxml2.kdom.KDOMElementLocator.java">jinahya/kxml2/kdom/KDOMElementLocator.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.kxml2.kdom.KDOMElementLocator.java">jinahya/kxml2/kdom/KDOMElementLocator.java</a>
                 </td>
                 <td>
                   0
@@ -295,7 +323,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncoder.java">jinahya/rfc3986/PercentEncoder.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentEncoder.java">jinahya/rfc3986/PercentEncoder.java</a>
                 </td>
                 <td>
                   0
@@ -309,7 +337,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="../../../../../../../../../https/ya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentDecoder.java">jinahya/rfc3986/PercentDecoder.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/maven/2/site/jinahya/jinahya-jsr14/1.0-SNAPSHOT/checkstyle.html#jinahya.rfc3986.PercentDecoder.java">jinahya/rfc3986/PercentDecoder.java</a>
                 </td>
                 <td>
                   0
