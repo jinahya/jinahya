@@ -21,21 +21,20 @@ package jinahya.util;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Closeable<T extends Closeable<T>> {
+public interface Closeable {
+
+
+    /**
+     *
+     */
+    void open();
 
 
     /**
      *
      * @return self
      */
-    T open();
-
-
-    /**
-     *
-     * @return self
-     */
-    T close();
+    void close();
 
 
     /**

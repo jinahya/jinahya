@@ -21,7 +21,7 @@ package jinahya.util;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class CloseableSupport<T extends Closeable<T>> implements Closeable<T> {
+public class CloseableSupport<T extends Closeable> implements Closeable {
 
 
     /**
@@ -40,24 +40,20 @@ public class CloseableSupport<T extends Closeable<T>> implements Closeable<T> {
 
 
     @Override
-    public synchronized T open() {
+    public synchronized void open() {
 
         if (closed) {
             closed = false;
         }
-
-        return closeable;
     }
 
 
     @Override
-    public synchronized T close() {
+    public synchronized void close() {
 
         if (!closed) {
             closed = true;
         }
-
-        return closeable;
     }
 
 
