@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2010-11-21T18:22:55.106">
+<pmd version="4.2.5" timestamp="2010-11-22T09:53:00.079">
 <file name="D:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\awt\StringChopper.java">
 <violation beginline="176" endline="181" begincolumn="17" endcolumn="17" rule="JumbledIncrementer" ruleset="Basic Rules" package="jinahya.awt" class="StringChopper" method="offsets" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
 Avoid modifying an outer loop incrementer in an inner loop for update expression
