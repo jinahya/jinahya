@@ -42,7 +42,7 @@ import jinahya.util.CloseableSupport;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ImagePool implements Closeable<ImagePool> {
+public class ImagePool implements Closeable {
 
 
     /**
@@ -164,11 +164,11 @@ public class ImagePool implements Closeable<ImagePool> {
      * @return self
      */
     @Override
-    public ImagePool open() {
+    public void open() {
 
         synchronized (support) {
 
-            return support.open();
+            support.open();
         }
     }
 
@@ -178,10 +178,12 @@ public class ImagePool implements Closeable<ImagePool> {
      *
      * @return self
      */
-    public ImagePool reopen() {
+    public void reopen() {
 
         synchronized (support) {
-            return close().open();
+
+            close();
+            open();
         }
     }
 
@@ -192,17 +194,19 @@ public class ImagePool implements Closeable<ImagePool> {
      * @return self
      */
     @Override
-    public ImagePool close() {
+    public void close() {
 
         synchronized (support) {
 
-            for (Image image : map.values()) {
-                image.flush();
+            if (!isClosed()) {
+
+                for (Image image : map.values()) {
+                    image.flush();
+                }
+                map.clear();
+
+                support.close();
             }
-
-            map.clear();
-
-            return support.close();
         }
     }
 
