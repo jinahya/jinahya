@@ -81,57 +81,22 @@ public class ArrayBean<E> {
 
 
     /**
-     * Creates an empty instance.
-     *
-     * @param type element type
-     */
-    @SuppressWarnings("unchecked")
-    public ArrayBean(final Class<E> type) {
-        this((E[]) Array.newInstance(type, 0));
-    }
-
-
-    /**
-     * Creates an instance.
-     *
-     * @param elements elements
-     */
-    public ArrayBean(final E[] elements) {
-        this(elements, elements.length == 0 ? -1 : 0);
-    }
-
-
-    /**
      * Creates an instance.
      *
      * @param elements elements
      * @param index index
      */
-    public ArrayBean(final E[] elements, final int index) {
+    public ArrayBean(final Class<E> type) {
         super();
 
-        if (elements == null) {
-            throw new IllegalArgumentException("null elements");
+        if (type == null) {
+            throw new IllegalArgumentException("null type");
         }
 
-        if (elements.length == 0) {
-            if (index != -1) {
-                throw new IllegalArgumentException(
-                    "illegal index(" + index + ") for elements.length("
-                    + elements.length + ")");
-            }
-        } else {
-            if ((index < 0 || index >= elements.length)) {
-                throw new IllegalArgumentException(
-                    "illegal index(" + index + ") for elements.length("
-                    + elements.length + ")");
-            }
-        }
+        this.type = type;
 
-        this.elements = new LinkedList<E>();
-        this.elements.addAll(Arrays.asList(elements));
-
-        this.index = index;
+        elements = new LinkedList<E>();
+        index = -1;
 
         pcs = new PropertyChangeSupport(this);
     }
@@ -178,9 +143,10 @@ public class ArrayBean<E> {
      *
      * @return elements
      */
-    @SuppressWarnings("unchecked")
     public E[] getElements() {
-        return (E[]) elements.toArray();
+        @SuppressWarnings("unchecked")
+        final E[] result = (E[]) Array.newInstance(type, elements.size());
+        return elements.toArray(result);
     }
 
 
@@ -514,6 +480,7 @@ public class ArrayBean<E> {
     }
 
 
+    private final Class<E> type;
     private final List<E> elements;
     private int index;
 
