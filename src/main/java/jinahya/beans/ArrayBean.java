@@ -119,6 +119,7 @@ public class ArrayBean<E> {
      */
     public void setIndex(final int index) {
 
+        /*
         if (elements.isEmpty()) {
             if (index != -1) {
                 throw new IllegalArgumentException(
@@ -130,6 +131,13 @@ public class ArrayBean<E> {
                     "illegal index(" + index + ") for elements.length("
                     + elements.size() + ")");
             }
+        }
+         */
+
+        if (index != -1 && index >= elements.size()) {
+            throw new IllegalArgumentException(
+                "illegal index(" + index + ") for elements.length("
+                + elements.size() + ")");
         }
 
         final Object oldIndex = this.index;
