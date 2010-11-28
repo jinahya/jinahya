@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya</groupId>
+  <artifactId>twitter-xauth-client</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20101128044552</lastUpdated>
+  </versioning>
+</metadata>
