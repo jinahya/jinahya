@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <groupId>jinahya</groupId>
+  <artifactId>twitter-xauth-client</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+	<groupId>org.testng</groupId>
+	<artifactId>testng</artifactId>
+	<version>5.14.2</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <!-- Build Settings -->
+  <build>
+    <extensions>
+      <extension>
+	<groupId>org.apache.maven.wagon</groupId>
+	<artifactId>wagon-webdav-jackrabbit</artifactId>
+	<version>1.0-beta-7</version>
+      </extension>
+      <extension>
+	<groupId>org.jvnet.wagon-svn</groupId>
+	<artifactId>wagon-svn</artifactId>
+	<version>1.9</version>
+      </extension>
+    </extensions>
+    <pluginManagement>
+      <plugins>
+	<plugin>
+	  <artifactId>maven-compiler-plugin</artifactId>
+	  <version>2.3.2</version>
+	</plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+	<artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+  </reporting>
+
+  <!-- More Project Information -->
+  <name>${project.artifactId}</name>
+  <description>The xAuth client for Twitter in Java</description>
+  <url>http://twitter-xauth-client.googlecode.com/maven/site/$project.groupId}/$project.artifactId}/${project.verion}</url>
+  <inceptionYear>2010</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <organization/>
+  <developers>
+    <developer>
+      <id>jinahya</id>
+      <name>Jin Kwon</name>
+      <email>jinahya@gmail.com</email>
+      <url/>
+      <organization/>
+      <organizationUrl/>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+9</timezone>
+      <properties/>
+    </developer>
+  </developers>
+  <contributors/>
+
+
+  <!-- Environment Settings -->
+  <distributionManagement>
+    <repository>
+      <id>onacit_googlecode</id>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
+    </repository>
+    <snapshotRepository/>
+    <site>
+      <id>onacit_googlecode</id>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/site</url>
+    </site>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>wagon-svn</id>
+      <distributionManagement>
+	<repository>
+	  <id>googlecode</id>
+	  <url>svn:https://jinahya.googlecode.com/svn/maven/repo</url>
+	</repository>
+	<snapshotRepository/>
+	<site>
+	  <id>googlecode</id>
+	  <url>svn:https://jinahya.googlecode.com/svn/maven/site</url>
+	</site>
+      </distributionManagement>
+    </profile>
+  </profiles>
+</project>
