@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2010-11-28T13:10:12.171">
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\awt\StringChopper.java">
+<violation beginline="176" endline="181" begincolumn="17" endcolumn="17" rule="JumbledIncrementer" ruleset="Basic Rules" package="jinahya.awt" class="StringChopper" method="offsets" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\kxml2\kdom\KDOMElementLocator.java">
+<violation beginline="120" endline="123" begincolumn="21" endcolumn="21" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="jinahya.kxml2.kdom" class="KDOMElementLocator" method="childNS" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\src\main\java\jinahya\util\CloseableSupport.java">
+<violation beginline="76" endline="76" begincolumn="21" endcolumn="29" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="jinahya.util" class="CloseableSupport" variable="closeable" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'closeable'.
+</violation>
+</file>
+</pmd>
