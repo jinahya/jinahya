@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.awt;
 
 
@@ -49,6 +48,7 @@ public class ImagePool implements Closeable {
      * Interface for image creation module.
      */
     public static interface ImageCreator {
+
 
         /**
          * Creates image from given <code>imagedata</code>.
@@ -115,6 +115,7 @@ public class ImagePool implements Closeable {
     public static ImagePool newToolkitImagePool() {
 
         return new ImagePool(new TC()) {
+
 
             @Override
             public ImagePool put(final String name, final URL imageurl)
@@ -184,6 +185,16 @@ public class ImagePool implements Closeable {
 
             close();
             open();
+        }
+    }
+
+
+    public void clear() {
+        synchronized (map) {
+            for (Image image : map.values()) {
+                image.flush();
+            }
+            map.clear();
         }
     }
 
@@ -621,6 +632,10 @@ public class ImagePool implements Closeable {
 
 
     private final ImageCreator creator;
+
+
     private final CloseableSupport<ImagePool> support;
+
+
     private final Map<String, Image> map;
 }
