@@ -39,18 +39,22 @@ public class ArrayBean<E> {
     /** property name for index property. */
     public static final String PROPERTY_NAME_INDEX = "index";
 
+
     /** property name for elements property. */
     public static final String PROPERTY_NAME_ELEMENTS = "elements";
+
 
     /**
      * Policy for setting index to the first.
      */
     public static final int INDEX_FIRST = 0x01;
 
+
     /**
      * Policy for setting index to current.
      */
     public static final int INDEX_CURRENT = INDEX_FIRST << 1;
+
 
     /**
      * Policy for setting index to the last.
@@ -485,11 +489,23 @@ public class ArrayBean<E> {
     }
 
 
+    /**
+     * Returns element type.
+     * @return element type
+     */
+    protected Class<E> getType() {
+        return type;
+    }
+
+
     private final Class<E> type;
+
 
     private final List<E> elements;
 
+
     private int index;
+
 
     private final PropertyChangeSupport pcs;
 }
