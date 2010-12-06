@@ -5,7 +5,7 @@
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>jinahya-jsr14</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -272,10 +272,9 @@
 
   <!-- Environment Settings -->
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya/jinahya-jsr14/tags/1.0.1</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/jinahya/jinahya-jsr14/tags/1.0.1</developerConnection>
-    <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya/jinahya-jsr14/tags/1.0.1</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/maven/2/proj/jinahya/jinahya-jsr14/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/maven/2/proj/jinahya/jinahya-jsr14/trunk</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/maven/2/proj/jinahya/jinahya-jsr14/trunk</url>
   </scm>
   <distributionManagement>
     <repository>
