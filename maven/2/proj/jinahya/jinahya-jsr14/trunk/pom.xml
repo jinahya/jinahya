@@ -8,11 +8,13 @@
   <version>1.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencies>
+    <!--
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <scope>test</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>jinahya</groupId>
       <artifactId>jinahya</artifactId>
@@ -21,44 +23,47 @@
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <scope>test</scope>
     </dependency>
+    -->
   </dependencies>
   <dependencyManagement>
     <dependencies>
+      <!--
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.5</version>
       </dependency>
+      -->
       <dependency>
         <groupId>jinahya</groupId>
         <artifactId>jinahya</artifactId>
-        <version>1.0.1</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>net.sf.kxml</groupId>
         <artifactId>kxml2</artifactId>
         <version>2.3.0</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>5.14.2</version>
       </dependency>
+      -->
     </dependencies>
   </dependencyManagement>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
     <project.build.maven-compiler-plugin.source>1.6</project.build.maven-compiler-plugin.source>
     <project.build.maven-compiler-plugin.target>jsr14</project.build.maven-compiler-plugin.target>
-
-    <reporting.maven-javadoc-plugin.version>2.7</reporting.maven-javadoc-plugin.version>
   </properties>
 
   <!-- Build Settings -->
@@ -103,7 +108,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${reporting.maven-javadoc-plugin.version}</version>
+          <version>2.7</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -206,7 +211,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${reporting.maven-javadoc-plugin.version}</version>
+        <version>2.7</version>
         <configuration>
           <links>
             <link>http://www.xmlpull.org/v1/doc/api</link>
