@@ -7,13 +7,17 @@
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>jinahya-jsr14</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>jinahya</groupId>
+      <artifactId>jinahya</artifactId>
     </dependency>
     <dependency>
       <groupId>net.sf.kxml</groupId>
@@ -31,6 +35,11 @@
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.5</version>
+      </dependency>
+      <dependency>
+        <groupId>jinahya</groupId>
+        <artifactId>jinahya</artifactId>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>net.sf.kxml</groupId>
@@ -51,14 +60,7 @@
     <project.build.maven-compiler-plugin.source>1.6</project.build.maven-compiler-plugin.source>
     <project.build.maven-compiler-plugin.target>jsr14</project.build.maven-compiler-plugin.target>
 
-    <reporting.maven-checkstyle-plugin.version>2.6</reporting.maven-checkstyle-plugin.version>
     <reporting.maven-javadoc-plugin.version>2.7</reporting.maven-javadoc-plugin.version>
-    <reporting.maven-jxr-plugin.version>2.2</reporting.maven-jxr-plugin.version>
-    <reporting.maven-pmd-plugin.version>2.5</reporting.maven-pmd-plugin.version>
-    <reporting.maven-project-info-reports-plugin.version>2.2</reporting.maven-project-info-reports-plugin.version>
-
-    <reporting.codehaus.cobertura-maven-plugin.version>2.4</reporting.codehaus.cobertura-maven-plugin.version>
-    <reporting.codehaus.findbugs-maven-plugin.version>2.3.1</reporting.codehaus.findbugs-maven-plugin.version>
   </properties>
 
   <!-- Build Settings -->
@@ -67,7 +69,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>1.0-beta-6</version>
+        <version>1.0-beta-7</version>
       </extension>
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
@@ -78,16 +80,16 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>${reporting.maven-checkstyle-plugin.version}</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>2.4.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>2.3.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
@@ -104,18 +106,6 @@
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${reporting.maven-javadoc-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jxr-plugin</artifactId>
-          <version>${reporting.maven-jxr-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-pmd-plugin</artifactId>
-          <version>${reporting.maven-pmd-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>${reporting.maven-project-info-reports-plugin.version}</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -135,18 +125,13 @@
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
-          <artifactId>cobertura-maven-plugin</artifactId>
-          <version>${reporting.codehaus.cobertura-maven-plugin.version}</version>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>dashboard-maven-plugin</artifactId>
           <version>1.0.0-beta-1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${reporting.codehaus.findbugs-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -178,13 +163,48 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <classifier>sources</classifier>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${project.build.directory}/dependency-sources</outputDirectory>
+              <includeGroupIds>jinahya</includeGroupIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-unpacked-dependency-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/dependency-sources</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${reporting.maven-checkstyle-plugin.version}</version>
+        <version>2.6</version>
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -199,23 +219,23 @@
       </plugin>
       <plugin>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>${reporting.maven-jxr-plugin.version}</version>
+        <version>2.2</version>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>${reporting.maven-pmd-plugin.version}</version>
+        <version>2.5</version>
         <configuration>
           <targetJdk>1.6</targetJdk>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${reporting.maven-project-info-reports-plugin.version}</version>
+        <version>2.2</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>${reporting.codehaus.cobertura-maven-plugin.version}</version>
+        <version>2.4</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -225,7 +245,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${reporting.codehaus.findbugs-maven-plugin.version}</version>
+        <version>2.3.1</version>
       </plugin>
     </plugins>
   </reporting>
