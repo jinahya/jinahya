@@ -1,13 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>jinahya</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -225,7 +223,7 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <description/>
+  <description />
   <url>http://jinahya.googlecode.com/svn/maven/2/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2010</inceptionYear>
   <licenses>
@@ -236,7 +234,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization/>
+  <organization />
   <developers>
     <developer>
       <id>jinahya</id>
@@ -244,21 +242,21 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors/>
+  <contributors />
 
   <!-- Environment Settings -->
-  <issueManagement/>
-  <ciManagement/>
-  <mailingLists/>
+  <issueManagement />
+  <ciManagement />
+  <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/1.0</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/1.0</developerConnection>
     <tag>HEAD</tag>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/trunk</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/tags/1.0</url>
   </scm>
-  <prerequisites/>
-  <repositories/>
-  <pluginRepositories/>
+  <prerequisites />
+  <repositories />
+  <pluginRepositories />
   <distributionManagement>
     <repository>
       <id>onacit_googlecode</id>
