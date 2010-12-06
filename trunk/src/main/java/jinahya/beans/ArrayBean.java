@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.beans;
 
 
@@ -40,22 +39,18 @@ public class ArrayBean<E> {
     /** property name for index property. */
     public static final String PROPERTY_NAME_INDEX = "index";
 
-
     /** property name for elements property. */
     public static final String PROPERTY_NAME_ELEMENTS = "elements";
-
 
     /**
      * Policy for setting index to the first.
      */
     public static final int INDEX_FIRST = 0x01;
 
-
     /**
      * Policy for setting index to current.
      */
     public static final int INDEX_CURRENT = INDEX_FIRST << 1;
-
 
     /**
      * Policy for setting index to the last.
@@ -77,6 +72,8 @@ public class ArrayBean<E> {
          * @return true if <code>element</code> is ok, false otherwise.
          */
         boolean filter(E element);
+
+
     }
 
 
@@ -121,16 +118,16 @@ public class ArrayBean<E> {
 
         /*
         if (elements.isEmpty()) {
-            if (index != -1) {
-                throw new IllegalArgumentException(
-                    "illegal index(" + index + ") for empty elements");
-            }
+        if (index != -1) {
+        throw new IllegalArgumentException(
+        "illegal index(" + index + ") for empty elements");
+        }
         } else {
-            if (index < 0 || index >= elements.size()) {
-                throw new IllegalArgumentException(
-                    "illegal index(" + index + ") for elements.length("
-                    + elements.size() + ")");
-            }
+        if (index < 0 || index >= elements.size()) {
+        throw new IllegalArgumentException(
+        "illegal index(" + index + ") for elements.length("
+        + elements.size() + ")");
+        }
         }
          */
 
@@ -294,7 +291,7 @@ public class ArrayBean<E> {
                 default:
                     throw new IllegalArgumentException(
                         "unknown index policy: " + indexPolicy);
-                    //break;
+                //break;
             }
         }
 
@@ -302,7 +299,7 @@ public class ArrayBean<E> {
             PROPERTY_NAME_ELEMENTS, oldElements, getElements());
     }
 
-    
+
     /**
      * Copy alements to given <code>bean</code>.
      *
@@ -489,7 +486,9 @@ public class ArrayBean<E> {
 
 
     private final Class<E> type;
+
     private final List<E> elements;
+
     private int index;
 
     private final PropertyChangeSupport pcs;
