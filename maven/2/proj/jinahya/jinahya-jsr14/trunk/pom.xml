@@ -43,7 +43,7 @@
       <dependency>
         <groupId>jinahya</groupId>
         <artifactId>jinahya</artifactId>
-        <version>${project.version}</version>
+        <version>1.0.2</version>
       </dependency>
       <dependency>
         <groupId>net.sf.kxml</groupId>
