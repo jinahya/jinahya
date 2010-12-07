@@ -11,6 +11,7 @@
     <dependency>
       <groupId>jinahya</groupId>
       <artifactId>jinahya</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.sf.kxml</groupId>
@@ -22,7 +23,7 @@
       <dependency>
         <groupId>jinahya</groupId>
         <artifactId>jinahya</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>net.sf.kxml</groupId>
