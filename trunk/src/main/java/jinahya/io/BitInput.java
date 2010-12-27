@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.io;
 
 
@@ -31,13 +30,16 @@ public class BitInput {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param in
+     * @param in source octet input
      */
     public BitInput(final InputStream in) {
         super();
 
-        this.in = in;
+        if ((this.in = in) == null) {
+            throw new IllegalArgumentException("null in");
+        }
 
         this.set = new BitSet(8);
     }
@@ -50,9 +52,7 @@ public class BitInput {
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
-    public int readUnsignedByte(final int length) throws IOException {
-
-        //System.out.println("readUnsignedByte(" + length + ")");
+    private int readUnsignedByte(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException(
@@ -80,7 +80,7 @@ public class BitInput {
         final int required = length - (8 - index);
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
-                | readUnsignedByte(required);
+                   | readUnsignedByte(required);
         }
 
         int value = 0x00;
@@ -96,34 +96,34 @@ public class BitInput {
 
 
     /**
-     * 
-     * @return
-     * @throws IOException
+     * Reads 1-bit long boolean value.
+     *
+     * @return boolean value
+     * @throws IOException if an I/O error occurs.
      */
-    public boolean readBoolean() throws IOException {
+    public final boolean readBoolean() throws IOException {
 
         return readUnsignedByte(1) == 0x01;
     }
 
 
     /**
+     * Reads an unsigned short value.
      *
      * @param length bit length between 0 (exclusive) and 16 (inclusive).
      * @return an unsigne short value.
      * @throws IOException if an I/O error occurs.
      */
-    public int readUnsignedShort(final int length) throws IOException {
-
-        //System.out.println("readUnsignedShort(" + length + ")");
+    private int readUnsignedShort(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " <= 0");
+                "illegal length(" + length + ") <= 0");
         }
 
         if (length > 16) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " > 16");
+                "illegal length(" + length + ") > 16");
         }
 
         final int quotient = length / 8;
@@ -132,7 +132,7 @@ public class BitInput {
         int value = 0x00;
         for (int i = 0; i < quotient; i++) {
             value <<= 0x08;
-            value |= readUnsignedByte(8);
+            value |= readUnsignedByte(0x08);
         }
 
         if (remainder > 0) {
@@ -144,11 +144,82 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads an unsigned int.
+     *
+     * @param length bit length between 1 (inclusive) and 32 (exclusive).
+     * @return
+     * @throws IOException
+     */
+    public int readUnsignedInt(final int length) throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") < 1");
+        }
+
+        if (length >= 32) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") >= 32");
+        }
+
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
+
+        int value = 0x00;
+        for (int i = 0; i < quotient; i++) {
+            value <<= 0x10;
+            value |= readUnsignedShort(0x10);
+        }
+
+        if (remainder > 0) {
+            value <<= remainder;
+            value |= readUnsignedShort(remainder);
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads an signed int.
+     *
+     * @param length bit length between 1 (exclusive) and 32 (inclusive).
+     * @return a <code>length</code>bit-long signed integer
+     * @throws IOException if an I/O error occurs.
+     */
+    public int readInt(final int length) throws IOException {
+
+        if (length <= 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") <= 1");
+        }
+
+        if (length > 32) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") > 32");
+        }
+
+
+        int value = readBoolean() ? (-1 << (length - 1)) : 0;
+
+        value |= readUnsignedInt(length - 1);
+
+        return value;
+    }
+
+
+    /**
+     * Align to given <code>length</code> bytes.
+     *
+     * @param length number of octets to align
+     * @throws IOException if an I/O error occurs.
+     */
     public void aling(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " <= 0");
+                "illegal length(" + length + ") <= 0");
         }
 
         int octets = count % length;
@@ -176,9 +247,18 @@ public class BitInput {
     }
 
 
+    /** input source. */
     private final InputStream in;
+
+
+    /** bit set. */
     private final BitSet set;
+
+
+    /** bit index to read. */
     private int index = 8;
 
+
+    /** octet count. */
     private int count = 0;
 }

@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.io;
 
 
@@ -30,13 +29,16 @@ public class BitOutput {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param out
+     * @param out target octet output
      */
     public BitOutput(final OutputStream out) {
         super();
 
-        this.out = out;
+        if ((this.out = out) == null) {
+            throw new IllegalArgumentException("null out");
+        }
 
         this.set = new BitSet(8);
     }
@@ -45,23 +47,21 @@ public class BitOutput {
     /**
      * Writes an unsigned byte value.
      *
-     * @param length bit length; between 0 (exclusive) and 8 (inclusive).
+     * @param length bit length between 0 (exclusive) and 8 (inclusive).
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
-    public void writeUnsignedByte(final int length, final int value)
+    private void writeUnsignedByte(final int length, int value)
         throws IOException {
-
-        //System.out.println("writeUnsignedByte(" + length + ", " + value + ")");
 
         if (length <= 0) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " <= 0");
+                "illegal length(" + length + ") <= 0");
         }
 
         if (length > 8) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " > 8");
+                "illegal length(" + length + ") > 8");
         }
 
         final int required = length - (8 - index);
@@ -71,12 +71,13 @@ public class BitOutput {
             return;
         }
 
-        int ivalue = value;
         for (int i = length - 1; i >= 0; i--) {
-            set.set(index + i, (ivalue & 0x01) == 0x01);
-            ivalue >>= 1;
+            set.set(index + i, (value & 0x01) == 0x01);
+            value >>= 1;
         }
+
         index += length;
+
         if (index == 8) {
             int octet = 0x00;
             for (int i = 0; i < 8; i++) {
@@ -84,41 +85,41 @@ public class BitOutput {
                 octet |= (set.get(i) ? 0x01 : 0x00);
             }
             out.write(octet);
-            index = 0;
             count++;
+            index = 0;
         }
     }
 
 
     /**
+     * Writes a boolean value.
      *
-     * @param value
-     * @throws IOException
+     * @param value value
+     * @throws IOException if an I/O error occurs
      */
-    public void writeBoolean(final boolean value) throws IOException {
+    public final void writeBoolean(final boolean value) throws IOException {
         writeUnsignedByte(0x01, value ? 0x01 : 0x00);
     }
 
 
     /**
+     * Writes an unsgined short value.
      *
-     * @param length
+     * @param length bit length between 0 (exclusive) and 16 (inclusive)
      * @param value
      * @throws IOException
      */
-    public void writeUnsignedShort(final int length, final int value)
+    private void writeUnsignedShort(final int length, final int value)
         throws IOException {
-
-        //System.out.println("writeUnsignedShort(" + length + ", " + value + ")");
 
         if (length <= 0) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " <= 0");
+                "illegal length(" + length + ") <= 0");
         }
 
         if (length > 16) {
             throw new IllegalArgumentException(
-                "illegal length: " + length + " > 16");
+                "illegal length(" + length + ") > 16");
         }
 
         final int quotient = length / 8;
@@ -130,6 +131,94 @@ public class BitOutput {
 
         for (int i = quotient - 1; i >= 0; i--) {
             writeUnsignedByte(8, value >> (8 * i));
+        }
+    }
+
+
+    /**
+     * Writes an unsigned int value.
+     *
+     * @param length bit length between 1 (inclusive) and 32 (exclusive)
+     * @param value unsinged int value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeUnsignedInt(final int length, final int value)
+        throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") < 1");
+        }
+
+        if (length >= 32) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") >= 32");
+        }
+
+        if (value < 0) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        } else {
+            if ((value >> length) != 0) {
+                throw new IllegalArgumentException("illegal value: " + value);
+            }
+        }
+
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
+
+        if (remainder > 0) {
+            writeUnsignedShort(remainder, value >> (quotient * 16));
+        }
+
+        for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedShort(16, value >> (16 * i));
+        }
+    }
+
+
+    /**
+     *
+     * @param length bit length between 1 (exclusive) and 32 (inclusive).
+     * @param value signed int value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeInt(final int length, final int value)
+        throws IOException {
+
+        if (length <= 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") <= 1");
+        }
+
+        if (length > 32) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") > 32");
+        }
+
+        if (length < 32) {
+            if (value < 0) {
+                if (value >> length != -1) {
+                    throw new IllegalArgumentException(
+                        "illegal value: " + value);
+                }
+            } else {
+                if ((value >> length) != 0) {
+                    throw new IllegalArgumentException(
+                        "illegal value: " + value);
+                }
+            }
+        }
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
+
+        if (remainder > 0) {
+            writeUnsignedShort(remainder, value >> (quotient * 16));
+        }
+
+        for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedShort(16, value >> (16 * i));
         }
     }
 
@@ -173,8 +262,12 @@ public class BitOutput {
 
     private final OutputStream out;
 
+
     private final BitSet set;
+
+
     private int index = 0;
+
 
     private int count = 0;
 
@@ -183,7 +276,10 @@ public class BitOutput {
         return count;
     }
 
+
     void count(final int count) {
         this.count = count;
     }
+
+
 }
