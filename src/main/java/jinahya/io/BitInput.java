@@ -210,6 +210,42 @@ public class BitInput {
 
 
     /**
+     *
+     * @param length
+     * @return
+     * @throws IOException
+     */
+    public final long readUnsignedLong(final int length) throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") < 1");
+        }
+
+        if (length >= 64) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") >= 64");
+        }
+
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
+
+        long value = 0x00L;
+        for (int i = 0; i < quotient; i++) {
+            value <<= 0x10;
+            value |= readUnsignedShort(0x10);
+        }
+
+        if (remainder > 0) {
+            value <<= remainder;
+            value |= readUnsignedShort(remainder);
+        }
+
+        return value;
+    }
+
+
+    /**
      * Align to given <code>length</code> bytes.
      *
      * @param length number of octets to align
@@ -232,7 +268,7 @@ public class BitInput {
             octets = 0 - octets;
         }
 
-        if (index > 0) {
+        if (index < 8) {
             readUnsignedByte(8 - index);
             octets--;
         }

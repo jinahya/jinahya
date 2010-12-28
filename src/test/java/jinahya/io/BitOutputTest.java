@@ -16,8 +16,12 @@
 package jinahya.io;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.testng.Assert;
 
@@ -282,6 +286,32 @@ public class BitOutputTest {
     }
 
 
+    @Test
+    public void testWriteIntWithDataInput() throws IOException {
+
+        final List<Integer> values = new ArrayList<Integer>();
+        for (int i = 0; i < 1024; i++) {
+            values.add(RANDOM.nextInt());
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(baos);
+        for (Integer value : values) {
+            output.writeInt(32, value);
+        }
+        baos.flush();
+
+        final byte[] bytes = baos.toByteArray();
+
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        final DataInputStream dis = new DataInputStream(bais);
+        for (Integer expected : values) {
+            final int actual = dis.readInt();
+            Assert.assertEquals(actual, expected.intValue());
+        }
+    }
+
+
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteIntWithIllegalLengthZero() throws IOException {
         EMPTY_INSTANCE.writeInt(0, 0);
@@ -303,6 +333,102 @@ public class BitOutputTest {
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteIntWithIllegalLengthTooLong() throws IOException {
         EMPTY_INSTANCE.writeInt(33, 0);
+    }
+
+
+    private void testWriteUnsignedLong(final int length, final long expected)
+        throws IOException {
+
+        Assert.assertTrue(length >= 1);
+        Assert.assertTrue(length < 64);
+
+        if (true) {
+            if (expected < 0) {
+                Assert.fail("negative value");
+            } else {
+                Assert.assertEquals(expected >> length, 0);
+            }
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeUnsignedLong(length, expected);
+        output.aling(1);
+
+        baos.flush();
+        final byte[] octets = baos.toByteArray();
+
+        long actual = 0x00L;
+        for (byte octet : octets) {
+            actual <<= 8;
+            actual |= (octet & 0xFF);
+        }
+        actual >>>= ((8 * octets.length) - length);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedLong() throws IOException {
+
+        final int length = RANDOM.nextInt(63) + 1; // 1 - 63
+
+        final long expected = RANDOM.nextLong() >>> (64 - length);
+
+        testWriteUnsignedLong(length, expected);
+    }
+
+
+    @Test
+    public void testWriteUnsignedLongWithLengthMin() throws IOException {
+
+        testWriteUnsignedLong(1, 0L);
+        testWriteUnsignedLong(1, 1L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedLongWithLengthMax() throws IOException {
+
+        final int length = 63;
+
+        final long expected = RANDOM.nextLong() >>> 1;
+
+        testWriteUnsignedLong(length, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedLongWithValueMax() throws IOException {
+
+        testWriteUnsignedLong(63, Long.MAX_VALUE);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedLongWithIllegalLengthZero()
+        throws IOException {
+
+        EMPTY_INSTANCE.writeUnsignedLong(0, 0L);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedLongWithIllegalLengthNegative()
+        throws IOException {
+
+        EMPTY_INSTANCE.writeUnsignedLong(
+            RANDOM.nextInt() | Integer.MIN_VALUE, 0L);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedLongWithIllegalLengthTooLong()
+        throws IOException {
+
+        EMPTY_INSTANCE.writeUnsignedLong(64, 0L);
     }
 
 

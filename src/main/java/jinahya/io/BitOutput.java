@@ -224,6 +224,48 @@ public class BitOutput {
 
 
     /**
+     *
+     * @param length
+     * @param value
+     * @throws IOException
+     */
+    public final void writeUnsignedLong(final int length, final long value)
+        throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") < 1");
+        }
+
+        if (length >= 64) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") >= 64");
+        }
+
+        if (value < 0) {
+            throw new IllegalArgumentException("negative value: " + value);
+        } else {
+            if ((value >> length) != 0) {
+                throw new IllegalArgumentException(
+                    "value out of range: " + value);
+            }
+        }
+
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
+
+        if (remainder > 0) {
+            writeUnsignedShort(
+                remainder, (int) ((value >> (quotient * 0x10)) & 0xFFFF));
+        }
+
+        for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedShort(0x10, (int) ((value >> (0x10 * i)) & 0xFFFF));
+        }
+    }
+
+
+    /**
      * Aling to given <code>length</code> as octets.
      *
      * @param length octet length

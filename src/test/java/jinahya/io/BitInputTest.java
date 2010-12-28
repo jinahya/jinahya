@@ -17,7 +17,11 @@ package jinahya.io;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -247,6 +251,32 @@ public class BitInputTest {
     }
 
 
+    @Test
+    public void testReadIntWithDataOutput() throws IOException {
+
+        final List<Integer> values = new ArrayList<Integer>();
+        for (int i = 0; i < 1024; i++) {
+            values.add(RANDOM.nextInt());
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final DataOutputStream dos = new DataOutputStream(baos);
+        for (Integer value : values) {
+            dos.writeInt(value);
+        }
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
+        for (Integer expected : values) {
+            final int actual = input.readInt(32);
+            Assert.assertEquals(actual, expected.intValue());
+        }
+    }
+
+
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadIntWithIllegalLengthOne() throws IOException {
         EMPTY_INSTANCE.readInt(1);
@@ -261,7 +291,7 @@ public class BitInputTest {
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testReadIntWithIllegalLengthNegative() throws IOException {
-        EMPTY_INSTANCE.readInt(-1 | RANDOM.nextInt());
+        EMPTY_INSTANCE.readInt(Integer.MIN_VALUE | RANDOM.nextInt());
     }
 
 
@@ -270,5 +300,78 @@ public class BitInputTest {
         EMPTY_INSTANCE.readInt(33);
     }
 
+
+    private void testReadUnsignedLong(final int length, final long expected)
+        throws IOException {
+
+        Assert.assertTrue(length >= 1);
+        Assert.assertTrue(length < 64);
+
+
+        if (true) {
+            if (expected < 0L) {
+                Assert.fail("negative value");
+            } else {
+                Assert.assertEquals(expected >> length, 0L);
+            }
+        }
+
+        final long shifted = expected << (64 - length);
+        final byte[] octets = new byte[8];
+        for (int i = 0; i < octets.length; i++) {
+            octets[i] = (byte) ((shifted >> ((7 - i) * 8)) & 0xFF);
+        }
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(octets));
+        final long actual = input.readUnsignedLong(length);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadUnsignedLong() throws IOException {
+
+        final int length = RANDOM.nextInt(63) + 1; // 1 - 63
+
+        final long value = RANDOM.nextLong() >>> (64 - length);
+
+        testReadUnsignedLong(length, value);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadUnsignedLongWithLengthOne() throws IOException {
+        EMPTY_INSTANCE.readUnsignedLong(0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadUnsignedLongWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.readUnsignedLong(Integer.MIN_VALUE | RANDOM.nextInt());
+    }
+
+
+    @Test
+    public void testReadUnsignedLongWithLengthMin() throws IOException {
+        testReadUnsignedLong(1, 0L);
+        testReadUnsignedLong(1, 1L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadUnsignedLongWithLengthMax() throws IOException {
+
+        final long value = RANDOM.nextLong() & 0x7FFFFFFFFFFFFFFFL;
+
+        testReadUnsignedLong(63, value);
+    }
+
+
+    @Test
+    public void testReadUnsignedLongWithValueMax() throws IOException {
+
+        testReadUnsignedLong(63, Long.MAX_VALUE);
+    }
 
 }

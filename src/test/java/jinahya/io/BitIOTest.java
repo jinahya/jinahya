@@ -13,13 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package jinahya.io;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import org.testng.Assert;
@@ -111,4 +112,103 @@ public class BitIOTest {
 
         //Assert.assertEquals(actual, value);
     }
+
+
+    @Test
+    public void testInt() throws IOException {
+
+
+        final int count = 1024;
+
+        final List<Integer> list = new LinkedList<Integer>();
+
+        for (int i = 0; i < count; i++) {
+            final int length = RANDOM.nextInt(31) + 2; // 2 - 32
+            Assert.assertTrue(length > 1);
+            Assert.assertTrue(length <= 32);
+            list.add(length);
+
+            final int expected = RANDOM.nextInt() >> (32 - length);
+            if (length < 32) {
+                if (expected < 0) {
+                    Assert.assertEquals(expected >> length, -1);
+                } else {
+                    Assert.assertEquals(expected >> length, 0);
+                }
+            }
+            list.add(expected);
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        for (int i = 0; i < count; i++) {
+            output.writeInt(list.get(i * 2), list.get(i * 2 + 1));
+        }
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
+        for (int i = 0; i < count; i++) {
+
+            final int length = list.get(i * 2);
+            final int expected = list.get(i * 2 + 1);
+
+            final int actual = input.readInt(length);
+
+            Assert.assertEquals(actual, expected);
+        }
+        input.aling(1);
+    }
+
+
+    @Test
+    public void testUnsignedLong() throws IOException {
+
+        final int count = 1024;
+
+        final List<Number> list = new LinkedList<Number>();
+
+        for (int i = 0; i < count; i++) {
+
+            final int length = RANDOM.nextInt(63) + 1; // 1 - 63
+            Assert.assertTrue(length >= 1);
+            Assert.assertTrue(length < 64);
+            list.add(length);
+
+            final long expected = RANDOM.nextLong() >>> (64 - length);
+            if (expected < 0L) {
+                Assert.fail("negative");
+            } else {
+                Assert.assertEquals(expected >> length, 0);
+            }
+            list.add(expected);
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        for (int i = 0; i < count; i++) {
+            final int length = list.get(i * 2).intValue();
+            final long expected = list.get(i * 2 + 1).longValue();
+            output.writeUnsignedLong(length, expected);
+        }
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
+        for (int i = 0; i < count; i++) {
+            final int length = list.get(i * 2).intValue();
+            final long expected = list.get(i * 2 + 1).longValue();
+            final long actual = input.readUnsignedLong(length);
+            Assert.assertEquals(actual, expected);
+        }
+        input.aling(1);
+    }
+
+
 }
