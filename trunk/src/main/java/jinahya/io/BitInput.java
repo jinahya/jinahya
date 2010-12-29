@@ -310,6 +310,65 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads a sequence of bytes.
+     *
+     * @param bytes byte array
+     * @throws IOException if an I/O error occurs.
+     */
+    public void readBytes(final byte[] bytes) throws IOException {
+        readBytes(bytes, 0, bytes.length);
+    }
+
+
+    /**
+     * Reads a sequence of bytes.
+     *
+     * @param bytes byte array
+     * @param offset offset in bytes
+     * @param length byte count to read
+     * @throws IOException if an I/O error occurs.
+     */
+    public void readBytes(final byte[] bytes, final int offset,
+                          final int length)
+        throws IOException {
+
+        if (bytes == null) {
+            throw new IllegalArgumentException("null bytes");
+        }
+
+        /*
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException(
+                "bytes.length(" + bytes.length + ") == 0");
+        }
+         */
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("negative offset");
+        }
+
+        if (offset >= bytes.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= bytes.length(" + bytes.length + ")");
+        }
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
+        if ((offset + length) > bytes.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") + length(" + length
+                + ") > bytes.length(" + bytes.length + ")");
+        }
+
+        for (int i = 0; i < length; i++) {
+            bytes[offset + i] = (byte) readUnsignedByte(8);
+        }
+    }
+
+
     /** input source. */
     private final InputStream in;
 

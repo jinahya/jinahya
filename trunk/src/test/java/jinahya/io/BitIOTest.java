@@ -37,32 +37,6 @@ public class BitIOTest {
     private static final Random RANDOM = new Random();
 
 
-    public void testUnsignedByte() throws IOException {
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-
-        final int length = RANDOM.nextInt(8) + 1;
-
-        int value = 0x00;
-        for (int i = 0; i < length; i++) {
-            value <<= 1;
-            value |= (RANDOM.nextBoolean() ? 0x01 : 0x00);
-        }
-
-        //output.writeUnsignedByte(length, value);
-        output.aling(1);
-
-        baos.flush();
-        Assert.assertEquals(baos.size(), 1);
-
-        final BitInput input =
-            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-
-        //Assert.assertEquals(input.readUnsignedByte(length), value);
-    }
-
-
     @Test(invocationCount = 128)
     public void testBoolean() throws IOException {
 
@@ -75,10 +49,10 @@ public class BitIOTest {
         output.aling(1);
 
         baos.flush();
-        Assert.assertEquals(baos.size(), 1);
+        final byte[] bytes = baos.toByteArray();
+        Assert.assertTrue(bytes.length == 1);
 
-        final BitInput input =
-            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
 
         final boolean actual = input.readBoolean();
 
@@ -86,31 +60,53 @@ public class BitIOTest {
     }
 
 
-    public void testUnsignedShort() throws IOException {
+    @Test
+    public void testUnsignedInt() throws IOException {
+
+        final int count = 1024;
+
+        final List<Number> list = new LinkedList<Number>();
+
+        for (int i = 0; i < count; i++) {
+
+            final int length = RANDOM.nextInt(31) + 1; // 1 - 31
+            Assert.assertTrue(length >= 1);
+            Assert.assertTrue(length < 32);
+            list.add(length);
+
+            final long value =
+                (RANDOM.nextInt() & 0x7FFFFFFF) >> (32 - length);
+            if (true) {
+                if (value < 0) {
+                    Assert.fail("negative value");
+                } else {
+                    Assert.assertEquals(value >> length, 0);
+                }
+            }
+            list.add(value);
+        }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
         final BitOutput output = new BitOutput(baos);
-
-        final int length = RANDOM.nextInt(16) + 1;
-
-        int value = RANDOM.nextInt(65536);
-        value <<= (32 - length);
-        value >>>= (32 - length);
-
-        long start = System.currentTimeMillis();
-        //output.writeUnsignedShort(length, value);
+        for (int i = 0; i < count; i++) {
+            final int length = list.get(i * 2).intValue();
+            final int value = list.get(i * 2 + 1).intValue();
+            output.writeUnsignedInt(length, value);
+        }
         output.aling(1);
 
-        //System.out.println(length + "/ " + value + " / " + (System.currentTimeMillis() - start));
-
         baos.flush();
+        final byte[] bytes = baos.toByteArray();
 
-        final BitInput input =
-            new BitInput(new ByteArrayInputStream(baos.toByteArray()));
-
-        //final int actual = input.readUnsignedShort(length);
-
-        //Assert.assertEquals(actual, value);
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
+        for (int i = 0; i < count; i++) {
+            final int length = list.get(i * 2).intValue();
+            final int expected = list.get(i * 2 + 1).intValue();
+            final int actual = input.readUnsignedInt(length);
+            Assert.assertEquals(actual, expected);
+        }
+        input.aling(1);
     }
 
 
@@ -120,7 +116,7 @@ public class BitIOTest {
 
         final int count = 1024;
 
-        final List<Integer> list = new LinkedList<Integer>();
+        final List<Number> list = new LinkedList<Number>();
 
         for (int i = 0; i < count; i++) {
             final int length = RANDOM.nextInt(31) + 2; // 2 - 32
@@ -128,22 +124,24 @@ public class BitIOTest {
             Assert.assertTrue(length <= 32);
             list.add(length);
 
-            final int expected = RANDOM.nextInt() >> (32 - length);
+            final int value = RANDOM.nextInt() >> (32 - length);
             if (length < 32) {
-                if (expected < 0) {
-                    Assert.assertEquals(expected >> length, -1);
+                if (value < 0) {
+                    Assert.assertEquals(value >> length, -1);
                 } else {
-                    Assert.assertEquals(expected >> length, 0);
+                    Assert.assertEquals(value >> length, 0);
                 }
             }
-            list.add(expected);
+            list.add(value);
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         final BitOutput output = new BitOutput(baos);
         for (int i = 0; i < count; i++) {
-            output.writeInt(list.get(i * 2), list.get(i * 2 + 1));
+            final int length = list.get(i * 2).intValue();
+            final int value = list.get(i * 2 + 1).intValue();
+            output.writeInt(length, value);
         }
         output.aling(1);
 
@@ -152,12 +150,9 @@ public class BitIOTest {
 
         final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
         for (int i = 0; i < count; i++) {
-
-            final int length = list.get(i * 2);
-            final int expected = list.get(i * 2 + 1);
-
+            final int length = list.get(i * 2).intValue();
+            final int expected = list.get(i * 2 + 1).intValue();
             final int actual = input.readInt(length);
-
             Assert.assertEquals(actual, expected);
         }
         input.aling(1);
@@ -178,15 +173,16 @@ public class BitIOTest {
             Assert.assertTrue(length < 64);
             list.add(length);
 
-            final long expected = RANDOM.nextLong() >>> (64 - length);
+            final long value =
+                (RANDOM.nextLong() & 0x7FFFFFFFFFFFFFFFL) >> (64 - length);
             if (true) {
-                if (expected < 0L) {
+                if (value < 0L) {
                     Assert.fail("negative");
                 } else {
-                    Assert.assertEquals(expected >> length, 0);
+                    Assert.assertEquals(value >> length, 0);
                 }
             }
-            list.add(expected);
+            list.add(value);
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -194,8 +190,8 @@ public class BitIOTest {
         final BitOutput output = new BitOutput(baos);
         for (int i = 0; i < count; i++) {
             final int length = list.get(i * 2).intValue();
-            final long expected = list.get(i * 2 + 1).longValue();
-            output.writeUnsignedLong(length, expected);
+            final long value = list.get(i * 2 + 1).longValue();
+            output.writeUnsignedLong(length, value);
         }
         output.aling(1);
 
@@ -227,15 +223,15 @@ public class BitIOTest {
             Assert.assertTrue(length <= 64);
             list.add(length);
 
-            final long expected = RANDOM.nextLong() >> (64 - length);
+            final long value = RANDOM.nextLong() >> (64 - length);
             if (length < 64) {
-                if (expected < 0L) {
-                    Assert.assertEquals(expected >> length, -1L);
+                if (value < 0L) {
+                    Assert.assertEquals(value >> length, -1L);
                 } else {
-                    Assert.assertEquals(expected >> length, 0L);
+                    Assert.assertEquals(value >> length, 0L);
                 }
             }
-            list.add(expected);
+            list.add(value);
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -243,8 +239,8 @@ public class BitIOTest {
         final BitOutput output = new BitOutput(baos);
         for (int i = 0; i < count; i++) {
             final int length = list.get(i * 2).intValue();
-            final long expected = list.get(i * 2 + 1).longValue();
-            output.writeLong(length, expected);
+            final long value = list.get(i * 2 + 1).longValue();
+            output.writeLong(length, value);
         }
         output.aling(1);
 

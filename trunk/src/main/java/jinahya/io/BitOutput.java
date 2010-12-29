@@ -145,34 +145,34 @@ public class BitOutput {
     public final void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        if (length < 1) {
+        if (length < 0x01) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") < 1");
         }
 
-        if (length >= 32) {
+        if (length >= 0x20) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") >= 32");
         }
 
-        if (value < 0) {
+        if (value < 0x00) {
             throw new IllegalArgumentException("illegal value: " + value);
         } else {
-            if ((value >> length) != 0) {
+            if ((value >> length) != 0x00) {
                 throw new IllegalArgumentException("illegal value: " + value);
             }
         }
 
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
 
         if (remainder > 0) {
-            writeUnsignedShort(remainder, value >> (quotient * 16));
+            writeUnsignedShort(remainder, value >> (quotient * 0x10));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort(16, value >> (16 * i));
+            writeUnsignedShort(0x10, value >> (0x10 * i));
         }
     }
 
@@ -186,39 +186,39 @@ public class BitOutput {
     public final void writeInt(final int length, final int value)
         throws IOException {
 
-        if (length <= 1) {
+        if (length <= 0x01) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") <= 1");
         }
 
-        if (length > 32) {
+        if (length > 0x20) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") > 32");
         }
 
-        if (length < 32) {
-            if (value < 0) {
+        if (length < 0x20) {
+            if (value < 0x00) {
                 if (value >> length != -1) {
                     throw new IllegalArgumentException(
                         "illegal value: " + value);
                 }
             } else {
-                if ((value >> length) != 0) {
+                if ((value >> length) != 0x00) {
                     throw new IllegalArgumentException(
                         "illegal value: " + value);
                 }
             }
         }
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
 
         if (remainder > 0) {
-            writeUnsignedShort(remainder, value >> (quotient * 16));
+            writeUnsignedShort(remainder, value >> (quotient * 0x10));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort(16, value >> (16 * i));
+            writeUnsignedShort(0x10, value >> (0x10 * i));
         }
     }
 
@@ -313,6 +313,56 @@ public class BitOutput {
 
 
     /**
+     *
+     * @param bytes
+     * @throws IOException
+     */
+    public final void writeBytes(final byte[] bytes) throws IOException {
+        writeBytes(bytes, 0, bytes.length);
+    }
+
+
+    /**
+     *
+     * @param bytes
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
+    public final void writeBytes(final byte[] bytes, final int offset,
+                                 final int length)
+        throws IOException {
+
+        if (bytes == null) {
+            throw new IllegalArgumentException("null bytes");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("negative offset");
+        }
+
+        if (offset >= bytes.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= bytes.length(" + bytes.length + ")");
+        }
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
+        if ((offset + length) > bytes.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") + length(" + length
+                + ") > bytes.length(" + bytes.length + ")");
+        }
+
+        for (int i = 0; i < length; i++) {
+            writeUnsignedByte(8, bytes[offset + i] & 0xFF);
+        }
+    }
+
+
+    /**
      * Aling to given <code>length</code> as octets.
      *
      * @param length the number of <b>octets</b> to align
@@ -369,4 +419,6 @@ public class BitOutput {
     void count(final int count) {
         this.count = count;
     }
+
+
 }
