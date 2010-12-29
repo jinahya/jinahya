@@ -246,6 +246,33 @@ public class BitInput {
 
 
     /**
+     * Reads a signed long value.
+     *
+     * @param length bit length between 1 (exclusive) and 64 (inclusive).
+     * @return a signed long value.
+     * @throws IOException if an I/O error occurs.
+     */
+    public final long readLong(final int length) throws IOException {
+
+        if (length <= 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") <= 1");
+        }
+
+        if (length > 64) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") > 64");
+        }
+
+        long value = readBoolean() ? (-1L << (length - 1)) : 0L;
+
+        value |= readUnsignedLong(length - 1);
+
+        return value;
+    }
+
+
+    /**
      * Align to given <code>length</code> bytes.
      *
      * @param length number of octets to align

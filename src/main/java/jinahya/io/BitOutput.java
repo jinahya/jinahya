@@ -266,9 +266,56 @@ public class BitOutput {
 
 
     /**
+     *
+     * @param length
+     * @param value
+     * @throws IOException
+     */
+    public final void writeLong(final int length, final long value)
+        throws IOException {
+
+        if (length <= 1) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") <= 1");
+        }
+
+        if (length > 64) {
+            throw new IllegalArgumentException(
+                "illegal length(" + length + ") > 64");
+        }
+
+        if (length < 64) {
+            if (value < 0L) {
+                if (value >> length != -1L) {
+                    throw new IllegalArgumentException(
+                        "illegal value: " + value);
+                }
+            } else {
+                if ((value >> length) != 0L) {
+                    throw new IllegalArgumentException(
+                        "illegal value: " + value);
+                }
+            }
+        }
+
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
+
+        if (remainder > 0x00) {
+            writeUnsignedShort(
+                remainder, (int) ((value >> (quotient * 0x10)) & 0xFFFF));
+        }
+
+        for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedShort(16, (int) ((value >> (16 * i)) & 0xFFFF));
+        }
+    }
+
+
+    /**
      * Aling to given <code>length</code> as octets.
      *
-     * @param length octet length
+     * @param length the number of <b>octets</b> to align
      */
     public void aling(final int length) throws IOException {
 
@@ -322,6 +369,4 @@ public class BitOutput {
     void count(final int count) {
         this.count = count;
     }
-
-
 }
