@@ -20,9 +20,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -486,6 +493,59 @@ public class BitInputTest {
     public void testReadLongWithLengthTooLong() throws IOException {
 
         EMPTY_INSTANCE.readLong(65);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadBytes() throws IOException {
+
+        final byte[] expected = new byte[RANDOM.nextInt(128) + 1];
+        RANDOM.nextBytes(expected);
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(expected));
+
+        final byte[] actual = new byte[expected.length];
+        input.readBytes(actual, 0, actual.length);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithNullBytes() throws IOException {
+        EMPTY_INSTANCE.readBytes(null, 0, 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithOffsetNegative() throws IOException {
+        EMPTY_INSTANCE.readBytes(
+            new byte[0], Integer.MIN_VALUE | RANDOM.nextInt(), 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithOffsetTooBig() throws IOException {
+        EMPTY_INSTANCE.readBytes(new byte[0], 1, 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.readBytes(
+            new byte[0], 0, Integer.MIN_VALUE | RANDOM.nextInt());
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithLengthTooBig() throws IOException {
+        EMPTY_INSTANCE.readBytes(new byte[0], 0, 1);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadBytesWithLengthOffsetTooBig() throws IOException {
+        EMPTY_INSTANCE.readBytes(new byte[1], 1, 1);
     }
 
 

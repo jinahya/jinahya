@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.testng.Assert;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -40,66 +40,6 @@ public class BitOutputTest {
 
     private static final BitOutput EMPTY_INSTANCE =
         new BitOutput(new ByteArrayOutputStream());
-
-
-    //@Test(invocationCount = 128)
-    public void testWriteUnsignedByte() throws IOException {
-
-        final int length = RANDOM.nextInt(8) + 1; // 1 - 8
-
-        final int expected = RANDOM.nextInt() >>> (32 - length);
-
-        testWriteUnsignedByte(length, expected);
-    }
-
-
-    //@Test
-    public void testWriteUnsignedByteMax() throws IOException {
-
-        testWriteUnsignedByte(8, 255);
-    }
-
-
-    private void testWriteUnsignedByte(final int length, final int expected)
-        throws IOException {
-
-        Assert.assertTrue(length > 0);
-        Assert.assertTrue(length <= 8);
-
-        Assert.assertTrue(expected >= 0);
-        Assert.assertTrue(expected < Math.pow(2, length));
-
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        final BitOutput output = new BitOutput(out);
-
-        //output.writeUnsignedByte(length, expected);
-        output.aling(1);
-        out.flush();
-
-        final byte[] bytes = out.toByteArray();
-        Assert.assertTrue(bytes.length == 1);
-
-        final int actual = (bytes[0] & 0xFF) >>> (8 - length);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    //@Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testWriteUnsignedByteWithLengthZero() throws IOException {
-        //EMPTY_INSTANCE.writeUnsignedByte(0, 0);
-    }
-
-
-    //@Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testWriteUnsignedByteWithLengthNegative() throws IOException {
-
-        /*
-        EMPTY_INSTANCE.writeUnsignedByte(
-        Integer.MIN_VALUE | RANDOM.nextInt(), 0);
-         */
-    }
 
 
     //@Test
@@ -137,16 +77,154 @@ public class BitOutputTest {
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testAlignWithIllegalLengthZero() throws IOException {
-
-        new BitOutput(new ByteArrayOutputStream()).aling(0);
+    public void testAlignWithLengthZero() throws IOException {
+        EMPTY_INSTANCE.aling(0);
     }
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testAlignWithIllegalLengthNegative() throws IOException {
+    public void testAlignWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.aling(Integer.MIN_VALUE | RANDOM.nextInt());
+    }
 
-        new BitOutput(new ByteArrayOutputStream()).aling(-1);
+
+    @Test(invocationCount = 128)
+    public void testWriteBoolean() throws IOException {
+
+        final boolean expected = RANDOM.nextBoolean();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeBoolean(expected);
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+        Assert.assertTrue(bytes.length == 1);
+
+        final boolean actual = (((bytes[0] >>> 8) & 0x01) == 0x01);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    private void testWriteUnsignedInt(final int length, final int expected)
+        throws IOException {
+
+        Assert.assertTrue(length >= 1);
+        Assert.assertTrue(length < 32);
+
+        if (true) {
+            if (expected < 0) {
+                Assert.fail("negative value");
+            } else {
+                Assert.assertTrue((expected >> length) == 0);
+            }
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeUnsignedInt(length, expected);
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        int actual = 0x00;
+        for (int i = 0; i < bytes.length; i++) {
+            actual <<= 0x08;
+            actual |= (bytes[i] & 0xFF);
+        }
+        actual >>>= ((8 * bytes.length) - length);
+
+        Assert.assertEquals(actual, expected, " for length:<" + length + ">");
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedInt() throws IOException {
+
+        final int length = RANDOM.nextInt(31) + 1; // 1 - 31
+
+        final int value = (RANDOM.nextInt() & 0x7FFFFFFF) >> (32 - length);
+
+        testWriteUnsignedInt(length, value);
+    }
+
+
+    @Test
+    public void testWriteUnsignedIntWithLengthMin() throws IOException {
+        testWriteUnsignedInt(1, 0);
+        testWriteUnsignedInt(1, 1);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedIntWithLengthMax() throws IOException {
+        final int value = RANDOM.nextInt() & 0x7FFFFFFF;
+        testWriteUnsignedInt(31, value);
+    }
+
+
+    @Test
+    public void testWriteUnsignedIntWithValueMax() throws IOException {
+        testWriteUnsignedInt(31, Integer.MAX_VALUE);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedIntWithLengthZero() throws IOException {
+        EMPTY_INSTANCE.writeUnsignedInt(0, 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedIntWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.writeUnsignedInt(
+            Integer.MIN_VALUE | RANDOM.nextInt(), 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteUnsignedIntWithLengthTooLong() throws IOException {
+        EMPTY_INSTANCE.writeUnsignedInt(32, 0);
+    }
+
+
+    private void testWriteInt(final int length, final int expected)
+        throws IOException {
+
+        Assert.assertTrue(length > 1);
+        Assert.assertTrue(length <= 32);
+
+        if (length < 0x20) {
+            if (expected < 0x00) {
+                Assert.assertTrue((expected >> length) == -1);
+            } else {
+                Assert.assertTrue((expected >> length) == 0);
+            }
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeInt(length, expected);
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        int actual = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            actual <<= 8;
+            actual |= (bytes[i] & 0xFF);
+        }
+        actual <<= ((4 - bytes.length) * 8);
+        actual >>= (32 - length);
+
+        Assert.assertEquals(actual, expected, "length:<" + length + ">");
     }
 
 
@@ -154,135 +232,55 @@ public class BitOutputTest {
     public void testWriteInt() throws IOException {
 
         final int length = RANDOM.nextInt(31) + 2; // 2 - 32
-        Assert.assertTrue(length > 1);
-        Assert.assertTrue(length <= 32);
 
-        final int expected = RANDOM.nextInt() >> (32 - length);
-        if (expected < 0) {
-            Assert.assertEquals(expected >> length, -1);
-        } else {
-            Assert.assertEquals(expected >> length, 0);
-        }
+        final int value = RANDOM.nextInt() >> (32 - length);
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeInt(length, expected);
-        output.aling(1);
-        baos.flush();
-        final byte[] bytes = baos.toByteArray();
-
-        int actual = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            actual <<= 8;
-            actual |= bytes[i] & 0xFF;
-        }
-        actual <<= ((4 - bytes.length) * 8);
-        actual >>= (32 - length);
-
-        Assert.assertEquals(actual, expected);
+        testWriteInt(length, value);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public void testWriteIntWithLengthMin() throws IOException {
-
-        final int length = 2;
-
-        final int expected = RANDOM.nextInt() >> 30;
-        if (expected < 0) {
-            Assert.assertEquals(expected >> length, -1);
-        } else {
-            Assert.assertEquals(expected >> length, 0);
-        }
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeInt(length, expected);
-        output.aling(1);
-        baos.flush();
-        final byte[] bytes = baos.toByteArray();
-
-        int actual = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            actual <<= 8;
-            actual |= bytes[i] & 0xFF;
-        }
-        actual <<= ((4 - bytes.length) * 8);
-        actual >>= (32 - length);
-
-        Assert.assertEquals(actual, expected);
+        testWriteInt(2, 0);
+        testWriteInt(2, 1);
+        testWriteInt(2, -2);
+        testWriteInt(2, -1);
     }
 
 
     @Test(invocationCount = 128)
     public void testWriteIntWithLengthMax() throws IOException {
+        testWriteInt(32, RANDOM.nextInt());
+    }
 
-        final int length = 32;
 
-        final int expected = RANDOM.nextInt();
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteIntWithLengthOne() throws IOException {
+        EMPTY_INSTANCE.writeInt(1, 0);
+    }
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeInt(length, expected);
-        output.aling(1);
-        baos.flush();
-        final byte[] bytes = baos.toByteArray();
 
-        int actual = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            actual <<= 8;
-            actual |= (bytes[i] & 0xFF);
-        }
-        actual <<= ((4 - bytes.length) * 8);
-        actual >>= (32 - length);
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteIntWithLengthZero() throws IOException {
+        EMPTY_INSTANCE.writeInt(0, 0);
+    }
 
-        Assert.assertEquals(actual, expected);
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteIntWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.writeInt(Integer.MIN_VALUE | RANDOM.nextInt(), 0);
     }
 
 
     @Test
     public void testWriteIntWithValueMin() throws IOException {
-
-        final int length = 32;
-
-        final int expected = Integer.MIN_VALUE;
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeInt(length, expected);
-        baos.flush();
-        final byte[] bytes = baos.toByteArray();
-
-        int actual = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            actual <<= 8;
-            actual |= (bytes[i] & 0xFF);
-        }
-
-        Assert.assertEquals(actual, expected);
+        testWriteInt(32, Integer.MIN_VALUE);
     }
 
 
     @Test
     public void testWriteIntWithValueMax() throws IOException {
-
-        final int length = 32;
-
-        final int expected = Integer.MAX_VALUE;
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeInt(length, expected);
-        baos.flush();
-        final byte[] bytes = baos.toByteArray();
-
-        int actual = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            actual <<= 8;
-            actual |= (bytes[i] & 0xFF);
-        }
-
-        Assert.assertEquals(actual, expected);
+        testWriteInt(32, Integer.MAX_VALUE);
     }
 
 
@@ -295,15 +293,16 @@ public class BitOutputTest {
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
         final BitOutput output = new BitOutput(baos);
         for (Integer value : values) {
             output.writeInt(32, value);
         }
+
         baos.flush();
-
         final byte[] bytes = baos.toByteArray();
-
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+
         final DataInputStream dis = new DataInputStream(bais);
         for (Integer expected : values) {
             final int actual = dis.readInt();
@@ -517,9 +516,9 @@ public class BitOutputTest {
 
         baos.flush();
         final byte[] bytes = baos.toByteArray();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 
-        final DataInputStream dis =
-            new DataInputStream(new ByteArrayInputStream(bytes));
+        final DataInputStream dis = new DataInputStream(bais);
 
         final long actual = dis.readLong();
 
@@ -529,23 +528,80 @@ public class BitOutputTest {
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteLongWithLengthOne() throws IOException {
-
         EMPTY_INSTANCE.writeLong(1, 0L);
     }
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteLongWithLengthZero() throws IOException {
-
         EMPTY_INSTANCE.writeLong(0, 0L);
     }
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testWriteLongWithLengthNegative() throws IOException {
-
         EMPTY_INSTANCE.writeLong(Integer.MIN_VALUE | RANDOM.nextInt(), 0L);
     }
 
 
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteLongWithLengthTooLong() throws IOException {
+        EMPTY_INSTANCE.writeLong(65, 0L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteBytes() throws IOException {
+
+        final byte[] expected = new byte[RANDOM.nextInt(128) + 1];
+        RANDOM.nextBytes(expected);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeBytes(expected, 0, expected.length);
+
+        baos.flush();
+        final byte[] actual = baos.toByteArray();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithNullBytes() throws IOException {
+        EMPTY_INSTANCE.writeBytes(null, 0, 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithOffsetNegative() throws IOException {
+        EMPTY_INSTANCE.writeBytes(
+            new byte[0], Integer.MIN_VALUE | RANDOM.nextInt(), 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithOffsetTooBig() throws IOException {
+        EMPTY_INSTANCE.writeBytes(new byte[0], 1, 0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithLengthNegative() throws IOException {
+        EMPTY_INSTANCE.writeBytes(
+            new byte[0], 0, Integer.MIN_VALUE | RANDOM.nextInt());
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithLengthTooBig() throws IOException {
+        EMPTY_INSTANCE.writeBytes(new byte[0], 0, 1);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteBytesWithLengthOffsetTooBig() throws IOException {
+        EMPTY_INSTANCE.writeBytes(new byte[1], 1, 1);
+    }
 }
