@@ -432,4 +432,120 @@ public class BitOutputTest {
     }
 
 
+    private void testWriteLong(final int length, final long expected)
+        throws IOException {
+
+        Assert.assertTrue(length > 1);
+        Assert.assertTrue(length <= 64);
+
+        if (length < 64) {
+            if (expected < 0) {
+                Assert.assertEquals(expected >> length, -1L);
+            } else {
+                Assert.assertEquals(expected >> length, 0L);
+            }
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeLong(length, expected);
+        output.aling(1);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        long actual = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            actual <<= 8;
+            actual |= bytes[i] & 0xFF;
+        }
+        actual <<= ((8 - bytes.length) * 8);
+        actual >>= (64 - length);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteLong() throws IOException {
+
+        final int length = RANDOM.nextInt(63) + 2; // 2 - 64
+
+        final long value = RANDOM.nextLong() >> (64 - length);
+
+        testWriteLong(length, value);
+    }
+
+
+    @Test
+    public void testWriteLongWithLengthMin() throws IOException {
+        testWriteLong(2, 0L);
+        testWriteLong(2, 1L);
+        testWriteLong(2, -2L);
+        testWriteLong(2, -1L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteLongWithLengthMax() throws IOException {
+        testWriteLong(64, RANDOM.nextLong());
+    }
+
+
+    @Test
+    public void testWriteLongWithValueMin() throws IOException {
+        testWriteLong(64, Long.MIN_VALUE);
+    }
+
+
+    @Test
+    public void testWriteLongWithValueMax() throws IOException {
+        testWriteLong(64, Long.MAX_VALUE);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteLongWithDataInput() throws IOException {
+
+        final long expected = RANDOM.nextLong();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final BitOutput output = new BitOutput(baos);
+        output.writeLong(64, expected);
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        final DataInputStream dis =
+            new DataInputStream(new ByteArrayInputStream(bytes));
+
+        final long actual = dis.readLong();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteLongWithLengthOne() throws IOException {
+
+        EMPTY_INSTANCE.writeLong(1, 0L);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteLongWithLengthZero() throws IOException {
+
+        EMPTY_INSTANCE.writeLong(0, 0L);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testWriteLongWithLengthNegative() throws IOException {
+
+        EMPTY_INSTANCE.writeLong(Integer.MIN_VALUE | RANDOM.nextInt(), 0L);
+    }
+
+
 }

@@ -374,4 +374,119 @@ public class BitInputTest {
         testReadUnsignedLong(63, Long.MAX_VALUE);
     }
 
+
+    private void testReadLong(final int length, final long expected)
+        throws IOException {
+
+        Assert.assertTrue(length > 1);
+        Assert.assertTrue(length <= 64);
+
+        if (length < 64) {
+            if (expected < 0L) {
+                Assert.assertEquals(expected >> length, -1L);
+            } else {
+                Assert.assertEquals(expected >> length, 0L);
+            }
+        }
+
+        final long shifted = expected << (64 - length);
+        final byte[] octets = new byte[8];
+        for (int i = 0; i < octets.length; i++) {
+            octets[i] = (byte) ((shifted >> ((7 - i) * 8)) & 0xFF);
+        }
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(octets));
+        final long actual = input.readLong(length);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadLong() throws IOException {
+
+        final int length = RANDOM.nextInt(63) + 2; // 2 - 64
+
+        final long value = RANDOM.nextLong() >> (64 - length);
+
+        testReadLong(length, value);
+    }
+
+
+    @Test
+    public void testReadLongWithLengthMin() throws IOException {
+        testReadLong(2, 0L);
+        testReadLong(2, 1L);
+        testReadLong(2, -1L);
+        testReadLong(2, -2L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadLongWithLengthMax() throws IOException {
+        testReadLong(64, RANDOM.nextLong());
+    }
+
+
+    @Test
+    public void testReadLongWithValueMin() throws IOException {
+        testReadLong(64, Long.MIN_VALUE);
+    }
+
+
+    @Test
+    public void testReadLongWithValueMax() throws IOException {
+        testReadLong(64, Long.MAX_VALUE);
+    }
+
+
+    @Test
+    public void testReadLongWithDataOutput() throws IOException {
+
+        final long expected = RANDOM.nextLong();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeLong(expected);
+        dos.flush();
+
+        baos.flush();
+        final byte[] bytes = baos.toByteArray();
+
+        final BitInput input = new BitInput(new ByteArrayInputStream(bytes));
+        final long actual = input.readLong(64);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadLongWithLengthOne() throws IOException {
+
+        EMPTY_INSTANCE.readLong(1);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadLongWithLengthZero() throws IOException {
+
+        EMPTY_INSTANCE.readLong(0);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadLongWithLengthNegative() throws IOException {
+
+        EMPTY_INSTANCE.readLong(Integer.MIN_VALUE | RANDOM.nextInt());
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testReadLongWithLengthTooLong() throws IOException {
+
+        EMPTY_INSTANCE.readLong(65);
+    }
+
+
 }
