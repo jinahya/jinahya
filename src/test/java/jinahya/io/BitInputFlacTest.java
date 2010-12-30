@@ -214,10 +214,112 @@ public class BitInputFlacTest {
         writer.writeEndElement();
 
 
+        readSubFrames(input, writer);
+
+
         writer.writeEndElement(); // ---------------------------------- </frame>
 
 
         writer.writeEndElement(); // --------------------------------- </frames>
+    }
+
+
+    private void readSubFrames(final BitInput input,
+                               final XMLStreamWriter writer)
+        throws IOException, XMLStreamException {
+
+
+        writer.writeStartElement("subFrames"); // ------------------ <subFrames>
+
+
+        writer.writeStartElement("subFrame"); // -------------------- <subFrame>
+
+
+        final int zeroBitPadding = input.readUnsignedInt(1);
+
+        writer.writeStartElement("subFrameType");
+        final int subFrameType = input.readUnsignedInt(6);
+        writer.writeCharacters(Integer.toString(subFrameType));
+        writer.writeEndElement();
+
+
+        int wastedBitsPerSample = 0;
+        final boolean wastedBitsPerSampleFlag = input.readBoolean();
+        if (wastedBitsPerSampleFlag) {
+            do {
+                wastedBitsPerSample++;
+            } while (!input.readBoolean());
+        }
+
+
+        writer.writeStartElement("blockingStrategy");
+        final int blockingStrategy = input.readUnsignedInt(1);
+        writer.writeCharacters(Integer.toString(blockingStrategy));
+        writer.writeEndElement();
+
+
+        writer.writeStartElement("blockSizeInInterChannelSamples");
+        final int blockSizeInInterChannelSamples = input.readUnsignedInt(4);
+        writer.writeCharacters(Integer.toString(blockSizeInInterChannelSamples));
+        writer.writeEndElement();
+
+
+        writer.writeStartElement("sampleRate"); // sample rate
+        final int sampleRate = input.readUnsignedInt(4);
+        writer.writeCharacters(Integer.toString(sampleRate));
+        writer.writeEndElement();
+
+
+        writer.writeStartElement("channelAssignment"); // channel assignment
+        final int channelAssignment = input.readUnsignedInt(4);
+        writer.writeCharacters(Integer.toString(channelAssignment));
+        writer.writeEndElement();
+
+
+        writer.writeStartElement("sampleSizeInBits");
+        final int sampleSizeInBits = input.readUnsignedInt(4);
+        writer.writeCharacters(Integer.toString(sampleSizeInBits));
+        writer.writeEndElement();
+
+
+        final int reserved2 = input.readUnsignedInt(1); // reserved
+
+
+        long sampleNumber = -1L;
+        int frameNumber = -1;
+        if (blockingStrategy == 0x01) {
+            sampleNumber = input.readUnsignedLong(36);
+        } else {
+            frameNumber = input.readUnsignedInt(31);
+        }
+
+        writer.writeStartElement("sampleNumber");
+        writer.writeCharacters(Long.toString(sampleNumber));
+        writer.writeEndElement();
+
+        writer.writeStartElement("frameNumber");
+        writer.writeCharacters(Integer.toString(frameNumber));
+        writer.writeEndElement();
+
+
+        if (blockSizeInInterChannelSamples >> 1 == 0x11) { // 011x
+        }
+
+
+        if (sampleSizeInBits >> 2 == 0x11) { // 11xx
+        }
+
+
+        writer.writeStartElement("CRC8");
+        final int crc8 = input.readUnsignedInt(8);
+        writer.writeCharacters(Integer.toBinaryString(crc8));
+        writer.writeEndElement();
+
+
+        writer.writeEndElement(); // ------------------------------- </subFrame>
+
+
+        writer.writeEndElement(); // ------------------------------ </subFrames>
     }
 
 
