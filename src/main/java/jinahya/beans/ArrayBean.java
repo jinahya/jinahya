@@ -21,11 +21,7 @@ package jinahya.beans;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,59 +44,7 @@ public class ArrayBean<I> {
 
 
     /**
-     * Policy for setting index to the first.
-     */
-    public static final int POLICY_INDEX_FIRST = 0x01;
-
-
-    /**
-     * Policy for setting index to current.
-     */
-    public static final int POLICY_INDEX_CURRENT = POLICY_INDEX_FIRST << 1;
-
-
-    /**
-     * Policy for setting index to the last.
-     */
-    public static final int POLICY_INDEX_LAST = POLICY_INDEX_CURRENT << 1;
-
-
-    /**
-     *
-     * @param <I>
-     */
-    public static interface Filter<I> {
-
-
-        /**
-         * Check whether given <code>item</code> is fine or not.
-         *
-         * @param item item to be checked
-         * @return true if <code>item</code> is ok, false otherwise.
-         */
-        boolean accept(I item);
-    }
-
-
-    /**
      * 
-     * @param <I> 
-     */
-    public static interface Manipulator<I> {
-
-
-        /**
-         * 
-         * @param items items to manipulate
-         * @return new index
-         */
-        int manipulate(List<I> list);
-    }
-
-
-    /**
-     * Creates an instance.
-     *
      * @param type item type
      */
     public ArrayBean(final Class<I> type) {
@@ -112,66 +56,10 @@ public class ArrayBean<I> {
 
         this.type = type;
 
-        list = Collections.synchronizedList(new LinkedList<I>());
+        list = new LinkedList<I>();
         index = -1;
 
         pcs = new PropertyChangeSupport(this);
-    }
-
-
-    /**
-     * 
-     * @param filter 
-     */
-    public void filter(final Filter<I> filter) {
-
-        if (filter == null) {
-            throw new IllegalArgumentException("null filter");
-        }
-
-        synchronized (list) {
-
-            final int oldIndex = index;
-            final I[] oldItems = getItems();
-
-            for (int i = list.size() - 1; i >= 0; i--) {
-                if (filter.accept(list.get(i))) {
-                    continue;
-                }
-                if (index < i) {
-                    // ok.
-                } else if (index == i) {
-                    if (list.size() - 1 == index) {
-                        index--;
-                    }
-                } else { // index > i
-                    index --;
-                }
-                list.remove(i);
-            }
-
-            firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, index);
-            firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
-        }
-    }
-
-
-    public void manipulate(final Manipulator<I> manipulator) {
-
-        if (manipulator == null) {
-            throw new IllegalArgumentException("null manipulator");
-        }
-
-        final List<I> mlist = new LinkedList<I>(list);
-        final int mindex = manipulator.manipulate(mlist);
-        if ((mlist.isEmpty() && mindex != -1) || (mlist.size() <= mindex)) {
-            throw new RuntimeException(
-                "wrong manipulation: index(" + mindex + ") for length("
-                + mlist.size() + ")");
-        }
-
-        synchronized (list) {
-        }
     }
 
 
@@ -188,18 +76,29 @@ public class ArrayBean<I> {
     /**
      * Sets index.
      *
-     * @param index new index
+     * @param newIndex new index
      */
-    public void setIndex(final int index) {
+    public void setIndex(final int newIndex) {
 
-        if ((list.isEmpty() && index != -1) || (list.size() <= index)) {
+        if (newIndex < -1) {
             throw new IllegalArgumentException(
-                "wrong index(" + index + ") for length(" + getLength() + ")");
+                "newIndex(" + newIndex + ") < -1");
+        } else if (newIndex == -1) {
+            if (!list.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "newIndex(" + newIndex + ") for an empty items");
+            }
+        } else { // newIndex >= 0
+            if (newIndex >= list.size()) {
+                throw new IllegalArgumentException(
+                    "newIndex(" + newIndex + ") >= items.length("
+                    + list.size() + ")");
+            }
         }
 
-        final Object oldIndex = this.index;
-        this.index = index;
-        firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, this.index);
+        final Object oldIndex = index;
+        index = newIndex;
+        firePropertyChange(PROPERTY_NAME_INDEX, oldIndex, index);
     }
 
 
@@ -208,19 +107,106 @@ public class ArrayBean<I> {
      *
      * @return elements
      */
+    @SuppressWarnings("unchecked")
     public I[] getItems() {
         return list.toArray((I[]) Array.newInstance(type, list.size()));
     }
 
 
     /**
-     * Returns element at given <code>index</code>.
-     *
-     * @param index element index
-     * @return item at <code>index</code>
+     * 
+     * @param newItems 
      */
-    public I getItemAt(final int index) {
-        return list.get(index);
+    public void setItems(final I[] newItems) {
+
+        if (newItems == null) {
+            throw new IllegalArgumentException("null newItemse");
+        }
+
+        final I[] oldItems = getItems();
+
+        list.clear();
+        list.addAll(Arrays.asList(newItems));
+
+        if (index == -1) {
+            if (!list.isEmpty()) {
+                setIndex(0);
+            }
+        } else {
+            if (index >= list.size()) {
+                setIndex(list.size() - 1);
+            }
+        }
+
+        firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
+    }
+
+
+    /**
+     * 
+     */
+    public I getItemAtIndex() {
+        return getItemAt(index);
+    }
+
+
+    /**
+     * 
+     */
+    public I getItemAt(final int targetIndex) {
+        return list.get(targetIndex);
+    }
+
+
+    public void swapItemAtIndexWith(final int targetIndex) {
+        swapItemAtWith(index, targetIndex);
+    }
+
+
+    public void swapItemAtWithIndex(final int sourceIndex) {
+        swapItemAtWith(sourceIndex, index);
+    }
+
+
+    public void swapItemAtWith(final int sourceIndex, final int targetIndex) {
+
+        if (sourceIndex < 0) {
+            throw new IllegalArgumentException(
+                "sourceIndex(" + sourceIndex + ") < 0");
+        }
+
+        if (sourceIndex >= list.size()) {
+            throw new IllegalArgumentException(
+                "sourceIndex(" + sourceIndex + ") >= list.length(" + list.size()
+                + ")");
+        }
+
+        if (targetIndex < 0) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") < 0");
+        }
+
+        if (targetIndex >= list.size()) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") >= list.length(" + list.size()
+                + ")");
+        }
+
+        if (sourceIndex == targetIndex) {
+            return;
+        }
+
+        final I[] oldItems = getItems();
+
+        Collections.swap(list, sourceIndex, targetIndex);
+
+        if (index == sourceIndex) {
+            setIndex(targetIndex);
+        } else if (index == targetIndex) {
+            setIndex(sourceIndex);
+        }
+
+        firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
     }
 
 
@@ -235,188 +221,124 @@ public class ArrayBean<I> {
 
 
     /**
-     * Removes element at given <code>index</code>.
-     *
-     * @param index index to be removed
-     * @return removed element
+     * 
+     * @param <E> item type
+     * @param targetIndex insertion index
+     * @param newItems new item
      */
-    public I removeItemAt(final int index) {
+    public <E extends I> void insertItemsAt(final int targetIndex,
+                                            final E... newItems) {
+
+        //insertItemsAt(targetIndex, Arrays.asList(newItems));
+
+        if (targetIndex < 0) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") < 0");
+        }
+
+        if (targetIndex > list.size()) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") > items.length("
+                + list.size() + ")");
+        }
+
+        if (newItems == null) {
+            throw new IllegalArgumentException("null newItems");
+        }
+
+        final Class<?> componentType = newItems.getClass().getComponentType();
+        if (!type.isAssignableFrom(componentType)) {
+            throw new IllegalArgumentException(
+                "newItems' componentType(" + componentType
+                + ") is not assignable to " + type);
+        }
 
         final I[] oldItems = getItems();
 
-        final I removed = list.remove(index); // IOOBE
+        for (int i = 0; i < newItems.length; i++) {
+            list.add(targetIndex + i, newItems[i]);
+        }
 
-        if (this.index >= list.size()) {
-            setIndex(list.size() - 1);
+        if (index == -1) {
+            setIndex(0);
+        } else {
+            if (index >= targetIndex) {
+                setIndex(index + newItems.length);
+            }
+        }
+
+        firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
+    }
+
+
+    /**
+     * 
+     * @param <E> item type
+     * @param newItems new items
+     */
+    public <E extends I> void insertItemsAtFirst(final E... newItems) {
+
+        insertItemsAt(0, newItems);
+    }
+
+
+    /**
+     * 
+     * @param <E> item type
+     * @param newItems new item
+     */
+    public <E extends I> void insertItemsAtLast(final E... newItems) {
+
+        insertItemsAt(list.size(), newItems);
+    }
+
+
+    /**
+     * Deletes item at index.
+     *
+     * @return deleted item
+     */
+    public I deleteItemAtIndex() {
+        return deleteItemAt(index);
+    }
+
+
+    /**
+     * Deletes item at given <code>targetIndex</code>.
+     *
+     * @param targetIndex index to be removed
+     * @return deleted item
+     */
+    public I deleteItemAt(final int targetIndex) {
+
+        if (targetIndex < 0) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") < 0");
+        }
+
+        if (targetIndex >= list.size()) {
+            throw new IllegalArgumentException(
+                "targetIndex(" + targetIndex + ") >= items.length"
+                + list.size());
+        }
+
+        final I[] oldItems = getItems();
+
+        final I removed = list.remove(targetIndex);
+
+        if (index < targetIndex) {
+            // do nothin'
+        } else if (index == targetIndex) {
+            if (index == list.size()) {
+                setIndex(list.size() - 1);
+            }
+        } else { // index > targetIndex
+            setIndex(index - 1);
         }
 
         pcs.firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
 
         return removed;
-    }
-
-
-    public boolean remove(final I item) {
-
-        final boolean result = list.remove(item);
-
-        if (result && (index >= list.size())) {
-            setIndex(list.size() - 1);
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Add given <code>element</code> at specified <code>index</code>.
-     *
-     * @param index index
-     * @param item item to add
-     */
-    public <E extends I> void add(final int index, final E item) {
-
-        if (item == null) {
-            throw new IllegalArgumentException("null element");
-        }
-
-        final I[] oldValue = getItems();
-
-        list.add(index, item);
-
-        pcs.firePropertyChange(PROPERTY_NAME_ITEMS, oldValue, getItems());
-    }
-
-
-    /**
-     * Sets given <code>newElements</code> with false for honorCurrentIndex.
-     *
-     * @param items new elements
-     */
-    public <T extends I> void items(final T[] items) {
-
-        if (items == null) {
-            throw new IllegalArgumentException("null items");
-        }
-
-        setItems(items, POLICY_INDEX_FIRST);
-    }
-
-
-    /**
-     * Sets given <code>newElements</code>.
-     *
-     * @param items new elements
-     * @param policy index policy
-     */
-    public <T extends I> void setItems(final T[] items, final int policy) {
-
-        if (items == null) {
-            throw new IllegalArgumentException("null items");
-        }
-
-        setItems(Arrays.asList(items), policy);
-    }
-
-
-    /**
-     * Sets given <code>newElements</code>.
-     *
-     * @param items new elements
-     * @param policy honor-current-index flag
-     */
-    private void setItems(final Collection<? extends I> items,
-                          final int policy) {
-
-        if (items == null) {
-            throw new IllegalArgumentException("null newElements");
-        }
-
-        synchronized (list) {
-
-            final I[] oldItems = getItems();
-
-            list.clear();
-            list.addAll(items);
-
-            if (list.isEmpty()) {
-                setIndex(-1);
-            } else {
-                switch (policy) {
-                    case POLICY_INDEX_FIRST:
-                        setIndex(0);
-                        break;
-                    case POLICY_INDEX_CURRENT:
-                        if (index == -1) {
-                            setIndex(0);
-                        } else {
-                            if (index >= items.size()) {
-                                setIndex(items.size() - 1);
-                            }
-                        }
-                        break;
-                    case POLICY_INDEX_LAST:
-                        setIndex(items.size() - 1);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            firePropertyChange(PROPERTY_NAME_ITEMS, oldItems, getItems());
-        }
-    }
-
-
-    /**
-     * Copy alements to given <code>bean</code>.
-     *
-     * @param bean target bean.
-     * @param filter element filter. can be null.
-     * @param indexPolicy index policy
-     */
-    public void copyTo(final ArrayBean<? super I> bean,
-                       final Filter<I> filter, final int indexPolicy) {
-
-        if (filter == null || list.isEmpty()) {
-            bean.setItems(list, indexPolicy);
-            return;
-        }
-
-        final Collection<I> newElements = new ArrayList<I>();
-        for (I element : list) {
-            if (filter.accept(element)) {
-                newElements.add(element);
-            }
-        }
-        bean.setItems(newElements, indexPolicy);
-    }
-
-
-    /**
-     * Copy elements from given <code>bean</code>.
-     *
-     * @param <T> source bean's element type
-     * @param bean source bean
-     * @param filter element filter. can be null.
-     * @param indexPolicy honor-current-index flag
-     */
-    public <T extends I> void copyFrom(final ArrayBean<T> bean,
-                                       final Filter<T> filter,
-                                       final int indexPolicy) {
-
-        if (filter == null || bean.list.isEmpty()) {
-            setItems(bean.list, indexPolicy);
-            return;
-        }
-
-        final Collection<T> newElements = new ArrayList<T>();
-        for (T element : bean.list) {
-            if (filter.accept(element)) {
-                newElements.add(element);
-            }
-        }
-        setItems(newElements, indexPolicy);
     }
 
 
@@ -531,36 +453,6 @@ public class ArrayBean<I> {
                                       final Object newValue) {
 
         pcs.firePropertyChange(propertyName, oldValue, newValue);
-    }
-
-
-    /**
-     *
-     * @param propertyName
-     * @param index
-     * @param oldValue
-     * @param newValue
-     */
-    protected void fireIndexedPropertyChange(final String propertyName,
-                                             final int index,
-                                             final Object oldValue,
-                                             final Object newValue) {
-
-        try {
-            final Method method = PropertyChangeSupport.class.getMethod(
-                "fireIndexedPropertyChange", new Class<?>[]{
-                    String.class, Integer.TYPE, Object.class, Object.class});
-            try {
-                method.invoke(pcs, new Object[]{
-                        propertyName, index, oldValue, newValue});
-            } catch (IllegalAccessException iae) {
-                iae.printStackTrace(System.err);
-            } catch (InvocationTargetException ite) {
-                ite.printStackTrace(System.err);
-            }
-        } catch (NoSuchMethodException nsme) {
-            nsme.printStackTrace(System.err);
-        }
     }
 
 

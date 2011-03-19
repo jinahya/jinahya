@@ -14,7 +14,11 @@
  *  limitations under the License.
  */
 
+
 package jinahya.xml;
+
+
+import java.util.LinkedList;
 
 
 /**
@@ -22,26 +26,39 @@ package jinahya.xml;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <E>
  */
-public interface ElementLocator<E> {
+public abstract class ElementLocator<E> {
+
+
+    public ElementLocator(final E root) {
+        super();
+
+        if (root == null) {
+            throw new IllegalArgumentException("null root");
+        }
+
+        path = new LinkedList<E>();
+        path.add(root);
+    }
 
 
     /**
-     * Counts child elements.
-     *
-     * @param localName child element's name
-     * @return children count
+     * 
+     * @param name
+     * @param space
+     * @return 
      */
-    int count(String localName);
+    public abstract int count(final String name, final String space);
 
 
     /**
-     * Counts child elements.
-     *
-     * @param namespaceURI child element's namespace
-     * @param localName child element's name
-     * @return children count
+     * 
+     * @param name
+     * @return 
+     * @see #getCount(java.lang.String, java.lang.String)
      */
-    int countNS(String namespaceURI, String localName);
+    public final int count(final String name) {
+        return count(name, null);
+    }
 
 
     /**
@@ -49,7 +66,24 @@ public interface ElementLocator<E> {
      *
      * @return self
      */
-    ElementLocator<E> root();
+    public final ElementLocator<E> root() {
+
+        if (path.size() > 1) {
+            path.removeLast();
+        }
+
+        return this;
+    }
+
+
+    /**
+     * 
+     * @return 
+     * @see #locateRoot()
+     */
+    public final ElementLocator<E> R() {
+        return root();
+    }
 
 
     /**
@@ -57,147 +91,175 @@ public interface ElementLocator<E> {
      *
      * @return self
      */
-    ElementLocator<E> parent();
+    public final ElementLocator<E> parent() {
+
+        if (path.size() > 1) {
+            path.removeLast();
+        }
+
+        return this;
+    }
 
 
     /**
-     * Locate to a child.
-     *
-     * @param localName child element's name
-     * @param index child index
-     * @return self
+     * @see #locateParent()
      */
-    ElementLocator<E> child(String localName, int index);
+    public final ElementLocator<E> P() {
+        return parent();
+    }
 
 
     /**
-     * Locate to a child.
-     *
-     * @param namespaceURI child element's namespace
-     * @param localName child element's name
-     * @param index child element index
-     * @return self
+     * 
+     * @param index
+     * @param name
+     * @param space
+     * @return 
      */
-    ElementLocator<E> childNS(String namespaceURI, String localName, int index);
+    public final ElementLocator<E> child(final int index, final String name,
+                                         final String space) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("index(" + index + ") < 0");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        final E located = locate(index, name, space);
+
+        path.add(located);
+
+        return this;
+    }
 
 
     /**
-     * Append a new child element and locate it.
-     *
-     * @param localName child element's name
-     * @return self
+     * 
      */
-    ElementLocator<E> child(String localName);
+    protected abstract E locate(final int index, final String name,
+                                final String space);
 
 
     /**
-     * Append a new child element and locate it.
-     *
-     * @param namespaceURI child element's namespace
-     * @param localName child element's name
-     * @return self
+     * 
+     * @param index
+     * @param name
+     * @param space
+     * @return 
+     * @see #child(int, java.lang.String, java.lang.String) 
      */
-    ElementLocator<E> childNS(String namespaceURI, String localName);
+    public final ElementLocator<E> C(final int index, final String name,
+                                     final String space) {
+
+        return child(index, name, space);
+    }
 
 
     /**
-     * Returns current element's text value.
-     *
-     * @return text content or null
+     * 
+     * @param index
+     * @param name
+     * @return 
+     * @see #child(int, java.lang.String, java.lang.String) 
      */
-    String text();
+    public final ElementLocator<E> child(final int index, final String name) {
+
+        return child(index, name, null);
+    }
 
 
     /**
-     * Returns current elements's text value. Locate to parent if
-     * <code>parent</code> is true.
-     *
-     * @param parent flag for locating parent
-     * @return text content or null
+     * 
+     * @param index
+     * @param name
+     * @return 
+     * @see #child(int, java.lang.String) 
      */
-    String text(boolean parent);
+    public final ElementLocator<E> C(final int index, final String name) {
+        return child(index, name);
+    }
+
+
+    /*
+     * 
+     * @param name
+     * @param space
+     * @return 
+    public abstract ElementLocator<E> child(final String name,
+    final String space);
+     */
+    /*
+     * 
+     * @param name
+     * @param space
+     * @return 
+     * @see #child(java.lang.String, java.lang.String) 
+    public final ElementLocator<E> C(final String name, final String space) {
+    return child(name, space);
+    }
+     */
+    /**
+     * 
+     * @return 
+     */
+    public abstract String text();
 
 
     /**
-     * Sets current element's text content.
-     *
-     * @param value text content value.
-     * @return self
+     * @return
+     * @see #text() 
      */
-    ElementLocator<E> text(String value);
+    public final String T() {
+        return text();
+    }
+
+
+    /**a
+     * 
+     * @param name
+     * @return 
+     * @see #attribute(java.lang.String, java.lang.String) 
+     */
+    public abstract String attribute(final String name);
+
+
+    /*
+     * 
+     * @param name
+     * @param value
+    public abstract void setAttribute(final String name, final String value);
+     */
 
 
     /**
-     * Sets current element's text content. Locate to parent if
-     * <code>parent</code> is true.
-     *
-     * @param value text content value
-     * @return self
+     * 
+     * @param name
+     * @param space
+     * @return 
      */
-    ElementLocator<E> text(String value, boolean parent);
+    public abstract String attribute(final String name, final String space);
+
+
+    /*
+     * 
+     * @param space
+     * @param name
+     * @param value
+    public abstract void setAttributeNS(final String space, final String name,
+                                        final String value);
+     */
 
 
     /**
-     * Returns attribute value.
-     *
-     * @param localName attribute's name
-     * @return attribute value
+     * 
      */
-    String attribute(String localName);
+    protected final E current() {
+        return path.getLast();
+    }
 
 
-    /**
-     * Returns attribute value.
-     *
-     * @param namespaceURI attribute's namespace
-     * @param localName attribute's name
-     * @return attribute value
-     */
-    String attributeNS(String namespaceURI, String localName);
-
-
-    /**
-     * Sets attribute value.
-     *
-     * @param localName attribute's name
-     * @param value attribute value
-     * @return self
-     */
-    ElementLocator<E> attribute(String localName, String value);
-
-
-    /**
-     * Set attribute value.
-     *
-     * @param namespaceURI attribute's namespace
-     * @param localName attribute's name
-     * @param value attribute's value
-     * @return self
-     */
-    ElementLocator<E> attributeNS(String namespaceURI, String localName,
-                                  String value);
-
-
-    /**
-     * Returns current element's namespace.
-     *
-     * @return current element's namespace
-     */
-    String namespace();
-
-
-    /**
-     * Returns current element's name.
-     *
-     * @return current element's name
-     */
-    String name();
-
-
-    /**
-     * Returns current element.
-     *
-     * @return current element
-     */
-    E current();
+    /** element path. */
+    private final LinkedList<E> path;
 }

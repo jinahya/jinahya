@@ -13,6 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+
 package jinahya.io;
 
 
@@ -37,11 +39,11 @@ public class BitInput {
     public BitInput(final InputStream in) {
         super();
 
-        if ((this.in = in) == null) {
+        if (in == null) {
             throw new IllegalArgumentException("null in");
         }
 
-        this.set = new BitSet(8);
+        this.in = in;
     }
 
 
@@ -126,8 +128,8 @@ public class BitInput {
                 "illegal length(" + length + ") > 16");
         }
 
-        final int quotient = length / 8;
-        final int remainder = length % 8;
+        final int quotient = length / 0x08;
+        final int remainder = length % 0x08;
 
         int value = 0x00;
         for (int i = 0; i < quotient; i++) {
@@ -211,9 +213,9 @@ public class BitInput {
 
     /**
      *
-     * @param length
-     * @return
-     * @throws IOException
+     * @param length bit length between 1 (inclusive) and 64 (exclusive)
+     * @return <code>length</code>-bit unsigned long value
+     * @throws IOException if an I/O error occurs
      */
     public final long readUnsignedLong(final int length) throws IOException {
 
@@ -231,12 +233,12 @@ public class BitInput {
         final int remainder = length % 0x10;
 
         long value = 0x00L;
-        for (int i = 0; i < quotient; i++) {
+        for (int i = 0x00; i < quotient; i++) {
             value <<= 0x10;
             value |= readUnsignedShort(0x10);
         }
 
-        if (remainder > 0) {
+        if (remainder > 0x00) {
             value <<= remainder;
             value |= readUnsignedShort(remainder);
         }
@@ -337,13 +339,6 @@ public class BitInput {
             throw new IllegalArgumentException("null bytes");
         }
 
-        /*
-        if (bytes.length == 0) {
-            throw new IllegalArgumentException(
-                "bytes.length(" + bytes.length + ") == 0");
-        }
-         */
-
         if (offset < 0) {
             throw new IllegalArgumentException("negative offset");
         }
@@ -364,17 +359,17 @@ public class BitInput {
         }
 
         for (int i = 0; i < length; i++) {
-            bytes[offset + i] = (byte) readUnsignedByte(8);
+            bytes[offset + i] = (byte) readUnsignedByte(0x08);
         }
     }
 
 
+    /** bit set. */
+    private final BitSet set = new BitSet(8);
+
+
     /** input source. */
     private final InputStream in;
-
-
-    /** bit set. */
-    private final BitSet set;
 
 
     /** bit index to read. */
