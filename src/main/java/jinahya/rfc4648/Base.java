@@ -41,7 +41,7 @@ public abstract class Base {
 
 
     /** Default pad character. */
-    private static final char PAD = '=';
+    protected static final char PAD = '=';
 
 
     /** MAGIC NUMBER: OCTET SIZE. */

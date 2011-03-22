@@ -119,6 +119,24 @@ public class TestVectors {
 
 
     @Test
+    public void testBASE64URL() throws IOException {
+
+        final Map<String, String> BASE64URL =
+            new HashMap<String, String>(BASE64);
+
+        for (Entry<String, String> entry : BASE64URL.entrySet()) {
+            final String value = entry.getValue();
+            final int padIndex = value.indexOf(Base.PAD);
+            if (padIndex != -1) {
+                entry.setValue(value.substring(0, padIndex));
+            }
+        }
+
+        testBase(BASE64URL, new Base64URL());
+    }
+
+
+    @Test
     public void testBASE32() throws IOException {
         testBase(BASE32, new Base32());
     }
