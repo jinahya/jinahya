@@ -29,9 +29,12 @@ import org.testng.annotations.Test;
 public abstract class ElementLocatorTest<T extends ElementLocator> {
 
 
+    protected static final String ROOT_ELEMENT_NAME = "root";
+
+
     protected static final String SIMPLE_XML =
         "<?xml version=\"1.0\"?>"
-        + "<root a=\"b\" c=\"d\">"
+        + "<" + ROOT_ELEMENT_NAME + " a=\"b\" c=\"d\">"
         + "  <grandfather a=\"b\" c=\"d\">"
         + "    <father a=\"b\" c=\"d\">"
         + "      <child a=\"b\" c=\"d\">"
@@ -41,10 +44,10 @@ public abstract class ElementLocatorTest<T extends ElementLocator> {
         + "      </child>"
         + "    </father>"
         + "  </grandfather>"
-        + "</root>";
+        + "</" + ROOT_ELEMENT_NAME + ">";
 
 
-    protected void testForSimpleXML(final T locator) {
+    protected void testReadingForSimpleXML(final T locator) {
 
         Assert.assertEquals(locator.getAttribute("a"), "b");
         Assert.assertEquals(locator.getAttribute("c"), "d");
@@ -80,5 +83,34 @@ public abstract class ElementLocatorTest<T extends ElementLocator> {
         Assert.assertEquals(locator.getAttribute("c"), "d");
 
         Assert.assertEquals(locator.getText(), "text");
+    }
+
+
+    protected void testWritingForSimpleXML(final T locator) {
+
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.locateChild("grandfather", 0);
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.locateChild("father", 0);
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.locateChild("child", 0);
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.locateChild("grandchild", 0);
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.locateChild("text", 0);
+        locator.setAttribute("a", "b");
+        locator.setAttribute("c", "d");
+
+        locator.setText("text");
     }
 }
