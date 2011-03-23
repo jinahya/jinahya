@@ -23,7 +23,6 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -56,71 +55,129 @@ public class DOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
-    public int count(final String name, final String space) {
+    public int getCount(final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
         }
 
-        final Element current = current();
-        final NodeList children;
+        return getCurrent().getElementsByTagName(name).getLength();
+    }
+
+
+    @Override
+    public int getCountNS(final String space, final String name) {
+
         if (space == null) {
-            children = current.getElementsByTagName(name);
-        } else {
-            children = current.getElementsByTagNameNS(space, name);
+            throw new IllegalArgumentException("null space");
         }
-        return children.getLength();
-    }
 
-
-    @Override
-    protected Element locate(final int index, final String name,
-                             final String space) {
-
-        final Element current = current();
-        final NodeList children;
-        if (space == null) {
-            children = current.getElementsByTagName(name);
-        } else {
-            children = current.getElementsByTagNameNS(space, name);
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
         }
-        final Node child = children.item(index);
-        if (child == null) {
-            throw new IndexOutOfBoundsException(
-                "no {" + space + "}" + name + " at " + index);
-        }
-        return (Element) child;
+
+        return getCurrent().getElementsByTagNameNS(space, name).getLength();
     }
 
 
     @Override
-    public String text() {
+    protected Element findChild(final String name, final int index) {
 
-        return current().getTextContent();
+        return (Element) getCurrent().getElementsByTagName(name).item(index);
     }
 
 
     @Override
-    public String attribute(final String name) {
+    protected Element addChild(final String name) {
 
-        return attribute(name, XMLConstants.NULL_NS_URI);
+        return (Element) getCurrent().appendChild(
+            document.createElement(name));
     }
 
 
     @Override
-    public String attribute(final String name, final String space) {
+    protected Element findChildNS(final String space, final String name,
+                                  final int index) {
+
+        return (Element) getCurrent().
+            getElementsByTagNameNS(space, name).item(index);
+    }
+
+
+    @Override
+    protected Element addChildNS(final String space, final String name) {
+        return (Element) getCurrent().appendChild(
+            document.createElementNS(space, name));
+    }
+
+
+    @Override
+    public String getText() {
+
+        return getCurrent().getTextContent();
+    }
+
+
+    @Override
+    public ElementLocator<Element> setText(final String text) {
+
+        getCurrent().appendChild(document.createTextNode(text));
+
+        return this;
+    }
+
+
+    @Override
+    public String getAttribute(final String name) {
+
+        return getAttributeNS(XMLConstants.NULL_NS_URI, name);
+    }
+
+
+    @Override
+    public ElementLocator<Element> setAttribute(final String name,
+                                                final String value) {
+
+        getCurrent().setAttribute(name, value);
+
+        return this;
+    }
+
+
+    @Override
+    public String getAttributeNS(final String space, final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
         }
 
         if (space == null) {
-            return attribute(name, XMLConstants.NULL_NS_URI);
+            return getAttributeNS(XMLConstants.NULL_NS_URI, name);
         }
 
-        return current().getAttributeNS(space, name);
+        return getCurrent().getAttributeNS(space, name);
     }
 
 
+    @Override
+    public ElementLocator<Element> setAttributeNS(final String space,
+                                                  final String name,
+                                                  final String value) {
+
+        if (space == null) {
+            throw new IllegalArgumentException("null space");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        getCurrent().setAttributeNS(space, name, value);
+
+        return this;
+    }
+
+
+    /** located document. */
     private Document document;
 }

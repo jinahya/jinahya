@@ -43,11 +43,11 @@ public abstract class ElementLocator<E> {
 
     /**
      * 
-     * @param name
      * @param space
+     * @param name
      * @return 
      */
-    public abstract int count(final String name, final String space);
+    public abstract int getCountNS(final String space, final String name);
 
 
     /**
@@ -56,9 +56,7 @@ public abstract class ElementLocator<E> {
      * @return 
      * @see #getCount(java.lang.String, java.lang.String)
      */
-    public final int count(final String name) {
-        return count(name, null);
-    }
+    public abstract int getCount(final String name);
 
 
     /**
@@ -66,7 +64,7 @@ public abstract class ElementLocator<E> {
      *
      * @return self
      */
-    public final ElementLocator<E> root() {
+    public final ElementLocator<E> locateRoot() {
 
         if (path.size() > 1) {
             path.removeLast();
@@ -82,7 +80,7 @@ public abstract class ElementLocator<E> {
      * @see #locateRoot()
      */
     public final ElementLocator<E> R() {
-        return root();
+        return locateRoot();
     }
 
 
@@ -91,7 +89,7 @@ public abstract class ElementLocator<E> {
      *
      * @return self
      */
-    public final ElementLocator<E> parent() {
+    public final ElementLocator<E> locateParent() {
 
         if (path.size() > 1) {
             path.removeLast();
@@ -105,19 +103,18 @@ public abstract class ElementLocator<E> {
      * @see #locateParent()
      */
     public final ElementLocator<E> P() {
-        return parent();
+        return locateParent();
     }
 
 
     /**
      * 
-     * @param index
      * @param name
-     * @param space
+     * @param index
      * @return 
      */
-    public final ElementLocator<E> child(final int index, final String name,
-                                         final String space) {
+    public final ElementLocator<E> locateChild(final String name,
+                                               final int index) {
 
         if (index < 0) {
             throw new IllegalArgumentException("index(" + index + ") < 0");
@@ -127,9 +124,13 @@ public abstract class ElementLocator<E> {
             throw new IllegalArgumentException("null name");
         }
 
-        final E located = locate(index, name, space);
+        E child = findChild(name, index);
 
-        path.add(located);
+        if (child == null) {
+            child = addChild(name);
+        }
+
+        path.add(child);
 
         return this;
     }
@@ -137,24 +138,97 @@ public abstract class ElementLocator<E> {
 
     /**
      * 
+     * @param name
+     * @param index
+     * @return 
+     * @see #locateChild(java.lang.String, int) 
      */
-    protected abstract E locate(final int index, final String name,
-                                final String space);
+    public ElementLocator<E> C(final String name, final int index) {
+        return locateChild(name, index);
+    }
+
+
+    /**
+     * Finds child. IndexOutOfBoundsException must be thrown if no child found.
+     *
+     * @param name child name
+     * @param index child index
+     * @return found child
+     */
+    protected abstract E findChild(final String name, final int index);
 
 
     /**
      * 
-     * @param index
      * @param name
-     * @param space
      * @return 
-     * @see #child(int, java.lang.String, java.lang.String) 
      */
-    public final ElementLocator<E> C(final int index, final String name,
-                                     final String space) {
+    protected abstract E addChild(final String name);
 
-        return child(index, name, space);
+
+    /**
+     * 
+     * @param space
+     * @param name
+     * @param index
+     * @return 
+     */
+    public final ElementLocator<E> locateChildNS(
+        final String space, final String name, final int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("index(" + index + ") < 0");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        E child = findChildNS(space, name, index);
+
+        if (child == null) {
+            child = addChildNS(space, name);
+        }
+
+        path.add(child);
+
+        return this;
     }
+
+
+    /**
+     * 
+     * @param space
+     * @param name
+     * @param index
+     * @return 
+     * @see #locateChildNS(java.lang.String, java.lang.String, int) 
+     */
+    public final ElementLocator<E> C(final String space, final String name,
+                                     final int index) {
+
+        return locateChildNS(space, name, index);
+    }
+
+
+    /**
+     * 
+     * @param space
+     * @param name
+     * @param index
+     * @return 
+     */
+    protected abstract E findChildNS(final String space, final String name,
+                                     final int index);
+
+
+    /**
+     * 
+     * @param space
+     * @param name
+     * @return 
+     */
+    protected abstract E addChildNS(final String space, final String name);
 
 
     /**
@@ -166,96 +240,172 @@ public abstract class ElementLocator<E> {
      */
     public final ElementLocator<E> child(final int index, final String name) {
 
-        return child(index, name, null);
+        return locateChildNS(null, name, index);
     }
 
 
     /**
      * 
-     * @param index
-     * @param name
-     * @return 
-     * @see #child(int, java.lang.String) 
-     */
-    public final ElementLocator<E> C(final int index, final String name) {
-        return child(index, name);
-    }
-
-
-    /*
-     * 
-     * @param name
-     * @param space
-     * @return 
-    public abstract ElementLocator<E> child(final String name,
-    final String space);
-     */
-    /*
-     * 
-     * @param name
-     * @param space
-     * @return 
-     * @see #child(java.lang.String, java.lang.String) 
-    public final ElementLocator<E> C(final String name, final String space) {
-    return child(name, space);
-    }
-     */
-    /**
-     * 
      * @return 
      */
-    public abstract String text();
+    public abstract String getText();
 
 
     /**
      * @return
-     * @see #text() 
+     * @see #getText() 
      */
     public final String T() {
-        return text();
+        return getText();
     }
 
 
-    /**a
+    /**
+     * 
+     * @param locateParent
+     * @return 
+     */
+    public final String getText(final boolean locateParent) {
+
+        final String text = getText();
+
+        if (locateParent) {
+            locateParent();
+        }
+
+        return text;
+    }
+
+
+    /**
+     * 
+     * @param locateParent
+     * @return 
+     * @see #getText(boolean) 
+     */
+    public final String T(final boolean locateParent) {
+        return getText(locateParent);
+    }
+
+
+    public abstract ElementLocator<E> setText(final String text);
+
+
+    /**
+     * 
+     * @param text
+     * @return 
+     * @see #setText(java.lang.String) 
+     */
+    public final ElementLocator<E> T(final String text) {
+        return setText(text);
+    }
+
+
+    /**
+     * 
+     * @param text
+     * @param locateParent
+     * @return 
+     */
+    public final ElementLocator<E> setText(final String text,
+                                           final boolean locateParent) {
+
+        setText(text);
+
+        if (locateParent) {
+            locateParent();
+        }
+
+        return this;
+    }
+
+
+    /**
+     * 
+     * @param text
+     * @param locateParent
+     * @return 
+     * @see #setText(java.lang.String, boolean) 
+     */
+    public final ElementLocator<E> T(final String text,
+                                     final boolean locateParent) {
+        return setText(text, locateParent);
+    }
+
+
+    /**
      * 
      * @param name
      * @return 
      * @see #attribute(java.lang.String, java.lang.String) 
      */
-    public abstract String attribute(final String name);
-
-
-    /*
-     * 
-     * @param name
-     * @param value
-    public abstract void setAttribute(final String name, final String value);
-     */
+    public abstract String getAttribute(final String name);
 
 
     /**
      * 
      * @param name
+     * @param value
+     * @return self
+     */
+    public abstract ElementLocator<E> setAttribute(final String name,
+                                                   final String value);
+
+
+    /**
+     * 
+     * @param name
+     * @param value
+     * @return 
+     * @see #setAttribute(java.lang.String, java.lang.String) 
+     */
+    public final ElementLocator<E> A(final String name, final String value) {
+        return setAttribute(name, value);
+    }
+
+
+    /**
+     * 
      * @param space
+     * @param name
      * @return 
      */
-    public abstract String attribute(final String name, final String space);
+    public abstract String getAttributeNS(final String space,
+                                          final String name);
 
 
-    /*
+    /**
      * 
      * @param space
      * @param name
      * @param value
-    public abstract void setAttributeNS(final String space, final String name,
-                                        final String value);
+     * @return self
      */
+    public abstract ElementLocator<E> setAttributeNS(final String space,
+                                                     final String name,
+                                                     final String value);
+
+
+    /**
+     * 
+     * @param space
+     * @param name
+     * @param value
+     * @return 
+     * @see #setAttributeNS(java.lang.String, java.lang.String, java.lang.String) 
+     */
+    public final ElementLocator<E> A(final String space, final String name,
+                                     final String value) {
+
+        return setAttributeNS(space, name, value);
+    }
 
 
     /**
      * 
      */
-    protected final E current() {
+    protected final E getCurrent() {
         return path.getLast();
     }
 
