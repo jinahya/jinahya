@@ -41,7 +41,11 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
-    public int count(final String name, final String space) {
+    public int getCountNS(final String space, final String name) {
+
+        if (space == null) {
+            throw new IllegalArgumentException("null space");
+        }
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -49,14 +53,14 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
         int count = 0;
 
-        final Element current = current();
+        final Element current = getCurrent();
         final int childCount = current.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT != current.getType(i)) {
                 continue;
             }
-            final Element child = current().getElement(i);
-            if (space != null && !space.equals(child.getNamespace())) {
+            final Element child = current.getElement(i);
+            if (!space.equals(child.getNamespace())) {
                 continue;
             }
             if (!name.equals(child.getName())) {
@@ -70,19 +74,84 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
-    protected Element locate(final int index, final String name,
-                             final String space) {
+    public int getCount(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
 
         int count = 0;
 
-        final Element current = current();
+        final Element current = getCurrent();
         final int childCount = current.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (Node.ELEMENT != current.getType(i)) {
                 continue;
             }
-            final Element child = current().getElement(i);
-            if (space != null && !space.equals(child.getNamespace())) {
+            final Element child = current.getElement(i);
+            if (!name.equals(child.getName())) {
+                continue;
+            }
+            count++;
+        }
+
+        return count;
+    }
+
+
+    @Override
+    protected Element findChild(final String name, final int index) {
+
+        int count = 0;
+
+        final Element current = getCurrent();
+        final int childCount = current.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (Node.ELEMENT != current.getType(i)) {
+                continue;
+            }
+            final Element child = current.getElement(i);
+            if (!name.equals(child.getName())) {
+                continue;
+            }
+            if (count == index) {
+                return child;
+            }
+            count++;
+        }
+
+        return null;
+    }
+
+
+    @Override
+    protected Element addChild(final String name) {
+
+        final Element current = getCurrent();
+
+        final Element child = current.createElement(
+            XmlPullParser.NO_NAMESPACE, name);
+
+        current.addChild(Node.ELEMENT, child);
+
+        return child;
+    }
+
+
+    @Override
+    protected Element findChildNS(final String space, final String name,
+                                  final int index) {
+
+        int count = 0;
+
+        final Element current = getCurrent();
+        final int childCount = current.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (Node.ELEMENT != current.getType(i)) {
+                continue;
+            }
+            final Element child = getCurrent().getElement(i);
+            if (!space.equals(child.getNamespace())) {
                 continue;
             }
             if (!name.equals(child.getName())) {
@@ -100,11 +169,24 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
-    public String text() {
+    protected Element addChildNS(final String space, final String name) {
+
+        final Element current = getCurrent();
+
+        final Element child = current.createElement(space, name);
+
+        current.addChild(Node.ELEMENT, child);
+
+        return child;
+    }
+
+
+    @Override
+    public String getText() {
 
         StringBuffer buffer = null;
 
-        final Element current = current();
+        final Element current = getCurrent();
         final int childCount = current.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final int type = current.getType(i);
@@ -126,19 +208,47 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
-    public String attribute(final String name) {
-        return attribute(name, XmlPullParser.NO_NAMESPACE);
+    public ElementLocator<Element> setText(final String text) {
+
+        final Element current = getCurrent();
+
+        current.addChild(Node.TEXT, text);
+
+        return this;
     }
 
 
-    /*
     @Override
-    public void setAttribute(final String name, final String value) {
-    setAttributeNS(XmlPullParser.NO_NAMESPACE, name, value);
+    public String getAttribute(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        final Element current = getCurrent();
+        final int attributeCount = current.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
+            if (name.equals(current.getAttributeName(i))) {
+                return current.getAttributeValue(i);
+            }
+        }
+
+        return null;
     }
-     */
+
+
     @Override
-    public String attribute(final String name, final String space) {
+    public ElementLocator<Element> setAttribute(final String name,
+                                                final String value) {
+
+        getCurrent().setAttribute(XmlPullParser.NO_NAMESPACE, name, value);
+
+        return this;
+    }
+
+
+    @Override
+    public String getAttributeNS(final String space, final String name) {
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
@@ -148,38 +258,38 @@ public class KDOMElementLocator extends ElementLocator<Element> {
             throw new IllegalArgumentException("null space");
         }
 
-        final Element current = current();
+        final Element current = getCurrent();
         final int attributeCount = current.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            if (space != null
-                && space.equals(current.getAttributeNamespace(i))) {
-                continue;
-            }
-            if (name.equals(current.getAttributeName(i))) {
+            if (space.equals(current.getAttributeNamespace(i))
+                && name.equals(current.getAttributeName(i))) {
                 return current.getAttributeValue(i);
             }
         }
 
         return null;
     }
-    /*
+
+
     @Override
-    public void setAttributeNS(final String space, final String name,
-    final String value) {
-    
-    if (space == null) {
-    throw new IllegalArgumentException("null space");
+    public ElementLocator<Element> setAttributeNS(final String space,
+                                                  final String name,
+                                                  final String value) {
+
+        if (space == null) {
+            throw new IllegalArgumentException("null space");
+        }
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        getCurrent().setAttribute(space, name, value);
+
+        return this;
     }
-    
-    if (name == null) {
-    throw new IllegalArgumentException("null name");
-    }
-    
-    if (value == null) {
-    throw new IllegalArgumentException("null value");
-    }
-    
-    current().setAttribute(space, name, value);
-    }
-     */
 }
