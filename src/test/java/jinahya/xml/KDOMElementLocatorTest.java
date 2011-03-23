@@ -22,12 +22,15 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -39,7 +42,8 @@ public class KDOMElementLocatorTest
 
 
     @Test
-    public void testForSimpleXML() throws XmlPullParserException, IOException {
+    public void testReadingForSimpleXML()
+        throws XmlPullParserException, IOException {
 
         final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         final XmlPullParser parser = factory.newPullParser();
@@ -50,6 +54,31 @@ public class KDOMElementLocatorTest
 
         document.parse(parser);
 
-        testForSimpleXML(new KDOMElementLocator(document.getRootElement()));
+        testReadingForSimpleXML(
+            new KDOMElementLocator(document.getRootElement()));
+    }
+
+
+    @Test
+    public void testWritingForSimpleXML()
+        throws XmlPullParserException, IOException {
+
+        final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        final XmlPullParser parser = factory.newPullParser();
+
+        parser.setInput(new StringReader(SIMPLE_XML));
+
+        final Document document = new Document();
+        final Element root = document.createElement(
+            XmlPullParser.NO_NAMESPACE, ROOT_ELEMENT_NAME);
+        document.addChild(Node.ELEMENT, root);
+
+        testWritingForSimpleXML(
+            new KDOMElementLocator(document.getRootElement()));
+
+        final XmlSerializer serializer = factory.newSerializer();
+        serializer.setOutput(System.out, "UTF-8");
+
+        document.write(serializer);
     }
 }
