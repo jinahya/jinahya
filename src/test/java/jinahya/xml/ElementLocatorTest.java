@@ -51,7 +51,34 @@ public abstract class ElementLocatorTest<T extends ElementLocator> {
 
         final int grandfatherCount = locator.getCount("grandfather");
         Assert.assertEquals(grandfatherCount, 1);
-
         locator.locateChild("grandfather", 0);
+        Assert.assertEquals(locator.getAttribute("a"), "b");
+        Assert.assertEquals(locator.getAttribute("c"), "d");
+
+        final int fatherCount = locator.getCount("father");
+        Assert.assertEquals(fatherCount, 1);
+        locator.locateChild("father", 0);
+        Assert.assertEquals(locator.getAttribute("a"), "b");
+        Assert.assertEquals(locator.getAttribute("c"), "d");
+
+        final int childCount = locator.getCount("child");
+        Assert.assertEquals(childCount, 1);
+        locator.locateChild("child", 0);
+        Assert.assertEquals(locator.getAttribute("a"), "b");
+        Assert.assertEquals(locator.getAttribute("c"), "d");
+
+        final int grandchildCount = locator.getCount("grandchild");
+        Assert.assertEquals(grandchildCount, 1);
+        locator.locateChild("grandchild", 0);
+        Assert.assertEquals(locator.getAttribute("a"), "b");
+        Assert.assertEquals(locator.getAttribute("c"), "d");
+
+        final int textCount = locator.getCount("text");
+        Assert.assertEquals(textCount, 1);
+        locator.locateChild("text", 0);
+        Assert.assertEquals(locator.getAttribute("a"), "b");
+        Assert.assertEquals(locator.getAttribute("c"), "d");
+
+        Assert.assertEquals(locator.getText(), "text");
     }
 }
