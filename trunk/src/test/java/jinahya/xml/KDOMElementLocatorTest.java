@@ -20,8 +20,11 @@ package jinahya.xml;
 
 import java.io.IOException;
 import java.io.StringReader;
+
 import org.kxml2.kdom.Document;
+
 import org.testng.annotations.Test;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -31,7 +34,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocatorTest extends ElementLocatorTest<KDOMElementLocator> {
+public class KDOMElementLocatorTest
+    extends ElementLocatorTest<KDOMElementLocator> {
 
 
     @Test
