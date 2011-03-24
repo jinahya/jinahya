@@ -19,6 +19,8 @@ package jinahya.rfc4648;
 
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -46,6 +48,18 @@ public abstract class BaseTest<T extends Base> {
     }
 
 
+    private static final PrintStream UTF8;
+
+
+    static {
+        try {
+            UTF8 = new PrintStream(System.out, true, "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new InstantiationError("What can I do to make you love me?");
+        }
+    }
+
+
     private static final String[] WELCOMES = {
         "Salaam", "Dobrodošli", "歡迎", "欢迎", "歡迎",
         "Vítáme tĕ", "Velkommen", "Welkom", "Bienvenue", "Wolkom",
@@ -55,7 +69,7 @@ public abstract class BaseTest<T extends Base> {
         "Suswaagatham", "Merhaba"};
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
 
         if (args.length == 0) {
             test(WELCOMES);
