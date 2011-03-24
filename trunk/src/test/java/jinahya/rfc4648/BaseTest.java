@@ -47,11 +47,12 @@ public abstract class BaseTest<T extends Base> {
 
 
     private static final String[] WELCOMES = {
-        "Salaam", "Dobrodošli", "歡迎", "欢迎", "歡迎", "Vítáme tĕ", "Velkommen",
-        "Welkom", "Bienvenue", "Wolkom", "Willkommen", "Καλώς ορίσατε", "Aloha",
-        "Shalom", "Benvenuto", "ようこそ", "환영합니다", "Тавтай морилогтун",
-        "Bem-vindo", "Bem-vinda", "Bienvenido", "Välkommen", "Mabuhay",
-        "Swaagatham", "Suswaagatham", "Merhaba"};
+        "Salaam", "Dobrodošli", "歡迎", "欢迎", "歡迎",
+        "Vítáme tĕ", "Velkommen", "Welkom", "Bienvenue", "Wolkom",
+        "Willkommen", "Καλώς ορίσατε", "Aloha", "Shalom", "Benvenuto",
+        "ようこそ", "환영합니다", "Тавтай морилогтун", "Bem-vindo",
+        "Bem-vinda", "Bienvenido", "Välkommen", "Mabuhay", "Swaagatham",
+        "Suswaagatham", "Merhaba"};
 
 
     public static void main(String[] args) throws IOException {
