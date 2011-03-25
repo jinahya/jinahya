@@ -5,7 +5,7 @@
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>jinahya</artifactId>
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -269,9 +269,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/trunk</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/jinahya-1.0.5</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/jinahya-1.0.5</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn/tags/jinahya-1.0.5</url>
   </scm>
   <prerequisites />
   <repositories />
