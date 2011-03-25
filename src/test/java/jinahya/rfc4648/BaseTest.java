@@ -82,7 +82,7 @@ public abstract class BaseTest<T extends Base> {
     private static void test(final String[] strings) throws IOException {
         for (String string : strings) {
 
-            System.out.printf("%1$5s: %2$s\n", "input", string);
+            UTF8.printf("%1$5s: %2$s\n", "input", string);
 
             final byte[] original = string.getBytes("UTF-8");
 
