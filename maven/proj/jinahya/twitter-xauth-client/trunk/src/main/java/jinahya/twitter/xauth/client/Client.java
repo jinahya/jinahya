@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.String;
-import java.lang.String;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -221,6 +219,15 @@ public abstract class Client {
     }
 
 
+    /**
+     * Tests.
+     *
+     * @param <T> type
+     * @param type client type
+     * @param args consumer_key, consumer_secret, username, password, method,
+     *             url, authorize
+     * @throws Exception if an error occurs.
+     */
     protected static <T extends Client> void main(final Class<T> type,
                                                   final String[] args)
         throws Exception {
@@ -545,7 +552,7 @@ public abstract class Client {
         if (parameters == null) {
             throw new IllegalArgumentException("null parameters");
         }
-        
+
         final List<String> list = new LinkedList<String>(parameters);
 
         // -------------------------------------------------- oauth_consumer_key
