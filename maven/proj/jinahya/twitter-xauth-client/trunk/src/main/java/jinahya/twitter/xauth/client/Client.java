@@ -3,8 +3,14 @@
 package jinahya.twitter.xauth.client;
 
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.String;
+import java.lang.String;
+import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -24,19 +30,23 @@ import java.util.Map.Entry;
 public abstract class Client {
 
 
-    private static final String TWITTER_ACCESS_TOKEN_URL =
+    private static final String ACCESS_TOKEN_URL =
         "https://api.twitter.com/oauth/access_token";
 
 
     protected static final String ALGORITHM = "HmacSHA1";
 
 
-    protected static String percent(final String string)
+    protected static String percent(final String input)
         throws UnsupportedEncodingException {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
 
         final StringBuffer buffer = new StringBuffer();
 
-        final byte[] bytes = string.getBytes("UTF-8");
+        final byte[] bytes = input.getBytes("UTF-8");
         for (int i = 0; i < bytes.length; i++) {
             final char ch = (char) (bytes[i] & 0xFF);
             if ((ch >= 0x30 && ch <= 0x39)
@@ -211,6 +221,45 @@ public abstract class Client {
     }
 
 
+    protected static <T extends Client> void main(final Class<T> type,
+                                                  final String[] args)
+        throws Exception {
+
+        final Constructor<T> constructor = type.getConstructor(
+            new Class<?>[]{String.class, String.class});
+
+        final String consumerKey = args[0];
+        final String consumerSecret = args[1];
+        final T instance = constructor.newInstance(consumerKey, consumerSecret);
+
+        final String username = args[2];
+        final String password = args[3];
+        instance.signIn(username, password);
+
+        final String method = args[4];
+        final String url = args[5];
+        final boolean authorize = Boolean.parseBoolean(args[6]);
+        final List<String> parameters = Collections.emptyList();
+        final InputStream stream =
+            instance.request(method, url, parameters, authorize);
+        try {
+            final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            try {
+                for (String line = null; (line = reader.readLine()) != null;) {
+                    System.out.println(line);
+                }
+            } finally {
+                reader.close();
+            }
+        } finally {
+            stream.close();
+        }
+
+        instance.signOut();
+    }
+
+
     /**
      * Creates a new instance.
      *
@@ -268,26 +317,33 @@ public abstract class Client {
         parameters.add("client_auth");
 
         final InputStream stream = request(
-            "POST", TWITTER_ACCESS_TOKEN_URL, parameters, false);
+            "POST", ACCESS_TOKEN_URL, parameters, true, "", "");
         try {
-            final StringBuffer buffer = new StringBuffer();
-            String key = null;
-            String value = null;
-            for (int b = 0; (b = stream.read()) != -1;) {
-                switch (b) {
-                    case '=':
-                        key = buffer.toString();
-                        buffer.delete(0, buffer.length());
-                        break;
-                    case '&':
-                        value = buffer.toString();
-                        buffer.delete(0, buffer.length());
-                        responses.put(key, value);
-                        break;
-                    default:
-                        buffer.append(b);
-                        break;
+            final InputStreamReader reader =
+                new InputStreamReader(stream, "UTF-8");
+            try {
+                final StringBuffer buffer = new StringBuffer();
+                String key = null;
+                String value = null;
+                for (int c = 0; (c = reader.read()) != -1;) {
+                    switch (c) {
+                        case '=':
+                            key = buffer.toString();
+                            buffer.delete(0, buffer.length());
+                            break;
+                        case '&':
+                            value = buffer.toString();
+                            buffer.delete(0, buffer.length());
+                            responses.put(key, value);
+
+                            break;
+                        default:
+                            buffer.append((char) c);
+                            break;
+                    }
                 }
+            } finally {
+                reader.close();
             }
         } finally {
             stream.close();
@@ -300,13 +356,13 @@ public abstract class Client {
      * @param method request method
      * @param url normalized resource url
      * @param parameters
-     * @param authenticate flag for authentication requirement
+     * @param authorize flag for authentication requirement
      * @return resource stream
      * @throws Exception if an error occurs.
      */
     public InputStream request(final String method, final String url,
                                final Map<String, String> parameters,
-                               final boolean authenticate)
+                               final boolean authorize)
         throws Exception {
 
         if (method == null) {
@@ -317,20 +373,21 @@ public abstract class Client {
             throw new IllegalArgumentException("null url");
         }
 
-        if (authenticate && !isSignedIn()) {
+        if (parameters == null) {
+            throw new IllegalArgumentException("null parameters");
+        }
+
+        if (authorize && !isSignedIn()) {
             throw new IllegalStateException("not signed in");
         }
 
-        List<String> list = null;
-        if (parameters != null) {
-            list = new LinkedList<String>();
-            for (Entry<String, String> entry : parameters.entrySet()) {
-                list.add(entry.getKey());
-                list.add(entry.getValue());
-            }
+        final List<String> list = new LinkedList<String>();
+        for (Entry<String, String> entry : parameters.entrySet()) {
+            list.add(entry.getKey());
+            list.add(entry.getValue());
         }
 
-        return request(method, url, list, authenticate);
+        return request(method, url, list, authorize);
     }
 
 
@@ -339,13 +396,13 @@ public abstract class Client {
      * @param method request method
      * @param url normalized resource url
      * @param parameters parameters
-     * @param authenticate flag for authentication requirement
+     * @param authorize flag for authentication requirement
      * @return resource stream
      * @throws Exception if an error occurs
      */
     public InputStream request(final String method, final String url,
                                final List<String> parameters,
-                               final boolean authenticate)
+                               final boolean authorize)
         throws Exception {
 
         if (method == null) {
@@ -356,18 +413,22 @@ public abstract class Client {
             throw new IllegalArgumentException("null url");
         }
 
-        if (authenticate && !isSignedIn()) {
+        if (parameters == null) {
+            throw new IllegalArgumentException("null parameters");
+        }
+
+        if (authorize && !isSignedIn()) {
             throw new IllegalStateException("not signed in");
         }
 
         String token = "";
         String tokenSecret = "";
-        if (authenticate) {
+        if (authorize) {
             token = responses.get("oauth_token");
             tokenSecret = responses.get("oauth_token_secret");
         }
 
-        return request(method, url, parameters, authenticate, token,
+        return request(method, url, parameters, authorize, token,
                        tokenSecret);
     }
 
@@ -377,7 +438,7 @@ public abstract class Client {
      * @param method HTTP method
      * @param url nomalized request URL
      * @param parameters parameters
-     * @param authenticate flag authenticate requirement
+     * @param authorize flag authenticate requirement
      * @param token token
      * @param tokenSecret token secret
      * @return resource stream
@@ -385,7 +446,7 @@ public abstract class Client {
      */
     private InputStream request(final String method, final String url,
                                 final List<String> parameters,
-                                final boolean authenticate, final String token,
+                                final boolean authorize, final String token,
                                 final String tokenSecret)
         throws Exception {
 
@@ -397,21 +458,20 @@ public abstract class Client {
             throw new IllegalArgumentException("null url");
         }
 
-        if (authenticate && !isSignedIn()) {
-            throw new IllegalStateException("not signed in");
+        if (parameters == null) {
+            throw new IllegalArgumentException("null parameters");
         }
 
         String authorization = null;
-        if (authenticate) {
-            authorization = authorize(
-                method, url, parameters, token, tokenSecret);
+        if (authorize) {
+            authorization = authorize(method, url, parameters, token,
+                                      tokenSecret);
         }
 
-        final StringBuffer buffer = new StringBuffer(url);
+        final StringBuffer buffer = new StringBuffer();
         final Iterator<String> iterator = parameters.iterator();
         if (iterator.hasNext()) {
-            buffer.append("?").
-                append(URLEncoder.encode(iterator.next(), "UTF-8")).
+            buffer.append(URLEncoder.encode(iterator.next(), "UTF-8")).
                 append("=").
                 append(URLEncoder.encode(iterator.next(), "UTF-8"));
         }
@@ -422,12 +482,27 @@ public abstract class Client {
                 append(URLEncoder.encode(iterator.next(), "UTF-8"));
         }
 
-        final HttpURLConnection connection =
-            (HttpURLConnection) new URL(buffer.toString()).openConnection();
-        connection.setRequestMethod(method);
+        final boolean output = method.equals("POST");
 
+        final String spec = url + (output ? "" : ("?" + buffer.toString()));
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) new URL(spec).openConnection();
+
+        connection.setRequestMethod(method);
         if (authorization != null) {
             connection.setRequestProperty("Authorization", authorization);
+        }
+
+        if (output) {
+            connection.setDoOutput(true);
+            final OutputStream out = connection.getOutputStream();
+            try {
+                out.write(buffer.toString().getBytes());
+                out.flush();
+            } finally {
+                out.close();
+            }
         }
 
         return connection.getInputStream();
@@ -459,10 +534,19 @@ public abstract class Client {
                                final String token, final String tokenSecret)
         throws Exception {
 
-        final List<String> list = new LinkedList<String>();
-        if (parameters != null) {
-            list.addAll(parameters);
+        if (method == null) {
+            throw new IllegalArgumentException("null method");
         }
+
+        if (url == null) {
+            throw new IllegalArgumentException("null url");
+        }
+
+        if (parameters == null) {
+            throw new IllegalArgumentException("null parameters");
+        }
+        
+        final List<String> list = new LinkedList<String>(parameters);
 
         // -------------------------------------------------- oauth_consumer_key
         list.add("oauth_consumer_key");

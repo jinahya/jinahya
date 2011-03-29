@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
+@Test(singleThreaded = true)
 public abstract class ClientTest<T extends Client> {
 
 

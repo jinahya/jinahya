@@ -16,6 +16,11 @@ import org.bouncycastle.crypto.params.KeyParameter;
 public class ClientBC extends Client {
 
 
+    public static void main(final String[] args) throws Exception {
+        main(ClientBC.class, args);
+    }
+
+
     /**
      * 
      * @param consumerKey consumer key

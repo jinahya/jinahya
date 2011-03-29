@@ -14,6 +14,11 @@ import javax.crypto.spec.SecretKeySpec;
 public class ClientSE extends Client {
 
 
+    public static void main(final String[] args) throws Exception {
+        main(ClientSE.class, args);
+    }
+
+
     /**
      * 
      * @param consumerKey consumer key
