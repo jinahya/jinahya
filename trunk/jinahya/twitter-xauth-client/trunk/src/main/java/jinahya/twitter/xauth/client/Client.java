@@ -73,7 +73,7 @@ public abstract class Client {
 
 
     /**
-     * Encodes given <code>input</code> into a base16(hex).
+     * Encodes given <code>input</code> into a Base16(hex) string.
      *
      * @param input octet input
      * @return a base 16 encoded string
@@ -516,11 +516,19 @@ public abstract class Client {
     }
 
 
+    /**
+     * Signs out.
+     */
     public void signOut() {
         responses.clear();
     }
 
 
+    /**
+     * Checks whether currently signed in or not.
+     *
+     * @return signed in status
+     */
     public boolean isSignedIn() {
         return !responses.isEmpty();
     }
