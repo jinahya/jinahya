@@ -1,13 +1,12 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>twitter-xauth-client</artifactId>
-  <version>1.0-alpha-1-SNAPSHOT</version>
+  <version>1.0-alpha-1</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -114,7 +113,7 @@
       </plugin>
     </plugins>
   </build>
-  <reporting/>
+  <reporting />
 
   <!-- More Project Information -->
   <name>twitter-xauth-client</name>
@@ -143,12 +142,12 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/${project.groupId}/${project.artifactId}/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/jinahya/twitter-xauth-client/tags/twitter-xauth-client-1.0-alpha-1</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/jinahya/twitter-xauth-client/tags/twitter-xauth-client-1.0-alpha-1</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk/tags/twitter-xauth-client-1.0-alpha-1</url>
   </scm>
   <prerequisites />
-  <repositories/>
+  <repositories />
   <pluginRepositories />
   <distributionManagement>
     <repository>
