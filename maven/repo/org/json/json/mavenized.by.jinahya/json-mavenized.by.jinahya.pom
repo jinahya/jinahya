@@ -39,6 +39,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.7</version>
         </plugin>
@@ -60,6 +65,14 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.3</source>
+          <target>1.1</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -94,7 +107,8 @@
 
   <!-- More Project Information -->
   <name>json</name>
-  <url>http://www.json.org</url> <!--url>http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</url-->
+  <url>http://www.json.org
+  </url> <!--url>http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</url-->
   <inceptionYear>2011</inceptionYear>
   <licenses/>
   <organization />
