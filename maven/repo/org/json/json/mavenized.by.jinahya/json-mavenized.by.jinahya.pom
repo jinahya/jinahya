@@ -94,7 +94,7 @@
 
   <!-- More Project Information -->
   <name>json</name>
-  <url>http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <url>http://www.json.org</url> <!--url>http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</url-->
   <inceptionYear>2011</inceptionYear>
   <licenses/>
   <organization />
@@ -108,7 +108,7 @@
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk</url>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Forg.json%2Fjson%2Ftrunk</url>
   </scm>
   <prerequisites />
   <repositories/>
