@@ -10,7 +10,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
@@ -493,8 +495,7 @@ public abstract class Client {
 
         final String spec = url + (output ? "" : ("?" + buffer.toString()));
 
-        final HttpURLConnection connection =
-            (HttpURLConnection) new URL(spec).openConnection();
+        final HttpURLConnection connection = (HttpURLConnection) open(spec);
 
         connection.setRequestMethod(method);
         if (authorization != null) {
@@ -513,6 +514,17 @@ public abstract class Client {
         }
 
         return connection.getInputStream();
+    }
+
+
+    /**
+     * 
+     * @param spec
+     * @return
+     * @throws Exception 
+     */
+    protected URLConnection open(final String spec) throws Exception {
+        return new URL(spec).openConnection();
     }
 
 
