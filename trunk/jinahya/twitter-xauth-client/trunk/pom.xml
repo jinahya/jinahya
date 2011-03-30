@@ -114,25 +114,12 @@
       </plugin>
     </plugins>
   </build>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.6</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.3.2</version>
-      </plugin>
-    </plugins>
-  </reporting>
+  <reporting/>
 
   <!-- More Project Information -->
   <name>twitter-xauth-client</name>
-  <url>http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</url>
-  <inceptionYear>2010</inceptionYear>
+  <url>http://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -156,8 +143,8 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/${project.groupId}/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk</url>
   </scm>
   <prerequisites />
