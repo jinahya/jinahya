@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -504,6 +503,11 @@ public abstract class Client {
 
         if (output) {
             connection.setDoOutput(true);
+        }
+
+        connection.connect();
+        
+        if (output) {
             final OutputStream out = connection.getOutputStream();
             try {
                 out.write(buffer.toString().getBytes());
