@@ -34,18 +34,28 @@ public class DelegatorSE
 
 
     @Override
-    public void close(final HttpURLConnection connection) throws IOException {
+    public HttpURLConnection open(final String spec) throws Exception {
+
+        return (HttpURLConnection) new URL(spec).openConnection();
     }
 
 
     @Override
-    public void connect(final HttpURLConnection connection) throws IOException {
+    public void connect(final HttpURLConnection connection, final String method, final String uri, final String authorization, final boolean output) throws IOException {
+
+        connection.setRequestMethod(method);
+        connection.setRequestProperty("Authorization", authorization);
+
+        if (output) {
+            connection.setDoOutput(true);
+        }
+
         connection.connect();
     }
 
 
     @Override
-    public InputStream getInputStream(final HttpURLConnection connection)
+    public InputStream openInputStream(final HttpURLConnection connection)
         throws IOException {
 
         return connection.getInputStream();
@@ -53,7 +63,12 @@ public class DelegatorSE
 
 
     @Override
-    public OutputStream getOutputStream(final HttpURLConnection connection)
+    public void closeInputStream(final HttpURLConnection connection, final InputStream inputStream) throws IOException {
+    }
+
+
+    @Override
+    public OutputStream openOutputStream(final HttpURLConnection connection)
         throws IOException {
 
         return connection.getOutputStream();
@@ -61,12 +76,11 @@ public class DelegatorSE
 
 
     @Override
-    public HttpURLConnection open(final String spec) throws Exception {
-        return (HttpURLConnection) new URL(spec).openConnection();
+    public void closeOutputStream(final HttpURLConnection connection, final OutputStream outputStream) throws IOException {
     }
 
 
-    @Override
+    //@Override
     public void setRequestMethod(final HttpURLConnection connection,
                                  final String method)
         throws IOException {
@@ -75,11 +89,16 @@ public class DelegatorSE
     }
 
 
-    @Override
+    //@Override
     public void setRequestProperty(final HttpURLConnection connection,
                                    final String key, final String value)
         throws IOException {
 
         connection.setRequestProperty(key, value);
+    }
+
+
+    @Override
+    public void close(final HttpURLConnection connection) throws IOException {
     }
 }

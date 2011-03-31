@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jin Kwon.
+ * Copyright 2011 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,27 @@
 package jinahya.twitter.xauth.client;
 
 
-import java.net.HttpURLConnection;
-
-
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author onacit
  */
-public class HttpURLConnectionClient extends Client<HttpURLConnection> {
+public class SocketClientSE extends SocketClient {
 
 
-    public HttpURLConnectionClient(final Delegator<HttpURLConnection> delegator,
-                                   final Authenticator authenticator,
-                                   final String consumerKey,
-                                   final String consumerSecret) {
+    public SocketClientSE(final String consumerKey,
+                          final String consumerSecret) {
 
-        super(delegator, authenticator, consumerKey, consumerSecret);
+        super(consumerKey, consumerSecret);
+
+        authenticator = new AuthenticatorSE();
     }
+
+
+    @Override
+    protected byte[] authenticate(byte[] key, byte[] input) throws Exception {
+        return authenticator.authenticate(key, input);
+    }
+
+
+    private final Authenticator authenticator;
 }

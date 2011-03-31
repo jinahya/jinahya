@@ -3,12 +3,10 @@
 package jinahya.twitter.xauth.client;
 
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ import java.util.Map.Entry;
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Client<C> {
+public abstract class Client {
 
 
     private static final String ACCESS_TOKEN_URL =
@@ -223,54 +221,45 @@ public class Client<C> {
     }
 
 
-    /**
-     * Tests.
-     *
-     * @param <T> type
-     * @param type client type
-     * @param args consumer_key, consumer_secret, username, password, method,
-     *             url, authorize
-     * @throws Exception if an error occurs.
-     */
+    /*
     protected static <T extends Client> void main(final Class<T> type,
-                                                  final String[] args)
-        throws Exception {
-
-        final Constructor<T> constructor = type.getConstructor(
-            new Class<?>[]{String.class, String.class});
-
-        final String consumerKey = args[0];
-        final String consumerSecret = args[1];
-        final T instance = constructor.newInstance(consumerKey, consumerSecret);
-
-        final String username = args[2];
-        final String password = args[3];
-        instance.signIn(username, password);
-
-        final String method = args[4];
-        final String url = args[5];
-        final boolean authorize = Boolean.parseBoolean(args[6]);
-        final List<String> parameters = Collections.<String>emptyList();
-        final InputStream stream =
-            instance.request(method, url, parameters, authorize);
-        try {
-            final BufferedReader reader =
-                new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-            try {
-                for (String line = null; (line = reader.readLine()) != null;) {
-                    System.out.println(line);
-                }
-            } finally {
-                reader.close();
-            }
-        } finally {
-            stream.close();
-        }
-
-        instance.signOut();
+    final String[] args)
+    throws Exception {
+    
+    final Constructor<T> constructor = type.getConstructor(
+    new Class<?>[]{String.class, String.class});
+    
+    final String consumerKey = args[0];
+    final String consumerSecret = args[1];
+    final T instance = constructor.newInstance(consumerKey, consumerSecret);
+    
+    final String username = args[2];
+    final String password = args[3];
+    instance.signIn(username, password);
+    
+    final String method = args[4];
+    final String url = args[5];
+    final boolean authorize = Boolean.parseBoolean(args[6]);
+    final List<String> parameters = Collections.<String>emptyList();
+    final InputStream stream =
+    instance.request(method, url, parameters, authorize);
+    try {
+    final BufferedReader reader =
+    new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+    try {
+    for (String line = null; (line = reader.readLine()) != null;) {
+    System.out.println(line);
     }
-
-
+    } finally {
+    reader.close();
+    }
+    } finally {
+    stream.close();
+    }
+    
+    instance.signOut();
+    }
+     */
     /**
      * Creates a new instance.
      *
@@ -279,18 +268,8 @@ public class Client<C> {
      * @param consumerKey consumer key
      * @param consumerSecret consumer secret
      */
-    public Client(final Delegator<C> delegator,
-                  final Authenticator authenticator, final String consumerKey,
-                  final String consumerSecret) {
+    public Client(final String consumerKey, final String consumerSecret) {
         super();
-
-        if (delegator == null) {
-            throw new IllegalArgumentException("null delegator");
-        }
-
-        if (authenticator == null) {
-            throw new IllegalArgumentException("null authenticator");
-        }
 
         if (consumerKey == null) {
             throw new IllegalArgumentException("null consumerKey");
@@ -300,8 +279,6 @@ public class Client<C> {
             throw new IllegalArgumentException("null consumerSecret");
         }
 
-        this.delegator = delegator;
-        this.authenticator = authenticator;
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
     }
@@ -511,29 +488,11 @@ public class Client<C> {
 
         final String spec = url + (output ? "" : ("?" + buffer.toString()));
 
-        final C connection = delegator.open(spec);
-
-        delegator.setRequestMethod(connection, method);
-
-        if (authorization != null) {
-            delegator.setRequestProperty(
-                connection, "Authorization", authorization);
-        }
-
-        delegator.connect(connection);
-
-        if (output) {
-            final OutputStream out = delegator.getOutputStream(connection);
-            try {
-                out.write(buffer.toString().getBytes());
-                out.flush();
-            } finally {
-                //out.close();
-            }
-        }
-
-        return delegator.getInputStream(connection);
+        return request(method, url, parameters, authorization);
     }
+
+
+    protected abstract InputStream request(final String method, final String url, final List<String> parameters, final String authorization) throws Exception;
 
 
     /**
@@ -703,17 +662,21 @@ public class Client<C> {
                             + percent(tokenSecret)).getBytes();
 
         // ----------------------------------------------------------- SIGNATURE
-        final byte[] authentication = authenticator.authenticate(key, input);
+        final byte[] authentication = authenticate(key, input);
 
         return base64(authentication);
     }
 
 
+    protected abstract byte[] authenticate(final byte[] key, final byte[] input)
+        throws Exception;
+
+    /*
     private final Delegator<C> delegator;
-
-
+    
+    
     private final Authenticator authenticator;
-
+     */
 
     private final String consumerKey;
 

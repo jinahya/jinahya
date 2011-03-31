@@ -3,10 +3,8 @@
 package jinahya.twitter.xauth.client;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -101,25 +99,7 @@ public abstract class ClientTest<T> {
     }
 
 
-    /*
-    @Test(enabled = false)
-    public void testAuthorize() throws Exception {
-    
-    final List<String> parameters = new LinkedList<String>(PARAMETERS);
-    parameters.add("oauth_timestamp");
-    parameters.add(TIMESTAMP);
-    parameters.add("oauth_nonce");
-    parameters.add(NONCE);
-    
-    final String authorization = client.authorize(
-    METHOD, URL, parameters, TOKEN, TOKEN_SECRET);
-    
-    System.out.println("AUTHORIZATION.ACTUAL  : " + authorization);
-    
-    System.out.println("AUTHORIZATION.EXPECTED: " + AUTHORIZATION);
-    }
-     */
-    protected void testAuthorize(final Client<T> client) throws Exception {
+    protected void testAuthorize(final Client client) throws Exception {
 
         final List<String> parameters = new LinkedList<String>(PARAMETERS);
         parameters.add("oauth_timestamp");
@@ -133,5 +113,13 @@ public abstract class ClientTest<T> {
         System.out.println("AUTHORIZATION.ACTUAL  : " + authorization);
 
         System.out.println("AUTHORIZATION.EXPECTED: " + AUTHORIZATION);
+    }
+
+
+    protected void testSignIn(final Client client, final String username,
+                              final String password)
+        throws Exception {
+
+        client.signIn(username, password);
     }
 }

@@ -35,18 +35,19 @@ public class DelegatorME
 
 
     @Override
-    public void close(final HttpConnection connection) throws IOException {
-        connection.close();
+    public HttpConnection open(final String spec) throws Exception {
+
+        return (HttpConnection) Connector.open(spec);
     }
 
 
     @Override
-    public void connect(final HttpConnection connection) throws IOException {
+    public void connect(final HttpConnection connection, final String method, final String uri, final String authorization, final boolean output) throws IOException {
     }
 
 
     @Override
-    public InputStream getInputStream(final HttpConnection connection)
+    public InputStream openInputStream(final HttpConnection connection)
         throws IOException {
 
         return connection.openInputStream();
@@ -54,20 +55,23 @@ public class DelegatorME
 
 
     @Override
-    public OutputStream getOutputStream(final HttpConnection connection)
+    public void closeInputStream(final HttpConnection connection, final InputStream inputStream) throws IOException {
+    }
+
+
+    @Override
+    public OutputStream openOutputStream(final HttpConnection connection)
         throws IOException {
 
         return connection.openOutputStream();
     }
 
 
-    @Override
-    public HttpConnection open(final String spec) throws Exception {
-        return (HttpConnection) Connector.open(spec);
+    public void closeOutputStream(final HttpConnection connection, final OutputStream outputStream) throws IOException {
     }
 
 
-    @Override
+    //@Override
     public void setRequestMethod(final HttpConnection connection,
                                  final String method)
         throws IOException {
@@ -76,11 +80,17 @@ public class DelegatorME
     }
 
 
-    @Override
+    //@Override
     public void setRequestProperty(final HttpConnection connection,
                                    final String key, final String value)
         throws IOException {
 
         connection.setRequestProperty(key, value);
+    }
+
+
+    @Override
+    public void close(final HttpConnection connection) throws IOException {
+        connection.close();
     }
 }
