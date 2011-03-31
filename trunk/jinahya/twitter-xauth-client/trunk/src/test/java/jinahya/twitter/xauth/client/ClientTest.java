@@ -81,38 +81,45 @@ public abstract class ClientTest<T> {
         + ", oauth_signature=\"GUUqqzmvcZ6ZJNNTIc%2FxZghY1Uw%3D\"";
 
 
-    public ClientTest(final Client<T> client) {
-        super();
-
-        this.client = client;
-    }
-
-
-    protected static final Properties PROPERTIES;
+    protected static final Properties PROPERTIES = new Properties();
 
 
     static {
         final InputStream stream =
             ClientTest.class.getResourceAsStream("properties.xml");
-        if (stream == null) {
-            throw new InstantiationError("failed to load resource");
-        }
-        try {
+        if (stream != null) {
             try {
-                PROPERTIES = new Properties();
-                //PROPERTIES.load(stream);
-                PROPERTIES.loadFromXML(stream);
-            } finally {
-                stream.close();
+                try {
+                    PROPERTIES.loadFromXML(stream);
+                } finally {
+                    stream.close();
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace(System.err);
             }
-        } catch (IOException ioe) {
-            throw new InstantiationError(ioe.getMessage());
         }
     }
 
 
-    @Test
+    /*
+    @Test(enabled = false)
     public void testAuthorize() throws Exception {
+    
+    final List<String> parameters = new LinkedList<String>(PARAMETERS);
+    parameters.add("oauth_timestamp");
+    parameters.add(TIMESTAMP);
+    parameters.add("oauth_nonce");
+    parameters.add(NONCE);
+    
+    final String authorization = client.authorize(
+    METHOD, URL, parameters, TOKEN, TOKEN_SECRET);
+    
+    System.out.println("AUTHORIZATION.ACTUAL  : " + authorization);
+    
+    System.out.println("AUTHORIZATION.EXPECTED: " + AUTHORIZATION);
+    }
+     */
+    protected void testAuthorize(final Client<T> client) throws Exception {
 
         final List<String> parameters = new LinkedList<String>(PARAMETERS);
         parameters.add("oauth_timestamp");
@@ -127,7 +134,4 @@ public abstract class ClientTest<T> {
 
         System.out.println("AUTHORIZATION.EXPECTED: " + AUTHORIZATION);
     }
-
-
-    protected final Client<T> client;
 }
