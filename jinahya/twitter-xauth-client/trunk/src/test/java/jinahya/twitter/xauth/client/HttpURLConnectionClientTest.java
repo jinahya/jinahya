@@ -19,6 +19,7 @@ package jinahya.twitter.xauth.client;
 
 
 import java.net.HttpURLConnection;
+import org.testng.annotations.Test;
 
 
 /**
@@ -28,10 +29,18 @@ import java.net.HttpURLConnection;
 public class HttpURLConnectionClientTest extends ClientTest<HttpURLConnection> {
 
 
-    public HttpURLConnectionClientTest() {
-        super(new HttpURLConnectionClient(
+    @Test
+    public void testAuthorize() throws Exception {
+
+        if (PROPERTIES.isEmpty()) {
+            return;
+        }
+
+        final Client<HttpURLConnection> client = new HttpURLConnectionClient(
             new DelegatorSE(), new AuthenticatorSE(),
             PROPERTIES.getProperty("consumerKey"),
-            PROPERTIES.getProperty("consumerSecret")));
+            PROPERTIES.getProperty("consumerSecret"));
+
+        testAuthorize(client);
     }
 }
