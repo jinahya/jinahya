@@ -25,44 +25,56 @@ public interface Delegator<T> {
     T open(String spec) throws Exception;
 
 
-    /**
+    /*
      * 
      * @param connector
      * @param method
      * @throws IOException 
-     */
     void setRequestMethod(T connection, String method) throws IOException;
+     */
 
 
-    /**
+    /*
      * 
      * @param connector
      * @param key
      * @param value
      * @throws IOException 
-     */
     void setRequestProperty(T connection, String key, String value)
         throws IOException;
+     */
 
 
     /**
      * 
-     * @param connector
+     * @param connection
+     * @param method
+     * @param authorization
+     * @param output
      * @throws IOException 
      */
-    void connect(final T connection) throws IOException;
+    /**
+     * 
+     */
+    void connect(final T connection, String method, String uri, String authorization, boolean output) throws IOException;
 
 
     /**
      * 
      */
-    OutputStream getOutputStream (T connection) throws IOException;
+    OutputStream openOutputStream(T connection) throws IOException;
+
+
+    void closeOutputStream(T connection, OutputStream outputStream) throws IOException;
 
 
     /**
      * 
      */
-    InputStream getInputStream (T connection) throws IOException;
+    InputStream openInputStream(T connection) throws IOException;
+
+
+    void closeInputStream(T connection, InputStream inputStream) throws IOException;
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jin Kwon.
+ * Copyright 2011 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@
 package jinahya.twitter.xauth.client;
 
 
-import java.net.HttpURLConnection;
 import org.testng.annotations.Test;
 
 
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author onacit
  */
-public class HttpURLConnectionClientTest extends ClientTest<HttpURLConnection> {
+public class SocketClientSETest extends ClientTest {
 
 
     @Test
@@ -36,11 +35,26 @@ public class HttpURLConnectionClientTest extends ClientTest<HttpURLConnection> {
             return;
         }
 
-        final Client<HttpURLConnection> client = new HttpURLConnectionClient(
-            new DelegatorSE(), new AuthenticatorSE(),
+        final Client client = new SocketClientSE(
             PROPERTIES.getProperty("consumerKey"),
             PROPERTIES.getProperty("consumerSecret"));
 
         testAuthorize(client);
+    }
+
+
+    @Test
+    public void testSignIn() throws Exception {
+
+        if (PROPERTIES.isEmpty()) {
+            return;
+        }
+
+        final Client client = new SocketClientSE(
+            PROPERTIES.getProperty("consumerKey"),
+            PROPERTIES.getProperty("consumerSecret"));
+
+        client.signIn(PROPERTIES.getProperty("username"),
+                      PROPERTIES.getProperty("password"));
     }
 }
