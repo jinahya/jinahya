@@ -9,9 +9,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,7 +23,7 @@ import java.util.Map.Entry;
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Client {
+public class Client<C> {
 
 
     private static final String ACCESS_TOKEN_URL =
@@ -34,6 +31,12 @@ public abstract class Client {
 
 
     protected static final String ALGORITHM = "HmacSHA1";
+
+
+    protected static final String KEY_OAUTH_TOKEN = "oauth_token";
+
+
+    protected static final String KEY_OAUTH_TOKEN_SECRET = "oauth_token_secret";
 
 
     protected static String percent(final String input)
@@ -247,7 +250,7 @@ public abstract class Client {
         final String method = args[4];
         final String url = args[5];
         final boolean authorize = Boolean.parseBoolean(args[6]);
-        final List<String> parameters = Collections.emptyList();
+        final List<String> parameters = Collections.<String>emptyList();
         final InputStream stream =
             instance.request(method, url, parameters, authorize);
         try {
@@ -271,11 +274,23 @@ public abstract class Client {
     /**
      * Creates a new instance.
      *
+     * @param delegator delegator
+     * @param authenticator authenticator
      * @param consumerKey consumer key
      * @param consumerSecret consumer secret
      */
-    public Client(final String consumerKey, final String consumerSecret) {
+    public Client(final Delegator<C> delegator,
+                  final Authenticator authenticator, final String consumerKey,
+                  final String consumerSecret) {
         super();
+
+        if (delegator == null) {
+            throw new IllegalArgumentException("null delegator");
+        }
+
+        if (authenticator == null) {
+            throw new IllegalArgumentException("null authenticator");
+        }
 
         if (consumerKey == null) {
             throw new IllegalArgumentException("null consumerKey");
@@ -285,6 +300,8 @@ public abstract class Client {
             throw new IllegalArgumentException("null consumerSecret");
         }
 
+        this.delegator = delegator;
+        this.authenticator = authenticator;
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
     }
@@ -494,41 +511,28 @@ public abstract class Client {
 
         final String spec = url + (output ? "" : ("?" + buffer.toString()));
 
-        final HttpURLConnection connection = (HttpURLConnection) open(spec);
+        final C connection = delegator.open(spec);
 
-        connection.setRequestMethod(method);
+        delegator.setRequestMethod(connection, method);
+
         if (authorization != null) {
-            connection.setRequestProperty("Authorization", authorization);
+            delegator.setRequestProperty(
+                connection, "Authorization", authorization);
         }
 
-        if (output) {
-            connection.setDoOutput(true);
-        }
+        delegator.connect(connection);
 
-        connection.connect();
-        
         if (output) {
-            final OutputStream out = connection.getOutputStream();
+            final OutputStream out = delegator.getOutputStream(connection);
             try {
                 out.write(buffer.toString().getBytes());
                 out.flush();
             } finally {
-                out.close();
+                //out.close();
             }
         }
 
-        return connection.getInputStream();
-    }
-
-
-    /**
-     * 
-     * @param spec
-     * @return
-     * @throws Exception 
-     */
-    protected URLConnection open(final String spec) throws Exception {
-        return new URL(spec).openConnection();
+        return delegator.getInputStream(connection);
     }
 
 
@@ -546,7 +550,13 @@ public abstract class Client {
      * @return signed in status
      */
     public boolean isSignedIn() {
-        return !responses.isEmpty();
+
+        if (responses.isEmpty()) {
+            return false;
+        }
+
+        return responses.containsKey(KEY_OAUTH_TOKEN)
+               && responses.containsKey(KEY_OAUTH_TOKEN_SECRET);
     }
 
 
@@ -584,7 +594,7 @@ public abstract class Client {
         list.add(consumerKey);
 
         // --------------------------------------------------------- oauth_token
-        list.add("oauth_token");
+        list.add(KEY_OAUTH_TOKEN);
         list.add(token);
 
         // ----------------------------------------------------- oauth_timestamp
@@ -685,19 +695,24 @@ public abstract class Client {
         }
 
         // ----------------------------------------------- SIGNATURE BASE STRING
-        final String input = percent(method) + "&" + percent(url) + "&"
-                             + percent(buffer.toString());
+        final byte[] input = (percent(method) + "&" + percent(url) + "&"
+                              + percent(buffer.toString())).getBytes();
 
         // ----------------------------------------------------------------- KEY
-        final String key = percent(consumerSecret) + "&" + percent(tokenSecret);
+        final byte[] key = (percent(consumerSecret) + "&"
+                            + percent(tokenSecret)).getBytes();
 
         // ----------------------------------------------------------- SIGNATURE
-        return base64(HmacSHA1(key.getBytes(), input.getBytes()));
+        final byte[] authentication = authenticator.authenticate(key, input);
+
+        return base64(authentication);
     }
 
 
-    protected abstract byte[] HmacSHA1(final byte[] key, final byte[] input)
-        throws Exception;
+    private final Delegator<C> delegator;
+
+
+    private final Authenticator authenticator;
 
 
     private final String consumerKey;

@@ -13,32 +13,11 @@ import org.bouncycastle.crypto.params.KeyParameter;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ClientBC extends Client {
-
-
-    /**
-     * 
-     * @param args
-     * @throws Exception 
-     */
-    public static void main(final String[] args) throws Exception {
-        main(ClientBC.class, args);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param consumerKey consumer key
-     * @param consumerSecret consumer secret
-     */
-    public ClientBC(final String consumerKey, final String consumerSecret) {
-        super(consumerKey, consumerSecret);
-    }
+public class AuthenticatorBC implements Authenticator {
 
 
     @Override
-    protected byte[] HmacSHA1(final byte[] key, final byte[] input)
+    public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 
         final Mac mac = new HMac(new SHA1Digest());
