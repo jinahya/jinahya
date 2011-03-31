@@ -3,9 +3,14 @@
 package jinahya.twitter.xauth.client;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 import org.testng.annotations.Test;
 
@@ -15,7 +20,7 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 @Test(singleThreaded = true)
-public abstract class ClientTest<T extends Client> {
+public abstract class ClientTest<T> {
 
 
     protected static final String METHOD = "GET";
@@ -76,10 +81,33 @@ public abstract class ClientTest<T extends Client> {
         + ", oauth_signature=\"GUUqqzmvcZ6ZJNNTIc%2FxZghY1Uw%3D\"";
 
 
-    public ClientTest(final T client) {
+    public ClientTest(final Client<T> client) {
         super();
 
         this.client = client;
+    }
+
+
+    protected static final Properties PROPERTIES;
+
+
+    static {
+        final InputStream stream =
+            ClientTest.class.getResourceAsStream("properties.xml");
+        if (stream == null) {
+            throw new InstantiationError("failed to load resource");
+        }
+        try {
+            try {
+                PROPERTIES = new Properties();
+                //PROPERTIES.load(stream);
+                PROPERTIES.loadFromXML(stream);
+            } finally {
+                stream.close();
+            }
+        } catch (IOException ioe) {
+            throw new InstantiationError(ioe.getMessage());
+        }
     }
 
 
@@ -101,5 +129,5 @@ public abstract class ClientTest<T extends Client> {
     }
 
 
-    protected final T client;
+    protected final Client<T> client;
 }
