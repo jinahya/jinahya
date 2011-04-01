@@ -18,18 +18,20 @@
 package jinahya.twitter.xauth.client;
 
 
-import jinahya.twitter.xauth.client.authenticator.Authenticator;
-import jinahya.twitter.xauth.client.requester.Requester;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import jinahya.twitter.xauth.client.authenticator.Authenticator;
+import jinahya.twitter.xauth.client.requester.Requester;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -237,7 +239,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = create();
+        final Client client = create(CONSUMER_KEY, CONSUMER_SECRET);
 
         final List<String> parameters = new LinkedList<String>(PARAMETERS);
         parameters.add("oauth_timestamp");
@@ -281,7 +283,10 @@ public abstract class ClientTest {
 
         final Client client = create();
 
+        final long start = System.currentTimeMillis();
         signIn(client);
+        final long finish = System.currentTimeMillis();
+        System.out.println(getClass() + "#testSignin -> " + (finish - start) + " ms");
         Assert.assertTrue(client.isSignedIn());
 
         client.signOut();

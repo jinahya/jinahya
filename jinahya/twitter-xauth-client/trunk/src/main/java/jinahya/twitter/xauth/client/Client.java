@@ -29,7 +29,7 @@ public abstract class Client implements Authenticator, Requester {
         "https://api.twitter.com/oauth/access_token";
 
 
-    protected static final String ALGORITHM = "HmacSHA1";
+    //protected static final String ALGORITHM = "HmacSHA1";
 
 
     protected static final String KEY_OAUTH_TOKEN = "oauth_token";
