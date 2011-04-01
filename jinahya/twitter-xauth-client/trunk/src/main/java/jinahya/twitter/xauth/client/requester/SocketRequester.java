@@ -18,6 +18,8 @@
 package jinahya.twitter.xauth.client.requester;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -76,7 +78,8 @@ public class SocketRequester implements Requester {
                 path += ("?" + parameters);
             }
 
-            final OutputStream output = socket.getOutputStream();
+            final OutputStream output =
+                new BufferedOutputStream(socket.getOutputStream());
             final Writer writer = new OutputStreamWriter(output, "US-ASCII");
             writer.write(method + " " + path + " HTTP/1.1\r\n");
             writer.write("Host: " + host + ":" + port + "\r\n");
@@ -94,21 +97,21 @@ public class SocketRequester implements Requester {
             }
             output.flush();
 
-            final InputStream input = socket.getInputStream();
+            final InputStream input =
+                new BufferedInputStream(socket.getInputStream());
+
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             baos.reset();
             line(input, baos);
             baos.flush();
 
-            final String status = new String(baos.toByteArray());
-            final StringTokenizer tokenizer = new StringTokenizer(status);
-            final String version = tokenizer.nextToken();
-            final String code = tokenizer.nextToken();
-            final String reason = tokenizer.nextToken();
-            if (!code.equals("200")) {
-                throw new IOException(reason);
-            }
+            final String statusLine = new String(baos.toByteArray());
+            final StringTokenizer tokenizer = new StringTokenizer(statusLine);
+            final String httpVersion = tokenizer.nextToken();
+            final String statusCode = tokenizer.nextToken();
+            final String reasonPhrase = tokenizer.nextToken();
+            check(statusCode, reasonPhrase);
 
             while (true) {
                 baos.reset();
@@ -129,6 +132,22 @@ public class SocketRequester implements Requester {
 
         } finally {
             socket.close();
+        }
+    }
+
+
+    /**
+     * Checks http response status.
+     *
+     * @param statusCode status code
+     * @param reasonPhrase reason phrase
+     * @throws IOException if the status is not ok
+     */
+    protected void check(final String statusCode, final String reasonPhrase)
+        throws IOException {
+
+        if (!statusCode.equals("200")) {
+            throw new IOException(statusCode + "; " + reasonPhrase);
         }
     }
 
