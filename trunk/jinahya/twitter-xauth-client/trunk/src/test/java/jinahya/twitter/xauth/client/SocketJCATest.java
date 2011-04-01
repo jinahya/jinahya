@@ -21,14 +21,11 @@ package jinahya.twitter.xauth.client;
 import jinahya.twitter.xauth.client.authenticator.JCAAuthenticator;
 import jinahya.twitter.xauth.client.requester.SocketRequester;
 
-import org.testng.annotations.Test;
-
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-@Test(enabled = false)
 public class SocketJCATest extends ClientTest {
 
 

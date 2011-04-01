@@ -81,27 +81,36 @@ public class SocketRequester implements Requester {
             final OutputStream output =
                 new BufferedOutputStream(socket.getOutputStream());
             final Writer writer = new OutputStreamWriter(output, "US-ASCII");
+
+            // ---------------------------------------------------- REQUEST LINE
             writer.write(method + " " + path + " HTTP/1.1\r\n");
+
+            // ------------------------------------------------- REQUEST HEADERS
             writer.write("Host: " + host + ":" + port + "\r\n");
             if (authorization != null) {
                 writer.write("Authorization: " + authorization + "\r\n");
             }
+            writer.write("Connection: close\r\n");
             final byte[] body = parameters.getBytes("US-ASCII");
             if (doOutput) {
                 writer.write("Content-Length: " + body.length + "\r\n");
             }
             writer.write("\r\n");
             writer.flush();
+
+            // ---------------------------------------------------- REQUEST BODY
             if (doOutput) {
                 output.write(body);
             }
             output.flush();
+
 
             final InputStream input =
                 new BufferedInputStream(socket.getInputStream());
 
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+            // ----------------------------------------------------- STATUS LINE
             line(input, baos);
             final String statusLine = new String(baos.toByteArray());
             final StringTokenizer tokenizer = new StringTokenizer(statusLine);
@@ -110,6 +119,7 @@ public class SocketRequester implements Requester {
             final String reasonPhrase = tokenizer.nextToken();
             check(statusCode, reasonPhrase);
 
+            // ------------------------------------------------ RESPONSE HEADERS
             while (true) {
                 line(input, baos);
                 if (baos.size() == 0) {
@@ -117,6 +127,7 @@ public class SocketRequester implements Requester {
                 }
             }
 
+            // --------------------------------------------------- RESPONSE BODY
             baos.reset();
             final byte[] buffer = new byte[1024];
             for (int read = -1; (read = input.read(buffer)) != -1;) {
