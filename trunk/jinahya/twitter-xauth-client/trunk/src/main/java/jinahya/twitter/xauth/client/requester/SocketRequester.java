@@ -102,10 +102,7 @@ public class SocketRequester implements Requester {
 
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            baos.reset();
             line(input, baos);
-            baos.flush();
-
             final String statusLine = new String(baos.toByteArray());
             final StringTokenizer tokenizer = new StringTokenizer(statusLine);
             final String httpVersion = tokenizer.nextToken();
@@ -114,9 +111,7 @@ public class SocketRequester implements Requester {
             check(statusCode, reasonPhrase);
 
             while (true) {
-                baos.reset();
                 line(input, baos);
-                baos.flush();
                 if (baos.size() == 0) {
                     break;
                 }
@@ -231,8 +226,11 @@ public class SocketRequester implements Requester {
      * @param output
      * @throws IOException 
      */
-    private void line(final InputStream input, final OutputStream output)
+    private void line(final InputStream input,
+                      final ByteArrayOutputStream output)
         throws IOException {
+
+        output.reset();
 
         for (int b = -1; (b = input.read()) != -1;) {
             if (b == '\r') {
@@ -241,5 +239,7 @@ public class SocketRequester implements Requester {
             }
             output.write(b);
         }
+
+        output.flush();
     }
 }
