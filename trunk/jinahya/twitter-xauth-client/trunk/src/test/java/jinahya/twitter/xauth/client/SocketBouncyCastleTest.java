@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 onacit.
+ * Copyright 2011 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,21 @@
 package jinahya.twitter.xauth.client;
 
 
+import jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator;
+import jinahya.twitter.xauth.client.requester.SocketRequester;
+
+import org.testng.annotations.Test;
+
+
 /**
  *
- * @author onacit
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SocketClientSE extends SocketClient {
+@Test(enabled = false)
+public class SocketBouncyCastleTest extends ClientTest {
 
 
-    public SocketClientSE(final String consumerKey,
-                          final String consumerSecret) {
-
-        super(consumerKey, consumerSecret);
-
-        authenticator = new AuthenticatorSE();
+    public SocketBouncyCastleTest() {
+        super(new SocketRequester(), new BouncyCastleAuthenticator());
     }
-
-
-    @Override
-    protected byte[] authenticate(byte[] key, byte[] input) throws Exception {
-        return authenticator.authenticate(key, input);
-    }
-
-
-    private final Authenticator authenticator;
 }

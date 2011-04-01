@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 onacit.
+ * Copyright 2011 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 
-package jinahya.twitter.xauth.client;
+package jinahya.twitter.xauth.client.requester;
 
 
 import java.io.ByteArrayInputStream;
@@ -27,42 +27,22 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
-import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 
 /**
  *
- * @author onacit
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class SocketClient extends Client {
+public class SocketRequester implements Requester {
 
 
-    public SocketClient(final String consumerKey, final String consumerSecret) {
-
-        this(consumerKey, consumerSecret, SSLSocketFactory.getDefault());
-    }
-
-
-    public SocketClient(final String consumerKey, final String consumerSecret,
-                        final SocketFactory factory) {
-
-        super(consumerKey, consumerSecret);
-
-        this.factory = factory;
-    }
-
-
-    @Override
-    protected InputStream request(final String method, final String url,
-                                  final List<String> parameters,
-                                  final String authorization)
+    //@Override
+    public InputStream request(final String method, final String url,
+                               final String parameters,
+                               final String authorization)
         throws Exception {
 
         final URL u = new URL(url);
@@ -71,16 +51,19 @@ public abstract class SocketClient extends Client {
         if (port == -1) {
             port = u.getDefaultPort();
         }
-        System.out.println("host: " + host);
-        System.out.println("port: " + port);
 
-        final Socket socket = createSocket(u.getProtocol(), host, port);
+        final Socket socket = create(u.getProtocol(), host, port);
         try {
-            if (!socket.isConnected()) {
-                final SocketAddress address = new InetSocketAddress(host, port);
-                socket.connect(address, connectTimeout);
+
+            if (!socket.isBound()) {
+                bind(socket);
             }
 
+            if (!socket.isConnected()) {
+                connect(socket, host, port);
+            }
+
+            /*
             final StringBuffer buffer = new StringBuffer();
             final Iterator<String> iterator = parameters.iterator();
             if (iterator.hasNext()) {
@@ -94,15 +77,15 @@ public abstract class SocketClient extends Client {
                     append("=").
                     append(URLEncoder.encode(iterator.next(), "UTF-8"));
             }
+             */
 
             final boolean doOutput = method.equals("POST");
 
             String path = u.getPath();
 
             if (!doOutput) {
-                path += "?" + buffer.toString();
+                path += ("?" + parameters);
             }
-            System.out.println("path: " + path);
 
             final OutputStream output = socket.getOutputStream();
             final Writer writer = new OutputStreamWriter(output, "US-ASCII");
@@ -111,18 +94,16 @@ public abstract class SocketClient extends Client {
             if (authorization != null) {
                 writer.write("Authorization: " + authorization + "\r\n");
             }
-            final byte[] body = buffer.toString().getBytes("US-ASCII");
+            final byte[] body = parameters.getBytes("US-ASCII");
             if (doOutput) {
                 writer.write("Content-Length: " + body.length + "\r\n");
             }
             writer.write("\r\n");
             writer.flush();
             if (doOutput) {
-                System.out.println("body: " + new String(body));
                 output.write(body);
             }
             output.flush();
-            System.out.println("output flushed");
 
             final InputStream input = socket.getInputStream();
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -133,11 +114,11 @@ public abstract class SocketClient extends Client {
 
             final String status = new String(baos.toByteArray());
             final StringTokenizer tokenizer = new StringTokenizer(status);
-            tokenizer.nextToken();
+            final String version = tokenizer.nextToken();
             final String code = tokenizer.nextToken();
-            System.out.println("code: " + code);
+            final String reason = tokenizer.nextToken();
             if (!code.equals("200")) {
-                throw new IOException("not ok; " + code);
+                throw new IOException(reason);
             }
 
             while (true) {
@@ -147,7 +128,6 @@ public abstract class SocketClient extends Client {
                 if (baos.size() == 0) {
                     break;
                 }
-                System.out.println("header: " + new String(baos.toByteArray()));
             }
 
             baos.reset();
@@ -155,7 +135,6 @@ public abstract class SocketClient extends Client {
                 baos.write(b);
             }
             baos.flush();
-            System.out.println("body: " + new String(baos.toByteArray()));
 
             return new ByteArrayInputStream(baos.toByteArray());
 
@@ -165,6 +144,56 @@ public abstract class SocketClient extends Client {
     }
 
 
+    /**
+     * 
+     * @param protocol
+     * @param host
+     * @param port
+     * @return
+     * @throws IOException 
+     */
+    protected Socket create(final String protocol, final String host,
+                            final int port)
+        throws IOException {
+
+        if (protocol.equals("https")) {
+            return SSLSocketFactory.getDefault().createSocket(host, port);
+        } else {
+            return new Socket(host, port);
+        }
+    }
+
+
+    /**
+     * 
+     * @param socket
+     * @throws IOException 
+     */
+    protected void bind(final Socket socket) throws IOException {
+    }
+
+
+    /**
+     * 
+     * @param socket
+     * @param host
+     * @param port
+     * @throws IOException 
+     */
+    protected void connect(final Socket socket, final String host,
+                           final int port)
+        throws IOException {
+
+        socket.connect(new InetSocketAddress(host, port));
+    }
+
+
+    /**
+     * 
+     * @param input
+     * @param output
+     * @throws IOException 
+     */
     private void line(final InputStream input, final OutputStream output)
         throws IOException {
 
@@ -176,22 +205,4 @@ public abstract class SocketClient extends Client {
             output.write(b);
         }
     }
-
-
-    protected Socket createSocket(final String protocol, final String host,
-                                  final int port)
-        throws IOException {
-
-        if (protocol.equals("https")) {
-            return factory.createSocket(host, port);
-        } else {
-            return new Socket(host, port);
-        }
-    }
-
-
-    private final SocketFactory factory;
-
-
-    private int connectTimeout = 0;
 }
