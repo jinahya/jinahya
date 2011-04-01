@@ -123,8 +123,9 @@ public class SocketRequester implements Requester {
             }
 
             baos.reset();
-            for (int b = -1; (b = input.read()) != -1;) {
-                baos.write(b);
+            final byte[] buffer = new byte[1024];
+            for (int read = -1; (read = input.read(buffer)) != -1;) {
+                baos.write(buffer, 0, read);
             }
             baos.flush();
 
