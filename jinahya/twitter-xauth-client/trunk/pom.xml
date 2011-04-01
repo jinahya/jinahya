@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>jinahya</groupId>
   <artifactId>twitter-xauth-client</artifactId>
-  <version>1.0-alpha-8-SNAPSHOT</version>
+  <version>1.0-alpha-8</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -187,9 +187,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/jinahya/twitter-xauth-client/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/jinahya/twitter-xauth-client/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/jinahya/twitter-xauth-client/tags/twitter-xauth-client-1.0-alpha-8</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/jinahya/twitter-xauth-client/tags/twitter-xauth-client-1.0-alpha-8</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk/tags/twitter-xauth-client-1.0-alpha-8</url>
   </scm>
   <prerequisites />
   <repositories />
