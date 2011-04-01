@@ -1,6 +1,6 @@
 
 
-package jinahya.twitter.xauth.client;
+package jinahya.twitter.xauth.client.authenticator;
 
 
 import javax.crypto.Mac;
@@ -11,13 +11,13 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class AuthenticatorSE implements Authenticator {
+public class JCAAuthenticator implements Authenticator {
 
 
     protected static final String ALGORITHM = "HmacSHA1";
 
 
-    @Override
+    //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 

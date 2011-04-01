@@ -1,6 +1,6 @@
 
 
-package jinahya.twitter.xauth.client;
+package jinahya.twitter.xauth.client.authenticator;
 
 
 import org.bouncycastle.crypto.Mac;
@@ -13,10 +13,10 @@ import org.bouncycastle.crypto.params.KeyParameter;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class AuthenticatorBC implements Authenticator {
+public class BouncyCastleAuthenticator implements Authenticator {
 
 
-    @Override
+    //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 

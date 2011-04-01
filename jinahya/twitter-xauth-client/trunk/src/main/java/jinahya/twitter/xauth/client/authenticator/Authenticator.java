@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 onacit.
+ * Copyright 2011 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,25 @@
  */
 
 
-package jinahya.twitter.xauth.client;
+package jinahya.twitter.xauth.client.authenticator;
 
 
 /**
+ * Interfact for HMAC-SHA1 authentication.
  *
- * @author onacit
- */
-/**
- * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public interface Authenticator {
 
 
+    /**
+     * Generates HMAC-SAH1 signature with given <code>key</code> and
+     * <code>input</code>.
+     *
+     * @param key key
+     * @param input input
+     * @return signature
+     * @throws Exception if any error occurs.
+     */
     byte[] authenticate(final byte[] key, final byte[] input) throws Exception;
 }
