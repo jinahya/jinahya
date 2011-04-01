@@ -68,22 +68,6 @@ public class SocketRequester implements Requester {
                 connect(socket, host, port);
             }
 
-            /*
-            final StringBuffer buffer = new StringBuffer();
-            final Iterator<String> iterator = parameters.iterator();
-            if (iterator.hasNext()) {
-            buffer.append(URLEncoder.encode(iterator.next(), "UTF-8")).
-            append("=").
-            append(URLEncoder.encode(iterator.next(), "UTF-8"));
-            }
-            while (iterator.hasNext()) {
-            buffer.append("&").
-            append(URLEncoder.encode(iterator.next(), "UTF-8")).
-            append("=").
-            append(URLEncoder.encode(iterator.next(), "UTF-8"));
-            }
-             */
-
             final boolean doOutput = method.equals("POST");
 
             String path = u.getPath();
@@ -162,15 +146,38 @@ public class SocketRequester implements Requester {
         throws IOException {
 
         if (protocol.equals("https")) {
-            return getSSLSocketFactory().createSocket();
+            return createSSL(host, port);
         } else {
-            return new Socket();
+            return create(host, port);
         }
     }
 
 
-    protected SocketFactory getSSLSocketFactory() {
-        return DEFAULT_SSL_SOCKET_FACTORY;
+    /**
+     * 
+     * @param host
+     * @param port
+     * @return
+     * @throws IOException 
+     */
+    protected Socket createSSL(final String host, final int port)
+        throws IOException {
+
+        return DEFAULT_SSL_SOCKET_FACTORY.createSocket();
+    }
+
+
+    /**
+     * 
+     * @param host
+     * @param port
+     * @return
+     * @throws IOException 
+     */
+    protected Socket create(final String host, final int port)
+        throws IOException {
+
+        return new Socket();
     }
 
 
