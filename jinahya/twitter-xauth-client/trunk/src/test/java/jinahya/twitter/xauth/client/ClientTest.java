@@ -254,7 +254,7 @@ public abstract class ClientTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void testStatusesPublicTimeline() throws Exception {
 
         if (PROPERTIES.isEmpty()) {
@@ -272,7 +272,7 @@ public abstract class ClientTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void testSignIn() throws Exception {
 
         if (PROPERTIES.isEmpty()) {
@@ -289,7 +289,7 @@ public abstract class ClientTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void testStatusesUpdate() throws Exception {
 
         if (PROPERTIES.isEmpty()) {
@@ -306,7 +306,7 @@ public abstract class ClientTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void testStatusesHomeTimeline() throws Exception {
 
         if (PROPERTIES.isEmpty()) {

@@ -29,6 +29,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.util.StringTokenizer;
+import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 
@@ -39,7 +40,11 @@ import javax.net.ssl.SSLSocketFactory;
 public class SocketRequester implements Requester {
 
 
-    //@Override
+    protected static final SocketFactory DEFAULT_SSL_SOCKET_FACTORY =
+        SSLSocketFactory.getDefault();
+
+
+    @Override
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)
@@ -67,15 +72,15 @@ public class SocketRequester implements Requester {
             final StringBuffer buffer = new StringBuffer();
             final Iterator<String> iterator = parameters.iterator();
             if (iterator.hasNext()) {
-                buffer.append(URLEncoder.encode(iterator.next(), "UTF-8")).
-                    append("=").
-                    append(URLEncoder.encode(iterator.next(), "UTF-8"));
+            buffer.append(URLEncoder.encode(iterator.next(), "UTF-8")).
+            append("=").
+            append(URLEncoder.encode(iterator.next(), "UTF-8"));
             }
             while (iterator.hasNext()) {
-                buffer.append("&").
-                    append(URLEncoder.encode(iterator.next(), "UTF-8")).
-                    append("=").
-                    append(URLEncoder.encode(iterator.next(), "UTF-8"));
+            buffer.append("&").
+            append(URLEncoder.encode(iterator.next(), "UTF-8")).
+            append("=").
+            append(URLEncoder.encode(iterator.next(), "UTF-8"));
             }
              */
 
@@ -157,10 +162,15 @@ public class SocketRequester implements Requester {
         throws IOException {
 
         if (protocol.equals("https")) {
-            return SSLSocketFactory.getDefault().createSocket(host, port);
+            return getSSLSocketFactory().createSocket();
         } else {
-            return new Socket(host, port);
+            return new Socket();
         }
+    }
+
+
+    protected SocketFactory getSSLSocketFactory() {
+        return DEFAULT_SSL_SOCKET_FACTORY;
     }
 
 
