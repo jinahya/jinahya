@@ -42,6 +42,9 @@ import javax.net.ssl.SSLSocketFactory;
 public class SocketRequester implements Requester {
 
 
+    /**
+     * 
+     */
     protected static final SocketFactory DEFAULT_SSL_SOCKET_FACTORY =
         SSLSocketFactory.getDefault();
 
