@@ -32,16 +32,66 @@ public class Util {
             throw new IllegalArgumentException("null input");
         }
 
+        return percent(input.getBytes("UTF-8"));
+    }
+
+
+    public static String percent(final byte[] input)
+        throws UnsupportedEncodingException {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
+
         final StringBuffer buffer = new StringBuffer();
 
-        final byte[] bytes = input.getBytes("UTF-8");
-        for (int i = 0; i < bytes.length; i++) {
-            final char ch = (char) (bytes[i] & 0xFF);
+        for (int i = 0; i < input.length; i++) {
+            final char ch = (char) (input[i] & 0xFF);
             if ((ch >= 0x30 && ch <= 0x39)
                 || (ch >= 0x41 && ch <= 0x5A)
                 || (ch >= 0x61 && ch <= 0x7A)
                 || ch == 0x2D || ch == 0x2E || ch == 0x5F || ch == 0x7E) {
                 buffer.append(ch);
+            } else {
+                buffer.append('%');
+                if (ch <= 0x0F) {
+                    buffer.append('0');
+                }
+                buffer.append(Integer.toHexString(ch).toUpperCase());
+            }
+        }
+
+        return buffer.toString();
+    }
+
+
+    public static String url(final String input)
+        throws UnsupportedEncodingException {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
+
+        return url(input.getBytes("UTF-8"));
+    }
+
+
+    public static String url(final byte[] input) {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
+
+        final StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < input.length; i++) {
+            final char ch = (char) (input[i] & 0xFF);
+            if ((ch >= 0x30 && ch <= 0x39)
+                || (ch >= 0x41 && ch <= 0x5A)
+                || (ch >= 0x61 && ch <= 0x7A)
+                || ch == 0x2D || ch == 0x2E || ch == 0x5F || ch == 0x7E) {
+                buffer.append(ch);
+            } else if (ch == 0x20) {
+                buffer.append('+');
             } else {
                 buffer.append('%');
                 if (ch <= 0x0F) {
@@ -204,6 +254,57 @@ public class Util {
                 if (targetKey.compareTo(sourceKey) > 0) {
                     Collections.swap(list, i, j); // key
                     Collections.swap(list, i + 1, j + 1); // value
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped) {
+                i -= 2;
+            }
+        }
+    }
+
+
+    public static void swap(final String[] elements, final int sourceIndex,
+                            final int targetIndex) {
+
+        final String tmp = elements[sourceIndex];
+        elements[sourceIndex] = elements[targetIndex];
+        elements[targetIndex] = tmp;
+    }
+
+
+    public static void sort(final String[] elements) {
+
+        boolean swapped;
+
+        // ------------------------------------------------------------ BY VALUE
+        for (int i = elements.length - 1; i >= 3;) {
+            final String sourceElement = elements[i];
+            swapped = false;
+            for (int j = 1; j <= i - 2; j += 2) {
+                final String targetElement = elements[j];
+                if (targetElement.compareTo(sourceElement) > 0) {
+                    swap(elements, i - 1, j - 1);
+                    swap(elements, i, j);
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped) {
+                i -= 2;
+            }
+        }
+
+        // -------------------------------------------------------------- BY KEY
+        for (int i = elements.length - 2; i >= 2;) {
+            final String sourceElement = elements[i];
+            swapped = false;
+            for (int j = 0; j <= i - 2; j += 2) {
+                final String targetElement = elements[j];
+                if (targetElement.compareTo(sourceElement) > 0) {
+                    swap(elements, i, j);
+                    swap(elements, i + 1, j + 1);
                     swapped = true;
                     break;
                 }

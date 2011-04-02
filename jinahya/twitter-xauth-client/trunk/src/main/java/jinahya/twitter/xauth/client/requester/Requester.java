@@ -14,13 +14,14 @@ public interface Requester {
 
 
     /**
-     * 
-     * @param method
-     * @param url
-     * @param parameters
-     * @param authorization
-     * @return
-     * @throws Exception 
+     * Requests with given arguments.
+     *
+     * @param method request method
+     * @param url request url
+     * @param parameters parameters (already url encoded)
+     * @param authorization authorization header value or null.
+     * @return resource stream
+     * @throws Exception if any error occurs
      */
     InputStream request(final String method, final String url,
                         final String parameters, final String authorization)
