@@ -5,7 +5,6 @@ package jinahya.twitter.xauth.client;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,8 +29,6 @@ public abstract class Client implements Authenticator, Requester {
 
 
     //protected static final String ALGORITHM = "HmacSHA1";
-
-
     protected static final String KEY_OAUTH_TOKEN = "oauth_token";
 
 
@@ -257,15 +254,15 @@ public abstract class Client implements Authenticator, Requester {
         final StringBuffer buffer = new StringBuffer();
         final Iterator<String> iterator = parameters.iterator();
         if (iterator.hasNext()) {
-            buffer.append(URLEncoder.encode(iterator.next(), "UTF-8")).
+            buffer.append(Util.url(iterator.next())).
                 append("=").
-                append(URLEncoder.encode(iterator.next(), "UTF-8"));
+                append(Util.url(iterator.next()));
         }
         while (iterator.hasNext()) {
             buffer.append("&").
-                append(URLEncoder.encode(iterator.next(), "UTF-8")).
+                append(Util.url(iterator.next())).
                 append("=").
-                append(URLEncoder.encode(iterator.next(), "UTF-8"));
+                append(Util.url(iterator.next()));
         }
 
         return request(method, url, buffer.toString(), authorization);
@@ -425,7 +422,39 @@ public abstract class Client implements Authenticator, Requester {
         }
 
         // ---------------------------------------------------------------- SORT
-        Util.sort(list);
+         boolean swapped;
+        for (int i = list.size() - 1; i >= 3;) {
+            final String source = list.get(i);
+            swapped = false;
+            for (int j = 1; j <= i - 2; j += 2) {
+                final String target = list.get(j);
+                if (target.compareTo(source) > 0) {
+                    Collections.swap(list, i - 1, j - 1); // key
+                    Collections.swap(list, i, j); // value
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped) {
+                i -= 2;
+            }
+        }
+        for (int i = list.size() - 2; i >= 2;) {
+            final String source = list.get(i);
+            swapped = false;
+            for (int j = 0; j <= i - 2; j += 2) {
+                final String target = list.get(j);
+                if (target.compareTo(source) > 0) {
+                    Collections.swap(list, i, j); // key
+                    Collections.swap(list, i + 1, j + 1); // value
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped) {
+                i -= 2;
+            }
+        }
 
         // --------------------------------------------------------- CONCATENATE
         final StringBuffer buffer = new StringBuffer();
