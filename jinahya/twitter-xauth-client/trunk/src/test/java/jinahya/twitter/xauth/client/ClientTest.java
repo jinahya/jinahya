@@ -231,7 +231,7 @@ public abstract class ClientTest {
     }
 
 
-    @Test
+    //@Test
     public void testAuthorize() throws Exception {
 
         if (PROPERTIES.isEmpty()) {
@@ -285,7 +285,8 @@ public abstract class ClientTest {
         final long start = System.currentTimeMillis();
         signIn(client);
         final long finish = System.currentTimeMillis();
-        System.out.println(getClass() + "#testSignin -> " + (finish - start) + " ms");
+        System.out.println(getClass() + "#testSignin -> " + (finish - start)
+                           + " ms");
         Assert.assertTrue(client.isSignedIn());
 
         client.signOut();

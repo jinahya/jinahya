@@ -6,13 +6,10 @@ package jinahya.twitter.xauth.client;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Random;
+import java.util.Vector;
 
 import jinahya.twitter.xauth.client.authenticator.Authenticator;
 import jinahya.twitter.xauth.client.requester.Requester;
@@ -22,7 +19,7 @@ import jinahya.twitter.xauth.client.requester.Requester;
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Client implements Authenticator, Requester {
+public abstract class ClientME implements Authenticator, Requester {
 
 
     /** access token url. */
@@ -244,7 +241,7 @@ public abstract class Client implements Authenticator, Requester {
      * @param consumerKey consumer key
      * @param consumerSecret consumer secret
      */
-    public Client(final String consumerKey, final String consumerSecret) {
+    public ClientME(final String consumerKey, final String consumerSecret) {
         super();
 
         if (consumerKey == null) {
@@ -280,19 +277,19 @@ public abstract class Client implements Authenticator, Requester {
 
         signOut();
 
-        final List<String> parameters = new LinkedList<String>();
+        final Vector parameters = new Vector(6);
 
         // ----------------------------------------------------- x_auth_username
-        parameters.add("x_auth_username");
-        parameters.add(username);
+        parameters.addElement("x_auth_username");
+        parameters.addElement(username);
 
         // ----------------------------------------------------- x_auth_password
-        parameters.add("x_auth_password");
-        parameters.add(password);
+        parameters.addElement("x_auth_password");
+        parameters.addElement(password);
 
         // --------------------------------------------------------- x_auth_mode
-        parameters.add("x_auth_mode");
-        parameters.add("client_auth");
+        parameters.addElement("x_auth_mode");
+        parameters.addElement("client_auth");
 
         final InputStream stream = request(
             "POST", ACCESS_TOKEN_URL, parameters, true, "", "");
@@ -313,7 +310,6 @@ public abstract class Client implements Authenticator, Requester {
                             value = buffer.toString();
                             buffer.delete(0, buffer.length());
                             responses.put(key, value);
-
                             break;
                         default:
                             buffer.append((char) c);
@@ -339,7 +335,7 @@ public abstract class Client implements Authenticator, Requester {
      * @throws Exception if an error occurs.
      */
     public InputStream request(final String method, final String url,
-                               final Map<String, String> parameters,
+                               final Hashtable parameters,
                                final boolean authorize)
         throws Exception {
 
@@ -359,13 +355,15 @@ public abstract class Client implements Authenticator, Requester {
             throw new IllegalStateException("not signed in");
         }
 
-        final List<String> list = new LinkedList<String>();
-        for (Entry<String, String> entry : parameters.entrySet()) {
-            list.add(entry.getKey());
-            list.add(entry.getValue());
+        final Vector vector = new Vector(parameters.size() * 2);
+        Object key;
+        for (Enumeration keys = parameters.keys(); keys.hasMoreElements();) {
+            key = keys.nextElement();
+            vector.addElement(key);
+            vector.addElement(parameters.get(key));
         }
 
-        return request(method, url, list, authorize);
+        return request(method, url, vector, authorize);
     }
 
 
@@ -379,8 +377,7 @@ public abstract class Client implements Authenticator, Requester {
      * @throws Exception if an error occurs
      */
     public InputStream request(final String method, final String url,
-                               final List<String> parameters,
-                               final boolean authorize)
+                               final Vector parameters, final boolean authorize)
         throws Exception {
 
         if (method == null) {
@@ -402,8 +399,8 @@ public abstract class Client implements Authenticator, Requester {
         String token = "";
         String tokenSecret = "";
         if (authorize) {
-            token = responses.get("oauth_token");
-            tokenSecret = responses.get("oauth_token_secret");
+            token = (String) responses.get("oauth_token");
+            tokenSecret = (String) responses.get("oauth_token_secret");
         }
 
         return request(method, url, parameters, authorize, token,
@@ -423,7 +420,7 @@ public abstract class Client implements Authenticator, Requester {
      * @throws Exception if an error occurs
      */
     private InputStream request(final String method, final String url,
-                                final List<String> parameters,
+                                final Vector parameters,
                                 final boolean authorize, final String token,
                                 final String tokenSecret)
         throws Exception {
@@ -455,17 +452,14 @@ public abstract class Client implements Authenticator, Requester {
         }
 
         final StringBuffer buffer = new StringBuffer();
-        final Iterator<String> iterator = parameters.iterator();
-        if (iterator.hasNext()) {
-            buffer.append(url(iterator.next())).
-                append("=").
-                append(url(iterator.next()));
+        final Enumeration e = parameters.elements();
+        if (e.hasMoreElements()) {
+            buffer.append(url((String) e.nextElement())).append("=").
+                append(url((String) e.nextElement()));
         }
-        while (iterator.hasNext()) {
-            buffer.append("&").
-                append(url(iterator.next())).
-                append("=").
-                append(url(iterator.next()));
+        while (e.hasMoreElements()) {
+            buffer.append("&").append(url((String) e.nextElement())).
+                append("=").append(url((String) e.nextElement()));
         }
 
         return request(method, url, buffer.toString(), authorization);
@@ -507,8 +501,8 @@ public abstract class Client implements Authenticator, Requester {
      * @throws Exception if an error occurs
      */
     protected String authorize(final String method, final String url,
-                               final List<String> parameters,
-                               final String token, final String tokenSecret)
+                               final Vector parameters, final String token,
+                               final String tokenSecret)
         throws Exception {
 
         if (method == null) {
@@ -531,20 +525,23 @@ public abstract class Client implements Authenticator, Requester {
             throw new IllegalArgumentException("null tokenSecret");
         }
 
-        final List<String> list = new LinkedList<String>(parameters);
+        final Vector vector = new Vector(parameters.size() + 14);
+        for (Enumeration e = parameters.elements(); e.hasMoreElements();) {
+            vector.addElement(e.nextElement());
+        }
 
         // -------------------------------------------------- oauth_consumer_key
-        list.add("oauth_consumer_key");
-        list.add(consumerKey);
+        vector.addElement("oauth_consumer_key");
+        vector.addElement(consumerKey);
 
         // --------------------------------------------------------- oauth_token
-        list.add("oauth_token");
-        list.add(token);
+        vector.addElement("oauth_token");
+        vector.addElement(token);
 
         // ----------------------------------------------------- oauth_timestamp
         long timestamp = System.currentTimeMillis();
-        list.add("oauth_timestamp");
-        list.add(Long.toString(timestamp / 1000L));
+        vector.addElement("oauth_timestamp");
+        vector.addElement(Long.toString(timestamp / 1000L));
 
         // --------------------------------------------------------- oauth_nonce
         final byte[] nonce = new byte[16];
@@ -552,40 +549,37 @@ public abstract class Client implements Authenticator, Requester {
             nonce[i] = (byte) (timestamp & 0xFFL);
             timestamp >>>= 8;
         }
-        long random = Double.doubleToRawLongBits(Math.random());
+        long l = random.nextLong();
         for (int i = 15; i >= 8; i--) {
-            nonce[i] = (byte) (random & 0xFFL);
-            random >>>= 8;
+            nonce[i] = (byte) (l & 0xFFL);
+            l >>>= 8;
         }
-        list.add("oauth_nonce");
-        list.add(base16(nonce));
+        vector.addElement("oauth_nonce");
+        vector.addElement(base16(nonce));
 
         // ---------------------------------------------- oauth_signature_method
-        list.add("oauth_signature_method");
-        list.add("HMAC-SHA1");
+        vector.addElement("oauth_signature_method");
+        vector.addElement("HMAC-SHA1");
 
         // ------------------------------------------------------- oauth_version
-        list.add("oauth_version");
-        list.add("1.0");
+        vector.addElement("oauth_version");
+        vector.addElement("1.0");
 
         // ----------------------------------------------------- oauth_signature
-        final String signature = sign(method, url, list, tokenSecret);
-        list.add("oauth_signature");
-        list.add(signature);
+        final String signature = sign(method, url, vector, tokenSecret);
+        vector.addElement("oauth_signature");
+        vector.addElement(signature);
 
         final StringBuffer buffer =
             new StringBuffer("OAuth realm=\"" + url + "\"");
-        for (Iterator<String> iterator = list.iterator(); iterator.hasNext();) {
-            final String key = iterator.next();
-            final String value = iterator.next();
+        for (Enumeration e = vector.elements(); e.hasMoreElements();) {
+            final String key = (String) e.nextElement();
+            final String value = (String) e.nextElement();
             if (parameters.contains(key)) {
                 continue;
             }
-            buffer.append(", ").
-                append(percent(key)).
-                append("=\"").
-                append(percent(value)).
-                append("\"");
+            buffer.append(", ").append(percent(key)).append("=\"").
+                append(percent(value)).append("\"");
         }
         return buffer.toString();
     }
@@ -601,27 +595,32 @@ public abstract class Client implements Authenticator, Requester {
      * @throws Exception if an error occurs
      */
     protected String sign(final String method, final String url,
-                          final List<String> parameters,
-                          final String tokenSecret)
+                          final Vector parameters, final String tokenSecret)
         throws Exception {
 
-        final List<String> list = new LinkedList<String>(parameters);
+        final String[] array = new String[parameters.size()];
 
         // ------------------------------------------------------ PERCENT ENCODE
-        for (int i = 0; i < list.size(); i++) {
-            list.add(i, percent(list.remove(i)));
+        int k = 0;
+        for (Enumeration e = parameters.elements(); e.hasMoreElements();) {
+            array[k++] = percent((String) e.nextElement());
         }
 
         // ---------------------------------------------------------------- SORT
         boolean swapped;
-        for (int i = list.size() - 1; i >= 3;) {
-            final String source = list.get(i);
+        String tmp;
+        for (int i = array.length - 1; i >= 3;) {
+            final String source = array[i];
             swapped = false;
             for (int j = 1; j <= i - 2; j += 2) {
-                final String target = list.get(j);
+                final String target = array[j];
                 if (target.compareTo(source) > 0) {
-                    Collections.swap(list, i - 1, j - 1); // key
-                    Collections.swap(list, i, j); // value
+                    tmp = array[j - 1];
+                    array[j - 1] = array[i - 1];
+                    array[i - 1] = tmp;
+                    tmp = array[j];
+                    array[j] = array[i];
+                    array[i] = tmp;
                     swapped = true;
                     break;
                 }
@@ -630,14 +629,18 @@ public abstract class Client implements Authenticator, Requester {
                 i -= 2;
             }
         }
-        for (int i = list.size() - 2; i >= 2;) {
-            final String source = list.get(i);
+        for (int i = array.length - 2; i >= 2;) {
+            final String source = array[i];
             swapped = false;
             for (int j = 0; j <= i - 2; j += 2) {
-                final String target = list.get(j);
+                final String target = array[j];
                 if (target.compareTo(source) > 0) {
-                    Collections.swap(list, i, j); // key
-                    Collections.swap(list, i + 1, j + 1); // value
+                    tmp = array[j];
+                    array[j] = array[i];
+                    array[i] = tmp;
+                    tmp = array[j + 1];
+                    array[j + 1] = array[i + 1];
+                    array[i + 1] = tmp;
                     swapped = true;
                     break;
                 }
@@ -649,19 +652,17 @@ public abstract class Client implements Authenticator, Requester {
 
         // --------------------------------------------------------- CONCATENATE
         final StringBuffer buffer = new StringBuffer();
-        final Iterator<String> iterator = list.iterator();
-        if (iterator.hasNext()) {
-            buffer.append(iterator.next()).append("=").append(iterator.next());
-            while (iterator.hasNext()) {
-                buffer.append("&").append(iterator.next()).append("=").
-                    append(iterator.next());
+        if (array.length > 0) {
+            buffer.append(array[0]).append("=").append(array[1]);
+            for (int i = 2; i < array.length - 1; i += 2) {
+                buffer.append("&").append(array[i]).append("=").
+                    append(array[i + 1]);
             }
         }
 
         // ----------------------------------------------- SIGNATURE BASE STRING
         final byte[] input = (percent(method) + "&" + percent(url)
-                              + "&"
-                              + percent(buffer.toString())).getBytes();
+                              + "&" + percent(buffer.toString())).getBytes();
 
         // ----------------------------------------------------------------- KEY
         final byte[] key = (percent(consumerSecret) + "&"
@@ -682,7 +683,10 @@ public abstract class Client implements Authenticator, Requester {
     private final String consumerSecret;
 
 
+    /** random. */
+    private final Random random = new Random();
+
+
     /** responses */
-    private final Map<String, String> responses =
-        Collections.synchronizedMap(new HashMap<String, String>());
+    private final Hashtable responses = new Hashtable();
 }

@@ -4,8 +4,6 @@ package jinahya.twitter.xauth.client;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.List;
 
 
 /**
@@ -14,7 +12,7 @@ import java.util.List;
  * @see <a href="http://tools.ietf.org/html/rfc3986">RFC 3986</a>
  * @see <a href="http://tools.ietf.org/html/rfc4648">RFC 4648</a>
  */
-public class Util {
+public class Encoders {
 
 
     /**
@@ -215,108 +213,7 @@ public class Util {
     }
 
 
-    /**
-     * Sorts given list which contains key-value sequence.
-     *
-     * @param <T> type
-     * @param list  list
-     * @see <a href="http://en.wikipedia.org/wiki/Sorting_algorithm#Stability">
-     *      Stability (Sorting algorithm)</a>
-     */
-    public static <T extends Comparable<T>> void sort(final List<T> list) {
-
-        boolean swapped;
-
-        // ------------------------------------------------------------ BY VALUE
-        for (int i = list.size() - 1; i >= 3;) {
-            final T sourceValue = list.get(i);
-            swapped = false;
-            for (int j = 1; j <= i - 2; j += 2) {
-                final T targetValue = list.get(j);
-                if (targetValue.compareTo(sourceValue) > 0) {
-                    Collections.swap(list, i - 1, j - 1); // key
-                    Collections.swap(list, i, j); // value
-                    swapped = true;
-                    break;
-                }
-            }
-            if (!swapped) {
-                i -= 2;
-            }
-        }
-
-        // -------------------------------------------------------------- BY KEY
-        for (int i = list.size() - 2; i >= 2;) {
-            final T sourceKey = list.get(i);
-            swapped = false;
-            for (int j = 0; j <= i - 2; j += 2) {
-                final T targetKey = list.get(j);
-                if (targetKey.compareTo(sourceKey) > 0) {
-                    Collections.swap(list, i, j); // key
-                    Collections.swap(list, i + 1, j + 1); // value
-                    swapped = true;
-                    break;
-                }
-            }
-            if (!swapped) {
-                i -= 2;
-            }
-        }
-    }
-
-
-    public static void swap(final String[] elements, final int sourceIndex,
-                            final int targetIndex) {
-
-        final String tmp = elements[sourceIndex];
-        elements[sourceIndex] = elements[targetIndex];
-        elements[targetIndex] = tmp;
-    }
-
-
-    public static void sort(final String[] elements) {
-
-        boolean swapped;
-
-        // ------------------------------------------------------------ BY VALUE
-        for (int i = elements.length - 1; i >= 3;) {
-            final String sourceElement = elements[i];
-            swapped = false;
-            for (int j = 1; j <= i - 2; j += 2) {
-                final String targetElement = elements[j];
-                if (targetElement.compareTo(sourceElement) > 0) {
-                    swap(elements, i - 1, j - 1);
-                    swap(elements, i, j);
-                    swapped = true;
-                    break;
-                }
-            }
-            if (!swapped) {
-                i -= 2;
-            }
-        }
-
-        // -------------------------------------------------------------- BY KEY
-        for (int i = elements.length - 2; i >= 2;) {
-            final String sourceElement = elements[i];
-            swapped = false;
-            for (int j = 0; j <= i - 2; j += 2) {
-                final String targetElement = elements[j];
-                if (targetElement.compareTo(sourceElement) > 0) {
-                    swap(elements, i, j);
-                    swap(elements, i + 1, j + 1);
-                    swapped = true;
-                    break;
-                }
-            }
-            if (!swapped) {
-                i -= 2;
-            }
-        }
-    }
-
-
-    private Util() {
+    private Encoders() {
         super();
     }
 }
