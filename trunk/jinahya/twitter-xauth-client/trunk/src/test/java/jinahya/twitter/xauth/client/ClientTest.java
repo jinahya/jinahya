@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -178,8 +179,6 @@ public abstract class ClientTest {
         }
     }
 
-    protected static void testSign() {
-    }
 
     public ClientTest(final Requester requester,
                       final Authenticator authenticator) {
@@ -187,6 +186,19 @@ public abstract class ClientTest {
 
         this.requester = requester;
         this.authenticator = authenticator;
+    }
+
+
+    @Test
+    public void testSign() {
+
+        if (PROPERTIES.isEmpty()) {
+            return;
+        }
+
+//        final Client client = new Client();
+        final List<String> parameters = new ArrayList<String>();
+        
     }
 
 

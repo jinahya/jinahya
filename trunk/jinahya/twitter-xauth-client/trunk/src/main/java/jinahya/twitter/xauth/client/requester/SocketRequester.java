@@ -43,7 +43,9 @@ public class SocketRequester implements Requester {
 
 
     /**
-     * 
+     * default ssl socket factory.
+     *
+     * @see javax.net.ssl.SSLSocketFactory#getDefault()
      */
     protected static final SocketFactory DEFAULT_SSL_SOCKET_FACTORY =
         SSLSocketFactory.getDefault();
