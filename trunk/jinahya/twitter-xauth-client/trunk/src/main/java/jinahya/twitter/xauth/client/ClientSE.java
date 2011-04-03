@@ -6,6 +6,7 @@ package jinahya.twitter.xauth.client;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import jinahya.twitter.xauth.client.authenticator.Authenticator;
 import jinahya.twitter.xauth.client.requester.Requester;
@@ -22,7 +24,7 @@ import jinahya.twitter.xauth.client.requester.Requester;
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Client implements Authenticator, Requester {
+public abstract class ClientSE implements Authenticator, Requester {
 
 
     /** access token url. */
@@ -244,7 +246,7 @@ public abstract class Client implements Authenticator, Requester {
      * @param consumerKey consumer key
      * @param consumerSecret consumer secret
      */
-    public Client(final String consumerKey, final String consumerSecret) {
+    public ClientSE(final String consumerKey, final String consumerSecret) {
         super();
 
         if (consumerKey == null) {
@@ -313,7 +315,6 @@ public abstract class Client implements Authenticator, Requester {
                             value = buffer.toString();
                             buffer.delete(0, buffer.length());
                             responses.put(key, value);
-
                             break;
                         default:
                             buffer.append((char) c);
@@ -457,14 +458,11 @@ public abstract class Client implements Authenticator, Requester {
         final StringBuffer buffer = new StringBuffer();
         final Iterator<String> iterator = parameters.iterator();
         if (iterator.hasNext()) {
-            buffer.append(url(iterator.next())).
-                append("=").
+            buffer.append(url(iterator.next())).append("=").
                 append(url(iterator.next()));
         }
         while (iterator.hasNext()) {
-            buffer.append("&").
-                append(url(iterator.next())).
-                append("=").
+            buffer.append("&").append(url(iterator.next())).append("=").
                 append(url(iterator.next()));
         }
 
@@ -552,10 +550,10 @@ public abstract class Client implements Authenticator, Requester {
             nonce[i] = (byte) (timestamp & 0xFFL);
             timestamp >>>= 8;
         }
-        long random = Double.doubleToRawLongBits(Math.random());
+        long l = random.nextLong();
         for (int i = 15; i >= 8; i--) {
-            nonce[i] = (byte) (random & 0xFFL);
-            random >>>= 8;
+            nonce[i] = (byte) (l & 0xFFL);
+            l >>>= 8;
         }
         list.add("oauth_nonce");
         list.add(base16(nonce));
@@ -581,11 +579,8 @@ public abstract class Client implements Authenticator, Requester {
             if (parameters.contains(key)) {
                 continue;
             }
-            buffer.append(", ").
-                append(percent(key)).
-                append("=\"").
-                append(percent(value)).
-                append("\"");
+            buffer.append(", ").append(percent(key)).append("=\"").
+                append(percent(value)).append("\"");
         }
         return buffer.toString();
     }
@@ -605,11 +600,11 @@ public abstract class Client implements Authenticator, Requester {
                           final String tokenSecret)
         throws Exception {
 
-        final List<String> list = new LinkedList<String>(parameters);
+        final List<String> list = new ArrayList<String>(parameters.size());
 
         // ------------------------------------------------------ PERCENT ENCODE
-        for (int i = 0; i < list.size(); i++) {
-            list.add(i, percent(list.remove(i)));
+        for (String parameter : parameters) {
+            list.add(percent(parameter));
         }
 
         // ---------------------------------------------------------------- SORT
@@ -660,8 +655,7 @@ public abstract class Client implements Authenticator, Requester {
 
         // ----------------------------------------------- SIGNATURE BASE STRING
         final byte[] input = (percent(method) + "&" + percent(url)
-                              + "&"
-                              + percent(buffer.toString())).getBytes();
+                              + "&" + percent(buffer.toString())).getBytes();
 
         // ----------------------------------------------------------------- KEY
         final byte[] key = (percent(consumerSecret) + "&"
@@ -682,7 +676,10 @@ public abstract class Client implements Authenticator, Requester {
     private final String consumerSecret;
 
 
+    /** random. */
+    private final Random random = new Random();
+
+
     /** responses */
-    private final Map<String, String> responses =
-        Collections.synchronizedMap(new HashMap<String, String>());
+    private final Map<String, String> responses = new HashMap<String, String>();
 }
