@@ -200,9 +200,7 @@ public abstract class AuthenticatorTest<T extends Authenticator> {
     @Test
     public void testRFC2022() throws Exception {
 
-        int i = 0;
         for (Object[] vector : RFC2202_TEST_CASES) {
-            System.out.println(i++);
             byte[] key;
             if (vector[0] instanceof String) {
                 key = ((String) vector[0]).getBytes();

@@ -245,30 +245,6 @@ public abstract class ClientTest {
     }
 
 
-    //@Test
-    public void testAuthorize() throws Exception {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-        final ClientSE client = create(CONSUMER_KEY, CONSUMER_SECRET);
-
-        final List<String> parameters = new LinkedList<String>(PARAMETERS);
-        parameters.add("oauth_timestamp");
-        parameters.add(TIMESTAMP);
-        parameters.add("oauth_nonce");
-        parameters.add(NONCE);
-
-        final String authorization = client.authorize(
-            METHOD, URL, parameters, TOKEN, TOKEN_SECRET);
-
-        System.out.println("AUTHORIZATION.ACTUAL  : " + authorization);
-
-        System.out.println("AUTHORIZATION.EXPECTED: " + AUTHORIZATION);
-    }
-
-
     @Test(enabled = false)
     public void testStatusesPublicTimeline() throws Exception {
 
