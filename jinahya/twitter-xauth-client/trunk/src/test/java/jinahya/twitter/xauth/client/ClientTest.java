@@ -131,7 +131,7 @@ public abstract class ClientTest {
     }
 
 
-    protected static Client signIn(final Client client) throws Exception {
+    protected static ClientSE signIn(final ClientSE client) throws Exception {
 
         if (client == null) {
             throw new IllegalArgumentException("null client");
@@ -161,7 +161,7 @@ public abstract class ClientTest {
     }
 
 
-    protected static void request(final Client client, final String method,
+    protected static void request(final ClientSE client, final String method,
                                   final String url,
                                   final Map<String, String> parameters,
                                   final boolean authorize) {
@@ -178,6 +178,8 @@ public abstract class ClientTest {
         }
     }
 
+    protected static void testSign() {
+    }
 
     public ClientTest(final Requester requester,
                       final Authenticator authenticator) {
@@ -188,12 +190,12 @@ public abstract class ClientTest {
     }
 
 
-    private Client create() {
+    private ClientSE create() {
         return create(null, null);
     }
 
 
-    private Client create(String consumerKey, String consumerSecret) {
+    private ClientSE create(String consumerKey, String consumerSecret) {
 
         if (PROPERTIES.isEmpty()) {
             throw new IllegalStateException("PROPERTIES is empty");
@@ -207,7 +209,7 @@ public abstract class ClientTest {
             consumerSecret = PROPERTIES.getProperty("consumerSecret");
         }
 
-        return new Client(consumerKey, consumerSecret) {
+        return new ClientSE(consumerKey, consumerSecret) {
 
 
             @Override
@@ -238,7 +240,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = create(CONSUMER_KEY, CONSUMER_SECRET);
+        final ClientSE client = create(CONSUMER_KEY, CONSUMER_SECRET);
 
         final List<String> parameters = new LinkedList<String>(PARAMETERS);
         parameters.add("oauth_timestamp");
@@ -262,7 +264,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = create();
+        final ClientSE client = create();
 
         final Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("include_entities", "true");
@@ -280,7 +282,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = create();
+        final ClientSE client = create();
 
         final long start = System.currentTimeMillis();
         signIn(client);
@@ -301,7 +303,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = signIn(create());
+        final ClientSE client = signIn(create());
 
         final Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("status", "xAuth; " + getClass().getSimpleName());
@@ -318,7 +320,7 @@ public abstract class ClientTest {
             return;
         }
 
-        final Client client = signIn(create());
+        final ClientSE client = signIn(create());
 
         final Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("include_entities", "true");
