@@ -3,7 +3,7 @@
   <groupId>jinahya</groupId>
   <artifactId>twitter-xauth-client</artifactId>
   <versioning>
-    <release>1.0-alpha-8</release>
+    <release>1.0-alpha-9</release>
     <versions>
       <version>1.0-SNAPSHOT</version>
       <version>1.0-alpha-1-SNAPSHOT</version>
@@ -19,7 +19,8 @@
       <version>1.0-alpha-8-SNAPSHOT</version>
       <version>1.0-alpha-8</version>
       <version>1.0-alpha-9-SNAPSHOT</version>
+      <version>1.0-alpha-9</version>
     </versions>
-    <lastUpdated>20110403120041</lastUpdated>
+    <lastUpdated>20110404011450</lastUpdated>
   </versioning>
 </metadata>
