@@ -84,7 +84,7 @@ public class RequesterTest<R extends Requester> {
 
         final Hashtable<String, String> parameters =
             new Hashtable<String, String>();
-        parameters.put("include_entities", "true");
+        parameters.put("trim_user", "true");
 
         final InputStream response = client.request(
             "GET", "http://api.twitter.com/1/statuses/public_timeline.xml",

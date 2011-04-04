@@ -51,7 +51,7 @@ public class SocketRequester implements Requester {
         SSLSocketFactory.getDefault();
 
 
-    @Override
+    //@Override
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)

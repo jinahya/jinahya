@@ -32,7 +32,7 @@ public class JCAAuthenticator implements Authenticator {
     protected static final String ALGORITHM = "HmacSHA1";
 
 
-    @Override
+    //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 

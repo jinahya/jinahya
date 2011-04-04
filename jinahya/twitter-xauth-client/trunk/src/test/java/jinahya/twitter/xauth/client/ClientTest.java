@@ -18,23 +18,11 @@
 package jinahya.twitter.xauth.client;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import jinahya.twitter.xauth.client.authenticator.Authenticator;
 import jinahya.twitter.xauth.client.requester.Requester;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 
 /**
@@ -102,220 +90,12 @@ public abstract class ClientTest {
         + ", oauth_signature=\"GUUqqzmvcZ6ZJNNTIc%2FxZghY1Uw%3D\"";
 
 
-    private static final Properties PROPERTIES = new Properties();
-
-
-    static {
-        final InputStream stream =
-            ClientTest.class.getResourceAsStream("properties.xml");
-        if (stream != null) {
-            try {
-                try {
-                    PROPERTIES.loadFromXML(stream);
-                } finally {
-                    stream.close();
-                }
-            } catch (IOException ioe) {
-                ioe.printStackTrace(System.err);
-            }
-        }
-    }
-
-
-    protected static boolean isPropertiesEmpty() {
-        return PROPERTIES.isEmpty();
-    }
-
-
-    protected static String getProperty(final String key) {
-        return PROPERTIES.getProperty(key);
-    }
-
-
-    protected static ClientSE signIn(final ClientSE client) throws Exception {
-
-        if (client == null) {
-            throw new IllegalArgumentException("null client");
-        }
-
-        if (PROPERTIES.isEmpty()) {
-            throw new IllegalStateException("PROPERTIES is empty");
-        }
-
-        client.signIn(getProperty("username"), getProperty("password"));
-
-        return client;
-    }
-
-
-    protected static void print(final InputStream stream) throws IOException {
-        final BufferedReader reader =
-            new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-        try {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-        } finally {
-            reader.close();
-        }
-    }
-
-
-    protected static void request(final ClientSE client, final String method,
-                                  final String url,
-                                  final Map<String, String> parameters,
-                                  final boolean authorize) {
-        try {
-            final InputStream response =
-                client.request(method, url, parameters, authorize);
-            try {
-                print(response);
-            } finally {
-                response.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-
     public ClientTest(final Requester requester,
                       final Authenticator authenticator) {
         super();
 
         this.requester = requester;
         this.authenticator = authenticator;
-    }
-
-
-    @Test
-    public void testSign() {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-//        final Client client = new Client();
-        final List<String> parameters = new ArrayList<String>();
-        
-    }
-
-
-    private ClientSE create() {
-        return create(null, null);
-    }
-
-
-    private ClientSE create(String consumerKey, String consumerSecret) {
-
-        if (PROPERTIES.isEmpty()) {
-            throw new IllegalStateException("PROPERTIES is empty");
-        }
-
-        if (consumerKey == null) {
-            consumerKey = PROPERTIES.getProperty("consumerKey");
-        }
-
-        if (consumerSecret == null) {
-            consumerSecret = PROPERTIES.getProperty("consumerSecret");
-        }
-
-        return new ClientSE(consumerKey, consumerSecret) {
-
-
-            @Override
-            public InputStream request(final String method, final String url,
-                                       final String parameters,
-                                       final String authorization)
-                throws Exception {
-
-                return ClientTest.this.requester.request(
-                    method, url, parameters, authorization);
-            }
-
-
-            @Override
-            public byte[] authenticate(final byte[] key, final byte[] input)
-                throws Exception {
-
-                return ClientTest.this.authenticator.authenticate(key, input);
-            }
-        };
-    }
-
-
-    @Test(enabled = false)
-    public void testStatusesPublicTimeline() throws Exception {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-        final ClientSE client = create();
-
-        final Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("include_entities", "true");
-
-        request(client, "GET",
-                "http://api.twitter.com/1/statuses/public_timeline.xml",
-                parameters, false);
-    }
-
-
-    @Test(enabled = false)
-    public void testSignIn() throws Exception {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-        final ClientSE client = create();
-
-        final long start = System.currentTimeMillis();
-        signIn(client);
-        final long finish = System.currentTimeMillis();
-        System.out.println(getClass() + "#testSignin -> " + (finish - start)
-                           + " ms");
-        Assert.assertTrue(client.isSignedIn());
-
-        client.signOut();
-        Assert.assertFalse(client.isSignedIn());
-    }
-
-
-    @Test(enabled = false)
-    public void testStatusesUpdate() throws Exception {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-        final ClientSE client = signIn(create());
-
-        final Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("status", "xAuth; " + getClass().getSimpleName());
-
-        request(client, "POST", "http://api.twitter.com/1/statuses/update.xml",
-                parameters, true);
-    }
-
-
-    @Test(enabled = false)
-    public void testStatusesHomeTimeline() throws Exception {
-
-        if (PROPERTIES.isEmpty()) {
-            return;
-        }
-
-        final ClientSE client = signIn(create());
-
-        final Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("include_entities", "true");
-
-        request(client, "GET",
-                "http://api.twitter.com/1/statuses/home_timeline.xml",
-                parameters, true);
     }
 
 

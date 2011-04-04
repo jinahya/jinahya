@@ -31,7 +31,7 @@ import java.net.URL;
 public class HttpURLConnectionRequester implements Requester {
 
 
-    @Override
+    //@Override
     public InputStream request(final String method, String url,
                                final String parameters,
                                final String authorization)

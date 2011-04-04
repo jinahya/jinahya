@@ -18,6 +18,8 @@
 package jinahya.twitter.xauth.client.authenticator;
 
 
+import org.apache.commons.codec.binary.Base64;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,15 +31,19 @@ import org.testng.annotations.Test;
 public abstract class AuthenticatorTest<T extends Authenticator> {
 
 
-    public AuthenticatorTest(final T authenticator) {
-        super();
+    protected static final String INPUT =
+        "GET&http%3A%2F%2Fphotos.example.net%2Fphotos&%25EA%25B0%2580%25EB%2582"
+        + "%2598%3D%25EB%258B%25A4%25EB%259D%25BC%26file%3Dvacation.jpg%26oauth"
+        + "_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26"
+        + "oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26"
+        + "oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Dorigin"
+        + "al";
 
-        if (authenticator == null) {
-            throw new IllegalArgumentException("null authenticator");
-        }
 
-        this.authenticator = authenticator;
-    }
+    protected static final String KEY = "kd94hf93k423kf44&pfkkdhi9sl3r4s00";
+
+
+    protected static final String SIGNATURE = "GUUqqzmvcZ6ZJNNTIc/xZghY1Uw=";
 
 
     private static final Object[][] RFC2202_TEST_CASES = new Object[][]{
@@ -197,6 +203,17 @@ public abstract class AuthenticatorTest<T extends Authenticator> {
     };
 
 
+    public AuthenticatorTest(final T authenticator) {
+        super();
+
+        if (authenticator == null) {
+            throw new IllegalArgumentException("null authenticator");
+        }
+
+        this.authenticator = authenticator;
+    }
+
+
     @Test
     public void testRFC2022() throws Exception {
 
@@ -225,5 +242,19 @@ public abstract class AuthenticatorTest<T extends Authenticator> {
     }
 
 
-    private T authenticator;
+    @Test
+    public void testPredefined() throws Exception {
+
+        final byte[] key = KEY.getBytes();
+        final byte[] input = INPUT.getBytes();
+
+        final byte[] output = authenticator.authenticate(key, input);
+
+        final String actual = Base64.encodeBase64String(output);
+
+        Assert.assertEquals(actual, SIGNATURE);
+    }
+
+
+    private final T authenticator;
 }
