@@ -31,7 +31,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 public class BouncyCastleAuthenticator implements Authenticator {
 
 
-    @Override
+    //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 
