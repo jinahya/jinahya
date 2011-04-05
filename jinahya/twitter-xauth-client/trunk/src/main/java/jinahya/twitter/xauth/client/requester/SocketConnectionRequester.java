@@ -18,8 +18,6 @@
 package jinahya.twitter.xauth.client.requester;
 
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,10 +25,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URL;
-
+import java.util.StringTokenizer;
+import javax.microedition.io.Connector;
+import javax.microedition.io.HttpConnection;
+import javax.microedition.io.SocketConnection;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -39,7 +37,7 @@ import javax.net.ssl.SSLSocketFactory;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SocketRequester extends AbstractSocketRequester {
+public class SocketConnectionRequester extends AbstractSocketRequester {
 
 
     /**
@@ -57,34 +55,32 @@ public class SocketRequester extends AbstractSocketRequester {
                                final String authorization)
         throws Exception {
 
-        final URL u = new URL(url);
-        final String host = u.getHost();
-        int port = u.getPort();
-        if (port == -1) {
-            port = u.getDefaultPort();
-        }
+        final int firstColonIndex = url.indexOf(':');
+        String protocol = url.substring(0, firstColonIndex);
 
-        final Socket socket = create(u.getProtocol(), host, port);
+        final boolean secure = protocol.equals("https");
+
+        final int pathStartIndex = url.indexOf('/', 8);
+        String path = url.substring(pathStartIndex);
+
+        final String host = url.substring(secure ? 8 : 7, pathStartIndex);
+
+        final int port = secure ? 443 : 80;
+
+        protocol = secure ? "ssl" : "socket";
+
+        final String name = protocol + "://" + host + ":" + port;
+
+        final SocketConnection connection = open(name);
         try {
 
-            if (!socket.isBound()) {
-                bind(socket);
-            }
-
-            if (!socket.isConnected()) {
-                connect(socket, host, port);
-            }
-
-            final boolean doOutput = method.equals("POST");
-
-            String path = u.getPath();
+            final boolean doOutput = method.equals(HttpConnection.POST);
 
             if (!doOutput) {
                 path += ("?" + parameters);
             }
 
-            final OutputStream output =
-                new BufferedOutputStream(socket.getOutputStream());
+            final OutputStream output = connection.openOutputStream();
             final Writer writer = new OutputStreamWriter(output, "US-ASCII");
 
             // ---------------------------------------------------- REQUEST LINE
@@ -110,8 +106,7 @@ public class SocketRequester extends AbstractSocketRequester {
             output.flush();
 
 
-            final InputStream input =
-                new BufferedInputStream(socket.getInputStream());
+            final InputStream input = connection.openInputStream();
 
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -139,79 +134,18 @@ public class SocketRequester extends AbstractSocketRequester {
             return new ByteArrayInputStream(baos.toByteArray());
 
         } finally {
-            socket.close();
+            connection.close();
         }
     }
 
 
     /**
      * 
-     * @param protocol
-     * @param host
-     * @param port
+     * @param name
      * @return
      * @throws IOException 
      */
-    protected Socket create(final String protocol, final String host,
-                            final int port)
-        throws IOException {
-
-        if (protocol.equals("https")) {
-            return createSSL(host, port);
-        } else {
-            return create(host, port);
-        }
-    }
-
-
-    /**
-     * 
-     * @param host
-     * @param port
-     * @return
-     * @throws IOException 
-     */
-    protected Socket createSSL(final String host, final int port)
-        throws IOException {
-
-        return DEFAULT_SSL_SOCKET_FACTORY.createSocket();
-    }
-
-
-    /**
-     * 
-     * @param host
-     * @param port
-     * @return
-     * @throws IOException 
-     */
-    protected Socket create(final String host, final int port)
-        throws IOException {
-
-        return new Socket();
-    }
-
-
-    /**
-     * 
-     * @param socket
-     * @throws IOException 
-     */
-    protected void bind(final Socket socket) throws IOException {
-    }
-
-
-    /**
-     * 
-     * @param socket
-     * @param host
-     * @param port
-     * @throws IOException 
-     */
-    protected void connect(final Socket socket, final String host,
-                           final int port)
-        throws IOException {
-
-        socket.connect(new InetSocketAddress(host, port));
+    protected SocketConnection open(final String name) throws IOException {
+        return (SocketConnection) Connector.open(name);
     }
 }
