@@ -22,19 +22,19 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
- * 
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://tools.ietf.org/html/rfc3986">RFC 3986</a>
  * @see <a href="http://tools.ietf.org/html/rfc4648">RFC 4648</a>
  */
-public class Encoders {
+public class Encode {
 
 
     /**
-     * 
+     *
      * @param input
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
      *      Percent-Encoding (RFC 3986)</a>
      */
@@ -228,7 +228,7 @@ public class Encoders {
     }
 
 
-    private Encoders() {
+    private Encode() {
         super();
     }
 }
