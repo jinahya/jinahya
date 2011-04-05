@@ -32,13 +32,17 @@ public byte[] authenticate(byte[] key, byte[] input) throws Exception;
 }}}
 ==== jinahya.twitter.xauth.client.authenticator.JCAAuthenticator ====
 This class uses the standard JCA class for HMAC-SHA1
-==== jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator ====
-This class uses BouncyCastle classes for HMAC-SHA1. (Java ME)
+==== jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator (Java ME) ====
+This class uses BouncyCastle classes for HMAC-SHA1.
 === jinahya.twitter.xauth.client.requester.Requester ===
-==== jinahya.twitter.xauth.client.requeter.HttpConnectionRequester ====
+==== jinahya.twitter.xauth.client.requeter.HttpConnectionRequester (Java ME) ====
+This class uses javax.microedition.io.HttpConnection.
 ==== jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester ====
+This class uses java.net.HttpURLConnection.
 ==== jinahya.twitter.xauth.client.requeter.SocketConnectionRequester ====
-==== jinahya.twitter.xauth.client.requeter.SocketRequester ====
+This requester uses javax.microedition.io.SocketConnection.
+==== jinahya.twitter.xauth.client.requeter.SocketRequester (Java ME) ====
+This requester uses java.net.Socket.
 == How to use... ==
 === Prepare your Authenticator and Requester ==
 You can use your own implement, or you can use those prepared classes.
