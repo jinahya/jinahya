@@ -22,15 +22,29 @@ public void percent(final String input)
 === Extend the client ===
 {{{
 class MyClient extends Client {
+
     public MyClient(final String consumerKey, final String consumerSecret) {
         super(consumerKey, consumerSecret);
+
+        authenticator = new MyAuthenticator();
+        requester = new MyRequester();
     }
+
     @Override
-    public void authenticate(final byte[] key, final byte[] input) throws Exception {
+    public byte[] authenticate(final byte[] key, final byte[] input) throws Exception {
+        return authenticator.authenticate(key, input);
     }
+
     @Override
-    public void request(final String method, final String url, final String parameters, final String authorization) throws Exception {
+    public void request(final String method, final String url, final String parameters,
+                        final String authorization)
+        throws Exception {
+
+        requester.request(method, url, parameters, authorization);
     }
+
+    private final Authenticator authenticator;
+    private final Requester requester;
 }
 }}}
 
