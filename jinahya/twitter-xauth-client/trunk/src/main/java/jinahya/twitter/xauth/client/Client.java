@@ -31,7 +31,7 @@ import jinahya.twitter.xauth.client.requester.Requester;
 
 
 /**
- * 
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public abstract class Client implements Authenticator, Requester {
@@ -43,10 +43,10 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param input
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
      *      Percent-Encoding (RFC 3986)</a>
      */
@@ -90,10 +90,10 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param input
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     protected static String url(final String input)
         throws UnsupportedEncodingException {
@@ -107,9 +107,9 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param input
-     * @return 
+     * @return
      */
     protected static String url(final byte[] input) {
 
@@ -341,7 +341,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param method request method
      * @param url normalized resource url
      * @param parameters
@@ -383,7 +383,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param method request method
      * @param url normalized resource url
      * @param parameters parameters
@@ -424,7 +424,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param method request method
      * @param url nomalized request URL
      * @param parameters parameters
@@ -490,6 +490,38 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
+     * Returns current user's id. An IllegalStateException will be thrown if
+     * this client is not signed in.
+     *
+     * @return current user's id
+     */
+    public String getUserId() {
+
+        if (!isSignedIn()) {
+            throw new IllegalStateException("not signed in");
+        }
+
+        return (String) responses.get("user_id");
+    }
+
+
+    /**
+     * Returns current user's screen name. An IllegalStateException will be
+     * thrown if this client is not signed in.
+     *
+     * @return current user's screen name
+     */
+    public String getScreenName() {
+
+        if (!isSignedIn()) {
+            throw new IllegalStateException("not signed in");
+        }
+
+        return (String) responses.get("screen_name");
+    }
+
+
+    /**
      * Checks whether currently signed in or not.
      *
      * @return signed in status
@@ -506,7 +538,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param method request method
      * @param url normalized resource url
      * @param parameters parameters
@@ -601,7 +633,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * 
+     *
      * @param method HTTP method
      * @param url normalized request URL
      * @param parameters OAuth parameters
