@@ -9,6 +9,15 @@ jinahya:twitter-xauth-client:jar is simple xAuth client for Twitter.
 = Details =
 
 == Basic Classes ==
+=== jinahya.twitter.xauth.client.Encode ===
+{{{
+public void percent(final String input)
+}}}
+=== jinahya.twitter.xauth.client.Client ===
+=== jinahya.twitter.xauth.client.authenticator.Authenticator ===
+=== jinahya.twitter.xauth.client.authenticator.Requester ===
+
+
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
