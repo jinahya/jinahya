@@ -78,6 +78,12 @@ public class Encode {
     }
 
 
+    /**
+     *
+     * @param input
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static String url(final String input)
         throws UnsupportedEncodingException {
 
@@ -89,6 +95,11 @@ public class Encode {
     }
 
 
+    /**
+     * 
+     * @param input
+     * @return
+     */
     public static String url(final byte[] input) {
 
         if (input == null) {
