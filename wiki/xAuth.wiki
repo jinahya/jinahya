@@ -20,6 +20,13 @@ public String url(byte[] input);
 === jinahya.twitter.xauth.client.authenticator.Authenticator ===
 This interface is responsible for generating HMAC-SHA1 authentication code.
 {{{
+/**
+ * Generates HMAC-SHA1 code.
+ *
+ * @param key key
+ * @param input input
+ * @returns HMAC-SHA1 output
+ */
 public byte[] authenticate(byte[] key, byte[] input) throws Exception;
 }}}
 ==== jinahya.twitter.xauth.client.authenticator.JCAAuthenticator ====
