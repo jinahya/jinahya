@@ -18,6 +18,10 @@ public String url(byte[] input);
 }}}
 === jinahya.twitter.xauth.client.Client ===
 === jinahya.twitter.xauth.client.authenticator.Authenticator ===
+This interface is responsible for generating HMAC-SHA1 authentication code.
+{{{
+public byte[] authenticate(byte[] key, byte[] input) throws Exception;
+}}}
 ==== jinahya.twitter.xauth.client.authenticator.JCAAuthenticator ====
 This class uses the standard JCA class for HMAC-SHA1
 ==== jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator ====
