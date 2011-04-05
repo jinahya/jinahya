@@ -11,14 +11,20 @@ jinahya:twitter-xauth-client:jar is simple xAuth client for Twitter.
 == Classes ==
 === jinahya.twitter.xauth.client.Encode ===
 {{{
-public void percent(final String input)
+public String base16(byte[] input);
+public String base64(byte[] input);
+public String percent(byte[] input);
+public String url(byte[] input);
 }}}
 === jinahya.twitter.xauth.client.Client ===
 === jinahya.twitter.xauth.client.authenticator.Authenticator ===
  * jinahya.twitter.xauth.client.authenticator.JCAAuthenticator
  * jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator
-=== jinahya.twitter.xauth.client.authenticator.Requester ===
-
+=== jinahya.twitter.xauth.client.requester.Requester ===
+ * jinahya.twitter.xauth.client.requeter.HttpConnectionRequester
+ * jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester
+ * jinahya.twitter.xauth.client.requeter.SocketConnectionRequester
+ * jinahya.twitter.xauth.client.requeter.SocketRequester
 == How to use... ==
 === Prepare your Authenticator and Requester ==
 You can use your own implement, or you can use those prepared classes.
