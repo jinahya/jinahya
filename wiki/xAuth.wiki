@@ -35,6 +35,21 @@ This class uses the standard JCA class for HMAC-SHA1
 ==== jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator (Java ME) ====
 This class uses BouncyCastle classes for HMAC-SHA1.
 === jinahya.twitter.xauth.client.requester.Requester ===
+This interface is responsible for talking to twitter.
+{{{
+/**
+ * Talks to twitter.
+ *
+ * @param method http request method
+ * @param url normalized resource url
+ * @param parameters url parameters
+ * @param authorization Authorization header value
+ * @returns resource stream
+ */
+public InputStram request(String method, String url, String parameters,
+                          String authorization)
+    throws Exception;
+}}}
 ==== jinahya.twitter.xauth.client.requeter.HttpConnectionRequester (Java ME) ====
 This class uses [http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/io/HttpConnection.html javax.microedition.io.HttpConnection].
 ==== jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester ====
