@@ -36,13 +36,13 @@ This class uses the standard JCA class for HMAC-SHA1
 This class uses BouncyCastle classes for HMAC-SHA1.
 === jinahya.twitter.xauth.client.requester.Requester ===
 ==== jinahya.twitter.xauth.client.requeter.HttpConnectionRequester (Java ME) ====
-This class uses javax.microedition.io.HttpConnection.
+This class uses [http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/io/HttpConnection.html javax.microedition.io.HttpConnection].
 ==== jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester ====
-This class uses [http://download.oracle.com/javase/6/docs/api/ java.net.HttpURLConnection].
+This class uses [http://download.oracle.com/javase/6/docs/api/java/net/HttpURLConnection.html java.net.HttpURLConnection].
 ==== jinahya.twitter.xauth.client.requeter.SocketConnectionRequester ====
-This requester uses javax.microedition.io.SocketConnection.
+This requester uses [http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/io/SocketConnection.html javax.microedition.io.SocketConnection].
 ==== jinahya.twitter.xauth.client.requeter.SocketRequester (Java ME) ====
-This requester uses [http://download.oracle.com/javase/6/docs/api/ java.net.Socket].
+This requester uses [http://download.oracle.com/javase/6/docs/api/java/net/Socket.html java.net.Socket].
 == How to use... ==
 === Prepare your Authenticator and Requester ==
 You can use your own implement, or you can use those prepared classes.
