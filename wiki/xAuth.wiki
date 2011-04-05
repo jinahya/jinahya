@@ -15,9 +15,10 @@ public void percent(final String input)
 }}}
 === jinahya.twitter.xauth.client.Client ===
 === jinahya.twitter.xauth.client.authenticator.Authenticator ===
+ * jinahya.twitter.xauth.client.authenticator.JCAAuthenticator
+ * jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator
 === jinahya.twitter.xauth.client.authenticator.Requester ===
-==== jinahya.twitter.xauth.client.authenticator.JCAAuthenticator =====
-==== jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator =====
+
 == How to use... ==
 === Prepare your Authenticator and Requester ==
 You can use your own implement, or you can use those prepared classes.
