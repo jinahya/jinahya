@@ -54,9 +54,9 @@ public InputStram request(String method, String url, String parameters,
 This class uses [http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/io/HttpConnection.html javax.microedition.io.HttpConnection].
 ==== jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester ====
 This class uses [http://download.oracle.com/javase/6/docs/api/java/net/HttpURLConnection.html java.net.HttpURLConnection].
-==== jinahya.twitter.xauth.client.requeter.SocketConnectionRequester ====
+==== jinahya.twitter.xauth.client.requeter.SocketConnectionRequester (Java ME) ====
 This requester uses [http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/io/SocketConnection.html javax.microedition.io.SocketConnection].
-==== jinahya.twitter.xauth.client.requeter.SocketRequester (Java ME) ====
+==== jinahya.twitter.xauth.client.requeter.SocketRequester ====
 This requester uses [http://download.oracle.com/javase/6/docs/api/java/net/Socket.html java.net.Socket].
 == How to use... ==
 === Prepare your Authenticator and Requester ==
