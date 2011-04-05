@@ -19,7 +19,9 @@ public String url(byte[] input);
 === jinahya.twitter.xauth.client.Client ===
 === jinahya.twitter.xauth.client.authenticator.Authenticator ===
  * jinahya.twitter.xauth.client.authenticator.JCAAuthenticator
+This class uses the standard JCA class for HMAC-SHA1
  * jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator
+This class uses BouncyCastle classes for HMAC-SHA1. (Java ME)
 === jinahya.twitter.xauth.client.requester.Requester ===
  * jinahya.twitter.xauth.client.requeter.HttpConnectionRequester
  * jinahya.twitter.xauth.client.requeter.HttpURLConnectionRequester
