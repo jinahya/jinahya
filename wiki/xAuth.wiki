@@ -18,7 +18,28 @@ public void percent(final String input)
 === jinahya.twitter.xauth.client.authenticator.Requester ===
 == How to use... ==
 === Prepare your Authenticator and Requester ==
+You can use your own implement, or you can use those prepared classes.
+{{{
+class MyAuthenticator implements Authenticator {
 
+    @Override
+    public byte[] authenticate(final byte[] key, final byte[] input) throws Exception {
+        // HmacSHA1
+    }
+}
+}}}
+{{{
+class MyRequester implements Requester {
+
+    @Override
+    public InputStream request(final String method, final String url,
+                               final String parameters, final String authorization)
+        throws Exception {
+
+        // Talk to Twitter
+    }
+}
+}}}
 === Extend the client ===
 {{{
 class MyClient extends Client {
