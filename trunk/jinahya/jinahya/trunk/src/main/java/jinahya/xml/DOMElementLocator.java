@@ -61,7 +61,7 @@ public class DOMElementLocator extends ElementLocator<Element> {
             throw new IllegalArgumentException("null name");
         }
 
-        return getCurrent().getElementsByTagName(name).getLength();
+        return getCountNS(XMLConstants.NULL_NS_URI, name);
     }
 
 
