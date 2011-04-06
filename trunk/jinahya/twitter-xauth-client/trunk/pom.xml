@@ -14,6 +14,38 @@
       <artifactId>commons-codec</artifactId>
       <scope>test</scope>
     </dependency>
+    <!--
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>cldc</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>midp</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>cdc</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>fp</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>pbp</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javame</groupId>
+      <artifactId>pp</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    -->
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk14</artifactId>
@@ -37,6 +69,38 @@
         <artifactId>commons-codec</artifactId>
         <version>1.5</version>
       </dependency>
+      <!--
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>cldc</artifactId>
+        <version>1.1</version>
+      </dependency>           
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>midp</artifactId>
+        <version>2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>cdc</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>fp</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>pbp</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javame</groupId>
+        <artifactId>pp</artifactId>
+        <version>1.1</version>
+      </dependency>
+      -->
       <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk14</artifactId>
@@ -50,7 +114,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.0</version>
+        <version>6.0.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -200,7 +264,12 @@
     <url>http://code.google.com/p/jinahya/source/browse/#svn%2Ftrunk%2Fjinahya%2Ftwitter-xauth-client%2Ftrunk</url>
   </scm>
   <prerequisites />
-  <repositories />
+  <repositories>
+    <repository>
+      <id>jinahya-files</id>
+      <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
+    </repository>
+  </repositories>
   <pluginRepositories />
   <distributionManagement>
     <repository>
@@ -214,63 +283,65 @@
     </site>
     -->
   </distributionManagement>
- <profiles> 
-    <profile> 
-      <id>umlgraph</id> 
-      <activation> 
-        <property> 
-          <name>umlgraph</name> 
-          <value>true</value> 
-        </property> 
-      </activation> 
+  <profiles>
+    <profile>
+      <id>umlgraph</id>
+      <activation>
+        <property>
+          <name>umlgraph</name>
+          <value>true</value>
+        </property>
+      </activation>
       <properties>
-	<umlgraph.version>5.1</umlgraph.version>
-	<umlgraph.additionalparam>-all -inferrel -inferdep -quiet -hide java.* -collapsible -collpackages java.util.* -qualify -postfixpackage -nodefontsize 9 -nodefontpackagesize 7</umlgraph.additionalparam>
+        <umlgraph.version>5.1</umlgraph.version>
+        <umlgraph.additionalparam>-all -inferrel -inferdep -quiet -hide java.* -collapsible -collpackages java.util.* -qualify -postfixpackage -nodefontsize 9 -nodefontpackagesize 7</umlgraph.additionalparam>
       </properties>
-      <build> 
-        <plugins> 
-          <plugin> 
-	    <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId> 
-            <configuration> 
-              <links> 
-                <link>http://download.oracle.com/javase/6/docs/api</link> 
-		<link>http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118</link>
-	      </links> 
-              <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> 
-              <docletArtifact> 
-                <groupId>org.umlgraph</groupId> 
-                <artifactId>doclet</artifactId> 
-                <version>${umlgraph.version}</version> 
-              </docletArtifact> 
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <links>
+                <link>http://download.oracle.com/javase/6/docs/api</link>
+                <link>http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/index.html</link>
+                <link>http://download.oracle.com/javame/config/cdc/ref-impl/pp1.1.2/jsr216/index.html</link>
+              </links>
+              <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+              <docletArtifact>
+                <groupId>org.umlgraph</groupId>
+                <artifactId>doclet</artifactId>
+                <version>${umlgraph.version}</version>
+              </docletArtifact>
               <additionalparam>${umlgraph.additionalparam}</additionalparam>
-              <useStandardDocletOptions>true</useStandardDocletOptions> 
-            </configuration> 
-          </plugin> 
-        </plugins> 
-      </build> 
-      <reporting> 
-        <plugins> 
-          <plugin> 
-            <artifactId>maven-javadoc-plugin</artifactId> 
-            <version>${project.reporting.maven-javadoc-plugin.version}</version> 
-            <configuration> 
-              <links> 
-                <link>http://download.oracle.com/javase/6/docs/api</link> 
-		<link>http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118</link>
-              </links> 
-              <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> 
-              <docletArtifact> 
-                <groupId>org.umlgraph</groupId> 
-                <artifactId>doclet</artifactId> 
-                <version>${umlgraph.version}</version> 
-              </docletArtifact> 
+              <useStandardDocletOptions>true</useStandardDocletOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${project.reporting.maven-javadoc-plugin.version}</version>
+            <configuration>
+              <links>
+                <link>http://download.oracle.com/javase/6/docs/api</link>
+                <link>http://download.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/index.html</link>
+                <link>http://download.oracle.com/javame/config/cdc/ref-impl/pp1.1.2/jsr216/index.html</link>
+              </links>
+              <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+              <docletArtifact>
+                <groupId>org.umlgraph</groupId>
+                <artifactId>doclet</artifactId>
+                <version>${umlgraph.version}</version>
+              </docletArtifact>
               <additionalparam>${umlgraph.additionalparam}</additionalparam>
-              <useStandardDocletOptions>true</useStandardDocletOptions> 
-            </configuration> 
-          </plugin> 
-        </plugins> 
-      </reporting> 
-    </profile> 
- </profiles>
+              <useStandardDocletOptions>true</useStandardDocletOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
 </project>
