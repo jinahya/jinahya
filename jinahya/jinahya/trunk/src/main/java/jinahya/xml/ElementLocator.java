@@ -18,6 +18,7 @@
 package jinahya.xml;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -42,21 +43,24 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param space
-     * @param name
-     * @return 
+     * Returns the number of child elements those are reside in no name space.
+     *
+     * @param name element name
+     * @return child count;
+     * @see #getCountNS(java.lang.String, java.lang.String)
      */
-    public abstract int getCountNS(final String space, final String name);
+    public abstract int getCount(final String name);
 
 
     /**
-     * 
-     * @param name
-     * @return 
-     * @see #getCount(java.lang.String, java.lang.String)
+     * Returns the number of child elements those are reside in given
+     * <code>namespace</code>.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return child count
      */
-    public abstract int getCount(final String name);
+    public abstract int getCountNS(final String namespace, final String name);
 
 
     /**
@@ -66,7 +70,7 @@ public abstract class ElementLocator<E> {
      */
     public final ElementLocator<E> locateRoot() {
 
-        if (path.size() > 1) {
+        while (path.size() > 1) {
             path.removeLast();
         }
 
@@ -100,6 +104,9 @@ public abstract class ElementLocator<E> {
 
 
     /**
+     * Shortened for {@link #locateParent()}.
+     *
+     * @return self
      * @see #locateParent()
      */
     public final ElementLocator<E> P() {
@@ -108,21 +115,24 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param name
-     * @param index
-     * @return 
+     * Locates a child.
+     *
+     * @param name element name.
+     * @param index element index
+     * @return self
+     * @see #locateChildNS(java.lang.String, java.lang.String, int) 
      */
     public final ElementLocator<E> locateChild(final String name,
                                                final int index) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
 
         if (index < 0) {
             throw new IllegalArgumentException("index(" + index + ") < 0");
         }
 
-        if (name == null) {
-            throw new IllegalArgumentException("null name");
-        }
 
         E child = findChild(name, index);
 
@@ -137,7 +147,8 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
+     * Locates a child.
+     *
      * @param name
      * @param index
      * @return 
@@ -149,45 +160,53 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * Finds child. IndexOutOfBoundsException must be thrown if no child found.
+     * Finds a child.
      *
-     * @param name child name
-     * @param index child index
-     * @return found child
+     * @param name child elment name
+     * @param index child element index
+     * @return child found or null if not found
      */
     protected abstract E findChild(final String name, final int index);
 
 
     /**
-     * 
-     * @param name
-     * @return 
+     * Adds new child to the current element.
+     *
+     * @param name name
+     * @return added child
      */
     protected abstract E addChild(final String name);
 
 
     /**
-     * 
-     * @param space
-     * @param name
-     * @param index
-     * @return 
+     * Locate a child.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @param index index
+     * @return self
+     * @see #locateChild(java.lang.String, int) 
      */
-    public final ElementLocator<E> locateChildNS(
-        final String space, final String name, final int index) {
+    public final ElementLocator<E> locateChildNS(final String namespace,
+                                                 final String name,
+                                                 final int index) {
 
-        if (index < 0) {
-            throw new IllegalArgumentException("index(" + index + ") < 0");
+        if (namespace == null) {
+            throw new IllegalArgumentException("null namespace");
         }
 
         if (name == null) {
             throw new IllegalArgumentException("null name");
         }
 
-        E child = findChildNS(space, name, index);
+        if (index < 0) {
+            throw new IllegalArgumentException("index(" + index + ") < 0");
+        }
+
+        E child = findChildNS(namespace, name, index);
 
         if (child == null) {
-            child = addChildNS(space, name);
+            child = addChildNS(namespace, name);
         }
 
         path.add(child);
@@ -197,56 +216,47 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param space
-     * @param name
-     * @param index
-     * @return 
+     * Locate a child.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @param index index
+     * @return self
      * @see #locateChildNS(java.lang.String, java.lang.String, int) 
      */
-    public final ElementLocator<E> C(final String space, final String name,
+    public final ElementLocator<E> C(final String namespace, final String name,
                                      final int index) {
 
-        return locateChildNS(space, name, index);
+        return locateChildNS(namespace, name, index);
     }
 
 
     /**
-     * 
-     * @param space
-     * @param name
-     * @param index
-     * @return 
+     * Finds a child.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @param index index
+     * @return child or null if not found
      */
-    protected abstract E findChildNS(final String space, final String name,
+    protected abstract E findChildNS(final String namespace, final String name,
                                      final int index);
 
 
     /**
-     * 
-     * @param space
-     * @param name
-     * @return 
+     * Adds new child element to the current element.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return added child
      */
-    protected abstract E addChildNS(final String space, final String name);
+    protected abstract E addChildNS(final String namespace, final String name);
 
 
     /**
-     * 
-     * @param index
-     * @param name
-     * @return 
-     * @see #child(int, java.lang.String, java.lang.String) 
-     */
-    public final ElementLocator<E> child(final int index, final String name) {
-
-        return locateChildNS(null, name, index);
-    }
-
-
-    /**
-     * 
-     * @return 
+     * Returns text value of current element.
+     *
+     * @return text value
      */
     public abstract String getText();
 
@@ -261,9 +271,10 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param locateParent
-     * @return 
+     * Returns text value of current element and locate parent if specified.
+     *
+     * @param locateParent locate parent flag
+     * @return text value.
      */
     public final String getText(final boolean locateParent) {
 
@@ -278,9 +289,10 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param locateParent
-     * @return 
+     * Returns text value of current element and locate parent if specified.
+     *
+     * @param locateParent locate parent flag
+     * @return text value
      * @see #getText(boolean) 
      */
     public final String T(final boolean locateParent) {
@@ -288,13 +300,20 @@ public abstract class ElementLocator<E> {
     }
 
 
+    /**
+     * Adds text value to current element.
+     *
+     * @param text text value
+     * @return self
+     */
     public abstract ElementLocator<E> setText(final String text);
 
 
     /**
-     * 
-     * @param text
-     * @return 
+     * Adds text value to current element.
+     *
+     * @param text text value
+     * @return self
      * @see #setText(java.lang.String) 
      */
     public final ElementLocator<E> T(final String text) {
@@ -303,10 +322,11 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param text
-     * @param locateParent
-     * @return 
+     * Adds text value to current element and locate parent if specified.
+     *
+     * @param text text value
+     * @param locateParent locate parent flag
+     * @return self
      */
     public final ElementLocator<E> setText(final String text,
                                            final boolean locateParent) {
@@ -322,10 +342,11 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param text
-     * @param locateParent
-     * @return 
+     * Adds text value to current element and locate parent if specified.
+     *
+     * @param text text value
+     * @param locateParent locate parent flag
+     * @return self
      * @see #setText(java.lang.String, boolean) 
      */
     public final ElementLocator<E> T(final String text,
@@ -335,18 +356,30 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
-     * @param name
-     * @return 
-     * @see #attribute(java.lang.String, java.lang.String) 
+     * Returns attribute value.
+     *
+     * @param name attribute name
+     * @return attribute value
+     * @see #getAttribute(java.lang.String, java.lang.String) 
      */
     public abstract String getAttribute(final String name);
 
 
     /**
      * 
+     * @param space
      * @param name
-     * @param value
+     * @return 
+     */
+    public abstract String getAttributeNS(final String space,
+                                          final String name);
+
+
+    /**
+     * Sets attribute value.
+     *
+     * @param name attribute name
+     * @param value attribute value
      * @return self
      */
     public abstract ElementLocator<E> setAttribute(final String name,
@@ -363,16 +396,6 @@ public abstract class ElementLocator<E> {
     public final ElementLocator<E> A(final String name, final String value) {
         return setAttribute(name, value);
     }
-
-
-    /**
-     * 
-     * @param space
-     * @param name
-     * @return 
-     */
-    public abstract String getAttributeNS(final String space,
-                                          final String name);
 
 
     /**
@@ -403,7 +426,12 @@ public abstract class ElementLocator<E> {
 
 
     /**
-     * 
+     * Returns
+     */
+    /**
+     * Returns currently located element.
+     *
+     * @return current element
      */
     protected final E getCurrent() {
         return path.getLast();

@@ -41,6 +41,17 @@ public class KDOMElementLocator extends ElementLocator<Element> {
 
 
     @Override
+    public int getCount(final String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        return getCountNS(XmlPullParser.NO_NAMESPACE, name);
+    }
+
+
+    @Override
     public int getCountNS(final String space, final String name) {
 
         if (space == null) {
@@ -63,32 +74,6 @@ public class KDOMElementLocator extends ElementLocator<Element> {
             if (!space.equals(child.getNamespace())) {
                 continue;
             }
-            if (!name.equals(child.getName())) {
-                continue;
-            }
-            count++;
-        }
-
-        return count;
-    }
-
-
-    @Override
-    public int getCount(final String name) {
-
-        if (name == null) {
-            throw new IllegalArgumentException("null name");
-        }
-
-        int count = 0;
-
-        final Element current = getCurrent();
-        final int childCount = current.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            if (Node.ELEMENT != current.getType(i)) {
-                continue;
-            }
-            final Element child = current.getElement(i);
             if (!name.equals(child.getName())) {
                 continue;
             }
