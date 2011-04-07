@@ -21,6 +21,7 @@ package jinahya.twitter.xauth.client.requester;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -28,6 +29,37 @@ import java.io.InputStream;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public abstract class AbstractSocketRequester implements Requester {
+
+
+    /**
+     * Reads a line from <code>input</code> and write to <code>output</code>.
+     *
+     * @param input input
+     * @param output output
+     * @throws IOException if an I/O error occurs.
+     */
+    protected static void line(final InputStream input,
+                               final OutputStream output)
+        throws IOException {
+
+        for (int b = -1; (b = input.read()) != -1;) {
+            if (b == '\r') {
+                input.read(); // '\n'
+                return;
+            }
+            output.write(b);
+        }
+    }
+
+
+    protected static void line(final InputStream input,
+                               final ByteArrayOutputStream output)
+        throws IOException {
+
+        output.reset();
+        line(input, output);
+        output.flush();
+    }
 
 
     /**
@@ -62,29 +94,5 @@ public abstract class AbstractSocketRequester implements Requester {
         if (!statusCode.equals("200")) {
             throw new IOException(statusCode + "; " + reasonPhrase);
         }
-    }
-
-
-    /**
-     * 
-     * @param input
-     * @param output
-     * @throws IOException 
-     */
-    protected void line(final InputStream input,
-                        final ByteArrayOutputStream output)
-        throws IOException {
-
-        output.reset();
-
-        for (int b = -1; (b = input.read()) != -1;) {
-            if (b == '\r') {
-                input.read(); // '\n'
-                return;
-            }
-            output.write(b);
-        }
-
-        output.flush();
     }
 }
