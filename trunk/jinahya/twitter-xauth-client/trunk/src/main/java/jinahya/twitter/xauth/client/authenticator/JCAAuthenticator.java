@@ -29,6 +29,9 @@ import javax.crypto.spec.SecretKeySpec;
 public class JCAAuthenticator implements Authenticator {
 
 
+    /**
+     * Standard algorithm name for HMAC-SHA1.
+     */
     protected static final String ALGORITHM = "HmacSHA1";
 
 
@@ -43,6 +46,12 @@ public class JCAAuthenticator implements Authenticator {
     }
 
 
+    /**
+     * Returns a Mac instance for {@value #ALGORITHM}.
+     *
+     * @return a Mac instance.
+     * @throws Exception if any error occurs.
+     */
     protected Mac getInstance() throws Exception {
         return Mac.getInstance(ALGORITHM);
     }
