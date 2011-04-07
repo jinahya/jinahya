@@ -22,10 +22,10 @@ package jinahya.twitter.xauth.client.authenticator;
  *
  * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
  */
-public class JCAAuthenticatorTest extends AuthenticatorTest<JCAAuthenticator> {
+public class JCEAuthenticatorTest extends AuthenticatorTest<JCEAuthenticator> {
 
 
-    public JCAAuthenticatorTest() {
-        super(new JCAAuthenticator());
+    public JCEAuthenticatorTest() {
+        super(new JCEAuthenticator());
     }
 }

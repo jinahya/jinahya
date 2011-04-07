@@ -18,7 +18,7 @@
 package jinahya.twitter.xauth.client;
 
 
-import jinahya.twitter.xauth.client.authenticator.JCAAuthenticator;
+import jinahya.twitter.xauth.client.authenticator.JCEAuthenticator;
 import jinahya.twitter.xauth.client.requester.SocketRequester;
 
 
@@ -30,6 +30,6 @@ public class SocketJCATest extends ClientTest {
 
 
     public SocketJCATest() {
-        super(new SocketRequester(), new JCAAuthenticator());
+        super(new SocketRequester(), new JCEAuthenticator());
     }
 }
