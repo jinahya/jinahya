@@ -18,14 +18,32 @@
 package jinahya.twitter.xauth.client.authenticator;
 
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
 /**
  *
- * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JCEAuthenticatorTest extends AuthenticatorTest<JCEAuthenticator> {
+public class JCAAuthenticator implements Authenticator {
 
 
-    public JCEAuthenticatorTest() {
-        super(new JCEAuthenticator());
+    protected static final String ALGORITHM = "HmacSHA1";
+
+
+    //@Override
+    public byte[] authenticate(final byte[] key, final byte[] input)
+        throws Exception {
+
+        final Mac mac = getInstance();
+        mac.init(new SecretKeySpec(key, ALGORITHM));
+
+        return mac.doFinal(input);
+    }
+
+
+    protected Mac getInstance() throws Exception {
+        return Mac.getInstance(ALGORITHM);
     }
 }
