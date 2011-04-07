@@ -19,7 +19,7 @@ package jinahya.twitter.xauth.client.requester;
 
 
 import jinahya.twitter.xauth.client.authenticator.BouncyCastleAuthenticator;
-import jinahya.twitter.xauth.client.authenticator.JCAAuthenticator;
+import jinahya.twitter.xauth.client.authenticator.JCEAuthenticator;
 
 import org.testng.annotations.Test;
 
@@ -40,6 +40,6 @@ public class SocketRequesterTest extends RequesterTest<SocketRequester> {
     public void testStatusesPublicTimeline() throws Exception {
 
         super.testStatusesPublicTimeline(new BouncyCastleAuthenticator());
-        super.testStatusesPublicTimeline(new JCAAuthenticator());
+        super.testStatusesPublicTimeline(new JCEAuthenticator());
     }
 }

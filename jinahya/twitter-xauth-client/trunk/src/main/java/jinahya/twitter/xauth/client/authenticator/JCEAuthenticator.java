@@ -26,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JCAAuthenticator implements Authenticator {
+public class JCEAuthenticator implements Authenticator {
 
 
     protected static final String ALGORITHM = "HmacSHA1";
@@ -36,9 +36,14 @@ public class JCAAuthenticator implements Authenticator {
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws Exception {
 
-        final Mac mac = Mac.getInstance(ALGORITHM);
+        final Mac mac = getInstance();
         mac.init(new SecretKeySpec(key, ALGORITHM));
 
         return mac.doFinal(input);
+    }
+
+
+    protected Mac getInstance() throws Exception {
+        return Mac.getInstance(ALGORITHM);
     }
 }

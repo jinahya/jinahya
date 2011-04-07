@@ -18,7 +18,7 @@
 package jinahya.twitter.xauth.client;
 
 
-import jinahya.twitter.xauth.client.authenticator.JCAAuthenticator;
+import jinahya.twitter.xauth.client.authenticator.JCEAuthenticator;
 import jinahya.twitter.xauth.client.requester.HttpURLConnectionRequester;
 
 import org.testng.annotations.Test;
@@ -33,6 +33,6 @@ public class HttpURLConnectionJCATest extends ClientTest {
 
 
     public HttpURLConnectionJCATest() {
-        super(new HttpURLConnectionRequester(), new JCAAuthenticator());
+        super(new HttpURLConnectionRequester(), new JCEAuthenticator());
     }
 }
