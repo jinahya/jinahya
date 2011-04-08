@@ -28,7 +28,7 @@ import java.io.OutputStream;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class AbstractSocketRequester implements Requester {
+abstract class AbstractSocketRequester implements Requester {
 
 
     /**
@@ -38,8 +38,7 @@ public abstract class AbstractSocketRequester implements Requester {
      * @param output output
      * @throws IOException if an I/O error occurs.
      */
-    protected static void line(final InputStream input,
-                               final OutputStream output)
+    static void line(final InputStream input, final OutputStream output)
         throws IOException {
 
         for (int b = -1; (b = input.read()) != -1;) {
@@ -52,8 +51,14 @@ public abstract class AbstractSocketRequester implements Requester {
     }
 
 
-    protected static void line(final InputStream input,
-                               final ByteArrayOutputStream output)
+    /**
+     *
+     * @param input
+     * @param output
+     * @throws IOException
+     */
+    static void line(final InputStream input,
+                     final ByteArrayOutputStream output)
         throws IOException {
 
         output.reset();
@@ -63,9 +68,10 @@ public abstract class AbstractSocketRequester implements Requester {
 
 
     /**
-     * 
-     * @param statusLine
-     * @throws IOException 
+     * Checks given <code>statusLine</code> of HTTP response.
+     *
+     * @param statusLine status line of HTTP response message.
+     * @throws IOException if statusLine is not OK
      */
     protected void checkStatusLine(final String statusLine) throws IOException {
 
@@ -81,11 +87,11 @@ public abstract class AbstractSocketRequester implements Requester {
 
 
     /**
-     * Checks http response status.
+     * Checks HTTP response status.
      *
      * @param statusCode status code
      * @param reasonPhrase reason phrase
-     * @throws IOException if the status is not ok
+     * @throws IOException if the status is not OK
      */
     protected void checkStatus(final String statusCode,
                                final String reasonPhrase)
