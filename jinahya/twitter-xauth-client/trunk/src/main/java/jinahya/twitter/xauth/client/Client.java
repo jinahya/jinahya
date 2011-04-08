@@ -36,7 +36,9 @@ import jinahya.twitter.xauth.client.requester.Requester;
 public abstract class Client implements Authenticator, Requester {
 
 
-    /** access token url. */
+    /**
+     * Twitter Access Token URL.
+     */
     private static final String ACCESS_TOKEN_URL =
         "https://api.twitter.com/oauth/access_token";
 
@@ -64,7 +66,7 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
-     * Sign in.
+     * Signs in with given user credentials.
      *
      * @param username username
      * @param password password
@@ -132,6 +134,55 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
+     * Requests HTTP GET resource.
+     *
+     * @param url normalized request URL
+     * @param parameters request parameters
+     * @param authorize authorize flag
+     * @return resource stream
+     * @throws Exception if an I/O error occurs.
+     */
+    public InputStream GET(final String url, final Hashtable parameters,
+                           final boolean authorize)
+        throws Exception {
+
+        return request("GET", url, parameters, authorize);
+    }
+
+
+    /**
+     * Requests HTTP POST resource.
+     *
+     * @param url normalized request URL
+     * @param parameters request parameters
+     * @param authorize authorize flag
+     * @return resource stream
+     * @throws Exception if any error occurs.
+     */
+    public InputStream POST(final String url, final Hashtable parameters,
+                            final boolean authorize)
+        throws Exception {
+
+        return request("POST", url, parameters, authorize);
+    }
+
+
+    /**
+     *
+     * @param method
+     * @param url
+     * @param parameters
+     * @return
+     * @throws Exception
+     */
+    public InputStream request(final String method, final String url,
+                               final Hashtable parameters) throws Exception {
+
+        return request(method, url, parameters);
+    }
+
+
+    /**
      *
      * @param method request method
      * @param url normalized resource url
@@ -176,7 +227,7 @@ public abstract class Client implements Authenticator, Requester {
     /**
      *
      * @param method request method
-     * @param url normalized resource url
+     * @param url normalized resource URL
      * @param parameters parameters
      * @param authorize flag for authentication requirement
      * @return resource stream
