@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>jinahya</groupId>
+  <artifactId>bit-io</artifactId>
+  <version>1.0-alpha-1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20110409.085706</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20110409085706</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.0-alpha-1-20110409.085706-1</value>
+        <updated>20110409085706</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0-alpha-1-20110409.085706-1</value>
+        <updated>20110409085706</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
