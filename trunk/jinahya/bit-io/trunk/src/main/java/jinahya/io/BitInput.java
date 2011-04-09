@@ -21,7 +21,6 @@ package jinahya.io;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.BitSet;
 
 
 /**
@@ -150,8 +149,8 @@ public class BitInput {
      * Reads an unsigned int.
      *
      * @param length bit length between 1 (inclusive) and 32 (exclusive).
-     * @return
-     * @throws IOException
+     * @return an unsigned int value
+     * @throws IOException if an I/O error occurs.
      */
     public int readUnsignedInt(final int length) throws IOException {
 
@@ -187,7 +186,7 @@ public class BitInput {
      * Reads an signed int.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
-     * @return a <code>length</code>bit-long signed integer
+     * @return a <code>length</code> bit-long signed integer
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
@@ -217,7 +216,7 @@ public class BitInput {
      * @return <code>length</code>-bit unsigned long value
      * @throws IOException if an I/O error occurs
      */
-    public final long readUnsignedLong(final int length) throws IOException {
+    public long readUnsignedLong(final int length) throws IOException {
 
         if (length < 1) {
             throw new IllegalArgumentException(
@@ -254,7 +253,7 @@ public class BitInput {
      * @return a signed long value.
      * @throws IOException if an I/O error occurs.
      */
-    public final long readLong(final int length) throws IOException {
+    public long readLong(final int length) throws IOException {
 
         if (length <= 1) {
             throw new IllegalArgumentException(
