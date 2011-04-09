@@ -20,7 +20,6 @@ package jinahya.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.BitSet;
 
 
 /**
@@ -42,7 +41,7 @@ public class BitOutput {
             throw new IllegalArgumentException("null out");
         }
 
-        this.set = new BitSet(8);
+        //this.set = new BitSet(8);
     }
 
 
@@ -74,7 +73,7 @@ public class BitOutput {
         }
 
         for (int i = length - 1; i >= 0; i--) {
-            set.set(index + i, (value & 0x01) == 0x01);
+            flags[index + i] = (value & 0x01) == 0x01;
             value >>= 1;
         }
 
@@ -82,9 +81,9 @@ public class BitOutput {
 
         if (index == 8) {
             int octet = 0x00;
-            for (int i = 0; i < 8; i++) {
+            for (int i = 7; i >= 0; i--) {
                 octet <<= 1;
-                octet |= (set.get(i) ? 0x01 : 0x00);
+                octet |= flags[0] ? 0x01 : 0x00;
             }
             out.write(octet);
             count++;
@@ -401,15 +400,20 @@ public class BitOutput {
     }
 
 
+    /** output. */
     private final OutputStream out;
 
 
-    private final BitSet set;
+    //private final BitSet set;
+    /** bit flags. */
+    private final boolean[] flags = new boolean[8];
 
 
+    /** bit index to write . */
     private int index = 0;
 
 
+    /** octet count. */
     private int count = 0;
 
 
