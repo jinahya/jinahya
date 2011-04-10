@@ -95,7 +95,7 @@ public class BitInput {
 
 
     /**
-     * Reads 1-bit long boolean value.
+     * Reads 1-bit boolean value.
      *
      * @return boolean value
      * @throws IOException if an I/O error occurs.
