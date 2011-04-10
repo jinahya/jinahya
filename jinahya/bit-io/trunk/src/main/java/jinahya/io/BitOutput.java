@@ -177,6 +177,7 @@ public class BitOutput {
 
 
     /**
+     * Writes an signed int.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @param value signed int value
@@ -185,7 +186,7 @@ public class BitOutput {
     public final void writeInt(final int length, final int value)
         throws IOException {
 
-        if (length <= 0x01) {
+        if (length <= 1) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") <= 1");
         }
@@ -223,10 +224,11 @@ public class BitOutput {
 
 
     /**
+     * Writes an unsigned long.
      *
-     * @param length
-     * @param value
-     * @throws IOException
+     * @param length bit length; between 1 (inclusive) and 64 (exclusive)
+     * @param value value
+     * @throws IOException if an I/O error occurs.
      */
     public final void writeUnsignedLong(final int length, final long value)
         throws IOException {
@@ -236,18 +238,15 @@ public class BitOutput {
                 "illegal length(" + length + ") < 1");
         }
 
-        if (length >= 64) {
+        if (length >= 0x40) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") >= 64");
         }
 
-        if (value < 0) {
-            throw new IllegalArgumentException("negative value: " + value);
-        } else {
-            if ((value >> length) != 0) {
-                throw new IllegalArgumentException(
-                    "value out of range: " + value);
-            }
+        if ((value >> length) != 0) {
+            throw new IllegalArgumentException(
+                "illegal value(" + value + ") for " + length
+                + "bit unsigned long");
         }
 
         final int quotient = length / 0x10;
@@ -265,8 +264,9 @@ public class BitOutput {
 
 
     /**
+     * Writes a signed long.
      *
-     * @param length
+     * @param length bit length; between 1 (exclusive) and 64 (inclusive)
      * @param value
      * @throws IOException
      */
