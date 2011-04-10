@@ -47,8 +47,6 @@ public class PercentCodecTest {
 
         final String actual = PercentDecoder.decode(encoded);
 
-        System.out.println(expected + " / " + encoded + " / " + actual);
-
         Assert.assertEquals(actual, expected);
     }
 }
