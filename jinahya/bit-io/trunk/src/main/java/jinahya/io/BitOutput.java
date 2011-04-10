@@ -37,11 +37,11 @@ public class BitOutput {
     public BitOutput(final OutputStream out) {
         super();
 
-        if ((this.out = out) == null) {
+        if (out == null) {
             throw new IllegalArgumentException("null out");
         }
 
-        //this.set = new BitSet(8);
+        this.out = out;
     }
 
 
@@ -66,28 +66,26 @@ public class BitOutput {
         }
 
         final int required = length - (8 - index);
+
         if (required > 0) {
             writeUnsignedByte(length - required, value >> required);
             writeUnsignedByte(required, value);
-            return;
-        }
-
-        for (int i = length - 1; i >= 0; i--) {
-            flags[index + i] = (value & 0x01) == 0x01;
-            value >>= 1;
-        }
-
-        index += length;
-
-        if (index == 8) {
-            int octet = 0x00;
-            for (int i = 7; i >= 0; i--) {
-                octet <<= 1;
-                octet |= flags[0] ? 0x01 : 0x00;
+        } else {
+            for (int i = length - 1; i >= 0; i--) {
+                flags[index + i] = (value & 0x01) == 0x01;
+                value >>= 1;
             }
-            out.write(octet);
-            count++;
-            index = 0;
+            index += length;
+            if (index == 0x08) {
+                int octet = 0x00;
+                for (int i = 0; i < flags.length; i++) {
+                    octet <<= 1;
+                    octet |= flags[i] ? 0x01 : 0x00;
+                }
+                out.write(octet);
+                count++;
+                index = 0;
+            }
         }
     }
 

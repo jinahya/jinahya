@@ -65,7 +65,7 @@ public class BitInput {
                 "illegal length: " + length + " > 8");
         }
 
-        if (index == 8) {
+        if (index == 0x08) {
             int octet = in.read();
             if (octet == -1) {
                 throw new EOFException("eof");
@@ -78,21 +78,19 @@ public class BitInput {
             count++;
         }
 
-        final int required = length - (8 - index);
+        final int required = length - (0x08 - index);
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
                    | readUnsignedByte(required);
+        } else {
+            int value = 0x00;
+            for (int i = 0; i < length; i++) {
+                value <<= 1;
+                value |= flags[index + i] ? 0x01 : 0x00;
+            }
+            index += length;
+            return value;
         }
-
-        int value = 0x00;
-        for (int i = 0; i < length; i++) {
-            value <<= 1;
-            value |= flags[index + i] ? 0x01 : 0x00;
-        }
-
-        index += length;
-
-        return value;
     }
 
 
