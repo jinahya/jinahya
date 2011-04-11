@@ -1,12 +1,12 @@
 /*
  *  Copyright 2010 Jin Kwon.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -104,8 +104,10 @@ public class PercentDecoder {
             if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || (b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E)) {
-                // - _ . ~
+                || (b == 0x2D // -
+                    || b == 0x5F // _
+                    || b == 0x2E // .
+                    || b == 0x7E)) { // ~
                 output.write(b);
             } else if (b == 0x25) { // '%'
                 int high = input.read();
@@ -126,5 +128,13 @@ public class PercentDecoder {
 
     static int atoi(final int i) throws EOFException {
         return i - (i >= 0x41 ? 0x37 : 0x30);
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    protected PercentDecoder() {
+        super();
     }
 }
