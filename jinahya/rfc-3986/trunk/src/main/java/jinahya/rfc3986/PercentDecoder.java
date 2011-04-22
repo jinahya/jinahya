@@ -34,47 +34,32 @@ public class PercentDecoder {
 
 
     /**
-     * Decodes given <code>string</code>.
+     * Decodes given <code>input</code>.
      *
-     * @param string encoded string
-     * @return decoded string
+     * @param input input to decode
+     * @return decoding output
      * @throws IOException if an I/O error occurs.
      */
-    public static String decode(final String string) throws IOException {
-        return decode(string, "UTF-8");
+    public static byte[] decode(final String input) throws IOException {
+        return decode(input.getBytes("US-ASCII"));
     }
 
 
     /**
-     * Decodes given <code>string</code>.
+     * Decodes given <code>input</code>.
      *
-     * @param string encoded string
-     * @param encoding output string encoding
-     * @return decoded string
-     * @throws IOException if an I/O error occurs
-     */
-    public static String decode(final String string, final String encoding)
-        throws IOException {
-
-        return new String(decode(string.getBytes("US-ASCII")), encoding);
-    }
-
-
-    /**
-     * Decodes given <code>bytes</code>.
-     *
-     * @param bytes bytes to decode
-     * @return decoded output
+     * @param input input to decode
+     * @return decoding output
      * @throws IOException if an I/O error occurs.
      */
-    public static byte[] decode(final byte[] bytes) throws IOException {
+    public static byte[] decode(final byte[] input) throws IOException {
 
-        if (bytes == null) {
+        if (input == null) {
             throw new IllegalArgumentException("null bytes");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        decode(new ByteArrayInputStream(bytes), output);
+        decode(new ByteArrayInputStream(input), output);
         output.flush();
         return output.toByteArray();
     }

@@ -32,30 +32,38 @@ import java.io.OutputStream;
 public class PercentEncoder {
 
 
-    public static byte[] encode(final String string) throws IOException {
+    /**
+     * Encodes given <code>input</code>.
+     *
+     * @param input string to encode
+     * @return encoding output
+     * @throws IOException if an I/O error occurs.
+     */
+    public static byte[] encode(final String input) throws IOException {
 
-        if (string == null) {
+        if (input == null) {
             throw new IllegalArgumentException("null string");
         }
 
-        return encode(string.getBytes("UTF-8"));
+        return encode(input.getBytes("UTF-8"));
     }
 
 
     /**
+     * Encodes given <code>input</code>.
      *
-     * @param bytes
-     * @return
-     * @throws IOException
+     * @param input bytes to encode
+     * @return encoding output
+     * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final byte[] bytes) throws IOException {
+    public static byte[] encode(final byte[] input) throws IOException {
 
-        if (bytes == null) {
+        if (input == null) {
             throw new IllegalArgumentException("null bytes");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        encode(new ByteArrayInputStream(bytes), output);
+        encode(new ByteArrayInputStream(input), output);
         output.flush();
         return output.toByteArray();
     }
