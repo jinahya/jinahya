@@ -42,10 +42,11 @@ public class PercentCodecTest {
 
         final String expected = RandomStringUtils.random(RANDOM.nextInt(1024));
 
-        final String encoded =
-            new String(PercentEncoder.encode(expected), "US-ASCII");
+        final byte[] original = expected.getBytes("UTF-8");
+        final byte[] encoded = PercentEncoder.encode(original);
+        final byte[] decoded = PercentDecoder.decode(encoded);
 
-        final String actual = PercentDecoder.decode(encoded);
+        final String actual = new String(decoded, "UTF-8");
 
         Assert.assertEquals(actual, expected);
     }
