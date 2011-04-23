@@ -312,9 +312,10 @@ public class BitOutput {
 
 
     /**
+     * Writes given <code>bytes</code>.
      *
-     * @param bytes
-     * @throws IOException
+     * @param bytes bytes to write.
+     * @throws IOException if an I/O error occurs.
      */
     public final void writeBytes(final byte[] bytes) throws IOException {
         writeBytes(bytes, 0, bytes.length);
