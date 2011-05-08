@@ -21,7 +21,6 @@ package jinahya.xml;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 
 
 /**
@@ -185,7 +184,7 @@ public class XOMElementLocator extends ElementLocator<Element> {
         }
 
         final Element current = getCurrent();
-        
+
         Attribute attribute = current.getAttribute(name, space);
 
         if (value == null) {
