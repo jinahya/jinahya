@@ -316,6 +316,7 @@ public class BitOutput {
      *
      * @param bytes bytes to write.
      * @throws IOException if an I/O error occurs.
+     * @see #writeBytes(byte[], int, int) 
      */
     public final void writeBytes(final byte[] bytes) throws IOException {
         writeBytes(bytes, 0, bytes.length);
@@ -323,11 +324,13 @@ public class BitOutput {
 
 
     /**
+     * Writes a byte array.
      *
-     * @param bytes
-     * @param offset
-     * @param length
-     * @throws IOException
+     * @param bytes byte array
+     * @param offset offset
+     * @param length length
+     * @throws IOException if an I/O error occurs.
+     * @see #writeBytes(byte[]) 
      */
     public final void writeBytes(final byte[] bytes, final int offset,
                                  final int length)
