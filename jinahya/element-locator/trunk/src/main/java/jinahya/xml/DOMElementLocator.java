@@ -67,15 +67,14 @@ public class DOMElementLocator extends ElementLocator<Element> {
     @Override
     protected Element findChild(final String name, final int index) {
 
-        return (Element) getCurrent().getElementsByTagName(name).item(index);
+        return findChildNS(XMLConstants.NULL_NS_URI, name, index);
     }
 
 
     @Override
     protected Element addChild(final String name) {
 
-        return (Element) getCurrent().appendChild(
-            document.createElement(name));
+        return addChildNS(XMLConstants.NULL_NS_URI, name);
     }
 
 
