@@ -10,8 +10,29 @@
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.santuario</groupId>
+      <artifactId>xmlsec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.modeshape</groupId>
+      <artifactId>modeshape-jcr</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -27,14 +48,34 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.5</version>
+      </dependency>
+      <dependency>
         <groupId>net.sf.kxml</groupId>
         <artifactId>kxml2</artifactId>
         <version>2.3.0</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.santuario</groupId>
+        <artifactId>xmlsec</artifactId>
+        <version>1.4.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.modeshape</groupId>
+        <artifactId>modeshape-jcr</artifactId>
+        <version>2.6.0.Beta1</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.0.1</version>
+        <version>6.1.1</version>
       </dependency>
       <dependency>
         <groupId>xom</groupId>
@@ -46,9 +87,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.build.maven-compiler-plugin.source>1.6</project.build.maven-compiler-plugin.source>
-    <project.build.maven-compiler-plugin.target>1.6</project.build.maven-compiler-plugin.target>
-    <reporting.maven-javadoc-plugin.version>2.7</reporting.maven-javadoc-plugin.version>
   </properties>
 
   <!-- Build Settings -->
@@ -81,7 +119,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.5</version>
+          <version>2.6</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -93,7 +131,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${reporting.maven-javadoc-plugin.version}</version>
+          <version>2.8</version>
         </plugin>
         <plugin>
           <artifactId>maven-jxr-plugin</artifactId>
@@ -105,11 +143,11 @@
         </plugin>
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.2</version>
+          <version>2.4</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>2.4.3</version>
+          <version>2.5</version>
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
@@ -121,12 +159,12 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.6</version>
+          <version>2.9</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>cobertura-maven-plugin</artifactId>
-          <version>2.4</version>
+          <version>2.5.1</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -136,7 +174,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -151,8 +189,8 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <source>${project.build.maven-compiler-plugin.source}</source>
-              <target>${project.build.maven-compiler-plugin.target}</target>
+              <source>1.6</source>
+              <target>jsr14</target>
             </configuration>
           </execution>
           <execution>
@@ -233,7 +271,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -241,20 +279,25 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
   <!-- Environment Settings -->
-  <issueManagement />
-  <ciManagement />
-  <mailingLists />
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/#svn/trunk</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupid}/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupid}/${project.artifactId}/trunk</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/jinahya/element-locator/trunk/</url>
   </scm>
-  <prerequisites />
-  <repositories />
-  <pluginRepositories />
+  <prerequisites/>
+  <repositories>
+    <repository>
+      <id>jboss</id>
+      <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories/>
   <distributionManagement>
     <repository>
       <id>onacit_googlecode</id>
@@ -273,12 +316,10 @@
       <distributionManagement>
         <repository>
           <id>onacit_googlecode</id>
-          <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/repo</url-->
           <url>svn:https://jinahya.googlecode.com/svn/maven/repo</url>
         </repository>
         <site>
           <id>onacit_googlecode</id>
-          <!--url>svn:https://jinahya.googlecode.com/svn/maven/2/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
           <url>svn:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
         </site>
       </distributionManagement>
