@@ -18,7 +18,6 @@
 package jinahya.xml.el;
 
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.w3c.dom.Attr;
@@ -36,6 +35,12 @@ import org.w3c.dom.NodeList;
 public class DOMElementLocator extends ElementLocator<Document> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param document document
+     * @return new instance of DOMElementLocator.
+     */
     public static ElementLocator<Document> newInstance(
         final Document document) {
 
@@ -52,6 +57,12 @@ public class DOMElementLocator extends ElementLocator<Document> {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param element element
+     * @return new instance of DOMelementLocator
+     */
     public static ElementLocator<Document> newInstance(final Element element) {
 
         if (element == null) {
@@ -63,9 +74,10 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given DOM Element to a ELElement.
+     *
+     * @param element element
+     * @return an ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -79,7 +91,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getLocalName();
 
-        final ELElement tag = new ELElement(namespaceURI, localName);
+        final ELElement _element = new ELElement(namespaceURI, localName);
 
         final NamedNodeMap attributes = element.getAttributes();
         final int attributeLength = attributes.getLength();
@@ -95,15 +107,16 @@ public class DOMElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getNodeValue();
-            tag.attributes.put(
+            _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
 
+        String text = null;
+
         final NodeList childNodes = element.getChildNodes();
         final int length = childNodes.getLength();
-        String text = null;
         for (int i = 0; i < length; i++) {
             final Node childNode = childNodes.item(i);
             switch (childNode.getNodeType()) {
@@ -114,24 +127,25 @@ public class DOMElementLocator extends ElementLocator<Document> {
                     }
                     break;
                 case Node.ELEMENT_NODE:
-                    tag.elements.add(parse((Element) childNode));
+                    _element.elements.add(parse((Element) childNode));
                     break;
                 default:
                     break;
             }
         }
 
-        if (tag.elements.isEmpty() && text != null) {
-            tag.text = text;
+        if (_element.elements.isEmpty()) {
+            _element.text = text;
         }
 
-        return tag;
+        return _element;
     }
 
 
     /**
-     * 
-     * @param root 
+     * Creates a new instance.
+     *
+     * @param root root element
      */
     protected DOMElementLocator(final ELElement root) {
         super(root);
@@ -140,8 +154,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap)
-        throws IOException {
+                         final Map<String, String> namespaces) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -151,11 +164,11 @@ public class DOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null document");
         }
 
-        if (namespaceMap == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
-        print(root, document, namespaceMap, document);
+        print(root, document, namespaces, document);
     }
 
 
@@ -165,11 +178,10 @@ public class DOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @param namesapces
      * @param parent
-     * @throws IOException 
      */
     private void print(final ELElement _element, final Document document,
-                       final Map<String, String> namesapces, final Node parent)
-        throws IOException {
+                       final Map<String, String> namesapces,
+                       final Node parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");

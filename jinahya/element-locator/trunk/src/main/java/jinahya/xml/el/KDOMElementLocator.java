@@ -18,7 +18,6 @@
 package jinahya.xml.el;
 
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.kxml2.kdom.Document;
@@ -33,6 +32,11 @@ import org.kxml2.kdom.Node;
 public class KDOMElementLocator extends ElementLocator<Document> {
 
 
+    /**
+     * 
+     * @param document
+     * @return 
+     */
     public static ElementLocator<Document> newInstance(
         final Document document) {
 
@@ -49,6 +53,11 @@ public class KDOMElementLocator extends ElementLocator<Document> {
     }
 
 
+    /**
+     * 
+     * @param element
+     * @return 
+     */
     public static ElementLocator<Document> newInstance(final Element element) {
 
         if (element == null) {
@@ -132,8 +141,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap)
-        throws IOException {
+                         final Map<String, String> namespaceMap) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -156,11 +164,10 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * @param _element
      * @param namesapces
      * @param parent
-     * @throws IOException 
      */
     private void print(final ELElement _element,
-                       final Map<String, String> namesapces, final Node parent)
-        throws IOException {
+                       final Map<String, String> namesapces,
+                       final Node parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");

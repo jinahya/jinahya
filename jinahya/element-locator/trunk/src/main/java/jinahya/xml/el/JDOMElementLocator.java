@@ -18,7 +18,6 @@
 package jinahya.xml.el;
 
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -126,8 +125,7 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaces)
-        throws IOException {
+                         final Map<String, String> namespaces) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -150,12 +148,10 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      * @param _element
      * @param namespaces
      * @param parent
-     * @throws IOException 
      */
     private void print(final ELElement _element,
                        final Map<String, String> namespaces,
-                       final Parent parent)
-        throws IOException {
+                       final Parent parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
