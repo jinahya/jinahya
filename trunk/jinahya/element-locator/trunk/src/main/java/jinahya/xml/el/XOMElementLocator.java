@@ -18,7 +18,6 @@
 package jinahya.xml.el;
 
 
-import java.io.IOException;
 import java.util.Map;
 
 import nu.xom.Attribute;
@@ -155,8 +154,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap)
-        throws IOException {
+                         final Map<String, String> namespaceMap) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -179,12 +177,10 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * @param _element
      * @param namesapces
      * @param parent
-     * @throws IOException 
      */
     private void print(final ELElement _element,
                        final Map<String, String> namesapces,
-                       final ParentNode parent)
-        throws IOException {
+                       final ParentNode parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");

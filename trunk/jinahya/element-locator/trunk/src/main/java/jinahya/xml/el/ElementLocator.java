@@ -427,9 +427,8 @@ public abstract class ElementLocator<D> {
     /**
      * 
      * @param document output document
-     * @throws IOException if an I/O error occurs.
      */
-    public final void print(final D document) throws IOException {
+    public final void print(final D document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -459,11 +458,9 @@ public abstract class ElementLocator<D> {
      * @param root
      * @param document
      * @param namespaceMap
-     * @throws IOException 
      */
     protected abstract void print(final ELElement root, final D document,
-                                  final Map<String, String> namespaceMap)
-        throws IOException;
+                                  final Map<String, String> namespaceMap);
 
 
     /**
