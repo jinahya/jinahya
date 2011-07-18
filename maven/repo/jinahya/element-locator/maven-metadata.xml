@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya</groupId>
+  <artifactId>element-locator</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110718082354</lastUpdated>
+  </versioning>
+</metadata>
