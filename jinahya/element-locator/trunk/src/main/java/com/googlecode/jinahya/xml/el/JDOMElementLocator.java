@@ -15,44 +15,26 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
+import java.util.List;
 import java.util.Map;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.ParentNode;
-import nu.xom.Text;
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.Parent;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocator extends ElementLocator<Document> {
+public class JDOMElementLocator extends ElementLocator<Document> {
 
 
-    /**
-     * 
-     * @param namespaceURI
-     * @param localName
-     * @return 
-     */
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
-    }
-
-
-    /**
-     * 
-     * @param document
-     * @return 
-     */
     public static ElementLocator<Document> newInstance(
         final Document document) {
 
@@ -69,18 +51,13 @@ public class XOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    /**
-     * 
-     * @param element
-     * @return 
-     */
     public static ElementLocator<Document> newInstance(final Element element) {
 
         if (element == null) {
             throw new NullPointerException("null element");
         }
 
-        return new XOMElementLocator(parse(element));
+        return new JDOMElementLocator(parse(element));
     }
 
 
@@ -99,13 +76,13 @@ public class XOMElementLocator extends ElementLocator<Document> {
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
-        final String localName = element.getLocalName();
+        final String localName = element.getName();
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
-        final int attributeCount = element.getAttributeCount();
-        for (int i = 0; i < attributeCount; i++) {
-            final Attribute attribute = element.getAttribute(i);
+        @SuppressWarnings("unchecked")
+        final List<Attribute> attributes = element.getAttributes();
+        for (Attribute attribute : attributes) {
             String attributeNamespaceURI = attribute.getNamespaceURI();
             if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
@@ -113,7 +90,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = attribute.getLocalName();
+            final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
@@ -123,20 +100,14 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        final int childCount = element.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final Node child = element.getChild(i);
-            if (child instanceof Text) {
-                if (text == null) {
-                    text = element.getValue();
-                }
-            } else if (child instanceof Element) {
-                _element.elements.add(parse((Element) element.getChild(i)));
-            }
+        @SuppressWarnings("unchecked")
+        final List<Element> children = element.getChildren();
+        for (Element child : children) {
+            _element.elements.add(parse(child));
         }
 
-        if (_element.elements.isEmpty() && text != null) {
-            _element.text = text;
+        if (_element.elements.isEmpty()) {
+            _element.text = element.getValue();
         }
 
         return _element;
@@ -147,14 +118,14 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected XOMElementLocator(final ELElement root) {
+    protected JDOMElementLocator(final ELElement root) {
         super(root);
     }
 
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap) {
+                         final Map<String, String> namespaces) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -164,29 +135,29 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null document");
         }
 
-        if (namespaceMap == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
-        print(root, namespaceMap, document);
+        print(root, namespaces, document);
     }
 
 
     /**
      * 
      * @param _element
-     * @param namesapces
+     * @param namespaces
      * @param parent
      */
     private void print(final ELElement _element,
-                       final Map<String, String> namesapces,
-                       final ParentNode parent) {
+                       final Map<String, String> namespaces,
+                       final Parent parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
         }
 
-        if (namesapces == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
@@ -195,27 +166,33 @@ public class XOMElementLocator extends ElementLocator<Document> {
         }
 
         final Element element = new Element(
-            getQualifiedName(_element, namesapces), _element.namespaceURI);
-
+            _element.localName, _element.namespaceURI);
         if (parent instanceof Document) {
-            final Element previousRoot = ((Document) parent).getRootElement();
-            parent.replaceChild(previousRoot, element);
+            ((Document) parent).addContent(element);
         } else {
-            parent.appendChild(element);
+            ((Element) parent).addContent(element);
         }
 
         for (ELAttribute _attribute : _element.attributes.values()) {
+            if (_attribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
+                final Attribute attribute = new Attribute(
+                    _attribute.localName, _attribute.value,
+                    Namespace.NO_NAMESPACE);
+                element.setAttribute(attribute);
+                continue;
+            }
+            final Namespace namespace = Namespace.getNamespace(namespaces.get(
+                _attribute.namespaceURI), _attribute.namespaceURI);
             final Attribute attribute = new Attribute(
-                getQualifiedName(_attribute, namesapces),
-                _attribute.namespaceURI, _attribute.value);
-            element.addAttribute(attribute);
+                _attribute.localName, _attribute.value, namespace);
+            element.setAttribute(attribute);
         }
 
-        if (_element.text != null) {
-            element.appendChild(_element.text);
+        if (_element.elements.isEmpty()) {
+            element.setText(_element.text);
         } else {
             for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, element);
+                print(grandchild, namespaces, element);
             }
         }
     }

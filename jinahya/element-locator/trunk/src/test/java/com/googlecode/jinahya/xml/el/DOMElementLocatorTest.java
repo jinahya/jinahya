@@ -15,9 +15,12 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
+import com.googlecode.jinahya.xml.el.DOMElementLocator;
+import com.googlecode.jinahya.xml.el.ElementLocator;
+import com.googlecode.jinahya.xml.el.ELElement;
 import java.io.InputStream;
 import java.io.OutputStream;
 

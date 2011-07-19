@@ -15,52 +15,36 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
+import com.googlecode.jinahya.xml.el.XOMElementLocator;
+import com.googlecode.jinahya.xml.el.ELElement;
+import com.googlecode.jinahya.xml.el.ElementLocator;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.kxml2.kdom.Document;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.XmlSerializer;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Serializer;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocatorTest
-    extends ElementLocatorTest<KDOMElementLocator, Document> {
-
-
-    private static final XmlPullParserFactory XMLPPF;
-
-
-    static {
-        try {
-            XMLPPF = XmlPullParserFactory.newInstance();
-            XMLPPF.setNamespaceAware(true);
-        } catch (XmlPullParserException xppe) {
-            throw new InstantiationError(xppe.getMessage());
-        }
-    }
+public class XOMElementLocatorTest
+    extends ElementLocatorTest<XOMElementLocator, Document> {
 
 
     @Override
     protected ElementLocator<Document> parseLocator(final InputStream in)
         throws Exception {
 
-        final XmlPullParser parser = XMLPPF.newPullParser();
-        parser.setInput(in, null);
-
-        final Document document = new Document();
-        document.parse(parser);
-
-        return KDOMElementLocator.newInstance(document);
+        final Builder builder = new Builder();
+        final Document document = builder.build(in);
+        return XOMElementLocator.newInstance(document);
     }
 
 
@@ -69,13 +53,18 @@ public class KDOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
+        return new XOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
-        return new Document();
+
+        final Element element = new Element("tmp:tmp", "http://tmp");
+
+        final Document document = new Document(element);
+
+        return document;
     }
 
 
@@ -84,10 +73,8 @@ public class KDOMElementLocatorTest
                                  final OutputStream out)
         throws Exception {
 
-        final XmlSerializer serializer = XMLPPF.newSerializer();
-        serializer.setOutput(out, "UTF-8");
-
-        document.write(serializer);
+        final Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.write(document);
     }
 }
 

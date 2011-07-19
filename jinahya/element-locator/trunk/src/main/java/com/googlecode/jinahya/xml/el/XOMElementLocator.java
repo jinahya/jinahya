@@ -15,21 +15,37 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
 import java.util.Map;
 
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.ParentNode;
+import nu.xom.Text;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocator extends ElementLocator<Document> {
+public class XOMElementLocator extends ElementLocator<Document> {
+
+
+    /**
+     * 
+     * @param namespaceURI
+     * @param localName
+     * @return 
+     */
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new XOMElementLocator(new ELElement(namespaceURI, localName));
+    }
 
 
     /**
@@ -64,7 +80,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        return new KDOMElementLocator(parse(element));
+        return new XOMElementLocator(parse(element));
     }
 
 
@@ -79,46 +95,43 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        String namespaceURI = element.getNamespace();
+        String namespaceURI = element.getNamespaceURI();
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
-        final String localName = element.getName();
+        final String localName = element.getLocalName();
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
         final int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            String attributeNamespaceURI = element.getAttributeNamespace(i);
+            final Attribute attribute = element.getAttribute(i);
+            String attributeNamespaceURI = attribute.getNamespaceURI();
             if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = element.getAttributeName(i);
-            final String attributeValue = element.getAttributeValue(i);
+            final String attributeLocalName = attribute.getLocalName();
+            final String attributeValue = attribute.getValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
 
-        final int childCount = element.getChildCount();
         String text = null;
+
+        final int childCount = element.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            switch (element.getType(i)) {
-                case Node.CDSECT:
-                case Node.TEXT:
-                    if (text == null) {
-                        text = element.getText(i);
-                    }
-                    break;
-                case Node.ELEMENT:
-                    _element.elements.add(parse((Element) element.getChild(i)));
-                    break;
-                default:
-                    break;
+            final Node child = element.getChild(i);
+            if (child instanceof Text) {
+                if (text == null) {
+                    text = element.getValue();
+                }
+            } else if (child instanceof Element) {
+                _element.elements.add(parse((Element) element.getChild(i)));
             }
         }
 
@@ -134,7 +147,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected KDOMElementLocator(final ELElement root) {
+    protected XOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -167,7 +180,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      */
     private void print(final ELElement _element,
                        final Map<String, String> namesapces,
-                       final Node parent) {
+                       final ParentNode parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
@@ -181,20 +194,28 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element child = parent.createElement(
-            _element.namespaceURI, _element.localName);
-        parent.addChild(Node.ELEMENT, child);
+        final Element element = new Element(
+            getQualifiedName(_element, namesapces), _element.namespaceURI);
+
+        if (parent instanceof Document) {
+            final Element previousRoot = ((Document) parent).getRootElement();
+            parent.replaceChild(previousRoot, element);
+        } else {
+            parent.appendChild(element);
+        }
 
         for (ELAttribute _attribute : _element.attributes.values()) {
-            child.setAttribute(_attribute.namespaceURI, _attribute.localName,
-                               _attribute.value);
+            final Attribute attribute = new Attribute(
+                getQualifiedName(_attribute, namesapces),
+                _attribute.namespaceURI, _attribute.value);
+            element.addAttribute(attribute);
         }
 
         if (_element.text != null) {
-            child.addChild(Node.TEXT, _element.text);
+            element.appendChild(_element.text);
         } else {
             for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, child);
+                print(grandchild, namesapces, element);
             }
         }
     }
