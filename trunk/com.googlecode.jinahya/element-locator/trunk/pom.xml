@@ -5,7 +5,7 @@
   <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>element-locator</artifactId>
-  <version>1.0-alpha-1</version>
+  <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -197,9 +197,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/tags/element-locator-1.0-alpha-1</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/tags/element-locator-1.0-alpha-1</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/jinahya/element-locator/tags/element-locator-1.0-alpha-1</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/element-locator/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/element-locator/trunk</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/jinahya/element-locator/trunk/</url>
   </scm>
   <prerequisites />
   <repositories />
