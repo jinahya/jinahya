@@ -6,7 +6,10 @@
 *{{{bit-io}}}* is a small library for reading/writing bits from a given {{{InputStream}}}/{{{OutputStream}}}.
 
 
-= Details =
+== BitInput ==
+
+
+== BitOutput ==
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
