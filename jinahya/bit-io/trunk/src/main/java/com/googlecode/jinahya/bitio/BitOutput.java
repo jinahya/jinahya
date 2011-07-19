@@ -315,56 +315,6 @@ public class BitOutput {
 
 
     /**
-     *
-     * @param bytes
-     * @throws IOException
-     */
-    public final void writeBytes(final byte[] bytes) throws IOException {
-        writeBytes(bytes, 0, bytes.length);
-    }
-
-
-    /**
-     *
-     * @param bytes
-     * @param offset
-     * @param length
-     * @throws IOException
-     */
-    public final void writeBytes(final byte[] bytes, final int offset,
-                                 final int length)
-        throws IOException {
-
-        if (bytes == null) {
-            throw new IllegalArgumentException("null bytes");
-        }
-
-        if (offset < 0) {
-            throw new IllegalArgumentException("negative offset");
-        }
-
-        if (offset >= bytes.length) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= bytes.length(" + bytes.length + ")");
-        }
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
-        }
-
-        if ((offset + length) > bytes.length) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length
-                + ") > bytes.length(" + bytes.length + ")");
-        }
-
-        for (int i = 0; i < length; i++) {
-            writeUnsignedByte(8, bytes[offset + i] & 0xFF);
-        }
-    }
-
-
-    /**
      * Aligns to given <code>length</code> as octets.
      *
      * @param length the number of octets to align
