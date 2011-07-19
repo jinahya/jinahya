@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
-  <groupId>jinahya</groupId>
+  <groupId>com.googlecode.jinahya</groupId>
   <artifactId>bit-io</artifactId>
   <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.0.1</version>
+        <version>6.1.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -111,11 +111,10 @@
           </execution>
         </executions>
       </plugin>
-      <!--
       <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-gpg-plugin</artifactId>
-	<executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
           <execution>
             <id>sign-artifacts</id>
             <phase>verify</phase>
@@ -123,9 +122,8 @@
               <goal>sign</goal>
             </goals>
           </execution>
-	</executions>
+        </executions>
       </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -191,10 +189,12 @@
   </scm>
   <prerequisites />
   <repositories>
+    <!--
     <repository>
       <id>jinahya-files</id>
       <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
     </repository>
+    -->
   </repositories>
   <pluginRepositories />
   <distributionManagement>
@@ -202,12 +202,10 @@
       <id>onacit_googlecode</id>
       <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
     </repository>
-    <!--
     <site>
       <id>onacit_googlecode</id>
       <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
-    -->
   </distributionManagement>
   <profiles>
     <profile>
