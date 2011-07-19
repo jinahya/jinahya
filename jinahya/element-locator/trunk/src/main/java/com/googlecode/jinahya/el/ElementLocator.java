@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xml.el;
+package com.googlecode.jinahya.el;
 
 
 import java.io.IOException;
