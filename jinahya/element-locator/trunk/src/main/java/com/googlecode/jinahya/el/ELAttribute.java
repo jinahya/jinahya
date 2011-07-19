@@ -19,6 +19,7 @@ package com.googlecode.jinahya.el;
 
 
 /**
+ * Attribute.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -26,20 +27,11 @@ public class ELAttribute extends ELNode {
 
 
     /**
-     * 
-     * @param localName
-     * @param value 
-     */
-    public ELAttribute(final String localName, final String value) {
-        this(ELNode.NULL_NS_URI, localName, value);
-    }
-
-
-    /**
-     * 
-     * @param namespaceURI
-     * @param localName
-     * @param value 
+     * Creates a new instance.
+     *
+     * @param namespaceURI name space URI
+     * @param localName local name
+     * @param value value
      */
     public ELAttribute(final String namespaceURI, final String localName,
                        final String value) {
@@ -65,6 +57,7 @@ public class ELAttribute extends ELNode {
     }
 
 
+    /** value. */
     protected final String value;
 }
 
