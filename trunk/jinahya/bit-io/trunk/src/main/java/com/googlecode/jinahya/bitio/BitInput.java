@@ -41,7 +41,7 @@ public class BitInput {
         super();
 
         if (in == null) {
-            throw new IllegalArgumentException("null in");
+            throw new NullPointerException("null in");
         }
 
         this.in = in;
