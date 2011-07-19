@@ -25,21 +25,17 @@ package com.googlecode.jinahya.el;
 public abstract class ELNode {
 
 
-    public static final String NULL_NS_URI = "";
+    static final String NULL_NS_URI = "";
 
 
-    public static final String XML_NS_URI =
-        "http://www.w3.org/XML/1998/namespace";
+    static final String XML_NS_PREFIX = "xml";
 
 
-    public static final String XML_NS_PREFIX = "xml";
+    static final String XML_NS_URI = "http://www.w3.org/XML/1998/namespace";
 
 
-    public static final String XMLNS_ATTRIBUTE_NS_URI =
+    static final String XMLNS_ATTRIBUTE_NS_URI =
         "http://www.w3.org/2000/xmlns/";
-
-
-    public static final String XMLNS_ATTRIBUTE = "xmlns";
 
 
     /**
