@@ -21,9 +21,11 @@ package com.googlecode.jinahya.bitio;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.BitSet;
 
 
 /**
+ * Bit Input.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -65,37 +67,39 @@ public class BitInput {
                 "illegal length: " + length + " > 8");
         }
 
-        if (index == 0x08) {
+        if (index == 8) {
             int octet = in.read();
             if (octet == -1) {
                 throw new EOFException("eof");
             }
             for (int i = 7; i >= 0; i--) {
-                flags[i] = (octet & 0x01) == 0x01;
+                set.set(i, (octet & 0x01) == 0x01);
                 octet >>= 1;
             }
             index = 0;
             count++;
         }
 
-        final int required = length - (0x08 - index);
+        final int required = length - (8 - index);
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
                    | readUnsignedByte(required);
-        } else {
-            int value = 0x00;
-            for (int i = 0; i < length; i++) {
-                value <<= 1;
-                value |= flags[index + i] ? 0x01 : 0x00;
-            }
-            index += length;
-            return value;
         }
+
+        int value = 0x00;
+        for (int i = 0; i < length; i++) {
+            value <<= 1;
+            value |= (set.get(index + i) ? 0x01 : 0x00);
+        }
+
+        index += length;
+
+        return value;
     }
 
 
     /**
-     * Reads 1-bit boolean value.
+     * Reads 1-bit long boolean value.
      *
      * @return boolean value
      * @throws IOException if an I/O error occurs.
@@ -110,7 +114,7 @@ public class BitInput {
      * Reads an unsigned short value.
      *
      * @param length bit length between 0 (exclusive) and 16 (inclusive).
-     * @return an unsigne short value.
+     * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
     private int readUnsignedShort(final int length) throws IOException {
@@ -147,8 +151,8 @@ public class BitInput {
      * Reads an unsigned int.
      *
      * @param length bit length between 1 (inclusive) and 32 (exclusive).
-     * @return an unsigned int value
-     * @throws IOException if an I/O error occurs.
+     * @return
+     * @throws IOException
      */
     public int readUnsignedInt(final int length) throws IOException {
 
@@ -184,7 +188,7 @@ public class BitInput {
      * Reads an signed int.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
-     * @return a <code>length</code> bit-long signed integer
+     * @return a <code>length</code>bit-long signed integer
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
@@ -198,7 +202,6 @@ public class BitInput {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ") > 32");
         }
-
 
         int value = readBoolean() ? (-1 << (length - 1)) : 0;
 
@@ -214,7 +217,7 @@ public class BitInput {
      * @return <code>length</code>-bit unsigned long value
      * @throws IOException if an I/O error occurs
      */
-    public long readUnsignedLong(final int length) throws IOException {
+    public final long readUnsignedLong(final int length) throws IOException {
 
         if (length < 1) {
             throw new IllegalArgumentException(
@@ -251,7 +254,7 @@ public class BitInput {
      * @return a signed long value.
      * @throws IOException if an I/O error occurs.
      */
-    public long readLong(final int length) throws IOException {
+    public final long readLong(final int length) throws IOException {
 
         if (length <= 1) {
             throw new IllegalArgumentException(
@@ -315,7 +318,7 @@ public class BitInput {
      * @param bytes byte array
      * @throws IOException if an I/O error occurs.
      */
-    public void readBytes(final byte[] bytes) throws IOException {
+    public final void readBytes(final byte[] bytes) throws IOException {
         readBytes(bytes, 0, bytes.length);
     }
 
@@ -328,8 +331,8 @@ public class BitInput {
      * @param length byte count to read
      * @throws IOException if an I/O error occurs.
      */
-    public void readBytes(final byte[] bytes, final int offset,
-                          final int length)
+    public final void readBytes(final byte[] bytes, final int offset,
+                                final int length)
         throws IOException {
 
         if (bytes == null) {
@@ -365,8 +368,8 @@ public class BitInput {
     private final InputStream in;
 
 
-    /** bit flags. */
-    private final boolean[] flags = new boolean[8];
+    /** bit set. */
+    private final BitSet set = new BitSet(8);
 
 
     /** bit index to read. */
