@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.el;
 
 
-import com.googlecode.jinahya.el.ElementLocator;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -178,12 +177,6 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
         System.out.println(new String(bytes, "UTF-8"));
         System.out.println("--------------------------------------------- XML");
-
-
-        System.out.println("----------------------------------- CANONICALIZED");
-        System.out.println(locator.getClass());
-        System.out.println(Canonicalizer.canonicalize(bytes));
-        System.out.println("----------------------------------- CANONICALIZED");
     }
 }
 

@@ -25,11 +25,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.modeshape</groupId>
-      <artifactId>modeshape-jcr</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <scope>test</scope>
@@ -51,11 +46,6 @@
         <groupId>org.jdom</groupId>
         <artifactId>jdom</artifactId>
         <version>1.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.modeshape</groupId>
-        <artifactId>modeshape-jcr</artifactId>
-        <version>2.6.0.Beta1</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
@@ -82,13 +72,11 @@
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>1.0</version>
       </extension>
-      <!--
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
         <artifactId>wagon-svn</artifactId>
         <version>1.9</version>
       </extension>
-      -->
     </extensions>
     <pluginManagement>
       <plugins>
@@ -107,6 +95,11 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.3</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -190,6 +183,19 @@
               <source>1.6</source>
               <target>1.6</target>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -278,18 +284,24 @@
     <url>http://code.google.com/p/jinahya/source/browse/trunk/jinahya/element-locator/trunk/</url>
   </scm>
   <prerequisites/>
-  <repositories>
-    <repository>
-      <id>jboss</id>
-      <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-    </repository>
-  </repositories>
+  <repositories/>
   <pluginRepositories/>
   <distributionManagement>
+     <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Propellors Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
+    </repository>
+    <!--
     <repository>
       <id>onacit_googlecode</id>
       <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
     </repository>
+    -->
     <site>
       <id>onacit_googlecode</id>
       <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
