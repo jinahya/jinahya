@@ -221,10 +221,12 @@
       <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
     </repository>
     -->
+    <!--
     <site>
       <id>onacit_googlecode</id>
       <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
+    -->
   </distributionManagement>
   <profiles>
     <profile>
@@ -276,10 +278,12 @@
           <id>onacit_googlecode</id>
           <url>svn:https://jinahya.googlecode.com/svn/maven/repo</url>
         </repository>
+        <!--
         <site>
           <id>onacit_googlecode</id>
           <url>svn:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
         </site>
+        -->
       </distributionManagement>
     </profile>
   </profiles>
