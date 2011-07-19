@@ -198,8 +198,8 @@
   <ciManagement/>
   <mailingLists/>
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupid}/${project.artifactId}/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupid}/${project.artifactId}/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/trunk/jinahya/element-locator/trunk/</url>
   </scm>
   <prerequisites/>
