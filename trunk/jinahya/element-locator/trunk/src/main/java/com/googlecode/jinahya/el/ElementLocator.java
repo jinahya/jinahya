@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.el;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +27,10 @@ import java.util.TreeMap;
 
 
 /**
+ * Abstract element locator.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <D> 
+ * @param <D> document type parameter
  */
 public abstract class ElementLocator<D> {
 
@@ -114,9 +114,11 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param localName
-     * @return 
+     * Returns the number of child elements with given <code>localName</code>
+     * with no namespace.
+     *
+     * @param localName local name
+     * @return number of children
      */
     public final int getChildCount(final String localName) {
 
@@ -168,7 +170,8 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * Locate to the parent of the current element.
+     * Locate to the parent of the current element. An IllegalStateException
+     * will be thrown if this locator is already on the root.
      *
      * @return self
      */
@@ -185,10 +188,12 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param localName
-     * @param index
-     * @return 
+     * Locates child element which has given <code>localName</code> with no
+     * namespace at <code>index</code>.
+     *
+     * @param localName local name
+     * @param index index
+     * @return self
      */
     public final ElementLocator<D> locateChild(final String localName,
                                                final int index) {
@@ -198,8 +203,8 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * Locate a child with <code>name</code> at <code>index</code> in
-     * <code>space</code>.
+     * Locate a child with <code>localName</code> at <code>index</code> in
+     * <code>namespaceURI</code>.
      *
      * @param namespaceURI element's name space URI
      * @param localName element's local name
@@ -248,9 +253,11 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param localName
-     * @return 
+     * Adds a child element whose name is <code>localName</code> with
+     * no namespace and locate it.
+     *
+     * @param localName local name
+     * @return self
      */
     public final ElementLocator<D> addChild(final String localName) {
 
@@ -259,7 +266,9 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
+     * Adds a child element whose name is <code>localName</code> with given
+     * <code>namespaceURI</code> and locate it.
+     *
      * @param namespaceURI
      * @param localName
      * @return 
@@ -342,7 +351,8 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
+     * Returns attribute value.
+     *
      * @param localName attribute's local name
      * @return attribute's value
      */
@@ -374,10 +384,11 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param localName
-     * @param value
-     * @return 
+     * Sets attribute value.
+     *
+     * @param localName local name
+     * @param value attribute value
+     * @return self
      */
     public final ElementLocator<D> setAttribute(final String localName,
                                                 final String value) {
@@ -425,7 +436,8 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
+     * Prints contents to given <code>document</code>.
+     *
      * @param document output document
      */
     public final void print(final D document) {
@@ -454,10 +466,11 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param root
-     * @param document
-     * @param namespaceMap
+     * Prints given <code>root</code> to specified <code>document</code>.
+     *
+     * @param root root element
+     * @param document target document
+     * @param namespaceMap provided namespace URI/prefix map
      */
     protected abstract void print(final ELElement root, final D document,
                                   final Map<String, String> namespaceMap);

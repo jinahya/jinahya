@@ -19,6 +19,7 @@ package com.googlecode.jinahya.el;
 
 
 /**
+ * Abstract node.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -39,9 +40,10 @@ public abstract class ELNode {
 
 
     /**
-     * 
-     * @param string
-     * @return 
+     * Converts given <code>string</code> to a JSON string.
+     *
+     * @param string string
+     * @return a JSON string
      */
     static String toJSONString(final String string) {
 
@@ -80,17 +82,18 @@ public abstract class ELNode {
 
 
     /**
-     * 
-     * @param base
-     * @return 
+     * James Clark notation.
+     *
+     * @param node node
+     * @return string
      */
-    static String express(final ELNode base) {
+    static String express(final ELNode node) {
 
-        if (base == null) {
+        if (node == null) {
             throw new NullPointerException("null node");
         }
 
-        return express(base.namespaceURI, base.localName);
+        return express(node.namespaceURI, node.localName);
     }
 
 
@@ -119,9 +122,10 @@ public abstract class ELNode {
 
 
     /**
-     * 
-     * @param namespaceURI
-     * @param localName 
+     * Creates a new instance.
+     *
+     * @param namespaceURI namespace URI
+     * @param localName local name
      */
     public ELNode(final String namespaceURI, final String localName) {
         super();
@@ -151,15 +155,18 @@ public abstract class ELNode {
 
 
     /**
-     * 
-     * @return 
+     * Prints as an JSON string.
+     *
+     * @return a JSON string
      */
     public abstract String toJSON();
 
 
+    /** namespace URI. */
     protected final String namespaceURI;
 
 
+    /** local name. */
     protected final String localName;
 }
 

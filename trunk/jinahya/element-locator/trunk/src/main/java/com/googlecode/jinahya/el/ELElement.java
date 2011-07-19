@@ -29,6 +29,7 @@ import java.util.TreeMap;
 
 
 /**
+ * Element.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -36,9 +37,10 @@ public class ELElement extends ELNode {
 
 
     /**
-     * 
-     * @param namesapceURI
-     * @param localName 
+     * Creates a new instance.
+     *
+     * @param namesapceURI name space URI
+     * @param localName local name
      */
     public ELElement(final String namesapceURI, final String localName) {
         super(namesapceURI, localName);
@@ -46,8 +48,9 @@ public class ELElement extends ELNode {
 
 
     /**
-     * 
-     * @return 
+     * Returns all name space URIs.
+     *
+     * @return a set of name space URIs.
      */
     public Set<String> getNamespaceURIs() {
 
@@ -129,13 +132,16 @@ public class ELElement extends ELNode {
     }
 
 
+    /** attributes. */
     protected final Map<String, ELAttribute> attributes =
         new TreeMap<String, ELAttribute>();
 
 
+    /** text. */
     protected String text = null;
 
 
+    /** elements. */
     protected final List<ELElement> elements = new ArrayList<ELElement>();
 }
 
