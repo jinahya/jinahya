@@ -170,8 +170,8 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/${project.groupId}/${project.artifactId}/tags/${project.artifactId}-1.0-alpha-2</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/tags/${project.artifactId}-1.0-alpha-2</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/bit-io/trunk/</url>
   </scm>
   <prerequisites />
