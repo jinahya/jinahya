@@ -15,32 +15,26 @@
  */
 
 
-package com.googlecode.jinahya.xml.el;
+package com.googlecode.jinahya.el;
 
 
+import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.Parent;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DOMElementLocator extends ElementLocator<Document> {
+public class JDOMElementLocator extends ElementLocator<Document> {
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param document document
-     * @return new instance of DOMElementLocator.
-     */
     public static ElementLocator<Document> newInstance(
         final Document document) {
 
@@ -48,7 +42,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null document");
         }
 
-        final Element element = document.getDocumentElement();
+        final Element element = document.getRootElement();
         if (element == null) {
             throw new IllegalArgumentException("no root element");
         }
@@ -57,27 +51,20 @@ public class DOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param element element
-     * @return new instance of DOMelementLocator
-     */
     public static ElementLocator<Document> newInstance(final Element element) {
 
         if (element == null) {
             throw new NullPointerException("null element");
         }
 
-        return new DOMElementLocator(parse(element));
+        return new JDOMElementLocator(parse(element));
     }
 
 
     /**
-     * Parses given DOM Element to a ELElement.
-     *
-     * @param element element
-     * @return an ELElement
+     * 
+     * @param element
+     * @return 
      */
     private static ELElement parse(final Element element) {
 
@@ -89,24 +76,22 @@ public class DOMElementLocator extends ElementLocator<Document> {
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
-        final String localName = element.getLocalName();
+        final String localName = element.getName();
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
-        final NamedNodeMap attributes = element.getAttributes();
-        final int attributeLength = attributes.getLength();
-        for (int i = 0; i < attributeLength; i++) {
-            final Attr attribute = (Attr) attributes.item(i);
+        @SuppressWarnings("unchecked")
+        final List<Attribute> attributes = element.getAttributes();
+        for (Attribute attribute : attributes) {
             String attributeNamespaceURI = attribute.getNamespaceURI();
-            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(
-                attributeNamespaceURI)) {
+            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = attribute.getLocalName();
-            final String attributeValue = attribute.getNodeValue();
+            final String attributeLocalName = attribute.getName();
+            final String attributeValue = attribute.getValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
@@ -115,27 +100,14 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        final NodeList childNodes = element.getChildNodes();
-        final int length = childNodes.getLength();
-        for (int i = 0; i < length; i++) {
-            final Node childNode = childNodes.item(i);
-            switch (childNode.getNodeType()) {
-                case Node.CDATA_SECTION_NODE:
-                case Node.TEXT_NODE:
-                    if (text == null) {
-                        text = childNode.getNodeValue();
-                    }
-                    break;
-                case Node.ELEMENT_NODE:
-                    _element.elements.add(parse((Element) childNode));
-                    break;
-                default:
-                    break;
-            }
+        @SuppressWarnings("unchecked")
+        final List<Element> children = element.getChildren();
+        for (Element child : children) {
+            _element.elements.add(parse(child));
         }
 
         if (_element.elements.isEmpty()) {
-            _element.text = text;
+            _element.text = element.getValue();
         }
 
         return _element;
@@ -143,11 +115,10 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param root root element
+     * 
+     * @param root 
      */
-    protected DOMElementLocator(final ELElement root) {
+    protected JDOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -168,30 +139,25 @@ public class DOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null namespaces");
         }
 
-        print(root, document, namespaces, document);
+        print(root, namespaces, document);
     }
 
 
     /**
      * 
      * @param _element
-     * @param document
-     * @param namesapces
+     * @param namespaces
      * @param parent
      */
-    private void print(final ELElement _element, final Document document,
-                       final Map<String, String> namesapces,
-                       final Node parent) {
+    private void print(final ELElement _element,
+                       final Map<String, String> namespaces,
+                       final Parent parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
         }
 
-        if (document == null) {
-            throw new NullPointerException("null document");
-        }
-
-        if (namesapces == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
@@ -199,21 +165,34 @@ public class DOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = document.createElementNS(
-            _element.namespaceURI, getQualifiedName(_element, namesapces));
-        parent.appendChild(element);
-
-        for (ELAttribute _attribute : _element.attributes.values()) {
-            element.setAttributeNS(_attribute.namespaceURI,
-                                   getQualifiedName(_attribute, namesapces),
-                                   _attribute.value);
+        final Element element = new Element(
+            _element.localName, _element.namespaceURI);
+        if (parent instanceof Document) {
+            ((Document) parent).addContent(element);
+        } else {
+            ((Element) parent).addContent(element);
         }
 
-        if (_element.text != null) {
-            element.appendChild(document.createTextNode(_element.text));
+        for (ELAttribute _attribute : _element.attributes.values()) {
+            if (_attribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
+                final Attribute attribute = new Attribute(
+                    _attribute.localName, _attribute.value,
+                    Namespace.NO_NAMESPACE);
+                element.setAttribute(attribute);
+                continue;
+            }
+            final Namespace namespace = Namespace.getNamespace(namespaces.get(
+                _attribute.namespaceURI), _attribute.namespaceURI);
+            final Attribute attribute = new Attribute(
+                _attribute.localName, _attribute.value, namespace);
+            element.setAttribute(attribute);
+        }
+
+        if (_element.elements.isEmpty()) {
+            element.setText(_element.text);
         } else {
-            for (ELElement child : _element.elements) {
-                print(child, document, namesapces, element);
+            for (ELElement grandchild : _element.elements) {
+                print(grandchild, namespaces, element);
             }
         }
     }

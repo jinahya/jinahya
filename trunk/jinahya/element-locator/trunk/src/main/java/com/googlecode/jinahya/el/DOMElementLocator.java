@@ -15,43 +15,31 @@
  */
 
 
-package com.googlecode.jinahya.xml.el;
+package com.googlecode.jinahya.el;
 
 
 import java.util.Map;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.ParentNode;
-import nu.xom.Text;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocator extends ElementLocator<Document> {
+public class DOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param namespaceURI
-     * @param localName
-     * @return 
-     */
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
-    }
-
-
-    /**
-     * 
-     * @param document
-     * @return 
+     * Creates a new instance.
+     *
+     * @param document document
+     * @return new instance of DOMElementLocator.
      */
     public static ElementLocator<Document> newInstance(
         final Document document) {
@@ -60,7 +48,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null document");
         }
 
-        final Element element = document.getRootElement();
+        final Element element = document.getDocumentElement();
         if (element == null) {
             throw new IllegalArgumentException("no root element");
         }
@@ -70,9 +58,10 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Creates a new instance.
+     *
+     * @param element element
+     * @return new instance of DOMelementLocator
      */
     public static ElementLocator<Document> newInstance(final Element element) {
 
@@ -80,14 +69,15 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        return new XOMElementLocator(parse(element));
+        return new DOMElementLocator(parse(element));
     }
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given DOM Element to a ELElement.
+     *
+     * @param element element
+     * @return an ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -103,18 +93,20 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
-        final int attributeCount = element.getAttributeCount();
-        for (int i = 0; i < attributeCount; i++) {
-            final Attribute attribute = element.getAttribute(i);
+        final NamedNodeMap attributes = element.getAttributes();
+        final int attributeLength = attributes.getLength();
+        for (int i = 0; i < attributeLength; i++) {
+            final Attr attribute = (Attr) attributes.item(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
-            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
+            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(
+                attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
             final String attributeLocalName = attribute.getLocalName();
-            final String attributeValue = attribute.getValue();
+            final String attributeValue = attribute.getNodeValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
@@ -123,19 +115,26 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        final int childCount = element.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final Node child = element.getChild(i);
-            if (child instanceof Text) {
-                if (text == null) {
-                    text = element.getValue();
-                }
-            } else if (child instanceof Element) {
-                _element.elements.add(parse((Element) element.getChild(i)));
+        final NodeList childNodes = element.getChildNodes();
+        final int length = childNodes.getLength();
+        for (int i = 0; i < length; i++) {
+            final Node childNode = childNodes.item(i);
+            switch (childNode.getNodeType()) {
+                case Node.CDATA_SECTION_NODE:
+                case Node.TEXT_NODE:
+                    if (text == null) {
+                        text = childNode.getNodeValue();
+                    }
+                    break;
+                case Node.ELEMENT_NODE:
+                    _element.elements.add(parse((Element) childNode));
+                    break;
+                default:
+                    break;
             }
         }
 
-        if (_element.elements.isEmpty() && text != null) {
+        if (_element.elements.isEmpty()) {
             _element.text = text;
         }
 
@@ -144,17 +143,18 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param root 
+     * Creates a new instance.
+     *
+     * @param root root element
      */
-    protected XOMElementLocator(final ELElement root) {
+    protected DOMElementLocator(final ELElement root) {
         super(root);
     }
 
 
     @Override
     protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap) {
+                         final Map<String, String> namespaces) {
 
         if (root == null) {
             throw new NullPointerException("null root");
@@ -164,26 +164,31 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null document");
         }
 
-        if (namespaceMap == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
-        print(root, namespaceMap, document);
+        print(root, document, namespaces, document);
     }
 
 
     /**
      * 
      * @param _element
+     * @param document
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement _element,
+    private void print(final ELElement _element, final Document document,
                        final Map<String, String> namesapces,
-                       final ParentNode parent) {
+                       final Node parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
+        }
+
+        if (document == null) {
+            throw new NullPointerException("null document");
         }
 
         if (namesapces == null) {
@@ -194,28 +199,21 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = new Element(
-            getQualifiedName(_element, namesapces), _element.namespaceURI);
-
-        if (parent instanceof Document) {
-            final Element previousRoot = ((Document) parent).getRootElement();
-            parent.replaceChild(previousRoot, element);
-        } else {
-            parent.appendChild(element);
-        }
+        final Element element = document.createElementNS(
+            _element.namespaceURI, getQualifiedName(_element, namesapces));
+        parent.appendChild(element);
 
         for (ELAttribute _attribute : _element.attributes.values()) {
-            final Attribute attribute = new Attribute(
-                getQualifiedName(_attribute, namesapces),
-                _attribute.namespaceURI, _attribute.value);
-            element.addAttribute(attribute);
+            element.setAttributeNS(_attribute.namespaceURI,
+                                   getQualifiedName(_attribute, namesapces),
+                                   _attribute.value);
         }
 
         if (_element.text != null) {
-            element.appendChild(_element.text);
+            element.appendChild(document.createTextNode(_element.text));
         } else {
-            for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, element);
+            for (ELElement child : _element.elements) {
+                print(child, document, namesapces, element);
             }
         }
     }
