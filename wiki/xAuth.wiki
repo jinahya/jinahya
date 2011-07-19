@@ -1,4 +1,4 @@
-#summary twitter-xauth-client
+#summary com.googlecode.jinahya:twitter-xauth-client
 #labels Twitter,xAuth
 
 = Introduction =
