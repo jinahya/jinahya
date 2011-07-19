@@ -8,6 +8,11 @@
   <artifactId>bit-io</artifactId>
   <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
@@ -31,6 +36,7 @@
 
   <!-- Build Settings -->
   <build>
+    <!--
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -43,6 +49,7 @@
         <version>1.9</version>
       </extension>
     </extensions>
+    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -171,14 +178,15 @@
   <repositories/>
   <pluginRepositories/>
   <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Propellors Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
     <repository>
-      <id>onacit_googlecode</id>
-      <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    <site>
-      <id>onacit_googlecode</id>
-      <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
   </distributionManagement>
   <profiles>
     <profile>
@@ -223,6 +231,7 @@
         </plugins>
       </build>
     </profile>
+    <!--
     <profile>
       <id>wagon-svn</id>  
       <distributionManagement>
@@ -236,5 +245,6 @@
         </site>
       </distributionManagement>
     </profile>
+    -->
   </profiles>
 </project>
