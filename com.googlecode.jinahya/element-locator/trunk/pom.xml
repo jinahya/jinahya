@@ -65,6 +65,7 @@
 
   <!-- Build Settings -->
   <build>
+    <!--
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -77,6 +78,7 @@
         <version>1.9</version>
       </extension>
     </extensions>
+    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -214,18 +216,6 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    <!--
-    <repository>
-      <id>onacit_googlecode</id>
-      <url>dav:https://jinahya.googlecode.com/svn/maven/repo</url>
-    </repository>
-    -->
-    <!--
-    <site>
-      <id>onacit_googlecode</id>
-      <url>dav:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
-    -->
   </distributionManagement>
   <profiles>
     <profile>
@@ -269,21 +259,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    <profile>
-      <id>wagon-svn</id>  
-      <distributionManagement>
-        <repository>
-          <id>onacit_googlecode</id>
-          <url>svn:https://jinahya.googlecode.com/svn/maven/repo</url>
-        </repository>
-        <!--
-        <site>
-          <id>onacit_googlecode</id>
-          <url>svn:https://jinahya.googlecode.com/svn/maven/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-        </site>
-        -->
-      </distributionManagement>
     </profile>
   </profiles>
 </project>
