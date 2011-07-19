@@ -1,4 +1,4 @@
-#summary Twiter-xAuth-Client.
+#summary twitter-xauth-client
 #labels Twitter,xAuth
 
 = Introduction =
