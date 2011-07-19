@@ -15,7 +15,7 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
 import java.util.Map;

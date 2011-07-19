@@ -15,32 +15,55 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
+import com.googlecode.jinahya.xml.el.KDOMElementLocator;
+import com.googlecode.jinahya.xml.el.ElementLocator;
+import com.googlecode.jinahya.xml.el.ELElement;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.kxml2.kdom.Document;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMElementLocatorTest
-    extends ElementLocatorTest<JDOMElementLocator, Document> {
+public class KDOMElementLocatorTest
+    extends ElementLocatorTest<KDOMElementLocator, Document> {
+
+
+    private static final XmlPullParserFactory XMLPPF;
+
+
+    static {
+        try {
+            XMLPPF = XmlPullParserFactory.newInstance();
+            XMLPPF.setNamespaceAware(true);
+        } catch (XmlPullParserException xppe) {
+            throw new InstantiationError(xppe.getMessage());
+        }
+    }
 
 
     @Override
     protected ElementLocator<Document> parseLocator(final InputStream in)
         throws Exception {
 
-        final SAXBuilder builder = new SAXBuilder();
-        final Document document = builder.build(in);
-        return JDOMElementLocator.newInstance(document);
+        final XmlPullParser parser = XMLPPF.newPullParser();
+        parser.setInput(in, null);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        return KDOMElementLocator.newInstance(document);
     }
 
 
@@ -49,13 +72,12 @@ public class JDOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
+        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
-
         return new Document();
     }
 
@@ -65,8 +87,10 @@ public class JDOMElementLocatorTest
                                  final OutputStream out)
         throws Exception {
 
-        final XMLOutputter outputter = new XMLOutputter();
-        outputter.output(document, out);
+        final XmlSerializer serializer = XMLPPF.newSerializer();
+        serializer.setOutput(out, "UTF-8");
+
+        document.write(serializer);
     }
 }
 

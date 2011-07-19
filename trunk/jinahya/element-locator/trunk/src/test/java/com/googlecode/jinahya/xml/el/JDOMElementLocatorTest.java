@@ -15,33 +15,35 @@
  */
 
 
-package jinahya.xml.el;
+package com.googlecode.jinahya.xml.el;
 
 
+import com.googlecode.jinahya.xml.el.ElementLocator;
+import com.googlecode.jinahya.xml.el.ELElement;
+import com.googlecode.jinahya.xml.el.JDOMElementLocator;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Serializer;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocatorTest
-    extends ElementLocatorTest<XOMElementLocator, Document> {
+public class JDOMElementLocatorTest
+    extends ElementLocatorTest<JDOMElementLocator, Document> {
 
 
     @Override
     protected ElementLocator<Document> parseLocator(final InputStream in)
         throws Exception {
 
-        final Builder builder = new Builder();
+        final SAXBuilder builder = new SAXBuilder();
         final Document document = builder.build(in);
-        return XOMElementLocator.newInstance(document);
+        return JDOMElementLocator.newInstance(document);
     }
 
 
@@ -50,18 +52,14 @@ public class XOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
+        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
 
-        final Element element = new Element("tmp:tmp", "http://tmp");
-
-        final Document document = new Document(element);
-
-        return document;
+        return new Document();
     }
 
 
@@ -70,8 +68,8 @@ public class XOMElementLocatorTest
                                  final OutputStream out)
         throws Exception {
 
-        final Serializer serializer = new Serializer(out, "UTF-8");
-        serializer.write(document);
+        final XMLOutputter outputter = new XMLOutputter();
+        outputter.output(document, out);
     }
 }
 
