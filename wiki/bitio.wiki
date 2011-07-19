@@ -1,9 +1,9 @@
 #summary com.googlecode.jinahya:bit-io
-#labels BitIO,IO,bit
+#labels bit-io
 
-= Introduction =
+= Bit Level I/O =
 
-Add your content here.
+*{{{bit-io}}}* is a small library for reading/writing bits from a given {{{InputStream}}}/{{{OutputStream}}}.
 
 
 = Details =
