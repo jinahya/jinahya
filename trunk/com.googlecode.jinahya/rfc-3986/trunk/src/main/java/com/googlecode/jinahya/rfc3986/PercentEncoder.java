@@ -115,16 +115,16 @@ public class PercentEncoder {
      *
      * @param integer integer
      * @return ASCII
+     * @throws IOException if <code>integer</code> is wrong
      */
-    static int itoa(final int integer) {
+    static int itoa(final int integer) throws IOException {
 
         if (integer < 0) {
-            throw new IllegalArgumentException("negative integer");
+            throw new IOException("wrong integer: " + integer + " < 0");
         }
 
         if (integer > 0x0F) {
-            throw new IllegalArgumentException(
-                "too big integer: " + integer + " > 0x0F");
+            throw new IOException("wrong integer: " + integer + " > 0x0F");
         }
 
         return integer + (integer < 0x0A ? 0x30 : 0x37);
