@@ -42,7 +42,7 @@ public class PercentEncoder {
     public static byte[] encode(final String input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null string");
+            throw new NullPointerException("null input");
         }
 
         return encode(input.getBytes("UTF-8"));
@@ -59,12 +59,13 @@ public class PercentEncoder {
     public static byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null bytes");
+            throw new NullPointerException("null input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         encode(new ByteArrayInputStream(input), output);
         output.flush();
+        
         return output.toByteArray();
     }
 

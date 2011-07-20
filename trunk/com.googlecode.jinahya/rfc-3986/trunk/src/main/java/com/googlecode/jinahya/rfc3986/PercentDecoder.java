@@ -41,6 +41,11 @@ public class PercentDecoder {
      * @throws IOException if an I/O error occurs.
      */
     public static byte[] decode(final String input) throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
         return decode(input.getBytes("US-ASCII"));
     }
 
@@ -55,12 +60,13 @@ public class PercentDecoder {
     public static byte[] decode(final byte[] input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null bytes");
+            throw new NullPointerException("null bytes");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         decode(new ByteArrayInputStream(input), output);
         output.flush();
+
         return output.toByteArray();
     }
 
@@ -77,11 +83,11 @@ public class PercentDecoder {
         throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null output");
+            throw new NullPointerException("null output");
         }
 
         for (int b = -1; (b = input.read()) != -1;) {
