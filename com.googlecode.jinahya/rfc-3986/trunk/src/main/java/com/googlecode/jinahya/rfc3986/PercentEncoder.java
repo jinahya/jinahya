@@ -113,11 +113,21 @@ public class PercentEncoder {
     /**
      * Integer to ASCII.
      *
-     * @param i integer
+     * @param integer integer
      * @return ASCII
      */
-    static int itoa(final int i) {
-        return i + (i < 0x0A ? 0x30 : 0x37);
+    static int itoa(final int integer) {
+
+        if (integer < 0) {
+            throw new IllegalArgumentException("negative integer");
+        }
+
+        if (integer > 0x0F) {
+            throw new IllegalArgumentException(
+                "too big integer: " + integer + " > 0x0F");
+        }
+
+        return integer + (integer < 0x0A ? 0x30 : 0x37);
     }
 
 
