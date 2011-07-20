@@ -117,8 +117,7 @@ public class PercentEncoder {
      * <code>integer</code> is in wrong range.
      *
      * @param integer 4-bit unsigned integer (0x00 ~ 0x0F)
-     * @return 7-bit ASCII value; digit (0x30 ~ 0x39),
-     *         upper alpha (0x41 ~ 0x5A), or lower alpha (0x61 ~ 0x7A)
+     * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
      */
     static int itoa(final int integer) {
 
