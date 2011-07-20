@@ -8,6 +8,11 @@
   <artifactId>rfc-4648</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
   <dependencies>
     <dependency>
       <groupId>commons-codec</groupId>
