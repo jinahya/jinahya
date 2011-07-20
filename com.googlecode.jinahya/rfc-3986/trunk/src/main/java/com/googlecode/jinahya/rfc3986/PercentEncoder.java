@@ -28,6 +28,8 @@ import java.io.OutputStream;
 /**
  *
  * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
+ *      Percent Encoding</a>
  */
 public class PercentEncoder {
 
@@ -65,7 +67,7 @@ public class PercentEncoder {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         encode(new ByteArrayInputStream(input), output);
         output.flush();
-        
+
         return output.toByteArray();
     }
 
@@ -94,9 +96,9 @@ public class PercentEncoder {
             if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
                 output.write(b);
             } else {
@@ -108,6 +110,12 @@ public class PercentEncoder {
     }
 
 
+    /**
+     * Integer to ASCII.
+     *
+     * @param i integer
+     * @return ASCII
+     */
     static int itoa(final int i) {
         return i + (i < 0x0A ? 0x30 : 0x37);
     }
@@ -120,3 +128,4 @@ public class PercentEncoder {
         super();
     }
 }
+
