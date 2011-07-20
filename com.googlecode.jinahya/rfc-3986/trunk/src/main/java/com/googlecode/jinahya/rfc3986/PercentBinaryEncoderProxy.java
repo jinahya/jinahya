@@ -28,6 +28,8 @@ import java.lang.reflect.Proxy;
  * <pre>
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
+ *
+ * // now you can use encoder.encode(String) or encoder.encode(byte[])
  * </pre>
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
