@@ -28,6 +28,8 @@ import java.lang.reflect.Proxy;
  * <pre>
  * final BinaryDecoder decoder = (BinaryDecoder)
  *     PercentBinaryDecoderProxy.newIntance();
+ *
+ * // now you can use decoder.decode(String) or decoder.decode(byte[])
  * </pre>
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
