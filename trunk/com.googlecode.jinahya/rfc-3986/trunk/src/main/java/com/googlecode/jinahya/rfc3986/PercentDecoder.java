@@ -122,11 +122,39 @@ public class PercentDecoder {
     /**
      * ASCII to Integer.
      *
-     * @param i ASCII
+     * @param ascii ASCII
      * @return integer
+     * @throws IOException if <code>ascii</code> is wrong
      */
-    static int atoi(final int i) {
-        return i - (i >= 0x41 ? 0x37 : 0x30);
+    static int atoi(final int ascii) throws IOException {
+
+        if (ascii < 0x30) {
+            throw new IOException("wrong ascii: " + ascii);
+        }
+
+        if (ascii < 0x3A) { // digit
+            return ascii - 0x30;
+        }
+
+        if (ascii < 0x41) {
+            throw new IOException("wrong ascii: " + ascii);
+        }
+
+        if (ascii < 0x5B) { // upper alpha
+            return ascii - 0x37;
+        }
+
+        if (ascii < 0x61) {
+            throw new IOException("wrong ascii: " + ascii);
+        }
+
+        if (ascii < 0x7B) { // lower alpha
+            return ascii - 0x57;
+        }
+
+        throw new IOException("wrong ascii: " + ascii);
+        
+        //return ascii - (ascii >= 0x41 ? 0x37 : 0x30);
     }
 
 
