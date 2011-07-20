@@ -144,7 +144,7 @@ public class TestVectors {
 
     @Test
     public void testBASE32HEX() throws IOException {
-        testBase(BASE32HEX, new Base32HEX());
+        testBase(BASE32HEX, new Base32Hex());
     }
 
 
