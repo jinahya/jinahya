@@ -26,6 +26,7 @@ import java.io.OutputStream;
 
 
 /**
+ * Percent Encoder.
  *
  * @author <a href="jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
@@ -93,12 +94,12 @@ public class PercentEncoder {
 
         for (int b = -1; (b = input.read()) != -1;) {
 
-            if ((b >= 0x30 && b <= 0x39)    // digit
+            if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
                 output.write(b);
             } else {
@@ -111,23 +112,31 @@ public class PercentEncoder {
 
 
     /**
-     * Integer to ASCII.
+     * Converts a 4-bit unsigned integer to a single 7-bit ASCII value. An
+     * <code>IllegalArgumentException</code> will be thrown if given
+     * <code>integer</code> is in wrong range.
      *
-     * @param integer integer
-     * @return ASCII
-     * @throws IOException if <code>integer</code> is wrong
+     * @param integer 4-bit unsigned integer (0x00 ~ 0x0F)
+     * @return 7-bit ASCII value; digit (0x30 ~ 0x39),
+     *         upper alpha (0x41 ~ 0x5A), or lower alpha (0x61 ~ 0x7A)
      */
-    static int itoa(final int integer) throws IOException {
+    static int itoa(final int integer) {
 
-        if (integer < 0) {
-            throw new IOException("wrong integer: " + integer + " < 0");
+        if (integer < 0x00) {
+            throw new IllegalArgumentException("wrong integer: " + integer);
         }
 
-        if (integer > 0x0F) {
-            throw new IOException("wrong integer: " + integer + " > 0x0F");
+        if (integer <= 0x09) { // 0x00 ~ 0x09
+            return integer + 0x30; // 0x48('0'), 0x49('1'), ...
         }
 
-        return integer + (integer < 0x0A ? 0x30 : 0x37);
+        if (integer <= 0x0F) { // 0x0A ~ 0x0F
+            return integer + 0x37; // 0x41('A'), 0x42('B'), ...
+        }
+
+        throw new IllegalArgumentException("wrong integer: " + integer);
+
+        //return integer + (integer < 0x0A ? 0x30 : 0x37);
     }
 
 
