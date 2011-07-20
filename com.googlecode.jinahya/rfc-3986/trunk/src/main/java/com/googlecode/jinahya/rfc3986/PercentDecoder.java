@@ -27,6 +27,7 @@ import java.io.OutputStream;
 
 
 /**
+ * Percent Decoder.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
@@ -94,12 +95,12 @@ public class PercentDecoder {
 
         for (int b = -1; (b = input.read()) != -1;) {
 
-            if ((b >= 0x30 && b <= 0x39)    // digit
+            if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
                 output.write(b);
             } else if (b == 0x25) { // '%'
@@ -120,40 +121,43 @@ public class PercentDecoder {
 
 
     /**
-     * ASCII to Integer.
+     * Converts a single 7-bit ASCII value to a 4-bit unsigned integer. An
+     * <code>IllegalArgumentException</code> will be thrown if given
+     * <code>ascii</code> is in wrong range.
      *
-     * @param ascii ASCII
-     * @return integer
-     * @throws IOException if <code>ascii</code> is wrong
+     * @param ascii 7-bit ASCII value; digit (0x30 ~ 0x39),
+     *        upper alpha (0x41 ~ 0x5A), or lower alpha (0x61 ~ 0x7A)
+     * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      */
-    static int atoi(final int ascii) throws IOException {
+    static int atoi(final int ascii) {
 
-        if (ascii < 0x30) {
-            throw new IOException("wrong ascii: " + ascii);
+        if (ascii < 0x30) { // ~ 0x2F('/')
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
-        if (ascii < 0x3A) { // digit
-            return ascii - 0x30;
+        if (ascii <= 0x39) { // 0x30('0') ~ 0x39('9')
+            return ascii - 0x30; // 0x00, 0x01, ...
         }
 
-        if (ascii < 0x41) {
-            throw new IOException("wrong ascii: " + ascii);
+        if (ascii <= 0x40) { // 0x3A(':') ~ 0x40('@')
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
-        if (ascii < 0x5B) { // upper alpha
-            return ascii - 0x37;
+        if (ascii <= 0x46) { // 0x41('A') ~ 0x46('F')
+            return ascii - 0x37; // 0x0A, 0x0B, ...
         }
 
-        if (ascii < 0x61) {
-            throw new IOException("wrong ascii: " + ascii);
+        if (ascii <= 0x60) { // 0x47('G') ~ 0x60('`')
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
-        if (ascii < 0x7B) { // lower alpha
-            return ascii - 0x57;
+        if (ascii <= 0x66) { // 0x61('a') ~ 0x66('f')
+            return ascii - 0x57; // 0x0A, 0x0B, ...
         }
 
-        throw new IOException("wrong ascii: " + ascii);
-        
+        // 0x67('g') ~
+        throw new IllegalArgumentException("wrong ascii: " + ascii);
+
         //return ascii - (ascii >= 0x41 ? 0x37 : 0x30);
     }
 
