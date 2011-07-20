@@ -38,7 +38,7 @@ public class PercentCodecTest {
 
 
     @Test(invocationCount = 128)
-    public void test() throws IOException {
+    public void test() throws IOException, PercentCodecException {
 
         final String expected = RandomStringUtils.random(RANDOM.nextInt(1024));
 
@@ -51,3 +51,4 @@ public class PercentCodecTest {
         Assert.assertEquals(actual, expected);
     }
 }
+
