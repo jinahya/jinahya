@@ -126,7 +126,7 @@ public class PercentDecoder {
      * <code>ascii</code> is in wrong range.
      *
      * @param ascii 7-bit ASCII value; digit (0x30 ~ 0x39),
-     *        upper alpha (0x41 ~ 0x5A), or lower alpha (0x61 ~ 0x7A)
+     *        upper alpha (0x41 ~ 0x46), or lower alpha (0x61 ~ 0x66)
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      */
     static int atoi(final int ascii) {
