@@ -29,6 +29,8 @@ import java.io.OutputStream;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
+ *      Percent Encoding</a>
  */
 public class PercentDecoder {
 
@@ -95,9 +97,9 @@ public class PercentDecoder {
             if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
                 output.write(b);
             } else if (b == 0x25) { // '%'
@@ -117,7 +119,13 @@ public class PercentDecoder {
     }
 
 
-    static int atoi(final int i) throws EOFException {
+    /**
+     * ASCII to Integer.
+     *
+     * @param i ASCII
+     * @return integer
+     */
+    static int atoi(final int i) {
         return i - (i >= 0x41 ? 0x37 : 0x30);
     }
 
@@ -129,3 +137,4 @@ public class PercentDecoder {
         super();
     }
 }
+
