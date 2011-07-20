@@ -49,7 +49,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>bit-io</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.shindig</groupId>
@@ -70,6 +70,7 @@
 
   <!-- Build Settings -->
   <build>
+    <!--
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -82,6 +83,7 @@
         <version>1.9</version>
       </extension>
     </extensions>
+    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -212,24 +214,7 @@
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/rfc-4648/trunk/</url>
   </scm>
   <prerequisites/>
-  <repositories>
-    <repository>
-      <id>sonatype-nexus-snapshots</id>  
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases>
-        <enabled>false</enabled>  
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>  
-      </snapshots>
-    </repository>
-    <!--
-    <repository>
-      <id>jinahya</id>
-      <url>http://jinahya.googlecode.com/svn/maven/repo</url>
-    </repository>
-    -->
-  </repositories>
+  <repositories/>
   <pluginRepositories/>
   <distributionManagement>
     <snapshotRepository>

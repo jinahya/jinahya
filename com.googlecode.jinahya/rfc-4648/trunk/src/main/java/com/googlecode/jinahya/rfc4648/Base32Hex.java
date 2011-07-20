@@ -22,10 +22,10 @@ package com.googlecode.jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base32HEX extends Base {
+public class Base32Hex extends Base {
 
 
-    public Base32HEX() {
+    public Base32Hex() {
 
         super(new byte[]{
                 '0', '1', '2', '3', '4', '5', '6', '7',

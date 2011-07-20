@@ -33,11 +33,11 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base32HEXTest extends BaseTest<Base32HEX> {
+public class Base32HexTest extends BaseTest<Base32Hex> {
 
 
-    public Base32HEXTest() {
-        super(new Base32HEX());
+    public Base32HexTest() {
+        super(new Base32Hex());
     }
 
 
