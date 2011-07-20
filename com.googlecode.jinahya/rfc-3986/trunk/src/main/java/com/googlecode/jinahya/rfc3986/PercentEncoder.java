@@ -41,8 +41,10 @@ public class PercentEncoder {
      * @param input string to encode
      * @return encoding output
      * @throws IOException if an I/O error occurs.
+     * @throws PercentCodecException if a wrong value read from the input.
      */
-    public static byte[] encode(final String input) throws IOException {
+    public static byte[] encode(final String input)
+        throws IOException, PercentCodecException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -58,8 +60,10 @@ public class PercentEncoder {
      * @param input bytes to encode
      * @return encoding output
      * @throws IOException if an I/O error occurs
+     * @throws PercentCodecException if a wrong value read from the input.
      */
-    public static byte[] encode(final byte[] input) throws IOException {
+    public static byte[] encode(final byte[] input)
+        throws IOException, PercentCodecException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -79,10 +83,11 @@ public class PercentEncoder {
      * @param input input
      * @param output output
      * @throws IOException if an I/O error occurs.
+     * @throws PercentCodecException if a wrong value read from the input.
      */
     public static void encode(final InputStream input,
                               final OutputStream output)
-        throws IOException {
+        throws IOException, PercentCodecException {
 
         if (input == null) {
             throw new IllegalArgumentException("null input");
@@ -94,12 +99,12 @@ public class PercentEncoder {
 
         for (int b = -1; (b = input.read()) != -1;) {
 
-            if ((b >= 0x30 && b <= 0x39)    // digit
+            if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
                 output.write(b);
             } else {
@@ -112,17 +117,18 @@ public class PercentEncoder {
 
 
     /**
-     * Converts a 4-bit unsigned integer to a single 7-bit ASCII value. An
-     * <code>IllegalArgumentException</code> will be thrown if given
+     * Converts a 4-bit unsigned integer to a single 7-bit ASCII value. A
+     * <code>PercentCodecException</code> will be thrown if given
      * <code>integer</code> is in wrong range.
      *
      * @param integer 4-bit unsigned integer (0x00 ~ 0x0F)
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
+     * @throws PercentCodecException if given <code>integer</code> is not valid.
      */
-    static int itoa(final int integer) {
+    static int itoa(final int integer) throws PercentCodecException {
 
         if (integer < 0x00) {
-            throw new IllegalArgumentException("wrong integer: " + integer);
+            throw new PercentCodecException("wrong integer: " + integer);
         }
 
         if (integer <= 0x09) { // 0x00 ~ 0x09
@@ -133,7 +139,7 @@ public class PercentEncoder {
             return integer + 0x37; // 0x41('A'), 0x42('B'), ...
         }
 
-        throw new IllegalArgumentException("wrong integer: " + integer);
+        throw new PercentCodecException("wrong integer: " + integer);
 
         //return integer + (integer < 0x0A ? 0x30 : 0x37);
     }
