@@ -33,6 +33,19 @@ import java.lang.reflect.Proxy;
  * // now you can use encoder.encode(String) or encoder.encode(byte[])
  * }</pre>
  * 
+ * 
+ * 
+ * 
+ * <script src="{@docRoot}/google-code-prettify/prettify.js" type="text/javascript"></script> 
+ * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <pre>{@code
+ * final BinaryEncoder encoder = (BinaryEncoder)
+ *     PercentBinaryEncoderProxy.newInstance();
+ *
+ * // now you can use encoder.encode(String) or encoder.encode(byte[])
+ * }</pre>
+ * 
+ * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/SId47">BinaryEncoder (Apache Commons Codec)</a>
  */
