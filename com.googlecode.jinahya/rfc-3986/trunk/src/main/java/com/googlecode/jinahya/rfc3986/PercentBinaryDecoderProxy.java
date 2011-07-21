@@ -27,9 +27,12 @@ import java.lang.reflect.Proxy;
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryDecoder</code>.
  *
- * <link rel="stylesheet" type="text/css" href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
- * <script src="{@docRoot}/resources/google-code-prettify/prettify.js" type="text/javascript"></script>
- * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <link rel="stylesheet" type="text/css"
+ *       href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
+ * <script src="{@docRoot}/resources/google-code-prettify/prettify.js"
+ *         type="text/javascript"></script>
+ * <script language="JavaScript">
+ *   window.onload=function(){windowTitle();prettyPrint();}</script>
  * <pre class="prettyprint"><code class="language-java">
  * // create
  * final BinaryDecoder decoder = (BinaryDecoder)

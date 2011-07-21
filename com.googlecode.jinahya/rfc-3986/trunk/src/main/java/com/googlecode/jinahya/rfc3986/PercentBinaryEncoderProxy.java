@@ -28,10 +28,13 @@ import java.lang.reflect.Proxy;
  * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
  *
  * <!--link rel="stylesheet" type="text/css" href="http://goo.gl/t8bIA"--> 
- * <link rel="stylesheet" type="text/css" href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
+ * <link rel="stylesheet" type="text/css"
+ *       href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
  * <!--script src="http://goo.gl/gxapB" type="text/javascript"--><!--/script-->
- * <script src="{@docRoot}/resources/google-code-prettify/prettify.js" type="text/javascript"></script>
- * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <script src="{@docRoot}/resources/google-code-prettify/prettify.js"
+ *         type="text/javascript"></script>
+ * <script language="JavaScript">
+ *   window.onload=function(){windowTitle();prettyPrint();}</script>
  * <pre class="prettyprint"><code class="language-java">
  * // create
  * final BinaryEncoder encoder = (BinaryEncoder)
