@@ -26,12 +26,21 @@ import java.lang.reflect.Proxy;
 
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryDecoder</code>.
- * <pre>{@code
- * final BinaryDecoder decoder = (BinaryDecoder)
- *     PercentBinaryDecoderProxy.newIntance();
  *
- * // now you can use decoder.decode(String) or decoder.decode(byte[])
- * }</pre>
+ * <link rel="stylesheet" type="text/css" href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
+ * <script src="{@docRoot}/resources/google-code-prettify/prettify.js" type="text/javascript"></script>
+ * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <pre class="prettyprint"><code class="language-java">
+ * // create
+ * final BinaryDecoder decoder = (BinaryDecoder)
+ *     PercentBinaryDecoderProxy.newInstance();
+ * 
+ * // decode String
+ * decoder.decode("");
+ * 
+ * // decode byte array
+ * decoder.decode(new byte[0]);
+ * </code></pre>
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/l58d1"">BinaryDecoder (Apache Commons Codec)</a>
