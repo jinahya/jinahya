@@ -38,7 +38,7 @@ public class PercentCodecTest {
 
 
     @Test(invocationCount = 128)
-    public void test() throws IOException, PercentCodecException {
+    public void test() throws IOException {
 
         final String expected = RandomStringUtils.random(RANDOM.nextInt(1024));
 
