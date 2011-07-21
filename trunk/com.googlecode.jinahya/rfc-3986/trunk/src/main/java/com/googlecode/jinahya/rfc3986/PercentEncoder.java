@@ -59,7 +59,7 @@ public class PercentEncoder {
      * @return encoding output
      * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final byte[] input) throws IOException {
+    public static byte[] encode(final byte... input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");

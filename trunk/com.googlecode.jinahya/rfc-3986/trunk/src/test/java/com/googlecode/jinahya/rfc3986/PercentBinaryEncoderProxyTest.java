@@ -37,7 +37,7 @@ public class PercentBinaryEncoderProxyTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test
+    @Test(invocationCount = 128)
     public void testEncode() throws Exception {
 
         final BinaryEncoder encoder =
@@ -57,14 +57,14 @@ public class PercentBinaryEncoderProxyTest {
             // ok
         }
 
-        final byte[] expected = new byte[RANDOM.nextInt(10)];
+        final byte[] expected = new byte[RANDOM.nextInt(1024)];
         RANDOM.nextBytes(expected);
         System.out.println("original ----------------------------------------");
         System.out.println(Base64.encodeBase64String(expected));
 
         final byte[] encoded = encoder.encode(expected);
         System.out.println("encoded -----------------------------------------");
-        System.out.println(Base64.encodeBase64String(encoded));
+        System.out.println(new String(encoded, "US-ASCII"));
 
         final byte[] actual = PercentDecoder.decode(encoded);
         System.out.println("decoded -----------------------------------------");
