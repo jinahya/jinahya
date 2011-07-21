@@ -28,7 +28,7 @@ import java.io.OutputStream;
 /**
  * Percent Encoder.
  *
- * @author <a href="jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/w4GhD">Percent Encoding</a>
  */
 public class PercentEncoder {
