@@ -185,13 +185,8 @@
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/rfc-3986/trunk/</url>
   </scm>
   <prerequisites />
-  <repositories>
-    <repository>
-      <id>jinahya-files</id>
-      <url>http://jinahya-files.googlecode.com/svn/maven/2/repo</url>
-    </repository>
-  </repositories>
-  <pluginRepositories />
+  <repositories/>
+  <pluginRepositories/>
   <distributionManagement>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
