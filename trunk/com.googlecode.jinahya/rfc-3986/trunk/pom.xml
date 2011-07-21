@@ -56,20 +56,6 @@
 
   <!-- Build Settings -->
   <build>
-    <!--
-        <extensions>
-        <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>1.0-beta-6</version>
-        </extension>
-        <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-        <version>1.9</version>
-        </extension>
-        </extensions>
-    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -123,21 +109,13 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <docfilessubdirs>true</docfilessubdirs>
+        </configuration>
       </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -158,6 +136,10 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <stylesheetfile>${basedir}/src/main/javadoc/stylesheet+prettify.css</stylesheetfile>
+                <docfilessubdirs>true</docfilessubdirs>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
@@ -168,7 +150,8 @@
       </plugin>
     </plugins>
   </build>
-  <reporting />
+  <reporting>
+  </reporting>
 
   <!-- More Project Information -->
   <name>rfc-3986</name>

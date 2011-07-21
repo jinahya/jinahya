@@ -26,24 +26,18 @@ import java.lang.reflect.Proxy;
 
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
- * <pre>{@code
+ *
+ * <link rel="stylesheet" type="text/css" href="http://goo.gl/t8bIA"> 
+ * <script src="http://goo.gl/gxapB" type="text/javascript"></script>
+ * <script language="JavaScript">
+ * window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <pre class="prettyprint"><!--code class="language-java"-->
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
  *
  * // now you can use encoder.encode(String) or encoder.encode(byte[])
- * }</pre>
- * 
- * 
- * 
- * 
- * <script src="{@docRoot}/google-code-prettify/prettify.js" type="text/javascript"></script> 
- * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
- * <pre>{@code
- * final BinaryEncoder encoder = (BinaryEncoder)
- *     PercentBinaryEncoderProxy.newInstance();
- *
- * // now you can use encoder.encode(String) or encoder.encode(byte[])
- * }</pre>
+ * public static void main(String[] args)
+ * <!--/code--></pre>
  * 
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
