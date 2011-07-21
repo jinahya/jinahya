@@ -26,12 +26,12 @@ import java.lang.reflect.Proxy;
 
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
- * <pre>
+ * <pre>{@code
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
  *
  * // now you can use encoder.encode(String) or encoder.encode(byte[])
- * </pre>
+ * }</pre>
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/SId47">BinaryEncoder (Apache Commons Codec)</a>
