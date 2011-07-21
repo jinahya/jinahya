@@ -42,10 +42,8 @@ public class PercentDecoder {
      * @param input input to decode
      * @return decoding output
      * @throws IOException if an I/O error occurs.
-     * @throws PercentCodecException if a wrong value read from the input
      */
-    public static byte[] decode(final String input)
-        throws IOException, PercentCodecException {
+    public static byte[] decode(final String input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -61,10 +59,8 @@ public class PercentDecoder {
      * @param input input to decode
      * @return decoding output
      * @throws IOException if an I/O error occurs.
-     * @throws PercentCodecException if a wrong value read from the input.
      */
-    public static byte[] decode(final byte[] input)
-        throws IOException, PercentCodecException {
+    public static byte[] decode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null bytes");
@@ -84,11 +80,10 @@ public class PercentDecoder {
      * @param input input
      * @param output output
      * @throws IOException if an I/O error occurs.
-     * @throws PercentCodecException if a wrong value read from the input.
      */
     public static void decode(final InputStream input,
                               final OutputStream output)
-        throws IOException, PercentCodecException {
+        throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -133,12 +128,12 @@ public class PercentDecoder {
      * @param ascii 7-bit ASCII value; digit (0x30 ~ 0x39),
      *        upper alpha (0x41 ~ 0x46), or lower alpha (0x61 ~ 0x66)
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
-     * @throws PercentCodecException if given <code>ascii</code> is not valid
+     * @throws IllegalArgumentException if given <code>ascii</code> is not valid
      */
-    static int atoi(final int ascii) throws PercentCodecException {
+    static int atoi(final int ascii) {
 
         if (ascii < 0x30) { // ~ 0x2F('/')
-            throw new PercentCodecException("wrong ascii: " + ascii);
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
         if (ascii <= 0x39) { // 0x30('0') ~ 0x39('9')
@@ -146,7 +141,7 @@ public class PercentDecoder {
         }
 
         if (ascii <= 0x40) { // 0x3A(':') ~ 0x40('@')
-            throw new PercentCodecException("wrong ascii: " + ascii);
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
         if (ascii <= 0x46) { // 0x41('A') ~ 0x46('F')
@@ -154,7 +149,7 @@ public class PercentDecoder {
         }
 
         if (ascii <= 0x60) { // 0x47('G') ~ 0x60('`')
-            throw new PercentCodecException("wrong ascii: " + ascii);
+            throw new IllegalArgumentException("wrong ascii: " + ascii);
         }
 
         if (ascii <= 0x66) { // 0x61('a') ~ 0x66('f')
@@ -162,7 +157,7 @@ public class PercentDecoder {
         }
 
         // 0x67('g') ~
-        throw new PercentCodecException("wrong ascii: " + ascii);
+        throw new IllegalArgumentException("wrong ascii: " + ascii);
 
         //return ascii - (ascii >= 0x41 ? 0x37 : 0x30);
     }

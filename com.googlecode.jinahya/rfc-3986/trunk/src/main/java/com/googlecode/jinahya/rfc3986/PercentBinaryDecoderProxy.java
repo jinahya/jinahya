@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.rfc3986;
 
 
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -75,20 +76,20 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
         if (args[0] instanceof String) {
             try {
                 return PercentDecoder.decode((String) args[0]);
-            } catch (PercentCodecException pce) {
+            } catch (Exception e) {
                 throw (Throwable) Class.forName(
                     "org.apache.commons.codec.DecoderException").
-                    getConstructor(Throwable.class).newInstance(pce);
+                    getConstructor(Throwable.class).newInstance(e);
             }
         }
 
         if (args[0] instanceof byte[]) {
             try {
                 return PercentDecoder.decode((byte[]) args[0]);
-            } catch (PercentCodecException pce) {
+            } catch (Exception e) {
                 throw (Throwable) Class.forName(
                     "org.apache.commons.codec.DecoderException").
-                    getConstructor(Throwable.class).newInstance(pce);
+                    getConstructor(Throwable.class).newInstance(e);
             }
         }
 

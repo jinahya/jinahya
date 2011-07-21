@@ -41,10 +41,8 @@ public class PercentEncoder {
      * @param input string to encode
      * @return encoding output
      * @throws IOException if an I/O error occurs.
-     * @throws PercentCodecException if a wrong value read from the input.
      */
-    public static byte[] encode(final String input)
-        throws IOException, PercentCodecException {
+    public static byte[] encode(final String input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -60,10 +58,8 @@ public class PercentEncoder {
      * @param input bytes to encode
      * @return encoding output
      * @throws IOException if an I/O error occurs
-     * @throws PercentCodecException if a wrong value read from the input.
      */
-    public static byte[] encode(final byte[] input)
-        throws IOException, PercentCodecException {
+    public static byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -83,11 +79,10 @@ public class PercentEncoder {
      * @param input input
      * @param output output
      * @throws IOException if an I/O error occurs.
-     * @throws PercentCodecException if a wrong value read from the input.
      */
     public static void encode(final InputStream input,
                               final OutputStream output)
-        throws IOException, PercentCodecException {
+        throws IOException {
 
         if (input == null) {
             throw new IllegalArgumentException("null input");
@@ -123,12 +118,11 @@ public class PercentEncoder {
      *
      * @param integer 4-bit unsigned integer (0x00 ~ 0x0F)
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
-     * @throws PercentCodecException if given <code>integer</code> is not valid.
      */
-    static int itoa(final int integer) throws PercentCodecException {
+    static int itoa(final int integer) {
 
         if (integer < 0x00) {
-            throw new PercentCodecException("wrong integer: " + integer);
+            throw new IllegalArgumentException("wrong integer: " + integer);
         }
 
         if (integer <= 0x09) { // 0x00 ~ 0x09
@@ -139,7 +133,7 @@ public class PercentEncoder {
             return integer + 0x37; // 0x41('A'), 0x42('B'), ...
         }
 
-        throw new PercentCodecException("wrong integer: " + integer);
+        throw new IllegalArgumentException("wrong integer: " + integer);
 
         //return integer + (integer < 0x0A ? 0x30 : 0x37);
     }
