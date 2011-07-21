@@ -30,8 +30,7 @@ import java.io.OutputStream;
  * Percent Decoder.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
- *      Percent Encoding</a>
+ * @see <a href="http://goo.gl/w4GhD">Percent Encoding</a>
  */
 public class PercentDecoder {
 
@@ -95,15 +94,18 @@ public class PercentDecoder {
 
         for (int b = -1; (b = input.read()) != -1;) {
 
-            if ((b >= 0x30 && b <= 0x39)    // digit
+            if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D    // -
-                || b == 0x5F    // _
-                || b == 0x2E    // .
+                || b == 0x2D // -
+                || b == 0x5F // _
+                || b == 0x2E // .
                 || b == 0x7E) { // ~
+
                 output.write(b);
+
             } else if (b == 0x25) { // '%'
+
                 int high = input.read();
                 if (high == -1) {
                     throw new EOFException("eof");
@@ -113,7 +115,9 @@ public class PercentDecoder {
                     throw new EOFException("eof");
                 }
                 output.write((atoi(high) << 4) | atoi(row));
+
             } else {
+
                 throw new IOException("illegal octet: " + b);
             }
         }
