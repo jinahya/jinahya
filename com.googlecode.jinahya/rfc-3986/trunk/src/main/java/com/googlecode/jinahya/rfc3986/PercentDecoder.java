@@ -60,7 +60,7 @@ public class PercentDecoder {
      * @return decoding output
      * @throws IOException if an I/O error occurs.
      */
-    public static byte[] decode(final byte[] input) throws IOException {
+    public static byte[] decode(final byte... input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null bytes");
