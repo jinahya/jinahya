@@ -27,17 +27,22 @@ import java.lang.reflect.Proxy;
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
  *
- * <link rel="stylesheet" type="text/css" href="http://goo.gl/t8bIA"> 
- * <script src="http://goo.gl/gxapB" type="text/javascript"></script>
- * <script language="JavaScript">
- * window.onload=function(){windowTitle();prettyPrint();}</script>
- * <pre class="prettyprint"><!--code class="language-java"-->
+ * <!--link rel="stylesheet" type="text/css" href="http://goo.gl/t8bIA"--> 
+ * <link rel="stylesheet" type="text/css" href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
+ * <!--script src="http://goo.gl/gxapB" type="text/javascript"--><!--/script-->
+ * <script src="{@docRoot}/resources/google-code-prettify/prettify.js" type="text/javascript"></script>
+ * <script language="JavaScript">window.onload=function(){windowTitle();prettyPrint();}</script>
+ * <pre class="prettyprint"><code class="language-java">
+ * // create
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
- *
- * // now you can use encoder.encode(String) or encoder.encode(byte[])
- * public static void main(String[] args)
- * <!--/code--></pre>
+ * 
+ * // encode String
+ * encoder.encode("");
+ * 
+ * // encode byte array
+ * encoder.encode(new byte[0]);
+ * </code></pre>
  * 
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
