@@ -52,6 +52,11 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @return a new proxy instance.
+     */
     public static Object newInstance() {
         return Proxy.newProxyInstance(BINARY_ENCODER_CLASS.getClassLoader(),
                                       new Class<?>[]{BINARY_ENCODER_CLASS},
@@ -59,6 +64,9 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected PercentBinaryEncoderProxy() {
         super();
     }
@@ -76,20 +84,20 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
         if (args[0] instanceof String) {
             try {
                 return PercentEncoder.encode((String) args[0]);
-            } catch (Exception e) {
+            } catch (IOException ioe) {
                 throw (Throwable) Class.forName(
                     "org.apache.commons.codec.EncoderException").
-                    getConstructor(Throwable.class).newInstance(e);
+                    getConstructor(Throwable.class).newInstance(ioe);
             }
         }
 
         if (args[0] instanceof byte[]) {
             try {
                 return PercentEncoder.encode((byte[]) args[0]);
-            } catch (Exception e) {
+            } catch (IOException ioe) {
                 throw (Throwable) Class.forName(
                     "org.apache.commons.codec.EncoderException").
-                    getConstructor(Throwable.class).newInstance(e);
+                    getConstructor(Throwable.class).newInstance(ioe);
             }
         }
 

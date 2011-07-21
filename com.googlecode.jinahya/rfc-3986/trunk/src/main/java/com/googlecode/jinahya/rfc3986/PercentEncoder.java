@@ -118,11 +118,12 @@ public class PercentEncoder {
      *
      * @param integer 4-bit unsigned integer (0x00 ~ 0x0F)
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
+     * @throws IOException if given <code>integer</code> is not valid.
      */
-    static int itoa(final int integer) {
+    static int itoa(final int integer) throws IOException {
 
         if (integer < 0x00) {
-            throw new IllegalArgumentException("wrong integer: " + integer);
+            throw new IOException("wrong integer: " + integer);
         }
 
         if (integer <= 0x09) { // 0x00 ~ 0x09
@@ -133,7 +134,7 @@ public class PercentEncoder {
             return integer + 0x37; // 0x41('A'), 0x42('B'), ...
         }
 
-        throw new IllegalArgumentException("wrong integer: " + integer);
+        throw new IOException("wrong integer: " + integer);
 
         //return integer + (integer < 0x0A ? 0x30 : 0x37);
     }
