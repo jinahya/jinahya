@@ -23,7 +23,7 @@ package com.googlecode.jinahya.el;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class ELNode {
+abstract class ELNode {
 
 
     static final String NULL_NS_URI = "";
@@ -162,11 +162,11 @@ public abstract class ELNode {
     public abstract String toJSON();
 
 
-    /** namespace URI. */
-    protected final String namespaceURI;
+    /** name space URI. */
+    final String namespaceURI;
 
 
     /** local name. */
-    protected final String localName;
+    final String localName;
 }
 

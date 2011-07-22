@@ -139,23 +139,26 @@ public class KDOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    @Override
-    protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap) {
+    /**
+     * 
+     * @return 
+     */
+    public final Document print() {
 
-        if (root == null) {
-            throw new NullPointerException("null root");
-        }
+        return print(new Document());
+    }
+
+
+    @Override
+    public Document print(final Document document) {
 
         if (document == null) {
-            throw new NullPointerException("null document");
+            throw new NullPointerException("document");
         }
 
-        if (namespaceMap == null) {
-            throw new NullPointerException("null namespaces");
-        }
+        print(getRoot(), getNamespaces(), document);
 
-        print(root, namespaceMap, document);
+        return document;
     }
 
 

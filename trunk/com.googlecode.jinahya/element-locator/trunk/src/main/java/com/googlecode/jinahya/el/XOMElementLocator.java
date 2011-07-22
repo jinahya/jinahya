@@ -86,8 +86,8 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param element
-     * @return 
+     * @param element element to be parsed
+     * @return an ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -152,23 +152,27 @@ public class XOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    @Override
-    protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaceMap) {
+    /**
+     * 
+     * @return 
+     */
+    public final Document print() {
 
-        if (root == null) {
-            throw new NullPointerException("null root");
-        }
+        // the tmp root element will be replaced
+        return print(new Document(new Element("tmp:tmp", "http://tmp")));
+    }
+
+
+    @Override
+    public Document print(final Document document) {
 
         if (document == null) {
-            throw new NullPointerException("null document");
+            throw new NullPointerException("document");
         }
 
-        if (namespaceMap == null) {
-            throw new NullPointerException("null namespaces");
-        }
+        print(getRoot(), getNamespaces(), document);
 
-        print(root, namespaceMap, document);
+        return document;
     }
 
 

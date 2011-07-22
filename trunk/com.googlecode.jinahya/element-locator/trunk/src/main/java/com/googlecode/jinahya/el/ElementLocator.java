@@ -19,7 +19,6 @@ package com.googlecode.jinahya.el;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -438,13 +437,17 @@ public abstract class ElementLocator<D> {
     /**
      * Prints contents to given <code>document</code>.
      *
-     * @param document output document
+     * @param document an empty document
+     * @return given <code>document</code>
      */
-    public final void print(final D document) {
+    public abstract D print(final D document);
 
-        if (document == null) {
-            throw new NullPointerException("null document");
-        }
+
+    /**
+     * 
+     * @return 
+     */
+    final Map<String, String> getNamespaces() {
 
         final Map<String, String> namespaces = new TreeMap<String, String>();
 
@@ -461,19 +464,8 @@ public abstract class ElementLocator<D> {
 
         namespaces.put(ELNode.XML_NS_URI, ELNode.XML_NS_PREFIX);
 
-        print(path.get(0), document, Collections.unmodifiableMap(namespaces));
+        return namespaces;
     }
-
-
-    /**
-     * Prints given <code>root</code> to specified <code>document</code>.
-     *
-     * @param root root element
-     * @param document target document
-     * @param namespaceMap provided namespace URI/prefix map
-     */
-    protected abstract void print(final ELElement root, final D document,
-                                  final Map<String, String> namespaceMap);
 
 
     /**
@@ -498,8 +490,32 @@ public abstract class ElementLocator<D> {
      *
      * @return current element
      */
-    protected final ELElement getCurrent() {
+    final ELElement getCurrent() {
         return path.get(path.size() - 1);
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
+    final ELElement getRoot() {
+        return path.get(0);
+    }
+
+
+    /**
+     * 
+     * @param root 
+     */
+    final void setRoot(final ELElement root) {
+
+        if (root == null) {
+            throw new NullPointerException("null root");
+        }
+
+        path.clear();
+        path.add(root);
     }
 
 

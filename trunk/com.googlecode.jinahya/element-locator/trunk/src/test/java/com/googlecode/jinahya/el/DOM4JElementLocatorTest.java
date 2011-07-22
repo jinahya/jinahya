@@ -20,48 +20,46 @@ package com.googlecode.jinahya.el;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Serializer;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.SAXReader;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocatorTest
-    extends ElementLocatorTest<XOMElementLocator, Document> {
+public class DOM4JElementLocatorTest
+    extends ElementLocatorTest<DOM4JElementLocator, Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator<Document> parseLocator(InputStream in)
         throws Exception {
 
-        final Builder builder = new Builder();
-        final Document document = builder.build(in);
-        return XOMElementLocator.newInstance(document);
+        final SAXReader reader = new SAXReader();
+        final Document document = reader.read(in);
+
+        return DOM4JElementLocator.newInstance(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected DOM4JElementLocator createLocator(final String namespaceURI,
+                                                final String localName)
         throws Exception {
 
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
+        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
 
-        final Element element = new Element("tmp:tmp", "http://tmp");
-
-        final Document document = new Document(element);
-
-        return document;
+        return DocumentHelper.createDocument();
     }
 
 
@@ -71,8 +69,9 @@ public class XOMElementLocatorTest
                                  final String charsetName)
         throws Exception {
 
-        final Serializer serializer = new Serializer(out, charsetName);
-        serializer.write(document);
+        final Writer writer = new OutputStreamWriter(out, charsetName);
+        document.write(writer);
+        writer.flush();
     }
 }
 

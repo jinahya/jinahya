@@ -15,6 +15,16 @@
   </parent>
   <dependencies>
     <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
       <scope>provided</scope>
@@ -37,6 +47,16 @@
   </dependencies>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.5</version>
+      </dependency>
+      <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>1.6.1</version>
+      </dependency>
       <dependency>
         <groupId>net.sf.kxml</groupId>
         <artifactId>kxml2</artifactId>
@@ -72,10 +92,17 @@
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>1.0</version>
       </extension>
+      <!--
+          <extension>
+          <groupId>org.jvnet.wagon-svn</groupId>
+          <artifactId>wagon-svn</artifactId>
+          <version>1.9</version>
+          </extension>
+      -->
       <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-        <version>1.9</version>
+        <groupId>com.google.code.maven-svn-wagon</groupId>
+        <artifactId>maven-svn-wagon</artifactId>
+        <version>1.4</version>
       </extension>
     </extensions>
     <pluginManagement>
@@ -132,19 +159,6 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <executions>
           <execution>
@@ -156,13 +170,24 @@
         </executions>
         <configuration>
           <reportPlugins>
+            <!--
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
+            -->
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <links>
+                  <link>http://download.java.net/jdk7/docs/api/</link>
+                  <link>http://kxml.sourceforge.net/kxml2/javadoc/</link>
+                  <link>http://www.jdom.org/docs/apidocs/</link>
+                  <link>http://www.xom.nu/apidocs/</link>
+                  <link>http://dom4j.sourceforge.net/dom4j-1.6.1/apidocs/</link>
+                </links>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
@@ -221,10 +246,37 @@
     </repository>
     <site>
       <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.verion}</url>
+      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
   </distributionManagement>
   <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>jsr14</id>
       <build>

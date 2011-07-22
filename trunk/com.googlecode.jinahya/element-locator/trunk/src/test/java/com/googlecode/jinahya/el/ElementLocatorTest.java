@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.security.MessageDigest;
+import org.apache.commons.codec.binary.Hex;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -124,7 +126,8 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
     protected abstract D createDocument() throws Exception;
 
 
-    protected abstract void printDocument(D document, OutputStream out)
+    protected abstract void printDocument(D document, OutputStream out,
+                                          String charsetName)
         throws Exception;
 
 
@@ -162,12 +165,17 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
         locator.locateRoot().addChild("\uD55C\uAE00").setText("\uAD8C\uC9C4");
 
+        final MessageDigest md = MessageDigest.getInstance("SHA-1");
+
 
         System.out.println("-------------------------------------------- JSON");
         System.out.println(locator.getClass());
-        System.out.println(locator.toJSON());
+        final String json = locator.toJSON();
+        System.out.println(json);
+        System.out.println("JSON.DIGEST: " + Hex.encodeHexString(
+            md.digest(json.getBytes("US-ASCII"))));
         System.out.println("-------------------------------------------- JSON");
-        
+
 
         final D document = createDocument();
 
@@ -178,12 +186,14 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        printDocument(document, out);
+        final String charsetName = "UTF-8";
+
+        printDocument(document, out, charsetName);
         out.flush();
 
         final byte[] bytes = out.toByteArray();
 
-        System.out.println(new String(bytes, "UTF-8"));
+        System.out.println(new String(bytes, charsetName));
         System.out.println("--------------------------------------------- XML");
     }
 }

@@ -19,6 +19,7 @@ package com.googlecode.jinahya.el;
 
 
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -74,10 +75,9 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Parses given DOM Element to a ELElement.
-     *
-     * @param element element
-     * @return an ELElement
+     * 
+     * @param element
+     * @return 
      */
     private static ELElement parse(final Element element) {
 
@@ -152,23 +152,31 @@ public class DOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    @Override
-    protected void print(final ELElement root, final Document document,
-                         final Map<String, String> namespaces) {
+    /**
+     * 
+     * @param builder
+     * @return 
+     */
+    public Document print(final DocumentBuilder builder) {
 
-        if (root == null) {
-            throw new NullPointerException("null root");
+        if (builder == null) {
+            throw new NullPointerException("null builder");
         }
+
+        return print(builder.newDocument());
+    }
+
+
+    @Override
+    public Document print(final Document document) {
 
         if (document == null) {
-            throw new NullPointerException("null document");
+            throw new NullPointerException("document");
         }
 
-        if (namespaces == null) {
-            throw new NullPointerException("null namespaces");
-        }
+        print(getRoot(), document, getNamespaces(), document);
 
-        print(root, document, namespaces, document);
+        return document;
     }
 
 
@@ -209,12 +217,13 @@ public class DOMElementLocator extends ElementLocator<Document> {
                                    _attribute.value);
         }
 
-        if (_element.text != null) {
+        if (_element.elements.isEmpty() && _element.text != null) {
             element.appendChild(document.createTextNode(_element.text));
-        } else {
-            for (ELElement child : _element.elements) {
-                print(child, document, namesapces, element);
-            }
+            return;
+        }
+
+        for (ELElement child : _element.elements) {
+            print(child, document, namesapces, element);
         }
     }
 }
