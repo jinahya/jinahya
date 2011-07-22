@@ -2,20 +2,20 @@
 #labels XML
 
 = Introduction =
-
 Simple (and somewhat restricted) XML parser/printer.
 
-
 = Details =
-
-This is a simple XML parser/printer. This artifact is fully applicable to an XML library and there are some restrictions.
+This is a simple XML parser/printer. This artifact is not fully applicable to any XML libraries and there are some restrictions.
 
 == Simple XML ==
   * There are only attributes, elements, and texts.
   * No other types are supported.
   * No ignorable white spaces.
-  * No mixed content. Elements always prior to texts.
-  * Automatic links to other wiki pages
+  * No mixed content. Elements are always prior to texts.
+  * And so on.
+
+== Architecture ==
+This library is just an thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, or XOM as underlying XML model.
 
 == Reading XML ==
 
