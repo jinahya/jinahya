@@ -1,0 +1,14 @@
+#summary Simple (and somewhat restricted) XML parser/printer.
+#labels XML
+
+= Introduction =
+
+Simple (and somewhat restricted) XML parser/printer.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
