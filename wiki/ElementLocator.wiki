@@ -8,7 +8,15 @@ Simple (and somewhat restricted) XML parser/printer.
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
+This is a simple XML parser/printer. This artifact is not a fully applicable XML library and there are some restrictions.
+
+== Simple XML ==
+  * There are only attributes, elements, and texts.
+  * No other types are supported.
+  * No ignorable white spaces.
+  * No mixed content. Elements always prior to texts.
   * Automatic links to other wiki pages
+
+== Reading XML ==
+
+== Writing XML ==
