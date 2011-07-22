@@ -9,7 +9,7 @@
     <copyright>&#169;2011</copyright>
     <item>
       <title>File: 4,
-             Errors: 60,
+             Errors: 56,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  9
+                  8
                 </td>
               </tr>
                           <tr>
@@ -57,20 +57,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.rfc3986.PercentDecoder.java">com/googlecode/jinahya/rfc3986/PercentDecoder.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  23
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.rfc3986.PercentBinaryDecoderProxy.java">com/googlecode/jinahya/rfc3986/PercentBinaryDecoderProxy.java</a>
                 </td>
                 <td>
@@ -80,7 +66,21 @@
                   0
                 </td>
                 <td>
-                  9
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.rfc3986.PercentDecoder.java">com/googlecode/jinahya/rfc3986/PercentDecoder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
                 </td>
               </tr>
                       </tbody>
