@@ -25,6 +25,8 @@
 -link
 'http://www.xom.nu/apidocs'
 -link
+'http://dom4j.sourceforge.net/dom4j-1.6.1/apidocs'
+-link
 '../apidocs'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/element-locator/trunk/target/javadoc-bundle-options'
