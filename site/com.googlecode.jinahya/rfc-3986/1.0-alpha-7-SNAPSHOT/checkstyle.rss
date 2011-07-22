@@ -52,7 +52,21 @@
                   0
                 </td>
                 <td>
-                  18
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.rfc3986.PercentBinaryDecoderProxy.java">com/googlecode/jinahya/rfc3986/PercentBinaryDecoderProxy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
                 </td>
               </tr>
                           <tr>
@@ -67,20 +81,6 @@
                 </td>
                 <td>
                   22
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.rfc3986.PercentBinaryDecoderProxy.java">com/googlecode/jinahya/rfc3986/PercentBinaryDecoderProxy.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
                 </td>
               </tr>
                       </tbody>
