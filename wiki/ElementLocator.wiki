@@ -8,7 +8,7 @@ Simple (and somewhat restricted) XML parser/printer.
 
 = Details =
 
-This is a simple XML parser/printer. This artifact is not a fully applicable XML library and there are some restrictions.
+This is a simple XML parser/printer. This artifact is fully applicable to an XML library and there are some restrictions.
 
 == Simple XML ==
   * There are only attributes, elements, and texts.
