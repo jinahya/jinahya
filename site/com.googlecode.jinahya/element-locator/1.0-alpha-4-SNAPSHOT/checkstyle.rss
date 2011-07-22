@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2010 - 2011</copyright>
     <item>
-      <title>File: 8,
-             Errors: 121,
+      <title>File: 9,
+             Errors: 145,
              Warnings: 0,
              Infos: 0
       </title>
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  9
+                  13
                 </td>
               </tr>
                           <tr>
@@ -66,7 +66,21 @@
                   0
                 </td>
                 <td>
-                  2
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.el.DOM4JElementLocator.java">com/googlecode/jinahya/el/DOM4JElementLocator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
                 </td>
               </tr>
                           <tr>
@@ -80,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  6
+                  8
                 </td>
               </tr>
                           <tr>
@@ -108,7 +122,7 @@
                   0
                 </td>
                 <td>
-                  18
+                  26
                 </td>
               </tr>
                           <tr>
@@ -122,7 +136,7 @@
                   0
                 </td>
                 <td>
-                  28
+                  25
                 </td>
               </tr>
                           <tr>
