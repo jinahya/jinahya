@@ -62,11 +62,13 @@
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>1.0</version>
       </extension>
+      <!--
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
         <artifactId>wagon-svn</artifactId>
         <version>1.9</version>
       </extension>
+      -->
     </extensions>
     <pluginManagement>
       <plugins>
@@ -100,11 +102,13 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>2.4</version>
         </plugin>
+        <!--
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.2</version>
         </plugin>
+        -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
@@ -133,6 +137,7 @@
           <docfilessubdirs>true</docfilessubdirs>
         </configuration>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -140,6 +145,7 @@
           <goals>deploy</goals>
         </configuration>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -222,7 +228,6 @@
     </repository>
     <site>
       <id>onacit_googlecode</id>
-      <!--url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
       <url>dav:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
   </distributionManagement>
