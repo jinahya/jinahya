@@ -62,6 +62,11 @@
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>1.0</version>
       </extension>
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.9</version>
+      </extension>
     </extensions>
     <pluginManagement>
       <plugins>
@@ -221,7 +226,8 @@
     </repository>
     <site>
       <id>onacit_googlecode</id>
-      <url>dav:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+      <!--url>dav:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
+      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
   </distributionManagement>
   <profiles>
