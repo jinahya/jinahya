@@ -18,11 +18,10 @@
 package com.googlecode.jinahya.el;
 
 
-import com.googlecode.jinahya.el.ElementLocator;
-import com.googlecode.jinahya.el.ELElement;
-import com.googlecode.jinahya.el.JDOMElementLocator;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
@@ -65,11 +64,14 @@ public class JDOMElementLocatorTest
 
     @Override
     protected void printDocument(final Document document,
-                                 final OutputStream out)
+                                 final OutputStream out,
+                                 final String charsetName)
         throws Exception {
 
         final XMLOutputter outputter = new XMLOutputter();
-        outputter.output(document, out);
+        final Writer writer = new OutputStreamWriter(out, charsetName);
+        outputter.output(document, writer);
+        writer.flush();
     }
 }
 

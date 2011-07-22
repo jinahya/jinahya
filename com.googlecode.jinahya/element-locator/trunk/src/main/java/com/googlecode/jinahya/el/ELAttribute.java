@@ -58,6 +58,6 @@ public class ELAttribute extends ELNode {
 
 
     /** value. */
-    protected final String value;
+    final String value;
 }
 

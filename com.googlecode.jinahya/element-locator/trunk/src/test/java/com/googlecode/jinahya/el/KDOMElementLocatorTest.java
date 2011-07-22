@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.el;
 
 
-import com.googlecode.jinahya.el.KDOMElementLocator;
-import com.googlecode.jinahya.el.ElementLocator;
-import com.googlecode.jinahya.el.ELElement;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -84,11 +81,12 @@ public class KDOMElementLocatorTest
 
     @Override
     protected void printDocument(final Document document,
-                                 final OutputStream out)
+                                 final OutputStream out,
+                                 final String charsetName)
         throws Exception {
 
         final XmlSerializer serializer = XMLPPF.newSerializer();
-        serializer.setOutput(out, "UTF-8");
+        serializer.setOutput(out, charsetName);
 
         document.write(serializer);
     }

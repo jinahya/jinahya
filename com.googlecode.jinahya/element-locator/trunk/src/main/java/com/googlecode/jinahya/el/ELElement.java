@@ -133,15 +133,15 @@ public class ELElement extends ELNode {
 
 
     /** attributes. */
-    protected final Map<String, ELAttribute> attributes =
+    final Map<String, ELAttribute> attributes =
         new TreeMap<String, ELAttribute>();
 
 
     /** text. */
-    protected String text = null;
+    String text = null;
 
 
     /** elements. */
-    protected final List<ELElement> elements = new ArrayList<ELElement>();
+    final List<ELElement> elements = new ArrayList<ELElement>();
 }
 
