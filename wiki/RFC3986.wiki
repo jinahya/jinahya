@@ -1,8 +1,9 @@
 #summary One-sentence summary of this page.
+#labels PercentEncoding,RFC-3986
 
-= Introduction =
+= (Partial) RFC-3986 Implementation =
 
-Add your content here.
+There are currently only classes for [http://tools.ietf.org/html/rfc3986#section-2.1 Percent Encoding].
 
 
 = Details =
@@ -13,4 +14,5 @@ Add your content here.  Format your content with:
   * Automatic links to other wiki pages
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/rfc-3986/1.0-alpha-7-SNAPSHOT/apidocs/index.html 1.0-alpha-7-SNAPSHOT]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/rfc-3986/1.0-alpha-5-SNAPSHOT/apidocs/index.html 1.0-alpha-5-SNAPSHOT]
