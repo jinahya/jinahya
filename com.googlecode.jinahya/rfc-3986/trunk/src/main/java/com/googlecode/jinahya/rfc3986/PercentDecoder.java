@@ -97,10 +97,7 @@ public class PercentDecoder {
             if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D // -
-                || b == 0x5F // _
-                || b == 0x2E // .
-                || b == 0x7E) { // ~
+                || b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) { // -_.~
 
                 output.write(b);
 
@@ -110,10 +107,12 @@ public class PercentDecoder {
                 if (high == -1) {
                     throw new EOFException("eof");
                 }
+
                 int row = input.read();
                 if (row == -1) {
                     throw new EOFException("eof");
                 }
+
                 output.write((atoi(high) << 4) | atoi(row));
 
             } else {
@@ -134,7 +133,7 @@ public class PercentDecoder {
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      * @throws IOException if given <code>ascii</code> is not valid
      */
-    static int atoi(final int ascii) throws IOException {
+    private static int atoi(final int ascii) throws IOException {
 
         if (ascii < 0x30) { // ~ 0x2F('/')
             throw new IOException("wrong ascii: " + ascii);

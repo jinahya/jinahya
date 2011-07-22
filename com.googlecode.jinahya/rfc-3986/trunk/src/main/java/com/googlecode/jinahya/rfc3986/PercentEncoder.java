@@ -96,10 +96,7 @@ public class PercentEncoder {
             if ((b >= 0x30 && b <= 0x39) // digit
                 || (b >= 0x41 && b <= 0x5A) // upper case alpha
                 || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D // -
-                || b == 0x5F // _
-                || b == 0x2E // .
-                || b == 0x7E) { // ~
+                || b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) { // -_.~
 
                 output.write(b);
 
@@ -122,7 +119,7 @@ public class PercentEncoder {
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
      * @throws IOException if given <code>integer</code> is not valid.
      */
-    static int itoa(final int integer) throws IOException {
+    private static int itoa(final int integer) throws IOException {
 
         if (integer < 0x00) {
             throw new IOException("wrong integer: " + integer);
