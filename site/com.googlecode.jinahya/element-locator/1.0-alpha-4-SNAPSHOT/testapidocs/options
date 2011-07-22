@@ -17,6 +17,14 @@
 -doctitle
 'element-locator 1.0-alpha-4-SNAPSHOT Test API'
 -link
+'http://download.java.net/jdk7/docs/api'
+-link
+'http://kxml.sourceforge.net/kxml2/javadoc'
+-link
+'http://www.jdom.org/docs/apidocs'
+-link
+'http://www.xom.nu/apidocs'
+-link
 '../apidocs'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/element-locator/trunk/target/javadoc-bundle-options'
