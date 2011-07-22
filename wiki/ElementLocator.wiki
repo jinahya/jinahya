@@ -30,7 +30,8 @@ This library is just an thin wrapper for various in-memory XML parser models. Yo
     <child age="26"/>
   </parent>
 </grandparent>
-}}
+}}}
+
 == Reading XML ==
 
 == Writing XML ==
