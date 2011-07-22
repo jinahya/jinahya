@@ -160,6 +160,14 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         locator.setAttribute("normalizable", "  \t\n\n\tsdajfsdf    \t\n");
         locator.setText("    \t\t\\n\nlkjsdfljsaflsdfjsd\t\t\\\t\n\\t");
 
+        locator.locateRoot().addChild("\uD55C\uAE00").setText("\uAD8C\uC9C4");
+
+
+        System.out.println("-------------------------------------------- JSON");
+        System.out.println(locator.getClass());
+        System.out.println(locator.toJSON());
+        System.out.println("-------------------------------------------- JSON");
+        
 
         final D document = createDocument();
 
