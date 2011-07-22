@@ -17,6 +17,20 @@ This is a simple XML parser/printer. This artifact is not fully applicable to an
 == Architecture ==
 This library is just an thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, or XOM as underlying XML model.
 
+== Sample XML ==
+{{{
+<?xml version="1.0"?>
+<grandparent age="100" xmlns="http://www.example.org/family"
+             xmlns:o="http://www.example.com/family/other">
+  <parent age="50">
+    <child age="30">
+      <grandchild age="5" o:gender="male">John</grandchild>
+      <o:spouse o:name="Marry">
+    </child>
+    <child age="26"/>
+  </parent>
+</grandparent>
+}}
 == Reading XML ==
 
 == Writing XML ==
