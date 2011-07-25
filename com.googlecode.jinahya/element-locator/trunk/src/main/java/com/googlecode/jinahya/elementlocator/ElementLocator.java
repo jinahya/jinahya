@@ -35,10 +35,11 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param node
-     * @param namespaces
-     * @return 
+     * Returns qualified name.
+     *
+     * @param node node
+     * @param namespaces name space map
+     * @return qualified name
      */
     static String getQualifiedName(final ELNode node,
                                    final Map<String, String> namespaces) {
@@ -79,7 +80,7 @@ public abstract class ElementLocator<D> {
         }
 
         if (namespaces == null) {
-            throw new NullPointerException("null namespaceMap");
+            throw new NullPointerException("null namespaces");
         }
 
         if (ELNode.NULL_NS_URI.equals(namespaceURI)) {
@@ -188,7 +189,7 @@ public abstract class ElementLocator<D> {
 
     /**
      * Locates child element which has given <code>localName</code> with no
-     * namespace at <code>index</code>.
+     * name space at <code>index</code>.
      *
      * @param localName local name
      * @param index index
@@ -232,7 +233,6 @@ public abstract class ElementLocator<D> {
         }
 
         int count = 0;
-
         for (ELElement element : getCurrent().elements) {
             if (!element.localName.equals(localName)) {
                 continue;
@@ -240,11 +240,10 @@ public abstract class ElementLocator<D> {
             if (!element.namespaceURI.equals(namespaceURI)) {
                 continue;
             }
-            if (count == index) {
+            if (count++ == index) {
                 path.add(element);
                 return this;
             }
-            count++;
         }
 
         throw new IndexOutOfBoundsException("no child at " + index);
@@ -298,7 +297,7 @@ public abstract class ElementLocator<D> {
     /**
      * Sets the text value.
      *
-     * @param text text value; may be null
+     * @param text text value
      * @return self
      */
     public final ElementLocator<D> setText(final String text) {
@@ -395,6 +394,48 @@ public abstract class ElementLocator<D> {
 
 
     /**
+     * Removes attribute whose name is <code>localName</code> with no
+     * namespaceURI.
+     *
+     * @param localName attribute's local name
+     * @return self.
+     */
+    public final ElementLocator<D> removeAttribute(final String localName) {
+
+        return removeAttribute(ELNode.NULL_NS_URI, localName);
+    }
+
+
+    /**
+     * Sets the value of attribute which has <code>localName</code> in
+     * <code>namespaceURI</code>.
+     * 
+     * @param namespaceURI attribute's name space URI
+     * @param localName attribute's local name
+     * @return self
+     */
+    public final ElementLocator<D> removeAttribute(final String namespaceURI,
+                                                   final String localName) {
+
+        if (namespaceURI == null) {
+            throw new NullPointerException("null namespaceURI");
+        }
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        getCurrent().attributes.remove(ELNode.express(namespaceURI, localName));
+
+        return this;
+    }
+
+
+    /**
      * Prints contents to given <code>document</code>.
      *
      * @param document an empty document
@@ -417,9 +458,9 @@ public abstract class ElementLocator<D> {
             namespaces.put(namespaceURI, null);
         }
 
-        long index = 0L;
+        int index = 0;
         for (Entry<String, String> entry : namespaces.entrySet()) {
-            entry.setValue("ns" + (index++));
+            entry.setValue("ns" + index++);
         }
 
         namespaces.put(ELNode.XML_NS_URI, ELNode.XML_NS_PREFIX);
