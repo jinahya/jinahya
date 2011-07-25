@@ -527,7 +527,7 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * Returns JSOM representation of the contents.
+     * Returns JSON representation of the contents.
      *
      * @return a JSON string.
      */
