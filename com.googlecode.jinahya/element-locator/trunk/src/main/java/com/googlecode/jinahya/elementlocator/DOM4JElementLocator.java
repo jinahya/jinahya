@@ -57,35 +57,18 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
      * @param document document
      * @return new instance of DOMElementLocator.
      */
-    public static ElementLocator<Document> newInstance(
-        final Document document) {
+    public static ElementLocator<Document> parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        final Element element = document.getRootElement();
-        if (element == null) {
+        final Element rootElement = document.getRootElement();
+        if (rootElement == null) {
             throw new IllegalArgumentException("no root element");
         }
 
-        return newInstance(element);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param element element
-     * @return new instance of DOMelementLocator
-     */
-    public static ElementLocator<Document> newInstance(final Element element) {
-
-        if (element == null) {
-            throw new NullPointerException("null element");
-        }
-
-        return new DOM4JElementLocator(parse(element));
+        return new DOM4JElementLocator(parse(rootElement));
     }
 
 
@@ -157,49 +140,15 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param root root element
-     */
-    private DOM4JElementLocator(final ELElement root) {
-        super(root);
-    }
-
-
-    /**
-     * Prints contents to a new document.
-     *
-     * @return a new document
-     */
-    public final Document print() {
-
-        return print(DocumentHelper.createDocument());
-    }
-
-
-    @Override
-    public Document print(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
-    }
-
-
-    /**
      * Prints given <code>elelement</code> to specified <code>parent</code>.
      *
      * @param elelement element to print
      * @param namesapces name space map
      * @param parent the parent to which the element is added.
      */
-    private void print(final ELElement elelement,
-                       final Map<String, String> namesapces,
-                       final Branch parent) {
+    private static void print(final ELElement elelement,
+                              final Map<String, String> namesapces,
+                              final Branch parent) {
 
         if (elelement == null) {
             throw new NullPointerException("null elelement");
@@ -234,7 +183,6 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             element.addAttribute(qName, elattribute.value);
         }
 
-
         if (!elelement.elements.isEmpty()) {
             for (ELElement grandchild : elelement.elements) {
                 print(grandchild, namesapces, element);
@@ -245,7 +193,40 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
         if (elelement.text != null) {
             element.setText(elelement.text);
         }
-        return;
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param root root element
+     */
+    private DOM4JElementLocator(final ELElement root) {
+        super(root);
+    }
+
+
+    /**
+     * Prints contents to a new document.
+     *
+     * @return a new document
+     */
+    public final Document print() {
+
+        return print(DocumentHelper.createDocument());
+    }
+
+
+    @Override
+    public Document print(final Document document) {
+
+        if (document == null) {
+            throw new NullPointerException("document");
+        }
+
+        print(getRoot(), getNamespaces(), document);
+
+        return document;
     }
 }
 

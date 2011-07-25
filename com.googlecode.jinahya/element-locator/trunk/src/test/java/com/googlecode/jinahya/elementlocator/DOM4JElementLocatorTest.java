@@ -43,7 +43,7 @@ public class DOM4JElementLocatorTest
         final SAXReader reader = new SAXReader();
         final Document document = reader.read(in);
 
-        return DOM4JElementLocator.newInstance(document);
+        return DOM4JElementLocator.parse(document);
     }
 
 

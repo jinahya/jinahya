@@ -44,34 +44,18 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @return 
      */
-    public static ElementLocator<Document> newInstance(
-        final Document document) {
+    public static ElementLocator<Document> parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        final Element element = document.getRootElement();
-        if (element == null) {
+        final Element rootElement = document.getRootElement();
+        if (rootElement == null) {
             throw new IllegalArgumentException("no root element");
         }
 
-        return newInstance(element);
-    }
-
-
-    /**
-     * 
-     * @param element
-     * @return 
-     */
-    public static ElementLocator<Document> newInstance(final Element element) {
-
-        if (element == null) {
-            throw new NullPointerException("null element");
-        }
-
-        return new KDOMElementLocator(parse(element));
+        return new KDOMElementLocator(parse(rootElement));
     }
 
 
@@ -140,45 +124,13 @@ public class KDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param root 
-     */
-    private KDOMElementLocator(final ELElement root) {
-        super(root);
-    }
-
-
-    /**
-     * 
-     * @return 
-     */
-    public final Document print() {
-
-        return print(new Document());
-    }
-
-
-    @Override
-    public Document print(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
-    }
-
-
-    /**
-     * 
      * @param elelement
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement elelement,
-                       final Map<String, String> namesapces,
-                       final Node parent) {
+    private static void print(final ELElement elelement,
+                              final Map<String, String> namesapces,
+                              final Node parent) {
 
         if (elelement == null) {
             throw new NullPointerException("null elelement");
@@ -211,6 +163,38 @@ public class KDOMElementLocator extends ElementLocator<Document> {
         for (ELElement grandchild : elelement.elements) {
             print(grandchild, namesapces, child);
         }
+    }
+
+
+    /**
+     * 
+     * @param root 
+     */
+    private KDOMElementLocator(final ELElement root) {
+        super(root);
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
+    public final Document print() {
+
+        return print(new Document());
+    }
+
+
+    @Override
+    public Document print(final Document document) {
+
+        if (document == null) {
+            throw new NullPointerException("document");
+        }
+
+        print(getRoot(), getNamespaces(), document);
+
+        return document;
     }
 }
 
