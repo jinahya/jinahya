@@ -23,7 +23,7 @@ package com.googlecode.jinahya.elementlocator;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ELAttribute extends ELNode {
+class ELAttribute extends ELNode {
 
 
     /**

@@ -38,6 +38,20 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
+     * Creates a new empty (root only) instance.
+     *
+     * @param namespaceURI root element's name space URI.
+     * @param localName root element's local namer
+     * @return a new root-only instance.
+     */
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param document document
@@ -92,7 +106,7 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getName();
 
-        final ELElement _element = new ELElement(namespaceURI, localName);
+        final ELElement elelement = new ELElement(namespaceURI, localName);
 
 
         final int attributeCount = element.attributeCount();
@@ -108,7 +122,7 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
-            _element.attributes.put(
+            elelement.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -127,18 +141,18 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
                     }
                     break;
                 case Node.ELEMENT_NODE:
-                    _element.elements.add(parse((Element) node));
+                    elelement.elements.add(parse((Element) node));
                     break;
                 default:
                     break;
             }
         }
 
-        if (_element.elements.isEmpty()) {
-            _element.text = text;
+        if (elelement.elements.isEmpty()) {
+            elelement.text = text;
         }
 
-        return _element;
+        return elelement;
     }
 
 
@@ -147,14 +161,15 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
      *
      * @param root root element
      */
-    protected DOM4JElementLocator(final ELElement root) {
+    private DOM4JElementLocator(final ELElement root) {
         super(root);
     }
 
 
     /**
-     * 
-     * @return 
+     * Prints contents to a new document.
+     *
+     * @return a new document
      */
     public final Document print() {
 
@@ -176,18 +191,18 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param _element
-     * @param document
-     * @param namesapces
-     * @param parent
+     * Prints given <code>elelement</code> to specified <code>parent</code>.
+     *
+     * @param elelement element to print
+     * @param namesapces name space map
+     * @param parent the parent to which the element is added.
      */
-    private void print(final ELElement _element,
+    private void print(final ELElement elelement,
                        final Map<String, String> namesapces,
                        final Branch parent) {
 
-        if (_element == null) {
-            throw new NullPointerException("null _element");
+        if (elelement == null) {
+            throw new NullPointerException("null elelement");
         }
 
         if (namesapces == null) {
@@ -198,27 +213,39 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = parent.addElement(
-            getQualifiedName(_element, namesapces), _element.namespaceURI);
-
-        for (ELAttribute _attribute : _element.attributes.values()) {
-            final Namespace namespace = new Namespace(
-                namesapces.get(_attribute.namespaceURI),
-                _attribute.namespaceURI);
-            final QName qName = new QName(
-                _attribute.localName, namespace,
-                getQualifiedName(_attribute, namesapces));
-            element.addAttribute(qName, _attribute.value);
+        if (parent instanceof Document) {
+            final Document document = (Document) parent;
+            final Element rootElement = document.getRootElement();
+            if (rootElement != null) {
+                document.remove(rootElement);
+            }
         }
 
-        if (_element.elements.isEmpty() && _element.text != null) {
-            element.setText(_element.text);
+        final Element element = parent.addElement(
+            getQualifiedName(elelement, namesapces), elelement.namespaceURI);
+
+        for (ELAttribute elattribute : elelement.attributes.values()) {
+            final Namespace namespace = new Namespace(
+                namesapces.get(elattribute.namespaceURI),
+                elattribute.namespaceURI);
+            final QName qName = new QName(
+                elattribute.localName, namespace,
+                getQualifiedName(elattribute, namesapces));
+            element.addAttribute(qName, elattribute.value);
+        }
+
+
+        if (!elelement.elements.isEmpty()) {
+            for (ELElement grandchild : elelement.elements) {
+                print(grandchild, namesapces, element);
+            }
             return;
         }
 
-        for (ELElement child : _element.elements) {
-            print(child, namesapces, element);
+        if (elelement.text != null) {
+            element.setText(elelement.text);
         }
+        return;
     }
 }
 

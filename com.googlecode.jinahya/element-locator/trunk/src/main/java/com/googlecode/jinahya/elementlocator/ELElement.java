@@ -33,7 +33,7 @@ import java.util.TreeMap;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class ELElement extends ELNode {
+class ELElement extends ELNode {
 
 
     /**

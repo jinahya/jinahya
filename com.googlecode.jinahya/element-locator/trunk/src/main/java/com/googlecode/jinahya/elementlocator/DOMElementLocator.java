@@ -37,6 +37,13 @@ import org.w3c.dom.NodeList;
 public class DOMElementLocator extends ElementLocator<Document> {
 
 
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new DOMElementLocator(new ELElement(namespaceURI, localName));
+    }
+
+
     /**
      * Creates a new instance.
      *
@@ -92,15 +99,14 @@ public class DOMElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getLocalName();
 
-        final ELElement _element = new ELElement(namespaceURI, localName);
+        final ELElement elelement = new ELElement(namespaceURI, localName);
 
         final NamedNodeMap attributes = element.getAttributes();
         final int attributeLength = attributes.getLength();
         for (int i = 0; i < attributeLength; i++) {
             final Attr attribute = (Attr) attributes.item(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
-            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(
-                attributeNamespaceURI)) {
+            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
@@ -108,7 +114,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getNodeValue();
-            _element.attributes.put(
+            elelement.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -128,18 +134,18 @@ public class DOMElementLocator extends ElementLocator<Document> {
                     }
                     break;
                 case Node.ELEMENT_NODE:
-                    _element.elements.add(parse((Element) childNode));
+                    elelement.elements.add(parse((Element) childNode));
                     break;
                 default:
                     break;
             }
         }
 
-        if (_element.elements.isEmpty()) {
-            _element.text = text;
+        if (elelement.elements.isEmpty()) {
+            elelement.text = text;
         }
 
-        return _element;
+        return elelement;
     }
 
 
@@ -148,7 +154,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
      *
      * @param root root element
      */
-    protected DOMElementLocator(final ELElement root) {
+    private DOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -183,17 +189,17 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param _element
+     * @param elelement
      * @param document
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement _element, final Document document,
+    private void print(final ELElement elelement, final Document document,
                        final Map<String, String> namesapces,
                        final Node parent) {
 
-        if (_element == null) {
-            throw new NullPointerException("null _element");
+        if (elelement == null) {
+            throw new NullPointerException("null elelement");
         }
 
         if (document == null) {
@@ -209,22 +215,24 @@ public class DOMElementLocator extends ElementLocator<Document> {
         }
 
         final Element element = document.createElementNS(
-            _element.namespaceURI, getQualifiedName(_element, namesapces));
+            elelement.namespaceURI, getQualifiedName(elelement, namesapces));
         parent.appendChild(element);
 
-        for (ELAttribute _attribute : _element.attributes.values()) {
-            element.setAttributeNS(_attribute.namespaceURI,
-                                   getQualifiedName(_attribute, namesapces),
-                                   _attribute.value);
+        for (ELAttribute elattribute : elelement.attributes.values()) {
+            element.setAttributeNS(elattribute.namespaceURI,
+                                   getQualifiedName(elattribute, namesapces),
+                                   elattribute.value);
         }
 
-        if (_element.elements.isEmpty() && _element.text != null) {
-            element.appendChild(document.createTextNode(_element.text));
+        if (elelement.elements.isEmpty()) {
+            if (elelement.text != null) {
+                element.appendChild(document.createTextNode(elelement.text));
+            }
             return;
         }
 
-        for (ELElement child : _element.elements) {
-            print(child, document, namesapces, element);
+        for (ELElement grandchild : elelement.elements) {
+            print(grandchild, document, namesapces, element);
         }
     }
 }

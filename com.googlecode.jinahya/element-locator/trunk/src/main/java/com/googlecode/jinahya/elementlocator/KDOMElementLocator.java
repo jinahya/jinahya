@@ -32,6 +32,13 @@ import org.kxml2.kdom.Node;
 public class KDOMElementLocator extends ElementLocator<Document> {
 
 
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
+    }
+
+
     /**
      * 
      * @param document
@@ -85,7 +92,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getName();
 
-        final ELElement _element = new ELElement(namespaceURI, localName);
+        final ELElement elelement = new ELElement(namespaceURI, localName);
 
         final int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
@@ -98,14 +105,15 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = element.getAttributeName(i);
             final String attributeValue = element.getAttributeValue(i);
-            _element.attributes.put(
+            elelement.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
 
-        final int childCount = element.getChildCount();
         String text = null;
+
+        final int childCount = element.getChildCount();
         for (int i = 0; i < childCount; i++) {
             switch (element.getType(i)) {
                 case Node.CDSECT:
@@ -115,18 +123,18 @@ public class KDOMElementLocator extends ElementLocator<Document> {
                     }
                     break;
                 case Node.ELEMENT:
-                    _element.elements.add(parse((Element) element.getChild(i)));
+                    elelement.elements.add(parse((Element) element.getChild(i)));
                     break;
                 default:
                     break;
             }
         }
 
-        if (_element.elements.isEmpty() && text != null) {
-            _element.text = text;
+        if (elelement.elements.isEmpty()) {
+            elelement.text = text;
         }
 
-        return _element;
+        return elelement;
     }
 
 
@@ -134,7 +142,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected KDOMElementLocator(final ELElement root) {
+    private KDOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -164,16 +172,16 @@ public class KDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param _element
+     * @param elelement
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement _element,
+    private void print(final ELElement elelement,
                        final Map<String, String> namesapces,
                        final Node parent) {
 
-        if (_element == null) {
-            throw new NullPointerException("null _element");
+        if (elelement == null) {
+            throw new NullPointerException("null elelement");
         }
 
         if (namesapces == null) {
@@ -185,20 +193,23 @@ public class KDOMElementLocator extends ElementLocator<Document> {
         }
 
         final Element child = parent.createElement(
-            _element.namespaceURI, _element.localName);
+            elelement.namespaceURI, elelement.localName);
         parent.addChild(Node.ELEMENT, child);
 
-        for (ELAttribute _attribute : _element.attributes.values()) {
+        for (ELAttribute _attribute : elelement.attributes.values()) {
             child.setAttribute(_attribute.namespaceURI, _attribute.localName,
                                _attribute.value);
         }
 
-        if (_element.text != null) {
-            child.addChild(Node.TEXT, _element.text);
-        } else {
-            for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, child);
+        if (elelement.elements.isEmpty()) {
+            if (elelement.text != null) {
+                child.addChild(Node.TEXT, elelement.text);
             }
+            return;
+        }
+
+        for (ELElement grandchild : elelement.elements) {
+            print(grandchild, namesapces, child);
         }
     }
 }

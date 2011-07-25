@@ -101,7 +101,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getLocalName();
 
-        final ELElement _element = new ELElement(namespaceURI, localName);
+        final ELElement elelement = new ELElement(namespaceURI, localName);
 
         final int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
@@ -115,7 +115,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getValue();
-            _element.attributes.put(
+            elelement.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -131,15 +131,15 @@ public class XOMElementLocator extends ElementLocator<Document> {
                     text = element.getValue();
                 }
             } else if (child instanceof Element) {
-                _element.elements.add(parse((Element) element.getChild(i)));
+                elelement.elements.add(parse((Element) element.getChild(i)));
             }
         }
 
-        if (_element.elements.isEmpty() && text != null) {
-            _element.text = text;
+        if (elelement.elements.isEmpty() && text != null) {
+            elelement.text = text;
         }
 
-        return _element;
+        return elelement;
     }
 
 
@@ -147,7 +147,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected XOMElementLocator(final ELElement root) {
+    private XOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -178,16 +178,16 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param _element
+     * @param elelement
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement _element,
+    private void print(final ELElement elelement,
                        final Map<String, String> namesapces,
                        final ParentNode parent) {
 
-        if (_element == null) {
-            throw new NullPointerException("null _element");
+        if (elelement == null) {
+            throw new NullPointerException("null elelement");
         }
 
         if (namesapces == null) {
@@ -199,7 +199,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
         }
 
         final Element element = new Element(
-            getQualifiedName(_element, namesapces), _element.namespaceURI);
+            getQualifiedName(elelement, namesapces), elelement.namespaceURI);
 
         if (parent instanceof Document) {
             final Element previousRoot = ((Document) parent).getRootElement();
@@ -208,19 +208,22 @@ public class XOMElementLocator extends ElementLocator<Document> {
             parent.appendChild(element);
         }
 
-        for (ELAttribute _attribute : _element.attributes.values()) {
+        for (ELAttribute elattribute : elelement.attributes.values()) {
             final Attribute attribute = new Attribute(
-                getQualifiedName(_attribute, namesapces),
-                _attribute.namespaceURI, _attribute.value);
+                getQualifiedName(elattribute, namesapces),
+                elattribute.namespaceURI, elattribute.value);
             element.addAttribute(attribute);
         }
 
-        if (_element.text != null) {
-            element.appendChild(_element.text);
-        } else {
-            for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, element);
+        if (elelement.elements.isEmpty()) {
+            if (elelement.text != null) {
+                element.appendChild(elelement.text);
             }
+            return;
+        }
+
+        for (ELElement grandchild : elelement.elements) {
+            print(grandchild, namesapces, element);
         }
     }
 }

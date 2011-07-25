@@ -51,7 +51,7 @@ public class JDOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
+        return JDOMElementLocator.newInstance(namespaceURI, localName);
     }
 
 
