@@ -441,7 +441,7 @@ public abstract class ElementLocator<D> {
      * @param document an empty document
      * @return given <code>document</code>
      */
-    public abstract D print(final D document);
+    public abstract D toDocument(final D document);
 
 
     /**

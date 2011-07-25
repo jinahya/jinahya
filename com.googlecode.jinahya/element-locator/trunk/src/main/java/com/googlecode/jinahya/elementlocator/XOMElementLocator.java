@@ -195,12 +195,12 @@ public class XOMElementLocator extends ElementLocator<Document> {
     public final Document print() {
 
         // the tmp root element will be replaced
-        return print(new Document(new Element("tmp:tmp", "http://tmp")));
+        return toDocument(new Document(new Element("tmp:tmp", "http://tmp")));
     }
 
 
     @Override
-    public Document print(final Document document) {
+    public Document toDocument(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("document");

@@ -57,7 +57,8 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
      * @param document document
      * @return new instance of DOMElementLocator.
      */
-    public static ElementLocator<Document> parse(final Document document) {
+    public static ElementLocator<Document> parseInstance(
+        final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -211,14 +212,14 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
      *
      * @return a new document
      */
-    public final Document print() {
+    public final Document toDocument() {
 
-        return print(DocumentHelper.createDocument());
+        return toDocument(DocumentHelper.createDocument());
     }
 
 
     @Override
-    public Document print(final Document document) {
+    public Document toDocument(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("document");

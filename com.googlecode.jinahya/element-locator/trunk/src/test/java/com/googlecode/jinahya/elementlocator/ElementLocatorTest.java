@@ -181,7 +181,7 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
         final D document = createDocument();
 
-        locator.print(document);
+        locator.toDocument(document);
 
         System.out.println("--------------------------------------------- XML");
         System.out.println(locator.getClass());

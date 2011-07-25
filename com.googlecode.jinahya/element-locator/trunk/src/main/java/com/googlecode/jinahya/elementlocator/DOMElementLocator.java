@@ -210,12 +210,12 @@ public class DOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null builder");
         }
 
-        return print(builder.newDocument());
+        return toDocument(builder.newDocument());
     }
 
 
     @Override
-    public Document print(final Document document) {
+    public Document toDocument(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("document");
