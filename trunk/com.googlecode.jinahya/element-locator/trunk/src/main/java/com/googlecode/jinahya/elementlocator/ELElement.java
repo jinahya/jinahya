@@ -19,8 +19,8 @@ package com.googlecode.jinahya.elementlocator;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -54,7 +54,7 @@ class ELElement extends ELNode {
      */
     public Set<String> getNamespaceURIs() {
 
-        final Set<String> set = new HashSet<String>();
+        final Set<String> set = new LinkedHashSet<String>();
 
         getNamespaceURIs(set);
 
