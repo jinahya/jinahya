@@ -182,16 +182,15 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             element.setAttribute(attribute);
         }
 
-        if (elelement.elements.isEmpty()) {
-            if (elelement.text != null) {
-                element.setText(elelement.text);
+        if (!elelement.elements.isEmpty()) {
+            for (ELElement grandchild : elelement.elements) {
+                print(grandchild, namespaces, element);
             }
             return;
-
         }
 
-        for (ELElement grandchild : elelement.elements) {
-            print(grandchild, namespaces, element);
+        if (elelement.text != null) {
+            element.setText(elelement.text);
         }
     }
 
@@ -212,12 +211,12 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      */
     public final Document print() {
 
-        return print(new Document());
+        return toDocument(new Document());
     }
 
 
     @Override
-    public Document print(final Document document) {
+    public Document toDocument(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("document");

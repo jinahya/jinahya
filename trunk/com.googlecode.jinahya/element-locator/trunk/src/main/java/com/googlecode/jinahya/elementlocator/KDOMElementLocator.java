@@ -181,12 +181,12 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      */
     public final Document print() {
 
-        return print(new Document());
+        return toDocument(new Document());
     }
 
 
     @Override
-    public Document print(final Document document) {
+    public Document toDocument(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("document");
