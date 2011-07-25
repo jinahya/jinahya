@@ -52,9 +52,10 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param document
-     * @return 
+     * Parses given <code>document</code> and creates a new instance.
+     *
+     * @param document document to parse
+     * @return a new instance.
      */
     public static ElementLocator<Document> parse(final Document document) {
 
@@ -72,9 +73,10 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given JDOM Element to ELElement.
+     *
+     * @param element JDOM Element to parse
+     * @return converted ELElement
      */
     private static ELElement parse(final Element element) {
 
