@@ -56,7 +56,8 @@ public class DOMElementLocator extends ElementLocator<Document> {
      * @param document document
      * @return new instance of DOMElementLocator.
      */
-    public static ElementLocator<Document> parse(final Document document) {
+    public static ElementLocator<Document> parseInstance(
+        final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -204,7 +205,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
      * @param builder
      * @return 
      */
-    public Document print(final DocumentBuilder builder) {
+    public Document toDocument(final DocumentBuilder builder) {
 
         if (builder == null) {
             throw new NullPointerException("null builder");
