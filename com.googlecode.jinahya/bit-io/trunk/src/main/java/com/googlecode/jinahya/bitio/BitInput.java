@@ -55,16 +55,14 @@ public class BitInput {
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
-    private int readUnsignedByte(final int length) throws IOException {
+    protected final int readUnsignedByte(final int length) throws IOException {
 
         if (length <= 0) {
-            throw new IllegalArgumentException(
-                "illegal length: " + length + " <= 0");
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 8) {
-            throw new IllegalArgumentException(
-                "illegal length: " + length + " > 8");
+            throw new IllegalArgumentException("length(" + length + ") > 8");
         }
 
         if (index == 8) {
@@ -81,6 +79,7 @@ public class BitInput {
         }
 
         final int required = length - (8 - index);
+
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
                    | readUnsignedByte(required);
@@ -99,7 +98,7 @@ public class BitInput {
 
 
     /**
-     * Reads 1-bit long boolean value.
+     * Reads 1-bit boolean value.
      *
      * @return boolean value
      * @throws IOException if an I/O error occurs.
@@ -117,16 +116,14 @@ public class BitInput {
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
-    private int readUnsignedShort(final int length) throws IOException {
+    protected final int readUnsignedShort(final int length) throws IOException {
 
         if (length <= 0) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") <= 0");
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 16) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") > 16");
+            throw new IllegalArgumentException("length(" + length + ") > 16");
         }
 
         final int quotient = length / 0x08;
@@ -151,19 +148,17 @@ public class BitInput {
      * Reads an unsigned int.
      *
      * @param length bit length between 1 (inclusive) and 32 (exclusive).
-     * @return
-     * @throws IOException
+     * @return an unsigned int value
+     * @throws IOException if an I/O error occurs
      */
-    public int readUnsignedInt(final int length) throws IOException {
+    public final int readUnsignedInt(final int length) throws IOException {
 
         if (length < 1) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") < 1");
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length >= 32) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") >= 32");
+            throw new IllegalArgumentException("length(" + length + ") >= 32");
         }
 
         final int quotient = length / 0x10;
@@ -185,25 +180,29 @@ public class BitInput {
 
 
     /**
-     * Reads an signed int.
+     * Reads a signed int.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @return a <code>length</code>bit-long signed integer
      * @throws IOException if an I/O error occurs.
      */
-    public int readInt(final int length) throws IOException {
+    public final int readInt(final int length) throws IOException {
 
         if (length <= 1) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") <= 1");
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 32) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") > 32");
+            throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        int value = readBoolean() ? (-1 << (length - 1)) : 0;
+        int value = 0x00;
+
+        if (readBoolean()) {
+            value--;
+        }
+
+        value <<= (length - 1);
 
         value |= readUnsignedInt(length - 1);
 
@@ -212,21 +211,20 @@ public class BitInput {
 
 
     /**
+     * Reads an unsigned long.
      *
      * @param length bit length between 1 (inclusive) and 64 (exclusive)
-     * @return <code>length</code>-bit unsigned long value
+     * @return an unsigned long value
      * @throws IOException if an I/O error occurs
      */
     public final long readUnsignedLong(final int length) throws IOException {
 
         if (length < 1) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") < 1");
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         if (length >= 64) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") >= 64");
+            throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
         final int quotient = length / 0x10;
@@ -257,16 +255,19 @@ public class BitInput {
     public final long readLong(final int length) throws IOException {
 
         if (length <= 1) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") <= 1");
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 64) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") > 64");
+            throw new IllegalArgumentException("length(" + length + ") > 64");
         }
 
-        long value = readBoolean() ? (-1L << (length - 1)) : 0L;
+        long value = 0x00L;
+        if (readBoolean()) {
+            value--;
+        }
+        value <<= (length - 1);
+        //long value = readBoolean() ? (-1L << (length - 1)) : 0L;
 
         value |= readUnsignedLong(length - 1);
 
@@ -277,14 +278,13 @@ public class BitInput {
     /**
      * Align to given <code>length</code> bytes.
      *
-     * @param length number of octets to align
+     * @param length number of bytes to align
      * @throws IOException if an I/O error occurs.
      */
-    public void aling(final int length) throws IOException {
+    public final void aling(final int length) throws IOException {
 
         if (length <= 0) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ") <= 0");
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         int octets = count % length;
