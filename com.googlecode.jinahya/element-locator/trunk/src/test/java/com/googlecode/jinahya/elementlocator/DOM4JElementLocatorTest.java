@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.el;
+package com.googlecode.jinahya.elementlocator;
 
 
 import java.io.InputStream;
@@ -23,42 +23,43 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.SAXReader;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMElementLocatorTest
-    extends ElementLocatorTest<JDOMElementLocator, Document> {
+public class DOM4JElementLocatorTest
+    extends ElementLocatorTest<DOM4JElementLocator, Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator<Document> parseLocator(InputStream in)
         throws Exception {
 
-        final SAXBuilder builder = new SAXBuilder();
-        final Document document = builder.build(in);
-        return JDOMElementLocator.newInstance(document);
+        final SAXReader reader = new SAXReader();
+        final Document document = reader.read(in);
+
+        return DOM4JElementLocator.newInstance(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected DOM4JElementLocator createLocator(final String namespaceURI,
+                                                final String localName)
         throws Exception {
 
-        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
+        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
 
-        return new Document();
+        return DocumentHelper.createDocument();
     }
 
 
@@ -68,9 +69,8 @@ public class JDOMElementLocatorTest
                                  final String charsetName)
         throws Exception {
 
-        final XMLOutputter outputter = new XMLOutputter();
         final Writer writer = new OutputStreamWriter(out, charsetName);
-        outputter.output(document, writer);
+        document.write(writer);
         writer.flush();
     }
 }

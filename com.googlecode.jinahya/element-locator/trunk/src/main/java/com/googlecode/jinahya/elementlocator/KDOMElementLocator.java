@@ -15,37 +15,21 @@
  */
 
 
-package com.googlecode.jinahya.el;
+package com.googlecode.jinahya.elementlocator;
 
 
 import java.util.Map;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.ParentNode;
-import nu.xom.Text;
+import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocator extends ElementLocator<Document> {
-
-
-    /**
-     * 
-     * @param namespaceURI
-     * @param localName
-     * @return 
-     */
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
-    }
+public class KDOMElementLocator extends ElementLocator<Document> {
 
 
     /**
@@ -80,14 +64,14 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        return new XOMElementLocator(parse(element));
+        return new KDOMElementLocator(parse(element));
     }
 
 
     /**
      * 
-     * @param element element to be parsed
-     * @return an ELElement
+     * @param element
+     * @return 
      */
     private static ELElement parse(final Element element) {
 
@@ -95,43 +79,46 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        String namespaceURI = element.getNamespaceURI();
+        String namespaceURI = element.getNamespace();
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
-        final String localName = element.getLocalName();
+        final String localName = element.getName();
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
         final int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            final Attribute attribute = element.getAttribute(i);
-            String attributeNamespaceURI = attribute.getNamespaceURI();
+            String attributeNamespaceURI = element.getAttributeNamespace(i);
             if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = attribute.getLocalName();
-            final String attributeValue = attribute.getValue();
+            final String attributeLocalName = element.getAttributeName(i);
+            final String attributeValue = element.getAttributeValue(i);
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
 
-        String text = null;
-
         final int childCount = element.getChildCount();
+        String text = null;
         for (int i = 0; i < childCount; i++) {
-            final Node child = element.getChild(i);
-            if (child instanceof Text) {
-                if (text == null) {
-                    text = element.getValue();
-                }
-            } else if (child instanceof Element) {
-                _element.elements.add(parse((Element) element.getChild(i)));
+            switch (element.getType(i)) {
+                case Node.CDSECT:
+                case Node.TEXT:
+                    if (text == null) {
+                        text = element.getText(i);
+                    }
+                    break;
+                case Node.ELEMENT:
+                    _element.elements.add(parse((Element) element.getChild(i)));
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -147,7 +134,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected XOMElementLocator(final ELElement root) {
+    protected KDOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -158,8 +145,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      */
     public final Document print() {
 
-        // the tmp root element will be replaced
-        return print(new Document(new Element("tmp:tmp", "http://tmp")));
+        return print(new Document());
     }
 
 
@@ -184,7 +170,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      */
     private void print(final ELElement _element,
                        final Map<String, String> namesapces,
-                       final ParentNode parent) {
+                       final Node parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
@@ -198,28 +184,20 @@ public class XOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = new Element(
-            getQualifiedName(_element, namesapces), _element.namespaceURI);
-
-        if (parent instanceof Document) {
-            final Element previousRoot = ((Document) parent).getRootElement();
-            parent.replaceChild(previousRoot, element);
-        } else {
-            parent.appendChild(element);
-        }
+        final Element child = parent.createElement(
+            _element.namespaceURI, _element.localName);
+        parent.addChild(Node.ELEMENT, child);
 
         for (ELAttribute _attribute : _element.attributes.values()) {
-            final Attribute attribute = new Attribute(
-                getQualifiedName(_attribute, namesapces),
-                _attribute.namespaceURI, _attribute.value);
-            element.addAttribute(attribute);
+            child.setAttribute(_attribute.namespaceURI, _attribute.localName,
+                               _attribute.value);
         }
 
         if (_element.text != null) {
-            element.appendChild(_element.text);
+            child.addChild(Node.TEXT, _element.text);
         } else {
             for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, element);
+                print(grandchild, namesapces, child);
             }
         }
     }

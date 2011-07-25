@@ -15,33 +15,43 @@
  */
 
 
-package com.googlecode.jinahya.el;
+package com.googlecode.jinahya.elementlocator;
 
 
 import java.util.Map;
 
-import org.dom4j.Attribute;
-import org.dom4j.Branch;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.Namespace;
-import org.dom4j.Node;
-import org.dom4j.QName;
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.ParentNode;
+import nu.xom.Text;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DOM4JElementLocator extends ElementLocator<Document> {
+public class XOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param document document
-     * @return new instance of DOMElementLocator.
+     * 
+     * @param namespaceURI
+     * @param localName
+     * @return 
+     */
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new XOMElementLocator(new ELElement(namespaceURI, localName));
+    }
+
+
+    /**
+     * 
+     * @param document
+     * @return 
      */
     public static ElementLocator<Document> newInstance(
         final Document document) {
@@ -60,10 +70,9 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param element element
-     * @return new instance of DOMelementLocator
+     * 
+     * @param element
+     * @return 
      */
     public static ElementLocator<Document> newInstance(final Element element) {
 
@@ -71,14 +80,14 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        return new DOM4JElementLocator(parse(element));
+        return new XOMElementLocator(parse(element));
     }
 
 
     /**
      * 
-     * @param element
-     * @return 
+     * @param element element to be parsed
+     * @return an ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -90,23 +99,21 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
-        final String localName = element.getName();
+        final String localName = element.getLocalName();
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
-
-        final int attributeCount = element.attributeCount();
+        final int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
-            final Attribute attribute = element.attribute(i);
+            final Attribute attribute = element.getAttribute(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
-            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(
-                attributeNamespaceURI)) {
+            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = attribute.getName();
+            final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
@@ -116,25 +123,19 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        final int nodeCount = element.nodeCount();
-        for (int i = 0; i < nodeCount; i++) {
-            final Node node = element.node(i);
-            switch (node.getNodeType()) {
-                case Node.CDATA_SECTION_NODE:
-                case Node.TEXT_NODE:
-                    if (text == null) {
-                        text = node.getText();
-                    }
-                    break;
-                case Node.ELEMENT_NODE:
-                    _element.elements.add(parse((Element) node));
-                    break;
-                default:
-                    break;
+        final int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final Node child = element.getChild(i);
+            if (child instanceof Text) {
+                if (text == null) {
+                    text = element.getValue();
+                }
+            } else if (child instanceof Element) {
+                _element.elements.add(parse((Element) element.getChild(i)));
             }
         }
 
-        if (_element.elements.isEmpty()) {
+        if (_element.elements.isEmpty() && text != null) {
             _element.text = text;
         }
 
@@ -143,11 +144,10 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param root root element
+     * 
+     * @param root 
      */
-    protected DOM4JElementLocator(final ELElement root) {
+    protected XOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -158,7 +158,8 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
      */
     public final Document print() {
 
-        return print(DocumentHelper.createDocument());
+        // the tmp root element will be replaced
+        return print(new Document(new Element("tmp:tmp", "http://tmp")));
     }
 
 
@@ -178,13 +179,12 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
     /**
      * 
      * @param _element
-     * @param document
      * @param namesapces
      * @param parent
      */
     private void print(final ELElement _element,
                        final Map<String, String> namesapces,
-                       final Branch parent) {
+                       final ParentNode parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
@@ -198,26 +198,29 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = parent.addElement(
+        final Element element = new Element(
             getQualifiedName(_element, namesapces), _element.namespaceURI);
 
+        if (parent instanceof Document) {
+            final Element previousRoot = ((Document) parent).getRootElement();
+            parent.replaceChild(previousRoot, element);
+        } else {
+            parent.appendChild(element);
+        }
+
         for (ELAttribute _attribute : _element.attributes.values()) {
-            final Namespace namespace = new Namespace(
-                namesapces.get(_attribute.namespaceURI),
-                _attribute.namespaceURI);
-            final QName qName = new QName(
-                _attribute.localName, namespace,
-                getQualifiedName(_attribute, namesapces));
-            element.addAttribute(qName, _attribute.value);
+            final Attribute attribute = new Attribute(
+                getQualifiedName(_attribute, namesapces),
+                _attribute.namespaceURI, _attribute.value);
+            element.addAttribute(attribute);
         }
 
-        if (_element.elements.isEmpty() && _element.text != null) {
-            element.setText(_element.text);
-            return;
-        }
-
-        for (ELElement child : _element.elements) {
-            print(child, namesapces, element);
+        if (_element.text != null) {
+            element.appendChild(_element.text);
+        } else {
+            for (ELElement grandchild : _element.elements) {
+                print(grandchild, namesapces, element);
+            }
         }
     }
 }

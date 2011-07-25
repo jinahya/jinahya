@@ -15,28 +15,26 @@
  */
 
 
-package com.googlecode.jinahya.el;
+package com.googlecode.jinahya.elementlocator;
 
 
+import java.util.List;
 import java.util.Map;
 
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
-import org.kxml2.kdom.Node;
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.Parent;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocator extends ElementLocator<Document> {
+public class JDOMElementLocator extends ElementLocator<Document> {
 
 
-    /**
-     * 
-     * @param document
-     * @return 
-     */
     public static ElementLocator<Document> newInstance(
         final Document document) {
 
@@ -53,18 +51,13 @@ public class KDOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    /**
-     * 
-     * @param element
-     * @return 
-     */
     public static ElementLocator<Document> newInstance(final Element element) {
 
         if (element == null) {
             throw new NullPointerException("null element");
         }
 
-        return new KDOMElementLocator(parse(element));
+        return new JDOMElementLocator(parse(element));
     }
 
 
@@ -79,7 +72,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null element");
         }
 
-        String namespaceURI = element.getNamespace();
+        String namespaceURI = element.getNamespaceURI();
         if (namespaceURI == null) {
             namespaceURI = ELNode.NULL_NS_URI;
         }
@@ -87,43 +80,34 @@ public class KDOMElementLocator extends ElementLocator<Document> {
 
         final ELElement _element = new ELElement(namespaceURI, localName);
 
-        final int attributeCount = element.getAttributeCount();
-        for (int i = 0; i < attributeCount; i++) {
-            String attributeNamespaceURI = element.getAttributeNamespace(i);
+        @SuppressWarnings("unchecked")
+        final List<Attribute> attributes = element.getAttributes();
+        for (Attribute attribute : attributes) {
+            String attributeNamespaceURI = attribute.getNamespaceURI();
             if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
                 attributeNamespaceURI = ELNode.NULL_NS_URI;
             }
-            final String attributeLocalName = element.getAttributeName(i);
-            final String attributeValue = element.getAttributeValue(i);
+            final String attributeLocalName = attribute.getName();
+            final String attributeValue = attribute.getValue();
             _element.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
 
-        final int childCount = element.getChildCount();
         String text = null;
-        for (int i = 0; i < childCount; i++) {
-            switch (element.getType(i)) {
-                case Node.CDSECT:
-                case Node.TEXT:
-                    if (text == null) {
-                        text = element.getText(i);
-                    }
-                    break;
-                case Node.ELEMENT:
-                    _element.elements.add(parse((Element) element.getChild(i)));
-                    break;
-                default:
-                    break;
-            }
+
+        @SuppressWarnings("unchecked")
+        final List<Element> children = element.getChildren();
+        for (Element child : children) {
+            _element.elements.add(parse(child));
         }
 
-        if (_element.elements.isEmpty() && text != null) {
-            _element.text = text;
+        if (_element.elements.isEmpty()) {
+            _element.text = element.getValue();
         }
 
         return _element;
@@ -134,7 +118,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected KDOMElementLocator(final ELElement root) {
+    protected JDOMElementLocator(final ELElement root) {
         super(root);
     }
 
@@ -165,18 +149,18 @@ public class KDOMElementLocator extends ElementLocator<Document> {
     /**
      * 
      * @param _element
-     * @param namesapces
+     * @param namespaces
      * @param parent
      */
     private void print(final ELElement _element,
-                       final Map<String, String> namesapces,
-                       final Node parent) {
+                       final Map<String, String> namespaces,
+                       final Parent parent) {
 
         if (_element == null) {
             throw new NullPointerException("null _element");
         }
 
-        if (namesapces == null) {
+        if (namespaces == null) {
             throw new NullPointerException("null namespaces");
         }
 
@@ -184,20 +168,34 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element child = parent.createElement(
-            _element.namespaceURI, _element.localName);
-        parent.addChild(Node.ELEMENT, child);
-
-        for (ELAttribute _attribute : _element.attributes.values()) {
-            child.setAttribute(_attribute.namespaceURI, _attribute.localName,
-                               _attribute.value);
+        final Element element = new Element(
+            _element.localName, _element.namespaceURI);
+        if (parent instanceof Document) {
+            ((Document) parent).addContent(element);
+        } else {
+            ((Element) parent).addContent(element);
         }
 
-        if (_element.text != null) {
-            child.addChild(Node.TEXT, _element.text);
+        for (ELAttribute _attribute : _element.attributes.values()) {
+            if (_attribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
+                final Attribute attribute = new Attribute(
+                    _attribute.localName, _attribute.value,
+                    Namespace.NO_NAMESPACE);
+                element.setAttribute(attribute);
+                continue;
+            }
+            final Namespace namespace = Namespace.getNamespace(namespaces.get(
+                _attribute.namespaceURI), _attribute.namespaceURI);
+            final Attribute attribute = new Attribute(
+                _attribute.localName, _attribute.value, namespace);
+            element.setAttribute(attribute);
+        }
+
+        if (_element.elements.isEmpty()) {
+            element.setText(_element.text);
         } else {
             for (ELElement grandchild : _element.elements) {
-                print(grandchild, namesapces, child);
+                print(grandchild, namespaces, element);
             }
         }
     }
