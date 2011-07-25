@@ -1,23 +1,23 @@
 -classpath
-'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/classes'
+'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/src/main/java'
+'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2011. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/site/apidocs'
+'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'bit-io 1.0-alpha-4-SNAPSHOT API'
 -linkoffline
-'http://download.oracle.com/javase/1.5.0/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/javadoc-bundle-options'
+'http://download.oracle.com/javase/1.5.0/docs/api' '/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
