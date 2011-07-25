@@ -97,7 +97,6 @@ public class BitIOTest {
             final int length = list.get(i);
             final int expected = list.get(i + 1);
             final int actual = input.readUnsignedInt(length);
-            //System.out.println(length + " / " + expected + " / " + actual);
             Assert.assertEquals(actual, expected);
         }
         input.aling(1);
@@ -166,7 +165,6 @@ public class BitIOTest {
             final int length = list.get(i);
             final int expected = list.get(i + 1);
             final int actual = input.readInt(length);
-            //System.out.println(length + " / " + expected + " / " + actual);
             Assert.assertEquals(actual, expected);
         }
         input.aling(1);
@@ -229,7 +227,6 @@ public class BitIOTest {
             final int length = list.get(i).intValue();
             final long expected = list.get(i + 1);
             final long actual = input.readUnsignedLong(length);
-            //System.out.println(length + " / " + expected + " / " + actual);
             Assert.assertEquals(actual, expected);
         }
         input.aling(1);
@@ -298,7 +295,6 @@ public class BitIOTest {
             final int length = list.get(i).intValue();
             final long expected = list.get(i + 1);
             final long actual = input.readLong(length);
-            //System.out.println(length + " / " + expected + " / " + actual);
             Assert.assertEquals(actual, expected);
         }
         input.aling(1);

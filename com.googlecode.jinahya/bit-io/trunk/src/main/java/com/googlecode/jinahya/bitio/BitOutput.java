@@ -349,4 +349,3 @@ public class BitOutput {
 
     private int count = 0;
 }
-

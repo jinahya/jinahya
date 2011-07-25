@@ -327,3 +327,4 @@ public class BitInput {
     /** octet count. */
     private int count = 0;
 }
+
