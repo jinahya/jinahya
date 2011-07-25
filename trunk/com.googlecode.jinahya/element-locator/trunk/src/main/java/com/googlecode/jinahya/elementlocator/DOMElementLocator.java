@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.el;
+package com.googlecode.jinahya.elementlocator;
 
 
 import java.util.Map;
