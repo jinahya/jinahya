@@ -44,7 +44,8 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @return 
      */
-    public static ElementLocator<Document> parse(final Document document) {
+    public static ElementLocator<Document> parseInstance(
+        final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -179,7 +180,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * 
      * @return 
      */
-    public final Document print() {
+    public final Document toDocument() {
 
         return toDocument(new Document());
     }

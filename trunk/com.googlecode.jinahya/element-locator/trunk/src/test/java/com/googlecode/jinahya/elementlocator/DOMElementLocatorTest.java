@@ -83,7 +83,7 @@ public class DOMElementLocatorTest
 
         final Document document = DB.parse(in);
 
-        return DOMElementLocator.parse(document);
+        return DOMElementLocator.parseInstance(document);
     }
 
 

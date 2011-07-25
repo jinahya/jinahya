@@ -53,7 +53,8 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @return 
      */
-    public static ElementLocator<Document> parse(final Document document) {
+    public static ElementLocator<Document> parseInstance(
+        final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -192,7 +193,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * 
      * @return 
      */
-    public final Document print() {
+    public final Document toDocument() {
 
         // the tmp root element will be replaced
         return toDocument(new Document(new Element("tmp:tmp", "http://tmp")));

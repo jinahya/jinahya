@@ -57,7 +57,8 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      * @param document document to parse
      * @return a new instance.
      */
-    public static ElementLocator<Document> parse(final Document document) {
+    public static ElementLocator<Document> parseInstance(
+        final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -209,7 +210,7 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      *
      * @return a new document
      */
-    public final Document print() {
+    public final Document toDocument() {
 
         return toDocument(new Document());
     }

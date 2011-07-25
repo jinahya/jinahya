@@ -41,7 +41,7 @@ public class XOMElementLocatorTest
 
         final Builder builder = new Builder();
         final Document document = builder.build(in);
-        return XOMElementLocator.parse(document);
+        return XOMElementLocator.parseInstance(document);
     }
 
 
