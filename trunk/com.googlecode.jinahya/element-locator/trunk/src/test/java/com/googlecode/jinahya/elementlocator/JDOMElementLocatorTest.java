@@ -42,7 +42,7 @@ public class JDOMElementLocatorTest
 
         final SAXBuilder builder = new SAXBuilder();
         final Document document = builder.build(in);
-        return JDOMElementLocator.newInstance(document);
+        return JDOMElementLocator.parse(document);
     }
 
 

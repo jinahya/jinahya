@@ -37,6 +37,13 @@ import org.jdom.Text;
 public class JDOMElementLocator extends ElementLocator<Document> {
 
 
+    /**
+     * Creates a new empty (root only) instance.
+     *
+     * @param namespaceURI root element's name space URI
+     * @param localName root element's local name
+     * @return a new empty (root only) instance.
+     */
     public static ElementLocator<Document> newInstance(
         final String namespaceURI, final String localName) {
 
@@ -44,29 +51,23 @@ public class JDOMElementLocator extends ElementLocator<Document> {
     }
 
 
-    public static ElementLocator<Document> newInstance(
-        final Document document) {
+    /**
+     * 
+     * @param document
+     * @return 
+     */
+    public static ElementLocator<Document> parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        final Element element = document.getRootElement();
-        if (element == null) {
+        final Element rootElement = document.getRootElement();
+        if (rootElement == null) {
             throw new IllegalArgumentException("no root element");
         }
 
-        return newInstance(element);
-    }
-
-
-    public static ElementLocator<Document> newInstance(final Element element) {
-
-        if (element == null) {
-            throw new NullPointerException("null element");
-        }
-
-        return new JDOMElementLocator(parse(element));
+        return new JDOMElementLocator(parse(rootElement));
     }
 
 
@@ -131,46 +132,13 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param root 
-     */
-    private JDOMElementLocator(final ELElement root) {
-        super(root);
-    }
-
-
-    /**
-     * A new document contains this element's content.
-     *
-     * @return a new document
-     */
-    public final Document print() {
-
-        return print(new Document());
-    }
-
-
-    @Override
-    public Document print(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
-    }
-
-
-    /**
-     * 
      * @param elelement
      * @param namespaces
-     * @param parent
+     * @param parent 
      */
-    private void print(final ELElement elelement,
-                       final Map<String, String> namespaces,
-                       final Parent parent) {
+    private static void print(final ELElement elelement,
+                              final Map<String, String> namespaces,
+                              final Parent parent) {
 
         if (elelement == null) {
             throw new NullPointerException("null elelement");
@@ -186,7 +154,12 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
         final Element element = new Element(
             elelement.localName, elelement.namespaceURI);
+
         if (parent instanceof Document) {
+            final Document document = (Document) parent;
+            if (document.hasRootElement()) {
+                document.removeContent(document.getRootElement());
+            }
             ((Document) parent).addContent(element);
         } else {
             ((Element) parent).addContent(element);
@@ -218,6 +191,39 @@ public class JDOMElementLocator extends ElementLocator<Document> {
         for (ELElement grandchild : elelement.elements) {
             print(grandchild, namespaces, element);
         }
+    }
+
+
+    /**
+     * 
+     * @param root 
+     */
+    private JDOMElementLocator(final ELElement root) {
+        super(root);
+    }
+
+
+    /**
+     * A new document contains this element's content.
+     *
+     * @return a new document
+     */
+    public final Document print() {
+
+        return print(new Document());
+    }
+
+
+    @Override
+    public Document print(final Document document) {
+
+        if (document == null) {
+            throw new NullPointerException("document");
+        }
+
+        print(getRoot(), getNamespaces(), document);
+
+        return document;
     }
 }
 

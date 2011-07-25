@@ -60,7 +60,7 @@ public class KDOMElementLocatorTest
         final Document document = new Document();
         document.parse(parser);
 
-        return KDOMElementLocator.newInstance(document);
+        return KDOMElementLocator.parse(document);
     }
 
 

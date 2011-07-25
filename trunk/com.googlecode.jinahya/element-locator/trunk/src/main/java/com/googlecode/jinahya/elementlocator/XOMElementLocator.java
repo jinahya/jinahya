@@ -53,8 +53,7 @@ public class XOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @return 
      */
-    public static ElementLocator<Document> newInstance(
-        final Document document) {
+    public static ElementLocator<Document> parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -63,21 +62,6 @@ public class XOMElementLocator extends ElementLocator<Document> {
         final Element element = document.getRootElement();
         if (element == null) {
             throw new IllegalArgumentException("no root element");
-        }
-
-        return newInstance(element);
-    }
-
-
-    /**
-     * 
-     * @param element
-     * @return 
-     */
-    public static ElementLocator<Document> newInstance(final Element element) {
-
-        if (element == null) {
-            throw new NullPointerException("null element");
         }
 
         return new XOMElementLocator(parse(element));
@@ -145,46 +129,13 @@ public class XOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param root 
-     */
-    private XOMElementLocator(final ELElement root) {
-        super(root);
-    }
-
-
-    /**
-     * 
-     * @return 
-     */
-    public final Document print() {
-
-        // the tmp root element will be replaced
-        return print(new Document(new Element("tmp:tmp", "http://tmp")));
-    }
-
-
-    @Override
-    public Document print(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
-    }
-
-
-    /**
-     * 
      * @param elelement
      * @param namesapces
      * @param parent
      */
-    private void print(final ELElement elelement,
-                       final Map<String, String> namesapces,
-                       final ParentNode parent) {
+    private static void print(final ELElement elelement,
+                              final Map<String, String> namesapces,
+                              final ParentNode parent) {
 
         if (elelement == null) {
             throw new NullPointerException("null elelement");
@@ -225,6 +176,39 @@ public class XOMElementLocator extends ElementLocator<Document> {
         for (ELElement grandchild : elelement.elements) {
             print(grandchild, namesapces, element);
         }
+    }
+
+
+    /**
+     * 
+     * @param root 
+     */
+    private XOMElementLocator(final ELElement root) {
+        super(root);
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
+    public final Document print() {
+
+        // the tmp root element will be replaced
+        return print(new Document(new Element("tmp:tmp", "http://tmp")));
+    }
+
+
+    @Override
+    public Document print(final Document document) {
+
+        if (document == null) {
+            throw new NullPointerException("document");
+        }
+
+        print(getRoot(), getNamespaces(), document);
+
+        return document;
     }
 }
 
