@@ -267,7 +267,6 @@ public class BitInput {
             value--;
         }
         value <<= (length - 1);
-        //long value = readBoolean() ? (-1L << (length - 1)) : 0L;
 
         value |= readUnsignedLong(length - 1);
 
