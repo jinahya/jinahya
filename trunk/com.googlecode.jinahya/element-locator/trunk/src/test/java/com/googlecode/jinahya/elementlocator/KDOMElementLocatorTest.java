@@ -69,7 +69,7 @@ public class KDOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
+        return KDOMElementLocator.newInstance(namespaceURI, localName);
     }
 
 

@@ -138,7 +138,8 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         final ElementLocator<D> locator =
             createLocator("http://a", "grandparent");
 
-        locator.addChild("parent").setText("parent0", true);
+        locator.addChild("parent").setText("parent0");
+        locator.locateParent();
 
         locator.addChild("http://b", "parent");
         locator.setAttribute("http://a", "a", "a");
@@ -151,8 +152,8 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         locator.addChild("child").setText("child1").locateParent();
 
         locator.addChild("http://c", "child").
-            addChild("grandchild").setText("grandchild", true).
-            locateParent();
+            addChild("grandchild").setText("grandchild").
+            locateParent().locateParent();
 
         locator.addChild("child").setText("child2").locateParent();
 

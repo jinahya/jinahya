@@ -88,11 +88,11 @@ public class DOMElementLocatorTest
 
 
     @Override
-    protected DOMElementLocator createLocator(final String namespaceURI,
-                                              final String localName)
+    protected ElementLocator<Document> createLocator(final String namespaceURI,
+                                                     final String localName)
         throws Exception {
 
-        return new DOMElementLocator(new ELElement(namespaceURI, localName));
+        return DOMElementLocator.newInstance(namespaceURI, localName);
     }
 
 

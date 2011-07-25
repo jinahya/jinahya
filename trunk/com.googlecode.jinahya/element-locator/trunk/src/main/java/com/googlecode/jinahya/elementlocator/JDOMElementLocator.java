@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.elementlocator;
 
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.Parent;
+import org.jdom.Text;
 
 
 /**
@@ -33,6 +35,13 @@ import org.jdom.Parent;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class JDOMElementLocator extends ElementLocator<Document> {
+
+
+    public static ElementLocator<Document> newInstance(
+        final String namespaceURI, final String localName) {
+
+        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
+    }
 
 
     public static ElementLocator<Document> newInstance(
@@ -78,11 +87,11 @@ public class JDOMElementLocator extends ElementLocator<Document> {
         }
         final String localName = element.getName();
 
-        final ELElement _element = new ELElement(namespaceURI, localName);
+        final ELElement elelement = new ELElement(namespaceURI, localName);
 
-        @SuppressWarnings("unchecked")
-        final List<Attribute> attributes = element.getAttributes();
-        for (Attribute attribute : attributes) {
+        final List<?> attributes = element.getAttributes();
+        for (int i = 0; i < attributes.size(); i++) {
+            final Attribute attribute = (Attribute) attributes.get(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
             if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
                 continue;
@@ -92,7 +101,7 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             }
             final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
-            _element.attributes.put(
+            elelement.attributes.put(
                 ELNode.express(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -100,17 +109,23 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        @SuppressWarnings("unchecked")
-        final List<Element> children = element.getChildren();
-        for (Element child : children) {
-            _element.elements.add(parse(child));
+        final Iterator<?> i = element.getContent().iterator();
+        while (i.hasNext()) {
+            final Object child = i.next();
+            if (child instanceof Text) {
+                if (text == null) {
+                    text = ((Text) child).getText();
+                }
+            } else if (child instanceof Element) {
+                elelement.elements.add(parse((Element) child));
+            }
         }
 
-        if (_element.elements.isEmpty()) {
-            _element.text = element.getValue();
+        if (elelement.elements.isEmpty()) {
+            elelement.text = text;
         }
 
-        return _element;
+        return elelement;
     }
 
 
@@ -118,14 +133,15 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    protected JDOMElementLocator(final ELElement root) {
+    private JDOMElementLocator(final ELElement root) {
         super(root);
     }
 
 
     /**
-     * 
-     * @return 
+     * A new document contains this element's content.
+     *
+     * @return a new document
      */
     public final Document print() {
 
@@ -148,16 +164,16 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param _element
+     * @param elelement
      * @param namespaces
      * @param parent
      */
-    private void print(final ELElement _element,
+    private void print(final ELElement elelement,
                        final Map<String, String> namespaces,
                        final Parent parent) {
 
-        if (_element == null) {
-            throw new NullPointerException("null _element");
+        if (elelement == null) {
+            throw new NullPointerException("null elelement");
         }
 
         if (namespaces == null) {
@@ -169,34 +185,38 @@ public class JDOMElementLocator extends ElementLocator<Document> {
         }
 
         final Element element = new Element(
-            _element.localName, _element.namespaceURI);
+            elelement.localName, elelement.namespaceURI);
         if (parent instanceof Document) {
             ((Document) parent).addContent(element);
         } else {
             ((Element) parent).addContent(element);
         }
 
-        for (ELAttribute _attribute : _element.attributes.values()) {
-            if (_attribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
+        for (ELAttribute elattribute : elelement.attributes.values()) {
+            if (elattribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
                 final Attribute attribute = new Attribute(
-                    _attribute.localName, _attribute.value,
+                    elattribute.localName, elattribute.value,
                     Namespace.NO_NAMESPACE);
                 element.setAttribute(attribute);
                 continue;
             }
             final Namespace namespace = Namespace.getNamespace(namespaces.get(
-                _attribute.namespaceURI), _attribute.namespaceURI);
+                elattribute.namespaceURI), elattribute.namespaceURI);
             final Attribute attribute = new Attribute(
-                _attribute.localName, _attribute.value, namespace);
+                elattribute.localName, elattribute.value, namespace);
             element.setAttribute(attribute);
         }
 
-        if (_element.elements.isEmpty()) {
-            element.setText(_element.text);
-        } else {
-            for (ELElement grandchild : _element.elements) {
-                print(grandchild, namespaces, element);
+        if (elelement.elements.isEmpty()) {
+            if (elelement.text != null) {
+                element.setText(elelement.text);
             }
+            return;
+
+        }
+
+        for (ELElement grandchild : elelement.elements) {
+            print(grandchild, namespaces, element);
         }
     }
 }

@@ -50,7 +50,7 @@ public class XOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return new XOMElementLocator(new ELElement(namespaceURI, localName));
+        return XOMElementLocator.newInstance(namespaceURI, localName);
     }
 
 

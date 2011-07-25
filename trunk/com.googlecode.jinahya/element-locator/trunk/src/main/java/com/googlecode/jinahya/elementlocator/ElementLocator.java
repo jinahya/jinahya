@@ -101,7 +101,7 @@ public abstract class ElementLocator<D> {
      *
      * @param root root element
      */
-    protected ElementLocator(final ELElement root) {
+    ElementLocator(final ELElement root) {
         super();
 
         if (root == null) {
@@ -114,7 +114,7 @@ public abstract class ElementLocator<D> {
 
     /**
      * Returns the number of child elements with given <code>localName</code>
-     * with no namespace.
+     * with no name space.
      *
      * @param localName local name
      * @return number of children
@@ -253,7 +253,7 @@ public abstract class ElementLocator<D> {
 
     /**
      * Adds a child element whose name is <code>localName</code> with
-     * no namespace and locate it.
+     * no name space and locate it.
      *
      * @param localName local name
      * @return self
@@ -296,26 +296,7 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * Returns text value of current element and locate parent if specified.
-     *
-     * @param parent flag for locating parent.
-     * @return text value.
-     */
-    public final String getText(final boolean parent) {
-
-        final String text = getText();
-
-        if (parent) {
-            locateParent();
-        }
-
-        return text;
-    }
-
-
-    /**
-     * Remove all child elements and add given <code>text</code> value to the
-     * current element.
+     * Sets the text value.
      *
      * @param text text value; may be null
      * @return self
@@ -323,27 +304,6 @@ public abstract class ElementLocator<D> {
     public final ElementLocator<D> setText(final String text) {
 
         getCurrent().text = text;
-
-        return this;
-    }
-
-
-    /**
-     * Remove all child elements and add given <code>text</code> value to the
-     * current element and locate parent if specified.
-     *
-     * @param text text value; may be null
-     * @param parent flag for locating parent
-     * @return self
-     */
-    public final ElementLocator<D> setText(final String text,
-                                           final boolean parent) {
-
-        setText(text);
-
-        if (parent) {
-            locateParent();
-        }
 
         return this;
     }
@@ -470,10 +430,12 @@ public abstract class ElementLocator<D> {
 
     /**
      * Removes current element and locate parent. An
-     * <code>IllegalStateException</code> will be thrown if currently on the
-     * root.
+     * <code>IllegalStateException</code> will be thrown if this element locator
+     * is already locating the root.
+     *
+     * @return self
      */
-    public final void removeCurrent() {
+    public final ElementLocator<D> removeCurrent() {
 
         if (path.size() == 1) {
             throw new IllegalStateException("can't remove the root element");
@@ -482,6 +444,8 @@ public abstract class ElementLocator<D> {
         final ELElement element = getCurrent();
 
         locateParent().getCurrent().elements.remove(element);
+
+        return this;
     }
 
 
@@ -496,8 +460,9 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @return 
+     * Returns the root element.
+     *
+     * @return the root element
      */
     final ELElement getRoot() {
         return path.get(0);
@@ -505,8 +470,9 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * 
-     * @param root 
+     * Sets the root element.
+     *
+     * @param root root element
      */
     final void setRoot(final ELElement root) {
 
@@ -520,7 +486,7 @@ public abstract class ElementLocator<D> {
 
 
     /**
-     * Returns JSOM representation.
+     * Returns JSOM representation of the contents.
      *
      * @return a JSON string.
      */

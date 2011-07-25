@@ -48,11 +48,11 @@ public class DOM4JElementLocatorTest
 
 
     @Override
-    protected DOM4JElementLocator createLocator(final String namespaceURI,
-                                                final String localName)
+    protected ElementLocator<Document> createLocator(final String namespaceURI,
+                                                     final String localName)
         throws Exception {
 
-        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
+        return DOM4JElementLocator.newInstance(namespaceURI, localName);
     }
 
 
