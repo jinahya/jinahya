@@ -33,8 +33,8 @@ import org.testng.annotations.Test;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <L> 
- * @param <D> 
+ * @param <L> locator type parameter
+ * @param <D> document type parameter
  */
 public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
