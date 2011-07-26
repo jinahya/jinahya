@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 
 
 /**
@@ -73,7 +74,8 @@ public class PercentEncoder {
 
 
     /**
-     * Encodes bytes from <code>input</code> and write to <code>output</code>.
+     * Encodes bytes from <code>input</code> and writes those encoded characters
+     * to <code>output</code>.
      *
      * @param input input
      * @param output output
@@ -81,6 +83,50 @@ public class PercentEncoder {
      */
     public static void encode(final InputStream input,
                               final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
+
+        if (output == null) {
+            throw new IllegalArgumentException("null output");
+        }
+
+        /*
+        final Writer writer = new OutputStreamWriter(output, "US-ASCII");
+        encode(input, writer);
+        writer.flush();
+         */
+        
+        for (int b = -1; (b = input.read()) != -1;) {
+
+            if ((b >= 0x30 && b <= 0x39) // digit
+                || (b >= 0x41 && b <= 0x5A) // upper case alpha
+                || (b >= 0x61 && b <= 0x7A) // lower case alpha
+                || b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) { // -_.~
+
+                output.write(b);
+
+            } else {
+
+                output.write(0x25); // '%'
+                output.write(itoa(b >> 4));
+                output.write(itoa(b & 0xF));
+            }
+        }
+    }
+
+
+    /**
+     * Encodes bytes from <code>input</code> and writes those encoded characters
+     * to <code>output</code>.
+     *
+     * @param input byte input
+     * @param output character output
+     * @throws IOException if an I/O error occurs
+     */
+    public static void encode(final InputStream input, final Writer output)
         throws IOException {
 
         if (input == null) {
@@ -103,8 +149,10 @@ public class PercentEncoder {
             } else {
 
                 output.write(0x25); // '%'
-                output.write(itoa(b >> 4));
-                output.write(itoa(b & 0xF));
+                if (b <= 0x0F) {
+                    output.write('0');
+                }
+                output.write(Integer.toHexString(b).toUpperCase());
             }
         }
     }

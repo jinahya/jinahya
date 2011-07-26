@@ -24,6 +24,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 
 
 /**
@@ -74,10 +75,11 @@ public class PercentDecoder {
 
 
     /**
-     * Decodes from <code>input</code> to <code>output</code>.
+     * Decodes characters from <code>input</code> and writes those decoded bytes
+     * to <code>output</code>.
      *
-     * @param input input
-     * @param output output
+     * @param input character input
+     * @param output byte output
      * @throws IOException if an I/O error occurs.
      */
     public static void decode(final InputStream input,
@@ -91,6 +93,11 @@ public class PercentDecoder {
         if (output == null) {
             throw new NullPointerException("null output");
         }
+
+        /*
+        final Reader reader = new InputStreamReader(input, "US-ASCII");
+        decode(reader, output);
+         */
 
         for (int b = -1; (b = input.read()) != -1;) {
 
@@ -118,6 +125,58 @@ public class PercentDecoder {
             } else {
 
                 throw new IOException("illegal octet: " + b);
+            }
+        }
+    }
+
+
+    /**
+     * Decodes characters from <code>input</code> and writes those decoded bytes
+     * to <code>output</code>.
+     * 
+     * @param input character input
+     * @param output byte output
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void decode(final Reader input, final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        final char[] hex = new char[2];
+
+        for (int c = -1; (c = input.read()) != -1;) {
+
+            if ((c >= 0x30 && c <= 0x39) // digit
+                || (c >= 0x41 && c <= 0x5A) // upper case alpha
+                || (c >= 0x61 && c <= 0x7A) // lower case alpha
+                || c == 0x2D || c == 0x5F || c == 0x2E || c == 0x7E) { // -_.~
+
+                output.write(c);
+
+            } else if (c == 0x25) { // '%'
+
+                hex[0] = (char) input.read();
+                if (hex[0] == -1) {
+                    throw new EOFException("eof");
+                }
+
+                hex[1] = (char) input.read();
+                if (hex[1] == -1) {
+                    throw new EOFException("eof");
+                }
+
+                output.write(Integer.parseInt(new String(hex), 16));
+
+            } else {
+
+                throw new IOException("illegal octet: " + c);
             }
         }
     }
