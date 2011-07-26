@@ -35,3 +35,6 @@ This library is just an thin wrapper for various in-memory XML parser models. Yo
 == Reading XML ==
 
 == Writing XML ==
+
+== Links ==
+  * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
