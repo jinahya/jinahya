@@ -42,7 +42,10 @@ KDOMElementLocator.parseInstance(org.kxml2.kdom.Document);
 XOMElementLocator.parseInstance(nu.xom.Document);
 }}}
 == Writing XML ==
-
+Every concrete class has a static method for creating a new instance.
+{{{
+public static ElementLocator<D> newInstance(final String namespaceURI, final String localName);
+}}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
   * [http://www.jdom.org/docs/apidocs/ JDOM v1.1.1 API Specification]
