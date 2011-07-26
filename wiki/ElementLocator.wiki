@@ -33,8 +33,15 @@ This library is just an thin wrapper for various in-memory XML parser models. Yo
 }}}
 
 == Reading XML ==
-
+Every concrete class has a static method for parsing a platform-specific <code>Document</code>.
+{{{
+public static ElementLocator<D> parseInstance(D document);
+}}}
 == Writing XML ==
 
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
+  * [http://www.jdom.org/docs/apidocs/ JDOM v1.1.1 API Specification]
+  * [http://kxml.sourceforge.net/kxml2/javadoc/ kxml API]
+  * [http://dom4j.sourceforge.net/apidocs/ dom4j 2.0.0-ALPHA-2 API]
+  * [http://www.xom.nu/apidocs/ XOM 1.2.6]
