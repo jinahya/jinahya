@@ -21,8 +21,8 @@ package com.googlecode.jinahya.rfc3986;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -35,38 +35,38 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class PercentEncoderTest {
+public class PercentDecoderTest {
 
 
     private static final Random RANDOM = new Random();
 
 
     @Test(invocationCount = 128)
-    public void testEncodeComparingTwoMethods() throws IOException {
+    public void testDecodeComparingTwoMethods() throws IOException {
 
-        final String string = RandomStringUtils.random(RANDOM.nextInt(1024));
+        final byte[] encoded = PercentEncoder.encode(
+            RandomStringUtils.random(RANDOM.nextInt(10)));
 
-        final String encoded1;
+
+        final String decoded1;
         {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PercentEncoder.encode(
-                new ByteArrayInputStream(string.getBytes("UTF-8")), baos);
+            PercentDecoder.decode(new ByteArrayInputStream(encoded), baos);
             baos.flush();
-            encoded1 = new String(baos.toByteArray(), "US-ASCII");
+            decoded1 = new String(baos.toByteArray(), "US-ASCII");
         }
 
-        final String encoded2;
+        final String decoded2;
         {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final Writer writer = new OutputStreamWriter(baos, "US-ASCII");
-            PercentEncoder.encode(
-                new ByteArrayInputStream(string.getBytes("UTF-8")), writer);
-            writer.flush();
+            final Reader reader = new InputStreamReader(
+                new ByteArrayInputStream(encoded), "US-ASCII");
+            PercentDecoder.decode(reader, baos);
             baos.flush();
-            encoded2 = new String(baos.toByteArray(), "US-ASCII");
+            decoded2 = new String(baos.toByteArray(), "US-ASCII");
         }
 
-        Assert.assertEquals(encoded1, encoded2);
+        Assert.assertEquals(decoded1, decoded2);
     }
 }
 
