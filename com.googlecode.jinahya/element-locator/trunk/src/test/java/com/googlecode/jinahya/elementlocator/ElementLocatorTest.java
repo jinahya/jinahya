@@ -62,56 +62,56 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         Assert.assertEquals(locator.getChildCount("parent"), 2);
 
         for (int i = 0; i < 2; i++) {
-            locator.locateChild("parent", i);
-            Assert.assertEquals(locator.getText(), "parent" + i);
-            locator.locateParent();
+            locator.child("parent", i);
+            Assert.assertEquals(locator.text(), "parent" + i);
+            locator.parent();
         }
 
         for (int i = 0; i < 2; i++) {
-            locator.locateChild("parent", i);
-            Assert.assertEquals(locator.getText(), "parent" + i);
-            locator.locateParent();
+            locator.child("parent", i);
+            Assert.assertEquals(locator.text(), "parent" + i);
+            locator.parent();
         }
 
         Assert.assertEquals(locator.getChildCount("http://b", "parent"), 1);
-        locator.locateChild("http://b", "parent", 0);
+        locator.child("http://b", "parent", 0);
 
-        Assert.assertEquals(locator.getAttribute("http://a", "a"), "a");
-        Assert.assertNull(locator.getAttribute("a"));
+        Assert.assertEquals(locator.attribute("http://a", "a"), "a");
+        Assert.assertNull(locator.attribute("", "a"));
 
-        Assert.assertEquals(locator.getAttribute("http://b", "b"), "b");
-        Assert.assertNull(locator.getAttribute("b"));
+        Assert.assertEquals(locator.attribute("http://b", "b"), "b");
+        Assert.assertNull(locator.attribute("", "b"));
 
-        Assert.assertEquals(locator.getAttribute("http://c", "c"), "c");
-        Assert.assertNull(locator.getAttribute("c"));
+        Assert.assertEquals(locator.attribute("http://c", "c"), "c");
+        Assert.assertNull(locator.attribute("", "c"));
 
-        Assert.assertEquals(locator.getAttribute("d"), "d");
-        Assert.assertNull(locator.getAttribute("http://a", "d"));
-        Assert.assertNull(locator.getAttribute("http://b", "d"));
-        Assert.assertNull(locator.getAttribute("http://c", "d"));
+        Assert.assertEquals(locator.attribute("", "d"), "d");
+        Assert.assertNull(locator.attribute("http://a", "d"));
+        Assert.assertNull(locator.attribute("http://b", "d"));
+        Assert.assertNull(locator.attribute("http://c", "d"));
 
         // --------------------------------------- /a:grandparent/b:parent/child
         Assert.assertEquals(locator.getChildCount("child"), 3);
         for (int i = 0; i < 3; i++) {
-            locator.locateChild("child", i);
-            Assert.assertEquals(locator.getText(), "child" + i);
-            locator.locateParent();
+            locator.child("child", i);
+            Assert.assertEquals(locator.text(), "child" + i);
+            locator.parent();
         }
         Assert.assertEquals(locator.getChildCount("child"), 3);
         for (int i = 0; i < 3; i++) {
-            locator.locateChild("child", i);
-            Assert.assertEquals(locator.getText(), "child" + i);
-            locator.locateParent();
+            locator.child("child", i);
+            Assert.assertEquals(locator.text(), "child" + i);
+            locator.parent();
         }
 
         // ------------------------------------- /a:grandparent/b:parent/c:child
         Assert.assertEquals(locator.getChildCount("http://c", "child"), 1);
-        locator.locateChild("http://c", "child", 0);
+        locator.child("http://c", "child", 0);
 
         // -------------------------- /a:grandparent/b:parent/c:child/grandchild
         Assert.assertEquals(locator.getChildCount("", "grandchild"), 1);
-        locator.locateChild("", "grandchild", 0);
-        Assert.assertEquals(locator.getText(), "grandchild");
+        locator.child("", "grandchild", 0);
+        Assert.assertEquals(locator.text(), "grandchild");
     }
 
 
@@ -138,34 +138,34 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         final ElementLocator<D> locator =
             createLocator("http://a", "grandparent");
 
-        locator.addChild("parent").setText("parent0");
-        locator.locateParent();
+        locator.child("parent").text("parent0");
+        locator.parent();
 
-        locator.addChild("http://b", "parent");
-        locator.setAttribute("http://a", "a", "a");
-        locator.setAttribute("http://b", "b", "b");
-        locator.setAttribute("http://c", "c", "c");
-        locator.setAttribute("d", "d");
-        locator.setAttribute("e", "e");
+        locator.child("http://b", "parent");
+        locator.attribute("http://a", "a", "a");
+        locator.attribute("http://b", "b", "b");
+        locator.attribute("http://c", "c", "c");
+        locator.attribute("", "d", "d");
+        locator.attribute("", "e", "e");
 
-        locator.addChild("child").setText("child0").locateParent();
-        locator.addChild("child").setText("child1").locateParent();
+        locator.child("child").text("child0").parent();
+        locator.child("child").text("child1").parent();
 
-        locator.addChild("http://c", "child").
-            addChild("grandchild").setText("grandchild").
-            locateParent().locateParent();
+        locator.child("http://c", "child").
+            child("grandchild").text("grandchild").
+            parent().parent();
 
-        locator.addChild("child").setText("child2").locateParent();
+        locator.child("child").text("child2").parent();
 
-        locator.locateParent();
+        locator.parent();
 
-        locator.addChild("parent").setText("parent1");
+        locator.child("parent").text("parent1");
 
-        locator.locateRoot().addChild("normalizable");
-        locator.setAttribute("normalizable", "  \t\n\n\tsdajfsdf    \t\n");
-        locator.setText("    \t\t\\n\nlkjsdfljsaflsdfjsd\t\t\\\t\n\\t");
+        locator.root().child("normalizable");
+        locator.attribute("", "normalizable", "  \t\n\n\tsdajfsdf    \t\n");
+        locator.text("    \t\t\\n\nlkjsdfljsaflsdfjsd\t\t\\\t\n\\t");
 
-        locator.locateRoot().addChild("\uD55C\uAE00").setText("\uAD8C\uC9C4");
+        locator.root().child("\uD55C\uAE00").text("\uAD8C\uC9C4");
 
         final MessageDigest md = MessageDigest.getInstance("SHA-1");
 
