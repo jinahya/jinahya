@@ -170,12 +170,40 @@ public abstract class ElementLocator<D> {
 
 
     /**
+     * Locate to the root. Nothing happens if this locator is already locating
+     * the root element.
+     *
+     * @return self
+     */
+    public final ElementLocator<D> root() {
+
+        while (path.size() > 1) {
+            path.remove(path.size() - 1);
+        }
+
+        return this;
+    }
+
+
+    /**
      * Locate to the parent of the current element. An IllegalStateException
      * will be thrown if this locator is already on the root.
      *
      * @return self
      */
     public final ElementLocator<D> locateParent() {
+
+        if (path.size() == 1) {
+            throw new IllegalStateException("no parent to locate");
+        }
+
+        path.remove(path.size() - 1);
+
+        return this;
+    }
+
+
+    public final ElementLocator<D> parent() {
 
         if (path.size() == 1) {
             throw new IllegalStateException("no parent to locate");
@@ -251,6 +279,69 @@ public abstract class ElementLocator<D> {
 
 
     /**
+     * Locates child element which has given <code>localName</code> with no
+     * name space at <code>index</code>.
+     *
+     * @param localName local name
+     * @param index index
+     * @return self
+     */
+    public final ElementLocator<D> child(final String localName,
+                                         final int index) {
+
+        return child(ELNode.NULL_NS_URI, localName, index);
+    }
+
+
+    /**
+     * Locate a child with <code>localName</code> at <code>index</code> in
+     * <code>namespaceURI</code>.
+     *
+     * @param namespaceURI element's name space URI
+     * @param localName element's local name
+     * @param index target index to locate
+     * @return self
+     * @see #locateChild(String, int) 
+     */
+    public final ElementLocator<D> child(final String namespaceURI,
+                                         final String localName,
+                                         final int index) {
+
+        if (namespaceURI == null) {
+            throw new NullPointerException("null namespaceURI");
+        }
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        if (index < 0) {
+            throw new IllegalArgumentException("negative index: " + index);
+        }
+
+        int count = 0;
+        for (ELElement element : getCurrent().elements) {
+            if (!element.localName.equals(localName)) {
+                continue;
+            }
+            if (!element.namespaceURI.equals(namespaceURI)) {
+                continue;
+            }
+            if (count++ == index) {
+                path.add(element);
+                return this;
+            }
+        }
+
+        throw new IndexOutOfBoundsException("no child at " + index);
+    }
+
+
+    /**
      * Adds a child element whose name is <code>localName</code> with
      * no name space and locate it.
      *
@@ -284,12 +375,44 @@ public abstract class ElementLocator<D> {
     }
 
 
+    public final ElementLocator<D> child(final String localName) {
+
+        return child(ELNode.NULL_NS_URI, localName);
+    }
+
+
+    /**
+     * Adds a child element whose name is <code>localName</code> with given
+     * <code>namespaceURI</code> and locate it.
+     *
+     * @param namespaceURI
+     * @param localName
+     * @return 
+     */
+    public final ElementLocator<D> child(final String namespaceURI,
+                                         final String localName) {
+
+        final ELElement child = new ELElement(namespaceURI, localName);
+
+        getCurrent().elements.add(child);
+
+        path.add(child);
+
+        return this;
+    }
+
+
     /**
      * Returns text value of current element.
      *
      * @return text value
      */
     public final String getText() {
+        return getCurrent().text;
+    }
+
+
+    public final String text() {
         return getCurrent().text;
     }
 
@@ -301,6 +424,14 @@ public abstract class ElementLocator<D> {
      * @return self
      */
     public final ElementLocator<D> setText(final String text) {
+
+        getCurrent().text = text;
+
+        return this;
+    }
+
+
+    public final ElementLocator<D> text(final String text) {
 
         getCurrent().text = text;
 
@@ -329,6 +460,39 @@ public abstract class ElementLocator<D> {
      */
     public final String getAttribute(final String namespaceURI,
                                      final String localName) {
+
+        final ELAttribute attribute = getCurrent().attributes.get(
+            ELNode.express(namespaceURI, localName));
+
+        if (attribute == null) {
+            return null;
+        }
+
+        return attribute.value;
+    }
+
+
+    /**
+     * Finds an attribute and returns its value.
+     *
+     * @param namespaceURI attribute's name space URI
+     * @param localName attribute's local name
+     * @return attribute's value or null if not found
+     */
+    public final String attribute(final String namespaceURI,
+                                  final String localName) {
+
+        if (namespaceURI == null) {
+            throw new NullPointerException("null namespaceURI");
+        }
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
 
         final ELAttribute attribute = getCurrent().attributes.get(
             ELNode.express(namespaceURI, localName));
@@ -388,6 +552,44 @@ public abstract class ElementLocator<D> {
             new ELAttribute(namespaceURI, localName, value);
 
         getCurrent().attributes.put(ELNode.express(attribute), attribute);
+
+        return this;
+    }
+
+
+    public final ElementLocator<D> attribute(final String namespaceURI,
+                                             final String localName,
+                                             final String value) {
+
+        if (namespaceURI == null) {
+            throw new NullPointerException("null namespaceURI");
+        }
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        /*
+        if (value == null) {
+        throw new NullPointerException("null value");
+        }
+         */
+
+        final String expressed = ELNode.express(namespaceURI, localName);
+
+        if (value == null) {
+            getCurrent().attributes.remove(expressed);
+            return this;
+        }
+
+        final ELAttribute attribute =
+            new ELAttribute(namespaceURI, localName, value);
+
+        getCurrent().attributes.put(expressed, attribute);
 
         return this;
     }
