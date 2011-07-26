@@ -15,7 +15,7 @@ This is a simple XML parser/printer. This artifact is not fully applicable to an
   * And so on.
 
 == Architecture ==
-This library is just an thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, or XOM as underlying XML model.
+This library is just an thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, DOM4J, or XOM as underlying XML model.
 
 == Sample XML ==
 {{{
