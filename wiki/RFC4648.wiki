@@ -3,7 +3,7 @@
 
 = Introduction =
 
-A complete RFC-4648 implementation.
+A complete [http://tools.ietf.org/html/rfc4648 RFC-4648] implementation.
 
 
 = Details =
@@ -14,3 +14,4 @@ Add your content here.  Format your content with:
   * Automatic links to other wiki pages
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/rfc-4648/1.0-alpha-2-SNAPSHOT/apidocs 1.0-alpha-2-SNAPSHOT]
