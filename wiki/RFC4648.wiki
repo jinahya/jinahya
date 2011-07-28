@@ -11,7 +11,7 @@ A complete [http://tools.ietf.org/html/rfc4648 RFC-4648] implementation.
 final Base base = new BaseXXX();
 // now you can use various #encode, #decode methods
 }}}
-== Apache Commons Codec BinaryEncoder/BinaryDecoder Proxy ==
+== Apache Commons Codec Proxy ==
 {{{
 final BinaryEncoder encoder = (BinaryEncoder)
     BaseBinaryEncoderProxy.newInstance(base);
