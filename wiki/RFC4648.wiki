@@ -11,16 +11,14 @@ A complete [http://tools.ietf.org/html/rfc4648 RFC-4648] implementation.
 final Base base = new BaseXXX();
 // now you can use various #encode, #decode methods
 }}}
+== Apache Commons Codec BinaryEncoder/BinaryDecoder Proxy ==
+{{{final BinaryEncoder encoder = (BinaryEncoder)
+    BaseBinaryEncoderProxy.newInstance(base);
+encoder.encoder(byte[]);
 
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-== Boolean ==
-Uses only one bit. 1 for true 0 for false.
-== Unsigned Integer ==
- * Valid Bit Length: between 1 (inclusive) and 32 (exclusive) 
+final BinaryDecoder decoder = (BinaryDecoder)
+    BaseBinaryDecoderProxy.newInstance(base);
+decoder.decode(byte[]);
+}}}
 = Apidocs =
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/rfc-4648/1.0-alpha-2-SNAPSHOT/apidocs/index.html 1.0-alpha-2-SNAPSHOT]
