@@ -12,7 +12,8 @@ final Base base = new BaseXXX();
 // now you can use various #encode, #decode methods
 }}}
 == Apache Commons Codec BinaryEncoder/BinaryDecoder Proxy ==
-{{{final BinaryEncoder encoder = (BinaryEncoder)
+{{{
+final BinaryEncoder encoder = (BinaryEncoder)
     BaseBinaryEncoderProxy.newInstance(base);
 encoder.encoder(byte[]);
 
