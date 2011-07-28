@@ -7,6 +7,12 @@ A complete [http://tools.ietf.org/html/rfc4648 RFC-4648] implementation.
 
 
 = Details =
+{{{
+final Base base = new BaseXXX();
+// now you can use various #encode, #decode methods
+}}}
+
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
