@@ -32,7 +32,6 @@ public class Base64URL extends Base {
      * Creates a new instance.
      */
     public Base64URL() {
-
         super(new byte[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
                 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
