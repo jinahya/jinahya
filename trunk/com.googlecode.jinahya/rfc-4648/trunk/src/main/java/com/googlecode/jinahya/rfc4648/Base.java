@@ -28,7 +28,9 @@ import java.io.CharArrayWriter;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -41,7 +43,7 @@ public abstract class Base {
 
 
     /** Default pad character. */
-    protected static final char PAD = '=';
+    static final char PAD = '=';
 
 
     /** MAGIC NUMBER: OCTET SIZE. */
@@ -57,7 +59,7 @@ public abstract class Base {
 
 
     /**
-     * Returns the Least Common Muliple value for given two operands.
+     * Returns the Least Common Multiple value for given two operands.
      *
      * @param a the first operand
      * @param b the second operand
@@ -73,7 +75,7 @@ public abstract class Base {
      *
      * @param a the first operand
      * @param b the second operand
-     * @return calculated greate common devisor
+     * @return calculated greatest common devisor
      */
     private static int gcd(final int a, final int b) {
         if (b == 0) {
@@ -87,14 +89,14 @@ public abstract class Base {
     /**
      * Create a new instance.
      *
-     * @param alphabet alphabe to be used
+     * @param alphabet alphabet to be used
      * @param padding flag for padding
      */
     protected Base(final byte[] alphabet, final boolean padding) {
         super();
 
         if (alphabet == null) {
-            throw new IllegalArgumentException("null alphabet");
+            throw new NullPointerException("null alphabet");
         }
 
         if (alphabet.length == 0) {
@@ -120,15 +122,16 @@ public abstract class Base {
 
 
     /**
+     * Encodes bytes in <code>input</code> and returns encoded characters.
      *
-     * @param input
-     * @return
-     * @throws IOException
+     * @param input byte input
+     * @return encoded characters
+     * @throws IOException if an I/O error occurs.
      */
     public char[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         return encode(new ByteArrayInputStream(input));
@@ -136,15 +139,16 @@ public abstract class Base {
 
 
     /**
+     * Encodes bytes from <code>input</code> and return encoded characters.
      *
-     * @param input
-     * @return
-     * @throws IOException
+     * @param input byte input
+     * @return encoded characters
+     * @throws IOException if an I/O error occurs.
      */
     public char[] encode(final InputStream input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         final CharArrayWriter output = new CharArrayWriter();
@@ -157,6 +161,33 @@ public abstract class Base {
 
 
     /**
+     * Encodes bytes from <code>input</code> and writes to <code>output</code>.
+     *
+     * @param input input
+     * @param output output
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void encode(final InputStream input, final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        final Writer writer = new OutputStreamWriter(output, "US-ASCII");
+
+        encode(input, writer);
+        writer.flush();
+    }
+
+
+    /**
+     * Encodes bytes from given <code>input</code> and writes those encoded
+     * characters to <code>output</code>.
      *
      * @param input binary input
      * @param output character output
@@ -166,11 +197,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null output");
+            throw new NullPointerException("null output");
         }
 
         encode(new BitInput(input), output);
@@ -178,6 +209,8 @@ public abstract class Base {
 
 
     /**
+     * Encodes bits from <code>input</code> and write those encoded characters
+     * to <code>output</code>.
      *
      * @param input binary input
      * @param output character output
@@ -231,15 +264,16 @@ public abstract class Base {
 
 
     /**
+     * Decodes characters in <code>input</code> and return decoded bytes.
      *
-     * @param input
-     * @return
-     * @throws IOException
+     * @param input character input
+     * @return decoded bytes
+     * @throws IOException if an I/O error occurs.
      */
     public final byte[] decode(final char[] input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         return decode(new CharArrayReader(input));
@@ -247,15 +281,16 @@ public abstract class Base {
 
 
     /**
+     * Decodes characters from <code>input</code> and return decoded bytes.
      *
-     * @param input
-     * @return
-     * @throws IOException
+     * @param input character input
+     * @return decoded bytes
+     * @throws IOException if an I/O error occurs.
      */
     public final byte[] decode(final Reader input) throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -268,6 +303,33 @@ public abstract class Base {
 
 
     /**
+     * Decodes characters from <code>input</code> and writes decoded bytes to
+     * <code>output</code>.
+     *
+     * @param input input
+     * @param output output
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void decode(final InputStream input, final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null outpute");
+        }
+
+        final Reader reader = new InputStreamReader(input, "US-ASCII");
+
+        decode(reader, output);
+    }
+
+
+    /**
+     * Decodes characters from <code>input</code> and writes decoded bytes to
+     * <code>output</code>.
      *
      * @param input character input
      * @param output binary output
@@ -277,11 +339,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null outpute");
+            throw new NullPointerException("null outpute");
         }
 
         decode(input, new BitOutput(output));
@@ -289,6 +351,8 @@ public abstract class Base {
 
 
     /**
+     * Decodes characters from <code>input</code> and writes decoded binary to
+     * <code>output</code>.
      *
      * @param input character input
      * @param output binary output
