@@ -24,6 +24,7 @@ import java.lang.reflect.Proxy;
 
 
 /**
+ * Proxy for BinaryEncoder.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
