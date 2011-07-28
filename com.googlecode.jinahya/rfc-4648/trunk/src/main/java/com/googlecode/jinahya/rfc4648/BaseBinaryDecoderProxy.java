@@ -30,7 +30,7 @@ import java.lang.reflect.Proxy;
 public class BaseBinaryDecoderProxy implements InvocationHandler {
 
 
-    protected static final Class<?> BINARY_DECODER_CLASS;
+    private static final Class<?> BINARY_DECODER_CLASS;
 
 
     static {
@@ -66,7 +66,7 @@ public class BaseBinaryDecoderProxy implements InvocationHandler {
      *
      * @param base base
      */
-    protected BaseBinaryDecoderProxy(final Base base) {
+    private BaseBinaryDecoderProxy(final Base base) {
         super();
 
         if (base == null) {
