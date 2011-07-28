@@ -19,12 +19,18 @@ package com.googlecode.jinahya.rfc4648;
 
 
 /**
+ * Base 64 codec for URL and Filename safe.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://goo.gl/kD53c">Base 64 Encoding with URL and Filename
+ *      Safe Alphabet</a>
  */
 public class Base64URL extends Base {
 
 
+    /**
+     * Creates a new instance.
+     */
     public Base64URL() {
 
         super(new byte[]{

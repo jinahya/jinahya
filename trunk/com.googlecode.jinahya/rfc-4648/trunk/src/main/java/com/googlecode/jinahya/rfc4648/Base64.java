@@ -19,12 +19,17 @@ package com.googlecode.jinahya.rfc4648;
 
 
 /**
+ * Base 64 codec.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://goo.gl/Nxi4E">Base 64 Encoding</a>
  */
 public class Base64 extends Base {
 
 
+    /**
+     * Creates a new instance.
+     */
     public Base64() {
         super(new byte[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',

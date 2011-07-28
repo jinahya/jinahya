@@ -87,6 +87,7 @@ public class BaseBinaryDecoderProxy implements InvocationHandler {
     }
 
 
+    /** base. */
     private final Base base;
 }
 

@@ -19,12 +19,17 @@ package com.googlecode.jinahya.rfc4648;
 
 
 /**
+ * Base 32 codec.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://goo.gl/MkkJZ">Base 32 Encoding</a>
  */
 public class Base32 extends Base {
 
 
+    /**
+     * Creates a new instance.
+     */
     public Base32() {
         super(new byte[]{
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
