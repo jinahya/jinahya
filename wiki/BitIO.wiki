@@ -17,7 +17,7 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 || long || 1(exclusive) ~ 64(inclusive) || ||
 || bytes || 31 + 8N || ||
 || ASCII || 31 + 7N || ||
-|| UTF || 16 + 8N || !DataIn|Output#read|writeUTF<br/>aaa||
+|| UTF || 16 + 8N || DataIn#readUTF<br/>DataOutput#writeUTF||
 
 
 = Apidocs =
