@@ -1,12 +1,35 @@
-#summary One-sentence summary of this page.
+#summary Java Bit Level I/O.
 
 = Introduction =
 
-Add your content here.
+A simple wrapper for bit level I/O with InputStream and OutputStream.
 
 
 = Details =
+You can read/write variable length of bits from/to InputStream and OutputStream.
 
+== Values ==
+=== Boolean ===
+Consumes only one bit. 1 for true; 0 for false;
+=== Unsigned Integer ===
+You can read/write an unsigned integer of between 1 (inclusive) and 32 (exclusive) bits.
+{{{
+int readUnsignedInt(length);
+void writeUnsignedInt(length, value);
+}}}
+=== Signed Integer ===
+=== Unsigned Long ===
+=== Signed Long ===
+Create.
+{{{
+final BitInput in = new BitInput(InputStream);
+}}}
+Reads values.
+{{{
+boolean readBoolean();
+int readUnsignedInt(int length);
+int readInt(int length);
+long read
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
