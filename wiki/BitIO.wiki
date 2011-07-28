@@ -2,7 +2,7 @@
 
 = Introduction =
 
-A simple wrapper for bit level I/O with !In|OutputStream.
+A simple wrapper for bit level I/O with In|!OutputStream.
 
 
 = Details =
