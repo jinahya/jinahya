@@ -18,3 +18,4 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-4-SNAPSHOT/apidocs/index.html 1.0-alpha-4-SNAPSHOT]
