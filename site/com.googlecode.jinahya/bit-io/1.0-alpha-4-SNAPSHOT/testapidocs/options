@@ -1,17 +1,17 @@
 -classpath
-'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/classes:/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/test-classes:/root/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/root/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/root/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/root/.m2/repository/org/testng/testng/6.1.1/testng-6.1.1.jar:/root/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/classes:/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/test-classes:/home/onacit/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/home/onacit/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/home/onacit/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/home/onacit/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/home/onacit/.m2/repository/org/testng/testng/6.1.1/testng-6.1.1.jar:/home/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/src/test/java'
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/src/test/java'
 -author
 -bottom
 'Copyright &#169; 2011. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/site/testapidocs'
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/site/testapidocs'
 -docencoding
 'UTF-8'
 -doctitle
@@ -19,7 +19,7 @@
 -link
 '../apidocs'
 -linkoffline
-'http://download.oracle.com/javase/1.5.0/docs/api' '/root/.jenkins/jobs/com.googlecode.jinahya_bit-io/workspace/target/javadoc-bundle-options'
+'http://download.oracle.com/javase/1.5.0/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/bit-io/trunk/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
