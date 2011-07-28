@@ -82,10 +82,11 @@ public class BaseBinaryEncoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        return base.encode((byte[]) args[0]);
+        return new String(base.encode((byte[]) args[0])).getBytes("US-ASCII");
     }
 
 
+    /** base. */
     private final Base base;
 }
 

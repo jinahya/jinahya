@@ -19,12 +19,18 @@ package com.googlecode.jinahya.rfc4648;
 
 
 /**
+ * Base 32 codec with extended hex alphabet.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://goo.gl/i20P9">Base 32 Encoding with Extended Hex
+ *      Alphabet</a>
  */
 public class Base32Hex extends Base {
 
 
+    /**
+     * Creates a new instance.
+     */
     public Base32Hex() {
 
         super(new byte[]{
@@ -34,3 +40,4 @@ public class Base32Hex extends Base {
                 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'}, true);
     }
 }
+

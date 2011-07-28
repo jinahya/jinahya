@@ -19,15 +19,21 @@ package com.googlecode.jinahya.rfc4648;
 
 
 /**
+ * Base 16 codec.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://goo.gl/AB2jP">Base 16 Encoding</a>
  */
 public class Base16 extends Base {
 
 
+    /**
+     * Creates a new instance.
+     */
     public Base16() {
         super(new byte[]{
                 '0', '1', '2', '3', '4', '5', '6', '7',
                 '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}, true);
     }
 }
+
