@@ -2,11 +2,11 @@
 
 = Introduction =
 
-A simple wrapper for bit level I/O with In|OutputStream.
+A simple wrapper for bit level I/O with !In|OutputStream.
 
 
 = Details =
-You can read/write variable length of bits from/to InputStream and OutputStream.
+You can read/write variable length of bits from/to !InputStream and !OutputStream.
 
 == Values ==
 || *type* || *bit range* || *notes* ||
