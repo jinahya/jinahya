@@ -18,9 +18,12 @@
 package com.googlecode.jinahya.bitio;
 
 
+import java.io.CharArrayWriter;
+import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UTFDataFormatException;
 import java.util.BitSet;
 
 
@@ -271,6 +274,104 @@ public class BitInput {
         value |= readUnsignedLong(length - 1);
 
         return value;
+    }
+
+
+    /**
+     * Reads a byte array. First, a 31-bit unsigned integer is read for the byte
+     * array length. And then each byte is read as 8-bit unsigned int.
+     *
+     * @return a byte array
+     * @throws IOException if an I/O error occurs.
+     */
+    public final byte[] readBytes() throws IOException {
+
+        final byte[] bytes = new byte[readUnsignedInt(0x1F)];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) readUnsignedByte(8);
+        }
+
+        return bytes;
+    }
+
+
+    /**
+     * Reads a 7-bit ASCII String. First, a 31-bit unsigned integer is read for
+     * the byte array length. And then each byte is read in 7-bit unsigned int.
+     *
+     * @return a String
+     * @throws IOException if an I/O error occurs.
+     */
+    public final String readASCII() throws IOException {
+
+        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) readUnsignedByte(0x07);
+        }
+
+        return new String(bytes, "US-ASCII");
+    }
+
+
+    /**
+     * Reads a modified-UTF8 String.
+     *
+     * @return a String
+     * @throws IOException if an I/O error occurs.
+     * @see DataInput#readUTF() 
+     */
+    public final String readUTF() throws IOException {
+
+        final CharArrayWriter caw = new CharArrayWriter();
+
+        final int length = readUnsignedInt(0x10); // 16
+        for (int i = 0; i < length; i++) {
+
+            final int first = readUnsignedByte(0x08);
+            if (first <= 0x7F) { // 0xxxxxxx
+                caw.write(first);
+                continue;
+            }
+
+            if (first <= 0xBF) {
+                throw new UTFDataFormatException(
+                    "illegal first byte: " + first);
+            }
+
+            if (first <= 0xDF) { // 110xxxxx
+                final int second = readUnsignedByte(0x08); // EOFException
+                i++;
+                if (second > 0xBF) { // !10xxxxxxxx
+                    throw new UTFDataFormatException(
+                        "illegal second byte: " + second);
+                }
+                caw.write(((first & 0x1F) << 6) | (second & 0x3F));
+                continue;
+            }
+
+            if (first <= 0xEF) { // 1110xxxx
+                final int second = readUnsignedByte(0x08); // EOFException
+                i++;
+                if (second > 0xBF) { // !10xxxxxxxx
+                    throw new UTFDataFormatException(
+                        "illegal second byte: " + second);
+                }
+                final int third = readUnsignedByte(0x08); // EOFException
+                i++;
+                if (third > 0xBF) { // !10xxxxxxxx
+                    throw new UTFDataFormatException(
+                        "illegal third byte: " + second);
+                }
+                caw.write(((first & 0x0F) << 12)
+                          | ((second & 0x3F) << 6)
+                          | (third & 0x3F));
+                continue;
+            }
+
+            throw new UTFDataFormatException("illegal first byte: " + first);
+        }
+
+        return caw.toString();
     }
 
 

@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -324,6 +326,74 @@ public class BitIOTest {
             Assert.assertEquals(input.readLong(0x40), expected);
         }
         input.aling(1);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testBytes() throws IOException {
+
+        final int length = RANDOM.nextInt(128) + 128;
+
+        final byte[] expected = new byte[length];
+        RANDOM.nextBytes(expected);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(baos);
+        output.writeBytes(expected);
+        output.aling(1);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(bais);
+        final byte[] actual = input.readBytes();
+        input.aling(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testASCII() throws IOException {
+
+        final String expected =
+            RandomStringUtils.randomAscii(RANDOM.nextInt(128) + 128);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(baos);
+        output.writeASCII(expected);
+        output.aling(1);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(bais);
+        final String actual = input.readASCII();
+        input.aling(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testUTF() throws IOException {
+
+        final String expected =
+            RandomStringUtils.random(RANDOM.nextInt(128) + 128);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(baos);
+        output.writeUTF(expected);
+        output.aling(1);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(bais);
+        final String actual = input.readUTF();
+        input.aling(1);
+
+        Assert.assertEquals(actual, expected);
     }
 }
 
