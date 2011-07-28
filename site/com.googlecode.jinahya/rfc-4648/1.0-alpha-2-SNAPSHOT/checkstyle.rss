@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 6,
-             Errors: 9,
+      <title>File: 8,
+             Errors: 17,
              Warnings: 0,
              Infos: 0
       </title>
@@ -85,6 +85,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.BaseBinaryDecoderProxy.java">com/googlecode/jinahya/rfc4648/BaseBinaryDecoderProxy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base16.java">com/googlecode/jinahya/rfc4648/Base16.java</a>
                 </td>
                 <td>
@@ -108,7 +122,21 @@
                   0
                 </td>
                 <td>
-                  2
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.BaseBinaryEncoderProxy.java">com/googlecode/jinahya/rfc4648/BaseBinaryEncoderProxy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                       </tbody>
