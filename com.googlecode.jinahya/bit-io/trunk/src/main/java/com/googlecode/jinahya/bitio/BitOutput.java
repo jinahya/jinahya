@@ -19,6 +19,7 @@ package com.googlecode.jinahya.bitio;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UTFDataFormatException;
@@ -129,7 +130,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a boolean value.
+     * Writes a boolean value. Only one bit is used; 1 for true 0 for false.
      *
      * @param value value
      * @throws IOException if an I/O error occurs
@@ -140,7 +141,9 @@ public class BitOutput {
 
 
     /**
-     * Writes an unsigned int value.
+     * Writes an unsigned int value. An <code>IllegalArgumentException</code>
+     * will be thrown if <code>length</code> or <code>value</code> is out of
+     * valid range.
      *
      * @param length bit length between 1 (inclusive) and 32 (exclusive)
      * @param value unsigned int value
@@ -331,8 +334,8 @@ public class BitOutput {
      * @param length number of bytes to write
      * @throws IOException if an I/O error occurs.
      */
-    public void writeBytes(final byte[] bytes, final int offset,
-                           final int length)
+    public final void writeBytes(final byte[] bytes, final int offset,
+                                 final int length)
         throws IOException {
 
         if (bytes == null) {
@@ -361,11 +364,14 @@ public class BitOutput {
 
 
     /**
-     * 
+     * Writes a 7-bit ASCII string. Writes a 31-bit unsigned integer for the
+     * character count following all characters which each is written as 7-bit
+     * unsigned byte.
+     *
      * @param string ASCII string to write
      * @throws IOException if an I/O error occurs
      */
-    public void writeASCII(final String string) throws IOException {
+    public final void writeASCII(final String string) throws IOException {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -380,12 +386,13 @@ public class BitOutput {
 
 
     /**
-     * 
-     * @param string
-     * @throws IOException 
+     * Writes a UTF string. Identical to {@link DataOutput#writeUTF(String)}.
+     *
+     * @param string string to write
+     * @throws IOException if an I/O error occurs
      * @see DataOutput#writeUTF(String) 
      */
-    public void writeUTF(final String string) throws IOException {
+    public final void writeUTF(final String string) throws IOException {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -434,31 +441,23 @@ public class BitOutput {
      */
     public final void aling(final int length) throws IOException {
 
-        if (length <= 0x00) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") <= 0x00");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
+        if (index > 0) { // bit index to write
+            writeUnsignedByte(8 - index, 0);
+        }
+        
         int octets = count % length;
 
         if (octets > 0) {
             octets = length - octets;
-        } else if (octets == 0) {
-            octets = length;
         } else { // mod < 0
             octets = 0 - octets;
         }
 
-        if (index > 0) {
-            writeUnsignedByte(8 - index, 0);
-            octets--;
-        }
-
-        if (octets == length) {
-            return;
-        }
-
-        for (int i = 0; i < octets; i++) {
+        for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0);
         }
     }
