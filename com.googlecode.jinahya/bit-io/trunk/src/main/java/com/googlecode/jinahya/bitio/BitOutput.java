@@ -463,15 +463,19 @@ public class BitOutput {
     }
 
 
+    /** output target .*/
     private final OutputStream out;
 
 
+    /** bit set. */
     private final BitSet set = new BitSet(8);
 
 
+    /** bit index to write. */
     private int index = 0;
 
 
+    /** so far written octet count. */
     private int count = 0;
 }
 

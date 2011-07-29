@@ -421,7 +421,7 @@ public class BitInput {
     private int index = 8;
 
 
-    /** octet count. */
+    /** so far read octet count. */
     private int count = 0;
 }
 
