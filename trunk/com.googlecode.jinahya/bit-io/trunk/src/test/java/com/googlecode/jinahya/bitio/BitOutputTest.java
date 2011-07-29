@@ -41,6 +41,150 @@ public class BitOutputTest {
 
 
     @Test(invocationCount = 128)
+    public void testWriteUnsignedByte() throws IOException {
+
+        for (int length = 1; length <= 8; length++) {
+
+            final int expected = RANDOM.nextInt() >>> (32 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeUnsignedByte(length, expected);
+            bo.aling(1);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final int actual = dis.readUnsignedByte() >> (8 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedShort() throws IOException {
+
+        for (int length = 2; length <= 16; length++) {
+
+            final int expected = RANDOM.nextInt() >>> (32 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeUnsignedShort(length, expected);
+            bo.aling(2);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final int actual = dis.readUnsignedShort() >> (16 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedInt() throws IOException {
+
+        for (int length = 1; length < 32; length++) {
+
+            final int expected = RANDOM.nextInt() >>> (32 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeUnsignedInt(length, expected);
+            bo.aling(4);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final int actual = dis.readInt() >>> (32 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 10)
+    public void testWriteInt() throws IOException {
+
+        for (int length = 2; length <= 32; length++) {
+
+            final int expected = RANDOM.nextInt() >> (32 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeInt(length, expected);
+            bo.aling(4);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final int actual = dis.readInt() >> (32 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteUnsignedLong() throws IOException {
+
+        for (int length = 1; length < 64; length++) {
+
+            final long expected = RANDOM.nextLong() >>> (64 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeUnsignedLong(length, expected);
+            bo.aling(8);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final long actual = dis.readLong() >>> (64 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testWriteLong() throws IOException {
+
+        for (int length = 2; length <= 64; length++) {
+
+            final long expected = RANDOM.nextLong() >> (64 - length);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BitOutput bo = new BitOutput(baos);
+            bo.writeLong(length, expected);
+            bo.aling(8);
+            baos.flush();
+
+            final ByteArrayInputStream bais =
+                new ByteArrayInputStream(baos.toByteArray());
+            final DataInputStream dis = new DataInputStream(bais);
+
+            final long actual = dis.readLong() >> (64 - length);
+
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test(invocationCount = 128)
     public void testWriteUTF() throws IOException {
 
         final String expected =

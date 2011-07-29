@@ -296,8 +296,8 @@ public class BitInput {
 
 
     /**
-     * Reads a 7-bit ASCII String. First, a 31-bit unsigned integer is read for
-     * the byte array length. And then each byte is read in 7-bit unsigned int.
+     * Reads a 7-bit ASCII String. Reads a 31-bit unsigned integer for character
+     * count following the characters which each is read as 7-bit unsigned byte.
      *
      * @return a String
      * @throws IOException if an I/O error occurs.
@@ -314,7 +314,7 @@ public class BitInput {
 
 
     /**
-     * Reads a modified-UTF8 String.
+     * Reads a modified-UTF8 String. Identical to {@link DataInput#readUTF()}.
      *
      * @return a String
      * @throws IOException if an I/O error occurs.
@@ -387,26 +387,23 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
+        if (index < 8) { // bit index to read
+            readUnsignedByte(8 - index);
+        }
+        
         int octets = count % length;
 
+        if (octets == 0) {
+            return;
+        }
+        
         if (octets > 0) {
             octets = length - octets;
-        } else if (octets == 0) {
-            octets = length;
         } else { // mod < 0
             octets = 0 - octets;
         }
 
-        if (index < 8) {
-            readUnsignedByte(8 - index);
-            octets--;
-        }
-
-        if (octets == length) {
-            return;
-        }
-
-        for (int i = 0; i < octets; i++) {
+        for (; octets > 0; octets--) {
             readUnsignedByte(8);
         }
     }
