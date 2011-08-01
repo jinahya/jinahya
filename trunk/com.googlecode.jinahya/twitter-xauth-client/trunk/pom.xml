@@ -211,8 +211,8 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/jinahya/twitter-xauth-client/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/jinahya/twitter-xauth-client/trunk</developerConnection>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/twitter-xauth-client/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/twitter-xauth-client/trunk</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/twitter-xauth-client/trunk</url>
   </scm>
   <prerequisites />
