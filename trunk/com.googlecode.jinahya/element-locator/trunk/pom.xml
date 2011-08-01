@@ -22,17 +22,14 @@
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -42,7 +39,6 @@
     <dependency>
       <groupId>xom</groupId>
       <artifactId>xom</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
