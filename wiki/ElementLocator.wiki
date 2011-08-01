@@ -7,6 +7,9 @@ Simple (and somewhat restricted) XML parser/printer.
 = Details =
 This is a simple XML parser/printer. This artifact is not fully applicable to any XML libraries and there are some restrictions.
 
+== Apidocs ==
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/element-locator/1.0-alpha-4/apidocs/index.html 1.0-alpha-4]
+
 == Simple XML ==
   * There are only attributes, elements, and texts.
   * No other types are supported.
