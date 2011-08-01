@@ -231,10 +231,12 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    <!--
     <site>
       <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
+    -->
   </distributionManagement>
   <profiles>
     <profile>
