@@ -31,14 +31,22 @@ import org.testng.annotations.Test;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <B>
  */
-public abstract class BaseTest<T extends Base> {
+@Test(singleThreaded = true)
+public abstract class BaseTest<B extends Base> {
 
 
     protected static final Random RANDOM = new Random();
 
 
-    protected static final byte[] generate(final int length) {
+    protected static byte[] generate() {
+
+        return generate(1024);
+    }
+
+
+    protected static byte[] generate(final int length) {
 
         synchronized (RANDOM) {
             final byte[] bytes = new byte[RANDOM.nextInt(length)];
@@ -114,7 +122,8 @@ public abstract class BaseTest<T extends Base> {
     }
 
 
-    public BaseTest(final T base) {
+    public BaseTest(final B base) {
+
         super();
 
         this.base = base;
@@ -134,5 +143,6 @@ public abstract class BaseTest<T extends Base> {
     }
 
 
-    protected final T base;
+    protected final B base;
 }
+

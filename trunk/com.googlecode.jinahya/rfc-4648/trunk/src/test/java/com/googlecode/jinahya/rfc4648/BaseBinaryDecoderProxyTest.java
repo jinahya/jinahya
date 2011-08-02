@@ -70,11 +70,11 @@ public class BaseBinaryDecoderProxyTest {
 
             final byte[] decoded1 = jinahya.decode(source);
             Assert.assertEquals(decoded1, original);
-            System.out.println("jinahya: " + hex(decoded1));
+            //System.out.println("jinahya: " + hex(decoded1));
 
             final byte[] decoded2 = commons.decode(modifier.modify(source));
             Assert.assertEquals(decoded2, original);
-            System.out.println("commons: " + hex(decoded2));
+            //System.out.println("commons: " + hex(decoded2));
 
             Assert.assertEquals(decoded1, decoded2);
         }

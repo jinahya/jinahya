@@ -18,17 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.IOException;
-
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.EncoderException;
-
-import org.apache.shindig.common.util.Base32;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -39,40 +28,5 @@ public class Base32HexTest extends BaseTest<Base32Hex> {
     public Base32HexTest() {
         super(new Base32Hex());
     }
-
-
-    @Test(invocationCount = 128, enabled = false)
-    public void testEncodingAgainstShindig()
-        throws IOException, DecoderException {
-
-        final byte[] original = generate(1024);
-
-        final char[] encoded = base.encode(original);
-        final byte[] encodedBytes = new byte[encoded.length];
-        for (int i = 0; i < encodedBytes.length; i++) {
-            encodedBytes[i] = (byte) Character.toLowerCase(encoded[i]);
-        }
-
-        final byte[] decoded = new Base32().decode(encodedBytes);
-
-        Assert.assertEquals(decoded, original, "fail");
-    }
-
-
-    @Test(invocationCount = 128, enabled = false)
-    public void testDecodingAgainstShindig()
-        throws EncoderException, IOException {
-
-        final byte[] original = generate(1024);
-
-        final byte[] encodedBytes = new Base32().encode(original);
-        final char[] encoded = new char[encodedBytes.length];
-        for (int i = 0; i < encoded.length; i++) {
-            encoded[i] = Character.toUpperCase((char) encodedBytes[i]);
-        }
-
-        final byte[] decoded = base.decode(encoded);
-
-        Assert.assertEquals(decoded, original, "fail");
-    }
 }
+

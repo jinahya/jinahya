@@ -20,7 +20,6 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.EncoderException;
@@ -35,9 +34,6 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BaseBinaryEncoderProxyTest {
-
-
-    private static final Random RANDOM = new Random();
 
 
     private static void test(final Map<String, String> vector, final Base base,
@@ -74,11 +70,11 @@ public class BaseBinaryEncoderProxyTest {
 
             final byte[] encoded1 = jinahya.encode(source);
             Assert.assertEquals(encoded1, encoded);
-            System.out.println("jinahya: " + hex(encoded1));
+            //System.out.println("jinahya: " + hex(encoded1));
 
             final byte[] encoded2 = modifier.modify(commons.encode(source));
             Assert.assertEquals(encoded2, encoded);
-            System.out.println("commons: " + hex(encoded2));
+            //System.out.println("commons: " + hex(encoded2));
 
             Assert.assertEquals(encoded1, encoded2);
         }
