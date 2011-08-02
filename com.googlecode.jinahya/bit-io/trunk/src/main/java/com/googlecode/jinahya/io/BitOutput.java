@@ -369,16 +369,16 @@ public class BitOutput {
      * character count following all characters which each is written as 7-bit
      * unsigned byte.
      *
-     * @param string ASCII string to write
+     * @param value ASCII string to write
      * @throws IOException if an I/O error occurs
      */
-    public final void writeASCII(final String string) throws IOException {
+    public final void writeASCII(final String value) throws IOException {
 
-        if (string == null) {
-            throw new NullPointerException("null string");
+        if (value == null) {
+            throw new NullPointerException("null value");
         }
 
-        final byte[] bytes = string.getBytes("US-ASCII");
+        final byte[] bytes = value.getBytes("US-ASCII");
         writeUnsignedInt(0x1F, bytes.length);
         for (int i = 0; i < bytes.length; i++) {
             writeUnsignedByte(0x07, bytes[i] & 0xFF);
@@ -389,23 +389,22 @@ public class BitOutput {
     /**
      * Writes a UTF string. Identical to {@link DataOutput#writeUTF(String)}.
      *
-     * @param string string to write
+     * @param value string to write
      * @throws IOException if an I/O error occurs
      * @see DataOutput#writeUTF(String) 
      */
-    public final void writeUTF(final String string) throws IOException {
+    public final void writeUTF(final String value) throws IOException {
 
-        if (string == null) {
-            throw new NullPointerException("null string");
+        if (value == null) {
+            throw new NullPointerException("null value");
         }
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        final char[] chars = string.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
+        for (int i = 0; i < value.length(); i++) {
 
-            final char c = chars[i];
-            
+            final char c = value.charAt(i);
+
             if (baos.size() > 65535) {
                 throw new UTFDataFormatException("too long");
             }
@@ -452,7 +451,7 @@ public class BitOutput {
         if (index > 0) { // bit index to write
             writeUnsignedByte(8 - index, 0);
         }
-        
+
         int octets = count % length;
 
         if (octets > 0) {
@@ -481,5 +480,17 @@ public class BitOutput {
 
     /** so far written octet count. */
     private int count = 0;
+
+
+    /** test. */
+    int getCount() {
+        return count;
+    }
+
+
+    /** test. */
+    void setCount(int count) {
+        this.count = count;
+    }
 }
 
