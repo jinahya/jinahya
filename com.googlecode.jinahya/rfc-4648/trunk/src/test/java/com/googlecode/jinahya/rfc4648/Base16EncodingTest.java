@@ -18,15 +18,18 @@
 package com.googlecode.jinahya.rfc4648;
 
 
+import org.apache.commons.codec.binary.Hex;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base16Test extends BaseTest<Base16> {
+public class Base16EncodingTest extends DecodingTest<Base16, Hex> {
 
 
-    public Base16Test() {
-        super(new Base16());
+    public Base16EncodingTest() {
+        super(new Base16(), new Hex(), Modifier.TO_UPPER);
     }
 }
 
