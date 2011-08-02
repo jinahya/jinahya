@@ -18,6 +18,10 @@
 package com.googlecode.jinahya.rfc4648;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -40,15 +44,30 @@ import java.lang.reflect.Proxy;
 public class BaseBinaryEncoderProxy implements InvocationHandler {
 
 
-    private static final Class BINARY_ENCODER_CLASS;
+    private static final Class CLAZZ;
 
 
     static {
         try {
-            BINARY_ENCODER_CLASS = Class.forName(
-                "org.apache.commons.codec.BinaryEncoder");
+            CLAZZ = Class.forName("org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
+        }
+    }
+
+
+    private static final Constructor CONSTRUCTOR;
+
+
+    static {
+        try {
+            CONSTRUCTOR = Class.forName(
+                "org.apache.commons.codec.EncoderException").getConstructor(
+                new Class[]{Throwable.class});
+        } catch (ClassNotFoundException cnfe) {
+            throw new InstantiationError(cnfe.getMessage());
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
         }
     }
 
@@ -65,8 +84,8 @@ public class BaseBinaryEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null base");
         }
 
-        return Proxy.newProxyInstance(BINARY_ENCODER_CLASS.getClassLoader(),
-                                      new Class[]{BINARY_ENCODER_CLASS},
+        return Proxy.newProxyInstance(CLAZZ.getClassLoader(),
+                                      new Class[]{CLAZZ},
                                       new BaseBinaryEncoderProxy(base));
     }
 
@@ -92,7 +111,17 @@ public class BaseBinaryEncoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        return new String(base.encode((byte[]) args[0])).getBytes("US-ASCII");
+        final ByteArrayInputStream input =
+            new ByteArrayInputStream((byte[]) args[0]);
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        try {
+            base.encode(input, output); // IOException
+            output.flush(); // IOException
+            return output.toByteArray();
+        } catch (IOException ioe) {
+            throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
+        }
     }
 
 
