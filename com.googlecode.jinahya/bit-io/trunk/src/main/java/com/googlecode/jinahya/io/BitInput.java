@@ -28,7 +28,7 @@ import java.util.BitSet;
 
 
 /**
- * Bit Input.
+ * Bit-level wrapper for InputStream.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
