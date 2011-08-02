@@ -15,10 +15,12 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 || int ||1(exclusive) ~ 32(inclusive) || ||
 || unsigned long || 1(inclusive) ~ 64(exclusive) || ||
 || long || 1(exclusive) ~ 64(inclusive) || ||
-|| bytes || 31 + 8N || ||
-|| ASCII || 31 + 7N || ||
+|| bytes || 31 + 8N || N: number of bytes ||
+|| ASCII || 31 + 7N || N: number of characters ||
 || UTF || 16 + 8N || !DataIn#readUTF<br/>!DataOutput#writeUTF||
 
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-5/apidocs/index.html 1.0-alpha-5]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-5-SNAPSHOT/apidocs/index.html 1.0-alpha-5-SNAPSHOT]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-4-SNAPSHOT/apidocs/index.html 1.0-alpha-4-SNAPSHOT]
