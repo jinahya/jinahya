@@ -25,6 +25,15 @@ import java.lang.reflect.Proxy;
 
 /**
  * Proxy for BinaryEncoder.
+ * 
+ * <blockquote><pre>
+ * // create
+ * final BinaryEncoder encoder = (BinaryEncoder)
+ *     BaseBinaryEncoderProxy.newInstance();
+ * 
+ * // encode
+ * encoder.encode(byte[]);
+ * </pre></blockquote>
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

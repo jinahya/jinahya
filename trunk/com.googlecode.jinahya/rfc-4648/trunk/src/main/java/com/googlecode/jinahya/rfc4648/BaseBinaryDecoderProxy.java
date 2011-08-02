@@ -25,6 +25,15 @@ import java.lang.reflect.Proxy;
 
 /**
  * Proxy for BinaryDecoder.
+ * 
+ * <blockquote><pre>
+ * // create
+ * final BinaryDecoder decoder = (BinaryDecoder)
+ *     BaseBinaryDecoderProxy.newInstance();
+ *
+ * // decode
+ * decoder.decode(byte[]);
+ * </pre></blockquote>
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -83,8 +92,18 @@ public class BaseBinaryDecoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        return base.decode(
-            new String((byte[]) args[0], "US-ASCII").toCharArray());
+        if (args[0] instanceof byte[]) {
+            return base.decode(
+                new String((byte[]) args[0], "US-ASCII").toCharArray());
+        }
+
+        if (args[0] instanceof String) {
+            return invoke(
+                proxy, method,
+                new Object[]{((String) args[0]).getBytes("US-ASCII")});
+        }
+
+        return invoke(proxy, method, new Object[]{args[0].toString()});
     }
 
 
