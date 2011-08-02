@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc4648;
 
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,63 +35,83 @@ import org.testng.annotations.Test;
 public class TestVectors {
 
 
-    private static final Map<String, String> BASE64 =
-        new HashMap<String, String>();
+    public static final Map<String, String> BASE64;
 
 
     static {
-        BASE64.put("", "");
-        BASE64.put("f", "Zg==");
-        BASE64.put("fo", "Zm8=");
-        BASE64.put("foo", "Zm9v");
-        BASE64.put("foob", "Zm9vYg==");
-        BASE64.put("fooba", "Zm9vYmE=");
-        BASE64.put("foobar", "Zm9vYmFy");
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("", "");
+        map.put("f", "Zg==");
+        map.put("fo", "Zm8=");
+        map.put("foo", "Zm9v");
+        map.put("foob", "Zm9vYg==");
+        map.put("fooba", "Zm9vYmE=");
+        map.put("foobar", "Zm9vYmFy");
+        BASE64 = Collections.unmodifiableMap(map);
     }
 
 
-    private static final Map<String, String> BASE32 =
-        new HashMap<String, String>();
+    public static final Map<String, String> BASE64URL;
 
 
     static {
-        BASE32.put("", "");
-        BASE32.put("f", "MY======");
-        BASE32.put("fo", "MZXQ====");
-        BASE32.put("foo", "MZXW6===");
-        BASE32.put("foob", "MZXW6YQ=");
-        BASE32.put("fooba", "MZXW6YTB");
-        BASE32.put("foobar", "MZXW6YTBOI======");
+        final Map<String, String> map = new HashMap<String, String>(BASE64);
+        for (Entry<String, String> entry : map.entrySet()) {
+            final String value = entry.getValue();
+            final int padIndex = value.indexOf(Base.PAD);
+            if (padIndex != -1) {
+                entry.setValue(value.substring(0, padIndex));
+            }
+        }
+        BASE64URL = Collections.unmodifiableMap(map);
     }
 
 
-    private static final Map<String, String> BASE32HEX =
-        new HashMap<String, String>();
+    public static final Map<String, String> BASE32;
 
 
     static {
-        BASE32HEX.put("", "");
-        BASE32HEX.put("f", "CO======");
-        BASE32HEX.put("fo", "CPNG====");
-        BASE32HEX.put("foo", "CPNMU===");
-        BASE32HEX.put("foob", "CPNMUOG=");
-        BASE32HEX.put("fooba", "CPNMUOJ1");
-        BASE32HEX.put("foobar", "CPNMUOJ1E8======");
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("", "");
+        map.put("f", "MY======");
+        map.put("fo", "MZXQ====");
+        map.put("foo", "MZXW6===");
+        map.put("foob", "MZXW6YQ=");
+        map.put("fooba", "MZXW6YTB");
+        map.put("foobar", "MZXW6YTBOI======");
+        BASE32 = Collections.unmodifiableMap(map);
     }
 
 
-    private static final Map<String, String> BASE16 =
-        new HashMap<String, String>();
+    public static final Map<String, String> BASE32HEX;
 
 
     static {
-        BASE16.put("", "");
-        BASE16.put("f", "66");
-        BASE16.put("fo", "666F");
-        BASE16.put("foo", "666F6F");
-        BASE16.put("foob", "666F6F62");
-        BASE16.put("fooba", "666F6F6261");
-        BASE16.put("foobar", "666F6F626172");
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("", "");
+        map.put("f", "CO======");
+        map.put("fo", "CPNG====");
+        map.put("foo", "CPNMU===");
+        map.put("foob", "CPNMUOG=");
+        map.put("fooba", "CPNMUOJ1");
+        map.put("foobar", "CPNMUOJ1E8======");
+        BASE32HEX = Collections.unmodifiableMap(map);
+    }
+
+
+    public static final Map<String, String> BASE16;
+
+
+    static {
+        final Map<String, String> map = new HashMap<String, String>();
+        map.put("", "");
+        map.put("f", "66");
+        map.put("fo", "666F");
+        map.put("foo", "666F6F");
+        map.put("foob", "666F6F62");
+        map.put("fooba", "666F6F6261");
+        map.put("foobar", "666F6F626172");
+        BASE16 = Collections.unmodifiableMap(map);
     }
 
 
@@ -114,6 +135,7 @@ public class TestVectors {
 
     @Test
     public void testBASE64() throws IOException {
+
         testBase(BASE64, new Base64());
     }
 
@@ -121,35 +143,28 @@ public class TestVectors {
     @Test
     public void testBASE64URL() throws IOException {
 
-        final Map<String, String> BASE64URL =
-            new HashMap<String, String>(BASE64);
-
-        for (Entry<String, String> entry : BASE64URL.entrySet()) {
-            final String value = entry.getValue();
-            final int padIndex = value.indexOf(Base.PAD);
-            if (padIndex != -1) {
-                entry.setValue(value.substring(0, padIndex));
-            }
-        }
-
         testBase(BASE64URL, new Base64URL());
     }
 
 
     @Test
     public void testBASE32() throws IOException {
+
         testBase(BASE32, new Base32());
     }
 
 
     @Test
     public void testBASE32HEX() throws IOException {
+
         testBase(BASE32HEX, new Base32Hex());
     }
 
 
     @Test
     public void testBASE16() throws IOException {
+
         testBase(BASE16, new Base16());
     }
 }
+
