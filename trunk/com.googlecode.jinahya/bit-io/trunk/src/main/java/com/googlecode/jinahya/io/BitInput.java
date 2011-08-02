@@ -299,7 +299,7 @@ public class BitInput {
      * Reads a 7-bit ASCII String. Reads a 31-bit unsigned integer for character
      * count following the characters which each is read as 7-bit unsigned byte.
      *
-     * @return a String
+     * @return an ASCII String
      * @throws IOException if an I/O error occurs.
      */
     public final String readASCII() throws IOException {
@@ -325,7 +325,8 @@ public class BitInput {
         final CharArrayWriter caw = new CharArrayWriter();
 
         final int length = readUnsignedInt(0x10); // 16
-        for (int i = 0; i < length; i++) {
+        int i = 0;
+        for (; i < length; i++) {
 
             final int first = readUnsignedByte(0x08);
             if (first <= 0x7F) { // 0xxxxxxx
@@ -390,13 +391,13 @@ public class BitInput {
         if (index < 8) { // bit index to read
             readUnsignedByte(8 - index);
         }
-        
+
         int octets = count % length;
 
         if (octets == 0) {
             return;
         }
-        
+
         if (octets > 0) {
             octets = length - octets;
         } else { // mod < 0
@@ -423,5 +424,17 @@ public class BitInput {
 
     /** so far read octet count. */
     private int count = 0;
+
+
+    /** test. */
+    int getCount() {
+        return count;
+    }
+
+
+    /** test. */
+    void setCount(int count) {
+        this.count = count;
+    }
 }
 
