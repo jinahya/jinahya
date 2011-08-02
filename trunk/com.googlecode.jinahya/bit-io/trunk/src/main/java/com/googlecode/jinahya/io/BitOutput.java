@@ -79,7 +79,8 @@ public class BitOutput {
 
         index += length;
         for (int i = 0; i < length; i++) {
-            set.set(--index, ((value >>> i) & 0x01) == 0x01);
+            index--;
+            set.set(index, ((value >>> i) & 0x01) == 0x01);
         }
 
         index += length;
@@ -261,7 +262,7 @@ public class BitOutput {
 
 
     /**
-     * Writes an signed long.
+     * Writes a signed long <code>value</code> in <code>length</code> bits.
      *
      * @param length bit length between 1 (exclusive) and 64 (inclusive).
      * @param value value to write
@@ -400,8 +401,11 @@ public class BitOutput {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        for (char c : string.toCharArray()) {
+        final char[] chars = string.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
 
+            final char c = chars[i];
+            
             if (baos.size() > 65535) {
                 throw new UTFDataFormatException("too long");
             }
