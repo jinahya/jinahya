@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import com.googlecode.jinahya.bitio.BitInput;
-import com.googlecode.jinahya.bitio.BitOutput;
+import com.googlecode.jinahya.io.BitInput;
+import com.googlecode.jinahya.io.BitOutput;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
