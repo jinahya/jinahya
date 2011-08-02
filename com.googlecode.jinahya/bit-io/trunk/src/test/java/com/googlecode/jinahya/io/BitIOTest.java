@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.bitio;
+package com.googlecode.jinahya.io;
 
 
 import java.io.ByteArrayInputStream;
