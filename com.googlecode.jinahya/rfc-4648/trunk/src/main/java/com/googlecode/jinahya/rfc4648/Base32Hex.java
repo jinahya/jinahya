@@ -29,14 +29,21 @@ public class Base32Hex extends Base {
 
 
     /**
+     * base32hex alphabet.
+     */
+    protected static final byte[] ALPHABAT = new byte[]{
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+        'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'
+    };
+
+
+    /**
      * Creates a new instance.
      */
     public Base32Hex() {
-        super(new byte[]{
-                '0', '1', '2', '3', '4', '5', '6', '7',
-                '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'}, true);
+        super(ALPHABAT, true);
     }
 }
 

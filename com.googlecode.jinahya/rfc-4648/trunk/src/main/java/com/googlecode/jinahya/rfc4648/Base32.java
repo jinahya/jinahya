@@ -28,13 +28,21 @@ public class Base32 extends Base {
 
 
     /**
+     * base32 alphabet.
+     */
+    protected static final byte[] ALPHABET = new byte[]{
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z', '2', '3', '4', '5', '6', '7'
+    };
+
+
+    /**
      * Creates a new instance.
      */
     public Base32() {
-        super(new byte[]{
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                'Y', 'Z', '2', '3', '4', '5', '6', '7'}, true);
+        super(ALPHABET, true);
     }
 }
+
