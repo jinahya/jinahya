@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;

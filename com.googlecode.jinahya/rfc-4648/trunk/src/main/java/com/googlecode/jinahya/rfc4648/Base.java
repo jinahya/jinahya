@@ -23,7 +23,6 @@ import com.googlecode.jinahya.io.BitOutput;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.CharArrayReader;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
