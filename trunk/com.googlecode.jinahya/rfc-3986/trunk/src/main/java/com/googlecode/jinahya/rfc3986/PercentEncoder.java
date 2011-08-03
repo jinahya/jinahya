@@ -173,7 +173,7 @@ public class PercentEncoder {
         }
 
         if (integer <= 0x09) { // 0x00 ~ 0x09
-            return integer + 0x30; // 0x48('0'), 0x49('1'), ...
+            return integer + 0x30; // 0x30('0'), 0x31('1'), ...
         }
 
         if (integer <= 0x0F) { // 0x0A ~ 0x0F
