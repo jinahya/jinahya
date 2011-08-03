@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -27,19 +28,10 @@ import java.lang.reflect.Proxy;
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryDecoder</code>.
  *
- * <link rel="stylesheet" type="text/css"
- *       href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
- * <script src="{@docRoot}/resources/google-code-prettify/prettify.js"
- *         type="text/javascript"></script>
- * <script language="JavaScript">
- *   window.onload=function(){windowTitle();prettyPrint();}</script>
- * <pre class="prettyprint"><code class="language-java">
+ * <blockquote><pre>
  * // create
  * final BinaryDecoder decoder = (BinaryDecoder)
  *     PercentBinaryDecoderProxy.newInstance();
- * 
- * // decode String
- * decoder.decode("");
  * 
  * // decode byte array
  * decoder.decode(new byte[0]);
@@ -51,15 +43,32 @@ import java.lang.reflect.Proxy;
 public class PercentBinaryDecoderProxy implements InvocationHandler {
 
 
-    private static final Class<?> BINARY_ENCODER_CLASS;
+    /** BinaryDecoder Class. */
+    private static final Class CLAZZ;
 
 
     static {
         try {
-            BINARY_ENCODER_CLASS =
-                Class.forName("org.apache.commons.codec.BinaryDecoder");
+            CLAZZ = Class.forName("org.apache.commons.codec.BinaryDecoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
+        }
+    }
+
+
+    /** DecoderException Constructor. */
+    private static final Constructor CONSTRUCTOR;
+
+
+    static {
+        try {
+            CONSTRUCTOR = Class.forName(
+                "org.apache.commons.codec.DecoderException").getConstructor(
+                new Class[]{Throwable.class});
+        } catch (ClassNotFoundException cnfe) {
+            throw new InstantiationError(cnfe.getMessage());
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
         }
     }
 
@@ -70,9 +79,9 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
      * @return a new proxy instance.
      */
     public static Object newInstance() {
-        return Proxy.newProxyInstance(BINARY_ENCODER_CLASS.getClassLoader(),
-                                      new Class<?>[]{BINARY_ENCODER_CLASS},
-                                      new PercentBinaryDecoderProxy());
+        return Proxy.newProxyInstance(
+            CLAZZ.getClassLoader(), new Class[]{CLAZZ},
+            new PercentBinaryDecoderProxy());
     }
 
 
@@ -84,7 +93,7 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
     }
 
 
-    @Override
+    //@Override
     public Object invoke(final Object proxy, final Method method,
                          final Object[] args)
         throws Throwable {
@@ -93,28 +102,11 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        if (args[0] instanceof String) {
-            try {
-                return PercentDecoder.decode((String) args[0]);
-            } catch (IOException ioe) {
-                throw (Throwable) Class.forName(
-                    "org.apache.commons.codec.DecoderException").
-                    getConstructor(Throwable.class).newInstance(ioe);
-            }
+        try {
+            return PercentDecoder.decode((byte[]) args[0]);
+        } catch (IOException ioe) {
+            throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
         }
-
-        if (args[0] instanceof byte[]) {
-            try {
-                return PercentDecoder.decode((byte[]) args[0]);
-            } catch (IOException ioe) {
-                throw (Throwable) Class.forName(
-                    "org.apache.commons.codec.DecoderException").
-                    getConstructor(Throwable.class).newInstance(ioe);
-            }
-        }
-
-        throw new IllegalArgumentException(
-            "unacceptable source type: " + args[0].getClass());
     }
 }
 
