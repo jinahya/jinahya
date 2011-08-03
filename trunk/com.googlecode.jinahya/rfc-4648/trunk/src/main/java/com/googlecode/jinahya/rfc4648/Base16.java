@@ -28,12 +28,18 @@ public class Base16 extends Base {
 
 
     /**
+     * base16 alphabet.
+     */
+    protected static final byte[] ALPHABET = new byte[]{
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+
+    /**
      * Creates a new instance.
      */
     public Base16() {
-        super(new byte[]{
-                '0', '1', '2', '3', '4', '5', '6', '7',
-                '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}, true);
+        super(ALPHABET, true);
     }
 }
 
