@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -27,25 +28,14 @@ import java.lang.reflect.Proxy;
 /**
  * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
  *
- * <!--link rel="stylesheet" type="text/css" href="http://goo.gl/t8bIA"--> 
- * <link rel="stylesheet" type="text/css"
- *       href="{@docRoot}/resources/google-code-prettify/prettify.css"> 
- * <!--script src="http://goo.gl/gxapB" type="text/javascript"--><!--/script-->
- * <script src="{@docRoot}/resources/google-code-prettify/prettify.js"
- *         type="text/javascript"></script>
- * <script language="JavaScript">
- *   window.onload=function(){windowTitle();prettyPrint();}</script>
- * <pre class="prettyprint"><code class="language-java">
+ * <blockquote><pre>
  * // create
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
  * 
- * // encode String
- * encoder.encode("");
- * 
- * // encode byte array
+ * // encode
  * encoder.encode(new byte[0]);
- * </code></pre>
+ * </blockquote></pre>
  * 
  * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -54,15 +44,32 @@ import java.lang.reflect.Proxy;
 public class PercentBinaryEncoderProxy implements InvocationHandler {
 
 
-    private static final Class<?> BINARY_ENCODER_CLASS;
+    /** BinaryEncoder Class. */
+    private static final Class CLAZZ;
 
 
     static {
         try {
-            BINARY_ENCODER_CLASS =
-                Class.forName("org.apache.commons.codec.BinaryEncoder");
+            CLAZZ = Class.forName("org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
+        }
+    }
+
+
+    /** EncoderException Constructor. */
+    private static final Constructor CONSTRUCTOR;
+
+
+    static {
+        try {
+            CONSTRUCTOR = Class.forName(
+                "org.apache.commons.codec.EncoderException").getConstructor(
+                new Class[]{Throwable.class});
+        } catch (ClassNotFoundException cnfe) {
+            throw new InstantiationError(cnfe.getMessage());
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
         }
     }
 
@@ -73,9 +80,9 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
      * @return a new proxy instance.
      */
     public static Object newInstance() {
-        return Proxy.newProxyInstance(BINARY_ENCODER_CLASS.getClassLoader(),
-                                      new Class<?>[]{BINARY_ENCODER_CLASS},
-                                      new PercentBinaryEncoderProxy());
+        return Proxy.newProxyInstance(
+            CLAZZ.getClassLoader(), new Class[]{CLAZZ},
+            new PercentBinaryEncoderProxy());
     }
 
 
@@ -87,7 +94,7 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     }
 
 
-    @Override
+    //@Override
     public Object invoke(final Object proxy, final Method method,
                          final Object[] args)
         throws Throwable {
@@ -96,28 +103,11 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        if (args[0] instanceof String) {
-            try {
-                return PercentEncoder.encode((String) args[0]);
-            } catch (IOException ioe) {
-                throw (Throwable) Class.forName(
-                    "org.apache.commons.codec.EncoderException").
-                    getConstructor(Throwable.class).newInstance(ioe);
-            }
+        try {
+            return PercentEncoder.encode((byte[]) args[0]);
+        } catch (IOException ioe) {
+            throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
         }
-
-        if (args[0] instanceof byte[]) {
-            try {
-                return PercentEncoder.encode((byte[]) args[0]);
-            } catch (IOException ioe) {
-                throw (Throwable) Class.forName(
-                    "org.apache.commons.codec.EncoderException").
-                    getConstructor(Throwable.class).newInstance(ioe);
-            }
-        }
-
-        throw new IllegalArgumentException(
-            "unacceptable source type: " + args[0].getClass());
     }
 }
 

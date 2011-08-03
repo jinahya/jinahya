@@ -59,7 +59,7 @@ public class PercentEncoder {
      * @return encoding output
      * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final byte... input) throws IOException {
+    public static byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -98,7 +98,7 @@ public class PercentEncoder {
         encode(input, writer);
         writer.flush();
          */
-        
+
         for (int b = -1; (b = input.read()) != -1;) {
 
             if ((b >= 0x30 && b <= 0x39) // digit
@@ -147,7 +147,6 @@ public class PercentEncoder {
                 output.write(b);
 
             } else {
-
                 output.write(0x25); // '%'
                 if (b <= 0x0F) {
                     output.write('0');
