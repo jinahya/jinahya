@@ -87,13 +87,13 @@ abstract class ELNode {
      * @param node node
      * @return string
      */
-    static String express(final ELNode node) {
+    static String jamesClark(final ELNode node) {
 
         if (node == null) {
             throw new NullPointerException("null node");
         }
 
-        return express(node.namespaceURI, node.localName);
+        return jamesClark(node.namespaceURI, node.localName);
     }
 
 
@@ -103,7 +103,8 @@ abstract class ELNode {
      * @param localName
      * @return 
      */
-    static String express(final String namespaceURI, final String localName) {
+    static String jamesClark(final String namespaceURI,
+                             final String localName) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");

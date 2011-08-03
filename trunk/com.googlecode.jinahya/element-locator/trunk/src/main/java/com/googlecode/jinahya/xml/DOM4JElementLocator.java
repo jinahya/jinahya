@@ -107,7 +107,7 @@ public class DOM4JElementLocator extends ElementLocator<Document> {
             final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
             elelement.attributes.put(
-                ELNode.express(attributeNamespaceURI, attributeLocalName),
+                ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }

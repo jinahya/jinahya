@@ -91,7 +91,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
             final String attributeLocalName = element.getAttributeName(i);
             final String attributeValue = element.getAttributeValue(i);
             elelement.attributes.put(
-                ELNode.express(attributeNamespaceURI, attributeLocalName),
+                ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
