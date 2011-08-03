@@ -59,7 +59,7 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         Assert.assertEquals(locator.getCurrent().namespaceURI, "http://a");
         Assert.assertEquals(locator.getCurrent().localName, "grandparent");
 
-        Assert.assertEquals(locator.getChildCount("parent"), 2);
+        Assert.assertEquals(locator.count("parent"), 2);
 
         for (int i = 0; i < 2; i++) {
             locator.child("parent", i);
@@ -73,7 +73,7 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
             locator.parent();
         }
 
-        Assert.assertEquals(locator.getChildCount("http://b", "parent"), 1);
+        Assert.assertEquals(locator.count("http://b", "parent"), 1);
         locator.child("http://b", "parent", 0);
 
         Assert.assertEquals(locator.attribute("http://a", "a"), "a");
@@ -91,13 +91,13 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         Assert.assertNull(locator.attribute("http://c", "d"));
 
         // --------------------------------------- /a:grandparent/b:parent/child
-        Assert.assertEquals(locator.getChildCount("child"), 3);
+        Assert.assertEquals(locator.count("child"), 3);
         for (int i = 0; i < 3; i++) {
             locator.child("child", i);
             Assert.assertEquals(locator.text(), "child" + i);
             locator.parent();
         }
-        Assert.assertEquals(locator.getChildCount("child"), 3);
+        Assert.assertEquals(locator.count("child"), 3);
         for (int i = 0; i < 3; i++) {
             locator.child("child", i);
             Assert.assertEquals(locator.text(), "child" + i);
@@ -105,11 +105,11 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         }
 
         // ------------------------------------- /a:grandparent/b:parent/c:child
-        Assert.assertEquals(locator.getChildCount("http://c", "child"), 1);
+        Assert.assertEquals(locator.count("http://c", "child"), 1);
         locator.child("http://c", "child", 0);
 
         // -------------------------- /a:grandparent/b:parent/c:child/grandchild
-        Assert.assertEquals(locator.getChildCount("", "grandchild"), 1);
+        Assert.assertEquals(locator.count("", "grandchild"), 1);
         locator.child("", "grandchild", 0);
         Assert.assertEquals(locator.text(), "grandchild");
     }

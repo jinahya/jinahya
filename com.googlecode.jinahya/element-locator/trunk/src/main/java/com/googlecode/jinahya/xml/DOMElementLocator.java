@@ -105,7 +105,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getNodeValue();
             elelement.attributes.put(
-                ELNode.express(attributeNamespaceURI, attributeLocalName),
+                ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
         }
