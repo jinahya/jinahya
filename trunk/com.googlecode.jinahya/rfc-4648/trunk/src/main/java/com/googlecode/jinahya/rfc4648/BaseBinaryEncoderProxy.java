@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -110,10 +108,6 @@ public class BaseBinaryEncoderProxy implements InvocationHandler {
     public Object invoke(final Object proxy, final Method method,
                          final Object[] args)
         throws Throwable {
-
-        final ByteArrayInputStream input =
-            new ByteArrayInputStream((byte[]) args[0]);
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         try {
             return base.encode((byte[]) args[0]);
