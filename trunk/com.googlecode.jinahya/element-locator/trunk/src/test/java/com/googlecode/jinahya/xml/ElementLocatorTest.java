@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.elementlocator;
+package com.googlecode.jinahya.xml;
 
 
 import java.io.ByteArrayOutputStream;
