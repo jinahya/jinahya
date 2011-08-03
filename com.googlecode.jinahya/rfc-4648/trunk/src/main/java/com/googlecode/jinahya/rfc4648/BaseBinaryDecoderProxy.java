@@ -111,14 +111,8 @@ public class BaseBinaryDecoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        final ByteArrayInputStream input =
-            new ByteArrayInputStream((byte[]) args[0]);
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
         try {
-            base.decode(input, output); // IOException
-            output.flush(); // IOException
-            return output.toByteArray();
+            return base.decode((byte[]) args[0]);
         } catch (IOException ioe) {
             throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
         }

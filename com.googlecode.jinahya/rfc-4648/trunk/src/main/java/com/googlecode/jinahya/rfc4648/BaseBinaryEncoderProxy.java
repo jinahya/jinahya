@@ -116,9 +116,7 @@ public class BaseBinaryEncoderProxy implements InvocationHandler {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         try {
-            base.encode(input, output); // IOException
-            output.flush(); // IOException
-            return output.toByteArray();
+            return base.encode((byte[]) args[0]);
         } catch (IOException ioe) {
             throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
         }

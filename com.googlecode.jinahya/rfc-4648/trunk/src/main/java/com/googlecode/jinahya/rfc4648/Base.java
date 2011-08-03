@@ -24,7 +24,6 @@ import com.googlecode.jinahya.io.BitOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
-import java.io.CharArrayWriter;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -129,7 +128,7 @@ public abstract class Base {
      * @return encoded characters
      * @throws IOException if an I/O error occurs.
      */
-    public char[] encode(final byte[] input) throws IOException {
+    public byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -146,18 +145,18 @@ public abstract class Base {
      * @return encoded characters
      * @throws IOException if an I/O error occurs.
      */
-    public char[] encode(final InputStream input) throws IOException {
+    public byte[] encode(final InputStream input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        final CharArrayWriter output = new CharArrayWriter();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         encode(input, output);
         output.flush();
 
-        return output.toCharArray();
+        return output.toByteArray();
     }
 
 
@@ -180,7 +179,6 @@ public abstract class Base {
         }
 
         final Writer writer = new OutputStreamWriter(output, "US-ASCII");
-
         encode(input, writer);
         writer.flush();
     }
@@ -271,13 +269,13 @@ public abstract class Base {
      * @return decoded bytes
      * @throws IOException if an I/O error occurs.
      */
-    public final byte[] decode(final char[] input) throws IOException {
+    public final byte[] decode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        return decode(new CharArrayReader(input));
+        return decode(new ByteArrayInputStream(input));
     }
 
 
@@ -288,7 +286,7 @@ public abstract class Base {
      * @return decoded bytes
      * @throws IOException if an I/O error occurs.
      */
-    public final byte[] decode(final Reader input) throws IOException {
+    public final byte[] decode(final InputStream input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");

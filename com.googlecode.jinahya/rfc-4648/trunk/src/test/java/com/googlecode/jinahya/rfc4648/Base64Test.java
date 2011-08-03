@@ -18,14 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.IOException;
-
-import org.apache.commons.codec.DecoderException;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -40,40 +32,5 @@ public class Base64Test extends BaseTest<Base64> {
     public Base64Test() {
         super(new Base64());
     }
-
-
-    @Test(invocationCount = 128)
-    public void testEncodingAgainstCommonsCodec()
-        throws IOException, DecoderException {
-
-        final byte[] original = generate(1024);
-
-        final char[] encoded = base.encode(original);
-        final byte[] encodedBytes = new byte[encoded.length];
-        for (int i = 0; i < encodedBytes.length; i++) {
-            encodedBytes[i] = (byte) encoded[i];
-        }
-
-        final byte[] decoded = COMMONS_CODEC.decode(encodedBytes);
-
-        Assert.assertEquals(decoded, original, "fail");
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testDecodingAgainstCommonsCodec() throws IOException {
-
-        final byte[] original = new byte[RANDOM.nextInt(1024)];
-        RANDOM.nextBytes(original);
-
-        final byte[] encodedBytes = COMMONS_CODEC.encode(original);
-        final char[] encoded = new char[encodedBytes.length];
-        for (int i = 0; i < encoded.length; i++) {
-            encoded[i] = (char)encodedBytes[i];
-        }
-
-        final byte[] decoded = base.decode(encoded);
-
-        Assert.assertEquals(decoded, original, "fail");
-    }
 }
+
