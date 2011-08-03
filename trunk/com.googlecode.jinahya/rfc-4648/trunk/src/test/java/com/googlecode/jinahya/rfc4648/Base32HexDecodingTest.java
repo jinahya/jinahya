@@ -22,15 +22,18 @@ package com.googlecode.jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLTest extends BaseTest<Base64URL> {
+public class Base32HexDecodingTest
+    extends DecodingTest<Base32Hex, org.apache.commons.codec.binary.Base32> {
 
 
-    private static final org.apache.commons.codec.binary.Base64 COMMONS_CODEC =
-        new org.apache.commons.codec.binary.Base64(-1, null, true);
+    private static org.apache.commons.codec.binary.Base32 getCommons() {
+
+        return new org.apache.commons.codec.binary.Base32(-1, null, true);
+    }
 
 
-    public Base64URLTest() {
-        super(new Base64URL());
+    public Base32HexDecodingTest() {
+        super(new Base32Hex(), getCommons(), Modifier.TO_SAME);
     }
 }
 

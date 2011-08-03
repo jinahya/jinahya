@@ -113,7 +113,7 @@ public abstract class BaseTest<B extends Base> {
                              final byte[] original)
         throws IOException {
 
-        final char[] encoded = base.encode(original);
+        final byte[] encoded = base.encode(original);
 
         System.out.printf("\t%1$10s: %2$s\n", name, new String(encoded));
 
@@ -135,7 +135,7 @@ public abstract class BaseTest<B extends Base> {
 
         final byte[] original = generate(1024);
 
-        final char[] encoded = base.encode(original);
+        final byte[] encoded = base.encode(original);
 
         final byte[] decoded = base.decode(encoded);
 

@@ -120,12 +120,13 @@ public class TestVectors {
 
         for (Entry<String, String> entry : map.entrySet()) {
             final byte[] input = entry.getKey().getBytes("US-ASCII");
-            final char[] output = base.encode(input);
-            Assert.assertEquals(new String(output), entry.getValue());
+            final byte[] output = base.encode(input);
+            Assert.assertEquals(new String(output, "US-ASCII"),
+                                entry.getValue());
         }
 
         for (Entry<String, String> entry : map.entrySet()) {
-            final char[] input = entry.getValue().toCharArray();
+            final byte[] input = entry.getValue().getBytes("US-ASCII");
             final byte[] output = base.decode(input);
             Assert.assertEquals(new String(output, "US-ASCII"),
                                 entry.getKey());
