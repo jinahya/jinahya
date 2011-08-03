@@ -34,7 +34,7 @@ import java.lang.reflect.Proxy;
  *     PercentBinaryEncoderProxy.newInstance();
  * 
  * // encode
- * encoder.encode(new byte[0]);
+ * encoder.encode(byte[]);
  * </blockquote></pre>
  * 
  * 

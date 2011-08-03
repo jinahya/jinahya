@@ -33,8 +33,8 @@ import java.lang.reflect.Proxy;
  * final BinaryDecoder decoder = (BinaryDecoder)
  *     PercentBinaryDecoderProxy.newInstance();
  * 
- * // decode byte array
- * decoder.decode(new byte[0]);
+ * // decode
+ * decoder.decode(byte[]);
  * </code></pre>
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
