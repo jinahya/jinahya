@@ -15,47 +15,47 @@
  */
 
 
-package com.googlecode.jinahya.elementlocator;
+package com.googlecode.jinahya.xml;
 
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.Parent;
-import org.jdom.Text;
+import org.dom4j.Attribute;
+import org.dom4j.Branch;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Namespace;
+import org.dom4j.Node;
+import org.dom4j.QName;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMElementLocator extends ElementLocator<Document> {
+public class DOM4JElementLocator extends ElementLocator<Document> {
 
 
     /**
      * Creates a new empty (root only) instance.
      *
-     * @param namespaceURI root element's name space URI
-     * @param localName root element's local name
-     * @return a new empty (root only) instance.
+     * @param namespaceURI root element's name space URI.
+     * @param localName root element's local namer
+     * @return a new root-only instance.
      */
     public static ElementLocator<Document> newInstance(
         final String namespaceURI, final String localName) {
 
-        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
+        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     /**
-     * Parses given <code>document</code> and creates a new instance.
+     * Creates a new instance.
      *
-     * @param document document to parse
-     * @return a new instance.
+     * @param document document
+     * @return new instance of DOMElementLocator.
      */
     public static ElementLocator<Document> parseInstance(
         final Document document) {
@@ -69,15 +69,14 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             throw new IllegalArgumentException("no root element");
         }
 
-        return new JDOMElementLocator(parse(rootElement));
+        return new DOM4JElementLocator(parse(rootElement));
     }
 
 
     /**
-     * Parses given JDOM Element to ELElement.
-     *
-     * @param element JDOM Element to parse
-     * @return converted ELElement
+     * 
+     * @param element
+     * @return 
      */
     private static ELElement parse(final Element element) {
 
@@ -93,11 +92,13 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
         final ELElement elelement = new ELElement(namespaceURI, localName);
 
-        final List<?> attributes = element.getAttributes();
-        for (int i = 0; i < attributes.size(); i++) {
-            final Attribute attribute = (Attribute) attributes.get(i);
+
+        final int attributeCount = element.attributeCount();
+        for (int i = 0; i < attributeCount; i++) {
+            final Attribute attribute = element.attribute(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
-            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(attributeNamespaceURI)) {
+            if (ELNode.XMLNS_ATTRIBUTE_NS_URI.equals(
+                attributeNamespaceURI)) {
                 continue;
             }
             if (attributeNamespaceURI == null) {
@@ -113,15 +114,21 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
         String text = null;
 
-        final Iterator<?> i = element.getContent().iterator();
-        while (i.hasNext()) {
-            final Object child = i.next();
-            if (child instanceof Text) {
-                if (text == null) {
-                    text = ((Text) child).getText();
-                }
-            } else if (child instanceof Element) {
-                elelement.elements.add(parse((Element) child));
+        final int nodeCount = element.nodeCount();
+        for (int i = 0; i < nodeCount; i++) {
+            final Node node = element.node(i);
+            switch (node.getNodeType()) {
+                case Node.CDATA_SECTION_NODE:
+                case Node.TEXT_NODE:
+                    if (text == null) {
+                        text = node.getText();
+                    }
+                    break;
+                case Node.ELEMENT_NODE:
+                    elelement.elements.add(parse((Element) node));
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -134,20 +141,21 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param elelement
-     * @param namespaces
-     * @param parent 
+     * Prints given <code>elelement</code> to specified <code>parent</code>.
+     *
+     * @param elelement element to print
+     * @param namesapces name space map
+     * @param parent the parent to which the element is added.
      */
     private static void print(final ELElement elelement,
-                              final Map<String, String> namespaces,
-                              final Parent parent) {
+                              final Map<String, String> namesapces,
+                              final Branch parent) {
 
         if (elelement == null) {
             throw new NullPointerException("null elelement");
         }
 
-        if (namespaces == null) {
+        if (namesapces == null) {
             throw new NullPointerException("null namespaces");
         }
 
@@ -155,37 +163,30 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             throw new NullPointerException("null parent");
         }
 
-        final Element element = new Element(
-            elelement.localName, elelement.namespaceURI);
-
         if (parent instanceof Document) {
             final Document document = (Document) parent;
-            if (document.hasRootElement()) {
-                document.removeContent(document.getRootElement());
+            final Element rootElement = document.getRootElement();
+            if (rootElement != null) {
+                document.remove(rootElement);
             }
-            ((Document) parent).addContent(element);
-        } else {
-            ((Element) parent).addContent(element);
         }
 
+        final Element element = parent.addElement(
+            getQualifiedName(elelement, namesapces), elelement.namespaceURI);
+
         for (ELAttribute elattribute : elelement.attributes.values()) {
-            if (elattribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
-                final Attribute attribute = new Attribute(
-                    elattribute.localName, elattribute.value,
-                    Namespace.NO_NAMESPACE);
-                element.setAttribute(attribute);
-                continue;
-            }
-            final Namespace namespace = Namespace.getNamespace(namespaces.get(
-                elattribute.namespaceURI), elattribute.namespaceURI);
-            final Attribute attribute = new Attribute(
-                elattribute.localName, elattribute.value, namespace);
-            element.setAttribute(attribute);
+            final Namespace namespace = new Namespace(
+                namesapces.get(elattribute.namespaceURI),
+                elattribute.namespaceURI);
+            final QName qName = new QName(
+                elattribute.localName, namespace,
+                getQualifiedName(elattribute, namesapces));
+            element.addAttribute(qName, elattribute.value);
         }
 
         if (!elelement.elements.isEmpty()) {
             for (ELElement grandchild : elelement.elements) {
-                print(grandchild, namespaces, element);
+                print(grandchild, namesapces, element);
             }
             return;
         }
@@ -197,22 +198,23 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
 
     /**
-     * 
-     * @param root 
+     * Creates a new instance.
+     *
+     * @param root root element
      */
-    private JDOMElementLocator(final ELElement root) {
+    private DOM4JElementLocator(final ELElement root) {
         super(root);
     }
 
 
     /**
-     * A new document contains this element's content.
+     * Prints contents to a new document.
      *
      * @return a new document
      */
     public final Document toDocument() {
 
-        return toDocument(new Document());
+        return toDocument(DocumentHelper.createDocument());
     }
 
 

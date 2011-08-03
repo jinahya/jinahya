@@ -15,52 +15,35 @@
  */
 
 
-package com.googlecode.jinahya.elementlocator;
+package com.googlecode.jinahya.xml;
 
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
-import org.kxml2.kdom.Document;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.XmlSerializer;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.SAXReader;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocatorTest
-    extends ElementLocatorTest<KDOMElementLocator, Document> {
-
-
-    private static final XmlPullParserFactory XMLPPF;
-
-
-    static {
-        try {
-            XMLPPF = XmlPullParserFactory.newInstance();
-            XMLPPF.setNamespaceAware(true);
-        } catch (XmlPullParserException xppe) {
-            throw new InstantiationError(xppe.getMessage());
-        }
-    }
+public class DOM4JElementLocatorTest
+    extends ElementLocatorTest<DOM4JElementLocator, Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator<Document> parseLocator(InputStream in)
         throws Exception {
 
-        final XmlPullParser parser = XMLPPF.newPullParser();
-        parser.setInput(in, null);
+        final SAXReader reader = new SAXReader();
+        final Document document = reader.read(in);
 
-        final Document document = new Document();
-        document.parse(parser);
-
-        return KDOMElementLocator.parseInstance(document);
+        return DOM4JElementLocator.parseInstance(document);
     }
 
 
@@ -69,13 +52,14 @@ public class KDOMElementLocatorTest
                                                      final String localName)
         throws Exception {
 
-        return KDOMElementLocator.newInstance(namespaceURI, localName);
+        return DOM4JElementLocator.newInstance(namespaceURI, localName);
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
-        return new Document();
+
+        return DocumentHelper.createDocument();
     }
 
 
@@ -85,10 +69,9 @@ public class KDOMElementLocatorTest
                                  final String charsetName)
         throws Exception {
 
-        final XmlSerializer serializer = XMLPPF.newSerializer();
-        serializer.setOutput(out, charsetName);
-
-        document.write(serializer);
+        final Writer writer = new OutputStreamWriter(out, charsetName);
+        document.write(writer);
+        writer.flush();
     }
 }
 
