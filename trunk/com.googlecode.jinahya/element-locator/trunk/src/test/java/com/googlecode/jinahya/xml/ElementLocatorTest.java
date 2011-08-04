@@ -52,11 +52,11 @@ public abstract class ElementLocatorTest<D> {
         final ElementLocator locator = parseLocator(url.openStream());
         System.out.println("-------------------------------------------- JSON");
         System.out.println(locator.getClass());
-        System.out.println(locator.toJSON());
+        System.out.println(locator.getRootElement().toJSON());
         System.out.println("-------------------------------------------- JSON");
 
-        Assert.assertEquals(locator.current().namespaceURI, "http://a");
-        Assert.assertEquals(locator.current().localName, "grandparent");
+        Assert.assertEquals(locator.getCurrentElement().namespaceURI, "http://a");
+        Assert.assertEquals(locator.getCurrentElement().localName, "grandparent");
 
         Assert.assertEquals(locator.count("parent"), 2);
 
@@ -175,7 +175,7 @@ public abstract class ElementLocatorTest<D> {
 
         System.out.println("-------------------------------------------- JSON");
         System.out.println(locator.getClass());
-        final String json = locator.toJSON();
+        final String json = locator.getRootElement().toJSON();
         System.out.println(json);
         System.out.println("JSON.DIGEST: " + Hex.encodeHexString(
             md.digest(json.getBytes("US-ASCII"))));
