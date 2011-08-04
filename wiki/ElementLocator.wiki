@@ -37,11 +37,8 @@ This is a simple XML parser/printer. This artifact is not fully applicable to an
 == Reading XML ==
 Every concrete class has a static method for parsing a platform-specific Document.
 {{{
-DOM4JElementLocator.parse(org.dom4j.Document);
-DOMElementLocator.parse(org.w3c.Document);
-JDOMElementLocator.parse(org.jdom.Document);
-KDOMElementLocator.parse(org.kxml2.kdom.Document);
-XOMElementLocator.parse(nu.xom.Document);
+Document document = ...; // parse as model specific way.
+XXXElementLocator.parse(Document);
 }}}
 == Writing XML ==
 Create the root element.
@@ -52,6 +49,12 @@ And invoke the constructors with the root element.
 {{{
 final ElementLocator locator = new XXXElementLocator(root);
 }}}
+When you're done, you can get the document back from the ELElement.
+{{{
+Document document = ...; // create as model specific way
+XXXElementLocator.print(locator.getRootElement(), document);
+}}}
+And you can print the document as model specific way.
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
   * [http://www.jdom.org/docs/apidocs/ JDOM v1.1.1 API Specification]
