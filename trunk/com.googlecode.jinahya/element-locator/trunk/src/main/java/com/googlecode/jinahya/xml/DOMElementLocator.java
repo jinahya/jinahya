@@ -34,20 +34,7 @@ import org.w3c.dom.NodeList;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DOMElementLocator extends ElementLocator<Document> {
-
-
-    /**
-     * 
-     * @param namespaceURI root element's name space URI
-     * @param localName root element's local name
-     * @return new empty (root-only) instance
-     */
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new DOMElementLocator(new ELElement(namespaceURI, localName));
-    }
+public class DOMElementLocator extends ElementLocator {
 
 
     /**
@@ -56,8 +43,7 @@ public class DOMElementLocator extends ElementLocator<Document> {
      * @param document document
      * @return new instance of DOMElementLocator.
      */
-    public static ElementLocator<Document> parseInstance(
-        final Document document) {
+    public static ElementLocator parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -141,51 +127,96 @@ public class DOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param elelement
-     * @param document
-     * @param namesapces
-     * @param parent
+     * @param element
+     * @param builder
+     * @return 
      */
-    private static void print(final ELElement elelement,
-                              final Document document,
-                              final Map<String, String> namesapces,
-                              final Node parent) {
+    public static Document print(final ELElement element,
+                                 final DocumentBuilder builder) {
 
-        if (elelement == null) {
-            throw new NullPointerException("null elelement");
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        if (builder == null) {
+            throw new NullPointerException("null builder");
+        }
+
+        final Document document = builder.newDocument();
+
+        print(element, document);
+
+        return document;
+    }
+
+
+    /**
+     * 
+     * @param element
+     * @param document 
+     */
+    public static void print(final ELElement element, final Document document) {
+
+        if (element == null) {
+            throw new NullPointerException("null element");
         }
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        if (namesapces == null) {
-            throw new NullPointerException("null namespaces");
+        final Map<String, String> namespaces = getNamespaces(element);
+
+        print(element, document, namespaces, document);
+    }
+
+
+    /**
+     * 
+     * @param child
+     * @param parent
+     * @param namesapces
+     * @param document
+     */
+    private static void print(final ELElement child, final Node parent,
+                              final Map<String, String> namesapces,
+                              final Document document) {
+
+        if (child == null) {
+            throw new NullPointerException("null child");
         }
 
         if (parent == null) {
             throw new NullPointerException("null parent");
         }
 
+        if (namesapces == null) {
+            throw new NullPointerException("null namespaces");
+        }
+
+        if (document == null) {
+            throw new NullPointerException("null document");
+        }
+
         final Element element = document.createElementNS(
-            elelement.namespaceURI, getQualifiedName(elelement, namesapces));
+            child.namespaceURI, getQualifiedName(child, namesapces));
         parent.appendChild(element);
 
-        for (ELAttribute elattribute : elelement.attributes.values()) {
+        for (ELAttribute elattribute : child.attributes.values()) {
             element.setAttributeNS(elattribute.namespaceURI,
                                    getQualifiedName(elattribute, namesapces),
                                    elattribute.value);
         }
 
-        if (elelement.elements.isEmpty()) {
-            if (elelement.text != null) {
-                element.appendChild(document.createTextNode(elelement.text));
+        if (!child.elements.isEmpty()) {
+            for (ELElement grandchild : child.elements) {
+                print(grandchild, element, namesapces, document);
             }
             return;
         }
 
-        for (ELElement grandchild : elelement.elements) {
-            print(grandchild, document, namesapces, element);
+        if (child.text != null) {
+            element.appendChild(document.createTextNode(child.text));
         }
     }
 
@@ -195,36 +226,8 @@ public class DOMElementLocator extends ElementLocator<Document> {
      *
      * @param root root element
      */
-    private DOMElementLocator(final ELElement root) {
+    public DOMElementLocator(final ELElement root) {
         super(root);
-    }
-
-
-    /**
-     * 
-     * @param builder
-     * @return 
-     */
-    public Document toDocument(final DocumentBuilder builder) {
-
-        if (builder == null) {
-            throw new NullPointerException("null builder");
-        }
-
-        return toDocument(builder.newDocument());
-    }
-
-
-    @Override
-    public Document toDocument(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), document, getNamespaces(), document);
-
-        return document;
     }
 }
 

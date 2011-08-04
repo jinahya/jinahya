@@ -33,13 +33,13 @@ import java.util.TreeMap;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class ELElement extends ELNode {
+public class ELElement extends ELNode {
 
 
     /**
      * Creates a new instance.
      *
-     * @param namesapceURI name space URI
+     * @param namesapceURI namespace URI
      * @param localName local name
      */
     public ELElement(final String namesapceURI, final String localName) {
@@ -48,100 +48,100 @@ class ELElement extends ELNode {
 
 
     /**
-     * Returns all name space URIs.
+     * Returns all namespace URIs.
      *
-     * @return a set of name space URIs.
+     * @return a set which contains all namespace URIs.
      */
     public Set<String> getNamespaceURIs() {
 
-        final Set<String> set = new LinkedHashSet<String>();
-
-        getNamespaceURIs(set);
-
-        return set;
+        return getNamespaceURIs(new LinkedHashSet<String>());
     }
 
 
     /**
-     * 
-     * @param set 
+     * Gets all namespace URIs.
+     *
+     * @param namespaceURIs the set to which all namesapce URIs are added
+     * @return given <code>namespaceURIs</code>
      */
-    private void getNamespaceURIs(final Set<String> set) {
+    public Set<String> getNamespaceURIs(final Set<String> namespaceURIs) {
 
-        if (set == null) {
+        if (namespaceURIs == null) {
             throw new NullPointerException("null set");
         }
 
-        set.add(namespaceURI);
+        namespaceURIs.add(namespaceURI);
 
         for (Entry<String, ELAttribute> entry : attributes.entrySet()) {
-            set.add(entry.getValue().namespaceURI);
+            namespaceURIs.add(entry.getValue().namespaceURI);
         }
 
         for (ELElement element : elements) {
-            element.getNamespaceURIs(set);
+            element.getNamespaceURIs(namespaceURIs);
         }
+
+        return namespaceURIs;
     }
 
 
     @Override
     public String toJSON() {
 
-        final StringBuilder builder = new StringBuilder();
+        final StringBuffer buffer = new StringBuffer();
 
-        builder.append("{");
+        buffer.append("{");
 
 
-        builder.append(toJSONString("namespaceURI")).append(":").
+        buffer.append(toJSONString("namespaceURI")).append(":").
             append(toJSONString(namespaceURI));
 
-        builder.append(",").append(toJSONString("localName")).append(":").
+        buffer.append(",").append(toJSONString("localName")).append(":").
             append(toJSONString(localName));
 
 
-        builder.append(",").append(toJSONString("attributes")).append(":[");
+        buffer.append(",").append(toJSONString("attributes")).append(":[");
         final Iterator<Entry<String, ELAttribute>> i =
             attributes.entrySet().iterator();
         if (i.hasNext()) {
-            builder.append(i.next().getValue().toJSON());
+            buffer.append(i.next().getValue().toJSON());
         }
         while (i.hasNext()) {
-            builder.append(",").append(i.next().getValue().toJSON());
+            buffer.append(",").append(i.next().getValue().toJSON());
         }
-        builder.append("]");
+        buffer.append("]");
 
 
-        builder.append(",").append(toJSONString("text")).append(":").
+        buffer.append(",").append(toJSONString("text")).append(":").
             append(toJSONString(text));
 
 
-        builder.append(",").append(toJSONString("elements")).append(":[");
+        buffer.append(",").append(toJSONString("elements")).append(":[");
         final Iterator<ELElement> j = elements.iterator();
         if (j.hasNext()) {
-            builder.append(j.next().toJSON());
+            buffer.append(j.next().toJSON());
         }
         while (j.hasNext()) {
-            builder.append(",").append(j.next().toJSON());
+            buffer.append(",").append(j.next().toJSON());
         }
-        builder.append("]");
+        buffer.append("]");
 
 
-        builder.append("}");
+        buffer.append("}");
 
-        return builder.toString();
+        return buffer.toString();
     }
 
 
     /** attributes. */
-    final Map<String, ELAttribute> attributes =
+    protected final Map<String, ELAttribute> attributes =
         new TreeMap<String, ELAttribute>();
 
 
     /** text. */
-    String text = null;
+    protected String text = null;
 
 
     /** elements. */
-    final List<ELElement> elements = new ArrayList<ELElement>();
+    protected final List<ELElement> elements = new ArrayList<ELElement>();
 }
 

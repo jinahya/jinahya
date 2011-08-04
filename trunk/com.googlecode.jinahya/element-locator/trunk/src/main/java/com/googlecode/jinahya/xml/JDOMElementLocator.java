@@ -34,21 +34,7 @@ import org.jdom.Text;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMElementLocator extends ElementLocator<Document> {
-
-
-    /**
-     * Creates a new empty (root only) instance.
-     *
-     * @param namespaceURI root element's name space URI
-     * @param localName root element's local name
-     * @return a new empty (root only) instance.
-     */
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
-    }
+public class JDOMElementLocator extends ElementLocator {
 
 
     /**
@@ -57,8 +43,7 @@ public class JDOMElementLocator extends ElementLocator<Document> {
      * @param document document to parse
      * @return a new instance.
      */
-    public static ElementLocator<Document> parseInstance(
-        final Document document) {
+    public static ElementLocator parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -135,28 +120,67 @@ public class JDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param elelement
+     * @param element
+     * @return 
+     */
+    public static Document print(final ELElement element) {
+
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        final Document document = new Document();
+
+        print(element, document);
+
+        return document;
+    }
+
+
+    /**
+     * 
+     * @param element
+     * @param document 
+     */
+    public static void print(final ELElement element, final Document document) {
+
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        if (document == null) {
+            throw new NullPointerException("null document");
+        }
+
+        final Map<String, String> namespaces = getNamespaces(element);
+
+        print(element, document, namespaces);
+    }
+
+
+    /**
+     * 
+     * @param child
      * @param namespaces
      * @param parent 
      */
-    private static void print(final ELElement elelement,
-                              final Map<String, String> namespaces,
-                              final Parent parent) {
+    private static void print(final ELElement child, final Parent parent,
+                              final Map<String, String> namespaces) {
 
-        if (elelement == null) {
-            throw new NullPointerException("null elelement");
-        }
-
-        if (namespaces == null) {
-            throw new NullPointerException("null namespaces");
+        if (child == null) {
+            throw new NullPointerException("null child");
         }
 
         if (parent == null) {
             throw new NullPointerException("null parent");
         }
 
+        if (namespaces == null) {
+            throw new NullPointerException("null namespaces");
+        }
+
         final Element element = new Element(
-            elelement.localName, elelement.namespaceURI);
+            child.localName, child.namespaceURI);
 
         if (parent instanceof Document) {
             final Document document = (Document) parent;
@@ -168,7 +192,7 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             ((Element) parent).addContent(element);
         }
 
-        for (ELAttribute elattribute : elelement.attributes.values()) {
+        for (ELAttribute elattribute : child.attributes.values()) {
             if (elattribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
                 final Attribute attribute = new Attribute(
                     elattribute.localName, elattribute.value,
@@ -183,49 +207,26 @@ public class JDOMElementLocator extends ElementLocator<Document> {
             element.setAttribute(attribute);
         }
 
-        if (!elelement.elements.isEmpty()) {
-            for (ELElement grandchild : elelement.elements) {
-                print(grandchild, namespaces, element);
+        if (!child.elements.isEmpty()) {
+            for (ELElement grandchild : child.elements) {
+                print(grandchild, element, namespaces);
             }
             return;
         }
 
-        if (elelement.text != null) {
-            element.setText(elelement.text);
+        if (child.text != null) {
+            element.setText(child.text);
         }
     }
 
 
     /**
-     * 
-     * @param root 
-     */
-    private JDOMElementLocator(final ELElement root) {
-        super(root);
-    }
-
-
-    /**
-     * A new document contains this element's content.
+     * Creates a new instance.
      *
-     * @return a new document
+     * @param root root element
      */
-    public final Document toDocument() {
-
-        return toDocument(new Document());
-    }
-
-
-    @Override
-    public Document toDocument(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
+    public JDOMElementLocator(final ELElement root) {
+        super(root);
     }
 }
 

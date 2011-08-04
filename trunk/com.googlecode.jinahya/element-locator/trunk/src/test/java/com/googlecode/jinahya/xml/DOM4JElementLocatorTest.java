@@ -32,27 +32,25 @@ import org.dom4j.io.SAXReader;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DOM4JElementLocatorTest
-    extends ElementLocatorTest<DOM4JElementLocator, Document> {
+public class DOM4JElementLocatorTest extends ElementLocatorTest<Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(InputStream in)
-        throws Exception {
+    protected ElementLocator parseLocator(InputStream in) throws Exception {
 
         final SAXReader reader = new SAXReader();
         final Document document = reader.read(in);
 
-        return DOM4JElementLocator.parseInstance(document);
+        return DOM4JElementLocator.parse(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected ElementLocator createLocator(final String namespaceURI,
+                                           final String localName)
         throws Exception {
 
-        return DOM4JElementLocator.newInstance(namespaceURI, localName);
+        return new DOM4JElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
@@ -60,6 +58,15 @@ public class DOM4JElementLocatorTest
     protected Document createDocument() throws Exception {
 
         return DocumentHelper.createDocument();
+    }
+
+
+    @Override
+    protected void printElement(final ELElement element,
+                                final Document document)
+        throws Exception {
+
+        DOM4JElementLocator.print(element, document);
     }
 
 

@@ -31,26 +31,25 @@ import nu.xom.Serializer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XOMElementLocatorTest
-    extends ElementLocatorTest<XOMElementLocator, Document> {
+public class XOMElementLocatorTest extends ElementLocatorTest<Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator parseLocator(final InputStream in)
         throws Exception {
 
         final Builder builder = new Builder();
         final Document document = builder.build(in);
-        return XOMElementLocator.parseInstance(document);
+        return XOMElementLocator.parse(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected ElementLocator createLocator(final String namespaceURI,
+                                           final String localName)
         throws Exception {
 
-        return XOMElementLocator.newInstance(namespaceURI, localName);
+        return new XOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
@@ -62,6 +61,15 @@ public class XOMElementLocatorTest
         final Document document = new Document(element);
 
         return document;
+    }
+
+
+    @Override
+    protected void printElement(final ELElement element,
+                                final Document document)
+        throws Exception {
+
+        XOMElementLocator.print(element, document);
     }
 
 

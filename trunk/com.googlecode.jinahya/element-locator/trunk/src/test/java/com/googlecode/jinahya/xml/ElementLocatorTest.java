@@ -33,10 +33,9 @@ import org.testng.annotations.Test;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <L> locator type parameter
  * @param <D> document type parameter
  */
-public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
+public abstract class ElementLocatorTest<D> {
 
 
     protected static URL getResource() {
@@ -50,14 +49,14 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
         final URL url = ElementLocatorTest.class.getResource("test.xml");
         Assert.assertNotNull(url);
 
-        final ElementLocator<D> locator = parseLocator(url.openStream());
+        final ElementLocator locator = parseLocator(url.openStream());
         System.out.println("-------------------------------------------- JSON");
         System.out.println(locator.getClass());
         System.out.println(locator.toJSON());
         System.out.println("-------------------------------------------- JSON");
 
-        Assert.assertEquals(locator.getCurrent().namespaceURI, "http://a");
-        Assert.assertEquals(locator.getCurrent().localName, "grandparent");
+        Assert.assertEquals(locator.current().namespaceURI, "http://a");
+        Assert.assertEquals(locator.current().localName, "grandparent");
 
         Assert.assertEquals(locator.count("parent"), 2);
 
@@ -115,16 +114,20 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
     }
 
 
-    protected abstract ElementLocator<D> parseLocator(InputStream in)
+    protected abstract ElementLocator parseLocator(InputStream in)
         throws Exception;
 
 
-    protected abstract ElementLocator<D> createLocator(String namespaceURI,
-                                                       String localName)
+    protected abstract ElementLocator createLocator(String namespaceURI,
+                                                    String localName)
         throws Exception;
 
 
     protected abstract D createDocument() throws Exception;
+
+
+    protected abstract void printElement(ELElement root, D document)
+        throws Exception;
 
 
     protected abstract void printDocument(D document, OutputStream out,
@@ -135,7 +138,7 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
     @Test
     public void testWrite() throws Exception {
 
-        final ElementLocator<D> locator =
+        final ElementLocator locator =
             createLocator("http://a", "grandparent");
 
         locator.child("parent").text("parent0");
@@ -181,7 +184,7 @@ public abstract class ElementLocatorTest<L extends ElementLocator<D>, D> {
 
         final D document = createDocument();
 
-        locator.toDocument(document);
+        printElement(locator.getRootElement(), document);
 
         System.out.println("--------------------------------------------- XML");
         System.out.println(locator.getClass());

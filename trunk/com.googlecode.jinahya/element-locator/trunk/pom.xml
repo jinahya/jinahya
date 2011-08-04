@@ -149,11 +149,32 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
+        <executions>
+          <execution>
+            <id>compile-1.1</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <source>1.5</source>
+              <target>jsr14</target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>testCompile-1.5</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <source>1.5</source>
+              <target>1.5</target>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -271,48 +292,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>jsr14</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>compile-jsr14</id>
-                <phase>process-sources</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <source>1.5</source>
-                  <target>jsr14</target>
-                </configuration>
-              </execution>
-              <execution>
-                <id>textCompile-1.5</id>
-                <phase>process-test-sources</phase>
-                <goals>
-                  <goal>testCompile</goal>
-                </goals>
-                <configuration>
-                  <source>1.5</source>
-                  <target>1.5</target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <classifier>jsr14</classifier>  
-            </configuration>
           </plugin>
         </plugins>
       </build>

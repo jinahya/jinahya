@@ -33,8 +33,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocatorTest
-    extends ElementLocatorTest<KDOMElementLocator, Document> {
+public class KDOMElementLocatorTest extends ElementLocatorTest<Document> {
 
 
     private static final XmlPullParserFactory XMLPPF;
@@ -51,7 +50,7 @@ public class KDOMElementLocatorTest
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator parseLocator(final InputStream in)
         throws Exception {
 
         final XmlPullParser parser = XMLPPF.newPullParser();
@@ -60,22 +59,31 @@ public class KDOMElementLocatorTest
         final Document document = new Document();
         document.parse(parser);
 
-        return KDOMElementLocator.parseInstance(document);
+        return KDOMElementLocator.parse(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected ElementLocator createLocator(final String namespaceURI,
+                                           final String localName)
         throws Exception {
 
-        return KDOMElementLocator.newInstance(namespaceURI, localName);
+        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
         return new Document();
+    }
+
+
+    @Override
+    protected void printElement(final ELElement element,
+                                final Document document)
+        throws Exception {
+
+        KDOMElementLocator.print(element, document);
     }
 
 
