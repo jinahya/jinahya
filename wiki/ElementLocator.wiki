@@ -39,11 +39,11 @@ This library is just an thin wrapper for various in-memory XML parser models. Yo
 == Reading XML ==
 Every concrete class has a static method for parsing a platform-specific Document.
 {{{
-DOM4JElementLocator.parseInstance(org.dom4j.Document);
-DOMElementLocator.parseInstance(org.w3c.Document);
-JDOMElementLocator.parseInstance(org.jdom.Document);
-KDOMElementLocator.parseInstance(org.kxml2.kdom.Document);
-XOMElementLocator.parseInstance(nu.xom.Document);
+DOM4JElementLocator.parse(org.dom4j.Document);
+DOMElementLocator.parse(org.w3c.Document);
+JDOMElementLocator.parse(org.jdom.Document);
+KDOMElementLocator.parse(org.kxml2.kdom.Document);
+XOMElementLocator.parse(nu.xom.Document);
 }}}
 == Writing XML ==
 Every concrete class has a static method for creating a new instance.
