@@ -177,7 +177,7 @@ public abstract class ElementLocator {
 
         int count = 0;
 
-        for (ELElement child : current().elements) {
+        for (ELElement child : getCurrentElement().elements) {
             if (!child.localName.equals(localName)) {
                 continue;
             }
@@ -276,7 +276,7 @@ public abstract class ElementLocator {
         }
 
         int count = 0;
-        for (ELElement element : current().elements) {
+        for (ELElement element : getCurrentElement().elements) {
             if (!element.localName.equals(localName)) {
                 continue;
             }
@@ -320,7 +320,7 @@ public abstract class ElementLocator {
 
         final ELElement child = new ELElement(namespaceURI, localName);
 
-        current().elements.add(child);
+        getCurrentElement().elements.add(child);
 
         path.add(child);
 
@@ -334,7 +334,7 @@ public abstract class ElementLocator {
      * @return text value; may be null
      */
     public final String text() {
-        return current().text;
+        return getCurrentElement().text;
     }
 
 
@@ -346,7 +346,7 @@ public abstract class ElementLocator {
      */
     public final ElementLocator text(final String text) {
 
-        current().text = text;
+        getCurrentElement().text = text;
 
         return this;
     }
@@ -374,7 +374,7 @@ public abstract class ElementLocator {
             throw new IllegalArgumentException("empty localName");
         }
 
-        final ELAttribute attribute = current().attributes.get(
+        final ELAttribute attribute = getCurrentElement().attributes.get(
             ELNode.jamesClark(namespaceURI, localName));
 
         if (attribute == null) {
@@ -413,14 +413,14 @@ public abstract class ElementLocator {
         final String expressed = ELNode.jamesClark(namespaceURI, localName);
 
         if (value == null) {
-            current().attributes.remove(expressed);
+            getCurrentElement().attributes.remove(expressed);
             return this;
         }
 
         final ELAttribute attribute =
             new ELAttribute(namespaceURI, localName, value);
 
-        current().attributes.put(expressed, attribute);
+        getCurrentElement().attributes.put(expressed, attribute);
 
         return this;
     }
@@ -465,9 +465,9 @@ public abstract class ElementLocator {
             throw new IllegalStateException("can't remove the root element");
         }
 
-        final ELElement element = current();
+        final ELElement element = getCurrentElement();
 
-        parent().current().elements.remove(element);
+        parent().getCurrentElement().elements.remove(element);
 
         return this;
     }
@@ -478,7 +478,7 @@ public abstract class ElementLocator {
      *
      * @return current element
      */
-    final ELElement current() {
+    final ELElement getCurrentElement() {
         return path.get(path.size() - 1);
     }
 
@@ -490,16 +490,6 @@ public abstract class ElementLocator {
      */
     public final ELElement getRootElement() {
         return path.get(0);
-    }
-
-
-    /**
-     * Returns JSON representation of the contents.
-     *
-     * @return a JSON string.
-     */
-    public final String toJSON() {
-        return path.get(0).toJSON();
     }
 
 
