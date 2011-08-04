@@ -29,14 +29,7 @@ import org.kxml2.kdom.Node;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class KDOMElementLocator extends ElementLocator<Document> {
-
-
-    public static ElementLocator<Document> newInstance(
-        final String namespaceURI, final String localName) {
-
-        return new KDOMElementLocator(new ELElement(namespaceURI, localName));
-    }
+public class KDOMElementLocator extends ElementLocator {
 
 
     /**
@@ -44,8 +37,7 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * @param document
      * @return 
      */
-    public static ElementLocator<Document> parseInstance(
-        final Document document) {
+    public static ElementLocator parse(final Document document) {
 
         if (document == null) {
             throw new NullPointerException("null document");
@@ -125,44 +117,89 @@ public class KDOMElementLocator extends ElementLocator<Document> {
 
     /**
      * 
-     * @param elelement
+     * @param element element to print
+     * @return a new document contains to which given <code>element</code> has
+     *         been printed.
+     */
+    public static Document print(final ELElement element) {
+
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        final Document document = new Document();
+
+        print(element, document);
+
+        return document;
+    }
+
+
+    /**
+     * 
+     * @param element
+     * @param document
+     */
+    public static void print(final ELElement element, final Document document) {
+
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        if (document == null) {
+            throw new NullPointerException("null document");
+        }
+
+        final Map<String, String> namespaces = getNamespaces(element);
+
+        print(element, document, namespaces);
+    }
+
+
+    /**
+     * 
+     * @param child
      * @param namesapces
      * @param parent
      */
-    private static void print(final ELElement elelement,
-                              final Map<String, String> namesapces,
-                              final Node parent) {
+    private static void print(final ELElement child, final Node parent,
+                              final Map<String, String> namesapces) {
 
-        if (elelement == null) {
-            throw new NullPointerException("null elelement");
-        }
-
-        if (namesapces == null) {
-            throw new NullPointerException("null namespaces");
+        if (child == null) {
+            throw new NullPointerException("null child");
         }
 
         if (parent == null) {
             throw new NullPointerException("null parent");
         }
 
-        final Element child = parent.createElement(
-            elelement.namespaceURI, elelement.localName);
-        parent.addChild(Node.ELEMENT, child);
-
-        for (ELAttribute _attribute : elelement.attributes.values()) {
-            child.setAttribute(_attribute.namespaceURI, _attribute.localName,
-                               _attribute.value);
+        if (namesapces == null) {
+            throw new NullPointerException("null namespaces");
         }
 
-        if (elelement.elements.isEmpty()) {
-            if (elelement.text != null) {
-                child.addChild(Node.TEXT, elelement.text);
+        final int childCount = parent.getChildCount();
+        for (int i = childCount - 1; i >= 0; i--) {
+            parent.removeChild(i);
+        }
+
+        final Element element = parent.createElement(
+            child.namespaceURI, child.localName);
+        parent.addChild(Node.ELEMENT, element);
+
+        for (ELAttribute attribute : child.attributes.values()) {
+            element.setAttribute(attribute.namespaceURI, attribute.localName,
+                                 attribute.value);
+        }
+
+        if (!child.elements.isEmpty()) {
+            for (ELElement grandchild : child.elements) {
+                print(grandchild, element, namesapces);
             }
             return;
         }
 
-        for (ELElement grandchild : elelement.elements) {
-            print(grandchild, namesapces, child);
+        if (child.text != null) {
+            element.addChild(Node.TEXT, child.text);
         }
     }
 
@@ -171,31 +208,8 @@ public class KDOMElementLocator extends ElementLocator<Document> {
      * 
      * @param root 
      */
-    private KDOMElementLocator(final ELElement root) {
+    public KDOMElementLocator(final ELElement root) {
         super(root);
-    }
-
-
-    /**
-     * 
-     * @return 
-     */
-    public final Document toDocument() {
-
-        return toDocument(new Document());
-    }
-
-
-    @Override
-    public Document toDocument(final Document document) {
-
-        if (document == null) {
-            throw new NullPointerException("document");
-        }
-
-        print(getRoot(), getNamespaces(), document);
-
-        return document;
     }
 }
 

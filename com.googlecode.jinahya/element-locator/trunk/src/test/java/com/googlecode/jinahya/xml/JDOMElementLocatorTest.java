@@ -32,26 +32,25 @@ import org.jdom.output.XMLOutputter;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMElementLocatorTest
-    extends ElementLocatorTest<JDOMElementLocator, Document> {
+public class JDOMElementLocatorTest extends ElementLocatorTest<Document> {
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(final InputStream in)
+    protected ElementLocator parseLocator(final InputStream in)
         throws Exception {
 
         final SAXBuilder builder = new SAXBuilder();
         final Document document = builder.build(in);
-        return JDOMElementLocator.parseInstance(document);
+        return JDOMElementLocator.parse(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected ElementLocator createLocator(final String namespaceURI,
+                                           final String localName)
         throws Exception {
 
-        return JDOMElementLocator.newInstance(namespaceURI, localName);
+        return new JDOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
@@ -59,6 +58,15 @@ public class JDOMElementLocatorTest
     protected Document createDocument() throws Exception {
 
         return new Document();
+    }
+
+
+    @Override
+    protected void printElement(final ELElement element,
+                                final Document document)
+        throws Exception {
+
+        JDOMElementLocator.print(element, document);
     }
 
 

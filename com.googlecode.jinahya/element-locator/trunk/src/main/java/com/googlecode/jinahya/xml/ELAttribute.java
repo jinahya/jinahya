@@ -23,7 +23,7 @@ package com.googlecode.jinahya.xml;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-class ELAttribute extends ELNode {
+public class ELAttribute extends ELNode {
 
 
     /**
@@ -58,6 +58,6 @@ class ELAttribute extends ELNode {
 
 
     /** value. */
-    final String value;
+    protected final String value;
 }
 

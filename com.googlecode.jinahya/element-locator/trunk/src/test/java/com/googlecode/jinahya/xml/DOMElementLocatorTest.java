@@ -36,8 +36,7 @@ import org.w3c.dom.ls.LSSerializer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DOMElementLocatorTest
-    extends ElementLocatorTest<DOMElementLocator, Document> {
+public class DOMElementLocatorTest extends ElementLocatorTest<Document> {
 
 
     private static final DocumentBuilderFactory DBF =
@@ -78,27 +77,35 @@ public class DOMElementLocatorTest
 
 
     @Override
-    protected ElementLocator<Document> parseLocator(InputStream in)
-        throws Exception {
+    protected ElementLocator parseLocator(InputStream in) throws Exception {
 
         final Document document = DB.parse(in);
 
-        return DOMElementLocator.parseInstance(document);
+        return DOMElementLocator.parse(document);
     }
 
 
     @Override
-    protected ElementLocator<Document> createLocator(final String namespaceURI,
-                                                     final String localName)
+    protected ElementLocator createLocator(final String namespaceURI,
+                                           final String localName)
         throws Exception {
 
-        return DOMElementLocator.newInstance(namespaceURI, localName);
+        return new DOMElementLocator(new ELElement(namespaceURI, localName));
     }
 
 
     @Override
     protected Document createDocument() throws Exception {
         return DB.newDocument();
+    }
+
+
+    @Override
+    protected void printElement(final ELElement element,
+                                final Document document)
+        throws Exception {
+
+        DOMElementLocator.print(element, document);
     }
 
 
