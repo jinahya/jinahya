@@ -44,9 +44,13 @@ KDOMElementLocator.parse(org.kxml2.kdom.Document);
 XOMElementLocator.parse(nu.xom.Document);
 }}}
 == Writing XML ==
-Every concrete class has a static method for creating a new instance.
+Create the root element.
 {{{
-public static ElementLocator<D> newInstance(final String namespaceURI, final String localName);
+final ELElement root = new ELElement(namespaceURI, localName);
+}}}
+And invoke the constructors with the root element.
+{{{
+final ElementLocator locator = new XXXElementLocator(root);
 }}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
