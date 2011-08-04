@@ -5,7 +5,7 @@
 Simple (and somewhat restricted) XML parser/printer.
 
 = Details =
-This is a simple XML parser/printer. This artifact is not fully applicable to any XML libraries and there are some restrictions.
+This is a simple XML parser/printer. This artifact is not fully applicable to any XML libraries and there are some restrictions. This library is just a thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, DOM4J, or XOM as underlying XML model.
 
 == Apidocs ==
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/element-locator/1.0-alpha-5/apidocs/index.html 1.0-alpha-5]
@@ -18,8 +18,6 @@ This is a simple XML parser/printer. This artifact is not fully applicable to an
   * No mixed content. Elements are always prior to texts.
   * And so on.
 
-== Architecture ==
-This library is just an thin wrapper for various in-memory XML parser models. You can use DOM, kXML2, JDOM, DOM4J, or XOM as underlying XML model.
 
 == Sample XML ==
 {{{
