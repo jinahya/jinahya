@@ -44,6 +44,7 @@ XXXElementLocator.print(locator.getRootElement(), document);
 And you can print the document as model specific way.
 == Example ==
 Lets do some.
+=== family.xml ===
 {{{
 <?xml version="1.0"?>
 <grandparent age="100" xmlns="http://www.example.org/family">
@@ -55,6 +56,62 @@ Lets do some.
     <child age="26"/>
   </parent>
 </grandparent>
+}}}
+=== Family.java ===
+{{{
+public class Family {
+public static void main(String[] args) throws Exception {
+String encoding = "UTF-8";
+
+DOMImplementationRegistry registry = 
+    DOMImplementationRegistry.newInstance();
+
+DOMImplementationLS implementation =
+    (DOMImplementationLS) registry.getDOMImplementation("XML 3.0");
+
+LSParser parser = implementation.createLSParser(
+    DOMImplementationLS.MODE_SYNCHRONOUS,
+    XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+LSInput input = implementation.createLSInput();
+input.setByteStream(new ByteArrayInputStream(XML.getBytes(encoding));
+input.setEncoding("UTF-8");
+
+        return parser.parse(input);
+    }
+
+
+    @Override
+    protected ElementLocator parseLocator(final Document document)
+        throws Exception {
+
+        return DOMElementLocator.parse(document);
+    }
+
+
+    @Override
+    protected void printLocator(final ElementLocator locator,
+                                final Document document)
+        throws Exception {
+
+        DOMElementLocator.print(locator.getRootElement(), document);
+    }
+
+
+    @Override
+    protected void printDocument(final Document document,
+                                 final OutputStream target,
+                                 final String charsetName)
+        throws IOException {
+
+        final LSSerializer serializer = IMPLEMENTATION.createLSSerializer();
+
+        final LSOutput output = IMPLEMENTATION.createLSOutput();
+        output.setByteStream(target);
+        output.setEncoding(charsetName);
+
+        serializer.write(document, output);
+    }
 }}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
