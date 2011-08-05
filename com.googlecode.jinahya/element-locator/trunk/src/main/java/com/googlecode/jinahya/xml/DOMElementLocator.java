@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml;
 
 
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -165,9 +166,7 @@ public class DOMElementLocator extends ElementLocator {
             throw new NullPointerException("null document");
         }
 
-        final Map<String, String> namespaces = getNamespaces(element);
-
-        print(element, document, namespaces, document);
+        print(element, document, getNamespaces(element), document);
     }
 
 
@@ -179,8 +178,7 @@ public class DOMElementLocator extends ElementLocator {
      * @param document
      */
     private static void print(final ELElement child, final Node parent,
-                              final Map<String, String> namesapces,
-                              final Document document) {
+                              final Map namesapces, final Document document) {
 
         if (child == null) {
             throw new NullPointerException("null child");
@@ -209,15 +207,16 @@ public class DOMElementLocator extends ElementLocator {
         }
         parent.appendChild(element);
 
-        for (ELAttribute elattribute : child.attributes.values()) {
+        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+            final ELAttribute elattribute = (ELAttribute) i.next();
             element.setAttributeNS(elattribute.namespaceURI,
                                    getQualifiedName(elattribute, namesapces),
                                    elattribute.value);
         }
 
         if (!child.elements.isEmpty()) {
-            for (ELElement grandchild : child.elements) {
-                print(grandchild, element, namesapces, document);
+            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+                print((ELElement) i.next(), element, namesapces, document);
             }
             return;
         }

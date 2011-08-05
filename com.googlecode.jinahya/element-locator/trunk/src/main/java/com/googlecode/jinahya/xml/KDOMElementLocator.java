@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml;
 
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.kxml2.kdom.Document;
@@ -150,9 +151,7 @@ public class KDOMElementLocator extends ElementLocator {
             throw new NullPointerException("null document");
         }
 
-        final Map<String, String> namespaces = getNamespaces(element);
-
-        print(element, document, namespaces);
+        print(element, document, getNamespaces(element));
     }
 
 
@@ -163,7 +162,7 @@ public class KDOMElementLocator extends ElementLocator {
      * @param parent
      */
     private static void print(final ELElement child, final Node parent,
-                              final Map<String, String> namesapces) {
+                              final Map namesapces) {
 
         if (child == null) {
             throw new NullPointerException("null child");
@@ -186,14 +185,15 @@ public class KDOMElementLocator extends ElementLocator {
             child.namespaceURI, child.localName);
         parent.addChild(Node.ELEMENT, element);
 
-        for (ELAttribute attribute : child.attributes.values()) {
+        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+            final ELAttribute attribute = (ELAttribute) i.next();
             element.setAttribute(attribute.namespaceURI, attribute.localName,
                                  attribute.value);
         }
 
         if (!child.elements.isEmpty()) {
-            for (ELElement grandchild : child.elements) {
-                print(grandchild, element, namesapces);
+            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+                print((ELElement) i.next(), element, namesapces);
             }
             return;
         }
@@ -205,8 +205,9 @@ public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param root 
+     * Creates a new instance.
+     *
+     * @param root root element
      */
     public KDOMElementLocator(final ELElement root) {
         super(root);

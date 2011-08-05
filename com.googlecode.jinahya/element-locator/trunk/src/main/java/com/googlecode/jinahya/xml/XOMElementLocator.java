@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml;
 
 
+import java.util.Iterator;
 import java.util.Map;
 
 import nu.xom.Attribute;
@@ -149,9 +150,7 @@ public class XOMElementLocator extends ElementLocator {
             throw new NullPointerException("null document");
         }
 
-        final Map<String, String> namespaces = getNamespaces(child);
-
-        print(child, document, namespaces);
+        print(child, document, getNamespaces(child));
     }
 
 
@@ -162,7 +161,7 @@ public class XOMElementLocator extends ElementLocator {
      * @param parent
      */
     private static void print(final ELElement child, final ParentNode parent,
-                              final Map<String, String> namesapces) {
+                              final Map namesapces) {
 
         if (child == null) {
             throw new NullPointerException("null child");
@@ -186,7 +185,8 @@ public class XOMElementLocator extends ElementLocator {
             parent.appendChild(element);
         }
 
-        for (ELAttribute elattribute : child.attributes.values()) {
+        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+            final ELAttribute elattribute = (ELAttribute) i.next();
             final Attribute attribute = new Attribute(
                 getQualifiedName(elattribute, namesapces),
                 elattribute.namespaceURI, elattribute.value);
@@ -194,8 +194,8 @@ public class XOMElementLocator extends ElementLocator {
         }
 
         if (!child.elements.isEmpty()) {
-            for (ELElement grandchild : child.elements) {
-                print(grandchild, element, namesapces);
+            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+                print((ELElement) i.next(), element, namesapces);
             }
             return;
         }
@@ -207,8 +207,9 @@ public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param root 
+     * Creates new instance.
+     *
+     * @param root the root element
      */
     public XOMElementLocator(final ELElement root) {
         super(root);

@@ -19,9 +19,10 @@ package com.googlecode.jinahya.xml;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 
@@ -40,8 +41,7 @@ public abstract class ElementLocator {
      * @param namespaces namespace map
      * @return qualified name
      */
-    static String getQualifiedName(final ELNode node,
-                                   final Map<String, String> namespaces) {
+    static String getQualifiedName(final ELNode node, final Map namespaces) {
 
         if (node == null) {
             throw new NullPointerException("null node");
@@ -64,7 +64,7 @@ public abstract class ElementLocator {
      */
     static String getQualifiedName(final String namespaceURI,
                                    final String localName,
-                                   final Map<String, String> namespaces) {
+                                   final Map namespaces) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
@@ -86,7 +86,7 @@ public abstract class ElementLocator {
             return localName;
         }
 
-        final String namespacePrefix = namespaces.get(namespaceURI);
+        final String namespacePrefix = (String) namespaces.get(namespaceURI);
         if (namespacePrefix == null) {
             throw new RuntimeException(
                 "no namespace prefix for " + namespaceURI);
@@ -101,22 +101,22 @@ public abstract class ElementLocator {
      * @param element
      * @return 
      */
-    static Map<String, String> getNamespaces(final ELElement element) {
+    static Map getNamespaces(final ELElement element) {
 
         if (element == null) {
             throw new NullPointerException("null element");
         }
 
-        final Map<String, String> namespaces = new TreeMap<String, String>();
+        final Map namespaces = new TreeMap();
 
-
-        for (String namespaceURI : element.getNamespaceURIs()) {
-            namespaces.put(namespaceURI, null);
+        final Set namespaceURIs = element.getNamespaceURIs();
+        for (Iterator i = namespaceURIs.iterator(); i.hasNext();) {
+            namespaces.put(i.next(), null);
         }
 
         int index = 0;
-        for (Entry<String, String> entry : namespaces.entrySet()) {
-            entry.setValue("ns" + index);
+        for (Iterator i = namespaceURIs.iterator(); i.hasNext();) {
+            namespaces.put(i.next(), "ns" + index);
             index++;
         }
 
@@ -148,7 +148,7 @@ public abstract class ElementLocator {
      */
     public final String getNamespaceURI() {
 
-        return getCurrentElement().namespaceURI;
+        return getCurrent().namespaceURI;
     }
 
 
@@ -158,7 +158,7 @@ public abstract class ElementLocator {
      */
     public final String getLocalName() {
 
-        return getCurrentElement().localName;
+        return getCurrent().localName;
     }
 
 
@@ -198,7 +198,8 @@ public abstract class ElementLocator {
 
         int count = 0;
 
-        for (ELElement child : getCurrentElement().elements) {
+        for (Iterator i = getCurrent().elements.iterator(); i.hasNext();) {
+            final ELElement child = (ELElement) i.next();
             if (!child.localName.equals(localName)) {
                 continue;
             }
@@ -297,7 +298,8 @@ public abstract class ElementLocator {
         }
 
         int count = 0;
-        for (ELElement element : getCurrentElement().elements) {
+        for (Iterator i = getCurrent().elements.iterator(); i.hasNext();) {
+            final ELElement element = (ELElement) i.next();
             if (!element.localName.equals(localName)) {
                 continue;
             }
@@ -341,7 +343,7 @@ public abstract class ElementLocator {
 
         final ELElement child = new ELElement(namespaceURI, localName);
 
-        getCurrentElement().elements.add(child);
+        getCurrent().elements.add(child);
 
         path.add(child);
 
@@ -355,7 +357,7 @@ public abstract class ElementLocator {
      * @return text value; may be null
      */
     public final String getText() {
-        return getCurrentElement().text;
+        return getCurrent().text;
     }
 
 
@@ -367,7 +369,7 @@ public abstract class ElementLocator {
      */
     public final ElementLocator setText(final String text) {
 
-        getCurrentElement().text = text;
+        getCurrent().text = text;
 
         return this;
     }
@@ -409,7 +411,7 @@ public abstract class ElementLocator {
             throw new IllegalArgumentException("empty localName");
         }
 
-        final ELAttribute attribute = getCurrentElement().attributes.get(
+        final ELAttribute attribute = (ELAttribute) getCurrent().attributes.get(
             ELNode.jamesClark(namespaceURI, localName));
 
         if (attribute == null) {
@@ -463,42 +465,16 @@ public abstract class ElementLocator {
         final String expressed = ELNode.jamesClark(namespaceURI, localName);
 
         if (value == null) {
-            getCurrentElement().attributes.remove(expressed);
+            getCurrent().attributes.remove(expressed);
             return this;
         }
 
         final ELAttribute attribute =
             new ELAttribute(namespaceURI, localName, value);
 
-        getCurrentElement().attributes.put(expressed, attribute);
+        getCurrent().attributes.put(expressed, attribute);
 
         return this;
-    }
-
-
-    /**
-     * 
-     * @return 
-     */
-    final Map<String, String> getNamespaces() {
-
-        final Map<String, String> namespaces = new TreeMap<String, String>();
-
-        final ELElement root = path.get(0);
-
-        for (String namespaceURI : root.getNamespaceURIs()) {
-            namespaces.put(namespaceURI, null);
-        }
-
-        int index = 0;
-        for (Entry<String, String> entry : namespaces.entrySet()) {
-            entry.setValue("ns" + index);
-            index++;
-        }
-
-        namespaces.put(ELNode.XML_NS_URI, ELNode.XML_NS_PREFIX);
-
-        return namespaces;
     }
 
 
@@ -515,9 +491,9 @@ public abstract class ElementLocator {
             throw new IllegalStateException("can't remove the root element");
         }
 
-        final ELElement element = getCurrentElement();
+        final ELElement element = getCurrent();
 
-        locateParent().getCurrentElement().elements.remove(element);
+        locateParent().getCurrent().elements.remove(element);
 
         return this;
     }
@@ -528,8 +504,8 @@ public abstract class ElementLocator {
      *
      * @return current element
      */
-    final ELElement getCurrentElement() {
-        return path.get(path.size() - 1);
+    final ELElement getCurrent() {
+        return (ELElement) path.get(path.size() - 1);
     }
 
 
@@ -538,12 +514,12 @@ public abstract class ElementLocator {
      *
      * @return the root element
      */
-    public final ELElement getRootElement() {
-        return path.get(0);
+    public final ELElement getRoot() {
+        return (ELElement) path.get(0);
     }
 
 
     /** element path. */
-    private final List<ELElement> path = new ArrayList<ELElement>();
+    private final List path = new ArrayList();
 }
 

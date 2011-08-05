@@ -120,7 +120,7 @@ public class Family {
 
 
         // ------------------------------------------- PRINT LOCATOR TO DOCUMENT
-        DOMElementLocator.print(locator.getRootElement(), document);
+        DOMElementLocator.print(locator.getRoot(), document);
 
 
         // -------------------------------------------- PRINT DOCUMENT TO TARGET
