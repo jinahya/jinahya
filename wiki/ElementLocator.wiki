@@ -151,6 +151,17 @@ public class Family {
     }
 }
 }}}
+{{{
+grandparent.age: 100
+parent.age: 50
+child.age: 30
+grandchild.gender: male
+grandchild.name: John
+spouse.name: Marry
+child.age: 26
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:grandparent xmlns:ns2="http://www.example.org/family" age="100"><ns2:parent age="50"><ns2:child age="30"><ns2:grandchild age="5"/><ns1:spouse xmlns:ns1="http://www.example.com/family/other" ns1:name="Marry"/></ns2:child><ns2:child age="26"/></ns2:parent></ns2:grandparent>
+}}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
   * [http://www.jdom.org/docs/apidocs/ JDOM v1.1.1 API Specification]
