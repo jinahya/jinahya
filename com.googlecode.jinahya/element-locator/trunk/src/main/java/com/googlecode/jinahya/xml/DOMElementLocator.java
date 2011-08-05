@@ -200,6 +200,13 @@ public class DOMElementLocator extends ElementLocator {
 
         final Element element = document.createElementNS(
             child.namespaceURI, getQualifiedName(child, namesapces));
+        if (parent instanceof Document) {
+            final Element documentElement =
+                ((Document) parent).getDocumentElement();
+            if (documentElement != null) {
+                parent.removeChild(documentElement);
+            }
+        }
         parent.appendChild(element);
 
         for (ELAttribute elattribute : child.attributes.values()) {

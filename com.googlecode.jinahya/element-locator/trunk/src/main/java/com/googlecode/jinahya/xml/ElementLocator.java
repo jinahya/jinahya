@@ -143,13 +143,33 @@ public abstract class ElementLocator {
 
 
     /**
+     * 
+     * @return 
+     */
+    public final String getNamespaceURI() {
+
+        return getCurrentElement().namespaceURI;
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
+    public final String getLocalName() {
+
+        return getCurrentElement().localName;
+    }
+
+
+    /**
      * Returns the number of child elements which each has given
      * <code>localName</code> in no namespace.
      *
      * @param localName local name
      * @return number of children
      */
-    public final int count(final String localName) {
+    public final int getChildCount(final String localName) {
 
         if (localName == null) {
             throw new NullPointerException("null localName");
@@ -159,7 +179,7 @@ public abstract class ElementLocator {
             throw new IllegalArgumentException("empty localName");
         }
 
-        return count(ELNode.NULL_NS_URI, localName);
+        return getChildCount(ELNode.NULL_NS_URI, localName);
     }
 
 
@@ -173,7 +193,8 @@ public abstract class ElementLocator {
      * @return child count
      * @see #getCount(String) 
      */
-    public final int count(final String namespaceURI, final String localName) {
+    public final int getChildCount(final String namespaceURI,
+                                   final String localName) {
 
         int count = 0;
 
@@ -197,7 +218,7 @@ public abstract class ElementLocator {
      *
      * @return self
      */
-    public final ElementLocator root() {
+    public final ElementLocator locateRoot() {
 
         while (path.size() > 1) {
             path.remove(path.size() - 1);
@@ -213,7 +234,7 @@ public abstract class ElementLocator {
      * 
      * @return self
      */
-    public final ElementLocator parent() {
+    public final ElementLocator locateParent() {
 
         if (path.size() == 1) {
             throw new IllegalStateException("no parent to locate");
@@ -236,10 +257,10 @@ public abstract class ElementLocator {
      * @return self
      * @see #child(java.lang.String, java.lang.String, int)
      */
-    public final ElementLocator child(final String localName,
-                                      final int index) {
+    public final ElementLocator locateChild(final String localName,
+                                            final int index) {
 
-        return child(ELNode.NULL_NS_URI, localName, index);
+        return locateChild(ELNode.NULL_NS_URI, localName, index);
     }
 
 
@@ -255,9 +276,9 @@ public abstract class ElementLocator {
      * @return self
      * @see #child(String, int) 
      */
-    public final ElementLocator child(final String namespaceURI,
-                                      final String localName,
-                                      final int index) {
+    public final ElementLocator locateChild(final String namespaceURI,
+                                            final String localName,
+                                            final int index) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
@@ -301,9 +322,9 @@ public abstract class ElementLocator {
      * @param localName new child element's local name.
      * @return self
      */
-    public final ElementLocator child(final String localName) {
+    public final ElementLocator addChild(final String localName) {
 
-        return child(ELNode.NULL_NS_URI, localName);
+        return addChild(ELNode.NULL_NS_URI, localName);
     }
 
 
@@ -315,8 +336,8 @@ public abstract class ElementLocator {
      * @param localName child element's local name
      * @return self
      */
-    public final ElementLocator child(final String namespaceURI,
-                                      final String localName) {
+    public final ElementLocator addChild(final String namespaceURI,
+                                         final String localName) {
 
         final ELElement child = new ELElement(namespaceURI, localName);
 
@@ -333,7 +354,7 @@ public abstract class ElementLocator {
      *
      * @return text value; may be null
      */
-    public final String text() {
+    public final String getText() {
         return getCurrentElement().text;
     }
 
@@ -344,11 +365,25 @@ public abstract class ElementLocator {
      * @param text new text value
      * @return self
      */
-    public final ElementLocator text(final String text) {
+    public final ElementLocator setText(final String text) {
 
         getCurrentElement().text = text;
 
         return this;
+    }
+
+
+    public final String getAttribute(final String localName) {
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        return getAttribute(ELNode.NULL_NS_URI, localName);
     }
 
 
@@ -359,8 +394,8 @@ public abstract class ElementLocator {
      * @param localName attribute's local name
      * @return attribute's value or null if not found
      */
-    public final String attribute(final String namespaceURI,
-                                  final String localName) {
+    public final String getAttribute(final String namespaceURI,
+                                     final String localName) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
@@ -385,6 +420,21 @@ public abstract class ElementLocator {
     }
 
 
+    public final ElementLocator setAttribute(final String localName,
+                                             final String value) {
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+
+        if (localName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        return setAttribute(ELNode.NULL_NS_URI, localName, value);
+    }
+
+
     /**
      * Sets or removes attribute's value. If <code>value</code> is null mapped
      * attribute will be removed.
@@ -394,9 +444,9 @@ public abstract class ElementLocator {
      * @param value attribute's value; null for removing attribute
      * @return self
      */
-    public final ElementLocator attribute(final String namespaceURI,
-                                          final String localName,
-                                          final String value) {
+    public final ElementLocator setAttribute(final String namespaceURI,
+                                             final String localName,
+                                             final String value) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
@@ -459,7 +509,7 @@ public abstract class ElementLocator {
      *
      * @return self
      */
-    public final ElementLocator remove() {
+    public final ElementLocator removeCurrent() {
 
         if (path.size() == 1) {
             throw new IllegalStateException("can't remove the root element");
@@ -467,7 +517,7 @@ public abstract class ElementLocator {
 
         final ELElement element = getCurrentElement();
 
-        parent().getCurrentElement().elements.remove(element);
+        locateParent().getCurrentElement().elements.remove(element);
 
         return this;
     }
