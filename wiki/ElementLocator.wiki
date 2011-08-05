@@ -59,59 +59,90 @@ Lets do some.
 }}}
 === Family.java ===
 {{{
-public class Family {
-public static void main(String[] args) throws Exception {
-String encoding = "UTF-8";
+ // ------------------------------------------ PARSE DOCUMENT FROM SOURCE
+        DOMImplementationRegistry registry =
+            DOMImplementationRegistry.newInstance();
+        DOMImplementationLS implementation =
+            (DOMImplementationLS) registry.getDOMImplementation("XML 3.0");
+        final LSParser parser = implementation.createLSParser(
+            DOMImplementationLS.MODE_SYNCHRONOUS,
+            XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        final LSInput input = implementation.createLSInput();
+        input.setByteStream(Family.class.getResourceAsStream("family.xml"));
+        input.setEncoding("UTF-8");
+        final Document document = parser.parse(input);
 
-DOMImplementationRegistry registry = 
-    DOMImplementationRegistry.newInstance();
-
-DOMImplementationLS implementation =
-    (DOMImplementationLS) registry.getDOMImplementation("XML 3.0");
-
-LSParser parser = implementation.createLSParser(
-    DOMImplementationLS.MODE_SYNCHRONOUS,
-    XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-LSInput input = implementation.createLSInput();
-input.setByteStream(new ByteArrayInputStream(XML.getBytes(encoding));
-input.setEncoding("UTF-8");
-
-        return parser.parse(input);
-    }
+        // ----------------------------------------- PARSE LOCATOR FROM DOCUMENT
+        final ElementLocator locator = DOMElementLocator.parse(document);
 
 
-    @Override
-    protected ElementLocator parseLocator(final Document document)
-        throws Exception {
+        final String family = "http://www.example.org/family";
+        final String other = "http://www.example.com/family/other";
 
-        return DOMElementLocator.parse(document);
-    }
+        final String namespaceURI = locator.getNamespaceURI(); // family
+        final String localName = locator.getLocalName(); // "grandparent"
+        final String grandparentAge = locator.getAttribute("age"); // "100"
+        System.out.println("grandparent.age: " + grandparentAge);
+
+        locator.locateChild(family, "parent", 0);
+        final String parentAge = locator.getAttribute("age"); // "50";
+        System.out.println("parent.age: " + parentAge);
+
+        final int childCount = locator.getChildCount(family, "child");
+        for (int i = 0; i < childCount; i++) {
+
+            locator.locateChild(family, "child", i);
+
+            final String childAge = locator.getAttribute("age");
+            System.out.println("child.age: " + childAge);
+
+            final int grandChildCount =
+                locator.getChildCount(family, "grandchild");
+            for (int j = 0; j < grandChildCount; j++) {
+
+                locator.locateChild(family, "grandchild", j);
+
+                final String gender = locator.getAttribute(other, "gender");
+                System.out.println("grandchild.gender: " + gender);
+                locator.setAttribute(other, "gender", null); // remove attribute
+
+                final String name = locator.getText();
+                System.out.println("grandchild.name: " + name);
+                locator.setText(null); // remove text
+
+                locator.locateParent();
+            }
+
+            final int spouseCount = locator.getChildCount(other, "spouse");
+            for (int j = spouseCount - 1; j >= 0; j--) {
+                locator.locateChild(other, "spouse", j);
+
+                final String spouseName = locator.getAttribute(other, "name");
+                System.out.println("spouse.name: " + spouseName);
+                locator.setAttribute(other, "spouse", null); // remove attribute
+
+                if (j > 0) {
+                    locator.removeCurrent();
+                } else {
+                    locator.locateParent();
+                }
+            }
+
+            locator.locateParent();
+        }
 
 
-    @Override
-    protected void printLocator(final ElementLocator locator,
-                                final Document document)
-        throws Exception {
-
+        // ------------------------------------------- PRINT LOCATOR TO DOCUMENT
         DOMElementLocator.print(locator.getRootElement(), document);
-    }
 
 
-    @Override
-    protected void printDocument(final Document document,
-                                 final OutputStream target,
-                                 final String charsetName)
-        throws IOException {
-
-        final LSSerializer serializer = IMPLEMENTATION.createLSSerializer();
-
-        final LSOutput output = IMPLEMENTATION.createLSOutput();
-        output.setByteStream(target);
-        output.setEncoding(charsetName);
-
+        // -------------------------------------------- PRINT DOCUMENT TO TARGET
+        final LSSerializer serializer = implementation.createLSSerializer();
+        final LSOutput output = implementation.createLSOutput();
+        output.setByteStream(System.out);
+        output.setEncoding("UTF-8");
         serializer.write(document, output);
-    }
+        System.out.flush();
 }}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
