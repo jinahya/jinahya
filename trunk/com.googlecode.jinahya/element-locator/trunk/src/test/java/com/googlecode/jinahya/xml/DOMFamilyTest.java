@@ -91,7 +91,7 @@ public class DOMFamilyTest extends FamilyTest<Document> {
                                 final Document document)
         throws Exception {
 
-        DOMElementLocator.print(locator.getRootElement(), document);
+        DOMElementLocator.print(locator.getRoot(), document);
     }
 
 

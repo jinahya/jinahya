@@ -78,7 +78,7 @@ public class JDOMElementLocator extends ElementLocator {
 
         final ELElement elelement = new ELElement(namespaceURI, localName);
 
-        final List<?> attributes = element.getAttributes();
+        final List attributes = element.getAttributes();
         for (int i = 0; i < attributes.size(); i++) {
             final Attribute attribute = (Attribute) attributes.get(i);
             String attributeNamespaceURI = attribute.getNamespaceURI();
@@ -98,7 +98,7 @@ public class JDOMElementLocator extends ElementLocator {
 
         String text = null;
 
-        final Iterator<?> i = element.getContent().iterator();
+        final Iterator i = element.getContent().iterator();
         while (i.hasNext()) {
             final Object child = i.next();
             if (child instanceof Text) {
@@ -152,9 +152,7 @@ public class JDOMElementLocator extends ElementLocator {
             throw new NullPointerException("null document");
         }
 
-        final Map<String, String> namespaces = getNamespaces(element);
-
-        print(element, document, namespaces);
+        print(element, document, getNamespaces(element));
     }
 
 
@@ -165,7 +163,7 @@ public class JDOMElementLocator extends ElementLocator {
      * @param parent 
      */
     private static void print(final ELElement child, final Parent parent,
-                              final Map<String, String> namespaces) {
+                              final Map namespaces) {
 
         if (child == null) {
             throw new NullPointerException("null child");
@@ -192,7 +190,8 @@ public class JDOMElementLocator extends ElementLocator {
             ((Element) parent).addContent(element);
         }
 
-        for (ELAttribute elattribute : child.attributes.values()) {
+        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+            final ELAttribute elattribute = (ELAttribute) i.next();
             if (elattribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
                 final Attribute attribute = new Attribute(
                     elattribute.localName, elattribute.value,
@@ -200,16 +199,17 @@ public class JDOMElementLocator extends ElementLocator {
                 element.setAttribute(attribute);
                 continue;
             }
-            final Namespace namespace = Namespace.getNamespace(namespaces.get(
-                elattribute.namespaceURI), elattribute.namespaceURI);
+            final Namespace namespace = Namespace.getNamespace(
+                (String) namespaces.get(elattribute.namespaceURI),
+                elattribute.namespaceURI);
             final Attribute attribute = new Attribute(
                 elattribute.localName, elattribute.value, namespace);
             element.setAttribute(attribute);
         }
 
         if (!child.elements.isEmpty()) {
-            for (ELElement grandchild : child.elements) {
-                print(grandchild, element, namespaces);
+            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+                print((ELElement) i.next(), element, namespaces);
             }
             return;
         }

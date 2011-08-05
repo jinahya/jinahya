@@ -151,11 +151,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <!--
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
-        <!--
+        -->
         <executions>
           <execution>
             <id>compile-1.1</id>
@@ -180,7 +181,6 @@
             </configuration>
           </execution>
         </executions>
-        -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

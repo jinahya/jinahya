@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml;
 
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.dom4j.Attribute;
@@ -172,7 +173,7 @@ public class DOM4JElementLocator extends ElementLocator {
      * @param namesapces name space map
      */
     private static void print(final ELElement child, final Branch parent,
-                              final Map<String, String> namesapces) {
+                              final Map namesapces) {
 
         if (child == null) {
             throw new NullPointerException("null child");
@@ -197,9 +198,10 @@ public class DOM4JElementLocator extends ElementLocator {
         final Element element = parent.addElement(
             getQualifiedName(child, namesapces), child.namespaceURI);
 
-        for (ELAttribute elattribute : child.attributes.values()) {
+        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+            final ELAttribute elattribute = (ELAttribute) i.next();
             final Namespace namespace = new Namespace(
-                namesapces.get(elattribute.namespaceURI),
+                (String) namesapces.get(elattribute.namespaceURI),
                 elattribute.namespaceURI);
             final QName qName = new QName(
                 elattribute.localName, namespace,
@@ -208,8 +210,8 @@ public class DOM4JElementLocator extends ElementLocator {
         }
 
         if (!child.elements.isEmpty()) {
-            for (ELElement grandchild : child.elements) {
-                print(grandchild, element, namesapces);
+            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+                print((ELElement) i.next(), element, namesapces);
             }
             return;
         }

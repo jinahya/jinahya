@@ -19,13 +19,12 @@ package com.googlecode.jinahya.xml;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
 
 /**
@@ -52,9 +51,9 @@ public class ELElement extends ELNode {
      *
      * @return a set which contains all namespace URIs.
      */
-    public Set<String> getNamespaceURIs() {
+    public Set getNamespaceURIs() {
 
-        return getNamespaceURIs(new LinkedHashSet<String>());
+        return getNamespaceURIs(new LinkedHashSet());
     }
 
 
@@ -64,7 +63,7 @@ public class ELElement extends ELNode {
      * @param namespaceURIs the set to which all namesapce URIs are added
      * @return given <code>namespaceURIs</code>
      */
-    public Set<String> getNamespaceURIs(final Set<String> namespaceURIs) {
+    public Set getNamespaceURIs(final Set namespaceURIs) {
 
         if (namespaceURIs == null) {
             throw new NullPointerException("null set");
@@ -72,19 +71,19 @@ public class ELElement extends ELNode {
 
         namespaceURIs.add(namespaceURI);
 
-        for (Entry<String, ELAttribute> entry : attributes.entrySet()) {
-            namespaceURIs.add(entry.getValue().namespaceURI);
+        for (Iterator i = attributes.values().iterator(); i.hasNext();) {
+            namespaceURIs.add(((ELAttribute) i.next()).namespaceURI);
         }
 
-        for (ELElement element : elements) {
-            element.getNamespaceURIs(namespaceURIs);
+        for (Iterator i = elements.iterator(); i.hasNext();) {
+            ((ELElement) i.next()).getNamespaceURIs(namespaceURIs);
         }
 
         return namespaceURIs;
     }
 
 
-    @Override
+    //@Override
     public String toJSON() {
 
         final StringBuffer buffer = new StringBuffer();
@@ -100,13 +99,12 @@ public class ELElement extends ELNode {
 
 
         buffer.append(",").append(toJSONString("attributes")).append(":[");
-        final Iterator<Entry<String, ELAttribute>> i =
-            attributes.entrySet().iterator();
+        final Iterator i = attributes.values().iterator();
         if (i.hasNext()) {
-            buffer.append(i.next().getValue().toJSON());
+            buffer.append(((ELAttribute) i.next()).toJSON());
         }
         while (i.hasNext()) {
-            buffer.append(",").append(i.next().getValue().toJSON());
+            buffer.append(",").append(((ELAttribute) i.next()).toJSON());
         }
         buffer.append("]");
 
@@ -116,12 +114,12 @@ public class ELElement extends ELNode {
 
 
         buffer.append(",").append(toJSONString("elements")).append(":[");
-        final Iterator<ELElement> j = elements.iterator();
+        final Iterator j = elements.iterator();
         if (j.hasNext()) {
-            buffer.append(j.next().toJSON());
+            buffer.append(((ELElement) j.next()).toJSON());
         }
         while (j.hasNext()) {
-            buffer.append(",").append(j.next().toJSON());
+            buffer.append(",").append(((ELElement) j.next()).toJSON());
         }
         buffer.append("]");
 
@@ -133,8 +131,7 @@ public class ELElement extends ELNode {
 
 
     /** attributes. */
-    protected final Map<String, ELAttribute> attributes =
-        new TreeMap<String, ELAttribute>();
+    protected final Map attributes = new HashMap(); // <String, ELAttribute>
 
 
     /** text. */
@@ -142,6 +139,6 @@ public class ELElement extends ELNode {
 
 
     /** elements. */
-    protected final List<ELElement> elements = new ArrayList<ELElement>();
+    protected final List elements = new ArrayList(); // <Element>
 }
 
