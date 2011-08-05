@@ -99,7 +99,7 @@ public class Family {
 
             final String childAge = locator.getAttribute("age");
             System.out.println(
-                "/:grandparent/:parent[0]/:child[" + (i + 1) + "]/@age -> "
+                "/:grandparent/:parent[1]/:child[" + (i + 1) + "]/@age -> "
                 + childAge);
 
             final int grandChildCount =
@@ -110,12 +110,12 @@ public class Family {
 
                 final String gender = locator.getAttribute(other, "gender");
                 System.out.println(
-                    "/:grandparent/:parent[0]/:child[" + (i + 1)
+                    "/:grandparent/:parent[1]/:child[" + (i + 1)
                     + "]/:grandchild/@o:gender ->" + gender);
                 locator.setAttribute(other, "gender", null); // remove attribute
 
                 final String name = locator.getText();
-                System.out.println("/:grandparent/:parent[0]/:child[" + (i + 1)
+                System.out.println("/:grandparent/:parent[1]/:child[" + (i + 1)
                                    + "]/:grandchild/text() -> " + name);
                 locator.setText(null); // remove text
 
@@ -128,7 +128,7 @@ public class Family {
 
                 final String spouseName = locator.getAttribute(other, "name");
                 System.out.println(
-                    "/:grandparent/:parent[0]/:child[" + (i + 1)
+                    "/:grandparent/:parent[1]/:child[" + (i + 1)
                     + "]/:grandchild/o:spouse[" + (j + 1) + "]/@o:name -> "
                     + spouseName);
                 locator.setAttribute(other, "spouse", null); // remove attribute
@@ -161,14 +161,13 @@ public class Family {
 {{{
 /:grandparent/@age -> 100
 /:grandparent/:parent[1]/@age -> 50
-/:grandparent/:parent[0]/:child[1]/@age -> 30
-/:grandparent/:parent[0]/:child[1]/:grandchild/@o:gender ->male
-/:grandparent/:parent[0]/:child[1]/:grandchild/text() -> John
-/:grandparent/:parent[0]/:child[1]/:grandchild/o:spouse[1]/@o:name -> Marry
-/:grandparent/:parent[0]/:child[2]/@age -> 26
+/:grandparent/:parent[1]/:child[1]/@age -> 30
+/:grandparent/:parent[1]/:child[1]/:grandchild/@o:gender ->male
+/:grandparent/:parent[1]/:child[1]/:grandchild/text() -> John
+/:grandparent/:parent[1]/:child[1]/:grandchild/o:spouse[1]/@o:name -> Marry
+/:grandparent/:parent[1]/:child[2]/@age -> 26
 <?xml version="1.0" encoding="UTF-8"?>
 <ns2:grandparent xmlns:ns2="http://www.example.org/family" age="100"><ns2:parent age="50"><ns2:child age="30"><ns2:grandchild age="5"/><ns1:spouse xmlns:ns1="http://www.example.com/family/other" ns1:name="Marry"/></ns2:child><ns2:child age="26"/></ns2:parent></ns2:grandparent>
-
 }}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
