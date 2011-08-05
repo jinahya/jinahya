@@ -143,10 +143,8 @@ public class Family {
             locator.locateParent();
         }
 
-
         // ------------------------------------------- PRINT LOCATOR TO DOCUMENT
         DOMElementLocator.print(locator.getRootElement(), document);
-
 
         // -------------------------------------------- PRINT DOCUMENT TO TARGET
         final LSSerializer serializer = implementation.createLSSerializer();
