@@ -111,7 +111,7 @@ public class Family {
                 final String gender = locator.getAttribute(other, "gender");
                 System.out.println(
                     "/:grandparent/:parent[1]/:child[" + (i + 1)
-                    + "]/:grandchild/@o:gender ->" + gender);
+                    + "]/:grandchild/@o:gender -> " + gender);
                 locator.setAttribute(other, "gender", null); // remove attribute
 
                 final String name = locator.getText();
@@ -164,7 +164,7 @@ public class Family {
 /:grandparent/@age -> 100
 /:grandparent/:parent[1]/@age -> 50
 /:grandparent/:parent[1]/:child[1]/@age -> 30
-/:grandparent/:parent[1]/:child[1]/:grandchild/@o:gender ->male
+/:grandparent/:parent[1]/:child[1]/:grandchild/@o:gender -> male
 /:grandparent/:parent[1]/:child[1]/:grandchild/text() -> John
 /:grandparent/:parent[1]/:child[1]/o:spouse[1]/@o:name -> Marry
 /:grandparent/:parent[1]/:child[2]/@age -> 26
