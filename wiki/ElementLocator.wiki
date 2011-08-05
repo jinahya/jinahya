@@ -168,6 +168,8 @@ public class Family {
 /:grandparent/:parent[1]/:child[1]/:grandchild/text() -> John
 /:grandparent/:parent[1]/:child[1]/:grandchild/o:spouse[1]/@o:name -> Marry
 /:grandparent/:parent[1]/:child[2]/@age -> 26
+}}}
+{{{
 <?xml version="1.0" encoding="UTF-8"?>
 <ns2:grandparent xmlns:ns2="http://www.example.org/family" age="100">
     <ns2:parent age="50">
