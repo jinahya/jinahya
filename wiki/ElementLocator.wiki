@@ -59,7 +59,12 @@ Lets do some.
 }}}
 === Family.java ===
 {{{
- // ------------------------------------------ PARSE DOCUMENT FROM SOURCE
+public class Family {
+
+
+    public static void main(String[] args) throws Exception {
+
+        // ------------------------------------------ PARSE DOCUMENT FROM SOURCE
         DOMImplementationRegistry registry =
             DOMImplementationRegistry.newInstance();
         DOMImplementationLS implementation =
@@ -143,6 +148,8 @@ Lets do some.
         output.setEncoding("UTF-8");
         serializer.write(document, output);
         System.out.flush();
+    }
+}
 }}}
 == Links ==
   * [http://www.w3.org/2003/01/dom2-javadoc/ W3C Document Object Model Level 2 version 1.0]
