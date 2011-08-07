@@ -11,10 +11,10 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 == Values ==
 || *type* || *bit range* || *notes* ||
 || boolean || 1 || 1 for true; 0 for false ||
-|| unsigned int || 1(inclusive) ~ 32(exclusive) || ||
-|| int ||1(exclusive) ~ 32(inclusive) || ||
-|| unsigned long || 1(inclusive) ~ 64(exclusive) || ||
-|| long || 1(exclusive) ~ 64(inclusive) || ||
+|| unsigned int || 1 ~ 31 || ||
+|| int || 2 ~ 32 || ||
+|| unsigned long || 1 ~ 63 || ||
+|| long || 2 ~ 64 || ||
 || bytes || 31 + 8N || N: number of bytes ||
 || ASCII || 31 + 7N || N: number of characters ||
 || UTF || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
