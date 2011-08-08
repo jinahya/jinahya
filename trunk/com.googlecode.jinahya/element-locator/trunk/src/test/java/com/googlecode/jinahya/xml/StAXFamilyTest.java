@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-
 import java.io.Writer;
+
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
 import javax.xml.stream.XMLStreamWriter;
+
 import org.testng.annotations.Test;
 
 
@@ -52,7 +52,7 @@ public class StAXFamilyTest {
     public void test() throws IOException, XMLStreamException {
 
         final Reader source =
-            new InputStreamReader(Family.getFamilyXML(), "UTF-8");
+            new InputStreamReader(Family.family(), "UTF-8");
         final XMLStreamReader reader =
             INPUT_FACTORY.createXMLStreamReader(source);
 
@@ -61,7 +61,7 @@ public class StAXFamilyTest {
         reader.close();
         source.close();
 
-        Family.doFamilyXML(locator);
+        Family.family(locator);
 
         final Writer target = new OutputStreamWriter(System.out, "UTF-8");
         final XMLStreamWriter writer =

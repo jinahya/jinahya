@@ -155,11 +155,20 @@ public abstract class ELNode {
     }
 
 
+    /**
+     * Returns <code>namespaceURI</code> property value.
+     *
+     * @return namespaceURI.
+     */
     public String getNamespaceURI() {
         return namespaceURI;
     }
 
 
+    /**
+     * Returns <code>localName</code> property value.
+     * @return localName
+     */
     public String getLocalName() {
         return localName;
     }
