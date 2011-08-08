@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<grandparent age="100" xmlns="http://www.example.org/family">
+  <parent age="50">
+    <child age="30" xmlns:o="http://www.example.com/family/other">
+      <grandchild age="5" o:gender="male">John</grandchild>
+      <o:spouse o:name="Marry"/>
+    </child>
+    <child age="26"/>
+  </parent>
+</grandparent>
