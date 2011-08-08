@@ -91,7 +91,7 @@ public class DOMFamilyTest extends FamilyTest<Document> {
                                 final Document document)
         throws Exception {
 
-        DOMElementLocator.print(locator.getRoot(), document);
+        DOMElementLocator.print(locator, document);
     }
 
 
@@ -99,7 +99,7 @@ public class DOMFamilyTest extends FamilyTest<Document> {
     protected void printDocument(final Document document,
                                  final OutputStream target,
                                  final String charsetName)
-        throws IOException {
+        throws Exception {
 
         final LSSerializer serializer = IMPLEMENTATION.createLSSerializer();
 

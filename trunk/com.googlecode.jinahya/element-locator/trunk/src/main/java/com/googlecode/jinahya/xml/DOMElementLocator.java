@@ -127,22 +127,24 @@ public class DOMElementLocator extends ElementLocator {
 
 
     /**
-     * Prints given <code>element</code> to specified <code>document</code>.
+     * Prints given <code>locator</code> to specified <code>document</code>.
      *
-     * @param element element
+     * @param locator locator
      * @param document document
      */
-    public static void print(final ELElement element, final Document document) {
+    public static void print(final ElementLocator locator,
+                             final Document document) {
 
-        if (element == null) {
-            throw new NullPointerException("null element");
+        if (locator == null) {
+            throw new NullPointerException("null locator");
         }
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        print(element, document, getNamespaces(element), document);
+        final ELElement root = locator.getRoot();
+        print(root, document, getNamespaces(root), document);
     }
 
 

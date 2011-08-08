@@ -69,7 +69,7 @@ public class DOM4JFamilyTest extends FamilyTest<Document> {
     protected void printDocument(final Document document,
                                  final OutputStream target,
                                  final String charsetName)
-        throws IOException {
+        throws Exception {
 
         final Writer writer = new OutputStreamWriter(target, charsetName);
         document.write(writer);

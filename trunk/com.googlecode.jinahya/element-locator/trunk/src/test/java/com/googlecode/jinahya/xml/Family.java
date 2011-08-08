@@ -44,7 +44,7 @@ public class Family {
     }
 
 
-    static void printFamilyXML(final ElementLocator locator) {
+    static void doFamilyXML(final ElementLocator locator) {
 
         final String family = "http://www.example.org/family";
         final String other = "http://www.example.com/family/other";
@@ -83,6 +83,7 @@ public class Family {
                     System.out.println(
                         "/:grandparent/:parent[" + (i + 1) + "]/:child["
                         + (j + 1) + "]/:grandchild/@o:gender -> " + gender);
+                    locator.setAttribute(other, "gender", null);
 
                     final String name = locator.getText();
                     System.out.println(
@@ -104,7 +105,11 @@ public class Family {
                         + (j + 1) + "]/o:spouse[" + (k + 1) + "]/@o:name -> "
                         + spouseName);
 
-                    locator.locateParent();
+                    if (k > 0) {
+                        locator.removeCurrent();
+                    } else {
+                        locator.locateParent();
+                    }
                 }
 
                 locator.locateParent();
@@ -134,11 +139,11 @@ public class Family {
         final ElementLocator locator = DOMElementLocator.parse(document);
 
 
-        printFamilyXML(locator);
+        doFamilyXML(locator);
 
 
         // ------------------------------------------- PRINT LOCATOR TO DOCUMENT
-        DOMElementLocator.print(locator.getRoot(), document);
+        DOMElementLocator.print(locator, document);
 
 
         // -------------------------------------------- PRINT DOCUMENT TO TARGET

@@ -125,40 +125,42 @@ public class KDOMElementLocator extends ElementLocator {
     /**
      * Prints given <code>element</code> to a new Document.
      *
-     * @param element element to print
+     * @param locator element to print
      * @return a new document to which <code>element</code> has been printed.
      */
-    public static Document print(final ELElement element) {
+    public static Document print(final ElementLocator locator) {
 
-        if (element == null) {
-            throw new NullPointerException("null element");
+        if (locator == null) {
+            throw new NullPointerException("null locator");
         }
 
         final Document document = new Document();
 
-        print(element, document);
+        print(locator, document);
 
         return document;
     }
 
 
     /**
-     * Prints given <code>element</code> to specified <code>document</code>.
+     * Prints given <code>locator</code> to specified <code>document</code>.
      *
-     * @param element the element to print
+     * @param locator the element to print
      * @param document the document to which <code>element</code> is printed.
      */
-    public static void print(final ELElement element, final Document document) {
+    public static void print(final ElementLocator locator,
+                             final Document document) {
 
-        if (element == null) {
-            throw new NullPointerException("null element");
+        if (locator == null) {
+            throw new NullPointerException("null locator");
         }
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
-        print(element, document, getNamespaces(element));
+        final ELElement root = locator.getRoot();
+        print(root, document, getNamespaces(root));
     }
 
 

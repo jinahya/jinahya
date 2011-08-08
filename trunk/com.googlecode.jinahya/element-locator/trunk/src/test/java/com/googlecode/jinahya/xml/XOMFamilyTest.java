@@ -66,7 +66,7 @@ public class XOMFamilyTest extends FamilyTest<Document> {
     protected void printDocument(final Document document,
                                  final OutputStream target,
                                  final String charsetName)
-        throws IOException {
+        throws Exception {
 
         final Serializer serializer = new Serializer(target, charsetName);
         serializer.write(document);

@@ -21,6 +21,7 @@ package com.googlecode.jinahya.xml;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -130,10 +131,27 @@ public class StAXElementLocator extends ElementLocator {
             throw new NullPointerException("null writer");
         }
 
-        writer.writeStartDocument();
+        print(locator, writer, "UTF-8", "1.0");
+    }
+
+
+    public static void print(final ElementLocator locator,
+                             final XMLStreamWriter writer,
+                             final String encoding, final String version)
+        throws XMLStreamException {
+
+        if (locator == null) {
+            throw new NullPointerException("null locator");
+        }
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        writer.writeStartDocument(encoding, version);
 
         final ELElement element = locator.getRoot();
-        print(element, writer, getNamespaces(element));
+        print(element, writer, getNamespaces(element), true);
 
         writer.writeEndDocument();
     }
@@ -142,6 +160,16 @@ public class StAXElementLocator extends ElementLocator {
     private static void print(final ELElement element,
                               final XMLStreamWriter writer,
                               final Map namespaces)
+        throws XMLStreamException {
+
+        print(element, writer, namespaces, false);
+    }
+
+
+    private static void print(final ELElement element,
+                              final XMLStreamWriter writer,
+                              final Map namespaces,
+                              final boolean writeNamespace)
         throws XMLStreamException {
 
 
@@ -157,22 +185,40 @@ public class StAXElementLocator extends ElementLocator {
             throw new NullPointerException("null namespaces");
         }
 
-        final String namespaceURI = element.getNamespaceURI();
-        // prefix, localName, namespaceURI
-        writer.writeStartElement((String) namespaces.get(namespaceURI),
-                                 element.getLocalName(),
-                                 namespaceURI);
+        final String elementNamespaceURI = element.getNamespaceURI();
+        if (elementNamespaceURI.equals(ELNode.NULL_NS_URI)) {
+            writer.writeStartElement(element.getLocalName());
+        } else {
+            writer.writeStartElement(
+                (String) namespaces.get(elementNamespaceURI),
+                element.getLocalName(), elementNamespaceURI);
+        }
 
-        for (Iterator i = element.getAttributes().values().iterator();
-             i.hasNext();) {
+        if (writeNamespace) {
+            for (Iterator i = namespaces.entrySet().iterator(); i.hasNext();) {
+                final Entry entry = (Entry) i.next();
+                final String namespaceURI = (String) entry.getKey();
+                if (namespaceURI.equals(ELNode.NULL_NS_URI)) {
+                    continue;
+                }
+                final String namespacePrefix = (String) entry.getValue();
+                writer.writeNamespace(namespacePrefix, namespaceURI);
+            }
+        }
 
+        final Map attributes = element.getAttributes();
+        for (Iterator i = attributes.values().iterator(); i.hasNext();) {
             final ELAttribute attribute = (ELAttribute) i.next();
             final String attributeNamespaceURI = attribute.getNamespaceURI();
-            // prefix, namespaceURI, localName, value
-            writer.writeAttribute(
-                (String) namespaces.get(attributeNamespaceURI),
-                attributeNamespaceURI, attribute.getLocalName(),
-                attribute.getValue());
+            if (attributeNamespaceURI.equals(ELNode.NULL_NS_URI)) {
+                writer.writeAttribute(attribute.getLocalName(),
+                                      attribute.getValue());
+            } else {
+                writer.writeAttribute(
+                    (String) namespaces.get(attributeNamespaceURI),
+                    attributeNamespaceURI, attribute.getLocalName(),
+                    attribute.getValue());
+            }
         }
 
         final List children = element.getElements();
