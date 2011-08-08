@@ -1,0 +1,24 @@
+-classpath
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/dependency-resolver/trunk/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/dependency-resolver/trunk/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/dependency-resolver/trunk/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'dependency-resolver 1.0-alpha-1-SNAPSHOT API'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/dependency-resolver/trunk/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'dependency-resolver 1.0-alpha-1-SNAPSHOT API'
