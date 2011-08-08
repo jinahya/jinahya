@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -37,6 +38,13 @@ import javax.xml.stream.XMLStreamWriter;
 public class StAXElementLocator extends ElementLocator {
 
 
+    /**
+     * Parses from given <code>reader</code> and creates a new ElementLocator.
+     *
+     * @param reader reader to parse
+     * @return a new ElementLocator
+     * @throws XMLStreamException if an XML error occurs.
+     */
     public static ElementLocator parse(final XMLStreamReader reader)
         throws XMLStreamException {
 
@@ -71,9 +79,25 @@ public class StAXElementLocator extends ElementLocator {
     }
 
 
+    /**
+     * Parses given <code>reader</code> and appends element to specified
+     * <code>locator</code>.
+     *
+     * @param reader reader
+     * @param locator locator
+     * @throws XMLStreamException if an XML error occurs.
+     */
     private static void parse(final XMLStreamReader reader,
                               final ElementLocator locator)
         throws XMLStreamException {
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        if (locator == null) {
+            throw new NullPointerException("null locator");
+        }
 
         reader.require(XMLStreamConstants.START_ELEMENT, null, null);
 
@@ -119,6 +143,13 @@ public class StAXElementLocator extends ElementLocator {
     }
 
 
+    /**
+     * Prints given <code>locator</code> to specified <code>writer</code>.
+     *
+     * @param locator locator to print
+     * @param writer the writer to which the locator is printed
+     * @throws XMLStreamException if an XML error occurs.
+     */
     public static void print(final ElementLocator locator,
                              final XMLStreamWriter writer)
         throws XMLStreamException {
@@ -135,6 +166,15 @@ public class StAXElementLocator extends ElementLocator {
     }
 
 
+    /**
+     * Prints given <code>locator</code> to specified <code>writer</code>.
+     *
+     * @param locator the locator to print
+     * @param writer the writer to which the locator is printed
+     * @param encoding output encoding for XML declaration
+     * @param version xml version for XML declaration
+     * @throws XMLStreamException if an XML error occurs.
+     */
     public static void print(final ElementLocator locator,
                              final XMLStreamWriter writer,
                              final String encoding, final String version)
@@ -148,6 +188,14 @@ public class StAXElementLocator extends ElementLocator {
             throw new NullPointerException("null writer");
         }
 
+        if (encoding == null) {
+            throw new NullPointerException("null encoding");
+        }
+
+        if (version == null) {
+            throw new NullPointerException("null version");
+        }
+
         writer.writeStartDocument(encoding, version);
 
         final ELElement element = locator.getRoot();
@@ -157,15 +205,42 @@ public class StAXElementLocator extends ElementLocator {
     }
 
 
+    /**
+     * 
+     * @param element
+     * @param writer
+     * @param namespaces
+     * @throws XMLStreamException 
+     */
     private static void print(final ELElement element,
                               final XMLStreamWriter writer,
                               final Map namespaces)
         throws XMLStreamException {
 
+        if (element == null) {
+            throw new NullPointerException("null element");
+        }
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (namespaces == null) {
+            throw new NullPointerException("null namespaces");
+        }
+
         print(element, writer, namespaces, false);
     }
 
 
+    /**
+     * 
+     * @param element
+     * @param writer
+     * @param namespaces
+     * @param writeNamespace
+     * @throws XMLStreamException 
+     */
     private static void print(final ELElement element,
                               final XMLStreamWriter writer,
                               final Map namespaces,

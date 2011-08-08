@@ -51,7 +51,8 @@ public abstract class ElementLocator {
             throw new NullPointerException("null namespaceMap");
         }
 
-        return getQualifiedName(node.getNamespaceURI(), node.getLocalName(), namespaces);
+        return getQualifiedName(node.getNamespaceURI(), node.getLocalName(),
+                                namespaces);
     }
 
 
@@ -230,18 +231,15 @@ public abstract class ElementLocator {
 
 
     /**
-     * Locates to the parent element. An <code>IllegalStateException</code> will
-     * be thrown if there is no parent to locate (on the root).
+     * Locates to the parent element.
      * 
      * @return self
      */
     public final ElementLocator locateParent() {
 
-        if (path.size() == 1) {
-            throw new IllegalStateException("no parent to locate");
+        if (path.size() > 1) {
+            path.remove(path.size() - 1);
         }
-
-        path.remove(path.size() - 1);
 
         return this;
     }
@@ -411,7 +409,8 @@ public abstract class ElementLocator {
             throw new IllegalArgumentException("empty localName");
         }
 
-        final ELAttribute attribute = (ELAttribute) getCurrent().getAttributes().get(
+        final ELAttribute attribute =
+            (ELAttribute) getCurrent().getAttributes().get(
             ELNode.jamesClark(namespaceURI, localName));
 
         if (attribute == null) {
@@ -514,7 +513,7 @@ public abstract class ElementLocator {
      *
      * @return the root element
      */
-    public final ELElement getRoot() {
+    final ELElement getRoot() {
         return (ELElement) path.get(0);
     }
 
