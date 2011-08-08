@@ -50,14 +50,19 @@ public class ELAttribute extends ELNode {
     public String toJSON() {
 
         return "{"
-               + toJSONString("namespaceURI") + ":" + toJSONString(namespaceURI)
-               + "," + toJSONString("localName") + ":" + toJSONString(localName)
+               + toJSONString("namespaceURI") + ":" + toJSONString(getNamespaceURI())
+               + "," + toJSONString("localName") + ":" + toJSONString(getLocalName())
                + "," + toJSONString("value") + ":" + toJSONString(value)
                + "}";
     }
 
 
+    public String getValue() {
+        return value;
+    }
+
+
     /** value. */
-    protected final String value;
+    private final String value;
 }
 

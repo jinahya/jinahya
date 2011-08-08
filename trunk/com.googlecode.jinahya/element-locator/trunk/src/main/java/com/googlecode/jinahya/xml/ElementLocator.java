@@ -51,7 +51,7 @@ public abstract class ElementLocator {
             throw new NullPointerException("null namespaceMap");
         }
 
-        return getQualifiedName(node.namespaceURI, node.localName, namespaces);
+        return getQualifiedName(node.getNamespaceURI(), node.getLocalName(), namespaces);
     }
 
 
@@ -148,7 +148,7 @@ public abstract class ElementLocator {
      */
     public final String getNamespaceURI() {
 
-        return getCurrent().namespaceURI;
+        return getCurrent().getNamespaceURI();
     }
 
 
@@ -158,7 +158,7 @@ public abstract class ElementLocator {
      */
     public final String getLocalName() {
 
-        return getCurrent().localName;
+        return getCurrent().getLocalName();
     }
 
 
@@ -198,12 +198,12 @@ public abstract class ElementLocator {
 
         int count = 0;
 
-        for (Iterator i = getCurrent().elements.iterator(); i.hasNext();) {
+        for (Iterator i = getCurrent().getElements().iterator(); i.hasNext();) {
             final ELElement child = (ELElement) i.next();
-            if (!child.localName.equals(localName)) {
+            if (!child.getLocalName().equals(localName)) {
                 continue;
             }
-            if (!child.namespaceURI.equals(namespaceURI)) {
+            if (!child.getNamespaceURI().equals(namespaceURI)) {
                 continue;
             }
             count++;
@@ -298,12 +298,12 @@ public abstract class ElementLocator {
         }
 
         int count = 0;
-        for (Iterator i = getCurrent().elements.iterator(); i.hasNext();) {
+        for (Iterator i = getCurrent().getElements().iterator(); i.hasNext();) {
             final ELElement element = (ELElement) i.next();
-            if (!element.localName.equals(localName)) {
+            if (!element.getLocalName().equals(localName)) {
                 continue;
             }
-            if (!element.namespaceURI.equals(namespaceURI)) {
+            if (!element.getNamespaceURI().equals(namespaceURI)) {
                 continue;
             }
             if (count == index) {
@@ -343,7 +343,7 @@ public abstract class ElementLocator {
 
         final ELElement child = new ELElement(namespaceURI, localName);
 
-        getCurrent().elements.add(child);
+        getCurrent().getElements().add(child);
 
         path.add(child);
 
@@ -357,7 +357,7 @@ public abstract class ElementLocator {
      * @return text value; may be null
      */
     public final String getText() {
-        return getCurrent().text;
+        return getCurrent().getText();
     }
 
 
@@ -369,7 +369,7 @@ public abstract class ElementLocator {
      */
     public final ElementLocator setText(final String text) {
 
-        getCurrent().text = text;
+        getCurrent().setText(text);
 
         return this;
     }
@@ -411,14 +411,14 @@ public abstract class ElementLocator {
             throw new IllegalArgumentException("empty localName");
         }
 
-        final ELAttribute attribute = (ELAttribute) getCurrent().attributes.get(
+        final ELAttribute attribute = (ELAttribute) getCurrent().getAttributes().get(
             ELNode.jamesClark(namespaceURI, localName));
 
         if (attribute == null) {
             return null;
         }
 
-        return attribute.value;
+        return attribute.getValue();
     }
 
 
@@ -465,14 +465,14 @@ public abstract class ElementLocator {
         final String expressed = ELNode.jamesClark(namespaceURI, localName);
 
         if (value == null) {
-            getCurrent().attributes.remove(expressed);
+            getCurrent().getAttributes().remove(expressed);
             return this;
         }
 
         final ELAttribute attribute =
             new ELAttribute(namespaceURI, localName, value);
 
-        getCurrent().attributes.put(expressed, attribute);
+        getCurrent().getAttributes().put(expressed, attribute);
 
         return this;
     }
@@ -493,7 +493,7 @@ public abstract class ElementLocator {
 
         final ELElement element = getCurrent();
 
-        locateParent().getCurrent().elements.remove(element);
+        locateParent().getCurrent().getElements().remove(element);
 
         return this;
     }

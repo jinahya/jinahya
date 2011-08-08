@@ -30,16 +30,19 @@ import nu.xom.Text;
 
 
 /**
+ * A XOM implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://www.xom.nu/">XOM</a>
  */
 public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param document
-     * @return 
+     * Parses given <code>document</code> and creates a new ElementLocator.
+     *
+     * @param document the document to be parsed
+     * @return a new ElementLocator instance.
      */
     public static ElementLocator parse(final Document document) {
 
@@ -57,9 +60,10 @@ public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
+     * Parses given <code>element</code> and creates a new ELElement.
+     *
      * @param element element to be parsed
-     * @return an ELElement
+     * @return a new ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -87,7 +91,7 @@ public class XOMElementLocator extends ElementLocator {
             }
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getValue();
-            elelement.attributes.put(
+            elelement.getAttributes().put(
                 ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -103,12 +107,13 @@ public class XOMElementLocator extends ElementLocator {
                     text = element.getValue();
                 }
             } else if (child instanceof Element) {
-                elelement.elements.add(parse((Element) element.getChild(i)));
+                elelement.getElements().add(
+                    parse((Element) element.getChild(i)));
             }
         }
 
-        if (elelement.elements.isEmpty()) {
-            elelement.text = text;
+        if (elelement.getElements().isEmpty()) {
+            elelement.setText(text);
         }
 
         return elelement;
@@ -116,9 +121,10 @@ public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Prints given <code>element</code> to a new Document.
+     *
+     * @param element the element to be printed
+     * @return a new Document to which <code>element</code> has been printed.
      */
     public static Document print(final ELElement element) {
 
@@ -136,9 +142,10 @@ public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param child
-     * @param document 
+     * Prints given <code>child</code> to specified <code>document</code>.
+     *
+     * @param child the root element to be printed
+     * @param document the document to which <code>child</code> is printed.
      */
     public static void print(final ELElement child, final Document document) {
 
@@ -155,10 +162,11 @@ public class XOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param child
-     * @param namesapces
-     * @param parent
+     * Prints given <code>child</code> to specified <code>parent</code>.
+     *
+     * @param child child
+     * @param parent parent
+     * @param namesapces namespaces
      */
     private static void print(final ELElement child, final ParentNode parent,
                               final Map namesapces) {
@@ -176,7 +184,7 @@ public class XOMElementLocator extends ElementLocator {
         }
 
         final Element element = new Element(
-            getQualifiedName(child, namesapces), child.namespaceURI);
+            getQualifiedName(child, namesapces), child.getNamespaceURI());
 
         if (parent instanceof Document) {
             final Element previousRoot = ((Document) parent).getRootElement();
@@ -185,23 +193,24 @@ public class XOMElementLocator extends ElementLocator {
             parent.appendChild(element);
         }
 
-        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+        for (Iterator i = child.getAttributes().values().iterator();
+             i.hasNext();) {
             final ELAttribute elattribute = (ELAttribute) i.next();
             final Attribute attribute = new Attribute(
                 getQualifiedName(elattribute, namesapces),
-                elattribute.namespaceURI, elattribute.value);
+                elattribute.getNamespaceURI(), elattribute.getValue());
             element.addAttribute(attribute);
         }
 
-        if (!child.elements.isEmpty()) {
-            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+        if (!child.getElements().isEmpty()) {
+            for (Iterator i = child.getElements().iterator(); i.hasNext();) {
                 print((ELElement) i.next(), element, namesapces);
             }
             return;
         }
 
-        if (child.text != null) {
-            element.appendChild(child.text);
+        if (child.getText() != null) {
+            element.appendChild(child.getText());
         }
     }
 

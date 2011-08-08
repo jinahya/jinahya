@@ -69,13 +69,13 @@ public class ELElement extends ELNode {
             throw new NullPointerException("null set");
         }
 
-        namespaceURIs.add(namespaceURI);
+        namespaceURIs.add(getNamespaceURI());
 
-        for (Iterator i = attributes.values().iterator(); i.hasNext();) {
-            namespaceURIs.add(((ELAttribute) i.next()).namespaceURI);
+        for (Iterator i = getAttributes().values().iterator(); i.hasNext();) {
+            namespaceURIs.add(((ELAttribute) i.next()).getNamespaceURI());
         }
 
-        for (Iterator i = elements.iterator(); i.hasNext();) {
+        for (Iterator i = getElements().iterator(); i.hasNext();) {
             ((ELElement) i.next()).getNamespaceURIs(namespaceURIs);
         }
 
@@ -92,14 +92,14 @@ public class ELElement extends ELNode {
 
 
         buffer.append(toJSONString("namespaceURI")).append(":").
-            append(toJSONString(namespaceURI));
+            append(toJSONString(getNamespaceURI()));
 
         buffer.append(",").append(toJSONString("localName")).append(":").
-            append(toJSONString(localName));
+            append(toJSONString(getLocalName()));
 
 
         buffer.append(",").append(toJSONString("attributes")).append(":[");
-        final Iterator i = attributes.values().iterator();
+        final Iterator i = getAttributes().values().iterator();
         if (i.hasNext()) {
             buffer.append(((ELAttribute) i.next()).toJSON());
         }
@@ -110,11 +110,11 @@ public class ELElement extends ELNode {
 
 
         buffer.append(",").append(toJSONString("text")).append(":").
-            append(toJSONString(text));
+            append(toJSONString(getText()));
 
 
         buffer.append(",").append(toJSONString("elements")).append(":[");
-        final Iterator j = elements.iterator();
+        final Iterator j = getElements().iterator();
         if (j.hasNext()) {
             buffer.append(((ELElement) j.next()).toJSON());
         }
@@ -130,15 +130,45 @@ public class ELElement extends ELNode {
     }
 
 
+    public String getText() {
+        return text;
+    }
+
+
+    public void setText(final String text) {
+        this.text = text;
+    }
+
+
+    public Map getAttributes() {
+
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
+
+        return attributes;
+    }
+
+
+    public List getElements() {
+
+        if (elements == null) {
+            elements = new ArrayList();
+        }
+
+        return elements;
+    }
+
+
     /** attributes. */
-    protected final Map attributes = new HashMap(); // <String, ELAttribute>
+    private Map attributes;
 
 
     /** text. */
-    protected String text = null;
+    private String text = null;
 
 
     /** elements. */
-    protected final List elements = new ArrayList(); // <Element>
+    private List elements;
 }
 

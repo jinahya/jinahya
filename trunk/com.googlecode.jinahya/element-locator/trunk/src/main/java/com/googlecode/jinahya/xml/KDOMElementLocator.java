@@ -27,16 +27,20 @@ import org.kxml2.kdom.Node;
 
 
 /**
+ * A kXML2 implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://kxml.sourceforge.net/kxml2/">kXML2</a>
  */
 public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param document
-     * @return 
+     * Parses given <code>document</code> and creates a new ElementLocator
+     * instance.
+     *
+     * @param document document to parse
+     * @return a new ElementLocator instance.
      */
     public static ElementLocator parse(final Document document) {
 
@@ -54,9 +58,10 @@ public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given <code>element</code>.
+     *
+     * @param element element to parse
+     * @return a new ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -83,7 +88,7 @@ public class KDOMElementLocator extends ElementLocator {
             }
             final String attributeLocalName = element.getAttributeName(i);
             final String attributeValue = element.getAttributeValue(i);
-            elelement.attributes.put(
+            elelement.getAttributes().put(
                 ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -101,15 +106,16 @@ public class KDOMElementLocator extends ElementLocator {
                     }
                     break;
                 case Node.ELEMENT:
-                    elelement.elements.add(parse((Element) element.getChild(i)));
+                    elelement.getElements().add(
+                        parse((Element) element.getChild(i)));
                     break;
                 default:
                     break;
             }
         }
 
-        if (elelement.elements.isEmpty()) {
-            elelement.text = text;
+        if (elelement.getElements().isEmpty()) {
+            elelement.setText(text);
         }
 
         return elelement;
@@ -117,10 +123,10 @@ public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
+     * Prints given <code>element</code> to a new Document.
+     *
      * @param element element to print
-     * @return a new document contains to which given <code>element</code> has
-     *         been printed.
+     * @return a new document to which <code>element</code> has been printed.
      */
     public static Document print(final ELElement element) {
 
@@ -137,9 +143,10 @@ public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @param document
+     * Prints given <code>element</code> to specified <code>document</code>.
+     *
+     * @param element the element to print
+     * @param document the document to which <code>element</code> is printed.
      */
     public static void print(final ELElement element, final Document document) {
 
@@ -156,10 +163,11 @@ public class KDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param child
-     * @param namesapces
-     * @param parent
+     * Appends given <code>child</code> to specified <code>parent</code>.
+     *
+     * @param child child
+     * @param parent parent
+     * @param namesapces namespaces
      */
     private static void print(final ELElement child, final Node parent,
                               final Map namesapces) {
@@ -182,24 +190,26 @@ public class KDOMElementLocator extends ElementLocator {
         }
 
         final Element element = parent.createElement(
-            child.namespaceURI, child.localName);
+            child.getNamespaceURI(), child.getLocalName());
         parent.addChild(Node.ELEMENT, element);
 
-        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+        for (Iterator i = child.getAttributes().values().iterator();
+             i.hasNext();) {
             final ELAttribute attribute = (ELAttribute) i.next();
-            element.setAttribute(attribute.namespaceURI, attribute.localName,
-                                 attribute.value);
+            element.setAttribute(attribute.getNamespaceURI(),
+                                 attribute.getLocalName(),
+                                 attribute.getValue());
         }
 
-        if (!child.elements.isEmpty()) {
-            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+        if (!child.getElements().isEmpty()) {
+            for (Iterator i = child.getElements().iterator(); i.hasNext();) {
                 print((ELElement) i.next(), element, namesapces);
             }
             return;
         }
 
-        if (child.text != null) {
-            element.addChild(Node.TEXT, child.text);
+        if (child.getText() != null) {
+            element.addChild(Node.TEXT, child.getText());
         }
     }
 

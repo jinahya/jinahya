@@ -93,7 +93,7 @@ public abstract class ELNode {
             throw new NullPointerException("null node");
         }
 
-        return jamesClark(node.namespaceURI, node.localName);
+        return jamesClark(node.getNamespaceURI(), node.getLocalName());
     }
 
 
@@ -155,6 +155,16 @@ public abstract class ELNode {
     }
 
 
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
+
+
+    public String getLocalName() {
+        return localName;
+    }
+
+
     /**
      * Returns a JSON representation.
      *
@@ -164,10 +174,10 @@ public abstract class ELNode {
 
 
     /** name space URI. */
-    protected final String namespaceURI;
+    private final String namespaceURI;
 
 
     /** local name. */
-    protected final String localName;
+    private final String localName;
 }
 

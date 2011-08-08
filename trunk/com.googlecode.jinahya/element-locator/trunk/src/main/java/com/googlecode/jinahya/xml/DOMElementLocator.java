@@ -21,8 +21,6 @@ package com.googlecode.jinahya.xml;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,6 +30,7 @@ import org.w3c.dom.NodeList;
 
 
 /**
+ * A W3C DOM implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -39,7 +38,7 @@ public class DOMElementLocator extends ElementLocator {
 
 
     /**
-     * Creates a new instance.
+     * Parses given <code>document</code> and creates a new instance.
      *
      * @param document document
      * @return new instance of DOMElementLocator.
@@ -60,9 +59,10 @@ public class DOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given <code>element</code>.
+     *
+     * @param element element to parse
+     * @return new ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -91,7 +91,7 @@ public class DOMElementLocator extends ElementLocator {
             }
             final String attributeLocalName = attribute.getLocalName();
             final String attributeValue = attribute.getNodeValue();
-            elelement.attributes.put(
+            elelement.getAttributes().put(
                 ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -111,15 +111,15 @@ public class DOMElementLocator extends ElementLocator {
                     }
                     break;
                 case Node.ELEMENT_NODE:
-                    elelement.elements.add(parse((Element) childNode));
+                    elelement.getElements().add(parse((Element) childNode));
                     break;
                 default:
                     break;
             }
         }
 
-        if (elelement.elements.isEmpty()) {
-            elelement.text = text;
+        if (elelement.getElements().isEmpty()) {
+            elelement.setText(text);
         }
 
         return elelement;
@@ -127,34 +127,10 @@ public class DOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @param builder
-     * @return 
-     */
-    public static Document print(final ELElement element,
-                                 final DocumentBuilder builder) {
-
-        if (element == null) {
-            throw new NullPointerException("null element");
-        }
-
-        if (builder == null) {
-            throw new NullPointerException("null builder");
-        }
-
-        final Document document = builder.newDocument();
-
-        print(element, document);
-
-        return document;
-    }
-
-
-    /**
-     * 
-     * @param element
-     * @param document 
+     * Prints given <code>element</code> to specified <code>document</code>.
+     *
+     * @param element element
+     * @param document document
      */
     public static void print(final ELElement element, final Document document) {
 
@@ -171,11 +147,12 @@ public class DOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param child
-     * @param parent
-     * @param namesapces
-     * @param document
+     * Prints given <code>child</code> to <code>parent</code>.
+     *
+     * @param child child to be attached to the parent
+     * @param parent parent to which child is appended
+     * @param namesapces namespaces
+     * @param document document
      */
     private static void print(final ELElement child, final Node parent,
                               final Map namesapces, final Document document) {
@@ -197,7 +174,7 @@ public class DOMElementLocator extends ElementLocator {
         }
 
         final Element element = document.createElementNS(
-            child.namespaceURI, getQualifiedName(child, namesapces));
+            child.getNamespaceURI(), getQualifiedName(child, namesapces));
         if (parent instanceof Document) {
             final Element documentElement =
                 ((Document) parent).getDocumentElement();
@@ -207,22 +184,23 @@ public class DOMElementLocator extends ElementLocator {
         }
         parent.appendChild(element);
 
-        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+        for (Iterator i = child.getAttributes().values().iterator();
+             i.hasNext();) {
             final ELAttribute elattribute = (ELAttribute) i.next();
-            element.setAttributeNS(elattribute.namespaceURI,
+            element.setAttributeNS(elattribute.getNamespaceURI(),
                                    getQualifiedName(elattribute, namesapces),
-                                   elattribute.value);
+                                   elattribute.getValue());
         }
 
-        if (!child.elements.isEmpty()) {
-            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+        if (!child.getElements().isEmpty()) {
+            for (Iterator i = child.getElements().iterator(); i.hasNext();) {
                 print((ELElement) i.next(), element, namesapces, document);
             }
             return;
         }
 
-        if (child.text != null) {
-            element.appendChild(document.createTextNode(child.text));
+        if (child.getText() != null) {
+            element.appendChild(document.createTextNode(child.getText()));
         }
     }
 
