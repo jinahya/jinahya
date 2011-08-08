@@ -39,12 +39,12 @@ import org.w3c.dom.ls.LSSerializer;
 public class Family {
 
 
-    static InputStream getFamilyXML() {
+    static InputStream family() {
         return Family.class.getResourceAsStream("family.xml");
     }
 
 
-    static void doFamilyXML(final ElementLocator locator) {
+    static void family(final ElementLocator locator) {
 
         final String family = "http://www.example.org/family";
         final String other = "http://www.example.com/family/other";
@@ -139,7 +139,7 @@ public class Family {
         final ElementLocator locator = DOMElementLocator.parse(document);
 
 
-        doFamilyXML(locator);
+        family(locator);
 
 
         // ------------------------------------------- PRINT LOCATOR TO DOCUMENT

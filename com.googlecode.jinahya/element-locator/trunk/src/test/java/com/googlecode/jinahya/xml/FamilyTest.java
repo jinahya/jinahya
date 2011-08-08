@@ -87,7 +87,7 @@ public abstract class FamilyTest<D> {
             new ByteArrayInputStream(XML), "UTF-8");
         final ElementLocator locator = parseLocator(document);
 
-        Family.doFamilyXML(locator);
+        Family.family(locator);
 
         printLocator(locator, document);
 
