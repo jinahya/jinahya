@@ -144,8 +144,9 @@ public abstract class ElementLocator {
 
 
     /**
-     * 
-     * @return 
+     * Returns currently located element's namespace URI.
+     *
+     * @return current element's namespace URI
      */
     public final String getNamespaceURI() {
 
@@ -154,8 +155,9 @@ public abstract class ElementLocator {
 
 
     /**
-     * 
-     * @return 
+     * Returns currently located element's local name.
+     *
+     * @return current element's local name.
      */
     public final String getLocalName() {
 
@@ -169,6 +171,7 @@ public abstract class ElementLocator {
      *
      * @param localName local name
      * @return number of children
+     * @see #getChildCount(java.lang.String, java.lang.String) 
      */
     public final int getChildCount(final String localName) {
 
@@ -192,7 +195,7 @@ public abstract class ElementLocator {
      * @param namespaceURI The namespace URI.
      * @param localName The local name.
      * @return child count
-     * @see #getCount(String) 
+     * @see #getChildCount(String) 
      */
     public final int getChildCount(final String namespaceURI,
                                    final String localName) {
@@ -254,7 +257,7 @@ public abstract class ElementLocator {
      * @param localName element's local name
      * @param index child element index
      * @return self
-     * @see #child(java.lang.String, java.lang.String, int)
+     * @see #locateChild(java.lang.String, java.lang.String, int)
      */
     public final ElementLocator locateChild(final String localName,
                                             final int index) {
@@ -273,7 +276,7 @@ public abstract class ElementLocator {
      * @param localName element's local name
      * @param index target index to locate
      * @return self
-     * @see #child(String, int) 
+     * @see #locateChild(String, int) 
      */
     public final ElementLocator locateChild(final String namespaceURI,
                                             final String localName,

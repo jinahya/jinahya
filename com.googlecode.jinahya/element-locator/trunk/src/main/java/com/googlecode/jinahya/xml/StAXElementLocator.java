@@ -30,10 +30,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 
 /**
- * A XOM implementation.
+ * A StAX implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @see <a href="http://www.xom.nu/">XOM</a>
  */
 public class StAXElementLocator extends ElementLocator {
 
