@@ -32,8 +32,10 @@ import org.dom4j.QName;
 
 
 /**
+ * A dom4j implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://dom4j.sourceforge.net/">dom4j</a>
  */
 public class DOM4JElementLocator extends ElementLocator {
 
@@ -60,9 +62,10 @@ public class DOM4JElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Parses given <code>element</code>.
+     *
+     * @param element element to parse
+     * @return a new ELElement
      */
     private static ELElement parse(final Element element) {
 
@@ -92,7 +95,7 @@ public class DOM4JElementLocator extends ElementLocator {
             }
             final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
-            elelement.attributes.put(
+            elelement.getAttributes().put(
                 ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -111,56 +114,47 @@ public class DOM4JElementLocator extends ElementLocator {
                     }
                     break;
                 case Node.ELEMENT_NODE:
-                    elelement.elements.add(parse((Element) node));
+                    elelement.getElements().add(parse((Element) node));
                     break;
                 default:
                     break;
             }
         }
 
-        if (elelement.elements.isEmpty()) {
-            elelement.text = text;
+        if (elelement.getElements().isEmpty()) {
+            elelement.setText(text);
         }
 
         return elelement;
     }
 
 
-    /**
-     * 
-     * @param element
-     * @return 
-     */
-    public static Document print(final ELElement element) {
+    public static Document print(final ElementLocator locator) {
 
-        if (element == null) {
-            throw new NullPointerException("null element");
+        if (locator == null) {
+            throw new NullPointerException("null locator");
         }
 
         final Document document = DocumentHelper.createDocument();
 
-        print(element, document);
+        print(locator, document);
 
         return document;
     }
 
 
-    /**
-     * Prints given <code>element</code> to specified <code>document</code>.
-     *
-     * @param element the root element to print
-     * @param document the document to which the element is printed.
-     */
-    public static void print(final ELElement element, final Document document) {
+    public static void print(final ElementLocator locator,
+                             final Document document) {
 
-        if (element == null) {
-            throw new NullPointerException("null element");
+        if (locator == null) {
+            throw new NullPointerException("null locator");
         }
 
         if (document == null) {
             throw new NullPointerException("null document");
         }
 
+        final ELElement element = locator.getRoot();
         print(element, document, getNamespaces(element));
     }
 
@@ -196,28 +190,30 @@ public class DOM4JElementLocator extends ElementLocator {
         }
 
         final Element element = parent.addElement(
-            getQualifiedName(child, namesapces), child.namespaceURI);
+            getQualifiedName(child, namesapces), child.getNamespaceURI());
 
-        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+        for (Iterator i = child.getAttributes().values().iterator();
+             i.hasNext();) {
             final ELAttribute elattribute = (ELAttribute) i.next();
             final Namespace namespace = new Namespace(
-                (String) namesapces.get(elattribute.namespaceURI),
-                elattribute.namespaceURI);
+                (String) namesapces.get(elattribute.getNamespaceURI()),
+                elattribute.getNamespaceURI());
             final QName qName = new QName(
-                elattribute.localName, namespace,
+                elattribute.getLocalName(), namespace,
                 getQualifiedName(elattribute, namesapces));
-            element.addAttribute(qName, elattribute.value);
+            element.addAttribute(qName, elattribute.getValue());
         }
 
-        if (!child.elements.isEmpty()) {
-            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+        if (!child.getElements().isEmpty()) {
+            for (Iterator i = child.getElements().iterator(); i.hasNext();) {
                 print((ELElement) i.next(), element, namesapces);
             }
             return;
         }
 
-        if (child.text != null) {
-            element.setText(child.text);
+        final String text = child.getText();
+        if (text != null) {
+            element.setText(text);
         }
     }
 

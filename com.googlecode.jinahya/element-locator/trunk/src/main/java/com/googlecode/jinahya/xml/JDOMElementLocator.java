@@ -31,8 +31,10 @@ import org.jdom.Text;
 
 
 /**
+ * A JDOM implementation.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @see <a href="http://www.jdom.org/">JDOM</a>
  */
 public class JDOMElementLocator extends ElementLocator {
 
@@ -90,7 +92,7 @@ public class JDOMElementLocator extends ElementLocator {
             }
             final String attributeLocalName = attribute.getName();
             final String attributeValue = attribute.getValue();
-            elelement.attributes.put(
+            elelement.getAttributes().put(
                 ELNode.jamesClark(attributeNamespaceURI, attributeLocalName),
                 new ELAttribute(attributeNamespaceURI, attributeLocalName,
                                 attributeValue));
@@ -106,12 +108,12 @@ public class JDOMElementLocator extends ElementLocator {
                     text = ((Text) child).getText();
                 }
             } else if (child instanceof Element) {
-                elelement.elements.add(parse((Element) child));
+                elelement.getElements().add(parse((Element) child));
             }
         }
 
-        if (elelement.elements.isEmpty()) {
-            elelement.text = text;
+        if (elelement.getElements().isEmpty()) {
+            elelement.setText(text);
         }
 
         return elelement;
@@ -119,9 +121,10 @@ public class JDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @return 
+     * Prints given <code>element</code> to a new Document.
+     *
+     * @param element element to print
+     * @return a new Document
      */
     public static Document print(final ELElement element) {
 
@@ -138,9 +141,10 @@ public class JDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param element
-     * @param document 
+     * Prints given <code>element</code> to specified <code>document</code>.
+     *
+     * @param element element to print
+     * @param document document to which the element is printed
      */
     public static void print(final ELElement element, final Document document) {
 
@@ -157,10 +161,11 @@ public class JDOMElementLocator extends ElementLocator {
 
 
     /**
-     * 
-     * @param child
-     * @param namespaces
-     * @param parent 
+     * Appends given <code>child</code> to <code>parent</code>.
+     *
+     * @param child child element
+     * @param parent parent
+     * @param namespaces namespaces
      */
     private static void print(final ELElement child, final Parent parent,
                               final Map namespaces) {
@@ -178,7 +183,7 @@ public class JDOMElementLocator extends ElementLocator {
         }
 
         final Element element = new Element(
-            child.localName, child.namespaceURI);
+            child.getLocalName(), child.getNamespaceURI());
 
         if (parent instanceof Document) {
             final Document document = (Document) parent;
@@ -190,32 +195,33 @@ public class JDOMElementLocator extends ElementLocator {
             ((Element) parent).addContent(element);
         }
 
-        for (Iterator i = child.attributes.values().iterator(); i.hasNext();) {
+        for (Iterator i = child.getAttributes().values().iterator();
+             i.hasNext();) {
             final ELAttribute elattribute = (ELAttribute) i.next();
-            if (elattribute.namespaceURI.equals(ELNode.NULL_NS_URI)) {
+            if (elattribute.getNamespaceURI().equals(ELNode.NULL_NS_URI)) {
                 final Attribute attribute = new Attribute(
-                    elattribute.localName, elattribute.value,
+                    elattribute.getLocalName(), elattribute.getValue(),
                     Namespace.NO_NAMESPACE);
                 element.setAttribute(attribute);
                 continue;
             }
             final Namespace namespace = Namespace.getNamespace(
-                (String) namespaces.get(elattribute.namespaceURI),
-                elattribute.namespaceURI);
+                (String) namespaces.get(elattribute.getNamespaceURI()),
+                elattribute.getNamespaceURI());
             final Attribute attribute = new Attribute(
-                elattribute.localName, elattribute.value, namespace);
+                elattribute.getLocalName(), elattribute.getValue(), namespace);
             element.setAttribute(attribute);
         }
 
-        if (!child.elements.isEmpty()) {
-            for (Iterator i = child.elements.iterator(); i.hasNext();) {
+        if (!child.getElements().isEmpty()) {
+            for (Iterator i = child.getElements().iterator(); i.hasNext();) {
                 print((ELElement) i.next(), element, namespaces);
             }
             return;
         }
 
-        if (child.text != null) {
-            element.setText(child.text);
+        if (child.getText() != null) {
+            element.setText(child.getText());
         }
     }
 

@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.xml;
 
 
+import java.io.InputStream;
+
 import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMConfiguration;
@@ -35,6 +37,82 @@ import org.w3c.dom.ls.LSSerializer;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class Family {
+
+
+    static InputStream getFamilyXML() {
+        return Family.class.getResourceAsStream("family.xml");
+    }
+
+
+    static void printFamilyXML(final ElementLocator locator) {
+
+        final String family = "http://www.example.org/family";
+        final String other = "http://www.example.com/family/other";
+
+        final String namespaceURI = locator.getNamespaceURI(); // family
+        final String localName = locator.getLocalName(); // "grandparent"
+        final String grandparentAge = locator.getAttribute("age"); // "100"
+        System.out.println("/:grandparent/@age -> " + grandparentAge);
+
+        final int parentCount = locator.getChildCount(family, "parent");
+        for (int i = 0; i < parentCount; i++) {
+
+            locator.locateChild(family, "parent", i);
+
+            final String parentAge = locator.getAttribute("age"); // "50";
+            System.out.println(
+                "/:grandparent/:parent[" + (i + 1) + "]/@age -> " + parentAge);
+
+            final int childCount = locator.getChildCount(family, "child");
+            for (int j = 0; j < childCount; j++) {
+
+                locator.locateChild(family, "child", j);
+
+                final String childAge = locator.getAttribute("age");
+                System.out.println(
+                    "/:grandparent/:parent[" + (i + 1) + "]/:child[" + (j + 1)
+                    + "]/@age -> " + childAge);
+
+                final int grandChildCount =
+                    locator.getChildCount(family, "grandchild");
+                for (int k = 0; k < grandChildCount; k++) {
+
+                    locator.locateChild(family, "grandchild", k);
+
+                    final String gender = locator.getAttribute(other, "gender");
+                    System.out.println(
+                        "/:grandparent/:parent[" + (i + 1) + "]/:child["
+                        + (j + 1) + "]/:grandchild/@o:gender -> " + gender);
+
+                    final String name = locator.getText();
+                    System.out.println(
+                        "/:grandparent/:parent[" + (i + 1) + "]/:child["
+                        + (j + 1) + "]/:grandchild/text() -> " + name);
+
+                    locator.locateParent();
+                }
+
+                final int spouseCount = locator.getChildCount(other, "spouse");
+                for (int k = spouseCount - 1; k >= 0; k--) {
+
+                    locator.locateChild(other, "spouse", k);
+
+                    final String spouseName =
+                        locator.getAttribute(other, "name");
+                    System.out.println(
+                        "/:grandparent/:parent[" + (i + 1) + "]/:child["
+                        + (j + 1) + "]/o:spouse[" + (k + 1) + "]/@o:name -> "
+                        + spouseName);
+
+                    locator.locateParent();
+                }
+
+                locator.locateParent();
+            }
+
+            locator.locateParent();
+        }
+    }
 
 
     public static void main(String[] args) throws Exception {
@@ -55,68 +133,8 @@ public class Family {
         // ----------------------------------------- PARSE LOCATOR FROM DOCUMENT
         final ElementLocator locator = DOMElementLocator.parse(document);
 
-        final String family = "http://www.example.org/family";
-        final String other = "http://www.example.com/family/other";
 
-        final String namespaceURI = locator.getNamespaceURI(); // family
-        final String localName = locator.getLocalName(); // "grandparent"
-        final String grandparentAge = locator.getAttribute("age"); // "100"
-        System.out.println("/:grandparent/@age -> " + grandparentAge);
-
-        locator.locateChild(family, "parent", 0);
-        final String parentAge = locator.getAttribute("age"); // "50";
-        System.out.println("/:grandparent/:parent[1]/@age -> " + parentAge);
-
-        final int childCount = locator.getChildCount(family, "child");
-        for (int i = 0; i < childCount; i++) {
-
-            locator.locateChild(family, "child", i);
-
-            final String childAge = locator.getAttribute("age");
-            System.out.println(
-                "/:grandparent/:parent[1]/:child[" + (i + 1) + "]/@age -> "
-                + childAge);
-
-            final int grandChildCount =
-                locator.getChildCount(family, "grandchild");
-            for (int j = 0; j < grandChildCount; j++) {
-
-                locator.locateChild(family, "grandchild", j);
-
-                final String gender = locator.getAttribute(other, "gender");
-                System.out.println(
-                    "/:grandparent/:parent[1]/:child[" + (i + 1)
-                    + "]/:grandchild/@o:gender -> " + gender);
-                locator.setAttribute(other, "gender", null); // remove attribute
-
-                final String name = locator.getText();
-                System.out.println("/:grandparent/:parent[1]/:child[" + (i + 1)
-                                   + "]/:grandchild/text() -> " + name);
-                locator.setText(null); // remove text
-
-                locator.locateParent();
-            }
-
-            final int spouseCount = locator.getChildCount(other, "spouse");
-            for (int j = spouseCount - 1; j >= 0; j--) {
-                locator.locateChild(other, "spouse", j);
-
-                final String spouseName = locator.getAttribute(other, "name");
-                System.out.println(
-                    "/:grandparent/:parent[1]/:child[" + (i + 1)
-                    + "]/o:spouse[" + (j + 1) + "]/@o:name -> "
-                    + spouseName);
-                locator.setAttribute(other, "spouse", null); // remove attribute
-
-                if (j > 0) {
-                    locator.removeCurrent();
-                } else {
-                    locator.locateParent();
-                }
-            }
-
-            locator.locateParent();
-        }
+        printFamilyXML(locator);
 
 
         // ------------------------------------------- PRINT LOCATOR TO DOCUMENT

@@ -61,7 +61,7 @@ public class DOM4JFamilyTest extends FamilyTest<Document> {
                                 final Document document)
         throws Exception {
 
-        DOM4JElementLocator.print(locator.getRoot(), document);
+        DOM4JElementLocator.print(locator, document);
     }
 
 
