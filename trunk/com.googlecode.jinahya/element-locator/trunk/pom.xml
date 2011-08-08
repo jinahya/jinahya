@@ -206,7 +206,7 @@
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
                 <links>
-                  <link>http://download.java.net/jdk7/docs/api/</link>
+                  <link>http://download.java.net/javase/7/docs/api</link>
                   <link>http://kxml.sourceforge.net/kxml2/javadoc/</link>
                   <link>http://www.jdom.org/docs/apidocs/</link>
                   <link>http://www.xom.nu/apidocs/</link>
