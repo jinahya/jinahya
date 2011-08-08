@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -78,68 +77,17 @@ public abstract class FamilyTest<D> {
 
     protected abstract void printDocument(D document, OutputStream target,
                                           String charsetName)
-        throws IOException;
+        throws Exception;
 
 
     @Test
     public void test() throws Exception {
 
-        final D document = parseDocument(new ByteArrayInputStream(XML), "UTF-8");
+        final D document = parseDocument(
+            new ByteArrayInputStream(XML), "UTF-8");
         final ElementLocator locator = parseLocator(document);
 
-
-        final String family = "http://www.example.org/family";
-
-        final String other = "http://www.example.com/family/other";
-
-
-        // located to /:grandparent
-        Assert.assertEquals(locator.getNamespaceURI(), family);
-        Assert.assertEquals(locator.getLocalName(), "grandparent");
-        Assert.assertEquals(locator.getAttribute("age"), "100");
-
-        // locate to /:grandparent/:parent[1]
-        locator.locateChild(family, "parent", 0);
-        Assert.assertEquals(locator.getAttribute("age"), "50");
-
-        // /:grandparent/:parent/:child[N]
-        final int childCount = locator.getChildCount(family, "child");
-        for (int i = 0; i < childCount; i++) {
-
-            locator.locateChild(family, "child", i);
-            final String age = locator.getAttribute(family, "age");
-
-            // /:grandparent/:parent/:child[N]/:grandchild
-            final int grandChildCount =
-                locator.getChildCount(family, "grandchild");
-            for (int j = 0; j < grandChildCount; j++) {
-                locator.locateChild(family, "grandchild", j);
-                final String gender = locator.getAttribute(other, "gender");
-                locator.setAttribute(other, "gender", null); // remove attribute
-                System.out.println("gender: " + gender);
-                final String name = locator.getText();
-                System.out.println("name: " + name);
-                locator.setText(null); // remove text
-                locator.locateParent();
-            }
-
-            // /:grandparent/:parent/:child/o:spouse
-            final int spouseCount = locator.getChildCount(other, "spouse");
-            for (int j = spouseCount - 1; j >= 0; j--) {
-                locator.locateChild(other, "spouse", j);
-                final String spouseName = locator.getAttribute(other, "name");
-                locator.setAttribute(other, "spouse", null); // remove attribute
-                System.out.println("spouseName: " + spouseName);
-                if (j > 0) {
-                    locator.removeCurrent();
-                } else {
-                    locator.locateParent();
-                }
-            }
-
-            locator.locateParent();
-        }
-
+        Family.doFamilyXML(locator);
 
         printLocator(locator, document);
 

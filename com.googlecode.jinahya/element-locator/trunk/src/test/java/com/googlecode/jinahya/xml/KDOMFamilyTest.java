@@ -18,24 +18,35 @@
 package com.googlecode.jinahya.xml;
 
 
-import java.io.IOException;
-
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.kxml2.kdom.Document;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class JDOMFamilyTest extends FamilyTest<Document> {
+public class KDOMFamilyTest extends FamilyTest<Document> {
+
+
+    private static final XmlPullParserFactory FACTORY;
+
+
+    static {
+        try {
+            FACTORY = XmlPullParserFactory.newInstance();
+            FACTORY.setNamespaceAware(true);
+        } catch (XmlPullParserException xppe) {
+            throw new InstantiationError(xppe.getMessage());
+        }
+    }
 
 
     @Override
@@ -43,8 +54,13 @@ public class JDOMFamilyTest extends FamilyTest<Document> {
                                      final String charsetName)
         throws Exception {
 
-        return new SAXBuilder().build(
-            new InputStreamReader(source, charsetName));
+        final XmlPullParser parser = FACTORY.newPullParser();
+        parser.setInput(source, charsetName);
+
+        final Document document = new Document();
+        document.parse(parser);
+
+        return document;
     }
 
 
@@ -52,7 +68,7 @@ public class JDOMFamilyTest extends FamilyTest<Document> {
     protected ElementLocator parseLocator(final Document document)
         throws Exception {
 
-        return JDOMElementLocator.parse(document);
+        return KDOMElementLocator.parse(document);
     }
 
 
@@ -61,7 +77,7 @@ public class JDOMFamilyTest extends FamilyTest<Document> {
                                 final Document document)
         throws Exception {
 
-        JDOMElementLocator.print(locator, document);
+        KDOMElementLocator.print(locator, document);
     }
 
 
@@ -71,10 +87,11 @@ public class JDOMFamilyTest extends FamilyTest<Document> {
                                  final String charsetName)
         throws Exception {
 
-        final XMLOutputter outputter = new XMLOutputter();
-        final Writer writer = new OutputStreamWriter(target, charsetName);
-        outputter.output(document, writer);
-        writer.flush();
+        final XmlSerializer serializer = FACTORY.newSerializer();
+        serializer.setOutput(target, charsetName);
+
+        document.write(serializer);
+        serializer.flush();
     }
 }
 
