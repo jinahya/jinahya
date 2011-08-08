@@ -220,8 +220,8 @@ public class DependencyResolver {
                     continue;
                 }
 
-                final Vector dependencies_ = findDependencies(auxiliary, target);
-                for (Enumeration j = dependencies_.elements(); j.hasMoreElements();) {
+                final Vector subdeps = findDependencies(auxiliary, target);
+                for (Enumeration j = subdeps.elements(); j.hasMoreElements();) {
                     final Vector path = (Vector) j.nextElement();
                     path.insertElementAt(source, 0);
                     dependencies.addElement(path);
@@ -233,6 +233,7 @@ public class DependencyResolver {
     }
 
 
+    /** table. */
     private final Hashtable table; // <String, List<String>>
 }
 
