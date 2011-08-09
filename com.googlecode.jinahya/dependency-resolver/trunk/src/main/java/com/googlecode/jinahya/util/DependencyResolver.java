@@ -18,9 +18,11 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -36,7 +38,7 @@ public class DependencyResolver {
     public DependencyResolver() {
         super();
 
-        table = new Hashtable();
+        map = new HashMap();
     }
 
 
@@ -46,10 +48,10 @@ public class DependencyResolver {
             throw new NullPointerException("null source");
         }
 
-        synchronized (table) {
+        synchronized (map) {
 
-            if (!table.containsKey(source)) {
-                table.put(source, new Vector());
+            if (!map.containsKey(source)) {
+                map.put(source, new ArrayList());
             }
         }
     }
@@ -76,17 +78,23 @@ public class DependencyResolver {
                 "self dependency: " + source + " -> " + target);
         }
 
-        synchronized (table) {
+        if (hasDependency(target, source)) {
+            throw new IllegalStateException(
+                "cyclic dependency: " + source + " -> [" + target + " -> "
+                + source + "]");
+        }
 
-            Vector targets = (Vector) table.get(source);
+        synchronized (map) {
+
+            List targets = (List) map.get(source);
 
             if (targets == null) {
-                targets = new Vector();
-                table.put(source, targets);
+                targets = new ArrayList();
+                map.put(source, targets);
             }
 
             if (!targets.contains(target)) {
-                targets.addElement(target);
+                targets.add(target);
             }
         }
     }
@@ -114,16 +122,16 @@ public class DependencyResolver {
                 "self dependency: " + source + " -> " + target);
         }
 
-        synchronized (table) {
+        synchronized (map) {
 
-            final Vector targets = (Vector) table.get(source);
+            final List targets = (List) map.get(source);
 
             if (targets == null) {
                 return;
             }
 
-            if (targets.removeElement(target) && targets.isEmpty()) {
-                table.remove(source);
+            if (targets.remove(target) && targets.isEmpty()) {
+                map.remove(source);
             }
         }
     }
@@ -152,9 +160,9 @@ public class DependencyResolver {
                 "self dependency: " + source + " -> " + target);
         }
 
-        synchronized (table) {
+        synchronized (map) {
 
-            final Vector targets = (Vector) table.get(source);
+            final List targets = (List) map.get(source);
 
             if (targets == null) {
                 return false;
@@ -164,8 +172,8 @@ public class DependencyResolver {
                 return true;
             }
 
-            for (Enumeration i = targets.elements(); i.hasMoreElements();) {
-                if (hasDependency((String) i.nextElement(), target)) {
+            for (Iterator i = targets.iterator(); i.hasNext();) {
+                if (hasDependency((String) i.next(), target)) {
                     return true;
                 }
             }
@@ -183,7 +191,7 @@ public class DependencyResolver {
      * @param target target
      * @return a list of array which each is a found path
      */
-    public Vector findDependencies(final String source, final String target) {
+    public List findDependencies(final String source, final String target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -198,33 +206,33 @@ public class DependencyResolver {
                 "self dependency: " + source + " -> " + target);
         }
 
-        synchronized (table) {
+        synchronized (map) {
 
-            final Vector dependencies = new Vector();
+            final List dependencies = new ArrayList();
 
-            final Vector targets = (Vector) table.get(source);
+            final List targets = (List) map.get(source);
 
             if (targets == null) {
                 return dependencies;
             }
 
-            for (Enumeration i = targets.elements(); i.hasMoreElements();) {
+            for (Iterator i = targets.iterator(); i.hasNext();) {
 
-                final String auxiliary = (String) i.nextElement();
+                final String auxiliary = (String) i.next();
 
                 if (auxiliary.equals(target)) {
-                    final Vector path = new Vector();
-                    path.addElement(source);
-                    path.addElement(auxiliary);
-                    dependencies.addElement(path);
+                    final List path = new ArrayList();
+                    path.add(source);
+                    path.add(auxiliary);
+                    dependencies.add(path);
                     continue;
                 }
 
-                final Vector subdeps = findDependencies(auxiliary, target);
-                for (Enumeration j = subdeps.elements(); j.hasMoreElements();) {
-                    final Vector path = (Vector) j.nextElement();
-                    path.insertElementAt(source, 0);
-                    dependencies.addElement(path);
+                final List dependencies_ = findDependencies(auxiliary, target);
+                for (Iterator j = dependencies_.iterator(); j.hasNext();) {
+                    final List path = (List) j.next();
+                    path.add(0, source);
+                    dependencies.add(path);
                 }
             }
 
@@ -234,6 +242,6 @@ public class DependencyResolver {
 
 
     /** table. */
-    private final Hashtable table; // <String, List<String>>
+    private final Map map; // <String, List<String>>
 }
 
