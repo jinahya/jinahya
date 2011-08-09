@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util;
 
 import java.util.Iterator;
 import java.util.List;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -91,6 +92,36 @@ public class DependencyResolverTest {
             final List<?> dependency = (List<?>) i.next();
             System.out.println(dependency);
         }
+    }
+
+
+    @Test
+    public void testHasDependency() {
+
+        final DependencyResolver resolver = new DependencyResolver();
+
+        Assert.assertFalse(resolver.hasDependency("A", "B"));
+
+        resolver.addDependency("A", "B");
+
+        Assert.assertTrue(resolver.hasDependency("A", "B"));
+
+        resolver.removeDependency("A", "B");
+
+        Assert.assertFalse(resolver.hasDependency("A", "B"));
+    }
+
+
+    @Test
+    public void testRemoveDependency() {
+
+        final DependencyResolver resolver = new DependencyResolver();
+
+        resolver.removeDependency("A", "B");
+
+        resolver.addDependency("A", "B");
+
+        resolver.removeDependency("A", "B");
     }
 }
 
