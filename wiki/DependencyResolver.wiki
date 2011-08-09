@@ -5,7 +5,7 @@
 A simple dependency resolver.
 
 = Apidocs =
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-1-SNAPSHOT/apidocs/index.html 1.0-alpha-1-SNAPSHOT]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-2-SNAPSHOT/apidocs/index.html 1.0-alpha-2-SNAPSHOT]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-1/apidocs/index.html 1.0-alpha-1]
 
 = Details =
