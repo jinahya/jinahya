@@ -4,6 +4,8 @@
 
 A simple dependency resolver.
 
+= Apidocs =
+  * [
 
 = Details =
 
