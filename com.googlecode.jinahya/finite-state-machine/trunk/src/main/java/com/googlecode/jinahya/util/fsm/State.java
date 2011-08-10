@@ -31,7 +31,7 @@ public interface State extends Serializable {
     /**
      * Constant for UNKONWN state.
      */
-    public static final State UNKNOWN = new AbstractState(-1, "UNKNOWN") {
+    public static final State UNKNOWN = new AbstractState(0, "UNKNOWN") {
 
 
         /** GENERATED. */

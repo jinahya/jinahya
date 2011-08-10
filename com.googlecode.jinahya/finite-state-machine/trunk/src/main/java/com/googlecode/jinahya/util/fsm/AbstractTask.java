@@ -22,7 +22,23 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Task {
+public abstract class AbstractTask implements Task {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param id 
+     */
+    protected AbstractTask(final String id) {
+        super();
+
+        if (id == null) {
+            throw new NullPointerException("null id");
+        }
+
+        this.id = id;
+    }
 
 
     /**
@@ -30,17 +46,13 @@ public interface Task {
      *
      * @return id
      */
-    String getId();
+    //@Override
+    public final String getId() {
+        return id;
+    }
 
 
-    /**
-     * Perform desired actions for given <code>transition</code>.
-     *
-     * @param context task context
-     * @param transition transition
-     * @throws FSMException if an error occurs.
-     */
-    void perform(TaskContext context, Transition transition)
-        throws FSMException;
+    /** id. */
+    private final String id;
 }
 
