@@ -18,54 +18,44 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.beans.PropertyChangeEvent;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Transition extends PropertyChangeEvent {
-
-
-    /** GENERATED. */
-    private static final long serialVersionUID = -2669482205992821932L;
-
-
-    /**
-     * Property name for state.
-     */
-    public static final String PROPERTY_NAME_STATE = "state";
+public class Transition {
 
 
     /**
      * Creates a new instance.
      *
-     * @param machine source machine
-     * @param sourceState source state
-     * @param targetState target state
+     * @param machine machine
+     * @param source source state
+     * @param target target state
      */
-    public Transition(final Machine machine, final State sourceState,
-                      final State targetState) {
+    public Transition(final Machine machine, final State source,
+                      final State target) {
 
-        super(machine, PROPERTY_NAME_STATE, sourceState, targetState);
+        super();
 
         if (machine == null) {
             throw new NullPointerException("null machine");
         }
 
-        if (sourceState == null) {
-            throw new NullPointerException("null sourceState");
+        if (source == null) {
+            throw new NullPointerException("null source");
         }
 
-        if (targetState == null) {
-            throw new NullPointerException("null targetState");
+        if (target == null) {
+            throw new NullPointerException("null target");
         }
 
-        if (sourceState.equals(targetState)) {
-            throw new IllegalArgumentException(
-                "sourceState is equlas to targetState");
+        if (source.equals(target)) {
+            throw new IllegalArgumentException("source is equlas to target");
         }
+
+        this.machine = machine;
+        this.source = source;
+        this.target = target;
     }
 
 
@@ -75,7 +65,7 @@ public class Transition extends PropertyChangeEvent {
      * @return the source machine
      */
     public Machine getMachine() {
-        return (Machine) super.source;
+        return machine;
     }
 
 
@@ -84,8 +74,8 @@ public class Transition extends PropertyChangeEvent {
      *
      * @return source state
      */
-    public State getSourceState() {
-        return (State) super.getOldValue();
+    public State getSource() {
+        return source;
     }
 
 
@@ -94,8 +84,8 @@ public class Transition extends PropertyChangeEvent {
      *
      * @return target state
      */
-    public State getTargetState() {
-        return (State) super.getNewValue();
+    public State getTarget() {
+        return target;
     }
 
 
@@ -111,15 +101,15 @@ public class Transition extends PropertyChangeEvent {
 
         final Transition transition = (Transition) obj;
 
-        if (!getMachine().equals(transition.getMachine())) {
+        if (!machine.equals(transition.getMachine())) {
             return false;
         }
 
-        if (!getSourceState().equals(transition.getSource())) {
+        if (!source.equals(transition.getSource())) {
             return false;
         }
 
-        if (!getTargetState().equals(transition.getTargetState())) {
+        if (!target.equals(transition.getTarget())) {
             return false;
         }
 
@@ -131,18 +121,27 @@ public class Transition extends PropertyChangeEvent {
 
         int hashCode = super.hashCode();
 
-        hashCode = 37 * hashCode + getMachine().hashCode();
+        hashCode = 37 * hashCode + machine.hashCode();
 
-        hashCode = 37 * hashCode + getSourceState().hashCode();
+        hashCode = 37 * hashCode + source.hashCode();
 
-        hashCode = 37 * hashCode + getTargetState().hashCode();
+        hashCode = 37 * hashCode + target.hashCode();
 
         return hashCode;
     }
 
 
     public String toString() {
-        return "Transition(" + getSourceState() + "->" + getTargetState() + ")";
+        return "Transition(" + source + "->" + target + ")";
     }
+
+
+    private final Machine machine;
+
+
+    private final State source;
+
+
+    private final State target;
 }
 

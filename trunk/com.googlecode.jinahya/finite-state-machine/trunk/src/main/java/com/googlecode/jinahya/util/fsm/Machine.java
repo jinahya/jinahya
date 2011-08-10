@@ -22,23 +22,23 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Machine {
+public abstract class Machine {
 
 
     /**
      * Creates a new instance.
      *
-     * @param state initial state
+     * @param context task context
      */
-    public Machine(final State state) {
+    public Machine(final TaskContext context) {
 
         super();
 
-        if (state == null) {
-            throw new NullPointerException("null state");
+        if (context == null) {
+            throw new NullPointerException("null context");
         }
 
-        this.state = state;
+        this.context = context;
     }
 
 
@@ -66,9 +66,71 @@ public class Machine {
         if (this.state.equals(state)) {
             throw new IllegalStateException("same state");
         }
+
+        if (finished) {
+            throw new IllegalStateException("already finished");
+        }
+
+        final State source = this.state;
+        this.state = state;
+        final State target = this.state;
+
+        final Transition transition = new Transition(this, source, target);
+
+        if (!started) {
+            if (!isStarting(transition)) {
+                throw new IllegalStateException("not started yet");
+            }
+            started = true;
+        }
+
+        try {
+            context.transited(transition);
+        } finally {
+            if (isFinishing(transition)) {
+                finished = true;
+            }
+        }
     }
 
 
-    private volatile State state;
+    /**
+     * 
+     * @param transition
+     * @return 
+     */
+    protected abstract boolean isStarting(Transition transition);
+
+
+    /**
+     * 
+     * @param transition
+     * @return 
+     */
+    protected abstract boolean isAllowed(Transition transition);
+
+
+    /**
+     * 
+     * @param transition
+     * @return 
+     */
+    protected abstract boolean isFinishing(Transition transition);
+
+
+    /** flag for started. */
+    private volatile boolean started = false;
+
+
+    /** flag for finished. */
+    private volatile boolean finished = false;
+
+
+    /** current state. */
+    private volatile State state = State.UNKNOWN;
+
+
+    /** task context. */
+    private final TaskContext context;
 }
 
