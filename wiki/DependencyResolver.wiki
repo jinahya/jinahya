@@ -75,7 +75,7 @@ So, what can we do with it?
 You can get a single list which is ordered as dependencies.
 {{{
 final List<String> single = resolver.getSingleGroup();
-// [R, Q, P, F, B, G, C, A, K, L, M, N, O, H, J, I]
+-> [R, Q, P, F, B, G, C, A, K, L, M, N, O, H, J, I]
 }}}
 And you can get a *_list of horizontal groups_*. Which means *_all groups must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
 {{{
