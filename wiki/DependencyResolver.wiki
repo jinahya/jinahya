@@ -90,6 +90,11 @@ final List<List<String>> groups = resolver.getHorizontalGroups();
 }}}
 You can also get a *_vertical_* groups. Which means *_each group can be processed concurrently_*  but *_all elements in a group must be processed in order_*.
 {{{
-final List<List<String>> groups = resolver.getVerticalGroups();
+// all vertical groups
+final List<List<String>> groups1 = resolver.getVerticalGroups();
 // [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
+
+// make it 3 groups in maximum
+final List<List<String>> groups2 = resolver.getVerticalGroups(3);
+// [[R, Q, P, O], [F, B, G, C, A, H], [K, L, M, N, J, I]]
 }}}
