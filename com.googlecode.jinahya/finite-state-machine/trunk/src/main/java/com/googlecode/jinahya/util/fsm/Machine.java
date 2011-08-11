@@ -22,7 +22,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Machine {
+public class Machine {
 
 
     /**
@@ -30,7 +30,7 @@ public abstract class Machine {
      *
      * @param context task context
      */
-    public Machine(final TaskContext context) {
+    public Machine(final FSMContext context) {
 
         super();
 
@@ -96,10 +96,30 @@ public abstract class Machine {
 
     /**
      * 
-     * @param transition
      * @return 
      */
-    protected abstract boolean isStarting(Transition transition);
+    public final synchronized boolean isStarted() {
+        return started;
+    }
+
+
+    /**
+     * 
+     * @return 
+     */
+    public final synchronized boolean isFinished() {
+        return finished;
+    }
+
+
+    /**
+     * 
+     * @param transition
+     * @return true
+     */
+    protected boolean isStarting(Transition transition) {
+        return true;
+    }
 
 
     /**
@@ -107,15 +127,19 @@ public abstract class Machine {
      * @param transition
      * @return 
      */
-    protected abstract boolean isAllowed(Transition transition);
+    protected boolean isAllowed(Transition transition) {
+        return true;
+    }
 
 
     /**
      * 
      * @param transition
-     * @return 
+     * @return false 
      */
-    protected abstract boolean isFinishing(Transition transition);
+    protected boolean isFinishing(Transition transition) {
+        return false;
+    }
 
 
     /** flag for started. */
@@ -131,6 +155,6 @@ public abstract class Machine {
 
 
     /** task context. */
-    private final TaskContext context;
+    private final FSMContext context;
 }
 

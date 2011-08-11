@@ -22,10 +22,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class TaskContext {
+public class FSMContext {
 
 
     private static final String INDEX_FILENAME = "fsm.index";
@@ -62,11 +62,12 @@ public class TaskContext {
     };
 
 
+    /** Default implementation. */
     protected static final ResourceLoader DEFAULT_RESOURCE_LOADER =
         new ResourceLoader() {
 
 
-            //@Override
+            @Override
             public InputStream loadResource(final ClassLoader classLoader,
                                             final String resourceName)
                 throws IOException, FSMException {
@@ -103,8 +104,8 @@ public class TaskContext {
      * @return a new instance of <code>FSMContext</code>
      * @throws FSMException if an error occurs.
      */
-    public static TaskContext newInstance(final String contextPath,
-                                          final ClassLoader classLoader)
+    public static FSMContext newInstance(final String contextPath,
+                                         final ClassLoader classLoader)
         throws FSMException {
 
         return newInstance(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
@@ -120,7 +121,7 @@ public class TaskContext {
      * @return a new instance of <code>FSMContext</code>
      * @throws FSMException if an error occurs.
      */
-    protected static TaskContext newInstance(
+    protected static FSMContext newInstance(
         final String contextPath, final ClassLoader classLoader,
         final ResourceLoader resourceLoader)
         throws FSMException {
@@ -137,9 +138,8 @@ public class TaskContext {
             throw new NullPointerException("null resourceLoader");
         }
 
-        final Set packageNames = new HashSet(); // <String>
-        final StringTokenizer tokenizer =
-            new StringTokenizer(contextPath, ":");
+        final Set<String> packageNames = new HashSet<String>();
+        final StringTokenizer tokenizer = new StringTokenizer(contextPath, ":");
         while (tokenizer.hasMoreTokens()) {
             final String packageName = tokenizer.nextToken();
             if (!packageName.trim().isEmpty()) {
@@ -150,10 +150,9 @@ public class TaskContext {
             throw new FSMException("no package names parsed");
         }
 
-        final Set taskClassSet = new LinkedHashSet();
+        final List<Class<?>> taskClassList = new ArrayList<Class<?>>();
 
-        for (final Iterator i = packageNames.iterator(); i.hasNext();) {
-            final String packageName = (String) i.next();
+        for (String packageName : packageNames) {
             final String resourceName =
                 packageName.replace('.', '/') + "/" + INDEX_FILENAME;
             try {
@@ -175,9 +174,16 @@ public class TaskContext {
                             }
                             final String className = packageName + "." + line;
                             try {
-                                final Class taskClass =
+                                final Class<?> taskClass =
                                     classLoader.loadClass(className);
-                                taskClassSet.add(taskClass);
+                                if (Task.class.isAssignableFrom(taskClass)) {
+                                    throw new FSMException(
+                                        "Task class(" + taskClass
+                                        + ") is not assignable to "
+                                        + Task.class);
+                                }
+                                taskClassList.add(
+                                    taskClass.asSubclass(Task.class));
                             } catch (ClassNotFoundException cnfe) {
                                 throw new FSMException(cnfe);
                             }
@@ -193,12 +199,12 @@ public class TaskContext {
             }
         }
 
-        if (taskClassSet.isEmpty()) {
+        if (taskClassList.isEmpty()) {
             throw new FSMException("no task classes are loaded");
         }
 
-        final Class[] taskClasses = new Class[taskClassSet.size()];
-        taskClassSet.toArray(taskClasses);
+        final Class<?>[] taskClasses = new Class<?>[taskClassList.size()];
+        taskClassList.toArray(taskClasses);
 
         return newInstance(taskClasses);
     }
@@ -211,7 +217,7 @@ public class TaskContext {
      * @return a new instance of <code>FSMContext</code>.
      * @throws FSMException if an error occurs.
      */
-    public static TaskContext newInstance(final Class[] taskClasses)
+    public static FSMContext newInstance(final Class<?>[] taskClasses)
         throws FSMException {
 
         if (taskClasses == null) {
@@ -251,7 +257,7 @@ public class TaskContext {
             }
         }
 
-        return new TaskContext(tasks);
+        return new FSMContext(tasks);
     }
 
 
@@ -260,7 +266,7 @@ public class TaskContext {
      * 
      * @param tasks tasks
      */
-    protected TaskContext(final Task[] tasks) {
+    private FSMContext(final Task[] tasks) {
         super();
 
         if (tasks == null) {
@@ -295,6 +301,6 @@ public class TaskContext {
 
 
     /** task map. */
-    private final Map tasks = new HashMap(); // <String, Task>
+    private final Map<String, Task> tasks = new HashMap<String, Task>();
 }
 

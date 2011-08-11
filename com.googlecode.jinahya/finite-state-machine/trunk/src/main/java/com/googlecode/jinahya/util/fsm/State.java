@@ -55,7 +55,7 @@ public interface State extends Serializable {
      *
      * @return integer representation
      */
-    int getValue();
+    int getCode();
 
 
     /**

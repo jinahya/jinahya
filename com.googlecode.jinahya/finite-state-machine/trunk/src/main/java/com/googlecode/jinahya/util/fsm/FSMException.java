@@ -29,16 +29,33 @@ public class FSMException extends Exception {
     private static final long serialVersionUID = 849712304649532194L;
 
 
+    /**
+     * Creates a new instance with given <code>cause</code>.
+     *
+     * @param cause cause
+     */
     public FSMException(final Throwable cause) {
         super(cause);
     }
 
 
+    /**
+     * Creates a new instance with given <code>message</code> and
+     * <code>cause</code>.
+     *
+     * @param message message
+     * @param cause cause
+     */
     public FSMException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
 
+    /**
+     * Creates a new instance with given <code>message</code>.
+     *
+     * @param message message
+     */
     public FSMException(final String message) {
         super(message);
     }

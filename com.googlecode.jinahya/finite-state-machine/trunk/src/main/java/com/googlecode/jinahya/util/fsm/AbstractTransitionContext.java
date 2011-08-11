@@ -22,37 +22,31 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class AbstractTask implements Task {
+abstract class AbstractTransitionContext implements TransitionContext {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param id 
+     * Creates a new instance
+     * @param transition 
      */
-    protected AbstractTask(final String id) {
+    protected AbstractTransitionContext(final Transition transition) {
         super();
 
-        if (id == null) {
-            throw new NullPointerException("null id");
+        if (transition == null) {
+            throw new NullPointerException("null transition");
         }
 
-        this.id = id;
+        this.transition = transition;
     }
 
 
-    /**
-     * Returns identifier.
-     *
-     * @return id
-     */
     @Override
-    public final String getId() {
-        return id;
+    public final Transition getTransition() {
+        return transition;
     }
 
 
-    /** id. */
-    private final String id;
+    /** transition. */
+    private final Transition transition;
 }
 
