@@ -30,6 +30,17 @@ which can be presented like this.
     ↓
 A → B → F
   ↘ C → G
+
+  ↗ J
+U
+  ↘ K ← L
+
+M → null
+N → null
+
+  ↗ Q ↘
+P       R
+  ↘ R ↗
 }}}
 
 You can construct a dependency resolver as follows.
