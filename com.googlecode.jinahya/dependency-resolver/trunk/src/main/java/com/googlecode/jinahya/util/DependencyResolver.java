@@ -19,8 +19,9 @@ package com.googlecode.jinahya.util;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,48 +30,18 @@ import java.util.Map;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DependencyResolver {
+public class DependencyResolver<T> {
 
 
     /**
-     * Creates a new instance.
+     * 
+     * @param source
+     * @param target 
      */
-    public DependencyResolver() {
-        super();
-
-        map = new HashMap();
-    }
-
-
-    public void addSource(final String source) {
+    public void addDependency(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
-        }
-
-        synchronized (map) {
-
-            if (!map.containsKey(source)) {
-                map.put(source, new ArrayList());
-            }
-        }
-    }
-
-
-    /**
-     * Adds a direct path from <code>source</code> to <code>target</code>.
-     *
-     * @param source source
-     * @param target target
-     */
-    public void addDependency(final String source, final String target) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("null target");
         }
 
         if (source.equals(target)) {
@@ -78,53 +49,46 @@ public class DependencyResolver {
                 "self dependency: " + source + " -> " + target);
         }
 
-        if (hasDependency(target, source)) {
-            throw new IllegalStateException(
-                "cyclic dependency: " + source + " -> [" + target + " -> "
-                + source + "]");
-        }
-
         synchronized (map) {
 
-            List targets = (List) map.get(source);
+            if (target != null && hasDependency(target, source)) {
+                throw new IllegalStateException(
+                    "cyclic dependency: " + source + " -> [" + target + " -> "
+                    + source + "]");
+            }
+
+            List<T> targets = map.get(source);
 
             if (targets == null) {
-                targets = new ArrayList();
+                targets = new ArrayList<T>();
                 map.put(source, targets);
             }
 
-            if (!targets.contains(target)) {
-                targets.add(target);
+            if (targets.contains(target)) {
+                return;
             }
+
+            targets.add(target);
         }
     }
 
 
     /**
-     * Removes direct path from <code>source</code> to <code>target</code>
-     * if exists.
+     * Remove direct dependencies from given <code>source</code> to all of
+     * specified <code>targets</code>.
      *
-     * @param source source
-     * @param target target
+     * @param source source; may not be null
+     * @param target targets; may not be null
      */
-    public void removeDependency(final String source, final String target) {
+    public void removeDependency(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
         }
 
-        if (target == null) {
-            throw new NullPointerException("null target");
-        }
-
-        if (source.equals(target)) {
-            throw new IllegalArgumentException(
-                "self dependency: " + source + " -> " + target);
-        }
-
         synchronized (map) {
 
-            final List targets = (List) map.get(source);
+            final List<T> targets = map.get(source);
 
             if (targets == null) {
                 return;
@@ -138,42 +102,40 @@ public class DependencyResolver {
 
 
     /**
-     * Checks if there is any direct or indirect path from <code>source</code>
-     * to <code>target</code>.
+     * Checks if there is any direct or indirect dependency from given
+     * <code>source</code> to specified <code>target</code>.
      *
-     * @param source source
-     * @param target target
-     * @return true if there is a path; false otherwise
+     * @param source source; may not be null
+     * @param target target; may be null
+     * @return true if there is a dependency; false otherwise
      */
-    public boolean hasDependency(final String source, final String target) {
+    public boolean hasDependency(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
         }
 
         if (target == null) {
-            throw new NullPointerException("null target");
-        }
-
-        if (source.equals(target)) {
-            throw new IllegalArgumentException(
-                "self dependency: " + source + " -> " + target);
+            throw new NullPointerException("null targets");
         }
 
         synchronized (map) {
 
-            final List targets = (List) map.get(source);
+            final List<T> list = map.get(source);
 
-            if (targets == null) {
+            if (list == null) {
                 return false;
             }
 
-            if (targets.contains(target)) {
+            if (list.contains(target)) {
                 return true;
             }
 
-            for (Iterator i = targets.iterator(); i.hasNext();) {
-                if (hasDependency((String) i.next(), target)) {
+            for (T auxiliary : list) {
+                if (auxiliary == null) {
+                    continue;
+                }
+                if (hasDependency(auxiliary, target)) {
                     return true;
                 }
             }
@@ -184,64 +146,208 @@ public class DependencyResolver {
 
 
     /**
-     * Finds all direct or indirect paths from <code>source</code> to
-     * <code>target</code>.
+     * Finds all direct or indirect dependency paths from given
+     * <code>source</code> to specified <code>target</code>.
      *
      * @param source source
      * @param target target
      * @return a list of array which each is a found path
      */
-    public List findDependencies(final String source, final String target) {
+    public List<List<T>> findDependencyPath(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
         }
 
-        if (target == null) {
-            throw new NullPointerException("null target");
-        }
-
-        if (source.equals(target)) {
-            throw new IllegalArgumentException(
-                "self dependency: " + source + " -> " + target);
-        }
-
         synchronized (map) {
 
-            final List dependencies = new ArrayList();
+            final List<List<T>> paths = new ArrayList<List<T>>();
 
-            final List targets = (List) map.get(source);
+            final List<T> targets = map.get(source);
 
             if (targets == null) {
-                return dependencies;
+                return paths;
             }
 
-            for (Iterator i = targets.iterator(); i.hasNext();) {
+            for (T auxiliary : targets) {
 
-                final String auxiliary = (String) i.next();
+                if ((auxiliary == null && target == null)
+                    || auxiliary.equals(target)) {
 
-                if (auxiliary.equals(target)) {
-                    final List path = new ArrayList();
+                    final List<T> path = new LinkedList<T>();
                     path.add(source);
                     path.add(auxiliary);
-                    dependencies.add(path);
+                    paths.add(path);
                     continue;
                 }
 
-                final List dependencies_ = findDependencies(auxiliary, target);
-                for (Iterator j = dependencies_.iterator(); j.hasNext();) {
-                    final List path = (List) j.next();
+                if (auxiliary == null) {
+                    continue;
+                }
+
+                for (List<T> path : findDependencyPath(auxiliary, target)) {
                     path.add(0, source);
-                    dependencies.add(path);
+                    paths.add(path);
                 }
             }
 
-            return dependencies;
+            return paths;
         }
     }
 
 
-    /** table. */
-    private final Map map; // <String, List<String>>
+    /**
+     * Returns a single list of all dependencies.
+     *
+     * @return the flatten dependency list
+     */
+    public List<T> getSingleGroup() {
+
+        final List<T> group = new LinkedList<T>();
+
+        synchronized (map) {
+            for (T source : map.keySet()) {
+                getSingleGroup(source, group);
+            }
+        }
+        return group;
+    }
+
+
+    /**
+     * Flatten dependencies from given <code>source</code>.
+     *
+     * @param source source
+     * @param group group
+     */
+    private void getSingleGroup(final T source, final List<T> group) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        if (group == null) {
+            throw new NullPointerException("null group");
+        }
+
+        synchronized (map) {
+
+            if (group.contains(source)) {
+                return;
+            }
+
+            final List<T> targets = map.get(source);
+            if (targets != null) {
+                for (T target : targets) {
+                    if (target == null) {
+                        continue;
+                    }
+                    getSingleGroup(target, group);
+                }
+            }
+
+            group.add(source);
+        }
+    }
+
+
+    /**
+     * 
+     * @param maximum the maximum number groups to get; 0 for unlimited
+     * @return horizontal groups
+     */
+    public List<List<T>> getHorizontalGroups(final int maximum) {
+
+        if (maximum < 0) {
+            throw new IllegalArgumentException("negative maximum: " + maximum);
+        }
+
+        final List<List<T>> groups = new ArrayList<List<T>>();
+
+        synchronized (map) {
+
+            final List<T> single = getSingleGroup();
+
+            while (!single.isEmpty()
+                   && (maximum == 0 || (groups.size() < (maximum - 1)))) {
+
+                final List<T> group = new ArrayList<T>();
+                groups.add(group);
+
+                group.add(single.remove(0));
+
+                outer:
+                for (int i = 0; i < single.size();) {
+                    for (T g : group) {
+                        if (hasDependency(single.get(i), g)) {
+                            group.add(single.remove(i));
+                            continue outer;
+                        }
+                    }
+                    for (int j = i + 1; j < single.size(); j++) {
+                        if (!hasDependency(single.get(j), single.get(i))) {
+                            continue;
+                        }
+                        for (T g : group) {
+                            if (hasDependency(single.get(j), g)) {
+                                group.add(single.remove(i));
+                                continue outer;
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+
+            if (!single.isEmpty()) {
+                groups.add(single);
+            }
+        }
+
+        return groups;
+    }
+
+
+    public List<List<T>> getVerticalGroups(final int maximum) {
+
+        if (maximum < 0) {
+            throw new IllegalArgumentException("negative maximum: " + maximum);
+        }
+
+        final List<List<T>> groups = new ArrayList<List<T>>();
+
+        synchronized (map) {
+
+            final List<T> single = getSingleGroup();
+
+            while (!single.isEmpty()
+                   && (maximum == 0 || (groups.size() < (maximum - 1)))) {
+
+                final List<T> group = new ArrayList<T>();
+                groups.add(group);
+
+                outer:
+                for (int i = single.size() - 1; i >= 0; i--) {
+                    for (int j = 0; j < i; j++) {
+                        if (hasDependency(single.get(i), single.get(j))) {
+                            continue outer;
+                        }
+                    }
+                    group.add(single.remove(i));
+                }
+            }
+
+            if (!single.isEmpty()) {
+                groups.add(single);
+            }
+        }
+
+        return groups;
+    }
+
+
+    /** map. */
+    private final Map<T, List<T>> map =
+        Collections.synchronizedMap(new HashMap<T, List<T>>());
 }
 

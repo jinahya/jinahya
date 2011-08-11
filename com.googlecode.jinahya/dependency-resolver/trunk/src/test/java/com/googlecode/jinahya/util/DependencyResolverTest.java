@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.testng.Assert;
@@ -32,10 +31,37 @@ import org.testng.annotations.Test;
 public class DependencyResolverTest {
 
 
+    private static final DependencyResolver<String> RESOLVER =
+        new DependencyResolver<String>();
+
+
+    static {
+        RESOLVER.addDependency("A", "B");
+        RESOLVER.addDependency("A", "C");
+        RESOLVER.addDependency("A", null);
+
+        RESOLVER.addDependency("B", "F");
+        RESOLVER.addDependency("B", null);
+
+        RESOLVER.addDependency("C", "G");
+        RESOLVER.addDependency("C", null);
+
+        RESOLVER.addDependency("H", "B");
+
+        RESOLVER.addDependency("I", "J");
+        RESOLVER.addDependency("I", "K");
+
+        RESOLVER.addDependency("L", "K");
+
+        RESOLVER.addDependency("X", null);
+    }
+
+
     @Test
     public void testAddDependency() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         try {
             resolver.addDependency(null, "null");
@@ -44,12 +70,7 @@ public class DependencyResolverTest {
             // expected
         }
 
-        try {
-            resolver.addDependency("null", null);
-            Assert.fail("passed: null target");
-        } catch (NullPointerException npe) {
-            // expected
-        }
+        resolver.addDependency("source", null);
 
         resolver.addDependency("source", "target");
     }
@@ -58,7 +79,8 @@ public class DependencyResolverTest {
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testAddDependencyForSelfDependency() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         resolver.addDependency("A", "A");
     }
@@ -67,7 +89,8 @@ public class DependencyResolverTest {
     @Test(expectedExceptions = {IllegalStateException.class})
     public void testAddDependencyForCyclicDependency() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         resolver.addDependency("A", "B");
         resolver.addDependency("B", "C");
@@ -77,9 +100,10 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testFindDependencies() {
+    public void testFindPaths() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         resolver.addDependency("A", "C");
 
@@ -87,10 +111,9 @@ public class DependencyResolverTest {
 
         resolver.addDependency("B", "C");
 
-        final List<?> dependencies = resolver.findDependencies("A", "C");
-        for (Iterator<?> i = dependencies.iterator(); i.hasNext();) {
-            final List<?> dependency = (List<?>) i.next();
-            System.out.println(dependency);
+        final List<List<String>> paths = resolver.findDependencyPath("A", "C");
+        for (List<String> path : paths) {
+            System.out.println(path);
         }
     }
 
@@ -98,7 +121,8 @@ public class DependencyResolverTest {
     @Test
     public void testHasDependency() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         Assert.assertFalse(resolver.hasDependency("A", "B"));
 
@@ -115,13 +139,41 @@ public class DependencyResolverTest {
     @Test
     public void testRemoveDependency() {
 
-        final DependencyResolver resolver = new DependencyResolver();
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
 
         resolver.removeDependency("A", "B");
 
         resolver.addDependency("A", "B");
 
         resolver.removeDependency("A", "B");
+    }
+
+
+    @Test
+    public void testGetSingleGroup() {
+
+        System.out.println("single: " + RESOLVER.getSingleGroup());
+    }
+
+
+    @Test
+    public void testGetHorizontalGroup() {
+
+        final List<List<String>> groups = RESOLVER.getHorizontalGroups(0);
+        for (List<String> group : groups) {
+            System.out.println("horizontal: " + group);
+        }
+    }
+
+
+    @Test
+    public void testGetVerticalGroup() {
+
+        final List<List<String>> groups = RESOLVER.getVerticalGroups(0);
+        for (List<String> group : groups) {
+            System.out.println("vertical: " + group);
+        }
     }
 }
 
