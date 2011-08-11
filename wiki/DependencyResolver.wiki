@@ -28,7 +28,8 @@ which can be presented like this.
 {{{
 H
   ↘
-A → B
+A → B → F
+  ↘ C → G
 }}}
 
 You can construct a dependency resolver as follows.
