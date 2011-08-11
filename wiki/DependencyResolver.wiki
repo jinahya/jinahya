@@ -11,7 +11,7 @@ A simple dependency resolving utility.
 
 This is a very simple dependency resolving utility.
 
-With following dependency rules,
+For following dependency rules,
   * A depends on B and C
   * B depends on F
   * C depends on G
