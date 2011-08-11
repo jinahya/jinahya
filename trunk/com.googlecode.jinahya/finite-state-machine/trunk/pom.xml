@@ -197,7 +197,18 @@
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/finite-state-machine/trunk/</url>
   </scm>
   <prerequisites />
-  <repositories />
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
   <pluginRepositories />
   <distributionManagement>
     <snapshotRepository>
