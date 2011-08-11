@@ -27,6 +27,7 @@ import java.util.Map;
 
 
 /**
+ * Dependency resolving utility.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -34,9 +35,37 @@ public class DependencyResolver<T> {
 
 
     /**
-     * 
-     * @param source
-     * @param target 
+     * Adds direct dependencies from <code>source</code> to each of
+     * <code>targets</code>.
+     *
+     * @param source source; may not be null
+     * @param targets targets; may not be null; each element may be null
+     */
+    public void addDependency(final T source, final T... targets) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        if (targets == null) {
+            throw new NullPointerException("null targets");
+        }
+
+        synchronized (map) {
+
+            for (T target : targets) {
+                addDependency(source, target);
+            }
+        }
+    }
+
+
+    /**
+     * Adds a direct dependency from given <code>source</code> to specified
+     * <code>target</code>.
+     *
+     * @param source source; may not be null
+     * @param target target; may be null
      */
     public void addDependency(final T source, final T target) {
 
@@ -74,11 +103,37 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Remove direct dependencies from given <code>source</code> to all of
+     * Removes direct dependencies from specified <code>source</code> to each of
      * specified <code>targets</code>.
      *
      * @param source source; may not be null
-     * @param target targets; may not be null
+     * @param targets targets; may not be null; each element may be null
+     */
+    public void removeDependency(final T source, final T... targets) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        if (targets == null) {
+            throw new NullPointerException("null targets");
+        }
+
+        synchronized (map) {
+
+            for (T target : targets) {
+                removeDependency(source, target);
+            }
+        }
+    }
+
+
+    /**
+     * Remove a direct dependency from given <code>source</code> to specified
+     * <code>target</code>.
+     *
+     * @param source source; may not be null
+     * @param target target; may be null
      */
     public void removeDependency(final T source, final T target) {
 
@@ -102,8 +157,39 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Checks if there is any direct or indirect dependency from given
-     * <code>source</code> to specified <code>target</code>.
+     * Checks if given <code>source</code> has direct or indirect dependencies
+     * to all of <code>targets</code>.
+     *
+     * @param source source; may not be null
+     * @param targets targets; may not be null; each element may be null
+     * @return true if all targets are dependent from source; false otherwise
+     */
+    public boolean hasDependency(final T source, final T... targets) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        if (targets == null) {
+            throw new NullPointerException("null targets");
+        }
+
+        synchronized (map) {
+
+            for (T target : targets) {
+                if (!hasDependency(source, target)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+
+    /**
+     * Checks if there is any direct or indirect dependency from
+     * <code>source</code> to <code>target</code>.
      *
      * @param source source; may not be null
      * @param target target; may be null
@@ -113,10 +199,6 @@ public class DependencyResolver<T> {
 
         if (source == null) {
             throw new NullPointerException("null source");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("null targets");
         }
 
         synchronized (map) {
@@ -151,7 +233,7 @@ public class DependencyResolver<T> {
      *
      * @param source source
      * @param target target
-     * @return a list of array which each is a found path
+     * @return dependency paths from <code>source</code> to <code>target</code>.
      */
     public List<List<T>> findDependencyPath(final T source, final T target) {
 
@@ -197,9 +279,9 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a single list of all dependencies.
+     * Returns a single group of all dependencies in order.
      *
-     * @return the flatten dependency list
+     * @return a single dependency group
      */
     public List<T> getSingleGroup() {
 
@@ -252,8 +334,10 @@ public class DependencyResolver<T> {
 
 
     /**
-     * 
-     * @param maximum the maximum number groups to get; 0 for unlimited
+     * Returns a list of dependency groups which each can be processed
+     * concurrently.
+     *
+     * @param maximum the maximum number of groups; 0 for unlimited
      * @return horizontal groups
      */
     public List<List<T>> getHorizontalGroups(final int maximum) {
@@ -308,6 +392,13 @@ public class DependencyResolver<T> {
     }
 
 
+    /**
+     * Returns a list of dependency groups in order which each must be processed
+     * after previous group.
+     *
+     * @param maximum the maximum number of groups; 0 for unlimited
+     * @return vertical groups
+     */
     public List<List<T>> getVerticalGroups(final int maximum) {
 
         if (maximum < 0) {
