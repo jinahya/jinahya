@@ -6,6 +6,7 @@
 A simple dependency resolving utility.
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-5/apidocs/index.html 1.0-alpha-5]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-4/apidocs/index.html 1.0-alpha-4]
 
 = Details =
