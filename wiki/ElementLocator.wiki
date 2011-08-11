@@ -1,5 +1,5 @@
 #summary Simple (and somewhat restricted) XML parser/printer.
-#labels XML
+#labels Featured,Phase-Implementation
 
 = Introduction =
 Simple (and somewhat restricted) XML parser/printer.
