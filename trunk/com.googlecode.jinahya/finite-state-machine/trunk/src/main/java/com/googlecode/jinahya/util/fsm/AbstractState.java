@@ -26,27 +26,32 @@ public class AbstractState implements State {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = 259468593205957460L;
+    private static final long serialVersionUID = -8272795149504605574L;
 
 
     /**
      * Creates a new instance.
      *
-     * @param value state value
-     * @param name  state name
+     * @param code state value; must be a non-zero positive
+     * @param name  state name; must not be null
      */
-    public AbstractState(final int value, final String name) {
+    public AbstractState(final int code, final String name) {
         super();
+
+        if (code <= 0) {
+            throw new IllegalArgumentException("negative code: " + code);
+        }
 
         if (name == null) {
             throw new NullPointerException("null name");
         }
 
-        this.value = value;
+        this.code = code;
         this.name = name;
     }
 
 
+    @Override
     public boolean equals(final Object obj) {
 
         if (this == obj) {
@@ -59,7 +64,7 @@ public class AbstractState implements State {
 
         final State state = (State) obj;
 
-        if (value != state.getValue()) {
+        if (code != state.getCode()) {
             return false;
         }
 
@@ -71,11 +76,12 @@ public class AbstractState implements State {
     }
 
 
+    @Override
     public int hashCode() {
 
         int hashCode = 17;
 
-        hashCode = 37 * hashCode + value;
+        hashCode = 37 * hashCode + code;
 
         hashCode = 37 * hashCode + name.hashCode();
 
@@ -83,24 +89,29 @@ public class AbstractState implements State {
     }
 
 
+    @Override
     public String toString() {
-        return "State(" + name + "(" + value + "))";
+        return "State[" + name + "(" + code + ")]";
     }
 
 
-    public int getValue() {
-        return value;
+    @Override
+    public final int getCode() {
+        return code;
     }
 
 
-    public String getName() {
+    @Override
+    public final String getName() {
         return name;
     }
 
 
-    private final int value;
+    /** value. */
+    private final int code;
 
 
+    /** name. */
     private final String name;
 }
 

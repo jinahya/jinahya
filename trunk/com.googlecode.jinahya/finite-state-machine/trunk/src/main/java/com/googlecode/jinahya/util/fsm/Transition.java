@@ -64,7 +64,7 @@ public class Transition {
      *
      * @return the source machine
      */
-    public Machine getMachine() {
+    public final Machine getMachine() {
         return machine;
     }
 
@@ -74,7 +74,7 @@ public class Transition {
      *
      * @return source state
      */
-    public State getSource() {
+    public final State getSource() {
         return source;
     }
 
@@ -84,12 +84,13 @@ public class Transition {
      *
      * @return target state
      */
-    public State getTarget() {
+    public final State getTarget() {
         return target;
     }
 
 
-    public boolean equals(Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
         if (this == obj) {
             return true;
@@ -117,9 +118,10 @@ public class Transition {
     }
 
 
+    @Override
     public int hashCode() {
 
-        int hashCode = super.hashCode();
+        int hashCode = 17;
 
         hashCode = 37 * hashCode + machine.hashCode();
 
@@ -131,17 +133,21 @@ public class Transition {
     }
 
 
+    @Override
     public String toString() {
-        return "Transition(" + source + "->" + target + ")";
+        return "Transition[" + source + "->" + target + "]";
     }
 
 
+    /** source machine. */
     private final Machine machine;
 
 
+    /** old state. */
     private final State source;
 
 
+    /** new state. */
     private final State target;
 }
 

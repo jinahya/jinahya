@@ -26,9 +26,8 @@ public interface Task {
 
 
     /**
-     * Returns identifier.
-     *
-     * @return id
+     * 
+     * @return 
      */
     String getId();
 
@@ -36,11 +35,9 @@ public interface Task {
     /**
      * Perform desired actions for given <code>transition</code>.
      *
-     * @param context task context
-     * @param transition transition
+     * @param context transition context
      * @throws FSMException if an error occurs.
      */
-    void perform(TaskContext context, Transition transition)
-        throws FSMException;
+    void perform(TransitionContext context) throws FSMException;
 }
 
