@@ -12,6 +12,7 @@ A simple dependency resolving utility.
 
 This is a very simple dependency resolving utility.
 
+<wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
 For following dependency rules,
   * A depends on B and C (A depends on B and A also depends on C)
   * B depends on F
@@ -46,12 +47,6 @@ N → null
 P       R
   ↘ R ↗
 }}}
-<wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
-
-
-
-
-
 
 You can construct a dependency resolver as follows.
 {{{
