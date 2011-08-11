@@ -1,4 +1,4 @@
-#summary Small dependency resolving helper class.
+#summary A Simple dependency-resolving helper class.
 #labels Featured,Phase-Implementation
 
 = Introduction =
