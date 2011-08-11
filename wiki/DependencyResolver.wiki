@@ -56,3 +56,5 @@ You can also get a *_vertical_* groups. Which means each *_group can be processe
 final List<List<String>> groups = resolver.getVerticalGroups();
 // vertical: [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
+
+0x21b4
