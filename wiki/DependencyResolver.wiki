@@ -57,4 +57,4 @@ final List<List<String>> groups = resolver.getVerticalGroups();
 // vertical: [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
 
-\u21b4
+↖	↗	↘	↙
