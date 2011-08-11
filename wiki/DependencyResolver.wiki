@@ -46,7 +46,7 @@ You can get a single list which is ordered as dependencies.
 final List<String> single = resolver.getSingleGroup();
 // single: [F, B, G, C, A, K, L, H, X, J, I]
 }}}
-And you can get a horizontal groups. Which means every group must be processed sequentially but each element in a group can be processed concurrently.
+And you can get a horizontal groups. Which means every *_group must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
 {{{
 final List<List<String>> groups = resolver.getHorizontalGroups();
 // horizontal: [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
