@@ -193,7 +193,7 @@ public class DependencyResolverTest {
 
         System.out.println("vertical(0): " + RESOLVER.getVerticalGroups(0));
 
-        System.out.println("vertical(1): " + RESOLVER.getVerticalGroups(1));
+        System.out.println("vertical(3): " + RESOLVER.getVerticalGroups(3));
     }
 
 

@@ -345,9 +345,8 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a list of dependency groups which each can be processed
-     * concurrently. Each group can be processed concurrently but each element
-     * in a group must be processed in order.
+     * Returns a list of vertical dependency groups. Each group can be processed
+     * concurrently but all elements in a group must be processed in order.
      *
      * @param maximum the maximum number of groups; 0 for unlimited
      * @return horizontal groups
@@ -418,9 +417,8 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a list of dependency groups in order which each must be processed
-     * after previous group. Each element in a group can be processed
-     * concurrently but a group must be processed after previous group.
+     * Returns a list of horizontal groups. Each element in a group can be
+     * processed concurrently but all groups must be processed in order.
      *
      * @param maximum the maximum number of groups; 0 for unlimited
      * @return vertical groups
