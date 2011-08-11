@@ -83,18 +83,10 @@ And you can get a *_list of horizontal groups_*. Which means *_all groups must b
 // all horizontal groups
 final List<List<String>> groups1 = resolver.getHorizontalGroups();
 -> [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
-
-// make it 2 groups in maximum
-final List<List<String>> groups2 = resolver.getHorizontalGroups(2);
--> [[J, N, M, K, G, F, R], [Q, P, B, C, A, L, O, H, I]]
 }}}
 You can also get a *_list of vertical groups_*. Which means *_each group can be processed concurrently_*  but *_all elements in a group must be processed in order_*.
 {{{
 // all vertical groups
 final List<List<String>> groups1 = resolver.getVerticalGroups();
 -> [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
-
-// make it 3 groups in maximum
-final List<List<String>> groups2 = resolver.getVerticalGroups(3);
--> [[R, Q, P, O], [F, B, G, C, A, H], [K, L, M, N, J, I]]
 }}}
