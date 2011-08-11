@@ -21,11 +21,9 @@ For following dependency rules,
 {{{
     H
     ↓
-    B → F
-  ↗
+  ↗ B → F
 A
-  ↘
-    C → G
+  ↘ C → G
 }}}
   * I depends on J and K
   * L depends on K
