@@ -27,6 +27,7 @@ For following dependency rules,
 which can be presented like this.
 `
    H
+  ↓
 A→B
 `
 
