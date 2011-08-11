@@ -80,11 +80,11 @@ final List<String> single = resolver.getSingleGroup();
 }}}
 And you can get a *_list of horizontal groups_*. Which means *_all groups must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
 {{{
-final List<List<String>> groups1 = resolver.getHorizontalGroups();
+final List<List<String>> groups = resolver.getHorizontalGroups();
 -> [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
 }}}
 You can also get a *_list of vertical groups_*. Which means *_each group can be processed concurrently_*  but *_all elements in a group must be processed in order_*.
 {{{
-final List<List<String>> groups1 = resolver.getVerticalGroups();
+final List<List<String>> groups = resolver.getVerticalGroups();
 -> [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
