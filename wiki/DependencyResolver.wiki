@@ -23,7 +23,7 @@ For following dependency rules,
   * O depends on P and Q
   * P depends on R
   * Q depends on R
-←	↑	→	↓↖	↗	↘	↙
+`←	↑	→	↓↖	↗	↘	↙`
 which can be presented like this.
 <tt>
    H
