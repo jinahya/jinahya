@@ -33,11 +33,12 @@ resolver.addDependencies("C", "G", null);
 resolver.addDependency("H", "B");
 resolver.addDependencies("I", "J", "K");
 resolver.addDependency("L", "K");
-resolver.addDependency("M", null); // null target allowed
+resolver.addDependency("M", null); // null single target is allowed
 resolver.addDependency("N", null);
 resolver.addDependencies("O", "P", "Q");
 resolver.addDependency("P", "R");
 resolver.addDependencies("Q", "R");
+// resolver.addDependencies("?", (String[]) null); // NPE
 }}}
 
 Add your content here.  Format your content with:
