@@ -16,14 +16,6 @@ For following dependency rules,
   * B depends on F
   * C depends on G
   * H depends on B
-  * I depends on J and K
-  * L depends on K
-  * M depends on nothing
-  * N depends on nothing
-  * O depends on P and Q
-  * P and Q depend on R (P depnds on R and Q depends on R)
-which can be presented like this.
-<wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
 {{{
     H
     ↓
@@ -31,22 +23,35 @@ which can be presented like this.
 A
   ↘ C → G
 }}}
+  * I depends on J and K
+  * L depends on K
 {{{
   ↗ J
-U
+I
   ↘ K ← L
 }}}
+  * M depends on nothing
 {{{
 M → null
 }}}
+  * N depends on nothing
 {{{
 N → null
 }}}
+  * O depends on P and Q
+  * P and Q depend on R (P depnds on R and Q depends on R)
 {{{
   ↗ Q ↘
 P       R
   ↘ R ↗
 }}}
+which can be presented like this.
+<wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
+
+
+
+
+
 
 You can construct a dependency resolver as follows.
 {{{
