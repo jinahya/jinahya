@@ -46,7 +46,6 @@ N → null
 P       R
   ↘ R ↗
 }}}
-which can be presented like this.
 <wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
 
 
