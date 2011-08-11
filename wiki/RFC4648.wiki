@@ -1,5 +1,5 @@
 #summary RFC-4648 Implementation.
-#labels Base,Base64,Base32,Hex,Base64URL,Base32Hex,RFC-4648,RFC,4648
+#labels Base,Base64,Base32,Hex,Base64URL,Base32Hex,RFC-4648,RFC,4648,Featured,Phase-Implementation
 
 = Introduction =
 
