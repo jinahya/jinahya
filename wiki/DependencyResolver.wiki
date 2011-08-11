@@ -23,7 +23,7 @@ For following dependency rules,
   * O depends on P and Q
   * P depends on R
   * Q depends on R
-You can construct dependency resolver as follows.
+You can construct a dependency resolver as follows.
 {{{
 final DependencyResolver<String> resolver =
     new DependencyResolver<String>();
@@ -40,7 +40,12 @@ resolver.addDependency("P", "R");
 resolver.addDependencies("Q", "R");
 // resolver.addDependencies("?", (String[]) null); // NPE
 }}}
-
+So, what can we do with it?
+You can get a single list which is ordered as dependencies.
+{{{
+final List<String> single = resolver.getSingleGroup();
+// single: [F, B, G, C, A, K, L, H, X, J, I]
+}}}
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
