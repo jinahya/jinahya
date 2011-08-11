@@ -1,4 +1,5 @@
 #summary Small dependency resolving helper class.
+#labels Featured,Phase-Implementation
 
 = Introduction =
 
@@ -57,17 +58,23 @@ You can construct a dependency resolver as follows.
 {{{
 final DependencyResolver<String> resolver =
     new DependencyResolver<String>();
+
 resolver.addDependencies("A", "B", "C"); // single source to multiple targets
 resolver.addDependency("B", "F"); // single source to single target
 resolver.addDependencies("C", "G", null);
 resolver.addDependency("H", "B");
+
 resolver.addDependencies("I", "J", "K");
 resolver.addDependency("L", "K");
+
 resolver.addDependency("M", null); // null single target is allowed
+
 resolver.addDependency("N", null);
+
 resolver.addDependencies("O", "P", "Q");
 resolver.addDependency("P", "R");
 resolver.addDependencies("Q", "R");
+
 // resolver.addDependencies("?", (String[]) null); // NPE
 }}}
 So, what can we do with it?
