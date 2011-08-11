@@ -69,15 +69,15 @@ So, what can we do with it?
 You can get a single list which is ordered as dependencies.
 {{{
 final List<String> single = resolver.getSingleGroup();
-// single: [F, B, G, C, A, K, L, H, X, J, I]
+// [R, Q, P, F, B, G, C, A, K, L, M, N, O, H, J, I]
 }}}
 And you can get a *_horizontal_* groups. Which means every *_group must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
 {{{
 final List<List<String>> groups = resolver.getHorizontalGroups();
-// horizontal: [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
+// [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
 }}}
 You can also get a *_vertical_* groups. Which means each *_group can be processed concurrently_*  but all *_elements in a group must be processed in order_*.
 {{{
 final List<List<String>> groups = resolver.getVerticalGroups();
-// vertical: [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
+// [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
