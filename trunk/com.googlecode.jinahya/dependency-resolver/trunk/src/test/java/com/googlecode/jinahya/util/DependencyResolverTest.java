@@ -189,20 +189,20 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testGetHorizontalGroup() {
-
-        System.out.println("horizontal(0): " + RESOLVER.getHorizontalGroups(0));
-
-        System.out.println("horizontal(1): " + RESOLVER.getHorizontalGroups(1));
-    }
-
-
-    @Test
     public void testGetVerticalGroup() {
 
         System.out.println("vertical(0): " + RESOLVER.getVerticalGroups(0));
 
-        System.out.println("vertical(2): " + RESOLVER.getVerticalGroups(2));
+        System.out.println("vertical(1): " + RESOLVER.getVerticalGroups(1));
+    }
+
+
+    @Test
+    public void testGetHorizontalGroup() {
+
+        System.out.println("horizontal(0): " + RESOLVER.getHorizontalGroups(0));
+
+        System.out.println("horizontal(2): " + RESOLVER.getHorizontalGroups(2));
     }
 }
 

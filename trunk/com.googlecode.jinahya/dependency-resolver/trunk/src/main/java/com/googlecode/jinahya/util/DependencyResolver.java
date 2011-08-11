@@ -334,13 +334,26 @@ public class DependencyResolver<T> {
 
 
     /**
+     * Return all horizontal groups.
+     *
+     * @return a list of all horizontal groups.
+     * @see #getVerticalGroups(int) 
+     */
+    public List<List<T>> getVerticalGroups() {
+        return getVerticalGroups(0);
+    }
+
+
+    /**
      * Returns a list of dependency groups which each can be processed
-     * concurrently.
+     * concurrently. Each group can be processed concurrently but each element
+     * in a group must be processed in order.
      *
      * @param maximum the maximum number of groups; 0 for unlimited
      * @return horizontal groups
+     * @see #getVerticalGroups() 
      */
-    public List<List<T>> getHorizontalGroups(final int maximum) {
+    public List<List<T>> getVerticalGroups(final int maximum) {
 
         if (maximum < 0) {
             throw new IllegalArgumentException("negative maximum: " + maximum);
@@ -393,13 +406,27 @@ public class DependencyResolver<T> {
 
 
     /**
+     * Returns all vertical groups.
+     *
+     * @return a list vertical groups.
+     * @see #getHorizontalGroups(int) 
+     */
+    public List<List<T>> getHorizontalGroups() {
+
+        return getHorizontalGroups(0);
+    }
+
+
+    /**
      * Returns a list of dependency groups in order which each must be processed
-     * after previous group.
+     * after previous group. Each element in a group can be processed
+     * concurrently but a group must be processed after previous group.
      *
      * @param maximum the maximum number of groups; 0 for unlimited
      * @return vertical groups
+     * @see #getHorizontalGroups() 
      */
-    public List<List<T>> getVerticalGroups(final int maximum) {
+    public List<List<T>> getHorizontalGroups(final int maximum) {
 
         if (maximum < 0) {
             throw new IllegalArgumentException("negative maximum: " + maximum);
