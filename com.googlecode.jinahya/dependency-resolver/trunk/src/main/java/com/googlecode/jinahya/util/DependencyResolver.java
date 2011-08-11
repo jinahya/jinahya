@@ -41,7 +41,7 @@ public class DependencyResolver<T> {
      * @param source source; may not be null
      * @param targets targets; may not be null; each element may be null
      */
-    public void addDependency(final T source, final T... targets) {
+    public void addDependencies(final T source, final T... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -109,7 +109,7 @@ public class DependencyResolver<T> {
      * @param source source; may not be null
      * @param targets targets; may not be null; each element may be null
      */
-    public void removeDependency(final T source, final T... targets) {
+    public void removeDependencies(final T source, final T... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -164,7 +164,7 @@ public class DependencyResolver<T> {
      * @param targets targets; may not be null; each element may be null
      * @return true if all targets are dependent from source; false otherwise
      */
-    public boolean hasDependency(final T source, final T... targets) {
+    public boolean hasDependencies(final T source, final T... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -235,7 +235,7 @@ public class DependencyResolver<T> {
      * @param target target
      * @return dependency paths from <code>source</code> to <code>target</code>.
      */
-    public List<List<T>> findDependencyPath(final T source, final T target) {
+    public List<List<T>> getDependencyGroups(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -267,7 +267,7 @@ public class DependencyResolver<T> {
                     continue;
                 }
 
-                for (List<T> path : findDependencyPath(auxiliary, target)) {
+                for (List<T> path : getDependencyGroups(auxiliary, target)) {
                     path.add(0, source);
                     paths.add(path);
                 }

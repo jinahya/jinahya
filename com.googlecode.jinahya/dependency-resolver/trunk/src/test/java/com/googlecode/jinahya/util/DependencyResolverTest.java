@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.List;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,24 +34,25 @@ public class DependencyResolverTest {
 
 
     static {
-        RESOLVER.addDependency("A", "B");
-        RESOLVER.addDependency("A", "C");
-        RESOLVER.addDependency("A", (String) null);
+        RESOLVER.addDependencies("A", "B", "C", null);
 
-        RESOLVER.addDependency("B", "F");
-        RESOLVER.addDependency("B", (String) null);
+        RESOLVER.addDependencies("B", "F", null);
 
-        RESOLVER.addDependency("C", "G");
-        RESOLVER.addDependency("C", (String) null);
+        RESOLVER.addDependencies("C", "G", null);
 
         RESOLVER.addDependency("H", "B");
 
-        RESOLVER.addDependency("I", "J");
-        RESOLVER.addDependency("I", "K");
+        RESOLVER.addDependencies("I", "J", "K");
 
         RESOLVER.addDependency("L", "K");
 
-        RESOLVER.addDependency("X", (String) null);
+        RESOLVER.addDependency("M", null);
+
+        RESOLVER.addDependency("N", null);
+
+        RESOLVER.addDependencies("O", "P", "Q");
+        RESOLVER.addDependency("P", "R");
+        RESOLVER.addDependencies("Q", "R");
     }
 
 
@@ -100,21 +99,34 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testFindPaths() {
+    public void testAddDependencies() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
 
-        resolver.addDependency("A", "C");
-
-        resolver.addDependency("A", "B");
-
-        resolver.addDependency("B", "C");
-
-        final List<List<String>> paths = resolver.findDependencyPath("A", "C");
-        for (List<String> path : paths) {
-            System.out.println(path);
+        try {
+            resolver.addDependencies(null, "null");
+            Assert.fail("passed: null source");
+        } catch (NullPointerException npe) {
+            // expected
         }
+
+        try {
+            resolver.addDependencies("source", (String[]) null);
+            Assert.fail("passed: null targets");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+
+        resolver.addDependencies("source", "target1", "target2", null);
+    }
+
+
+    @Test
+    public void testGetDependencyGroups() {
+
+        System.out.println("paths from O to R: "
+                           + RESOLVER.getDependencyGroups("O", "R"));
     }
 
 
@@ -137,6 +149,15 @@ public class DependencyResolverTest {
 
 
     @Test
+    public void testHasDependencies() {
+
+        Assert.assertTrue(RESOLVER.hasDependencies("A", "F", "G"));
+
+        Assert.assertFalse(RESOLVER.hasDependencies("H", "F", "G"));
+    }
+
+
+    @Test
     public void testRemoveDependency() {
 
         final DependencyResolver<String> resolver =
@@ -147,6 +168,16 @@ public class DependencyResolverTest {
         resolver.addDependency("A", "B");
 
         resolver.removeDependency("A", "B");
+    }
+
+
+    @Test
+    public void testRemoveDependencies() {
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        resolver.removeDependencies("A", "B", "C", "D", null);
     }
 
 
