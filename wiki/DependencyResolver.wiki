@@ -24,7 +24,7 @@ For following dependency rules,
   * P depends on R
   * Q depends on R
 which can be presented like this.
-<wiki:comment>←↑→↓↖↗↘↙</wiki:comemnt>
+<wiki:comment>←↑→↓↖↗↘↙</wiki:comment>
 {{{
     H
     ↓
