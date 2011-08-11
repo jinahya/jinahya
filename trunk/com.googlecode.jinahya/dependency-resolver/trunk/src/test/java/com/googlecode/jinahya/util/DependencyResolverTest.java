@@ -38,13 +38,13 @@ public class DependencyResolverTest {
     static {
         RESOLVER.addDependency("A", "B");
         RESOLVER.addDependency("A", "C");
-        RESOLVER.addDependency("A", null);
+        RESOLVER.addDependency("A", (String) null);
 
         RESOLVER.addDependency("B", "F");
-        RESOLVER.addDependency("B", null);
+        RESOLVER.addDependency("B", (String) null);
 
         RESOLVER.addDependency("C", "G");
-        RESOLVER.addDependency("C", null);
+        RESOLVER.addDependency("C", (String) null);
 
         RESOLVER.addDependency("H", "B");
 
@@ -53,7 +53,7 @@ public class DependencyResolverTest {
 
         RESOLVER.addDependency("L", "K");
 
-        RESOLVER.addDependency("X", null);
+        RESOLVER.addDependency("X", (String) null);
     }
 
 
@@ -160,20 +160,18 @@ public class DependencyResolverTest {
     @Test
     public void testGetHorizontalGroup() {
 
-        final List<List<String>> groups = RESOLVER.getHorizontalGroups(0);
-        for (List<String> group : groups) {
-            System.out.println("horizontal: " + group);
-        }
+        System.out.println("horizontal(0): " + RESOLVER.getHorizontalGroups(0));
+
+        System.out.println("horizontal(1): " + RESOLVER.getHorizontalGroups(1));
     }
 
 
     @Test
     public void testGetVerticalGroup() {
 
-        final List<List<String>> groups = RESOLVER.getVerticalGroups(0);
-        for (List<String> group : groups) {
-            System.out.println("vertical: " + group);
-        }
+        System.out.println("vertical(0): " + RESOLVER.getVerticalGroups(0));
+
+        System.out.println("vertical(2): " + RESOLVER.getVerticalGroups(2));
     }
 }
 
