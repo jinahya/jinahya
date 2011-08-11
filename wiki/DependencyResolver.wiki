@@ -2,13 +2,43 @@
 
 = Introduction =
 
-A simple dependency resolver.
+A simple dependency resolving utility.
 
 = Apidocs =
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-2-SNAPSHOT/apidocs/index.html 1.0-alpha-2-SNAPSHOT]
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-1/apidocs/index.html 1.0-alpha-1]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-3/apidocs/index.html 1.0-alpha-3]
 
 = Details =
+
+This is a very simple dependency resolving utility.
+
+With following dependency rules,
+  * A depends on B and C
+  * B depends on F
+  * C depends on G
+  * H depends on B
+  * I depends on J and K
+  * L depends on K
+  * M depends on nothing
+  * N depends on nothing
+  * O depends on P and Q
+  * P depends on R
+  * Q depends on R
+You can construct dependency resolver as follows.
+{{{
+final DependencyResolver<String> resolver =
+    new DependencyResolver<String>();
+resolver.addDependencies("A", "B", "C"); // single source to multiple targets
+resolver.addDependency("B", "F"); // single source to single target
+resolver.addDependencies("C", "G", null);
+resolver.addDependency("H", "B");
+resolver.addDependencies("I", "J", "K");
+resolver.addDependency("L", "K");
+resolver.addDependency("M", null); // null target allowed
+resolver.addDependency("N", null);
+resolver.addDependencies("O", "P", "Q");
+resolver.addDependency("P", "R");
+resolver.addDependencies("Q", "R");
+}}}
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
