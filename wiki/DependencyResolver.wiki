@@ -25,11 +25,11 @@ For following dependency rules,
   * Q depends on R
 `←	↑	→	↓↖	↗	↘	↙`
 which can be presented like this.
-`
-   H
-  ↓
-A→B
-`
+{{{
+H
+  ↘
+A → B
+}}}
 
 You can construct a dependency resolver as follows.
 {{{
