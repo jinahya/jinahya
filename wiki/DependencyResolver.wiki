@@ -23,6 +23,13 @@ For following dependency rules,
   * O depends on P and Q
   * P depends on R
   * Q depends on R
+←	↑	→	↓↖	↗	↘	↙
+which can be presented like this.
+{{{
+   H
+A→B
+}}}
+
 You can construct a dependency resolver as follows.
 {{{
 final DependencyResolver<String> resolver =
@@ -56,5 +63,3 @@ You can also get a *_vertical_* groups. Which means each *_group can be processe
 final List<List<String>> groups = resolver.getVerticalGroups();
 // vertical: [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
-
-↖	↗	↘	↙
