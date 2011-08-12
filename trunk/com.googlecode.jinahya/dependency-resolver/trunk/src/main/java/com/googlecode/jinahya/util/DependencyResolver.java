@@ -40,8 +40,10 @@ public class DependencyResolver<T> {
      *
      * @param source source; may not be null
      * @param targets targets; may not be null; each element may be null
+     * @throws DependencyResolverException if an error occurs
      */
-    public void addDependencies(final T source, final T... targets) {
+    public void addDependencies(final T source, final T... targets)
+        throws DependencyResolverException {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -66,8 +68,10 @@ public class DependencyResolver<T> {
      *
      * @param source source; may not be null
      * @param target target; may be null
+     * @throws DependencyResolverException if failed to add dependency.
      */
-    public void addDependency(final T source, final T target) {
+    public void addDependency(final T source, final T target)
+        throws DependencyResolverException {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -81,9 +85,7 @@ public class DependencyResolver<T> {
         synchronized (map) {
 
             if (target != null && hasDependency(target, source)) {
-                throw new IllegalStateException(
-                    "cyclic dependency: " + source + " -> [" + target + " -> "
-                    + source + "]");
+                throw new CyclicDependencyException(source, target);
             }
 
             List<T> targets = map.get(source);
@@ -235,7 +237,7 @@ public class DependencyResolver<T> {
      * @param target target
      * @return dependency paths from <code>source</code> to <code>target</code>.
      */
-    public List<List<T>> getDependencyGroups(final T source, final T target) {
+    public List<List<T>> getDependencyPaths(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -267,7 +269,7 @@ public class DependencyResolver<T> {
                     continue;
                 }
 
-                for (List<T> path : getDependencyGroups(auxiliary, target)) {
+                for (List<T> path : getDependencyPaths(auxiliary, target)) {
                     path.add(0, source);
                     paths.add(path);
                 }

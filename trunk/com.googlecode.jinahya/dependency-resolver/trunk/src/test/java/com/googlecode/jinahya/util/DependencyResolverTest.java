@@ -34,30 +34,34 @@ public class DependencyResolverTest {
 
 
     static {
-        RESOLVER.addDependencies("A", "B", "C", null);
+        try {
+            RESOLVER.addDependencies("A", "B", "C", null);
 
-        RESOLVER.addDependencies("B", "F", null);
+            RESOLVER.addDependencies("B", "F", null);
 
-        RESOLVER.addDependencies("C", "G", null);
+            RESOLVER.addDependencies("C", "G", null);
 
-        RESOLVER.addDependency("H", "B");
+            RESOLVER.addDependency("H", "B");
 
-        RESOLVER.addDependencies("I", "J", "K");
+            RESOLVER.addDependencies("I", "J", "K");
 
-        RESOLVER.addDependency("L", "K");
+            RESOLVER.addDependency("L", "K");
 
-        RESOLVER.addDependency("M", null);
+            RESOLVER.addDependency("M", null);
 
-        RESOLVER.addDependency("N", null);
+            RESOLVER.addDependency("N", null);
 
-        RESOLVER.addDependencies("O", "P", "Q");
-        RESOLVER.addDependency("P", "R");
-        RESOLVER.addDependencies("Q", "R");
+            RESOLVER.addDependencies("O", "P", "Q");
+            RESOLVER.addDependency("P", "R");
+            RESOLVER.addDependencies("Q", "R");
+        } catch (DependencyResolverException dre) {
+            throw new InstantiationError(dre.getMessage());
+        }
     }
 
 
     @Test
-    public void testAddDependency() {
+    public void testAddDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -76,7 +80,8 @@ public class DependencyResolverTest {
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testAddDependencyForSelfDependency() {
+    public void testAddDependencyForSelfDependency()
+        throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -85,8 +90,9 @@ public class DependencyResolverTest {
     }
 
 
-    @Test(expectedExceptions = {IllegalStateException.class})
-    public void testAddDependencyForCyclicDependency() {
+    @Test(expectedExceptions = {CyclicDependencyException.class})
+    public void testAddDependencyForCyclicDependency()
+        throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -99,7 +105,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testAddDependencies() {
+    public void testAddDependencies() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -126,12 +132,12 @@ public class DependencyResolverTest {
     public void testGetDependencyGroups() {
 
         System.out.println("paths from O to R: "
-                           + RESOLVER.getDependencyGroups("O", "R"));
+                           + RESOLVER.getDependencyPaths("O", "R"));
     }
 
 
     @Test
-    public void testHasDependency() {
+    public void testHasDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -158,7 +164,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testRemoveDependency() {
+    public void testRemoveDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
