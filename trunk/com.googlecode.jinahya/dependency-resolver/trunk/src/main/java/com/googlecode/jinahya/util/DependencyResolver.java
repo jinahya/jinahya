@@ -334,29 +334,12 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Return all horizontal groups.
-     *
-     * @return a list of all horizontal groups.
-     * @see #getVerticalGroups(int) 
-     */
-    public List<List<T>> getVerticalGroups() {
-        return getVerticalGroups(0);
-    }
-
-
-    /**
      * Returns a list of vertical dependency groups. Each group can be processed
      * concurrently but all elements in a group must be processed in order.
      *
-     * @param maximum the maximum number of groups; 0 for unlimited
      * @return horizontal groups
-     * @see #getVerticalGroups() 
      */
-    public List<List<T>> getVerticalGroups(final int maximum) {
-
-        if (maximum < 0) {
-            throw new IllegalArgumentException("negative maximum: " + maximum);
-        }
+    public List<List<T>> getVerticalGroups() {
 
         final List<List<T>> groups = new ArrayList<List<T>>();
 
@@ -364,8 +347,7 @@ public class DependencyResolver<T> {
 
             final List<T> single = getSingleGroup();
 
-            while (!single.isEmpty()
-                   && (maximum == 0 || (groups.size() < (maximum - 1)))) {
+            while (!single.isEmpty()) {
 
                 final List<T> group = new ArrayList<T>();
                 groups.add(group);
@@ -405,30 +387,12 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns all vertical groups.
-     *
-     * @return a list vertical groups.
-     * @see #getHorizontalGroups(int) 
-     */
-    public List<List<T>> getHorizontalGroups() {
-
-        return getHorizontalGroups(0);
-    }
-
-
-    /**
      * Returns a list of horizontal groups. Each element in a group can be
      * processed concurrently but all groups must be processed in order.
      *
-     * @param maximum the maximum number of groups; 0 for unlimited
      * @return vertical groups
-     * @see #getHorizontalGroups() 
      */
-    public List<List<T>> getHorizontalGroups(final int maximum) {
-
-        if (maximum < 0) {
-            throw new IllegalArgumentException("negative maximum: " + maximum);
-        }
+    public List<List<T>> getHorizontalGroups() {
 
         final List<List<T>> groups = new ArrayList<List<T>>();
 
@@ -436,8 +400,7 @@ public class DependencyResolver<T> {
 
             final List<T> single = getSingleGroup();
 
-            while (!single.isEmpty()
-                   && (maximum == 0 || (groups.size() < (maximum - 1)))) {
+            while (!single.isEmpty()) {
 
                 final List<T> group = new ArrayList<T>();
                 groups.add(group);
