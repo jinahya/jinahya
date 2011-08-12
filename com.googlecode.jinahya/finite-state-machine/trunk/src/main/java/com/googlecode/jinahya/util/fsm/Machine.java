@@ -117,7 +117,7 @@ public class Machine {
      * @param transition
      * @return true
      */
-    protected boolean isStarting(Transition transition) {
+    protected boolean isStarting(final Transition transition) {
         return true;
     }
 
@@ -125,9 +125,9 @@ public class Machine {
     /**
      * 
      * @param transition
-     * @return 
+     * @return true
      */
-    protected boolean isAllowed(Transition transition) {
+    protected boolean isAllowed(final Transition transition) {
         return true;
     }
 
@@ -137,7 +137,7 @@ public class Machine {
      * @param transition
      * @return false 
      */
-    protected boolean isFinishing(Transition transition) {
+    protected boolean isFinishing(final Transition transition) {
         return false;
     }
 

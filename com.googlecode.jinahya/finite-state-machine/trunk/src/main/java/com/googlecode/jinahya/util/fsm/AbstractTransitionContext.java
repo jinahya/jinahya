@@ -26,8 +26,9 @@ abstract class AbstractTransitionContext implements TransitionContext {
 
 
     /**
-     * Creates a new instance
-     * @param transition 
+     * Creates a new instance.
+     *
+     * @param transition transition
      */
     protected AbstractTransitionContext(final Transition transition) {
         super();

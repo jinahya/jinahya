@@ -18,51 +18,110 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.io.Serializable;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface State extends Serializable {
+public class State {
+
+
+    /** GENERATED. */
+    private static final long serialVersionUID = -8272795149504605574L;
 
 
     /**
-     * Constant for UNKONWN state.
+     * 
      */
-    public static final State UNKNOWN = new AbstractState(0, "UNKNOWN") {
-
-
-        /** GENERATED. */
-        private static final long serialVersionUID = -7766829699556888699L;
-    };
+    public static final State UNKNOWN = new State(0, "UNKNOWN");
 
 
     /**
      * Constant for INVALID state.
      */
-    public static final State INVALID = new AbstractState(-1, "INVALID") {
-
-
-        /** GENERATE. */
-        private static final long serialVersionUID = -7766829699556888699L;
-    };
+    public static final State INVALID = new State(-1, "INVALID");
 
 
     /**
-     * Returns the integer value representing this state.
+     * Creates a new instance.
      *
-     * @return integer representation
+     * @param code state value; must be a non-zero positive
+     * @param name  state name; must not be null
      */
-    int getCode();
+    public State(final int code, final String name) {
+        super();
+
+        if (code <= 0) {
+            throw new IllegalArgumentException("negative code: " + code);
+        }
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+
+        this.code = code;
+        this.name = name;
+    }
 
 
-    /**
-     * Returns the name of this state.
-     *
-     * @return name of this state
-     */
-    String getName();
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof State)) { // (null instanceof XXX) -> false
+            return false;
+        }
+
+        final State state = (State) obj;
+
+        if (code != state.getCode()) {
+            return false;
+        }
+
+        if (!name.equals(state.getName())) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int hashCode = 17;
+
+        hashCode = 37 * hashCode + code;
+
+        hashCode = 37 * hashCode + name.hashCode();
+
+        return hashCode;
+    }
+
+
+    @Override
+    public String toString() {
+        return "State[" + name + "(" + code + ")]";
+    }
+
+
+    public final int getCode() {
+        return code;
+    }
+
+
+    public final String getName() {
+        return name;
+    }
+
+
+    /** value. */
+    private final int code;
+
+
+    /** name. */
+    private final String name;
 }
 
