@@ -28,18 +28,12 @@ public class Transition {
     /**
      * Creates a new instance.
      *
-     * @param machine machine
      * @param source source state
      * @param target target state
      */
-    public Transition(final Machine machine, final State source,
-                      final State target) {
+    public Transition(final State source, final State target) {
 
         super();
-
-        if (machine == null) {
-            throw new NullPointerException("null machine");
-        }
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -53,19 +47,8 @@ public class Transition {
             throw new IllegalArgumentException("source is equlas to target");
         }
 
-        this.machine = machine;
         this.source = source;
         this.target = target;
-    }
-
-
-    /**
-     * Returns the source machine that this transition made.
-     *
-     * @return the source machine
-     */
-    public final Machine getMachine() {
-        return machine;
     }
 
 
@@ -102,10 +85,6 @@ public class Transition {
 
         final Transition transition = (Transition) obj;
 
-        if (!machine.equals(transition.getMachine())) {
-            return false;
-        }
-
         if (!source.equals(transition.getSource())) {
             return false;
         }
@@ -123,8 +102,6 @@ public class Transition {
 
         int hashCode = 17;
 
-        hashCode = 37 * hashCode + machine.hashCode();
-
         hashCode = 37 * hashCode + source.hashCode();
 
         hashCode = 37 * hashCode + target.hashCode();
@@ -137,10 +114,6 @@ public class Transition {
     public String toString() {
         return "Transition[" + source + "->" + target + "]";
     }
-
-
-    /** source machine. */
-    private final Machine machine;
 
 
     /** old state. */

@@ -26,9 +26,10 @@ public interface TransitionMatcher {
 
 
     /**
-     * 
-     * @param transition
-     * @return 
+     * Matches given <code>transition</code>.
+     *
+     * @param transition the transition to match
+     * @return true if matches; false otherwise
      */
     boolean matches(Transition transition);
 }

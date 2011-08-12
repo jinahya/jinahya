@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class FSMContext {
+public class MachineContext {
 
 
     private static final String INDEX_FILENAME = "fsm.index";
@@ -104,7 +104,7 @@ public class FSMContext {
      * @return a new instance of <code>FSMContext</code>
      * @throws FSMException if an error occurs.
      */
-    public static FSMContext newInstance(final String contextPath,
+    public static MachineContext newInstance(final String contextPath,
                                          final ClassLoader classLoader)
         throws FSMException {
 
@@ -121,7 +121,7 @@ public class FSMContext {
      * @return a new instance of <code>FSMContext</code>
      * @throws FSMException if an error occurs.
      */
-    protected static FSMContext newInstance(
+    protected static MachineContext newInstance(
         final String contextPath, final ClassLoader classLoader,
         final ResourceLoader resourceLoader)
         throws FSMException {
@@ -217,7 +217,7 @@ public class FSMContext {
      * @return a new instance of <code>FSMContext</code>.
      * @throws FSMException if an error occurs.
      */
-    public static FSMContext newInstance(final Class<?>[] taskClasses)
+    public static MachineContext newInstance(final Class<?>[] taskClasses)
         throws FSMException {
 
         if (taskClasses == null) {
@@ -257,7 +257,7 @@ public class FSMContext {
             }
         }
 
-        return new FSMContext(tasks);
+        return new MachineContext(tasks);
     }
 
 
@@ -266,7 +266,7 @@ public class FSMContext {
      * 
      * @param tasks tasks
      */
-    private FSMContext(final Task[] tasks) {
+    private MachineContext(final Task[] tasks) {
         super();
 
         if (tasks == null) {

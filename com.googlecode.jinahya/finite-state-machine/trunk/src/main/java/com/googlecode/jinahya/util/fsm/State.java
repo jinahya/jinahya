@@ -18,15 +18,18 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.io.Serializable;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class State {
+public class State implements Serializable {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = -8272795149504605574L;
+    private static final long serialVersionUID = 8481324675025780560L;
 
 
     /**
