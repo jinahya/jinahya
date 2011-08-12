@@ -26,18 +26,50 @@ public interface TransitionContext {
 
 
     /**
-     * 
-     * @param taskId
-     * @throws FSMException 
-     */
-    void wait(String taskId) throws FSMException;
-
-
-    /**
      * Returns transition.
      *
      * @return transition
      */
     Transition getTransition();
+
+
+    /**
+     * Makes sure the task calling this method be performed after the task
+     * identified by <code>targetTaskId</code>.
+     *
+     * @param targetTaskId the id of the target task to wait
+     * @throws FSMException if targetTaskId is unknown or illegal dependency
+     *         detected.
+     */
+    void setDependency(String targetTaskId) throws FSMException;
+
+
+    /**
+     * Sets property.
+     *
+     * @param name property name; may not null
+     * @param value property value
+     */
+    void setProperty(String name, String value);
+
+
+    /**
+     * Returns property value identified by <code>name</code>.
+     *
+     * @param name property name; may not null
+     * @return property value
+     */
+    String getProprety(String name);
+
+
+    /**
+     * Returns property value identified by <code>name</code> owned to the task
+     * identified by <code>targetTaskId</code>.
+     *
+     * @param name property name; may not null
+     * @param targetTaskId owner task id; may not null
+     * @return property value
+     */
+    String getProprety(String name, String targetTaskId);
 }
 

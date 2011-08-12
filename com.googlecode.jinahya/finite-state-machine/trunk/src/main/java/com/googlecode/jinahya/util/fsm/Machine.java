@@ -57,7 +57,7 @@ public class Machine {
      *
      * @param state state
      */
-    public synchronized void setState(final State state) {
+    public synchronized void setState(final State state) throws FSMException {
 
         if (state == null) {
             throw new NullPointerException("null state");
