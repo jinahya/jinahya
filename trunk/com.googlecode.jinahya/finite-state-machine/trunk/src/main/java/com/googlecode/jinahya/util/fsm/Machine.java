@@ -30,7 +30,7 @@ public class Machine {
      *
      * @param context task context
      */
-    public Machine(final FSMContext context) {
+    public Machine(final MachineContext context) {
 
         super();
 
@@ -67,7 +67,7 @@ public class Machine {
             throw new IllegalStateException("same state");
         }
 
-        if (finished) {
+        if (isFinished()) {
             throw new IllegalStateException("already finished");
         }
 
@@ -75,9 +75,9 @@ public class Machine {
         this.state = state;
         final State target = this.state;
 
-        final Transition transition = new Transition(this, source, target);
+        final Transition transition = new Transition(source, target);
 
-        if (!started) {
+        if (!isStarted()) {
             if (!isStarting(transition)) {
                 throw new IllegalStateException("not started yet");
             }
@@ -155,6 +155,6 @@ public class Machine {
 
 
     /** task context. */
-    private final FSMContext context;
+    private final MachineContext context;
 }
 
