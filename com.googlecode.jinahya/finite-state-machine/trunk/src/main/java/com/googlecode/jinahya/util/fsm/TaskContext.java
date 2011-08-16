@@ -22,7 +22,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +37,7 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class TaskFactory {
+public abstract class TaskContext {
 
 
     /** task index filename. */
@@ -103,11 +107,11 @@ public abstract class TaskFactory {
      * @return a new instance of <code>FSMContext</code>
      * @throws FSMException if an error occurs.
      */
-    public static Task[] load(final String contextPath,
-                              final ClassLoader classLoader)
+    protected static Class<?>[] loadClasses(final String contextPath,
+                                            final ClassLoader classLoader)
         throws FSMException {
 
-        return load(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
+        return loadClasses(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
     }
 
 
@@ -120,9 +124,9 @@ public abstract class TaskFactory {
      * @return an array of loaded tasks
      * @throws FSMException if an error occurs.
      */
-    public static Task[] load(final String contextPath,
-                              final ClassLoader classLoader,
-                              final ResourceLoader resourceLoader)
+    protected static Class<?>[] loadClasses(final String contextPath,
+                                            final ClassLoader classLoader,
+                                            final ResourceLoader resourceLoader)
         throws FSMException {
 
         if (contextPath == null) {
@@ -149,7 +153,7 @@ public abstract class TaskFactory {
             throw new FSMException("no package names parsed");
         }
 
-        final List<Class<?>> taskClassList = new ArrayList<Class<?>>();
+        final List<Class<?>> classList = new ArrayList<Class<?>>();
 
         for (String packageName : packageNames) {
             final String resourceName =
@@ -173,16 +177,7 @@ public abstract class TaskFactory {
                             }
                             final String className = packageName + "." + line;
                             try {
-                                final Class<?> taskClass =
-                                    classLoader.loadClass(className);
-                                if (Task.class.isAssignableFrom(taskClass)) {
-                                    throw new FSMException(
-                                        "Task class(" + taskClass
-                                        + ") is not assignable to "
-                                        + Task.class);
-                                }
-                                taskClassList.add(
-                                    taskClass.asSubclass(Task.class));
+                                classList.add(classLoader.loadClass(className));
                             } catch (ClassNotFoundException cnfe) {
                                 throw new FSMException(cnfe);
                             }
@@ -198,63 +193,86 @@ public abstract class TaskFactory {
             }
         }
 
-        if (taskClassList.isEmpty()) {
+        if (classList.isEmpty()) {
             throw new FSMException("no task classes are loaded");
         }
 
-        final Class<?>[] taskClasses = new Class<?>[taskClassList.size()];
-        taskClassList.toArray(taskClasses);
+        final Class<?>[] classes = new Class<?>[classList.size()];
+        classList.toArray(classes);
 
-        return load(taskClasses);
+        return classes;
     }
 
 
     /**
      * Creates a new instance of <code>FSMContext</code>.
      *
-     * @param taskClasses pre-loaded task classes
+     * @param classes pre-loaded task classes
      * @return a new instance of <code>FSMContext</code>.
      * @throws FSMException if an error occurs.
      */
-    public static Task[] load(final Class<?>[] taskClasses)
+    protected static Task[] instantiateTasks(final Class<?>[] classes)
         throws FSMException {
 
-        if (taskClasses == null) {
-            throw new NullPointerException("null taskClasses");
+        if (classes == null) {
+            throw new NullPointerException("null classes");
         }
 
-        if (taskClasses.length == 0) {
-            throw new NullPointerException("empty taskClasses");
+        /*
+        if (classes.length == 0) {
+        throw new NullPointerException("empty classes");
         }
+         */
 
-        for (int i = 0; i < taskClasses.length; i++) {
-            if (taskClasses[i] == null) {
-                throw new NullPointerException(
-                    "null at taskClasses[" + i + "]");
+        //final Set<String> taskIdSet = new HashSet<String>();
+        final List<Task> taskList = new ArrayList<Task>(classes.length);
+
+        for (int i = 0; i < classes.length; i++) {
+            if (classes[i] == null) {
+                throw new NullPointerException("null at classes[" + i + "]");
             }
-            if (!Task.class.isAssignableFrom(taskClasses[i])) {
+            if (!Task.class.isAssignableFrom(classes[i])) {
                 throw new IllegalArgumentException(
-                    "taskClasses[" + i + "](" + taskClasses[i]
+                    "classes[" + i + "](" + classes[i]
                     + ") is not assignable to " + Task.class);
             }
+            try {
+                final Constructor<? extends Task> constructor =
+                    classes[i].asSubclass(Task.class).getConstructor(
+                    (Class[]) null);
+                try {
+                    final Task task = constructor.newInstance((Object[]) null);
+                    final String id = task.getId();
+                    if (id == null) {
+                        throw new FSMException("null task id at [" + i + "]");
+                    }
+                    /*
+                    if (!taskIdSet.add(id)) {
+                    throw new FSMException(
+                    "duplicate task id at [" + i + "]");
+                    }
+                     */
+                    taskList.add(task);
+                } catch (InstantiationException ie) {
+                    throw new FSMException(ie);
+                } catch (IllegalAccessException iae) {
+                    throw new FSMException(iae);
+                } catch (InvocationTargetException ite) {
+                    throw new FSMException(ite);
+                }
+            } catch (NoSuchMethodException nsme) {
+                throw new FSMException(nsme);
+            }
             for (int j = 0; j < i; j++) {
-                if (taskClasses[j].equals(taskClasses[i])) {
+                if (classes[j].equals(classes[i])) {
                     throw new IllegalArgumentException(
-                        "duplicate taskClass: " + taskClasses[i]);
+                        "duplicate class: " + classes[i]);
                 }
             }
         }
 
-        final Task[] tasks = new Task[taskClasses.length];
-        for (int i = 0; i < tasks.length; i++) {
-            try {
-                tasks[i] = (Task) taskClasses[i].newInstance();
-            } catch (InstantiationException ie) {
-                throw new FSMException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new FSMException(iae);
-            }
-        }
+        final Task[] tasks = new Task[taskList.size()];
+        taskList.toArray(tasks);
 
         return tasks;
     }
@@ -262,9 +280,34 @@ public abstract class TaskFactory {
 
     /**
      * Creates a new instance.
+     *
+     * @param classes task classes
+     * @throws FSMException
      */
-    protected TaskFactory() {
+    protected TaskContext(final Class<?>[] classes) throws FSMException {
         super();
+
+        if (classes == null) {
+            throw new NullPointerException("null taskClasses");
+        }
+
+        this.tasks = instantiateTasks(classes);
     }
+
+
+    /**
+     * Returns an unmodifiable collection of task instances.
+     *
+     * @return an unmodifiable collection of task instances.
+     * @throws FSMException if an error occurs.
+     */
+    public Collection<Task> getTasks() throws FSMException {
+
+        return Arrays.asList(tasks);
+    }
+
+
+    /** tasks. */
+    private final Task[] tasks;
 }
 
