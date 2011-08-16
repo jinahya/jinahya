@@ -243,6 +243,11 @@ public class DependencyResolver<T> {
             throw new NullPointerException("null source");
         }
 
+        if (source.equals(target)) {
+            throw new IllegalArgumentException(
+                "self dependency: " + source + " -> " + target);
+        }
+
         synchronized (map) {
 
             final List<List<T>> paths = new ArrayList<List<T>>();
@@ -336,12 +341,13 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a list of vertical dependency groups. Each group can be processed
-     * concurrently but all elements in a group must be processed in order.
+     * Returns a list of horizontal dependency groups. Each group can be
+     * processed concurrently but all elements in a group must be processed in
+     * order.
      *
      * @return horizontal groups
      */
-    public List<List<T>> getVerticalGroups() {
+    public List<List<T>> getHorizontalGroups() {
 
         final List<List<T>> groups = new ArrayList<List<T>>();
 
@@ -389,12 +395,12 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a list of horizontal groups. Each element in a group can be
+     * Returns a list of vertical groups. Each element in a group can be
      * processed concurrently but all groups must be processed in order.
      *
      * @return vertical groups
      */
-    public List<List<T>> getHorizontalGroups() {
+    public List<List<T>> getVerticalGroups() {
 
         final List<List<T>> groups = new ArrayList<List<T>>();
 
