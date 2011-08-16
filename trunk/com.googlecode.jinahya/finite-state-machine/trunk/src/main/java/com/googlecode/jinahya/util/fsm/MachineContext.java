@@ -221,13 +221,13 @@ public abstract class MachineContext {
         };
 
 
-        final Collection<Task> tasks = taskContext.getTasks();
+        final Collection<Task> contextTasks = taskContext.getTasks();
 
         final Map<String, Task> map = new HashMap<String, Task>();
 
-        for (Task task : tasks) {
+        for (Task task : contextTasks) {
             final String taskId = task.getId();
-            if (taskId == null){
+            if (taskId == null) {
                 throw new FSMException("null task id from " + task);
             }
             if (map.containsKey(taskId)) {
@@ -247,30 +247,27 @@ public abstract class MachineContext {
 
         final List<List<String>> idGroups = resolver.getVerticalGroups();
         for (List<String> idGroup : idGroups) {
-            final Task[] taskGroup = new Task[idGroup.size()];
-            for (int i = 0; i < taskGroup.length; i++) {
-                taskGroup[i] = map.get(idGroup.get(i));
+            final Task[] tasks = new Task[idGroup.size()];
+            for (int i = 0; i < tasks.length; i++) {
+                tasks[i] = map.get(idGroup.get(i));
             }
-            perform(transitionContext, taskGroup);
+            perform(transitionContext, tasks);
         }
     }
 
 
     /**
      * Perform <code>tasks</code>. Each task can be performed concurrently.
+     * Implementations must guarantee that all tasks performed before this
+     * method returns.
      *
      * @param context transition context
-     * @param taskGroup tasks to be performed
+     * @param tasks tasks to be performed
      * @throws FSMException if an error occurs
      */
-    protected void perform(final TransitionContext context,
-                           final Task... taskGroup)
-        throws FSMException {
-
-        for (Task task : taskGroup) {
-            task.perform(context);
-        }
-    }
+    protected abstract void perform(final TransitionContext context,
+                                    final Task... tasks)
+        throws FSMException;
 
 
     private final TaskContext taskContext;
