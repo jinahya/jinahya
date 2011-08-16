@@ -21,7 +21,7 @@ package com.googlecode.jinahya.util.fsm;
 import com.googlecode.jinahya.util.DependencyResolver;
 import com.googlecode.jinahya.util.DependencyResolverException;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,31 +38,16 @@ public abstract class MachineContext {
     /**
      * Creates a new instance.
      * 
-     * @param tasks tasks
+     * @param taskContext tasks
      */
-    protected MachineContext(final Task[] tasks) {
+    protected MachineContext(final TaskContext taskContext) {
         super();
 
-        if (tasks == null) {
-            throw new NullPointerException("null tasks");
+        if (taskContext == null) {
+            throw new NullPointerException("null taskContext");
         }
 
-        if (tasks.length == 0) {
-            throw new IllegalArgumentException("empty tasks");
-        }
-
-        for (int i = 0; i < tasks.length; i++) {
-            final Task task = tasks[i];
-            if (task == null) {
-                throw new NullPointerException("null at tasks[" + i + "]");
-            }
-            final String taskId = task.getId();
-            if (this.tasks.containsKey(taskId)) {
-                throw new IllegalArgumentException(
-                    "duplicate task id at " + i + ": " + taskId);
-            }
-            this.tasks.put(taskId, task);
-        }
+        this.taskContext = taskContext;
     }
 
 
@@ -74,14 +59,9 @@ public abstract class MachineContext {
     public void transited(final Transition transition) throws FSMException {
 
 
-        final Map<String, Thread> threads =
-            Collections.synchronizedMap(new HashMap<String, Thread>());
-
-
-        final Map<String, Map<String, String>> properties =
+        final Map<String, Map<String, Object>> properties =
             Collections.synchronizedMap(
-            new HashMap<String, Map<String, String>>());
-
+            new HashMap<String, Map<String, Object>>());
 
         final ThreadLocal<String> taskIdLocal = new ThreadLocal<String>();
 
@@ -89,7 +69,7 @@ public abstract class MachineContext {
             new DependencyResolver<String>();
 
 
-        final TransitionContext context = new TransitionContext() {
+        final TransitionContext transitionContext = new TransitionContext() {
 
 
             @Override
@@ -99,16 +79,16 @@ public abstract class MachineContext {
 
 
             @Override
-            public void setDependency(final String targetTaskId)
+            public void setPerformBefore(final String sourceTaskId)
                 throws FSMException {
 
-                if (targetTaskId == null) {
-                    throw new NullPointerException("null targetTaskId");
+                if (sourceTaskId == null) {
+                    throw new NullPointerException("null sourceTaskId");
                 }
 
-                final String sourceTaskId = taskIdLocal.get();
-                if (sourceTaskId == null) {
-                    throw new IllegalStateException("no source task id set");
+                final String targetTaskId = taskIdLocal.get();
+                if (targetTaskId == null) {
+                    throw new IllegalStateException("no task id set");
                 }
 
                 try {
@@ -119,8 +99,35 @@ public abstract class MachineContext {
             }
 
 
+            @Override
+            public void setPerformAfter(final String targetTaskId)
+                throws FSMException {
+
+                if (targetTaskId == null) {
+                    throw new NullPointerException("null targetTaskId");
+                }
+
+                final String sourceTaskId = taskIdLocal.get();
+                if (sourceTaskId == null) {
+                    throw new IllegalStateException("no task id set");
+                }
+
+                try {
+                    resolver.addDependency(sourceTaskId, targetTaskId);
+                } catch (DependencyResolverException dre) {
+                    throw new FSMException(dre);
+                }
+            }
+
+
+            /**
+             *
+             * @param taskId property owner task id
+             * @param name property name
+             * @param value property value
+             */
             private void setProperty(final String taskId, final String name,
-                                     final String value) {
+                                     final Object value) {
 
                 if (taskId == null) {
                     throw new NullPointerException("null taskId");
@@ -131,9 +138,9 @@ public abstract class MachineContext {
                 }
 
                 synchronized (properties) {
-                    Map<String, String> map = properties.get(taskId);
+                    Map<String, Object> map = properties.get(taskId);
                     if (map == null) {
-                        map = new HashMap<String, String>();
+                        map = new HashMap<String, Object>();
                         properties.put(taskId, map);
                     }
                     map.put(name, value);
@@ -141,7 +148,13 @@ public abstract class MachineContext {
             }
 
 
-            private String getProperty(final String taskId, final String name) {
+            /**
+             * Returns property value.
+             *
+             * @param taskId property owner task id
+             * @param name property name
+             */
+            private Object getProperty(final String taskId, final String name) {
 
                 if (taskId == null) {
                     throw new NullPointerException("null taskId");
@@ -152,7 +165,7 @@ public abstract class MachineContext {
                 }
 
                 synchronized (properties) {
-                    final Map<String, String> map = properties.get(taskId);
+                    final Map<String, Object> map = properties.get(taskId);
                     if (map == null) {
                         return null;
                     }
@@ -162,91 +175,104 @@ public abstract class MachineContext {
 
 
             @Override
-            public void setProperty(final String name, final String value) {
+            public void setProperty(final Task owner, final String name,
+                                    final Object value) {
+
+                if (owner == null) {
+                    throw new NullPointerException("null owner");
+                }
 
                 if (name == null) {
                     throw new NullPointerException("null name");
                 }
 
-                final String taskId = taskIdLocal.get();
-                if (taskId == null) {
-                    throw new IllegalStateException("no thread local task id");
-                }
-
-                setProperty(taskId, name, value);
+                setProperty(owner.getId(), name, value);
             }
 
 
             @Override
-            public String getProprety(final String name) {
+            public Object getProprety(final Task owner, final String name) {
+
+                if (owner == null) {
+                    throw new NullPointerException("null owner");
+                }
 
                 if (name == null) {
                     throw new NullPointerException("null name");
                 }
 
-                final String taskId = taskIdLocal.get();
-                if (taskId == null) {
-                    throw new IllegalStateException("no thread local task id");
-                }
-
-                return getProperty(taskId, name);
+                return getProperty(owner.getId(), name);
             }
 
 
             @Override
-            public String getProprety(final String name,
-                                      final String targetTaskId) {
+            public Object getProprety(final String name, final String ownerId) {
 
                 if (name == null) {
                     throw new NullPointerException("null name");
                 }
 
-                if (targetTaskId == null) {
-                    throw new NullPointerException("null targetTaskId");
+                if (ownerId == null) {
+                    throw new NullPointerException("null ownerId");
                 }
 
-                final String taskId = taskIdLocal.get();
-                if (taskId == null) {
-                    throw new IllegalStateException("no thread local task id");
-                }
-
-                return getProperty(targetTaskId, name);
+                return getProperty(ownerId, name);
             }
         };
 
 
-        for (Task task : tasks.values()) {
-            taskIdLocal.set(task.getId());
-            task.prepare(context);
+        final Collection<Task> tasks = taskContext.getTasks();
+
+        final Map<String, Task> map = new HashMap<String, Task>();
+
+        for (Task task : tasks) {
+            final String taskId = task.getId();
+            if (taskId == null){
+                throw new FSMException("null task id from " + task);
+            }
+            if (map.containsKey(taskId)) {
+                throw new FSMException("duplicate task id from " + task);
+            }
+            map.put(taskId, task);
+            try {
+                resolver.addDependency(taskId, null);
+            } catch (DependencyResolverException dre) {
+                //dre.printStackTrace(System.err); // not gonna happen
+                throw new FSMException(dre);
+            }
+            taskIdLocal.set(taskId);
+            task.prepare(transitionContext);
+            taskIdLocal.set(null);
         }
 
-        final List<String> single = resolver.getSingleGroup();
-        for (String taskId : tasks.keySet()) {
-            if (!single.contains(taskId)) {
-                single.add(taskId);
+        final List<List<String>> idGroups = resolver.getVerticalGroups();
+        for (List<String> idGroup : idGroups) {
+            final Task[] taskGroup = new Task[idGroup.size()];
+            for (int i = 0; i < taskGroup.length; i++) {
+                taskGroup[i] = map.get(idGroup.get(i));
             }
-        }
-
-        for (List<String> taskIdList : resolver.getHorizontalGroups()) {
-            final List<Task> taskList = new ArrayList<Task>(taskIdList.size());
-            for (String taskId : taskIdList) {
-                taskList.add(tasks.get(taskId));
-            }
-            perform(taskList);
+            perform(transitionContext, taskGroup);
         }
     }
 
 
     /**
-     * 
-     * @param taskList
-     * @throws FSMException 
+     * Perform <code>tasks</code>. Each task can be performed concurrently.
+     *
+     * @param context transition context
+     * @param taskGroup tasks to be performed
+     * @throws FSMException if an error occurs
      */
-    protected abstract void perform(final List<Task> taskList)
-        throws FSMException;
+    protected void perform(final TransitionContext context,
+                           final Task... taskGroup)
+        throws FSMException {
+
+        for (Task task : taskGroup) {
+            task.perform(context);
+        }
+    }
 
 
-    /** task map. */
-    private final Map<String, Task> tasks = new HashMap<String, Task>();
+    private final TaskContext taskContext;
 }
 

@@ -35,41 +35,34 @@ public interface TransitionContext {
 
     /**
      * Makes sure the task calling this method be performed after the task
-     * identified by <code>targetTaskId</code>.
+     * identified by <code>sourceTaskId</code>.
      *
-     * @param targetTaskId the id of the target task to wait
-     * @throws FSMException if targetTaskId is unknown or illegal dependency
+     * @param targetTaskId the id of task which must be performed before this
+     *        task
+     * @throws FSMException if sourceTaskId is unknown or illegal dependency
      *         detected.
      */
-    void setDependency(String targetTaskId) throws FSMException;
+    void setPerformAfter(String targetTaskId) throws FSMException;
 
 
     /**
-     * Sets property.
-     *
-     * @param name property name; may not null
-     * @param value property value
-     */
-    void setProperty(String name, String value);
-
-
-    /**
-     * Returns property value identified by <code>name</code>.
-     *
-     * @param name property name; may not null
-     * @return property value
-     */
-    String getProprety(String name);
-
-
-    /**
-     * Returns property value identified by <code>name</code> owned to the task
+     * Make sure the task calling this method be performed before the task
      * identified by <code>targetTaskId</code>.
      *
-     * @param name property name; may not null
-     * @param targetTaskId owner task id; may not null
-     * @return property value
+     * @param sourceTaskId the id of task which must be performed after this
+     *        task
+     * @throws FSMException if targetTaskId is unknown or illegal dependency
+     *         detected
      */
-    String getProprety(String name, String targetTaskId);
+    void setPerformBefore(String sourceTaskId) throws FSMException;
+
+
+    void setProperty(Task owner, String name, Object value);
+
+
+    Object getProprety(Task owner, String name);
+
+
+    Object getProprety(String name, String ownerId);
 }
 
