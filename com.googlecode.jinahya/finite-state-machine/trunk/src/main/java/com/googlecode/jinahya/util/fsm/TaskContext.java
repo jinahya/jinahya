@@ -218,13 +218,6 @@ public abstract class TaskContext {
             throw new NullPointerException("null classes");
         }
 
-        /*
-        if (classes.length == 0) {
-        throw new NullPointerException("empty classes");
-        }
-         */
-
-        //final Set<String> taskIdSet = new HashSet<String>();
         final List<Task> taskList = new ArrayList<Task>(classes.length);
 
         for (int i = 0; i < classes.length; i++) {
@@ -246,12 +239,6 @@ public abstract class TaskContext {
                     if (id == null) {
                         throw new FSMException("null task id at [" + i + "]");
                     }
-                    /*
-                    if (!taskIdSet.add(id)) {
-                    throw new FSMException(
-                    "duplicate task id at [" + i + "]");
-                    }
-                     */
                     taskList.add(task);
                 } catch (InstantiationException ie) {
                     throw new FSMException(ie);
