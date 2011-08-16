@@ -6,6 +6,7 @@
 A simple dependency resolving utility.
 
 = Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-8/apidocs/index.html 1.0-alpha-8]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-7/apidocs/index.html 1.0-alpha-7]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-6/apidocs/index.html 1.0-alpha-6]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/dependency-resolver/1.0-alpha-5/apidocs/index.html 1.0-alpha-5]
@@ -80,13 +81,13 @@ You can get a single list which is ordered as dependencies.
 final List<String> single = resolver.getSingleGroup();
 -> [R, Q, P, F, B, G, C, A, K, L, M, N, O, H, J, I]
 }}}
-And you can get a *_list of horizontal groups_*. Which means *_all groups must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
-{{{
-final List<List<String>> groups = resolver.getHorizontalGroups();
--> [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
-}}}
-You can also get a *_list of vertical groups_*. Which means *_each group can be processed concurrently_*  but *_all elements in a group must be processed in order_*.
+And you can get a *_list of vertical groups_*. Which means *_all groups must be processed sequentially_* but *_each element in a group can be processed concurrently_*.
 {{{
 final List<List<String>> groups = resolver.getVerticalGroups();
+-> [[J, N, M, K, G, F, R], [I, L, C, B, P, Q], [H, O, A]]
+}}}
+You can also get a *_list of horizontal groups_*. Which means *_each group can be processed concurrently_*  but *_all elements in a group must be processed in order_*.
+{{{
+final List<List<String>> groups = resolver.getHorizontalGroups();
 -> [[R, Q, P, O], [F, B, G, C, A, H], [K, L, J, I], [M], [N]]
 }}}
