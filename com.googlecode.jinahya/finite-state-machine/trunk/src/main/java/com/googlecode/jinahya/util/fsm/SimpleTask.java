@@ -23,7 +23,21 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class SimpleTask extends Task {
+public abstract class SimpleTask extends SwitchTask {
+
+
+    /**
+     * A TransitionMatcher instance matches nothing.
+     */
+    private static final TransitionMatcher NOTMATCHES =
+        new TransitionMatcher() {
+
+
+            @Override
+            public boolean matches(final Transition transition) {
+                return false;
+            }
+        };
 
 
     /**
@@ -34,53 +48,24 @@ public abstract class SimpleTask extends Task {
      */
     public SimpleTask(final String id, final TransitionMatcher[] matchers) {
 
-        super(id);
-
-        if (matchers == null) {
-            throw new NullPointerException("null matchers");
-        }
-
-        if (matchers.length == 0) {
-            throw new NullPointerException("empty matchers");
-        }
-
-        this.matchers = matchers;
+        super(id, matchers, new TransitionMatcher[]{NOTMATCHES});
     }
 
 
-    /**
-     * Checks if given <code>transition</code> matches any of matchers.
-     * 
-     * @param transition transition to check
-     * @return true if <code>transition</code> matches any of matchers.
-     */
-    protected boolean matchesAny(final Transition transition) {
-
-        if (transition == null) {
-            throw new NullPointerException("null transition");
-        }
-
-        return transition.matchesAny(matchers);
+    @Override
+    protected void prepareOff(final TransitionContext context)
+        throws FSMException {
+//empty
+        System.out.println("prepareOff?");
     }
 
 
-    /**
-     * Checks if given <code>transition</code> matches all of matchers.
-     *
-     * @param transition transition to check
-     * @return true if <code>transition</code> matches all of matchers.
-     */
-    protected boolean matchesAll(final Transition transition) {
+    @Override
+    protected void performOff(final TransitionContext context)
+        throws FSMException {
+        // empty
 
-        if (transition == null) {
-            throw new NullPointerException("null transition");
-        }
-
-        return transition.matchesAll(matchers);
+        System.out.println("performOff?");
     }
-
-
-    /** matchers for switching on. */
-    private final TransitionMatcher[] matchers;
 }
 
