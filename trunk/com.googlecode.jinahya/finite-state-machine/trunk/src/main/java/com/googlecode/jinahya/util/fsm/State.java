@@ -54,12 +54,12 @@ public class State implements Serializable {
     public State(final int code, final String name) {
         super();
 
-        if (code <= 0) {
-            throw new IllegalArgumentException("negative code: " + code);
-        }
-
         if (name == null) {
             throw new NullPointerException("null name");
+        }
+
+        if (name.trim().isEmpty()) {
+            throw new NullPointerException("empty name");
         }
 
         this.code = code;

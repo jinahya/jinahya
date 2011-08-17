@@ -30,25 +30,85 @@ import javax.tv.xlet.XletStateChangeException;
 public class MyXlet implements Xlet {
 
 
+    private static final TaskContext TASK_CONTEXT;
+
+
+    static {
+        try {
+            TASK_CONTEXT =
+                TaskContext.newInstance("com.googlecode.jinahya.util.fsm");
+        } catch (FSMException fsme) {
+            throw new InstantiationError(fsme.getMessage());
+        }
+    }
+
+
     @Override
     public void initXlet(final XletContext context)
         throws XletStateChangeException {
+
+        System.out.println("[XLET] initXlet");
+
+        synchronized (this) {
+            machine = new XletMachine(new MachineContext(TASK_CONTEXT));
+            try {
+                machine.setState(XletStates.PAUSED);
+            } catch (FSMException fsme) {
+                throw new XletStateChangeException(fsme.getMessage());
+            }
+        }
     }
 
 
     @Override
     public void startXlet() throws XletStateChangeException {
+
+        System.out.println("[XLET] startXlet");
+
+        synchronized (this) {
+            try {
+                machine.setState(XletStates.ACTIVE);
+            } catch (FSMException fsme) {
+                throw new XletStateChangeException(fsme.getMessage());
+            }
+        }
     }
 
 
     @Override
     public void pauseXlet() {
+
+        System.out.println("[XLET] pauseXlet");
+
+        synchronized (this) {
+            try {
+                machine.setState(XletStates.PAUSED);
+            } catch (FSMException fsme) {
+                fsme.printStackTrace(System.err);
+            }
+        }
     }
 
 
     @Override
     public void destroyXlet(final boolean unconditional)
         throws XletStateChangeException {
+
+        System.out.println("[XLET] destroyXlet");
+
+        synchronized (this) {
+            if (machine != null) {
+                try {
+                    machine.setState(XletStates.DESTROYED);
+                } catch (FSMException fsme) {
+                    fsme.printStackTrace(System.err);
+                }
+                machine = null;
+            }
+        }
     }
+
+
+    private volatile Machine machine = null;
 }
 
