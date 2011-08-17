@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * A Finite State Machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -55,7 +56,8 @@ public class Machine {
     /**
      * Sets state.
      *
-     * @param state state
+     * @param state new state
+     * @throws FSMException if an error occurs.
      */
     public synchronized void setState(final State state) throws FSMException {
 
@@ -84,19 +86,18 @@ public class Machine {
             started = true;
         }
 
-        try {
-            context.transited(transition);
-        } finally {
-            if (isFinishing(transition)) {
-                finished = true;
-            }
+        if (isFinishing(transition)) {
+            finished = true;
         }
+
+        context.transited(transition);
     }
 
 
     /**
-     * 
-     * @return 
+     * Returns <code>started</code> flag value.
+     *
+     * @return true if this machine has been started; false otherwise.
      */
     public final synchronized boolean isStarted() {
         return started;
@@ -104,8 +105,9 @@ public class Machine {
 
 
     /**
-     * 
-     * @return 
+     * Returns <code>finished</code> flag value.
+     *
+     * @return true if this machine has been finished; false otherwise.
      */
     public final synchronized boolean isFinished() {
         return finished;
@@ -113,8 +115,11 @@ public class Machine {
 
 
     /**
-     * 
-     * @param transition
+     * Checks if given <code>transition</code> is a starting condition.
+     * Default implementation always returns <code>true</code>. Override this
+     * method if customizations are needed.
+     *
+     * @param transition transition to check
      * @return true
      */
     protected boolean isStarting(final Transition transition) {
@@ -123,8 +128,11 @@ public class Machine {
 
 
     /**
-     * 
-     * @param transition
+     * Checks if given <code>transition</code> is allowed. Default
+     * implementation always returns <code>true</code>. Override this method if
+     * customizations are needed.
+     *
+     * @param transition transition to check.
      * @return true
      */
     protected boolean isAllowed(final Transition transition) {
@@ -133,8 +141,11 @@ public class Machine {
 
 
     /**
-     * 
-     * @param transition
+     * Checks if given <code>transition</code> is an finishing condition.
+     * Default implementation always returns <code>false</code>. Override this
+     * method if customizations are needed.
+     *
+     * @param transition transition to check
      * @return false 
      */
     protected boolean isFinishing(final Transition transition) {

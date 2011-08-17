@@ -29,10 +29,11 @@ import java.util.Map;
 
 
 /**
+ * The machine context which performs tasks for every transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class MachineContext {
+public class MachineContext {
 
 
     /**
@@ -52,9 +53,10 @@ public abstract class MachineContext {
 
 
     /**
-     * 
-     * @param transition transition
-     * @throws FSMException
+     * Notifies a state transition.
+     *
+     * @param transition transition transition.
+     * @throws FSMException if an error occurs.
      */
     public void transited(final Transition transition) throws FSMException {
 
@@ -79,20 +81,20 @@ public abstract class MachineContext {
 
 
             @Override
-            public void setPerformBefore(final String sourceTaskId)
+            public void setPerformBefore(final String nextTaskId)
                 throws FSMException {
 
-                if (sourceTaskId == null) {
-                    throw new NullPointerException("null sourceTaskId");
+                if (nextTaskId == null) {
+                    throw new NullPointerException("null nextTaskId");
                 }
 
-                final String targetTaskId = taskIdLocal.get();
-                if (targetTaskId == null) {
+                final String taskId = taskIdLocal.get();
+                if (taskId == null) {
                     throw new IllegalStateException("no task id set");
                 }
 
                 try {
-                    resolver.addDependency(sourceTaskId, targetTaskId);
+                    resolver.addDependency(nextTaskId, taskId);
                 } catch (DependencyResolverException dre) {
                     throw new FSMException(dre);
                 }
@@ -100,20 +102,20 @@ public abstract class MachineContext {
 
 
             @Override
-            public void setPerformAfter(final String targetTaskId)
+            public void setPerformAfter(final String previousTaskId)
                 throws FSMException {
 
-                if (targetTaskId == null) {
-                    throw new NullPointerException("null targetTaskId");
+                if (previousTaskId == null) {
+                    throw new NullPointerException("null previousTaskId");
                 }
 
-                final String sourceTaskId = taskIdLocal.get();
-                if (sourceTaskId == null) {
+                final String taskId = taskIdLocal.get();
+                if (taskId == null) {
                     throw new IllegalStateException("no task id set");
                 }
 
                 try {
-                    resolver.addDependency(sourceTaskId, targetTaskId);
+                    resolver.addDependency(taskId, previousTaskId);
                 } catch (DependencyResolverException dre) {
                     throw new FSMException(dre);
                 }
@@ -121,6 +123,7 @@ public abstract class MachineContext {
 
 
             /**
+             * Sets property.
              *
              * @param taskId property owner task id
              * @param name property name
@@ -258,18 +261,23 @@ public abstract class MachineContext {
 
     /**
      * Perform <code>tasks</code>. Each task can be performed concurrently.
-     * Implementations must guarantee that all tasks performed before this
-     * method returns.
+     * Overriding classes must guarantee that all tasks performed before this
+     * method returns. Default implementation performs tasks one by one.
      *
      * @param context transition context
      * @param tasks tasks to be performed
      * @throws FSMException if an error occurs
      */
-    protected abstract void perform(final TransitionContext context,
-                                    final Task... tasks)
-        throws FSMException;
+    protected void perform(final TransitionContext context, final Task... tasks)
+        throws FSMException {
+
+        for (Task task : tasks) {
+            task.perform(context);
+        }
+    }
 
 
+    /** task context. */
     private final TaskContext taskContext;
 }
 

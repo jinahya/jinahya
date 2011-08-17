@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 
 /**
+ * State of a machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -33,7 +34,7 @@ public class State implements Serializable {
 
 
     /**
-     * 
+     * Default state for all newly created machines.
      */
     public static final State UNKNOWN = new State(0, "UNKNOWN");
 
@@ -110,11 +111,21 @@ public class State implements Serializable {
     }
 
 
+    /**
+     * Returns code.
+     *
+     * @return code
+     */
     public final int getCode() {
         return code;
     }
 
 
+    /**
+     * Returns name.
+     *
+     * @return name
+     */
     public final String getName() {
         return name;
     }

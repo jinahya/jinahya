@@ -19,19 +19,14 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
- * Interface for matching a transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface TransitionMatcher {
+public class MachineContextImpl extends MachineContext {
 
 
-    /**
-     * Matches given <code>transition</code>.
-     *
-     * @param transition the transition to match
-     * @return true if matches; false otherwise
-     */
-    boolean matches(Transition transition);
+    public MachineContextImpl(final TaskContext taskContext) {
+        super(taskContext);
+    }
 }
 
