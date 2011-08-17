@@ -21,11 +21,11 @@ package com.googlecode.jinahya.util.fsm;
 import com.googlecode.jinahya.util.DependencyResolver;
 import com.googlecode.jinahya.util.DependencyResolverException;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 /**
@@ -223,28 +223,17 @@ public class MachineContext {
             }
         };
 
+        final Map<String, Task> taskMap = taskContext.getTaskMap();
 
-        final Collection<Task> contextTasks = taskContext.getTasks();
-
-        final Map<String, Task> map = new HashMap<String, Task>();
-
-        for (Task task : contextTasks) {
-            final String taskId = task.getId();
-            if (taskId == null) {
-                throw new FSMException("null task id from " + task);
-            }
-            if (map.containsKey(taskId)) {
-                throw new FSMException("duplicate task id from " + task);
-            }
-            map.put(taskId, task);
+        for (Entry<String, Task> entry : taskMap.entrySet()) {
             try {
-                resolver.addDependency(taskId, null);
+                resolver.addDependency(entry.getKey(), null);
             } catch (DependencyResolverException dre) {
                 //dre.printStackTrace(System.err); // not gonna happen
                 throw new FSMException(dre);
             }
-            taskIdLocal.set(taskId);
-            task.prepare(transitionContext);
+            taskIdLocal.set(entry.getKey());
+            entry.getValue().prepare(transitionContext);
             taskIdLocal.set(null);
         }
 
@@ -252,7 +241,7 @@ public class MachineContext {
         for (List<String> idGroup : idGroups) {
             final Task[] tasks = new Task[idGroup.size()];
             for (int i = 0; i < tasks.length; i++) {
-                tasks[i] = map.get(idGroup.get(i));
+                tasks[i] = taskMap.get(idGroup.get(i));
             }
             perform(transitionContext, tasks);
         }
