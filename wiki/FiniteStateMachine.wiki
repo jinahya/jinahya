@@ -5,6 +5,8 @@
 
 Add your content here.
 
+= Apidocs =
+  * [http://jinahya.googlecode.com/site/com.googlecode.jinahya/finite-state-machine/1.0-alpha-3/index.html 1.0-alpha-3]
 
 = Details =
 
