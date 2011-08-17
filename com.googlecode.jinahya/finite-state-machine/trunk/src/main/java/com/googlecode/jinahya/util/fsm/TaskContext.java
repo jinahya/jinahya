@@ -37,7 +37,7 @@ import java.util.StringTokenizer;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class TaskContext {
+public class TaskContext {
 
 
     /** task index filename. */
@@ -60,7 +60,7 @@ public abstract class TaskContext {
          * @throws IOException if an I/O error occurs
          * @throws FSMException if an error occurs
          */
-        InputStream loadResource(ClassLoader classLoader, String resourceName)
+        InputStream load(ClassLoader classLoader, String resourceName)
             throws IOException, FSMException;
     };
 
@@ -71,8 +71,8 @@ public abstract class TaskContext {
 
 
             @Override
-            public InputStream loadResource(final ClassLoader classLoader,
-                                            final String resourceName)
+            public InputStream load(final ClassLoader classLoader,
+                                    final String resourceName)
                 throws IOException, FSMException {
 
                 if (classLoader == null) {
@@ -100,33 +100,33 @@ public abstract class TaskContext {
 
 
     /**
-     * Creates a new instance of <code>FSMContext</code>.
+     * Loads task classes.
      *
      * @param contextPath context path
      * @param classLoader class loader
-     * @return a new instance of <code>FSMContext</code>
+     * @return an array of loaded task classes
      * @throws FSMException if an error occurs.
      */
-    protected static Class<?>[] loadClasses(final String contextPath,
-                                            final ClassLoader classLoader)
+    protected static Class<?>[] load(final String contextPath,
+                                     final ClassLoader classLoader)
         throws FSMException {
 
-        return loadClasses(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
+        return load(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
     }
 
 
     /**
-     * Creates a new instance of <code>FSMContext</code>.
+     * Loads task classes.
      *
      * @param contextPath context path
      * @param classLoader class loader
      * @param resourceLoader platform specific resource loader
-     * @return an array of loaded tasks
+     * @return an array of loaded task classes
      * @throws FSMException if an error occurs.
      */
-    protected static Class<?>[] loadClasses(final String contextPath,
-                                            final ClassLoader classLoader,
-                                            final ResourceLoader resourceLoader)
+    protected static Class<?>[] load(final String contextPath,
+                                     final ClassLoader classLoader,
+                                     final ResourceLoader resourceLoader)
         throws FSMException {
 
         if (contextPath == null) {
@@ -153,14 +153,14 @@ public abstract class TaskContext {
             throw new FSMException("no package names parsed");
         }
 
-        final List<Class<?>> classList = new ArrayList<Class<?>>();
+        final List<Class<?>> classes = new ArrayList<Class<?>>();
 
         for (String packageName : packageNames) {
             final String resourceName =
                 packageName.replace('.', '/') + "/" + TASK_INDEX_FILENAME;
             try {
                 final InputStream resourceStream =
-                    resourceLoader.loadResource(classLoader, resourceName);
+                    resourceLoader.load(classLoader, resourceName);
                 if (resourceStream == null) {
                     throw new FSMException("resourceLoader returned null?");
                 }
@@ -177,7 +177,7 @@ public abstract class TaskContext {
                             }
                             final String className = packageName + "." + line;
                             try {
-                                classList.add(classLoader.loadClass(className));
+                                classes.add(classLoader.loadClass(className));
                             } catch (ClassNotFoundException cnfe) {
                                 throw new FSMException(cnfe);
                             }
@@ -193,14 +193,11 @@ public abstract class TaskContext {
             }
         }
 
-        if (classList.isEmpty()) {
+        if (classes.isEmpty()) {
             throw new FSMException("no task classes are loaded");
         }
 
-        final Class<?>[] classes = new Class<?>[classList.size()];
-        classList.toArray(classes);
-
-        return classes;
+        return classes.toArray(new Class<?>[classes.size()]);
     }
 
 
@@ -211,7 +208,7 @@ public abstract class TaskContext {
      * @return a new instance of <code>FSMContext</code>.
      * @throws FSMException if an error occurs.
      */
-    protected static Task[] instantiateTasks(final Class<?>[] classes)
+    protected static Task[] instantiate(final Class<?>[] classes)
         throws FSMException {
 
         if (classes == null) {
@@ -278,7 +275,7 @@ public abstract class TaskContext {
             throw new NullPointerException("null taskClasses");
         }
 
-        this.tasks = instantiateTasks(classes);
+        this.tasks = instantiate(classes);
     }
 
 

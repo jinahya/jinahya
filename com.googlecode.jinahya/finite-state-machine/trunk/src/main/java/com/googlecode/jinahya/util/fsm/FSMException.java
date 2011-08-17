@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * Exception for FSM.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

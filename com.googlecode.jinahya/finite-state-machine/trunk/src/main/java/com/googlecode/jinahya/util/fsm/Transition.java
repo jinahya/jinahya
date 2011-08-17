@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * Transition between states.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
