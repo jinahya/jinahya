@@ -278,6 +278,6 @@ public class MachineContext {
 
 
     /** task context. */
-    private final TaskContext taskContext;
+    protected final TaskContext taskContext;
 }
 
