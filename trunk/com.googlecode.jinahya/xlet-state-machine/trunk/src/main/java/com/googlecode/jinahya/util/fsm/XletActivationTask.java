@@ -18,25 +18,23 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import static com.googlecode.jinahya.util.fsm.XletTransitionMatchers.*;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletTask extends Task {
+public abstract class XletActivationTask extends SimpleTask {
 
 
     /**
      * Creates a new instance.
      *
-     * @param id 
+     * @param id task id
      */
-    public XletTask(final String id) {
-        super(id);
-    }
-
-
-    @Override
-    public void perform(final TransitionContext context) throws FSMException {
+    public XletActivationTask(final String id) {
+        super(id, new TransitionMatcher[]{START_XLET});
     }
 }
 
