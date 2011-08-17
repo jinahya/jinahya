@@ -35,7 +35,7 @@ public abstract class XletActivationSwitchTask extends SwitchTask {
      */
     public XletActivationSwitchTask(final String id) {
         super(id, new TransitionMatcher[]{START_XLET},
-              new TransitionMatcher[]{DESTROY_XLET});
+              new TransitionMatcher[]{PAUSE_XLET, DESTROY_XLET});
     }
 }
 
