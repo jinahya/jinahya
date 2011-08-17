@@ -29,6 +29,13 @@ public class CyclicDependencyException extends DependencyResolverException {
     private static final long serialVersionUID = 8162863238681407043L;
 
 
+    /**
+     * Creates a new dependency for cyclic dependency between
+     * <code>source</code> and <code>target</code>.
+     *
+     * @param source source
+     * @param target target
+     */
     public CyclicDependencyException(final Object source, final Object target) {
         super("cyclic dependency: " + source + " -> " + target);
     }

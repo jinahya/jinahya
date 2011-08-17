@@ -79,7 +79,7 @@ public class DependencyResolver<T> {
 
         if (source.equals(target)) {
             throw new IllegalArgumentException(
-                "self dependency: " + source + " -> " + target);
+                "source(" + source + ") is equals to target(" + target + ")");
         }
 
         synchronized (map) {
@@ -245,7 +245,7 @@ public class DependencyResolver<T> {
 
         if (source.equals(target)) {
             throw new IllegalArgumentException(
-                "self dependency: " + source + " -> " + target);
+                "source(" + source + ") is equals to target(" + target + ")");
         }
 
         synchronized (map) {
@@ -395,8 +395,8 @@ public class DependencyResolver<T> {
 
 
     /**
-     * Returns a list of vertical groups. Each element in a group can be
-     * processed concurrently but all groups must be processed in order.
+     * Returns a list of vertical dependency groups. Each element in a group can
+     * be processed concurrently but all groups must be processed in order.
      *
      * @return vertical groups
      */

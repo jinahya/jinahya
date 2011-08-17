@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 /**
+ * General exception for dependency resolver.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -29,17 +30,34 @@ public class DependencyResolverException extends Exception {
     private static final long serialVersionUID = -4398231764430765498L;
 
 
+    /**
+     * Creates a new instance with given <code>cause</code>.
+     *
+     * @param cause cause
+     */
     public DependencyResolverException(final Throwable cause) {
         super(cause);
     }
 
 
+    /**
+     * Creates a new instance with given <code>message</code> and
+     * <code>cause</code>.
+     *
+     * @param message message
+     * @param cause cause
+     */
     public DependencyResolverException(final String message,
                                        final Throwable cause) {
         super(message, cause);
     }
 
 
+    /**
+     * Creates a new instance with given <code>message</code>.
+     *
+     * @param message message
+     */
     public DependencyResolverException(final String message) {
         super(message);
     }

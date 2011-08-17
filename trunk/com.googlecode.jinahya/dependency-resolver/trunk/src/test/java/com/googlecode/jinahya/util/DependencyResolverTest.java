@@ -29,37 +29,6 @@ import org.testng.annotations.Test;
 public class DependencyResolverTest {
 
 
-    private static final DependencyResolver<String> RESOLVER =
-        new DependencyResolver<String>();
-
-
-    static {
-        try {
-            RESOLVER.addDependencies("A", "B", "C", null);
-
-            RESOLVER.addDependencies("B", "F", null);
-
-            RESOLVER.addDependencies("C", "G", null);
-
-            RESOLVER.addDependency("H", "B");
-
-            RESOLVER.addDependencies("I", "J", "K");
-
-            RESOLVER.addDependency("L", "K");
-
-            RESOLVER.addDependency("M", null);
-
-            RESOLVER.addDependency("N", null);
-
-            RESOLVER.addDependencies("O", "P", "Q");
-            RESOLVER.addDependency("P", "R");
-            RESOLVER.addDependencies("Q", "R");
-        } catch (DependencyResolverException dre) {
-            throw new InstantiationError(dre.getMessage());
-        }
-    }
-
-
     @Test
     public void testAddDependency() throws DependencyResolverException {
 
@@ -129,14 +98,6 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testGetDependencyGroups() {
-
-        System.out.println("paths from O to R: "
-                           + RESOLVER.getDependencyPaths("O", "R"));
-    }
-
-
-    @Test
     public void testHasDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
@@ -151,15 +112,6 @@ public class DependencyResolverTest {
         resolver.removeDependency("A", "B");
 
         Assert.assertFalse(resolver.hasDependency("A", "B"));
-    }
-
-
-    @Test
-    public void testHasDependencies() {
-
-        Assert.assertTrue(RESOLVER.hasDependencies("A", "F", "G"));
-
-        Assert.assertFalse(RESOLVER.hasDependencies("H", "F", "G"));
     }
 
 
@@ -184,27 +136,6 @@ public class DependencyResolverTest {
             new DependencyResolver<String>();
 
         resolver.removeDependencies("A", "B", "C", "D", null);
-    }
-
-
-    @Test
-    public void testGetSingleGroup() {
-
-        System.out.println("single: " + RESOLVER.getSingleGroup());
-    }
-
-
-    @Test
-    public void testGetVerticalGroup() {
-
-        System.out.println("vertical: " + RESOLVER.getVerticalGroups());
-    }
-
-
-    @Test
-    public void testGetHorizontalGroup() {
-
-        System.out.println("horizontal: " + RESOLVER.getHorizontalGroups());
     }
 }
 
