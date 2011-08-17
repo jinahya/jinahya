@@ -117,6 +117,50 @@ public class Transition {
     }
 
 
+    /**
+     * Check if this transition matches any of given <code>matchers</code>.
+     *
+     * @param matchers matchers
+     * @return true if matches any; false otherwise
+     */
+    public boolean matchesAny(final TransitionMatcher... matchers) {
+
+        if (matchers == null) {
+            throw new NullPointerException("null matchers");
+        }
+
+        for (TransitionMatcher matcher : matchers) {
+            if (matcher.matches(this)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * checks if this transition matches all of given <code>matchers</code>.
+     *
+     * @param matchers matchers
+     * @return true if matches all; false otherwise
+     */
+    public boolean matchesAll(final TransitionMatcher... matchers) {
+
+        if (matchers == null) {
+            throw new NullPointerException("null matchers");
+        }
+
+        for (TransitionMatcher matcher : matchers) {
+            if (!matcher.matches(this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     /** old state. */
     private final State source;
 
