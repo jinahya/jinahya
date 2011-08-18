@@ -148,6 +148,11 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <links>
+                  <link>http://download.oracle.com/javase/7/docs/api/</link>
+                </links>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
@@ -160,7 +165,7 @@
   </build>
   <reporting />
 
-  <name>${project.artifactId}</name>
+  <name>finite-state-machine</name>
   <url>http://jinahya.googlecode.com/</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
