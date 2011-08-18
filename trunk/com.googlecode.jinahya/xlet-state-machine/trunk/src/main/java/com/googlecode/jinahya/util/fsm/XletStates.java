@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * States.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -55,9 +56,7 @@ public final class XletStates {
         new State(ACTIVE.getCode() << 1, "DESTROYED");
 
 
-    /**
-     * Creates a new instance.
-     */
+    /** PRIVATE. */
     private XletStates() {
         super();
     }
