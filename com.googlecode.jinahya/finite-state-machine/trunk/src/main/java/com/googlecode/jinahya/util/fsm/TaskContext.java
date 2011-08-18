@@ -85,7 +85,7 @@ public class TaskContext {
                     throw new NullPointerException("null resourceName");
                 }
 
-                if (resourceName.trim().isEmpty()) {
+                if (resourceName.trim().length() == 0) {
                     throw new IllegalArgumentException("empty resourceName");
                 }
 
@@ -109,8 +109,8 @@ public class TaskContext {
      * @return a collection of loaded task classes
      * @throws FSMException if an error occurs.
      */
-    protected static Set<Class<? extends Task>> load(
-        final String contextPath, final ClassLoader classLoader)
+    protected static Set<Class<?>> load(final String contextPath,
+                                        final ClassLoader classLoader)
         throws FSMException {
 
         return load(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
@@ -126,9 +126,9 @@ public class TaskContext {
      * @return a collection of loaded task classes
      * @throws FSMException if an error occurs.
      */
-    protected static Set<Class<? extends Task>> load(
-        final String contextPath, final ClassLoader classLoader,
-        final ResourceLoader resourceLoader)
+    protected static Set<Class<?>> load(final String contextPath,
+                                        final ClassLoader classLoader,
+                                        final ResourceLoader resourceLoader)
         throws FSMException {
 
         if (contextPath == null) {
@@ -147,7 +147,7 @@ public class TaskContext {
         final StringTokenizer tokenizer = new StringTokenizer(contextPath, ":");
         while (tokenizer.hasMoreTokens()) {
             final String packageName = tokenizer.nextToken();
-            if (!packageName.trim().isEmpty()) {
+            if (packageName.trim().length() > 0) {
                 packageNames.add(packageName);
             }
         }
@@ -155,8 +155,7 @@ public class TaskContext {
             throw new FSMException("no package names parsed");
         }
 
-        final Set<Class<? extends Task>> classes =
-            new HashSet<Class<? extends Task>>();
+        final Set<Class<?>> classes = new HashSet<Class<?>>();
 
         for (String packageName : packageNames) {
             final String resourceName =
@@ -175,21 +174,12 @@ public class TaskContext {
                              (line = reader.readLine()) != null;) {
 
                             line = line.trim();
-                            if (line.isEmpty() || line.startsWith("#")) {
+                            if (line.length() == 0 || line.startsWith("#")) {
                                 continue;
                             }
                             final String className = packageName + "." + line;
                             try {
-                                final Class<?> clazz =
-                                    classLoader.loadClass(className);
-                                try {
-                                    classes.add(clazz.asSubclass(Task.class));
-                                } catch (ClassCastException cce) {
-                                    throw new FSMException(
-                                        clazz + ") is not assignable to "
-                                        + Task.class);
-
-                                }
+                                classes.add(classLoader.loadClass(className));
                             } catch (ClassNotFoundException cnfe) {
                                 throw new FSMException(
                                     "failed to load class: " + className, cnfe);
@@ -217,8 +207,7 @@ public class TaskContext {
      * @return a new instance of <code>FSMContext</code>.
      * @throws FSMException if an error occurs.
      */
-    protected static Collection<Task> instantiate(
-        final Set<Class<? extends Task>> classes)
+    protected static List<Task> instantiate(final Set<Class<?>> classes)
         throws FSMException {
 
         if (classes == null) {
@@ -228,15 +217,20 @@ public class TaskContext {
         final Set<String> taskIdSet = new HashSet<String>();
         final List<Task> taskList = new ArrayList<Task>(classes.size());
 
-        for (Class<? extends Task> clazz : classes) {
+        for (Class<?> clazz : classes) {
             if (clazz == null) {
                 throw new NullPointerException("null task class");
             }
+            if (!Task.class.isAssignableFrom(clazz)) {
+                throw new IllegalArgumentException(
+                    clazz + " is not assignable to " + Task.class);
+            }
             try {
-                final Constructor<? extends Task> constructor =
+                final Constructor<?> constructor =
                     clazz.getConstructor((Class[]) null);
                 try {
-                    final Task task = constructor.newInstance((Object[]) null);
+                    final Task task =
+                        (Task) constructor.newInstance((Object[]) null);
                     final String taskId = task.getId();
                     if (!taskIdSet.add(taskId)) {
                         throw new FSMException("duplicate task id: " + taskId);
@@ -329,15 +323,25 @@ public class TaskContext {
      *
      * @param classes task classes
      */
-    protected TaskContext(final Set<Class<? extends Task>> classes) {
+    protected TaskContext(final Set<Class<?>> classes) {
 
         super();
 
         if (classes == null) {
-            throw new NullPointerException("null taskClasses");
+            throw new NullPointerException("null classes");
         }
 
-        this.classes = new HashSet<Class<? extends Task>>(classes);
+        for (Class<?> clazz : classes) {
+            if (clazz == null) {
+                throw new NullPointerException("null class");
+            }
+            if (!Task.class.isAssignableFrom(clazz)) {
+                throw new IllegalArgumentException(
+                    clazz + " is not assignable to " + Task.class);
+            }
+        }
+
+        this.classes = new HashSet<Class<?>>(classes);
     }
 
 
@@ -376,10 +380,10 @@ public class TaskContext {
 
 
     /** classes. */
-    private final Set<Class<? extends Task>> classes;
+    private final Set<Class<?>> classes;
 
 
     /** tasks. */
-    private volatile Collection<Task> tasks = null;
+    private volatile List<Task> tasks = null;
 }
 

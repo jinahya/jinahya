@@ -58,7 +58,7 @@ public class State implements Serializable {
             throw new NullPointerException("null name");
         }
 
-        if (name.trim().isEmpty()) {
+        if (name.trim().length() == 0) {
             throw new NullPointerException("empty name");
         }
 
