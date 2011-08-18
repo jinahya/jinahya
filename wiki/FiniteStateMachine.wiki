@@ -21,6 +21,7 @@ A State has a code and name.
 === Transition ===
 A Transition consists of two States. One for the previous(current) State and one for the current(next) State.
 {{{
+final Transition transition = ...
 final State previous = transition.getSource();
 final State current = transition.getTarget();
 }}}
