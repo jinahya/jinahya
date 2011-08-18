@@ -40,19 +40,6 @@ public class UpdateTitlesOnce extends XletInitializationTask {
 
 
     @Override
-    public void prepare(final TransitionContext context) throws FSMException {
-        System.out.println("[" + getId() + "] prepare");
-
-        final Transition transition = context.getTransition();
-        System.out.println(transition);
-
-        System.out.println(XletTransitionMatchers.INIT_XLET.matches(transition));
-
-        super.prepare(context);
-    }
-
-
-    @Override
     public void prepareOn(final TransitionContext context) throws FSMException {
 
         System.out.println("[" + getId() + "] prepareOn");

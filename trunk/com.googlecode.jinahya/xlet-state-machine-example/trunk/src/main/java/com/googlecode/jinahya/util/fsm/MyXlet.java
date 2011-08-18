@@ -30,27 +30,22 @@ import javax.tv.xlet.XletStateChangeException;
 public class MyXlet implements Xlet {
 
 
-    private static final TaskContext TASK_CONTEXT;
-
-
-    static {
-        try {
-            TASK_CONTEXT =
-                TaskContext.newInstance("com.googlecode.jinahya.util.fsm");
-        } catch (FSMException fsme) {
-            throw new InstantiationError(fsme.getMessage());
-        }
-    }
-
-
     @Override
     public void initXlet(final XletContext context)
         throws XletStateChangeException {
 
         System.out.println("[XLET] initXlet");
 
+        final TaskContext taskContext;
+        try {
+            taskContext =
+                TaskContext.newInstance("com.googlecode.jinahya.util.fsm");
+        } catch (FSMException fsme) {
+            throw new XletStateChangeException(fsme.getMessage());
+        }
+
         synchronized (this) {
-            machine = new XletMachine(new MachineContext(TASK_CONTEXT));
+            machine = new XletMachine(new MachineContext(taskContext));
             try {
                 machine.setState(XletStates.PAUSED);
             } catch (FSMException fsme) {
