@@ -19,7 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -107,12 +107,8 @@ public final class XletTransitionMatchers {
     /**
      * Unmodifiable collection of matchers.
      */
-    public static final Collection<TransitionMatcher> VALUES;
-
-
-    static {
-        VALUES = Arrays.asList(LOAD_XLET, START_XLET, PAUSE_XLET, DESTROY_XLET);
-    }
+    public static final List<TransitionMatcher> VALUES =
+        Arrays.asList(LOAD_XLET, START_XLET, PAUSE_XLET, DESTROY_XLET);
 
 
     /** PRIVATE. */
