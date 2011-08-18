@@ -17,8 +17,13 @@ Add your content here.  Format your content with:
   * Automatic links to other wiki pages
 == Components ==
 === State ===
+A State has a code and name.
 === Transition ===
+A Transition has two States. One for source and the other is target.
 === Task ===
 === !TaskContext ===
+TaskContexts are responsible to load Tasks.
 === Machine ===
+Machines are responsible to hold current State and fire Transitions to MachineContext.
 === !MachineContext ===
+MachineContexts are responsible to perform Tasks retrieved from TaskContext.
