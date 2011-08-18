@@ -19,7 +19,7 @@ Add your content here.  Format your content with:
 === State ===
 A State has a code and name.
 === Transition ===
-A Transition has two States. One for source and the other is target.
+A Transition consists of two States. One for the previous(current) State and one for the current(next) State.
 === Task ===
 === !TaskContext ===
 TaskContexts are responsible to load Tasks.
