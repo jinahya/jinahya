@@ -26,10 +26,8 @@ package com.googlecode.jinahya.util.fsm;
 public abstract class SimpleTask extends SwitchTask {
 
 
-    /**
-     * A TransitionMatcher instance matches nothing.
-     */
-    private static final TransitionMatcher NOTMATCHES =
+    /** A TransitionMatcher doesn't match at all. */
+    private static final TransitionMatcher NOT_MATCHES_AT_ALL =
         new TransitionMatcher() {
 
 
@@ -48,24 +46,23 @@ public abstract class SimpleTask extends SwitchTask {
      */
     public SimpleTask(final String id, final TransitionMatcher[] matchers) {
 
-        super(id, matchers, new TransitionMatcher[]{NOTMATCHES});
+        super(id, matchers, new TransitionMatcher[]{NOT_MATCHES_AT_ALL});
     }
 
 
     @Override
     protected void prepareOff(final TransitionContext context)
         throws FSMException {
-//empty
-        System.out.println("prepareOff?");
+
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
     @Override
     protected void performOff(final TransitionContext context)
         throws FSMException {
-        // empty
 
-        System.out.println("performOff?");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
 
