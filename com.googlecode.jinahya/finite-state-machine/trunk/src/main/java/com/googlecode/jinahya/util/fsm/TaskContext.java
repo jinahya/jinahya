@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,7 +27,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -53,90 +53,104 @@ public class TaskContext {
 
 
         /**
-         * Loads resource denoted by given <code>resourceName</code> using
-         * specified <code>classLoader</code>.
+         * Loads resource denoted by given <code>resourceName</code>.
          *
-         * @param classLoader class loader
          * @param resourceName resource name
-         * @return loaded resource; never null
+         * @return loaded resource stream; never null
          * @throws IOException if an I/O error occurs
          * @throws FSMException if an error occurs
          */
-        InputStream load(ClassLoader classLoader, String resourceName)
-            throws IOException, FSMException;
+        InputStream load(String resourceName) throws IOException, FSMException;
     };
 
 
-    /** Default implementation. */
-    protected static final ResourceLoader DEFAULT_RESOURCE_LOADER =
-        new ResourceLoader() {
+    /**
+     * A ResourceLoader implementation using a ClassLoader.
+     */
+    protected static class ClassResourceLoader implements ResourceLoader {
 
 
-            @Override
-            public InputStream load(final ClassLoader classLoader,
-                                    final String resourceName)
-                throws IOException, FSMException {
+        /**
+         * Creates a new instance.
+         *
+         * @param classLoader 
+         */
+        public ClassResourceLoader(final ClassLoader classLoader) {
+            super();
 
-                if (classLoader == null) {
-                    throw new NullPointerException("null classLoader");
-                }
-
-                if (resourceName == null) {
-                    throw new NullPointerException("null resourceName");
-                }
-
-                if (resourceName.trim().length() == 0) {
-                    throw new IllegalArgumentException("empty resourceName");
-                }
-
-                final InputStream resourceStream =
-                    classLoader.getResourceAsStream(resourceName);
-                if (resourceName == null) {
-                    throw new FSMException(
-                        "failed to find resource: " + resourceName);
-                }
-
-                return resourceStream;
+            if (classLoader == null) {
+                throw new NullPointerException("null classLoader");
             }
-        };
+
+            this.classLoader = classLoader;
+        }
+
+
+        @Override
+        public InputStream load(final String resourceName)
+            throws IOException, FSMException {
+
+            if (resourceName == null) {
+                throw new NullPointerException("null resourceName");
+            }
+
+            if (resourceName.trim().length() == 0) {
+                throw new IllegalArgumentException("empty resourceName");
+            }
+
+            final InputStream resourceStream =
+                classLoader.getResourceAsStream(resourceName);
+            if (resourceName == null) {
+                throw new FSMException(
+                    "failed to load resource: " + resourceName);
+            }
+
+            return resourceStream;
+        }
+
+
+        /** class loader. */
+        private final ClassLoader classLoader;
+    };
+
+
+    /**
+     * A ResourceLoader implementation using File I/O.
+     */
+    protected static class FileResourceLoader implements ResourceLoader {
+
+
+        @Override
+        public InputStream load(final String resourceName)
+            throws IOException, FSMException {
+
+            if (resourceName == null) {
+                throw new NullPointerException("null resourceName");
+            }
+
+            if (resourceName.trim().length() == 0) {
+                throw new IllegalArgumentException("empty resourceName");
+            }
+
+            return new FileInputStream(resourceName);
+        }
+    };
 
 
     /**
      * Loads task classes.
      *
      * @param contextPath context path
-     * @param classLoader class loader
-     * @return a collection of loaded task classes
+     * @param resourceLoader resource loader
+     * @return a set of indexed task class names.
      * @throws FSMException if an error occurs.
      */
-    protected static Set<Class<?>> load(final String contextPath,
-                                        final ClassLoader classLoader)
-        throws FSMException {
-
-        return load(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
-    }
-
-
-    /**
-     * Loads task classes.
-     *
-     * @param contextPath context path
-     * @param classLoader class loader
-     * @param resourceLoader platform specific resource loader
-     * @return a collection of loaded task classes
-     * @throws FSMException if an error occurs.
-     */
-    protected static Set<Class<?>> load(final String contextPath,
-                                        final ClassLoader classLoader,
-                                        final ResourceLoader resourceLoader)
+    protected static Set<String> index(final String contextPath,
+                                       final ResourceLoader resourceLoader)
         throws FSMException {
 
         if (contextPath == null) {
             throw new NullPointerException("null contextPath");
-        }
-
-        if (classLoader == null) {
-            throw new NullPointerException("null classLoader");
         }
 
         if (resourceLoader == null) {
@@ -151,239 +165,166 @@ public class TaskContext {
                 packageNames.add(packageName);
             }
         }
-        if (packageNames.isEmpty()) {
-            throw new FSMException("no package names parsed");
-        }
 
-        final Set<Class<?>> classes = new HashSet<Class<?>>();
+        final Set<String> classNames = new HashSet<String>();
 
         for (String packageName : packageNames) {
             final String resourceName =
                 packageName.replace('.', '/') + "/" + TASK_INDEX_FILENAME;
             try {
-                final InputStream resourceStream =
-                    resourceLoader.load(classLoader, resourceName);
-                if (resourceStream == null) {
-                    throw new FSMException("resourceLoader returned null?");
+                final InputStream resource = resourceLoader.load(resourceName);
+                if (resource == null) {
+                    throw new FSMException("resourceLoader loaded null?");
                 }
                 try {
                     final BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(resourceStream, "UTF-8"));
+                        new InputStreamReader(resource, "UTF-8"));
                     try {
-                        for (String line = null;
-                             (line = reader.readLine()) != null;) {
-
-                            line = line.trim();
-                            if (line.length() == 0 || line.startsWith("#")) {
+                        String className = null;
+                        while (true) {
+                            className = reader.readLine();
+                            if (className == null) {
+                                break;
+                            }
+                            className = className.trim();
+                            if (className.length() == 0
+                                || className.startsWith("#")) {
                                 continue;
                             }
-                            final String className = packageName + "." + line;
-                            try {
-                                classes.add(classLoader.loadClass(className));
-                            } catch (ClassNotFoundException cnfe) {
-                                throw new FSMException(
-                                    "failed to load class: " + className, cnfe);
-                            }
+                            classNames.add(className);
                         }
                     } finally {
                         reader.close();
                     }
                 } finally {
-                    resourceStream.close();
+                    resource.close();
                 }
             } catch (IOException ioe) {
                 throw new FSMException(ioe);
             }
         }
 
-        return classes;
-    }
-
-
-    /**
-     * Creates a new instance of <code>FSMContext</code>.
-     *
-     * @param classes pre-loaded task classes
-     * @return a new instance of <code>FSMContext</code>.
-     * @throws FSMException if an error occurs.
-     */
-    protected static List<Task> instantiate(final Set<Class<?>> classes)
-        throws FSMException {
-
-        if (classes == null) {
-            throw new NullPointerException("null classes");
-        }
-
-        final Set<String> taskIdSet = new HashSet<String>();
-        final List<Task> taskList = new ArrayList<Task>(classes.size());
-
-        for (Class<?> clazz : classes) {
-            if (clazz == null) {
-                throw new NullPointerException("null task class");
-            }
-            if (!Task.class.isAssignableFrom(clazz)) {
-                throw new IllegalArgumentException(
-                    clazz + " is not assignable to " + Task.class);
-            }
-            try {
-                final Constructor<?> constructor =
-                    clazz.getConstructor((Class[]) null);
-                try {
-                    final Task task =
-                        (Task) constructor.newInstance((Object[]) null);
-                    final String taskId = task.getId();
-                    if (!taskIdSet.add(taskId)) {
-                        throw new FSMException("duplicate task id: " + taskId);
-                    }
-                    taskList.add(task);
-                } catch (InstantiationException ie) {
-                    throw new FSMException(ie);
-                } catch (IllegalAccessException iae) {
-                    throw new FSMException(iae);
-                } catch (InvocationTargetException ite) {
-                    throw new FSMException(ite);
-                }
-            } catch (NoSuchMethodException nsme) {
-                throw new FSMException(nsme);
-            }
-        }
-
-        return taskList;
-    }
-
-
-    /**
-     * 
-     * @param contextPath
-     * @return
-     * @throws FSMException 
-     */
-    public static TaskContext newInstance(final String contextPath)
-        throws FSMException {
-
-        return newInstance(contextPath, DEFAULT_RESOURCE_LOADER);
-    }
-
-
-    /**
-     * 
-     * @param contextPath
-     * @param resourceLoader
-     * @return
-     * @throws FSMException 
-     */
-    public static TaskContext newInstance(final String contextPath,
-                                          final ResourceLoader resourceLoader)
-        throws FSMException {
-
-        final ClassLoader classLoader =
-            Thread.currentThread().getContextClassLoader();
-        if (classLoader == null) {
-            throw new FSMException("no context class loader");
-        }
-
-        return newInstance(contextPath, classLoader, resourceLoader);
-    }
-
-
-    /**
-     * 
-     * @param contextPath
-     * @param classLoader
-     * @return
-     * @throws FSMException 
-     */
-    public static TaskContext newInstance(final String contextPath,
-                                          final ClassLoader classLoader)
-        throws FSMException {
-
-        return newInstance(contextPath, classLoader, DEFAULT_RESOURCE_LOADER);
-    }
-
-
-    /**
-     * 
-     * @param contextPath
-     * @param classLoader
-     * @param resourceLoader
-     * @return
-     * @throws FSMException 
-     */
-    public static TaskContext newInstance(
-        final String contextPath, final ClassLoader classLoader,
-        final ResourceLoader resourceLoader)
-        throws FSMException {
-
-        return new TaskContext(load(contextPath, classLoader, resourceLoader));
+        return classNames;
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param classes task classes
+     * @param classNames task class names
      */
-    protected TaskContext(final Set<Class<?>> classes) {
+    protected TaskContext(final Set<String> classNames) {
 
         super();
 
-        if (classes == null) {
-            throw new NullPointerException("null classes");
+        if (classNames == null) {
+            throw new NullPointerException("null classNames");
         }
 
-        for (Class<?> clazz : classes) {
-            if (clazz == null) {
-                throw new NullPointerException("null class");
-            }
-            if (!Task.class.isAssignableFrom(clazz)) {
-                throw new IllegalArgumentException(
-                    clazz + " is not assignable to " + Task.class);
+        for (String className : classNames) {
+            if (className == null) {
+                throw new NullPointerException("null className");
             }
         }
 
-        this.classes = new HashSet<Class<?>>(classes);
+        this.classNames = new HashSet<String>(classNames);
     }
 
 
     /**
-     * Returns an unmodifiable collection of task instances.
+     * Returns a map of task id and task instances.
      *
-     * @return an unmodifiable collection of task instances.
-     * @throws FSMException if an error occurs.
-     */
-    public synchronized Collection<Task> getTasks() throws FSMException {
-
-        if (tasks == null) {
-            tasks = instantiate(classes);
-        }
-
-        return Collections.unmodifiableCollection(tasks);
-    }
-
-
-    /**
-     * Returns an unmodifiable map of task if and tasks.
-     *
-     * @return a map of task id and tasks.
+     * @return a map of task id and task instances.
      * @throws FSMException if an error occurs.
      */
     public synchronized Map<String, Task> getTaskMap() throws FSMException {
 
-        final Map<String, Task> taskMap = new HashMap<String, Task>();
-
-        for (Task task : getTasks()) {
-            taskMap.put(task.getId(), task);
+        if (tasks == null) {
+            tasks = new HashMap<String, Task>();
+            for (String className : classNames) {
+                final Class<?> loaded = loadClass(className);
+                if (!Task.class.isAssignableFrom(loaded)) {
+                    throw new FSMException(
+                        "loaded task class(" + loaded
+                        + ") is not assignable to " + Task.class);
+                }
+                try {
+                    final Constructor<?> constructor =
+                        loaded.getConstructor((Class[]) null);
+                    try {
+                        final Task task =
+                            (Task) constructor.newInstance((Object[]) null);
+                        final String taskId = task.getId();
+                        if (tasks.containsKey(taskId)) {
+                            throw new FSMException(
+                                "duplicate task id: " + taskId);
+                        }
+                        tasks.put(taskId, task);
+                    } catch (InstantiationException ie) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, ie);
+                    } catch (IllegalAccessException iae) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, iae);
+                    } catch (InvocationTargetException ite) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, ite);
+                    }
+                } catch (NoSuchMethodException nsme) {
+                    throw new FSMException(
+                        "no default constructor: " + loaded, nsme);
+                }
+            }
         }
 
-        return Collections.unmodifiableMap(taskMap);
+        return new HashMap<String, Task>(tasks);
     }
 
 
-    /** classes. */
-    private final Set<Class<?>> classes;
+    /**
+     * Load class named as given <code>className</code>. Default implementation
+     * uses {@link Class#forName(java.lang.String) }. Override this method if
+     * any customizations are requires.
+     *
+     * @param className class name
+     * @return loaded class
+     * @throws FSMException if an error occurs.
+     */
+    protected Class<?> loadClass(final String className) throws FSMException {
+
+        if (className == null) {
+            throw new NullPointerException("null className");
+        }
+
+        if (className.trim().length() == 0) {
+            throw new IllegalArgumentException("empty className");
+        }
+
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException cnfe) {
+            throw new FSMException(cnfe);
+        }
+    }
+
+
+    /**
+     * Returns a collection of task instances.
+     *
+     * @return a collection of task instances.
+     * @throws FSMException if an error occurs.
+     */
+    public synchronized Collection<Task> getTasks() throws FSMException {
+
+        return getTaskMap().values();
+    }
+
+
+    /** task class names. */
+    private final Set<String> classNames;
 
 
     /** tasks. */
-    private volatile List<Task> tasks = null;
+    private volatile Map<String, Task> tasks = null;
 }
 
