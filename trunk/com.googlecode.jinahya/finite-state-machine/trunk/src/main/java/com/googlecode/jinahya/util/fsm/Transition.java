@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 
 
@@ -132,13 +133,7 @@ public class Transition {
             throw new NullPointerException("null matchers");
         }
 
-        for (TransitionMatcher matcher : matchers) {
-            if (matcher.matches(this)) {
-                return true;
-            }
-        }
-
-        return false;
+        return matchesAny(Arrays.asList(matchers));
     }
 
 
@@ -176,13 +171,7 @@ public class Transition {
             throw new NullPointerException("null matchers");
         }
 
-        for (TransitionMatcher matcher : matchers) {
-            if (!matcher.matches(this)) {
-                return false;
-            }
-        }
-
-        return true;
+        return matchesAll(Arrays.asList(matchers));
     }
 
 
