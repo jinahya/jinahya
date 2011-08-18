@@ -60,7 +60,6 @@ public class MachineContext {
      */
     public void transited(final Transition transition) throws FSMException {
 
-
         final Map<String, Map<String, Object>> properties =
             Collections.synchronizedMap(
             new HashMap<String, Map<String, Object>>());
