@@ -22,6 +22,8 @@ import static com.googlecode.jinahya.util.fsm.XletTransitionMatchers.*;
 
 
 /**
+ * A task switches on <code>startXlet</code> and switches off on
+ * <code>pauseXlet</code> or <code>destroyXlet</code>.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -35,7 +37,8 @@ public abstract class XletActivationSwitchTask extends SwitchTask {
      */
     public XletActivationSwitchTask(final String id) {
         super(id, new TransitionMatcher[]{START_XLET},
-              new TransitionMatcher[]{PAUSE_XLET, DESTROY_XLET});
+              new TransitionMatcher[]{PAUSE_XLET,
+                                      DESTROY_XLET});
     }
 }
 

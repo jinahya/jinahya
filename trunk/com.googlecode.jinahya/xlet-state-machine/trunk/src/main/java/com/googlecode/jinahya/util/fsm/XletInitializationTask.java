@@ -22,6 +22,7 @@ import static com.googlecode.jinahya.util.fsm.XletTransitionMatchers.*;
 
 
 /**
+ * A task performs on <code>initXlet</code>.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

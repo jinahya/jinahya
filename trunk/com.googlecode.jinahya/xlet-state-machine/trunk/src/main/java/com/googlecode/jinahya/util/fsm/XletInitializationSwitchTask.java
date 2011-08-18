@@ -22,6 +22,8 @@ import static com.googlecode.jinahya.util.fsm.XletTransitionMatchers.*;
 
 
 /**
+ * A task switches on <code>initXlet</code> and switches off on
+ * <code>destroyXlet</code>.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */

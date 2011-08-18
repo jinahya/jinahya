@@ -39,6 +39,11 @@ public class XletMachine extends Machine {
 
     @Override
     protected boolean isStarting(final Transition transition) {
+
+        if (transition == null) {
+            throw new NullPointerException("null transition");
+        }
+        
         return XletTransitionMatchers.INIT_XLET.matches(transition);
     }
 
@@ -46,18 +51,21 @@ public class XletMachine extends Machine {
     @Override
     protected boolean isAllowed(final Transition transition) {
 
-        for (TransitionMatcher matcher : XletTransitionMatchers.VALUES) {
-            if (matcher.matches(transition)) {
-                return true;
-            }
+        if (transition == null) {
+            throw new NullPointerException("null transition");
         }
 
-        return false;
+        return transition.matchesAny(XletTransitionMatchers.VALUES);
     }
 
 
     @Override
     protected boolean isFinishing(final Transition transition) {
+
+        if (transition == null) {
+            throw new NullPointerException("null transition");
+        }
+        
         return XletTransitionMatchers.DESTROY_XLET.matches(transition);
     }
 }
