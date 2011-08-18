@@ -26,20 +26,23 @@ public final class XletStates {
 
 
     /**
-     * LOADED state.
+     * LOADED state. This state is a virtual one.
      */
     public static final State LOADED = new State(1, "LOADED");
 
 
     /**
-     * PAUSED state.
+     * PAUSED state. This state can be reached when <code>initXlet</code>
+     * invoked from {@link #LOADED} or <code>pauseXlet</code> invoked from
+     * {@link #ACTIVE}.
      */
     public static final State PAUSED =
         new State(LOADED.getCode() << 1, "PAUSED");
 
 
     /**
-     * ACTIVE(STARTED) state.
+     * ACTIVE(STARTED) state. {@link XletMachine} can be reached to this state
+     * when <code>pauseXlet</code> invoked from {@link #PAUSED}.
      */
     public static final State ACTIVE =
         new State(PAUSED.getCode() << 1, "ACTIVE");
