@@ -191,7 +191,7 @@ public class TaskContext {
                                 || className.startsWith("#")) {
                                 continue;
                             }
-                            classNames.add(className);
+                            classNames.add(packageName + "." + className);
                         }
                     } finally {
                         reader.close();
