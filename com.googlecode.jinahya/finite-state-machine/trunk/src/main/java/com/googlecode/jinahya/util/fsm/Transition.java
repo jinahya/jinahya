@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util.fsm;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -143,7 +144,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
-    public boolean matchesAny(final Collection<TransitionMatcher> matchers) {
+    public boolean matchesAny(final List<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -181,7 +182,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if all matches; false otherwise
      */
-    public boolean matchesAll(final Collection<TransitionMatcher> matchers) {
+    public boolean matchesAll(final List<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
