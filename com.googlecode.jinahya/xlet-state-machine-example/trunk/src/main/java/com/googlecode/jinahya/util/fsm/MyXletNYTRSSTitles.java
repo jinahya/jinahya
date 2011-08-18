@@ -53,8 +53,9 @@ public class MyXletNYTRSSTitles extends MyXletRSSTitles {
 
 
     /**
-     * 
-     * @return 
+     * Returns the instance.
+     *
+     * @return instance.
      */
     public static MyXletRSSTitles getInstance() {
         return InstanceHolder.INSTANCE;

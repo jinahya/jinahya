@@ -19,10 +19,15 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 
 /**
@@ -30,6 +35,18 @@ import java.util.List;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class MyXletRSSTitles {
+
+
+    private static final XmlPullParserFactory FACTORY;
+
+
+    static {
+        try {
+            FACTORY = XmlPullParserFactory.newInstance();
+        } catch (XmlPullParserException xppe) {
+            throw new InstantiationError(xppe.getMessage());
+        }
+    }
 
 
     /**
@@ -53,12 +70,54 @@ public class MyXletRSSTitles {
      * Updates titles.
      *
      * @throws IOException 
+     * @throws XmlPullParserException 
      */
-    public final void update() throws IOException {
+    public final void update() throws IOException, XmlPullParserException {
 
         synchronized (titles) {
             titles.clear();
-            // update
+
+            final InputStream stream = url.openStream();
+            try {
+                final XmlPullParser parser = FACTORY.newPullParser();
+                parser.setInput(stream, null);
+
+                boolean item = false;
+                boolean title = false;
+
+                while (parser.next() != XmlPullParser.END_DOCUMENT) {
+
+                    switch (parser.getEventType()) {
+                        case XmlPullParser.START_TAG:
+                            if (parser.getName().equals("item")) {
+                                item = true;
+                            } else if (parser.getName().equals("title")) {
+                                title = true;
+                            }
+                            break;
+                        case XmlPullParser.END_TAG:
+                            if (parser.getName().equals("item")) {
+                                item = false;
+                            } else if (parser.getName().equals("title")) {
+                                title = false;
+                            }
+                            break;
+                        case XmlPullParser.TEXT:
+                            if (item && title) {
+                                titles.add(parser.getText());
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } finally {
+                stream.close();
+            }
+
+            for (int i = 0; i < titles.size(); i++) {
+                System.out.println("title[" + i + "]: " + titles.get(i));
+            }
         }
     }
 
