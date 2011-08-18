@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.util.Collection;
+
+
 /**
  * Transition between states.
  *
@@ -118,12 +121,34 @@ public class Transition {
 
 
     /**
-     * Check if this transition matches any of given <code>matchers</code>.
+     * Checks if this transition matches any of given <code>matchers</code>.
      *
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
     public boolean matchesAny(final TransitionMatcher... matchers) {
+
+        if (matchers == null) {
+            throw new NullPointerException("null matchers");
+        }
+
+        for (TransitionMatcher matcher : matchers) {
+            if (matcher.matches(this)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Checks if this transition matches any of given <code>matchers</code>.
+     *
+     * @param matchers matchers
+     * @return true if matches any; false otherwise
+     */
+    public boolean matchesAny(final Collection<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -146,6 +171,28 @@ public class Transition {
      * @return true if matches all; false otherwise
      */
     public boolean matchesAll(final TransitionMatcher... matchers) {
+
+        if (matchers == null) {
+            throw new NullPointerException("null matchers");
+        }
+
+        for (TransitionMatcher matcher : matchers) {
+            if (!matcher.matches(this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if this transition matches all of given <code>matchers</code>.
+     *
+     * @param matchers matchers
+     * @return true if all matches; false otherwise
+     */
+    public boolean matchesAll(final Collection<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
