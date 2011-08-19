@@ -33,7 +33,14 @@ public interface State extends Serializable {
      * Default state that every newly created machine has.
      */
     public static final State UNKNOWN =
-        AbstractState.newInstance(1, "UNKNOWN");
+        AbstractState.newInstance(-1, "UNKNOWN");
+
+
+    /**
+     * 
+     */
+    public static final State LOADED =
+        AbstractState.newInstance(0, "LOADED");
 
 
     /**

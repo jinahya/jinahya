@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-
 /**
  * Platform specific resource loader.
  */
@@ -42,6 +41,5 @@ public interface ResourceLoader {
      * @throws FSMException if an error occurs
      */
     InputStream load(String resourceName) throws IOException, FSMException;
-    
 }
 
