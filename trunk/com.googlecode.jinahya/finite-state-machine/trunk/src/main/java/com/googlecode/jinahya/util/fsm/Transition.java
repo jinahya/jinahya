@@ -118,7 +118,7 @@ public class Transition {
 
     @Override
     public String toString() {
-        return "Transition: " + source + " -> " + target;
+        return "Transition(" + source + "->" + target + ")";
     }
 
 

@@ -27,7 +27,7 @@ public abstract class AbstractState implements State {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = -8629523682990637616L;
+    private static final long serialVersionUID = 3885354297727614037L;
 
 
     /**
@@ -110,7 +110,7 @@ public abstract class AbstractState implements State {
 
     @Override
     public String toString() {
-        return "State: " + name + "(" + code + ")";
+        return "State(" + name + "(" + code + "))";
     }
 
 
