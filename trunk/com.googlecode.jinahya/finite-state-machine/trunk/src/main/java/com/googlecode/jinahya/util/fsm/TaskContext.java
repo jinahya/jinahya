@@ -51,8 +51,8 @@ public class TaskContext {
      * @return a set of indexed task class names.
      * @throws FSMException if an error occurs.
      */
-    protected static Set<String> index(final String contextPath,
-                                       final ResourceLoader resourceLoader)
+    public static Set<String> getClassNames(final String contextPath,
+                                            final ResourceLoader resourceLoader)
         throws FSMException {
 
         if (contextPath == null) {
@@ -111,22 +111,6 @@ public class TaskContext {
         }
 
         return classNames;
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param contextPath context path
-     * @param resourceLoader resource loader
-     * @return a new instance.
-     * @throws FSMException if an error occurs.
-     */
-    public static TaskContext newInstance(final String contextPath,
-                                          final ResourceLoader resourceLoader)
-        throws FSMException {
-
-        return new TaskContext(index(contextPath, resourceLoader));
     }
 
 

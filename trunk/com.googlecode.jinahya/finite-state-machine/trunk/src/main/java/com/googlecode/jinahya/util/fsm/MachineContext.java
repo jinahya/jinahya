@@ -41,7 +41,7 @@ public class MachineContext {
      * 
      * @param taskContext tasks
      */
-    protected MachineContext(final TaskContext taskContext) {
+    public MachineContext(final TaskContext taskContext) {
         super();
 
         if (taskContext == null) {
