@@ -18,21 +18,10 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class StateTest {
-
-
-    @Test
-    public void testEqualsForConstants() {
-
-        Assert.assertFalse(State.UNKNOWN.equals(State.LOADED));
-    }
 }
 
