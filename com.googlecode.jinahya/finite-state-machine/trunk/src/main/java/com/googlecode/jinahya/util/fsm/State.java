@@ -37,20 +37,6 @@ public interface State extends Serializable {
 
 
     /**
-     * 
-     */
-    public static final State LOADED =
-        AbstractState.newInstance(0, "LOADED");
-
-
-    /**
-     * Constant for INVALID state.
-     */
-    public static final State INVALID =
-        AbstractState.newInstance(-1, "INVALID");
-
-
-    /**
      * Returns code value of this State.
      *
      * @return code
