@@ -38,9 +38,9 @@ public class MyXlet implements Xlet {
 
         final TaskContext taskContext;
         try {
-            taskContext =
-                TaskContext.newInstance("com.googlecode.jinahya.util.fsm");
+            taskContext = MyXletTaskContext.newInstance();
         } catch (FSMException fsme) {
+            fsme.printStackTrace(System.err);
             throw new XletStateChangeException(fsme.getMessage());
         }
 
@@ -49,6 +49,7 @@ public class MyXlet implements Xlet {
             try {
                 machine.setState(XletStates.PAUSED);
             } catch (FSMException fsme) {
+                fsme.printStackTrace(System.err);
                 throw new XletStateChangeException(fsme.getMessage());
             }
         }
