@@ -1,0 +1,30 @@
+-classpath
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/xlet-state-machine-example/trunk/target/classes:/home/onacit/.m2/repository/com/googlecode/jinahya/finite-state-machine/1.0-alpha-8/finite-state-machine-1.0-alpha-8.jar:/home/onacit/.m2/repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar:/home/onacit/.m2/repository/com/googlecode/jinahya/ocap-api/1.2/ocap-api-1.2.jar:/home/onacit/.m2/repository/com/googlecode/jinahya/dependency-resolver/1.0-alpha-9/dependency-resolver-1.0-alpha-9.jar:/home/onacit/.m2/repository/com/googlecode/jinahya/xlet-state-machine/1.0-alpha-4/xlet-state-machine-1.0-alpha-4.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/xlet-state-machine-example/trunk/src/main/java:/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/xlet-state-machine-example/trunk/target/unpacked-dependency-sources'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/xlet-state-machine-example/trunk/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'xlet-state-machine-example 1.0-alpha-1-SNAPSHOT API'
+-link
+'http://download.oracle.com/javase/7/docs/api'
+-link
+'http://download.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927'
+-link
+'http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/xlet-state-machine/1.0-alpha-4/apidocs'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/home/onacit/src/jinahya.googlecode.com/com.googlecode.jinahya/xlet-state-machine-example/trunk/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'xlet-state-machine-example 1.0-alpha-1-SNAPSHOT API'
