@@ -110,7 +110,7 @@ public abstract class AbstractState implements State {
 
     @Override
     public String toString() {
-        return "State[" + name + "(" + code + ")]";
+        return "State: " + name + "(" + code + ")";
     }
 
 
