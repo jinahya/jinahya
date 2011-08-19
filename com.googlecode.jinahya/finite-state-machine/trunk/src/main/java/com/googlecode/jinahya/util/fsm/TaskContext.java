@@ -19,17 +19,14 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -44,97 +41,6 @@ public class TaskContext {
 
     /** task index filename. */
     private static final String TASK_INDEX_FILENAME = "task.index";
-
-
-    /**
-     * Platform specific resource loader.
-     */
-    protected static interface ResourceLoader {
-
-
-        /**
-         * Loads resource denoted by given <code>resourceName</code>.
-         *
-         * @param resourceName resource name
-         * @return loaded resource stream; never null
-         * @throws IOException if an I/O error occurs
-         * @throws FSMException if an error occurs
-         */
-        InputStream load(String resourceName) throws IOException, FSMException;
-    };
-
-
-    /**
-     * A ResourceLoader implementation using a ClassLoader.
-     */
-    protected static class ClassResourceLoader implements ResourceLoader {
-
-
-        /**
-         * Creates a new instance.
-         *
-         * @param classLoader 
-         */
-        public ClassResourceLoader(final ClassLoader classLoader) {
-            super();
-
-            if (classLoader == null) {
-                throw new NullPointerException("null classLoader");
-            }
-
-            this.classLoader = classLoader;
-        }
-
-
-        @Override
-        public InputStream load(final String resourceName)
-            throws IOException, FSMException {
-
-            if (resourceName == null) {
-                throw new NullPointerException("null resourceName");
-            }
-
-            if (resourceName.trim().length() == 0) {
-                throw new IllegalArgumentException("empty resourceName");
-            }
-
-            final InputStream resourceStream =
-                classLoader.getResourceAsStream(resourceName);
-            if (resourceName == null) {
-                throw new FSMException(
-                    "failed to load resource: " + resourceName);
-            }
-
-            return resourceStream;
-        }
-
-
-        /** class loader. */
-        private final ClassLoader classLoader;
-    };
-
-
-    /**
-     * A ResourceLoader implementation using File I/O.
-     */
-    protected static class FileResourceLoader implements ResourceLoader {
-
-
-        @Override
-        public InputStream load(final String resourceName)
-            throws IOException, FSMException {
-
-            if (resourceName == null) {
-                throw new NullPointerException("null resourceName");
-            }
-
-            if (resourceName.trim().length() == 0) {
-                throw new IllegalArgumentException("empty resourceName");
-            }
-
-            return new FileInputStream(resourceName);
-        }
-    };
 
 
     /**
@@ -211,9 +117,25 @@ public class TaskContext {
     /**
      * Creates a new instance.
      *
+     * @param contextPath context path
+     * @param resourceLoader resource loader
+     * @return a new instance.
+     * @throws FSMException if an error occurs.
+     */
+    public static TaskContext newInstance(final String contextPath,
+                                          final ResourceLoader resourceLoader)
+        throws FSMException {
+
+        return new TaskContext(index(contextPath, resourceLoader));
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
      * @param classNames task class names
      */
-    protected TaskContext(final Set<String> classNames) {
+    public TaskContext(final Set<String> classNames) {
 
         super();
 
@@ -237,7 +159,8 @@ public class TaskContext {
      * @return a map of task id and task instances.
      * @throws FSMException if an error occurs.
      */
-    public synchronized Map<String, Task> getTaskMap() throws FSMException {
+    public synchronized final Map<String, Task> getTaskMap()
+        throws FSMException {
 
         if (tasks == null) {
             tasks = new HashMap<String, Task>();
@@ -282,6 +205,18 @@ public class TaskContext {
 
 
     /**
+     * Returns a collection of task instances.
+     *
+     * @return a collection of task instances.
+     * @throws FSMException if an error occurs.
+     */
+    public synchronized final Collection<Task> getTasks() throws FSMException {
+
+        return getTaskMap().values();
+    }
+
+
+    /**
      * Load class named as given <code>className</code>. Default implementation
      * uses {@link Class#forName(java.lang.String) }. Override this method if
      * any customizations are requires.
@@ -305,18 +240,6 @@ public class TaskContext {
         } catch (ClassNotFoundException cnfe) {
             throw new FSMException(cnfe);
         }
-    }
-
-
-    /**
-     * Returns a collection of task instances.
-     *
-     * @return a collection of task instances.
-     * @throws FSMException if an error occurs.
-     */
-    public synchronized Collection<Task> getTasks() throws FSMException {
-
-        return getTaskMap().values();
     }
 
 
