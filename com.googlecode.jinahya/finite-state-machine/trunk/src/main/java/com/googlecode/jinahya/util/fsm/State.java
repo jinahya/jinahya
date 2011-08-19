@@ -26,116 +26,36 @@ import java.io.Serializable;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class State implements Serializable {
-
-
-    /** GENERATED. */
-    private static final long serialVersionUID = 8481324675025780560L;
+public interface State extends Serializable {
 
 
     /**
-     * Default state for all newly created machines.
+     * Default state that every newly created machine has.
      */
-    public static final State UNKNOWN = new State(0, "UNKNOWN");
+    public static final State UNKNOWN =
+        AbstractState.newInstance(1, "UNKNOWN");
 
 
     /**
      * Constant for INVALID state.
      */
-    public static final State INVALID = new State(-1, "INVALID");
+    public static final State INVALID =
+        AbstractState.newInstance(-1, "INVALID");
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param code state value; must be a non-zero positive
-     * @param name  state name; must not be null
-     */
-    public State(final int code, final String name) {
-        super();
-
-        if (name == null) {
-            throw new NullPointerException("null name");
-        }
-
-        if (name.trim().length() == 0) {
-            throw new NullPointerException("empty name");
-        }
-
-        this.code = code;
-        this.name = name;
-    }
-
-
-    @Override
-    public boolean equals(final Object obj) {
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof State)) { // (null instanceof XXX) -> false
-            return false;
-        }
-
-        final State state = (State) obj;
-
-        if (code != state.getCode()) {
-            return false;
-        }
-
-        if (!name.equals(state.getName())) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    @Override
-    public int hashCode() {
-
-        int hashCode = 17;
-
-        hashCode = 37 * hashCode + code;
-
-        hashCode = 37 * hashCode + name.hashCode();
-
-        return hashCode;
-    }
-
-
-    @Override
-    public String toString() {
-        return "State[" + name + "(" + code + ")]";
-    }
-
-
-    /**
-     * Returns code.
+     * Returns code value of this State.
      *
      * @return code
      */
-    public final int getCode() {
-        return code;
-    }
+    int getCode();
 
 
     /**
-     * Returns name.
+     * Returns the name of this State.
      *
      * @return name
      */
-    public final String getName() {
-        return name;
-    }
-
-
-    /** value. */
-    private final int code;
-
-
-    /** name. */
-    private final String name;
+    String getName();
 }
 
