@@ -6,8 +6,7 @@
 Add your content here.
 
 = Apidocs =
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/finite-state-machine/1.0-alpha-6/apidocs/index.html 1.0-alpha-6]
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/finite-state-machine/1.0-alpha-3/apidocs/index.html 1.0-alpha-3]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/finite-state-machine/1.0-alpha-10/apidocs/index.html 1.0-alpha-10]
 
 = Details =
 
