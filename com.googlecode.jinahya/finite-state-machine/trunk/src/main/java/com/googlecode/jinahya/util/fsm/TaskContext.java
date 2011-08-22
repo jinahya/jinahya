@@ -143,8 +143,7 @@ public class TaskContext {
      * @return a map of task id and task instances.
      * @throws FSMException if an error occurs.
      */
-    public synchronized final Map<String, Task> getTaskMap()
-        throws FSMException {
+    public synchronized Map<String, Task> getTaskMap() throws FSMException {
 
         if (tasks == null) {
             tasks = new HashMap<String, Task>();
@@ -194,7 +193,7 @@ public class TaskContext {
      * @return a collection of task instances.
      * @throws FSMException if an error occurs.
      */
-    public synchronized final Collection<Task> getTasks() throws FSMException {
+    public synchronized Collection<Task> getTasks() throws FSMException {
 
         return getTaskMap().values();
     }

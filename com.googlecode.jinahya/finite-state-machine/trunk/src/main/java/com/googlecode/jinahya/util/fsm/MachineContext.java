@@ -228,7 +228,6 @@ public class MachineContext {
             try {
                 resolver.addDependency(entry.getKey(), null);
             } catch (DependencyResolverException dre) {
-                //dre.printStackTrace(System.err); // not gonna happen
                 throw new FSMException(dre);
             }
             taskIdLocal.set(entry.getKey());
@@ -252,12 +251,24 @@ public class MachineContext {
      * Overriding classes must guarantee that all tasks performed before this
      * method returns. Default implementation performs tasks one by one.
      *
-     * @param context transition context
-     * @param tasks tasks to be performed
+     * @param context transition context; not null
+     * @param tasks tasks to be performed; not null nor empty
      * @throws FSMException if an error occurs
      */
     protected void perform(final TransitionContext context, final Task... tasks)
         throws FSMException {
+
+        if (context == null) {
+            throw new NullPointerException("null context");
+        }
+
+        if (tasks == null) {
+            throw new NullPointerException("null tasks");
+        }
+
+        if (tasks.length == 0) {
+            throw new IllegalArgumentException("empty tasks");
+        }
 
         for (Task task : tasks) {
             task.perform(context);
