@@ -25,6 +25,9 @@ final State previous = transition.getSource();
 final State current = transition.getTarget();
 }}}
 === Task ===
+==== Id ====
+==== {{{prepare(TransitionContext)}}} ====
+==== {{{perform(TransitionContext)}}} ====
 === !TaskContext ===
 TaskContexts are responsible to load Tasks.
 === Machine ===
