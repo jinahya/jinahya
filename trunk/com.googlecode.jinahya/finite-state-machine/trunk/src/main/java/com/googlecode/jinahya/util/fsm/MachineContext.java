@@ -226,14 +226,18 @@ public class MachineContext {
         final Map<String, Task> taskMap = taskContext.getTaskMap();
 
         for (Entry<String, Task> entry : taskMap.entrySet()) {
+
             try {
                 resolver.addDependency(entry.getKey(), null);
             } catch (DependencyResolverException dre) {
                 throw new FSMException(dre);
             }
-            taskIdBuffer.append(entry.getKey());
-            entry.getValue().prepare(transitionContext);
-            taskIdBuffer.delete(0, taskIdBuffer.length()); // clear
+
+            synchronized (taskIdBuffer) {
+                taskIdBuffer.append(entry.getKey());
+                entry.getValue().prepare(transitionContext);
+                taskIdBuffer.delete(0, taskIdBuffer.length()); // clear
+            }
         }
 
         final List<List<String>> idGroups = resolver.getVerticalGroups();
