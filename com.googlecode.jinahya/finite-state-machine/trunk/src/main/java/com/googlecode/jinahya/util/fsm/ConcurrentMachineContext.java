@@ -115,7 +115,7 @@ public class ConcurrentMachineContext extends MachineContext {
             }
         }
 
-        // throw thrown if exists
+        // throw any thrown if exist
         for (Iterator<Throwable> i = throwns.values().iterator();
              i.hasNext();) {
             final Throwable thrown = i.next();
