@@ -64,7 +64,8 @@ public class MachineContext {
             Collections.synchronizedMap(
             new HashMap<String, Map<String, Object>>());
 
-        final ThreadLocal<String> taskIdLocal = new ThreadLocal<String>();
+        final StringBuffer taskIdBuffer = new StringBuffer();
+        //final ThreadLocal<String> taskIdLocal = new ThreadLocal<String>();
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -87,8 +88,8 @@ public class MachineContext {
                     throw new NullPointerException("null nextTaskId");
                 }
 
-                final String taskId = taskIdLocal.get();
-                if (taskId == null) {
+                final String taskId = taskIdBuffer.toString();
+                if (taskId.isEmpty()) {
                     throw new IllegalStateException("no task id set");
                 }
 
@@ -108,7 +109,7 @@ public class MachineContext {
                     throw new NullPointerException("null previousTaskId");
                 }
 
-                final String taskId = taskIdLocal.get();
+                final String taskId = taskIdBuffer.toString();
                 if (taskId == null) {
                     throw new IllegalStateException("no task id set");
                 }
@@ -230,9 +231,9 @@ public class MachineContext {
             } catch (DependencyResolverException dre) {
                 throw new FSMException(dre);
             }
-            taskIdLocal.set(entry.getKey());
+            taskIdBuffer.append(entry.getKey());
             entry.getValue().prepare(transitionContext);
-            taskIdLocal.set(null);
+            taskIdBuffer.delete(0, taskIdBuffer.length()); // clear
         }
 
         final List<List<String>> idGroups = resolver.getVerticalGroups();
