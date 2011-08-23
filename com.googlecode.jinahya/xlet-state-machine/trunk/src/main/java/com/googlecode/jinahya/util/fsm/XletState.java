@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletState extends AbstractState {
+public final class XletState extends AbstractState {
 
 
     /** GENERATED. */
@@ -60,13 +60,8 @@ public class XletState extends AbstractState {
         new XletState(ACTIVE.getCode() << 3, "DESTROYED");
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param code state code
-     * @param name state name
-     */
-    protected XletState(final int code, final String name) {
+    /** PRIVATE. */
+    private XletState(final int code, final String name) {
         super(code, name);
     }
 }

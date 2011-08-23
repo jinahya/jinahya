@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class XletTransitionMatcher {
+public final class XletTransitionMatcher {
 
 
     /**
@@ -105,8 +105,9 @@ public class XletTransitionMatcher {
 
 
     /**
-     * 
-     * @return 
+     * Returns values.
+     *
+     * @return values
      */
     public static TransitionMatcher[] values() {
         return new TransitionMatcher[]{
@@ -116,12 +117,14 @@ public class XletTransitionMatcher {
 
 
     /**
-     * 
+     * VALUES.
      */
-    public static List<TransitionMatcher> VALUES = Arrays.asList(values());
+    public static final List<TransitionMatcher> VALUES =
+        Arrays.asList(values());
 
 
-    protected XletTransitionMatcher() {
+    /** PRIVATE. */
+    private XletTransitionMatcher() {
         super();
     }
 }
