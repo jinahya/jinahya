@@ -39,7 +39,7 @@ public final class XletTransitionMatcher {
         @Override
         public boolean matches(final Transition transition) {
             return transition.getSource().equals(State.UNKNOWN)
-                   && transition.getTarget().equals(XletState.PAUSED);
+                   && transition.getTarget().equals(XletState.LOADED);
         }
     };
 
@@ -52,9 +52,8 @@ public final class XletTransitionMatcher {
 
         @Override
         public boolean matches(final Transition transition) {
-            return ((transition.getSource().equals(State.UNKNOWN)
-                     || transition.getSource().equals(XletState.LOADED))
-                    && transition.getTarget().equals(XletState.PAUSED));
+            return transition.getSource().equals(XletState.LOADED)
+                   && transition.getTarget().equals(XletState.PAUSED);
         }
     };
 

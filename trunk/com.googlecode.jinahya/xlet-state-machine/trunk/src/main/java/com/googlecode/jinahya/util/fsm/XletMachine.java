@@ -44,7 +44,8 @@ public class XletMachine extends Machine {
             throw new NullPointerException("null transition");
         }
         
-        return XletTransitionMatcher.INIT_XLET.matches(transition);
+        return transition.matchesAny(
+            XletTransitionMatcher.LOAD_XLET, XletTransitionMatcher.INIT_XLET);
     }
 
 
