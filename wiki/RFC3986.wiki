@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary (Partial) RFC-3986 Implementation.
 #labels PercentEncoding,RFC-3986,Featured,Phase-Implementation,RFC
 
 = (Partial) RFC-3986 Implementation =
