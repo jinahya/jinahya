@@ -46,6 +46,7 @@ public abstract class TVXlet implements Xlet {
         throws XletStateChangeException {
 
         try {
+            machine.setState(XletState.LOADED);
             machine.setState(XletState.PAUSED);
         } catch (FSMException fsme) {
             throw new XletStateChangeException(fsme.getMessage());
