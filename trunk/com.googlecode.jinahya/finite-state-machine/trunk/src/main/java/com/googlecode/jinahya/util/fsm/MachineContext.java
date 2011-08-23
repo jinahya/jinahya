@@ -65,7 +65,6 @@ public class MachineContext {
             new HashMap<String, Map<String, Object>>());
 
         final StringBuffer taskIdBuffer = new StringBuffer();
-        //final ThreadLocal<String> taskIdLocal = new ThreadLocal<String>();
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
