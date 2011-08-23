@@ -27,7 +27,7 @@ import javax.tv.xlet.XletStateChangeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MEXlet implements Xlet {
+public abstract class MEXlet implements Xlet {
 
 
     /**
