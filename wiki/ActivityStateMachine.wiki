@@ -4,6 +4,9 @@
 
 Add your content here.
 
+= Apidocs =
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/actvity-state-machin/1.0-alpha-1/site/apidocs/index.html 1.0-alpha-1]
+
 
 = Details =
 
