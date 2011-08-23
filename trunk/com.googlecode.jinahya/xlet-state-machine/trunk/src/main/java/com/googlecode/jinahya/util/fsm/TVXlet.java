@@ -27,7 +27,7 @@ import javax.microedition.xlet.XletStateChangeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class TVXlet implements Xlet {
+public abstract class TVXlet implements Xlet {
 
 
     /**
