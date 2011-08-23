@@ -27,17 +27,7 @@ import android.util.AndroidRuntimeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class FSMActivity extends Activity {
-
-
-    /**
-     * Creates a new instance with given <code>context</code>.
-     *
-     * @param context context
-     */
-    public FSMActivity(final MachineContext context) {
-        this(new ActivityMachine(context));
-    }
+public abstract class FSMActivity extends Activity {
 
 
     /**
@@ -46,7 +36,7 @@ public class FSMActivity extends Activity {
      *
      * @param machine machine
      */
-    protected FSMActivity(final Machine machine) {
+    public FSMActivity(final ActivityMachine machine) {
         super();
 
         if (machine == null) {
