@@ -24,12 +24,17 @@ import javax.microedition.xlet.XletStateChangeException;
 
 
 /**
- *
+ * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public abstract class MEXlet implements Xlet {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param machine machine
+     */
     public MEXlet(final XletMachine machine) {
         super();
 
@@ -46,7 +51,9 @@ public abstract class MEXlet implements Xlet {
         throws XletStateChangeException {
 
         try {
-            machine.setState(XletState.LOADED);
+            if (machine.getState().equals(State.UNKNOWN)) {
+                machine.setState(XletState.LOADED);
+            }
             machine.setState(XletState.PAUSED);
         } catch (FSMException fsme) {
             throw new XletStateChangeException(fsme.getMessage());
@@ -81,6 +88,9 @@ public abstract class MEXlet implements Xlet {
         throws XletStateChangeException {
 
         try {
+            if (machine.getState().equals(State.UNKNOWN)) {
+                machine.setState(XletState.LOADED);
+            }
             machine.setState(XletState.DESTROYED);
         } catch (FSMException fsme) {
             fsme.printStackTrace(System.err);
