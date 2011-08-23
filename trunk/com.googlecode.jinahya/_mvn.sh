@@ -4,10 +4,13 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 wd=`pwd`
-for i in `find . -name pom.xml -type f -printf '%h\n'`
+pd=
+#for i in `find . -name pom.xml -type f -printf '%h\n'`
+for i in `find . -name pom.xml -type f`
 do
-    echo "[[[[[ " $i " ]]]]]"
-    cd -P $i
+    pd=${i%/*}
+    echo "[[[[[ " $pd " ]]]]]"
+    cd -P $pd
     mvn $*
     cd $wd
 done

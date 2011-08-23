@@ -1,12 +1,15 @@
 #!/bin/sh
 wd=`pwd`
-for i in `find . -name pom.xml -type f -printf '%h\n'`
+#for i in `find . -name pom.xml -type f -printf '%h\n'`
+pd=
+for i in `find . -name pom.xml -type f`
 do
-    if [ ! -d $i/target ]; then
+    pd=${i%/*}
+    if [ ! -d $pd/target ]; then
         continue
     fi
-    echo "[[[[[ " $i " ]]]]]"
-    cd -P $i
+    echo "[[[[[ " $pd " ]]]]]"
+    cd -P $pd
     mvn clean
     cd $wd
 done
