@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import static com.googlecode.jinahya.util.fsm.XletTransitionMatchers.*;
+import static com.googlecode.jinahya.util.fsm.XletTransitionMatcher.*;
 
 
 /**
