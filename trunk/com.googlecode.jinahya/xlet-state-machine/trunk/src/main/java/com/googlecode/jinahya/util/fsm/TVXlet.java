@@ -30,40 +30,44 @@ import javax.tv.xlet.XletStateChangeException;
 public abstract class TVXlet implements Xlet {
 
 
-    /**
-     * 
-     * @param machine 
-     */
-    public TVXlet(final XletMachine machine) {
-        super();
-
-        if (machine == null) {
-            throw new NullPointerException("null machine");
-        }
-
-        this.machine = machine;
-    }
-
-
     @Override
     public void initXlet(final XletContext ctx)
         throws XletStateChangeException {
 
-        try {
-            machine.setState(XletState.PAUSED);
-        } catch (FSMException fsme) {
-            throw new XletStateChangeException(fsme.getMessage());
+        synchronized (this) {
+            try {
+                machine = createMachine();
+            } catch (FSMException fsme) {
+                throw new XletStateChangeException(fsme.getMessage());
+            }
+
+            try {
+                machine.setState(XletState.PAUSED);
+            } catch (FSMException fsme) {
+                throw new XletStateChangeException(fsme.getMessage());
+            }
         }
     }
+
+
+    /**
+     * Creates a machine.
+     *
+     * @return machine
+     * @throws FSMException if an error occurs.
+     */
+    protected abstract XletMachine createMachine() throws FSMException;
 
 
     @Override
     public void startXlet() throws XletStateChangeException {
 
-        try {
-            machine.setState(XletState.ACTIVE);
-        } catch (FSMException fsme) {
-            throw new XletStateChangeException(fsme.getMessage());
+        synchronized (this) {
+            try {
+                machine.setState(XletState.ACTIVE);
+            } catch (FSMException fsme) {
+                throw new XletStateChangeException(fsme.getMessage());
+            }
         }
     }
 
@@ -71,10 +75,12 @@ public abstract class TVXlet implements Xlet {
     @Override
     public void pauseXlet() {
 
-        try {
-            machine.setState(XletState.PAUSED);
-        } catch (FSMException fsme) {
-            fsme.printStackTrace(System.err);
+        synchronized (this) {
+            try {
+                machine.setState(XletState.PAUSED);
+            } catch (FSMException fsme) {
+                fsme.printStackTrace(System.err);
+            }
         }
     }
 
@@ -83,14 +89,16 @@ public abstract class TVXlet implements Xlet {
     public void destroyXlet(final boolean unconditional)
         throws XletStateChangeException {
 
-        try {
-            machine.setState(XletState.DESTROYED);
-        } catch (FSMException fsme) {
-            fsme.printStackTrace(System.err);
+        synchronized (this) {
+            try {
+                machine.setState(XletState.DESTROYED);
+            } catch (FSMException fsme) {
+                fsme.printStackTrace(System.err);
+            }
         }
     }
 
 
-    private final Machine machine;
+    private volatile Machine machine;
 }
 
