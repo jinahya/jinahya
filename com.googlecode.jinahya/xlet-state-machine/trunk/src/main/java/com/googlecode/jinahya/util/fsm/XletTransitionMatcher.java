@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class XletTransitionMatchers {
+public class XletTransitionMatcher {
 
 
     /**
@@ -39,7 +39,7 @@ public final class XletTransitionMatchers {
         @Override
         public boolean matches(final Transition transition) {
             return transition.getSource().equals(State.UNKNOWN)
-                   && transition.getTarget().equals(XletStates.PAUSED);
+                   && transition.getTarget().equals(XletState.PAUSED);
         }
     };
 
@@ -53,8 +53,8 @@ public final class XletTransitionMatchers {
         @Override
         public boolean matches(final Transition transition) {
             return ((transition.getSource().equals(State.UNKNOWN)
-                     || transition.getSource().equals(XletStates.LOADED))
-                    && transition.getTarget().equals(XletStates.PAUSED));
+                     || transition.getSource().equals(XletState.LOADED))
+                    && transition.getTarget().equals(XletState.PAUSED));
         }
     };
 
@@ -67,8 +67,8 @@ public final class XletTransitionMatchers {
 
         @Override
         public boolean matches(final Transition transition) {
-            return (transition.getSource().equals(XletStates.PAUSED)
-                    && transition.getTarget().equals(XletStates.ACTIVE));
+            return (transition.getSource().equals(XletState.PAUSED)
+                    && transition.getTarget().equals(XletState.ACTIVE));
         }
     };
 
@@ -81,8 +81,8 @@ public final class XletTransitionMatchers {
 
         @Override
         public boolean matches(final Transition transition) {
-            return (transition.getSource().equals(XletStates.ACTIVE)
-                    && transition.getTarget().equals(XletStates.PAUSED));
+            return (transition.getSource().equals(XletState.ACTIVE)
+                    && transition.getTarget().equals(XletState.PAUSED));
         }
     };
 
@@ -96,23 +96,32 @@ public final class XletTransitionMatchers {
 
             @Override
             public boolean matches(final Transition transition) {
-                return ((transition.getSource().equals(XletStates.LOADED)
-                         || transition.getSource().equals(XletStates.PAUSED)
-                         || transition.getSource().equals(XletStates.ACTIVE))
-                        && transition.getTarget().equals(XletStates.DESTROYED));
+                return ((transition.getSource().equals(XletState.LOADED)
+                         || transition.getSource().equals(XletState.PAUSED)
+                         || transition.getSource().equals(XletState.ACTIVE))
+                        && transition.getTarget().equals(XletState.DESTROYED));
             }
         };
 
 
     /**
-     * Unmodifiable collection of matchers.
+     * 
+     * @return 
      */
-    public static final List<TransitionMatcher> VALUES =
-        Arrays.asList(LOAD_XLET, START_XLET, PAUSE_XLET, DESTROY_XLET);
+    public static TransitionMatcher[] values() {
+        return new TransitionMatcher[]{
+                LOAD_XLET, INIT_XLET, START_XLET, PAUSE_XLET, DESTROY_XLET
+            };
+    }
 
 
-    /** PRIVATE. */
-    private XletTransitionMatchers() {
+    /**
+     * 
+     */
+    public static List<TransitionMatcher> VALUES = Arrays.asList(values());
+
+
+    protected XletTransitionMatcher() {
         super();
     }
 }

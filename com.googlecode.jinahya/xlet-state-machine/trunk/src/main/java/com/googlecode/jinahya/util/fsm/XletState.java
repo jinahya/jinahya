@@ -23,13 +23,17 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class XletStates {
+public class XletState extends AbstractState {
+
+
+    /** GENERATED. */
+    private static final long serialVersionUID = -1830570028535534271L;
 
 
     /**
      * LOADED state. This state is a virtual one.
      */
-    public static final State LOADED = new State(1, "LOADED");
+    public static final State LOADED = new XletState(1, "LOADED");
 
 
     /**
@@ -38,7 +42,7 @@ public final class XletStates {
      * {@link #ACTIVE}.
      */
     public static final State PAUSED =
-        new State(LOADED.getCode() << 1, "PAUSED");
+        new XletState(LOADED.getCode() << 3, "PAUSED");
 
 
     /**
@@ -46,19 +50,24 @@ public final class XletStates {
      * when <code>pauseXlet</code> invoked from {@link #PAUSED}.
      */
     public static final State ACTIVE =
-        new State(PAUSED.getCode() << 1, "ACTIVE");
+        new XletState(PAUSED.getCode() << 3, "ACTIVE");
 
 
     /**
      * DESTROYED state.
      */
     public static final State DESTROYED =
-        new State(ACTIVE.getCode() << 1, "DESTROYED");
+        new XletState(ACTIVE.getCode() << 3, "DESTROYED");
 
 
-    /** PRIVATE. */
-    private XletStates() {
-        super();
+    /**
+     * Creates a new instance.
+     *
+     * @param code state code
+     * @param name state name
+     */
+    protected XletState(final int code, final String name) {
+        super(code, name);
     }
 }
 

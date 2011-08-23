@@ -44,7 +44,7 @@ public class XletMachine extends Machine {
             throw new NullPointerException("null transition");
         }
         
-        return XletTransitionMatchers.INIT_XLET.matches(transition);
+        return XletTransitionMatcher.INIT_XLET.matches(transition);
     }
 
 
@@ -55,7 +55,7 @@ public class XletMachine extends Machine {
             throw new NullPointerException("null transition");
         }
 
-        return transition.matchesAny(XletTransitionMatchers.VALUES);
+        return transition.matchesAny(XletTransitionMatcher.VALUES);
     }
 
 
@@ -66,7 +66,7 @@ public class XletMachine extends Machine {
             throw new NullPointerException("null transition");
         }
         
-        return XletTransitionMatchers.DESTROY_XLET.matches(transition);
+        return XletTransitionMatcher.DESTROY_XLET.matches(transition);
     }
 }
 
