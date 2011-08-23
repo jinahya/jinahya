@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import com.googlecode.jinahya.util.fsm.TaskContext.ClassResourceLoader;
-
 import java.util.Set;
 
 
@@ -30,16 +28,28 @@ import java.util.Set;
 public final class MyXletTaskContext extends TaskContext {
 
 
+    private static final Set<String> CLASS_NAMES;
+
+
+    static {
+        try {
+            CLASS_NAMES = getClassNames(
+                "com.googlecode.jinahya.util.fsm",
+                new ClassResourceLoader(
+                MyXletTaskContext.class.getClassLoader()));
+        } catch (FSMException fsme) {
+            throw new InstantiationError(fsme.getMessage());
+        }
+    }
+
+
     /**
      * Creates a new instance.
      *
      * @return a new instance of MyXletTaskContext
-     * @throws FSMException if an error occurs.
      */
-    public static TaskContext newInstance() throws FSMException {
-        return new MyXletTaskContext(index(
-            "com.googlecode.jinahya.util.fsm",
-            new ClassResourceLoader(MyXletTaskContext.class.getClassLoader())));
+    public static TaskContext newInstance() {
+        return new MyXletTaskContext(CLASS_NAMES);
     }
 
 
