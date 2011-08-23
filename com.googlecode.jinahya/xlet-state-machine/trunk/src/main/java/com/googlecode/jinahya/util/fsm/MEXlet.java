@@ -18,9 +18,9 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import javax.tv.xlet.Xlet;
-import javax.tv.xlet.XletContext;
-import javax.tv.xlet.XletStateChangeException;
+import javax.microedition.xlet.Xlet;
+import javax.microedition.xlet.XletContext;
+import javax.microedition.xlet.XletStateChangeException;
 
 
 /**
