@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
@@ -27,32 +26,22 @@ import javax.tv.xlet.XletStateChangeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MyXlet implements Xlet {
+public class MyXlet extends TVXlet {
+
+
+    public MyXlet() {
+        super(new XletMachine(new MachineContext(
+            MyXletTaskContext.newInstance())));
+    }
 
 
     @Override
-    public void initXlet(final XletContext context)
+    public void initXlet(final XletContext ctx)
         throws XletStateChangeException {
 
         System.out.println("[XLET] initXlet");
 
-        final TaskContext taskContext;
-        try {
-            taskContext = MyXletTaskContext.newInstance();
-        } catch (FSMException fsme) {
-            fsme.printStackTrace(System.err);
-            throw new XletStateChangeException(fsme.getMessage());
-        }
-
-        synchronized (this) {
-            machine = new XletMachine(new MachineContext(taskContext));
-            try {
-                machine.setState(XletStates.PAUSED);
-            } catch (FSMException fsme) {
-                fsme.printStackTrace(System.err);
-                throw new XletStateChangeException(fsme.getMessage());
-            }
-        }
+        super.initXlet(ctx);
     }
 
 
@@ -61,13 +50,7 @@ public class MyXlet implements Xlet {
 
         System.out.println("[XLET] startXlet");
 
-        synchronized (this) {
-            try {
-                machine.setState(XletStates.ACTIVE);
-            } catch (FSMException fsme) {
-                throw new XletStateChangeException(fsme.getMessage());
-            }
-        }
+        super.startXlet();
     }
 
 
@@ -76,13 +59,7 @@ public class MyXlet implements Xlet {
 
         System.out.println("[XLET] pauseXlet");
 
-        synchronized (this) {
-            try {
-                machine.setState(XletStates.PAUSED);
-            } catch (FSMException fsme) {
-                fsme.printStackTrace(System.err);
-            }
-        }
+        super.pauseXlet();
     }
 
 
@@ -92,19 +69,7 @@ public class MyXlet implements Xlet {
 
         System.out.println("[XLET] destroyXlet");
 
-        synchronized (this) {
-            if (machine != null) {
-                try {
-                    machine.setState(XletStates.DESTROYED);
-                } catch (FSMException fsme) {
-                    fsme.printStackTrace(System.err);
-                }
-                machine = null;
-            }
-        }
+        super.destroyXlet(unconditional);
     }
-
-
-    private volatile Machine machine = null;
 }
 
