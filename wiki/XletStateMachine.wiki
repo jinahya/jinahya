@@ -1,4 +1,5 @@
 #summary Xlet State Machine.
+#labels Xlet,JavaTV
 
 = Introduction =
 
