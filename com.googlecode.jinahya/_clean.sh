@@ -1,14 +1,11 @@
 #!/bin/sh
 wd=`pwd`
-pd=
 for i in `find . -name pom.xml -type f`
 do
-    pd=${i%/*}
-    if [ ! -d $pd/target ]; then
+    if [ ! -d ${i%/*}/target ]; then
         continue
     fi
-    echo "[[[[[ " $pd " ]]]]]"
-    cd -P $pd
+    cd -P ${i%/*}
     mvn clean
     cd $wd
 done
