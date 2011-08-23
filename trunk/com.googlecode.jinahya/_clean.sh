@@ -1,6 +1,5 @@
 #!/bin/sh
 wd=`pwd`
-#for i in `find . -name pom.xml -type f -printf '%h\n'`
 pd=
 for i in `find . -name pom.xml -type f`
 do

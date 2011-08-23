@@ -5,7 +5,6 @@ if [ $# -eq 0 ]; then
 fi
 wd=`pwd`
 pd=
-#for i in `find . -name pom.xml -type f -printf '%h\n'`
 for i in `find . -name pom.xml -type f`
 do
     pd=${i%/*}
