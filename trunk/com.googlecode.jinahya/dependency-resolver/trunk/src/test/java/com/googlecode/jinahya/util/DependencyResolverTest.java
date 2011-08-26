@@ -59,7 +59,7 @@ public class DependencyResolverTest {
     }
 
 
-    @Test(expectedExceptions = {CyclicDependencyException.class})
+    @Test(expectedExceptions = {CyclicDependencyResolverException.class})
     public void testAddDependencyForCyclicDependency()
         throws DependencyResolverException {
 
