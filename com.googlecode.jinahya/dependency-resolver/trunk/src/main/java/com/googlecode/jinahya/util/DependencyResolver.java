@@ -85,7 +85,7 @@ public class DependencyResolver<T> {
         synchronized (map) {
 
             if (target != null && hasDependency(target, source)) {
-                throw new CyclicDependencyResolverException(source, target);
+                throw new CyclicDependencyException(source, target);
             }
 
             List<T> targets = map.get(source);

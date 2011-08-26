@@ -22,8 +22,7 @@ package com.googlecode.jinahya.util;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class CyclicDependencyResolverException
-    extends DependencyResolverException {
+public class CyclicDependencyException extends DependencyResolverException {
 
 
     /** GENERATED. */
@@ -37,8 +36,7 @@ public class CyclicDependencyResolverException
      * @param source source
      * @param target target
      */
-    public CyclicDependencyResolverException(final Object source,
-                                             final Object target) {
+    public CyclicDependencyException(final Object source, final Object target) {
 
         super("cyclic dependency: " + source + " -> " + target);
     }
