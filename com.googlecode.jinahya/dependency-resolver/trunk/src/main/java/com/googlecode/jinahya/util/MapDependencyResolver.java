@@ -34,23 +34,6 @@ public class MapDependencyResolver<T> implements DependencyResolver<T> {
 
 
     /**
-     * Returns a synchronized wrapper of given <code>resolver</code>.
-     *
-     * @param resolver resolver to be synchronized
-     * @return a synchronized wrapper
-     */
-    public static DependencyResolver synchronizedInstance(
-        final MapDependencyResolver resolver) {
-
-        if (resolver == null) {
-            throw new NullPointerException("null resolver");
-        }
-
-        return new SynchronizedDependencyResolver(resolver, resolver.map);
-    }
-
-
-    /**
      * {@inheritDoc }
      */
     @Override
