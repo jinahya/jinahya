@@ -137,5 +137,9 @@ public class DependencyResolverTest {
 
         resolver.removeDependencies("A", "B", "C", "D", null);
     }
-}
 
+
+    @Test
+    public void testPerformance() {
+    }
+}
