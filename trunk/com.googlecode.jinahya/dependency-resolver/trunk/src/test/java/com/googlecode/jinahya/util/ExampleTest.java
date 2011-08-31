@@ -30,7 +30,7 @@ public class ExampleTest {
 
 
     private static final DependencyResolver<String> RESOLVER =
-        new DependencyResolver<String>();
+        new MapDependencyResolver<String>();
 
 
     static {
@@ -103,4 +103,3 @@ public class ExampleTest {
                            + RESOLVER.getDependencyPaths("O", "R"));
     }
 }
-
