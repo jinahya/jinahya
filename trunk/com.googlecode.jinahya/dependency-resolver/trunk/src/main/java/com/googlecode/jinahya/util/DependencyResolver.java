@@ -18,12 +18,7 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -31,7 +26,127 @@ import java.util.Map;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DependencyResolver<T> {
+public interface DependencyResolver<T> {
+
+
+    public static class SynchronizedDependencyResolver<T>
+        implements DependencyResolver<T> {
+
+
+        SynchronizedDependencyResolver(DependencyResolver<T> resolver,
+                                       Object mutex) {
+            super();
+
+            if (resolver == null) {
+                throw new NullPointerException("null resolver");
+            }
+
+            if (mutex == null) {
+                throw new NullPointerException("null mutex");
+            }
+
+            this.resolver = resolver;
+            this.mutex = mutex;
+        }
+
+
+        @Override
+        public void addDependencies(T source, T... targets)
+            throws DependencyResolverException {
+
+            synchronized (mutex) {
+                resolver.addDependencies(source, targets);
+            }
+        }
+
+
+        @Override
+        public void addDependency(T source, T target)
+            throws DependencyResolverException {
+
+            synchronized (mutex) {
+                resolver.addDependency(source, target);
+            }
+        }
+
+
+        @Override
+        public List<List<T>> getDependencyPaths(T source, T target) {
+
+            synchronized (mutex) {
+                return resolver.getDependencyPaths(source, target);
+            }
+        }
+
+
+        @Override
+        public List<List<T>> getHorizontalGroups() {
+
+            synchronized (mutex) {
+                return resolver.getHorizontalGroups();
+            }
+        }
+
+
+        @Override
+        public List<T> getSingleGroup() {
+
+            synchronized (mutex) {
+                return resolver.getSingleGroup();
+            }
+        }
+
+
+        @Override
+        public List<List<T>> getVerticalGroups() {
+
+            synchronized (mutex) {
+                return resolver.getVerticalGroups();
+            }
+        }
+
+
+        @Override
+        public boolean hasDependencies(T source, T... targets) {
+
+            synchronized (mutex) {
+                return resolver.hasDependencies(source, targets);
+            }
+        }
+
+
+        @Override
+        public boolean hasDependency(T source, T target) {
+
+            synchronized (mutex) {
+                return resolver.hasDependency(source, target);
+            }
+        }
+
+
+        @Override
+        public void removeDependencies(T source, T... targets) {
+
+            synchronized (mutex) {
+                resolver.removeDependencies(source, targets);
+            }
+        }
+
+
+        public void removeDependency(T source, T target) {
+            synchronized (mutex) {
+                resolver.removeDependency(source, target);
+            }
+        }
+
+
+        /** resolver. */
+        final DependencyResolver<T> resolver;
+
+
+        /** mutex. */
+        final Object mutex;
+    }
 
 
     /**
@@ -42,24 +157,8 @@ public class DependencyResolver<T> {
      * @param targets targets; may not be null; each element may be null
      * @throws DependencyResolverException if an error occurs
      */
-    public void addDependencies(final T source, final T... targets)
-        throws DependencyResolverException {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (targets == null) {
-            throw new NullPointerException("null targets");
-        }
-
-        synchronized (map) {
-
-            for (T target : targets) {
-                addDependency(source, target);
-            }
-        }
-    }
+    void addDependencies(final T source, final T... targets)
+        throws DependencyResolverException;
 
 
     /**
@@ -70,38 +169,8 @@ public class DependencyResolver<T> {
      * @param target target; may be null
      * @throws DependencyResolverException if failed to add dependency.
      */
-    public void addDependency(final T source, final T target)
-        throws DependencyResolverException {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (source.equals(target)) {
-            throw new IllegalArgumentException(
-                "source(" + source + ") is equals to target(" + target + ")");
-        }
-
-        synchronized (map) {
-
-            if (target != null && hasDependency(target, source)) {
-                throw new CyclicDependencyException(source, target);
-            }
-
-            List<T> targets = map.get(source);
-
-            if (targets == null) {
-                targets = new ArrayList<T>();
-                map.put(source, targets);
-            }
-
-            if (targets.contains(target)) {
-                return;
-            }
-
-            targets.add(target);
-        }
-    }
+    void addDependency(final T source, final T target)
+        throws DependencyResolverException;
 
 
     /**
@@ -111,23 +180,7 @@ public class DependencyResolver<T> {
      * @param source source; may not be null
      * @param targets targets; may not be null; each element may be null
      */
-    public void removeDependencies(final T source, final T... targets) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (targets == null) {
-            throw new NullPointerException("null targets");
-        }
-
-        synchronized (map) {
-
-            for (T target : targets) {
-                removeDependency(source, target);
-            }
-        }
-    }
+    void removeDependencies(final T source, final T... targets);
 
 
     /**
@@ -137,25 +190,7 @@ public class DependencyResolver<T> {
      * @param source source; may not be null
      * @param target target; may be null
      */
-    public void removeDependency(final T source, final T target) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        synchronized (map) {
-
-            final List<T> targets = map.get(source);
-
-            if (targets == null) {
-                return;
-            }
-
-            if (targets.remove(target) && targets.isEmpty()) {
-                map.remove(source);
-            }
-        }
-    }
+    void removeDependency(final T source, final T target);
 
 
     /**
@@ -166,27 +201,7 @@ public class DependencyResolver<T> {
      * @param targets targets; may not be null; each element may be null
      * @return true if all targets are dependent from source; false otherwise
      */
-    public boolean hasDependencies(final T source, final T... targets) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (targets == null) {
-            throw new NullPointerException("null targets");
-        }
-
-        synchronized (map) {
-
-            for (T target : targets) {
-                if (!hasDependency(source, target)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
+    boolean hasDependencies(final T source, final T... targets);
 
 
     /**
@@ -197,36 +212,7 @@ public class DependencyResolver<T> {
      * @param target target; may be null
      * @return true if there is a dependency; false otherwise
      */
-    public boolean hasDependency(final T source, final T target) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        synchronized (map) {
-
-            final List<T> list = map.get(source);
-
-            if (list == null) {
-                return false;
-            }
-
-            if (list.contains(target)) {
-                return true;
-            }
-
-            for (T auxiliary : list) {
-                if (auxiliary == null) {
-                    continue;
-                }
-                if (hasDependency(auxiliary, target)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+    boolean hasDependency(final T source, final T target);
 
 
     /**
@@ -237,52 +223,7 @@ public class DependencyResolver<T> {
      * @param target target
      * @return dependency paths from <code>source</code> to <code>target</code>.
      */
-    public List<List<T>> getDependencyPaths(final T source, final T target) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (source.equals(target)) {
-            throw new IllegalArgumentException(
-                "source(" + source + ") is equals to target(" + target + ")");
-        }
-
-        synchronized (map) {
-
-            final List<List<T>> paths = new ArrayList<List<T>>();
-
-            final List<T> targets = map.get(source);
-
-            if (targets == null) {
-                return paths;
-            }
-
-            for (T auxiliary : targets) {
-
-                if ((auxiliary == null && target == null)
-                    || auxiliary.equals(target)) {
-
-                    final List<T> path = new LinkedList<T>();
-                    path.add(source);
-                    path.add(auxiliary);
-                    paths.add(path);
-                    continue;
-                }
-
-                if (auxiliary == null) {
-                    continue;
-                }
-
-                for (List<T> path : getDependencyPaths(auxiliary, target)) {
-                    path.add(0, source);
-                    paths.add(path);
-                }
-            }
-
-            return paths;
-        }
-    }
+    public List<List<T>> getDependencyPaths(final T source, final T target);
 
 
     /**
@@ -290,54 +231,7 @@ public class DependencyResolver<T> {
      *
      * @return a single dependency group
      */
-    public List<T> getSingleGroup() {
-
-        final List<T> group = new LinkedList<T>();
-
-        synchronized (map) {
-            for (T source : map.keySet()) {
-                getSingleGroup(source, group);
-            }
-        }
-        return group;
-    }
-
-
-    /**
-     * Flatten dependencies from given <code>source</code>.
-     *
-     * @param source source
-     * @param group group
-     */
-    private void getSingleGroup(final T source, final List<T> group) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (group == null) {
-            throw new NullPointerException("null group");
-        }
-
-        synchronized (map) {
-
-            if (group.contains(source)) {
-                return;
-            }
-
-            final List<T> targets = map.get(source);
-            if (targets != null) {
-                for (T target : targets) {
-                    if (target == null) {
-                        continue;
-                    }
-                    getSingleGroup(target, group);
-                }
-            }
-
-            group.add(source);
-        }
-    }
+    List<T> getSingleGroup();
 
 
     /**
@@ -347,51 +241,7 @@ public class DependencyResolver<T> {
      *
      * @return horizontal groups
      */
-    public List<List<T>> getHorizontalGroups() {
-
-        final List<List<T>> groups = new ArrayList<List<T>>();
-
-        synchronized (map) {
-
-            final List<T> single = getSingleGroup();
-
-            while (!single.isEmpty()) {
-
-                final List<T> group = new ArrayList<T>();
-                groups.add(group);
-
-                group.add(single.remove(0));
-
-                outer:
-                for (int i = 0; i < single.size();) {
-                    for (T g : group) {
-                        if (hasDependency(single.get(i), g)) {
-                            group.add(single.remove(i));
-                            continue outer;
-                        }
-                    }
-                    for (int j = i + 1; j < single.size(); j++) {
-                        if (!hasDependency(single.get(j), single.get(i))) {
-                            continue;
-                        }
-                        for (T g : group) {
-                            if (hasDependency(single.get(j), g)) {
-                                group.add(single.remove(i));
-                                continue outer;
-                            }
-                        }
-                    }
-                    i++;
-                }
-            }
-
-            if (!single.isEmpty()) {
-                groups.add(single);
-            }
-        }
-
-        return groups;
-    }
+    List<List<T>> getHorizontalGroups();
 
 
     /**
@@ -400,41 +250,5 @@ public class DependencyResolver<T> {
      *
      * @return vertical groups
      */
-    public List<List<T>> getVerticalGroups() {
-
-        final List<List<T>> groups = new ArrayList<List<T>>();
-
-        synchronized (map) {
-
-            final List<T> single = getSingleGroup();
-
-            while (!single.isEmpty()) {
-
-                final List<T> group = new ArrayList<T>();
-                groups.add(group);
-
-                outer:
-                for (int i = single.size() - 1; i >= 0; i--) {
-                    for (int j = 0; j < i; j++) {
-                        if (hasDependency(single.get(i), single.get(j))) {
-                            continue outer;
-                        }
-                    }
-                    group.add(single.remove(i));
-                }
-            }
-
-            if (!single.isEmpty()) {
-                groups.add(single);
-            }
-        }
-
-        return groups;
-    }
-
-
-    /** map. */
-    private final Map<T, List<T>> map =
-        Collections.synchronizedMap(new HashMap<T, List<T>>());
+    List<List<T>> getVerticalGroups();
 }
-
