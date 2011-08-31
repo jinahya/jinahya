@@ -33,7 +33,7 @@ public class DependencyResolverTest {
     public void testAddDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         try {
             resolver.addDependency(null, "null");
@@ -53,7 +53,7 @@ public class DependencyResolverTest {
         throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         resolver.addDependency("A", "A");
     }
@@ -64,7 +64,7 @@ public class DependencyResolverTest {
         throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         resolver.addDependency("A", "B");
         resolver.addDependency("B", "C");
@@ -77,7 +77,7 @@ public class DependencyResolverTest {
     public void testAddDependencies() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         try {
             resolver.addDependencies(null, "null");
@@ -101,7 +101,7 @@ public class DependencyResolverTest {
     public void testHasDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         Assert.assertFalse(resolver.hasDependency("A", "B"));
 
@@ -119,7 +119,7 @@ public class DependencyResolverTest {
     public void testRemoveDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         resolver.removeDependency("A", "B");
 
@@ -133,7 +133,7 @@ public class DependencyResolverTest {
     public void testRemoveDependencies() {
 
         final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
+            new MapDependencyResolver<String>();
 
         resolver.removeDependencies("A", "B", "C", "D", null);
     }
