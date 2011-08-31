@@ -29,8 +29,13 @@ import java.util.List;
 public interface DependencyResolver<T> {
 
 
-    public static class SynchronizedDependencyResolver<T>
+    static class SynchronizedDependencyResolver<T>
         implements DependencyResolver<T> {
+
+
+        SynchronizedDependencyResolver(DependencyResolver<T> resolver) {
+            this(resolver, resolver);
+        }
 
 
         SynchronizedDependencyResolver(DependencyResolver<T> resolver,
