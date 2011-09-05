@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util;
 
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,32 +32,32 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testAddDependency() throws DependencyResolverException {
+    public void testAdd() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
         try {
-            resolver.addDependency(null, "null");
-            Assert.fail("passed: null source");
+            resolver.add(null, "null");
+            Assert.fail("passed: add() with null source");
         } catch (NullPointerException npe) {
             // expected
         }
 
-        resolver.addDependency("source", null);
+        resolver.add("source", (String) null);
 
-        resolver.addDependency("source", "target");
+        resolver.add("source", "target");
     }
 
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testAddDependencyForSelfDependency()
+    @Test(expectedExceptions = {DependencyResolverException.class})
+    public void testAddForSelfDependency()
         throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
-        resolver.addDependency("A", "A");
+        resolver.add("A", "A");
     }
 
 
@@ -64,12 +66,12 @@ public class DependencyResolverTest {
         throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
-        resolver.addDependency("A", "B");
-        resolver.addDependency("B", "C");
+        resolver.add("A", "B");
+        resolver.add("B", "C");
 
-        resolver.addDependency("C", "A");
+        resolver.add("C", "A");
     }
 
 
@@ -77,23 +79,23 @@ public class DependencyResolverTest {
     public void testAddDependencies() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
         try {
-            resolver.addDependencies(null, "null");
+            resolver.add(null, "null");
             Assert.fail("passed: null source");
         } catch (NullPointerException npe) {
             // expected
         }
 
         try {
-            resolver.addDependencies("source", (String[]) null);
+            resolver.add("source", (String[]) null);
             Assert.fail("passed: null targets");
         } catch (NullPointerException npe) {
             // expected
         }
 
-        resolver.addDependencies("source", "target1", "target2", null);
+        resolver.add("source", "target1", "target2", null);
     }
 
 
@@ -101,17 +103,17 @@ public class DependencyResolverTest {
     public void testHasDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
-        Assert.assertFalse(resolver.hasDependency("A", "B"));
+        Assert.assertFalse(resolver.has("A", "B"));
 
-        resolver.addDependency("A", "B");
+        resolver.add("A", "B");
 
-        Assert.assertTrue(resolver.hasDependency("A", "B"));
+        Assert.assertTrue(resolver.has("A", "B"));
 
-        resolver.removeDependency("A", "B");
+        resolver.remove("A", "B");
 
-        Assert.assertFalse(resolver.hasDependency("A", "B"));
+        Assert.assertFalse(resolver.has("A", "B"));
     }
 
 
@@ -119,13 +121,13 @@ public class DependencyResolverTest {
     public void testRemoveDependency() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
-        resolver.removeDependency("A", "B");
+        resolver.remove("A", "B");
 
-        resolver.addDependency("A", "B");
+        resolver.add("A", "B");
 
-        resolver.removeDependency("A", "B");
+        resolver.remove("A", "B");
     }
 
 
@@ -133,13 +135,46 @@ public class DependencyResolverTest {
     public void testRemoveDependencies() {
 
         final DependencyResolver<String> resolver =
-            new MapDependencyResolver<String>();
+            new DependencyResolver<String>();
 
-        resolver.removeDependencies("A", "B", "C", "D", null);
+        resolver.remove("A", "B", "C", "D", null);
     }
 
 
     @Test
     public void testPerformance() {
+    }
+
+
+    @Test
+    public void checkSynchronizedInstanceInheritesAllPublicMethods()
+        throws NoSuchMethodException {
+
+        final Class<? extends DependencyResolver> class1 =
+            new DependencyResolver<Object>().getClass();
+
+        final Class<? extends DependencyResolver> class2 =
+            DependencyResolver.<Object>synchronizedInstance().getClass();
+        System.out.println("synchronized class: " + class2);
+
+        for (Method method1 : class1.getDeclaredMethods()) {
+
+            final int modifiers1 = method1.getModifiers();
+
+            if (Modifier.isStatic(modifiers1)) {
+                continue;
+            }
+
+            if (!Modifier.isPublic(modifiers1)) {
+                continue;
+            }
+
+            final Method method2 = class2.getDeclaredMethod(
+                method1.getName(), method1.getParameterTypes());
+
+            final int modifiers2 = method2.getModifiers();
+
+            Assert.assertTrue(Modifier.isSynchronized(modifiers2));
+        }
     }
 }

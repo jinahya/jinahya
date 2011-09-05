@@ -30,30 +30,30 @@ public class ExampleTest {
 
 
     private static final DependencyResolver<String> RESOLVER =
-        new MapDependencyResolver<String>();
+        new DependencyResolver<String>();
 
 
     static {
         try {
-            RESOLVER.addDependencies("A", "B", "C", null);
+            RESOLVER.add("A", "B", "C", null);
 
-            RESOLVER.addDependencies("B", "F", null);
+            RESOLVER.add("B", "F", null);
 
-            RESOLVER.addDependencies("C", "G", null);
+            RESOLVER.add("C", "G", null);
 
-            RESOLVER.addDependency("H", "B");
+            RESOLVER.add("H", "B");
 
-            RESOLVER.addDependencies("I", "J", "K");
+            RESOLVER.add("I", "J", "K");
 
-            RESOLVER.addDependency("L", "K");
+            RESOLVER.add("L", "K");
 
-            RESOLVER.addDependency("M", null);
+            RESOLVER.add("M", (String) null);
 
-            RESOLVER.addDependency("N", null);
+            RESOLVER.add("N", (String) null);
 
-            RESOLVER.addDependencies("O", "P", "Q");
-            RESOLVER.addDependency("P", "R");
-            RESOLVER.addDependencies("Q", "R");
+            RESOLVER.add("O", "P", "Q");
+            RESOLVER.add("P", "R");
+            RESOLVER.add("Q", "R");
         } catch (DependencyResolverException dre) {
             throw new InstantiationError(dre.getMessage());
         }
@@ -64,16 +64,16 @@ public class ExampleTest {
     public void testGetDependencyGroups() {
 
         System.out.println("paths from O to R: "
-                           + RESOLVER.getDependencyPaths("O", "R"));
+                           + RESOLVER.getPaths("O", "R"));
     }
 
 
     @Test
     public void testHasDependencies() {
 
-        Assert.assertTrue(RESOLVER.hasDependencies("A", "F", "G"));
+        Assert.assertTrue(RESOLVER.hasAll("A", "F", "G"));
 
-        Assert.assertFalse(RESOLVER.hasDependencies("H", "F", "G"));
+        Assert.assertFalse(RESOLVER.hasAll("H", "F", "G"));
     }
 
 
@@ -100,6 +100,6 @@ public class ExampleTest {
 
     public void testGetDependencyPaths() {
         System.out.println("from O to R: "
-                           + RESOLVER.getDependencyPaths("O", "R"));
+                           + RESOLVER.getPaths("O", "R"));
     }
 }
