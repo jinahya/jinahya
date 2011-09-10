@@ -33,7 +33,7 @@ public final class XletState extends AbstractState {
     /**
      * LOADED state. This state is a virtual one.
      */
-    public static final State LOADED = new XletState(1, "LOADED");
+    public static final State LOADED = new XletState(0, "LOADED");
 
 
     /**
@@ -41,23 +41,20 @@ public final class XletState extends AbstractState {
      * invoked from {@link #LOADED} or <code>pauseXlet</code> invoked from
      * {@link #ACTIVE}.
      */
-    public static final State PAUSED =
-        new XletState(LOADED.getCode() << 3, "PAUSED");
+    public static final State PAUSED = new XletState(1, "PAUSED");
 
 
     /**
      * ACTIVE(STARTED) state. {@link XletMachine} can be reached to this state
      * when <code>pauseXlet</code> invoked from {@link #PAUSED}.
      */
-    public static final State ACTIVE =
-        new XletState(PAUSED.getCode() << 3, "ACTIVE");
+    public static final State ACTIVE = new XletState(2, "ACTIVE");
 
 
     /**
      * DESTROYED state.
      */
-    public static final State DESTROYED =
-        new XletState(ACTIVE.getCode() << 3, "DESTROYED");
+    public static final State DESTROYED = new XletState(3, "DESTROYED");
 
 
     /** PRIVATE. */
@@ -65,4 +62,3 @@ public final class XletState extends AbstractState {
         super(code, name);
     }
 }
-
