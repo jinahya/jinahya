@@ -29,11 +29,11 @@ public class XletMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param context task context
+     * @param taskContext task context
      */
-    public XletMachine(final MachineContext context) {
+    public XletMachine(final TaskContext taskContext) {
 
-        super(context);
+        super(taskContext);
     }
 
 

@@ -30,7 +30,7 @@ public abstract class Task {
      *
      * @param id 
      */
-    protected Task(final String id) {
+    public Task(final String id) {
         super();
 
         if (id == null) {
@@ -52,15 +52,16 @@ public abstract class Task {
 
 
     /**
-     * 
-     * @param context
-     * @throws FSMException 
+     * Prepares for given <code>context</code>.
+     *
+     * @param context transition context
+     * @throws FSMException if an error occurs.
      */
     public abstract void prepare(TransitionContext context) throws FSMException;
 
 
     /**
-     * Perform desired actions for given <code>transition</code>.
+     * Performs desired actions for given <code>transition</code>.
      *
      * @param context transition context
      * @throws FSMException if an error occurs.

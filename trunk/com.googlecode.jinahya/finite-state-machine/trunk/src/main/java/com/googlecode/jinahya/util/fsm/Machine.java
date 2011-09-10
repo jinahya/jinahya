@@ -18,6 +18,14 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import com.googlecode.jinahya.util.DependencyResolver;
+import com.googlecode.jinahya.util.DependencyResolverException;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+
 /**
  * A Finite State Machine.
  *
@@ -29,17 +37,17 @@ public class Machine {
     /**
      * Creates a new instance.
      *
-     * @param context task context
+     * @param taskContext task context
      */
-    public Machine(final MachineContext context) {
+    public Machine(final TaskContext taskContext) {
 
         super();
 
-        if (context == null) {
-            throw new NullPointerException("null context");
+        if (taskContext == null) {
+            throw new NullPointerException("null taskContext");
         }
 
-        this.context = context;
+        this.taskContext = taskContext;
     }
 
 
@@ -48,7 +56,7 @@ public class Machine {
      *
      * @return state
      */
-    public synchronized State getState() {
+    public final synchronized State getState() {
         return state;
     }
 
@@ -59,7 +67,8 @@ public class Machine {
      * @param state new state
      * @throws FSMException if an error occurs.
      */
-    public synchronized void setState(final State state) throws FSMException {
+    public final synchronized void setState(final State state)
+        throws FSMException {
 
         if (state == null) {
             throw new NullPointerException("null state");
@@ -90,7 +99,103 @@ public class Machine {
             finished = true;
         }
 
-        context.transited(transition);
+        final Map<String, Task> tasks = taskContext.getTasks();
+
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        // add all task ids as sources
+        for (String taskId : tasks.keySet()) {
+            try {
+                resolver.add(taskId, (String) null);
+            } catch (DependencyResolverException dre) {
+                dre.printStackTrace(System.err);
+            }
+        }
+
+
+        final StringBuffer taskIdBuffer = new StringBuffer();
+
+        
+        
+        final TransitionContext transitionContext = new TransitionContext() {
+
+
+            @Override
+            public Transition getTransition() {
+                return transition;
+            }
+
+
+            @Override
+            public final void setPerformBefore(final String nextTaskId)
+                throws FSMException {
+
+                if (nextTaskId == null) {
+                    throw new NullPointerException("null nextTaskId");
+                }
+
+                final String taskId = taskIdBuffer.toString();
+                if (taskId.isEmpty()) {
+                    return;
+                }
+
+                try {
+                    resolver.add(nextTaskId, taskId);
+                } catch (DependencyResolverException dre) {
+                    throw new FSMException(dre);
+                }
+            }
+
+
+            @Override
+            public final void setPerformAfter(final String previousTaskId)
+                throws FSMException {
+
+                if (previousTaskId == null) {
+                    throw new NullPointerException("null previousTaskId");
+                }
+                final String taskId = taskIdBuffer.toString();
+                if (taskId.isEmpty()) {
+                    return;
+                }
+
+                try {
+                    resolver.add(taskId, previousTaskId);
+                } catch (DependencyResolverException dre) {
+                    throw new FSMException(dre);
+                }
+            }
+        };
+
+        
+        // prepare
+        for (Entry<String, Task> entry : tasks.entrySet()) {
+            taskIdBuffer.delete(0, taskIdBuffer.length());
+            taskIdBuffer.append(entry.getKey());
+            entry.getValue().prepare(transitionContext);
+        }
+        taskIdBuffer.delete(0, taskIdBuffer.length());
+
+
+        // perform
+        for (List<String> idGroup : resolver.getVerticalGroups()) {
+            final Task[] taskGroup = new Task[idGroup.size()];
+            for (int i = 0; i < taskGroup.length; i++) {
+                taskGroup[i] = tasks.get(idGroup.get(i));
+            }
+            perform(transitionContext, taskGroup);
+        }
+    }
+
+
+    protected void perform(final TransitionContext context, Task... tasks)
+        throws FSMException {
+
+        for (Task task : tasks) {
+            task.perform(context);
+        }
     }
 
 
@@ -166,6 +271,5 @@ public class Machine {
 
 
     /** task context. */
-    private final MachineContext context;
+    private final TaskContext taskContext;
 }
-
