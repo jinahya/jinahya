@@ -60,20 +60,20 @@ public class DependencyResolver<T> implements Serializable {
 
 
             @Override
-            public synchronized boolean has(T source, T target) {
-                return super.has(source, target);
+            public synchronized boolean contains(T source, T target) {
+                return super.contains(source, target);
             }
 
 
             @Override
-            public synchronized boolean hasAll(T source, T... target) {
-                return super.hasAll(source, target);
+            public synchronized boolean containsAll(T source, T... target) {
+                return super.containsAll(source, target);
             }
 
 
             @Override
-            public synchronized boolean hasAny(T source, T... targets) {
-                return super.hasAny(source, targets);
+            public synchronized boolean containsAny(T source, T... targets) {
+                return super.containsAny(source, targets);
             }
 
 
@@ -98,6 +98,12 @@ public class DependencyResolver<T> implements Serializable {
             @Override
             public synchronized List<List<T>> getVerticalGroups() {
                 return super.getVerticalGroups();
+            }
+
+
+            @Override
+            public synchronized void clear() {
+                super.clear();
             }
         };
     }
@@ -190,7 +196,7 @@ public class DependencyResolver<T> implements Serializable {
                 throw new DependencyResolverException("self dependency");
             }
 
-            if (target != null && has(target, source)) {
+            if (target != null && contains(target, source)) {
                 throw new CyclicDependencyException(source, target);
             }
 
@@ -292,7 +298,7 @@ public class DependencyResolver<T> implements Serializable {
      *         <code>targets</code>; false if there is no dependency from
      *         <code>source</code> to any of <code>targets</code>.
      */
-    public boolean hasAll(final T source, final T... targets) {
+    public boolean containsAll(final T source, final T... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -303,7 +309,7 @@ public class DependencyResolver<T> implements Serializable {
         }
 
         for (T target : targets) {
-            if (!has(source, target)) {
+            if (!contains(source, target)) {
                 return false;
             }
         }
@@ -320,7 +326,7 @@ public class DependencyResolver<T> implements Serializable {
      * @param targets targets
      * @return true if there is a dependency; false if there is none.
      */
-    public boolean hasAny(final T source, final T... targets) {
+    public boolean containsAny(final T source, final T... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -331,7 +337,7 @@ public class DependencyResolver<T> implements Serializable {
         }
 
         for (T target : targets) {
-            if (has(source, target)) {
+            if (contains(source, target)) {
                 return true;
             }
         }
@@ -350,7 +356,7 @@ public class DependencyResolver<T> implements Serializable {
      *         <code>source</code> to <code>target</code>; false if there is
      *         none.
      */
-    public boolean has(final T source, final T target) {
+    public boolean contains(final T source, final T target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -370,7 +376,7 @@ public class DependencyResolver<T> implements Serializable {
             if (auxiliary == null) {
                 continue;
             }
-            if (has(auxiliary, target)) {
+            if (contains(auxiliary, target)) {
                 return true;
             }
         }
@@ -441,12 +447,12 @@ public class DependencyResolver<T> implements Serializable {
     }
      */
     /**
-     * Finds all direct or indirect dependency paths from given
-     * <code>source</code> to specified <code>target</code>.
+     * Finds all direct or indirect paths from given <code>source</code> to
+     * specified <code>target</code>.
      *
      * @param source source
      * @param target target
-     * @return dependency paths from <code>source</code> to <code>target</code>.
+     * @return paths from <code>source</code> to <code>target</code>.
      */
     public List<List<T>> getPaths(final T source, final T target) {
 
@@ -596,6 +602,12 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
+    /**
+     * Returns a list of vertical dependency groups. Each group can be processed
+     * concurrently but all elements in a group must be processed in order.
+     *
+     * @return vertical groups
+     */
     public List<List<T>> getHorizontalGroups() {
 
         final List<List<T>> groups = new ArrayList<List<T>>();
@@ -612,17 +624,17 @@ public class DependencyResolver<T> implements Serializable {
             outer:
             for (int i = 0; i < single.size();) {
                 for (T g : group) {
-                    if (has(single.get(i), g)) {
+                    if (contains(single.get(i), g)) {
                         group.add(single.remove(i));
                         continue outer;
                     }
                 }
                 for (int j = i + 1; j < single.size(); j++) {
-                    if (!has(single.get(j), single.get(i))) {
+                    if (!contains(single.get(j), single.get(i))) {
                         continue;
                     }
                     for (T g : group) {
-                        if (has(single.get(j), g)) {
+                        if (contains(single.get(j), g)) {
                             group.add(single.remove(i));
                             continue outer;
                         }
@@ -660,7 +672,7 @@ public class DependencyResolver<T> implements Serializable {
             outer:
             for (int i = single.size() - 1; i >= 0; i--) {
                 for (int j = 0; j < i; j++) {
-                    if (has(single.get(i), single.get(j))) {
+                    if (contains(single.get(i), single.get(j))) {
                         continue outer;
                     }
                 }
@@ -673,6 +685,14 @@ public class DependencyResolver<T> implements Serializable {
         }
 
         return groups;
+    }
+
+
+    /**
+     * Removes all dependencies from this resolver.
+     */
+    public void clear() {
+        map.clear();
     }
 
 
