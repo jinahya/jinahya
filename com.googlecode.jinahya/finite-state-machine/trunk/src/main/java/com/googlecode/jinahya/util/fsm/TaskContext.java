@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -143,10 +143,10 @@ public class TaskContext {
      * @return a map of task id and task instances.
      * @throws FSMException if an error occurs.
      */
-    public synchronized Map<String, Task> getTaskMap() throws FSMException {
+    public synchronized Map<String, Task> getTasks() throws FSMException {
 
         if (tasks == null) {
-            tasks = new HashMap<String, Task>();
+            final Map<String, Task> taskMap = new HashMap<String, Task>();
             for (String className : classNames) {
                 final Class<?> loaded = loadClass(className);
                 if (!Task.class.isAssignableFrom(loaded)) {
@@ -161,11 +161,11 @@ public class TaskContext {
                         final Task task =
                             (Task) constructor.newInstance((Object[]) null);
                         final String taskId = task.getId();
-                        if (tasks.containsKey(taskId)) {
+                        if (taskMap.containsKey(taskId)) {
                             throw new FSMException(
                                 "duplicate task id: " + taskId);
                         }
-                        tasks.put(taskId, task);
+                        taskMap.put(taskId, task);
                     } catch (InstantiationException ie) {
                         throw new FSMException(
                             "failed to create a new instance: " + loaded, ie);
@@ -181,21 +181,10 @@ public class TaskContext {
                         "no default constructor: " + loaded, nsme);
                 }
             }
+            tasks = Collections.unmodifiableMap(taskMap);
         }
 
-        return new HashMap<String, Task>(tasks);
-    }
-
-
-    /**
-     * Returns a collection of task instances.
-     *
-     * @return a collection of task instances.
-     * @throws FSMException if an error occurs.
-     */
-    public synchronized Collection<Task> getTasks() throws FSMException {
-
-        return getTaskMap().values();
+        return tasks;
     }
 
 
@@ -233,4 +222,3 @@ public class TaskContext {
     /** tasks. */
     private volatile Map<String, Task> tasks = null;
 }
-

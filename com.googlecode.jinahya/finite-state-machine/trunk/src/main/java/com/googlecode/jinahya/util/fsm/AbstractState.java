@@ -37,7 +37,7 @@ public abstract class AbstractState implements State {
      * @param name state name
      * @return a new State instance.
      */
-    public static State newInstance(final int code, final String name) {
+    static State newInstance(final int code, final String name) {
 
         return new AbstractState(code, name) {
 
