@@ -117,8 +117,8 @@ public class Machine {
 
         final StringBuffer taskIdBuffer = new StringBuffer();
 
-        
-        
+
+
         final TransitionContext transitionContext = new TransitionContext() {
 
 
@@ -169,7 +169,7 @@ public class Machine {
             }
         };
 
-        
+
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
             taskIdBuffer.delete(0, taskIdBuffer.length());
@@ -190,6 +190,15 @@ public class Machine {
     }
 
 
+    /**
+     * Performs each of given <code>tasks</code> with specified
+     * <code>context</code>. Each task can be performed concurrently. This
+     * method must guarantee that all tasks are performed before return.
+     *
+     * @param context transition context
+     * @param tasks tasks
+     * @throws FSMException if an error occurs.
+     */
     protected void perform(final TransitionContext context, Task... tasks)
         throws FSMException {
 
