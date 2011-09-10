@@ -71,9 +71,9 @@ public class ExampleTest {
     @Test
     public void testHasDependencies() {
 
-        Assert.assertTrue(RESOLVER.hasAll("A", "F", "G"));
+        Assert.assertTrue(RESOLVER.containsAll("A", "F", "G"));
 
-        Assert.assertFalse(RESOLVER.hasAll("H", "F", "G"));
+        Assert.assertFalse(RESOLVER.containsAll("H", "F", "G"));
     }
 
 

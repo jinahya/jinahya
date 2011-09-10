@@ -105,15 +105,15 @@ public class DependencyResolverTest {
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
 
-        Assert.assertFalse(resolver.has("A", "B"));
+        Assert.assertFalse(resolver.contains("A", "B"));
 
         resolver.add("A", "B");
 
-        Assert.assertTrue(resolver.has("A", "B"));
+        Assert.assertTrue(resolver.contains("A", "B"));
 
         resolver.remove("A", "B");
 
-        Assert.assertFalse(resolver.has("A", "B"));
+        Assert.assertFalse(resolver.contains("A", "B"));
     }
 
 
