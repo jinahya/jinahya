@@ -104,22 +104,11 @@ public final class XletTransitionMatcher {
 
 
     /**
-     * Returns values.
-     *
-     * @return values
-     */
-    public static TransitionMatcher[] values() {
-        return new TransitionMatcher[]{
-                LOAD_XLET, INIT_XLET, START_XLET, PAUSE_XLET, DESTROY_XLET
-            };
-    }
-
-
-    /**
      * VALUES.
      */
     public static final List<TransitionMatcher> VALUES =
-        Arrays.asList(values());
+        Arrays.asList(LOAD_XLET, INIT_XLET, START_XLET, PAUSE_XLET,
+                      DESTROY_XLET);
 
 
     /** PRIVATE. */
@@ -127,4 +116,3 @@ public final class XletTransitionMatcher {
         super();
     }
 }
-

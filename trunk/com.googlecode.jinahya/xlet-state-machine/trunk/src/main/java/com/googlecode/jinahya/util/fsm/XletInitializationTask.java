@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import static com.googlecode.jinahya.util.fsm.XletTransitionMatcher.*;
-
-
 /**
  * A task performs on <code>initXlet</code>.
  *
@@ -35,7 +32,6 @@ public abstract class XletInitializationTask extends SimpleTask {
      * @param id task id
      */
     public XletInitializationTask(final String id) {
-        super(id, new TransitionMatcher[]{INIT_XLET});
+        super(id, new TransitionMatcher[]{XletTransitionMatcher.INIT_XLET});
     }
 }
-

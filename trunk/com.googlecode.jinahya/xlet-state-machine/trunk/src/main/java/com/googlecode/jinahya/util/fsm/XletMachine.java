@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.util.Map;
+
 /**
  * Xlet machine.
  *
@@ -29,11 +31,11 @@ public class XletMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param taskContext task context
+     * @param tasks task context
      */
-    public XletMachine(final TaskContext taskContext) {
+    public XletMachine(final Map<String, Task> tasks) {
 
-        super(taskContext);
+        super(tasks);
     }
 
 
@@ -43,7 +45,7 @@ public class XletMachine extends Machine {
         if (transition == null) {
             throw new NullPointerException("null transition");
         }
-        
+
         return transition.matchesAny(
             XletTransitionMatcher.LOAD_XLET, XletTransitionMatcher.INIT_XLET);
     }
@@ -66,8 +68,7 @@ public class XletMachine extends Machine {
         if (transition == null) {
             throw new NullPointerException("null transition");
         }
-        
+
         return XletTransitionMatcher.DESTROY_XLET.matches(transition);
     }
 }
-
