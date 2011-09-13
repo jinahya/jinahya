@@ -51,7 +51,7 @@ public abstract class SimpleTask extends SwitchTask {
 
 
     @Override
-    protected void prepareOff(final TransitionContext context)
+    protected final void prepareOff(final TransitionContext context)
         throws FSMException {
 
         throw new UnsupportedOperationException("Not supported yet.");
@@ -59,10 +59,9 @@ public abstract class SimpleTask extends SwitchTask {
 
 
     @Override
-    protected void performOff(final TransitionContext context)
+    protected final void performOff(final TransitionContext context)
         throws FSMException {
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
-

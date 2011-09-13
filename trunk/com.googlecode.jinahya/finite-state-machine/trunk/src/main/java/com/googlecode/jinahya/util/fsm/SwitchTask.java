@@ -67,13 +67,15 @@ public abstract class SwitchTask extends Task {
 
         final Transition transition = context.getTransition();
 
-        if (on) {
-            if (transition.matchesAny(offMatchers)) {
-                prepareOff(context);
-            }
-        } else { // off
-            if (transition.matchesAny(onMatchers)) {
-                prepareOn(context);
+        synchronized (this) {
+            if (on) {
+                if (transition.matchesAny(offMatchers)) {
+                    prepareOff(context);
+                }
+            } else { // off
+                if (transition.matchesAny(onMatchers)) {
+                    prepareOn(context);
+                }
             }
         }
     }
@@ -108,15 +110,17 @@ public abstract class SwitchTask extends Task {
 
         final Transition transition = context.getTransition();
 
-        if (on) {
-            if (transition.matchesAny(offMatchers)) {
-                on = false;
-                performOff(context);
-            }
-        } else { // off
-            if (transition.matchesAny(onMatchers)) {
-                on = true;
-                performOn(context);
+        synchronized (this) {
+            if (on) {
+                if (transition.matchesAny(offMatchers)) {
+                    on = false;
+                    performOff(context);
+                }
+            } else { // off
+                if (transition.matchesAny(onMatchers)) {
+                    on = true;
+                    performOn(context);
+                }
             }
         }
     }
@@ -151,6 +155,5 @@ public abstract class SwitchTask extends Task {
 
 
     /** on flag. */
-    private boolean on = false;
+    private volatile boolean on = false;
 }
-
