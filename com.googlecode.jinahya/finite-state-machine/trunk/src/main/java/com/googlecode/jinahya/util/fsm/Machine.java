@@ -103,15 +103,8 @@ public abstract class Machine {
         // prepare a dependency resolver and add all ids as sources
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
-        for (String taskId : tasks.keySet()) {
-            try {
-                resolver.add(taskId, (String) null);
-            } catch (DependencyResolverException dre) {
-                dre.printStackTrace(System.err);
-            }
-        }
 
-        final StringBuffer taskIdBuffer = new StringBuffer();
+        final StringBuffer idBuffer = new StringBuffer();
 
 
         final TransitionContext transitionContext = new TransitionContext() {
@@ -131,7 +124,7 @@ public abstract class Machine {
                     throw new NullPointerException("null nextTaskId");
                 }
 
-                final String taskId = taskIdBuffer.toString();
+                final String taskId = idBuffer.toString();
                 if (taskId.isEmpty()) {
                     return;
                 }
@@ -152,7 +145,7 @@ public abstract class Machine {
                     throw new NullPointerException("null previousTaskId");
                 }
 
-                final String taskId = taskIdBuffer.toString();
+                final String taskId = idBuffer.toString();
                 if (taskId.isEmpty()) {
                     return;
                 }
@@ -167,11 +160,19 @@ public abstract class Machine {
 
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
-            taskIdBuffer.delete(0, taskIdBuffer.length());
-            taskIdBuffer.append(entry.getKey());
+            if (!entry.getValue().matches(transition)) {
+                continue;
+            }
+            try {
+                resolver.add(entry.getKey(), (String) null);
+            } catch (DependencyResolverException dre) {
+                throw new FSMException(dre);
+            }
+            idBuffer.delete(0, idBuffer.length());
+            idBuffer.append(entry.getKey());
             entry.getValue().prepare(transitionContext);
         }
-        taskIdBuffer.delete(0, taskIdBuffer.length());
+        idBuffer.delete(0, idBuffer.length());
 
         // perform
         for (List<String> idGroup : resolver.getVerticalGroups()) {

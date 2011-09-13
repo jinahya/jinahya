@@ -28,16 +28,26 @@ public abstract class Task {
     /**
      * Creates a new instance.
      *
-     * @param id 
+     * @param id task id
+     * @param matchers transition matchers
      */
-    public Task(final String id) {
+    public Task(final String id, final TransitionMatcher... matchers) {
         super();
 
         if (id == null) {
             throw new NullPointerException("null id");
         }
 
+        if (matchers == null) {
+            throw new NullPointerException("null matchers");
+        }
+
+        if (matchers.length == 0) {
+            throw new IllegalArgumentException("empty matchers");
+        }
+
         this.id = id;
+        this.matchers = matchers;
     }
 
 
@@ -48,6 +58,23 @@ public abstract class Task {
      */
     public final String getId() {
         return id;
+    }
+
+
+    /**
+     * Checks if given <code>transition</code> matches to any of
+     * <code>matchers</code>.
+     *
+     * @param transition transition to match.
+     * @return true if matches; false otherwise
+     */
+    public boolean matches(final Transition transition) {
+
+        if (transition == null) {
+            throw new NullPointerException("null transition");
+        }
+
+        return transition.matchesAny(matchers);
     }
 
 
@@ -71,5 +98,8 @@ public abstract class Task {
 
     /** id. */
     private final String id;
-}
 
+
+    /** matchers. */
+    private final TransitionMatcher[] matchers;
+}

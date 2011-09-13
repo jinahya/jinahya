@@ -35,15 +35,8 @@ public abstract class SwitchTask extends Task {
      */
     public SwitchTask(final String id, final TransitionMatcher[] onMatchers,
                       final TransitionMatcher[] offMatchers) {
-        super(id);
 
-        if (onMatchers == null) {
-            throw new NullPointerException("null onMatchers");
-        }
-
-        if (onMatchers.length == 0) {
-            throw new NullPointerException("empty onMatchers");
-        }
+        super(id, onMatchers);
 
         if (offMatchers == null) {
             throw new NullPointerException("null offMatchers");
@@ -53,101 +46,38 @@ public abstract class SwitchTask extends Task {
             throw new NullPointerException("empty offMatchers");
         }
 
-        this.onMatchers = onMatchers;
         this.offMatchers = offMatchers;
     }
 
 
     @Override
-    public void prepare(final TransitionContext context) throws FSMException {
+    public boolean matches(final Transition transition) {
 
-        if (context == null) {
-            throw new NullPointerException("null context");
-        }
+        final boolean matches;
 
-        final Transition transition = context.getTransition();
-
-        synchronized (this) {
-            if (on) {
-                if (transition.matchesAny(offMatchers)) {
-                    prepareOff(context);
-                }
-            } else { // off
-                if (transition.matchesAny(onMatchers)) {
-                    prepareOn(context);
-                }
+        if (on) {
+            matches = transition.matchesAny(offMatchers);
+            if (matches) {
+                on = false;
+            }
+        } else { // off
+            matches = super.matches(transition);
+            if (matches) {
+                on = true;
             }
         }
+
+        return matches;
     }
 
 
     /**
-     * Prepares for switching on.
-     *
-     * @param context context
-     * @throws FSMException if an error occurs.
+     * 
+     * @return 
      */
-    protected abstract void prepareOn(TransitionContext context)
-        throws FSMException;
-
-
-    /**
-     * Prepares for switching off.
-     *
-     * @param context context
-     * @throws FSMException if an error occurs.
-     */
-    protected abstract void prepareOff(TransitionContext context)
-        throws FSMException;
-
-
-    @Override
-    public void perform(final TransitionContext context) throws FSMException {
-
-        if (context == null) {
-            throw new NullPointerException("null context");
-        }
-
-        final Transition transition = context.getTransition();
-
-        synchronized (this) {
-            if (on) {
-                if (transition.matchesAny(offMatchers)) {
-                    on = false;
-                    performOff(context);
-                }
-            } else { // off
-                if (transition.matchesAny(onMatchers)) {
-                    on = true;
-                    performOn(context);
-                }
-            }
-        }
+    protected final boolean isOn() {
+        return on;
     }
-
-
-    /**
-     * Performs for switching on.
-     *
-     * @param context context
-     * @throws FSMException if an error occurs.
-     */
-    protected abstract void performOn(TransitionContext context)
-        throws FSMException;
-
-
-    /**
-     * Performs for switching off.
-     *
-     * @param context context
-     * @throws FSMException if an error occurs.
-     */
-    protected abstract void performOff(TransitionContext context)
-        throws FSMException;
-
-
-    /** matchers for switching on. */
-    private final TransitionMatcher[] onMatchers;
 
 
     /** matchers for switching off. */
