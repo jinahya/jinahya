@@ -50,14 +50,13 @@ public class ActivityResourceLoader implements ResourceLoader {
 
 
     @Override
-    public InputStream load(final String resourceName)
+    public InputStream loadResource(final String name)
         throws IOException, FSMException {
 
-        return assetManager.open(resourceName);
+        return assetManager.open(name);
     }
 
 
     /** asset manager. */
     private final AssetManager assetManager;
 }
-

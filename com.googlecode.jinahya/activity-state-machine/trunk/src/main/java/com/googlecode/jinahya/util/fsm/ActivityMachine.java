@@ -18,8 +18,11 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.util.Map;
+
+
 /**
- * Xlet machine.
+ * Activity Machine.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -31,9 +34,9 @@ public class ActivityMachine extends Machine {
      *
      * @param context task context
      */
-    public ActivityMachine(final MachineContext context) {
+    public ActivityMachine(final Map<String, Task> tasks) {
 
-        super(context);
+        super(tasks);
     }
 
 
@@ -69,4 +72,3 @@ public class ActivityMachine extends Machine {
         return transition.matchesAny(ActivityTransitionMatcher.ON_DESTROY);
     }
 }
-

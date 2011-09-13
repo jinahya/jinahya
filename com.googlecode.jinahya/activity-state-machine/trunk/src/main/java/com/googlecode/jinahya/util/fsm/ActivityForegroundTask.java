@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class ActivityForegroundTask extends SimpleTask {
+public abstract class ActivityForegroundTask extends Task {
 
 
     /**
@@ -32,7 +32,7 @@ public abstract class ActivityForegroundTask extends SimpleTask {
      * @param id task id
      */
     public ActivityForegroundTask(final String id) {
-        super(id, new TransitionMatcher[]{ActivityTransitionMatcher.ON_START});
+        super(id, ActivityTransitionMatcher.ON_START);
     }
 }
 

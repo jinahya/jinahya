@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class ActivityInitializationTask extends SimpleTask {
+public abstract class ActivityInitializationTask extends Task {
 
 
     /**
@@ -32,7 +32,6 @@ public abstract class ActivityInitializationTask extends SimpleTask {
      * @param id task id
      */
     public ActivityInitializationTask(final String id) {
-        super(id, new TransitionMatcher[]{ActivityTransitionMatcher.ON_CREATE});
+        super(id, ActivityTransitionMatcher.ON_CREATE);
     }
 }
-
