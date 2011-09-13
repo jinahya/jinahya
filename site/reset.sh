@@ -1,10 +1,5 @@
 #!/bin/bash
-#
- svn up
-#
-sh ./fix_newlines.sh
-#
-sh ./svn_apply_autoprops.py
-#
+svn up
+./fix_newlines.sh
+./svn_apply_autoprops.py
 svn ci -m reset
-
