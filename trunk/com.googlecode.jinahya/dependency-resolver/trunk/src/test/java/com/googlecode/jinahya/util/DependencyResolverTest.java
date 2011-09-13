@@ -150,12 +150,10 @@ public class DependencyResolverTest {
     public void checkSynchronizedInstanceInheritesAllPublicMethods()
         throws NoSuchMethodException {
 
-        final Class<? extends DependencyResolver> class1 =
-            new DependencyResolver<Object>().getClass();
+        final Class<?> class1 = new DependencyResolver<Object>().getClass();
 
-        final Class<? extends DependencyResolver> class2 =
+        final Class<?> class2 =
             DependencyResolver.<Object>synchronizedInstance().getClass();
-        System.out.println("synchronized class: " + class2);
 
         for (Method method1 : class1.getDeclaredMethods()) {
 
