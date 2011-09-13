@@ -19,7 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
- * States.
+ * Xlet States.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -27,7 +27,7 @@ public final class XletState extends AbstractState {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = -1830570028535534271L;
+    private static final long serialVersionUID = -8883596593544696325L;
 
 
     /**
@@ -57,7 +57,12 @@ public final class XletState extends AbstractState {
     public static final State DESTROYED = new XletState(3, "DESTROYED");
 
 
-    /** PRIVATE. */
+    /**
+     * Creates a new instance.
+     *
+     * @param code state code
+     * @param name state name
+     */
     private XletState(final int code, final String name) {
         super(code, name);
     }

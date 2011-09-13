@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import static com.googlecode.jinahya.util.fsm.XletTransitionMatcher.*;
-
-
 /**
  * A task switches on <code>startXlet</code> and switches off on
  * <code>pauseXlet</code> or <code>destroyXlet</code>.
@@ -36,8 +33,8 @@ public abstract class XletActivationSwitchTask extends SwitchTask {
      * @param id task id
      */
     public XletActivationSwitchTask(final String id) {
-        super(id, new TransitionMatcher[]{START_XLET},
-              new TransitionMatcher[]{PAUSE_XLET, DESTROY_XLET});
+        super(id, new TransitionMatcher[]{XletTransitionMatcher.START_XLET},
+              new TransitionMatcher[]{XletTransitionMatcher.PAUSE_XLET,
+                                      XletTransitionMatcher.DESTROY_XLET});
     }
 }
-
