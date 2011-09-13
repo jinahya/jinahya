@@ -39,7 +39,8 @@ public final class TaskContext {
 
 
     /** task index filename. */
-    private static final String TASK_INDEX_FILENAME = "fsm.index";
+    private static final String TASK_INDEX_FILENAME =
+        "com.googlecode.jinahya.util.fsm.task.index";
 
 
     /*
