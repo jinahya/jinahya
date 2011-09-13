@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-svn up
+ svn up
 #
 sh ./fix_newlines.sh
 #
