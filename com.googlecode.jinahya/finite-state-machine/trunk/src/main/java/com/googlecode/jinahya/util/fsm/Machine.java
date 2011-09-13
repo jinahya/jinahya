@@ -31,23 +31,23 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Machine {
+public abstract class Machine {
 
 
     /**
      * Creates a new instance.
      *
-     * @param taskContext task context
+     * @param tasks tasks
      */
-    public Machine(final TaskContext taskContext) {
+    public Machine(final Map<String, Task> tasks) {
 
         super();
 
-        if (taskContext == null) {
-            throw new NullPointerException("null taskContext");
+        if (tasks == null) {
+            throw new NullPointerException("null tasks");
         }
 
-        this.taskContext = taskContext;
+        this.tasks = tasks;
     }
 
 
@@ -99,13 +99,10 @@ public class Machine {
             finished = true;
         }
 
-        final Map<String, Task> tasks = taskContext.getTasks();
 
-
+        // prepare a dependency resolver and add all ids as sources
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
-
-        // add all task ids as sources
         for (String taskId : tasks.keySet()) {
             try {
                 resolver.add(taskId, (String) null);
@@ -114,9 +111,7 @@ public class Machine {
             }
         }
 
-
         final StringBuffer taskIdBuffer = new StringBuffer();
-
 
 
         final TransitionContext transitionContext = new TransitionContext() {
@@ -156,6 +151,7 @@ public class Machine {
                 if (previousTaskId == null) {
                     throw new NullPointerException("null previousTaskId");
                 }
+
                 final String taskId = taskIdBuffer.toString();
                 if (taskId.isEmpty()) {
                     return;
@@ -169,7 +165,6 @@ public class Machine {
             }
         };
 
-
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
             taskIdBuffer.delete(0, taskIdBuffer.length());
@@ -177,7 +172,6 @@ public class Machine {
             entry.getValue().prepare(transitionContext);
         }
         taskIdBuffer.delete(0, taskIdBuffer.length());
-
 
         // perform
         for (List<String> idGroup : resolver.getVerticalGroups()) {
@@ -236,9 +230,7 @@ public class Machine {
      * @param transition transition to check
      * @return true
      */
-    protected boolean isStarting(final Transition transition) {
-        return true;
-    }
+    protected abstract boolean isStarting(Transition transition);
 
 
     /**
@@ -249,9 +241,7 @@ public class Machine {
      * @param transition transition to check.
      * @return true
      */
-    protected boolean isAllowed(final Transition transition) {
-        return true;
-    }
+    protected abstract boolean isAllowed(Transition transition);
 
 
     /**
@@ -262,9 +252,11 @@ public class Machine {
      * @param transition transition to check
      * @return false 
      */
-    protected boolean isFinishing(final Transition transition) {
-        return false;
-    }
+    protected abstract boolean isFinishing(Transition transition);
+
+
+    /** tasks. */
+    private final Map<String, Task> tasks;
 
 
     /** flag for started. */
@@ -277,8 +269,4 @@ public class Machine {
 
     /** current state. */
     private volatile State state = State.UNKNOWN;
-
-
-    /** task context. */
-    private final TaskContext taskContext;
 }

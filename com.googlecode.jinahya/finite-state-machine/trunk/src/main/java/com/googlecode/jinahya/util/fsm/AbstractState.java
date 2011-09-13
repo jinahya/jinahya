@@ -31,38 +31,16 @@ public abstract class AbstractState implements State {
 
 
     /**
-     * Creates a new State instance.
-     *
-     * @param code state code
-     * @param name state name
-     * @return a new State instance.
-     */
-    static State newInstance(final int code, final String name) {
-
-        return new AbstractState(code, name) {
-
-
-            /** GENERATE. */
-            private static final long serialVersionUID = -7766829699556888699L;
-        };
-    }
-
-
-    /**
      * Creates a new instance.
      *
-     * @param code state value; must be a non-zero positive
-     * @param name  state name; must not be null
+     * @param code state value
+     * @param name state name
      */
     public AbstractState(final int code, final String name) {
         super();
 
         if (name == null) {
             throw new NullPointerException("null name");
-        }
-
-        if (name.trim().length() == 0) {
-            throw new NullPointerException("empty name");
         }
 
         this.code = code;
@@ -141,4 +119,3 @@ public abstract class AbstractState implements State {
     /** name. */
     private final String name;
 }
-

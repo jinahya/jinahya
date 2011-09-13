@@ -127,7 +127,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
-    public boolean matchesAny(final TransitionMatcher... matchers) {
+    public final boolean matchesAny(final TransitionMatcher... matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -143,12 +143,16 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
-    public boolean matchesAny(final List<TransitionMatcher> matchers) {
+    public final boolean matchesAny(final List<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
         }
 
+        if (matchers.isEmpty()) {
+            throw new NullPointerException("empty matchers");
+        }
+        
         for (TransitionMatcher matcher : matchers) {
             if (matcher.matches(this)) {
                 return true;
@@ -165,7 +169,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches all; false otherwise
      */
-    public boolean matchesAll(final TransitionMatcher... matchers) {
+    public final boolean matchesAll(final TransitionMatcher... matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -181,10 +185,14 @@ public class Transition {
      * @param matchers matchers
      * @return true if all matches; false otherwise
      */
-    public boolean matchesAll(final List<TransitionMatcher> matchers) {
+    public final boolean matchesAll(final List<TransitionMatcher> matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
+        }
+
+        if (matchers.isEmpty()) {
+            throw new NullPointerException("empty matchers");
         }
 
         for (TransitionMatcher matcher : matchers) {
@@ -204,4 +212,3 @@ public class Transition {
     /** new state. */
     private final State target;
 }
-
