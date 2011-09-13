@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletInitializationTask extends SimpleTask {
+public abstract class XletInitializationTask extends Task {
 
 
     /**
@@ -32,6 +32,6 @@ public abstract class XletInitializationTask extends SimpleTask {
      * @param id task id
      */
     public XletInitializationTask(final String id) {
-        super(id, new TransitionMatcher[]{XletTransitionMatcher.INIT_XLET});
+        super(id, XletTransitionMatcher.INIT_XLET);
     }
 }
