@@ -48,29 +48,23 @@ public class ClassResourceLoader implements ResourceLoader {
 
 
     @Override
-    public InputStream load(final String resourceName)
+    public InputStream loadResource(final String name)
         throws IOException, FSMException {
 
-        if (resourceName == null) {
+        if (name == null) {
             throw new NullPointerException("null resourceName");
         }
 
-        if (resourceName.trim().length() == 0) {
-            throw new IllegalArgumentException("empty resourceName");
+        final InputStream resource = classLoader.getResourceAsStream(name);
+
+        if (resource == null) {
+            throw new FSMException("failed to load resource: " + name);
         }
 
-        final InputStream resourceStream =
-            classLoader.getResourceAsStream(resourceName);
-
-        if (resourceName == null) {
-            throw new FSMException("failed to load resource: " + resourceName);
-        }
-
-        return resourceStream;
+        return resource;
     }
 
 
     /** class loader. */
-    final ClassLoader classLoader;
+    private final ClassLoader classLoader;
 }
-

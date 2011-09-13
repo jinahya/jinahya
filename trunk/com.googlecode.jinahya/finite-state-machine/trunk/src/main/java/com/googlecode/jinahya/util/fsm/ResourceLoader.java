@@ -24,8 +24,6 @@ import java.io.InputStream;
 
 /**
  * Platform specific resource loader.
- */
-/**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -35,11 +33,10 @@ public interface ResourceLoader {
     /**
      * Loads resource denoted by given <code>resourceName</code>.
      *
-     * @param resourceName resource name
+     * @param name resource name
      * @return loaded resource stream; never null
      * @throws IOException if an I/O error occurs
      * @throws FSMException if an error occurs
      */
-    InputStream load(String resourceName) throws IOException, FSMException;
+    InputStream loadResource(String name) throws IOException, FSMException;
 }
-

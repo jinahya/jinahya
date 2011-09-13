@@ -36,7 +36,7 @@ public interface State extends Serializable {
 
 
         /** GENERATED. */
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = -2761992830718509483L;
 
 
         @Override

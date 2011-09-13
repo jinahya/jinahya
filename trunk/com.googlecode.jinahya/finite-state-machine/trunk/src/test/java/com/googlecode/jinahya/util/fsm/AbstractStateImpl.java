@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 <a href="mailto:jinahya@gmail.com">Jin Kwon</a>.
+ * Copyright 2011 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,18 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-
 /**
- * A ResourceLoader implementation using File I/O.
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author onacit
  */
-public class FileResourceLoader implements ResourceLoader {
+public class AbstractStateImpl extends AbstractState {
 
 
-    @Override
-    public InputStream loadResource(final String name)
-        throws IOException, FSMException {
+    /** GENERATED. */
+    private static final long serialVersionUID = 6763674645080209972L;
 
-        if (name == null) {
-            throw new NullPointerException("null resourceName");
-        }
 
-        return new FileInputStream(name);
+    public AbstractStateImpl(int code, String name) {
+        super(code, name);
     }
 }
