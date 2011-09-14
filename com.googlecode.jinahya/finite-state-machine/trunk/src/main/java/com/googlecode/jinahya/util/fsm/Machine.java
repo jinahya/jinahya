@@ -108,12 +108,11 @@ public abstract class Machine {
             listener.transited(event);
         }
 
-
         final StringBuffer buffer = new StringBuffer();
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
-        final TransitionContext context =
-            new TransitionContextImpl(transition, buffer, resolver);
+        final TransitionContext context = TransitionContextFactory.newInstance(
+            transition, buffer, resolver);
 
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
@@ -133,6 +132,7 @@ public abstract class Machine {
 
         // perform
         for (List<String> idGroup : resolver.getVerticalGroups()) {
+            System.out.println("idGroup: " + idGroup);
             final Task[] taskGroup = new Task[idGroup.size()];
             for (int i = 0; i < taskGroup.length; i++) {
                 taskGroup[i] = tasks.get(idGroup.get(i));
