@@ -19,7 +19,10 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,12 +36,18 @@ public class Transition {
     /**
      * Creates a new instance.
      *
+     * @param machine the machine that this transition occurred.
      * @param source source state
      * @param target target state
      */
-    public Transition(final State source, final State target) {
+    public Transition(final Machine machine, final State source,
+                      final State target) {
 
         super();
+
+        if (machine == null) {
+            throw new NullPointerException("null machine");
+        }
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -52,8 +61,19 @@ public class Transition {
             throw new IllegalArgumentException("source is equlas to target");
         }
 
+        this.machine = machine;
         this.source = source;
         this.target = target;
+    }
+
+
+    /**
+     * Returns machine.
+     *
+     * @return machine.
+     */
+    public final Machine getMachine() {
+        return machine;
     }
 
 
@@ -90,6 +110,10 @@ public class Transition {
 
         final Transition transition = (Transition) obj;
 
+        if (!machine.equals(transition.getMachine())) {
+            return false;
+        }
+
         if (!source.equals(transition.getSource())) {
             return false;
         }
@@ -107,6 +131,8 @@ public class Transition {
 
         int hashCode = 17;
 
+        hashCode = 37 * hashCode + machine.hashCode();
+
         hashCode = 37 * hashCode + source.hashCode();
 
         hashCode = 37 * hashCode + target.hashCode();
@@ -117,7 +143,7 @@ public class Transition {
 
     @Override
     public String toString() {
-        return "Transition(" + source + "->" + target + ")";
+        return "Transition(" + machine + ":" + source + "->" + target + ")";
     }
 
 
@@ -152,7 +178,7 @@ public class Transition {
         if (matchers.isEmpty()) {
             throw new NullPointerException("empty matchers");
         }
-        
+
         for (TransitionMatcher matcher : matchers) {
             if (matcher.matches(this)) {
                 return true;
@@ -205,10 +231,48 @@ public class Transition {
     }
 
 
+    /**
+     * Returns the property value mapped to given <code>name</code>.
+     *
+     * @param name property name
+     * @return property value; may be null if the value itself is null or there
+     *         is no value mapped to given <code>name</code>.
+     */
+    public final Object getProperty(final String name) {
+        return properties.get(name);
+    }
+
+
+    /**
+     * Sets a property.
+     *
+     * @param name property name
+     * @param value property value
+     * @return previously mapped value
+     */
+    public final Object setProperty(final String name, final Object value) {
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+
+        return properties.put(name, value);
+    }
+
+
+    /** machine. */
+    private final Machine machine;
+
+
     /** old state. */
     private final State source;
 
 
     /** new state. */
     private final State target;
+
+
+    /** properties. */
+    private Map<String, Object> properties =
+        Collections.synchronizedMap(new HashMap<String, Object>());
 }

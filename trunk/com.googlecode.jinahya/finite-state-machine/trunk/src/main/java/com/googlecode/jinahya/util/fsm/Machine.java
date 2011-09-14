@@ -21,6 +21,9 @@ package com.googlecode.jinahya.util.fsm;
 import com.googlecode.jinahya.util.DependencyResolver;
 import com.googlecode.jinahya.util.DependencyResolverException;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -86,7 +89,7 @@ public abstract class Machine {
         this.state = state;
         final State target = this.state;
 
-        final Transition transition = new Transition(source, target);
+        final Transition transition = new Transition(this, source, target);
 
         if (!isStarted()) {
             if (!isStarting(transition)) {
@@ -224,6 +227,40 @@ public abstract class Machine {
 
 
     /**
+     * Returns the property value mapped to given <code>name</code>.
+     *
+     * @param name property name
+     * @return property value; may be null if the value itself is null or there
+     *         is no value mapped to given <code>name</code>.
+     */
+    public final Object getProperty(final String name) {
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+        
+        return properties.get(name);
+    }
+
+
+    /**
+     * Sets a property.
+     *
+     * @param name property name
+     * @param value property value
+     * @return previously mapped value
+     */
+    public final Object setProperty(final String name, final Object value) {
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+
+        return properties.put(name, value);
+    }
+
+
+    /**
      * Checks if given <code>transition</code> is a starting condition.
      * Default implementation always returns <code>true</code>. Override this
      * method if customizations are needed.
@@ -256,6 +293,36 @@ public abstract class Machine {
     protected abstract boolean isFinishing(Transition transition);
 
 
+    /**
+     * Adds given <code>listener</code> to this machine.
+     *
+     * @param listener the listener to be added
+     */
+    public void addTransitionListener(final TransitionListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException("null listener");
+        }
+
+        listeners.add(listener);
+    }
+
+
+    /**
+     * Removes given <code>listener</code> from this machine.
+     *
+     * @param listener the listener to be removed
+     */
+    public void removeTransitionListener(final TransitionListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException("null listener");
+        }
+
+        listeners.remove(listener);
+    }
+
+
     /** tasks. */
     private final Map<String, Task> tasks;
 
@@ -270,4 +337,14 @@ public abstract class Machine {
 
     /** current state. */
     private volatile State state = State.UNKNOWN;
+
+
+    /** properties. */
+    private Map<String, Object> properties =
+        Collections.synchronizedMap(new HashMap<String, Object>());
+
+
+    /** listeners. */
+    private List<TransitionListener> listeners =
+        new ArrayList<TransitionListener>();
 }
