@@ -21,6 +21,8 @@ package com.googlecode.jinahya.util.fsm;
 import com.googlecode.jinahya.util.DependencyResolver;
 import com.googlecode.jinahya.util.DependencyResolverException;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,6 +40,12 @@ public abstract class Machine {
 
 
     /**
+     * Property name for 'state'.
+     */
+    public static final String PROPERTY_NAME_STATE = "state";
+
+
+    /**
      * Creates a new instance.
      *
      * @param tasks tasks
@@ -51,6 +59,8 @@ public abstract class Machine {
         }
 
         this.tasks = tasks;
+
+        pcs = new PropertyChangeSupport(this);
     }
 
 
@@ -78,16 +88,20 @@ public abstract class Machine {
         }
 
         if (this.state.equals(state)) {
-            throw new IllegalStateException("same state");
+            throw new FSMException("same state");
         }
 
         if (isFinished()) {
-            throw new IllegalStateException("already finished");
+            throw new FSMException("already finished");
         }
 
         final State source = this.state;
         this.state = state;
         final State target = this.state;
+
+
+        pcs.firePropertyChange(PROPERTY_NAME_STATE, source, target);
+
 
         final Transition transition = new Transition(this, source, target);
 
@@ -220,7 +234,8 @@ public abstract class Machine {
      * method if customizations are needed.
      *
      * @param transition transition to check
-     * @return true
+     * @return true if given <code>transition</code> is a starting condition;
+     *         false otherwise.
      */
     protected abstract boolean isStarting(Transition transition);
 
@@ -231,7 +246,8 @@ public abstract class Machine {
      * customizations are needed.
      *
      * @param transition transition to check.
-     * @return true
+     * @return true if given <code>transition</code> is allowed; false if not
+     *         allowed.
      */
     protected abstract boolean isAllowed(Transition transition);
 
@@ -242,7 +258,8 @@ public abstract class Machine {
      * method if customizations are needed.
      *
      * @param transition transition to check
-     * @return false 
+     * @return true if given <code>transition</code> is a finishing condition;
+     *         false otherwise.
      */
     protected abstract boolean isFinishing(Transition transition);
 
@@ -277,6 +294,38 @@ public abstract class Machine {
     }
 
 
+    /**
+     * Adds a property change listener for property changes.
+     *
+     * @param listener the listener to be added
+     */
+    public void addPropertyChangeListener(
+        final PropertyChangeListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException("null listener");
+        }
+
+        pcs.addPropertyChangeListener(listener);
+    }
+
+
+    /**
+     * Removes a property change listener for property changes.
+     *
+     * @param listener the listener to be removed
+     */
+    public void removePropertyChangeListener(
+        final PropertyChangeListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException("null listener");
+        }
+        
+        pcs.removePropertyChangeListener(listener);
+    }
+
+
     /** tasks. */
     private final Map<String, Task> tasks;
 
@@ -301,4 +350,8 @@ public abstract class Machine {
     /** listeners. */
     private List<TransitionListener> listeners =
         new ArrayList<TransitionListener>();
+
+
+    /** property change support. */
+    private final PropertyChangeSupport pcs;
 }
