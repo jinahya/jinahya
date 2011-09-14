@@ -55,11 +55,11 @@ public abstract class AbstractState implements State {
             return true;
         }
 
-        if (!(obj instanceof AbstractState)) { // (null instanceof XXX) -> false
+        if (!(obj instanceof State)) { // (null instanceof XXX) -> false
             return false;
         }
 
-        final AbstractState state = (AbstractState) obj;
+        final State state = (State) obj;
 
         if (code != state.getCode()) {
             return false;

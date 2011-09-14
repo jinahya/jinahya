@@ -19,10 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -231,35 +228,6 @@ public class Transition {
     }
 
 
-    /**
-     * Returns the property value mapped to given <code>name</code>.
-     *
-     * @param name property name
-     * @return property value; may be null if the value itself is null or there
-     *         is no value mapped to given <code>name</code>.
-     */
-    public final Object getProperty(final String name) {
-        return properties.get(name);
-    }
-
-
-    /**
-     * Sets a property.
-     *
-     * @param name property name
-     * @param value property value
-     * @return previously mapped value
-     */
-    public final Object setProperty(final String name, final Object value) {
-
-        if (name == null) {
-            throw new NullPointerException("null name");
-        }
-
-        return properties.put(name, value);
-    }
-
-
     /** machine. */
     private final Machine machine;
 
@@ -270,9 +238,4 @@ public class Transition {
 
     /** new state. */
     private final State target;
-
-
-    /** properties. */
-    private Map<String, Object> properties =
-        Collections.synchronizedMap(new HashMap<String, Object>());
 }

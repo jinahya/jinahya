@@ -32,23 +32,20 @@ public interface State extends Serializable {
     /**
      * Default state that every newly created machine has.
      */
-    public static final State UNKNOWN = new State() {
+    State UNKNOWN = new AbstractState(-1, "UNKNOWN") {
 
 
-        /** GENERATED. */
-        private static final long serialVersionUID = -2761992830718509483L;
+        private static final long serialVersionUID = -7766829699556888699L;
+    };
 
 
-        @Override
-        public int getCode() {
-            return -1;
-        }
+    /**
+     * A virtual State for invalid state.
+     */
+    State INVALID = new AbstractState(-2, "INVALID") {
 
 
-        @Override
-        public String getName() {
-            return "UNKNOWN";
-        }
+        private static final long serialVersionUID = -7766829699556888699L;
     };
 
 

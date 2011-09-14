@@ -55,4 +55,24 @@ public interface TransitionContext {
      *         detected
      */
     void setPerformBefore(String nextTaskId) throws FSMException;
+
+
+    /**
+     * Returns the property value mapped to given <code>name</code>.
+     *
+     * @param name property name
+     * @return property value; null if the value itself is null or there is no
+     *         value mapped to specified <code>name</code>.
+     */
+    Object getProperty(final String name);
+
+
+    /**
+     * Sets a property.
+     *
+     * @param name property name
+     * @param value property value
+     * @return the value previously mapped to <code>name</code>
+     */
+    Object setProperty(String name, Object value);
 }
