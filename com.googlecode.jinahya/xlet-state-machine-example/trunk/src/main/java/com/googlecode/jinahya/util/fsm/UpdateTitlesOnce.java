@@ -40,16 +40,16 @@ public class UpdateTitlesOnce extends XletInitializationTask {
 
 
     @Override
-    public void prepareOn(final TransitionContext context) throws FSMException {
+    public void prepare(final TransitionContext context) throws FSMException {
 
-        System.out.println("[" + getId() + "] prepareOn");
+        System.out.println("[" + getId() + "] prepare");
     }
 
 
     @Override
-    public void performOn(final TransitionContext context) throws FSMException {
+    public void perform(final TransitionContext context) throws FSMException {
 
-        System.out.println("[" + getId() + "] performOn");
+        System.out.println("[" + getId() + "] perform");
 
         try {
             MyXletNYTRSSTitles.getInstance().update();
