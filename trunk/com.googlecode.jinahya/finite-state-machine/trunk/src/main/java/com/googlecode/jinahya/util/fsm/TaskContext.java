@@ -126,13 +126,11 @@ public final class TaskContext {
      * @param classLoader
      * @return
      * @throws FSMException
-     * @throws IOException
-     * @throws ClassNotFoundException 
      */
-    public static Map<String, Task> load(final String contextPath,
-                                         final ResourceLoader resourceLoader,
-                                         final ClassLoader classLoader)
-        throws FSMException, IOException, ClassNotFoundException {
+    public static Map<String, Task> loadTasks(
+        final String contextPath, final ResourceLoader resourceLoader,
+        final ClassLoader classLoader)
+        throws FSMException {
 
         if (contextPath == null) {
             throw new NullPointerException("null contextPath");
@@ -150,10 +148,12 @@ public final class TaskContext {
         final Set<String> packageNames = new HashSet<String>();
         final StringTokenizer tokenizer = new StringTokenizer(contextPath, ":");
         while (tokenizer.hasMoreTokens()) {
-            final String packageName = tokenizer.nextToken();
-            if (packageName.trim().length() > 0) {
-                packageNames.add(packageName);
+            String packageName = tokenizer.nextToken();
+            packageName = packageName.trim();
+            if (packageName.length() == 0) {
+                throw new FSMException("empty package name");
             }
+            packageNames.add(packageName);
         }
 
         // parse class names
@@ -161,68 +161,77 @@ public final class TaskContext {
         for (String packageName : packageNames) {
             final String resourceName =
                 packageName.replace('.', '/') + "/" + TASK_INDEX_FILENAME;
-            final InputStream resource = resourceLoader.loadResource(resourceName);
-            if (resource == null) {
-                throw new FSMException("null resource loaded");
-            }
             try {
-                final BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(resource, "UTF-8"));
+                final InputStream resource =
+                    resourceLoader.loadResource(resourceName);
+                if (resource == null) {
+                    throw new FSMException("null resource loaded");
+                }
                 try {
-                    String className = null;
-                    while (true) {
-                        className = reader.readLine();
-                        if (className == null) {
-                            break;
+                    final BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(resource, "UTF-8"));
+                    try {
+                        String className = null;
+                        while (true) {
+                            className = reader.readLine();
+                            if (className == null) {
+                                break;
+                            }
+                            className = className.trim();
+                            if (className.length() == 0
+                                || className.startsWith("#")) {
+                                continue;
+                            }
+                            classNames.add(packageName + "." + className);
                         }
-                        className = className.trim();
-                        if (className.length() == 0
-                            || className.startsWith("#")) {
-                            continue;
-                        }
-                        classNames.add(packageName + "." + className);
+                    } finally {
+                        reader.close();
                     }
                 } finally {
-                    reader.close();
+                    resource.close();
                 }
-            } finally {
-                resource.close();
+            } catch (IOException ioe) {
+                throw new FSMException(ioe);
             }
         }
 
         final Map<String, Task> tasks = new HashMap<String, Task>();
         for (String className : classNames) {
-            final Class<?> loaded = classLoader.loadClass(className);
-            if (!Task.class.isAssignableFrom(loaded)) {
-                throw new FSMException(
-                    "loaded class(" + loaded + ") is not assignable to "
-                    + Task.class);
-            }
             try {
-                final Constructor<?> constructor =
-                    loaded.getConstructor((Class[]) null);
-                try {
-                    final Task task =
-                        (Task) constructor.newInstance((Object[]) null);
-                    final String taskId = task.getId();
-                    if (tasks.containsKey(taskId)) {
-                        throw new FSMException(
-                            "duplicate task id: " + taskId);
-                    }
-                    tasks.put(taskId, task);
-                } catch (InstantiationException ie) {
+                final Class<?> loaded = classLoader.loadClass(className);
+                if (!Task.class.isAssignableFrom(loaded)) {
                     throw new FSMException(
-                        "failed to create a new instance: " + loaded, ie);
-                } catch (IllegalAccessException iae) {
-                    throw new FSMException(
-                        "failed to create a new instance: " + loaded, iae);
-                } catch (InvocationTargetException ite) {
-                    throw new FSMException(
-                        "failed to create a new instance: " + loaded, ite);
+                        "loaded class(" + loaded + ") is not assignable to "
+                        + Task.class);
                 }
-            } catch (NoSuchMethodException nsme) {
-                throw new FSMException(
-                    "no default constructor: " + loaded, nsme);
+                try {
+                    final Constructor<?> constructor =
+                        loaded.getConstructor((Class[]) null);
+                    try {
+                        final Task task =
+                            (Task) constructor.newInstance((Object[]) null);
+                        final String taskId = task.getId();
+                        if (tasks.containsKey(taskId)) {
+                            throw new FSMException(
+                                "duplicate task id: " + taskId);
+                        }
+                        tasks.put(taskId, task);
+                    } catch (InstantiationException ie) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, ie);
+                    } catch (IllegalAccessException iae) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, iae);
+                    } catch (InvocationTargetException ite) {
+                        throw new FSMException(
+                            "failed to create a new instance: " + loaded, ite);
+                    }
+                } catch (NoSuchMethodException nsme) {
+                    throw new FSMException(
+                        "no default constructor: " + loaded, nsme);
+                }
+            } catch (ClassNotFoundException cnfe) {
+                throw new FSMException(cnfe);
             }
         }
 
