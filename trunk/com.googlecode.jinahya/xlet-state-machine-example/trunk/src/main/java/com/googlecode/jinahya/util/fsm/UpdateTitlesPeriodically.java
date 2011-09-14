@@ -29,7 +29,7 @@ public class UpdateTitlesPeriodically extends XletActivationSwitchTask
     /**
      * ID.
      */
-    public static final String ID = UpdateTitlesPeriodically.class.getName();
+    public static final String ID = UpdateTitlesPeriodically.class.getSimpleName();
 
 
     /**
@@ -41,31 +41,21 @@ public class UpdateTitlesPeriodically extends XletActivationSwitchTask
 
 
     @Override
-    protected void prepareOn(final TransitionContext context)
+    public void prepare(final TransitionContext transition)
         throws FSMException {
 
-        System.out.println("[" + getId() + "] prepareOn");
+        System.out.println("[" + getId() + "] prepare: " + isOn());
     }
 
 
     @Override
-    protected void prepareOff(final TransitionContext context)
+    public void perform(final TransitionContext context)
         throws FSMException {
 
-        System.out.println("[" + getId() + "] prepareOff");
-    }
+        System.out.println("[" + getId() + "] perform: " + isOn());
 
-
-    @Override
-    protected void performOn(final TransitionContext context)
-        throws FSMException {
-
-        System.out.println("[" + getId() + "] performOn");
-
-        // synchronized block is unnessary
-        // because state changes are synchronized
-        synchronized (this) {
-
+        if (isOn()) {
+        } else {
             if (thread != null) {
                 throw new IllegalStateException(
                     "thread is not null? this is an unacceptable state.");
@@ -126,4 +116,3 @@ public class UpdateTitlesPeriodically extends XletActivationSwitchTask
 
     private volatile Thread thread = null;
 }
-

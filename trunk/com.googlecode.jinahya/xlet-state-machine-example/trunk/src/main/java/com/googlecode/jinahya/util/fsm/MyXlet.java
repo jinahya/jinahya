@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.util.Map;
+
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
@@ -29,9 +31,32 @@ import javax.tv.xlet.XletStateChangeException;
 public class MyXlet extends TVXlet {
 
 
+    static final String CONTEXT_PATH = "com.googlecode.jinahya.util.fsm";
+
+
+    static final ClassLoader CLASS_LOADER =
+        Thread.currentThread().getContextClassLoader();
+
+
+    static final ResourceLoader RESOURCE_LOADER =
+        new ClassResourceLoader(CLASS_LOADER);
+
+
+    static final Map<String, Task> TASKS;
+
+
+    static {
+        try {
+            TASKS = TaskContext.loadTasks(
+                CONTEXT_PATH, RESOURCE_LOADER, CLASS_LOADER);
+        } catch (FSMException fsme) {
+            throw new InstantiationError(fsme.getMessage());
+        }
+    }
+
+
     public MyXlet() {
-        super(new XletMachine(new MachineContext(
-            MyXletTaskContext.newInstance())));
+        super(new XletMachine(TASKS));
     }
 
 
@@ -72,4 +97,3 @@ public class MyXlet extends TVXlet {
         super.destroyXlet(unconditional);
     }
 }
-

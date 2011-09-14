@@ -53,27 +53,77 @@ public abstract class SwitchTask extends Task {
     @Override
     public boolean matches(final Transition transition) {
 
-        final boolean matches;
-
         if (on) {
-            matches = transition.matchesAny(offMatchers);
+            final boolean matches = transition.matchesAny(offMatchers);
             if (matches) {
                 on = false;
             }
+            return matches;
         } else { // off
-            matches = super.matches(transition);
+            final boolean matches = super.matches(transition);
             if (matches) {
                 on = true;
             }
+            return matches;
         }
+    }
 
-        return matches;
+
+    @Override
+    public void prepare(final TransitionContext context) throws FSMException {
+        if (on) {
+            prepareOff(context);
+        } else {
+            prepareOn(context);
+        }
+    }
+
+
+    protected abstract void prepareOn(final TransitionContext context)
+        throws FSMException;
+
+
+    /**
+     * 
+     * @param context
+     * @throws FSMException 
+     */
+    protected abstract void prepareOff(final TransitionContext context)
+        throws FSMException;
+
+
+    @Override
+    public void perform(final TransitionContext context) throws FSMException {
+        if (on) {
+            performOff(context);
+        } else {
+            performOn(context);
+        }
     }
 
 
     /**
      * 
-     * @return 
+     * @param context
+     * @throws FSMException 
+     */
+    protected abstract void performOn(final TransitionContext context)
+        throws FSMException;
+
+
+    /**
+     * 
+     * @param context
+     * @throws FSMException 
+     */
+    protected abstract void performOff(final TransitionContext context)
+        throws FSMException;
+
+
+    /**
+     * Returns the value of 'on' flag.
+     *
+     * @return true if this switch task is on; false if off.
      */
     protected final boolean isOn() {
         return on;
