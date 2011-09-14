@@ -58,21 +58,21 @@ You can construct a dependency resolver as follows.
 final DependencyResolver<String> resolver =
     new DependencyResolver<String>();
 
-resolver.addDependencies("A", "B", "C"); // single source to multiple targets
-resolver.addDependency("B", "F"); // single source to single target
-resolver.addDependencies("C", "G", null);
-resolver.addDependency("H", "B");
+resolver.add("A", "B", "C"); // single source to multiple targets
+resolver.add("B", "F"); // single source to single target
+resolver.add("C", "G", null);
+resolver.add("H", "B");
 
-resolver.addDependencies("I", "J", "K");
-resolver.addDependency("L", "K");
+resolver.add("I", "J", "K");
+resolver.add("L", "K");
 
-resolver.addDependency("M", null); // null single target is allowed
+resolver.add("M", (String) null); // null single target is allowed
 
-resolver.addDependency("N", null);
+resolver.add("N", (String) null);
 
-resolver.addDependencies("O", "P", "Q");
-resolver.addDependency("P", "R");
-resolver.addDependencies("Q", "R");
+resolver.add("O", "P", "Q");
+resolver.add("P", "R");
+resolver.add("Q", "R");
 
 // resolver.addDependencies("?", (String[]) null); // NPE
 }}}
