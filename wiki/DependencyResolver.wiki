@@ -94,7 +94,7 @@ final List<List<String>> groups = resolver.getHorizontalGroups();
 }}}
 And here comes paths from 'O' to 'R'
 {{{
-final List<List<String>> paths = resolver.getDependencyPaths("O", "R");
+final List<List<String>> paths = resolver.getPaths("O", "R");
 -> [[O, P, R], [O, Q, R]]
 }}}
 }}}
