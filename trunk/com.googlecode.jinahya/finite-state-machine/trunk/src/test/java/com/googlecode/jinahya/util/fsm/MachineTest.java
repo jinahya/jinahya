@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util.fsm;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
