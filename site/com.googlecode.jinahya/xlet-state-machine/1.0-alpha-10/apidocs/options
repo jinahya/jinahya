@@ -1,0 +1,30 @@
+-classpath
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/xlet-state-machine/trunk/target/checkout/target/classes;C:/Users/onacit/.m2/repository/com/googlecode/jinahya/finite-state-machine/1.0-alpha-14/finite-state-machine-1.0-alpha-14.jar;C:/Users/onacit/.m2/repository/com/googlecode/jinahya/ocap-api/1.2/ocap-api-1.2.jar;C:/Users/onacit/.m2/repository/com/googlecode/jinahya/dependency-resolver/1.0-alpha-12/dependency-resolver-1.0-alpha-12.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/xlet-state-machine/trunk/target/checkout/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/xlet-state-machine/trunk/target/checkout/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'xlet-state-machine 1.0-alpha-10 API'
+-link
+'http://download.oracle.com/javase/7/docs/api'
+-link
+'http://download.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927'
+-link
+'http://download.oracle.com/javame/config/cdc/ref-impl/pbp1.1.2/jsr217'
+-link
+'http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/finite-state-machine/1.0-alpha-14/apidocs'
+-use
+-version
+-windowtitle
+'xlet-state-machine 1.0-alpha-10 API'
