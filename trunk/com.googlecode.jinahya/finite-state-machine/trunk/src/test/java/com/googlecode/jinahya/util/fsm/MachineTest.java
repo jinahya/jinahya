@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -27,6 +29,34 @@ import org.testng.annotations.Test;
  * @author onacit
  */
 public class MachineTest {
+
+
+    @Test
+    public void testGetState() {
+
+        final Machine machine = new MachineImpl();
+
+        Assert.assertSame(machine.getState(), State.UNKNOWN);
+    }
+
+
+    @Test
+    public void testSetState() throws FSMException {
+
+
+        final Machine machine = new MachineImpl();
+
+        try {
+            machine.setState(machine.getState());
+            Assert.fail("setState(same state)");
+        } catch (FSMException fsme) {
+            // expected
+        }
+
+        machine.setState(State.INVALID);
+
+        Assert.assertSame(machine.getState(), State.INVALID);
+    }
 
 
     @Test
@@ -114,5 +144,59 @@ public class MachineTest {
         for (int i = 0; i < 100; i++) {
             machine.removeTransitionListener(listener);
         }
+    }
+
+
+    @Test
+    public void testAddPropertyChangeListener() throws FSMException {
+
+        final Machine machine = new MachineImpl();
+
+        try {
+            machine.addPropertyChangeListener(null);
+            Assert.fail("addPropertyChangeListener(null)");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+
+        final PropertyChangeListener pcl = new PropertyChangeListener() {
+
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                System.out.println("evt: " + evt);
+            }
+        };
+
+        machine.addPropertyChangeListener(pcl);
+
+        machine.setState(State.INVALID);
+    }
+
+
+    @Test
+    public void testRemovePropertyChangeListener() throws FSMException {
+
+        final Machine machine = new MachineImpl();
+
+        try {
+            machine.removePropertyChangeListener(null);
+            Assert.fail("removePropertyChangeListener(null)");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+
+        final PropertyChangeListener pcl = new PropertyChangeListener() {
+
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                System.out.println("evt: " + evt);
+            }
+        };
+
+        machine.removePropertyChangeListener(pcl);
+
+        machine.setState(State.INVALID);
     }
 }
