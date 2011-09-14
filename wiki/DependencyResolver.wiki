@@ -74,7 +74,7 @@ resolver.add("O", "P", "Q");
 resolver.add("P", "R");
 resolver.add("Q", "R");
 
-// resolver.addDependencies("?", (String[]) null); // NPE
+// resolver.add("?", (String[]) null); // NPE
 }}}
 So, what can we do with it?
 You can get a single list which is ordered as dependencies.
