@@ -22,14 +22,14 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author onacit
  */
-public class AbstractStateImpl extends AbstractState {
+public class StateImpl extends AbstractState {
 
 
     /** GENERATED. */
     private static final long serialVersionUID = 6763674645080209972L;
 
 
-    public AbstractStateImpl(int code, String name) {
+    public StateImpl(int code, String name) {
         super(code, name);
     }
 }

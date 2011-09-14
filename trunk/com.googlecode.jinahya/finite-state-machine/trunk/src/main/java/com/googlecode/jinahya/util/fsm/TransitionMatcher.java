@@ -27,11 +27,48 @@ public interface TransitionMatcher {
 
 
     /**
-     * Matches given <code>transition</code>.
+     * A TransitionMatcher simply matches.
+     */
+    TransitionMatcher YES = new TransitionMatcher() {
+
+
+        @Override
+        public boolean matches(final Transition transition) {
+
+            if (transition == null) {
+                throw new NullPointerException("null transition");
+            }
+
+            return true;
+        }
+    };
+
+
+    /**
+     * A TransitionMatcher simply doesn't match.
+     */
+    TransitionMatcher NO = new TransitionMatcher() {
+
+
+        @Override
+        public boolean matches(final Transition transition) {
+
+            if (transition == null) {
+                throw new NullPointerException("null transition");
+            }
+
+            return false;
+        }
+    };
+
+
+    /**
+     * Matches given <code>transition</code>. A
+     * <code>NullPointerException</code> must be thrown if specified
+     * <code>transition</code> is null.
      *
      * @param transition the transition to match
      * @return true if matches; false otherwise
      */
     boolean matches(Transition transition);
 }
-

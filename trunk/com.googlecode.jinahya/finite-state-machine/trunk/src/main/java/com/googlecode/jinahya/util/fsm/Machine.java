@@ -102,64 +102,18 @@ public abstract class Machine {
             finished = true;
         }
 
+        // fire transition event
+        final TransitionEvent event = new TransitionEvent(transition);
+        for (TransitionListener listener : listeners) {
+            listener.transited(event);
+        }
 
-        // prepare a dependency resolver and add all ids as sources
+
+        final StringBuffer buffer = new StringBuffer();
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
-
-        final StringBuffer idBuffer = new StringBuffer();
-
-
-        final TransitionContext transitionContext = new TransitionContext() {
-
-
-            @Override
-            public Transition getTransition() {
-                return transition;
-            }
-
-
-            @Override
-            public final void setPerformBefore(final String nextTaskId)
-                throws FSMException {
-
-                if (nextTaskId == null) {
-                    throw new NullPointerException("null nextTaskId");
-                }
-
-                final String taskId = idBuffer.toString();
-                if (taskId.isEmpty()) {
-                    return;
-                }
-
-                try {
-                    resolver.add(nextTaskId, taskId);
-                } catch (DependencyResolverException dre) {
-                    throw new FSMException(dre);
-                }
-            }
-
-
-            @Override
-            public final void setPerformAfter(final String previousTaskId)
-                throws FSMException {
-
-                if (previousTaskId == null) {
-                    throw new NullPointerException("null previousTaskId");
-                }
-
-                final String taskId = idBuffer.toString();
-                if (taskId.isEmpty()) {
-                    return;
-                }
-
-                try {
-                    resolver.add(taskId, previousTaskId);
-                } catch (DependencyResolverException dre) {
-                    throw new FSMException(dre);
-                }
-            }
-        };
+        final TransitionContext context =
+            new TransitionContextImpl(transition, buffer, resolver);
 
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
@@ -171,11 +125,11 @@ public abstract class Machine {
             } catch (DependencyResolverException dre) {
                 throw new FSMException(dre);
             }
-            idBuffer.delete(0, idBuffer.length());
-            idBuffer.append(entry.getKey());
-            entry.getValue().prepare(transitionContext);
+            buffer.delete(0, buffer.length());
+            buffer.append(entry.getKey());
+            entry.getValue().prepare(context);
         }
-        idBuffer.delete(0, idBuffer.length());
+        buffer.delete(0, buffer.length());
 
         // perform
         for (List<String> idGroup : resolver.getVerticalGroups()) {
@@ -183,7 +137,7 @@ public abstract class Machine {
             for (int i = 0; i < taskGroup.length; i++) {
                 taskGroup[i] = tasks.get(idGroup.get(i));
             }
-            perform(transitionContext, taskGroup);
+            perform(context, taskGroup);
         }
     }
 
@@ -238,7 +192,7 @@ public abstract class Machine {
         if (name == null) {
             throw new NullPointerException("null name");
         }
-        
+
         return properties.get(name);
     }
 
