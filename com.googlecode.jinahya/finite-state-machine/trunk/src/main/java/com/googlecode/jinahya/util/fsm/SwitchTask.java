@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class SwitchTask extends Task {
+public abstract class SwitchTask extends AbstractTask {
 
 
     /**
@@ -79,14 +79,21 @@ public abstract class SwitchTask extends Task {
     }
 
 
+    /**
+     * Prepares to be on.
+     *
+     * @param context transition context
+     * @throws FSMException if an error occurs.
+     */
     protected abstract void prepareOn(final TransitionContext context)
         throws FSMException;
 
 
     /**
-     * 
-     * @param context
-     * @throws FSMException 
+     * Prepares to be off.
+     *
+     * @param context transition context
+     * @throws FSMException if an error occurs.
      */
     protected abstract void prepareOff(final TransitionContext context)
         throws FSMException;
@@ -103,31 +110,23 @@ public abstract class SwitchTask extends Task {
 
 
     /**
-     * 
-     * @param context
-     * @throws FSMException 
+     * Performs for switched on.
+     *
+     * @param context transition context
+     * @throws FSMException if an error occurs.
      */
     protected abstract void performOn(final TransitionContext context)
         throws FSMException;
 
 
     /**
-     * 
-     * @param context
-     * @throws FSMException 
+     * Performs for switched off.
+     *
+     * @param context transition context
+     * @throws FSMException if an error occurs.
      */
     protected abstract void performOff(final TransitionContext context)
         throws FSMException;
-
-
-    /**
-     * Returns the value of 'on' flag.
-     *
-     * @return true if this switch task is on; false if off.
-     */
-    protected final boolean isOn() {
-        return on;
-    }
 
 
     /** matchers for switching off. */
