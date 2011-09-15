@@ -35,11 +35,12 @@ final class TransitionContextFactory {
 
 
     /**
-     * 
-     * @param transition
-     * @param buffer
-     * @param resolver
-     * @return 
+     * Creates a new instance.
+     *
+     * @param transition transition
+     * @param buffer task id buffer
+     * @param resolver task id dependency resolver
+     * @return a new instance
      */
     static TransitionContext newInstance(
         final Transition transition, final StringBuffer buffer,
