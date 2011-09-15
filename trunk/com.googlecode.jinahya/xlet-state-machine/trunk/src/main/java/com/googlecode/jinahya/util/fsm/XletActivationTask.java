@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletActivationTask extends Task {
+public abstract class XletActivationTask extends AbstractTask {
 
 
     /**
