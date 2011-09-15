@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 /**
  *
  * @author onacit
@@ -29,13 +25,13 @@ import java.util.Map;
 public class MachineImpl extends Machine {
 
 
-    public MachineImpl() {
-        this(new HashMap<String, Task>());
+    public MachineImpl() throws FSMException {
+        this(TaskContextTest.newInstance());
     }
 
 
-    public MachineImpl(final Map<String, Task> tasks) {
-        super(tasks);
+    public MachineImpl(final TaskContext taskContext) {
+        super(taskContext);
     }
 
 

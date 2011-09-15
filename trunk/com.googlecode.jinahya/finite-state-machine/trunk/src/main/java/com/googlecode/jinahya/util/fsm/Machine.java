@@ -48,17 +48,17 @@ public abstract class Machine {
     /**
      * Creates a new instance.
      *
-     * @param tasks tasks
+     * @param taskContext task context
      */
-    public Machine(final Map<String, Task> tasks) {
+    public Machine(final TaskContext taskContext) {
 
         super();
 
-        if (tasks == null) {
-            throw new NullPointerException("null tasks");
+        if (taskContext == null) {
+            throw new NullPointerException("null taskContext");
         }
 
-        this.tasks = tasks;
+        this.taskContext = taskContext;
 
         pcs = new PropertyChangeSupport(this);
     }
@@ -127,6 +127,10 @@ public abstract class Machine {
             new DependencyResolver<String>();
         final TransitionContext context = TransitionContextFactory.newInstance(
             transition, buffer, resolver);
+
+        if (tasks == null) {
+            tasks = taskContext.getTasks();
+        }
 
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
@@ -321,13 +325,16 @@ public abstract class Machine {
         if (listener == null) {
             throw new NullPointerException("null listener");
         }
-        
+
         pcs.removePropertyChangeListener(listener);
     }
 
 
+    private final TaskContext taskContext;
+
+
     /** tasks. */
-    private final Map<String, Task> tasks;
+    private transient Map<String, Task> tasks;
 
 
     /** flag for started. */
