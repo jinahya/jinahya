@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.util.fsm.b;
 
 
+import com.googlecode.jinahya.util.fsm.AbstractTask;
 import com.googlecode.jinahya.util.fsm.FSMException;
-import com.googlecode.jinahya.util.fsm.Task;
 import com.googlecode.jinahya.util.fsm.TransitionContext;
 import com.googlecode.jinahya.util.fsm.TransitionMatcher;
 
@@ -28,7 +28,7 @@ import com.googlecode.jinahya.util.fsm.TransitionMatcher;
  *
  * @author onacit
  */
-public class B0 extends Task {
+public class B0 extends AbstractTask {
 
 
     protected static final String ID = B0.class.getSimpleName();

@@ -22,33 +22,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Task {
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param id task id
-     * @param matchers transition matchers
-     */
-    public Task(final String id, final TransitionMatcher... matchers) {
-        super();
-
-        if (id == null) {
-            throw new NullPointerException("null id");
-        }
-
-        if (matchers == null) {
-            throw new NullPointerException("null matchers");
-        }
-
-        if (matchers.length == 0) {
-            throw new IllegalArgumentException("empty matchers");
-        }
-
-        this.id = id;
-        this.matchers = matchers;
-    }
+public interface Task {
 
 
     /**
@@ -56,9 +30,7 @@ public abstract class Task {
      *
      * @return id
      */
-    public final String getId() {
-        return id;
-    }
+    String getId();
 
 
     /**
@@ -68,14 +40,7 @@ public abstract class Task {
      * @param transition transition to match.
      * @return true if matches; false otherwise
      */
-    public boolean matches(final Transition transition) {
-
-        if (transition == null) {
-            throw new NullPointerException("null transition");
-        }
-
-        return transition.matchesAny(matchers);
-    }
+    boolean matches(final Transition transition);
 
 
     /**
@@ -84,7 +49,7 @@ public abstract class Task {
      * @param context transition context
      * @throws FSMException if an error occurs.
      */
-    public abstract void prepare(TransitionContext context) throws FSMException;
+    void prepare(TransitionContext context) throws FSMException;
 
 
     /**
@@ -93,13 +58,5 @@ public abstract class Task {
      * @param context transition context
      * @throws FSMException if an error occurs.
      */
-    public abstract void perform(TransitionContext context) throws FSMException;
-
-
-    /** id. */
-    private final String id;
-
-
-    /** matchers. */
-    private final TransitionMatcher[] matchers;
+    void perform(TransitionContext context) throws FSMException;
 }
