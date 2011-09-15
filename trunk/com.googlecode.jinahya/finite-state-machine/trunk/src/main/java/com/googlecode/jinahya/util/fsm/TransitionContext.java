@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * A context for a transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
