@@ -30,8 +30,7 @@ import org.testng.annotations.Test;
 public class TaskContextTest {
 
 
-    @Test
-    public static Map<String, Task> loadTasks() throws FSMException {
+    public static TaskContext newInstance() throws FSMException {
 
         final String contextPath =
             "com.googlecode.jinahya.util.fsm.a"
@@ -42,14 +41,22 @@ public class TaskContextTest {
 
         final ClassLoader classLoader = TaskContextTest.class.getClassLoader();
 
-        return TaskContext.loadTasks(contextPath, resourceLoader, classLoader);
+        return TaskContext.newInstance(
+            contextPath, resourceLoader, classLoader);
+    }
+
+
+    @Test
+    public void testNewInstance() throws FSMException {
+
+        final TaskContext instance = newInstance();
     }
 
 
     @Test
     public void testLoadTasks() throws FSMException {
 
-        final Map<String, Task> tasks = loadTasks();
+        final Map<String, Task> tasks = newInstance().getTasks();
 
         System.out.println(tasks.keySet());
     }

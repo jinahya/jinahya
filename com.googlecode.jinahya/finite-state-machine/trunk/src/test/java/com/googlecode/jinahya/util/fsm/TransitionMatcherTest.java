@@ -30,7 +30,7 @@ public class TransitionMatcherTest {
 
 
     @Test
-    public void testYES() {
+    public void testYES() throws FSMException {
 
         try {
             TransitionMatcher.YES.matches(null);
@@ -49,7 +49,7 @@ public class TransitionMatcherTest {
 
 
     @Test
-    public void testNO() {
+    public void testNO() throws FSMException {
 
         try {
             TransitionMatcher.NO.matches(null);

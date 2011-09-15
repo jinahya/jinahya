@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.util.Map;
 import org.testng.annotations.Test;
 
 
@@ -32,9 +31,9 @@ public class TaskTest {
     @Test
     public void testDependency() throws FSMException {
 
-        final Map<String, Task> tasks = TaskContextTest.loadTasks();
+        final TaskContext taskContext = TaskContextTest.newInstance();
 
-        final Machine machine = new MachineImpl(tasks);
+        final Machine machine = new MachineImpl(taskContext);
 
         machine.setState(State.INVALID);
     }

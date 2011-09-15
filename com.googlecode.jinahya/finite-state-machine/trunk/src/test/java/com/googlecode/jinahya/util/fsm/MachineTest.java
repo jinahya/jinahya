@@ -33,7 +33,7 @@ public class MachineTest {
 
 
     @Test
-    public void testGetState() {
+    public void testGetState() throws FSMException {
 
         final Machine machine = new MachineImpl();
 
@@ -61,7 +61,7 @@ public class MachineTest {
 
 
     @Test
-    public void testSetProperty() {
+    public void testSetProperty() throws FSMException {
 
         final Machine machine = new MachineImpl();
 
@@ -77,7 +77,7 @@ public class MachineTest {
 
 
     @Test
-    public void testGetProperty() {
+    public void testGetProperty() throws FSMException {
 
         final Machine machine = new MachineImpl();
 
@@ -100,7 +100,7 @@ public class MachineTest {
 
 
     @Test
-    public void testAddTransitionListener() {
+    public void testAddTransitionListener() throws FSMException {
 
         final Machine machine = new MachineImpl();
 
@@ -118,7 +118,7 @@ public class MachineTest {
 
 
     @Test
-    public void testRemoveTransitionListener() {
+    public void testRemoveTransitionListener() throws FSMException {
 
         final Machine machine = new MachineImpl();
 
