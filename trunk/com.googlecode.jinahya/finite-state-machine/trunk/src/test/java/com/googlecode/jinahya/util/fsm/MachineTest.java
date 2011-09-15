@@ -49,7 +49,7 @@ public class MachineTest {
 
         try {
             machine.setState(machine.getState());
-            Assert.fail("setState(same state)");
+            Assert.fail("setState(getState())");
         } catch (FSMException fsme) {
             // expected
         }
