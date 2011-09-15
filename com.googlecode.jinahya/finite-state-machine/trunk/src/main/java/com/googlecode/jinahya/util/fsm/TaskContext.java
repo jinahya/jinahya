@@ -46,12 +46,13 @@ public final class TaskContext {
 
 
     /**
-     * 
-     * @param contextPath
-     * @param resourceLoader
-     * @param classLoader
-     * @return
-     * @throws FSMException 
+     * Creates a new instance.
+     *
+     * @param contextPath context path
+     * @param resourceLoader resource loader
+     * @param classLoader class loader
+     * @return a new instance
+     * @throws FSMException if an error occurs
      */
     public static TaskContext newInstance(final String contextPath,
                                           final ResourceLoader resourceLoader,

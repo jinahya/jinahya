@@ -35,6 +35,7 @@ public interface State extends Serializable {
     State UNKNOWN = new AbstractState(-1, "UNKNOWN") {
 
 
+        /** GENERATED. */
         private static final long serialVersionUID = -7766829699556888699L;
     };
 
@@ -45,6 +46,7 @@ public interface State extends Serializable {
     State INVALID = new AbstractState(-2, "INVALID") {
 
 
+        /** GENERATED. */
         private static final long serialVersionUID = -7766829699556888699L;
     };
 
