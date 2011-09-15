@@ -34,6 +34,7 @@ public class TransitionMatcherTest {
 
         try {
             TransitionMatcher.YES.matches(null);
+            Assert.fail("passed: matches(null)");
         } catch (NullPointerException npe) {
             // expected
         }
@@ -52,6 +53,7 @@ public class TransitionMatcherTest {
 
         try {
             TransitionMatcher.NO.matches(null);
+            Assert.fail("passed: matches(null)");
         } catch (NullPointerException npe) {
             // expected
         }
