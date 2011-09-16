@@ -20,6 +20,7 @@ package myxlet.task.activation.switch_;
 
 import com.googlecode.jinahya.util.fsm.FSMException;
 import com.googlecode.jinahya.util.fsm.TransitionContext;
+
 import com.googlecode.jinahya.util.fsm.XletActivationSwitchTask;
 
 import myxlet.model.RSSTitles;
