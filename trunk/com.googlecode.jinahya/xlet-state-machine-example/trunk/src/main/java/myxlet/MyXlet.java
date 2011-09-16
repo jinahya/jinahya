@@ -36,7 +36,9 @@ public class MyXlet extends TVXlet {
 
 
     /** context path. */
-    static final String CONTEXT_PATH = "com.googlecode.jinahya.util.fsm";
+    static final String CONTEXT_PATH =
+        "myxlet.task.initialization" + ":myxlet.task.initialization.switch_"
+        + ":myxlet.task.activation" + ":myxlet.task.activation.switch_";
 
 
     /** class loader. */
