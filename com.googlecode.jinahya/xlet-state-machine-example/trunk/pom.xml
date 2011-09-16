@@ -227,8 +227,7 @@
               <classifier>sources</classifier>
               <failOnMissingClassifierArtifact>true</failOnMissingClassifierArtifact>
               <!--excludeArtifactIds>ocap-api</excludeArtifactIds-->
-              <includeArtifactIds>xlet-state-machine</includeArtifactIds>
-              <!--includeScope>compile</includeScope-->
+              <includeArtifactIds>finite-state-machine, xlet-state-machine</includeArtifactIds>
               <outputDirectory>${project.build.directory}/unpacked-dependency-sources</outputDirectory>
             </configuration>
           </execution>
