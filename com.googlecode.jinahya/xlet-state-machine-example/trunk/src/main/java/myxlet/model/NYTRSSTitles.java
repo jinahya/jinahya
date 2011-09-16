@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package myxlet.model;
 
 
 import java.net.MalformedURLException;
@@ -26,7 +26,7 @@ import java.net.URL;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MyXletNYTRSSTitles extends MyXletRSSTitles {
+public final class NYTRSSTitles extends RSSTitles {
 
 
     private static final URL URL;
@@ -47,8 +47,7 @@ public class MyXletNYTRSSTitles extends MyXletRSSTitles {
 
 
         /** instance. */
-        private static final MyXletRSSTitles INSTANCE =
-            new MyXletNYTRSSTitles(URL);
+        private static final RSSTitles INSTANCE = new NYTRSSTitles(URL);
     }
 
 
@@ -57,14 +56,13 @@ public class MyXletNYTRSSTitles extends MyXletRSSTitles {
      *
      * @return instance.
      */
-    public static MyXletRSSTitles getInstance() {
+    public static RSSTitles getInstance() {
         return InstanceHolder.INSTANCE;
     }
 
 
     /** private. */
-    private MyXletNYTRSSTitles(final URL url) {
+    private NYTRSSTitles(final URL url) {
         super(url);
     }
 }
-

@@ -15,26 +15,35 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package myxlet.task.initialization.switch_;
+
+
+import com.googlecode.jinahya.util.fsm.FSMException;
+import com.googlecode.jinahya.util.fsm.TransitionContext;
+
+import com.googlecode.jinahya.util.fsm.XletInitializationSwitchTask;
+
+import myxlet.model.NYTRSSTitles;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class UpdateTitlesPeriodically extends XletActivationSwitchTask
+public class UpdateNYTTitlesTitlesPeriodically
+    extends XletInitializationSwitchTask
     implements Runnable {
 
 
     /** ID. */
     public static final String ID =
-        UpdateTitlesPeriodically.class.getSimpleName();
+        UpdateNYTTitlesTitlesPeriodically.class.getSimpleName();
 
 
     /**
      * creates a new instance.
      */
-    public UpdateTitlesPeriodically() {
+    public UpdateNYTTitlesTitlesPeriodically() {
         super(ID);
     }
 
@@ -106,7 +115,7 @@ public class UpdateTitlesPeriodically extends XletActivationSwitchTask
         while (!Thread.currentThread().isInterrupted()) {
 
             try {
-                MyXletNYTRSSTitles.getInstance().update();
+                NYTRSSTitles.getInstance().update();
             } catch (Exception e) {
                 e.printStackTrace(System.err);
             }
@@ -120,5 +129,6 @@ public class UpdateTitlesPeriodically extends XletActivationSwitchTask
     }
 
 
+    /** thread. */
     private volatile Thread thread;
 }
