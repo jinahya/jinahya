@@ -24,10 +24,21 @@ import javax.tv.xlet.XletStateChangeException;
 
 
 /**
+ * Xlet for TV.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public abstract class TVXlet implements Xlet {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param taskContext task context
+     */
+    public TVXlet(final TaskContext taskContext) {
+        this(new XletMachine(taskContext));
+    }
 
 
     /**
@@ -40,6 +51,11 @@ public abstract class TVXlet implements Xlet {
 
         if (machine == null) {
             throw new NullPointerException("null machine");
+        }
+
+        if (!machine.getState().equals(State.UNKNOWN)) {
+            throw new IllegalArgumentException(
+                "machine's state is not " + State.UNKNOWN);
         }
 
         this.machine = machine;

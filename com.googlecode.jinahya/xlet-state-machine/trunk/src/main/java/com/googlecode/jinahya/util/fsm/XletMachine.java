@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util.fsm;
 
 import java.util.Map;
 
+
 /**
  * Xlet machine.
  *
@@ -31,11 +32,10 @@ public class XletMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param tasks task context
+     * @param taskContext task context
      */
-    public XletMachine(final Map<String, Task> tasks) {
-
-        super(tasks);
+    public XletMachine(final TaskContext taskContext) {
+        super(taskContext);
     }
 
 
