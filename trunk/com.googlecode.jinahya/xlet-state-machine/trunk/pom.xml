@@ -33,7 +33,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>finite-state-machine</artifactId>
-        <version>1.0-alpha-15</version>
+        <version>1.0-alpha-16</version>
       </dependency>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>

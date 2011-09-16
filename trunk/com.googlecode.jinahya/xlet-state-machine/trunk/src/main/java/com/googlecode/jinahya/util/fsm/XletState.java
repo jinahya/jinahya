@@ -31,7 +31,7 @@ public final class XletState extends AbstractState {
 
 
     /**
-     * LOADED state. This state is a virtual one.
+     * LOADED state. This state is virtual.
      */
     public static final State LOADED = new XletState(0, "LOADED");
 

@@ -24,10 +24,21 @@ import javax.microedition.xlet.XletStateChangeException;
 
 
 /**
- * 
+ * Xlet for Micro Edition.
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public abstract class MEXlet implements Xlet {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param taskContext task context
+     */
+    public MEXlet(final TaskContext taskContext) {
+        this(new XletMachine(taskContext));
+    }
 
 
     /**
@@ -40,6 +51,11 @@ public abstract class MEXlet implements Xlet {
 
         if (machine == null) {
             throw new NullPointerException("null machine");
+        }
+
+        if (!machine.getState().equals(State.UNKNOWN)) {
+            throw new IllegalArgumentException(
+                "machine's state is not " + State.UNKNOWN);
         }
 
         this.machine = machine;
@@ -101,4 +117,3 @@ public abstract class MEXlet implements Xlet {
     /** machine. */
     private final Machine machine;
 }
-
