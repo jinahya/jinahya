@@ -15,10 +15,14 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package myxlet;
 
 
-import java.util.Map;
+import com.googlecode.jinahya.util.fsm.ClassResourceLoader;
+import com.googlecode.jinahya.util.fsm.FSMException;
+import com.googlecode.jinahya.util.fsm.ResourceLoader;
+import com.googlecode.jinahya.util.fsm.TVXlet;
+import com.googlecode.jinahya.util.fsm.TaskContext;
 
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
@@ -31,23 +35,27 @@ import javax.tv.xlet.XletStateChangeException;
 public class MyXlet extends TVXlet {
 
 
+    /** context path. */
     static final String CONTEXT_PATH = "com.googlecode.jinahya.util.fsm";
 
 
+    /** class loader. */
     static final ClassLoader CLASS_LOADER =
         Thread.currentThread().getContextClassLoader();
 
 
+    /** resource loader. */
     static final ResourceLoader RESOURCE_LOADER =
         new ClassResourceLoader(CLASS_LOADER);
 
 
-    static final Map<String, Task> TASKS;
+    /** task context. */
+    static final TaskContext TASK_CONTEXT;
 
 
     static {
         try {
-            TASKS = TaskContext.loadTasks(
+            TASK_CONTEXT = TaskContext.newInstance(
                 CONTEXT_PATH, RESOURCE_LOADER, CLASS_LOADER);
         } catch (FSMException fsme) {
             throw new InstantiationError(fsme.getMessage());
@@ -56,17 +64,21 @@ public class MyXlet extends TVXlet {
 
 
     public MyXlet() {
-        super(new XletMachine(TASKS));
+        super(TASK_CONTEXT);
     }
 
 
     @Override
-    public void initXlet(final XletContext ctx)
+    public void initXlet(final XletContext xletContext)
         throws XletStateChangeException {
 
         System.out.println("[XLET] initXlet");
 
-        super.initXlet(ctx);
+        super.initXlet(xletContext);
+
+        synchronized (this) {
+            this.xletContext = xletContext;
+        }
     }
 
 
@@ -94,6 +106,21 @@ public class MyXlet extends TVXlet {
 
         System.out.println("[XLET] destroyXlet");
 
+        synchronized (this) {
+            xletContext = null;
+        }
+
         super.destroyXlet(unconditional);
     }
+
+
+    protected XletContext getXletContext() {
+        synchronized (this) {
+            return xletContext;
+        }
+    }
+
+
+    /** xlet context. */
+    private XletContext xletContext;
 }
