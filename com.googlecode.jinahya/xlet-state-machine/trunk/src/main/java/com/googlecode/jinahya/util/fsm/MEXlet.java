@@ -63,7 +63,7 @@ public abstract class MEXlet implements Xlet {
 
 
     @Override
-    public void initXlet(final XletContext ctx)
+    public void initXlet(final XletContext xletContext)
         throws XletStateChangeException {
 
         try {
