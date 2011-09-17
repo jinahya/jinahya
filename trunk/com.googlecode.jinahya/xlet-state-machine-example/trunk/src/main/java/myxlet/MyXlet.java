@@ -23,6 +23,8 @@ import com.googlecode.jinahya.util.fsm.FSMException;
 import com.googlecode.jinahya.util.fsm.ResourceLoader;
 import com.googlecode.jinahya.util.fsm.TVXlet;
 import com.googlecode.jinahya.util.fsm.TaskContext;
+import com.googlecode.jinahya.util.fsm.TransitionEvent;
+import com.googlecode.jinahya.util.fsm.TransitionListener;
 
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
@@ -32,7 +34,7 @@ import javax.tv.xlet.XletStateChangeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MyXlet extends TVXlet {
+public class MyXlet extends TVXlet implements TransitionListener {
 
 
     /** context path. */
@@ -78,9 +80,7 @@ public class MyXlet extends TVXlet {
 
         super.initXlet(xletContext);
 
-        synchronized (this) {
-            this.xletContext = xletContext;
-        }
+        getMachine().addTransitionListener(this);
     }
 
 
@@ -106,23 +106,14 @@ public class MyXlet extends TVXlet {
     public void destroyXlet(final boolean unconditional)
         throws XletStateChangeException {
 
-        System.out.println("[XLET] destroyXlet");
-
-        synchronized (this) {
-            xletContext = null;
-        }
+        getMachine().removeTransitionListener(this);
 
         super.destroyXlet(unconditional);
     }
 
 
-    protected XletContext getXletContext() {
-        synchronized (this) {
-            return xletContext;
-        }
+    @Override
+    public void transited(final TransitionEvent evt) {
+        System.out.println("transited(" + evt + ")");
     }
-
-
-    /** xlet context. */
-    private XletContext xletContext;
 }
