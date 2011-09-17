@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.util.Map;
-
-
 /**
  * Xlet machine.
  *

@@ -135,9 +135,9 @@ public abstract class TVXlet implements Xlet {
     /**
      * Returns xlet context.
      *
-     * @return xlet contex.
+     * @return xlet context.
      */
-    protected synchronized XletContext getXletContext() {
+    protected final synchronized XletContext getXletContext() {
         return xletContext;
     }
 
