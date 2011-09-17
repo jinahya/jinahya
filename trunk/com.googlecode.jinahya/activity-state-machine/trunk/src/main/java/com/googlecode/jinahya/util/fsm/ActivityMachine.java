@@ -47,7 +47,7 @@ public class ActivityMachine extends Machine {
             throw new NullPointerException("null transition");
         }
 
-        return transition.matchesAny(ActivityTransitionMatcher.ON_CREATE);
+        return ActivityTransitionMatcher.ON_CREATE.matches(transition);
     }
 
 
@@ -69,6 +69,6 @@ public class ActivityMachine extends Machine {
             throw new NullPointerException("null transition");
         }
 
-        return transition.matchesAny(ActivityTransitionMatcher.ON_DESTROY);
+        return ActivityTransitionMatcher.ON_DESTROY.matches(transition);
     }
 }
