@@ -114,6 +114,16 @@ public abstract class TVXlet implements Xlet {
     }
 
 
+    /**
+     * Returns machine.
+     *
+     * @return machine
+     */
+    protected final Machine getMachine() {
+        return machine;
+    }
+
+
     /** machine. */
     private final Machine machine;
 }
