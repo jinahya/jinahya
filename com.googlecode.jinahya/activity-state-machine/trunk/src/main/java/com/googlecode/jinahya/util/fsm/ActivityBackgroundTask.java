@@ -23,7 +23,7 @@ package com.googlecode.jinahya.util.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class ActivityBackgroundTask extends Task {
+public abstract class ActivityBackgroundTask extends AbstractTask {
 
 
     /**
@@ -32,6 +32,6 @@ public abstract class ActivityBackgroundTask extends Task {
      * @param id task id
      */
     public ActivityBackgroundTask(final String id) {
-        super(id, ActivityTransitionMatcher.ON_RESUME);
+        super(id, ActivityTransitionMatcher.ON_START);
     }
 }
