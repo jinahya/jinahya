@@ -74,6 +74,10 @@ public abstract class MEXlet implements Xlet {
         } catch (FSMException fsme) {
             throw new XletStateChangeException(fsme.getMessage());
         }
+
+        synchronized (this) {
+            this.xletContext = xletContext;
+        }
     }
 
 
@@ -111,6 +115,10 @@ public abstract class MEXlet implements Xlet {
         } catch (FSMException fsme) {
             fsme.printStackTrace(System.err);
         }
+
+        synchronized (this) {
+            xletContext = null;
+        }
     }
 
 
@@ -124,6 +132,20 @@ public abstract class MEXlet implements Xlet {
     }
 
 
+    /**
+     * Returns xlet context.
+     *
+     * @return xlet contex.
+     */
+    protected synchronized XletContext getXletContext() {
+        return xletContext;
+    }
+
+
     /** machine. */
     private final Machine machine;
+
+
+    /** xlet context. */
+    private volatile XletContext xletContext;
 }
