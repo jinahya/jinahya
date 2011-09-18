@@ -29,9 +29,11 @@ final State current = transition.getTarget();
 ==== Transition(State, State) ====
 == Task ==
 A Task represents those actions to be performed when a Machine has been transited.
-==== {{{Task(String)}}} ====
-==== {{{void prepare(TransitionContext)}}} ====
-==== {{{void perform(TransitionContext)}}} ====
+=== {{{Task(String)}}} ===
+Tasks take a String identifier. There are two methods to implement.
+=== {{{void prepare(TransitionContext)}}} ===
+
+=== {{{void perform(TransitionContext)}}} ===
 === !TaskContext ===
 TaskContexts are responsible to load Tasks.
 
@@ -44,3 +46,5 @@ Machines are responsible for holding current State and fire Transitions to Machi
 MachineContexts are responsible to perform Tasks retrieved from TaskContext.
 ==== {{{MachineContext(TextContext)}}} ====
 ==== void transited(Transition) ====
+= Properties =
+There are two scope of properties that users can get/set. One for machine's lifetime and one for those transition lifetime.
