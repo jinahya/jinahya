@@ -14,20 +14,22 @@ Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
-== Components ==
-=== State ===
-A State has a code and name.
-==== State(int, String) ====
-=== Transition ===
-A Transition consists of two States. One for the previous(current) State and one for the current(next) State.
+= Components =
+== State ==
+A State represents the machine's current state.
+== Machine ==
+A Machine represents a state machine which is holding a state value.
+== Transition ==
+A Transition consists of two States. One for the previous(old) State and one for the current(new) State.
 {{{
-final Transition transition = ...
+final Transition transition = ...;
 final State previous = transition.getSource();
 final State current = transition.getTarget();
 }}}
 ==== Transition(State, State) ====
-=== Task ===
-==== Task(String) ====
+== Task ==
+A Task represents those actions to be performed when a Machine has been transited.
+==== {{{Task(String)}}} ====
 ==== {{{void prepare(TransitionContext)}}} ====
 ==== {{{void perform(TransitionContext)}}} ====
 === !TaskContext ===
