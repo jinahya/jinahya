@@ -114,7 +114,10 @@ public class RSSTitles {
             stream.close();
         }
 
-        setTitles(temp);
+        synchronized (titles) {
+            this.titles.clear();
+            this.titles.addAll(titles);
+        }
     }
 
 
@@ -130,15 +133,7 @@ public class RSSTitles {
     }
 
 
-    protected void setTitles(final List<String> titles) {
-        synchronized (titles) {
-            this.titles.clear();
-            this.titles.addAll(titles);
-        }
-    }
-
-
-    public void addRSSTitlesUpdateListener(
+    public final void addRSSTitlesUpdateListener(
         final RSSTitlesUpdateListener listener) {
 
         if (listener == null) {
@@ -149,7 +144,7 @@ public class RSSTitles {
     }
 
 
-    public void removeRSSTitlesUpdateListener(
+    public final void removeRSSTitlesUpdateListener(
         final RSSTitlesUpdateListener listener) {
 
         if (listener == null) {

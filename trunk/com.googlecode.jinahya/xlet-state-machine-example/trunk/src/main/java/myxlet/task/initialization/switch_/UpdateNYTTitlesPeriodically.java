@@ -15,34 +15,34 @@
  */
 
 
-package myxlet.task.activation.switch_;
+package myxlet.task.initialization.switch_;
 
 
 import com.googlecode.jinahya.util.fsm.FSMException;
 import com.googlecode.jinahya.util.fsm.TransitionContext;
+import com.googlecode.jinahya.util.fsm.XletInitializationSwitchTask;
 
-import com.googlecode.jinahya.util.fsm.XletActivationSwitchTask;
-
-import myxlet.model.RSSTitles;
+import myxlet.model.NYTRSSTitles;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class UpdateNYTTitlesTitlesPeriodically extends XletActivationSwitchTask
+public class UpdateNYTTitlesPeriodically
+    extends XletInitializationSwitchTask
     implements Runnable {
 
 
     /** ID. */
     public static final String ID =
-        UpdateNYTTitlesTitlesPeriodically.class.getSimpleName();
+        UpdateNYTTitlesPeriodically.class.getName();
 
 
     /**
      * creates a new instance.
      */
-    public UpdateNYTTitlesTitlesPeriodically() {
+    public UpdateNYTTitlesPeriodically() {
         super(ID);
     }
 
@@ -59,7 +59,7 @@ public class UpdateNYTTitlesTitlesPeriodically extends XletActivationSwitchTask
     public void prepareOff(final TransitionContext transition)
         throws FSMException {
 
-        System.out.println("[" + getId() + "] prepareOn");
+        System.out.println("[" + getId() + "] prepareOff");
     }
 
 
@@ -113,18 +113,14 @@ public class UpdateNYTTitlesTitlesPeriodically extends XletActivationSwitchTask
 
         while (!Thread.currentThread().isInterrupted()) {
 
-            synchronized (this) {
-                if (titles != null) {
-                    try {
-                        titles.update();
-                    } catch (Exception e) {
-                        e.printStackTrace(System.err);
-                    }
-                }
+            try {
+                NYTRSSTitles.getInstance().update();
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
             }
 
             try {
-                Thread.sleep(60000L); // 1 minute
+                Thread.sleep(60000L); // 60 secs
             } catch (InterruptedException ie) {
                 break;
             }
@@ -132,22 +128,6 @@ public class UpdateNYTTitlesTitlesPeriodically extends XletActivationSwitchTask
     }
 
 
-    public RSSTitles getTitles() {
-        synchronized (this) {
-            return this.titles;
-        }
-    }
-
-
-    public void setTitles(final RSSTitles titles) {
-        synchronized (this) {
-            this.titles = titles;
-        }
-    }
-
-
+    /** thread. */
     private volatile Thread thread;
-
-
-    private volatile RSSTitles titles;
 }

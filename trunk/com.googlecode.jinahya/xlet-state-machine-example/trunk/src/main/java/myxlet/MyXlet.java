@@ -18,14 +18,10 @@
 package myxlet;
 
 
-import com.googlecode.jinahya.util.fsm.ClassResourceLoader;
-import com.googlecode.jinahya.util.fsm.FSMException;
-import com.googlecode.jinahya.util.fsm.ResourceLoader;
 import com.googlecode.jinahya.util.fsm.TVXlet;
-import com.googlecode.jinahya.util.fsm.TaskContext;
-import com.googlecode.jinahya.util.fsm.TransitionEvent;
 import com.googlecode.jinahya.util.fsm.TransitionListener;
 
+import java.beans.PropertyChangeListener;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
 
@@ -34,41 +30,14 @@ import javax.tv.xlet.XletStateChangeException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class MyXlet extends TVXlet implements TransitionListener {
+public class MyXlet extends TVXlet {
 
 
-    /** context path. */
-    static final String CONTEXT_PATH =
-        "myxlet.task.initialization" + ":myxlet.task.initialization.switch_"
-        + ":myxlet.task.activation" + ":myxlet.task.activation.switch_";
-
-
-    /** class loader. */
-    static final ClassLoader CLASS_LOADER =
-        Thread.currentThread().getContextClassLoader();
-
-
-    /** resource loader. */
-    static final ResourceLoader RESOURCE_LOADER =
-        new ClassResourceLoader(CLASS_LOADER);
-
-
-    /** task context. */
-    static final TaskContext TASK_CONTEXT;
-
-
-    static {
-        try {
-            TASK_CONTEXT = TaskContext.newInstance(
-                CONTEXT_PATH, RESOURCE_LOADER, CLASS_LOADER);
-        } catch (FSMException fsme) {
-            throw new InstantiationError(fsme.getMessage());
-        }
-    }
-
-
+    /**
+     * Creates a new instance.
+     */
     public MyXlet() {
-        super(TASK_CONTEXT);
+        super(MyTaskContextFactory.getTaskContext());
     }
 
 
@@ -76,18 +45,19 @@ public class MyXlet extends TVXlet implements TransitionListener {
     public void initXlet(final XletContext xletContext)
         throws XletStateChangeException {
 
-        System.out.println("[XLET] initXlet");
+        synchronized (this) {
+            tl = new MyTransitionListener();
+            getMachine().addTransitionListener(tl);
+            pcl = new MyPropertyChangeListener();
+            getMachine().addPropertyChangeListener(pcl);
+        }
 
         super.initXlet(xletContext);
-
-        getMachine().addTransitionListener(this);
     }
 
 
     @Override
     public void startXlet() throws XletStateChangeException {
-
-        System.out.println("[XLET] startXlet");
 
         super.startXlet();
     }
@@ -95,8 +65,6 @@ public class MyXlet extends TVXlet implements TransitionListener {
 
     @Override
     public void pauseXlet() {
-
-        System.out.println("[XLET] pauseXlet");
 
         super.pauseXlet();
     }
@@ -106,14 +74,25 @@ public class MyXlet extends TVXlet implements TransitionListener {
     public void destroyXlet(final boolean unconditional)
         throws XletStateChangeException {
 
-        getMachine().removeTransitionListener(this);
-
         super.destroyXlet(unconditional);
+
+        synchronized (this) {
+            if (tl != null) {
+                getMachine().removeTransitionListener(tl);
+                tl = null;
+            }
+            if (pcl != null) {
+                getMachine().removePropertyChangeListener(pcl);
+                pcl = null;
+            }
+        }
     }
 
 
-    @Override
-    public void transited(final TransitionEvent evt) {
-        System.out.println("transited(" + evt + ")");
-    }
+    /** transition listener. */
+    private volatile TransitionListener tl;
+
+
+    /** transition listener. */
+    private volatile PropertyChangeListener pcl;
 }

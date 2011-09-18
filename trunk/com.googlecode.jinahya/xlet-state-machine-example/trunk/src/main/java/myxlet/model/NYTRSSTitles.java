@@ -48,6 +48,12 @@ public final class NYTRSSTitles extends RSSTitles {
 
         /** instance. */
         private static final RSSTitles INSTANCE = new NYTRSSTitles(URL);
+
+
+        /** PRIVATE. */
+        private InstanceHolder() {
+            super();
+        }
     }
 
 
