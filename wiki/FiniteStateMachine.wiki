@@ -48,3 +48,4 @@ MachineContexts are responsible to perform Tasks retrieved from TaskContext.
 ==== void transited(Transition) ====
 = Properties =
 There are two scope of properties that users can get/set. One for machine's lifetime and one for those transition lifetime.
+= Loading Tasks with TaskContext =
