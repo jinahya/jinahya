@@ -52,7 +52,6 @@ public abstract class SwitchTask extends AbstractTask {
 
     @Override
     public boolean matches(final Transition transition) {
-
         if (on) {
             return transition.matchesAny(offMatchers);
         } else { // off
