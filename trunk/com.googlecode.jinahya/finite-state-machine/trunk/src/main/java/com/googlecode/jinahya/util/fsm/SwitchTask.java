@@ -54,17 +54,9 @@ public abstract class SwitchTask extends AbstractTask {
     public boolean matches(final Transition transition) {
 
         if (on) {
-            final boolean matches = transition.matchesAny(offMatchers);
-            if (matches) {
-                on = false;
-            }
-            return matches;
+            return transition.matchesAny(offMatchers);
         } else { // off
-            final boolean matches = super.matches(transition);
-            if (matches) {
-                on = true;
-            }
-            return matches;
+            return super.matches(transition);
         }
     }
 
@@ -102,9 +94,17 @@ public abstract class SwitchTask extends AbstractTask {
     @Override
     public void perform(final TransitionContext context) throws FSMException {
         if (on) {
-            performOff(context);
-        } else {
-            performOn(context);
+            try {
+                performOff(context);
+            } finally {
+                on = false;
+            }
+        } else { // off;
+            try {
+                performOn(context);
+            } finally {
+                on = true;
+            }
         }
     }
 

@@ -46,6 +46,17 @@ final class TransitionContextFactory {
         final Transition transition, final StringBuffer buffer,
         final DependencyResolver<String> resolver) {
 
+        if (transition == null) {
+            throw new NullPointerException("null transition");
+        }
+
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (resolver == null) {
+            throw new NullPointerException("null resolver");
+        }
 
         final Map<String, Object> properties =
             Collections.synchronizedMap(new HashMap<String, Object>());
