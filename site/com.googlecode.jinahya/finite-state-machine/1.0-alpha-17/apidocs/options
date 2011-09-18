@@ -1,0 +1,24 @@
+-classpath
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/finite-state-machine/trunk/target/checkout/target/classes;C:/Users/onacit/.m2/repository/com/googlecode/jinahya/dependency-resolver/1.0-alpha-12/dependency-resolver-1.0-alpha-12.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/finite-state-machine/trunk/target/checkout/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/finite-state-machine/trunk/target/checkout/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'finite-state-machine 1.0-alpha-17 API'
+-link
+'http://download.oracle.com/javase/7/docs/api'
+-use
+-version
+-windowtitle
+'finite-state-machine 1.0-alpha-17 API'
