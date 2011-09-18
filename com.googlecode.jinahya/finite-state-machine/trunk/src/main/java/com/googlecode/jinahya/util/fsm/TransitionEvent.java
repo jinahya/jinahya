@@ -41,6 +41,10 @@ public class TransitionEvent extends EventObject {
     public TransitionEvent(final Transition transition) {
         super(transition.getMachine());
 
+        if (transition == null) {
+            throw new NullPointerException("null transition");
+        }
+
         this.transition = transition;
     }
 

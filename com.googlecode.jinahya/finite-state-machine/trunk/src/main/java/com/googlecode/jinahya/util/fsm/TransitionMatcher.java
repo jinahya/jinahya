@@ -64,7 +64,7 @@ public interface TransitionMatcher {
 
     /**
      * Matches given <code>transition</code>. A
-     * <code>NullPointerException</code> must be thrown if specified
+     * <code>NullPointerException</code> will be thrown if specified
      * <code>transition</code> is null.
      *
      * @param transition the transition to match

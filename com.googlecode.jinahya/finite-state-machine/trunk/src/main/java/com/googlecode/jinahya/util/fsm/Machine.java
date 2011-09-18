@@ -150,7 +150,6 @@ public abstract class Machine {
 
         // perform
         for (List<String> idGroup : resolver.getVerticalGroups()) {
-            System.out.println("idGroup: " + idGroup);
             final Task[] taskGroup = new Task[idGroup.size()];
             for (int i = 0; i < taskGroup.length; i++) {
                 taskGroup[i] = tasks.get(idGroup.get(i));

@@ -22,7 +22,7 @@ import java.util.EventListener;
 
 
 /**
- * An interface for listening transition events.
+ * An interface for listening transition events from machines.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
