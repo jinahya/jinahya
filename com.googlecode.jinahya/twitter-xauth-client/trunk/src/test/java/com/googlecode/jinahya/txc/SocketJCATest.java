@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.txc;
 
 
-import com.googlecode.jinahya.txc.JCAAuthenticator;
-import com.googlecode.jinahya.txc.SocketRequester;
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -32,4 +29,3 @@ public class SocketJCATest extends ClientTest {
         super(new SocketRequester(), new JCAAuthenticator());
     }
 }
-

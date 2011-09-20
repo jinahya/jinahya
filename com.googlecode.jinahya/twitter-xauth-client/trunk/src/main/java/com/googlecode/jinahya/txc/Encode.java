@@ -27,18 +27,19 @@ import java.io.UnsupportedEncodingException;
  * @see <a href="http://tools.ietf.org/html/rfc3986">RFC 3986</a>
  * @see <a href="http://tools.ietf.org/html/rfc4648">RFC 4648</a>
  */
-public class Encode {
+final class Encode {
 
 
     /**
+     * Percent Encoding.
      *
-     * @param input
+     * @param input input
      * @return
      * @throws UnsupportedEncodingException
      * @see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">
      *      Percent-Encoding (RFC 3986)</a>
      */
-    public static String percent(final String input)
+    static String percent(final String input)
         throws UnsupportedEncodingException {
 
         if (input == null) {
@@ -49,7 +50,13 @@ public class Encode {
     }
 
 
-    public static String percent(final byte[] input)
+    /**
+     * 
+     * @param input
+     * @return
+     * @throws UnsupportedEncodingException 
+     */
+    static String percent(final byte[] input)
         throws UnsupportedEncodingException {
 
         if (input == null) {
@@ -84,7 +91,7 @@ public class Encode {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String url(final String input)
+    static String url(final String input)
         throws UnsupportedEncodingException {
 
         if (input == null) {
@@ -100,7 +107,7 @@ public class Encode {
      * @param input
      * @return
      */
-    public static String url(final byte[] input) {
+    static String url(final byte[] input) {
 
         if (input == null) {
             throw new IllegalArgumentException("null input");
@@ -149,7 +156,7 @@ public class Encode {
      * @see <a href="http://tools.ietf.org/html/rfc4648#section-8">Base 16
      *      Encoding (RFC 4648)</a>
      */
-    public static String base16(final byte[] input) {
+    static String base16(final byte[] input) {
 
         if (input == null) {
             throw new IllegalArgumentException("null input");
@@ -200,7 +207,7 @@ public class Encode {
      * @see <a href="http://tools.ietf.org/html/rfc4648#section-4">Base 64
      *      Encoding (RFC 4648)</a>
      */
-    public static String base64(final byte[] input) {
+    static String base64(final byte[] input) {
 
         if (input == null) {
             throw new IllegalArgumentException("null input");

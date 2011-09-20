@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.txc;
 
 
-import com.googlecode.jinahya.txc.Client;
-import com.googlecode.jinahya.txc.Authenticator;
-import com.googlecode.jinahya.txc.Requester;
 import java.io.InputStream;
 
 

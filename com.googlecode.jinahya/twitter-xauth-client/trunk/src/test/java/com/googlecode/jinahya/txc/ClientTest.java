@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.txc;
 
 
-import com.googlecode.jinahya.txc.Authenticator;
-import com.googlecode.jinahya.txc.Requester;
 import java.util.Arrays;
 import java.util.List;
 

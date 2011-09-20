@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -37,12 +39,19 @@ public class JCAAuthenticator implements Authenticator {
 
     //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
-        throws Exception {
+        throws TXCException {
 
-        final Mac mac = getInstance();
-        mac.init(new SecretKeySpec(key, ALGORITHM));
-
-        return mac.doFinal(input);
+        try {
+            final Mac mac = getMac();
+            try {
+                mac.init(new SecretKeySpec(key, ALGORITHM));
+                return mac.doFinal(input);
+            } catch (InvalidKeyException ike) {
+                throw new TXCException(ike);
+            }
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new TXCException(nsae);
+        }
     }
 
 
@@ -50,9 +59,9 @@ public class JCAAuthenticator implements Authenticator {
      * Returns a Mac instance for {@value #ALGORITHM}.
      *
      * @return a Mac instance.
-     * @throws Exception if any error occurs.
+     * @throws NoSuchAlgorithmException 
      */
-    protected Mac getInstance() throws Exception {
+    protected Mac getMac() throws NoSuchAlgorithmException {
         return Mac.getInstance(ALGORITHM);
     }
 }

@@ -43,7 +43,7 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * default ssl socket factory.
+     * default SSL socket factory.
      *
      * @see javax.net.ssl.SSLSocketFactory#getDefault()
      */
