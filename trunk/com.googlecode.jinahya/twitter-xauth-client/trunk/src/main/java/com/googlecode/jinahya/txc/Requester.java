@@ -18,11 +18,13 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 
 
 /**
- * 
+ * Interface for requesting resource.
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public interface Requester {
@@ -32,13 +34,14 @@ public interface Requester {
      * Requests with given arguments.
      *
      * @param method request method
-     * @param url request url
-     * @param parameters parameters (already url encoded)
+     * @param url request URL
+     * @param parameters parameters (already URL-Encoded)
      * @param authorization authorization header value or null.
      * @return resource stream
-     * @throws Exception if any error occurs
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if any error occurs
      */
     InputStream request(final String method, final String url,
                         final String parameters, final String authorization)
-        throws Exception;
+        throws IOException, TXCException;
 }

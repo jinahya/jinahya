@@ -18,19 +18,15 @@
 package com.googlecode.jinahya.txc;
 
 
-import org.testng.annotations.Test;
-
-
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
  */
-@Test(enabled = false)
-public class SocketBouncyCastleTest extends ClientTest {
+public class BCAuthenticatorTest
+    extends AuthenticatorTest<BCAuthenticator> {
 
 
-    public SocketBouncyCastleTest() {
-        super(new SocketRequester(), new BouncyCastleAuthenticator());
+    public BCAuthenticatorTest() {
+        super(new BCAuthenticator());
     }
 }
-

@@ -25,12 +25,12 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-@Test(enabled = false)
-public class HttpURLConnectionBouncyCastleTest extends ClientTest {
+@Test//(enabled = false)
+public class BCSocketClientTest extends ClientTest {
 
 
-    public HttpURLConnectionBouncyCastleTest() {
-        super(new HttpURLConnectionRequester(), new BouncyCastleAuthenticator());
+    public BCSocketClientTest() {
+        super(new BCAuthenticator(), new SocketRequester());
     }
 }
 

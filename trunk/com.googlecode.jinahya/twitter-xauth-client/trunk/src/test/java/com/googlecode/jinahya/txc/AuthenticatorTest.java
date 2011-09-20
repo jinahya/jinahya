@@ -204,6 +204,11 @@ public abstract class AuthenticatorTest<T extends Authenticator> {
     };
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param authenticator authenticator to test
+     */
     public AuthenticatorTest(final T authenticator) {
         super();
 
@@ -257,6 +262,6 @@ public abstract class AuthenticatorTest<T extends Authenticator> {
     }
 
 
+    /** authenticator. */
     private final T authenticator;
 }
-

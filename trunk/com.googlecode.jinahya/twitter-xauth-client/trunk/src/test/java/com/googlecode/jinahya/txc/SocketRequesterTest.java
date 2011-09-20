@@ -36,7 +36,7 @@ public class SocketRequesterTest extends RequesterTest<SocketRequester> {
     @Test(enabled = true)
     public void testStatusesPublicTimeline() throws Exception {
 
-        super.testStatusesPublicTimeline(new BouncyCastleAuthenticator());
+        super.testStatusesPublicTimeline(new BCAuthenticator());
         super.testStatusesPublicTimeline(new JCAAuthenticator());
     }
 }

@@ -18,11 +18,11 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Random;
 import java.util.Vector;
 
 
@@ -30,7 +30,7 @@ import java.util.Vector;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class Client implements Authenticator, Requester {
+public class Client {
 
 
     /**
@@ -45,8 +45,12 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @param consumerKey consumer key
      * @param consumerSecret consumer secret
+     * @param authenticator authenticator
+     * @param requester requester
      */
-    public Client(final String consumerKey, final String consumerSecret) {
+    public Client(final String consumerKey, final String consumerSecret,
+                  final Authenticator authenticator,
+                  final Requester requester) {
         super();
 
         if (consumerKey == null) {
@@ -57,8 +61,18 @@ public abstract class Client implements Authenticator, Requester {
             throw new NullPointerException("null consumerSecret");
         }
 
+        if (authenticator == null) {
+            throw new NullPointerException("null authenticator");
+        }
+
+        if (requester == null) {
+            throw new NullPointerException("null requester");
+        }
+
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
+        this.authenticator = authenticator;
+        this.requester = requester;
     }
 
 
@@ -67,17 +81,26 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @param username username
      * @param password password
-     * @throws Exception if an error occurs.
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs.
      */
-    public void signIn(final String username, final String password)
-        throws Exception {
+    public final void signIn(final String username, final String password)
+        throws IOException, TXCException {
 
         if (username == null) {
             throw new NullPointerException("null username");
         }
 
+        if (username.length() == 0) {
+            throw new IllegalArgumentException("empty username");
+        }
+
         if (password == null) {
             throw new NullPointerException("null password");
+        }
+
+        if (password.length() == 0) {
+            throw new IllegalArgumentException("empty password");
         }
 
         signOut();
@@ -135,16 +158,17 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @param url normalized request URL
      * @param parameters request parameters
-     * @param authorize authorize flag
+     * @param requiresAuthentication authorize flag
      * @return resource stream
-     * @throws Exception if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs.
      */
-    public InputStream GET(final String url,
-                           final Hashtable<String, String> parameters,
-                           final boolean authorize)
-        throws Exception {
+    public final InputStream GET(final String url,
+                                 final Hashtable<String, String> parameters,
+                                 final boolean requiresAuthentication)
+        throws IOException, TXCException {
 
-        return request("GET", url, parameters, authorize);
+        return request("GET", url, parameters, requiresAuthentication);
     }
 
 
@@ -153,48 +177,35 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @param url normalized request URL
      * @param parameters request parameters
-     * @param authorize authorize flag
+     * @param requiresAuthentication authorize flag
      * @return resource stream
-     * @throws Exception if any error occurs.
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if any error occurs.
      */
-    public InputStream POST(final String url,
-                            final Hashtable<String, String> parameters,
-                            final boolean authorize)
-        throws Exception {
+    public final InputStream POST(final String url,
+                                  final Hashtable<String, String> parameters,
+                                  final boolean requiresAuthentication)
+        throws IOException, TXCException {
 
-        return request("POST", url, parameters, authorize);
+        return request("POST", url, parameters, requiresAuthentication);
     }
 
 
     /**
-     *
-     * @param method
-     * @param url
-     * @param parameters
-     * @return
-     * @throws Exception
-     */
-    public InputStream request(final String method, final String url,
-                               final Hashtable<String, String> parameters)
-        throws Exception {
-
-        return request(method, url, parameters);
-    }
-
-
-    /**
+     * Requests a resource.
      *
      * @param method request method
-     * @param url normalized resource url
+     * @param url normalized resource URL
      * @param parameters
-     * @param authorize flag for authentication requirement
+     * @param requiresAuthentication flag for authentication requirement
      * @return resource stream
-     * @throws Exception if an error occurs.
+     * @thrwos IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs.
      */
     public InputStream request(final String method, final String url,
                                final Hashtable<String, String> parameters,
-                               final boolean authorize)
-        throws Exception {
+                               final boolean requiresAuthentication)
+        throws IOException, TXCException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -208,8 +219,8 @@ public abstract class Client implements Authenticator, Requester {
             throw new NullPointerException("null parameters");
         }
 
-        if (authorize && !isSignedIn()) {
-            throw new IllegalStateException("not signed in");
+        if (requiresAuthentication && !isSignedIn()) {
+            throw new TXCException("not signed in");
         }
 
         final Vector<String> vector = new Vector<String>(parameters.size() * 2);
@@ -220,23 +231,25 @@ public abstract class Client implements Authenticator, Requester {
             vector.addElement(parameters.get(key));
         }
 
-        return request(method, url, vector, authorize);
+        return request(method, url, vector, requiresAuthentication);
     }
 
 
     /**
+     * Requests resource.
      *
      * @param method request method
      * @param url normalized resource URL
      * @param parameters parameters
-     * @param authorize flag for authentication requirement
+     * @param requiresAuthentication flag for authentication requirement
      * @return resource stream
-     * @throws Exception if an error occurs
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs
      */
-    public InputStream request(final String method, final String url,
-                               final Vector<String> parameters,
-                               final boolean authorize)
-        throws Exception {
+    private InputStream request(final String method, final String url,
+                                final Vector<String> parameters,
+                                final boolean requiresAuthentication)
+        throws IOException, TXCException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -250,18 +263,18 @@ public abstract class Client implements Authenticator, Requester {
             throw new NullPointerException("null parameters");
         }
 
-        if (authorize && !isSignedIn()) {
+        if (requiresAuthentication && !isSignedIn()) {
             throw new IllegalStateException("not signed in");
         }
 
         String token = "";
         String tokenSecret = "";
-        if (authorize) {
+        if (requiresAuthentication) {
             token = responses.get("oauth_token");
             tokenSecret = responses.get("oauth_token_secret");
         }
 
-        return request(method, url, parameters, authorize, token,
+        return request(method, url, parameters, requiresAuthentication, token,
                        tokenSecret);
     }
 
@@ -275,13 +288,14 @@ public abstract class Client implements Authenticator, Requester {
      * @param token token
      * @param tokenSecret token secret
      * @return resource stream
-     * @throws Exception if an error occurs
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs
      */
     private InputStream request(final String method, final String url,
                                 final Vector<String> parameters,
                                 final boolean authorize, final String token,
                                 final String tokenSecret)
-        throws Exception {
+        throws IOException, TXCException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -320,14 +334,14 @@ public abstract class Client implements Authenticator, Requester {
                 append("=").append(Encode.url(e.nextElement()));
         }
 
-        return request(method, url, buffer.toString(), authorization);
+        return requester.request(method, url, buffer.toString(), authorization);
     }
 
 
     /**
      * Signs out.
      */
-    public void signOut() {
+    public final void signOut() {
         responses.clear();
     }
 
@@ -338,7 +352,7 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @return current user's id
      */
-    public String getUserId() {
+    public final String getUserId() {
 
         if (!isSignedIn()) {
             throw new IllegalStateException("not signed in");
@@ -354,7 +368,7 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @return current user's screen name
      */
-    public String getScreenName() {
+    public final String getScreenName() {
 
         if (!isSignedIn()) {
             throw new IllegalStateException("not signed in");
@@ -369,7 +383,7 @@ public abstract class Client implements Authenticator, Requester {
      *
      * @return signed in status
      */
-    public boolean isSignedIn() {
+    public final boolean isSignedIn() {
 
         if (responses.isEmpty()) {
             return false;
@@ -381,20 +395,21 @@ public abstract class Client implements Authenticator, Requester {
 
 
     /**
+     * Generates the authorization string.
      *
      * @param method request method
-     * @param url normalized resource url
+     * @param url normalized resource URL
      * @param parameters parameters
      * @param token access token
      * @param tokenSecret token secret
      * @return OAuth Authorization header value
-     * @throws Exception if an error occurs
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs
      */
-    protected String authorize(final String method, final String url,
-                               final Vector<String> parameters,
-                               final String token,
-                               final String tokenSecret)
-        throws Exception {
+    private String authorize(final String method, final String url,
+                             final Vector<String> parameters,
+                             final String token, final String tokenSecret)
+        throws IOException, TXCException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -442,7 +457,7 @@ public abstract class Client implements Authenticator, Requester {
             nonce[i] = (byte) (timestamp & 0xFFL);
             timestamp >>>= 8;
         }
-        long l = random.nextLong();
+        long l = Double.doubleToLongBits(Math.random());
         for (int i = 15; i >= 8; i--) {
             nonce[i] = (byte) (l & 0xFFL);
             l >>>= 8;
@@ -485,12 +500,13 @@ public abstract class Client implements Authenticator, Requester {
      * @param parameters OAuth parameters
      * @param tokenSecret token secret
      * @return signature
-     * @throws Exception if an error occurs
+     * @throws IOException if an I/O error occurs.
+     * @throws TXCException if an error occurs
      */
-    protected String sign(final String method, final String url,
-                          final Vector<String> parameters,
-                          final String tokenSecret)
-        throws Exception {
+    private String sign(final String method, final String url,
+                        final Vector<String> parameters,
+                        final String tokenSecret)
+        throws IOException, TXCException {
 
         final String[] array = new String[parameters.size()];
 
@@ -498,7 +514,7 @@ public abstract class Client implements Authenticator, Requester {
         int k = 0;
         for (Enumeration<String> e = parameters.elements();
              e.hasMoreElements();) {
-            array[k++] = Encode.percent((String) e.nextElement());
+            array[k++] = Encode.percent(e.nextElement());
         }
 
         // ---------------------------------------------------------------- SORT
@@ -565,7 +581,7 @@ public abstract class Client implements Authenticator, Requester {
                             + Encode.percent(tokenSecret)).getBytes();
 
         // ----------------------------------------------------------- SIGNATURE
-        final byte[] authentication = authenticate(key, input);
+        final byte[] authentication = authenticator.authenticate(key, input);
 
         return Encode.base64(authentication);
     }
@@ -579,12 +595,15 @@ public abstract class Client implements Authenticator, Requester {
     private final String consumerSecret;
 
 
-    /** random. */
-    private final Random random = new Random();
+    /** authenticator. */
+    private final Authenticator authenticator;
 
 
-    /** responses */
+    /** requester. */
+    private final Requester requester;
+
+
+    /** responses. */
     private final Hashtable<String, String> responses =
         new Hashtable<String, String>();
 }
-
