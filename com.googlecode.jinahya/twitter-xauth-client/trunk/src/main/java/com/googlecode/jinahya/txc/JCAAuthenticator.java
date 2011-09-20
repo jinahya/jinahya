@@ -20,6 +20,7 @@ package com.googlecode.jinahya.txc;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -31,37 +32,35 @@ import javax.crypto.spec.SecretKeySpec;
 public class JCAAuthenticator implements Authenticator {
 
 
-    /**
-     * Standard algorithm name for HMAC-SHA1.
-     */
-    protected static final String ALGORITHM = "HmacSHA1";
+    /** Standard algorithm name for HMAC-SHA1. */
+    private static final String ALGORITHM = "HmacSHA1";
 
 
-    //@Override
-    public byte[] authenticate(final byte[] key, final byte[] input)
-        throws TXCException {
+    /** the Mac instance. */
+    private static final Mac MAC;
 
+
+    static {
         try {
-            final Mac mac = getMac();
-            try {
-                mac.init(new SecretKeySpec(key, ALGORITHM));
-                return mac.doFinal(input);
-            } catch (InvalidKeyException ike) {
-                throw new TXCException(ike);
-            }
+            MAC = Mac.getInstance(ALGORITHM);
         } catch (NoSuchAlgorithmException nsae) {
-            throw new TXCException(nsae);
+            throw new InstantiationError(nsae.getMessage());
         }
     }
 
 
-    /**
-     * Returns a Mac instance for {@value #ALGORITHM}.
-     *
-     * @return a Mac instance.
-     * @throws NoSuchAlgorithmException 
-     */
-    protected Mac getMac() throws NoSuchAlgorithmException {
-        return Mac.getInstance(ALGORITHM);
+    @Override
+    public byte[] authenticate(final byte[] key, final byte[] input)
+        throws TXCException {
+
+        synchronized (MAC) {
+            MAC.reset();
+            try {
+                MAC.init(new SecretKeySpec(key, ALGORITHM));
+                return MAC.doFinal(input);
+            } catch (InvalidKeyException ike) {
+                throw new TXCException(ike);
+            }
+        }
     }
 }
