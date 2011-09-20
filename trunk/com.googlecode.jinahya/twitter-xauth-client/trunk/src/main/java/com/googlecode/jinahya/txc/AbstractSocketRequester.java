@@ -31,9 +31,17 @@ import java.util.Vector;
 abstract class AbstractSocketRequester implements Requester {
 
 
+    /** buffer. */
     private static final StringBuffer BUFFER = new StringBuffer();
 
 
+    /**
+     * Reads a line.
+     *
+     * @param input input
+     * @return a line
+     * @throws IOException if an I/O error occurs.
+     */
     static String readLine(final InputStream input) throws IOException {
 
         synchronized (BUFFER) {

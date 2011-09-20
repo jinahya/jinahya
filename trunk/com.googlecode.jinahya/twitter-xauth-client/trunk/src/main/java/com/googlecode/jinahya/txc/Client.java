@@ -220,7 +220,7 @@ public class Client {
         }
 
         if (requiresAuthentication && !isSignedIn()) {
-            throw new TXCException("not signed in");
+            throw new IllegalStateException("not signed in");
         }
 
         final Vector<String> vector = new Vector<String>(parameters.size() * 2);

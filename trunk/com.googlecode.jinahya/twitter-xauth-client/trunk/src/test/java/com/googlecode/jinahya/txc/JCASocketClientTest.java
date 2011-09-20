@@ -18,19 +18,14 @@
 package com.googlecode.jinahya.txc;
 
 
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-@Test(enabled = false)
-public class HttpURLConnectionJCATest extends ClientTest {
+public class JCASocketClientTest extends ClientTest {
 
 
-    public HttpURLConnectionJCATest() {
-        super(new JCAAuthenticator(), new HttpURLConnectionRequester());
+    public JCASocketClientTest() {
+        super(new JCAAuthenticator(), new SocketRequester());
     }
 }
-
