@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jin Kwon.
+ * Copyright 2011 Jin Kwon <jinahya at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,27 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.util.Vector;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon <jinahya at gmail.com>
  */
-@Test(enabled = false)
-public class HttpURLConnectionJCATest extends ClientTest {
+public class AbstractSocketRequesterTest {
 
 
-    public HttpURLConnectionJCATest() {
-        super(new JCAAuthenticator(), new HttpURLConnectionRequester());
+    @Test
+    public static void testTokenizeStatusLine() {
+
+        final String statusLine = "HTTP/1.1 200 OK";
+        final Vector<String> tokenized =
+            AbstractSocketRequester.tokenizeStatusLine(statusLine);
+        Assert.assertEquals(tokenized.elementAt(0), "HTTP/1.1");
+        Assert.assertEquals(tokenized.elementAt(1), "200");
+        Assert.assertEquals(tokenized.elementAt(2), "OK");
     }
 }
-

@@ -22,10 +22,10 @@ package com.googlecode.jinahya.txc;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class SocketJCATest extends ClientTest {
+public class JCASocketTest extends ClientTest {
 
 
-    public SocketJCATest() {
-        super(new SocketRequester(), new JCAAuthenticator());
+    public JCASocketTest() {
+        super(new JCAAuthenticator(), new SocketRequester());
     }
 }

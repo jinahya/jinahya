@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.io.IOException;
+
+
 /**
  * Interface for HMAC-SHA1 authentication.
  *
@@ -33,8 +36,9 @@ public interface Authenticator {
      * @param key key
      * @param input input
      * @return signature
+     * @throws IOException if an I/O error occurs.
      * @throws TXCException if any error occurs.
      */
     byte[] authenticate(final byte[] key, final byte[] input)
-        throws TXCException;
+        throws IOException, TXCException;
 }

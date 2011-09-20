@@ -18,14 +18,11 @@
 package com.googlecode.jinahya.txc;
 
 
-import java.io.InputStream;
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public final class ClientFactory {
+final class ClientFactory {
 
 
     public static Client newClient(final Authenticator authenticator,
@@ -36,32 +33,13 @@ public final class ClientFactory {
         }
 
         return new Client(TestProperties.getProperty("consumerKey"),
-                          TestProperties.getProperty("consumerSecret")) {
-
-
-            @Override
-            public byte[] authenticate(final byte[] key, final byte[] input)
-                throws Exception {
-
-                return authenticator.authenticate(key, input);
-            }
-
-
-            @Override
-            public InputStream request(final String method, final String url,
-                                       final String parameters,
-                                       final String authorization)
-                throws Exception {
-
-                return requester.request(method, url, parameters,
-                                         authorization);
-            }
-        };
+                          TestProperties.getProperty("consumerSecret"),
+                          authenticator, requester);
     }
 
 
+    /** PRIVATE. */
     private ClientFactory() {
         super();
     }
 }
-

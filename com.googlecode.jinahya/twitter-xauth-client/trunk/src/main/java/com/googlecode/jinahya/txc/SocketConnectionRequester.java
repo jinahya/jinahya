@@ -34,6 +34,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 
 /**
+ * A Requester for SocketConnector.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -41,7 +42,7 @@ public class SocketConnectionRequester extends AbstractSocketRequester {
 
 
     /**
-     * default ssl socket factory.
+     * default SSL socket factory.
      *
      * @see javax.net.ssl.SSLSocketFactory#getDefault()
      */
@@ -49,11 +50,11 @@ public class SocketConnectionRequester extends AbstractSocketRequester {
         SSLSocketFactory.getDefault();
 
 
-    //@Override
+    @Override
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)
-        throws Exception {
+        throws IOException, TXCException {
 
         final int firstColonIndex = url.indexOf(':');
         String protocol = url.substring(0, firstColonIndex);
@@ -105,26 +106,18 @@ public class SocketConnectionRequester extends AbstractSocketRequester {
             }
             output.flush();
 
-
             final InputStream input = connection.openInputStream();
 
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
             // ----------------------------------------------------- STATUS LINE
-            line(input, baos);
-            final String statusLine = new String(baos.toByteArray());
+            final String statusLine = readLine(input);
             checkStatusLine(statusLine);
 
             // ------------------------------------------------ RESPONSE HEADERS
-            while (true) {
-                line(input, baos);
-                if (baos.size() == 0) {
-                    break;
-                }
+            while (readLine(input).length() > 0) {
             }
 
             // --------------------------------------------------- RESPONSE BODY
-            baos.reset();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final byte[] buffer = new byte[1024];
             for (int read = -1; (read = input.read(buffer)) != -1;) {
                 baos.write(buffer, 0, read);
@@ -140,10 +133,11 @@ public class SocketConnectionRequester extends AbstractSocketRequester {
 
 
     /**
-     * 
-     * @param name
-     * @return
-     * @throws IOException 
+     * Open a socket connection.
+     *
+     * @param name the URL for the connection
+     * @return A new Connection object.
+     * @throws IOException if an I/O error occurs.
      */
     protected SocketConnection open(final String name) throws IOException {
         return (SocketConnection) Connector.open(name);

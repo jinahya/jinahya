@@ -25,24 +25,28 @@ import org.bouncycastle.crypto.params.KeyParameter;
 
 
 /**
+ * Authenticator using BouncyCastle API.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BouncyCastleAuthenticator implements Authenticator {
+public class BCAuthenticator implements Authenticator {
 
 
-    //@Override
+    /** The Mac instance. */
+    private static final Mac MAC = new HMac(new SHA1Digest());
+
+
+    @Override
     public byte[] authenticate(final byte[] key, final byte[] input)
         throws TXCException {
 
-        final Mac mac = new HMac(new SHA1Digest());
-        mac.init(new KeyParameter(key));
-
-        mac.update(input, 0, input.length);
-
-        final byte[] output = new byte[mac.getMacSize()];
-        mac.doFinal(output, 0);
-
-        return output;
+        synchronized (MAC) {
+            MAC.reset();
+            MAC.init(new KeyParameter(key));
+            MAC.update(input, 0, input.length);
+            final byte[] output = new byte[MAC.getMacSize()];
+            MAC.doFinal(output, 0);
+            return output;
+        }
     }
 }

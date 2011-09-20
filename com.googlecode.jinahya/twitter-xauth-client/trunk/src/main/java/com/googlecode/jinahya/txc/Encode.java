@@ -86,9 +86,10 @@ final class Encode {
 
 
     /**
+     * Encodes as URL-Encoding.
      *
-     * @param input
-     * @return
+     * @param input input
+     * @return URL-Encoded output
      * @throws UnsupportedEncodingException
      */
     static String url(final String input)
@@ -103,9 +104,10 @@ final class Encode {
 
 
     /**
-     * 
-     * @param input
-     * @return
+     * Encodes URL-Encoding.
+     *
+     * @param input input
+     * @return URL-Encoded output
      */
     static String url(final byte[] input) {
 

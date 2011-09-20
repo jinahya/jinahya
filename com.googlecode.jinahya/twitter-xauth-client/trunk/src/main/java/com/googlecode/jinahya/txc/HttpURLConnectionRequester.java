@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -31,11 +32,11 @@ import java.net.URL;
 public class HttpURLConnectionRequester implements Requester {
 
 
-    //@Override
+    @Override
     public InputStream request(final String method, String url,
                                final String parameters,
                                final String authorization)
-        throws Exception {
+        throws IOException, TXCException {
 
 
         final boolean doOutput = method.equals("POST");

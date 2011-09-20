@@ -18,10 +18,10 @@
 package com.googlecode.jinahya.txc;
 
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**
@@ -31,39 +31,31 @@ import java.io.OutputStream;
 abstract class AbstractSocketRequester implements Requester {
 
 
-    /**
-     * Reads a line from <code>input</code> and write to <code>output</code>.
-     *
-     * @param input input
-     * @param output output
-     * @throws IOException if an I/O error occurs.
-     */
-    static void line(final InputStream input, final OutputStream output)
-        throws IOException {
+    private static final StringBuffer BUFFER = new StringBuffer();
 
-        for (int b = -1; (b = input.read()) != -1;) {
-            if (b == '\r') {
-                input.read(); // '\n'
-                return;
-            }
-            output.write(b);
+
+    static String readLine(final InputStream input) throws IOException {
+
+        synchronized (BUFFER) {
+            return readLine(input, BUFFER);
         }
     }
 
 
-    /**
-     *
-     * @param input
-     * @param output
-     * @throws IOException
-     */
-    static void line(final InputStream input,
-                     final ByteArrayOutputStream output)
+    static String readLine(final InputStream input, final StringBuffer buffer)
         throws IOException {
 
-        output.reset();
-        line(input, output);
-        output.flush();
+        buffer.delete(0, buffer.length());
+
+        for (int b = -1; (b = input.read()) != -1;) {
+            if (b == '\r') {
+                input.read(); // '\n'
+                break;
+            }
+            buffer.append((char) b);
+        }
+
+        return buffer.toString();
     }
 
 
@@ -73,16 +65,62 @@ abstract class AbstractSocketRequester implements Requester {
      * @param statusLine status line of HTTP response message.
      * @throws IOException if statusLine is not OK
      */
-    protected void checkStatusLine(final String statusLine) throws IOException {
+    static void checkStatusLine(final String statusLine) throws IOException {
 
-        int spaceIndex = statusLine.indexOf(' ');
-        final String httpVersion = statusLine.substring(0, spaceIndex);
-        spaceIndex = statusLine.indexOf(' ', spaceIndex + 1);
-        final String statusCode = statusLine.substring(
-            httpVersion.length() + 2, spaceIndex);
-        final String reasonPhrase = statusLine.substring(spaceIndex + 1);
+        final Vector<String> tokenized = tokenizeStatusLine(statusLine);
+        checkStatusLine(tokenized.elementAt(1), tokenized.elementAt(2));
+    }
 
-        checkStatus(statusCode, reasonPhrase);
+
+    static Vector<String> tokenizeStatusLine(final String statusLine) {
+
+        final Vector<String> tokens = new Vector<String>(3);
+
+        final StringTokenizer tokenizer = new StringTokenizer(statusLine);
+        while (tokenizer.hasMoreTokens()) {
+            final String token = tokenizer.nextToken().trim();
+            if (token.length() > 0) {
+                tokens.add(token);
+            }
+        }
+
+        return tokens;
+    }
+
+
+    /**
+     * Returns the <code>HTTP-Version</code> of given <code>statusLine</code>.
+     *
+     * @param statusLine the Status-Line of a HTTP Response message.
+     * @return the <code>HTTP-Version</code>
+     */
+    static String getHttpVersion(final String statusLine) {
+
+        return tokenizeStatusLine(statusLine).elementAt(0);
+    }
+
+
+    /**
+     * Returns the <code>Status-Code</code> of given <code>statusLine</code>.
+     *
+     * @param statusLine the Status-Line of a HTTP Response message.
+     * @return the <code>Status-Code</code>
+     */
+    static String getStatusCode(final String statusLine) {
+
+        return tokenizeStatusLine(statusLine).elementAt(1);
+    }
+
+
+    /**
+     * Returns the <code>Reason-Phrase</code> of given <code>statusLine</code>.
+     *
+     * @param statusLine the Status-Line of a HTTP Response message.
+     * @return The <code>Reason Phrase</code>
+     */
+    static String getReasonPhrase(final String statusLine) {
+
+        return tokenizeStatusLine(statusLine).elementAt(2);
     }
 
 
@@ -93,8 +131,8 @@ abstract class AbstractSocketRequester implements Requester {
      * @param reasonPhrase reason phrase
      * @throws IOException if the status is not OK
      */
-    protected void checkStatus(final String statusCode,
-                               final String reasonPhrase)
+    static void checkStatusLine(final String statusCode,
+                                final String reasonPhrase)
         throws IOException {
 
         if (!statusCode.equals("200")) {
@@ -102,4 +140,3 @@ abstract class AbstractSocketRequester implements Requester {
         }
     }
 }
-

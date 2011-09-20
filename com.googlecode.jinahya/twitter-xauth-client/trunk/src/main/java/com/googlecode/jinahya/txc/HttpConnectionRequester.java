@@ -35,11 +35,11 @@ import javax.microedition.io.HttpConnection;
 public class HttpConnectionRequester implements Requester {
 
 
-    //@Override
+    @Override
     public InputStream request(final String method, String url,
                                final String parameters,
                                final String authorization)
-        throws Exception {
+        throws IOException, TXCException {
 
 
         final boolean doOutput = method.equals(HttpConnection.POST);
@@ -77,7 +77,7 @@ public class HttpConnectionRequester implements Requester {
                 baos.write(buffer, 0, read);
             }
             baos.flush();
-            
+
             return new ByteArrayInputStream(baos.toByteArray());
 
         } finally {

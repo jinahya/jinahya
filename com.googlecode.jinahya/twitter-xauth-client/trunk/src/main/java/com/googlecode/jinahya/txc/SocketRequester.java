@@ -32,6 +32,7 @@ import java.net.Socket;
 import java.net.URL;
 
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 
@@ -51,11 +52,11 @@ public class SocketRequester extends AbstractSocketRequester {
         SSLSocketFactory.getDefault();
 
 
-    //@Override
+    @Override
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)
-        throws Exception {
+        throws IOException, TXCException {
 
         final URL u = new URL(url);
         final String host = u.getHost();
@@ -65,6 +66,7 @@ public class SocketRequester extends AbstractSocketRequester {
         }
 
         final Socket socket = create(u.getProtocol(), host, port);
+
         try {
 
             if (!socket.isBound()) {
@@ -113,23 +115,17 @@ public class SocketRequester extends AbstractSocketRequester {
             final InputStream input =
                 new BufferedInputStream(socket.getInputStream());
 
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             // ----------------------------------------------------- STATUS LINE
-            line(input, baos);
-            final String statusLine = new String(baos.toByteArray());
+            final String statusLine = readLine(input);
             checkStatusLine(statusLine);
 
             // ------------------------------------------------ RESPONSE HEADERS
-            while (true) {
-                line(input, baos);
-                if (baos.size() == 0) {
-                    break;
-                }
+            while (readLine(input).length() > 0) {
             }
 
             // --------------------------------------------------- RESPONSE BODY
-            baos.reset();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final byte[] buffer = new byte[1024];
             for (int read = -1; (read = input.read(buffer)) != -1;) {
                 baos.write(buffer, 0, read);
@@ -145,12 +141,13 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * 
-     * @param protocol
-     * @param host
-     * @param port
-     * @return
-     * @throws IOException 
+     * Creates a Socket.
+     *
+     * @param protocol protocol
+     * @param host target host
+     * @param port target port
+     * @return a new Socket
+     * @throws IOException if an I/O error occurs.
      */
     protected Socket create(final String protocol, final String host,
                             final int port)
@@ -165,25 +162,27 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * 
-     * @param host
-     * @param port
-     * @return
-     * @throws IOException 
+     * Creates a SSLSocket instance.
+     *
+     * @param host target host
+     * @param port target port
+     * @return a new SSLSocket
+     * @throws IOException if an I/O error occurs.
      */
-    protected Socket createSSL(final String host, final int port)
+    protected SSLSocket createSSL(final String host, final int port)
         throws IOException {
 
-        return DEFAULT_SSL_SOCKET_FACTORY.createSocket();
+        return (SSLSocket) DEFAULT_SSL_SOCKET_FACTORY.createSocket();
     }
 
 
     /**
-     * 
-     * @param host
-     * @param port
-     * @return
-     * @throws IOException 
+     * Create a Socket.
+     *
+     * @param host target host
+     * @param port target port
+     * @return a new Socket
+     * @throws IOException if an I/O error occurs.
      */
     protected Socket create(final String host, final int port)
         throws IOException {
@@ -193,20 +192,22 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * 
-     * @param socket
-     * @throws IOException 
+     * Binds given <code>socket</code>.
+     *
+     * @param socket socket to bind
+     * @throws IOException if an I/O error occurs.
      */
     protected void bind(final Socket socket) throws IOException {
     }
 
 
     /**
-     * 
-     * @param socket
-     * @param host
-     * @param port
-     * @throws IOException 
+     * Connects given <code>socket</code> to specified address.
+     *
+     * @param socket socket
+     * @param host target host
+     * @param port target port
+     * @throws IOException if an I/O error occurs.
      */
     protected void connect(final Socket socket, final String host,
                            final int port)

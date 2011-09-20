@@ -18,8 +18,18 @@
 package com.googlecode.jinahya.txc;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Logger;
+
+import junit.framework.Assert;
+import org.testng.SkipException;
+import org.testng.annotations.Test;
 
 
 /**
@@ -87,18 +97,119 @@ public abstract class ClientTest {
         + ", oauth_signature=\"GUUqqzmvcZ6ZJNNTIc%2FxZghY1Uw%3D\"";
 
 
-    public ClientTest(final Requester requester,
-                      final Authenticator authenticator) {
+    private static final Logger LOGGER =
+        Logger.getLogger("com.googlecode.jinahya.txc");
+
+
+    public ClientTest(final Authenticator authenticator,
+                      final Requester requester) {
         super();
 
-        this.requester = requester;
         this.authenticator = authenticator;
+        this.requester = requester;
     }
 
 
-    private final Requester requester;
+    /**
+     * Creates a client.
+     *
+     * @return a new client.
+     */
+    protected final Client createClient() {
+
+        final String consumerKey = System.getProperty("consumerKey");
+        if (consumerKey == null) {
+            throw new SkipException("no consumerKey");
+        }
+
+        final String consumerSecret = System.getProperty("consumerSecret");
+        if (consumerSecret == null) {
+            throw new SkipException("no consumerSecret");
+        }
+
+        return new Client(consumerKey, consumerSecret, authenticator,
+                          requester);
+    }
 
 
+    protected final void signIn(final Client client)
+        throws IOException, TXCException {
+
+        final String username = System.getProperty("username");
+        if (username == null) {
+            throw new SkipException("no username");
+        }
+
+        final String password = System.getProperty("password");
+        if (password == null) {
+            throw new SkipException("no password");
+        }
+
+        client.signIn(username, password);
+    }
+
+
+    protected static void print(final InputStream response) throws IOException {
+        final BufferedReader reader =
+            new BufferedReader(new InputStreamReader(response, "UTF-8"));
+        try {
+            for (String line = null; (line = reader.readLine()) != null;) {
+                System.out.println(line);
+            }
+        } finally {
+            reader.close();
+        }
+    }
+
+
+    @Test
+    public void testSignIn() throws IOException, TXCException {
+
+        final Client client = createClient();
+        signIn(client);
+        LOGGER.info("signed in");
+        LOGGER.info("userId: " + client.getUserId());
+        LOGGER.info("screenName: " + client.getScreenName());
+
+        Assert.assertTrue(client.isSignedIn());
+
+        final Hashtable<String, String> parameters =
+            new Hashtable<String, String>();
+
+        {
+            final InputStream response = client.GET(
+                "https://api.twitter.com/1/statuses/home_timeline.json",
+                parameters, true);
+            try {
+                print(response);
+            } finally {
+                response.close();
+            }
+        }
+
+        {
+            parameters.clear();
+            parameters.put("status", "hello");
+            final InputStream response = client.POST(
+                "https://api.twitter.com/1/statuses/update.xml", parameters,
+                true);
+            try {
+                print(response);
+            } finally {
+                response.close();
+            }
+        }
+
+        
+        client.signOut();
+        Assert.assertFalse(client.isSignedIn());
+    }
+
+
+    /** authenticator. */
     private final Authenticator authenticator;
-}
 
+
+    /** requester. */
+    private final Requester requester;
+}
