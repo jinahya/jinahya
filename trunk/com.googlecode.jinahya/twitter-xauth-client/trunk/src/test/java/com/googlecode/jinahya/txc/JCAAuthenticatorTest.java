@@ -17,9 +17,6 @@
 
 package com.googlecode.jinahya.txc;
 
-
-import com.googlecode.jinahya.txc.JCAAuthenticator;
-
 /**
  *
  * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>

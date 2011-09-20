@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.txc;
 
 
-import com.googlecode.jinahya.txc.BouncyCastleAuthenticator;
-import com.googlecode.jinahya.txc.HttpURLConnectionRequester;
 import org.testng.annotations.Test;
 
 

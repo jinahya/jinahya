@@ -33,7 +33,8 @@ public interface Authenticator {
      * @param key key
      * @param input input
      * @return signature
-     * @throws Exception if any error occurs.
+     * @throws TXCException if any error occurs.
      */
-    byte[] authenticate(final byte[] key, final byte[] input) throws Exception;
+    byte[] authenticate(final byte[] key, final byte[] input)
+        throws TXCException;
 }

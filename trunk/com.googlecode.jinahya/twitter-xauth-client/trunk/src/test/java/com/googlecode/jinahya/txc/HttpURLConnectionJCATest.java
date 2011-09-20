@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.txc;
 
 
-import com.googlecode.jinahya.txc.JCAAuthenticator;
-import com.googlecode.jinahya.txc.HttpURLConnectionRequester;
 import org.testng.annotations.Test;
 
 

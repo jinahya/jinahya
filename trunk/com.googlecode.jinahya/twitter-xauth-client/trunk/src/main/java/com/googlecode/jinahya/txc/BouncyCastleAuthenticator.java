@@ -33,7 +33,7 @@ public class BouncyCastleAuthenticator implements Authenticator {
 
     //@Override
     public byte[] authenticate(final byte[] key, final byte[] input)
-        throws Exception {
+        throws TXCException {
 
         final Mac mac = new HMac(new SHA1Digest());
         mac.init(new KeyParameter(key));
