@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
 import javax.crypto.Mac;

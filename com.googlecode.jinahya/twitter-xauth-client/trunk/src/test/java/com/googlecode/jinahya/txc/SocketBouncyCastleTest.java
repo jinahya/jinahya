@@ -15,30 +15,24 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
-import java.io.InputStream;
+import com.googlecode.jinahya.txc.BouncyCastleAuthenticator;
+import com.googlecode.jinahya.txc.SocketRequester;
+import org.testng.annotations.Test;
 
 
 /**
- * 
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public interface Requester {
+@Test(enabled = false)
+public class SocketBouncyCastleTest extends ClientTest {
 
 
-    /**
-     * Requests with given arguments.
-     *
-     * @param method request method
-     * @param url request url
-     * @param parameters parameters (already url encoded)
-     * @param authorization authorization header value or null.
-     * @return resource stream
-     * @throws Exception if any error occurs
-     */
-    InputStream request(final String method, final String url,
-                        final String parameters, final String authorization)
-        throws Exception;
+    public SocketBouncyCastleTest() {
+        super(new SocketRequester(), new BouncyCastleAuthenticator());
+    }
 }
+

@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
+import com.googlecode.jinahya.txc.Authenticator;
 import org.apache.commons.codec.binary.Base64;
 
 import org.testng.Assert;
