@@ -15,25 +15,20 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
+
+import com.googlecode.jinahya.txc.JCAAuthenticator;
 
 /**
- * Interface for HMAC-SHA1 authentication.
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
  */
-public interface Authenticator {
+public class JCAAuthenticatorTest extends AuthenticatorTest<JCAAuthenticator> {
 
 
-    /**
-     * Generates HMAC-SAH1 signature with given <code>key</code> and
-     * <code>input</code>.
-     *
-     * @param key key
-     * @param input input
-     * @return signature
-     * @throws Exception if any error occurs.
-     */
-    byte[] authenticate(final byte[] key, final byte[] input) throws Exception;
+    public JCAAuthenticatorTest() {
+        super(new JCAAuthenticator());
+    }
 }
+

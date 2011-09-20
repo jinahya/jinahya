@@ -15,18 +15,21 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class ClientTest {
+public final class TestProperties {
 
 
     protected static final String METHOD = "GET";
@@ -87,18 +90,38 @@ public abstract class ClientTest {
         + ", oauth_signature=\"GUUqqzmvcZ6ZJNNTIc%2FxZghY1Uw%3D\"";
 
 
-    public ClientTest(final Requester requester,
-                      final Authenticator authenticator) {
-        super();
+    private static final Properties PROPERTIES = new Properties();
 
-        this.requester = requester;
-        this.authenticator = authenticator;
+
+    static {
+        final InputStream stream =
+            TestProperties.class.getResourceAsStream("properties.xml");
+        if (stream != null) {
+            try {
+                try {
+                    PROPERTIES.loadFromXML(stream);
+                } finally {
+                    stream.close();
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace(System.err);
+            }
+        }
     }
 
 
-    private final Requester requester;
+    public static boolean isEmpty() {
+        return PROPERTIES.isEmpty();
+    }
 
 
-    private final Authenticator authenticator;
+    public static String getProperty(final String key) {
+        return PROPERTIES.getProperty(key);
+    }
+
+
+    private TestProperties() {
+        super();
+    }
 }
 

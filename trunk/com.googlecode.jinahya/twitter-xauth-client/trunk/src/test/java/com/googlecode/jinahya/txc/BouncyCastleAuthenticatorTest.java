@@ -15,18 +15,21 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
+
+import com.googlecode.jinahya.txc.BouncyCastleAuthenticator;
 
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:support@minigate.net">Minigate Co., Ltd.</a>
  */
-public class SocketJCATest extends ClientTest {
+public class BouncyCastleAuthenticatorTest
+    extends AuthenticatorTest<BouncyCastleAuthenticator> {
 
 
-    public SocketJCATest() {
-        super(new SocketRequester(), new JCAAuthenticator());
+    public BouncyCastleAuthenticatorTest() {
+        super(new BouncyCastleAuthenticator());
     }
 }
 

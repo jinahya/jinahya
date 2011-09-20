@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
+import com.googlecode.jinahya.txc.Encode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

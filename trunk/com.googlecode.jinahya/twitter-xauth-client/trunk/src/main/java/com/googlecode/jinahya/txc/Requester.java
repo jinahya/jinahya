@@ -15,22 +15,30 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
-import org.testng.annotations.Test;
+import java.io.InputStream;
 
 
 /**
- *
+ * 
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-@Test(enabled = false)
-public class HttpURLConnectionJCATest extends ClientTest {
+public interface Requester {
 
 
-    public HttpURLConnectionJCATest() {
-        super(new HttpURLConnectionRequester(), new JCAAuthenticator());
-    }
+    /**
+     * Requests with given arguments.
+     *
+     * @param method request method
+     * @param url request url
+     * @param parameters parameters (already url encoded)
+     * @param authorization authorization header value or null.
+     * @return resource stream
+     * @throws Exception if any error occurs
+     */
+    InputStream request(final String method, final String url,
+                        final String parameters, final String authorization)
+        throws Exception;
 }
-

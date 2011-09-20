@@ -15,9 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.twitter.xauth;
+package com.googlecode.jinahya.txc;
 
 
+import com.googlecode.jinahya.txc.JCAAuthenticator;
+import com.googlecode.jinahya.txc.HttpURLConnectionRequester;
 import org.testng.annotations.Test;
 
 
@@ -26,11 +28,11 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 @Test(enabled = false)
-public class SocketBouncyCastleTest extends ClientTest {
+public class HttpURLConnectionJCATest extends ClientTest {
 
 
-    public SocketBouncyCastleTest() {
-        super(new SocketRequester(), new BouncyCastleAuthenticator());
+    public HttpURLConnectionJCATest() {
+        super(new HttpURLConnectionRequester(), new JCAAuthenticator());
     }
 }
 
