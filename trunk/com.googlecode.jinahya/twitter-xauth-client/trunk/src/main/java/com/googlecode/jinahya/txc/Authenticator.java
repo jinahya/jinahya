@@ -37,8 +37,8 @@ public interface Authenticator {
      * @param input input
      * @return signature
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if any error occurs.
+     * @throws XTweetException if any error occurs.
      */
     byte[] authenticate(final byte[] key, final byte[] input)
-        throws IOException, TXCException;
+        throws IOException, XTweetException;
 }

@@ -39,9 +39,9 @@ public interface Requester {
      * @param authorization authorization header value or null.
      * @return resource stream
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if any error occurs
+     * @throws XTweetException if any error occurs
      */
     InputStream request(final String method, final String url,
                         final String parameters, final String authorization)
-        throws IOException, TXCException;
+        throws IOException, XTweetException;
 }

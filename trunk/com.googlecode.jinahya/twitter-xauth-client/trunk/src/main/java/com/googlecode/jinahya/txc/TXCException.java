@@ -23,7 +23,7 @@ package com.googlecode.jinahya.txc;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TXCException extends Exception {
+public class XTweetException extends Exception {
 
 
     /** GENERATED. */
@@ -35,7 +35,7 @@ public class TXCException extends Exception {
      *
      * @param cause cause
      */
-    public TXCException(final Throwable cause) {
+    public XTweetException(final Throwable cause) {
         super(cause);
     }
 
@@ -46,7 +46,7 @@ public class TXCException extends Exception {
      * @param message message
      * @param cause cause
      */
-    public TXCException(final String message, final Throwable cause) {
+    public XTweetException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -56,7 +56,7 @@ public class TXCException extends Exception {
      *
      * @param message message
      */
-    public TXCException(final String message) {
+    public XTweetException(final String message) {
         super(message);
     }
 }

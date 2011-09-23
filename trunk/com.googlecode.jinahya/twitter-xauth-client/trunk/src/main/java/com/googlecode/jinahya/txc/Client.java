@@ -82,10 +82,10 @@ public class Client {
      * @param username username
      * @param password password
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs.
+     * @throws XTweetException if an error occurs.
      */
     public final void signIn(final String username, final String password)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         if (username == null) {
             throw new NullPointerException("null username");
@@ -161,12 +161,12 @@ public class Client {
      * @param requiresAuthentication authorize flag
      * @return resource stream
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs.
+     * @throws XTweetException if an error occurs.
      */
     public final InputStream GET(final String url,
                                  final Hashtable<String, String> parameters,
                                  final boolean requiresAuthentication)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         return request("GET", url, parameters, requiresAuthentication);
     }
@@ -180,12 +180,12 @@ public class Client {
      * @param requiresAuthentication authorize flag
      * @return resource stream
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if any error occurs.
+     * @throws XTweetException if any error occurs.
      */
     public final InputStream POST(final String url,
                                   final Hashtable<String, String> parameters,
                                   final boolean requiresAuthentication)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         return request("POST", url, parameters, requiresAuthentication);
     }
@@ -200,12 +200,12 @@ public class Client {
      * @param requiresAuthentication flag for authentication requirement
      * @return resource stream
      * @thrwos IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs.
+     * @throws XTweetException if an error occurs.
      */
     public InputStream request(final String method, final String url,
                                final Hashtable<String, String> parameters,
                                final boolean requiresAuthentication)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -244,12 +244,12 @@ public class Client {
      * @param requiresAuthentication flag for authentication requirement
      * @return resource stream
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs
+     * @throws XTweetException if an error occurs
      */
     private InputStream request(final String method, final String url,
                                 final Vector<String> parameters,
                                 final boolean requiresAuthentication)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -289,13 +289,13 @@ public class Client {
      * @param tokenSecret token secret
      * @return resource stream
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs
+     * @throws XTweetException if an error occurs
      */
     private InputStream request(final String method, final String url,
                                 final Vector<String> parameters,
                                 final boolean authorize, final String token,
                                 final String tokenSecret)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -404,12 +404,12 @@ public class Client {
      * @param tokenSecret token secret
      * @return OAuth Authorization header value
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs
+     * @throws XTweetException if an error occurs
      */
     private String authorize(final String method, final String url,
                              final Vector<String> parameters,
                              final String token, final String tokenSecret)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         if (method == null) {
             throw new NullPointerException("null method");
@@ -501,12 +501,12 @@ public class Client {
      * @param tokenSecret token secret
      * @return signature
      * @throws IOException if an I/O error occurs.
-     * @throws TXCException if an error occurs
+     * @throws XTweetException if an error occurs
      */
     private String sign(final String method, final String url,
                         final Vector<String> parameters,
                         final String tokenSecret)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         final String[] array = new String[parameters.size()];
 

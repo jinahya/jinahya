@@ -54,7 +54,7 @@ public class SocketConnectionRequester extends AbstractSocketRequester {
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         final int firstColonIndex = url.indexOf(':');
         String protocol = url.substring(0, firstColonIndex);

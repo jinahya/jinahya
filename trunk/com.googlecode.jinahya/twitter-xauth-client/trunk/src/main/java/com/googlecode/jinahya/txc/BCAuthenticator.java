@@ -38,7 +38,7 @@ public class BCAuthenticator implements Authenticator {
 
     @Override
     public byte[] authenticate(final byte[] key, final byte[] input)
-        throws TXCException {
+        throws XTweetException {
 
         synchronized (MAC) {
             MAC.reset();
