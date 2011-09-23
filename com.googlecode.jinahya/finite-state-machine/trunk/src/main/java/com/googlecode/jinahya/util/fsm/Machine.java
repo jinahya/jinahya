@@ -134,14 +134,17 @@ public abstract class Machine {
 
         // prepare
         for (Entry<String, Task> entry : tasks.entrySet()) {
-            if (!entry.getValue().matches(transition)) {
-                continue;
+            if (entry.getValue().matches(transition)) {
+                try {
+                    resolver.add(entry.getKey(), (String) null);
+                } catch (DependencyResolverException dre) {
+                    throw new FSMException(dre);
+                }
             }
-            try {
-                resolver.add(entry.getKey(), (String) null);
-            } catch (DependencyResolverException dre) {
-                throw new FSMException(dre);
-            }
+        }
+
+        // prepare
+        for (Entry<String, Task> entry : tasks.entrySet()) {
             buffer.delete(0, buffer.length());
             buffer.append(entry.getKey());
             entry.getValue().prepare(context);
