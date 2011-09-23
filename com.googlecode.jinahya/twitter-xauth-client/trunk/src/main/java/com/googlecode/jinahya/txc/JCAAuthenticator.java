@@ -51,7 +51,7 @@ public class JCAAuthenticator implements Authenticator {
 
     @Override
     public byte[] authenticate(final byte[] key, final byte[] input)
-        throws TXCException {
+        throws XTweetException {
 
         synchronized (MAC) {
             MAC.reset();
@@ -59,7 +59,7 @@ public class JCAAuthenticator implements Authenticator {
                 MAC.init(new SecretKeySpec(key, ALGORITHM));
                 return MAC.doFinal(input);
             } catch (InvalidKeyException ike) {
-                throw new TXCException(ike);
+                throw new XTweetException(ike);
             }
         }
     }

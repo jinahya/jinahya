@@ -36,7 +36,7 @@ public class HttpURLConnectionRequester implements Requester {
     public InputStream request(final String method, String url,
                                final String parameters,
                                final String authorization)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
 
         final boolean doOutput = method.equals("POST");

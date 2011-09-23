@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.util.fsm;
 
 
-import java.util.Map;
-
-
 /**
  * Activity Machine.
  *
@@ -32,11 +29,11 @@ public class ActivityMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param context task context
+     * @param taskContext task context
      */
-    public ActivityMachine(final Map<String, Task> tasks) {
+    public ActivityMachine(final TaskContext taskContext) {
 
-        super(tasks);
+        super(taskContext);
     }
 
 

@@ -133,7 +133,7 @@ public abstract class ClientTest {
 
 
     protected final void signIn(final Client client)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         final String username = System.getProperty("username");
         if (username == null) {
@@ -163,7 +163,7 @@ public abstract class ClientTest {
 
 
     @Test
-    public void testSignIn() throws IOException, TXCException {
+    public void testSignIn() throws IOException, XTweetException {
 
         final Client client = createClient();
         signIn(client);

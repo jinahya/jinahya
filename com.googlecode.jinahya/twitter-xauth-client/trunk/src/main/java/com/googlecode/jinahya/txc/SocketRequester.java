@@ -56,7 +56,7 @@ public class SocketRequester extends AbstractSocketRequester {
     public InputStream request(final String method, final String url,
                                final String parameters,
                                final String authorization)
-        throws IOException, TXCException {
+        throws IOException, XTweetException {
 
         final URL u = new URL(url);
         final String host = u.getHost();

@@ -19,7 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
- * States.
+ * States for Activity.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
