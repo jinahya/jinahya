@@ -84,6 +84,11 @@ final class TransitionContextFactory {
                     return;
                 }
 
+                if (!resolver.contains(nextTaskId, null)) {
+                    throw new FSMException(
+                        "unknown next taskId: " + nextTaskId);
+                }
+                
                 try {
                     resolver.add(nextTaskId, taskId);
                 } catch (DependencyResolverException dre) {
@@ -103,6 +108,11 @@ final class TransitionContextFactory {
                 final String taskId = buffer.toString();
                 if (taskId.isEmpty()) {
                     return;
+                }
+
+                if (!resolver.contains(previousTaskId, null)) {
+                    throw new FSMException(
+                        "unknown previous taskId: " + previousTaskId);
                 }
 
                 try {
