@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util.fsm.a;
 
 import com.googlecode.jinahya.util.fsm.AbstractTask;
 import com.googlecode.jinahya.util.fsm.FSMException;
+import com.googlecode.jinahya.util.fsm.PreparationContext;
 import com.googlecode.jinahya.util.fsm.TransitionContext;
 import com.googlecode.jinahya.util.fsm.TransitionMatcher;
 
@@ -40,7 +41,7 @@ public class A0 extends AbstractTask {
 
 
     @Override
-    public void prepare(final TransitionContext context) throws FSMException {
+    public void prepare(final PreparationContext context) throws FSMException {
         System.out.println("Task(" + getId() + ").prepare(" + context + ")");
 
         synchronized (this) {

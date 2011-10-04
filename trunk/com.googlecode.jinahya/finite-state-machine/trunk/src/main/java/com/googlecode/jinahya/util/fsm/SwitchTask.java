@@ -61,7 +61,7 @@ public abstract class SwitchTask extends AbstractTask {
 
 
     @Override
-    public void prepare(final TransitionContext context) throws FSMException {
+    public void prepare(final PreparationContext context) throws FSMException {
         if (on) {
             prepareOff(context);
         } else {

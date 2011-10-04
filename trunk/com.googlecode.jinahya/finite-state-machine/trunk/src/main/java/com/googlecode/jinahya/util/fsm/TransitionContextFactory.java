@@ -62,7 +62,7 @@ final class TransitionContextFactory {
             Collections.synchronizedMap(new HashMap<String, Object>());
 
 
-        return new TransitionContext() {
+        return new PreparationContext() {
 
 
             @Override
@@ -88,7 +88,7 @@ final class TransitionContextFactory {
                     throw new FSMException(
                         "unknown next taskId: " + nextTaskId);
                 }
-                
+
                 try {
                     resolver.add(nextTaskId, taskId);
                 } catch (DependencyResolverException dre) {
@@ -141,7 +141,11 @@ final class TransitionContextFactory {
                     throw new NullPointerException("null name");
                 }
 
-                return properties.put(name, value);
+                if (value == null) {
+                    return properties.remove(name);
+                } else {
+                    return properties.put(name, value);
+                }
             }
         };
     }

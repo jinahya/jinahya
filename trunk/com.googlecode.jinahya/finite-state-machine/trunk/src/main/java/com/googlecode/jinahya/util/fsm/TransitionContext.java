@@ -35,30 +35,6 @@ public interface TransitionContext {
 
 
     /**
-     * Makes sure the task calling this method be performed after the task
-     * identified by <code>sourceTaskId</code>.
-     *
-     * @param previousTaskId the id of task which must be performed before this
-     *        task
-     * @throws FSMException if sourceTaskId is unknown or illegal dependency
-     *         detected.
-     */
-    void setPerformAfter(String previousTaskId) throws FSMException;
-
-
-    /**
-     * Make sure the task calling this method be performed before the task
-     * identified by <code>targetTaskId</code>.
-     *
-     * @param nextTaskId the id of task which must be performed after this
-     *        task
-     * @throws FSMException if targetTaskId is unknown or illegal dependency
-     *         detected
-     */
-    void setPerformBefore(String nextTaskId) throws FSMException;
-
-
-    /**
      * Returns the property value mapped to given <code>name</code>.
      *
      * @param name property name

@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import android.app.Activity;
+
+
 /**
  * States for Activity.
  *
@@ -27,7 +30,9 @@ public enum ActivityState implements State {
 
 
     /**
-     * 
+     * State when {@link Activity#onCreate(android.os.Bundle)} called from
+     * {@link #UNKNOWN} or {@link Activity#onStop()} called from
+     * {@link #ACTIVE}.
      */
     STOPPED,
     /**
@@ -35,15 +40,15 @@ public enum ActivityState implements State {
      */
     PAUSED,
     /**
-     * 
+     * State when {@link Activity#onResume()} called.
      */
     ACTIVE,
     /**
-     * 
+     * State when {@link Activity#onRestart()} called.
      */
     RESTARTING,
     /**
-     * 
+     * State when {@link Activity#onDestroy()} called.
      */
     DESTROYED;
 
@@ -65,4 +70,3 @@ public enum ActivityState implements State {
         return "ActivityState(" + getName() + "(" + getCode() + "))";
     }
 }
-
