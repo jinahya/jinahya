@@ -20,6 +20,7 @@ package com.googlecode.jinahya.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

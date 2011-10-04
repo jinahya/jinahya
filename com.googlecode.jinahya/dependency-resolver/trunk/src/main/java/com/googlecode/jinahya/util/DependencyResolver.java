@@ -109,66 +109,6 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
-    /*
-     * Adds direct dependencies from <code>source</code> to each of
-     * <code>targets</code>.
-     *
-     * @param source source; may not be null
-     * @param targets targets; may not be null; each element may be null
-     * @throws DependencyResolverException if an error occurs
-    public void addDependencies(final T source, final T... targets)
-    throws DependencyResolverException {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    if (targets == null) {
-    throw new NullPointerException("null targets");
-    }
-    
-    for (T target : targets) {
-    addDependency(source, target);
-    }
-    }
-     */
-    /*
-     * Adds a direct dependency from given <code>source</code> to specified
-     * <code>target</code>.
-     *
-     * @param source source; may not be null
-     * @param target target; may be null
-     * @throws DependencyResolverException if failed to add dependency.
-    public void addDependency(final T source, final T target)
-    throws DependencyResolverException {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    if (source.equals(target)) {
-    throw new IllegalArgumentException(
-    "source(" + source + ") is equals to target(" + target + ")");
-    }
-    
-    if (target != null && hasDependency(target, source)) {
-    throw new CyclicDependencyException(source, target);
-    }
-    
-    List<T> targets = map.get(source);
-    
-    if (targets == null) {
-    targets = new ArrayList<T>();
-    map.put(source, targets);
-    }
-    
-    if (targets.contains(target)) {
-    return;
-    }
-    
-    targets.add(target);
-    }
-     */
     /**
      * Adds dependencies from <code>source</code> to each of
      * <code>targets</code>.
@@ -212,27 +152,6 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
-    /*
-     * Removes direct dependencies from specified <code>source</code> to each of
-     * specified <code>targets</code>.
-     *
-     * @param source source; may not be null
-     * @param targets targets; may not be null; each element may be null
-    public void removeDependencies(final T source, final T... targets) {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    if (targets == null) {
-    throw new NullPointerException("null targets");
-    }
-    
-    for (T target : targets) {
-    removeDependency(source, target);
-    }
-    }
-     */
     /**
      * Removes direct dependencies from <code>source</code> to each of
      * <code>targets</code>.
@@ -265,29 +184,6 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
-    /*
-     * Remove a direct dependency from given <code>source</code> to specified
-     * <code>target</code>.
-     *
-     * @param source source; may not be null
-     * @param target target; may be null
-    public void removeDependency(final T source, final T target) {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    final List<T> targets = map.get(source);
-    
-    if (targets == null) {
-    return;
-    }
-    
-    if (targets.remove(target) && targets.isEmpty()) {
-    map.remove(source);
-    }
-    }
-     */
     /**
      * Check if all of specified <code>targets</code> has a direct or indirect
      * dependency from given <code>source</code>.
@@ -385,67 +281,6 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
-    /*
-     * Checks if given <code>source</code> has direct or indirect dependencies
-     * to all of <code>targets</code>.
-     *
-     * @param source source; may not be null
-     * @param targets targets; may not be null; each element may be null
-     * @return true if all targets are dependent from source; false otherwise
-    public boolean hasDependencies(final T source, final T... targets) {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    if (targets == null) {
-    throw new NullPointerException("null targets");
-    }
-    
-    for (T target : targets) {
-    if (!hasDependency(source, target)) {
-    return false;
-    }
-    }
-    
-    return true;
-    }
-     */
-    /*
-     * Checks if there is any direct or indirect dependency from
-     * <code>source</code> to <code>target</code>.
-     *
-     * @param source source; may not be null
-     * @param target target; may be null
-     * @return true if there is a dependency; false otherwise
-    public boolean hasDependency(final T source, final T target) {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    final List<T> list = map.get(source);
-    
-    if (list == null) {
-    return false;
-    }
-    
-    if (list.contains(target)) {
-    return true;
-    }
-    
-    for (T auxiliary : list) {
-    if (auxiliary == null) {
-    continue;
-    }
-    if (hasDependency(auxiliary, target)) {
-    return true;
-    }
-    }
-    
-    return false;
-    }
-     */
     /**
      * Finds all direct or indirect paths from given <code>source</code> to
      * specified <code>target</code>.
@@ -499,57 +334,6 @@ public class DependencyResolver<T> implements Serializable {
     }
 
 
-    /*
-     * Finds all direct or indirect dependency paths from given
-     * <code>source</code> to specified <code>target</code>.
-     *
-     * @param source source
-     * @param target target
-     * @return dependency paths from <code>source</code> to <code>target</code>.
-    public List<List<T>> getDependencyPaths(final T source, final T target) {
-    
-    if (source == null) {
-    throw new NullPointerException("null source");
-    }
-    
-    if (source.equals(target)) {
-    throw new IllegalArgumentException(
-    "source(" + source + ") is equals to target(" + target + ")");
-    }
-    
-    final List<List<T>> paths = new ArrayList<List<T>>();
-    
-    final List<T> targets = map.get(source);
-    
-    if (targets == null) {
-    return paths;
-    }
-    
-    for (T auxiliary : targets) {
-    
-    if ((auxiliary == null && target == null)
-    || auxiliary.equals(target)) {
-    
-    final List<T> path = new LinkedList<T>();
-    path.add(source);
-    path.add(auxiliary);
-    paths.add(path);
-    continue;
-    }
-    
-    if (auxiliary == null) {
-    continue;
-    }
-    
-    for (List<T> path : getDependencyPaths(auxiliary, target)) {
-    path.add(0, source);
-    paths.add(path);
-    }
-    }
-    
-    return paths;
-    }
-     */
     /**
      * Returns a single group of all dependencies in order.
      *
