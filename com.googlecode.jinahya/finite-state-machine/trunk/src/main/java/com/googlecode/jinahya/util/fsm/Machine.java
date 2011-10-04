@@ -147,7 +147,7 @@ public abstract class Machine {
         for (Entry<String, Task> entry : tasks.entrySet()) {
             buffer.delete(0, buffer.length());
             buffer.append(entry.getKey());
-            entry.getValue().prepare(context);
+            entry.getValue().prepare((PreparationContext) context);
         }
         buffer.delete(0, buffer.length());
 
@@ -230,7 +230,11 @@ public abstract class Machine {
             throw new NullPointerException("null name");
         }
 
-        return properties.put(name, value);
+        if (value == null) {
+            return properties.remove(name);
+        } else {
+            return properties.put(name, value);
+        }
     }
 
 
@@ -352,13 +356,13 @@ public abstract class Machine {
 
 
     /** properties. */
-    private Map<String, Object> properties =
+    private final Map<String, Object> properties =
         Collections.synchronizedMap(new HashMap<String, Object>());
 
 
     /** listeners. */
-    private List<TransitionListener> listeners =
-        new ArrayList<TransitionListener>();
+    private final List<TransitionListener> listeners =
+        Collections.synchronizedList(new ArrayList<TransitionListener>());
 
 
     /** property change support. */

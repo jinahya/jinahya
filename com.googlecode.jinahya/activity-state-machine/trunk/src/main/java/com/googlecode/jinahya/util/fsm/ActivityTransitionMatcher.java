@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util.fsm;
 
 
+import android.app.Activity;
+
 /**
  * Transition matchers.
  *
@@ -27,7 +29,8 @@ public enum ActivityTransitionMatcher implements TransitionMatcher {
 
 
     /**
-     * 
+     * Matcher for the transition of
+     * {@link Activity#onCreate(android.os.Bundle)}.
      */
     ON_CREATE {
 

@@ -49,7 +49,7 @@ public interface Task {
      * @param context transition context
      * @throws FSMException if an error occurs.
      */
-    void prepare(TransitionContext context) throws FSMException;
+    void prepare(PreparationContext context) throws FSMException;
 
 
     /**
