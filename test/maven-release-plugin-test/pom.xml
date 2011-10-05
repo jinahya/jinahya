@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>test</groupId>
   <artifactId>maven-release-plugin-test</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <packaging>jar</packaging>
 
   <name>maven-release-plugin-test</name>
@@ -37,9 +36,9 @@
   </build>
 
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/maven-release-plugin-test</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/maven-release-plugin-test</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/${project.groupId}/maven-release-plugin-test/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/test/maven-release-plugin-test-1.1</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/test/maven-release-plugin-test-1.1</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/test/maven-release-plugin-test-1.1</url>
   </scm> 
 
 </project>
