@@ -32,7 +32,7 @@
         <configuration>
           <tagBase>https://jinahya.googlecode.com/svn/tags</tagBase>
         </configuration>
-      </plugins>
+      </plugin>
     </plugins>
   </build>
 
