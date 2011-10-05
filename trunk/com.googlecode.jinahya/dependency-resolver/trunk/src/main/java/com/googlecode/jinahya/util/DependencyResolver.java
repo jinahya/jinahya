@@ -105,6 +105,8 @@ public class DependencyResolver<T> implements Serializable {
             public synchronized void clear() {
                 super.clear();
             }
+
+
         };
     }
 
@@ -128,6 +130,10 @@ public class DependencyResolver<T> implements Serializable {
             throw new NullPointerException("null targets");
         }
 
+        if (targets.length == 0) {
+            throw new IllegalArgumentException("empty targets");
+        }
+
         List<T> list = map.get(source);
 
         for (T target : targets) {
@@ -135,7 +141,6 @@ public class DependencyResolver<T> implements Serializable {
             if (source.equals(target)) {
                 throw new DependencyResolverException("self dependency");
             }
-
             if (target != null && contains(target, source)) {
                 throw new CyclicDependencyException(source, target);
             }
@@ -482,4 +487,7 @@ public class DependencyResolver<T> implements Serializable {
 
     /** map. */
     private final Map<T, List<T>> map = new HashMap<T, List<T>>();
+
+
 }
+
