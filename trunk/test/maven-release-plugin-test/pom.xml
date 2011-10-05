@@ -3,7 +3,7 @@
 
   <groupId>test</groupId>
   <artifactId>maven-release-plugin-test</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>maven-release-plugin-test</name>
@@ -36,9 +36,9 @@
   </build>
 
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/test/maven-release-plugin-test-1.1</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/test/maven-release-plugin-test-1.1</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/test/maven-release-plugin-test-1.1</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/test/maven-release-plugin-test</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/test/maven-release-plugin-test</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/test/maven-release-plugin-test/</url>
   </scm> 
 
 </project>
