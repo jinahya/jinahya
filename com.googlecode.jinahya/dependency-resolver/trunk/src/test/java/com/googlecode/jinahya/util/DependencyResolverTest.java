@@ -45,9 +45,20 @@ public class DependencyResolverTest {
             // expected
         }
 
-        resolver.add("source", (String) null);
+        try {
+            resolver.add(null, (String[]) null);
+            Assert.fail("passed: add() with null targets");
+        } catch (NullPointerException npe) {
+            // expected
+        }
 
-        resolver.add("source", "target");
+        resolver.add("source", (String) null);
+        Assert.assertTrue(resolver.contains("source", (String) null));
+
+        for (int i = 0; i < 10; i++) {
+            resolver.add("source", "target" + i);
+            Assert.assertTrue(resolver.contains("source", "target" + i));
+        }
     }
 
 

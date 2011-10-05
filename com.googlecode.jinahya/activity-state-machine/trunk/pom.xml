@@ -115,6 +115,18 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <!--detectLinks>true</detectLinks-->
+          <links>
+            <link>http://download.oracle.com/javase/7/docs/api/</link>
+            <link>http://www.androidjavadoc.com/2.3/</link>
+            <link>http://testng.org/javadocs/</link>
+          </links>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <executions>
           <execution>
@@ -130,7 +142,6 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
-                <detectLinks>true</detectLinks>
                 <links>
                   <link>http://download.oracle.com/javase/7/docs/api/</link>
                   <link>http://www.androidjavadoc.com/2.3/</link>
