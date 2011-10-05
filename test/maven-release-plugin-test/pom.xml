@@ -37,9 +37,9 @@
   </build>
 
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/maven-release-plugin-test/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/maven-release-plugin-test/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/maven-release-plugin-test/trunk/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/maven-release-plugin-test</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/maven-release-plugin-test</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/maven-release-plugin-test/</url>
   </scm> 
 
 </project>
