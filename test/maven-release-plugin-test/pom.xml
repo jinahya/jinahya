@@ -30,16 +30,16 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.2.1</version>
         <configuration>
-          <tagBase>https://jinahya.googlecode.com/svn/tags</tagBase>
+          <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/test/maven-release-plugin-test</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/test/maven-release-plugin-test</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/test/maven-release-plugin-test/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/maven-release-plugin-test</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/maven-release-plugin-test</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/${project.groupId}/maven-release-plugin-test/</url>
   </scm> 
 
 </project>
