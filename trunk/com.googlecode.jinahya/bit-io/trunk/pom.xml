@@ -1,13 +1,11 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.0-alpha-7-SNAPSHOT</version>
+  <version>1.0-alpha-7</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -197,9 +195,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/${project.groupId}/${project.artifactId}/trunk</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7</url>
   </scm>
   <prerequisites />
   <repositories />
