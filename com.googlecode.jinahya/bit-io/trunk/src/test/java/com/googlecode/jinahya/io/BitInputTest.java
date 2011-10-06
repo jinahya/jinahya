@@ -57,7 +57,7 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final int actual = bi.readUnsignedByte(length);
-            bi.aling(1);
+            bi.align(1);
 
             Assert.assertEquals(actual, expected);
         }
@@ -81,7 +81,7 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final int actual = bi.readUnsignedShort(length);
-            bi.aling(2);
+            bi.align(2);
 
             Assert.assertEquals(actual, expected);
         }
@@ -105,7 +105,7 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final int actual = bi.readUnsignedInt(length);
-            bi.aling(4);
+            bi.align(4);
 
             Assert.assertEquals(actual, expected);
         }
@@ -129,10 +129,31 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final int actual = bi.readInt(length);
-            bi.aling(4);
+            bi.align(4);
 
             Assert.assertEquals(actual, expected);
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadFloat() throws IOException {
+
+        final float expected = RANDOM.nextFloat();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeFloat(expected);
+        dos.flush();
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput bi = new BitInput(bais);
+        final float actual = bi.readFloat();
+        Assert.assertEquals(bi.align(), 0);
+
+        Assert.assertEquals(actual, expected);
     }
 
 
@@ -153,7 +174,7 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final long actual = bi.readUnsignedLong(length);
-            bi.aling(8);
+            bi.align(8);
 
             Assert.assertEquals(actual, expected);
         }
@@ -177,10 +198,31 @@ public class BitInputTest {
                 new ByteArrayInputStream(baos.toByteArray());
             final BitInput bi = new BitInput(bais);
             final long actual = bi.readLong(length);
-            bi.aling(8);
+            bi.align(8);
 
             Assert.assertEquals(actual, expected);
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testReadDouble() throws IOException {
+
+        final double expected = RANDOM.nextDouble();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeDouble(expected);
+        dos.flush();
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput bi = new BitInput(bais);
+        final double actual = bi.readDouble();
+        Assert.assertEquals(bi.align(), 0);
+
+        Assert.assertEquals(actual, expected);
     }
 
 
@@ -200,9 +242,11 @@ public class BitInputTest {
             new ByteArrayInputStream(baos.toByteArray());
         final BitInput bi = new BitInput(bais);
         final String actual = bi.readUTF();
-        bi.aling(1);
+        bi.align(1);
 
         Assert.assertEquals(actual, expected);
     }
+
+
 }
 

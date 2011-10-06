@@ -154,11 +154,12 @@ public class BitOutput {
         throws IOException {
 
         if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
         if (length >= 0x20) {
-            throw new IllegalArgumentException("length(" + length + ") >= 32");
+            throw new IllegalArgumentException(
+                "length(" + length + ") >= 0x20");
         }
 
         if ((value >> length) != 0x00) {
@@ -221,6 +222,28 @@ public class BitOutput {
         for (int i = quotient - 1; i >= 0; i--) {
             writeUnsignedShort(0x10, value >> (0x10 * i));
         }
+    }
+
+
+    /**
+     * Writes a 32-bit signed integer.
+     *
+     * @param value a 32-bit signed integer
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeInt(final int value) throws IOException {
+        writeInt(0x20, value);
+    }
+
+
+    /**
+     * Writes a float value.
+     *
+     * @param value the float value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeFloat(final float value) throws IOException {
+        writeInt(Float.floatToRawIntBits(value));
     }
 
 
@@ -311,6 +334,28 @@ public class BitOutput {
 
 
     /**
+     * Writes a 64-bit signed long value.
+     *
+     * @param value the value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeLong(final long value) throws IOException {
+        writeLong(0x40, value);
+    }
+
+
+    /**
+     * Writes a double value.
+     *
+     * @param value the value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void writeDouble(final double value) throws IOException {
+        writeLong(Double.doubleToRawLongBits(value));
+    }
+
+
+    /**
      * Writes given <code>bytes</code>.
      *
      * @param bytes bytes to write
@@ -336,7 +381,7 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     public final void writeBytes(final byte[] bytes, final int offset,
-                                 final int length)
+        final int length)
         throws IOException {
 
         if (bytes == null) {
@@ -440,19 +485,27 @@ public class BitOutput {
      * Aligns to given <code>length</code> as bytes.
      *
      * @param length the number of bytes to align
+     * @return the bits padded to align
      * @throws IOException if an I/O error occurs.
      */
-    public final void aling(final int length) throws IOException {
+    public final int align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
+        int bits = 0;
+
         if (index > 0) { // bit index to write
+            bits = (8 - index);
             writeUnsignedByte(8 - index, 0);
         }
 
         int octets = count % length;
+
+        if (octets == 0) {
+            return bits;
+        }
 
         if (octets > 0) {
             octets = length - octets;
@@ -462,7 +515,21 @@ public class BitOutput {
 
         for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0);
+            bits += 8;
         }
+
+        return bits;
+    }
+
+
+    /**
+     * Align to 1 byte.
+     *
+     * @return the number of bits padded to align.
+     * @throws IOException if an I/O error occurs.
+     */
+    public final int align() throws IOException {
+        return align(1);
     }
 
 
@@ -492,5 +559,7 @@ public class BitOutput {
     void setCount(int count) {
         this.count = count;
     }
+
+
 }
 

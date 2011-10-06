@@ -50,7 +50,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeUnsignedByte(length, expected);
-            bo.aling(1);
+            bo.align(1);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -74,7 +74,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeUnsignedShort(length, expected);
-            bo.aling(2);
+            bo.align(2);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -98,7 +98,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeUnsignedInt(length, expected);
-            bo.aling(4);
+            bo.align(4);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -122,7 +122,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeInt(length, expected);
-            bo.aling(4);
+            bo.align(4);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -137,6 +137,27 @@ public class BitOutputTest {
 
 
     @Test(invocationCount = 128)
+    public void testWriteFloat() throws IOException {
+
+        final float expected = RANDOM.nextFloat();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(baos);
+        bo.writeFloat(expected);
+        Assert.assertEquals(bo.align(), 0);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final DataInputStream dis = new DataInputStream(bais);
+
+        final float actual = dis.readFloat();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
     public void testWriteUnsignedLong() throws IOException {
 
         for (int length = 1; length < 64; length++) {
@@ -146,7 +167,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeUnsignedLong(length, expected);
-            bo.aling(8);
+            bo.align(8);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -170,7 +191,7 @@ public class BitOutputTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final BitOutput bo = new BitOutput(baos);
             bo.writeLong(length, expected);
-            bo.aling(8);
+            bo.align(8);
             baos.flush();
 
             final ByteArrayInputStream bais =
@@ -185,6 +206,27 @@ public class BitOutputTest {
 
 
     @Test(invocationCount = 128)
+    public void testWriteDouble() throws IOException {
+
+        final double expected = RANDOM.nextFloat();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(baos);
+        bo.writeDouble(expected);
+        Assert.assertEquals(bo.align(), 0);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final DataInputStream dis = new DataInputStream(bais);
+
+        final double actual = dis.readDouble();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
     public void testWriteUTF() throws IOException {
 
         final String expected =
@@ -193,7 +235,7 @@ public class BitOutputTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);
         bo.writeUTF(expected);
-        bo.aling(1);
+        bo.align(1);
         baos.flush();
 
         final ByteArrayInputStream bais =
@@ -204,5 +246,7 @@ public class BitOutputTest {
 
         Assert.assertEquals(actual, expected);
     }
+
+
 }
 
