@@ -19,7 +19,6 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.CharArrayWriter;
-import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,7 +84,7 @@ public class BitInput {
 
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
-                   | readUnsignedByte(required);
+                | readUnsignedByte(required);
         }
 
         int value = 0x00;
@@ -214,6 +213,28 @@ public class BitInput {
 
 
     /**
+     * Reads an 32-bit signed integer.
+     *
+     * @return a 32-bit signed integer
+     * @throws IOException if an I/O error occurs.
+     */
+    public final int readInt() throws IOException {
+        return readInt(0x20);
+    }
+
+
+    /**
+     * Reads a float value.
+     *
+     * @return float value
+     * @throws IOException if an I/O error occurs
+     */
+    public final float readFloat() throws IOException {
+        return Float.intBitsToFloat(readInt(32));
+    }
+
+
+    /**
      * Reads an unsigned long.
      *
      * @param length bit length between 1 (inclusive) and 64 (exclusive)
@@ -278,15 +299,37 @@ public class BitInput {
 
 
     /**
+     * Reads a 64-bit signed long.
+     *
+     * @return a 64-bit signed long
+     * @throws IOException if an I/O error occurs.
+     */
+    public final long readLong() throws IOException {
+        return readLong(0x40);
+    }
+
+
+    /**
+     * Reads a 64-bit double value.
+     *
+     * @return double value
+     * @throws IOException if an I/O error occurs.
+     */
+    public final double readDouble() throws IOException {
+        return Double.longBitsToDouble(readLong());
+    }
+
+
+    /**
      * Reads a byte array. First, a 31-bit unsigned integer is read for the byte
-     * array length. And then each byte is read as 8-bit unsigned int.
+     * array length. And then each byte is read as 8-bit unsigned byte.
      *
      * @return a byte array
      * @throws IOException if an I/O error occurs.
      */
     public final byte[] readBytes() throws IOException {
 
-        final byte[] bytes = new byte[readUnsignedInt(0x1F)];
+        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) readUnsignedByte(8);
         }
@@ -296,8 +339,9 @@ public class BitInput {
 
 
     /**
-     * Reads a 7-bit ASCII String. Reads a 31-bit unsigned integer for character
-     * count following the characters which each is read as 7-bit unsigned byte.
+     * Reads a 7-bit ASCII String. First, a 31-bit unsigned integer is read for
+     * the character count following the characters which each is read as 7-bit
+     * unsigned byte.
      *
      * @return an ASCII String
      * @throws IOException if an I/O error occurs.
@@ -364,8 +408,8 @@ public class BitInput {
                         "illegal third byte: " + second);
                 }
                 caw.write(((first & 0x0F) << 12)
-                          | ((second & 0x3F) << 6)
-                          | (third & 0x3F));
+                    | ((second & 0x3F) << 6)
+                    | (third & 0x3F));
                 continue;
             }
 
@@ -380,33 +424,51 @@ public class BitInput {
      * Align to given <code>length</code> bytes.
      *
      * @param length number of bytes to align
+     * @return bits discarded to align
      * @throws IOException if an I/O error occurs.
      */
-    public final void aling(final int length) throws IOException {
+    public final int align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
+        int bits = 0;
+
         if (index < 8) { // bit index to read
+            bits += (8 - index);
             readUnsignedByte(8 - index);
         }
 
         int octets = count % length;
 
         if (octets == 0) {
-            return;
+            return bits;
         }
 
         if (octets > 0) {
             octets = length - octets;
-        } else { // mod < 0
+        } else { // octets < 0
             octets = 0 - octets;
         }
 
         for (; octets > 0; octets--) {
             readUnsignedByte(8);
+            bits += 8;
         }
+
+        return bits;
+    }
+
+
+    /**
+     * Align to 1 byte.
+     *
+     * @return bits discarded to align
+     * @throws IOException if an I/O error occurs.
+     */
+    public final int align() throws IOException {
+        return align(1);
     }
 
 
@@ -436,5 +498,7 @@ public class BitInput {
     void setCount(int count) {
         this.count = count;
     }
+
+
 }
 
