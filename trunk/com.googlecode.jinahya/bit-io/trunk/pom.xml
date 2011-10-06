@@ -196,9 +196,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/bit-io-1.0-alpha-8</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/bit-io-1.0-alpha-8</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/bit-io-1.0-alpha-8</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io-1.0-alpha-8/trunk</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io-1.0-alpha-8/trunk</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/bit-io-1.0-alpha-8/trunk</url>
   </scm>
   <prerequisites />
   <repositories />
