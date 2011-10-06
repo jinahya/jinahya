@@ -1,1 +1,0 @@
--Dtest=com.googlecode.jinahya.txc.BCHttpURLConnectionClientTest -DconsumerKey= -DconsumerSecret= -Dusername= -Dpassword= clean test
