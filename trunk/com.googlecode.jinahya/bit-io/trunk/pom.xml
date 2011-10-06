@@ -136,7 +136,6 @@
         <artifactId>maven-release-plugin</artifactId>
 	<configuration>
 	  <goals>deploy</goals>
-	  <tagBase>https://jinahya.googlecode.com/svn/tags</tagBase>
 	</configuration>
       </plugin>
       <plugin>
