@@ -75,76 +75,91 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     }
 
 
+    /** {@inheritDoc}. */
     public String getAttributeNamespace(final int index) {
         return parser.getAttributeNamespace(index);
     }
 
 
+    /** {@inheritDoc}. */
     public String getAttributePrefix(final int index) {
         return parser.getAttributePrefix(index);
     }
 
 
+    /** {@inheritDoc}. */
     public String getAttributeType(final int index) {
         return parser.getAttributeType(index);
     }
 
 
+    /** {@inheritDoc}. */
     public String getAttributeValue(final int index) {
         return parser.getAttributeValue(index);
     }
 
 
+    /** {@inheritDoc}. */
     public String getAttributeValue(String namespace, String name) {
         return parser.getAttributeValue(namespace, name);
     }
 
 
+    /** {@inheritDoc}. */
     public int getColumnNumber() {
         return parser.getColumnNumber();
     }
 
 
+    /** {@inheritDoc}. */
     public int getDepth() {
         return parser.getDepth();
     }
 
 
+    /** {@inheritDoc}. */
     public int getEventType() throws XmlPullParserException {
         return parser.getEventType();
     }
 
 
+    /** {@inheritDoc}. */
     public boolean getFeature(String name) {
         return parser.getFeature(name);
     }
 
 
+    /** {@inheritDoc}. */
     public String getInputEncoding() {
         return parser.getInputEncoding();
     }
 
 
+    /** {@inheritDoc}. */
     public int getLineNumber() {
         return parser.getLineNumber();
     }
 
 
+    /** {@inheritDoc}. */
     public String getName() {
         return parser.getName();
     }
 
 
+    /** {@inheritDoc}. */
     public String getNamespace(String prefix) {
         return parser.getNamespace(prefix);
     }
 
 
+    /** {@inheritDoc}. */
     public String getNamespace() {
         return parser.getNamespace();
     }
 
 
+    /** {@inheritDoc}. */
     public int getNamespaceCount(final int depth)
         throws XmlPullParserException {
 
@@ -152,6 +167,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     }
 
 
+    /** {@inheritDoc}. */
     public String getNamespacePrefix(final int pos)
         throws XmlPullParserException {
 
@@ -159,71 +175,85 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     }
 
 
+    /** {@inheritDoc}. */
     public String getNamespaceUri(final int pos) throws XmlPullParserException {
         return parser.getNamespaceUri(pos);
     }
 
 
+    /** {@inheritDoc}. */
     public String getPositionDescription() {
         return parser.getPositionDescription();
     }
 
 
+    /** {@inheritDoc}. */
     public String getPrefix() {
         return parser.getPrefix();
     }
 
 
+    /** {@inheritDoc}. */
     public Object getProperty(final String name) {
         return parser.getProperty(name);
     }
 
 
+    /** {@inheritDoc}. */
     public String getText() {
         return parser.getText();
     }
 
 
+    /** {@inheritDoc}. */
     public char[] getTextCharacters(final int[] holderForStartAndLength) {
         return parser.getTextCharacters(holderForStartAndLength);
     }
 
 
+    /** {@inheritDoc}. */
     public boolean isAttributeDefault(final int index) {
         return parser.isAttributeDefault(index);
     }
 
 
+    /** {@inheritDoc}. */
     public boolean isEmptyElementTag() throws XmlPullParserException {
         return parser.isEmptyElementTag();
     }
 
 
+    /** {@inheritDoc}. */
     public boolean isWhitespace() throws XmlPullParserException {
         return parser.isWhitespace();
     }
 
 
+    /** {@inheritDoc}. */
     public int next() throws XmlPullParserException, IOException {
         return parser.next();
     }
 
 
+    /** {@inheritDoc}. */
     public int nextTag() throws XmlPullParserException, IOException {
         return parser.nextTag();
     }
 
 
+    /** {@inheritDoc}. */
     public String nextText() throws XmlPullParserException, IOException {
         return parser.nextText();
     }
 
 
+    /** {@inheritDoc}. */
     public int nextToken() throws XmlPullParserException, IOException {
         return parser.nextToken();
     }
 
 
+    /** {@inheritDoc}. */
     public void require(final int tyep, final String namespace,
                         final String name)
         throws XmlPullParserException, IOException {
@@ -240,11 +270,13 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     }
 
 
+    /** {@inheritDoc}. */
     public void setInput(final Reader in) throws XmlPullParserException {
         parser.setInput(in);
     }
 
 
+    /** {@inheritDoc}. */
     public void setInput(final InputStream inputStream,
                          final String inputEncoding)
         throws XmlPullParserException {
@@ -253,6 +285,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     }
 
 
+    /** {@inheritDoc}. */
     public void setProperty(final String name, final Object value)
         throws XmlPullParserException {
 
@@ -261,38 +294,19 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parses an attribute and returns as a Date.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Date or null it attribute not found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs
+     * @throws ParseException if the attribute value couldn't be parsed.
      */
-    public Date getXSDateAttributeValue(final String namespace,
-                                        final String name)
+    public Date getXSDateAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.getXSDateAttributeValue(
-            parser, namespace, name);
-    }
-
-
-    /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
-     */
-    public Date getXSTimeAttributeValue(final String namespace,
-                                        final String name)
-        throws XmlPullParserException, IOException, ParseException {
-
-        return XmlPullParserHelper.getXSTimeAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getXSDateAttribute(parser, namespace, name);
     }
 
 
@@ -305,11 +319,27 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws IOException
      * @throws ParseException 
      */
-    public Date getXSDateTimeAttributeValue(final String namespace,
-                                            final String name)
+    public Date getXSTimeAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.getXSDateTimeAttributeValue(
+        return XmlPullParserHelper.getXSTimeAttribute(parser, namespace, name);
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     * @throws ParseException 
+     */
+    public Date getXSDateTimeAttribute(final String namespace,
+                                       final String name)
+        throws XmlPullParserException, IOException, ParseException {
+
+        return XmlPullParserHelper.getXSDateTimeAttribute(
             parser, namespace, name);
     }
 
@@ -321,10 +351,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws IOException
      * @throws ParseException 
      */
-    public Date nextXSDateText()
+    public Date nextXSDate()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSDateText(parser);
+        return XmlPullParserHelper.nextXSDate(parser);
     }
 
 
@@ -335,10 +365,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws IOException
      * @throws ParseException 
      */
-    public Date nextXSTimeText()
+    public Date nextXSTime()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSTimeText(parser);
+        return XmlPullParserHelper.nextXSTime(parser);
     }
 
 
@@ -349,10 +379,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws IOException
      * @throws ParseException 
      */
-    public Date nextXSDateTimeText()
+    public Date nextXSDateTime()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSDateTimeText(parser);
+        return XmlPullParserHelper.nextXSDateTime(parser);
     }
 
 
@@ -364,11 +394,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Byte getByteAttributeValue(final String namespace, final String name)
+    public Byte getByteAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getByteAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getByteAttribute(parser, namespace, name);
     }
 
 
@@ -380,12 +409,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Short getShortAttributeValue(final String namespace,
-                                        final String name)
+    public Short getShortAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getShortAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getShortAttribute(parser, namespace, name);
     }
 
 
@@ -397,12 +424,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Integer getIntAttributeValue(final String namespace,
-                                        final String name)
+    public Integer getIntAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getIntAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getIntAttribute(parser, namespace, name);
     }
 
 
@@ -414,11 +439,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Long getLongAttributeValue(final String namespace, final String name)
+    public Long getLongAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getLongAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getLongAttribute(parser, namespace, name);
     }
 
 
@@ -430,12 +454,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Float getFloatAttributeValue(final String namespace,
-                                        final String name)
+    public Float getFloatAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getFloatAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getFloatAttribute(parser, namespace, name);
     }
 
 
@@ -447,12 +469,10 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Double getDoubleAttributeValue(final String namespace,
-                                          final String name)
+    public Double getDoubleAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getDoubleAttributeValue(
-            parser, namespace, name);
+        return XmlPullParserHelper.getDoubleAttribute(parser, namespace, name);
     }
 
 
@@ -470,15 +490,16 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses current tag and return the value as a Byte.
+     *
+     * @return parsed Byte value or null if empty tag
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     * @see XmlPullParserHelper#nextByte(XmlPullParser) 
      */
-    public Byte nextByteText()
-        throws XmlPullParserException, IOException {
+    public Byte nextByte() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextByteText(parser);
+        return XmlPullParserHelper.nextByte(parser);
     }
 
 
@@ -488,10 +509,9 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Short nextShortText()
-        throws XmlPullParserException, IOException {
+    public Short nextShort() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextShortText(parser);
+        return XmlPullParserHelper.nextShort(parser);
     }
 
 
@@ -502,10 +522,9 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public Integer nextIntText()
-        throws XmlPullParserException, IOException {
+    public Integer nextInt() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextIntText(parser);
+        return XmlPullParserHelper.nextInt(parser);
     }
 
 
@@ -516,10 +535,9 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public Long nextLongText()
-        throws XmlPullParserException, IOException {
+    public Long nextLong() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextLongText(parser);
+        return XmlPullParserHelper.nextLong(parser);
     }
 
 
@@ -530,10 +548,9 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public Float nextFloatText()
-        throws XmlPullParserException, IOException {
+    public Float nextFloat() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextFloatText(parser);
+        return XmlPullParserHelper.nextFloat(parser);
     }
 
 
@@ -544,10 +561,9 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public Double nextDoubleText()
-        throws XmlPullParserException, IOException {
+    public Double nextDouble() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextDoubleText(parser);
+        return XmlPullParserHelper.nextDouble(parser);
     }
 
 
