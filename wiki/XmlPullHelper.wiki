@@ -29,6 +29,6 @@ final Date died = parser.nextXSDate();
 
 // <tag2 id="1">1.5</tag2>
 parser.nextTag();
-final Integer integerFromAttribute = parser.getIntAttribute("id");
-final Double doubleFromTag = parser.nextDouble(); //
+final Integer id = parser.getIntAttribute("id");
+final Double point = parser.nextDouble(); //
 }}}
