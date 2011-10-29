@@ -175,7 +175,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date getXSDateAttributeValue(final XmlPullParser parser,
+    public static Date getXSDateAttribute(final XmlPullParser parser,
                                                final String namespace,
                                                final String name)
         throws XmlPullParserException, IOException, ParseException {
@@ -199,7 +199,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date getXSTimeAttributeValue(final XmlPullParser parser,
+    public static Date getXSTimeAttribute(final XmlPullParser parser,
                                                final String namespace,
                                                final String name)
         throws XmlPullParserException, IOException, ParseException {
@@ -223,7 +223,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date getXSDateTimeAttributeValue(final XmlPullParser parser,
+    public static Date getXSDateTimeAttribute(final XmlPullParser parser,
                                                    final String namespace,
                                                    final String name)
         throws XmlPullParserException, IOException, ParseException {
@@ -245,7 +245,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date nextXSDateText(final XmlPullParser parser)
+    public static Date nextXSDate(final XmlPullParser parser)
         throws XmlPullParserException, IOException, ParseException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
@@ -269,7 +269,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date nextXSTimeText(final XmlPullParser parser)
+    public static Date nextXSTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException, ParseException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
@@ -293,7 +293,7 @@ public final class XmlPullParserHelper {
      * @throws IOException
      * @throws ParseException 
      */
-    public static Date nextXSDateTimeText(final XmlPullParser parser)
+    public static Date nextXSDateTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException, ParseException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
@@ -363,7 +363,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Byte getByteAttributeValue(final XmlPullParser parser,
+    public static Byte getByteAttribute(final XmlPullParser parser,
                                              final String namespace,
                                              final String name)
         throws XmlPullParserException, IOException {
@@ -382,7 +382,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Short getShortAttributeValue(final XmlPullParser parser,
+    public static Short getShortAttribute(final XmlPullParser parser,
                                                final String namespace,
                                                final String name)
         throws XmlPullParserException, IOException {
@@ -401,7 +401,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Integer getIntAttributeValue(final XmlPullParser parser,
+    public static Integer getIntAttribute(final XmlPullParser parser,
                                                final String namespace,
                                                final String name)
         throws XmlPullParserException, IOException {
@@ -420,7 +420,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Long getLongAttributeValue(final XmlPullParser parser,
+    public static Long getLongAttribute(final XmlPullParser parser,
                                              final String namespace,
                                              final String name)
         throws XmlPullParserException, IOException {
@@ -439,7 +439,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Float getFloatAttributeValue(final XmlPullParser parser,
+    public static Float getFloatAttribute(final XmlPullParser parser,
                                                final String namespace,
                                                final String name)
         throws XmlPullParserException, IOException {
@@ -458,7 +458,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Double getDoubleAttributeValue(final XmlPullParser parser,
+    public static Double getDoubleAttribute(final XmlPullParser parser,
                                                  final String namespace,
                                                  final String name)
         throws XmlPullParserException, IOException {
@@ -534,7 +534,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Byte nextByteText(final XmlPullParser parser)
+    public static Byte nextByte(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         return (Byte) nextNumberText(parser, Byte.class);
@@ -548,7 +548,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Short nextShortText(final XmlPullParser parser)
+    public static Short nextShort(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         return (Short) nextNumberText(parser, Short.class);
@@ -562,7 +562,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Integer nextIntText(final XmlPullParser parser)
+    public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         return (Integer) nextNumberText(parser, Integer.class);
@@ -576,7 +576,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Long nextLongText(final XmlPullParser parser)
+    public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         final String text = nextNillableText(parser);
@@ -595,7 +595,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Float nextFloatText(final XmlPullParser parser)
+    public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         return (Float) nextNumberText(parser, Float.class);
@@ -609,7 +609,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static Double nextDoubleText(final XmlPullParser parser)
+    public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         return (Double) nextNumberText(parser, Double.class);
