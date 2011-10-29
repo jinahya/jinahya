@@ -21,8 +21,9 @@ final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 final XmlPullParser parser_ = factory.newPullParser();
 
 final ExtendedXmlPullParser parser = new ExtendedXmlPullParser(parser_);
+assert (parser instanceof XmlPullParser);
 
-// <tag1 date="1976-10-31T10-45-10.000+09:00">2076-10-31</tag1>
+// <tag1 date="1976-10-31T00-00-00.000+09:00">2076-10-31</tag1>
 parser.nextTag();
 final Date born = parser.getXSDateTimeAttribute("date");
 final Date died = parser.nextXSDate();
