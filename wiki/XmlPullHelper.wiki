@@ -35,7 +35,7 @@ final Double point = parser.nextDouble();
 
 // <tag3/>
 parser.nextTag();
-final String tag3 = parser.nextNillableTest();
+final String tag3 = parser.nextNillableText();
 assert tag3 == null;
 
 // <tag4></tag4>
