@@ -31,4 +31,15 @@ final Date died = parser.nextXSDate();
 parser.nextTag();
 final Integer id = parser.getIntAttribute("id");
 final Double point = parser.nextDouble();
+
+// <tag3/>
+parser.nextTag();
+final String tag3 = parser.nextNillableTest();
+assert tag3 == null;
+
+// <tag4></tag4>
+parser.nextTag();
+final String tag4 = parser.nextNillableText();
+assert tag4 != null;
+assert tag4.equals("");
 }}}
