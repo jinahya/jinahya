@@ -32,10 +32,11 @@ public interface XmlSerializable {
 
 
     /**
-     * 
-     * @param serializer
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Serializes information to given <code>serializer</code>.
+     *
+     * @param serializer serializer
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     void serialize(XmlSerializer serializer)
         throws XmlPullParserException, IOException;
