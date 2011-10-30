@@ -22,6 +22,7 @@ import static com.googlecode.jinahya.xmlpull.XmlPullParserHelper.*;
 
 import java.text.ParseException;
 
+import junit.framework.Assert;
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -113,6 +114,46 @@ public class XmlPullParserHelperTest {
             }
 
             System.out.printf("%1$30s -> %2$s\n", xsDateTimeString, parsed);
+        }
+    }
+
+
+    @Test
+    public void testParseXSBoolean() throws XmlPullParserException {
+
+        try {
+            XmlPullParserHelper.parseXSBoolean(null);
+            Assert.fail("passed: parseXSBoolean(null)");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+
+        Assert.assertTrue(XmlPullParserHelper.parseXSBoolean("true"));
+        Assert.assertTrue(XmlPullParserHelper.parseXSBoolean("1"));
+
+        Assert.assertFalse(XmlPullParserHelper.parseXSBoolean("false"));
+        Assert.assertFalse(XmlPullParserHelper.parseXSBoolean("0"));
+
+        testXSBooleanWithIllegalValues("True");
+
+        testXSBooleanWithIllegalValues("TRUE");
+
+        testXSBooleanWithIllegalValues("False");
+        testXSBooleanWithIllegalValues("FALSE");
+
+        testXSBooleanWithIllegalValues("-1");
+        testXSBooleanWithIllegalValues("2");
+        testXSBooleanWithIllegalValues("3");
+    }
+
+
+    private void testXSBooleanWithIllegalValues(final String illegalValue) {
+        try {
+            XmlPullParserHelper.parseXSBoolean(illegalValue);
+            Assert.fail("passed: parseXSBoolean(\""
+                        + String.valueOf(illegalValue) + "\"");
+        } catch (XmlPullParserException xppe) {
+            // expected
         }
     }
 

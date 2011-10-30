@@ -609,8 +609,13 @@ public final class XmlPullParserHelper {
     }
 
 
-    public static boolean parseXSBoolean(final String value) {
+    static boolean parseXSBoolean(final String value)
+        throws XmlPullParserException {
 
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+        
         if ("true".equals(value) || "1".equals(value)) {
             return true;
         }
@@ -619,7 +624,7 @@ public final class XmlPullParserHelper {
             return false;
         }
 
-        throw new IllegalArgumentException("invalid value: " + value);
+        throw new XmlPullParserException("unknown xs:boolean value: " + value);
     }
 
 
