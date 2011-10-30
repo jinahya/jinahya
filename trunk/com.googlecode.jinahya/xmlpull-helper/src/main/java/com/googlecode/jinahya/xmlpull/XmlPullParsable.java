@@ -32,10 +32,11 @@ public interface XmlPullParsable {
 
 
     /**
-     * 
-     * @param parser
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses information from given <code>parser</code>.
+     *
+     * @param parser parser
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     void parse(XmlPullParser parser) throws XmlPullParserException, IOException;
 

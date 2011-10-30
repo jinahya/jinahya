@@ -73,6 +73,10 @@ public final class XmlPullParserHelper {
                                         final String temporalString)
         throws XmlPullParserException {
 
+        if (temporalString == null) {
+            return null;
+        }
+
         for (int i = 0; i < temporalFormats.length; i++) {
             if (temporalFormats[i] == null) {
                 continue;
@@ -87,14 +91,14 @@ public final class XmlPullParserHelper {
         }
 
         throw new XmlPullParserException(
-            "failed to parse given temporalString('" + temporalString + "')");
+            "unparsable temporalString('" + temporalString + "')");
     }
 
 
     /**
-     * 
+     * DateFormats for <code>xs:date</code>.
      */
-    static final DateFormat[] XS_DATE_FORMATS = getXSTemporalFormats(
+    private static final DateFormat[] XS_DATE_FORMATS = getXSTemporalFormats(
         new String[]{
             "yyyy-MM-ssXXX",
             "yyyy-MM-ss"
@@ -102,10 +106,11 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param dateString
-     * @return
-     * @throws XmlPullParserException 
+     * Parses <code>xs:date</code>.
+     *
+     * @param dateString date string
+     * @return parsed Date or null if given <code>dateString</code> is null.
+     * @throws XmlPullParserException if an XML error occurs.
      */
     static Date parseXSDate(final String dateString)
         throws XmlPullParserException {
@@ -115,9 +120,9 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
+     * DateFormats for <code>xs:time</code>.
      */
-    static final DateFormat[] XS_TIME_FORMATS = getXSTemporalFormats(
+    private static final DateFormat[] XS_TIME_FORMATS = getXSTemporalFormats(
         new String[]{
             "HH:mm:ss.SSSXXX",
             "HH:mm:ssXXX",
@@ -127,10 +132,11 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param timeString
-     * @return
-     * @throws XmlPullParserException 
+     * Parses <code>xs:time</code> string to Date.
+     *
+     * @param timeString <code>xs:time</code> string
+     * @return parsed Date or null if <code>timeString</code> is null.
+     * @throws XmlPullParserException if an XML error occurs.
      */
     static Date parseXSTime(final String timeString)
         throws XmlPullParserException {
@@ -140,9 +146,10 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
+     * DateFormats for <code>xs:dateTime</code>.
      */
-    static final DateFormat[] XS_DATE_TIME_FORMATS = getXSTemporalFormats(
+    private static final DateFormat[] XS_DATE_TIME_FORMATS =
+        getXSTemporalFormats(
         new String[]{
             "yyyy-MM-ss'T'HH:mm:ss.SSSXXX",
             "yyyy-MM-ss'T'HH:mm:ssXXX",
@@ -188,13 +195,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Returns the attribute value as a Date.
+     *
+     * @param parser parser
+     * @param namespace tag namespace
+     * @param name tag name
+     * @return parsed Date or null if no attribute found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date getXSTimeAttribute(final XmlPullParser parser,
                                           final String namespace,
@@ -211,13 +219,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Parses an <code>xs:dateTime</code> attribute and returns as Date.
+     *
+     * @param parser parser
+     * @param namespace tag namespace
+     * @param name tag name
+     * @return parsed Date or null if no attribute found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date getXSDateTimeAttribute(final XmlPullParser parser,
                                               final String namespace,
@@ -234,11 +243,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Parses a <code>xs:date</code> text and returns as a Date.
+     *
+     * @param parser parser
+     * @return parsed Date or null if current tag is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date nextXSDate(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -257,11 +267,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Parses a <code>xs:time</code> text and returns as a Date.
+     *
+     * @param parser parser
+     * @return parsed Date or null if current tag is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date nextXSTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -280,11 +291,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Parsed a <code>xs:dateTime</code> text and returns as a Date.
+     *
+     * @param parser parser
+     * @return parsed Date or null if current tag is an empty tag
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date nextXSDateTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -303,19 +315,20 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @param numberClass
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute and returns as a Number.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @param numberClass number class to convert
+     * @return parsed Number instance of null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
-    private static Object getNumberAttributeValue(final XmlPullParser parser,
-                                                  final String namespace,
-                                                  final String name,
-                                                  final Class numberClass)
+    static Object getNumberAttributeValue(final XmlPullParser parser,
+                                          final String namespace,
+                                          final String name,
+                                          final Class numberClass)
         throws XmlPullParserException, IOException {
 
         if (!Number.class.isAssignableFrom(numberClass)) {
@@ -487,8 +500,8 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    private static Object nextNumberText(final XmlPullParser parser,
-                                         final Class numberClass)
+    static Object nextNumberText(final XmlPullParser parser,
+                                 final Class numberClass)
         throws XmlPullParserException, IOException {
 
         if (!Number.class.isAssignableFrom(numberClass)) {
@@ -615,7 +628,7 @@ public final class XmlPullParserHelper {
         if (value == null) {
             throw new NullPointerException("null value");
         }
-        
+
         if ("true".equals(value) || "1".equals(value)) {
             return true;
         }
@@ -624,7 +637,8 @@ public final class XmlPullParserHelper {
             return false;
         }
 
-        throw new XmlPullParserException("unknown xs:boolean value: " + value);
+        throw new XmlPullParserException(
+            "unparsable xs:boolean value: " + value);
     }
 
 
@@ -638,7 +652,7 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return Boolean.valueOf("true".equals(value) || "1".equals(value));
+        return Boolean.valueOf(parseXSBoolean(value));
     }
 
 
@@ -650,7 +664,7 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return Boolean.valueOf("true".equals(text) || "1".equals(text));
+        return Boolean.valueOf(parseXSBoolean(text));
     }
 
 
