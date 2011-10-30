@@ -61,8 +61,8 @@ public class XmlPullParserHelperTest {
         for (String xsDateExample : XS_DATE_STRINGS) {
             try {
                 parsed = parseXSDate(xsDateExample).toString();
-            } catch (ParseException pe) {
-                parsed = pe.getMessage();
+            } catch (XmlPullParserException xppe) {
+                parsed = xppe.getMessage();
             }
 
             System.out.printf("%1$20s -> %2$s\n", xsDateExample, parsed);
@@ -84,8 +84,8 @@ public class XmlPullParserHelperTest {
         for (String xsTimeString : XS_TIME_STRINGS) {
             try {
                 parsed = parseXSTime(xsTimeString).toString();
-            } catch (ParseException pe) {
-                parsed = pe.getMessage();
+            } catch (XmlPullParserException xppe) {
+                parsed = xppe.getMessage();
             }
 
             System.out.printf("%1$20s -> %2$s\n", xsTimeString, parsed);
@@ -108,8 +108,8 @@ public class XmlPullParserHelperTest {
         for (String xsDateTimeString : XS_DATE_TIME_STRINGS) {
             try {
                 parsed = parseXSDateTime(xsDateTimeString).toString();
-            } catch (ParseException pe) {
-                parsed = pe.getMessage();
+            } catch (XmlPullParserException xppe) {
+                parsed = xppe.getMessage();
             }
 
             System.out.printf("%1$30s -> %2$s\n", xsDateTimeString, parsed);
