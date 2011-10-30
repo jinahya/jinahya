@@ -67,11 +67,11 @@ public final class XmlPullParserHelper {
      * @param temporalFormats
      * @param temporalString
      * @return
-     * @throws ParseException 
+     * @throws XmlPullParserException 
      */
     private static Date parseXSTemporal(final DateFormat[] temporalFormats,
                                         final String temporalString)
-        throws ParseException {
+        throws XmlPullParserException {
 
         for (int i = 0; i < temporalFormats.length; i++) {
             if (temporalFormats[i] == null) {
@@ -86,9 +86,8 @@ public final class XmlPullParserHelper {
             }
         }
 
-        throw new ParseException(
-            "failed to parse given temporalString('" + temporalString + "')",
-            0);
+        throw new XmlPullParserException(
+            "failed to parse given temporalString('" + temporalString + "')");
     }
 
 
@@ -106,10 +105,10 @@ public final class XmlPullParserHelper {
      * 
      * @param dateString
      * @return
-     * @throws ParseException 
+     * @throws XmlPullParserException 
      */
     static Date parseXSDate(final String dateString)
-        throws ParseException {
+        throws XmlPullParserException {
 
         return parseXSTemporal(XS_DATE_FORMATS, dateString);
     }
@@ -131,10 +130,10 @@ public final class XmlPullParserHelper {
      * 
      * @param timeString
      * @return
-     * @throws ParseException 
+     * @throws XmlPullParserException 
      */
     static Date parseXSTime(final String timeString)
-        throws ParseException {
+        throws XmlPullParserException {
 
         return parseXSTemporal(XS_TIME_FORMATS, timeString);
     }
@@ -156,10 +155,10 @@ public final class XmlPullParserHelper {
      * 
      * @param dateTimeString
      * @return
-     * @throws ParseException 
+     * @throws XmlPullParserException 
      */
     static Date parseXSDateTime(final String dateTimeString)
-        throws ParseException {
+        throws XmlPullParserException {
 
         return parseXSTemporal(XS_DATE_TIME_FORMATS, dateTimeString);
     }
@@ -173,12 +172,11 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date getXSDateAttribute(final XmlPullParser parser,
-                                               final String namespace,
-                                               final String name)
-        throws XmlPullParserException, IOException, ParseException {
+                                          final String namespace,
+                                          final String name)
+        throws XmlPullParserException, IOException {
 
         final String dateString = parser.getAttributeValue(namespace, name);
         if (dateString == null) {
@@ -197,12 +195,11 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date getXSTimeAttribute(final XmlPullParser parser,
-                                               final String namespace,
-                                               final String name)
-        throws XmlPullParserException, IOException, ParseException {
+                                          final String namespace,
+                                          final String name)
+        throws XmlPullParserException, IOException {
 
         final String timeString = parser.getAttributeValue(namespace, name);
         if (timeString == null) {
@@ -221,12 +218,11 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date getXSDateTimeAttribute(final XmlPullParser parser,
-                                                   final String namespace,
-                                                   final String name)
-        throws XmlPullParserException, IOException, ParseException {
+                                              final String namespace,
+                                              final String name)
+        throws XmlPullParserException, IOException {
 
         final String dateTimeString = parser.getAttributeValue(namespace, name);
         if (dateTimeString == null) {
@@ -243,10 +239,9 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date nextXSDate(final XmlPullParser parser)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
             return null;
@@ -267,10 +262,9 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date nextXSTime(final XmlPullParser parser)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
             return null;
@@ -291,10 +285,9 @@ public final class XmlPullParserHelper {
      * @return
      * @throws XmlPullParserException
      * @throws IOException
-     * @throws ParseException 
      */
     public static Date nextXSDateTime(final XmlPullParser parser)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) { // <tag/>
             return null;
@@ -364,8 +357,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Byte getByteAttribute(final XmlPullParser parser,
-                                             final String namespace,
-                                             final String name)
+                                        final String namespace,
+                                        final String name)
         throws XmlPullParserException, IOException {
 
         return (Byte) getNumberAttributeValue(
@@ -383,8 +376,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Short getShortAttribute(final XmlPullParser parser,
-                                               final String namespace,
-                                               final String name)
+                                          final String namespace,
+                                          final String name)
         throws XmlPullParserException, IOException {
 
         return (Short) getNumberAttributeValue(
@@ -402,8 +395,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Integer getIntAttribute(final XmlPullParser parser,
-                                               final String namespace,
-                                               final String name)
+                                          final String namespace,
+                                          final String name)
         throws XmlPullParserException, IOException {
 
         return (Integer) getNumberAttributeValue(
@@ -421,8 +414,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Long getLongAttribute(final XmlPullParser parser,
-                                             final String namespace,
-                                             final String name)
+                                        final String namespace,
+                                        final String name)
         throws XmlPullParserException, IOException {
 
         return (Long) getNumberAttributeValue(
@@ -440,8 +433,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Float getFloatAttribute(final XmlPullParser parser,
-                                               final String namespace,
-                                               final String name)
+                                          final String namespace,
+                                          final String name)
         throws XmlPullParserException, IOException {
 
         return (Float) getNumberAttributeValue(
@@ -459,8 +452,8 @@ public final class XmlPullParserHelper {
      * @throws IOException 
      */
     public static Double getDoubleAttribute(final XmlPullParser parser,
-                                                 final String namespace,
-                                                 final String name)
+                                            final String namespace,
+                                            final String name)
         throws XmlPullParserException, IOException {
 
         return (Double) getNumberAttributeValue(
@@ -613,6 +606,46 @@ public final class XmlPullParserHelper {
         throws XmlPullParserException, IOException {
 
         return (Double) nextNumberText(parser, Double.class);
+    }
+
+
+    public static boolean parseXSBoolean(final String value) {
+
+        if ("true".equals(value) || "1".equals(value)) {
+            return true;
+        }
+
+        if ("false".equals(value) || "0".equals(value)) {
+            return false;
+        }
+
+        throw new IllegalArgumentException("invalid value: " + value);
+    }
+
+
+    public static Boolean getBooleanAttribute(final XmlPullParser parser,
+                                              final String namespace,
+                                              final String name)
+        throws XmlPullParserException, IOException {
+
+        final String value = parser.getAttributeValue(namespace, name);
+        if (value == null) {
+            return null;
+        }
+
+        return Boolean.valueOf("true".equals(value) || "1".equals(value));
+    }
+
+
+    public static Boolean nextBoolean(final XmlPullParser parser)
+        throws XmlPullParserException, IOException {
+
+        final String text = nextNillableText(parser);
+        if (text == null) {
+            return null;
+        }
+
+        return Boolean.valueOf("true".equals(text) || "1".equals(text));
     }
 
 
