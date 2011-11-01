@@ -63,7 +63,7 @@ public class XSTemporalsTest {
                 parsed = xppe.getMessage();
             }
 
-            System.out.printf("%1$20s -> %2$s\n", string, parsed);
+            System.out.printf("%1$30s -> %2$s\n", string, parsed);
         }
     }
 
@@ -86,7 +86,7 @@ public class XSTemporalsTest {
                 parsed = xppe.getMessage();
             }
 
-            System.out.printf("%1$20s -> %2$s\n", string, parsed);
+            System.out.printf("%1$30s -> %2$s\n", string, parsed);
         }
     }
 
