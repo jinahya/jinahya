@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import com.googlecode.jinahya.xmlpull.xs.XSTemporals;
+
 import java.io.IOException;
 
 import java.util.Date;

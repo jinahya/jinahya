@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import java.util.Date;
 import org.xmlpull.v1.XmlSerializer;
 
 
@@ -272,16 +271,14 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /*
     public ExtendedXmlSerializer attributeXSDate(final String namespace, final String name, final Date date) {
-
-        if (date == null) {
-            return this;
-        }
-
-        
+    
+    if (date == null) {
+    return this;
+    }
+    
+    
     }
      */
-
-
     /** impl. */
     private final XmlSerializer serializer;
 

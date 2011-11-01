@@ -54,6 +54,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public void defineEntityReplacementText(final String entityName,
                                             final String replacementText)
         throws XmlPullParserException {
@@ -63,102 +64,119 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getAttributeCount() {
         return parser.getAttributeCount();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributeName(final int index) {
         return parser.getAttributeName(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributeNamespace(final int index) {
         return parser.getAttributeNamespace(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributePrefix(final int index) {
         return parser.getAttributePrefix(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributeType(final int index) {
         return parser.getAttributeType(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributeValue(final int index) {
         return parser.getAttributeValue(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getAttributeValue(String namespace, String name) {
         return parser.getAttributeValue(namespace, name);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getColumnNumber() {
         return parser.getColumnNumber();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getDepth() {
         return parser.getDepth();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getEventType() throws XmlPullParserException {
         return parser.getEventType();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public boolean getFeature(String name) {
         return parser.getFeature(name);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getInputEncoding() {
         return parser.getInputEncoding();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getLineNumber() {
         return parser.getLineNumber();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getName() {
         return parser.getName();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getNamespace(String prefix) {
         return parser.getNamespace(prefix);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getNamespace() {
         return parser.getNamespace();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int getNamespaceCount(final int depth)
         throws XmlPullParserException {
 
@@ -167,6 +185,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getNamespacePrefix(final int pos)
         throws XmlPullParserException {
 
@@ -175,84 +194,98 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getNamespaceUri(final int pos) throws XmlPullParserException {
         return parser.getNamespaceUri(pos);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getPositionDescription() {
         return parser.getPositionDescription();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getPrefix() {
         return parser.getPrefix();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public Object getProperty(final String name) {
         return parser.getProperty(name);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String getText() {
         return parser.getText();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public char[] getTextCharacters(final int[] holderForStartAndLength) {
         return parser.getTextCharacters(holderForStartAndLength);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public boolean isAttributeDefault(final int index) {
         return parser.isAttributeDefault(index);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public boolean isEmptyElementTag() throws XmlPullParserException {
         return parser.isEmptyElementTag();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public boolean isWhitespace() throws XmlPullParserException {
         return parser.isWhitespace();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int next() throws XmlPullParserException, IOException {
         return parser.next();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int nextTag() throws XmlPullParserException, IOException {
         return parser.nextTag();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public String nextText() throws XmlPullParserException, IOException {
         return parser.nextText();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public int nextToken() throws XmlPullParserException, IOException {
         return parser.nextToken();
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public void require(final int tyep, final String namespace,
                         final String name)
         throws XmlPullParserException, IOException {
@@ -262,6 +295,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public void setFeature(final String name, final boolean state)
         throws XmlPullParserException {
 
@@ -270,12 +304,14 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public void setInput(final Reader in) throws XmlPullParserException {
         parser.setInput(in);
     }
 
 
     /** {@inheritDoc}. */
+    @Override
     public void setInput(final InputStream inputStream,
                          final String inputEncoding)
         throws XmlPullParserException {
@@ -285,6 +321,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
 
 
     /** {@inheritDoc}. */
+    @Override
     public void setProperty(final String name, final Object value)
         throws XmlPullParserException {
 

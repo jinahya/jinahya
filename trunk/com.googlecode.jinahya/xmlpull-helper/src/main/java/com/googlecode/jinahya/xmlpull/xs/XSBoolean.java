@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull.v1;
+package com.googlecode.jinahya.xmlpull.xs;
 
 
 import org.xmlpull.v1.XmlPullParserException;
