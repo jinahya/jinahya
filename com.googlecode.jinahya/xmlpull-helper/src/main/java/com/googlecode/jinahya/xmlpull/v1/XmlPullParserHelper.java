@@ -20,10 +20,6 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -34,179 +30,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XmlPullParsableHelper {
-
-
-    /**
-     * Parses a new instance of given <code>type</code> from specified
-     * <code>parser</code>.
-     *
-     * @param <T> type parameter
-     * @param parser parser
-     * @param type type
-     * @return a new instance
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     */
-    public static <T extends XmlPullParsable> T parseInstance(
-        final XmlPullParser parser, final Class<T> type)
-        throws XmlPullParserException, IOException {
-
-        try {
-            final T instance = type.newInstance();
-            instance.parse(parser);
-            return instance;
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(ie);
-        }
-    }
-
-
-    /**
-     * 
-     * @param patterns
-     * @return 
-     */
-    private static DateFormat[] getXSTemporalFormats(final String[] patterns) {
-
-        final DateFormat[] formats = new DateFormat[patterns.length];
-
-        for (int i = 0; i < formats.length; i++) {
-            try {
-                formats[i] = new SimpleDateFormat(patterns[i]);
-            } catch (IllegalArgumentException ie) {
-                System.err.println("failed to create DateFormat from '"
-                                   + patterns[i] + "'");
-            }
-        }
-
-        return formats;
-    }
-
-
-    /**
-     * Parses given <code>temporalString</code> with specified
-     * <code>temporalFormats</code>.
-     *
-     * @param temporalFormats date formats
-     * @param temporalString date value
-     * @return parsed date
-     * @throws XmlPullParserException 
-     */
-    private static Date parseXSTemporal(final DateFormat[] temporalFormats,
-                                        final String temporalString)
-        throws XmlPullParserException {
-
-        if (temporalFormats == null) {
-            throw new NullPointerException("null tempralFormats");
-        }
-
-        if (temporalFormats.length == 0) {
-            throw new IllegalArgumentException("empty temporalFormats");
-        }
-
-        if (temporalString == null) {
-            throw new NullPointerException("null temporalString");
-        }
-
-        if (temporalString.length() == 0) {
-            throw new IllegalArgumentException("empty temporalString");
-        }
-
-        for (int i = 0; i < temporalFormats.length; i++) {
-            if (temporalFormats[i] == null) {
-                continue;
-            }
-            try {
-                synchronized (temporalFormats[i]) {
-                    return temporalFormats[i].parse(temporalString);
-                }
-            } catch (ParseException pe) {
-                // empty
-            }
-        }
-
-        throw new XmlPullParserException(
-            "unparsable temporalString('" + temporalString + "')");
-    }
-
-
-    /**
-     * DateFormats for <code>xs:date</code>.
-     */
-    private static final DateFormat[] XS_DATE_FORMATS = getXSTemporalFormats(
-        new String[]{
-            "yyyy-MM-ddXXX",
-            "yyyy-MM-dd"
-        });
-
-
-    /**
-     * Parses <code>xs:date</code>.
-     *
-     * @param dateString date string
-     * @return parsed Date or null if given <code>dateString</code> is null.
-     * @throws XmlPullParserException if an XML error occurs.
-     */
-    static Date parseXSDate(final String dateString)
-        throws XmlPullParserException {
-
-        return parseXSTemporal(XS_DATE_FORMATS, dateString);
-    }
-
-
-    /**
-     * DateFormats for <code>xs:time</code>.
-     */
-    private static final DateFormat[] XS_TIME_FORMATS = getXSTemporalFormats(
-        new String[]{
-            "HH:mm:ss.SSSXXX",
-            "HH:mm:ssXXX",
-            "HH:mm:ss.SSS",
-            "HH:mm:ss"
-        });
-
-
-    /**
-     * Parses <code>xs:time</code> string to Date.
-     *
-     * @param timeString <code>xs:time</code> string
-     * @return parsed Date or null if <code>timeString</code> is null.
-     * @throws XmlPullParserException if an XML error occurs.
-     */
-    static Date parseXSTime(final String timeString)
-        throws XmlPullParserException {
-
-        return parseXSTemporal(XS_TIME_FORMATS, timeString);
-    }
-
-
-    /**
-     * DateFormats for <code>xs:dateTime</code>.
-     */
-    private static final DateFormat[] XS_DATE_TIME_FORMATS =
-        getXSTemporalFormats(
-        new String[]{
-            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
-            "yyyy-MM-dd'T'HH:mm:ssXXX",
-            "yyyy-MM-dd'T'HH:mm:ss.SSS",
-            "yyyy-MM-dd'T'HH:mm:ss"
-        });
-
-
-    /**
-     * 
-     * @param dateTimeString
-     * @return
-     * @throws XmlPullParserException 
-     */
-    static Date parseXSDateTime(final String dateTimeString)
-        throws XmlPullParserException {
-
-        return parseXSTemporal(XS_DATE_TIME_FORMATS, dateTimeString);
-    }
+public final class XmlPullParserHelper {
 
 
     /**
@@ -228,7 +52,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSDate(dateString);
+        return XSTemporals.parseXSDate(dateString);
     }
 
 
@@ -252,7 +76,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSTime(timeString);
+        return XSTemporals.parseXSTime(timeString);
     }
 
 
@@ -276,7 +100,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSDateTime(dateTimeString);
+        return XSTemporals.parseXSDateTime(dateTimeString);
     }
 
 
@@ -300,7 +124,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSDate(value);
+        return XSTemporals.parseXSDate(value);
     }
 
 
@@ -324,7 +148,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSTime(value);
+        return XSTemporals.parseXSTime(value);
     }
 
 
@@ -348,7 +172,7 @@ public final class XmlPullParsableHelper {
             return null;
         }
 
-        return parseXSDateTime(value);
+        return XSTemporals.parseXSDateTime(value);
     }
 
 
@@ -592,7 +416,7 @@ public final class XmlPullParsableHelper {
     }
 
 
-    private XmlPullParsableHelper() {
+    private XmlPullParserHelper() {
         super();
     }
 

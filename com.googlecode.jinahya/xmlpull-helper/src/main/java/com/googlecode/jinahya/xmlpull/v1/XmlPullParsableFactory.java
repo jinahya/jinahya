@@ -20,6 +20,7 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 
@@ -27,17 +28,40 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlPullParsable {
+public final class XmlPullParsableFactory {
 
 
     /**
-     * Parses information from given <code>parser</code>.
+     * Parses a new instance of given <code>type</code> from specified
+     * <code>parser</code>.
      *
+     * @param <T> type parameter
      * @param parser parser
+     * @param type type
+     * @return a new instance
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void parse(ExtendedXmlPullParser parser)
-        throws XmlPullParserException, IOException;
+    public static <T extends XmlPullParsable> T parseInstance(
+        final ExtendedXmlPullParser parser, final Class<T> type)
+        throws XmlPullParserException, IOException {
+
+        try {
+            final T instance = type.newInstance();
+            instance.parse(parser);
+            return instance;
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        }
+    }
+
+
+    private XmlPullParsableFactory() {
+        super();
+    }
+
+
 }
 

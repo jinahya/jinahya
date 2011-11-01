@@ -18,11 +18,9 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import static com.googlecode.jinahya.xmlpull.v1.XmlPullParsableHelper.*;
-
 import java.text.ParseException;
 
-import junit.framework.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,7 +31,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XmlPullParserHelperTest {
+public class XSTemporalsTest {
 
 
     private static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
@@ -59,14 +57,14 @@ public class XmlPullParserHelperTest {
 
         String parsed = null;
 
-        for (String xsDateExample : XS_DATE_STRINGS) {
+        for (String string : XS_DATE_STRINGS) {
             try {
-                parsed = parseXSDate(xsDateExample).toString();
+                parsed = XSTemporals.parseXSDate(string).toString();
             } catch (XmlPullParserException xppe) {
                 parsed = xppe.getMessage();
             }
 
-            System.out.printf("%1$20s -> %2$s\n", xsDateExample, parsed);
+            System.out.printf("%1$20s -> %2$s\n", string, parsed);
         }
     }
 
@@ -82,14 +80,14 @@ public class XmlPullParserHelperTest {
 
         String parsed = null;
 
-        for (String xsTimeString : XS_TIME_STRINGS) {
+        for (String string : XS_TIME_STRINGS) {
             try {
-                parsed = parseXSTime(xsTimeString).toString();
+                parsed = XSTemporals.parseXSTime(string).toString();
             } catch (XmlPullParserException xppe) {
                 parsed = xppe.getMessage();
             }
 
-            System.out.printf("%1$20s -> %2$s\n", xsTimeString, parsed);
+            System.out.printf("%1$20s -> %2$s\n", string, parsed);
         }
     }
 
@@ -106,14 +104,14 @@ public class XmlPullParserHelperTest {
 
         String parsed = null;
 
-        for (String xsDateTimeString : XS_DATE_TIME_STRINGS) {
+        for (String string : XS_DATE_TIME_STRINGS) {
             try {
-                parsed = parseXSDateTime(xsDateTimeString).toString();
+                parsed = XSTemporals.parseXSDateTime(string).toString();
             } catch (XmlPullParserException xppe) {
                 parsed = xppe.getMessage();
             }
 
-            System.out.printf("%1$30s -> %2$s\n", xsDateTimeString, parsed);
+            System.out.printf("%1$30s -> %2$s\n", string, parsed);
         }
     }
 
@@ -122,17 +120,17 @@ public class XmlPullParserHelperTest {
     public void testParseXSBoolean() throws XmlPullParserException {
 
         try {
-            XmlPullParsableHelper.parseXSBoolean(null);
+            XmlPullParserHelper.parseXSBoolean(null);
             Assert.fail("passed: parseXSBoolean(null)");
         } catch (NullPointerException npe) {
             // expected
         }
 
-        Assert.assertTrue(XmlPullParsableHelper.parseXSBoolean("true"));
-        Assert.assertTrue(XmlPullParsableHelper.parseXSBoolean("1"));
+        Assert.assertTrue(XmlPullParserHelper.parseXSBoolean("true"));
+        Assert.assertTrue(XmlPullParserHelper.parseXSBoolean("1"));
 
-        Assert.assertFalse(XmlPullParsableHelper.parseXSBoolean("false"));
-        Assert.assertFalse(XmlPullParsableHelper.parseXSBoolean("0"));
+        Assert.assertFalse(XmlPullParserHelper.parseXSBoolean("false"));
+        Assert.assertFalse(XmlPullParserHelper.parseXSBoolean("0"));
 
         testXSBooleanWithIllegalValues("True");
 
@@ -149,7 +147,7 @@ public class XmlPullParserHelperTest {
 
     private void testXSBooleanWithIllegalValues(final String illegalValue) {
         try {
-            XmlPullParsableHelper.parseXSBoolean(illegalValue);
+            XmlPullParserHelper.parseXSBoolean(illegalValue);
             Assert.fail("passed: parseXSBoolean(\""
                         + String.valueOf(illegalValue) + "\"");
         } catch (XmlPullParserException xppe) {
