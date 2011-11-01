@@ -15,29 +15,32 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
 
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlPullParsable {
+public interface XmlSerializable {
 
 
     /**
-     * Parses information from given <code>parser</code>.
+     * Serializes information to given <code>serializer</code>.
      *
-     * @param parser parser
+     * @param serializer serializer
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void parse(XmlPullParser parser) throws XmlPullParserException, IOException;
+    void serialize(XmlSerializer serializer)
+        throws XmlPullParserException, IOException;
+
+
 }
 

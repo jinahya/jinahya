@@ -15,31 +15,29 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
+
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlSerializable {
+public class XmlPullParsableImpl implements XmlPullParsable {
 
 
-    /**
-     * Serializes information to given <code>serializer</code>.
-     *
-     * @param serializer serializer
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     */
-    void serialize(XmlSerializer serializer)
-        throws XmlPullParserException, IOException;
+    @Override
+    public void parse(final XmlPullParser parser)
+        throws XmlPullParserException, IOException {
+
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 
 }

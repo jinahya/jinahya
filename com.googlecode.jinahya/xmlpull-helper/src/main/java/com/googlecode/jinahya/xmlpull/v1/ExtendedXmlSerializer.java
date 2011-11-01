@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
