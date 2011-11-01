@@ -38,9 +38,10 @@ public final class XSTemporals {
 
 
     /**
-     * 
-     * @param patterns
-     * @return 
+     * Creates a list of DateFormats with given <code>patterns</code>.
+     *
+     * @param patterns data format patterns
+     * @return a list of DataFormats.
      */
     private static List<DateFormat> createDateFormats(final String[] patterns) {
 
@@ -94,6 +95,15 @@ public final class XSTemporals {
         }));
 
 
+
+    /**
+     * Parses a XML Schema temporal value.
+     *
+     * @param formats formats to use
+     * @param string string to be parsed
+     * @return a Date representation
+     * @throws XmlPullParserException if failed to parse
+     */
     private static Date parseXSTemporal(final List<DateFormat> formats,
                                         final String string)
         throws XmlPullParserException {
@@ -107,7 +117,7 @@ public final class XSTemporals {
                     return format.parse(string);
                 }
             } catch (ParseException pe) {
-                pe.printStackTrace(System.err);
+                //pe.printStackTrace(System.err);
             }
         }
 
@@ -116,6 +126,14 @@ public final class XSTemporals {
     }
 
 
+    /**
+     * Serializes given <code>value</code> with specified <code>formats</code>.
+     *
+     * @param formats formats
+     * @param value value
+     * @return String representation
+     * @throws XmlPullParserException if failed to serialize
+     */
     private static String serializeXSTemporal(final List<DateFormat> formats,
                                               final Date value)
         throws XmlPullParserException {
@@ -153,10 +171,11 @@ public final class XSTemporals {
 
 
     /**
-     * 
-     * @param value
-     * @return
-     * @throws XmlPullParserException 
+     * Serializes given <code>value</code> to <code>xs:date</code> format.
+     *
+     * @param value value
+     * @return String representation
+     * @throws XmlPullParserException if failed to serialize
      */
     public static String serailizeXSDate(final Date value)
         throws XmlPullParserException {
@@ -175,7 +194,7 @@ public final class XSTemporals {
      *
      * @param string <code>xs:time</code> string
      * @return parsed Date or null if <code>timeString</code> is null.
-     * @throws XmlPullParserException if an XML error occurs.
+     * @throws XmlPullParserException if failed to parse
      */
     public static Date parseXSTime(final String string)
         throws XmlPullParserException {
@@ -189,10 +208,11 @@ public final class XSTemporals {
 
 
     /**
-     * 
-     * @param value
-     * @return
-     * @throws XmlPullParserException 
+     * Serializes given <code>value</code> to <code>xs:time</code> format.
+     *
+     * @param value value
+     * @return String representation
+     * @throws XmlPullParserException if failed to serialize
      */
     public static String serializeXSTime(final Date value)
         throws XmlPullParserException {
@@ -239,6 +259,9 @@ public final class XSTemporals {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     private XSTemporals() {
         super();
     }

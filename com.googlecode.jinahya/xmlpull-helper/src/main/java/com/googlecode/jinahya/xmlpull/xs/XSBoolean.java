@@ -28,6 +28,13 @@ import org.xmlpull.v1.XmlPullParserException;
 public final class XSBoolean {
 
 
+    /**
+     * Parses given <code>string</code>.
+     *
+     * @param string string to parse
+     * @return parsed Boolean value
+     * @throws XmlPullParserException if failed to parse string
+     */
     public static boolean parseXSBoolean(final String string)
         throws XmlPullParserException {
 
@@ -48,6 +55,12 @@ public final class XSBoolean {
     }
 
 
+    /**
+     * Serializes given <code>value</code>.
+     *
+     * @param value value to serialize
+     * @return String representation.
+     */
     public static String serializeXSBoolean(final Boolean value) {
 
         if (value == null) {
@@ -58,6 +71,9 @@ public final class XSBoolean {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     private XSBoolean() {
         super();
     }
