@@ -394,36 +394,6 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public Byte getByteAttribute(final String namespace, final String name)
-        throws XmlPullParserException, IOException {
-
-        return XmlPullParserHelper.getByteAttribute(parser, namespace, name);
-    }
-
-
-    /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public Short getShortAttribute(final String namespace, final String name)
-        throws XmlPullParserException, IOException {
-
-        return XmlPullParserHelper.getShortAttribute(parser, namespace, name);
-    }
-
-
-    /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
     public Integer getIntAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
@@ -485,33 +455,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public String nextNillableText()
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextNillableText(parser);
-    }
-
-
-    /**
-     * Parses current tag and return the value as a Byte.
-     *
-     * @return parsed Byte value or null if empty tag
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     * @see XmlPullParserHelper#nextByte(XmlPullParser) 
-     */
-    public Byte nextByte() throws XmlPullParserException, IOException {
-
-        return XmlPullParserHelper.nextByte(parser);
-    }
-
-
-    /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public Short nextShort() throws XmlPullParserException, IOException {
-
-        return XmlPullParserHelper.nextShort(parser);
+        return XmlPullParserHelper.nextNillable(parser);
     }
 
 

@@ -20,9 +20,6 @@ package com.googlecode.jinahya.xmlpull;
 
 import java.io.IOException;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +35,33 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public final class XmlPullParserHelper {
+
+
+    /**
+     * Parses a new instance of given <code>type</code> from specified
+     * <code>parser</code>.
+     *
+     * @param <T> type parameter
+     * @param parser parser
+     * @param type type
+     * @return a new instance
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static <T extends XmlPullParsable> T parseInstance(
+        final XmlPullParser parser, final Class<T> type)
+        throws XmlPullParserException, IOException {
+
+        try {
+            final T instance = type.newInstance();
+            instance.parse(parser);
+            return instance;
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        }
+    }
 
 
     /**
@@ -63,18 +87,31 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param temporalFormats
-     * @param temporalString
-     * @return
+     * Parses given <code>temporalString</code> with specifed <code>temporalFormats</code>.
+     *
+     * @param temporalFormats date formats
+     * @param temporalString date value
+     * @return parsed date
      * @throws XmlPullParserException 
      */
     private static Date parseXSTemporal(final DateFormat[] temporalFormats,
                                         final String temporalString)
         throws XmlPullParserException {
 
+        if (temporalFormats == null) {
+            throw new NullPointerException("null tempralFormats");
+        }
+
+        if (temporalFormats.length == 0) {
+            throw new IllegalArgumentException("empty temporalFormats");
+        }
+
         if (temporalString == null) {
-            return null;
+            throw new NullPointerException("null temporalString");
+        }
+
+        if (temporalString.length() == 0) {
+            throw new IllegalArgumentException("empty temporalString");
         }
 
         for (int i = 0; i < temporalFormats.length; i++) {
@@ -253,16 +290,16 @@ public final class XmlPullParserHelper {
     public static Date nextXSDate(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        if (parser.isEmptyElementTag()) { // <tag/>
+        if (parser == null) {
+            throw new NullPointerException("null parser");
+        }
+
+        final String value = nextNillable(parser);
+        if (value == null) {
             return null;
         }
 
-        final String dateText = parser.nextText();
-        if (dateText.length() == 0) { // <tag></tag>
-            return null;
-        }
-
-        return parseXSDate(dateText);
+        return parseXSDate(value);
     }
 
 
@@ -277,16 +314,16 @@ public final class XmlPullParserHelper {
     public static Date nextXSTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        if (parser.isEmptyElementTag()) { // <tag/>
+        if (parser == null) {
+            throw new NullPointerException("null parser");
+        }
+
+        final String value = nextNillable(parser);
+        if (value == null) {
             return null;
         }
 
-        final String timeText = parser.nextText();
-        if (timeText.length() == 0) { // <tag></tag>
-            return null;
-        }
-
-        return parseXSTime(timeText);
+        return parseXSTime(value);
     }
 
 
@@ -301,100 +338,16 @@ public final class XmlPullParserHelper {
     public static Date nextXSDateTime(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        if (parser.isEmptyElementTag()) { // <tag/>
-            return null;
+        if (parser == null) {
+            throw new NullPointerException("null parser");
         }
 
-        final String dateTimeText = parser.nextText();
-        if (dateTimeText.length() == 0) { // <tag></tag>
-            return null;
-        }
-
-        return parseXSDateTime(dateTimeText);
-    }
-
-
-    /**
-     * Parses an attribute and returns as a Number.
-     *
-     * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
-     * @param numberClass number class to convert
-     * @return parsed Number instance of null if no attribute found
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     */
-    static Object getNumberAttributeValue(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name,
-                                          final Class numberClass)
-        throws XmlPullParserException, IOException {
-
-        if (!Number.class.isAssignableFrom(numberClass)) {
-            throw new IllegalArgumentException(
-                "numberClass(" + numberClass + ") is not assignable to "
-                + Number.class);
-        }
-
-        final String value = parser.getAttributeValue(namespace, name);
+        final String value = nextNillable(parser);
         if (value == null) {
             return null;
         }
 
-        try {
-            final Method method = numberClass.getMethod(
-                "valueOf", new Class[]{String.class});
-            try {
-                return method.invoke(null, new Object[]{value});
-            } catch (IllegalAccessException iae) {
-                iae.printStackTrace(System.err);
-            } catch (InvocationTargetException ite) {
-                ite.printStackTrace(System.err);
-            }
-        } catch (NoSuchMethodException nsme) {
-            nsme.printStackTrace(System.err);
-        }
-
-        return null;
-    }
-
-
-    /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public static Byte getByteAttribute(final XmlPullParser parser,
-                                        final String namespace,
-                                        final String name)
-        throws XmlPullParserException, IOException {
-
-        return (Byte) getNumberAttributeValue(
-            parser, namespace, name, Byte.class);
-    }
-
-
-    /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public static Short getShortAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name)
-        throws XmlPullParserException, IOException {
-
-        return (Short) getNumberAttributeValue(
-            parser, namespace, name, Short.class);
+        return parseXSDateTime(value);
     }
 
 
@@ -412,8 +365,12 @@ public final class XmlPullParserHelper {
                                           final String name)
         throws XmlPullParserException, IOException {
 
-        return (Integer) getNumberAttributeValue(
-            parser, namespace, name, Integer.class);
+        final String value = parser.getAttributeValue(namespace, name);
+        if (value == null) {
+            return null;
+        }
+
+        return Integer.valueOf(value);
     }
 
 
@@ -431,8 +388,12 @@ public final class XmlPullParserHelper {
                                         final String name)
         throws XmlPullParserException, IOException {
 
-        return (Long) getNumberAttributeValue(
-            parser, namespace, name, Long.class);
+        final String value = parser.getAttributeValue(namespace, name);
+        if (value == null) {
+            return null;
+        }
+
+        return Long.valueOf(value);
     }
 
 
@@ -450,8 +411,12 @@ public final class XmlPullParserHelper {
                                           final String name)
         throws XmlPullParserException, IOException {
 
-        return (Float) getNumberAttributeValue(
-            parser, namespace, name, Float.class);
+        final String value = parser.getAttributeValue(namespace, name);
+        if (value == null) {
+            return null;
+        }
+
+        return Float.valueOf(value);
     }
 
 
@@ -469,8 +434,12 @@ public final class XmlPullParserHelper {
                                             final String name)
         throws XmlPullParserException, IOException {
 
-        return (Double) getNumberAttributeValue(
-            parser, namespace, name, Double.class);
+        final String value = parser.getAttributeValue(namespace, name);
+        if (value == null) {
+            return null;
+        }
+
+        return Double.valueOf(value);
     }
 
 
@@ -481,83 +450,15 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public static String nextNillableText(final XmlPullParser parser)
+    public static String nextNillable(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) {
+            parser.nextTag();
             return null;
         }
 
         return parser.nextText();
-    }
-
-
-    /**
-     * 
-     * @param parser
-     * @param numberClass
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    static Object nextNumberText(final XmlPullParser parser,
-                                 final Class numberClass)
-        throws XmlPullParserException, IOException {
-
-        if (!Number.class.isAssignableFrom(numberClass)) {
-            throw new IllegalArgumentException(
-                "numberClass(" + numberClass + ") is not assignable to "
-                + Number.class);
-        }
-
-        final String text = nextNillableText(parser);
-        if (text == null) {
-            return null;
-        }
-
-        try {
-            final Method method = numberClass.getMethod(
-                "valueOf", new Class[]{String.class});
-            try {
-                return method.invoke(null, new Object[]{text});
-            } catch (IllegalAccessException iae) {
-                iae.printStackTrace(System.err);
-            } catch (InvocationTargetException ite) {
-                ite.printStackTrace(System.err);
-            }
-        } catch (NoSuchMethodException nsme) {
-            nsme.printStackTrace(System.err);
-        }
-
-        return null;
-    }
-
-
-    /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public static Byte nextByte(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        return (Byte) nextNumberText(parser, Byte.class);
-    }
-
-
-    /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
-     */
-    public static Short nextShort(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        return (Short) nextNumberText(parser, Short.class);
     }
 
 
@@ -571,7 +472,12 @@ public final class XmlPullParserHelper {
     public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        return (Integer) nextNumberText(parser, Integer.class);
+        final String value = nextNillable(parser);
+        if (value == null) {
+            return null;
+        }
+
+        return Integer.valueOf(value);
     }
 
 
@@ -585,12 +491,12 @@ public final class XmlPullParserHelper {
     public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String text = nextNillableText(parser);
-        if (text == null) {
+        final String value = nextNillable(parser);
+        if (value == null) {
             return null;
         }
 
-        return Long.valueOf(text);
+        return Long.valueOf(value);
     }
 
 
@@ -604,7 +510,12 @@ public final class XmlPullParserHelper {
     public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        return (Float) nextNumberText(parser, Float.class);
+        final String value = nextNillable(parser);
+        if (value == null) {
+            return null;
+        }
+
+        return Float.valueOf(value);
     }
 
 
@@ -618,7 +529,12 @@ public final class XmlPullParserHelper {
     public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        return (Double) nextNumberText(parser, Double.class);
+        final String value = nextNillable(parser);
+        if (value == null) {
+            return null;
+        }
+
+        return Double.valueOf(value);
     }
 
 
@@ -652,19 +568,19 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return Boolean.valueOf(parseXSBoolean(value));
+        return parseXSBoolean(value);
     }
 
 
     public static Boolean nextBoolean(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String text = nextNillableText(parser);
-        if (text == null) {
+        final String value = nextNillable(parser);
+        if (value == null) {
             return null;
         }
 
-        return Boolean.valueOf(parseXSBoolean(text));
+        return parseXSBoolean(value);
     }
 
 
