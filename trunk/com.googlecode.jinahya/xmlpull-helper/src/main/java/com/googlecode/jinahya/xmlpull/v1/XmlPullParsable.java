@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
@@ -24,21 +24,20 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XmlPullParsableImpl implements XmlPullParsable {
+public interface XmlPullParsable {
 
 
-    @Override
-    public void parse(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
+    /**
+     * Parses information from given <code>parser</code>.
+     *
+     * @param parser parser
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
+    void parse(XmlPullParser parser) throws XmlPullParserException, IOException;
 }
 

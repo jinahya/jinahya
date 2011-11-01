@@ -15,10 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
-import static com.googlecode.jinahya.xmlpull.XmlPullParsableHelper.*;
+import static com.googlecode.jinahya.xmlpull.v1.XmlPullParsableHelper.*;
 
 import java.text.ParseException;
 

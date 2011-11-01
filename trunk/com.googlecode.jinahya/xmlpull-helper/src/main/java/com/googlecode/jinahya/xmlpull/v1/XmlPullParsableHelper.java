@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull;
+package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
@@ -87,7 +87,8 @@ public final class XmlPullParsableHelper {
 
 
     /**
-     * Parses given <code>temporalString</code> with specifed <code>temporalFormats</code>.
+     * Parses given <code>temporalString</code> with specified
+     * <code>temporalFormats</code>.
      *
      * @param temporalFormats date formats
      * @param temporalString date value
@@ -572,6 +573,13 @@ public final class XmlPullParsableHelper {
     }
 
 
+    /**
+     * 
+     * @param parser
+     * @return the parsed value or null if the current tag is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
     public static Boolean nextBoolean(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
