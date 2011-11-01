@@ -137,8 +137,8 @@ public final class XmlPullParsableHelper {
      */
     private static final DateFormat[] XS_DATE_FORMATS = getXSTemporalFormats(
         new String[]{
-            "yyyy-MM-ssXXX",
-            "yyyy-MM-ss"
+            "yyyy-MM-ddXXX",
+            "yyyy-MM-dd"
         });
 
 
@@ -188,10 +188,10 @@ public final class XmlPullParsableHelper {
     private static final DateFormat[] XS_DATE_TIME_FORMATS =
         getXSTemporalFormats(
         new String[]{
-            "yyyy-MM-ss'T'HH:mm:ss.SSSXXX",
-            "yyyy-MM-ss'T'HH:mm:ssXXX",
-            "yyyy-MM-ss'T'HH:mm:ss.SSS",
-            "yyyy-MM-ss'T'HH:mm:ss"
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "yyyy-MM-dd'T'HH:mm:ss"
         });
 
 
