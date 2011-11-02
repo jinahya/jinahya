@@ -20,26 +20,47 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlSerializable {
+public final class PullParsableFactory {
 
 
     /**
-     * Serializes information to given <code>serializer</code>.
+     * Parses a new instance of given <code>type</code> from specified
+     * <code>parser</code>.
      *
-     * @param serializer serializer
+     * @param <T> type parameter
+     * @param parser parser
+     * @param type type
+     * @return a new instance
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void serialize(XmlSerializer serializer)
-        throws XmlPullParserException, IOException;
+    public static <T extends PullParsable> T parseInstance(
+        final PullParser parser, final Class<T> type)
+        throws XmlPullParserException, IOException {
+
+        try {
+            final T instance = type.newInstance();
+            instance.parse(parser);
+            return instance;
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        }
+    }
+
+
+    private PullParsableFactory() {
+        super();
+    }
 
 
 }
