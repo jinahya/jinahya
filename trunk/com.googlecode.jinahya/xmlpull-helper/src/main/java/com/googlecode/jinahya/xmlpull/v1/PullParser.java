@@ -34,7 +34,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class ExtendedXmlPullParser implements XmlPullParser {
+public final class PullParser implements XmlPullParser {
 
 
     /**
@@ -42,7 +42,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      *
      * @param parser parser implementation
      */
-    public ExtendedXmlPullParser(final XmlPullParser parser) {
+    public PullParser(final XmlPullParser parser) {
         super();
 
         if (parser == null) {
@@ -342,7 +342,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Date getXSDateAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.getXSDateAttribute(parser, namespace, name);
+        return PullParserHelper.getXSDateAttribute(parser, namespace, name);
     }
 
 
@@ -358,7 +358,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Date getXSTimeAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.getXSTimeAttribute(parser, namespace, name);
+        return PullParserHelper.getXSTimeAttribute(parser, namespace, name);
     }
 
 
@@ -375,7 +375,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
                                        final String name)
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.getXSDateTimeAttribute(
+        return PullParserHelper.getXSDateTimeAttribute(
             parser, namespace, name);
     }
 
@@ -390,7 +390,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Date nextXSDate()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSDate(parser);
+        return PullParserHelper.nextXSDate(parser);
     }
 
 
@@ -404,7 +404,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Date nextXSTime()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSTime(parser);
+        return PullParserHelper.nextXSTime(parser);
     }
 
 
@@ -418,7 +418,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Date nextXSDateTime()
         throws XmlPullParserException, IOException, ParseException {
 
-        return XmlPullParserHelper.nextXSDateTime(parser);
+        return PullParserHelper.nextXSDateTime(parser);
     }
 
 
@@ -433,7 +433,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Integer getIntAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getIntAttribute(parser, namespace, name);
+        return PullParserHelper.getIntAttribute(parser, namespace, name);
     }
 
 
@@ -448,7 +448,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Long getLongAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getLongAttribute(parser, namespace, name);
+        return PullParserHelper.getLongAttribute(parser, namespace, name);
     }
 
 
@@ -463,7 +463,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Float getFloatAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getFloatAttribute(parser, namespace, name);
+        return PullParserHelper.getFloatAttribute(parser, namespace, name);
     }
 
 
@@ -478,7 +478,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public Double getDoubleAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.getDoubleAttribute(parser, namespace, name);
+        return PullParserHelper.getDoubleAttribute(parser, namespace, name);
     }
 
 
@@ -491,7 +491,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
     public String nextNillableText()
         throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextNillable(parser);
+        return PullParserHelper.nextNillable(parser);
     }
 
 
@@ -504,7 +504,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      */
     public Integer nextInt() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextInt(parser);
+        return PullParserHelper.nextInt(parser);
     }
 
 
@@ -517,7 +517,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      */
     public Long nextLong() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextLong(parser);
+        return PullParserHelper.nextLong(parser);
     }
 
 
@@ -530,7 +530,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      */
     public Float nextFloat() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextFloat(parser);
+        return PullParserHelper.nextFloat(parser);
     }
 
 
@@ -543,7 +543,7 @@ public final class ExtendedXmlPullParser implements XmlPullParser {
      */
     public Double nextDouble() throws XmlPullParserException, IOException {
 
-        return XmlPullParserHelper.nextDouble(parser);
+        return PullParserHelper.nextDouble(parser);
     }
 
 

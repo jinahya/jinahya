@@ -29,10 +29,10 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ExtendedXmlSerializer implements XmlSerializer {
+public class PushSerializer implements XmlSerializer {
 
 
-    public ExtendedXmlSerializer(final XmlSerializer serializer) {
+    public PushSerializer(final XmlSerializer serializer) {
         super();
 
         if (serializer == null) {
@@ -45,7 +45,7 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /** {@inheritDoc} */
     @Override
-    public ExtendedXmlSerializer attribute(final String namespace,
+    public PushSerializer attribute(final String namespace,
                                            final String name,
                                            final String value)
         throws IOException, IllegalArgumentException, IllegalStateException {
@@ -94,7 +94,7 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /** {@inheritDoc} */
     @Override
-    public ExtendedXmlSerializer endTag(final String namespace,
+    public PushSerializer endTag(final String namespace,
                                         final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
@@ -239,7 +239,7 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /** {@inheritDoc} */
     @Override
-    public ExtendedXmlSerializer startTag(final String namespace,
+    public PushSerializer startTag(final String namespace,
                                           final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
@@ -250,7 +250,7 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /** {@inheritDoc} */
     @Override
-    public ExtendedXmlSerializer text(final String text)
+    public PushSerializer text(final String text)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
         assert serializer.equals(serializer.text(text));
@@ -260,7 +260,7 @@ public class ExtendedXmlSerializer implements XmlSerializer {
 
     /** {@inheritDoc} */
     @Override
-    public ExtendedXmlSerializer text(final char[] buf, final int start,
+    public PushSerializer text(final char[] buf, final int start,
                                       final int len)
         throws IOException, IllegalArgumentException, IllegalStateException {
 

@@ -32,7 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XmlPullParserHelper {
+public final class PullParserHelper {
 
 
     /**
@@ -418,7 +418,7 @@ public final class XmlPullParserHelper {
     }
 
 
-    private XmlPullParserHelper() {
+    private PullParserHelper() {
         super();
     }
 

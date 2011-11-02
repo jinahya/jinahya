@@ -18,26 +18,18 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlPullParsable {
+public final class PullSerializerHelper {
 
 
-    /**
-     * Parses information from given <code>parser</code>.
-     *
-     * @param parser parser
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     */
-    void parse(ExtendedXmlPullParser parser)
-        throws XmlPullParserException, IOException;
+    
+    private PullSerializerHelper() {
+        super();
+    }
+
+
 }
 
