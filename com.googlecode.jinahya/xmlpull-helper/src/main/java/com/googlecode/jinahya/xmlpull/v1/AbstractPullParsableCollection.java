@@ -44,8 +44,7 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
 
         if (PullParsable.class.isAssignableFrom(parsableType)) {
             throw new IllegalArgumentException(
-                parsableType + " is not assignable to "
-                + PullParsable.class);
+                parsableType + " is not assignable to " + PullParsable.class);
         }
 
         this.parsableType = parsableType;
@@ -69,9 +68,11 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
     }
 
 
+    /** parsable type. */
     private final Class<T> parsableType;
 
 
+    /** parsable collection. */
     private Collection<T> parsableCollection;
 
 

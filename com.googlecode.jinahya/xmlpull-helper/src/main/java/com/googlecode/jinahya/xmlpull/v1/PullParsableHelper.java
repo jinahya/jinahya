@@ -28,7 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class PullParsableFactory {
+public final class PullParsableHelper {
 
 
     /**
@@ -58,7 +58,7 @@ public final class PullParsableFactory {
     }
 
 
-    private PullParsableFactory() {
+    private PullParsableHelper() {
         super();
     }
 
