@@ -39,5 +39,7 @@ public interface PullParsable {
      */
     void parse(PullParser parser)
         throws XmlPullParserException, IOException;
+
+
 }
 
