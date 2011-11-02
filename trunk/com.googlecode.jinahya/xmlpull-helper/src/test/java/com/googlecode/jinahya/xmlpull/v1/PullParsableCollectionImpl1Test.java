@@ -19,8 +19,8 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 
 import java.io.IOException;
-
 import java.io.InputStream;
+
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParserException;

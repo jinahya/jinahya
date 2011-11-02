@@ -32,17 +32,18 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class PullParserHelper {
+public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
+     * Parses an attribute as <code>xs:date</code>.
+     *
+     * @param parser parser
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Date value or null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Date getXSDateAttribute(final XmlPullParser parser,
                                           final String namespace,
@@ -59,12 +60,12 @@ public final class PullParserHelper {
 
 
     /**
-     * Returns the attribute value as a Date.
+     * Parses an attribute as <code>xs:time</code>.
      *
      * @param parser parser
      * @param namespace tag namespace
      * @param name tag name
-     * @return parsed Date or null if no attribute found.
+     * @return parsed Date value or null if no attribute found.
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
@@ -418,7 +419,7 @@ public final class PullParserHelper {
     }
 
 
-    private PullParserHelper() {
+    private XmlPullParserHelper() {
         super();
     }
 

@@ -21,7 +21,6 @@ package com.googlecode.jinahya.xmlpull.v1;
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -38,7 +37,7 @@ public interface PushSerializable {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void serialize(XmlSerializer serializer)
+    void serialize(PushSerializer serializer)
         throws XmlPullParserException, IOException;
 
 

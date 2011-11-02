@@ -26,12 +26,18 @@ import org.xmlpull.v1.XmlSerializer;
 
 
 /**
+ * An extended XmlSerializer.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class PushSerializer implements XmlSerializer {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param serializer serializer implementation.
+     */
     public PushSerializer(final XmlSerializer serializer) {
         super();
 
@@ -46,8 +52,8 @@ public class PushSerializer implements XmlSerializer {
     /** {@inheritDoc} */
     @Override
     public PushSerializer attribute(final String namespace,
-                                           final String name,
-                                           final String value)
+                                    final String name,
+                                    final String value)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
         assert serializer.equals(serializer.attribute(namespace, name, value));
@@ -95,7 +101,7 @@ public class PushSerializer implements XmlSerializer {
     /** {@inheritDoc} */
     @Override
     public PushSerializer endTag(final String namespace,
-                                        final String name)
+                                 final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
         assert serializer.equals(serializer.endTag(namespace, name));
@@ -240,7 +246,7 @@ public class PushSerializer implements XmlSerializer {
     /** {@inheritDoc} */
     @Override
     public PushSerializer startTag(final String namespace,
-                                          final String name)
+                                   final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
         assert serializer.equals(serializer.startTag(namespace, name));
@@ -261,7 +267,7 @@ public class PushSerializer implements XmlSerializer {
     /** {@inheritDoc} */
     @Override
     public PushSerializer text(final char[] buf, final int start,
-                                      final int len)
+                               final int len)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
         assert serializer.equals(serializer.text(buf, start, len));
@@ -279,7 +285,7 @@ public class PushSerializer implements XmlSerializer {
     
     }
      */
-    /** impl. */
+    /** serializer implementation. */
     private final XmlSerializer serializer;
 
 
