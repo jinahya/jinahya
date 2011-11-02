@@ -24,6 +24,7 @@ import java.util.Collection;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <T> 
  */
 public interface PullParsableCollection<T extends PullParsable>
     extends PullParsable {

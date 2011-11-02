@@ -488,8 +488,7 @@ public final class PullParser implements XmlPullParser {
      * @throws XmlPullParserException
      * @throws IOException 
      */
-    public String nextNillableText()
-        throws XmlPullParserException, IOException {
+    public String nextNillable() throws XmlPullParserException, IOException {
 
         return PullParserHelper.nextNillable(parser);
     }
