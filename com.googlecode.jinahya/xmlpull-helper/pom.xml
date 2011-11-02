@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>xmlpull-helper</artifactId>
-  <version>1.0-alpha-1-SNAPSHOT</version>
+  <version>1.0-alpha-1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -214,9 +214,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xmlpull-helper/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xmlpull-helper/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/xmlpull-helper/trunk/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/xmlpull-helper-1.0-alpha-1</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/xmlpull-helper-1.0-alpha-1</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/xmlpull-helper-1.0-alpha-1</url>
   </scm>
   <prerequisites />
   <repositories>
