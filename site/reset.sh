@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 svn up
 ./fix_newlines.sh
 ./svn_apply_autoprops.py
