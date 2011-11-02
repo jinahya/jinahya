@@ -22,11 +22,11 @@ package com.googlecode.jinahya.xmlpull.v1;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class PullSerializerHelper {
+public final class XmlSerializerHelper {
 
 
     
-    private PullSerializerHelper() {
+    private XmlSerializerHelper() {
         super();
     }
 

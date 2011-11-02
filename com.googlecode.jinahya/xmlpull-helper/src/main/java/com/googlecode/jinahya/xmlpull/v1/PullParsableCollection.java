@@ -24,22 +24,24 @@ import java.util.Collection;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> 
+ * @param <T> parsable type parameter
  */
 public interface PullParsableCollection<T extends PullParsable>
     extends PullParsable {
 
 
     /**
-     * 
-     * @return 
+     * Returns the type of child elements.
+     *
+     * @return child type.
      */
     Class<T> getParsableType();
 
 
     /**
-     * 
-     * @return 
+     * Returns the child collection.
+     *
+     * @return child collection
      */
     Collection<T> getParsableCollection();
 

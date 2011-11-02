@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
-import java.text.ParseException;
-
 import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -337,160 +335,161 @@ public final class PullParser implements XmlPullParser {
      * @return the parsed Date or null it attribute not found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs
-     * @throws ParseException if the attribute value couldn't be parsed.
      */
     public Date getXSDateAttribute(final String namespace, final String name)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getXSDateAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getXSDateAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parses an <code>xs:time</code> attribute and returns as a Date.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Date or null if no attribute found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Date getXSTimeAttribute(final String namespace, final String name)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getXSTimeAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getXSTimeAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parses an <code>xs:dateTime</code> attribute and returns as Date.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Date or null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Date getXSDateTimeAttribute(final String namespace,
                                        final String name)
-        throws XmlPullParserException, IOException, ParseException {
+        throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getXSDateTimeAttribute(
+        return XmlPullParserHelper.getXSDateTimeAttribute(
             parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parsed the <code>nextText()</code> as an <code>xs:date</code>.
+     *
+     * @return parsed Date or null if the tag is empty.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
-    public Date nextXSDate()
-        throws XmlPullParserException, IOException, ParseException {
+    public Date nextXSDate() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextXSDate(parser);
+        return XmlPullParserHelper.nextXSDate(parser);
     }
 
 
     /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parses the <code>nextText()</code> as an <code>xs:time</code>.
+     *
+     * @return the parsed Date or null if the tag is empty.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
-    public Date nextXSTime()
-        throws XmlPullParserException, IOException, ParseException {
+    public Date nextXSTime() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextXSTime(parser);
+        return XmlPullParserHelper.nextXSTime(parser);
     }
 
 
     /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException
-     * @throws ParseException 
+     * Parses the <code>nextText</code> as an <code>xs:dateTime</code>.
+     *
+     * @return the parsed Date or null if the tag is empty
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
-    public Date nextXSDateTime()
-        throws XmlPullParserException, IOException, ParseException {
+    public Date nextXSDateTime() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextXSDateTime(parser);
+        return XmlPullParserHelper.nextXSDateTime(parser);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Returns an attribute as an Integer.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Integer or null if attribute not found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Integer getIntAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getIntAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getIntAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Long.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Long value or null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Long getLongAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getLongAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getLongAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Float.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Float value or null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Float getFloatAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getFloatAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getFloatAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Double.
+     *
+     * @param namespace namespace
+     * @param name name
+     * @return the parsed Double value or null if no attribute found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public Double getDoubleAttribute(final String namespace, final String name)
         throws XmlPullParserException, IOException {
 
-        return PullParserHelper.getDoubleAttribute(parser, namespace, name);
+        return XmlPullParserHelper.getDoubleAttribute(parser, namespace, name);
     }
 
 
     /**
-     * 
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code>.
+     *
+     * @return <code>nextText</code> value or null if the tag is empty.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public String nextNillable() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextNillable(parser);
+        return XmlPullParserHelper.nextNillable(parser);
     }
 
 
@@ -503,7 +502,7 @@ public final class PullParser implements XmlPullParser {
      */
     public Integer nextInt() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextInt(parser);
+        return XmlPullParserHelper.nextInt(parser);
     }
 
 
@@ -516,12 +515,12 @@ public final class PullParser implements XmlPullParser {
      */
     public Long nextLong() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextLong(parser);
+        return XmlPullParserHelper.nextLong(parser);
     }
 
 
     /**
-     * Parses <code>nextText</code> to Float.
+     * Parses <code>nextText</code> to a Float.
      *
      * @return parsed Float value or null if empty tag.
      * @throws XmlPullParserException if an XML error occurs.
@@ -529,12 +528,12 @@ public final class PullParser implements XmlPullParser {
      */
     public Float nextFloat() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextFloat(parser);
+        return XmlPullParserHelper.nextFloat(parser);
     }
 
 
     /**
-     * Parses <code>nextText</code> to Double.
+     * Parses <code>nextText</code> to a Double.
      *
      * @return parsed Long value or null if empty tag.
      * @throws XmlPullParserException if an XML error occurs.
@@ -542,7 +541,7 @@ public final class PullParser implements XmlPullParser {
      */
     public Double nextDouble() throws XmlPullParserException, IOException {
 
-        return PullParserHelper.nextDouble(parser);
+        return XmlPullParserHelper.nextDouble(parser);
     }
 
 
