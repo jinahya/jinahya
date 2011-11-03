@@ -24,12 +24,12 @@ import java.sql.SQLException;
 
 
 /**
- * Interface JDBC mapped element.
+ * Interface database mapped element.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <I> id type parameter
  */
-public interface JDBCElement<I> {
+public interface DBElement<I> {
 
 
     /**

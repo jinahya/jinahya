@@ -34,7 +34,7 @@ import javax.sql.DataSource;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public abstract class DefaultSequenceGenerator
-    extends AbstractSequenceGenerator {
+    extends AbstractDBSequenceGenerator {
 
 
     /**

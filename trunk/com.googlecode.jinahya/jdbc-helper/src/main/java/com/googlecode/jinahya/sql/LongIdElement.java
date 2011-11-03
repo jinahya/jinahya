@@ -22,11 +22,11 @@ import java.sql.Types;
 
 
 /**
- * JDBCElement with Long id.
+ * DBElement with Long id.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class JDBCLongIdElement extends AbstractJDBCElement<Long> {
+public abstract class LongIdElement extends AbstractDBElement<Long> {
 
 
     /**
@@ -35,8 +35,8 @@ public abstract class JDBCLongIdElement extends AbstractJDBCElement<Long> {
      * @param tableName table name
      * @param idColumnName id column name
      */
-    public JDBCLongIdElement(final String tableName,
-                             final String idColumnName) {
+    public LongIdElement(final String tableName,
+                           final String idColumnName) {
 
         super(tableName, idColumnName, Types.BIGINT);
     }

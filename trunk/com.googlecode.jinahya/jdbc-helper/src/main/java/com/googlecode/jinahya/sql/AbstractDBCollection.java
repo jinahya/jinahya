@@ -25,14 +25,14 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * Abstract implementation of JDBCCollection.
+ * Abstract implementation of DBCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <T> element type parameter
  */
 @XmlTransient
-public class AbstractJDBCCollection<T extends JDBCElement<?>>
-    implements JDBCCollection<T> {
+public class AbstractDBCollection<T extends DBElement<?>>
+    implements DBCollection<T> {
 
 
     /**
@@ -40,7 +40,7 @@ public class AbstractJDBCCollection<T extends JDBCElement<?>>
      *
      * @param elementType element type
      */
-    public AbstractJDBCCollection(final Class<T> elementType) {
+    public AbstractDBCollection(final Class<T> elementType) {
         super();
 
         this.elementType = elementType;

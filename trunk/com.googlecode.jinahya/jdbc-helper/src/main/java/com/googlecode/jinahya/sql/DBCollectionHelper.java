@@ -25,11 +25,11 @@ import java.sql.SQLException;
 
 
 /**
- * A helper for JDBCCollection.
+ * A helper for DBCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class JDBCCollectionHelper {
+public final class DBCollectionHelper {
 
 
     /**
@@ -44,7 +44,7 @@ public final class JDBCCollectionHelper {
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends JDBCCollection<E>, E extends JDBCElement<?>> C selectInstance(
+    public static <C extends DBCollection<E>, E extends DBElement<?>> C selectInstance(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectionType)
         throws SQLException {
@@ -74,7 +74,7 @@ public final class JDBCCollectionHelper {
      * @param collection collection
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends JDBCCollection<E>, E extends JDBCElement<?>> void select(
+    public static <C extends DBCollection<E>, E extends DBElement<?>> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collection)
         throws SQLException {
@@ -127,7 +127,7 @@ public final class JDBCCollectionHelper {
     /**
      * Creates a new instance.
      */
-    private JDBCCollectionHelper() {
+    private DBCollectionHelper() {
         super();
     }
 

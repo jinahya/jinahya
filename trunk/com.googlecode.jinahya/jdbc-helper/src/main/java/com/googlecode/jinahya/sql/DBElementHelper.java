@@ -28,11 +28,11 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class JDBCElementHelper {
+public final class DBElementHelper {
 
 
     /**
-     * Selects a new JDBCElement instance.
+     * Selects a new DBElement instance.
      *
      * @param <E> element type parameter
      * @param connection connection
@@ -41,7 +41,7 @@ public final class JDBCElementHelper {
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends JDBCElement<I>, I> E selectInstance(
+    public static <E extends DBElement<I>, I> E selectInstance(
         final Connection connection, final Class<E> elementType, final I id)
         throws SQLException {
 
@@ -73,7 +73,7 @@ public final class JDBCElementHelper {
      * @return true if successfully selected; false if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends JDBCElement<?>> boolean select(
+    public static <E extends DBElement<?>> boolean select(
         final Connection connection, final E element)
         throws SQLException {
 
@@ -114,7 +114,7 @@ public final class JDBCElementHelper {
     }
 
 
-    public static <A extends JDBCElement<?>> boolean delete(
+    public static <A extends DBElement<?>> boolean delete(
         final Connection connection, final A element)
         throws SQLException {
 
@@ -145,7 +145,7 @@ public final class JDBCElementHelper {
     /**
      * Creates a new instance.
      */
-    private JDBCElementHelper() {
+    private DBElementHelper() {
         super();
     }
 

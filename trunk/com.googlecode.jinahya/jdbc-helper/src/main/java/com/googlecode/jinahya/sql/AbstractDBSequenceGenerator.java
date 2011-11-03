@@ -35,7 +35,8 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractSequenceGenerator implements SequenceGenerator {
+public abstract class AbstractDBSequenceGenerator
+    implements DBSequenceGenerator {
 
 
     /**
@@ -45,8 +46,8 @@ public abstract class AbstractSequenceGenerator implements SequenceGenerator {
      * @param minCount min count
      * @param maxCount max count
      */
-    public AbstractSequenceGenerator(final DataSource dataSource,
-                                     final int minCount, final int maxCount) {
+    public AbstractDBSequenceGenerator(final DataSource dataSource,
+                                       final int minCount, final int maxCount) {
         super();
 
         if (dataSource == null) {
