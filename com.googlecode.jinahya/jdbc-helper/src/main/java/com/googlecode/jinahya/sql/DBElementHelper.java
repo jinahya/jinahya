@@ -114,8 +114,17 @@ public final class DBElementHelper {
     }
 
 
-    public static <A extends DBElement<?>> boolean delete(
-        final Connection connection, final A element)
+    /**
+     * Delete given <code>element</code>.
+     *
+     * @param <E> element type parameter
+     * @param connection connection
+     * @param element element
+     * @return true if successfully deleted; false otherwise
+     * @throws SQLException if an SQL error occurs.
+     */
+    public static <E extends DBElement<?>> boolean delete(
+        final Connection connection, final E element)
         throws SQLException {
 
         if (connection == null) {
