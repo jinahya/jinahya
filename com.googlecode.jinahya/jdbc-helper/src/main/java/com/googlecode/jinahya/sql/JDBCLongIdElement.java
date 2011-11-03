@@ -22,6 +22,7 @@ import java.sql.Types;
 
 
 /**
+ * JDBCElement with Long id.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
