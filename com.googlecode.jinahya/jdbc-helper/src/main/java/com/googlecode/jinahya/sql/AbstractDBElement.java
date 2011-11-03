@@ -25,12 +25,12 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * Abstract JDBCElement implementation.
+ * Abstract DBElement implementation.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class AbstractJDBCElement<T> implements JDBCElement<T> {
+public abstract class AbstractDBElement<T> implements DBElement<T> {
 
 
     /**
@@ -90,7 +90,7 @@ public abstract class AbstractJDBCElement<T> implements JDBCElement<T> {
      * @param idColumnName id column name
      * @param idColumnType id column type
      */
-    public AbstractJDBCElement(final String tableName,
+    public AbstractDBElement(final String tableName,
                                final String idColumnName,
                                final int idColumnType) {
         super();
@@ -153,13 +153,13 @@ public abstract class AbstractJDBCElement<T> implements JDBCElement<T> {
 
     @Override
     public boolean select(final Connection connection) throws SQLException {
-        return JDBCElementHelper.select(connection, this);
+        return DBElementHelper.select(connection, this);
     }
 
 
     @Override
     public boolean delete(final Connection connection) throws SQLException {
-        return JDBCElementHelper.delete(connection, this);
+        return DBElementHelper.delete(connection, this);
     }
 
 

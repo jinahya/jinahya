@@ -15,36 +15,23 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.annotation;
 
 
-import java.util.Collection;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
- * Interface for collection type of element.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> element type parameter
  */
-public interface JDBCCollection<E extends JDBCElement<?>> {
-
-
-    /**
-     * Return element type.
-     *
-     * @return element type
-     */
-    Class<E> getElementType();
-
-
-    /**
-     * Returns element collection.
-     *
-     * @return element collection
-     */
-    Collection<E> getElementCollection();
-
-
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DBSelect {
 }
 

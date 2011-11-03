@@ -26,7 +26,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface SequenceGenerator {
+public interface DBSequenceGenerator {
 
 
     /**

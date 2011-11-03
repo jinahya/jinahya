@@ -30,8 +30,12 @@ import java.lang.annotation.Target;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Documented
-@Target({ElementType.METHOD})
+@Target(value = {ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JDBCSelect {
+public @interface DBEntity {
+
+    String tableName();
+
+    String idColumnName();
 }
 
