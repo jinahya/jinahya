@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.sql;
 
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 
