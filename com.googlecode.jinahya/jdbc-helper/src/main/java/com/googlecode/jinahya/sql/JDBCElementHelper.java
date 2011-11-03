@@ -39,22 +39,28 @@ public final class JDBCElementHelper {
      * @param elementType accessible type
      * @param id id
      * @return a new instance or null if not found
-     * @throws InstantiationException if failed to instantiate accessible.
-     * @throws IllegalAccessException if failed to instantiate accessible.
      * @throws SQLException if an SQL error occurs.
      */
     public static <E extends JDBCElement<I>, I> E selectInstance(
         final Connection connection, final Class<E> elementType, final I id)
-        throws InstantiationException, IllegalAccessException, SQLException {
+        throws SQLException {
 
-        final E element = elementType.newInstance();
-        element.setId(id);
+        try {
+            final E element = elementType.newInstance();
+            element.setId(id);
 
-        if (select(connection, element)) {
-            return element;
+            if (select(connection, element)) {
+                return element;
+            }
+            return null;
+
+        } catch (IllegalAccessException iae) {
+            throw new SQLException(
+                "failed to create instance of " + elementType, iae);
+        } catch (InstantiationException ie) {
+            throw new SQLException(
+                "failed to create instance of " + elementType, ie);
         }
-
-        return null;
     }
 
 
