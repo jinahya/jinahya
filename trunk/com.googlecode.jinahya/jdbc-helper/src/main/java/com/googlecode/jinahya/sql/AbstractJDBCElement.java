@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * Abstract JDBCElement implementation.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -32,6 +33,12 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractJDBCElement<T> implements JDBCElement<T> {
 
 
+    /**
+     * 
+     * @param tableName
+     * @param idColumnName
+     * @return 
+     */
     protected static String createQualifiedIdColumnName(
         final String tableName, final String idColumnName) {
 
@@ -57,6 +64,11 @@ public abstract class AbstractJDBCElement<T> implements JDBCElement<T> {
     }
 
 
+    /**
+     * 
+     * @param idColumnName
+     * @return 
+     */
     protected static String createIdSequenceName(final String idColumnName) {
 
         if (idColumnName == null) {

@@ -32,11 +32,11 @@ public final class JDBCElementHelper {
 
 
     /**
-     * Selects a new JDBCAccessible instance.
+     * Selects a new JDBCElement instance.
      *
      * @param <E> element type parameter
      * @param connection connection
-     * @param elementType accessible type
+     * @param elementType element type
      * @param id id
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
@@ -65,7 +65,8 @@ public final class JDBCElementHelper {
 
 
     /**
-     * 
+     * Selects given <code>element</code>.
+     *
      * @param <E> element type parameter
      * @param connection connection
      * @param element element
@@ -81,7 +82,7 @@ public final class JDBCElementHelper {
         }
 
         if (element == null) {
-            throw new NullPointerException("null accessible");
+            throw new NullPointerException("null element");
         }
         if (element.getId() == null) {
             throw new IllegalArgumentException("null element.id");
@@ -114,24 +115,24 @@ public final class JDBCElementHelper {
 
 
     public static <A extends JDBCElement<?>> boolean delete(
-        final Connection connection, final A accessible)
+        final Connection connection, final A element)
         throws SQLException {
 
         if (connection == null) {
             throw new NullPointerException("null connection");
         }
 
-        if (accessible == null) {
-            throw new NullPointerException("null accessible");
+        if (element == null) {
+            throw new NullPointerException("null element");
         }
 
         final PreparedStatement preparedStatement = connection.prepareStatement(
-            "DELETEFROM " + accessible.getTableName()
-            + " WHERE " + accessible.getIdColumnName() + " = ?");
+            "DELETEFROM " + element.getTableName()
+            + " WHERE " + element.getIdColumnName() + " = ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setObject(++parameterIndex, accessible.getId(),
-                                        accessible.getIdColumnType());
+            preparedStatement.setObject(++parameterIndex, element.getId(),
+                                        element.getIdColumnType());
 
             return preparedStatement.executeUpdate() == 1;
 

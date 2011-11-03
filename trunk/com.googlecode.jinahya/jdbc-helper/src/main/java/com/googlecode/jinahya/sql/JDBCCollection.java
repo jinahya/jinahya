@@ -22,7 +22,7 @@ import java.util.Collection;
 
 
 /**
- * Interface for collection type of accessible.
+ * Interface for collection type of element.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> element type parameter
@@ -39,9 +39,9 @@ public interface JDBCCollection<E extends JDBCElement<?>> {
 
 
     /**
-     * Returns accessible collection.
+     * Returns element collection.
      *
-     * @return accessible collection
+     * @return element collection
      */
     Collection<E> getElementCollection();
 
