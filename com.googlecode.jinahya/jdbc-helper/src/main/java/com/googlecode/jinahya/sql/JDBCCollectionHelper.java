@@ -25,6 +25,7 @@ import java.sql.SQLException;
 
 
 /**
+ * A helper for JDBCCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -91,7 +92,7 @@ public final class JDBCCollectionHelper {
         }
 
         if (collection == null) {
-            throw new NullPointerException("null accessible");
+            throw new NullPointerException("null element");
         }
 
         final PreparedStatement preparedStatement = connection.prepareStatement(

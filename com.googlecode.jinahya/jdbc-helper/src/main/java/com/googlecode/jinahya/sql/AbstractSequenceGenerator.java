@@ -31,6 +31,7 @@ import javax.sql.DataSource;
 
 
 /**
+ * Abstract SequenceGenerator implementation.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -38,10 +39,11 @@ public abstract class AbstractSequenceGenerator implements SequenceGenerator {
 
 
     /**
-     * 
-     * @param dataSource
-     * @param minCount
-     * @param maxCount 
+     * Creates a new instance.
+     *
+     * @param dataSource data source
+     * @param minCount min count
+     * @param maxCount max count
      */
     public AbstractSequenceGenerator(final DataSource dataSource,
                                      final int minCount, final int maxCount) {
@@ -107,7 +109,8 @@ public abstract class AbstractSequenceGenerator implements SequenceGenerator {
 
 
     /**
-     * 
+     * Fetch sequence values.
+     *
      * @param connection connection
      * @param name sequence name
      * @param list sequence value list
@@ -119,15 +122,19 @@ public abstract class AbstractSequenceGenerator implements SequenceGenerator {
         throws SQLException;
 
 
+    /** data source. */
     private final DataSource dataSource;
 
 
+    /** min count. */
     private final int minCount;
 
 
+    /** max count. */
     private final int maxCount;
 
 
+    /** map. */
     private final Map<String, List<Long>> map;
 
 

@@ -25,9 +25,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * Abstract implementation of JDBCCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> accessible type
+ * @param <T> element type parameter
  */
 @XmlTransient
 public class AbstractJDBCCollection<T extends JDBCElement<?>>
@@ -35,8 +36,9 @@ public class AbstractJDBCCollection<T extends JDBCElement<?>>
 
 
     /**
-     * 
-     * @param elementType 
+     * Creates a new instance.
+     *
+     * @param elementType element type
      */
     public AbstractJDBCCollection(final Class<T> elementType) {
         super();
@@ -48,11 +50,11 @@ public class AbstractJDBCCollection<T extends JDBCElement<?>>
     @Override
     public final Collection<T> getElementCollection() {
 
-        if (accessibleCollection == null) {
-            accessibleCollection = new ArrayList<T>();
+        if (elementCollection == null) {
+            elementCollection = new ArrayList<T>();
         }
 
-        return accessibleCollection;
+        return elementCollection;
     }
 
 
@@ -66,7 +68,7 @@ public class AbstractJDBCCollection<T extends JDBCElement<?>>
 
 
     @XmlTransient
-    private Collection<T> accessibleCollection;
+    private Collection<T> elementCollection;
 
 
 }

@@ -29,6 +29,7 @@ import javax.sql.DataSource;
 
 
 /**
+ * Default implementation.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -37,10 +38,11 @@ public abstract class DefaultSequenceGenerator
 
 
     /**
-     * 
-     * @param dataSource
-     * @param minCount
-     * @param maxCount 
+     * Creates a new instance.
+     *
+     * @param dataSource data source
+     * @param minCount min count
+     * @param maxCount max count
      */
     public DefaultSequenceGenerator(final DataSource dataSource,
                                     final int minCount, final int maxCount) {
