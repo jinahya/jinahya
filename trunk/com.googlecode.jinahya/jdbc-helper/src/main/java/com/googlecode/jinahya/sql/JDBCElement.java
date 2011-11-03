@@ -24,6 +24,7 @@ import java.sql.SQLException;
 
 
 /**
+ * Interface JDBC mapped element.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <I> id type parameter
@@ -72,46 +73,51 @@ public interface JDBCElement<I> {
 
 
     /**
-     * 
-     * @param connection
-     * @return
-     * @throws SQLException 
+     * Deletes this element.
+     *
+     * @param connection connection
+     * @return true if successfully deleted; false otherwise.
+     * @throws SQLException if an SQL error occurs.
      */
     boolean delete(Connection connection) throws SQLException;
 
 
     /**
-     * 
-     * @param connection
-     * @return
+     * Inserts this element.
+     *
+     * @param connection connection
+     * @return true if successfully inserted; false otherwise.
      * @throws SQLException 
      */
     boolean insert(Connection connection) throws SQLException;
 
 
     /**
-     * 
-     * @param connection
-     * @return
-     * @throws SQLException 
+     * Selects this instance.
+     *
+     * @param connection connection
+     * @return true if successfully selected; false otherwise.
+     * @throws SQLException if an SQL error occurs.
      */
     boolean select(Connection connection) throws SQLException;
 
 
     /**
-     * 
-     * @param connection
-     * @return
-     * @throws SQLException 
+     * Updates this instance.
+     *
+     * @param connection connection
+     * @return true if successfully updated; false otherwise.
+     * @throws SQLException if an SQL error occurs.
      */
     boolean update(Connection connection) throws SQLException;
 
 
     /**
-     * 
-     * @param resultSet
-     * @param prefix
-     * @throws SQLException 
+     * Reads information from given <code>resultSet</code>.
+     *
+     * @param resultSet result set
+     * @param prefix column prefix
+     * @throws SQLException if an SQL error occurs.
      */
     void read(ResultSet resultSet, String prefix) throws SQLException;
 

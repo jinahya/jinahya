@@ -22,12 +22,20 @@ import java.sql.SQLException;
 
 
 /**
+ * Interface for sequence generator.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public interface SequenceGenerator {
 
 
+    /**
+     * Returns next sequence value.
+     *
+     * @param name sequence name
+     * @return next sequence value
+     * @throws SQLException if an SQL error occurs.
+     */
     Long getNextSequence(String name) throws SQLException;
 
 
