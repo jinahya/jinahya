@@ -41,8 +41,9 @@ public final class DBElementHelper {
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement> E selectInstance(
-        final Connection connection, final Class<E> elementType, final Long id)
+    public static <E extends DBElement> E select(final Connection connection,
+                                                 final Class<E> elementType,
+                                                 final Long id)
         throws SQLException {
 
         try {
@@ -113,6 +114,30 @@ public final class DBElementHelper {
     }
 
 
+    public static <E extends DBElement> boolean delete(
+        final Connection connection, final String tableName,
+        final String idColumnName, final Long id)
+        throws SQLException {
+
+        if (connection == null) {
+            throw new NullPointerException("null connection");
+        }
+
+        final PreparedStatement preparedStatement = connection.prepareStatement(
+            "DELETE FROM " + tableName
+            + " WHERE " + idColumnName + " = ?");
+        try {
+            int parameterIndex = 0;
+            preparedStatement.setLong(++parameterIndex, id);
+
+            return preparedStatement.executeUpdate() == 1;
+
+        } finally {
+            preparedStatement.close();
+        }
+    }
+
+
     /**
      * Delete given <code>element</code>.
      *
@@ -126,26 +151,8 @@ public final class DBElementHelper {
         final Connection connection, final E element)
         throws SQLException {
 
-        if (connection == null) {
-            throw new NullPointerException("null connection");
-        }
-
-        if (element == null) {
-            throw new NullPointerException("null element");
-        }
-
-        final PreparedStatement preparedStatement = connection.prepareStatement(
-            "DELETEFROM " + element.getTableName()
-            + " WHERE " + element.getIdColumnName() + " = ?");
-        try {
-            int parameterIndex = 0;
-            preparedStatement.setLong(++parameterIndex, element.getId());
-
-            return preparedStatement.executeUpdate() == 1;
-
-        } finally {
-            preparedStatement.close();
-        }
+        return delete(connection, element.getTableName(),
+                      element.getIdColumnName(), element.getId());
     }
 
 
