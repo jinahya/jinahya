@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class OracleDBSequenceManager extends DBSequenceManager {
+public class OracleDBSequenceManager extends DBSequenceManager {
 
 
     /**
@@ -46,7 +46,7 @@ public abstract class OracleDBSequenceManager extends DBSequenceManager {
      * @param maxCount max count
      */
     public OracleDBSequenceManager(final DataSource dataSource,
-                            final int minCount, final int maxCount) {
+                                   final int minCount, final int maxCount) {
 
         super(dataSource, minCount, maxCount);
     }

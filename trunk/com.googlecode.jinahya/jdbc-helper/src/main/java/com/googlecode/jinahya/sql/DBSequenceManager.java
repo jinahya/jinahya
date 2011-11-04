@@ -46,7 +46,7 @@ public abstract class DBSequenceManager {
      * @param maximumSize max count
      */
     public DBSequenceManager(final DataSource dataSource, final int minimumSize,
-                      final int maximumSize) {
+                             final int maximumSize) {
         super();
 
         if (dataSource == null) {
