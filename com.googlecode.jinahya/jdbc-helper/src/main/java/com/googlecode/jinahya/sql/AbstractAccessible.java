@@ -34,6 +34,14 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractAccessible implements Accessible {
 
 
+    /**
+     * Reads a Long value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return read Long value or null if null
+     * @throws SQLException if an SQL error occurs.
+     */
     protected static Long getLong(final ResultSet resultSet,
                                   final String columnLabel)
         throws SQLException {
@@ -47,6 +55,15 @@ public abstract class AbstractAccessible implements Accessible {
     }
 
 
+    /**
+     * Reads a long value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return read long value or default value if null
+     * @throws SQLException if an SQL error occurs.
+     */
     protected static long getLong(final ResultSet resultSet,
                                   final String columnLabel,
                                   final long defaultValue)
@@ -61,6 +78,14 @@ public abstract class AbstractAccessible implements Accessible {
     }
 
 
+    /**
+     * Reads an Integer from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return read Integer value or null if null
+     * @throws SQLException if an SQL error occurs.
+     */
     protected static Integer getInt(final ResultSet resultSet,
                                     final String columnLabel)
         throws SQLException {
@@ -74,6 +99,15 @@ public abstract class AbstractAccessible implements Accessible {
     }
 
 
+    /**
+     * Reads an int value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return read int value or defalutValue if null
+     * @throws SQLException if an SQL error occurs.
+     */
     protected static int getInt(final ResultSet resultSet,
                                 final String columnLabel,
                                 final int defaultValue)
@@ -95,7 +129,7 @@ public abstract class AbstractAccessible implements Accessible {
      * @param idColumnName id column name
      */
     public AbstractAccessible(final String tableName,
-                                final String idColumnName) {
+                              final String idColumnName) {
         super();
 
         if (tableName == null) {
