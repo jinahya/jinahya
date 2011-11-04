@@ -15,35 +15,34 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull.v1;
+package com.googlecode.jinahya.xmlpull.xs;
 
 
-import java.util.Collection;
+import java.io.IOException;
+
+import org.testng.annotations.Test;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> parsable type parameter
  */
-public interface PullParsableCollection<T extends PullParsable>
-    extends PullParsable {
+public class XSTimeAdapterTest extends XSTemporalAdapterTest<XSTimeAdapter> {
 
 
-    /**
-     * Returns the type of child elements.
-     *
-     * @return child type.
-     */
-    Class<T> getPullParsableType();
+    private static final String[] XS_TIME_STRINGS = new String[]{
+        "21:32:52", "21:32:52+02:00", "19:32:52Z", "19:32:52+00:00",
+        "21:32:52.12679"
+    };
 
 
-    /**
-     * Returns the child collection.
-     *
-     * @return child collection
-     */
-    Collection<T> getPullParsableCollection();
+    @Test
+    public void testParse() throws XmlPullParserException, IOException {
+
+        testParse(new XSTimeAdapter(), XS_TIME_STRINGS);
+    }
 
 
 }

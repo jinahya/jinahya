@@ -63,7 +63,7 @@ public class PullParsableCollectionImpl1
 
 
     public Collection<PullParsableImpl1> getParsable() {
-        return getParsableCollection();
+        return getPullParsableCollection();
     }
 
 

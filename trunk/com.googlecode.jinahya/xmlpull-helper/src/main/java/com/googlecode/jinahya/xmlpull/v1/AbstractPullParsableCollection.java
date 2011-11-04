@@ -52,13 +52,13 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
 
 
     @Override
-    public final Class<T> getParsableType() {
+    public final Class<T> getPullParsableType() {
         return parsableType;
     }
 
 
     @Override
-    public final Collection<T> getParsableCollection() {
+    public final Collection<T> getPullParsableCollection() {
 
         if (parsableCollection == null) {
             parsableCollection = new ArrayList<T>();

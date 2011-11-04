@@ -15,35 +15,34 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull.v1;
+package com.googlecode.jinahya.xmlpull.xs;
 
 
-import java.util.Collection;
+import java.io.IOException;
+
+import org.testng.annotations.Test;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> parsable type parameter
  */
-public interface PullParsableCollection<T extends PullParsable>
-    extends PullParsable {
+public class XSDateAdapterTest extends XSTemporalAdapterTest<XSDateAdapter> {
 
 
-    /**
-     * Returns the type of child elements.
-     *
-     * @return child type.
-     */
-    Class<T> getPullParsableType();
+    private static final String[] XS_DATE_STRINGS = new String[]{
+        "2001-10-26", "2001-10-26+02:00", "2001-10-26Z", "2001-10-26+00:00",
+        "-2001-10-26", "-20000-04-01"
+    };
 
 
-    /**
-     * Returns the child collection.
-     *
-     * @return child collection
-     */
-    Collection<T> getPullParsableCollection();
+    @Test
+    public void testParse() throws XmlPullParserException, IOException {
+
+        testParse(new XSDateAdapter(), XS_DATE_STRINGS);
+    }
 
 
 }
