@@ -183,13 +183,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as an Integer.
+     *
+     * @param parser parser
+     * @param namespace namespace
+     * @param name name
+     * @return parsed Integer value or null if the tag is an empty.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Integer getIntAttribute(final XmlPullParser parser,
                                           final String namespace,
@@ -522,12 +523,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code> as a double.
+     *
+     * @param parser parser
+     * @param defaultValue default value
+     * @return parsed double value or the <code>defaultValue</code> if the tag
+     *         is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static double nextDouble(final XmlPullParser parser,
                                     final double defaultValue)
@@ -543,13 +546,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Boolean.
+     *
+     * @param parser parser
+     * @param namespace namespace
+     * @param name name
+     * @return parsed Boolean value or null if attribute not found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Boolean getBooleanAttribute(final XmlPullParser parser,
                                               final String namespace,
@@ -566,14 +570,16 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a boolean.
+     *
+     * @param parser parser
+     * @param namespace namespace
+     * @param name name
+     * @param defaultValue default value
+     * @return parsed boolean value or <code>defaultValue</code> if no attribute
+     *         found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs
      */
     public static boolean getBooleanAttribute(final XmlPullParser parser,
                                               final String namespace,
@@ -591,9 +597,10 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return the parsed value or null if the current tag is an empty tag.
+     * Parses <code>nextText</code> as a Boolean value.
+     *
+     * @param parser parser
+     * @return Boolean value or null if the tag is an empty tag.
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
@@ -610,15 +617,17 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText()</code> as a boolean value.
+     *
+     * @param parser parser
+     * @param defaultValue default value
+     * @return boolean value or the <code>defaultValue</code> if the tag is an
+     *         empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static boolean nextBoolean(final XmlPullParser parser,
-                                      boolean defaultValue)
+                                      final boolean defaultValue)
         throws XmlPullParserException, IOException {
 
         final Boolean value = nextBoolean(parser);
