@@ -167,9 +167,9 @@
               <attach>true</attach>
               <attachArtifactClassifier>microedition</attachArtifactClassifier>
               <options>
+                <option>-microedition</option>
                 <option>-ignorewarnings</option>
                 <option>-target 1.1</option>
-                <option>-microedition</option>
                 <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
                 <option>-keep public class * { public protected *; }</option>
               </options>
