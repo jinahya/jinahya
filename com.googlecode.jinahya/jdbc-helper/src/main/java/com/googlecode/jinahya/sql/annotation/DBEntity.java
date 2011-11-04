@@ -35,9 +35,19 @@ import java.lang.annotation.Target;
 public @interface DBEntity {
 
 
+    /**
+     * table name.
+     *
+     * @return table name
+     */
     String tableName();
 
 
+    /**
+     * id column name.
+     *
+     * @return id column name
+     */
     String idColumnName();
 
 
