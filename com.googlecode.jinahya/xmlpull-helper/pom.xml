@@ -165,12 +165,11 @@
             </goals>
             <configuration>
               <attach>true</attach>
-              <attachArtifactClassifier>micro</attachArtifactClassifier>
+              <attachArtifactClassifier>microedition</attachArtifactClassifier>
               <options>
                 <option>-ignorewarnings</option>
-                <!--option>-dontobfuscate</option-->
                 <option>-target 1.1</option>
-                <option>-renamesourcefileattribute SourceFile</option>
+                <option>-microedition</option>
                 <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
                 <option>-keep public class * { public protected *; }</option>
               </options>
