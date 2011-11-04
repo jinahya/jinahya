@@ -33,7 +33,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class DefaultSequenceGenerator
+public abstract class DefaultDBSequenceGenerator
     extends AbstractDBSequenceGenerator {
 
 
@@ -44,8 +44,8 @@ public abstract class DefaultSequenceGenerator
      * @param minCount min count
      * @param maxCount max count
      */
-    public DefaultSequenceGenerator(final DataSource dataSource,
-                                    final int minCount, final int maxCount) {
+    public DefaultDBSequenceGenerator(final DataSource dataSource,
+                                      final int minCount, final int maxCount) {
 
         super(dataSource, minCount, maxCount);
     }
@@ -53,10 +53,10 @@ public abstract class DefaultSequenceGenerator
 
     @Override
     protected void fetch(final Connection connection, final String name,
-                         final List<Long> list, final int maxCount)
+                         final List<Long> list)
         throws SQLException {
 
-        if (list.size() >= maxCount) {
+        if (list.size() >= getMaximumSize()) {
             return;
         }
 
@@ -65,7 +65,8 @@ public abstract class DefaultSequenceGenerator
             + " CONNECT BY LEVEL <= ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setInt(++parameterIndex, maxCount - list.size());
+            preparedStatement.setInt(++parameterIndex,
+                                     getMaximumSize() - list.size());
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {

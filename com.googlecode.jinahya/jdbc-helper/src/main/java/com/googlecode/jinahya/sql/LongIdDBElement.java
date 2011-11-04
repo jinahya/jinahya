@@ -26,7 +26,7 @@ import java.sql.Types;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class LongIdElement extends AbstractDBElement<Long> {
+public abstract class LongIdDBElement extends AbstractDBElement<Long> {
 
 
     /**
@@ -35,7 +35,7 @@ public abstract class LongIdElement extends AbstractDBElement<Long> {
      * @param tableName table name
      * @param idColumnName id column name
      */
-    public LongIdElement(final String tableName,
+    public LongIdDBElement(final String tableName,
                            final String idColumnName) {
 
         super(tableName, idColumnName, Types.BIGINT);
