@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection1>
+  <parsable1 id="0">
+    <name/>
+    <age/>
+  </parsable1>  
+  <parsable1 id="1">
+    <name>name1</name>
+    <age>18</age>
+  </parsable1>  
+  <parsable1 id="1">
+    <name>Jame</name>
+    <age>18</age>
+  </parsable1>  
+  <parsable1 id="1">
+    <name>Ass Ignorant</name>
+    <age>20</age>
+  </parsable1>
+</collection1>
