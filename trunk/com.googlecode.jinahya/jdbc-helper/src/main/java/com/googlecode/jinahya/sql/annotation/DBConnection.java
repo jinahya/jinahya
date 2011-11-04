@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Documented
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DBConnection {
 }

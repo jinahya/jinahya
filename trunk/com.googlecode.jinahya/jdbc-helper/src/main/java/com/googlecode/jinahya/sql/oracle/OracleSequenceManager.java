@@ -38,9 +38,11 @@ import javax.sql.DataSource;
 public class OracleSequenceManager extends SequenceManager {
 
 
+    /** default minimum count. */
     private static final int DEFAULT_MINIMUM_COUNT = 10;
 
 
+    /** default maximum count. */
     private static final int DEFAULT_MAXIMUM_COUNT = 100;
 
 
@@ -90,7 +92,8 @@ public class OracleSequenceManager extends SequenceManager {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
                 while (resultSet.next()) {
-                    sequenceValues.add(resultSet.getLong(sequenceName + ".NEXTVAL"));
+                    sequenceValues.add(resultSet.getLong(
+                        sequenceName + ".NEXTVAL"));
                 }
             } finally {
                 resultSet.close();
