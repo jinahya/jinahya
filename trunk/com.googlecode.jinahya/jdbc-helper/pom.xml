@@ -6,7 +6,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>jdbc-helper</artifactId>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-3</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
