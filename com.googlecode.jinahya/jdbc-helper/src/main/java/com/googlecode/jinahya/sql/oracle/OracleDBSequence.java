@@ -15,8 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.oracle;
 
+
+import com.googlecode.jinahya.sql.DBSequence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,8 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class DefaultDBSequenceGenerator
-    extends AbstractDBSequenceGenerator {
+public abstract class OracleDBSequence extends DBSequence {
 
 
     /**
@@ -44,16 +45,16 @@ public abstract class DefaultDBSequenceGenerator
      * @param minCount min count
      * @param maxCount max count
      */
-    public DefaultDBSequenceGenerator(final DataSource dataSource,
-                                      final int minCount, final int maxCount) {
+    public OracleDBSequence(final DataSource dataSource,
+                            final int minCount, final int maxCount) {
 
         super(dataSource, minCount, maxCount);
     }
 
 
     @Override
-    protected void fetch(final Connection connection, final String name,
-                         final List<Long> list)
+    protected void fetchNextValues(final Connection connection,
+                                   final String name, final List<Long> list)
         throws SQLException {
 
         if (list.size() >= getMaximumSize()) {

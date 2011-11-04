@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <T> element type parameter
  */
 @XmlTransient
-public class AbstractDBCollection<T extends DBElement<?>>
+public class AbstractDBCollection<T extends DBElement>
     implements DBCollection<T> {
 
 
