@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql.oracle;
 
 
-import com.googlecode.jinahya.sql.DBSequenceManager;
+import com.googlecode.jinahya.sql.SequenceManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class OracleDBSequenceManager extends DBSequenceManager {
+public class OracleSequenceManager extends SequenceManager {
 
 
     private static final int DEFAULT_MINIMUM_COUNT = 10;
@@ -49,7 +49,7 @@ public class OracleDBSequenceManager extends DBSequenceManager {
      *
      * @param dataSource data source
      */
-    public OracleDBSequenceManager(final DataSource dataSource) {
+    public OracleSequenceManager(final DataSource dataSource) {
         this(dataSource, DEFAULT_MINIMUM_COUNT, DEFAULT_MAXIMUM_COUNT);
     }
 
@@ -61,9 +61,9 @@ public class OracleDBSequenceManager extends DBSequenceManager {
      * @param minimumCount minimum count
      * @param maximumCount maximum count
      */
-    public OracleDBSequenceManager(final DataSource dataSource,
-                                   final int minimumCount,
-                                   final int maximumCount) {
+    public OracleSequenceManager(final DataSource dataSource,
+                                 final int minimumCount,
+                                 final int maximumCount) {
 
         super(dataSource, minimumCount, maximumCount);
     }
