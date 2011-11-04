@@ -25,7 +25,9 @@ package com.googlecode.jinahya.xmlpull.v1;
 public final class XmlSerializerHelper {
 
 
-    
+    /**
+     * Creates a new instance.
+     */
     private XmlSerializerHelper() {
         super();
     }

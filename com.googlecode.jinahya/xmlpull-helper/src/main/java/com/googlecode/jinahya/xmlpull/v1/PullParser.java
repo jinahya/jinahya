@@ -161,7 +161,7 @@ public final class PullParser implements XmlPullParser {
 
     /** {@inheritDoc}. */
     @Override
-    public String getNamespace(String prefix) {
+    public String getNamespace(final String prefix) {
         return parser.getNamespace(prefix);
     }
 
@@ -385,7 +385,6 @@ public final class PullParser implements XmlPullParser {
      * @throws IOException if an I/O error occurs.
      */
     public Date nextXSDate() throws XmlPullParserException, IOException {
-
         return XmlPullParserHelper.nextXSDate(parser);
     }
 
@@ -398,7 +397,6 @@ public final class PullParser implements XmlPullParser {
      * @throws IOException if an I/O error occurs.
      */
     public Date nextXSTime() throws XmlPullParserException, IOException {
-
         return XmlPullParserHelper.nextXSTime(parser);
     }
 
@@ -411,7 +409,6 @@ public final class PullParser implements XmlPullParser {
      * @throws IOException if an I/O error occurs.
      */
     public Date nextXSDateTime() throws XmlPullParserException, IOException {
-
         return XmlPullParserHelper.nextXSDateTime(parser);
     }
 
@@ -433,6 +430,24 @@ public final class PullParser implements XmlPullParser {
 
 
     /**
+     * 
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public int getIntAttribute(final String namespace, final String name,
+                               final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.getIntAttribute(
+            parser, namespace, name, defaultValue);
+    }
+
+
+    /**
      * Parses an attribute as a Long.
      *
      * @param namespace namespace
@@ -445,6 +460,24 @@ public final class PullParser implements XmlPullParser {
         throws XmlPullParserException, IOException {
 
         return XmlPullParserHelper.getLongAttribute(parser, namespace, name);
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public long getLongAttribute(final String namespace, final String name,
+                                 final long defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.getLongAttribute(
+            parser, namespace, name, defaultValue);
     }
 
 
@@ -465,6 +498,24 @@ public final class PullParser implements XmlPullParser {
 
 
     /**
+     * 
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public float getFloatAttribute(final String namespace, final String name,
+                                   final float defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.getFloatAttribute(
+            parser, namespace, name, defaultValue);
+    }
+
+
+    /**
      * Parses an attribute as a Double.
      *
      * @param namespace namespace
@@ -477,6 +528,24 @@ public final class PullParser implements XmlPullParser {
         throws XmlPullParserException, IOException {
 
         return XmlPullParserHelper.getDoubleAttribute(parser, namespace, name);
+    }
+
+
+    /**
+     * 
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public double getDoubleAttribute(final String namespace, final String name,
+                                     final double defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.getDoubleAttribute(
+            parser, namespace, name, defaultValue);
     }
 
 
@@ -507,6 +576,20 @@ public final class PullParser implements XmlPullParser {
 
 
     /**
+     * 
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public int nextInt(final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.nextInt(parser, defaultValue);
+    }
+
+
+    /**
      * Parses <code>nextText</code> to a Long.
      *
      * @return parsed Long value or null if empty tag.
@@ -516,6 +599,20 @@ public final class PullParser implements XmlPullParser {
     public Long nextLong() throws XmlPullParserException, IOException {
 
         return XmlPullParserHelper.nextLong(parser);
+    }
+
+
+    /**
+     * 
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public long nextLong(final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.nextLong(parser, defaultValue);
     }
 
 
@@ -533,6 +630,20 @@ public final class PullParser implements XmlPullParser {
 
 
     /**
+     * 
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public float nextFloat(final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.nextFloat(parser, defaultValue);
+    }
+
+
+    /**
      * Parses <code>nextText</code> to a Double.
      *
      * @return parsed Long value or null if empty tag.
@@ -542,6 +653,21 @@ public final class PullParser implements XmlPullParser {
     public Double nextDouble() throws XmlPullParserException, IOException {
 
         return XmlPullParserHelper.nextDouble(parser);
+    }
+
+
+    /**
+     * Parses the value returned by <code>nextText()</code> as a double value.
+     *
+     * @param defaultValue default value
+     * @return parsed double value or the defaultValue if empty tag
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
+    public double nextDouble(final double defaultValue)
+        throws XmlPullParserException, IOException {
+
+        return XmlPullParserHelper.nextDouble(parser, defaultValue);
     }
 
 

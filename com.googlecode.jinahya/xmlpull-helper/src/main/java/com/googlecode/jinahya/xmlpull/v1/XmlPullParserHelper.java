@@ -18,7 +18,10 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import com.googlecode.jinahya.xmlpull.xs.XSTemporals;
+import com.googlecode.jinahya.xmlpull.xs.XSBooleanAdapter;
+import com.googlecode.jinahya.xmlpull.xs.XSDateAdapter;
+import com.googlecode.jinahya.xmlpull.xs.XSDateTimeAdapter;
+import com.googlecode.jinahya.xmlpull.xs.XSTimeAdapter;
 
 import java.io.IOException;
 
@@ -55,7 +58,7 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return XSTemporals.parseXSDate(dateString);
+        return XSDateAdapter.parseXSDate(dateString);
     }
 
 
@@ -79,7 +82,7 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return XSTemporals.parseXSTime(timeString);
+        return XSTimeAdapter.parseXSTime(timeString);
     }
 
 
@@ -103,7 +106,7 @@ public final class XmlPullParserHelper {
             return null;
         }
 
-        return XSTemporals.parseXSDateTime(dateTimeString);
+        return XSDateTimeAdapter.parseXSDateTime(dateTimeString);
     }
 
 
@@ -122,12 +125,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return XSTemporals.parseXSDate(value);
+        return XSDateAdapter.parseXSDate(string);
     }
 
 
@@ -146,12 +149,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return XSTemporals.parseXSTime(value);
+        return XSTimeAdapter.parseXSTime(string);
     }
 
 
@@ -170,12 +173,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return XSTemporals.parseXSDateTime(value);
+        return XSDateTimeAdapter.parseXSDateTime(string);
     }
 
 
@@ -193,12 +196,36 @@ public final class XmlPullParserHelper {
                                           final String name)
         throws XmlPullParserException, IOException {
 
-        final String value = parser.getAttributeValue(namespace, name);
-        if (value == null) {
+        final String string = parser.getAttributeValue(namespace, name);
+        if (string == null) {
             return null;
         }
 
-        return Integer.valueOf(value);
+        return Integer.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static int getIntAttribute(final XmlPullParser parser,
+                                      final String namespace, final String name,
+                                      final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Integer value = getIntAttribute(parser, namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
     }
 
 
@@ -216,12 +243,37 @@ public final class XmlPullParserHelper {
                                         final String name)
         throws XmlPullParserException, IOException {
 
-        final String value = parser.getAttributeValue(namespace, name);
-        if (value == null) {
+        final String string = parser.getAttributeValue(namespace, name);
+        if (string == null) {
             return null;
         }
 
-        return Long.valueOf(value);
+        return Long.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static long getLongAttribute(final XmlPullParser parser,
+                                        final String namespace,
+                                        final String name,
+                                        final long defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Long value = getLongAttribute(parser, namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.longValue();
     }
 
 
@@ -239,12 +291,27 @@ public final class XmlPullParserHelper {
                                           final String name)
         throws XmlPullParserException, IOException {
 
-        final String value = parser.getAttributeValue(namespace, name);
-        if (value == null) {
+        final String string = parser.getAttributeValue(namespace, name);
+        if (string == null) {
             return null;
         }
 
-        return Float.valueOf(value);
+        return Float.valueOf(string);
+    }
+
+
+    public static float getFloatAttribute(final XmlPullParser parser,
+                                          final String namespace,
+                                          final String name,
+                                          final float defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Float value = getFloatAttribute(parser, namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.floatValue();
     }
 
 
@@ -262,12 +329,37 @@ public final class XmlPullParserHelper {
                                             final String name)
         throws XmlPullParserException, IOException {
 
-        final String value = parser.getAttributeValue(namespace, name);
-        if (value == null) {
+        final String string = parser.getAttributeValue(namespace, name);
+        if (string == null) {
             return null;
         }
 
-        return Double.valueOf(value);
+        return Double.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static double getDoubleAttribute(final XmlPullParser parser,
+                                            final String namespace,
+                                            final String name,
+                                            final double defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Double value = getDoubleAttribute(parser, namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.doubleValue();
     }
 
 
@@ -282,7 +374,7 @@ public final class XmlPullParserHelper {
         throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) {
-            parser.nextTag();
+            parser.nextTag(); // move to end tag
             return null;
         }
 
@@ -300,12 +392,33 @@ public final class XmlPullParserHelper {
     public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return Integer.valueOf(value);
+        return Integer.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static int nextInt(final XmlPullParser parser,
+                              final int defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Integer value = nextInt(parser);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.intValue();
     }
 
 
@@ -319,12 +432,33 @@ public final class XmlPullParserHelper {
     public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return Long.valueOf(value);
+        return Long.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static long nextLong(final XmlPullParser parser,
+                                final long defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Long value = nextLong(parser);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.longValue();
     }
 
 
@@ -338,12 +472,33 @@ public final class XmlPullParserHelper {
     public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return Float.valueOf(value);
+        return Float.valueOf(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static float nextFloat(final XmlPullParser parser,
+                                  final float defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Float value = nextFloat(parser);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.floatValue();
     }
 
 
@@ -357,46 +512,81 @@ public final class XmlPullParserHelper {
     public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return Double.valueOf(value);
+        return Double.valueOf(string);
     }
 
 
-    static boolean parseXSBoolean(final String value)
-        throws XmlPullParserException {
+    /**
+     * 
+     * @param parser
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static double nextDouble(final XmlPullParser parser,
+                                    final double defaultValue)
+        throws XmlPullParserException, IOException {
 
+        final Double value = nextDouble(parser);
         if (value == null) {
-            throw new NullPointerException("null value");
+            return defaultValue;
         }
 
-        if ("true".equals(value) || "1".equals(value)) {
-            return true;
-        }
-
-        if ("false".equals(value) || "0".equals(value)) {
-            return false;
-        }
-
-        throw new XmlPullParserException(
-            "unparsable xs:boolean value: " + value);
+        return value.doubleValue();
     }
 
 
+    /**
+     * 
+     * @param parser
+     * @param namespace
+     * @param name
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
     public static Boolean getBooleanAttribute(final XmlPullParser parser,
                                               final String namespace,
                                               final String name)
         throws XmlPullParserException, IOException {
 
-        final String value = parser.getAttributeValue(namespace, name);
-        if (value == null) {
+        final String string = parser.getAttributeValue(namespace, name);
+        if (string == null) {
             return null;
         }
 
-        return parseXSBoolean(value);
+        return XSBooleanAdapter.parseXSBoolean(string);
+    }
+
+
+    /**
+     * 
+     * @param parser
+     * @param namespace
+     * @param name
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static boolean getBooleanAttribute(final XmlPullParser parser,
+                                              final String namespace,
+                                              final String name,
+                                              final boolean defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Boolean value = getBooleanAttribute(parser, namespace, name);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
     }
 
 
@@ -410,15 +600,39 @@ public final class XmlPullParserHelper {
     public static Boolean nextBoolean(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String value = nextNillable(parser);
-        if (value == null) {
+        final String string = nextNillable(parser);
+        if (string == null) {
             return null;
         }
 
-        return parseXSBoolean(value);
+        return XSBooleanAdapter.parseXSBoolean(string);
     }
 
 
+    /**
+     * 
+     * @param parser
+     * @param defaultValue
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException 
+     */
+    public static boolean nextBoolean(final XmlPullParser parser,
+                                      boolean defaultValue)
+        throws XmlPullParserException, IOException {
+
+        final Boolean value = nextBoolean(parser);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.booleanValue();
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
     private XmlPullParserHelper() {
         super();
     }

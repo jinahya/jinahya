@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xmlpull.xs;
 
 
+import java.io.IOException;
 import org.xmlpull.v1.XmlPullParserException;
 
 
@@ -25,7 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XSBoolean {
+public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
 
 
     /**
@@ -35,7 +36,7 @@ public final class XSBoolean {
      * @return parsed Boolean value
      * @throws XmlPullParserException if failed to parse string
      */
-    public static boolean parseXSBoolean(final String string)
+    public static Boolean parseXSBoolean(final String string)
         throws XmlPullParserException {
 
         if (string == null) {
@@ -43,11 +44,11 @@ public final class XSBoolean {
         }
 
         if ("true".equals(string) || "1".equals(string)) {
-            return true;
+            return Boolean.TRUE;
         }
 
         if ("false".equals(string) || "0".equals(string)) {
-            return false;
+            return Boolean.FALSE;
         }
 
         throw new XmlPullParserException(
@@ -71,10 +72,34 @@ public final class XSBoolean {
     }
 
 
+    @Override
+    public Boolean parse(final String string)
+        throws XmlPullParserException, IOException {
+
+        if (string == null) {
+            throw new NullPointerException("null value");
+        }
+
+        return parseXSBoolean(string);
+    }
+
+
+    @Override
+    public String serialize(final Boolean value)
+        throws XmlPullParserException, IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        return serializeXSBoolean(value);
+    }
+
+
     /**
      * Creates a new instance.
      */
-    private XSBoolean() {
+    private XSBooleanAdapter() {
         super();
     }
 

@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XSBooleanTest {
+public class XSBooleanAdapterTest {
 
 
     private static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
@@ -48,17 +48,17 @@ public class XSBooleanTest {
     public void testParseXSBoolean() throws XmlPullParserException {
 
         try {
-            XSBoolean.parseXSBoolean(null);
+            XSBooleanAdapter.parseXSBoolean(null);
             Assert.fail("passed: parseXSBoolean(null)");
         } catch (NullPointerException npe) {
             // expected
         }
 
-        Assert.assertTrue(XSBoolean.parseXSBoolean("true"));
-        Assert.assertTrue(XSBoolean.parseXSBoolean("1"));
+        Assert.assertTrue(XSBooleanAdapter.parseXSBoolean("true"));
+        Assert.assertTrue(XSBooleanAdapter.parseXSBoolean("1"));
 
-        Assert.assertFalse(XSBoolean.parseXSBoolean("false"));
-        Assert.assertFalse(XSBoolean.parseXSBoolean("0"));
+        Assert.assertFalse(XSBooleanAdapter.parseXSBoolean("false"));
+        Assert.assertFalse(XSBooleanAdapter.parseXSBoolean("0"));
 
         testXSBooleanWithIllegalValues("True");
 
@@ -75,7 +75,7 @@ public class XSBooleanTest {
 
     private void testXSBooleanWithIllegalValues(final String illegalValue) {
         try {
-            XSBoolean.parseXSBoolean(illegalValue);
+            XSBooleanAdapter.parseXSBoolean(illegalValue);
             Assert.fail("passed: parseXSBoolean(\""
                         + String.valueOf(illegalValue) + "\"");
         } catch (XmlPullParserException xppe) {
