@@ -27,7 +27,7 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
-public interface DBCollectable<A extends DBAccessible> {
+public interface Collectable<A extends Accessible> {
 
 
     /**

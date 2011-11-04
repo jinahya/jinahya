@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class DBSequenceManager {
+public abstract class SequenceManager {
 
 
     /**
@@ -45,8 +45,8 @@ public abstract class DBSequenceManager {
      * @param minimumSize minimum count
      * @param maximumSize maximum count
      */
-    public DBSequenceManager(final DataSource dataSource, final int minimumSize,
-                             final int maximumSize) {
+    public SequenceManager(final DataSource dataSource, final int minimumSize,
+                           final int maximumSize) {
         super();
 
         if (dataSource == null) {

@@ -29,7 +29,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class DBCollectableHelper {
+public final class CollectableHelper {
 
 
     /**
@@ -44,7 +44,7 @@ public final class DBCollectableHelper {
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollectable<A>, A extends DBAccessible> C select(
+    public static <C extends Collectable<A>, A extends Accessible> C select(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectableType)
         throws SQLException {
@@ -74,7 +74,7 @@ public final class DBCollectableHelper {
      * @param collectable collectable
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollectable<A>, A extends DBAccessible> void select(
+    public static <C extends Collectable<A>, A extends Accessible> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collectable)
         throws SQLException {
@@ -101,18 +101,20 @@ public final class DBCollectableHelper {
         try {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
-                final Class<A> elementType = collectable.getAccessibleType();
+                final Class<A> accessibleType = collectable.getAccessibleType();
                 while (resultSet.next()) {
                     try {
-                        final A element = elementType.newInstance();
-                        element.read(resultSet, "");
-                        collectable.getAccessibles().add(element);
+                        final A accessible = accessibleType.newInstance();
+                        accessible.read(resultSet, "");
+                        collectable.getAccessibles().add(accessible);
                     } catch (IllegalAccessException iae) {
                         throw new SQLException(
-                            "failed to create instance of " + elementType, iae);
+                            "failed to create instance of " + accessibleType,
+                            iae);
                     } catch (InstantiationException ie) {
                         throw new SQLException(
-                            "failed to create instance of " + elementType, ie);
+                            "failed to create instance of " + accessibleType,
+                            ie);
                     }
                 }
             } finally {
@@ -127,7 +129,7 @@ public final class DBCollectableHelper {
     /**
      * Creates a new instance.
      */
-    private DBCollectableHelper() {
+    private CollectableHelper() {
         super();
     }
 

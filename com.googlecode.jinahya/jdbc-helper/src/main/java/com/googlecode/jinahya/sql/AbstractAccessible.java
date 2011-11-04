@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class AbstractDBAccessible implements DBAccessible {
+public abstract class AbstractAccessible implements Accessible {
 
 
     protected static Long getLong(final ResultSet resultSet,
@@ -94,7 +94,7 @@ public abstract class AbstractDBAccessible implements DBAccessible {
      * @param tableName table name
      * @param idColumnName id column name
      */
-    public AbstractDBAccessible(final String tableName,
+    public AbstractAccessible(final String tableName,
                                 final String idColumnName) {
         super();
 
@@ -131,13 +131,13 @@ public abstract class AbstractDBAccessible implements DBAccessible {
 
     @Override
     public boolean select(final Connection connection) throws SQLException {
-        return DBAccessibleHelper.select(connection, this);
+        return AccessibleHelper.select(connection, this);
     }
 
 
     @Override
     public boolean delete(final Connection connection) throws SQLException {
-        return DBAccessibleHelper.delete(connection, this);
+        return AccessibleHelper.delete(connection, this);
     }
 
 
