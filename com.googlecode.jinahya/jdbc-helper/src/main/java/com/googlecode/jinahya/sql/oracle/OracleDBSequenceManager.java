@@ -38,41 +38,59 @@ import javax.sql.DataSource;
 public class OracleDBSequenceManager extends DBSequenceManager {
 
 
+    private static final int DEFAULT_MINIMUM_COUNT = 10;
+
+
+    private static final int DEFAULT_MAXIMUM_COUNT = 100;
+
+
     /**
      * Creates a new instance.
      *
      * @param dataSource data source
-     * @param minCount min count
-     * @param maxCount max count
+     */
+    public OracleDBSequenceManager(final DataSource dataSource) {
+        this(dataSource, DEFAULT_MINIMUM_COUNT, DEFAULT_MAXIMUM_COUNT);
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param dataSource data source
+     * @param minimumCount minimum count
+     * @param maximumCount maximum count
      */
     public OracleDBSequenceManager(final DataSource dataSource,
-                                   final int minCount, final int maxCount) {
+                                   final int minimumCount,
+                                   final int maximumCount) {
 
-        super(dataSource, minCount, maxCount);
+        super(dataSource, minimumCount, maximumCount);
     }
 
 
     @Override
     protected void fetchNextValues(final Connection connection,
-                                   final String name, final List<Long> list)
+                                   final String sequenceName,
+                                   final List<Long> sequenceValues)
         throws SQLException {
 
-        if (list.size() >= getMaximumSize()) {
+        if (sequenceValues.size() >= getMaximumSize()) {
             return;
         }
 
         final PreparedStatement preparedStatement = connection.prepareCall(
-            "SELECT LEVEL, " + name + ".NEXTVAL FROM DUAL"
+            "SELECT LEVEL, " + sequenceName + ".NEXTVAL FROM DUAL"
             + " CONNECT BY LEVEL <= ?");
         try {
             int parameterIndex = 0;
             preparedStatement.setInt(++parameterIndex,
-                                     getMaximumSize() - list.size());
+                                     getMaximumSize() - sequenceValues.size());
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
                 while (resultSet.next()) {
-                    list.add(resultSet.getLong(name + ".NEXTVAL"));
+                    sequenceValues.add(resultSet.getLong(sequenceName + ".NEXTVAL"));
                 }
             } finally {
                 resultSet.close();

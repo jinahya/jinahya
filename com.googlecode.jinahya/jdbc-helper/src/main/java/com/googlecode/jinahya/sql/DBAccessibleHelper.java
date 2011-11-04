@@ -28,26 +28,26 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class DBElementHelper {
+public final class DBAccessibleHelper {
 
 
     /**
      * Selects a new DBElement instance.
      *
-     * @param <E> element type parameter
+     * @param <A> accessible type parameter
      * @param connection connection
-     * @param elementType element type
+     * @param accessibleType element type
      * @param id id
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement> E select(final Connection connection,
-                                                 final Class<E> elementType,
-                                                 final Long id)
+    public static <A extends DBAccessible> A select(
+        final Connection connection, final Class<A> accessibleType,
+        final Long id)
         throws SQLException {
 
         try {
-            final E element = elementType.newInstance();
+            final A element = accessibleType.newInstance();
             element.setId(id);
 
             if (select(connection, element)) {
@@ -57,10 +57,10 @@ public final class DBElementHelper {
 
         } catch (IllegalAccessException iae) {
             throw new SQLException(
-                "failed to create instance of " + elementType, iae);
+                "failed to create instance of " + accessibleType, iae);
         } catch (InstantiationException ie) {
             throw new SQLException(
-                "failed to create instance of " + elementType, ie);
+                "failed to create instance of " + accessibleType, ie);
         }
     }
 
@@ -68,33 +68,33 @@ public final class DBElementHelper {
     /**
      * Selects given <code>element</code>.
      *
-     * @param <E> element type parameter
+     * @param <A> accessible type parameter
      * @param connection connection
-     * @param element element
+     * @param accessible accessible
      * @return true if successfully selected; false if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement> boolean select(
-        final Connection connection, final E element)
+    public static <A extends DBAccessible> boolean select(
+        final Connection connection, final A accessible)
         throws SQLException {
 
         if (connection == null) {
             throw new NullPointerException("null connection");
         }
 
-        if (element == null) {
+        if (accessible == null) {
             throw new NullPointerException("null element");
         }
-        if (element.getId() == null) {
+        if (accessible.getId() == null) {
             throw new IllegalArgumentException("null element.id");
         }
 
         final PreparedStatement preparedStatement = connection.prepareStatement(
-            "SELECT * FROM " + element.getTableName()
-            + " WHERE " + element.getIdColumnName() + " = ?");
+            "SELECT * FROM " + accessible.getTableName()
+            + " WHERE " + accessible.getIdColumnName() + " = ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setLong(++parameterIndex, element.getId());
+            preparedStatement.setLong(++parameterIndex, accessible.getId());
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
@@ -102,7 +102,7 @@ public final class DBElementHelper {
                     return false;
                 }
 
-                element.read(resultSet, "");
+                accessible.read(resultSet, "");
                 return true;
 
             } finally {
@@ -114,7 +114,18 @@ public final class DBElementHelper {
     }
 
 
-    public static <E extends DBElement> boolean delete(
+    /**
+     * Deletes an accessible identified by given <code>id</code>.
+     *
+     * @param <A> accessible type parameter
+     * @param connection connection
+     * @param tableName table name
+     * @param idColumnName id column name
+     * @param id id
+     * @return true if successfully delete; false otherwise
+     * @throws SQLException if an SQL error occurs.
+     */
+    public static <A extends DBAccessible> boolean delete(
         final Connection connection, final String tableName,
         final String idColumnName, final Long id)
         throws SQLException {
@@ -141,25 +152,25 @@ public final class DBElementHelper {
     /**
      * Delete given <code>element</code>.
      *
-     * @param <E> element type parameter
+     * @param <A> accessible type parameter
      * @param connection connection
-     * @param element element
+     * @param accessible element
      * @return true if successfully deleted; false otherwise
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement> boolean delete(
-        final Connection connection, final E element)
+    public static <A extends DBAccessible> boolean delete(
+        final Connection connection, final A accessible)
         throws SQLException {
 
-        return delete(connection, element.getTableName(),
-                      element.getIdColumnName(), element.getId());
+        return delete(connection, accessible.getTableName(),
+                      accessible.getIdColumnName(), accessible.getId());
     }
 
 
     /**
      * Creates a new instance.
      */
-    private DBElementHelper() {
+    private DBAccessibleHelper() {
         super();
     }
 

@@ -29,36 +29,36 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class DBCollectionHelper {
+public final class DBCollectableHelper {
 
 
     /**
      * Select a new instance.
      *
      * @param <C> collection type parameter
-     * @param <E> element type parameter;
+     * @param <A> accessible type parameter;
      * @param connection connection
      * @param tableName element table name
      * @param idColumnName element id column name
-     * @param collectionType collection type
+     * @param collectableType collectable type
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollection<E>, E extends DBElement> C select(
+    public static <C extends DBCollectable<A>, A extends DBAccessible> C select(
         final Connection connection, final String tableName,
-        final String idColumnName, final Class<C> collectionType)
+        final String idColumnName, final Class<C> collectableType)
         throws SQLException {
 
         try {
-            final C collection = collectionType.newInstance();
+            final C collection = collectableType.newInstance();
             select(connection, tableName, idColumnName, collection);
             return collection;
         } catch (IllegalAccessException iae) {
             throw new SQLException(
-                "failed to create instance of " + collectionType, iae);
+                "failed to create instance of " + collectableType, iae);
         } catch (InstantiationException ie) {
             throw new SQLException(
-                "failed to create instance of " + collectionType, ie);
+                "failed to create instance of " + collectableType, ie);
         }
     }
 
@@ -67,16 +67,16 @@ public final class DBCollectionHelper {
      * Selects given <code>collectio</code>.
      *
      * @param <C> collection type parameter
-     * @param <E> element type parameter
+     * @param <A> accessible type parameter
      * @param connection connection
      * @param tableName element table name
      * @param idColumnName element id column name
-     * @param collection collection
+     * @param collectable collectable
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollection<E>, E extends DBElement> void select(
+    public static <C extends DBCollectable<A>, A extends DBAccessible> void select(
         final Connection connection, final String tableName,
-        final String idColumnName, final C collection)
+        final String idColumnName, final C collectable)
         throws SQLException {
 
         if (connection == null) {
@@ -91,7 +91,7 @@ public final class DBCollectionHelper {
             throw new NullPointerException("null elementIdColumnName");
         }
 
-        if (collection == null) {
+        if (collectable == null) {
             throw new NullPointerException("null element");
         }
 
@@ -101,12 +101,12 @@ public final class DBCollectionHelper {
         try {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
-                final Class<E> elementType = collection.getElementType();
+                final Class<A> elementType = collectable.getAccessibleType();
                 while (resultSet.next()) {
                     try {
-                        final E element = elementType.newInstance();
+                        final A element = elementType.newInstance();
                         element.read(resultSet, "");
-                        collection.getElementCollection().add(element);
+                        collectable.getAccessibles().add(element);
                     } catch (IllegalAccessException iae) {
                         throw new SQLException(
                             "failed to create instance of " + elementType, iae);
@@ -127,7 +127,7 @@ public final class DBCollectionHelper {
     /**
      * Creates a new instance.
      */
-    private DBCollectionHelper() {
+    private DBCollectableHelper() {
         super();
     }
 

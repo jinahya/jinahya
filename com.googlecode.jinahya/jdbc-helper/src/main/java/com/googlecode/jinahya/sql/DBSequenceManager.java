@@ -42,8 +42,8 @@ public abstract class DBSequenceManager {
      * Creates a new instance.
      *
      * @param dataSource data source
-     * @param minimumSize min count
-     * @param maximumSize max count
+     * @param minimumSize minimum count
+     * @param maximumSize maximum count
      */
     public DBSequenceManager(final DataSource dataSource, final int minimumSize,
                              final int maximumSize) {
@@ -80,24 +80,24 @@ public abstract class DBSequenceManager {
     /**
      * Returns next id value identified by given <code>name</code>.
      *
-     * @param name id name
-     * @return next sequence
+     * @param sequenceName sequence name
+     * @return next sequence value
      * @throws SQLException if an SQL error occurs.
      */
-    public Long getNextValue(final String name) throws SQLException {
+    public Long getNextValue(final String sequenceName) throws SQLException {
 
         synchronized (map) {
 
-            if (!map.containsKey(name)) {
-                map.put(name, new LinkedList<Long>());
+            if (!map.containsKey(sequenceName)) {
+                map.put(sequenceName, new LinkedList<Long>());
             }
 
-            final List<Long> list = map.get(name);
+            final List<Long> list = map.get(sequenceName);
 
             if (list.size() < minimumSize) {
                 final Connection connection = dataSource.getConnection();
                 try {
-                    fetchNextValues(connection, name, list);
+                    fetchNextValues(connection, sequenceName, list);
                 } finally {
                     connection.close();
                 }
@@ -112,20 +112,31 @@ public abstract class DBSequenceManager {
      * Fetch sequence values.
      *
      * @param connection connection
-     * @param name sequence name
-     * @param list sequence value list
+     * @param sequenceName sequence name
+     * @param sequenceValues sequence value list
      * @throws SQLException if an SQL error occurs.
      */
-    protected abstract void fetchNextValues(Connection connection, String name,
-                                            List<Long> list)
+    protected abstract void fetchNextValues(Connection connection,
+                                            String sequenceName,
+                                            List<Long> sequenceValues)
         throws SQLException;
 
 
+    /**
+     * Returns minimumSize.
+     *
+     * @return minimumSize
+     */
     public int getMinimumSize() {
         return minimumSize;
     }
 
 
+    /**
+     * Returns maximumSize.
+     *
+     * @return maximumSize
+     */
     public int getMaximumSize() {
         return maximumSize;
     }
