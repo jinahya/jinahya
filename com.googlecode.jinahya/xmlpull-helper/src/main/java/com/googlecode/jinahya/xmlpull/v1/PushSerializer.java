@@ -56,7 +56,7 @@ public class PushSerializer implements XmlSerializer {
                                     final String value)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
-        assert serializer.equals(serializer.attribute(namespace, name, value));
+        serializer.equals(serializer.attribute(namespace, name, value));
 
         return this;
     }
@@ -104,7 +104,7 @@ public class PushSerializer implements XmlSerializer {
                                  final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
-        assert serializer.equals(serializer.endTag(namespace, name));
+        serializer.equals(serializer.endTag(namespace, name));
 
         return this;
     }
@@ -249,7 +249,7 @@ public class PushSerializer implements XmlSerializer {
                                    final String name)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
-        assert serializer.equals(serializer.startTag(namespace, name));
+        serializer.equals(serializer.startTag(namespace, name));
         return this;
     }
 
@@ -259,7 +259,7 @@ public class PushSerializer implements XmlSerializer {
     public PushSerializer text(final String text)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
-        assert serializer.equals(serializer.text(text));
+        serializer.equals(serializer.text(text));
         return this;
     }
 
@@ -270,7 +270,7 @@ public class PushSerializer implements XmlSerializer {
                                final int len)
         throws IOException, IllegalArgumentException, IllegalStateException {
 
-        assert serializer.equals(serializer.text(buf, start, len));
+        serializer.equals(serializer.text(buf, start, len));
         return this;
     }
 

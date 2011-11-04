@@ -51,6 +51,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.bootstrap.classes>${java.home}/lib/rt.jar</java.bootstrap.classes>
   </properties>
 
   <build>
@@ -63,6 +64,11 @@
     </extensions>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>com.pyx4me</groupId>
+          <artifactId>proguard-maven-plugin</artifactId>
+          <version>2.0.4</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -147,6 +153,41 @@
           </execution>
         </executions>
         -->
+      </plugin>
+      <plugin>
+        <groupId>com.pyx4me</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>proguard</goal>
+            </goals>
+            <configuration>
+              <attach>true</attach>
+              <attachArtifactClassifier>micro</attachArtifactClassifier>
+              <options>
+                <option>-ignorewarnings</option>
+                <!--option>-dontobfuscate</option-->
+                <option>-target 1.1</option>
+                <option>-renamesourcefileattribute SourceFile</option>
+                <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
+                <option>-keep public class * { public protected *; }</option>
+              </options>
+              <libs>
+                <lib>${java.bootstrap.classes}</lib>
+              </libs>
+            </configuration>
+          </execution>
+        </executions>          
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard-base</artifactId>
+            <version>4.6</version>
+            <scope>runtime</scope>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -235,7 +276,6 @@
   <distributionManagement>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
-      <name>Propellors Snapshots</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
     <repository>
@@ -273,6 +313,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>        
+      </activation>
+      <properties>
+        <java.bootstrap.classes>${java.home}/../Classes/classes.jar</java.bootstrap.classes>
+      </properties>
     </profile>
   </profiles>
 </project>
