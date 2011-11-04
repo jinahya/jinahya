@@ -168,23 +168,6 @@ public abstract class AbstractDBElement implements DBElement {
 
 
     @Override
-    public final Long getId() {
-        return id;
-    }
-
-
-    @Override
-    public void setId(final Long id) {
-
-        if (id == null) {
-            throw new NullPointerException("null id");
-        }
-
-        this.id = id;
-    }
-
-
-    @Override
     public final String getTableName() {
         return tableName;
     }
@@ -219,6 +202,10 @@ public abstract class AbstractDBElement implements DBElement {
         if (prefix == null) {
             throw new NullPointerException("null prefix");
         }
+
+        if (getId() == null) {
+            setId(resultSet.getLong(prefix + idColumnName));
+        }
     }
 
 
@@ -228,10 +215,6 @@ public abstract class AbstractDBElement implements DBElement {
 
     /** id column name. */
     private final String idColumnName;
-
-
-    /** id. */
-    private Long id;
 
 
 }
