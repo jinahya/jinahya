@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql;
 
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -150,6 +151,20 @@ public abstract class AbstractDBElement implements DBElement {
     @Override
     public boolean delete(final Connection connection) throws SQLException {
         return DBElementHelper.delete(connection, this);
+    }
+
+
+    @Override
+    public void read(final ResultSet resultSet, final String prefix)
+        throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("null resultSet");
+        }
+
+        if (prefix == null) {
+            throw new NullPointerException("null prefix");
+        }
     }
 
 
