@@ -71,8 +71,13 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
                                 final String string)
         throws XmlPullParserException {
 
-        assert formats != null;
-        assert string != null;
+        if (formats == null) {
+            throw new NullPointerException("null formats");
+        }
+
+        if (string == null) {
+            throw new NullPointerException("null value");
+        }
 
         for (DateFormat format : formats) {
             try {
@@ -101,8 +106,13 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
                                       final Date value)
         throws XmlPullParserException {
 
-        assert formats != null;
-        assert value != null;
+        if (formats == null) {
+            throw new NullPointerException("null formats");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
 
         for (DateFormat format : formats) {
             synchronized (format) {
