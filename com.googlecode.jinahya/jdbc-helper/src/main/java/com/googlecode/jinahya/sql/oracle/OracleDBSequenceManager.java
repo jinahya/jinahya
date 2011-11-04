@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql.oracle;
 
 
-import com.googlecode.jinahya.sql.DBSequence;
+import com.googlecode.jinahya.sql.DBSequenceManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class OracleDBSequence extends DBSequence {
+public abstract class OracleDBSequenceManager extends DBSequenceManager {
 
 
     /**
@@ -45,7 +45,7 @@ public abstract class OracleDBSequence extends DBSequence {
      * @param minCount min count
      * @param maxCount max count
      */
-    public OracleDBSequence(final DataSource dataSource,
+    public OracleDBSequenceManager(final DataSource dataSource,
                             final int minCount, final int maxCount) {
 
         super(dataSource, minCount, maxCount);

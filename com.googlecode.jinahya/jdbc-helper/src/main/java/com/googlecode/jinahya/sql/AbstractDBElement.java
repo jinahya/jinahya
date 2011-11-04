@@ -34,6 +34,60 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractDBElement implements DBElement {
 
 
+    protected static Long getLong(final ResultSet resultSet,
+                                  final String columnLabel)
+        throws SQLException {
+
+        final Long value = resultSet.getLong(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    protected static long getLong(final ResultSet resultSet,
+                                  final String columnLabel,
+                                  final long defaultValue)
+        throws SQLException {
+
+        final Long value = getLong(resultSet, columnLabel);
+        if (resultSet.wasNull()) {
+            return defaultValue;
+        }
+
+        return value.longValue();
+    }
+
+
+    protected static Integer getInt(final ResultSet resultSet,
+                                    final String columnLabel)
+        throws SQLException {
+
+        final Integer value = resultSet.getInt(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    protected static int getInt(final ResultSet resultSet,
+                                final String columnLabel,
+                                final int defaultValue)
+        throws SQLException {
+
+        final Integer value = getInt(resultSet, columnLabel);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.intValue();
+    }
+
+
     /**
      * 
      * @param tableName
