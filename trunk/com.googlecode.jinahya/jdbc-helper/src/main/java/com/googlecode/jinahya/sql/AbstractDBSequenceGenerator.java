@@ -43,35 +43,37 @@ public abstract class AbstractDBSequenceGenerator
      * Creates a new instance.
      *
      * @param dataSource data source
-     * @param minCount min count
-     * @param maxCount max count
+     * @param minimumSize min count
+     * @param maximumSize max count
      */
     public AbstractDBSequenceGenerator(final DataSource dataSource,
-                                       final int minCount, final int maxCount) {
+                                       final int minimumSize,
+                                       final int maximumSize) {
         super();
 
         if (dataSource == null) {
             throw new NullPointerException("null dataSource");
         }
 
-        if (minCount <= 0) {
+        if (minimumSize <= 0) {
             throw new IllegalArgumentException(
-                "minCount(" + minCount + ") <= 0");
+                "minimumSize(" + minimumSize + ") <= 0");
         }
 
-        if (maxCount <= 0) {
+        if (maximumSize <= 0) {
             throw new IllegalArgumentException(
-                "minCount(" + maxCount + ") <=0");
+                "maximumSize(" + maximumSize + ") <=0");
         }
 
-        if (minCount >= maxCount) {
+        if (minimumSize >= maximumSize) {
             throw new IllegalArgumentException(
-                "minCount(" + maxCount + ") >= maxCount(" + maxCount + ")");
+                "minimumSize(" + maximumSize + ") >= maximumSize("
+                + maximumSize + ")");
         }
 
         this.dataSource = dataSource;
-        this.minCount = minCount;
-        this.maxCount = maxCount;
+        this.minimumSize = minimumSize;
+        this.maximumSize = maximumSize;
 
         map = Collections.synchronizedMap(new HashMap<String, List<Long>>());
     }
@@ -95,10 +97,10 @@ public abstract class AbstractDBSequenceGenerator
 
             final List<Long> list = map.get(name);
 
-            if (list.size() < minCount) {
+            if (list.size() < minimumSize) {
                 final Connection connection = dataSource.getConnection();
                 try {
-                    fetch(connection, name, list, maxCount);
+                    fetch(connection, name, list);
                 } finally {
                     connection.close();
                 }
@@ -115,12 +117,21 @@ public abstract class AbstractDBSequenceGenerator
      * @param connection connection
      * @param name sequence name
      * @param list sequence value list
-     * @param maxCount maximum count
      * @throws SQLException if an SQL error occurs.
      */
     protected abstract void fetch(Connection connection, String name,
-                                  List<Long> list, int maxCount)
+                                  List<Long> list)
         throws SQLException;
+
+
+    public int getMinimumSize() {
+        return minimumSize;
+    }
+
+
+    public int getMaximumSize() {
+        return maximumSize;
+    }
 
 
     /** data source. */
@@ -128,11 +139,11 @@ public abstract class AbstractDBSequenceGenerator
 
 
     /** min count. */
-    private final int minCount;
+    private final int minimumSize;
 
 
     /** max count. */
-    private final int maxCount;
+    private final int maximumSize;
 
 
     /** map. */
