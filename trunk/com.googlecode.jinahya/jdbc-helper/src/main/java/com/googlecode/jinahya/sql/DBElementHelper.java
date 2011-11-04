@@ -41,8 +41,8 @@ public final class DBElementHelper {
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement<I>, I> E selectInstance(
-        final Connection connection, final Class<E> elementType, final I id)
+    public static <E extends DBElement> E selectInstance(
+        final Connection connection, final Class<E> elementType, final Long id)
         throws SQLException {
 
         try {
@@ -73,7 +73,7 @@ public final class DBElementHelper {
      * @return true if successfully selected; false if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement<?>> boolean select(
+    public static <E extends DBElement> boolean select(
         final Connection connection, final E element)
         throws SQLException {
 
@@ -123,7 +123,7 @@ public final class DBElementHelper {
      * @return true if successfully deleted; false otherwise
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends DBElement<?>> boolean delete(
+    public static <E extends DBElement> boolean delete(
         final Connection connection, final E element)
         throws SQLException {
 

@@ -35,8 +35,7 @@ import javax.sql.DataSource;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractDBSequenceGenerator
-    implements DBSequenceGenerator {
+public abstract class DBSequence {
 
 
     /**
@@ -46,9 +45,8 @@ public abstract class AbstractDBSequenceGenerator
      * @param minimumSize min count
      * @param maximumSize max count
      */
-    public AbstractDBSequenceGenerator(final DataSource dataSource,
-                                       final int minimumSize,
-                                       final int maximumSize) {
+    public DBSequence(final DataSource dataSource, final int minimumSize,
+                      final int maximumSize) {
         super();
 
         if (dataSource == null) {
@@ -86,8 +84,7 @@ public abstract class AbstractDBSequenceGenerator
      * @return next sequence
      * @throws SQLException if an SQL error occurs.
      */
-    @Override
-    public final Long getNextSequence(final String name) throws SQLException {
+    public Long getNextValue(final String name) throws SQLException {
 
         synchronized (map) {
 
@@ -100,7 +97,7 @@ public abstract class AbstractDBSequenceGenerator
             if (list.size() < minimumSize) {
                 final Connection connection = dataSource.getConnection();
                 try {
-                    fetch(connection, name, list);
+                    fetchNextValues(connection, name, list);
                 } finally {
                     connection.close();
                 }
@@ -119,8 +116,8 @@ public abstract class AbstractDBSequenceGenerator
      * @param list sequence value list
      * @throws SQLException if an SQL error occurs.
      */
-    protected abstract void fetch(Connection connection, String name,
-                                  List<Long> list)
+    protected abstract void fetchNextValues(Connection connection, String name,
+                                            List<Long> list)
         throws SQLException;
 
 

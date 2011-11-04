@@ -44,7 +44,7 @@ public final class DBCollectionHelper {
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollection<E>, E extends DBElement<?>> C selectInstance(
+    public static <C extends DBCollection<E>, E extends DBElement> C selectInstance(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectionType)
         throws SQLException {
@@ -74,7 +74,7 @@ public final class DBCollectionHelper {
      * @param collection collection
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DBCollection<E>, E extends DBElement<?>> void select(
+    public static <C extends DBCollection<E>, E extends DBElement> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collection)
         throws SQLException {

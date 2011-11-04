@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class AbstractDBElement<T> implements DBElement<T> {
+public abstract class AbstractDBElement implements DBElement {
 
 
     /**
@@ -91,8 +91,8 @@ public abstract class AbstractDBElement<T> implements DBElement<T> {
      * @param idColumnType id column type
      */
     public AbstractDBElement(final String tableName,
-                               final String idColumnName,
-                               final int idColumnType) {
+                             final String idColumnName,
+                             final int idColumnType) {
         super();
 
         if (tableName == null) {
@@ -117,13 +117,13 @@ public abstract class AbstractDBElement<T> implements DBElement<T> {
 
 
     @Override
-    public final T getId() {
+    public final Long getId() {
         return id;
     }
 
 
     @Override
-    public void setId(final T id) {
+    public void setId(final Long id) {
 
         if (id == null) {
             throw new NullPointerException("null id");
@@ -176,7 +176,7 @@ public abstract class AbstractDBElement<T> implements DBElement<T> {
 
 
     /** id. */
-    private T id;
+    private Long id;
 
 
 }

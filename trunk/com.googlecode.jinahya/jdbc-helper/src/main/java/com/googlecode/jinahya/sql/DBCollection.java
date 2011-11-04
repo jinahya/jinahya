@@ -27,7 +27,7 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> element type parameter
  */
-public interface DBCollection<E extends DBElement<?>> {
+public interface DBCollection<E extends DBElement> {
 
 
     /**
