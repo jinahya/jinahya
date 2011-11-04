@@ -28,47 +28,47 @@ import javax.xml.bind.annotation.XmlTransient;
  * Abstract implementation of DBCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> element type parameter
+ * @param <A> accessible type parameter
  */
 @XmlTransient
-public class AbstractDBCollection<T extends DBElement>
-    implements DBCollection<T> {
+public class AbstractDBCollectable<A extends DBAccessible>
+    implements DBCollectable<A> {
 
 
     /**
      * Creates a new instance.
      *
-     * @param elementType element type
+     * @param accessibleType accessible type
      */
-    public AbstractDBCollection(final Class<T> elementType) {
+    public AbstractDBCollectable(final Class<A> accessibleType) {
         super();
 
-        this.elementType = elementType;
+        this.accessibleType = accessibleType;
     }
 
 
     @Override
-    public final Collection<T> getElementCollection() {
+    public final Collection<A> getAccessibles() {
 
-        if (elementCollection == null) {
-            elementCollection = new ArrayList<T>();
+        if (accessibles == null) {
+            accessibles = new ArrayList<A>();
         }
 
-        return elementCollection;
+        return accessibles;
     }
 
 
     @Override
-    public final Class<T> getElementType() {
-        return elementType;
+    public final Class<A> getAccessibleType() {
+        return accessibleType;
     }
 
 
-    private final Class<T> elementType;
+    private final Class<A> accessibleType;
 
 
     @XmlTransient
-    private Collection<T> elementCollection;
+    private Collection<A> accessibles;
 
 
 }

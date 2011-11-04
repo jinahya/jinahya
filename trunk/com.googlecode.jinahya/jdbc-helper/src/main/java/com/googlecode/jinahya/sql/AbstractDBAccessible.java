@@ -26,12 +26,12 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * Abstract DBElement implementation.
+ * Abstract DBAccessible implementation.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class AbstractDBElement implements DBElement {
+public abstract class AbstractDBAccessible implements DBAccessible {
 
 
     protected static Long getLong(final ResultSet resultSet,
@@ -89,63 +89,13 @@ public abstract class AbstractDBElement implements DBElement {
 
 
     /**
-     * 
-     * @param tableName
-     * @param idColumnName
-     * @return 
-     */
-    protected static String createQualifiedIdColumnName(
-        final String tableName, final String idColumnName) {
-
-        if (tableName == null) {
-            throw new NullPointerException("null tableName");
-        }
-        if (tableName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty tableName");
-        }
-
-        if (idColumnName == null) {
-            throw new NullPointerException("null idColumnName");
-        }
-        if (idColumnName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty idColumnName");
-        }
-
-        if (idColumnName.startsWith(tableName.toUpperCase() + "_")) {
-            return idColumnName;
-        }
-
-        return (tableName + "_" + idColumnName).toUpperCase();
-    }
-
-
-    /**
-     * 
-     * @param idColumnName
-     * @return 
-     */
-    protected static String createIdSequenceName(final String idColumnName) {
-
-        if (idColumnName == null) {
-            throw new NullPointerException("null idColumnName");
-        }
-
-        if (idColumnName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty idColumnName");
-        }
-
-        return (idColumnName + "_SEQ").toUpperCase();
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param tableName table name
      * @param idColumnName id column name
      */
-    public AbstractDBElement(final String tableName,
-                             final String idColumnName) {
+    public AbstractDBAccessible(final String tableName,
+                                final String idColumnName) {
         super();
 
         if (tableName == null) {
@@ -181,13 +131,13 @@ public abstract class AbstractDBElement implements DBElement {
 
     @Override
     public boolean select(final Connection connection) throws SQLException {
-        return DBElementHelper.select(connection, this);
+        return DBAccessibleHelper.select(connection, this);
     }
 
 
     @Override
     public boolean delete(final Connection connection) throws SQLException {
-        return DBElementHelper.delete(connection, this);
+        return DBAccessibleHelper.delete(connection, this);
     }
 
 

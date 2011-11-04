@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface DBElement {
+public interface DBAccessible {
 
 
     /**
@@ -78,7 +78,7 @@ public interface DBElement {
      *
      * @param connection connection
      * @return true if successfully inserted; false otherwise.
-     * @throws SQLException 
+     * @throws SQLException if an SQL error occurs.
      */
     boolean insert(Connection connection) throws SQLException;
 

@@ -22,28 +22,28 @@ import java.util.Collection;
 
 
 /**
- * Interface for collection type of element.
+ * Interface for collection type of accessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> element type parameter
+ * @param <A> accessible type parameter
  */
-public interface DBCollection<E extends DBElement> {
+public interface DBCollectable<A extends DBAccessible> {
 
 
     /**
-     * Return element type.
+     * Return accessible type.
      *
-     * @return element type
+     * @return accessible type
      */
-    Class<E> getElementType();
+    Class<A> getAccessibleType();
 
 
     /**
-     * Returns element collection.
+     * Returns accessible collection.
      *
-     * @return element collection
+     * @return accessible collection
      */
-    Collection<E> getElementCollection();
+    Collection<A> getAccessibles();
 
 
 }
