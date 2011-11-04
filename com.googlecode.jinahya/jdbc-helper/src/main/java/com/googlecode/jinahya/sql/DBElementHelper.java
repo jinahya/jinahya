@@ -93,8 +93,7 @@ public final class DBElementHelper {
             + " WHERE " + element.getIdColumnName() + " = ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setObject(++parameterIndex, element.getId(),
-                                        element.getIdColumnType());
+            preparedStatement.setLong(++parameterIndex, element.getId());
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
@@ -140,8 +139,7 @@ public final class DBElementHelper {
             + " WHERE " + element.getIdColumnName() + " = ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setObject(++parameterIndex, element.getId(),
-                                        element.getIdColumnType());
+            preparedStatement.setLong(++parameterIndex, element.getId());
 
             return preparedStatement.executeUpdate() == 1;
 

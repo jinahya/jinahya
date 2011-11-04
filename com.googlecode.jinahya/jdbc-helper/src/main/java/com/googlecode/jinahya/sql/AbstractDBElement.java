@@ -88,11 +88,9 @@ public abstract class AbstractDBElement implements DBElement {
      *
      * @param tableName table name
      * @param idColumnName id column name
-     * @param idColumnType id column type
      */
     public AbstractDBElement(final String tableName,
-                             final String idColumnName,
-                             final int idColumnType) {
+                             final String idColumnName) {
         super();
 
         if (tableName == null) {
@@ -111,8 +109,6 @@ public abstract class AbstractDBElement implements DBElement {
 
         this.tableName = tableName;
         this.idColumnName = idColumnName;
-
-        this.idColumnType = idColumnType;
     }
 
 
@@ -146,12 +142,6 @@ public abstract class AbstractDBElement implements DBElement {
 
 
     @Override
-    public final int getIdColumnType() {
-        return idColumnType;
-    }
-
-
-    @Override
     public boolean select(final Connection connection) throws SQLException {
         return DBElementHelper.select(connection, this);
     }
@@ -169,10 +159,6 @@ public abstract class AbstractDBElement implements DBElement {
 
     /** id column name. */
     private final String idColumnName;
-
-
-    /** id column type. */
-    private final int idColumnType;
 
 
     /** id. */

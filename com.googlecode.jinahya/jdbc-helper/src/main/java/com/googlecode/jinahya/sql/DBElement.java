@@ -48,14 +48,6 @@ public interface DBElement {
 
 
     /**
-     * Returns id column type.
-     *
-     * @return 
-     */
-    int getIdColumnType();
-
-
-    /**
      * Returns table name.
      *
      * @return table name
