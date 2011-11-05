@@ -30,8 +30,16 @@ import java.lang.annotation.Target;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Documented
-@Target({ElementType.METHOD})
+@Target(value = {ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DBDelete {
+public @interface DatabaseEntity {
+
+
+    String tableName();
+
+
+    String idColumnName();
+
+
 }
 
