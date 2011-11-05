@@ -152,6 +152,18 @@ public abstract class AbstractAccessible implements Accessible {
 
 
     @Override
+    public Long getId() {
+        return id;
+    }
+
+
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
+
+    @Override
     public final String getTableName() {
         return tableName;
     }
@@ -199,6 +211,10 @@ public abstract class AbstractAccessible implements Accessible {
 
     /** id column name. */
     private final String idColumnName;
+
+
+    /** id. */
+    private Long id;
 
 
 }
