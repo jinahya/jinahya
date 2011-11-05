@@ -30,26 +30,8 @@ import java.lang.annotation.Target;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Documented
-@Target(value = {ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DBEntity {
-
-
-    /**
-     * table name.
-     *
-     * @return table name
-     */
-    String tableName();
-
-
-    /**
-     * id column name.
-     *
-     * @return id column name
-     */
-    String idColumnName();
-
-
+public @interface DatabaseUpdate {
 }
 
