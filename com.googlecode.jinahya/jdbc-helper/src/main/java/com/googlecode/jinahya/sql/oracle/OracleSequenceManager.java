@@ -74,7 +74,8 @@ public class OracleSequenceManager extends SequenceManager {
     @Override
     protected void fetchNextValues(final Connection connection,
                                    final String sequenceName,
-                                   final List<Long> sequenceValues)
+                                   final List<Long> sequenceValues,
+                                   final int fetchCount)
         throws SQLException {
 
         if (sequenceValues.size() >= getMaximumSize()) {
@@ -86,8 +87,7 @@ public class OracleSequenceManager extends SequenceManager {
             + " CONNECT BY LEVEL <= ?");
         try {
             int parameterIndex = 0;
-            preparedStatement.setInt(++parameterIndex,
-                                     getMaximumSize() - sequenceValues.size());
+            preparedStatement.setInt(++parameterIndex, fetchCount);
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {

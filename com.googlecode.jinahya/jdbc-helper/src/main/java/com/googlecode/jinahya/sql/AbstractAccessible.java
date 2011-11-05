@@ -123,6 +123,94 @@ public abstract class AbstractAccessible implements Accessible {
 
 
     /**
+     * Reads an Float from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return read Float value or null if database value is null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static Float getFloat(final ResultSet resultSet,
+                                    final String columnLabel)
+        throws SQLException {
+
+        final Float value = resultSet.getFloat(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads a float value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return read float value or defalutValue if database value is null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static float getFloat(final ResultSet resultSet,
+                                    final String columnLabel,
+                                    final float defaultValue)
+        throws SQLException {
+
+        final Float value = getFloat(resultSet, columnLabel);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.floatValue();
+    }
+
+
+    /**
+     * Reads an Float from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return read Double value or null if database value is null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static Double getDouble(final ResultSet resultSet,
+                                      final String columnLabel)
+        throws SQLException {
+
+        final Double value = resultSet.getDouble(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads a double value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return read double value or defalutValue if database value is null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static double getDouble(final ResultSet resultSet,
+                                      final String columnLabel,
+                                      final float defaultValue)
+        throws SQLException {
+
+        final Double value = getDouble(resultSet, columnLabel);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.doubleValue();
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param tableName table name

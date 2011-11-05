@@ -16,6 +16,16 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>6.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.extras</groupId>
+        <artifactId>glassfish-embedded-all</artifactId>
+        <version>3.1.1</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.3</version>
@@ -23,6 +33,16 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>org.glassfish.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>

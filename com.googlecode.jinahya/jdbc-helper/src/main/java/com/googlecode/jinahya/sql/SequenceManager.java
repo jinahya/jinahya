@@ -97,7 +97,8 @@ public abstract class SequenceManager {
             if (list.size() < minimumSize) {
                 final Connection connection = dataSource.getConnection();
                 try {
-                    fetchNextValues(connection, sequenceName, list);
+                    fetchNextValues(connection, sequenceName, list,
+                                    maximumSize - list.size());
                 } finally {
                     connection.close();
                 }
@@ -114,12 +115,25 @@ public abstract class SequenceManager {
      * @param connection connection
      * @param sequenceName sequence name
      * @param sequenceValues sequence value list
+     * @param fetchCount number of value to fetch
      * @throws SQLException if an SQL error occurs.
      */
     protected abstract void fetchNextValues(Connection connection,
                                             String sequenceName,
-                                            List<Long> sequenceValues)
+                                            List<Long> sequenceValues,
+                                            int fetchCount)
         throws SQLException;
+
+
+    /**
+     * Returns a Connection.
+     *
+     * @return the Connection
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected final Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
 
 
     /**
@@ -127,7 +141,7 @@ public abstract class SequenceManager {
      *
      * @return minimumSize
      */
-    public int getMinimumSize() {
+    public final int getMinimumSize() {
         return minimumSize;
     }
 
@@ -137,7 +151,7 @@ public abstract class SequenceManager {
      *
      * @return maximumSize
      */
-    public int getMaximumSize() {
+    public final int getMaximumSize() {
         return maximumSize;
     }
 
