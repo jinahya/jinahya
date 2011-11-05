@@ -88,19 +88,23 @@ public class TableSequenceManager extends SequenceManager {
                 connection.setTransactionIsolation(
                     Connection.TRANSACTION_REPEATABLE_READ);
             }
+            try {
+                if (metaData.supportsResultSetConcurrency(TYPE, CONCURRENCY)) {
+                    fetchConcurrently(connection, sequenceName, sequenceValues,
+                                      fetchCount);
+                } else {
 
-            if (metaData.supportsResultSetConcurrency(TYPE, CONCURRENCY)) {
-                fetch(connection, sequenceName, sequenceValues, fetchCount);
-                return;
+                    fetchSeparately(connection, sequenceName, sequenceValues,
+                                    fetchCount);
+                }
+                connection.commit();
+            } catch (SQLException sqle) {
+                try {
+                    connection.rollback();
+                } catch (SQLException sqle2) {
+                }
+                throw sqle;
             }
-
-            long sequenceValue = select(connection, sequenceName);
-            for (int i = 0; i < fetchCount; i++) {
-                sequenceValues.add(++sequenceValue);
-            }
-            update(connection, sequenceName, sequenceValue);
-            return;
-
         } finally {
             connection.setAutoCommit(commit);
             connection.setTransactionIsolation(isolation);
@@ -117,12 +121,15 @@ public class TableSequenceManager extends SequenceManager {
      * @param fetchCount number of sequence values to fetch
      * @throws SQLException if an SQL error occurs.
      */
-    private void fetch(final Connection connection, final String sequenceName,
-                       final List<Long> sequenceValues, final int fetchCount)
+    private void fetchConcurrently(final Connection connection,
+                                   final String sequenceName,
+                                   final List<Long> sequenceValues,
+                                   final int fetchCount)
         throws SQLException {
 
         final PreparedStatement preparedStatement = connection.prepareStatement(
-            "SELECT * FROM " + table + " WHERE " + pkColumnName + " = ?",
+            "SELECT * FROM " + table + " WHERE " + pkColumnName + " = ?"
+            + " FOR UPDATE",
             ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         try {
             int parameterIndex = 0;
@@ -137,11 +144,11 @@ public class TableSequenceManager extends SequenceManager {
                     }
                     resultSet.updateLong(valueColumnName, sequenceValue);
                     resultSet.updateRow();
-                    connection.commit();
+                    //connection.commit();
                     return;
                 }
 
-                long sequenceValue = 0L;
+                long sequenceValue = -1L;
                 for (int i = 0; i < fetchCount; i++) {
                     sequenceValues.add(++sequenceValue);
                 }
@@ -149,7 +156,7 @@ public class TableSequenceManager extends SequenceManager {
                 resultSet.updateString(pkColumnName, sequenceName);
                 resultSet.updateLong(valueColumnName, sequenceValue);
                 resultSet.insertRow();
-                connection.commit();
+                //connection.commit();
                 return;
 
             } finally {
@@ -166,14 +173,19 @@ public class TableSequenceManager extends SequenceManager {
      *
      * @param connection connection
      * @param sequenceName sequence name
-     * @return current sequence value
+     * @param sequenceValues sequence value list
+     * @param fetchCount number of values to fetch
      * @throws SQLException if an SQL error occurs.
      */
-    private long select(final Connection connection, final String sequenceName)
+    private void fetchSeparately(final Connection connection,
+                                 final String sequenceName,
+                                 final List<Long> sequenceValues,
+                                 final int fetchCount)
         throws SQLException {
 
         final PreparedStatement preparedStatement = connection.prepareStatement(
-            "SELECT * FROM " + table + " WHERE " + pkColumnName + " = ?");
+            "SELECT * FROM " + table + " WHERE " + pkColumnName + " = ?"
+            + " FOR UPDATE");
         try {
             int parameterIndex = 0;
             preparedStatement.setString(++parameterIndex, sequenceName);
@@ -182,10 +194,16 @@ public class TableSequenceManager extends SequenceManager {
             try {
                 if (resultSet.next()) {
                     insert(connection, sequenceName);
-                    return select(connection, sequenceName);
+                    fetchSeparately(connection, sequenceName, sequenceValues,
+                                    fetchCount);
                 }
 
-                return resultSet.getLong(valueColumnName);
+                long sequenceValue = resultSet.getLong(valueColumnName);
+                for (int i = 0; i < fetchCount; i++) {
+                    sequenceValues.add(++sequenceValue);
+                }
+                update(connection, sequenceName, sequenceValue);
+                return;
 
             } finally {
                 resultSet.close();
@@ -213,7 +231,7 @@ public class TableSequenceManager extends SequenceManager {
         try {
             int parameterIndex = 0;
             preparedStatement.setString(++parameterIndex, sequenceName);
-            preparedStatement.setLong(++parameterIndex, 1L);
+            preparedStatement.setLong(++parameterIndex, -1L);
 
             final int result = preparedStatement.executeUpdate();
             if (result != 1) {
