@@ -29,7 +29,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class CollectableHelper {
+public final class DatabaseCollectableHelper {
 
 
     /**
@@ -44,7 +44,7 @@ public final class CollectableHelper {
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends Collectable<A>, A extends Accessible> C select(
+    public static <C extends DatabaseCollectable<A>, A extends DatabaseAccessible> C select(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectableType)
         throws SQLException {
@@ -74,7 +74,7 @@ public final class CollectableHelper {
      * @param collectable collectable
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends Collectable<A>, A extends Accessible> void select(
+    public static <C extends DatabaseCollectable<A>, A extends DatabaseAccessible> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collectable)
         throws SQLException {
@@ -129,7 +129,7 @@ public final class CollectableHelper {
     /**
      * Creates a new instance.
      */
-    private CollectableHelper() {
+    private DatabaseCollectableHelper() {
         super();
     }
 
