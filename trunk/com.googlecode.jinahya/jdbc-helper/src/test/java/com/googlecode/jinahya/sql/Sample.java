@@ -43,11 +43,11 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity()
-@Table(name = DatabaseAccessibleSample.TABLE_NAME)//"SAMPLE")
+@Table(name = Sample.TABLE_NAME)//"SAMPLE")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "sample")
 @XmlType(propOrder = {"name", "age"})
-public class DatabaseAccessibleSample extends AbstractDatabaseAccessible {
+public class Sample extends AbstractDatabaseAccessible {
 
 
     public static final String TABLE_NAME = "SAMPLE";
@@ -66,7 +66,7 @@ public class DatabaseAccessibleSample extends AbstractDatabaseAccessible {
     /**
      * Creates a new instance.
      */
-    public DatabaseAccessibleSample() {
+    public Sample() {
         super(TABLE_NAME, ID_COLUMN_NAME);
     }
 
