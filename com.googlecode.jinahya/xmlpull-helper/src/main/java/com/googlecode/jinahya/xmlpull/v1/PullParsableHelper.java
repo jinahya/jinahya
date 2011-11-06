@@ -41,8 +41,8 @@ public final class PullParsableHelper {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public static <T extends PullParsable> T parseInstance(
-        final PullParser parser, final Class<T> parsableType)
+    public static <T extends PullParsable> T parse(final PullParser parser,
+                                                   final Class<T> parsableType)
         throws XmlPullParserException, IOException {
 
         if (parser == null) {

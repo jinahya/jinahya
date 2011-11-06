@@ -26,8 +26,8 @@ import java.util.Collection;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractPullParsableCollection<T extends PullParsable>
-    implements PullParsableCollection<T> {
+public abstract class AbstractPullCollectable<T extends PullParsable>
+    implements PullCollectable<T> {
 
 
     /**
@@ -35,7 +35,7 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
      *
      * @param parsableType parsableType
      */
-    public AbstractPullParsableCollection(final Class<T> parsableType) {
+    public AbstractPullCollectable(final Class<T> parsableType) {
         super();
 
         if (parsableType == null) {
@@ -52,19 +52,19 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
 
 
     @Override
-    public final Class<T> getPullParsableType() {
+    public final Class<T> getParsableType() {
         return parsableType;
     }
 
 
     @Override
-    public final Collection<T> getPullParsableCollection() {
+    public final Collection<T> getParsables() {
 
-        if (parsableCollection == null) {
-            parsableCollection = new ArrayList<T>();
+        if (parsables == null) {
+            parsables = new ArrayList<T>();
         }
 
-        return parsableCollection;
+        return parsables;
     }
 
 
@@ -73,7 +73,7 @@ public abstract class AbstractPullParsableCollection<T extends PullParsable>
 
 
     /** parsable collection.*/
-    private Collection<T> parsableCollection;
+    private Collection<T> parsables;
 
 
 }

@@ -22,7 +22,7 @@ package com.googlecode.jinahya.xmlpull.v1.annotation;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public @interface PullEntity {
+public @interface Serializer {
     
 }
 
