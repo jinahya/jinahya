@@ -31,7 +31,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PullParsableCollectionImpl1Test {
+public class SamplesTest {
 
 
     @Test
@@ -42,18 +42,17 @@ public class PullParsableCollectionImpl1Test {
         final PullParser parser = new PullParser(factory.newPullParser());
 
         final InputStream input =
-            PullParsableCollectionImpl1Test.class.getResourceAsStream(
-            "collection1.xml");
+            SamplesTest.class.getResourceAsStream("samples.xml");
         try {
             parser.setInput(input, null);
             parser.nextTag();
 
-            final PullParsableCollectionImpl1 collection =
-                new PullParsableCollectionImpl1();
+            final Samples collection =
+                new Samples();
 
             collection.parse(parser);
 
-            for (PullParsableImpl1 parsable : collection.getParsable()) {
+            for (Sample parsable : collection.getParsable()) {
                 System.out.println(parsable);
             }
         } finally {

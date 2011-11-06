@@ -18,37 +18,32 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParserException;
+import java.util.Collection;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <T> parsable type parameter
  */
-public interface PullParsable {
+public interface PullCollectable<T extends PullParsable>
+    extends PullParsable {
 
 
     /**
-     * Parses information from given <code>parser</code>.
+     * Returns the type of child elements.
      *
-     * @param parser parser
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
+     * @return child type.
      */
-    void parse(PullParser parser)
-        throws XmlPullParserException, IOException;
+    Class<T> getParsableType();
 
 
     /**
-     * 
-     * @param serializer
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Returns the child collection.
+     *
+     * @return child collection
      */
-    void serialize(PushSerializer serializer)
-        throws XmlPullParserException, IOException;
+    Collection<T> getParsables();
 
 
 }

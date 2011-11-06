@@ -15,36 +15,14 @@
  */
 
 
-package com.googlecode.jinahya.xmlpull.v1;
-
-
-import java.util.Collection;
+package com.googlecode.jinahya.xmlpull.v1.annotation;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> parsable type parameter
  */
-public interface PullParsableCollection<T extends PullParsable>
-    extends PullParsable {
-
-
-    /**
-     * Returns the type of child elements.
-     *
-     * @return child type.
-     */
-    Class<T> getPullParsableType();
-
-
-    /**
-     * Returns the child collection.
-     *
-     * @return child collection
-     */
-    Collection<T> getPullParsableCollection();
-
-
+public @interface XmlPullElement {
+    
 }
 
