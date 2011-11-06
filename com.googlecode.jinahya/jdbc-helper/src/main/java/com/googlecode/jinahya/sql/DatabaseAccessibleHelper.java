@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class AccessibleHelper {
+public final class DatabaseAccessibleHelper {
 
 
     /**
@@ -41,7 +41,7 @@ public final class AccessibleHelper {
      * @return a new instance or null if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <A extends Accessible> A select(
+    public static <A extends DatabaseAccessible> A select(
         final Connection connection, final Class<A> accessibleType,
         final Long id)
         throws SQLException {
@@ -74,7 +74,7 @@ public final class AccessibleHelper {
      * @return true if successfully selected; false if not found
      * @throws SQLException if an SQL error occurs.
      */
-    public static <A extends Accessible> boolean select(
+    public static <A extends DatabaseAccessible> boolean select(
         final Connection connection, final A accessible)
         throws SQLException {
 
@@ -125,7 +125,7 @@ public final class AccessibleHelper {
      * @return true if successfully delete; false otherwise
      * @throws SQLException if an SQL error occurs.
      */
-    public static <A extends Accessible> boolean delete(
+    public static <A extends DatabaseAccessible> boolean delete(
         final Connection connection, final String tableName,
         final String idColumnName, final Long id)
         throws SQLException {
@@ -158,7 +158,7 @@ public final class AccessibleHelper {
      * @return true if successfully deleted; false otherwise
      * @throws SQLException if an SQL error occurs.
      */
-    public static <A extends Accessible> boolean delete(
+    public static <A extends DatabaseAccessible> boolean delete(
         final Connection connection, final A accessible)
         throws SQLException {
 
@@ -170,7 +170,7 @@ public final class AccessibleHelper {
     /**
      * Creates a new instance.
      */
-    private AccessibleHelper() {
+    private DatabaseAccessibleHelper() {
         super();
     }
 
