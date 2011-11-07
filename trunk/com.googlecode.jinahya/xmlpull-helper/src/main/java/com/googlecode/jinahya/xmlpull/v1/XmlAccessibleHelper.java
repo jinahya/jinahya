@@ -20,7 +20,6 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
-
 import org.xmlpull.v1.XmlPullParserException;
 
 
@@ -28,46 +27,47 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class PullParsableHelper {
+public final class XmlAccessibleHelper {
 
 
     /**
      * Parses a new instance.
      *
-     * @param <T> parsable type parameter
+     * @param <A> accessible type parameter
      * @param parser parser
-     * @param parsableType parsable type
+     * @param accessibleType parsable type
      * @return a new parsed instance
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public static <T extends PullParsable> T parse(final PullParser parser,
-                                                   final Class<T> parsableType)
+    public static <A extends XmlAccessible> A parse(
+        final PullParser parser, final Class<A> accessibleType)
         throws XmlPullParserException, IOException {
 
         if (parser == null) {
             throw new NullPointerException("null parser");
         }
 
-        if (parsableType == null) {
-            throw new NullPointerException("null parsableType");
+        if (accessibleType == null) {
+            throw new NullPointerException("null elementType");
         }
 
-        if (!PullParsable.class.isAssignableFrom(parsableType)) {
+        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
-                parsableType + " is not assignable to " + PullParsable.class);
+                accessibleType + " is not assignable to "
+                + XmlAccessible.class);
         }
 
         try {
-            final T parsable = parsableType.newInstance();
-            parsable.parse(parser);
-            return parsable;
+            final A accessible = accessibleType.newInstance();
+            accessible.parse(parser);
+            return accessible;
         } catch (InstantiationException ie) {
             throw new XmlPullParserException(
-                "failed to create instance of " + parsableType, parser, ie);
+                "failed to create instance of " + accessibleType, parser, ie);
         } catch (IllegalAccessException iae) {
             throw new XmlPullParserException(
-                "failed to create instance of " + parsableType, parser, iae);
+                "failed to create instance of " + accessibleType, parser, iae);
         }
     }
 
@@ -75,7 +75,7 @@ public final class PullParsableHelper {
     /**
      * Creates a new instance.
      */
-    private PullParsableHelper() {
+    private XmlAccessibleHelper() {
         super();
     }
 
