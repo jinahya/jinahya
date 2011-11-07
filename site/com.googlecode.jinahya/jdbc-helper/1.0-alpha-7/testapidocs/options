@@ -1,0 +1,28 @@
+-classpath
+'/home/onacit/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7/target/classes:/home/onacit/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7/target/test-classes:/home/onacit/.m2/repository/javax/javaee-api/6.0/javaee-api-6.0.jar:/home/onacit/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/home/onacit/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/home/onacit/.m2/repository/org/glassfish/extras/glassfish-embedded-all/3.1.1/glassfish-embedded-all-3.1.1.jar:/home/onacit/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/home/onacit/.m2/repository/org/testng/testng/6.3/testng-6.3.jar:/home/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/onacit/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/onacit/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jdbc-helper 1.0-alpha-7 Test API'
+-link
+'http://www.xmlpull.org/v1/doc/api'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/home/onacit/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'jdbc-helper 1.0-alpha-7 Test API'
