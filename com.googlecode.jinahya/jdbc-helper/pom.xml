@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>jdbc-helper</artifactId>
-  <version>1.0-alpha-7</version>
+  <version>1.0-alpha-8-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -226,9 +226,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/jdbc-helper-1.0-alpha-7</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-helper</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-helper</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/jdbc-helper/</url>
   </scm>
   <prerequisites />
   <repositories>
