@@ -104,7 +104,7 @@ public abstract class SequenceManager {
                 }
             }
 
-            return list.get(0);
+            return list.remove(0);
         }
     }
 
