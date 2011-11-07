@@ -103,6 +103,7 @@ public final class DatabaseAccessibleHelper {
                 }
 
                 accessible.read(resultSet, "");
+                
                 return true;
 
             } finally {
