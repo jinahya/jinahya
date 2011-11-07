@@ -144,7 +144,6 @@ public class TableSequenceManager extends SequenceManager {
                     }
                     resultSet.updateLong(valueColumnName, sequenceValue);
                     resultSet.updateRow();
-                    //connection.commit();
                     return;
                 }
 
@@ -156,7 +155,6 @@ public class TableSequenceManager extends SequenceManager {
                 resultSet.updateString(pkColumnName, sequenceName);
                 resultSet.updateLong(valueColumnName, sequenceValue);
                 resultSet.insertRow();
-                //connection.commit();
                 return;
 
             } finally {
