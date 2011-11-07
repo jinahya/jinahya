@@ -27,7 +27,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface PullParsable {
+public interface XmlAccessible {
 
 
     /**
@@ -37,15 +37,15 @@ public interface PullParsable {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void parse(PullParser parser)
-        throws XmlPullParserException, IOException;
+    void parse(PullParser parser) throws XmlPullParserException, IOException;
 
 
     /**
-     * 
-     * @param serializer
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Serializes information to given <code>serializer</code>.
+     *
+     * @param serializer serializer
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     void serialize(PushSerializer serializer)
         throws XmlPullParserException, IOException;

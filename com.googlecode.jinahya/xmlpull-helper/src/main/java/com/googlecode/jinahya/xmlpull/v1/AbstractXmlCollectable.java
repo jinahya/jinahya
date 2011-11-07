@@ -25,55 +25,57 @@ import java.util.Collection;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <A> accessible type parameter
  */
-public abstract class AbstractPullCollectable<T extends PullParsable>
-    implements PullCollectable<T> {
+public abstract class AbstractXmlCollectable<A extends XmlAccessible>
+    implements XmlCollectable<A> {
 
 
     /**
      * Creates a new instance.
      *
-     * @param parsableType parsableType
+     * @param accessibleType parsableType
      */
-    public AbstractPullCollectable(final Class<T> parsableType) {
+    public AbstractXmlCollectable(final Class<A> accessibleType) {
         super();
 
-        if (parsableType == null) {
-            throw new NullPointerException("null parsableType");
+        if (accessibleType == null) {
+            throw new NullPointerException("null accessibleType");
         }
 
-        if (!PullParsable.class.isAssignableFrom(parsableType)) {
+        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
-                parsableType + " is not assignable to " + PullParsable.class);
+                accessibleType + " is not assignable to "
+                + XmlAccessible.class);
         }
 
-        this.parsableType = parsableType;
+        this.accessibleType = accessibleType;
     }
 
 
     @Override
-    public final Class<T> getParsableType() {
-        return parsableType;
+    public final Class<A> getAccessibleType() {
+        return accessibleType;
     }
 
 
     @Override
-    public final Collection<T> getParsables() {
+    public final Collection<A> getAccessibles() {
 
-        if (parsables == null) {
-            parsables = new ArrayList<T>();
+        if (accessibles == null) {
+            accessibles = new ArrayList<A>();
         }
 
-        return parsables;
+        return accessibles;
     }
 
 
     /** parsable type. */
-    private final Class<T> parsableType;
+    private final Class<A> accessibleType;
 
 
     /** parsable collection.*/
-    private Collection<T> parsables;
+    private Collection<A> accessibles;
 
 
 }

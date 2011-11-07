@@ -28,7 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Sample implements PullParsable {
+public class Sample implements XmlAccessible {
 
 
     public static final String LOCAL_NAME = "sample";

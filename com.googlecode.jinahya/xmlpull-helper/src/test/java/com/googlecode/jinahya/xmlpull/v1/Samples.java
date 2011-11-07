@@ -30,7 +30,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Samples extends AbstractPullCollectable<Sample> {
+public class Samples extends AbstractXmlCollectable<Sample> {
 
 
     public static final String LOCAL_NAME = "samples";
@@ -70,7 +70,7 @@ public class Samples extends AbstractPullCollectable<Sample> {
 
 
     public Collection<Sample> getParsable() {
-        return getParsables();
+        return getAccessibles();
     }
 
 
