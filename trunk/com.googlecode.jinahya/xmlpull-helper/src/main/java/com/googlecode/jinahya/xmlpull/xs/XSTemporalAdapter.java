@@ -42,14 +42,21 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
      */
     protected static List<DateFormat> createFormats(final String[] patterns) {
 
+        if (patterns == null) {
+            throw new NullPointerException("null patterns");
+        }
+
+        if (patterns.length == 0) {
+            throw new IllegalArgumentException("empty patterns");
+        }
+
         final List<DateFormat> formats =
             new ArrayList<DateFormat>(patterns.length);
         for (String pattern : patterns) {
             try {
                 formats.add(new SimpleDateFormat(pattern));
             } catch (IllegalArgumentException ie) {
-                System.err.println("failed to create a DateFormat from '"
-                                   + pattern + "'");
+                //ie.printStackTrace(System.err);
             }
         }
 
