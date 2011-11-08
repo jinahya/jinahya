@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 
 /**
  *
@@ -65,11 +63,9 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
      * @param formats formats to use
      * @param string string to be parsed
      * @return a Date representation
-     * @throws XmlPullParserException if failed to parse
      */
     static Date parseXSTemporal(final List<DateFormat> formats,
-                                final String string)
-        throws XmlPullParserException {
+                                final String string) {
 
         if (formats == null) {
             throw new NullPointerException("null formats");
@@ -89,8 +85,7 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
             }
         }
 
-        throw new XmlPullParserException(
-            "unparsable string('" + string + "')");
+        throw new IllegalArgumentException("failed to parse from " + string);
     }
 
 
@@ -100,11 +95,9 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
      * @param formats formats
      * @param value value
      * @return String representation
-     * @throws XmlPullParserException if failed to serialize
      */
     static String serializeXSTemporal(final List<DateFormat> formats,
-                                      final Date value)
-        throws XmlPullParserException {
+                                      final Date value) {
 
         if (formats == null) {
             throw new NullPointerException("null formats");
@@ -120,8 +113,7 @@ public abstract class XSTemporalAdapter implements XSTypeAdapter<Date> {
             }
         }
 
-        throw new XmlPullParserException(
-            "failed to serialize a value('" + value + "')");
+        throw new IllegalArgumentException("failed to serialize from " + value);
     }
 
 

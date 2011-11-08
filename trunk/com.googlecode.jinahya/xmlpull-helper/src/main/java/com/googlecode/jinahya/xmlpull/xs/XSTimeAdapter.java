@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 
 /**
  *
@@ -46,15 +44,20 @@ public class XSTimeAdapter extends XSTemporalAdapter {
         }));
 
 
+    static {
+        if (FORMATS.isEmpty()) {
+            throw new InstantiationError("empty formats");
+        }
+    }
+
+
     /**
      * Parses <code>xs:date</code>.
      *
      * @param string date string
      * @return parsed Date or null if given <code>dateString</code> is null.
-     * @throws XmlPullParserException if an XML error occurs.
      */
-    public static Date parseXSTime(final String string)
-        throws XmlPullParserException {
+    public static Date parseXSTime(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -69,10 +72,8 @@ public class XSTimeAdapter extends XSTemporalAdapter {
      *
      * @param value value
      * @return String representation
-     * @throws XmlPullParserException if failed to serialize
      */
-    public static String serializeXSTime(final Date value)
-        throws XmlPullParserException {
+    public static String serializeXSTime(final Date value) {
 
         if (value == null) {
             throw new NullPointerException("null date");
@@ -88,9 +89,9 @@ public class XSTimeAdapter extends XSTemporalAdapter {
      *
      * @param string <code>xs:time</code> string
      * @return parsed Date or null if <code>timeString</code> is null.
-     * @throws XmlPullParserException if failed to parse
      */
-    public Date parse(final String string) throws XmlPullParserException {
+    @Override
+    public Date parse(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -105,9 +106,9 @@ public class XSTimeAdapter extends XSTemporalAdapter {
      *
      * @param value value
      * @return String representation
-     * @throws XmlPullParserException if failed to serialize
      */
-    public String serialize(final Date value) throws XmlPullParserException {
+    @Override
+    public String print(final Date value) {
 
         if (value == null) {
             throw new NullPointerException("null value");

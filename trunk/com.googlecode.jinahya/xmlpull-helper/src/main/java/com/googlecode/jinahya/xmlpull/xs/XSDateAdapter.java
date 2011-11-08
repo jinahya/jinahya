@@ -18,14 +18,11 @@
 package com.googlecode.jinahya.xmlpull.xs;
 
 
-import java.io.IOException;
 import java.text.DateFormat;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
@@ -45,15 +42,20 @@ public class XSDateAdapter extends XSTemporalAdapter {
         }));
 
 
+    static {
+        if (FORMATS.isEmpty()) {
+            throw new InstantiationError("empty formats");
+        }
+    }
+
+
     /**
      * Parses <code>xs:date</code>.
      *
      * @param string date string
      * @return parsed Date or null if given <code>dateString</code> is null.
-     * @throws XmlPullParserException if an XML error occurs.
      */
-    public static Date parseXSDate(final String string)
-        throws XmlPullParserException {
+    public static Date parseXSDate(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -68,10 +70,8 @@ public class XSDateAdapter extends XSTemporalAdapter {
      *
      * @param value value
      * @return String representation
-     * @throws XmlPullParserException if failed to serialize
      */
-    public static String serializeXSDate(final Date value)
-        throws XmlPullParserException {
+    public static String serializeXSDate(final Date value) {
 
         if (value == null) {
             throw new NullPointerException("null date");
@@ -83,8 +83,7 @@ public class XSDateAdapter extends XSTemporalAdapter {
 
 
     @Override
-    public Date parse(final String string)
-        throws XmlPullParserException, IOException {
+    public Date parse(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null string");
@@ -95,8 +94,7 @@ public class XSDateAdapter extends XSTemporalAdapter {
 
 
     @Override
-    public String serialize(final Date value)
-        throws XmlPullParserException, IOException {
+    public String print(final Date value) {
 
         if (value == null) {
             throw new NullPointerException("null value");

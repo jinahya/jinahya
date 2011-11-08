@@ -29,17 +29,25 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Samples extends AbstractXmlCollectable<Sample> {
+public abstract class AbstractXmlWrapper<A extends XmlAccessible>
+    extends AbstractXmlCollectable<A> {
 
 
-    public static final String NAMESPACE_URI = null;
+    /**
+     * Creates a new instance.
+     *
+     * @param accessibleType accessible type
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     */
+    public AbstractXmlWrapper(final Class<A> accessibleType,
+                              final String namespaceURI,
+                              final String localName) {
 
+        super(accessibleType);
 
-    public static final String LOCAL_NAME = "samples";
-
-
-    public Samples() {
-        super(Sample.class);
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
     }
 
 
@@ -47,24 +55,23 @@ public class Samples extends AbstractXmlCollectable<Sample> {
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, LOCAL_NAME);
-
-        getAccessibles().clear();
-        while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final Sample sample = new Sample();
-            sample.parse(parser);
-            getAccessibles().add(sample);
-        }
-
-        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, LOCAL_NAME);
+        XmlCollectableHelper.parse(parser, this, namespaceURI, localName);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
-
-        throw new UnsupportedOperationException("Not supported yet.");
+        XmlCollectableHelper.serialize(serializer, this, namespaceURI,
+                                       localName);
     }
+
+
+    /** XML namespace URI. */
+    private final String namespaceURI;
+
+
+    /** XML local name. */
+    private final String localName;
 
 
 }

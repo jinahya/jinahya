@@ -29,17 +29,14 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Samples extends AbstractXmlCollectable<Sample> {
-
-
-    public static final String NAMESPACE_URI = null;
+public class SamplesNS extends AbstractXmlCollectable<SampleNS> {
 
 
     public static final String LOCAL_NAME = "samples";
 
 
-    public Samples() {
-        super(Sample.class);
+    public SamplesNS() {
+        super(SampleNS.class);
     }
 
 
@@ -47,16 +44,18 @@ public class Samples extends AbstractXmlCollectable<Sample> {
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, LOCAL_NAME);
+        parser.require(XmlPullParser.START_TAG, SampleNS.NAMESPACE_URI,
+                       Samples.LOCAL_NAME);
 
         getAccessibles().clear();
         while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final Sample sample = new Sample();
+            final SampleNS sample = new SampleNS();
             sample.parse(parser);
             getAccessibles().add(sample);
         }
 
-        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, LOCAL_NAME);
+        parser.require(XmlPullParser.END_TAG, SampleNS.NAMESPACE_URI,
+                       Samples.LOCAL_NAME);
     }
 
 
