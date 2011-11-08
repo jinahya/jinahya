@@ -443,12 +443,13 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText()</code> as a long value.
+     *
+     * @param parser parser
+     * @param defaultValue default value
+     * @return parsed long value or <code>defaultValue</code> if nill.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static long nextLong(final XmlPullParser parser,
                                 final long defaultValue)
@@ -464,11 +465,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText()</code> as a Float value.
+     *
+     * @param parser parser
+     * @return parsed value or null if nill
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs
      */
     public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -483,12 +485,13 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText()</code> as a float value.
+     *
+     * @param parser parser
+     * @param defaultValue default value
+     * @return parsed value or <code>defaultValue</code> if nill
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static float nextFloat(final XmlPullParser parser,
                                   final float defaultValue)
