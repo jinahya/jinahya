@@ -23,26 +23,14 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XSTemporalAdapterTest<T extends XSTemporalAdapter> {
-
-
-    protected static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
-
-
-    static {
-        try {
-            XML_PULL_PARSER_FACTORY = XmlPullParserFactory.newInstance();
-        } catch (XmlPullParserException xppe) {
-            throw new InstantiationError(xppe.getMessage());
-        }
-    }
+public class XSTemporalAdapterTest<T extends XSTemporalAdapter>
+    extends XSTypeAdapterTest {
 
 
     protected static <T extends XSTemporalAdapter> void testParse(
