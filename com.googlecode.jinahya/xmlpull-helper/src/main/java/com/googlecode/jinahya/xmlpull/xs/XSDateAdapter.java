@@ -26,6 +26,7 @@ import java.util.List;
 
 
 /**
+ * XSTypeAdapter for <code>xs:date</code>.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
