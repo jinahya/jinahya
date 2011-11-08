@@ -29,23 +29,11 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XSBooleanAdapterTest {
-
-
-    private static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
-
-
-    static {
-        try {
-            XML_PULL_PARSER_FACTORY = XmlPullParserFactory.newInstance();
-        } catch (XmlPullParserException xppe) {
-            throw new InstantiationError(xppe.getMessage());
-        }
-    }
+public class XSBooleanAdapterTest extends XSTypeAdapterTest {
 
 
     @Test
-    public void testParseXSBoolean() throws XmlPullParserException {
+    public static void testParseXSBoolean() {
 
         try {
             XSBooleanAdapter.parseXSBoolean(null);
@@ -73,7 +61,9 @@ public class XSBooleanAdapterTest {
     }
 
 
-    private void testXSBooleanWithIllegalValues(final String illegalValue) {
+    private static void testXSBooleanWithIllegalValues(
+        final String illegalValue) {
+
         try {
             XSBooleanAdapter.parseXSBoolean(illegalValue);
             Assert.fail("passed: parseXSBoolean(\""
