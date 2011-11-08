@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<samples>
+<samples xmlns="http://jinahya.googlecode.com/xmlpull/v1">
   <sample id="0">
     <name/>
     <age/>
   </sample>  
   <sample id="1">
-    <name>John</name>
+    <name>name1</name>
     <age>18</age>
   </sample>  
   <sample id="1">
-    <name>Jane</name>
+    <name>Jame</name>
     <age>18</age>
   </sample>  
   <sample id="1">

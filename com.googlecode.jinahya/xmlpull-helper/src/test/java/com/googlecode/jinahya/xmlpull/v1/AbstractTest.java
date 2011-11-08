@@ -18,11 +18,11 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.testng.annotations.Test;
+import java.net.URL;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -31,33 +31,36 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SamplesTest {
+public abstract class AbstractTest {
 
 
-    @Test
-    public void testParse() throws XmlPullParserException, IOException {
+    protected static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
 
-        final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 
-        final PullParser parser = new PullParser(factory.newPullParser());
-
-        final InputStream input =
-            SamplesTest.class.getResourceAsStream("samples.xml");
+    static {
         try {
-            parser.setInput(input, null);
-            parser.nextTag();
-
-            final Samples collection =
-                new Samples();
-
-            collection.parse(parser);
-
-            for (Sample parsable : collection.getParsable()) {
-                System.out.println(parsable);
-            }
-        } finally {
-            input.close();
+            XML_PULL_PARSER_FACTORY = XmlPullParserFactory.newInstance();
+            XML_PULL_PARSER_FACTORY.setNamespaceAware(true);
+        } catch (XmlPullParserException xppe) {
+            throw new InstantiationError(xppe.getLocalizedMessage());
         }
+    }
+
+
+    protected static XmlPullParser newPullParser()
+        throws XmlPullParserException {
+
+        return XML_PULL_PARSER_FACTORY.newPullParser();
+    }
+
+
+    protected static InputStream getResourceAsStream(final String name) {
+        return AbstractTest.class.getResourceAsStream(name);
+    }
+
+
+    protected static URL getResource(final String name) {
+        return AbstractTest.class.getResource(name);
     }
 
 

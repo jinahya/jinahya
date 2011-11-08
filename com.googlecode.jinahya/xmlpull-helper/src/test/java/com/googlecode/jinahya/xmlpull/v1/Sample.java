@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -34,29 +35,40 @@ public class Sample implements XmlAccessible {
     public static final String LOCAL_NAME = "sample";
 
 
+    public Sample() {
+        this(null);
+    }
+
+
+    protected Sample(final String namespaceURI) {
+        super();
+
+        this.namespaceURI = namespaceURI;
+    }
+
+
     @Override
-    public void parse(final PullParser parser)
+    public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, null, LOCAL_NAME);
+        parser.require(XmlPullParser.START_TAG, namespaceURI, LOCAL_NAME);
 
-        id = parser.getLongAttribute(null, "id");
-
-        parser.nextTag();
-        name = parser.nextNillable();
+        id = XmlPullParserHelper.getLongAttribute(parser, null, "id");
 
         parser.nextTag();
-        age = parser.nextInt();
+        name = XmlPullParserHelper.nextNillable(parser);
 
         parser.nextTag();
-        parser.require(XmlPullParser.END_TAG, null, LOCAL_NAME);
+        age = XmlPullParserHelper.nextInt(parser);
+
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, namespaceURI, LOCAL_NAME);
 
     }
 
 
     @Override
-    public void serialize(final PushSerializer serializer)
-        throws XmlPullParserException, IOException {
+    public void serialize(final XmlSerializer serializer) throws IOException {
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -101,6 +113,9 @@ public class Sample implements XmlAccessible {
     public String toString() {
         return id + "/" + name + "/" + age;
     }
+
+
+    private final String namespaceURI;
 
 
     private Long id;

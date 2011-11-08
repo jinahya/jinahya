@@ -78,7 +78,7 @@ public class XSBooleanAdapterTest {
             XSBooleanAdapter.parseXSBoolean(illegalValue);
             Assert.fail("passed: parseXSBoolean(\""
                         + String.valueOf(illegalValue) + "\"");
-        } catch (XmlPullParserException xppe) {
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }

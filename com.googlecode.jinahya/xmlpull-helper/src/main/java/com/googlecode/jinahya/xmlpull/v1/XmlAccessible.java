@@ -20,7 +20,9 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
@@ -37,18 +39,17 @@ public interface XmlAccessible {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void parse(PullParser parser) throws XmlPullParserException, IOException;
+    void parse(XmlPullParser parser)
+        throws XmlPullParserException, IOException;
 
 
     /**
      * Serializes information to given <code>serializer</code>.
      *
      * @param serializer serializer
-     * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    void serialize(PushSerializer serializer)
-        throws XmlPullParserException, IOException;
+    void serialize(XmlSerializer serializer) throws IOException;
 
 
 }

@@ -18,22 +18,36 @@
 package com.googlecode.jinahya.xmlpull.xs;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <V> value type parameter
  */
-public interface XSTypeAdapter<T> {
+public interface XSTypeAdapter<V> {
 
 
-    T parse(String string) throws XmlPullParserException, IOException;
+    /**
+     * Parses given <code>string</code> to the target value. A
+     * <code>NullPointerException</code> will be thrown if <code>string</code>
+     * is null. An <code>IllegalArgumentException</code> will be thrown if
+     * failed to parse.
+     *
+     * @param string string to parse
+     * @return parsed value
+     */
+    V parse(String string);
 
 
-    String serialize(T value) throws XmlPullParserException, IOException;
+    /**
+     * Prints given <code>value</code> to a string value. A
+     * <code>NullPointerException</code> will be thrown if <code>string</code>
+     * is null. An <code>IllegalArgumentException</code> will be thrown if
+     * failed to print.
+     * 
+     * @param value value to print
+     * @return printed string
+     */
+    String print(V value);
 
 
 }

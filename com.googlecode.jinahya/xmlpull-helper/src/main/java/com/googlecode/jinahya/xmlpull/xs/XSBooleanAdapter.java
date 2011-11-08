@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.xmlpull.xs;
 
 
-import java.io.IOException;
-import org.xmlpull.v1.XmlPullParserException;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -34,10 +30,8 @@ public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
      *
      * @param string string to parse
      * @return parsed Boolean value
-     * @throws XmlPullParserException if failed to parse string
      */
-    public static Boolean parseXSBoolean(final String string)
-        throws XmlPullParserException {
+    public static Boolean parseXSBoolean(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null value");
@@ -51,8 +45,8 @@ public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
             return Boolean.FALSE;
         }
 
-        throw new XmlPullParserException(
-            "unparsable xs:boolean value: " + string);
+        throw new IllegalArgumentException(
+            "failed to parse xs:boolean value from " + string);
     }
 
 
@@ -73,8 +67,7 @@ public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
 
 
     @Override
-    public Boolean parse(final String string)
-        throws XmlPullParserException, IOException {
+    public Boolean parse(final String string) {
 
         if (string == null) {
             throw new NullPointerException("null value");
@@ -85,8 +78,7 @@ public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
 
 
     @Override
-    public String serialize(final Boolean value)
-        throws XmlPullParserException, IOException {
+    public String print(final Boolean value) {
 
         if (value == null) {
             throw new NullPointerException("null value");
