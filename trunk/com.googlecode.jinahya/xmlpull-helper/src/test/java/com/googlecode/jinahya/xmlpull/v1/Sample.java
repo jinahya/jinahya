@@ -56,7 +56,7 @@ public class Sample implements XmlAccessible {
         id = XmlPullParserHelper.getLongAttribute(parser, null, "id");
 
         parser.nextTag();
-        name = XmlPullParserHelper.nextNillable(parser);
+        name = XmlPullParserHelper.nextNillableText(parser);
 
         parser.nextTag();
         age = XmlPullParserHelper.nextInt(parser);
