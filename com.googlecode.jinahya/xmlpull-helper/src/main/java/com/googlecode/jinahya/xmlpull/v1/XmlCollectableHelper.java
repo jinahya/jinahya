@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -161,13 +162,14 @@ public final class XmlCollectableHelper {
 
 
     /**
-     * 
-     * @param <C>
-     * @param serializer
-     * @param collectable
-     * @param namespaceURI
-     * @param localName
-     * @throws IOException 
+     * Serializes given <code>collectable</code> as an XmlWrapper.
+     *
+     * @param <C> collectable type parameter
+     * @param serializer serializer
+     * @param collectable collectable
+     * @param namespaceURI namespace URI
+     * @param localName local name
+     * @throws IOException if an I/O error occurs
      */
     public static <C extends XmlCollectable<?>> void serialize(
         final XmlSerializer serializer, final C collectable,

@@ -61,8 +61,8 @@ public abstract class AbstractXmlWrapper<A extends XmlAccessible>
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
-        XmlCollectableHelper.serialize(serializer, this, namespaceURI,
-                                       localName);
+        XmlCollectableHelper.serialize(
+            serializer, this, namespaceURI, localName);
     }
 
 

@@ -182,8 +182,8 @@
         <dependencies>
           <dependency>
             <groupId>net.sf.proguard</groupId>
-            <artifactId>proguard-base</artifactId>
-            <version>4.6</version>
+            <artifactId>proguard</artifactId>
+            <version>4.4</version>
             <scope>runtime</scope>
           </dependency>
         </dependencies>
