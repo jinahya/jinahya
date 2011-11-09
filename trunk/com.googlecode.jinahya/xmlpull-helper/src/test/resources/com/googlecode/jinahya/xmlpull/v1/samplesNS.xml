@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<samples xmlns="http://jinahya.googlecode.com/xmlpull/v1">
+<samples xmlns="http://jinahya.googlecode.com/xmlpull/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <sample id="0">
-    <name/>
-    <age/>
+    <name xsi:nil="true"/>
+    <age xsi:nil="true"/>
   </sample>  
   <sample id="1">
     <name>name1</name>
