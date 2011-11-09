@@ -44,7 +44,7 @@ public final class XmlPullParserHelper {
      * @param parser parser
      * @param namespace namespace
      * @param name name
-     * @return the parsed Date value or null if no attribute found
+     * @return parsed Date value or null if no attribute found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
@@ -87,7 +87,7 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * Parses an <code>xs:dateTime</code> attribute and returns as Date.
+     * Parses an attribute as <code>xs:dateTime</code>.
      *
      * @param parser parser
      * @param namespace tag namespace
@@ -111,7 +111,7 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * Parses a <code>xs:date</code> text and returns as a Date.
+     * Parses <code>nextText()</code> as <code>xs:date</code>.
      *
      * @param parser parser
      * @return parsed Date or null if current tag is an empty tag.
@@ -135,7 +135,7 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * Parses a <code>xs:time</code> text and returns as a Date.
+     * Parses <code>xs:time</code> text as a Date.
      *
      * @param parser parser
      * @return parsed Date or null if current tag is an empty tag.
@@ -207,14 +207,16 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as an int.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @param defaultValue default value
+     * @return parsed int value or <code>defaultValue</code> if attribute not
+     *         found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static int getIntAttribute(final XmlPullParser parser,
                                       final String namespace, final String name,
@@ -231,13 +233,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Long.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @return parsed Long value or null if attribute not found
+     * @throws XmlPullParserException if an XML error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static Long getLongAttribute(final XmlPullParser parser,
                                         final String namespace,
@@ -254,14 +257,16 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a long.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @param defaultValue default value
+     * @return parsed long value or <code>defaultValue</code> if attribute not
+     *         found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static long getLongAttribute(final XmlPullParser parser,
                                         final String namespace,
@@ -279,13 +284,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Float.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @return parsed Float value or null if attribute not found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Float getFloatAttribute(final XmlPullParser parser,
                                           final String namespace,
@@ -301,6 +307,18 @@ public final class XmlPullParserHelper {
     }
 
 
+    /**
+     * Parses an attribute as a float.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @param defaultValue default value
+     * @return parsed float value or <code>defaultValue</code> if attribute not
+     *         found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
     public static float getFloatAttribute(final XmlPullParser parser,
                                           final String namespace,
                                           final String name,
@@ -317,13 +335,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a Double.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @return parsed Double value or null if attribute not found
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Double getDoubleAttribute(final XmlPullParser parser,
                                             final String namespace,
@@ -340,14 +359,16 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param namespace
-     * @param name
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses an attribute as a double.
+     *
+     * @param parser parser
+     * @param namespace attribute namespace
+     * @param name attribute name
+     * @param defaultValue default value
+     * @return parsed double value or <code>defaultValue</code> if attribute not
+     *         found.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static double getDoubleAttribute(final XmlPullParser parser,
                                             final String namespace,
@@ -365,11 +386,13 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code>.
+     *
+     * @param parser parser
+     * @return <code>nextText</code> value or null if current tag is an empty
+     *         tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static String nextNillable(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -384,11 +407,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText()</code> as an Integer.
+     *
+     * @param parser parser
+     * @return parsed Integer value or null if current tag is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -403,12 +427,14 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @param defaultValue
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code> as an int.
+     *
+     * @param parser parser
+     * @param defaultValue default value
+     * @return parsed int value or <code>defaultValue</code> if current tag is
+     *         an empty tag.
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public static int nextInt(final XmlPullParser parser,
                               final int defaultValue)
@@ -424,11 +450,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code> as a Long.
+     *
+     * @param parser parser
+     * @return parsed Long value or null if current tag is an empty tag.
+     * @throws XmlPullParserException if an XML error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
@@ -507,11 +534,12 @@ public final class XmlPullParserHelper {
 
 
     /**
-     * 
-     * @param parser
-     * @return
-     * @throws XmlPullParserException
-     * @throws IOException 
+     * Parses <code>nextText</code> as a Double value.
+     *
+     * @param parser parser
+     * @return parsed Double value or null if current tag is nill
+     * @throws XmlPullParserException is an XML error occurs.
+     * @throws IOException if an I/O error occurs
      */
     public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
