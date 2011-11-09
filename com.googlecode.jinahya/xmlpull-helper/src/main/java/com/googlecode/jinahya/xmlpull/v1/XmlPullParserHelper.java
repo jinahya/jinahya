@@ -125,7 +125,7 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -149,7 +149,7 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -173,7 +173,7 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -394,7 +394,7 @@ public final class XmlPullParserHelper {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public static String nextNillable(final XmlPullParser parser)
+    public static String nextNillableText(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         if (parser.isEmptyElementTag()) {
@@ -417,7 +417,7 @@ public final class XmlPullParserHelper {
     public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -460,7 +460,7 @@ public final class XmlPullParserHelper {
     public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -502,7 +502,7 @@ public final class XmlPullParserHelper {
     public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -544,7 +544,7 @@ public final class XmlPullParserHelper {
     public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
@@ -638,7 +638,7 @@ public final class XmlPullParserHelper {
     public static Boolean nextBoolean(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillable(parser);
+        final String string = nextNillableText(parser);
         if (string == null) {
             return null;
         }
