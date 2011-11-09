@@ -397,12 +397,15 @@ public final class XmlPullParserHelper {
     public static String nextNillableText(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        if (parser.isEmptyElementTag()) {
-            parser.nextTag(); // move to end tag
+        final boolean nil = getBooleanAttribute(
+            parser, XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil", false);
+
+        String value = parser.nextText();
+        if (value.length() == 0 && nil) {
             return null;
         }
 
-        return parser.nextText();
+        return value;
     }
 
 
