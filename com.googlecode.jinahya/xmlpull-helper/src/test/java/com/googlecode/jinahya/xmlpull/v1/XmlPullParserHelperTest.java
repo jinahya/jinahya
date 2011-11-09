@@ -69,6 +69,23 @@ public class XmlPullParserHelperTest extends AbstractTest {
             Assert.assertNull(XmlPullParserHelper.nextNillableText(parser));
         }
 
+        {
+            final XmlPullParser parser = newPullParser();
+            final String xml = "<test/>";
+            parser.setInput(new ByteArrayInputStream(xml.getBytes()), null);
+            parser.nextTag();
+            Assert.assertEquals(
+                XmlPullParserHelper.nextNillableText(parser), "");
+        }
+
+        {
+            final XmlPullParser parser = newPullParser();
+            final String xml = "<test></test>";
+            parser.setInput(new ByteArrayInputStream(xml.getBytes()), null);
+            parser.nextTag();
+            Assert.assertEquals(
+                XmlPullParserHelper.nextNillableText(parser), "");
+        }
     }
 
 
