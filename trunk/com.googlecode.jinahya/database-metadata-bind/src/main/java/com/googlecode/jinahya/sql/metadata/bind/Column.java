@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "columnName",
-                      "dataType", "typeName", "columnSize"})
+                      "dataType", "typeName", "columnSize", "decimalDigits",
+                      "numPrecRadix", "nullable", "remarks", "columnDef",
+                      "charOctetLength"})
 public class Column extends Metadata {
 
 
@@ -102,25 +104,79 @@ public class Column extends Metadata {
 
     @XmlElement(required = true, nillable = false)
     public BigDecimal getColumnSize() {
-    return getValue(BigDecimal.class, "COLUMN_SIZE");
-    }
-    
-    
-    public void setColumnSize(final BigDecimal columnSize) {
-    setValue(BigDecimal.class, "COLUMN_SIZE", columnSize);
-    }
-
-    /*
-    @XmlElement(required = true, nillable = false)
-    public Number getColumnSize() {
         return getValue(BigDecimal.class, "COLUMN_SIZE");
     }
 
 
-    public void setColumnSize(final Number columnSize) {
-        setValue(Number.class, "COLUMN_SIZE", columnSize);
+    public void setColumnSize(final BigDecimal columnSize) {
+        setValue(BigDecimal.class, "COLUMN_SIZE", columnSize);
     }
-     */
+
+
+    @XmlElement(required = true, nillable = true)
+    public Integer getDecimalDigits() {
+        return getValue(Integer.class, "DECIMAL_DIGITS");
+    }
+
+
+    public void setDecimalDigits(final Integer decimalDigits) {
+        setValue(Integer.class, "DECIMAL_DIGITS", decimalDigits);
+    }
+
+
+    @XmlElement(required = true)
+    public Integer getNumPrecRadix() {
+        return getValue(Integer.class, "NUM_PREC_RADIX");
+    }
+
+
+    public void setNumPrecRadix(final Integer numPrecRadix) {
+        setValue(Integer.class, "NUM_PREC_RADIX", numPrecRadix);
+    }
+
+
+    @XmlElement(required = true)
+    public BigDecimal getNullable() {
+        return getValue(BigDecimal.class, "NULLABLE");
+    }
+
+
+    public void setNullable(final BigDecimal nullable) {
+        setValue(BigDecimal.class, "NULLABLE", nullable);
+    }
+
+
+    @XmlElement(required = true, nillable = true)
+    public String getRemarks() {
+        return getValue(String.class, "REMARKS");
+    }
+
+
+    public void setRemarks(final String remarks) {
+        setValue(String.class, "REMARKS", remarks);
+    }
+
+
+    @XmlElement(required = true, nillable = true)
+    public String getColumnDef() {
+        return getValue(String.class, "COLUMN_DEF");
+    }
+
+
+    public void setColumnDef(final String columnDef) {
+        setValue(String.class, "COLUMN_DEF", columnDef);
+    }
+
+
+    @XmlElement(required = true)
+    public BigDecimal getCharOctetLength() {
+        return getValue(BigDecimal.class, "CHAR_OCTET_LENGTH");
+    }
+
+
+    public void setCharOctetLength(final BigDecimal charOctetLength) {
+        setValue(BigDecimal.class, "CHAR_OCTET_LENGTH", charOctetLength);
+    }
 
 
 }

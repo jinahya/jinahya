@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"tableCatalog", "tableSchema"})
+@XmlType(propOrder = {"tableCatalog", "tableSchema", "tables"})
 public class Schema extends Metadata {
 
 
