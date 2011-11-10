@@ -20,6 +20,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * Catalog binding.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -35,25 +37,45 @@ import javax.xml.bind.annotation.XmlType;
 public class Catalog extends Metadata {
 
 
+    /**
+     * Returns the value of 'TABLE_CAT'.
+     *
+     * @return tableCatalog
+     */
     @XmlElement(required = true)
     public String getTableCatalog() {
         return getValue(String.class, "TABLE_CAT");
     }
 
 
+    /**
+     * Sets the value of 'TABLE_CAT'.
+     *
+     * @param tableCatalog tableCatalog
+     */
     public void setTableCatalog(final String tableCatalog) {
         setValue(String.class, "TABLE_CAT", tableCatalog);
     }
 
 
+    /**
+     * Returns schemas.
+     *
+     * @return schemas
+     */
     public Collection<Schema> getSchemas() {
+
         if (schemas == null) {
             schemas = new ArrayList<Schema>();
         }
+
         return schemas;
     }
 
 
+    /**
+     * schemas.
+     */
     @XmlElement(name = "schema")
     @XmlElementWrapper(name = "schemas", required = true, nillable = true)
     private Collection<Schema> schemas;

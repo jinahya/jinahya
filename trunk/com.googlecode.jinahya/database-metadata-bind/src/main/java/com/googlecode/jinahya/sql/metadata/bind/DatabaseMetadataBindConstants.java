@@ -29,6 +29,9 @@ import javax.xml.bind.JAXBException;
 public final class DatabaseMetadataBindConstants {
 
 
+    /**
+     * JAXBContext.
+     */
     public static final JAXBContext JAXB_CONTEXT;
 
 
@@ -42,10 +45,16 @@ public final class DatabaseMetadataBindConstants {
     }
 
 
+    /**
+     * Target namespace.
+     */
     public static final String TARGET_NAMESPACE =
         "http://jinahya.googlecode.com/sql/metadata/bind";
 
 
+    /**
+     * Creates a new instance.
+     */
     private DatabaseMetadataBindConstants() {
         super();
     }
