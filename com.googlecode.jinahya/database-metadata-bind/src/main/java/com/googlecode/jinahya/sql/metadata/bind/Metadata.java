@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -25,8 +28,11 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import java.util.Properties;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -35,6 +41,77 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlRootElement
 public abstract class Metadata {
+
+
+    /**
+     * Marshals given <code>metadata</code> to specified <code>output</code>.
+     *
+     * @param <M> metadata type parameter
+     * @param metadata metadata
+     * @param properties marshaller properties
+     * @param outputType marshal output type
+     * @param output marshal output
+     * @throws JAXBException if a JAXB error occurs.
+     * @throws NoSuchMethodException if output is unknown
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public static <M extends Metadata, O> void marshal(
+        final M metadata, final Properties properties,
+        final Class<O> outputType, final O output)
+        throws JAXBException, NoSuchMethodException, IllegalAccessException,
+               InvocationTargetException {
+
+        final Marshaller marshaller =
+            DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
+
+        if (properties != null) {
+            for (String name : properties.stringPropertyNames()) {
+                marshaller.setProperty(name, properties.get(name));
+            }
+        }
+
+        final Method method = Marshaller.class.getMethod(
+            "marshal", Object.class, outputType);
+
+        method.invoke(marshaller, metadata, output);
+    }
+
+
+    /**
+     * Unmarshals a instance of given <code>metadataType</code> from specified
+     * <code>input</code>.
+     *
+     * @param <M> metadata type parameter
+     * @param metadataType metadata type
+     * @param properties unmarshaller properties
+     * @param inputType input type
+     * @param input input
+     * @throws JAXBException if a JAXB error occurs.
+     * @throws NoSuchMethodException if input is unknown
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public static <M extends Metadata, I> void unmarshal(
+        final Class<M> metadataType, final Properties properties,
+        final Class<I> inputType, final I input)
+        throws JAXBException, NoSuchMethodException, IllegalAccessException,
+               InvocationTargetException {
+
+        final Unmarshaller unmarshaller =
+            DatabaseMetadataBindConstants.JAXB_CONTEXT.createUnmarshaller();
+
+        if (properties != null) {
+            for (String name : properties.stringPropertyNames()) {
+                unmarshaller.setProperty(name, properties.get(name));
+            }
+        }
+
+        final Method method = Marshaller.class.getMethod(
+            "unmarshal", inputType);
+
+        method.invoke(unmarshaller, input);
+    }
 
 
     /**
@@ -92,7 +169,7 @@ public abstract class Metadata {
      *
      * @return entries
      */
-    @XmlJavaTypeAdapter(MetadataEntriesAdapter.class)
+    //@XmlJavaTypeAdapter(MetadataEntriesAdapter.class)
     public Map<String, MetadataEntry> getEntries() {
 
         if (entries == null) {
@@ -186,6 +263,17 @@ public abstract class Metadata {
     public MetadataEntry addEntry(final MetadataEntry entry) {
 
         return getEntries().put(entry.getLabel(), entry);
+    }
+
+
+    public void print(final PrintStream out) {
+        for (MetadataEntry entry : getEntries().values()) {
+            out.print(entry.getLabel() + ": " + entry.getValue());
+            if (entry.getValue() != null) {
+                out.print(" " + entry.getValue().getClass());
+            }
+            out.println();
+        }
     }
 
 
