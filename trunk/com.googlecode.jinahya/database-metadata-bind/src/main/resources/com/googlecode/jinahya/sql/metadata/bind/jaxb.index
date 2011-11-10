@@ -1,11 +1,13 @@
+Catalog
+Catalogs
 Column
+ColumnPrivilege
 Columns
 Index
 Indices
-#Metadata
-#MetadataCollection
-#MetadataEntries
-#MetadataEntry
+Schema
+Schemas
 Table
+TablePrivilege
 Tables
 

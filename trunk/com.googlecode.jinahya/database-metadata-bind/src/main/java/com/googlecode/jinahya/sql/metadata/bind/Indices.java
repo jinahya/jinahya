@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -30,6 +33,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Indices extends MetadataCollection<Index> {
+
+
+    public static Indices newInstance(final DatabaseMetaData databaseMetaData,
+                                      final String catalog, final String schema,
+                                      final String table, final boolean unique,
+                                      final boolean approximate)
+        throws SQLException {
+
+        final ResultSet indexResultSet = databaseMetaData.getIndexInfo(
+            catalog, schema, table, unique, approximate);
+        try {
+            final Indices indices = new Indices();
+            while (indexResultSet.next()) {
+                final Index index = Metadata.newInstance(
+                    Index.class, indexResultSet);
+                indices.getMetadata().add(index);
+            }
+
+            return indices;
+
+        } finally {
+            indexResultSet.close();
+        }
+    }
 
 
     @XmlElement(name = "index")

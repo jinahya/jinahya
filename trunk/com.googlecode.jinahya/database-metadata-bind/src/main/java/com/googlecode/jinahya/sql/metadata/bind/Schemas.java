@@ -32,37 +32,40 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Columns extends MetadataCollection<Column> {
+public class Schemas extends MetadataCollection<Schema> {
 
 
-    public static Columns newInstance(final DatabaseMetaData databaseMetaData,
+    public static Schemas newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog,
-                                      final String schemaPattern,
-                                      final String tableNamePattern,
-                                      final String columnNamePattern)
+                                      final String schemaPattern)
         throws SQLException {
 
-        final ResultSet columnResultSet = databaseMetaData.getColumns(
-            catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        final ResultSet schemaResultSet =
+            databaseMetaData.getSchemas(catalog, schemaPattern);
         try {
-            final Columns columns = new Columns();
-            while (columnResultSet.next()) {
-                final Column column = Metadata.newInstance(
-                    Column.class, columnResultSet);
-                columns.getMetadata().add(column);
+            final Schemas schemas = new Schemas();
+            while (schemaResultSet.next()) {
+                final Schema schema = Metadata.newInstance(
+                    Schema.class, schemaResultSet);
+                schemas.getMetadata().add(schema);
+
+                final Tables tables = Tables.newInstance(
+                    databaseMetaData, catalog, schema.getTableSchema(), null,
+                    null);
+                schema.getTables().addAll(tables.getMetadata());
             }
 
-            return columns;
+            return schemas;
 
         } finally {
-            columnResultSet.close();
+            schemaResultSet.close();
         }
     }
 
 
-    @XmlElement(name = "column")
+    @XmlElement(name = "schema")
     @Override
-    public Collection<Column> getMetadata() {
+    public Collection<Schema> getMetadata() {
         return super.getMetadata();
     }
 

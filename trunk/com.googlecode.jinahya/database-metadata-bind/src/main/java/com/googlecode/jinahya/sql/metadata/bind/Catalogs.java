@@ -32,37 +32,36 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Columns extends MetadataCollection<Column> {
+public class Catalogs extends MetadataCollection<Catalog> {
 
 
-    public static Columns newInstance(final DatabaseMetaData databaseMetaData,
-                                      final String catalog,
-                                      final String schemaPattern,
-                                      final String tableNamePattern,
-                                      final String columnNamePattern)
+    public static Catalogs newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
-        final ResultSet columnResultSet = databaseMetaData.getColumns(
-            catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        final ResultSet catalogResultSet = databaseMetaData.getCatalogs();
         try {
-            final Columns columns = new Columns();
-            while (columnResultSet.next()) {
-                final Column column = Metadata.newInstance(
-                    Column.class, columnResultSet);
-                columns.getMetadata().add(column);
+            final Catalogs catalogs = new Catalogs();
+            while (catalogResultSet.next()) {
+                final Catalog catalog = Metadata.newInstance(
+                   Catalog.class, catalogResultSet);
+                catalogs.getMetadata().add(catalog);
+
+                final Schemas schemas = Schemas.newInstance(
+                    databaseMetaData, catalog.getTableCatalog(), null);
+                catalog.getSchemas().addAll(schemas.getMetadata());
             }
 
-            return columns;
+            return catalogs;
 
         } finally {
-            columnResultSet.close();
+            catalogResultSet.close();
         }
     }
 
 
-    @XmlElement(name = "column")
+    @XmlElement(name = "catalog")
     @Override
-    public Collection<Column> getMetadata() {
+    public Collection<Catalog> getMetadata() {
         return super.getMetadata();
     }
 

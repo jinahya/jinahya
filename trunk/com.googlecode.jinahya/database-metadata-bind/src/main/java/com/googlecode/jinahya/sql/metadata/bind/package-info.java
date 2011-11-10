@@ -10,7 +10,7 @@
     @XmlNs(prefix = "xs", namespaceURI = "http://www.w3.org/2001/XMLSchema"),
     @XmlNs(prefix = "xsi",
            namespaceURI = "http://www.w3.org/2001/XMLSchema-instance")},
-           namespace = "http://www.gnifrix.com/teledit/persistence",
+           namespace = DatabaseMetadataBindConstants.TARGET_NAMESPACE,
            elementFormDefault = XmlNsForm.QUALIFIED,
            attributeFormDefault = XmlNsForm.UNQUALIFIED)
 package com.googlecode.jinahya.sql.metadata.bind;

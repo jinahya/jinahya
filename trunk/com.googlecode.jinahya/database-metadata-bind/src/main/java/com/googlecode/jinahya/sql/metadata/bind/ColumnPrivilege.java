@@ -18,33 +18,14 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import org.testng.annotations.Test;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TableTest {
-
-
-    @Test
-    public void testXmlOutput() throws JAXBException {
-
-        final Marshaller marshaller =
-            DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-        final Table table = new Table();
-        table.setTableCatalog("catalog");
-        table.setTableSchema("schema");
-        table.setTableName("name");
-
-        marshaller.marshal(table, System.out);
-    }
-
-
+@XmlRootElement
+public class ColumnPrivilege extends Privilege {
 }
 
