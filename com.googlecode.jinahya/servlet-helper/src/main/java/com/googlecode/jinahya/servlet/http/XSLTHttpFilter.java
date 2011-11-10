@@ -133,27 +133,28 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
 
 
     /**
-     * 
-     * @return
-     * @throws IOException 
+     * Returns stylesheet resource.
+     *
+     * @return stylesheet resource.
+     * @throws IOException if an I/O error occurs.
      */
     protected abstract URL getStylesheetResource() throws IOException;
 
 
     /**
-     * 
-     * @return 
+     * Returns content type.
+     *
+     * @return content type
      */
     protected abstract String getContentType();
 
 
     /**
-     * 
-     * @return 
+     * Returns character encoding.
+     *
+     * @return character encoding.
      */
-    protected String getCharacterEncoding() {
-        return "UTF-8";
-    }
+    protected abstract String getCharacterEncoding();
 
 
     /**
@@ -175,8 +176,9 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
 
 
     /**
-     * 
-     * @return 
+     * Returns a new instance of TransformerFactory.
+     *
+     * @return a new insance of TransformerFactory.
      */
     protected TransformerFactory newTransformerFactory() {
         return TransformerFactory.newInstance();
