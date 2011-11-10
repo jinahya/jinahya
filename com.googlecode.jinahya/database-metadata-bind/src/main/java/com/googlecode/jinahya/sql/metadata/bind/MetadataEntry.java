@@ -34,6 +34,13 @@ import javax.xml.bind.annotation.XmlValue;
 public final class MetadataEntry {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param label label
+     * @param value value
+     * @return a new instance.
+     */
     public static MetadataEntry newIntance(final String label,
                                            final Object value) {
 

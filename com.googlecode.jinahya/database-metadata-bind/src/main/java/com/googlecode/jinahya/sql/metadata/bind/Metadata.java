@@ -103,7 +103,12 @@ public abstract class Metadata {
     }
 
 
-    public Object getValue(final String label) {
+    /**
+     * 
+     * @param label
+     * @return 
+     */
+    protected Object getValue(final String label) {
         final MetadataEntry entry = getEntries().get(label);
         if (entry == null) {
             return null;
@@ -112,23 +117,39 @@ public abstract class Metadata {
     }
 
 
-    public void setValue(final String label, final Object value) {
+    /**
+     * 
+     * @param label
+     * @param value 
+     */
+    protected void setValue(final String label, final Object value) {
 
         if (!getEntries().containsKey(label)) {
-            getEntries().put(label, MetadataEntry.newIntance(label, value));
+            addEntry(label, value);
+            return;
         }
 
         getEntries().get(label).setValue(value);
     }
 
 
-    public <T> T getValue(final Class<T> type, final String label) {
+    /**
+     * 
+     * @param <T>
+     * @param type
+     * @param label
+     * @return 
+     */
+    protected <T> T getValue(final Class<T> type, final String label) {
         return type.cast(getValue(label));
     }
 
 
-    public <T> void setValue(final Class<T> valueType, final String label,
-                             final T value) {
+    /**
+     * 
+     */
+    protected <T> void setValue(final Class<T> valueType, final String label,
+                                final T value) {
 
         if (valueType == null) {
             throw new NullPointerException("null valueType");
@@ -142,11 +163,33 @@ public abstract class Metadata {
         setValue(label, value);
     }
 
-    public void addEntry(final String label, final Object value) {
 
-        getEntries().put(label, MetadataEntry.newIntance(label, value));
+    /**
+     * Adds a new entry.
+     *
+     * @param label entry label
+     * @param value entry value
+     * @return previous entry mapped to given <code>label</code>
+     */
+    public MetadataEntry addEntry(final String label, final Object value) {
+
+        return addEntry(MetadataEntry.newIntance(label, value));
     }
 
+
+    /**
+     * Adds a new entry.
+     *
+     * @param entry entry
+     * @return previous entry
+     */
+    public MetadataEntry addEntry(final MetadataEntry entry) {
+
+        return getEntries().put(entry.getLabel(), entry);
+    }
+
+
+    /** entries. */
     private Map<String, MetadataEntry> entries;
 
 
