@@ -82,6 +82,12 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
         final URL stylesheetResource;
         try {
             stylesheetResource = getStylesheetResource();
+            if (stylesheetResource == null) {
+                ((HttpServletResponse) response).sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "failed to get stylesheet resource: null returned");
+                return;
+            }
         } catch (IOException e) {
             ((HttpServletResponse) response).sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -169,6 +175,11 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
 
         if (transformerFactory == null) {
             transformerFactory = newTransformerFactory();
+            if (transformerFactory == null) {
+                throw new TransformerConfigurationException(
+                    "failed to create TransformerFactory: null returned");
+            
+            }
         }
 
         return transformerFactory.newTransformer(source);

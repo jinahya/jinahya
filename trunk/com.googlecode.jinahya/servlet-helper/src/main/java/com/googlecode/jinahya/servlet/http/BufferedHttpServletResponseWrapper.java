@@ -34,6 +34,11 @@ public class BufferedHttpServletResponseWrapper
     extends HttpServletResponseWrapper {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param response response
+     */
     public BufferedHttpServletResponseWrapper(
         final HttpServletResponse response) {
 
@@ -41,6 +46,12 @@ public class BufferedHttpServletResponseWrapper
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param response response
+     * @param outputStream outputStream
+     */
     public BufferedHttpServletResponseWrapper(
         final HttpServletResponse response,
         final BufferedHttpServletOutputStream outputStream) {
@@ -83,7 +94,6 @@ public class BufferedHttpServletResponseWrapper
     @Override
     public void reset() {
         super.reset();
-
         outputStream.reset();
     }
 

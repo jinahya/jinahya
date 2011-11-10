@@ -31,37 +31,41 @@ import javax.servlet.ServletOutputStream;
 public class BufferedHttpServletOutputStream extends ServletOutputStream {
 
 
+    /**
+     * Creates a new instance.
+     */
     public BufferedHttpServletOutputStream() {
         super();
 
-        baos = new ByteArrayOutputStream();
+        bufferStream = new ByteArrayOutputStream();
     }
 
 
     @Override
     public void write(final int b) throws IOException {
-        baos.write(b);
+        bufferStream.write(b);
     }
 
 
     /**
-     * 
+     * Reset this OutputStream.
      */
     public void reset() {
-        baos.reset();
+        bufferStream.reset();
     }
 
 
     /**
-     * 
-     * @return 
+     * Returns the buffered bytes.
+     *
+     * @return buffered bytes
      */
     public byte[] getBytes() {
-        return baos.toByteArray();
+        return bufferStream.toByteArray();
     }
 
 
-    private final ByteArrayOutputStream baos;
+    private final ByteArrayOutputStream bufferStream;
 
 
 }
