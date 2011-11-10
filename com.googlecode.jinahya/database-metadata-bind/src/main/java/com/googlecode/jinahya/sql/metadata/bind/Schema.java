@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * Schema binding.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -36,28 +37,53 @@ import javax.xml.bind.annotation.XmlType;
 public class Schema extends Metadata {
 
 
+    /**
+     * Returns tableCatalog.
+     *
+     * @return tableCatalog
+     */
     @XmlElement(required = true)
     public String getTableCatalog() {
         return getValue(String.class, "TABLE_CAT");
     }
 
 
+    /**
+     * Sets tableCatalog.
+     *
+     * @param tableCatalog tableCatalog
+     */
     public void setTableCatalog(final String tableCatalog) {
         setValue(String.class, "TABLE_CAT", tableCatalog);
     }
 
 
+    /**
+     * Returns tableSchema.
+     *
+     * @return tableSchema
+     */
     @XmlElement(required = true)
     public String getTableSchema() {
         return getValue(String.class, "TABLE_SCHEM");
     }
 
 
+    /**
+     * Sets the value of 'TABLE_SCHEM'.
+     *
+     * @param tableSchema tableSchema
+     */
     public void setTableSchema(final String tableSchema) {
         setValue(String.class, "TABLE_SCHEM", tableSchema);
     }
 
 
+    /**
+     * Returns tables.
+     *
+     * @return tables
+     */
     public Collection<Table> getTables() {
 
         if (tables == null) {
@@ -68,6 +94,7 @@ public class Schema extends Metadata {
     }
 
 
+    /** tables. */
     @XmlElement(name = "table")
     @XmlElementWrapper(name = "tables", required = true, nillable = true)
     private Collection<Table> tables;

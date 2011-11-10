@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Catalog collection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -35,6 +36,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Catalogs extends MetadataCollection<Catalog> {
 
 
+    /**
+     * Retrieves a new instance.
+     *
+     * @param databaseMetaData database meta data
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
+     */
     public static Catalogs newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
@@ -59,6 +67,11 @@ public class Catalogs extends MetadataCollection<Catalog> {
     }
 
 
+    /**
+     * Returns metadata.
+     *
+     * @return metadata
+     */
     @XmlElement(name = "catalog")
     @Override
     public Collection<Catalog> getMetadata() {
