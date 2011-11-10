@@ -19,28 +19,31 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import java.io.PrintStream;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import java.util.Properties;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public abstract class Metadata {
+//@XmlRootElement
+@XmlTransient
+public abstract class MetadataAccessible {
 
 
     /**
@@ -56,7 +59,7 @@ public abstract class Metadata {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <M extends Metadata, O> void marshal(
+    public static <M extends MetadataAccessible, O> void marshal(
         final M metadata, final Properties properties,
         final Class<O> outputType, final O output)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -92,7 +95,7 @@ public abstract class Metadata {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <M extends Metadata, I> void unmarshal(
+    public static <M extends MetadataAccessible, I> void unmarshal(
         final Class<M> metadataType, final Properties properties,
         final Class<I> inputType, final I input)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -124,7 +127,7 @@ public abstract class Metadata {
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
-    public static <T extends Metadata> T newInstance(
+    public static <T extends MetadataAccessible> T newInstance(
         final Class<T> metadataType, final ResultSet resultSet)
         throws SQLException {
 

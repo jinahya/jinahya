@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Tables extends MetadataCollectable<Table> {
+public class Functions extends MetadataCollectable<Function> {
 
 
     /**
@@ -45,45 +45,30 @@ public class Tables extends MetadataCollectable<Table> {
      * @param databaseMetaData
      * @param catalog
      * @param schemaPattern
-     * @param tableNamePattern
-     * @param types
+     * @param functionNamePattern
      * @return
      * @throws SQLException 
      */
-    public static Tables newInstance(final DatabaseMetaData databaseMetaData,
-                                     final String catalog,
-                                     final String schemaPattern,
-                                     final String tableNamePattern,
-                                     final String[] types)
+    public static Functions newInstance(final DatabaseMetaData databaseMetaData,
+                                        final String catalog,
+                                        final String schemaPattern,
+                                        final String functionNamePattern)
         throws SQLException {
 
-        final ResultSet tableResultSet = databaseMetaData.getTables(
-            catalog, schemaPattern, tableNamePattern, types);
+        final ResultSet functionResultSet = databaseMetaData.getFunctions(
+            catalog, schemaPattern, functionNamePattern);
         try {
-            final Tables tables = new Tables();
-            while (tableResultSet.next()) {
-                final Table table = MetadataAccessible.newInstance(
-                    Table.class, tableResultSet);
-                tables.getMetadata().add(table);
-                if (table.getTableName().equals("PRODUCT")) {
-                    table.print(System.out);
-                }
-
-                final Columns columns = Columns.newInstance(
-                    databaseMetaData, table.getTableCatalog(),
-                    table.getTableSchema(), table.getTableName(), null);
-                table.getColumns().addAll(columns.getMetadata());
-
-                final Indices indices = Indices.newInstance(
-                    databaseMetaData, table.getTableCatalog(),
-                    table.getTableSchema(), table.getTableName(), false, false);
-                table.getIndices().addAll(indices.getMetadata());                
+            final Functions functions = new Functions();
+            while (functionResultSet.next()) {
+                final Function function = MetadataAccessible.newInstance(
+                    Function.class, functionResultSet);
+                functions.getFunctions().add(function);
             }
 
-            return tables;
+            return functions;
 
         } finally {
-            tableResultSet.close();
+            functionResultSet.close();
         }
     }
 
@@ -94,7 +79,6 @@ public class Tables extends MetadataCollectable<Table> {
      * @param catalog
      * @param schemaPattern
      * @param tableNamePattern
-     * @param types
      * @param properties
      * @param outputType
      * @param output
@@ -107,13 +91,13 @@ public class Tables extends MetadataCollectable<Table> {
     public static <O> void marshalInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String tableNamePattern,
-        final String[] types, final Map<String, Object> properties,
-        final Class<O> outputType, final O output)
+        final Map<String, Object> properties, final Class<O> outputType,
+        final O output)
         throws SQLException, JAXBException, NoSuchMethodException,
                IllegalAccessException, InvocationTargetException {
 
-        final Tables instance = newInstance(
-            databaseMetaData, catalog, schemaPattern, tableNamePattern, types);
+        final Functions instance = newInstance(
+            databaseMetaData, catalog, schemaPattern, tableNamePattern);
 
         marshal(instance, properties, outputType, output);
     }
@@ -132,18 +116,18 @@ public class Tables extends MetadataCollectable<Table> {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <I> Tables unmarshalInstance(
+    public static <I> Functions unmarshalInstance(
         final Map<String, Object> properties, final Class<I> inputTyep,
         final I input)
         throws SQLException, JAXBException, NoSuchMethodException,
                IllegalAccessException, InvocationTargetException {
 
-        return unmarshal(Tables.class, properties, inputTyep, input);
+        return unmarshal(Functions.class, properties, inputTyep, input);
     }
 
 
-    @XmlElement(name = "table")
-    public Collection<Table> getTables() {
+    @XmlElement(name = "function")
+    public Collection<Function> getFunctions() {
         return super.getMetadata();
     }
 

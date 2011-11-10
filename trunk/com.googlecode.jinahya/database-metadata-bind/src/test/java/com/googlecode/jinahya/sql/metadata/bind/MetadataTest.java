@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class MetadataTest<T extends Metadata> {
+public abstract class MetadataTest<T extends MetadataAccessible> {
 
 
     public MetadataTest(final Class<T> metadataType) {
