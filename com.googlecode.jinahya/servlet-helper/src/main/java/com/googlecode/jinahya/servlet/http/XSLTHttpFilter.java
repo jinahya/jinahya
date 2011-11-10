@@ -178,7 +178,7 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
     /**
      * Returns a new instance of TransformerFactory.
      *
-     * @return a new insance of TransformerFactory.
+     * @return a new instance of TransformerFactory.
      */
     protected TransformerFactory newTransformerFactory() {
         return TransformerFactory.newInstance();
