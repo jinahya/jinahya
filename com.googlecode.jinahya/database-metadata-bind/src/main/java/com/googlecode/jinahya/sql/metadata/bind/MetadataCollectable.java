@@ -30,33 +30,33 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-@XmlType(name = "collection")
-public abstract class MetadataCollection<T extends Metadata> {
+//@XmlRootElement
+//@XmlType(name = "collection")
+@XmlTransient
+public abstract class MetadataCollectable<T extends MetadataAccessible> {
 
 
     /**
      * 
-     * @param <C>
-     * @param <O>
-     * @param collection
-     * @param properties
-     * @param outputType
-     * @param output
-     * @throws JAXBException
+     * @param <C> collection type parameter
+     * @param <O> output type parameter
+     * @param collection collection
+     * @param properties marshaller properties
+     * @param outputType output type
+     * @param output output
+     * @throws JAXBException if JAXB error occurs
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <C extends MetadataCollection, O> void marshal(
+    public static <C extends MetadataCollectable, O> void marshal(
         final C collection, final Map<String, Object> properties,
         final Class<O> outputType, final O output)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -92,7 +92,7 @@ public abstract class MetadataCollection<T extends Metadata> {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <C extends MetadataCollection, I> C unmarshal(
+    public static <C extends MetadataCollectable, I> C unmarshal(
         final Class<C> collectionType, final Map<String, Object> properties,
         final Class<I> inputType, final I input)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -119,7 +119,7 @@ public abstract class MetadataCollection<T extends Metadata> {
      *
      * @return entries
      */
-    public Collection<T> getMetadata() {
+    protected Collection<T> getMetadata() {
 
         if (metadata == null) {
             metadata = new ArrayList<T>();
@@ -129,7 +129,7 @@ public abstract class MetadataCollection<T extends Metadata> {
     }
 
 
-    @XmlElement
+    /** metadata. */
     private Collection<T> metadata;
 
 

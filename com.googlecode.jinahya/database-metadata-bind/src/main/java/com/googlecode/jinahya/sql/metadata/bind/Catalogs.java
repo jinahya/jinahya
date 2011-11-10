@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Catalogs extends MetadataCollection<Catalog> {
+public class Catalogs extends MetadataCollectable<Catalog> {
 
 
     /**
@@ -50,7 +51,7 @@ public class Catalogs extends MetadataCollection<Catalog> {
         try {
             final Catalogs catalogs = new Catalogs();
             while (catalogResultSet.next()) {
-                final Catalog catalog = Metadata.newInstance(
+                final Catalog catalog = MetadataAccessible.newInstance(
                    Catalog.class, catalogResultSet);
                 catalogs.getMetadata().add(catalog);
 
@@ -68,13 +69,12 @@ public class Catalogs extends MetadataCollection<Catalog> {
 
 
     /**
-     * Returns metadata.
+     * Returns catalogs.
      *
-     * @return metadata
+     * @return catalogs
      */
     @XmlElement(name = "catalog")
-    @Override
-    public Collection<Catalog> getMetadata() {
+    public Collection<Catalog> getCatalogs() {
         return super.getMetadata();
     }
 

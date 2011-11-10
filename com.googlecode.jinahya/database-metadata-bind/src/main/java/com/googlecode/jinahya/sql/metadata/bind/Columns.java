@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Columns extends MetadataCollection<Column> {
+public class Columns extends MetadataCollectable<Column> {
 
 
     public static Columns newInstance(final DatabaseMetaData databaseMetaData,
@@ -47,7 +47,7 @@ public class Columns extends MetadataCollection<Column> {
         try {
             final Columns columns = new Columns();
             while (columnResultSet.next()) {
-                final Column column = Metadata.newInstance(
+                final Column column = MetadataAccessible.newInstance(
                     Column.class, columnResultSet);
                 columns.getMetadata().add(column);
             }
@@ -61,8 +61,7 @@ public class Columns extends MetadataCollection<Column> {
 
 
     @XmlElement(name = "column")
-    @Override
-    public Collection<Column> getMetadata() {
+    public Collection<Column> getColumns() {
         return super.getMetadata();
     }
 

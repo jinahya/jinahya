@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -32,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Schemas extends MetadataCollection<Schema> {
+public class Schemas extends MetadataCollectable<Schema> {
 
 
     public static Schemas newInstance(final DatabaseMetaData databaseMetaData,
@@ -45,7 +46,7 @@ public class Schemas extends MetadataCollection<Schema> {
         try {
             final Schemas schemas = new Schemas();
             while (schemaResultSet.next()) {
-                final Schema schema = Metadata.newInstance(
+                final Schema schema = MetadataAccessible.newInstance(
                     Schema.class, schemaResultSet);
                 schemas.getMetadata().add(schema);
 
@@ -64,8 +65,7 @@ public class Schemas extends MetadataCollection<Schema> {
 
 
     @XmlElement(name = "schema")
-    @Override
-    public Collection<Schema> getMetadata() {
+    public Collection<Schema> getSchemas() {
         return super.getMetadata();
     }
 
