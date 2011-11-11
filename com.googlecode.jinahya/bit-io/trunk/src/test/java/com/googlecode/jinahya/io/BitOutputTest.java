@@ -40,7 +40,7 @@ public class BitOutputTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteUnsignedByte() throws IOException {
 
         for (int length = 1; length <= 8; length++) {
@@ -64,7 +64,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteUnsignedShort() throws IOException {
 
         for (int length = 2; length <= 16; length++) {
@@ -88,7 +88,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteUnsignedInt() throws IOException {
 
         for (int length = 1; length < 32; length++) {
@@ -136,7 +136,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteFloat() throws IOException {
 
         final float expected = RANDOM.nextFloat();
@@ -157,7 +157,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteUnsignedLong() throws IOException {
 
         for (int length = 1; length < 64; length++) {
@@ -181,7 +181,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteLong() throws IOException {
 
         for (int length = 2; length <= 64; length++) {
@@ -205,7 +205,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteDouble() throws IOException {
 
         final double expected = RANDOM.nextFloat();
@@ -226,11 +226,11 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testWriteUTF() throws IOException {
 
         final String expected =
-            RandomStringUtils.random(RANDOM.nextInt(128) + 128);
+            RandomStringUtils.random(RANDOM.nextInt(64) + 64);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);

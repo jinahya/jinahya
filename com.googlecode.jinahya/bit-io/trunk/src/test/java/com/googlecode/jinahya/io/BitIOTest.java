@@ -45,7 +45,7 @@ public class BitIOTest {
     @Test
     public void testBoolean() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Boolean> values = new ArrayList<Boolean>(count);
         for (int i = 0; i < count; i++) {
             values.add(RANDOM.nextBoolean());
@@ -72,7 +72,7 @@ public class BitIOTest {
     @Test
     public void testUnsignedInt() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Integer> values = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
@@ -108,7 +108,7 @@ public class BitIOTest {
     @Test
     public void testUnsignedInt31() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Integer> values = new ArrayList<Integer>(count);
 
         for (int i = 0; i < count; i++) {
@@ -140,7 +140,7 @@ public class BitIOTest {
     @Test
     public void testInt() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Integer> values = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
@@ -176,7 +176,7 @@ public class BitIOTest {
     @Test
     public void testInt32() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Integer> values = new ArrayList<Integer>(count);
         for (int i = 0; i < count; i++) {
             values.add(RANDOM.nextInt());
@@ -203,7 +203,7 @@ public class BitIOTest {
     @Test
     public void testFloat() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Float> values = new ArrayList<Float>(count);
         for (int i = 0; i < count; i++) {
             values.add(RANDOM.nextFloat());
@@ -231,7 +231,7 @@ public class BitIOTest {
     @Test
     public void testUnsignedLong() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Long> values = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
@@ -267,7 +267,7 @@ public class BitIOTest {
     @Test
     public void testUnsignedLong63() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Long> values = new ArrayList<Long>(count);
 
         for (int i = 0; i < count; i++) {
@@ -299,7 +299,7 @@ public class BitIOTest {
     @Test
     public void testLong() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Long> values = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
@@ -335,7 +335,7 @@ public class BitIOTest {
     @Test
     public void testLong64() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Long> values = new ArrayList<Long>(count);
         for (int i = 0; i < count; i++) {
             values.add(RANDOM.nextLong());
@@ -362,7 +362,7 @@ public class BitIOTest {
     @Test
     public void testDouble() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = RANDOM.nextInt(64) + 64;
         final List<Double> values = new ArrayList<Double>(count);
         for (int i = 0; i < count; i++) {
             values.add(RANDOM.nextDouble());
@@ -387,10 +387,10 @@ public class BitIOTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testBytes() throws IOException {
 
-        final int length = RANDOM.nextInt(128) + 128;
+        final int length = RANDOM.nextInt(64) + 64;
 
         final byte[] expected = new byte[length];
         RANDOM.nextBytes(expected);
@@ -411,11 +411,11 @@ public class BitIOTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public void testASCII() throws IOException {
 
         final String expected =
-            RandomStringUtils.randomAscii(RANDOM.nextInt(128) + 128);
+            RandomStringUtils.randomAscii(RANDOM.nextInt(64) + 64);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);
@@ -434,11 +434,11 @@ public class BitIOTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 64)
     public void testUTF() throws IOException {
 
         final String expected =
-            RandomStringUtils.random(RANDOM.nextInt(128) + 128);
+            RandomStringUtils.random(RANDOM.nextInt(64) + 64);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(baos);
