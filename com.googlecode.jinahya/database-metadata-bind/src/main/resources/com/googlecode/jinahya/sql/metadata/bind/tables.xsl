@@ -67,7 +67,7 @@
   </xsl:template>
   <xsl:template match="b:columns">
     <xsl:for-each select="b:column">
-      <tr>
+      <tr xmlns="http://www.w3.org/1999/xhtml">
         <td><!-- table -->
         </td>
         <td><!-- column -->

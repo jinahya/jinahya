@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * Abstract implementation of DBCollection.
+ * Abstract implementation of DatabaseCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
@@ -42,6 +42,16 @@ public class AbstractDatabaseCollectable<A extends DatabaseAccessible>
      */
     public AbstractDatabaseCollectable(final Class<A> accessibleType) {
         super();
+
+        if (accessibleType == null) {
+            throw new NullPointerException("null accessibleType");
+        }
+
+        if (!DatabaseAccessible.class.isAssignableFrom(accessibleType)) {
+            throw new IllegalArgumentException(
+                accessibleType + " is not assignable to "
+                + DatabaseAccessible.class);
+        }
 
         this.accessibleType = accessibleType;
     }

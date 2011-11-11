@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class DependencyResolver<T> implements Serializable {
+public class DependencyResolver<E> implements Serializable {
 
 
     /**
@@ -119,7 +119,7 @@ public class DependencyResolver<T> implements Serializable {
      * @param targets targets
      * @throws DependencyResolverException if an error occurs.
      */
-    public void add(final T source, final T... targets)
+    public void add(final E source, final E... targets)
         throws DependencyResolverException {
 
         if (source == null) {
@@ -134,9 +134,9 @@ public class DependencyResolver<T> implements Serializable {
             throw new IllegalArgumentException("empty targets");
         }
 
-        List<T> list = map.get(source);
+        List<E> list = map.get(source);
 
-        for (T target : targets) {
+        for (E target : targets) {
 
             if (source.equals(target)) {
                 throw new DependencyResolverException("self dependency");
@@ -146,7 +146,7 @@ public class DependencyResolver<T> implements Serializable {
             }
 
             if (list == null) {
-                list = new ArrayList<T>();
+                list = new ArrayList<E>();
                 map.put(source, list);
             }
 
@@ -164,7 +164,7 @@ public class DependencyResolver<T> implements Serializable {
      * @param source source
      * @param targets targets
      */
-    public void remove(final T source, final T... targets) {
+    public void remove(final E source, final E... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -174,13 +174,13 @@ public class DependencyResolver<T> implements Serializable {
             throw new NullPointerException("null targets");
         }
 
-        final List<T> list = map.get(source);
+        final List<E> list = map.get(source);
 
         if (list == null) {
             return;
         }
 
-        for (T target : targets) {
+        for (E target : targets) {
             if (list.remove(target) && list.isEmpty()) {
                 map.remove(source);
                 return;
@@ -199,7 +199,7 @@ public class DependencyResolver<T> implements Serializable {
      *         <code>targets</code>; false if there is no dependency from
      *         <code>source</code> to any of <code>targets</code>.
      */
-    public boolean containsAll(final T source, final T... targets) {
+    public boolean containsAll(final E source, final E... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -209,7 +209,7 @@ public class DependencyResolver<T> implements Serializable {
             throw new NullPointerException("null targets");
         }
 
-        for (T target : targets) {
+        for (E target : targets) {
             if (!contains(source, target)) {
                 return false;
             }
@@ -227,7 +227,7 @@ public class DependencyResolver<T> implements Serializable {
      * @param targets targets
      * @return true if there is a dependency; false if there is none.
      */
-    public boolean containsAny(final T source, final T... targets) {
+    public boolean containsAny(final E source, final E... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -237,7 +237,7 @@ public class DependencyResolver<T> implements Serializable {
             throw new NullPointerException("null targets");
         }
 
-        for (T target : targets) {
+        for (E target : targets) {
             if (contains(source, target)) {
                 return true;
             }
@@ -257,13 +257,13 @@ public class DependencyResolver<T> implements Serializable {
      *         <code>source</code> to <code>target</code>; false if there is
      *         none.
      */
-    public boolean contains(final T source, final T target) {
+    public boolean contains(final E source, final E target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
         }
 
-        final List<T> list = map.get(source);
+        final List<E> list = map.get(source);
 
         if (list == null) {
             return false;
@@ -273,7 +273,7 @@ public class DependencyResolver<T> implements Serializable {
             return true;
         }
 
-        for (T auxiliary : list) {
+        for (E auxiliary : list) {
             if (auxiliary == null) {
                 continue;
             }
@@ -294,7 +294,7 @@ public class DependencyResolver<T> implements Serializable {
      * @param target target
      * @return paths from <code>source</code> to <code>target</code>.
      */
-    public List<List<T>> getPaths(final T source, final T target) {
+    public List<List<E>> getPaths(final E source, final E target) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -305,20 +305,20 @@ public class DependencyResolver<T> implements Serializable {
                 "source(" + source + ") is equals to target(" + target + ")");
         }
 
-        final List<List<T>> paths = new ArrayList<List<T>>();
+        final List<List<E>> paths = new ArrayList<List<E>>();
 
-        final List<T> targets = map.get(source);
+        final List<E> targets = map.get(source);
 
         if (targets == null) {
             return paths;
         }
 
-        for (T auxiliary : targets) {
+        for (E auxiliary : targets) {
 
             if ((auxiliary == null && target == null)
                 || auxiliary.equals(target)) {
 
-                final List<T> path = new LinkedList<T>();
+                final List<E> path = new LinkedList<E>();
                 path.add(source);
                 path.add(auxiliary);
                 paths.add(path);
@@ -329,7 +329,7 @@ public class DependencyResolver<T> implements Serializable {
                 continue;
             }
 
-            for (List<T> path : getPaths(auxiliary, target)) {
+            for (List<E> path : getPaths(auxiliary, target)) {
                 path.add(0, source);
                 paths.add(path);
             }
@@ -344,11 +344,11 @@ public class DependencyResolver<T> implements Serializable {
      *
      * @return a single dependency group
      */
-    public List<T> getSingleGroup() {
+    public List<E> getSingleGroup() {
 
-        final List<T> group = new LinkedList<T>();
+        final List<E> group = new LinkedList<E>();
 
-        for (T source : map.keySet()) {
+        for (E source : map.keySet()) {
             getSingleGroup(source, group);
         }
 
@@ -363,7 +363,7 @@ public class DependencyResolver<T> implements Serializable {
      *
      * @return horizontal groups
      */
-    private void getSingleGroup(final T source, final List<T> group) {
+    private void getSingleGroup(final E source, final List<E> group) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -377,9 +377,9 @@ public class DependencyResolver<T> implements Serializable {
             return;
         }
 
-        final List<T> targets = map.get(source);
+        final List<E> targets = map.get(source);
         if (targets != null) {
-            for (T target : targets) {
+            for (E target : targets) {
                 if (target == null) {
                     continue;
                 }
@@ -397,22 +397,22 @@ public class DependencyResolver<T> implements Serializable {
      *
      * @return vertical groups
      */
-    public List<List<T>> getHorizontalGroups() {
+    public List<List<E>> getHorizontalGroups() {
 
-        final List<List<T>> groups = new ArrayList<List<T>>();
+        final List<List<E>> groups = new ArrayList<List<E>>();
 
-        final List<T> single = getSingleGroup();
+        final List<E> single = getSingleGroup();
 
         while (!single.isEmpty()) {
 
-            final List<T> group = new ArrayList<T>();
+            final List<E> group = new ArrayList<E>();
             groups.add(group);
 
             group.add(single.remove(0));
 
             outer:
             for (int i = 0; i < single.size();) {
-                for (T g : group) {
+                for (E g : group) {
                     if (contains(single.get(i), g)) {
                         group.add(single.remove(i));
                         continue outer;
@@ -422,7 +422,7 @@ public class DependencyResolver<T> implements Serializable {
                     if (!contains(single.get(j), single.get(i))) {
                         continue;
                     }
-                    for (T g : group) {
+                    for (E g : group) {
                         if (contains(single.get(j), g)) {
                             group.add(single.remove(i));
                             continue outer;
@@ -447,15 +447,15 @@ public class DependencyResolver<T> implements Serializable {
      *
      * @return vertical groups
      */
-    public List<List<T>> getVerticalGroups() {
+    public List<List<E>> getVerticalGroups() {
 
-        final List<List<T>> groups = new ArrayList<List<T>>();
+        final List<List<E>> groups = new ArrayList<List<E>>();
 
-        final List<T> single = getSingleGroup();
+        final List<E> single = getSingleGroup();
 
         while (!single.isEmpty()) {
 
-            final List<T> group = new ArrayList<T>();
+            final List<E> group = new ArrayList<E>();
             groups.add(group);
 
             outer:
@@ -486,7 +486,7 @@ public class DependencyResolver<T> implements Serializable {
 
 
     /** map. */
-    private final Map<T, List<T>> map = new HashMap<T, List<T>>();
+    private final Map<E, List<E>> map = new HashMap<E, List<E>>();
 
 
 }
