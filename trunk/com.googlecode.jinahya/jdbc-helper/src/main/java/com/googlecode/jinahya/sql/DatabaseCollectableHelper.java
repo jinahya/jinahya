@@ -23,9 +23,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.Collection;
+
 
 /**
- * A helper for DBCollection.
+ * A helper for DatabaseCollection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -36,7 +38,6 @@ public final class DatabaseCollectableHelper {
      * Select a new instance.
      *
      * @param <C> collection type parameter
-     * @param <A> accessible type parameter;
      * @param connection connection
      * @param tableName element table name
      * @param idColumnName element id column name
@@ -44,7 +45,7 @@ public final class DatabaseCollectableHelper {
      * @return a new collection instance
      * @throws SQLException if an SQL error occurs
      */
-    public static <C extends DatabaseCollectable<A>, A extends DatabaseAccessible> C select(
+    public static <C extends DatabaseCollectable<?>> C select(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectableType)
         throws SQLException {
@@ -63,7 +64,7 @@ public final class DatabaseCollectableHelper {
     }
 
 
-    /**
+    /*
      * Selects given <code>collectio</code>.
      *
      * @param <C> collection type parameter
@@ -73,8 +74,67 @@ public final class DatabaseCollectableHelper {
      * @param idColumnName element id column name
      * @param collectable collectable
      * @throws SQLException if an SQL error occurs
-     */
     public static <C extends DatabaseCollectable<A>, A extends DatabaseAccessible> void select(
+    final Connection connection, final String tableName,
+    final String idColumnName, final C collectable)
+    throws SQLException {
+    
+    if (connection == null) {
+    throw new NullPointerException("null connection");
+    }
+    
+    if (tableName == null) {
+    throw new NullPointerException("null elementTableName");
+    }
+    
+    if (idColumnName == null) {
+    throw new NullPointerException("null elementIdColumnName");
+    }
+    
+    if (collectable == null) {
+    throw new NullPointerException("null element");
+    }
+    
+    final PreparedStatement preparedStatement = connection.prepareStatement(
+    "SELECT * FROM " + tableName
+    + " ORDER BY " + idColumnName + " ASC");
+    try {
+    final ResultSet resultSet = preparedStatement.executeQuery();
+    try {
+    final Class<A> accessibleType = collectable.getAccessibleType();
+    while (resultSet.next()) {
+    try {
+    final A accessible = accessibleType.newInstance();
+    accessible.read(resultSet, "");
+    collectable.getAccessibles().add(accessible);
+    } catch (IllegalAccessException iae) {
+    throw new SQLException(
+    "failed to create instance of " + accessibleType,
+    iae);
+    } catch (InstantiationException ie) {
+    throw new SQLException(
+    "failed to create instance of " + accessibleType,
+    ie);
+    }
+    }
+    } finally {
+    resultSet.close();
+    }
+    } finally {
+    preparedStatement.close();
+    }
+    }
+     */
+    /**
+     * 
+     * @param <C>
+     * @param connection
+     * @param tableName
+     * @param idColumnName
+     * @param collectable
+     * @throws SQLException 
+     */
+    public static <C extends DatabaseCollectable<?>> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collectable)
         throws SQLException {
@@ -101,12 +161,17 @@ public final class DatabaseCollectableHelper {
         try {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
-                final Class<A> accessibleType = collectable.getAccessibleType();
+                final Collection<DatabaseAccessible> accessibles =
+                    (Collection<DatabaseAccessible>)
+                    collectable.getAccessibles();
+                final Class<? extends DatabaseAccessible> accessibleType =
+                    collectable.getAccessibleType();
                 while (resultSet.next()) {
                     try {
-                        final A accessible = accessibleType.newInstance();
-                        accessible.read(resultSet, "");
-                        collectable.getAccessibles().add(accessible);
+                        final DatabaseAccessible accessible =
+                            accessibleType.newInstance();
+                        accessible.read(resultSet);
+                        accessibles.add(accessible);
                     } catch (IllegalAccessException iae) {
                         throw new SQLException(
                             "failed to create instance of " + accessibleType,

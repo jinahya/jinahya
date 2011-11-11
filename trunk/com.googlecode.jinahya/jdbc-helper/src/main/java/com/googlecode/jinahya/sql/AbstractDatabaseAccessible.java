@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * Abstract DBAccessible implementation.
+ * Abstract implementation of DatabaseAccessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -35,18 +35,19 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
 
 
     /**
-     * Reads a Long value from given ResultSet.
+     * Reads a Byte from given ResultSet.
      *
      * @param resultSet result set
      * @param columnLabel column label
-     * @return read Long value or null if null
+     * @return fetched Byte value or <code>null</code> if the column value is
+     *         null
      * @throws SQLException if an SQL error occurs.
      */
-    protected static Long getLong(final ResultSet resultSet,
+    protected static Byte getByte(final ResultSet resultSet,
                                   final String columnLabel)
         throws SQLException {
 
-        final Long value = resultSet.getLong(columnLabel);
+        final Byte value = resultSet.getByte(columnLabel);
         if (resultSet.wasNull()) {
             return null;
         }
@@ -56,25 +57,73 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
 
 
     /**
-     * Reads a long value from given ResultSet.
+     * Reads a byte value from given ResultSet.
      *
      * @param resultSet result set
      * @param columnLabel column label
      * @param defaultValue default value
-     * @return read long value or default value if null
+     * @return fetched byte value or <code>defalutValue</code> if the column
+     *         value is null
      * @throws SQLException if an SQL error occurs.
      */
-    protected static long getLong(final ResultSet resultSet,
+    protected static byte getByte(final ResultSet resultSet,
                                   final String columnLabel,
-                                  final long defaultValue)
+                                  final byte defaultValue)
         throws SQLException {
 
-        final Long value = getLong(resultSet, columnLabel);
-        if (resultSet.wasNull()) {
+        final Byte value = getByte(resultSet, columnLabel);
+        if (value == null) {
             return defaultValue;
         }
 
-        return value.longValue();
+        return value.byteValue();
+    }
+
+
+    /**
+     * Reads a Short value from given ResultSet mapped to specified
+     * <code>columnLabel</code>.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return fetched Short value or <code>null</code> if the column value is
+     *         null.
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static Short getShort(final ResultSet resultSet,
+                                    final String columnLabel)
+        throws SQLException {
+
+        final Short value = resultSet.getShort(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads a short value from given <code>resultSet</code>.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return fetched short value or <code>defalutValue</code> if the column
+     *         value is null.
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static short getShort(final ResultSet resultSet,
+                                    final String columnLabel,
+                                    final short defaultValue)
+        throws SQLException {
+
+        final Integer value = getInt(resultSet, columnLabel);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value.shortValue();
     }
 
 
@@ -123,11 +172,55 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
 
 
     /**
+     * Reads a Long value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @return read Long value or null if null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static Long getLong(final ResultSet resultSet,
+                                  final String columnLabel)
+        throws SQLException {
+
+        final Long value = resultSet.getLong(columnLabel);
+        if (resultSet.wasNull()) {
+            return null;
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads a long value from given ResultSet.
+     *
+     * @param resultSet result set
+     * @param columnLabel column label
+     * @param defaultValue default value
+     * @return read long value or default value if null
+     * @throws SQLException if an SQL error occurs.
+     */
+    protected static long getLong(final ResultSet resultSet,
+                                  final String columnLabel,
+                                  final long defaultValue)
+        throws SQLException {
+
+        final Long value = getLong(resultSet, columnLabel);
+        if (resultSet.wasNull()) {
+            return defaultValue;
+        }
+
+        return value.longValue();
+    }
+
+
+    /**
      * Reads an Float from given ResultSet.
      *
      * @param resultSet result set
      * @param columnLabel column label
-     * @return read Float value or null if database value is null
+     * @return read Float value or <code>null</code> if database value is null
      * @throws SQLException if an SQL error occurs.
      */
     protected static Float getFloat(final ResultSet resultSet,
@@ -149,7 +242,8 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
      * @param resultSet result set
      * @param columnLabel column label
      * @param defaultValue default value
-     * @return read float value or defalutValue if database value is null
+     * @return read float value or <code>defalutValue</code> if database value
+     *         is null
      * @throws SQLException if an SQL error occurs.
      */
     protected static float getFloat(final ResultSet resultSet,
@@ -171,7 +265,7 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
      *
      * @param resultSet result set
      * @param columnLabel column label
-     * @return read Double value or null if database value is null
+     * @return read Double value or <code>null</code> if database value is null
      * @throws SQLException if an SQL error occurs.
      */
     protected static Double getDouble(final ResultSet resultSet,
@@ -193,7 +287,8 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
      * @param resultSet result set
      * @param columnLabel column label
      * @param defaultValue default value
-     * @return read double value or defalutValue if database value is null
+     * @return read double value or <code>defalutValue</code> if database value
+     *         is null
      * @throws SQLException if an SQL error occurs.
      */
     protected static double getDouble(final ResultSet resultSet,
@@ -272,6 +367,12 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
     @Override
     public boolean delete(final Connection connection) throws SQLException {
         return DatabaseAccessibleHelper.delete(connection, this);
+    }
+
+
+    @Override
+    public void read(final ResultSet resultSet) throws SQLException {
+        read(resultSet, "");
     }
 
 

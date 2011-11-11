@@ -32,7 +32,7 @@ public final class DatabaseAccessibleHelper {
 
 
     /**
-     * Selects a new DBElement instance.
+     * Selects a new DatabaseAccessible instance.
      *
      * @param <A> accessible type parameter
      * @param connection connection
@@ -102,7 +102,7 @@ public final class DatabaseAccessibleHelper {
                     return false;
                 }
 
-                accessible.read(resultSet, "");
+                accessible.read(resultSet);
                 
                 return true;
 

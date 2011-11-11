@@ -24,7 +24,7 @@ import java.sql.SQLException;
 
 
 /**
- * Interface database mapped element.
+ * Interface for database mapped elements.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -107,10 +107,20 @@ public interface DatabaseAccessible {
      * Reads information from given <code>resultSet</code>.
      *
      * @param resultSet result set
-     * @param prefix column prefix
      * @throws SQLException if an SQL error occurs.
      */
-    void read(ResultSet resultSet, String prefix) throws SQLException;
+    void read(ResultSet resultSet) throws SQLException;
+
+
+    /**
+     * Reads information from given <code>resultSet</code>.
+     *
+     * @param resultSet result set
+     * @param columnLabelPrefix column label prefix
+     * @throws SQLException if an SQL error occurs.
+     */
+    void read(ResultSet resultSet, String columnLabelPrefix)
+        throws SQLException;
 
 
 }
