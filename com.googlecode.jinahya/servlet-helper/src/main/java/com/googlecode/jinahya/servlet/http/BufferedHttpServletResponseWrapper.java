@@ -19,6 +19,7 @@ package com.googlecode.jinahya.servlet.http;
 
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletOutputStream;
@@ -42,29 +43,14 @@ public class BufferedHttpServletResponseWrapper
     public BufferedHttpServletResponseWrapper(
         final HttpServletResponse response) {
 
-        this(response, new BufferedHttpServletOutputStream());
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param response response
-     * @param outputStream outputStream
-     */
-    public BufferedHttpServletResponseWrapper(
-        final HttpServletResponse response,
-        final BufferedHttpServletOutputStream outputStream) {
-
         super(response);
 
-        this.outputStream = outputStream;
+        outputStream = new BufferedHttpServletOutputStream();
     }
 
 
     @Override
     public void flushBuffer() throws IOException {
-        super.flushBuffer();
 
         if (writer != null) {
             writer.flush();
@@ -84,7 +70,8 @@ public class BufferedHttpServletResponseWrapper
     public PrintWriter getWriter() throws IOException {
 
         if (writer == null) {
-            writer = new PrintWriter(getOutputStream());
+            writer = new PrintWriter(new OutputStreamWriter(
+                getOutputStream(), getResponse().getCharacterEncoding()));
         }
 
         return writer;
@@ -93,21 +80,35 @@ public class BufferedHttpServletResponseWrapper
 
     @Override
     public void reset() {
-        super.reset();
         outputStream.reset();
     }
 
 
     @Override
     public void resetBuffer() {
-        super.resetBuffer();
         outputStream.reset();
     }
 
 
+    /**
+     * Returns buffered bytes.
+     *
+     * @return buffered bytes
+     */
+    public byte[] getBytes() {
+        return outputStream.getBytes();
+    }
+
+
+    /**
+     * output stream.
+     */
     private final BufferedHttpServletOutputStream outputStream;
 
 
+    /**
+     * writer.
+     */
     private PrintWriter writer;
 
 

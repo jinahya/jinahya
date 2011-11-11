@@ -22,16 +22,22 @@ import com.googlecode.jinahya.servlet.AbstractFilter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import java.net.URL;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -42,10 +48,17 @@ import javax.xml.transform.stream.StreamSource;
 
 
 /**
+ * XSLT Filter.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class XSLTHttpFilter extends AbstractFilter {
+public abstract class XSLTFilter extends AbstractFilter {
+
+
+    /**
+     * Preferred character encoding.
+     */
+    protected static final String PREFERRED_CHARACTER_ENCODING = "UTF-8";
 
 
     @Override
@@ -54,19 +67,13 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
                          final FilterChain chain)
         throws IOException, ServletException {
 
-        final BufferedHttpServletOutputStream outputStream =
-            new BufferedHttpServletOutputStream();
-
-        final HttpServletResponseWrapper responseWrapper =
+        final BufferedHttpServletResponseWrapper responseWrapper =
             new BufferedHttpServletResponseWrapper(
-            (HttpServletResponse) response, outputStream);
+            (HttpServletResponse) response);
 
-        chain.doFilter(request, responseWrapper);
+        chain.doFilter(request, responseWrapper); // ------------- doFilter(...)
 
-        responseWrapper.flushBuffer();
-        outputStream.flush();
-
-        final byte[] outputBytes = outputStream.getBytes();
+        final byte[] outputBytes = responseWrapper.getBytes();
 
         final int status = responseWrapper.getStatus();
         if (status != HttpServletResponse.SC_OK) {
@@ -79,10 +86,10 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
             return;
         }
 
-        final URL stylesheetResource;
+        final URL resource;
         try {
-            stylesheetResource = getStylesheetResource();
-            if (stylesheetResource == null) {
+            resource = getStylesheetResource();
+            if (resource == null) {
                 ((HttpServletResponse) response).sendError(
                     HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "failed to get stylesheet resource: null returned");
@@ -95,21 +102,20 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
             return;
         }
 
-        final Source stylesheetSource;
+        final Source source;
         try {
-            stylesheetSource = new StreamSource(
-                stylesheetResource.openStream());
+            source = new StreamSource(resource.openStream());
         } catch (IOException ioe) {
             ((HttpServletResponse) response).sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 "failed to open stream from stylesheet resource("
-                + stylesheetResource + "): " + ioe.getMessage());
+                + resource + "): " + ioe.getMessage());
             return;
         }
 
         final Transformer transformer;
         try {
-            transformer = newTransformer(stylesheetSource);
+            transformer = getTransformerFactory().newTransformer(source);
         } catch (TransformerConfigurationException tce) {
             ((HttpServletResponse) response).sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -117,17 +123,31 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
             return;
         }
 
+        final Properties properties = new Properties();
+        getTransformerOutputProperties(properties);
+        transformer.setOutputProperties(properties);
+
+        final Map<String, Object> parameters = new HashMap<String, Object>();
+        getTransformerParameters(parameters);
+        for (Entry<String, Object> parameter : parameters.entrySet()) {
+            transformer.setParameter(parameter.getKey(), parameter.getValue());
+        }
+
         ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_OK);
-        ((HttpServletResponse) response).setContentType(getContentType());
+        ((HttpServletResponse) response).setContentType(getOutputContentType());
         ((HttpServletResponse) response).setCharacterEncoding(
-            getCharacterEncoding());
+            getOutputCharacterEncoding());
 
         try {
             transformer.transform(
-                new StreamSource(new ByteArrayInputStream(outputBytes)),
-                new StreamResult(response.getOutputStream()));
+                new StreamSource(new InputStreamReader(
+                new ByteArrayInputStream(outputBytes),
+                responseWrapper.getCharacterEncoding())),
+                new StreamResult(response.getWriter()));
+
             response.flushBuffer();
             return;
+
         } catch (TransformerException te) {
             ((HttpServletResponse) response).sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -136,6 +156,25 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
         }
 
     }
+
+
+    /**
+     * Fills output properties for the Transformer.
+     *
+     * @param properties output properties to be filled
+     */
+    protected void getTransformerOutputProperties(final Properties properties) {
+        properties.put(OutputKeys.ENCODING, getOutputCharacterEncoding());
+    }
+
+
+    /**
+     * Fills parameters for the Transformer.
+     *
+     * @param parameters parameters to be filled
+     */
+    protected abstract void getTransformerParameters(
+        Map<String, Object> parameters);
 
 
     /**
@@ -148,51 +187,35 @@ public abstract class XSLTHttpFilter extends AbstractFilter {
 
 
     /**
-     * Returns content type.
+     * Returns output content type.
      *
-     * @return content type
+     * @return output content type
      */
-    protected abstract String getContentType();
+    protected abstract String getOutputContentType();
 
 
     /**
-     * Returns character encoding.
+     * Returns output character encoding.
      *
-     * @return character encoding.
+     * @return output character encoding.
      */
-    protected abstract String getCharacterEncoding();
+    protected abstract String getOutputCharacterEncoding();
 
 
     /**
-     * Creates a transformer for <code>source</code>.
-     *
-     * @param source source
-     * @return a new Transformer
-     * @throws TransformerConfigurationException if an error occurs.
-     */
-    protected Transformer newTransformer(final Source source)
-        throws TransformerConfigurationException {
-
-        if (transformerFactory == null) {
-            transformerFactory = newTransformerFactory();
-            if (transformerFactory == null) {
-                throw new TransformerConfigurationException(
-                    "failed to create TransformerFactory: null returned");
-            
-            }
-        }
-
-        return transformerFactory.newTransformer(source);
-    }
-
-
-    /**
-     * Returns a new instance of TransformerFactory.
+     * Returns a <code>TransformerFactory</code> instance. The default
+     * implementation returns {@link TransformerFactory#newInstance()}. Override
+     * this method if you want to use a custom factory.
      *
      * @return a new instance of TransformerFactory.
      */
-    protected TransformerFactory newTransformerFactory() {
-        return TransformerFactory.newInstance();
+    protected TransformerFactory getTransformerFactory() {
+
+        if (transformerFactory == null) {
+            transformerFactory = TransformerFactory.newInstance();
+        }
+
+        return transformerFactory;
     }
 
 
