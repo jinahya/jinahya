@@ -32,7 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XmlAccessHelperTest extends AbstractTest {
+public class XmlAccessHelperTest extends XmlPullHelperTest {
 
 
     @Test
