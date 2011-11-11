@@ -23,6 +23,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UTFDataFormatException;
+
 import java.util.BitSet;
 
 
@@ -395,6 +396,10 @@ public class BitOutput {
         if (length < 0) {
             throw new IndexOutOfBoundsException("length(" + length + ") < 0");
         }
+        if (length > 65535) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > 65535");
+        }
 
         if (offset + length > bytes.length) {
             throw new IllegalArgumentException(
@@ -402,9 +407,9 @@ public class BitOutput {
                 + ") > bytes.length(" + bytes.length + ")");
         }
 
-        writeUnsignedInt(0x1F, length); // 31
+        writeUnsignedShort(0x0F, length); // 15
         for (int i = 0; i < length; i++) {
-            writeUnsignedByte(0x08, bytes[offset + i]);
+            writeUnsignedByte(0x08, bytes[offset + i] & 0xFF);
         }
     }
 

@@ -23,6 +23,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UTFDataFormatException;
+
 import java.util.BitSet;
 
 
@@ -329,7 +330,8 @@ public class BitInput {
      */
     public final byte[] readBytes() throws IOException {
 
-        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
+        final byte[] bytes = new byte[readUnsignedInt(0x0F)]; // 15
+
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) readUnsignedByte(8);
         }

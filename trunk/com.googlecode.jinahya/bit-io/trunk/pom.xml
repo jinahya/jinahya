@@ -12,6 +12,20 @@
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>6.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -24,20 +38,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.6</version>
-      </dependency>
-      <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <version>6.2.1</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -53,6 +54,11 @@
     </extensions>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>com.pyx4me</groupId>
+          <artifactId>proguard-maven-plugin</artifactId>
+          <version>2.0.4</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -94,6 +100,11 @@
           <version>3.0</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.10</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.3.2</version>
@@ -104,6 +115,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+        <!--
         <executions>
           <execution>
             <id>compile-1.1</id>
@@ -128,14 +144,49 @@
             </configuration>
           </execution>
         </executions>
+        -->
+      </plugin>
+      <plugin>
+        <groupId>com.pyx4me</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>proguard</goal>
+            </goals>
+            <configuration>
+              <attach>true</attach>
+              <attachArtifactClassifier>microedition</attachArtifactClassifier>
+              <options>
+                <option>-microedition</option>
+                <option>-ignorewarnings</option>
+                <option>-target 1.1</option>
+                <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
+                <option>-keep public class * { public protected *; }</option>
+              </options>
+              <libs>
+                <lib>${java.bootstrap.classes}</lib>
+              </libs>
+            </configuration>
+          </execution>
+        </executions>          
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard</artifactId>
+            <version>4.4</version>
+            <scope>runtime</scope>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-	<configuration>
-	  <goals>deploy</goals>
-	  <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
-	</configuration>
+        <configuration>
+          <goals>deploy</goals>
+          <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -150,10 +201,10 @@
         </executions>
         <configuration>
           <reportPlugins>
-	    <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-project-info-reports-plugin</artifactId>
-	    </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
@@ -163,6 +214,13 @@
               <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
           </reportPlugins>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-Xms512m -Xmx512m</argLine>
         </configuration>
       </plugin>
     </plugins>
@@ -243,6 +301,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>        
+      </activation>
+      <properties>
+        <java.bootstrap.classes>${java.home}/../Classes/classes.jar</java.bootstrap.classes>
+      </properties>
     </profile>
   </profiles>
 </project>
