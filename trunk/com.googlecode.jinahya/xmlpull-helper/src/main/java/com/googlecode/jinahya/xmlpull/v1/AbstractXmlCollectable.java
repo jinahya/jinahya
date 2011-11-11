@@ -70,8 +70,26 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     }
 
 
+    /**
+     * Creates a new instance of accessibleType.
+     *
+     * @return a new instance of accessibleType.
+     */
+    protected A newAccessible() {
+        try {
+            return accessibleType.newInstance();
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + accessibleType, ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + accessibleType, iae);
+        }
+    }
+
+
     /** parsable type. */
-    private final Class<A> accessibleType;
+    protected final Class<A> accessibleType;
 
 
     /** parsable collection.*/

@@ -18,11 +18,54 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import java.io.IOException;
+import org.xmlpull.v1.XmlSerializer;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public final class XmlSerializerHelper {
+
+
+    /**
+     * 
+     * @param serializer
+     * @throws IOException 
+     */
+    public static void nilAttribute(final XmlSerializer serializer)
+        throws IOException {
+
+        serializer.attribute(
+            XmlPullConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil", "true");
+    }
+
+
+    /**
+     * 
+     * @param serializer
+     * @param namespaceURI
+     * @param localName
+     * @param text
+     * @throws IOException 
+     */
+    public static void nillableTag(final XmlSerializer serializer,
+                                   final String namespaceURI,
+                                   final String localName, final String text)
+        throws IOException {
+
+        serializer.startTag(namespaceURI, localName);
+
+        if (text == null) {
+            nilAttribute(serializer);
+        } else {
+            serializer.text(text);
+        }
+
+        serializer.endTag(namespaceURI, localName);
+
+    }
 
 
     /**

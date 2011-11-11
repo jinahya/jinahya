@@ -29,29 +29,28 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Sample implements XmlAccessible {
+public class Sample extends AbstractXmlElement {
+
+
+    public static final String NAMESPACE_URI = null;
 
 
     public static final String LOCAL_NAME = "sample";
 
 
     public Sample() {
-        this(null);
+        this(NAMESPACE_URI);
     }
 
 
     protected Sample(final String namespaceURI) {
-        super();
-
-        this.namespaceURI = namespaceURI;
+        super(namespaceURI, LOCAL_NAME);
     }
 
 
     @Override
-    public void parse(final XmlPullParser parser)
+    protected void parseContents(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, namespaceURI, LOCAL_NAME);
 
         id = XmlPullParserHelper.getLongAttribute(parser, null, "id");
 
@@ -60,17 +59,20 @@ public class Sample implements XmlAccessible {
 
         parser.nextTag();
         age = XmlPullParserHelper.nextInt(parser);
-
-        parser.nextTag();
-        parser.require(XmlPullParser.END_TAG, namespaceURI, LOCAL_NAME);
-
     }
 
 
     @Override
-    public void serialize(final XmlSerializer serializer) throws IOException {
+    protected void serializeContents(final XmlSerializer serializer)
+        throws IOException {
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        serializer.attribute(namespaceURI, "id", Long.toString(id));
+
+        XmlSerializerHelper.nillableTag(
+            serializer, namespaceURI, "name", name);
+
+        XmlSerializerHelper.nillableTag(
+            serializer, namespaceURI, "age", name);
     }
 
 
@@ -113,9 +115,6 @@ public class Sample implements XmlAccessible {
     public String toString() {
         return id + "/" + name + "/" + age;
     }
-
-
-    private final String namespaceURI;
 
 
     private Long id;

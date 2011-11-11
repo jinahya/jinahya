@@ -161,7 +161,9 @@
           <execution>
             <phase>package</phase>
             <goals>
+              <!--
               <goal>proguard</goal>
+              -->
             </goals>
             <configuration>
               <attach>true</attach>

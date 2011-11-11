@@ -98,7 +98,7 @@ public class XmlAccessHelperTest extends AbstractTest {
                 parser.nextTag();
 
                 final Samples samples = XmlCollectableHelper.parse(
-                    parser, Samples.class, null, SamplesNS.LOCAL_NAME);
+                    parser, Samples.class, null, Samples.LOCAL_NAME);
                 for (Sample sample : samples.getAccessibles()) {
                     System.out.println(sample);
                 }
@@ -120,7 +120,7 @@ public class XmlAccessHelperTest extends AbstractTest {
 
                 final SamplesNS samples = XmlCollectableHelper.parse(
                     parser, SamplesNS.class, SampleNS.NAMESPACE_URI,
-                    SamplesNS.LOCAL_NAME);
+                    Samples.LOCAL_NAME);
 
                 for (Sample sample : samples.getAccessibles()) {
                     System.out.println(sample);
