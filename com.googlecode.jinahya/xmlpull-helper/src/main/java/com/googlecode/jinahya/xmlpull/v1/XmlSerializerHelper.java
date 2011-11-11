@@ -30,9 +30,10 @@ public final class XmlSerializerHelper {
 
 
     /**
-     * 
-     * @param serializer
-     * @throws IOException 
+     * Serializes <code>xsi:nill="true"</code> attribute.
+     *
+     * @param serializer serializer
+     * @throws IOException if an I/O error occurs.
      */
     public static void nilAttribute(final XmlSerializer serializer)
         throws IOException {
@@ -42,17 +43,222 @@ public final class XmlSerializerHelper {
     }
 
 
+    public static void optionalAttribute(final XmlSerializer serializer,
+                                         final String namespaceURI,
+                                         final String localName,
+                                         final Object value)
+        throws IOException {
+
+        if (value == null) {
+            return;
+        }
+
+        serializer.attribute(namespaceURI, localName, value.toString());
+    }
+
+
+    public static void booleanAttribute(final XmlSerializer serializer,
+                                        final String namespaceURI,
+                                        final String localName,
+                                        final Boolean value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    public static void booleanAttribute(final XmlSerializer serializer,
+                                        final String namespaceURI,
+                                        final String localName,
+                                        final boolean value)
+        throws IOException {
+
+        booleanAttribute(serializer, namespaceURI, localName,
+                         Boolean.valueOf(localName));
+    }
+
+
+    public static void byteAttribute(final XmlSerializer serializer,
+                                     final String namespaceURI,
+                                     final String localName,
+                                     final Byte value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    public static void byteAttribute(final XmlSerializer serializer,
+                                     final String namespaceURI,
+                                     final String localName,
+                                     final byte value)
+        throws IOException {
+
+        byteAttribute(serializer, namespaceURI, localName, Byte.valueOf(value));
+    }
+
+
+    public static void shortAttribute(final XmlSerializer serializer,
+                                      final String namespaceURI,
+                                      final String localName,
+                                      final Short value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    public static void shortAttribute(final XmlSerializer serializer,
+                                      final String namespaceURI,
+                                      final String localName,
+                                      final short value)
+        throws IOException {
+
+        shortAttribute(serializer, namespaceURI, localName,
+                       Short.valueOf(value));
+    }
+
+
+    public static void intAttribute(final XmlSerializer serializer,
+                                    final String namespaceURI,
+                                    final String localName,
+                                    final Integer value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    public static void intAttribute(final XmlSerializer serializer,
+                                    final String namespaceURI,
+                                    final String localName,
+                                    final int value)
+        throws IOException {
+
+        intAttribute(serializer, namespaceURI, localName,
+                     Integer.valueOf(value));
+    }
+
+
+    public static void longAttribute(final XmlSerializer serializer,
+                                     final String namespaceURI,
+                                     final String localName,
+                                     final Long value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
     /**
-     * 
-     * @param serializer
-     * @param namespaceURI
-     * @param localName
-     * @param text
-     * @throws IOException 
+     * Serializes a long attribute.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void longAttribute(final XmlSerializer serializer,
+                                     final String namespaceURI,
+                                     final String localName,
+                                     final long value)
+        throws IOException {
+
+        longAttribute(serializer, namespaceURI, localName, Long.valueOf(value));
+    }
+
+
+    /**
+     * Serializes a Float attribute.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void floatAttribute(final XmlSerializer serializer,
+                                      final String namespaceURI,
+                                      final String localName,
+                                      final Float value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    /**
+     * Serializes a float value.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void floatAttribute(final XmlSerializer serializer,
+                                      final String namespaceURI,
+                                      final String localName,
+                                      final float value)
+        throws IOException {
+
+        floatAttribute(serializer, namespaceURI, localName,
+                       Float.valueOf(value));
+    }
+
+
+    /**
+     * Serializes a Double attribute.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void doubleAttribute(final XmlSerializer serializer,
+                                       final String namespaceURI,
+                                       final String localName,
+                                       final Double value)
+        throws IOException {
+
+        optionalAttribute(serializer, namespaceURI, localName, value);
+    }
+
+
+    /**
+     * Serializes a double value.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void doubleAttribute(final XmlSerializer serializer,
+                                       final String namespaceURI,
+                                       final String localName,
+                                       final double value)
+        throws IOException {
+
+        doubleAttribute(serializer, namespaceURI, localName,
+                        Double.valueOf(value));
+    }
+
+
+    /**
+     * Serializes a nillable tag.
+     *
+     * @param serializer serializer
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @param text text
+     * @throws IOException if an I/O error occurs.
      */
     public static void nillableTag(final XmlSerializer serializer,
                                    final String namespaceURI,
-                                   final String localName, final String text)
+                                   final String localName, final Object text)
         throws IOException {
 
         serializer.startTag(namespaceURI, localName);
@@ -60,11 +266,10 @@ public final class XmlSerializerHelper {
         if (text == null) {
             nilAttribute(serializer);
         } else {
-            serializer.text(text);
+            serializer.text(text.toString());
         }
 
         serializer.endTag(namespaceURI, localName);
-
     }
 
 

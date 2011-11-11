@@ -22,16 +22,25 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.Random;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractTest {
+public abstract class XmlPullHelperTest {
+
+
+    protected static final String ENCODING = "UTF-8";
+
+
+    protected static final Random RANDOM = new Random();
 
 
     protected static final XmlPullParserFactory XML_PULL_PARSER_FACTORY;
@@ -54,13 +63,20 @@ public abstract class AbstractTest {
     }
 
 
+    protected static XmlSerializer newSerializer()
+        throws XmlPullParserException {
+
+        return XML_PULL_PARSER_FACTORY.newSerializer();
+    }
+
+
     protected static InputStream getResourceAsStream(final String name) {
-        return AbstractTest.class.getResourceAsStream(name);
+        return XmlPullHelperTest.class.getResourceAsStream(name);
     }
 
 
     protected static URL getResource(final String name) {
-        return AbstractTest.class.getResource(name);
+        return XmlPullHelperTest.class.getResource(name);
     }
 
 
