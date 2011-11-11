@@ -217,7 +217,7 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
      * @param idColumnName id column name
      */
     public AbstractDatabaseAccessible(final String tableName,
-                              final String idColumnName) {
+                                      final String idColumnName) {
         super();
 
         if (tableName == null) {
@@ -275,30 +275,12 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
     }
 
 
-    @Override
-    public void read(final ResultSet resultSet, final String prefix)
-        throws SQLException {
-
-        if (resultSet == null) {
-            throw new NullPointerException("null resultSet");
-        }
-
-        if (prefix == null) {
-            throw new NullPointerException("null prefix");
-        }
-
-        if (getId() == null) {
-            setId(resultSet.getLong(prefix + idColumnName));
-        }
-    }
-
-
     /** table name. */
-    private final String tableName;
+    protected final String tableName;
 
 
     /** id column name. */
-    private final String idColumnName;
+    protected final String idColumnName;
 
 
     /** id. */
