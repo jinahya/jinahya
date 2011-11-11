@@ -18,52 +18,18 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Samples extends AbstractXmlCollectable<Sample> {
-
-
-    public static final String NAMESPACE_URI = null;
+public class Samples extends AbstractXmlElementWrapper<Sample> {
 
 
     public static final String LOCAL_NAME = "samples";
 
 
     public Samples() {
-        super(Sample.class);
-    }
-
-
-    @Override
-    public void parse(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, LOCAL_NAME);
-
-        getAccessibles().clear();
-        while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final Sample sample = new Sample();
-            sample.parse(parser);
-            getAccessibles().add(sample);
-        }
-
-        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, LOCAL_NAME);
-    }
-
-
-    @Override
-    public void serialize(final XmlSerializer serializer) throws IOException {
-
-        throw new UnsupportedOperationException("Not supported yet.");
+        super(Sample.class, Sample.NAMESPACE_URI, LOCAL_NAME);
     }
 
 

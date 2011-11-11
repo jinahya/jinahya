@@ -29,22 +29,19 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractXmlWrapper<A extends XmlAccessible>
-    extends AbstractXmlCollectable<A> {
+public abstract class AbstractXmlElement implements XmlAccessible {
 
 
     /**
      * Creates a new instance.
      *
-     * @param accessibleType accessible type
      * @param namespaceURI XML namespace URI
      * @param localName XML local name
      */
-    public AbstractXmlWrapper(final Class<A> accessibleType,
-                              final String namespaceURI,
+    public AbstractXmlElement(final String namespaceURI,
                               final String localName) {
 
-        super(accessibleType);
+        super();
 
         this.namespaceURI = namespaceURI;
         this.localName = localName;
@@ -55,19 +52,49 @@ public abstract class AbstractXmlWrapper<A extends XmlAccessible>
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        XmlCollectableHelper.parse(parser, this, namespaceURI, localName);
+        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
+
+        parseContents(parser);
+
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
+
+
+    /**
+     * Parses contents.
+     *
+     * @param parser parser
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract void parseContents(final XmlPullParser parser)
+        throws XmlPullParserException, IOException;
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
-        XmlCollectableHelper.serialize(
-            serializer, this, namespaceURI, localName);
+
+        serializer.startTag(namespaceURI, localName);
+
+        serializeContents(serializer);
+
+        serializer.endTag(namespaceURI, localName);
     }
 
 
+    /**
+     * Serializes contents.
+     *
+     * @param serializer serializer
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract void serializeContents(final XmlSerializer serializer)
+        throws IOException;
+
+
     /** XML namespace URI. */
-    private final String namespaceURI;
+    protected final String namespaceURI;
 
 
     /** XML local name. */

@@ -125,13 +125,14 @@ public final class XmlCollectableHelper {
 
 
     /**
-     * 
-     * @param <C>
-     * @param serializer
-     * @param collectableType
-     * @param namespaceURI
-     * @param localName
-     * @throws IOException 
+     * Serializes a new instance of given <code>collectableType</code>.
+     *
+     * @param <C> XmlCollectable type parameter
+     * @param serializer serializer
+     * @param collectableType XmlCollectable type
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
+     * @throws IOException if an I/O error occurs.
      */
     public static <C extends XmlCollectable<?>> void serialize(
         final XmlSerializer serializer, final Class<C> collectableType,
