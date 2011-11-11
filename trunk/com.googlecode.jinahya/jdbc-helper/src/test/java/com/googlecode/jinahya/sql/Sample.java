@@ -117,7 +117,7 @@ public class Sample extends AbstractDatabaseAccessible {
     public void read(final ResultSet resultSet, final String prefix)
         throws SQLException {
 
-        super.read(resultSet, prefix);
+        setId(resultSet.getLong(prefix + idColumnName));
 
         name = resultSet.getString(prefix + "NAME");
         age = getInt(resultSet, prefix + "AGE");
