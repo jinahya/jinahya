@@ -20,10 +20,12 @@ package com.googlecode.jinahya.servlet;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 
 /**
+ * Abstract implementation of Filter.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -36,22 +38,30 @@ public abstract class AbstractFilter implements Filter {
     }
 
 
-    /**
-     * 
-     * @param message 
-     */
-    protected void log(final String message) {
-        filterConfig.getServletContext().log(message);
+    @Override
+    public void destroy() {
+        filterConfig = null;
     }
 
 
     /**
-     * 
-     * @param message
-     * @param cause 
+     * Logs given <code>message</code>.
+     *
+     * @param message message
+     */
+    protected void log(final String message) {
+        getServletContext().log(message);
+    }
+
+
+    /**
+     * Logs given <code>message</code> with specified <code>cause</code>.
+     *
+     * @param message message
+     * @param cause cause
      */
     protected void log(final String message, final Throwable cause) {
-        filterConfig.getServletContext().log(message, cause);
+        getServletContext().log(message, cause);
     }
 
 
@@ -61,10 +71,31 @@ public abstract class AbstractFilter implements Filter {
      * @return filterConfig
      */
     protected FilterConfig getFilterConfig() {
+
+        if (filterConfig == null) {
+            throw new IllegalStateException("no filterConfig");
+        }
+
         return filterConfig;
     }
 
 
+    /**
+     * Returns servletContext.
+     *
+     * @return servletContext
+     */
+    protected ServletContext getServletContext() {
+
+        if (filterConfig == null) {
+            throw new IllegalStateException("no filterConfig");
+        }
+
+        return filterConfig.getServletContext();
+    }
+
+
+    /** filterConfig. */
     private FilterConfig filterConfig;
 
 

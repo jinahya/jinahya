@@ -25,6 +25,7 @@ import javax.servlet.ServletOutputStream;
 
 
 /**
+ * Buffered implementation of ServletOutputStream.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -56,7 +57,7 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
 
 
     /**
-     * Returns the buffered bytes.
+     * Returns buffered bytes.
      *
      * @return buffered bytes
      */
@@ -65,6 +66,9 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
     }
 
 
+    /**
+     * buffer stream.
+     */
     private final ByteArrayOutputStream bufferStream;
 
 
