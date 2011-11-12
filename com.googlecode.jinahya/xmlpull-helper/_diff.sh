@@ -1,5 +1,4 @@
 #!/bin/sh
 groupId=com.googlecode.jinahya
 artifactId=xmlpull-helper
-tag=$1
-svn diff --old=http://jinahya.googlecode.com/svn/tags/$groupId/$artifactId-$tag --new http://jinahya.googlecode.com/svn/trunk/$groupId/$artifactId
+svn diff --old=http://jinahya.googlecode.com/svn/tags/$groupId/$artifactId-$1 --new http://jinahya.googlecode.com/svn/trunk/$groupId/$artifactId
