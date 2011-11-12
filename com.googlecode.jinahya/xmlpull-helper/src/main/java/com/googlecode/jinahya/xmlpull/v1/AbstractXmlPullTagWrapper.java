@@ -34,8 +34,8 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> AbstractXmlElementWrapper type parameter
  */
-public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
-    extends AbstractXmlCollectable<E> {
+public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
+    extends AbstractXmlPullCollectable<E> implements XmlPullTag {
 
 
     /**
@@ -45,7 +45,7 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
      * @param namespaceURI XML namespace URI
      * @param localName XML local name
      */
-    public AbstractXmlElementWrapper(final Class<E> elementType,
+    public AbstractXmlPullTagWrapper(final Class<E> elementType,
                                      final String namespaceURI,
                                      final String localName) {
 
@@ -83,6 +83,18 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
         }
 
         serializer.endTag(namespaceURI, localName);
+    }
+
+
+    @Override
+    public final String getNamespaceURI() {
+        return namespaceURI;
+    }
+
+
+    @Override
+    public final String getLocalName() {
+        return localName;
     }
 
 

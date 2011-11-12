@@ -48,212 +48,274 @@ public final class XmlSerializerHelper {
      * Serializes an optional attribute.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value attribute value
      * @throws IOException if an I/O error occurs.
      */
     public static void optionalAttribute(final XmlSerializer serializer,
-                                         final String namespaceURI,
-                                         final String localName,
-                                         final Object value)
+                                         final String namespace,
+                                         final String name, final Object value)
         throws IOException {
 
         if (value == null) {
             return;
         }
 
-        serializer.attribute(namespaceURI, localName, value.toString());
+        serializer.attribute(namespace, name, value.toString());
     }
 
 
+    /**
+     * Serializes a <code>Boolean</code> attribute.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void booleanAttribute(final XmlSerializer serializer,
-                                        final String namespaceURI,
-                                        final String localName,
-                                        final Boolean value)
+                                        final String namespace,
+                                        final String name, final Boolean value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
+    /**
+     * Serializes a <code>boolean</code> attribute.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void booleanAttribute(final XmlSerializer serializer,
-                                        final String namespaceURI,
-                                        final String localName,
-                                        final boolean value)
+                                        final String namespace,
+                                        final String name, final boolean value)
         throws IOException {
 
-        booleanAttribute(serializer, namespaceURI, localName,
-                         Boolean.valueOf(localName));
+        booleanAttribute(serializer, namespace, name, Boolean.valueOf(name));
     }
 
 
+    /**
+     * Serializes a <code>Byte</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void byteAttribute(final XmlSerializer serializer,
-                                     final String namespaceURI,
-                                     final String localName,
+                                     final String namespace, final String name,
                                      final Byte value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
+    /**
+     * Serializes a <code>byte</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void byteAttribute(final XmlSerializer serializer,
-                                     final String namespaceURI,
-                                     final String localName,
+                                     final String namespace, final String name,
                                      final byte value)
         throws IOException {
 
-        byteAttribute(serializer, namespaceURI, localName, Byte.valueOf(value));
+        byteAttribute(serializer, namespace, name, Byte.valueOf(value));
     }
 
 
+    /**
+     * Serializes a <code>Short</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void shortAttribute(final XmlSerializer serializer,
-                                      final String namespaceURI,
-                                      final String localName,
+                                      final String namespace, final String name,
                                       final Short value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
+    /**
+     * Serializes a <code>short</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void shortAttribute(final XmlSerializer serializer,
-                                      final String namespaceURI,
-                                      final String localName,
+                                      final String namespace, final String name,
                                       final short value)
         throws IOException {
 
-        shortAttribute(serializer, namespaceURI, localName,
-                       Short.valueOf(value));
+        shortAttribute(serializer, namespace, name, Short.valueOf(value));
     }
 
 
+    /**
+     * Serializes an <code>Integer</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void intAttribute(final XmlSerializer serializer,
-                                    final String namespaceURI,
-                                    final String localName,
+                                    final String namespace, final String name,
                                     final Integer value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
+    /**
+     * Serializes an <code>int</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace namespace
+     * @param name name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void intAttribute(final XmlSerializer serializer,
-                                    final String namespaceURI,
-                                    final String localName,
+                                    final String namespace, final String name,
                                     final int value)
         throws IOException {
 
-        intAttribute(serializer, namespaceURI, localName,
-                     Integer.valueOf(value));
+        intAttribute(serializer, namespace, name, Integer.valueOf(value));
     }
 
 
+    /**
+     * Serializes a <code>Long</code> value.
+     *
+     * @param serializer serializer
+     * @param namespace XML namespace URI
+     * @param name XML name
+     * @param value value
+     * @throws IOException if an I/O error occurs.
+     */
     public static void longAttribute(final XmlSerializer serializer,
-                                     final String namespaceURI,
-                                     final String localName,
+                                     final String namespace, final String name,
                                      final Long value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
     /**
-     * Serializes a long attribute.
+     * Serializes a <code>long</code> attribute.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public static void longAttribute(final XmlSerializer serializer,
-                                     final String namespaceURI,
-                                     final String localName,
+                                     final String namespace, final String name,
                                      final long value)
         throws IOException {
 
-        longAttribute(serializer, namespaceURI, localName, Long.valueOf(value));
+        longAttribute(serializer, namespace, name, Long.valueOf(value));
     }
 
 
     /**
-     * Serializes a Float attribute.
+     * Serializes a <code>Float</code> attribute.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public static void floatAttribute(final XmlSerializer serializer,
-                                      final String namespaceURI,
-                                      final String localName,
+                                      final String namespace, final String name,
                                       final Float value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
     /**
-     * Serializes a float value.
+     * Serializes a <code>float</code> value.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public static void floatAttribute(final XmlSerializer serializer,
-                                      final String namespaceURI,
-                                      final String localName,
+                                      final String namespace, final String name,
                                       final float value)
         throws IOException {
 
-        floatAttribute(serializer, namespaceURI, localName,
+        floatAttribute(serializer, namespace, name,
                        Float.valueOf(value));
     }
 
 
     /**
-     * Serializes a Double attribute.
+     * Serializes a <code>Double</code> attribute.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public static void doubleAttribute(final XmlSerializer serializer,
-                                       final String namespaceURI,
-                                       final String localName,
-                                       final Double value)
+                                       final String namespace,
+                                       final String name, final Double value)
         throws IOException {
 
-        optionalAttribute(serializer, namespaceURI, localName, value);
+        optionalAttribute(serializer, namespace, name, value);
     }
 
 
     /**
-     * Serializes a double value.
+     * Serializes a <code>double</code> value.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param value value
      * @throws IOException if an I/O error occurs.
      */
     public static void doubleAttribute(final XmlSerializer serializer,
-                                       final String namespaceURI,
-                                       final String localName,
-                                       final double value)
+                                       final String namespace,
+                                       final String name, final double value)
         throws IOException {
 
-        doubleAttribute(serializer, namespaceURI, localName,
-                        Double.valueOf(value));
+        doubleAttribute(serializer, namespace, name, Double.valueOf(value));
     }
 
 
@@ -262,24 +324,23 @@ public final class XmlSerializerHelper {
      * <code>nillable</code> is false and text is null.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param text text
      * @param nillable nillable flag
      * @throws IOException if an I/O error occurs.
      */
     public static void simpleTag(final XmlSerializer serializer,
-                                 final String namespaceURI,
-                                 final String localName, final Object text,
-                                 final boolean nillable)
+                                 final String namespace, final String name,
+                                 final Object text, final boolean nillable)
         throws IOException {
 
         if (!nillable && text == null) {
             throw new NullPointerException(
-                "{" + namespaceURI + "}" + localName + "/text()");
+                "{" + namespace + "}" + name + "/text()");
         }
 
-        nillableSimpleTag(serializer, namespaceURI, localName, text);
+        nillableSimpleTag(serializer, namespace, name, text);
     }
 
 
@@ -287,22 +348,21 @@ public final class XmlSerializerHelper {
      * Serializes a nillable tag.
      *
      * @param serializer serializer
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param namespace XML namespace URI
+     * @param name XML local name
      * @param text text
      * @throws IOException if an I/O error occurs.
      */
     public static void nillableSimpleTag(final XmlSerializer serializer,
-                                         final String namespaceURI,
-                                         final String localName,
-                                         final Object text)
+                                         final String namespace,
+                                         final String name, final Object text)
         throws IOException {
 
         if (serializer == null) {
             throw new NullPointerException("null serializer");
         }
 
-        serializer.startTag(namespaceURI, localName);
+        serializer.startTag(namespace, name);
 
         if (text == null) {
             xsiNilAttribute(serializer);
@@ -310,7 +370,7 @@ public final class XmlSerializerHelper {
             serializer.text(text.toString());
         }
 
-        serializer.endTag(namespaceURI, localName);
+        serializer.endTag(namespace, name);
     }
 
 
