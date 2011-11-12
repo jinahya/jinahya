@@ -284,7 +284,6 @@
           </dependency>
         </dependencies>
       </plugin>
-      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
@@ -298,12 +297,11 @@
           </execution>
         </executions>
       </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
-          <goals>deploy</goals>
+          <goals>install</goals>
           <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
         </configuration>
       </plugin>
@@ -401,10 +399,12 @@
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
+        <!--
         <property>
           <name>performRelease</name>
           <value>true</value>
         </property>
+        -->
       </activation>
       <build>
         <plugins>
@@ -434,6 +434,48 @@
       <properties>
         <java.bootstrap.classes>${java.home}/../Classes/classes.jar</java.bootstrap.classes>
       </properties>
+    </profile>
+    <profile>
+      <id>jsr14</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>compile-jsr14</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <source>1.5</source>
+                  <target>jsr14</target>
+                </configuration>
+              </execution>
+              <execution>
+                <id>testCompile-1.5</id>
+                <phase>process-test-sources</phase>
+                <goals>
+                  <goal>testCompile</goal>
+                </goals>
+                <configuration>
+                  <source>1.5</source>
+                  <target>1.5</target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <classifier>jsr14</classifier>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
