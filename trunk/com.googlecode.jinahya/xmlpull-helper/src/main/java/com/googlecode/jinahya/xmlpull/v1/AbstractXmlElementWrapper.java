@@ -20,8 +20,6 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -30,12 +28,13 @@ import org.xmlpull.v1.XmlSerializer;
 
 
 /**
+ * Abstract element wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> AbstractXmlElementWrapper type parameter
  */
 public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
-    extends AbstractXmlElement implements XmlCollectable<E> {
+    extends AbstractXmlCollectable<E> {
 
 
     /**
@@ -49,91 +48,54 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
                                      final String namespaceURI,
                                      final String localName) {
 
-        super(namespaceURI, localName);
+        super(elementType);
 
-        this.elementType = elementType;
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
     }
 
 
     @Override
-    protected void parseContents(final XmlPullParser parser)
+    public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
+        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
+
         while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final E element = newElement();
+            final E element = newAccessible();
             element.parse(parser);
-            getElements().add(element);
+            getAccessibles().add(element);
         }
+
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
 
 
     @Override
-    protected void serializeContents(final XmlSerializer serializer)
+    public void serialize(final XmlSerializer serializer)
         throws IOException {
 
-        for (final Iterator<E> i = getElements().iterator(); i.hasNext();) {
+        serializer.startTag(namespaceURI, localName);
+
+        for (final Iterator<E> i = getAccessibles().iterator(); i.hasNext();) {
             i.next().serialize(serializer);
         }
+
+        serializer.endTag(namespaceURI, localName);
     }
 
 
     /**
-     * Creates a new instance of <code>elementType</code>.
-     *
-     * @return a new instance of <code>elementType</code>
+     * XML namespace URI.
      */
-    protected E newElement() {
-        try {
-            return elementType.newInstance();
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + elementType, ie);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + elementType, iae);
-        }
-    }
+    protected final String namespaceURI;
 
 
     /**
-     * Returns elements.
-     *
-     * @return elements.
+     * XML local name.
      */
-    public Collection<E> getElements() {
-
-        if (elements == null) {
-            elements = new ArrayList<E>();
-        }
-
-        return elements;
-    }
-
-
-    @Override
-    public Collection<E> getAccessibles() {
-        return getElements();
-
-    }
-
-
-    public final Class<E> getElementType() {
-        return elementType;
-    }
-
-
-    @Override
-    public final Class<E> getAccessibleType() {
-        return getElementType();
-    }
-
-
-    /** elementType. */
-    protected final Class<E> elementType;
-
-
-    /** elements. */
-    private Collection<E> elements;
+    private final String localName;
 
 
 }
