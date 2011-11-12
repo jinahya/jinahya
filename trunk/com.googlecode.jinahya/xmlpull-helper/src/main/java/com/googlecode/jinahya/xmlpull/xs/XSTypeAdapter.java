@@ -19,6 +19,7 @@ package com.googlecode.jinahya.xmlpull.xs;
 
 
 /**
+ * Interface for XML Schema type adapters.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <V> value type parameter
@@ -43,7 +44,7 @@ public interface XSTypeAdapter<V> {
      * <code>NullPointerException</code> will be thrown if <code>string</code>
      * is null. An <code>IllegalArgumentException</code> will be thrown if
      * failed to print.
-     * 
+     *
      * @param value value to print
      * @return printed string
      */

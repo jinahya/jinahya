@@ -19,6 +19,7 @@ package com.googlecode.jinahya.xmlpull.xs;
 
 
 /**
+ * XSTypeAdapter for <code>xs:boolean</code>.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

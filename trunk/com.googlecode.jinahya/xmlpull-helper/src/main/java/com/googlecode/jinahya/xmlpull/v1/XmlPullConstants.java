@@ -19,6 +19,7 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 
 /**
+ * Constants for XmlPullHelper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -29,6 +30,9 @@ public final class XmlPullConstants {
         "http://www.w3.org/2001/XMLSchema-instance";
 
 
+    /**
+     * Creates a new instance.
+     */
     private XmlPullConstants() {
         super();
     }

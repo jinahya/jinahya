@@ -28,6 +28,7 @@ import java.util.List;
 
 
 /**
+ * Abstract XSTypeAdapter for temporal types.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

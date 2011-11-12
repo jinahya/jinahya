@@ -66,7 +66,11 @@ public abstract class XmlPullHelperTest {
     protected static XmlSerializer newSerializer()
         throws XmlPullParserException {
 
-        return XML_PULL_PARSER_FACTORY.newSerializer();
+        final XmlSerializer serializer = XML_PULL_PARSER_FACTORY.newSerializer();
+
+        assert serializer != null;
+
+        return serializer;
     }
 
 
