@@ -68,7 +68,6 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
             getElements().add(element);
         }
 
-        parser.nextTag();
         parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
 
