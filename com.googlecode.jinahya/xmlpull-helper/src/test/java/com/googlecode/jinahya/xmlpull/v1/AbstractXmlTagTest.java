@@ -30,44 +30,40 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AbstractElementWrapperTest extends XmlPullHelperTest {
+public class AbstractXmlTagTest extends XmlPullHelperTest {
 
 
     @Test
-    public void testParseForSamples()
+    public void testParseForSample()
         throws XmlPullParserException, IOException {
 
         final XmlPullParser parser = newPullParser();
 
-        parser.setInput(getResourceAsStream("samples.xml"), ENCODING);
+        parser.setInput(getResourceAsStream("sample.xml"), ENCODING);
 
         parser.nextTag();
 
-        Samples samples = new Samples();
-        samples.parse(parser);
+        Sample sample = new Sample();
+        sample.parse(parser);
 
-        for (Sample sample : samples.getElements()) {
-            System.out.println(sample);
-        }
+        System.out.println(sample);
     }
 
 
     @Test
-    public void testParseForSamplesNS()
+    public void testParseForSampleNS()
         throws XmlPullParserException, IOException {
 
         final XmlPullParser parser = newPullParser();
 
-        parser.setInput(getResourceAsStream("samplesNS.xml"), ENCODING);
+        parser.setInput(getResourceAsStream("sampleNS.xml"), ENCODING);
 
         parser.nextTag();
 
-        SamplesNS samplesNS = new SamplesNS();
-        samplesNS.parse(parser);
+        SampleNS sampleNS = new SampleNS();
+        sampleNS.parse(parser);
 
-        for (SampleNS sampleNS : samplesNS.getElements()) {
-            System.out.println(sampleNS);
-        }
+        System.out.println(sampleNS);
     }
 
 

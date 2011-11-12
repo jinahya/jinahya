@@ -20,7 +20,6 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -63,9 +62,9 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
         while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final E element = newElement();
+            final E element = newAccessible();
             element.parse(parser);
-            getElements().add(element);
+            getAccessibles().add(element);
         }
 
         parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
@@ -73,8 +72,7 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
 
 
     @Override
-    public void serialize(final XmlSerializer serializer)
-        throws IOException {
+    public void serialize(final XmlSerializer serializer) throws IOException {
 
         serializer.startTag(namespaceURI, localName);
 
@@ -95,39 +93,6 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
     @Override
     public final String getLocalName() {
         return localName;
-    }
-
-
-    /**
-     * Returns type of wrapped elements. This is an alias of
-     * {@link #getAccessibleType()}.
-     *
-     * @return elementType.
-     */
-    public final Class<E> getElementType() {
-        return getAccessibleType();
-    }
-
-
-    /**
-     * Returns wrapped elements. This method is an alias of
-     * {@link #getAccessibles()}.
-     *
-     * @return elements
-     */
-    public final Collection<E> getElements() {
-        return getAccessibles();
-    }
-
-
-    /**
-     * Creates a new element to be wrapped. This method is an
-     * alias of {@link #newAccessible()}.
-     *
-     * @return new element
-     */
-    public final E newElement() {
-        return newAccessible();
     }
 
 
