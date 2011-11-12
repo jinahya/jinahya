@@ -295,7 +295,6 @@
               </execution>
               <execution>
                 <id>testCompile-1.5</id>
-                <!--phase>process-test-sources</phase-->
                 <phase>test-compile</phase>
                 <goals>
                   <goal>testCompile</goal>
