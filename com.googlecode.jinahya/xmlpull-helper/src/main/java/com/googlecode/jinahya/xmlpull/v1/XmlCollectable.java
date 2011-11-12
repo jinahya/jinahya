@@ -22,6 +22,7 @@ import java.util.Collection;
 
 
 /**
+ * Interface for collectable.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter

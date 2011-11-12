@@ -84,54 +84,5 @@ public class XmlAccessibleTest extends XmlPullHelperTest {
     }
 
 
-    @Test
-    public static void testParseCollectable()
-        throws XmlPullParserException, IOException {
-
-        {
-            final XmlPullParser parser = newPullParser();
-
-            final InputStream stream = getResourceAsStream("samples.xml");
-            try {
-                parser.setInput(stream, null);
-
-                parser.nextTag();
-
-                final Samples samples = XmlCollectableHelper.parse(
-                    parser, Samples.class, null, Samples.LOCAL_NAME);
-                for (Sample sample : samples.getAccessibles()) {
-                    System.out.println(sample);
-                }
-
-            } finally {
-                stream.close();
-            }
-        }
-
-
-        {
-            final XmlPullParser parser = newPullParser();
-
-            final InputStream stream = getResourceAsStream("samplesNS.xml");
-            try {
-                parser.setInput(stream, null);
-
-                parser.nextTag();
-
-                final SamplesNS samples = XmlCollectableHelper.parse(
-                    parser, SamplesNS.class, SampleNS.NAMESPACE_URI,
-                    Samples.LOCAL_NAME);
-
-                for (Sample sample : samples.getAccessibles()) {
-                    System.out.println(sample);
-                }
-
-            } finally {
-                stream.close();
-            }
-        }
-    }
-
-
 }
 

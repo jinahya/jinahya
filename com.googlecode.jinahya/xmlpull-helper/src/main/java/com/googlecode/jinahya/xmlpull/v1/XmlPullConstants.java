@@ -26,6 +26,10 @@ package com.googlecode.jinahya.xmlpull.v1;
 public final class XmlPullConstants {
 
 
+    public static final String W3C_XML_SCHEMA_NS_URI =
+        "http://www.w3.org/2001/XMLSchema";
+
+
     public static final String W3C_XML_SCHEMA_INSTANCE_NS_URI =
         "http://www.w3.org/2001/XMLSchema-instance";
 
