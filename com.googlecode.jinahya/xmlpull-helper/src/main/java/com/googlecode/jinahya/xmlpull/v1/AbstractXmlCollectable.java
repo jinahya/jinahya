@@ -23,9 +23,10 @@ import java.util.Collection;
 
 
 /**
+ * Abstract XmlCollectable.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> accessible type parameter
+ * @param <A> XmlAccessible type parameter
  */
 public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     implements XmlCollectable<A> {
@@ -34,13 +35,13 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     /**
      * Creates a new instance.
      *
-     * @param accessibleType parsableType
+     * @param accessibleType accessible type
      */
     public AbstractXmlCollectable(final Class<A> accessibleType) {
         super();
 
         if (accessibleType == null) {
-            throw new NullPointerException("null accessibleType");
+            throw new NullPointerException("null elementType");
         }
 
         if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
@@ -53,27 +54,10 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     }
 
 
-    @Override
-    public final Class<A> getAccessibleType() {
-        return accessibleType;
-    }
-
-
-    @Override
-    public final Collection<A> getAccessibles() {
-
-        if (accessibles == null) {
-            accessibles = new ArrayList<A>();
-        }
-
-        return accessibles;
-    }
-
-
     /**
-     * Creates a new instance of accessibleType.
+     * Creates a new instance of <code>accessibleType</code>.
      *
-     * @return a new instance of accessibleType.
+     * @return a new instance of <code>accessibleType</code>
      */
     protected A newAccessible() {
         try {
@@ -88,11 +72,28 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     }
 
 
-    /** parsable type. */
+    @Override
+    public Collection<A> getAccessibles() {
+
+        if (accessibles == null) {
+            accessibles = new ArrayList<A>();
+        }
+
+        return accessibles;
+    }
+
+
+    @Override
+    public final Class<A> getAccessibleType() {
+        return accessibleType;
+    }
+
+
+    /** elementType. */
     protected final Class<A> accessibleType;
 
 
-    /** parsable collection.*/
+    /** elements. */
     private Collection<A> accessibles;
 
 
