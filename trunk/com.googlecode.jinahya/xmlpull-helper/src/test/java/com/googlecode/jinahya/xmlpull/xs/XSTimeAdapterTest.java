@@ -20,6 +20,8 @@ package com.googlecode.jinahya.xmlpull.xs;
 
 import java.io.IOException;
 
+import java.util.Date;
+
 import org.testng.annotations.Test;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -42,6 +44,13 @@ public class XSTimeAdapterTest extends XSTemporalAdapterTest<XSTimeAdapter> {
     public void testParse() throws XmlPullParserException, IOException {
 
         testParse(new XSTimeAdapter(), XS_TIME_STRINGS);
+    }
+
+
+    @Test
+    public void testSerialize() throws IOException {
+
+        testSerialize(new XSTimeAdapter(), new Date());
     }
 
 

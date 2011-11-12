@@ -95,7 +95,7 @@ public class XSDateAdapter extends XSTemporalAdapter {
 
 
     @Override
-    public String print(final Date value) {
+    public String serialize(final Date value) {
 
         if (value == null) {
             throw new NullPointerException("null value");

@@ -48,7 +48,7 @@ public interface XSTypeAdapter<V> {
      * @param value value to print
      * @return printed string
      */
-    String print(V value);
+    String serialize(V value);
 
 
 }
