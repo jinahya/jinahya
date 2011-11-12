@@ -20,6 +20,7 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -62,9 +63,9 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
         while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final E element = newAccessible();
+            final E element = newElement();
             element.parse(parser);
-            getAccessibles().add(element);
+            getElements().add(element);
         }
 
         parser.nextTag();
@@ -83,6 +84,39 @@ public abstract class AbstractXmlElementWrapper<E extends AbstractXmlElement>
         }
 
         serializer.endTag(namespaceURI, localName);
+    }
+
+
+    /**
+     * Returns type of wrapped elements. This is an alias of
+     * {@link #getAccessibleType()}.
+     *
+     * @return elementType.
+     */
+    public final Class<E> getElementType() {
+        return getAccessibleType();
+    }
+
+
+    /**
+     * Returns wrapped elements. This method is an alias of
+     * {@link #getAccessibles()}.
+     *
+     * @return elements
+     */
+    public final Collection<E> getElements() {
+        return getAccessibles();
+    }
+
+
+    /**
+     * Creates a new element to be wrapped. This method is an
+     * alias of {@link #newAccessible()}.
+     *
+     * @return new element
+     */
+    public final E newElement() {
+        return newAccessible();
     }
 
 

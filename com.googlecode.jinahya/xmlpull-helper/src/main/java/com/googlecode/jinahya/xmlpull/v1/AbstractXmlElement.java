@@ -93,7 +93,9 @@ public abstract class AbstractXmlElement implements XmlAccessible {
         throws IOException;
 
 
-    /** XML namespace URI. */
+    /**
+     * XML namespace URI.
+     */
     protected final String namespaceURI;
 
 
