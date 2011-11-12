@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlAccessible {
+public interface XmlPullAccessible {
 
 
     /**

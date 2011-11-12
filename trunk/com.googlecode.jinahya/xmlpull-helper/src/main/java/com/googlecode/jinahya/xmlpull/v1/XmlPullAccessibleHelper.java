@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XmlAccessibleHelper {
+public final class XmlPullAccessibleHelper {
 
 
     /**
@@ -43,7 +43,7 @@ public final class XmlAccessibleHelper {
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public static <A extends XmlAccessible> A parse(
+    public static <A extends XmlPullAccessible> A parse(
         final XmlPullParser parser, final Class<A> accessibleType)
         throws XmlPullParserException, IOException {
 
@@ -55,10 +55,10 @@ public final class XmlAccessibleHelper {
             throw new NullPointerException("null elementType");
         }
 
-        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
+        if (!XmlPullAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
                 accessibleType + " is not assignable to "
-                + XmlAccessible.class);
+                + XmlPullAccessible.class);
         }
 
         try {
@@ -84,7 +84,7 @@ public final class XmlAccessibleHelper {
      * @param accessibleType accessible type
      * @throws IOException if an I/O error occurs.
      */
-    public static <A extends XmlAccessible> void serialize(
+    public static <A extends XmlPullAccessible> void serialize(
         final XmlSerializer serializer, final Class<A> accessibleType)
         throws IOException {
 
@@ -96,10 +96,10 @@ public final class XmlAccessibleHelper {
             throw new NullPointerException("null elementType");
         }
 
-        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
+        if (!XmlPullAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
                 accessibleType + " is not assignable to "
-                + XmlAccessible.class);
+                + XmlPullAccessible.class);
         }
 
         try {
@@ -117,7 +117,7 @@ public final class XmlAccessibleHelper {
     /**
      * Creates a new instance.
      */
-    private XmlAccessibleHelper() {
+    private XmlPullAccessibleHelper() {
         super();
     }
 

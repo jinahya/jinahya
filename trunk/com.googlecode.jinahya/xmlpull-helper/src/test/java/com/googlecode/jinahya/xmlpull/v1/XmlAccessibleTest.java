@@ -49,7 +49,7 @@ public class XmlAccessibleTest extends XmlPullHelperTest {
                 parser.nextTag();
 
                 final Sample sample =
-                    XmlAccessibleHelper.parse(parser, Sample.class);
+                    XmlPullAccessibleHelper.parse(parser, Sample.class);
 
                 Assert.assertEquals(sample.getId(), Long.valueOf(0L));
                 Assert.assertEquals(sample.getName(), "name");
@@ -71,7 +71,7 @@ public class XmlAccessibleTest extends XmlPullHelperTest {
                 parser.nextTag();
 
                 final Sample sample =
-                    XmlAccessibleHelper.parse(parser, SampleNS.class);
+                    XmlPullAccessibleHelper.parse(parser, SampleNS.class);
 
                 Assert.assertEquals(sample.getId(), Long.valueOf(0L));
                 Assert.assertEquals(sample.getName(), "name");

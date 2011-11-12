@@ -18,32 +18,28 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.util.Collection;
-
-
 /**
- * Interface for collectable.
+ * Interface XML tag.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> accessible type parameter
  */
-public interface XmlCollectable<A extends XmlAccessible> extends XmlAccessible {
+public interface XmlPullTag extends XmlPullAccessible {
 
 
     /**
-     * Returns the type of child elements.
+     * Returns XML namespace URi of this tag.
      *
-     * @return child type.
+     * @return XML namespace URI
      */
-    Class<A> getAccessibleType();
+    String getNamespaceURI();
 
 
     /**
-     * Returns the child collection.
+     * Returns XML local name of this tag.
      *
-     * @return child collection
+     * @return XML local name
      */
-    Collection<A> getAccessibles();
+    String getLocalName();
 
 
 }

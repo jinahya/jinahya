@@ -28,8 +28,8 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> XmlAccessible type parameter
  */
-public abstract class AbstractXmlCollectable<A extends XmlAccessible>
-    implements XmlCollectable<A> {
+public abstract class AbstractXmlPullCollectable<A extends XmlPullAccessible>
+    implements XmlPullCollectable<A> {
 
 
     /**
@@ -37,17 +37,17 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
      *
      * @param accessibleType accessible type
      */
-    public AbstractXmlCollectable(final Class<A> accessibleType) {
+    public AbstractXmlPullCollectable(final Class<A> accessibleType) {
         super();
 
         if (accessibleType == null) {
             throw new NullPointerException("null elementType");
         }
 
-        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
+        if (!XmlPullAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
                 accessibleType + " is not assignable to "
-                + XmlAccessible.class);
+                + XmlPullAccessible.class);
         }
 
         this.accessibleType = accessibleType;

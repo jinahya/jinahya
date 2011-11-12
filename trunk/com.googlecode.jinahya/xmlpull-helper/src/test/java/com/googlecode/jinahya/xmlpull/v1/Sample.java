@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Sample extends AbstractXmlElement {
+public class Sample extends AbstractXmlPullTag {
 
 
     public static final String NAMESPACE_URI = null;

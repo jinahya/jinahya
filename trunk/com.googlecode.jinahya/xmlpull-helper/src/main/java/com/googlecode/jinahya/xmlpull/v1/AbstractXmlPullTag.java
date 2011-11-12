@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractXmlElement implements XmlAccessible {
+public abstract class AbstractXmlPullTag implements XmlPullTag {
 
 
     /**
@@ -38,7 +38,7 @@ public abstract class AbstractXmlElement implements XmlAccessible {
      * @param namespaceURI XML namespace URI
      * @param localName XML local name
      */
-    public AbstractXmlElement(final String namespaceURI,
+    public AbstractXmlPullTag(final String namespaceURI,
                               final String localName) {
 
         super();
@@ -62,7 +62,7 @@ public abstract class AbstractXmlElement implements XmlAccessible {
 
 
     /**
-     * Parses contents.
+     * Parses contents from given <code>parser</code>.
      *
      * @param parser parser
      * @throws XmlPullParserException if an XML error occurs.
@@ -84,13 +84,25 @@ public abstract class AbstractXmlElement implements XmlAccessible {
 
 
     /**
-     * Serializes contents.
+     * Serializes contents to give <code>serializer</code>.
      *
      * @param serializer serializer
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void serializeContents(final XmlSerializer serializer)
         throws IOException;
+
+
+    @Override
+    public final String getNamespaceURI() {
+        return namespaceURI;
+    }
+
+
+    @Override
+    public final String getLocalName() {
+        return localName;
+    }
 
 
     /**
