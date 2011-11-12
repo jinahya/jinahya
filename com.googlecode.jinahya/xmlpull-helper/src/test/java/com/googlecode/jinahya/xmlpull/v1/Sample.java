@@ -68,10 +68,10 @@ public class Sample extends AbstractXmlElement {
 
         serializer.attribute(namespaceURI, "id", Long.toString(id));
 
-        XmlSerializerHelper.simpleTag(
+        XmlSerializerHelper.nillableSimpleTag(
             serializer, namespaceURI, "name", name);
 
-        XmlSerializerHelper.simpleTag(
+        XmlSerializerHelper.nillableSimpleTag(
             serializer, namespaceURI, "age", name);
     }
 

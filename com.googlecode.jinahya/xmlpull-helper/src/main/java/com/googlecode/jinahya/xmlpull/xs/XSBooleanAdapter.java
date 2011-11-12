@@ -79,7 +79,7 @@ public class XSBooleanAdapter implements XSTypeAdapter<Boolean> {
 
 
     @Override
-    public String print(final Boolean value) {
+    public String serialize(final Boolean value) {
 
         if (value == null) {
             throw new NullPointerException("null value");

@@ -258,24 +258,6 @@ public final class XmlSerializerHelper {
 
 
     /**
-     * Serializes a non-nill simple tag.
-     *
-     * @param serializer serializer
-     * @param namespaceURI XML namespace URi
-     * @param localName XML local name
-     * @param text text
-     * @throws IOException if an I/O error occurs
-     */
-    public static void simpleTag(final XmlSerializer serializer,
-                                 final String namespaceURI,
-                                 final String localName, final Object text)
-        throws IOException {
-
-        simpleTag(serializer, namespaceURI, localName, text, false);
-    }
-
-
-    /**
      * Serializes a tag. A NullPointerException will be thrown if
      * <code>nillable</code> is false and text is null.
      *

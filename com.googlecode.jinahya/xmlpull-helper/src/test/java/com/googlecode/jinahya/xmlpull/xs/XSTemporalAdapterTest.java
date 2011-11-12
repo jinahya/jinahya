@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlPullParserException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class XSTemporalAdapterTest<T extends XSTemporalAdapter>
+public abstract class XSTemporalAdapterTest<T extends XSTemporalAdapter>
     extends XSTypeAdapterTest {
 
 
@@ -41,6 +41,14 @@ public class XSTemporalAdapterTest<T extends XSTemporalAdapter>
             final Date parsed = adapter.parse(string);
             System.out.printf("%1$30s -> %2$s\n", string, parsed);
         }
+    }
+
+
+    protected static <T extends XSTemporalAdapter> void testSerialize(
+        final T adapter, final Date value)
+        throws IOException {
+
+        System.out.println(adapter.serialize(value));
     }
 
 

@@ -126,11 +126,12 @@ public class XmlSerializerHelperTest extends XmlPullHelperTest {
 
         XmlSerializerHelper.nillableSimpleTag(serializer, null, "String0",
                                               null);
-        XmlSerializerHelper.simpleTag(serializer, null, "String1", "String1");
+        XmlSerializerHelper.simpleTag(serializer, null, "String1", "String1",
+                                      false);
 
         XmlSerializerHelper.nillableSimpleTag(serializer, null, "Byte0", null);
         XmlSerializerHelper.simpleTag(serializer, null, "Byte1",
-                                      Byte.valueOf((byte) 0));
+                                      Byte.valueOf((byte) 0), false);
 
         serializer.endTag(null, "root");
 
