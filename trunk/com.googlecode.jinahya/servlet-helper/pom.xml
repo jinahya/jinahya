@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>servlet-helper</artifactId>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0-alpha-2</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -183,9 +183,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/servlet-helper</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/servlet-helper</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/servlet-helper/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/servlet-helper-1.0-alpha-2</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/servlet-helper-1.0-alpha-2</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/servlet-helper-1.0-alpha-2</url>
   </scm>
   <prerequisites />
   <repositories>
