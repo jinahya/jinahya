@@ -56,10 +56,10 @@ public final class DatabaseAccessibleHelper {
             return null;
 
         } catch (IllegalAccessException iae) {
-            throw new SQLException(
+            throw new RuntimeException(
                 "failed to create instance of " + accessibleType, iae);
         } catch (InstantiationException ie) {
-            throw new SQLException(
+            throw new RuntimeException(
                 "failed to create instance of " + accessibleType, ie);
         }
     }
