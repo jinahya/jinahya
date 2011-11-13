@@ -50,7 +50,7 @@ public class BufferedHttpServletResponseWrapper
 
 
     @Override
-    public void flushBuffer() throws IOException {
+    public final void flushBuffer() throws IOException {
 
         if (writer != null) {
             writer.flush();
@@ -61,13 +61,13 @@ public class BufferedHttpServletResponseWrapper
 
 
     @Override
-    public ServletOutputStream getOutputStream() throws IOException {
+    public final ServletOutputStream getOutputStream() throws IOException {
         return outputStream;
     }
 
 
     @Override
-    public PrintWriter getWriter() throws IOException {
+    public final PrintWriter getWriter() throws IOException {
 
         if (writer == null) {
             writer = new PrintWriter(new OutputStreamWriter(
@@ -79,13 +79,13 @@ public class BufferedHttpServletResponseWrapper
 
 
     @Override
-    public void reset() {
+    public final void reset() {
         outputStream.reset();
     }
 
 
     @Override
-    public void resetBuffer() {
+    public final void resetBuffer() {
         outputStream.reset();
     }
 
@@ -95,7 +95,7 @@ public class BufferedHttpServletResponseWrapper
      *
      * @return buffered bytes
      */
-    public byte[] getBytes() {
+    public final byte[] getBytes() {
         return outputStream.getBytes();
     }
 
