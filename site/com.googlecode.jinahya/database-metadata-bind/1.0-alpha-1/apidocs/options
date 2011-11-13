@@ -1,0 +1,26 @@
+-classpath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-1/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-1/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-1/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'database-metadata-bind 1.0-alpha-1 API'
+-link
+'http://www.xmlpull.org/v1/doc/api'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-1/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'database-metadata-bind 1.0-alpha-1 API'
