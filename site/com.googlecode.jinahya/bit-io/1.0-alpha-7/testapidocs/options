@@ -1,0 +1,26 @@
+-classpath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7/target/classes:/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7/target/test-classes:/Users/onacit/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/Users/onacit/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/Users/onacit/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/Users/onacit/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/Users/onacit/.m2/repository/org/testng/testng/6.2.1/testng-6.2.1.jar:/Users/onacit/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'bit-io 1.0-alpha-7 Test API'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/bit-io-1.0-alpha-7/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'bit-io 1.0-alpha-7 Test API'
