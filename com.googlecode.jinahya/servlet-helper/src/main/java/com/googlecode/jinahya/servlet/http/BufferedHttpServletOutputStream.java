@@ -51,7 +51,7 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
     /**
      * Reset this OutputStream.
      */
-    public void reset() {
+    public final void reset() {
         bufferStream.reset();
     }
 
@@ -61,7 +61,7 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
      *
      * @return buffered bytes
      */
-    public byte[] getBytes() {
+    public final byte[] getBytes() {
         return bufferStream.toByteArray();
     }
 
