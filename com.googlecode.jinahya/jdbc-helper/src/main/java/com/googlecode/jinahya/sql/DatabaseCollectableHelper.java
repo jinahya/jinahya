@@ -103,7 +103,8 @@ public final class DatabaseCollectableHelper {
             try {
                 @SuppressWarnings("unchecked")
                 final Collection<DatabaseAccessible> accessibles =
-                    (Collection<DatabaseAccessible>) collectable.getAccessibles();
+                    (Collection<DatabaseAccessible>)
+                    collectable.getAccessibles();
                 final Class<? extends DatabaseAccessible> accessibleType =
                     collectable.getAccessibleType();
                 while (resultSet.next()) {
