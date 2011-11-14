@@ -41,9 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 @XmlTransient
-public abstract class MetadataAccessible {
+public abstract class Metadata {
 
 
     /**
@@ -57,9 +56,9 @@ public abstract class MetadataAccessible {
      * @throws JAXBException if a JAXB error occurs.
      * @throws NoSuchMethodException if output is unknown
      * @throws IllegalAccessException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
      */
-    public static <M extends MetadataAccessible, O> void marshal(
+    public static <M extends Metadata, O> void marshal(
         final M metadata, final Properties properties,
         final Class<O> outputType, final O output)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -95,7 +94,7 @@ public abstract class MetadataAccessible {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    public static <M extends MetadataAccessible, I> void unmarshal(
+    public static <M extends Metadata, I> void unmarshal(
         final Class<M> metadataType, final Properties properties,
         final Class<I> inputType, final I input)
         throws JAXBException, NoSuchMethodException, IllegalAccessException,
@@ -121,20 +120,20 @@ public abstract class MetadataAccessible {
      * Creates a new instance of <code>metadataType</code> and reads information
      * from specified <code>resultSet</code>.
      *
-     * @param <T> metadata type parameter
+     * @param <M> metadata type parameter
      * @param metadataType metadata type
      * @param resultSet result set
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
-    public static <T extends MetadataAccessible> T newInstance(
-        final Class<T> metadataType, final ResultSet resultSet)
+    public static <M extends Metadata> M newInstance(
+        final Class<M> metadataType, final ResultSet resultSet)
         throws SQLException {
 
         try {
-            final T metadataSet = metadataType.newInstance();
-            metadataSet.read(resultSet);
-            return metadataSet;
+            final M metadata = metadataType.newInstance();
+            metadata.read(resultSet);
+            return metadata;
         } catch (InstantiationException ie) {
             throw new SQLException(ie);
         } catch (IllegalAccessException iae) {
@@ -159,7 +158,7 @@ public abstract class MetadataAccessible {
             if (resultSet.wasNull()) {
                 value = null;
             }
-            final MetadataEntry entry = new MetadataEntry();
+            final Entry entry = new Entry();
             entry.setLabel(label);
             entry.setValue(value);
             getEntries().put(label, entry);
@@ -168,15 +167,13 @@ public abstract class MetadataAccessible {
 
 
     /**
-     * Returns entries.
-     *
-     * @return entries
+     * 
+     * @return 
      */
-    //@XmlJavaTypeAdapter(MetadataEntriesAdapter.class)
-    public Map<String, MetadataEntry> getEntries() {
+    public Map<String, Entry> getEntries() {
 
         if (entries == null) {
-            entries = new LinkedHashMap<String, MetadataEntry>();
+            entries = new LinkedHashMap<String, Entry>();
         }
 
         return entries;
@@ -189,7 +186,7 @@ public abstract class MetadataAccessible {
      * @return 
      */
     protected Object getValue(final String label) {
-        final MetadataEntry entry = getEntries().get(label);
+        final Entry entry = getEntries().get(label);
         if (entry == null) {
             return null;
         }
@@ -215,29 +212,33 @@ public abstract class MetadataAccessible {
 
     /**
      * 
-     * @param <T>
-     * @param type
-     * @param label
+     * @param <V> value type parameter
+     * @param type type
+     * @param label label
      * @return 
      */
-    protected <T> T getValue(final Class<T> type, final String label) {
+    protected <V> V getValue(final Class<V> type, final String label) {
         return type.cast(getValue(label));
     }
 
 
     /**
      * 
+     * @param <V> value type parameter
+     * @param type type
+     * @param label label
+     * @param value value
      */
-    protected <T> void setValue(final Class<T> valueType, final String label,
-                                final T value) {
+    protected <V> void setValue(final Class<V> type, final String label,
+                                final V value) {
 
-        if (valueType == null) {
+        if (type == null) {
             throw new NullPointerException("null valueType");
         }
 
-        if (value != null && !valueType.isInstance(value)) {
+        if (value != null && !type.isInstance(value)) {
             throw new IllegalArgumentException(
-                value + " is not an instance of " + valueType);
+                value + " is not an instance of " + type);
         }
 
         setValue(label, value);
@@ -251,9 +252,9 @@ public abstract class MetadataAccessible {
      * @param value entry value
      * @return previous entry mapped to given <code>label</code>
      */
-    public MetadataEntry addEntry(final String label, final Object value) {
+    public Entry addEntry(final String label, final Object value) {
 
-        return addEntry(MetadataEntry.newIntance(label, value));
+        return addEntry(Entry.newIntance(label, value));
     }
 
 
@@ -263,14 +264,14 @@ public abstract class MetadataAccessible {
      * @param entry entry
      * @return previous entry
      */
-    public MetadataEntry addEntry(final MetadataEntry entry) {
+    public Entry addEntry(final Entry entry) {
 
         return getEntries().put(entry.getLabel(), entry);
     }
 
 
     public void print(final PrintStream out) {
-        for (MetadataEntry entry : getEntries().values()) {
+        for (Entry entry : getEntries().values()) {
             out.print(entry.getLabel() + ": " + entry.getValue());
             if (entry.getValue() != null) {
                 out.print(" " + entry.getValue().getClass());
@@ -281,7 +282,7 @@ public abstract class MetadataAccessible {
 
 
     /** entries. */
-    private Map<String, MetadataEntry> entries;
+    private Map<String, Entry> entries;
 
 
 }

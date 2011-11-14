@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
                       "remarks", "typeCatalog", "typeSchema", "typeName",
                       "idColumnName", "idColumnGeneration", "columns",
                       "indices"})
-public class Function extends MetadataAccessible {
+public class Function extends Metadata {
 
 
     @XmlElement(required = true, nillable = true)

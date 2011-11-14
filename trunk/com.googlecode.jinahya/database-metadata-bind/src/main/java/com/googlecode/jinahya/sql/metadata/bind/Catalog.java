@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"tableCatalog", "schemas"})
-public class Catalog extends MetadataAccessible {
+public class Catalog extends Metadata {
 
 
     /**

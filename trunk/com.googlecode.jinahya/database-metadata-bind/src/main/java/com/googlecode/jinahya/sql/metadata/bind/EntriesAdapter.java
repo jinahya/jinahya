@@ -28,15 +28,14 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MetadataEntriesAdapter
-    extends XmlAdapter<MetadataEntries, Map<String, MetadataEntry>> {
+public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
 
 
     @Override
-    public MetadataEntries marshal(final Map<String, MetadataEntry> bound)
+    public Entries marshal(final Map<String, Entry> bound)
         throws Exception {
 
-        final MetadataEntries value = new MetadataEntries();
+        final Entries value = new Entries();
 
         value.getEntries().addAll(bound.values());
 
@@ -45,13 +44,13 @@ public class MetadataEntriesAdapter
 
 
     @Override
-    public Map<String, MetadataEntry> unmarshal(final MetadataEntries value)
+    public Map<String, Entry> unmarshal(final Entries value)
         throws Exception {
 
-        final Map<String, MetadataEntry> bound =
-            new LinkedHashMap<String, MetadataEntry>();
+        final Map<String, Entry> bound =
+            new LinkedHashMap<String, Entry>();
 
-        for (MetadataEntry entry : value.getEntries()) {
+        for (Entry entry : value.getEntries()) {
             bound.put(entry.getLabel(), entry);
         }
 

@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
                       "dataType", "typeName", "columnSize", "decimalDigits",
                       "numPrecRadix", "nullable", "remarks", "columnDef",
                       "charOctetLength"})
-public class Column extends MetadataAccessible {
+public class Column extends Metadata {
 
 
     @XmlElement(required = true)

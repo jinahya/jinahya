@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class MetadataEntries {
+public class Entries {
 
 
     /**
@@ -38,10 +38,10 @@ public class MetadataEntries {
      *
      * @return entries
      */
-    protected Collection<MetadataEntry> getEntries() {
+    protected Collection<Entry> getEntries() {
 
         if (entries == null) {
-            entries = new ArrayList<MetadataEntry>();
+            entries = new ArrayList<Entry>();
         }
 
         return entries;
@@ -50,7 +50,7 @@ public class MetadataEntries {
 
     /** entries. */
     @XmlElement
-    private Collection<MetadataEntry> entries;
+    private Collection<Entry> entries;
 
 
 }

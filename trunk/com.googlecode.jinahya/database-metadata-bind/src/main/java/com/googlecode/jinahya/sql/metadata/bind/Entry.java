@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public final class MetadataEntry {
+public class Entry {
 
 
     /**
@@ -39,10 +39,10 @@ public final class MetadataEntry {
      * @param value value
      * @return a new instance.
      */
-    public static MetadataEntry newIntance(final String label,
+    public static Entry newIntance(final String label,
                                            final Object value) {
 
-        final MetadataEntry instance = new MetadataEntry();
+        final Entry instance = new Entry();
         instance.setLabel(label);
         instance.setValue(value);
 
@@ -50,11 +50,21 @@ public final class MetadataEntry {
     }
 
 
+    /**
+     * Returns label.
+     *
+     * @return label
+     */
     public String getLabel() {
         return label;
     }
 
 
+    /**
+     * Sets label.
+     *
+     * @param label label.
+     */
     public void setLabel(final String label) {
 
         if (label == null) {
@@ -69,11 +79,21 @@ public final class MetadataEntry {
     }
 
 
+    /**
+     * Returns value.
+     *
+     * @return value.
+     */
     public Object getValue() {
         return value;
     }
 
 
+    /**
+     * Sets value.
+     *
+     * @param value value
+     */
     public void setValue(final Object value) {
         this.value = value;
     }
