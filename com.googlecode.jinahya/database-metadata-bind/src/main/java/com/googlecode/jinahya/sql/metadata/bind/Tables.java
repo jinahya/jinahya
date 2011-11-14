@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.lang.reflect.InvocationTargetException;
-
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Tables extends MetadataCollectable<Table> {
+public class Tables extends MetadataSet<Table> {
 
 
     /**
@@ -62,7 +60,7 @@ public class Tables extends MetadataCollectable<Table> {
         try {
             final Tables tables = new Tables();
             while (tableResultSet.next()) {
-                final Table table = MetadataAccessible.newInstance(
+                final Table table = Metadata.newInstance(
                     Table.class, tableResultSet);
                 tables.getMetadata().add(table);
                 if (table.getTableName().equals("PRODUCT")) {
@@ -77,7 +75,7 @@ public class Tables extends MetadataCollectable<Table> {
                 final Indices indices = Indices.newInstance(
                     databaseMetaData, table.getTableCatalog(),
                     table.getTableSchema(), table.getTableName(), false, false);
-                table.getIndices().addAll(indices.getMetadata());                
+                table.getIndices().addAll(indices.getMetadata());
             }
 
             return tables;
@@ -100,17 +98,13 @@ public class Tables extends MetadataCollectable<Table> {
      * @param output
      * @throws SQLException
      * @throws JAXBException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
     public static <O> void marshalInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String tableNamePattern,
         final String[] types, final Map<String, Object> properties,
         final Class<O> outputType, final O output)
-        throws SQLException, JAXBException, NoSuchMethodException,
-               IllegalAccessException, InvocationTargetException {
+        throws SQLException, JAXBException {
 
         final Tables instance = newInstance(
             databaseMetaData, catalog, schemaPattern, tableNamePattern, types);
@@ -128,17 +122,21 @@ public class Tables extends MetadataCollectable<Table> {
      * @return
      * @throws SQLException
      * @throws JAXBException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
     public static <I> Tables unmarshalInstance(
         final Map<String, Object> properties, final Class<I> inputTyep,
         final I input)
-        throws SQLException, JAXBException, NoSuchMethodException,
-               IllegalAccessException, InvocationTargetException {
+        throws SQLException, JAXBException {
 
         return unmarshal(Tables.class, properties, inputTyep, input);
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Tables() {
+        super(Table.class);
     }
 
 

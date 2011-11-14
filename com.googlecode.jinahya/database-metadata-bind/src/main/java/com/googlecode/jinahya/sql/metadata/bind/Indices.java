@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Indices extends MetadataCollectable<Index> {
+public class Indices extends MetadataSet<Index> {
 
 
     public static Indices newInstance(final DatabaseMetaData databaseMetaData,
@@ -46,7 +46,7 @@ public class Indices extends MetadataCollectable<Index> {
         try {
             final Indices indices = new Indices();
             while (indexResultSet.next()) {
-                final Index index = MetadataAccessible.newInstance(
+                final Index index = Metadata.newInstance(
                     Index.class, indexResultSet);
                 indices.getMetadata().add(index);
             }
@@ -56,6 +56,14 @@ public class Indices extends MetadataCollectable<Index> {
         } finally {
             indexResultSet.close();
         }
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Indices() {
+        super(Index.class);
     }
 
 

@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
                       "indexQualifier", "indexName", "type", "ordinalPosition",
                       "columnName", "ascOrDesc", "cardinality", "pages",
                       "filterCondition"})
-public class Index extends MetadataAccessible {
+public class Index extends Metadata {
 
 
     @XmlElement(required = true)

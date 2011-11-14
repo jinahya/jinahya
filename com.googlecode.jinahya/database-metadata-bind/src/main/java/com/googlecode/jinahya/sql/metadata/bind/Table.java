@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
                       "remarks", "typeCatalog", "typeSchema", "typeName",
                       "idColumnName", "idColumnGeneration", "columns",
                       "indices"})
-public class Table extends MetadataAccessible {
+public class Table extends Metadata {
 
 
     public Collection<Column> getColumns() {

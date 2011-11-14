@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.lang.reflect.InvocationTargetException;
-
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Functions extends MetadataCollectable<Function> {
+public class Functions extends MetadataSet<Function> {
 
 
     /**
@@ -48,6 +46,7 @@ public class Functions extends MetadataCollectable<Function> {
      * @param functionNamePattern
      * @return
      * @throws SQLException 
+     * @see DatabaseMetaData#getFunctions(String, String, String) 
      */
     public static Functions newInstance(final DatabaseMetaData databaseMetaData,
                                         final String catalog,
@@ -60,7 +59,7 @@ public class Functions extends MetadataCollectable<Function> {
         try {
             final Functions functions = new Functions();
             while (functionResultSet.next()) {
-                final Function function = MetadataAccessible.newInstance(
+                final Function function = Metadata.newInstance(
                     Function.class, functionResultSet);
                 functions.getFunctions().add(function);
             }
@@ -78,26 +77,22 @@ public class Functions extends MetadataCollectable<Function> {
      * @param databaseMetaData
      * @param catalog
      * @param schemaPattern
-     * @param tableNamePattern
+     * @param functionNamePattern
      * @param properties
      * @param outputType
      * @param output
      * @throws SQLException
      * @throws JAXBException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
     public static <O> void marshalInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
-        final String schemaPattern, final String tableNamePattern,
+        final String schemaPattern, final String functionNamePattern,
         final Map<String, Object> properties, final Class<O> outputType,
         final O output)
-        throws SQLException, JAXBException, NoSuchMethodException,
-               IllegalAccessException, InvocationTargetException {
+        throws SQLException, JAXBException {
 
         final Functions instance = newInstance(
-            databaseMetaData, catalog, schemaPattern, tableNamePattern);
+            databaseMetaData, catalog, schemaPattern, functionNamePattern);
 
         marshal(instance, properties, outputType, output);
     }
@@ -112,17 +107,21 @@ public class Functions extends MetadataCollectable<Function> {
      * @return
      * @throws SQLException
      * @throws JAXBException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
     public static <I> Functions unmarshalInstance(
         final Map<String, Object> properties, final Class<I> inputTyep,
         final I input)
-        throws SQLException, JAXBException, NoSuchMethodException,
-               IllegalAccessException, InvocationTargetException {
+        throws SQLException, JAXBException {
 
         return unmarshal(Functions.class, properties, inputTyep, input);
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Functions() {
+        super(Function.class);
     }
 
 

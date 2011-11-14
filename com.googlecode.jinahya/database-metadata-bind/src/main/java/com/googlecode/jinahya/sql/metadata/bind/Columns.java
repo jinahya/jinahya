@@ -32,9 +32,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Columns extends MetadataCollectable<Column> {
+public class Columns extends MetadataSet<Column> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @param columnNamePattern
+     * @return
+     * @throws SQLException 
+     * @see DatabaseMetaData#getColumns(String, String, String, String) 
+     */
     public static Columns newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog,
                                       final String schemaPattern,
@@ -47,9 +58,9 @@ public class Columns extends MetadataCollectable<Column> {
         try {
             final Columns columns = new Columns();
             while (columnResultSet.next()) {
-                final Column column = MetadataAccessible.newInstance(
+                final Column column = Metadata.newInstance(
                     Column.class, columnResultSet);
-                columns.getMetadata().add(column);
+                columns.getColumns().add(column);
             }
 
             return columns;
@@ -57,6 +68,14 @@ public class Columns extends MetadataCollectable<Column> {
         } finally {
             columnResultSet.close();
         }
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Columns() {
+        super(Column.class);
     }
 
 

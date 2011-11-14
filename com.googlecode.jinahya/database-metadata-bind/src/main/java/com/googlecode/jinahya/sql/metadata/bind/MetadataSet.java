@@ -29,38 +29,32 @@ import java.util.Map.Entry;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <M> metadata type parameter.
  */
-//@XmlRootElement
-//@XmlType(name = "collection")
 @XmlTransient
-public abstract class MetadataCollectable<T extends MetadataAccessible> {
+public abstract class MetadataSet<M extends Metadata> {
 
 
     /**
      * 
-     * @param <C> collection type parameter
+     * @param <S> collection type parameter
      * @param <O> output type parameter
      * @param collection collection
      * @param properties marshaller properties
      * @param outputType output type
      * @param output output
      * @throws JAXBException if JAXB error occurs
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
-    public static <C extends MetadataCollectable, O> void marshal(
-        final C collection, final Map<String, Object> properties,
+    public static <S extends MetadataSet, O> void marshal(
+        final S collection, final Map<String, Object> properties,
         final Class<O> outputType, final O output)
-        throws JAXBException, NoSuchMethodException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         final Marshaller marshaller =
             DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
@@ -71,10 +65,21 @@ public abstract class MetadataCollectable<T extends MetadataAccessible> {
             }
         }
 
-        final Method method = Marshaller.class.getMethod(
-            "marshal", Object.class, outputType);
+        try {
+            final Method method = Marshaller.class.getMethod(
+                "marshal", Object.class, outputType);
 
-        method.invoke(marshaller, collection, output);
+            try {
+                method.invoke(marshaller, collection, output);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
     }
 
 
@@ -82,21 +87,17 @@ public abstract class MetadataCollectable<T extends MetadataAccessible> {
      * Unmarshals a instance of given <code>metadataType</code> from specified
      * <code>input</code>.
      *
-     * @param <C> collection type parameter
+     * @param <S> collection type parameter
      * @param collectionType collection type
      * @param properties unmarshaller properties
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
-     * @throws NoSuchMethodException if input is unknown
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
-    public static <C extends MetadataCollectable, I> C unmarshal(
-        final Class<C> collectionType, final Map<String, Object> properties,
+    public static <S extends MetadataSet, I> S unmarshal(
+        final Class<S> collectionType, final Map<String, Object> properties,
         final Class<I> inputType, final I input)
-        throws JAXBException, NoSuchMethodException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         final Unmarshaller unmarshaller =
             DatabaseMetadataBindConstants.JAXB_CONTEXT.createUnmarshaller();
@@ -107,10 +108,48 @@ public abstract class MetadataCollectable<T extends MetadataAccessible> {
             }
         }
 
-        final Method method = Marshaller.class.getMethod(
-            "unmarshal", inputType);
+        try {
+            final Method method = Marshaller.class.getMethod(
+                "unmarshal", inputType);
 
-        return collectionType.cast(method.invoke(unmarshaller, input));
+            try {
+                return collectionType.cast(method.invoke(unmarshaller, input));
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param accessibleType accessibleType
+     */
+    public MetadataSet(final Class<M> accessibleType) {
+        super();
+
+        if (accessibleType == null) {
+            throw new NullPointerException("null accessibleType");
+        }
+
+        if (!Metadata.class.isAssignableFrom(accessibleType)) {
+            throw new IllegalArgumentException(
+                accessibleType + " is not assignable to "
+                + Metadata.class);
+        }
+
+        this.metadataType = accessibleType;
+    }
+
+
+    public Class<M> getMetadataType() {
+        return metadataType;
     }
 
 
@@ -119,18 +158,24 @@ public abstract class MetadataCollectable<T extends MetadataAccessible> {
      *
      * @return entries
      */
-    protected Collection<T> getMetadata() {
+    protected Collection<M> getMetadata() {
 
         if (metadata == null) {
-            metadata = new ArrayList<T>();
+            metadata = new ArrayList<M>();
         }
 
         return metadata;
     }
 
 
-    /** metadata. */
-    private Collection<T> metadata;
+    /**
+     * Accessible type.
+     */
+    protected final Class<M> metadataType;
+
+
+    /** Accessible collection. */
+    private Collection<M> metadata;
 
 
 }

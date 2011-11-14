@@ -33,9 +33,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Schemas extends MetadataCollectable<Schema> {
+public class Schemas extends MetadataSet<Schema> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @return
+     * @throws SQLException 
+     * @see DatabaseMetaData#getSchemas(String, String)
+     */
     public static Schemas newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog,
                                       final String schemaPattern)
@@ -46,7 +55,7 @@ public class Schemas extends MetadataCollectable<Schema> {
         try {
             final Schemas schemas = new Schemas();
             while (schemaResultSet.next()) {
-                final Schema schema = MetadataAccessible.newInstance(
+                final Schema schema = Metadata.newInstance(
                     Schema.class, schemaResultSet);
                 schemas.getMetadata().add(schema);
 
@@ -61,6 +70,14 @@ public class Schemas extends MetadataCollectable<Schema> {
         } finally {
             schemaResultSet.close();
         }
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Schemas() {
+        super(Schema.class);
     }
 
 

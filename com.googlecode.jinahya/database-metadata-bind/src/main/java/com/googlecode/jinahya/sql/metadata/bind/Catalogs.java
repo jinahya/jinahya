@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Catalogs extends MetadataCollectable<Catalog> {
+public class Catalogs extends MetadataSet<Catalog> {
 
 
     /**
@@ -43,6 +43,8 @@ public class Catalogs extends MetadataCollectable<Catalog> {
      * @param databaseMetaData database meta data
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
+     * @see DatabaseMetaData#getCatalogs()
+     * @see DatabaseMetaData#getSchemas(String, String) 
      */
     public static Catalogs newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
@@ -51,9 +53,9 @@ public class Catalogs extends MetadataCollectable<Catalog> {
         try {
             final Catalogs catalogs = new Catalogs();
             while (catalogResultSet.next()) {
-                final Catalog catalog = MetadataAccessible.newInstance(
-                   Catalog.class, catalogResultSet);
-                catalogs.getMetadata().add(catalog);
+                final Catalog catalog = Metadata.newInstance(
+                    Catalog.class, catalogResultSet);
+                catalogs.getCatalogs().add(catalog);
 
                 final Schemas schemas = Schemas.newInstance(
                     databaseMetaData, catalog.getTableCatalog(), null);
@@ -65,6 +67,14 @@ public class Catalogs extends MetadataCollectable<Catalog> {
         } finally {
             catalogResultSet.close();
         }
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public Catalogs() {
+        super(Catalog.class);
     }
 
 
