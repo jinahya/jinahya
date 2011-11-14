@@ -22,12 +22,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  * Abstract implementation of DatabaseAccessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlTransient
 public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
 
 
