@@ -49,8 +49,10 @@ public class Sample extends AbstractXmlPullTag {
 
 
     @Override
-    protected void parseContents(final XmlPullParser parser)
+    public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
+
+        requireStartTag(parser); // ---------------------------------- START_TAG
 
         id = XmlPullParserHelper.getLongAttribute(parser, null, "id");
 
@@ -59,12 +61,16 @@ public class Sample extends AbstractXmlPullTag {
 
         parser.nextTag();
         age = XmlPullParserHelper.nextInt(parser);
+
+        parser.nextTag();
+        requireEndTag(parser); // -------------------------------------- END_TAG
     }
 
 
     @Override
-    protected void serializeContents(final XmlSerializer serializer)
-        throws IOException {
+    public void serialize(final XmlSerializer serializer) throws IOException {
+
+        startTag(serializer); // ------------------------------------- START_TAG
 
         serializer.attribute(namespaceURI, "id", Long.toString(id));
 
@@ -73,6 +79,8 @@ public class Sample extends AbstractXmlPullTag {
 
         XmlSerializerHelper.nillableSimpleTag(
             serializer, namespaceURI, "age", name);
+
+        endTag(serializer); // ----------------------------------------- END_TAG
     }
 
 
