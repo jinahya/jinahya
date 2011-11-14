@@ -91,7 +91,7 @@ public abstract class AbstractXmlPullTag implements XmlPullTag {
 
 
     /** XML local name. */
-    private final String localName;
+    protected final String localName;
 
 
 }

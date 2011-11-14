@@ -20,6 +20,8 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -34,24 +36,23 @@ import org.xmlpull.v1.XmlSerializer;
  * @param <E> AbstractXmlElementWrapper type parameter
  */
 public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
-    extends AbstractXmlPullCollectable<E> implements XmlPullTag {
+    extends AbstractXmlPullTag implements XmlPullCollectable<E> {
 
 
     /**
      * Creates a new instance.
      *
-     * @param elementType accessible type
-     * @param namespaceURI XML namespace URI
-     * @param localName XML local name
+     * @param tagType accessible type
+     * @param namespace XML namespace URI
+     * @param name XML local name
      */
-    public AbstractXmlPullTagWrapper(final Class<E> elementType,
-                                     final String namespaceURI,
-                                     final String localName) {
+    public AbstractXmlPullTagWrapper(final Class<E> tagType,
+                                     final String namespace,
+                                     final String name) {
 
-        super(elementType);
+        super(namespace, name);
 
-        this.namespaceURI = namespaceURI;
-        this.localName = localName;
+        this.tagType = tagType;
     }
 
 
@@ -59,53 +60,77 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
+        requireStartTag(parser);
 
         while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final E element = newAccessible();
-            element.parse(parser);
-            getAccessibles().add(element);
+            final E tag = newTag();
+            tag.parse(parser);
+            getAccessibles().add(tag);
         }
 
-        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
+        requireEndTag(parser);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        serializer.startTag(namespaceURI, localName);
+        startTag(serializer);
 
         for (final Iterator<E> i = getAccessibles().iterator(); i.hasNext();) {
             i.next().serialize(serializer);
         }
 
-        serializer.endTag(namespaceURI, localName);
+        endTag(serializer);
     }
 
 
     @Override
-    public final String getNamespaceURI() {
-        return namespaceURI;
+    public final Class<E> getAccessibleType() {
+        return tagType;
     }
 
 
     @Override
-    public final String getLocalName() {
-        return localName;
+    public final Collection<E> getAccessibles() {
+
+        if (tags == null) {
+            return new ArrayList<E>();
+        }
+
+        return tags;
     }
 
 
     /**
-     * XML namespace URI.
+     * Creates a new instance of <code>tagType</code>.
+     *
+     * @return a new tag.
      */
-    protected final String namespaceURI;
+    protected E newTag() {
+
+        try {
+            return tagType.newInstance();
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + tagType, ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + tagType, iae);
+        }
+    }
 
 
     /**
-     * XML local name.
+     * Tag type.
      */
-    private final String localName;
+    protected final Class<E> tagType;
+
+
+    /**
+     * Tags.
+     */
+    private Collection<E> tags;
 
 
 }
