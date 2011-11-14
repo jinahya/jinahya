@@ -52,6 +52,15 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
 
         super(namespace, name);
 
+        if (tagType == null) {
+            throw new NullPointerException("null tagType");
+        }
+
+        if (!AbstractXmlPullTag.class.isAssignableFrom(tagType)) {
+            throw new IllegalArgumentException(
+                tagType + " is not assignable to " + AbstractXmlPullTag.class);
+        }
+
         this.tagType = tagType;
     }
 
