@@ -21,6 +21,8 @@ package com.googlecode.jinahya.sql;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  * Abstract implementation of DatabaseCollection.
@@ -28,6 +30,7 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
+@XmlTransient
 public abstract class AbstractDatabaseCollectable<A extends DatabaseAccessible>
     implements DatabaseCollectable<A> {
 
