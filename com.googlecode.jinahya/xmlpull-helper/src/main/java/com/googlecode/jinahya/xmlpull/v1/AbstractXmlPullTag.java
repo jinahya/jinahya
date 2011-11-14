@@ -48,49 +48,28 @@ public abstract class AbstractXmlPullTag implements XmlPullTag {
     }
 
 
-    @Override
-    public void parse(final XmlPullParser parser)
+    protected void requireStartTag(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
+    }
 
-        parseContents(parser);
 
-        parser.nextTag();
+    protected void requireEndTag(final XmlPullParser parser)
+        throws XmlPullParserException, IOException {
+
         parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
 
 
-    /**
-     * Parses contents from given <code>parser</code>.
-     *
-     * @param parser parser
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
-     */
-    protected abstract void parseContents(final XmlPullParser parser)
-        throws XmlPullParserException, IOException;
-
-
-    @Override
-    public void serialize(final XmlSerializer serializer) throws IOException {
-
+    protected void startTag(final XmlSerializer serializer) throws IOException {
         serializer.startTag(namespaceURI, localName);
-
-        serializeContents(serializer);
-
-        serializer.endTag(namespaceURI, localName);
     }
 
 
-    /**
-     * Serializes contents to give <code>serializer</code>.
-     *
-     * @param serializer serializer
-     * @throws IOException if an I/O error occurs.
-     */
-    protected abstract void serializeContents(final XmlSerializer serializer)
-        throws IOException;
+    protected void endTag(final XmlSerializer serializer) throws IOException {
+        serializer.endTag(namespaceURI, localName);
+    }
 
 
     @Override
