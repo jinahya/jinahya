@@ -36,6 +36,9 @@ import org.kohsuke.args4j.Option;
 public class MetadataPrinter {
 
 
+    /**
+     * Command line option.
+     */
     public static class ConnectionOption {
 
 
@@ -121,7 +124,7 @@ public class MetadataPrinter {
 
 
     /**
-     * Prints metadata.
+     * Prints database metadata with given arguments.
      *
      * @param driver driver class name
      * @param url database connection url
