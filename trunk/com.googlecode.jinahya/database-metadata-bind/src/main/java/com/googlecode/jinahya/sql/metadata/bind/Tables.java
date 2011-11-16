@@ -63,18 +63,19 @@ public class Tables extends MetadataSet<Table> {
                 final Table table = Metadata.newInstance(
                     Table.class, tableResultSet);
                 tables.getMetadata().add(table);
-                if (table.getTableName().equals("PRODUCT")) {
-                    table.print(System.out);
-                }
+
+                final String tableCatalog = table.getValue("TABLE_CAT");
+                final String tableSchema = table.getValue("TABLE_SCHEM");
+                final String tableName = table.getValue("TABLE_NAME");
 
                 final Columns columns = Columns.newInstance(
-                    databaseMetaData, table.getTableCatalog(),
-                    table.getTableSchema(), table.getTableName(), null);
+                    databaseMetaData, tableCatalog, tableSchema, tableName,
+                    null);
                 table.getColumns().addAll(columns.getMetadata());
 
                 final Indices indices = Indices.newInstance(
-                    databaseMetaData, table.getTableCatalog(),
-                    table.getTableSchema(), table.getTableName(), false, false);
+                    databaseMetaData, tableCatalog, tableSchema, tableName,
+                    false, false);
                 table.getIndices().addAll(indices.getMetadata());
             }
 

@@ -58,7 +58,7 @@ public class Catalogs extends MetadataSet<Catalog> {
                 catalogs.getCatalogs().add(catalog);
 
                 final Schemas schemas = Schemas.newInstance(
-                    databaseMetaData, catalog.getTableCatalog(), null);
+                    databaseMetaData, catalog.getValue("TABLE_CAT"), null);
                 catalog.getSchemas().addAll(schemas.getMetadata());
             }
 

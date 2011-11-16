@@ -18,10 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.math.BigDecimal;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -29,153 +26,136 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "columnName",
-                      "dataType", "typeName", "columnSize", "decimalDigits",
-                      "numPrecRadix", "nullable", "remarks", "columnDef",
-                      "charOctetLength"})
 public class Column extends Metadata {
 
 
-    @XmlElement(required = true)
-    public String getTableCatalog() {
-        return getValue(String.class, "TABLE_CAT");
+    public String getTABLE_CAT() {
+        return getValue("TABLE_CAT");
     }
 
 
-    public void setTableCatalog(final String tableCatalog) {
-        setValue(String.class, "TABLE_CAT", tableCatalog);
+    public void setTABLE_CAT(final String TABLE_CAT) {
+        setValue("TABLE_CAT", TABLE_CAT);
     }
 
 
-    @XmlElement(required = true)
-    public String getTableSchema() {
-        return getValue(String.class, "TABLE_SCHEM");
+    public String getTABLE_SCHEM() {
+        return getValue("TABLE_SCHEM");
     }
 
 
-    public void setTableSchema(final String tableSchema) {
-        setValue(String.class, "TABLE_SCHEM", tableSchema);
+    public void setTABLE_SCHEM(final String TABLE_SCHEM) {
+        setValue("TABLE_SCHEM", TABLE_SCHEM);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public String getTableName() {
-        return getValue(String.class, "TABLE_NAME");
+    public String getTABLE_NAME() {
+        return getValue("TABLE_NAME");
     }
 
 
-    public void setTableName(final String tableName) {
-        setValue(String.class, "TABLE_NAME", tableName);
+    public void setTABLE_NAME(final String TABLE_NAME) {
+        setValue("TABLE_NAME", TABLE_NAME);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public String getColumnName() {
-        return getValue(String.class, "COLUMN_NAME");
+    public String getCOLUMN_NAME() {
+        return getValue("COLUMN_NAME");
     }
 
 
-    public void setColumnName(final String columnName) {
-        setValue(String.class, "COLUMN_NAME", columnName);
+    public void setCOLUMN_NAME(final String COLUMN_NAME) {
+        setValue("COLUMN_NAME", COLUMN_NAME);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Integer getDataType() {
-        return getValue(Integer.class, "DATA_TYPE");
+    public String getDATA_TYPE() {
+        return getValue("DATA_TYPE");
     }
 
 
-    public void setDataType(Integer dataType) {
-        setValue(Integer.class, "DATA_TYPE", dataType);
+    public void setDATA_TYPE(final String DATA_TYPE) {
+        setValue("DATA_TYPE", DATA_TYPE);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public String getTypeName() {
-        return getValue(String.class, "TYPE_NAME");
+    public String getTYPE_NAME() {
+        return getValue("TYPE_NAME");
     }
 
 
-    public void setTypeName(final String typeName) {
-        setValue(String.class, "TYPE_NAME", typeName);
+    public void setTYPE_NAME(final String TYPE_NAME) {
+        setValue("TYPE_NAME", TYPE_NAME);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public BigDecimal getColumnSize() {
-        return getValue(BigDecimal.class, "COLUMN_SIZE");
+    public String getCOLUMN_SIZE() {
+        return getValue("COLUMN_SIZE");
     }
 
 
-    public void setColumnSize(final BigDecimal columnSize) {
-        setValue(BigDecimal.class, "COLUMN_SIZE", columnSize);
+    public void setCOLUMN_SIZE(final String COLUMN_SIZE) {
+        setValue("COLUMN_SIZE", COLUMN_SIZE);
     }
 
 
-    @XmlElement(required = true, nillable = true)
-    public Integer getDecimalDigits() {
-        return getValue(Integer.class, "DECIMAL_DIGITS");
+    public String getDECIMAL_DIGITS() {
+        return getValue("DECIMAL_DIGITS");
     }
 
 
-    public void setDecimalDigits(final Integer decimalDigits) {
-        setValue(Integer.class, "DECIMAL_DIGITS", decimalDigits);
+    public void setDECIMAL_DIGITS(final String DECIMAL_DIGITS) {
+        setValue("DECIMAL_DIGITS", DECIMAL_DIGITS);
     }
 
 
-    @XmlElement(required = true)
-    public Integer getNumPrecRadix() {
-        return getValue(Integer.class, "NUM_PREC_RADIX");
+    public String getNUM_PREC_RADIX() {
+        return getValue("NUM_PREC_RADIX");
     }
 
 
-    public void setNumPrecRadix(final Integer numPrecRadix) {
-        setValue(Integer.class, "NUM_PREC_RADIX", numPrecRadix);
+    public void setNUM_PREC_RADIX(final String NUM_PREC_RADIX) {
+        setValue("NUM_PREC_RADIX", NUM_PREC_RADIX);
     }
 
 
-    @XmlElement(required = true)
-    public BigDecimal getNullable() {
-        return getValue(BigDecimal.class, "NULLABLE");
+    public String getNULLABLE() {
+        return getValue("NULLABLE");
     }
 
 
-    public void setNullable(final BigDecimal nullable) {
-        setValue(BigDecimal.class, "NULLABLE", nullable);
+    public void setNULLABLE(final String NULLABLE) {
+        setValue("NULLABLE", NULLABLE);
     }
 
 
-    @XmlElement(required = true, nillable = true)
-    public String getRemarks() {
-        return getValue(String.class, "REMARKS");
+    public String getREMARKS() {
+        return getValue("REMARKS");
     }
 
 
-    public void setRemarks(final String remarks) {
-        setValue(String.class, "REMARKS", remarks);
+    public void setREMARKS(final String REMARKS) {
+        setValue("REMARKS", REMARKS);
     }
 
 
-    @XmlElement(required = true, nillable = true)
-    public String getColumnDef() {
-        return getValue(String.class, "COLUMN_DEF");
+    public String getCOLUMN_DEF() {
+        return getValue("COLUMN_DEF");
     }
 
 
-    public void setColumnDef(final String columnDef) {
-        setValue(String.class, "COLUMN_DEF", columnDef);
+    public void setCOLUMN_DEF(final String COLUMN_DEF) {
+        setValue("COLUMN_DEF", COLUMN_DEF);
     }
 
 
-    @XmlElement(required = true)
-    public BigDecimal getCharOctetLength() {
-        return getValue(BigDecimal.class, "CHAR_OCTET_LENGTH");
+    public String getCHAR_OCTET_LENGTH() {
+        return getValue("CHAR_OCTET_LENGTH");
     }
 
 
-    public void setCharOctetLength(final BigDecimal charOctetLength) {
-        setValue(BigDecimal.class, "CHAR_OCTET_LENGTH", charOctetLength);
+    public void setCHAR_OCTET_LENGTH(final String CHAR_OCTET_LENGTH) {
+        setValue("CHAR_OCTET_LENGTH", CHAR_OCTET_LENGTH);
     }
 
 

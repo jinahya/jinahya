@@ -29,13 +29,16 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
+/*
 @XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "nonUnique",
                       "indexQualifier", "indexName", "type", "ordinalPosition",
                       "columnName", "ascOrDesc", "cardinality", "pages",
                       "filterCondition"})
+ */
 public class Index extends Metadata {
 
 
+    /*
     @XmlElement(required = true)
     public String getTableCatalog() {
         return getValue(String.class, "TABLE_CAT");
@@ -172,6 +175,7 @@ public class Index extends Metadata {
     public void setPages(final String filterCondition) {
         setValue(String.class, "FILTER_CONDITION", filterCondition);
     }
+     */
 
 
 }

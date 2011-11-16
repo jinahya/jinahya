@@ -60,8 +60,8 @@ public class Schemas extends MetadataSet<Schema> {
                 schemas.getMetadata().add(schema);
 
                 final Tables tables = Tables.newInstance(
-                    databaseMetaData, catalog, schema.getTableSchema(), null,
-                    null);
+                    databaseMetaData, catalog, schema.getValue("TABLE_SCHEM"),
+                    null, null);
                 schema.getTables().addAll(tables.getMetadata());
             }
 
