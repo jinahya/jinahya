@@ -33,8 +33,43 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "tables"})
+@XmlType(propOrder = {"entries", "attributes", "tables"})
 public class Schema extends Metadata {
+
+
+    public String getTABLE_SCHEM() {
+        return getValue("TABLE_SCHEM");
+    }
+
+
+    public void setTABLE_SCHEM(final String TABLE_SCHEM) {
+        setValue("TABLE_SCHEM", TABLE_SCHEM);
+    }
+
+
+    public String getTABLE_CATALOG() {
+        return getValue("TABLE_CATALOG");
+    }
+
+
+    public void setTABLE_CATALOG(final String TABLE_CATALOG) {
+        setValue("TABLE_CATALOG", TABLE_CATALOG);
+    }
+
+
+    /**
+     * Returns attributes.
+     *
+     * @return attributes
+     */
+    public Collection<Attribute> getAttributes() {
+
+        if (attributes == null) {
+            attributes = new ArrayList<Attribute>();
+        }
+
+        return attributes;
+    }
 
 
     /**
@@ -50,6 +85,14 @@ public class Schema extends Metadata {
 
         return tables;
     }
+
+
+    /**
+     * attributes
+     */
+    @XmlElement(name = "attribute")
+    @XmlElementWrapper(required = true, nillable = false)
+    private Collection<Attribute> attributes;
 
 
     /** tables. */

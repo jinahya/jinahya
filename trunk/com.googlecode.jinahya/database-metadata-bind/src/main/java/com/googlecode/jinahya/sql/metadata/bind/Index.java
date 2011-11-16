@@ -18,10 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.math.BigDecimal;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -29,153 +26,137 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-/*
-@XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "nonUnique",
-                      "indexQualifier", "indexName", "type", "ordinalPosition",
-                      "columnName", "ascOrDesc", "cardinality", "pages",
-                      "filterCondition"})
- */
 public class Index extends Metadata {
 
 
-    /*
-    @XmlElement(required = true)
-    public String getTableCatalog() {
-        return getValue(String.class, "TABLE_CAT");
+    public String getTABLE_CAT() {
+        return getValue("TABLE_CAT");
     }
 
 
-    public void setTableCatalog(final String tableCatalog) {
-        setValue(String.class, "TABLE_CAT", tableCatalog);
+    public void setTABLE_CAT(final String TABLE_CAT) {
+        setValue("TABLE_CAT", TABLE_CAT);
     }
 
 
-    @XmlElement(required = true)
-    public String getTableSchema() {
-        return getValue(String.class, "TABLE_SCHEM");
+    public String getTABLE_SCHEM() {
+        return getValue("TABLE_SCHEM");
     }
 
 
-    public void setTableSchema(final String tableSchema) {
-        setValue(String.class, "TABLE_SCHEM", tableSchema);
+    public void setTABLE_SCHEM(final String TABLE_SCHEM) {
+        setValue("TABLE_SCHEM", TABLE_SCHEM);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public String getTableName() {
-        return getValue(String.class, "TABLE_NAME");
+    public String getTABLE_NAME() {
+        return getValue("TABLE_NAME");
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public BigDecimal getNonUnique() {
-        return getValue(BigDecimal.class, "NON_UNIQUE");
+    public void setTABLE_NAME(final String TABLE_NAME) {
+        setValue("TABLE_NAME", TABLE_NAME);
     }
 
 
-    public void setNonUnique(final BigDecimal nonUnique) {
-        setValue(BigDecimal.class, "NON_UNIQUE", nonUnique);
+    public String getNON_UNIQUE() {
+        return getValue("NON_UNIQUE");
     }
 
 
-    @XmlElement(required = true)
-    public String getIndexQualifier() {
-        return getValue(String.class, "INDEX_QUALIFIER");
+    public void setNON_UNIQUE(final String NON_UNIQUE) {
+        setValue("NON_UNIQUE", NON_UNIQUE);
     }
 
 
-    public void setIndexQualifier(final String indexQualifier) {
-        setValue(String.class, "INDEX_QUALIFIER", indexQualifier);
+    public String getINDEX_QUALIFIER() {
+        return getValue("INDEX_QUALIFIER");
     }
 
 
-    @XmlElement(required = true)
-    public String getIndexName() {
-        return getValue(String.class, "INDEX_NAME");
+    public void setINDEX_QUALIFIER(final String INDEX_QUALIFIER) {
+        setValue("INDEX_QUALIFIER", INDEX_QUALIFIER);
     }
 
 
-    public void setIndexName(final String indexName) {
-        setValue(String.class, "INDEX_NAME", indexName);
+    public String getINDEX_NAME() {
+        return getValue("INDEX_NAME");
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Integer getType() {
-        return getValue(Integer.class, "TYPE");
+    public void setINDEX_NAME(final String INDEX_NAME) {
+        setValue("INDEX_NAME", INDEX_NAME);
     }
 
 
-    public void setType(final Integer type) {
-        setValue(Integer.class, "TYPE", type);
+    public String getTYPE() {
+        return getValue("TYPE");
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Integer getOrdinalPosition() {
-        return getValue(Integer.class, "ORDINAL_POSITION");
+    public void setTYPE(final String TYPE) {
+        setValue("TYPE", TYPE);
     }
 
 
-    public void setOrdinalPosition(final Integer ordinalPosition) {
-        setValue(Integer.class, "TYPE", ordinalPosition);
+    public String getORDINAL_POSITION() {
+        return getValue("ORDINAL_POSITION");
     }
 
 
-    @XmlElement(required = true)
-    public String getColumnName() {
-        return getValue(String.class, "COLUMN_NAME");
+    public void setORDINAL_POSITION(final String ORDINAL_POSITION) {
+        setValue("ORDINAL_POSITION", ORDINAL_POSITION);
     }
 
 
-    public void setColumnName(final String columnName) {
-        setValue(String.class, "COLUMN_NAME", columnName);
+    public String getCOLUMN_NAME() {
+        return getValue("COLUMN_NAME");
     }
 
 
-    @XmlElement(required = true)
-    public String getAscOrDesc() {
-        return getValue(String.class, "ASC_OR_DESC");
+    public void setCOLUMN_NAME(final String COLUMN_NAME) {
+        setValue("COLUMN_NAME", COLUMN_NAME);
     }
 
 
-    public void setAscOrDesc(final String ascOrDesc) {
-        setValue(String.class, "COLUMN_NAME", ascOrDesc);
+    public String getASC_OR_DESC() {
+        return getValue("ASC_OR_DESC");
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Short getCardinality() {
-        return getValue(Short.class, "CARDINALITY");
+    public void setASC_OR_DESC(final String ASC_OR_DESC) {
+        setValue("ASC_OR_DESC", ASC_OR_DESC);
     }
 
 
-    public void setCardinality(final Short cardinality) {
-        setValue(Short.class, "CARDINALITY", cardinality);
+    public String getCARDINALITY() {
+        return getValue("CARDINALITY");
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Short getPages() {
-        return getValue(Short.class, "PAGES");
+    public void setCARDINALITY(final String CARDINALITY) {
+        setValue("CARDINALITY", CARDINALITY);
     }
 
 
-    public void setPages(final Short pages) {
-        setValue(Short.class, "PAGES", pages);
+    public String getPAGES() {
+        return getValue("PAGES");
     }
 
 
-    @XmlElement(required = true)
-    public String getFilterCondition() {
-        return getValue(String.class, "FILTER_CONDITION");
+    public void setPAGES(final String PAGES) {
+        setValue("PAGES", PAGES);
     }
 
 
-    public void setPages(final String filterCondition) {
-        setValue(String.class, "FILTER_CONDITION", filterCondition);
+    public String getFILTER_CONDITION() {
+        return getValue("FILTER_CONDITION");
     }
-     */
+
+
+    public void setFILTER_CONDITION(final String FILTER_CONDITION) {
+        setValue("FILTER_CONDITION", FILTER_CONDITION);
+    }
 
 
 }

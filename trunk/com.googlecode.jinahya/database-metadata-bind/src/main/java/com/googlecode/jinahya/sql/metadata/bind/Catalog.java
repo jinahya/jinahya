@@ -37,6 +37,16 @@ import javax.xml.bind.annotation.XmlType;
 public class Catalog extends Metadata {
 
 
+    public String getTABLE_CAT() {
+        return getValue("TABLE_CAT");
+    }
+
+
+    public void setTABLE_CAT(final String TABLE_CAT) {
+        setValue("TABLE_CAT", TABLE_CAT);
+    }
+
+
     /**
      * Returns schemas.
      *

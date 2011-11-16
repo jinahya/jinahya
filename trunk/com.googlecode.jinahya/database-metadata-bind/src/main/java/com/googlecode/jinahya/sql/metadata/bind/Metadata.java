@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.io.PrintStream;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -40,6 +38,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
+ * Abstract class for various database metadata.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -193,9 +192,10 @@ public abstract class Metadata {
 
 
     /**
-     * 
-     * @param key
-     * @return 
+     * Returns the value of an entry mapped to given <code>key</code>.
+     *
+     * @param key entry key
+     * @return entry value
      */
     protected String getValue(final String key) {
         final Entry entry = getEntries().get(key);
@@ -207,14 +207,25 @@ public abstract class Metadata {
 
 
     /**
-     * 
-     * @param key
-     * @param value 
+     * Sets the value of an entry mapped to given <code>key</code>. A new entry
+     * will be created if there is not entry.
+     *
+     * @param key entry key
+     * @param value entry value.
      */
     protected void setValue(final String key, final String value) {
 
+        if (key == null) {
+            throw new NullPointerException("null key");
+        }
+
+        if (value == null) {
+            getEntries().remove(key);
+            return;
+        }
+
         if (!getEntries().containsKey(key)) {
-            addEntry(key, value);
+            getEntries().put(key, Entry.newIntance(key, value));
             return;
         }
 
@@ -222,40 +233,7 @@ public abstract class Metadata {
     }
 
 
-    /**
-     * Adds a new entry.
-     *
-     * @param key entry label
-     * @param value entry value
-     * @return previous entry mapped to given <code>label</code>
-     */
-    public Entry addEntry(final String key, final String value) {
 
-        return addEntry(Entry.newIntance(key, value));
-    }
-
-
-    /**
-     * Adds a new entry.
-     *
-     * @param entry entry
-     * @return previous entry
-     */
-    public Entry addEntry(final Entry entry) {
-
-        return getEntries().put(entry.getKey(), entry);
-    }
-
-
-    public void print(final PrintStream out) {
-        for (Entry entry : getEntries().values()) {
-            out.print(entry.getKey() + ": " + entry.getValue());
-            if (entry.getValue() != null) {
-                out.print(" " + entry.getValue().getClass());
-            }
-            out.println();
-        }
-    }
 
 
     /** entries. */

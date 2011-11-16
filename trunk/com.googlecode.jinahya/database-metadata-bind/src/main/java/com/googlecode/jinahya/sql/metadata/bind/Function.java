@@ -18,13 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -32,81 +26,67 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-/*
-@XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "tableType",
-                      "remarks", "typeCatalog", "typeSchema", "typeName",
-                      "idColumnName", "idColumnGeneration", "columns",
-                      "indices"})
- */
 public class Function extends Metadata {
 
 
-    /*
-    @XmlElement(required = true, nillable = true)
-    public String getFunctionCatalog() {
-        return getValue(String.class, "FUNCTION_CAT");
+    public String getFUNCTION_CAT() {
+        return getValue("FUNCTION_CAT");
     }
 
 
-    public void setFunctionCatalog(final String functionCatalog) {
-        setValue(String.class, "FUNCTION_CAT", functionCatalog);
+    public void setFUNCTION_CAT(final String FUNCTION_CAT) {
+        setValue("FUNCTION_CAT", FUNCTION_CAT);
     }
 
 
-    @XmlElement(required = true, nillable = true)
-    public String getFunctionSchema() {
-        return getValue(String.class, "FUNCTION_SCHEM");
+    public String getFUNCTION_SCHEM() {
+        return getValue("FUNCTION_SCHEM");
     }
 
 
-    public void setFunctionSchema(final String functionSchema) {
-        setValue(String.class, "FUNCTION_SCHEM", functionSchema);
+    public void setFUNCTION_SCHEM(final String FUNCTION_SCHEM) {
+        setValue("FUNCTION_SCHEM", FUNCTION_SCHEM);
     }
 
 
-    @XmlElement(required = true)
-    public String getFunctionName() {
-        return getValue(String.class, "FUNCTION_NAME");
+    public String getFUNCTION_NAME() {
+        return getValue("FUNCTION_NAME");
     }
 
 
-    public void setFunctionName(final String tableName) {
-        setValue(String.class, "FUNCTION_NAME", tableName);
+    public void setFUNCTION_NAME(final String FUNCTION_NAME) {
+        setValue("FUNCTION_NAME", FUNCTION_NAME);
     }
 
 
-    @XmlElement(required = true)
-    public String getRemarks() {
-        return getValue(String.class, "REMARKS");
+    public String getREMARKS() {
+        return getValue("REMARKS");
     }
 
 
-    public void setRemarks(final String remarks) {
-        setValue(String.class, "REMARKS", remarks);
+    public void setValue(final String REMARKS) {
+        setValue("REMARKS", REMARKS);
     }
 
 
-    @XmlElement(required = true, nillable = false)
-    public Short getFunctionType() {
-        return getValue(Short.class, "FUNCTION_TYPE");
+    public String getFUNCTION_TYPE() {
+        return getValue("FUNCTION_TYPE");
     }
 
 
-    public void setFunctionType(final Short functionType) {
-        setValue(Short.class, "FUNCTION_TYPE", functionType);
+    public void setFUNCTION_TYPE(final String FUNCTION_TYPE) {
+        setValue("FUNCTION_TYPE", FUNCTION_TYPE);
     }
 
 
-    @XmlElement(required = true)
-    public String getSpecificName() {
-        return getValue(String.class, "SPECIIC_CAT");
+    public String getSPECIFIC_NAME() {
+        return getValue("SPECIFIC_NAME");
     }
 
 
-    public void setSpecificName(final String specificName) {
-        setValue(String.class, "SPECIFIC_CAT", specificName);
+    public void setSPECIFIC_NAME(final String SPECIFIC_NAME) {
+        setValue("SPECIFIC_NAME", SPECIFIC_NAME);
     }
-     */
 
 
 }

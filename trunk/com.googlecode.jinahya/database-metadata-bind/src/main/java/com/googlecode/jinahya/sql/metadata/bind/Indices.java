@@ -35,27 +35,77 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Indices extends MetadataSet<Index> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schema
+     * @param table
+     * @param unique
+     * @param approximate
+     * @return
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getIndexInfo(String, String, String, boolean,
+     *      boolean) 
+     */
     public static Indices newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog, final String schema,
                                       final String table, final boolean unique,
                                       final boolean approximate)
         throws SQLException {
 
+        final Indices indices = new Indices();
+        getIndexInfo(databaseMetaData, catalog, schema, table, unique,
+                     approximate, indices.getIndices());
+
+        return indices;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schema
+     * @param table
+     * @param unique
+     * @param approximate
+     * @param indices
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getIndexInfo(String, String, String, boolean,
+     *      boolean) 
+     */
+    public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
+                                    final String catalog, final String schema,
+                                    final String table, final boolean unique,
+                                    final boolean approximate,
+                                    final Collection<Index> indices)
+        throws SQLException {
+
         final ResultSet indexResultSet = databaseMetaData.getIndexInfo(
             catalog, schema, table, unique, approximate);
         try {
-            final Indices indices = new Indices();
             while (indexResultSet.next()) {
                 final Index index = Metadata.newInstance(
                     Index.class, indexResultSet);
-                indices.getMetadata().add(index);
+                indices.add(index);
             }
-
-            return indices;
-
         } finally {
             indexResultSet.close();
         }
+    }
+
+
+    public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
+                                    final Table table, final boolean unique,
+                                    final boolean approximate)
+        throws SQLException {
+
+        getIndexInfo(databaseMetaData, table.getTABLE_CAT(),
+                     table.getTABLE_SCHEM(), table.getTABLE_NAME(), unique,
+                     approximate, table.getIndices());
     }
 
 

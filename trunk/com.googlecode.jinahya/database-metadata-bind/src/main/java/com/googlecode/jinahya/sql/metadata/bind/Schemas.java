@@ -37,12 +37,14 @@ public class Schemas extends MetadataSet<Schema> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @return
-     * @throws SQLException 
+     * Selects a new instance of Schemas.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @return a new instance of Schemas
+     * @throws SQLException if an SQL error occurs.
+     *
      * @see DatabaseMetaData#getSchemas(String, String)
      */
     public static Schemas newInstance(final DatabaseMetaData databaseMetaData,
@@ -50,26 +52,65 @@ public class Schemas extends MetadataSet<Schema> {
                                       final String schemaPattern)
         throws SQLException {
 
+        final Schemas schemas = new Schemas();
+        getSchemas(databaseMetaData, catalog, schemaPattern,
+                   schemas.getSchemas());
+
+        return schemas;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param schemas
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getSchemas(String, String) 
+     */
+    public static void getSchemas(final DatabaseMetaData databaseMetaData,
+                                  final String catalog,
+                                  final String schemaPattern,
+                                  final Collection<Schema> schemas)
+        throws SQLException {
+
         final ResultSet schemaResultSet =
             databaseMetaData.getSchemas(catalog, schemaPattern);
         try {
-            final Schemas schemas = new Schemas();
             while (schemaResultSet.next()) {
                 final Schema schema = Metadata.newInstance(
                     Schema.class, schemaResultSet);
-                schemas.getMetadata().add(schema);
+                schemas.add(schema);
 
-                final Tables tables = Tables.newInstance(
-                    databaseMetaData, catalog, schema.getValue("TABLE_SCHEM"),
-                    null, null);
-                schema.getTables().addAll(tables.getMetadata());
+                Attributes.getAttributes(databaseMetaData, schema, null, null);
+
+                Tables.getTables(databaseMetaData, schema, null, null);
             }
-
-            return schemas;
-
         } finally {
             schemaResultSet.close();
         }
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getSchemas(String, String) 
+     */
+    public static void getSchemas(final DatabaseMetaData databaseMetaData,
+                                  final Catalog catalog,
+                                  final String schemaPattern)
+        throws SQLException {
+
+
+        getSchemas(databaseMetaData, catalog.getTABLE_CAT(), schemaPattern,
+                   catalog.getSchemas());
     }
 
 

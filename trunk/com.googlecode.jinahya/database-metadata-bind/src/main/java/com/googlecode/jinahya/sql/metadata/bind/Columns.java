@@ -44,7 +44,8 @@ public class Columns extends MetadataSet<Column> {
      * @param tableNamePattern
      * @param columnNamePattern
      * @return
-     * @throws SQLException 
+     * @throws SQLException
+     *
      * @see DatabaseMetaData#getColumns(String, String, String, String) 
      */
     public static Columns newInstance(final DatabaseMetaData databaseMetaData,
@@ -54,21 +55,56 @@ public class Columns extends MetadataSet<Column> {
                                       final String columnNamePattern)
         throws SQLException {
 
+        final Columns columns = new Columns();
+        getColumns(databaseMetaData, catalog, schemaPattern, tableNamePattern,
+                   columnNamePattern, columns.getColumns());
+
+        return columns;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @param columnNamePattern
+     * @param columns
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getColumns(String, String, String, String)
+     */
+    public static void getColumns(final DatabaseMetaData databaseMetaData,
+                                  final String catalog,
+                                  final String schemaPattern,
+                                  final String tableNamePattern,
+                                  final String columnNamePattern,
+                                  final Collection<Column> columns)
+        throws SQLException {
+
         final ResultSet columnResultSet = databaseMetaData.getColumns(
             catalog, schemaPattern, tableNamePattern, columnNamePattern);
         try {
-            final Columns columns = new Columns();
             while (columnResultSet.next()) {
                 final Column column = Metadata.newInstance(
                     Column.class, columnResultSet);
-                columns.getColumns().add(column);
+                columns.add(column);
             }
-
-            return columns;
-
         } finally {
             columnResultSet.close();
         }
+    }
+
+
+    public static void getColumns(final DatabaseMetaData databaseMetaData,
+                                  final Table table,
+                                  final String columnNamePattern)
+        throws SQLException {
+
+        getColumns(databaseMetaData, table.getTABLE_CAT(),
+                   table.getTABLE_SCHEM(), table.getTABLE_NAME(),
+                   columnNamePattern, table.getColumns());
     }
 
 
