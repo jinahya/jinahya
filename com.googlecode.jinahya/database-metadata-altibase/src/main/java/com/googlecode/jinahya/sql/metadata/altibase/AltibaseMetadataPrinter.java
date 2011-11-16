@@ -37,7 +37,10 @@ import org.kohsuke.args4j.CmdLineParser;
 public class AltibaseMetadataPrinter extends MetadataPrinter {
 
 
-    protected static final String DRIVER_NAME =
+    /**
+     * Database driver class name for Altibase.
+     */
+    public static final String DRIVER_NAME =
         "Altibase.jdbc.driver.AltibaseDriver";
 
 
