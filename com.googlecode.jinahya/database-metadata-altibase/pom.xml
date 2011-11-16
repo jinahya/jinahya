@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya</groupId>
-  <artifactId>database-metadata-bind-altibase</artifactId>
+  <artifactId>database-metadata-altibase</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
@@ -197,7 +197,7 @@
   </build>
   <reporting />
 
-  <name>database-metadata-bind-altibase</name>
+  <name>database-metadata-altibase</name>
   <url>http://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -222,9 +222,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-bind-altibase</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-bind-altibase</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/database-metadata-bind-altibase/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-altibase</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-altibase</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/database-metadata-altibase/</url>
   </scm>
   <prerequisites />
   <repositories>

@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind.altibase;
+package com.googlecode.jinahya.sql.metadata.altibase;
 
 
 import com.googlecode.jinahya.sql.metadata.bind.MetadataPrinter;
