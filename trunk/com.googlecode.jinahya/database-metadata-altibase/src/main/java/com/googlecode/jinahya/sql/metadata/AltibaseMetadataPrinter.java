@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
-
 import java.io.IOException;
 
 import java.sql.SQLException;
