@@ -32,13 +32,16 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
+/*
 @XmlType(propOrder = {"tableCatalog", "tableSchema", "tableName", "tableType",
                       "remarks", "typeCatalog", "typeSchema", "typeName",
                       "idColumnName", "idColumnGeneration", "columns",
                       "indices"})
+ */
 public class Function extends Metadata {
 
 
+    /*
     @XmlElement(required = true, nillable = true)
     public String getFunctionCatalog() {
         return getValue(String.class, "FUNCTION_CAT");
@@ -103,6 +106,7 @@ public class Function extends Metadata {
     public void setSpecificName(final String specificName) {
         setValue(String.class, "SPECIFIC_CAT", specificName);
     }
+     */
 
 
 }

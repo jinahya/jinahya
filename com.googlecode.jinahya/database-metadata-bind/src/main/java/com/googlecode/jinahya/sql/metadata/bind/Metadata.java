@@ -34,7 +34,9 @@ import java.util.Properties;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -54,15 +56,11 @@ public abstract class Metadata {
      * @param outputType marshal output type
      * @param output marshal output
      * @throws JAXBException if a JAXB error occurs.
-     * @throws NoSuchMethodException if output is unknown
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
      */
     public static <M extends Metadata, O> void marshal(
         final M metadata, final Properties properties,
         final Class<O> outputType, final O output)
-        throws JAXBException, NoSuchMethodException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         final Marshaller marshaller =
             DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
@@ -73,10 +71,19 @@ public abstract class Metadata {
             }
         }
 
-        final Method method = Marshaller.class.getMethod(
-            "marshal", Object.class, outputType);
-
-        method.invoke(marshaller, metadata, output);
+        try {
+            final Method method = Marshaller.class.getMethod(
+                "marshal", Object.class, outputType);
+            try {
+                method.invoke(marshaller, metadata, output);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
     }
 
 
@@ -90,15 +97,11 @@ public abstract class Metadata {
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
-     * @throws NoSuchMethodException if input is unknown
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException 
      */
     public static <M extends Metadata, I> void unmarshal(
         final Class<M> metadataType, final Properties properties,
         final Class<I> inputType, final I input)
-        throws JAXBException, NoSuchMethodException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         final Unmarshaller unmarshaller =
             DatabaseMetadataBindConstants.JAXB_CONTEXT.createUnmarshaller();
@@ -109,10 +112,19 @@ public abstract class Metadata {
             }
         }
 
-        final Method method = Marshaller.class.getMethod(
-            "unmarshal", inputType);
-
-        method.invoke(unmarshaller, input);
+        try {
+            final Method method = Marshaller.class.getMethod(
+                "unmarshal", inputType);
+            try {
+                method.invoke(unmarshaller, input);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
     }
 
 
@@ -135,9 +147,9 @@ public abstract class Metadata {
             metadata.read(resultSet);
             return metadata;
         } catch (InstantiationException ie) {
-            throw new SQLException(ie);
+            throw new RuntimeException(ie);
         } catch (IllegalAccessException iae) {
-            throw new SQLException(iae);
+            throw new RuntimeException(iae);
         }
     }
 
@@ -150,26 +162,26 @@ public abstract class Metadata {
      */
     protected void read(final ResultSet resultSet) throws SQLException {
 
-        final ResultSetMetaData meta = resultSet.getMetaData();
-        final int count = meta.getColumnCount();
-        for (int column = 1; column <= count; column++) {
-            final String label = meta.getColumnLabel(column);
-            Object value = resultSet.getObject(label);
+        final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        final int columnCount = resultSetMetaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            final String key = resultSetMetaData.getColumnLabel(column);
+            String value = String.valueOf(resultSet.getObject(key));
             if (resultSet.wasNull()) {
                 value = null;
             }
-            final Entry entry = new Entry();
-            entry.setLabel(label);
-            entry.setValue(value);
-            getEntries().put(label, entry);
+            getEntries().put(key, Entry.newIntance(key, value));
         }
     }
 
 
     /**
-     * 
-     * @return 
+     * Returns entries.
+     *
+     * @return entries
      */
+    @XmlElement(required = true, nillable = true)
+    @XmlJavaTypeAdapter(EntriesAdapter.class)
     public Map<String, Entry> getEntries() {
 
         if (entries == null) {
@@ -182,11 +194,11 @@ public abstract class Metadata {
 
     /**
      * 
-     * @param label
+     * @param key
      * @return 
      */
-    protected Object getValue(final String label) {
-        final Entry entry = getEntries().get(label);
+    protected String getValue(final String key) {
+        final Entry entry = getEntries().get(key);
         if (entry == null) {
             return null;
         }
@@ -196,65 +208,30 @@ public abstract class Metadata {
 
     /**
      * 
-     * @param label
+     * @param key
      * @param value 
      */
-    protected void setValue(final String label, final Object value) {
+    protected void setValue(final String key, final String value) {
 
-        if (!getEntries().containsKey(label)) {
-            addEntry(label, value);
+        if (!getEntries().containsKey(key)) {
+            addEntry(key, value);
             return;
         }
 
-        getEntries().get(label).setValue(value);
-    }
-
-
-    /**
-     * 
-     * @param <V> value type parameter
-     * @param type type
-     * @param label label
-     * @return 
-     */
-    protected <V> V getValue(final Class<V> type, final String label) {
-        return type.cast(getValue(label));
-    }
-
-
-    /**
-     * 
-     * @param <V> value type parameter
-     * @param type type
-     * @param label label
-     * @param value value
-     */
-    protected <V> void setValue(final Class<V> type, final String label,
-                                final V value) {
-
-        if (type == null) {
-            throw new NullPointerException("null valueType");
-        }
-
-        if (value != null && !type.isInstance(value)) {
-            throw new IllegalArgumentException(
-                value + " is not an instance of " + type);
-        }
-
-        setValue(label, value);
+        getEntries().get(key).setValue(value);
     }
 
 
     /**
      * Adds a new entry.
      *
-     * @param label entry label
+     * @param key entry label
      * @param value entry value
      * @return previous entry mapped to given <code>label</code>
      */
-    public Entry addEntry(final String label, final Object value) {
+    public Entry addEntry(final String key, final String value) {
 
-        return addEntry(Entry.newIntance(label, value));
+        return addEntry(Entry.newIntance(key, value));
     }
 
 
@@ -266,13 +243,13 @@ public abstract class Metadata {
      */
     public Entry addEntry(final Entry entry) {
 
-        return getEntries().put(entry.getLabel(), entry);
+        return getEntries().put(entry.getKey(), entry);
     }
 
 
     public void print(final PrintStream out) {
         for (Entry entry : getEntries().values()) {
-            out.print(entry.getLabel() + ": " + entry.getValue());
+            out.print(entry.getKey() + ": " + entry.getValue());
             if (entry.getValue() != null) {
                 out.print(" " + entry.getValue().getClass());
             }

@@ -20,7 +20,6 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlValue;
 
 
@@ -35,15 +34,14 @@ public class Entry {
     /**
      * Creates a new instance.
      *
-     * @param label label
+     * @param key key
      * @param value value
      * @return a new instance.
      */
-    public static Entry newIntance(final String label,
-                                           final Object value) {
+    public static Entry newIntance(final String key, final String value) {
 
         final Entry instance = new Entry();
-        instance.setLabel(label);
+        instance.setKey(key);
         instance.setValue(value);
 
         return instance;
@@ -55,27 +53,27 @@ public class Entry {
      *
      * @return label
      */
-    public String getLabel() {
-        return label;
+    public String getKey() {
+        return key;
     }
 
 
     /**
      * Sets label.
      *
-     * @param label label.
+     * @param key key.
      */
-    public void setLabel(final String label) {
+    public void setKey(final String key) {
 
-        if (label == null) {
-            throw new NullPointerException("null label");
+        if (key == null) {
+            throw new NullPointerException("null key");
         }
 
-        if (label.trim().length() == 0) {
-            throw new IllegalArgumentException("emtpy label");
+        if (key.trim().length() == 0) {
+            throw new IllegalArgumentException("emtpy key");
         }
 
-        this.label = label;
+        this.key = key;
     }
 
 
@@ -84,7 +82,7 @@ public class Entry {
      *
      * @return value.
      */
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -94,18 +92,17 @@ public class Entry {
      *
      * @param value value
      */
-    public void setValue(final Object value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
 
     @XmlAttribute(required = true)
-    private String label;
+    private String key;
 
 
     @XmlValue
-    @XmlSchemaType(name = "anySimpleType")
-    private Object value;
+    private String value;
 
 
 }

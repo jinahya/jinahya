@@ -38,19 +38,19 @@ public class Entries {
      *
      * @return entries
      */
-    protected Collection<Entry> getEntries() {
+    protected Collection<Entry> getEntry() {
 
-        if (entries == null) {
-            entries = new ArrayList<Entry>();
+        if (entry == null) {
+            entry = new ArrayList<Entry>();
         }
 
-        return entries;
+        return entry;
     }
 
 
     /** entries. */
     @XmlElement
-    private Collection<Entry> entries;
+    private Collection<Entry> entry;
 
 
 }

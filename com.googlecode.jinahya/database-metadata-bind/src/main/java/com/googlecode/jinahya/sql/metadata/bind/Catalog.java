@@ -33,29 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"tableCatalog", "schemas"})
+@XmlType(propOrder = {"entries", "schemas"})
 public class Catalog extends Metadata {
-
-
-    /**
-     * Returns the value of 'TABLE_CAT'.
-     *
-     * @return tableCatalog
-     */
-    @XmlElement(required = true)
-    public String getTableCatalog() {
-        return getValue(String.class, "TABLE_CAT");
-    }
-
-
-    /**
-     * Sets the value of 'TABLE_CAT'.
-     *
-     * @param tableCatalog tableCatalog
-     */
-    public void setTableCatalog(final String tableCatalog) {
-        setValue(String.class, "TABLE_CAT", tableCatalog);
-    }
 
 
     /**
@@ -77,7 +56,7 @@ public class Catalog extends Metadata {
      * schemas.
      */
     @XmlElement(name = "schema")
-    @XmlElementWrapper(name = "schemas", required = true, nillable = true)
+    @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
 
 

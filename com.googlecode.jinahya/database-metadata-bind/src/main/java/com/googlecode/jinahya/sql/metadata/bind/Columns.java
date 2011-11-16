@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
