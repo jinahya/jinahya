@@ -71,21 +71,41 @@ public class Metadata {
     }
 
 
+    /**
+     * Returns catalogs.
+     *
+     * @return catalogs
+     */
     public Catalogs getCatalogs() {
         return catalogs;
     }
 
 
+    /**
+     * Sets catalogs.
+     *
+     * @param catalogs catalogs.
+     */
     public void setCatalogs(final Catalogs catalogs) {
         this.catalogs = catalogs;
     }
 
 
+    /**
+     * Returns properties.
+     *
+     * @return properties.
+     */
     public Properties getProperties() {
         return properties;
     }
 
 
+    /**
+     * Sets properties.
+     *
+     * @param properties properties.
+     */
     public void setProperties(final Properties properties) {
         this.properties = properties;
     }
