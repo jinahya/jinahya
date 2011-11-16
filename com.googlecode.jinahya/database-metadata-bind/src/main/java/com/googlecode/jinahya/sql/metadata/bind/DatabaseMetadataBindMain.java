@@ -70,6 +70,14 @@ public class DatabaseMetadataBindMain {
     }
 
 
+    /**
+     * 
+     * @param args command line arguments
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws JAXBException 
+     */
     public static void main(final String[] args)
         throws IOException, ClassNotFoundException, SQLException,
                JAXBException {
