@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Identifiers extends MetadataSet<Identifier> {
+public class Identifiers extends EntrySetWrapper<Identifier> {
 
 
     /**
@@ -90,7 +90,7 @@ public class Identifiers extends MetadataSet<Identifier> {
             catalog, schema, table, scope, nullable);
         try {
             while (identifierResultSet.next()) {
-                final Identifier identifier = Metadata.newInstance(
+                final Identifier identifier = EntrySet.newInstance(
                     Identifier.class, identifierResultSet);
                 identifiers.add(identifier);
             }
@@ -127,7 +127,7 @@ public class Identifiers extends MetadataSet<Identifier> {
      */
     @XmlElement(name = "identifier")
     public Collection<Identifier> getIdentifiers() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

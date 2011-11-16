@@ -27,5 +27,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class ColumnPrivilege extends Privilege {
+
+
+    public String getCOLUMN_NAME() {
+        return getValue("COLUMN_NAME");
+    }
+
+
+    public void setCOLUMN_NAME(final String COLUMN_NAME) {
+        setValue("COLUMN_NAME", COLUMN_NAME);
+    }
+
+
 }
 

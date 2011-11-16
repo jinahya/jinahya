@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "schemas"})
-public class Catalog extends Metadata {
+public class Catalog extends EntrySet {
 
 
     public String getTABLE_CAT() {

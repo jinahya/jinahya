@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Function extends Metadata {
+public class Function extends EntrySet {
 
 
     public String getFUNCTION_CAT() {

@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Functions extends MetadataSet<Function> {
+public class Functions extends EntrySetWrapper<Function> {
 
 
     /**
@@ -85,7 +85,7 @@ public class Functions extends MetadataSet<Function> {
             catalog, schemaPattern, functionNamePattern);
         try {
             while (functionResultSet.next()) {
-                final Function function = Metadata.newInstance(
+                final Function function = EntrySet.newInstance(
                     Function.class, functionResultSet);
                 functions.add(function);
             }
@@ -150,7 +150,7 @@ public class Functions extends MetadataSet<Function> {
 
     @XmlElement(name = "function")
     public Collection<Function> getFunctions() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

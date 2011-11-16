@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"entries", "columns", "indices", "temporaryIdentifiers",
                       "transactionIdentifiers", "sessionIdentifiers"})
-public class Table extends Metadata {
+public class Table extends EntrySet {
 
 
     public String getTABLE_CAT() {

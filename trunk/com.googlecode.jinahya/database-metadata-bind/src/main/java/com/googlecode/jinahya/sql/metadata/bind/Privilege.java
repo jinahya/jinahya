@@ -18,112 +18,81 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlElement;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Privilege {
+public abstract class Privilege extends EntrySet {
 
 
-    public String getGrantee() {
-        return grantee;
+    public String getTABLE_CAT() {
+        return getValue("TABLE_CAT");
     }
 
 
-    public void setGrantee(String grantee) {
-        this.grantee = grantee;
+    public void setTABLE_CAT(final String TABLE_CAT) {
+        setValue("TABLE_CAT", TABLE_CAT);
     }
 
 
-    public String getGrantor() {
-        return grantor;
+    public String getTABLE_SCHEM() {
+        return getValue("TABLE_SCHEM");
     }
 
 
-    public void setGrantor(String grantor) {
-        this.grantor = grantor;
+    public void setTABLE_SCHEM(final String TABLE_SCHEM) {
+        setValue("TABLE_SCHEM", TABLE_SCHEM);
     }
 
 
-    public String getIsGrantable() {
-        return isGrantable;
+    public String getTABLE_NAME() {
+        return getValue("TABLE_NAME");
     }
 
 
-    public void setIsGrantable(String isGrantable) {
-        this.isGrantable = isGrantable;
+    public void setTABLE_NAME(final String TABLE_NAME) {
+        setValue("TABLE_NAME", TABLE_NAME);
     }
 
 
-    public String getPrivilege() {
-        return privilege;
+    public String getGRANTOR() {
+        return getValue("GRANTOR");
     }
 
 
-    public void setPrivilege(String privilege) {
-        this.privilege = privilege;
+    public void setGRANTOR(final String GRANTOR) {
+        setValue("GRANTOR", GRANTOR);
     }
 
 
-    public String getTableCategory() {
-        return tableCategory;
+    public String getGRANTEE() {
+        return getValue("GRANTEE");
     }
 
 
-    public void setTableCategory(String tableCategory) {
-        this.tableCategory = tableCategory;
+    public void setGRANTEE(final String GRANTEE) {
+        setValue("GRANTEE", GRANTEE);
     }
 
 
-    public String getTableName() {
-        return tableName;
+    public String getPRIVILEGE() {
+        return getValue("PRIVILEGE");
     }
 
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setPRIVILEGE(final String PRIVILEGE) {
+        setValue("PRIVILEGE", PRIVILEGE);
     }
 
 
-    public String getTableSchema() {
-        return tableSchema;
+    public String getIS_GRANTABLE() {
+        return getValue("IS_GRANTABLE");
     }
 
 
-    public void setTableSchema(String tableSchema) {
-        this.tableSchema = tableSchema;
+    public void setIS_GRANTABLE(final String IS_GRANTABLE) {
+        setValue("IS_GRANTABLE", IS_GRANTABLE);
     }
-
-
-    @XmlElement(required = true, nillable = true)
-    private String tableCategory;
-
-
-    @XmlElement(required = true, nillable = true)
-    private String tableSchema;
-
-
-    @XmlElement(required = true)
-    private String tableName;
-
-
-    @XmlElement(required = true, nillable = true)
-    private String grantor;
-
-
-    @XmlElement(required = true)
-    private String grantee;
-
-
-    @XmlElement(required = true)
-    private String privilege;
-
-
-    @XmlElement(required = true, nillable = true)
-    private String isGrantable;
 
 
 }

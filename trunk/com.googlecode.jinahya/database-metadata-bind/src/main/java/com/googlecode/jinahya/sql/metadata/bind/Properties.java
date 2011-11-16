@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Properties extends MetadataSet<Property> {
+public class Properties extends EntrySetWrapper<Property> {
 
 
     /**
@@ -73,7 +73,7 @@ public class Properties extends MetadataSet<Property> {
             databaseMetaData.getClientInfoProperties();
         try {
             while (propertyResultSet.next()) {
-                final Property property = Metadata.newInstance(
+                final Property property = EntrySet.newInstance(
                     Property.class, propertyResultSet);
                 properties.add(property);
             }
@@ -98,7 +98,7 @@ public class Properties extends MetadataSet<Property> {
      */
     @XmlElement(name = "property")
     public Collection<Property> getProperties() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Identifier extends Metadata {
+public class Identifier extends EntrySet {
 
 
     public String getSCOPE() {

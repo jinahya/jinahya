@@ -29,12 +29,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Identifier collection.
+ * Attributes collection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Attributes extends MetadataSet<Attribute> {
+public class Attributes extends EntrySetWrapper<Attribute> {
 
 
     /**
@@ -86,7 +86,7 @@ public class Attributes extends MetadataSet<Attribute> {
             catalog, schemaPattern, typeNamePattern, attributeNamePattern);
         try {
             while (attributeResultSet.next()) {
-                final Attribute attribute = Metadata.newInstance(
+                final Attribute attribute = EntrySet.newInstance(
                     Attribute.class, attributeResultSet);
                 attributes.add(attribute);
             }
@@ -96,6 +96,16 @@ public class Attributes extends MetadataSet<Attribute> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param schema
+     * @param typeNamePattern
+     * @param attributeNamePattern
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getAttributes(String, String, String, String) 
+     */
     public static void getAttributes(
         final DatabaseMetaData databaseMetaData, final Schema schema,
         final String typeNamePattern, final String attributeNamePattern)
@@ -122,7 +132,7 @@ public class Attributes extends MetadataSet<Attribute> {
      */
     @XmlElement(name = "attribute")
     public Collection<Attribute> getAttributes() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

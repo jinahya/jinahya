@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Catalogs extends MetadataSet<Catalog> {
+public class Catalogs extends EntrySetWrapper<Catalog> {
 
 
     /**
@@ -71,7 +71,7 @@ public class Catalogs extends MetadataSet<Catalog> {
         final ResultSet catalogResultSet = databaseMetaData.getCatalogs();
         try {
             while (catalogResultSet.next()) {
-                final Catalog catalog = Metadata.newInstance(
+                final Catalog catalog = EntrySet.newInstance(
                     Catalog.class, catalogResultSet);
                 catalogs.add(catalog);
 
@@ -99,7 +99,7 @@ public class Catalogs extends MetadataSet<Catalog> {
      */
     @XmlElement(name = "catalog")
     public Collection<Catalog> getCatalogs() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 
