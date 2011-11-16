@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "attributes", "tables"})
+@XmlType(propOrder = {"entries", "attributes", "functions", "tables"})
 public class Schema extends EntrySet {
 
 
@@ -73,6 +73,21 @@ public class Schema extends EntrySet {
 
 
     /**
+     * Returns functions.
+     *
+     * @return functions
+     */
+    public Collection<Function> getFunctions() {
+
+        if (functions == null) {
+            functions = new ArrayList<Function>();
+        }
+
+        return functions;
+    }
+
+
+    /**
      * Returns tables.
      *
      * @return tables
@@ -93,6 +108,14 @@ public class Schema extends EntrySet {
     @XmlElement(name = "attribute")
     @XmlElementWrapper(required = true, nillable = false)
     private Collection<Attribute> attributes;
+
+
+    /**
+     * functions.
+     */
+    @XmlElement(name = "function")
+    @XmlElementWrapper(required = true, nillable = false)
+    private Collection<Function> functions;
 
 
     /** tables. */

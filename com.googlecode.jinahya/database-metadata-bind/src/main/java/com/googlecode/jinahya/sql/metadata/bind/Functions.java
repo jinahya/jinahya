@@ -23,9 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.Collection;
-import java.util.Map;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -96,47 +94,22 @@ public class Functions extends EntrySetWrapper<Function> {
 
 
     /**
-     * @param <O> output type parameter
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param functionNamePattern
-     * @param properties
-     * @param outputType
-     * @param output
-     * @throws SQLException
-     * @throws JAXBException
-     */
-    public static <O> void marshalInstance(
-        final DatabaseMetaData databaseMetaData, final String catalog,
-        final String schemaPattern, final String functionNamePattern,
-        final Map<String, Object> properties, final Class<O> outputType,
-        final O output)
-        throws SQLException, JAXBException {
-
-        final Functions instance = newInstance(
-            databaseMetaData, catalog, schemaPattern, functionNamePattern);
-
-        marshal(instance, properties, outputType, output);
-    }
-
-
-    /**
      * 
-     * @param <I>
-     * @param properties
-     * @param inputTyep
-     * @param input
-     * @return
-     * @throws SQLException
-     * @throws JAXBException
+     * @param databaseMetaData
+     * @param schema
+     * @param functionNamePattern
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getFunctions(String, String, String)
      */
-    public static <I> Functions unmarshalInstance(
-        final Map<String, Object> properties, final Class<I> inputTyep,
-        final I input)
-        throws SQLException, JAXBException {
+    public static void getFunctions(final DatabaseMetaData databaseMetaData,
+                                    final Schema schema,
+                                    final String functionNamePattern)
+        throws SQLException {
 
-        return unmarshal(Functions.class, properties, inputTyep, input);
+        getFunctions(databaseMetaData, schema.getTABLE_CATALOG(),
+                     schema.getTABLE_SCHEM(), functionNamePattern,
+                     schema.getFunctions());
     }
 
 
