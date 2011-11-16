@@ -63,9 +63,9 @@ public class Metadata {
 
         final Metadata instance = new Metadata();
 
-        instance.properties = Properties.newInstance(databaseMetaData);
+        instance.setProperties(Properties.newInstance(databaseMetaData));
 
-        instance.catalogs = Catalogs.newInstance(databaseMetaData);
+        instance.setCatalogs(Catalogs.newInstance(databaseMetaData));
 
         return instance;
     }
