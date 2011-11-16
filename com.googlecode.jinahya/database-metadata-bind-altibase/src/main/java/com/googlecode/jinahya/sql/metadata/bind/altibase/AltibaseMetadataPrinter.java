@@ -42,12 +42,13 @@ public class AltibaseMetadataPrinter extends MetadataPrinter {
 
 
     /**
-     * 
+     * Prints database metadata for Altibase.
+     *
      * @param args command line arguments
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     * @throws JAXBException 
+     * @throws IOException if an I/O error occurs.
+     * @throws ClassNotFoundException if {@link #DRIVER_NAME} not found.
+     * @throws SQLException if an SQL error occurs.
+     * @throws JAXBException if JAXB error occurs.
      */
     public static void main(final String[] args)
         throws IOException, ClassNotFoundException, SQLException,
