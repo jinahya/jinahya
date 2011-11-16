@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Column extends Metadata {
+public class Attribute extends Metadata {
 
 
     public String getTABLE_CAT() {
@@ -49,23 +49,13 @@ public class Column extends Metadata {
     }
 
 
-    public String getTABLE_NAME() {
-        return getValue("TABLE_NAME");
+    public String getATTR_NAME() {
+        return getValue("ATTR_NAME");
     }
 
 
-    public void setTABLE_NAME(final String TABLE_NAME) {
-        setValue("TABLE_NAME", TABLE_NAME);
-    }
-
-
-    public String getCOLUMN_NAME() {
-        return getValue("COLUMN_NAME");
-    }
-
-
-    public void setCOLUMN_NAME(final String COLUMN_NAME) {
-        setValue("COLUMN_NAME", COLUMN_NAME);
+    public void setATTR_NAME(final String ATTR_NAME) {
+        setValue("ATTR_NAME", ATTR_NAME);
     }
 
 
@@ -79,23 +69,23 @@ public class Column extends Metadata {
     }
 
 
-    public String getTYPE_NAME() {
-        return getValue("TYPE_NAME");
+    public String getATTR_TYPE_NAME() {
+        return getValue("ATTR_TYPE_NAME");
     }
 
 
-    public void setTYPE_NAME(final String TYPE_NAME) {
-        setValue("TYPE_NAME", TYPE_NAME);
+    public void setATTR_TYPE_NAME(final String ATTR_TYPE_NAME) {
+        setValue("ATTR_TYPE_NAME", ATTR_TYPE_NAME);
     }
 
 
-    public String getCOLUMN_SIZE() {
-        return getValue("COLUMN_SIZE");
+    public String getATTR_SIZE() {
+        return getValue("ATTR_SIZE");
     }
 
 
-    public void setCOLUMN_SIZE(final String COLUMN_SIZE) {
-        setValue("COLUMN_SIZE", COLUMN_SIZE);
+    public void setATTR_SIZE(final String ATTR_SIZE) {
+        setValue("ATTR_SIZE", ATTR_SIZE);
     }
 
 
@@ -139,13 +129,33 @@ public class Column extends Metadata {
     }
 
 
-    public String getCOLUMN_DEF() {
-        return getValue("COLUMN_DEF");
+    public String getATTR_DEF() {
+        return getValue("ATTR_DEF");
     }
 
 
-    public void setCOLUMN_DEF(final String COLUMN_DEF) {
-        setValue("COLUMN_DEF", COLUMN_DEF);
+    public void setATTR_DEF(final String ATTR_DEF) {
+        setValue("ATTR_DEF", ATTR_DEF);
+    }
+
+
+    public String getSQL_DATA_TYPE() {
+        return getValue("SQL_DATA_TYPE");
+    }
+
+
+    public void setSQL_DATA_TYPE(final String SQL_DATA_TYPE) {
+        setValue("SQL_DATA_TYPE", SQL_DATA_TYPE);
+    }
+
+
+    public String getSQL_DATETIME_SUB() {
+        return getValue("SQL_DATETIME_SUB ");
+    }
+
+
+    public void setSQL_DATETIME_SUB(final String SQL_DATETIME_SUB) {
+        setValue("SQL_DATETIME_SUB", SQL_DATETIME_SUB);
     }
 
 
@@ -160,7 +170,7 @@ public class Column extends Metadata {
 
 
     public String getORDINAL_POSITION() {
-        return getValue("ORDINAL_POSITION ");
+        return getValue("ORDINAL_POSITION");
     }
 
 
@@ -199,33 +209,13 @@ public class Column extends Metadata {
     }
 
 
-    public String getSCOPE_TABLE() {
-        return getValue("SCOPE_TABLE");
-    }
-
-
-    public void setSCOPE_TABLE(final String SCOPE_TABLE) {
-        setValue("SCOPE_TABLE", SCOPE_TABLE);
-    }
-
-
-    public String geSOURCE_DATA_TYPE() {
+    public String getSOURCE_DATA_TYPE() {
         return getValue("SOURCE_DATA_TYPE");
     }
 
 
     public void setSOURCE_DATA_TYPE(final String SOURCE_DATA_TYPE) {
         setValue("SOURCE_DATA_TYPE", SOURCE_DATA_TYPE);
-    }
-
-
-    public String getIS_AUTOINCREMENT() {
-        return getValue("IS_AUTOINCREMENT");
-    }
-
-
-    public void setIS_AUTOINCREMENT(final String IS_AUTOINCREMENT) {
-        setValue("IS_AUTOINCREMENT", IS_AUTOINCREMENT);
     }
 
 

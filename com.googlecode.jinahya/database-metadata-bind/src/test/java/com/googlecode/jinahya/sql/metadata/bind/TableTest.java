@@ -38,9 +38,9 @@ public class TableTest {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         final Table table = new Table();
-        table.setTableCatalog("catalog");
-        table.setTableSchema("schema");
-        table.setTableName("name");
+        table.setTABLE_CAT("catalog");
+        table.setTABLE_SCHEM("schema");
+        table.setTABLE_NAME("name");
 
         marshaller.marshal(table, System.out);
     }

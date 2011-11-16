@@ -49,21 +49,35 @@ public class Catalogs extends MetadataSet<Catalog> {
     public static Catalogs newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
+        final Catalogs catalogs = new Catalogs();
+        getCatalogs(databaseMetaData, catalogs.getCatalogs());
+
+        return catalogs;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalogs
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getCatalogs()
+     */
+    public static void getCatalogs(final DatabaseMetaData databaseMetaData,
+                                   final Collection<Catalog> catalogs)
+        throws SQLException {
+
         final ResultSet catalogResultSet = databaseMetaData.getCatalogs();
         try {
-            final Catalogs catalogs = new Catalogs();
             while (catalogResultSet.next()) {
                 final Catalog catalog = Metadata.newInstance(
                     Catalog.class, catalogResultSet);
-                catalogs.getCatalogs().add(catalog);
+                catalogs.add(catalog);
 
-                final Schemas schemas = Schemas.newInstance(
-                    databaseMetaData, catalog.getValue("TABLE_CAT"), null);
-                catalog.getSchemas().addAll(schemas.getMetadata());
+                Schemas.getSchemas(databaseMetaData, catalog.getTABLE_CAT(),
+                                   null, catalog.getSchemas());
             }
-
-            return catalogs;
-
         } finally {
             catalogResultSet.close();
         }

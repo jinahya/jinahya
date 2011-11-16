@@ -46,6 +46,7 @@ public class Functions extends MetadataSet<Function> {
      * @param functionNamePattern
      * @return
      * @throws SQLException 
+     *
      * @see DatabaseMetaData#getFunctions(String, String, String) 
      */
     public static Functions newInstance(final DatabaseMetaData databaseMetaData,
@@ -54,18 +55,40 @@ public class Functions extends MetadataSet<Function> {
                                         final String functionNamePattern)
         throws SQLException {
 
+        final Functions functions = new Functions();
+        getFunctions(databaseMetaData, catalog, schemaPattern,
+                     functionNamePattern, functions.getFunctions());
+
+        return functions;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param functionNamePattern
+     * @param functions
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getFunctions(String, String, String) 
+     */
+    public static void getFunctions(final DatabaseMetaData databaseMetaData,
+                                    final String catalog,
+                                    final String schemaPattern,
+                                    final String functionNamePattern,
+                                    final Collection<Function> functions)
+        throws SQLException {
+
         final ResultSet functionResultSet = databaseMetaData.getFunctions(
             catalog, schemaPattern, functionNamePattern);
         try {
-            final Functions functions = new Functions();
             while (functionResultSet.next()) {
                 final Function function = Metadata.newInstance(
                     Function.class, functionResultSet);
-                functions.getFunctions().add(function);
+                functions.add(function);
             }
-
-            return functions;
-
         } finally {
             functionResultSet.close();
         }

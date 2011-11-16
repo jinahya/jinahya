@@ -47,6 +47,8 @@ public class Tables extends MetadataSet<Table> {
      * @param types
      * @return
      * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getTables(String, String, String, String[]) 
      */
     public static Tables newInstance(final DatabaseMetaData databaseMetaData,
                                      final String catalog,
@@ -55,35 +57,74 @@ public class Tables extends MetadataSet<Table> {
                                      final String[] types)
         throws SQLException {
 
+        final Tables tables = new Tables();
+        getTables(databaseMetaData, catalog, schemaPattern, tableNamePattern,
+                  types, tables.getTables());
+
+        return tables;
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @param types
+     * @param tables
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getTables(String, String, String, String[]) 
+     */
+    public static void getTables(final DatabaseMetaData databaseMetaData,
+                                 final String catalog,
+                                 final String schemaPattern,
+                                 final String tableNamePattern,
+                                 final String[] types,
+                                 final Collection<Table> tables)
+        throws SQLException {
+
         final ResultSet tableResultSet = databaseMetaData.getTables(
             catalog, schemaPattern, tableNamePattern, types);
         try {
-            final Tables tables = new Tables();
             while (tableResultSet.next()) {
                 final Table table = Metadata.newInstance(
                     Table.class, tableResultSet);
-                tables.getMetadata().add(table);
+                tables.add(table);
 
-                final String tableCatalog = table.getValue("TABLE_CAT");
-                final String tableSchema = table.getValue("TABLE_SCHEM");
-                final String tableName = table.getValue("TABLE_NAME");
+                Columns.getColumns(databaseMetaData, table, null);
 
-                final Columns columns = Columns.newInstance(
-                    databaseMetaData, tableCatalog, tableSchema, tableName,
-                    null);
-                table.getColumns().addAll(columns.getMetadata());
+                Indices.getIndexInfo(databaseMetaData, table, false, false);
 
-                final Indices indices = Indices.newInstance(
-                    databaseMetaData, tableCatalog, tableSchema, tableName,
-                    false, false);
-                table.getIndices().addAll(indices.getMetadata());
+                Identifiers.getBestRowIdentifier(
+                    databaseMetaData, table, DatabaseMetaData.bestRowTemporary,
+                    true, table.getTemporayIdentifiers());
+
+                Identifiers.getBestRowIdentifier(
+                    databaseMetaData, table,
+                    DatabaseMetaData.bestRowTransaction, true,
+                    table.getTransactionIdentifiers());
+
+                Identifiers.getBestRowIdentifier(
+                    databaseMetaData, table, DatabaseMetaData.bestRowSession,
+                    true, table.getSessionIdentifiers());
             }
-
-            return tables;
-
         } finally {
             tableResultSet.close();
         }
+    }
+
+
+    public static void getTables(final DatabaseMetaData databaseMetaData,
+                                 final Schema schema,
+                                 final String tableNamePattern,
+                                 final String[] types)
+        throws SQLException {
+
+        getTables(databaseMetaData, schema.getTABLE_CATALOG(),
+                  schema.getTABLE_SCHEM(), tableNamePattern, types,
+                  schema.getTables());
     }
 
 
