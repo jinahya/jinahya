@@ -64,7 +64,7 @@ public class Function extends EntrySet {
     }
 
 
-    public void setValue(final String REMARKS) {
+    public void setREMARKS(final String REMARKS) {
         setValue("REMARKS", REMARKS);
     }
 

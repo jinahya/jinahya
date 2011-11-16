@@ -100,10 +100,22 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @param scope
+     * @param nullable
+     * @param identifiers
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getBestRowIdentifier(String, String, String, int,
+     *      boolean) 
+     */
     public static void getBestRowIdentifier(
         final DatabaseMetaData databaseMetaData, final Table table,
-        final int scope,
-        final boolean nullable, final Collection<Identifier> identifiers)
+        final int scope, final boolean nullable,
+        final Collection<Identifier> identifiers)
         throws SQLException {
 
         getBestRowIdentifier(
