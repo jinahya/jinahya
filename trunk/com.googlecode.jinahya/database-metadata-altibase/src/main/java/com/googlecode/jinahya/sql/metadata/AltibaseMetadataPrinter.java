@@ -15,10 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.altibase;
+package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.bind.MetadataPrinter;
+import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
 
 import java.io.IOException;
 
