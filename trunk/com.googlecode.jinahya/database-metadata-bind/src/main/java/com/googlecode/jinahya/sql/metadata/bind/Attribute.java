@@ -18,10 +18,13 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Binding for attributes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -29,11 +32,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Attribute extends EntrySet {
 
 
+    /**
+     * Creates a new instance from given <code>resultSet</code>.
+     * 
+     * @param resultSet resultSet
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
+     */
+    public static Attribute newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(Attribute.class, resultSet);
+    }
+
+
+    /**
+     * Returns the value of 'TABLE_CAT' entry.
+     *
+     * @return 'TABLE_CAT' entry value.
+     */
     public String getTABLE_CAT() {
         return getValue("TABLE_CAT");
     }
 
 
+    /**
+     * Sets the value of 'TABLE_CAT' entry.
+     *
+     * @param TABLE_CAT 'TABLE_CAT' entry value.
+     */
     public void setTABLE_CAT(final String TABLE_CAT) {
         setValue("TABLE_CAT", TABLE_CAT);
     }
