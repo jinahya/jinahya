@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -102,8 +101,20 @@ public class MetadataPrinter {
     }
 
 
+    /**
+     * Prints database metadata with given <code>option</code>.
+     *
+     * @param option database connection option
+     * @throws ClassNotFoundException if <code>option.driver</code> not found
+     * @throws SQLException if an SQL error occurs
+     * @throws JAXBException if an JAXB error occurs.
+     */
     protected static void printMetadata(final ConnectionOption option)
         throws ClassNotFoundException, SQLException, JAXBException {
+
+        if (option == null) {
+            throw new NullPointerException("null option");
+        }
 
         printMetadata(option.driver, option.url, option.user, option.password);
     }
@@ -128,6 +139,14 @@ public class MetadataPrinter {
         final String driver, final String url, final String user,
         final String password)
         throws ClassNotFoundException, SQLException, JAXBException {
+
+        if (driver == null) {
+            throw new NullPointerException("null driver");
+        }
+
+        if (url == null) {
+            throw new NullPointerException("null url");
+        }
 
         Class.forName(driver);
 
