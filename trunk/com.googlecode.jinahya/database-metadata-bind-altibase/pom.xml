@@ -135,7 +135,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.googlecode.jinahya.sql.metadata.bind.DatabaseMetadataBindMain</mainClass>
+              <mainClass>com.googlecode.jinahya.sql.metadata.bind.altibase.AltibaseMetadataPrinter</mainClass>
             </manifest>
           </archive>
         </configuration>
