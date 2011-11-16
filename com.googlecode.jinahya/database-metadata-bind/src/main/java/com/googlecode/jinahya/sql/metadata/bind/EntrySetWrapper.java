@@ -35,24 +35,24 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <M> metadata type parameter.
+ * @param <E> EntrySet type parameter.
  */
 @XmlTransient
-public abstract class MetadataSet<M extends Metadata> {
+public abstract class EntrySetWrapper<E extends EntrySet> {
 
 
     /**
      * 
-     * @param <S> collection type parameter
+     * @param <W> EntrySetWrapper type
      * @param <O> output type parameter
-     * @param collection collection
+     * @param wrapper EntrySetWrapper
      * @param properties marshaller properties
      * @param outputType output type
      * @param output output
      * @throws JAXBException if JAXB error occurs
      */
-    public static <S extends MetadataSet, O> void marshal(
-        final S collection, final Map<String, Object> properties,
+    public static <W extends EntrySetWrapper, O> void marshal(
+        final W wrapper, final Map<String, Object> properties,
         final Class<O> outputType, final O output)
         throws JAXBException {
 
@@ -70,7 +70,7 @@ public abstract class MetadataSet<M extends Metadata> {
                 "marshal", Object.class, outputType);
 
             try {
-                method.invoke(marshaller, collection, output);
+                method.invoke(marshaller, wrapper, output);
             } catch (IllegalAccessException iae) {
                 throw new RuntimeException(iae);
             } catch (InvocationTargetException ite) {
@@ -87,15 +87,15 @@ public abstract class MetadataSet<M extends Metadata> {
      * Unmarshals a instance of given <code>metadataType</code> from specified
      * <code>input</code>.
      *
-     * @param <S> collection type parameter
-     * @param collectionType collection type
+     * @param <W> EntrySetWrapper type parameter
+     * @param wrapperType EntrySetWrapper type
      * @param properties unmarshaller properties
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <S extends MetadataSet, I> S unmarshal(
-        final Class<S> collectionType, final Map<String, Object> properties,
+    public static <W extends EntrySetWrapper, I> W unmarshal(
+        final Class<W> wrapperType, final Map<String, Object> properties,
         final Class<I> inputType, final I input)
         throws JAXBException {
 
@@ -113,7 +113,7 @@ public abstract class MetadataSet<M extends Metadata> {
                 "unmarshal", inputType);
 
             try {
-                return collectionType.cast(method.invoke(unmarshaller, input));
+                return wrapperType.cast(method.invoke(unmarshaller, input));
             } catch (IllegalAccessException iae) {
                 throw new RuntimeException(iae);
             } catch (InvocationTargetException ite) {
@@ -129,27 +129,26 @@ public abstract class MetadataSet<M extends Metadata> {
     /**
      * Creates a new instance.
      *
-     * @param accessibleType accessibleType
+     * @param entrySetType EntrySet type
      */
-    public MetadataSet(final Class<M> accessibleType) {
+    public EntrySetWrapper(final Class<E> entrySetType) {
         super();
 
-        if (accessibleType == null) {
-            throw new NullPointerException("null accessibleType");
+        if (entrySetType == null) {
+            throw new NullPointerException("null entrySetType");
         }
 
-        if (!Metadata.class.isAssignableFrom(accessibleType)) {
+        if (!EntrySet.class.isAssignableFrom(entrySetType)) {
             throw new IllegalArgumentException(
-                accessibleType + " is not assignable to "
-                + Metadata.class);
+                entrySetType + " is not assignable to " + EntrySet.class);
         }
 
-        this.metadataType = accessibleType;
+        this.entrySetType = entrySetType;
     }
 
 
-    public Class<M> getMetadataType() {
-        return metadataType;
+    public Class<E> getEntrySetType() {
+        return entrySetType;
     }
 
 
@@ -158,24 +157,24 @@ public abstract class MetadataSet<M extends Metadata> {
      *
      * @return entries
      */
-    protected Collection<M> getMetadata() {
+    protected Collection<E> getEntrySets() {
 
-        if (metadata == null) {
-            metadata = new ArrayList<M>();
+        if (entrySets == null) {
+            entrySets = new ArrayList<E>();
         }
 
-        return metadata;
+        return entrySets;
     }
 
 
     /**
      * Accessible type.
      */
-    protected final Class<M> metadataType;
+    protected final Class<E> entrySetType;
 
 
     /** Accessible collection. */
-    private Collection<M> metadata;
+    private Collection<E> entrySets;
 
 
 }

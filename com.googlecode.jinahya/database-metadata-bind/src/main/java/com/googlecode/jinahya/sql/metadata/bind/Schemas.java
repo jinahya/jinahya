@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Schemas extends MetadataSet<Schema> {
+public class Schemas extends EntrySetWrapper<Schema> {
 
 
     /**
@@ -80,7 +80,7 @@ public class Schemas extends MetadataSet<Schema> {
             databaseMetaData.getSchemas(catalog, schemaPattern);
         try {
             while (schemaResultSet.next()) {
-                final Schema schema = Metadata.newInstance(
+                final Schema schema = EntrySet.newInstance(
                     Schema.class, schemaResultSet);
                 schemas.add(schema);
 
@@ -124,7 +124,7 @@ public class Schemas extends MetadataSet<Schema> {
 
     @XmlElement(name = "schema")
     public Collection<Schema> getSchemas() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

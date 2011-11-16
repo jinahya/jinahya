@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Column extends Metadata {
+public class Column extends EntrySet {
 
 
     public String getTABLE_CAT() {

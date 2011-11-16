@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Property extends Metadata {
+public class Property extends EntrySet {
 
 
     public String getNAME() {

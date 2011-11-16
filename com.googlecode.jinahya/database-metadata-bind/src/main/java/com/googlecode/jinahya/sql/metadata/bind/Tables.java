@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Tables extends MetadataSet<Table> {
+public class Tables extends EntrySetWrapper<Table> {
 
 
     /**
@@ -89,7 +89,7 @@ public class Tables extends MetadataSet<Table> {
             catalog, schemaPattern, tableNamePattern, types);
         try {
             while (tableResultSet.next()) {
-                final Table table = Metadata.newInstance(
+                final Table table = EntrySet.newInstance(
                     Table.class, tableResultSet);
                 tables.add(table);
 
@@ -184,7 +184,7 @@ public class Tables extends MetadataSet<Table> {
 
     @XmlElement(name = "table")
     public Collection<Table> getTables() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

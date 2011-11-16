@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Indices extends MetadataSet<Index> {
+public class Indices extends EntrySetWrapper<Index> {
 
 
     /**
@@ -88,7 +88,7 @@ public class Indices extends MetadataSet<Index> {
             catalog, schema, table, unique, approximate);
         try {
             while (indexResultSet.next()) {
-                final Index index = Metadata.newInstance(
+                final Index index = EntrySet.newInstance(
                     Index.class, indexResultSet);
                 indices.add(index);
             }
@@ -119,7 +119,7 @@ public class Indices extends MetadataSet<Index> {
 
     @XmlElement(name = "index")
     public Collection<Index> getIndices() {
-        return super.getMetadata();
+        return super.getEntrySets();
     }
 
 

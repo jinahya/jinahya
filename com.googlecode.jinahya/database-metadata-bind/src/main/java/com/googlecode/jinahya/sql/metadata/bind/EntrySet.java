@@ -43,21 +43,21 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class Metadata {
+public abstract class EntrySet {
 
 
     /**
      * Marshals given <code>metadata</code> to specified <code>output</code>.
      *
-     * @param <M> metadata type parameter
-     * @param metadata metadata
+     * @param <E> EntrySet type parameter
+     * @param entrySet EntrySet
      * @param properties marshaller properties
      * @param outputType marshal output type
      * @param output marshal output
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <M extends Metadata, O> void marshal(
-        final M metadata, final Properties properties,
+    public static <E extends EntrySet, O> void marshal(
+        final E entrySet, final Properties properties,
         final Class<O> outputType, final O output)
         throws JAXBException {
 
@@ -74,7 +74,7 @@ public abstract class Metadata {
             final Method method = Marshaller.class.getMethod(
                 "marshal", Object.class, outputType);
             try {
-                method.invoke(marshaller, metadata, output);
+                method.invoke(marshaller, entrySet, output);
             } catch (IllegalAccessException iae) {
                 throw new RuntimeException(iae);
             } catch (InvocationTargetException ite) {
@@ -90,15 +90,15 @@ public abstract class Metadata {
      * Unmarshals a instance of given <code>metadataType</code> from specified
      * <code>input</code>.
      *
-     * @param <M> metadata type parameter
-     * @param metadataType metadata type
+     * @param <E> EntrySet type parameter
+     * @param entrySetType EntrySet type
      * @param properties unmarshaller properties
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <M extends Metadata, I> void unmarshal(
-        final Class<M> metadataType, final Properties properties,
+    public static <E extends EntrySet, I> void unmarshal(
+        final Class<E> entrySetType, final Properties properties,
         final Class<I> inputType, final I input)
         throws JAXBException {
 
@@ -128,21 +128,21 @@ public abstract class Metadata {
 
 
     /**
-     * Creates a new instance of <code>metadataType</code> and reads information
+     * Creates a new instance of <code>entrySetType</code> and reads information
      * from specified <code>resultSet</code>.
      *
-     * @param <M> metadata type parameter
-     * @param metadataType metadata type
+     * @param <E> EntrySet type parameter
+     * @param entrySetType EntrySet type
      * @param resultSet result set
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
-    public static <M extends Metadata> M newInstance(
-        final Class<M> metadataType, final ResultSet resultSet)
+    public static <E extends EntrySet> E newInstance(
+        final Class<E> entrySetType, final ResultSet resultSet)
         throws SQLException {
 
         try {
-            final M metadata = metadataType.newInstance();
+            final E metadata = entrySetType.newInstance();
             metadata.read(resultSet);
             return metadata;
         } catch (InstantiationException ie) {
