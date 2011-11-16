@@ -86,6 +86,8 @@ public class Schemas extends EntrySetWrapper<Schema> {
 
                 Attributes.getAttributes(databaseMetaData, schema, null, null);
 
+                Functions.getFunctions(databaseMetaData, schema, schemaPattern);
+                
                 Tables.getTables(databaseMetaData, schema, null, null);
             }
         } finally {
