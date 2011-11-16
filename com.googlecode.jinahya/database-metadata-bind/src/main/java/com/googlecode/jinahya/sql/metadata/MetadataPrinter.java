@@ -15,9 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind;
+package com.googlecode.jinahya.sql.metadata;
 
 
+import com.googlecode.jinahya.sql.metadata.bind.Catalogs;
+import com.googlecode.jinahya.sql.metadata.bind.DatabaseMetadataBindConstants;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
