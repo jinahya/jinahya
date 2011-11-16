@@ -47,6 +47,24 @@ public abstract class EntrySet {
 
 
     /**
+     * Marshals given <code>entrySet</code> to specified <code>output</code>.
+     *
+     * @param <E> EntrySet type parameter
+     * @param <O> output type parameter
+     * @param entrySet entrySet to marshal
+     * @param outputType output type
+     * @param output output
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static <E extends EntrySet, O> void marshal(
+        final E entrySet, final Class<O> outputType, final O output)
+        throws JAXBException {
+
+        marshal(entrySet, null, outputType, output);
+    }
+
+
+    /**
      * Marshals given <code>metadata</code> to specified <code>output</code>.
      *
      * @param <E> EntrySet type parameter
@@ -87,8 +105,30 @@ public abstract class EntrySet {
 
 
     /**
-     * Unmarshals a instance of given <code>metadataType</code> from specified
-     * <code>input</code>.
+     * Un
+     */
+    /**
+     * Unmarshals a new instance of given <code>entrySetType</code> from
+     * specified <code>input</code>.
+     *
+     * @param <E> EntrySet type parameter
+     * @param <I> input type parameter
+     * @param entrySetType EntrySet type
+     * @param inputType input type
+     * @param input input
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static <E extends EntrySet, I> void unmarshal(
+        final Class<E> entrySetType, final Class<I> inputType, final I input)
+        throws JAXBException {
+
+        unmarshal(entrySetType, null, inputType, input);
+    }
+
+
+    /**
+     * Unmarshals a new instance of given <code>entrySetType</code> from
+     * specified <code>input</code>.
      *
      * @param <E> EntrySet type parameter
      * @param entrySetType EntrySet type
@@ -231,9 +271,6 @@ public abstract class EntrySet {
 
         getEntries().get(key).setValue(value);
     }
-
-
-
 
 
     /** entries. */
