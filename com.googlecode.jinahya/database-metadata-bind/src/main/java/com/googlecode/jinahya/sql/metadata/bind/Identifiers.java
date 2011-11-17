@@ -145,6 +145,21 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
     }
 
 
+    public static void getAllBestRowIdentifier(
+        final DatabaseMetaData databaseMetaData, final Table table)
+        throws SQLException {
+
+        getBestRowIdentifier(databaseMetaData, table,
+                             DatabaseMetaData.bestRowTemporary, true);
+
+        getBestRowIdentifier(databaseMetaData, table,
+                             DatabaseMetaData.bestRowTransaction, true);
+
+        getBestRowIdentifier(databaseMetaData, table,
+                             DatabaseMetaData.bestRowSession, true);
+    }
+
+
     /**
      * Creates a new instance.
      */

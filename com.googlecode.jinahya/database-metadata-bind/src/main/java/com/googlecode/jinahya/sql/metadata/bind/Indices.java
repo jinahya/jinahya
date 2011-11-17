@@ -109,6 +109,14 @@ public class Indices extends EntrySetWrapper<Index> {
     }
 
 
+    public static void getAllIndexInfo(final DatabaseMetaData databaseMetaData,
+                                       final Table table)
+        throws SQLException {
+
+        getIndexInfo(databaseMetaData, table, false, false);
+    }
+
+
     /**
      * Creates a new instance.
      */

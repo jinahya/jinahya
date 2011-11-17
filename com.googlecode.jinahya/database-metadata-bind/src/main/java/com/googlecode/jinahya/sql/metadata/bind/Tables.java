@@ -23,9 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.Collection;
-import java.util.Map;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,16 +38,18 @@ public class Tables extends EntrySetWrapper<Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param types
-     * @return
-     * @throws SQLException 
+     * Creates a new instance.
      *
-     * @see DatabaseMetaData#getTables(String, String, String, String[]) 
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @param tableNamePattern table name pattern
+     * @param types types
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
+     *
+     * @see #getTables(DatabaseMetaData, String, String, String, String[],
+     *                 Collection)
      */
     public static Tables newInstance(final DatabaseMetaData databaseMetaData,
                                      final String catalog,
@@ -90,26 +90,26 @@ public class Tables extends EntrySetWrapper<Table> {
             catalog, schemaPattern, tableNamePattern, types);
         try {
             while (tableResultSet.next()) {
+
+                // ----------------------------------------------------- entries
                 final Table table = EntrySet.newInstance(
                     Table.class, tableResultSet);
                 tables.add(table);
 
-                Columns.getColumns(databaseMetaData, table, null);
+                // ----------------------------------------------------- columns
+                Columns.getAllColumns(databaseMetaData, table);
 
-                Indices.getIndexInfo(databaseMetaData, table, false, false);
+                // ------------------------------------------------ exportedKeys
+                ExportedKeys.getExportedKeys(databaseMetaData, table);
 
+                // ------------------------------------------------- identifiers
+                Identifiers.getAllBestRowIdentifier(databaseMetaData, table);
 
-                Identifiers.getBestRowIdentifier(
-                    databaseMetaData, table, DatabaseMetaData.bestRowTemporary,
-                    true);
+                // ----------------------------------------------------- indices
+                Indices.getAllIndexInfo(databaseMetaData, table);
 
-                Identifiers.getBestRowIdentifier(
-                    databaseMetaData, table,
-                    DatabaseMetaData.bestRowTransaction, true);
-
-                Identifiers.getBestRowIdentifier(
-                    databaseMetaData, table, DatabaseMetaData.bestRowSession,
-                    true);
+                // -------------------------------------------------- privileges
+                TablePrivileges.getTablePrivileges(databaseMetaData, table);
             }
         } finally {
             tableResultSet.close();
@@ -117,6 +117,17 @@ public class Tables extends EntrySetWrapper<Table> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param schema
+     * @param tableNamePattern
+     * @param types
+     * @throws SQLException 
+     *
+     * @see #getTables(DatabaseMetaData, String, String, String, String[],
+     *                 Collection)
+     */
     public static void getTables(final DatabaseMetaData databaseMetaData,
                                  final Schema schema,
                                  final String tableNamePattern,
@@ -130,48 +141,16 @@ public class Tables extends EntrySetWrapper<Table> {
 
 
     /**
-     * @param <O> output type parameter
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param types
-     * @param properties
-     * @param outputType
-     * @param output
-     * @throws SQLException
-     * @throws JAXBException
-     */
-    public static <O> void marshalInstance(
-        final DatabaseMetaData databaseMetaData, final String catalog,
-        final String schemaPattern, final String tableNamePattern,
-        final String[] types, final Map<String, Object> properties,
-        final Class<O> outputType, final O output)
-        throws SQLException, JAXBException {
-
-        final Tables instance = newInstance(
-            databaseMetaData, catalog, schemaPattern, tableNamePattern, types);
-
-        marshal(instance, properties, outputType, output);
-    }
-
-
-    /**
      * 
-     * @param <I>
-     * @param properties
-     * @param inputTyep
-     * @param input
-     * @return
-     * @throws SQLException
-     * @throws JAXBException
+     * @param databaseMetaData database meta data
+     * @param schema schema
+     * @throws SQLException id an SQL error occurs.
      */
-    public static <I> Tables unmarshalInstance(
-        final Map<String, Object> properties, final Class<I> inputTyep,
-        final I input)
-        throws SQLException, JAXBException {
+    public static void getAllTables(final DatabaseMetaData databaseMetaData,
+                                    final Schema schema)
+        throws SQLException {
 
-        return unmarshal(Tables.class, properties, inputTyep, input);
+        getTables(databaseMetaData, schema, null, null);
     }
 
 

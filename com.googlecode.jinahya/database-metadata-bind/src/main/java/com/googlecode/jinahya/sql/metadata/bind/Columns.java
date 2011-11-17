@@ -123,6 +123,20 @@ public class Columns extends EntrySetWrapper<Column> {
 
 
     /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException 
+     */
+    public static void getAllColumns(final DatabaseMetaData databaseMetaData,
+                                     final Table table)
+        throws SQLException {
+
+        getColumns(databaseMetaData, table, null);
+    }
+
+
+    /**
      * Creates a new instance.
      */
     public Columns() {

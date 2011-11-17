@@ -84,11 +84,11 @@ public class Schemas extends EntrySetWrapper<Schema> {
                     Schema.class, schemaResultSet);
                 schemas.add(schema);
 
-                Attributes.getAttributes(databaseMetaData, schema, null, null);
+                Attributes.getAllAttributes(databaseMetaData, schema);
 
-                Functions.getFunctions(databaseMetaData, schema, schemaPattern);
-                
-                Tables.getTables(databaseMetaData, schema, null, null);
+                Functions.getAllFunctions(databaseMetaData, schema);
+
+                Tables.getAllTables(databaseMetaData, schema);
             }
         } finally {
             schemaResultSet.close();
@@ -98,10 +98,10 @@ public class Schemas extends EntrySetWrapper<Schema> {
 
     /**
      * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @throws SQLException 
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @throws SQLException if an SQL error occurs
      *
      * @see DatabaseMetaData#getSchemas(String, String) 
      */
@@ -113,6 +113,21 @@ public class Schemas extends EntrySetWrapper<Schema> {
 
         getSchemas(databaseMetaData, catalog.getTABLE_CAT(), schemaPattern,
                    catalog.getSchemas());
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @throws SQLException if an SQL error occurs.
+     */
+    public static void getAllSchemas(final DatabaseMetaData databaseMetaData,
+                                     final Catalog catalog)
+        throws SQLException {
+
+
+        getSchemas(databaseMetaData, catalog, null);
     }
 
 
