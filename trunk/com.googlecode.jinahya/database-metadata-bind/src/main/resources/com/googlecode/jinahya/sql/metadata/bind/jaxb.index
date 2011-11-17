@@ -9,9 +9,13 @@ Columns
 ExportedKey
 ExportedKeys
 Function
+FunctionColumn
+FunctionColumns
 Functions
 Identifier
 Identifiers
+ImportedKey
+ImportedKeys
 Index
 Indices
 Metadata

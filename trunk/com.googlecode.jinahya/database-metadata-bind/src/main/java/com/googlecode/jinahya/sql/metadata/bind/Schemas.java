@@ -76,22 +76,36 @@ public class Schemas extends EntrySetWrapper<Schema> {
                                   final Collection<Schema> schemas)
         throws SQLException {
 
-        final ResultSet schemaResultSet =
-            databaseMetaData.getSchemas(catalog, schemaPattern);
         try {
-            while (schemaResultSet.next()) {
-                final Schema schema = EntrySet.newInstance(
-                    Schema.class, schemaResultSet);
-                schemas.add(schema);
+            final ResultSet schemaResultSet =
+                databaseMetaData.getSchemas(catalog, schemaPattern);
+            try {
+                while (schemaResultSet.next()) {
 
-                Attributes.getAllAttributes(databaseMetaData, schema);
+                    // ------------------------------------------------- entries
+                    final Schema schema = EntrySet.newInstance(
+                        Schema.class, schemaResultSet);
+                    schemas.add(schema);
 
-                Functions.getAllFunctions(databaseMetaData, schema);
+                    // ---------------------------------------------- attributes
+                    Attributes.getAllAttributes(databaseMetaData, schema);
 
-                Tables.getAllTables(databaseMetaData, schema);
+                    // ----------------------------------------------- functions
+                    Functions.getAllFunctions(databaseMetaData, schema);
+
+                    // ---------------------------------------- procedureColumns
+                    ProcedureColumns.getAllProcedureColumns(
+                        databaseMetaData, schema);
+
+                    // -------------------------------------------------- tables
+                    Tables.getAllTables(databaseMetaData, schema);
+
+                }
+            } finally {
+                schemaResultSet.close();
             }
-        } finally {
-            schemaResultSet.close();
+        } catch (AbstractMethodError ame) {
+            //ame.printStackTrace(System.err);
         }
     }
 
