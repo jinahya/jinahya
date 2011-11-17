@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Binding for column privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -29,11 +30,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ColumnPrivilege extends Privilege {
 
 
+    /**
+     * Returns the value of 'COLUMN_NAME' entry.
+     *
+     * @return 'COLUMN_NAME' entry value
+     */
     public String getCOLUMN_NAME() {
         return getValue("COLUMN_NAME");
     }
 
 
+    /**
+     * Sets the value of 'COLUMN_NAME' entry.
+     *
+     * @param COLUMN_NAME 'COLUMN_NAME' entry value
+     */
     public void setCOLUMN_NAME(final String COLUMN_NAME) {
         setValue("COLUMN_NAME", COLUMN_NAME);
     }

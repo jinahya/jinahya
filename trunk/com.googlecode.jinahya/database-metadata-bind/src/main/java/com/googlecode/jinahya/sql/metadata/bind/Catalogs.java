@@ -38,13 +38,15 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
 
 
     /**
-     * Retrieves a new instance.
+     * Retrieves <code>Catalog</code>s from given <code>databaseMetaData</code>
+     * and creates a new instance of <code>Catalogs</code>.
      *
      * @param databaseMetaData database meta data
-     * @return a new instance
+     * @return a new instance of <code>Catalogs</code>
      * @throws SQLException if an SQL error occurs.
+     *
      * @see DatabaseMetaData#getCatalogs()
-     * @see DatabaseMetaData#getSchemas(String, String) 
+     * @see DatabaseMetaData#getSchemas(String, String)
      */
     public static Catalogs newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
@@ -57,10 +59,12 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalogs
-     * @throws SQLException 
+     * Retrieves <code>Catalog</code>s from given <code>databaseMetaData</code>
+     * and adds them to specified <code>catalogs</code>.
+     *
+     * @param databaseMetaData database meta data
+     * @param catalogs the collection to be filled
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getCatalogs()
      */

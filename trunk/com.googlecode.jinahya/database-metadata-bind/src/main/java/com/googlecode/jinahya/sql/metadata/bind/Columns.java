@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Column wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -37,16 +38,15 @@ public class Columns extends EntrySetWrapper<Column> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param columnNamePattern
-     * @return
-     * @throws SQLException
+     * Creates a new instance.
      *
-     * @see DatabaseMetaData#getColumns(String, String, String, String) 
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @param tableNamePattern table name pattern
+     * @param columnNamePattern column name pattern
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
      */
     public static Columns newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog,
@@ -64,14 +64,16 @@ public class Columns extends EntrySetWrapper<Column> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param columnNamePattern
-     * @param columns
-     * @throws SQLException 
+     * Retrives <code>Column</code>s from given <code>databaseMetaData</code>
+     * and adds them to specified <code>columns</code>.
+     *
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @param tableNamePattern table name pattern
+     * @param columnNamePattern column name pattern
+     * @param columns the collection to be filled
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getColumns(String, String, String, String)
      */
@@ -97,6 +99,18 @@ public class Columns extends EntrySetWrapper<Column> {
     }
 
 
+    /**
+     * Retrieves <code>Column</code>s of given <code>table</code> and adds them
+     * to <code>table</code>'s <code>columns</code> collection field.
+     *
+     * @param databaseMetaData database meta data
+     * @param table table
+     * @param columnNamePattern column name pattern
+     * @throws SQLException if an SQL error occurs.
+     *
+     * @see #getColumns(DatabaseMetaData, String, String, String, String,
+     *                  Collection)
+     */
     public static void getColumns(final DatabaseMetaData databaseMetaData,
                                   final Table table,
                                   final String columnNamePattern)
