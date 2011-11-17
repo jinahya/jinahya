@@ -50,7 +50,7 @@ public class Entries {
 
 
     /** entries. */
-    @XmlElement(name = "entry")
+    @XmlElement(name = "entry", nillable = true)
     private Collection<Entry> entries;
 
 

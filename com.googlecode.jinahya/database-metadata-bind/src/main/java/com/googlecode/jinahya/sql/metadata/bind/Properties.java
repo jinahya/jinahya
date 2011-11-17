@@ -50,6 +50,7 @@ public class Properties extends EntrySetWrapper<Property> {
         throws SQLException {
 
         final Properties properties = new Properties();
+
         getClientInfoProperties(databaseMetaData, properties.getProperties());
 
         return properties;
@@ -69,16 +70,20 @@ public class Properties extends EntrySetWrapper<Property> {
         final Collection<Property> properties)
         throws SQLException {
 
-        final ResultSet propertyResultSet =
-            databaseMetaData.getClientInfoProperties();
         try {
-            while (propertyResultSet.next()) {
-                final Property property = EntrySet.newInstance(
-                    Property.class, propertyResultSet);
-                properties.add(property);
+            final ResultSet propertyResultSet =
+                databaseMetaData.getClientInfoProperties();
+            try {
+                while (propertyResultSet.next()) {
+                    final Property property = EntrySet.newInstance(
+                        Property.class, propertyResultSet);
+                    properties.add(property);
+                }
+            } finally {
+                propertyResultSet.close();
             }
-        } finally {
-            propertyResultSet.close();
+        } catch (AbstractMethodError ame) {
+            //ame.printStackTrace(System.err);
         }
     }
 

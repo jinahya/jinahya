@@ -48,6 +48,46 @@ public class MetadataPrinter {
     public static class ConnectionOption {
 
 
+        public String getDriver() {
+            return driver;
+        }
+
+
+        public void setDriver(String driver) {
+            this.driver = driver;
+        }
+
+
+        public String getPassword() {
+            return password;
+        }
+
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+
+        public String getUrl() {
+            return url;
+        }
+
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+
+        public String getUser() {
+            return user;
+        }
+
+
+        public void setUser(String user) {
+            this.user = user;
+        }
+
+
         /**
          * JDBC driver class name.
          */
@@ -167,12 +207,19 @@ public class MetadataPrinter {
             connection = DriverManager.getConnection(url);
         }
         try {
-            final Metadata metadata = Metadata.newInstance(connection);
+            final Metadata metadata =
+                Metadata.newInstance(connection.getMetaData());
+
             final Marshaller marshaller =
                 DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
+
             marshaller.setProperty(
                 Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.setProperty(
+                Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+
             marshaller.marshal(metadata, System.out);
+
             System.out.flush();
         } finally {
             connection.close();

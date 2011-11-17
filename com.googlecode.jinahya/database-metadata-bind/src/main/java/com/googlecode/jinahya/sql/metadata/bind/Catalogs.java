@@ -22,6 +22,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -75,12 +76,25 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
         final ResultSet catalogResultSet = databaseMetaData.getCatalogs();
         try {
             while (catalogResultSet.next()) {
+
+                // ----------------------------------------------------- entries
                 final Catalog catalog = EntrySet.newInstance(
                     Catalog.class, catalogResultSet);
                 catalogs.add(catalog);
 
-                Schemas.getSchemas(databaseMetaData, catalog.getTABLE_CAT(),
-                                   null, catalog.getSchemas());
+                // --------------------------------------------- functionColumns
+                FunctionColumns.getAllFunctionColumns(
+                    databaseMetaData, catalog);
+
+                // --------------------------------------------------- functions
+                Functions.getAllFunctions(databaseMetaData, catalog);
+
+                // ----------------------------------------------------- schemas
+                Schemas.getAllSchemas(databaseMetaData, catalog);
+
+                // -------------------------------------------- procedureColumns
+                ProcedureColumns.getAllProcedureColumns(
+                    databaseMetaData, catalog);
             }
         } finally {
             catalogResultSet.close();

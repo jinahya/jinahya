@@ -18,11 +18,13 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -33,22 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"properties", "catalogs"})
+@XmlType(propOrder = {"properties", "catalogs", "schemas", "tables"})
 public class Metadata {
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param connection database connection
-     * @return a new instance of Metadata
-     * @throws SQLException if an SQL error occurs.
-     */
-    public static Metadata newInstance(final Connection connection)
-        throws SQLException {
-
-        return newInstance(connection.getMetaData());
-    }
 
 
     /**
@@ -63,31 +51,27 @@ public class Metadata {
 
         final Metadata instance = new Metadata();
 
-        instance.setProperties(Properties.newInstance(databaseMetaData));
+        Properties.getClientInfoProperties(
+            databaseMetaData, instance.getProperties());
 
-        instance.setCatalogs(Catalogs.newInstance(databaseMetaData));
+        Catalogs.getCatalogs(databaseMetaData, instance.getCatalogs());
+
+        Schemas.getSchemas(databaseMetaData, null, null, instance.getSchemas());
+
+        Tables.getTables(databaseMetaData, null, null, null, null,
+                         instance.getTables());
 
         return instance;
     }
 
 
-    /**
-     * Returns catalogs.
-     *
-     * @return catalogs
-     */
-    public Catalogs getCatalogs() {
+    public Collection<Catalog> getCatalogs() {
+
+        if (catalogs == null) {
+            catalogs = new ArrayList<Catalog>();
+        }
+
         return catalogs;
-    }
-
-
-    /**
-     * Sets catalogs.
-     *
-     * @param catalogs catalogs.
-     */
-    public void setCatalogs(final Catalogs catalogs) {
-        this.catalogs = catalogs;
     }
 
 
@@ -96,27 +80,54 @@ public class Metadata {
      *
      * @return properties.
      */
-    public Properties getProperties() {
+    public Collection<Property> getProperties() {
+
+        if (properties == null) {
+            properties = new ArrayList<Property>();
+        }
+
         return properties;
     }
 
 
-    /**
-     * Sets properties.
-     *
-     * @param properties properties.
-     */
-    public void setProperties(final Properties properties) {
-        this.properties = properties;
+    public Collection<Schema> getSchemas() {
+
+        if (schemas == null) {
+            schemas = new ArrayList<Schema>();
+        }
+
+        return schemas;
     }
 
 
-    @XmlElement(required = true, nillable = true)
-    private Properties properties;
+    public Collection<Table> getTables() {
+
+        if (tables == null) {
+            tables = new ArrayList<Table>();
+        }
+
+        return tables;
+    }
 
 
-    @XmlElement(required = true, nillable = true)
-    private Catalogs catalogs;
+    @XmlElement(name = "property")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Property> properties;
+
+
+    @XmlElement(name = "catalog")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Catalog> catalogs;
+
+
+    @XmlElement(name = "schema")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Schema> schemas;
+
+
+    @XmlElement(name = "table")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Table> tables;
 
 
 }

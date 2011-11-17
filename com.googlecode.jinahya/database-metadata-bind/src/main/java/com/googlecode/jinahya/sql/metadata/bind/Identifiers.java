@@ -145,6 +145,12 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException 
+     */
     public static void getAllBestRowIdentifier(
         final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {

@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "schemas"})
+@XmlType(propOrder = {"entries", "functionColumns", "functions",
+                      "procedureColumns", "procedures", "schemas"})
 public class Catalog extends EntrySet {
 
 
@@ -72,12 +73,72 @@ public class Catalog extends EntrySet {
     }
 
 
+    public Collection<Function> getFunctions() {
+
+        if (functions == null) {
+            functions = new ArrayList<Function>();
+        }
+
+        return functions;
+    }
+
+
+    public Collection<FunctionColumn> getFunctionColumns() {
+
+        if (functionColumns == null) {
+            functionColumns = new ArrayList<FunctionColumn>();
+        }
+
+        return functionColumns;
+    }
+
+
+    public Collection<ProcedureColumn> getProcedureColumns() {
+
+        if (procedureColumns == null) {
+            procedureColumns = new ArrayList<ProcedureColumn>();
+        }
+
+        return procedureColumns;
+    }
+
+
+    public Collection<Procedure> getProcedures() {
+
+        if (procedures == null) {
+            procedures = new ArrayList<Procedure>();
+        }
+
+        return procedures;
+    }
+
+
     /**
      * schemas.
      */
     @XmlElement(name = "schema")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
+
+
+    @XmlElement(name = "function")
+    @XmlElementWrapper(required = true, nillable = true)
+    public Collection<Function> functions;
+
+
+    @XmlElement(name = "functionColumn")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<FunctionColumn> functionColumns;
+
+
+    @XmlElement(name = "procedureColumn")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ProcedureColumn> procedureColumns;
+
+
+    @XmlElement(name = "procedure")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Procedure> procedures;
 
 
 }

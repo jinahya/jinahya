@@ -82,17 +82,41 @@ public class Functions extends EntrySetWrapper<Function> {
                                     final Collection<Function> functions)
         throws SQLException {
 
-        final ResultSet functionResultSet = databaseMetaData.getFunctions(
-            catalog, schemaPattern, functionNamePattern);
         try {
-            while (functionResultSet.next()) {
-                final Function function = EntrySet.newInstance(
-                    Function.class, functionResultSet);
-                functions.add(function);
+            final ResultSet functionResultSet = databaseMetaData.getFunctions(
+                catalog, schemaPattern, functionNamePattern);
+            try {
+                while (functionResultSet.next()) {
+                    final Function function = EntrySet.newInstance(
+                        Function.class, functionResultSet);
+                    functions.add(function);
+                }
+            } finally {
+                functionResultSet.close();
             }
-        } finally {
-            functionResultSet.close();
+        } catch (AbstractMethodError ame) {
+            //
         }
+    }
+
+
+    public static void getFunctions(final DatabaseMetaData databaseMetaData,
+                                    final Catalog catalog,
+                                    final String schemaNamePattern,
+                                    final String functionNamePattern)
+        throws SQLException {
+
+        getFunctions(databaseMetaData, catalog.getTABLE_CAT(),
+                     schemaNamePattern, functionNamePattern,
+                     catalog.getFunctions());
+    }
+
+
+    public static void getAllFunctions(final DatabaseMetaData databaseMetaData,
+                                       final Catalog catalog)
+        throws SQLException {
+
+        getFunctions(databaseMetaData, catalog, null, null);
     }
 
 

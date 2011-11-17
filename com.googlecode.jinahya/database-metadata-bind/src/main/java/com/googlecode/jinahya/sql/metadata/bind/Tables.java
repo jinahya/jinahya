@@ -105,6 +105,9 @@ public class Tables extends EntrySetWrapper<Table> {
                 // ------------------------------------------------- identifiers
                 Identifiers.getAllBestRowIdentifier(databaseMetaData, table);
 
+                // ------------------------------------------------ importedKeys
+                ImportedKeys.getImportedKeys(databaseMetaData, table);
+
                 // ----------------------------------------------------- indices
                 Indices.getAllIndexInfo(databaseMetaData, table);
 

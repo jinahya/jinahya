@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "attributes", "functions", "tables"})
+@XmlType(propOrder = {"entries", "attributes", "functions", "procedureColumns",
+                      "procedures", "tables"})
 public class Schema extends EntrySet {
 
 
@@ -102,6 +103,26 @@ public class Schema extends EntrySet {
     }
 
 
+    public Collection<ProcedureColumn> getProcedureColumns() {
+
+        if (procedureColumns == null) {
+            procedureColumns = new ArrayList<ProcedureColumn>();
+        }
+
+        return procedureColumns;
+    }
+
+
+    public Collection<Procedure> getProcedures() {
+
+        if (procedures == null) {
+            procedures = new ArrayList<Procedure>();
+        }
+
+        return procedures;
+    }
+
+
     /**
      * attributes
      */
@@ -116,6 +137,16 @@ public class Schema extends EntrySet {
     @XmlElement(name = "function")
     @XmlElementWrapper(required = true, nillable = false)
     private Collection<Function> functions;
+
+
+    @XmlElement(name = "procedureColumns")
+    @XmlElementWrapper(required = true, nillable = false)
+    private Collection<ProcedureColumn> procedureColumns;
+
+
+    @XmlElement(name = "procedure")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Procedure> procedures;
 
 
     /** tables. */
