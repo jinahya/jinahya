@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>database-metadata-bind</artifactId>
-  <version>1.0-alpha-2</version>
+  <version>1.0-alpha-3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -233,9 +233,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-2</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-2</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/database-metadata-bind-1.0-alpha-2</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-bind</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/database-metadata-bind</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/database-metadata-bind/</url>
   </scm>
   <prerequisites />
   <repositories>
