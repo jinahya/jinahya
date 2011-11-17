@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
-                      "indices"})
+                      "indices", "privileges"})
 public class Table extends EntrySet {
 
 
@@ -199,6 +199,21 @@ public class Table extends EntrySet {
     }
 
 
+    /**
+     * Returns privileges.
+     *
+     * @return privileges
+     */
+    public Collection<TablePrivilege> getPrivileges() {
+
+        if (privileges == null) {
+            privileges = new ArrayList<TablePrivilege>();
+        }
+
+        return privileges;
+    }
+
+
     @XmlElement(name = "column")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Column> columns;
@@ -217,6 +232,11 @@ public class Table extends EntrySet {
     @XmlElement(name = "index")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Index> indices;
+
+
+    @XmlElement(name = "privilege")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<TablePrivilege> privileges;
 
 
 }
