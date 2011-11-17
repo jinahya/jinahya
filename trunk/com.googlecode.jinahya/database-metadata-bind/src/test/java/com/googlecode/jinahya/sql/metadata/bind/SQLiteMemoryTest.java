@@ -19,12 +19,14 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.xml.bind.JAXBException;
+
 import org.testng.annotations.Test;
 
 
