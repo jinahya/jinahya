@@ -42,7 +42,8 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
 
 
     /**
-     * 
+     * Marshals given <code>wrapper</code> to specified <code>output</code>.
+     *
      * @param <W> EntrySetWrapper type
      * @param <O> output type parameter
      * @param wrapper EntrySetWrapper
@@ -68,7 +69,6 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
         try {
             final Method method = Marshaller.class.getMethod(
                 "marshal", Object.class, outputType);
-
             try {
                 method.invoke(marshaller, wrapper, output);
             } catch (IllegalAccessException iae) {
@@ -76,7 +76,6 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
             } catch (InvocationTargetException ite) {
                 throw new RuntimeException(ite);
             }
-
         } catch (NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
         }
@@ -111,7 +110,6 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
         try {
             final Method method = Marshaller.class.getMethod(
                 "unmarshal", inputType);
-
             try {
                 return wrapperType.cast(method.invoke(unmarshaller, input));
             } catch (IllegalAccessException iae) {
@@ -119,7 +117,6 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
             } catch (InvocationTargetException ite) {
                 throw new RuntimeException(ite);
             }
-
         } catch (NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
         }

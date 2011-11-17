@@ -5,6 +5,8 @@ Catalogs
 Column
 ColumnPrivilege
 Columns
+ExportedKey
+ExportedKeys
 Function
 Functions
 Identifier

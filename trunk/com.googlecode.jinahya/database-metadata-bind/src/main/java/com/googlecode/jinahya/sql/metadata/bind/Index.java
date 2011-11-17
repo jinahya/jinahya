@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Index binding.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -149,11 +150,21 @@ public class Index extends EntrySet {
     }
 
 
+    /**
+     * Returns the value of 'FILTER_CONDITION' entry value.
+     *
+     * @return 'FILTER_CONDITION' entry value
+     */
     public String getFILTER_CONDITION() {
         return getValue("FILTER_CONDITION");
     }
 
 
+    /**
+     * Sets the value of 'FILTER_CONDITION' entry value.
+     *
+     * @param FILTER_CONDITION 'FILTER_CONDITION' entry value
+     */
     public void setFILTER_CONDITION(final String FILTER_CONDITION) {
         setValue("FILTER_CONDITION", FILTER_CONDITION);
     }

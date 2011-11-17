@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Identifier collection.
+ * Identifier wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -66,18 +66,20 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schema
-     * @param table
-     * @param scope
-     * @param nullable
-     * @param identifiers
-     * @throws SQLException 
+     * Gets identifiers from <code>databaseMetaData</code> and and adds bound
+     * <code>Identifiers</code> to specified <code>identifiers</code>.
+     *
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param scope scope
+     * @param nullable nullable
+     * @param identifiers identifiers to be filled
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getBestRowIdentifier(String, String, String, int,
-     *      boolean) 
+     *      boolean)
      */
     public static void getBestRowIdentifier(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -121,6 +123,25 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
         getBestRowIdentifier(
             databaseMetaData, table.getTABLE_CAT(), table.getTABLE_SCHEM(),
             table.getTABLE_NAME(), scope, nullable, identifiers);
+    }
+
+
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @param scope
+     * @param nullable
+     * @throws SQLException 
+     */
+    public static void getBestRowIdentifier(
+        final DatabaseMetaData databaseMetaData, final Table table,
+        final int scope, final boolean nullable)
+        throws SQLException {
+
+        getBestRowIdentifier(
+            databaseMetaData, table.getTABLE_CAT(), table.getTABLE_SCHEM(),
+            table.getTABLE_NAME(), scope, nullable, table.getIdentifiers());
     }
 
 

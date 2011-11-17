@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "columns", "indices", "temporaryIdentifiers",
-                      "transactionIdentifiers", "sessionIdentifiers"})
+@XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
+                      "indices"})
 public class Table extends EntrySet {
 
 
@@ -155,6 +155,21 @@ public class Table extends EntrySet {
 
 
     /**
+     * Returns exportedKeys.
+     *
+     * @return exportedKeys.
+     */
+    public Collection<ExportedKey> getExportedKeys() {
+
+        if (exportedKeys == null) {
+            exportedKeys = new ArrayList<ExportedKey>();
+        }
+
+        return exportedKeys;
+    }
+
+
+    /**
      * Returns indices.
      *
      * @return indices
@@ -169,33 +184,18 @@ public class Table extends EntrySet {
     }
 
 
-    public Collection<Identifier> getTemporayIdentifiers() {
+    /**
+     * Returns identifiers.
+     *
+     * @return identifiers
+     */
+    public Collection<Identifier> getIdentifiers() {
 
-        if (temporaryIdentifiers == null) {
-            temporaryIdentifiers = new ArrayList<Identifier>();
+        if (identifiers == null) {
+            identifiers = new ArrayList<Identifier>();
         }
 
-        return temporaryIdentifiers;
-    }
-
-
-    public Collection<Identifier> getTransactionIdentifiers() {
-
-        if (transactionIdentifiers == null) {
-            transactionIdentifiers = new ArrayList<Identifier>();
-        }
-
-        return transactionIdentifiers;
-    }
-
-
-    public Collection<Identifier> getSessionIdentifiers() {
-
-        if (sessionIdentifiers == null) {
-            sessionIdentifiers = new ArrayList<Identifier>();
-        }
-
-        return sessionIdentifiers;
+        return identifiers;
     }
 
 
@@ -204,24 +204,19 @@ public class Table extends EntrySet {
     private Collection<Column> columns;
 
 
+    @XmlElement(name = "exportedKey")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ExportedKey> exportedKeys;
+
+
+    @XmlElement(name = "identifier")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Identifier> identifiers;
+
+
     @XmlElement(name = "index")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Index> indices;
-
-
-    @XmlElement(name = "temporayIdentifier")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Identifier> temporaryIdentifiers;
-
-
-    @XmlElement(name = "transactionIdentifier")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Identifier> transactionIdentifiers;
-
-
-    @XmlElement(name = "sessionIdentifier")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Identifier> sessionIdentifiers;
 
 
 }

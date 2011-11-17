@@ -49,15 +49,15 @@ public abstract class EntrySet {
     /**
      * Marshals given <code>entrySet</code> to specified <code>output</code>.
      *
-     * @param <E> EntrySet type parameter
+     * @param <S> EntrySet type parameter
      * @param <O> output type parameter
      * @param entrySet entrySet to marshal
      * @param outputType output type
      * @param output output
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <E extends EntrySet, O> void marshal(
-        final E entrySet, final Class<O> outputType, final O output)
+    public static <S extends EntrySet, O> void marshal(
+        final S entrySet, final Class<O> outputType, final O output)
         throws JAXBException {
 
         marshal(entrySet, null, outputType, output);
@@ -67,15 +67,15 @@ public abstract class EntrySet {
     /**
      * Marshals given <code>metadata</code> to specified <code>output</code>.
      *
-     * @param <E> EntrySet type parameter
+     * @param <S> EntrySet type parameter
      * @param entrySet EntrySet
      * @param properties marshaller properties
      * @param outputType marshal output type
      * @param output marshal output
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <E extends EntrySet, O> void marshal(
-        final E entrySet, final Properties properties,
+    public static <S extends EntrySet, O> void marshal(
+        final S entrySet, final Properties properties,
         final Class<O> outputType, final O output)
         throws JAXBException {
 
@@ -111,15 +111,15 @@ public abstract class EntrySet {
      * Unmarshals a new instance of given <code>entrySetType</code> from
      * specified <code>input</code>.
      *
-     * @param <E> EntrySet type parameter
+     * @param <S> EntrySet type parameter
      * @param <I> input type parameter
      * @param entrySetType EntrySet type
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <E extends EntrySet, I> void unmarshal(
-        final Class<E> entrySetType, final Class<I> inputType, final I input)
+    public static <S extends EntrySet, I> void unmarshal(
+        final Class<S> entrySetType, final Class<I> inputType, final I input)
         throws JAXBException {
 
         unmarshal(entrySetType, null, inputType, input);
@@ -130,15 +130,15 @@ public abstract class EntrySet {
      * Unmarshals a new instance of given <code>entrySetType</code> from
      * specified <code>input</code>.
      *
-     * @param <E> EntrySet type parameter
+     * @param <S> EntrySet type parameter
      * @param entrySetType EntrySet type
      * @param properties unmarshaller properties
      * @param inputType input type
      * @param input input
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <E extends EntrySet, I> void unmarshal(
-        final Class<E> entrySetType, final Properties properties,
+    public static <S extends EntrySet, I> void unmarshal(
+        final Class<S> entrySetType, final Properties properties,
         final Class<I> inputType, final I input)
         throws JAXBException {
 
@@ -171,18 +171,18 @@ public abstract class EntrySet {
      * Creates a new instance of <code>entrySetType</code> and reads information
      * from specified <code>resultSet</code>.
      *
-     * @param <E> EntrySet type parameter
+     * @param <S> EntrySet type parameter
      * @param entrySetType EntrySet type
      * @param resultSet result set
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
-    public static <E extends EntrySet> E newInstance(
-        final Class<E> entrySetType, final ResultSet resultSet)
+    public static <S extends EntrySet> S newInstance(
+        final Class<S> entrySetType, final ResultSet resultSet)
         throws SQLException {
 
         try {
-            final E metadata = entrySetType.newInstance();
+            final S metadata = entrySetType.newInstance();
             metadata.read(resultSet);
             return metadata;
         } catch (InstantiationException ie) {
