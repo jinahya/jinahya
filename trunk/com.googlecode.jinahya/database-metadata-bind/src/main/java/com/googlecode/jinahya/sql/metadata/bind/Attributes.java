@@ -118,6 +118,20 @@ public class Attributes extends EntrySetWrapper<Attribute> {
 
 
     /**
+     * 
+     * @param databaseMetaData database meta data
+     * @param schema schema
+     * @throws SQLException if an SQL error occurs
+     */
+    public static void getAllAttributes(
+        final DatabaseMetaData databaseMetaData, final Schema schema)
+        throws SQLException {
+
+        getAttributes(databaseMetaData, schema, null, null);
+    }
+
+
+    /**
      * Creates a new instance.
      */
     public Attributes() {

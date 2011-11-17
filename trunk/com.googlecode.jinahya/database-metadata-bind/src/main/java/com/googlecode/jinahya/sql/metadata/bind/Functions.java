@@ -118,6 +118,14 @@ public class Functions extends EntrySetWrapper<Function> {
     }
 
 
+    public static void getAllFunctions(final DatabaseMetaData databaseMetaData,
+                                       final Schema schema)
+        throws SQLException {
+
+        getFunctions(databaseMetaData, schema, null);
+    }
+
+
     /**
      * Creates a new instance.
      */
