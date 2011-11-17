@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Entries.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -38,19 +39,19 @@ public class Entries {
      *
      * @return entries
      */
-    protected Collection<Entry> getEntry() {
+    protected Collection<Entry> getEntries() {
 
-        if (entry == null) {
-            entry = new ArrayList<Entry>();
+        if (entries == null) {
+            entries = new ArrayList<Entry>();
         }
 
-        return entry;
+        return entries;
     }
 
 
     /** entries. */
-    @XmlElement
-    private Collection<Entry> entry;
+    @XmlElement(name = "entry")
+    private Collection<Entry> entries;
 
 
 }

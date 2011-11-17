@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Identifier collection.
+ * TablePrivilege wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -38,8 +38,7 @@ public class TablePrivileges extends Privileges<TablePrivilege> {
 
     public static TablePrivileges newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
-        final String schemaPattern,
-        final String tableNamePattern)
+        final String schemaPattern, final String tableNamePattern)
         throws SQLException {
 
         final TablePrivileges instance = new TablePrivileges();

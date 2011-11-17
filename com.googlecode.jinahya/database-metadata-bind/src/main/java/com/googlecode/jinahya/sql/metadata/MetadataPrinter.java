@@ -20,6 +20,8 @@ package com.googlecode.jinahya.sql.metadata;
 
 import com.googlecode.jinahya.sql.metadata.bind.Catalogs;
 import com.googlecode.jinahya.sql.metadata.bind.DatabaseMetadataBindConstants;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,6 +30,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 
@@ -42,46 +46,6 @@ public class MetadataPrinter {
      * Command line option.
      */
     public static class ConnectionOption {
-
-
-        public String getDriver() {
-            return driver;
-        }
-
-
-        public void setDriver(final String driver) {
-            this.driver = driver;
-        }
-
-
-        public String getPassword() {
-            return password;
-        }
-
-
-        public void setPassword(final String password) {
-            this.password = password;
-        }
-
-
-        public String getUrl() {
-            return url;
-        }
-
-
-        public void setUrl(final String url) {
-            this.url = url;
-        }
-
-
-        public String getUser() {
-            return user;
-        }
-
-
-        public void setUser(final String user) {
-            this.user = user;
-        }
 
 
         @Option(name = "-driver", usage = "database driver name")
@@ -103,6 +67,26 @@ public class MetadataPrinter {
         private String password;
 
 
+    }
+
+
+    public static void main(final String[] args)
+        throws IOException, ClassNotFoundException, SQLException,
+               JAXBException {
+
+        final ConnectionOption option = new ConnectionOption();
+
+        final CmdLineParser parser = new CmdLineParser(option);
+
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException cle) {
+            cle.printStackTrace(System.err);
+            parser.printUsage(System.out);
+            return;
+        }
+
+        printMetadata(option);
     }
 
 

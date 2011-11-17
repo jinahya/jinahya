@@ -15,11 +15,12 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind;
+package com.googlecode.jinahya.sql.metadata;
 
+
+import com.googlecode.jinahya.sql.metadata.bind.DatabaseMetadataBindConstants;
 
 import java.io.IOException;
-
 
 import javax.xml.bind.SchemaOutputResolver;
 
@@ -35,12 +36,12 @@ public class SchemaGenerator {
 
 
     /**
-     * 
+     * Prints XMLSchema.
+     *
      * @param args command line arguments
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
-    public static void main(final String[] args)
-        throws IOException {
+    public static void main(final String[] args) throws IOException {
 
         SchemaOutputResolver resolver = new SchemaOutputResolver() {
 
