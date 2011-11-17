@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Identifier collection.
+ * ColumnPrivilege wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

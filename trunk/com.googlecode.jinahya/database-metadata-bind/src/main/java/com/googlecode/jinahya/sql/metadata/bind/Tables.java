@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Table wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

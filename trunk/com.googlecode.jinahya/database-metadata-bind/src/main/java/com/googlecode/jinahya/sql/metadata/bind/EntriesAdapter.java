@@ -37,7 +37,7 @@ public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
 
         final Entries value = new Entries();
 
-        value.getEntry().addAll(bound.values());
+        value.getEntries().addAll(bound.values());
 
         return value;
     }
@@ -49,7 +49,7 @@ public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
 
         final Map<String, Entry> bound = new LinkedHashMap<String, Entry>();
 
-        for (Entry entry : value.getEntry()) {
+        for (Entry entry : value.getEntries()) {
             bound.put(entry.getKey(), entry);
         }
 

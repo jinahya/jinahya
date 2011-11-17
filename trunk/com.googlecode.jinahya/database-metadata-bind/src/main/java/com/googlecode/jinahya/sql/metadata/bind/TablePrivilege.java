@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
+ * Binding for table privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

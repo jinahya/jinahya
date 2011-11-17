@@ -64,7 +64,7 @@ public class Columns extends EntrySetWrapper<Column> {
 
 
     /**
-     * Retrives <code>Column</code>s from given <code>databaseMetaData</code>
+     * Retrieves <code>Column</code>s from given <code>databaseMetaData</code>
      * and adds them to specified <code>columns</code>.
      *
      * @param databaseMetaData database meta data
