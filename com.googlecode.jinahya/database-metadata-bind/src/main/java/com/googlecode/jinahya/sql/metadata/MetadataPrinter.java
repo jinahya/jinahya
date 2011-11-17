@@ -18,17 +18,17 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.bind.Catalogs;
 import com.googlecode.jinahya.sql.metadata.bind.DatabaseMetadataBindConstants;
+import com.googlecode.jinahya.sql.metadata.bind.Metadata;
 
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -48,21 +48,33 @@ public class MetadataPrinter {
     public static class ConnectionOption {
 
 
+        /**
+         * JDBC driver class name.
+         */
         @Option(name = "-driver", usage = "database driver name")
         private String driver;
 
 
+        /**
+         * Database connection url.
+         */
         @Option(name = "-url", required = true,
                 usage = "a database url of the form jdbc:subprotocol:subname")
         private String url;
 
 
+        /**
+         * Database user.
+         */
         @Option(name = "-user",
                 usage = "the database user on whose behalf the connection is"
                         + " being made")
         private String user;
 
 
+        /**
+         * Database password.
+         */
         @Option(name = "-password", usage = "the user's password")
         private String password;
 
@@ -70,6 +82,15 @@ public class MetadataPrinter {
     }
 
 
+    /**
+     * Prints database metadata.
+     *
+     * @param args command line arguments
+     * @throws IOException if an I/O error occurs.
+     * @throws ClassNotFoundException if JDBC driver class not found
+     * @throws SQLException if an SQL error occurs.
+     * @throws JAXBException if a JAXB error occurs.
+     */
     public static void main(final String[] args)
         throws IOException, ClassNotFoundException, SQLException,
                JAXBException {
@@ -146,13 +167,12 @@ public class MetadataPrinter {
             connection = DriverManager.getConnection(url);
         }
         try {
-            final Catalogs catalogs =
-                Catalogs.newInstance(connection.getMetaData());
+            final Metadata metadata = Metadata.newInstance(connection);
             final Marshaller marshaller =
                 DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
             marshaller.setProperty(
                 Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(catalogs, System.out);
+            marshaller.marshal(metadata, System.out);
             System.out.flush();
         } finally {
             connection.close();
