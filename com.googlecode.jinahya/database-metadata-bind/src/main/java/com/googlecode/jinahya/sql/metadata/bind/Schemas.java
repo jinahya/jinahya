@@ -100,6 +100,8 @@ public class Schemas extends EntrySetWrapper<Schema> {
                     // -------------------------------------------------- tables
                     Tables.getAllTables(databaseMetaData, schema);
 
+                    // ---------------------------------------------------- UDTs
+                    UDTs.getAllUDTs(databaseMetaData, schema);
                 }
             } finally {
                 schemaResultSet.close();

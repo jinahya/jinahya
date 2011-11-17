@@ -95,6 +95,9 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
                 // -------------------------------------------- procedureColumns
                 ProcedureColumns.getAllProcedureColumns(
                     databaseMetaData, catalog);
+
+                // -------------------------------------------------------- UDTs
+                UDTs.getAllUDTs(databaseMetaData, catalog);
             }
         } finally {
             catalogResultSet.close();

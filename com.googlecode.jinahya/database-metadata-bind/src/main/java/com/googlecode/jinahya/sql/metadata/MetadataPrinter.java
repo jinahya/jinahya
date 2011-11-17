@@ -185,7 +185,7 @@ public class MetadataPrinter {
      * @see DriverManager#getConnection(String)
      * @see DriverManager#getConnection(String, String, String)
      */
-    protected static void printMetadata(
+    public static void printMetadata(
         final String driver, final String url, final String user,
         final String password)
         throws ClassNotFoundException, SQLException, JAXBException {
@@ -210,20 +210,32 @@ public class MetadataPrinter {
             final Metadata metadata =
                 Metadata.newInstance(connection.getMetaData());
 
-            final Marshaller marshaller =
-                DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
+            printMetadata(metadata);
 
-            marshaller.setProperty(
-                Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(
-                Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
-
-            marshaller.marshal(metadata, System.out);
-
-            System.out.flush();
         } finally {
             connection.close();
         }
+    }
+
+
+    public static void printMetadata(final Metadata metadata)
+        throws SQLException, JAXBException {
+
+        if (metadata == null) {
+            throw new NullPointerException("null metadata");
+        }
+
+        final Marshaller marshaller =
+            DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
+
+        marshaller.setProperty(
+            Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setProperty(
+            Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+
+        marshaller.marshal(metadata, System.out);
+
+        System.out.flush();
     }
 
 

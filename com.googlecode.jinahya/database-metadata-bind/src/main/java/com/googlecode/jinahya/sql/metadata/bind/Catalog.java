@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "functionColumns", "functions",
-                      "procedureColumns", "procedures", "schemas"})
+                      "procedureColumns", "procedures", "schemas", "UDTs"})
 public class Catalog extends EntrySet {
 
 
@@ -113,6 +113,16 @@ public class Catalog extends EntrySet {
     }
 
 
+    public Collection<UDT> getUDTs() {
+
+        if (UDTs == null) {
+            UDTs = new ArrayList<UDT>();
+        }
+
+        return UDTs;
+    }
+
+
     /**
      * schemas.
      */
@@ -139,6 +149,11 @@ public class Catalog extends EntrySet {
     @XmlElement(name = "procedure")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Procedure> procedures;
+
+
+    @XmlElement(name = "UDT")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<UDT> UDTs;
 
 
 }

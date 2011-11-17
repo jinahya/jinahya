@@ -23,6 +23,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +36,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"properties", "catalogs", "schemas", "tables"})
+@XmlType(propOrder = {"properties", "catalogs", "dataTypes", "schemas",
+                      "tables", "tableTypes"})
 public class Metadata {
 
 
@@ -56,10 +58,14 @@ public class Metadata {
 
         Catalogs.getCatalogs(databaseMetaData, instance.getCatalogs());
 
+        DataTypes.getTypeInfo(databaseMetaData, instance.getDataTypes());
+
         Schemas.getSchemas(databaseMetaData, null, null, instance.getSchemas());
 
         Tables.getTables(databaseMetaData, null, null, null, null,
                          instance.getTables());
+
+        TableTypes.getTableTypes(databaseMetaData, instance.getTableTypes());
 
         return instance;
     }
@@ -110,6 +116,26 @@ public class Metadata {
     }
 
 
+    public Collection<DataType> getDataTypes() {
+
+        if (dataTypes == null) {
+            dataTypes = new ArrayList<DataType>();
+        }
+
+        return dataTypes;
+    }
+
+
+    public Collection<TableType> getTableTypes() {
+
+        if (tableTypes == null) {
+            tableTypes = new ArrayList<TableType>();
+        }
+
+        return tableTypes;
+    }
+
+
     @XmlElement(name = "property")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Property> properties;
@@ -120,6 +146,11 @@ public class Metadata {
     private Collection<Catalog> catalogs;
 
 
+    @XmlElement(name = "dataType")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<DataType> dataTypes;
+
+
     @XmlElement(name = "schema")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
@@ -128,6 +159,11 @@ public class Metadata {
     @XmlElement(name = "table")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Table> tables;
+
+
+    @XmlElement(name = "tableType")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<TableType> tableTypes;
 
 
 }

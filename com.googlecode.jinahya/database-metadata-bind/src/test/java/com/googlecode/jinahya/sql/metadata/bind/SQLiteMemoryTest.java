@@ -18,10 +18,13 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.xml.bind.JAXBException;
 import org.testng.annotations.Test;
 
 
@@ -32,6 +35,9 @@ import org.testng.annotations.Test;
 public class SQLiteMemoryTest extends SQLiteTest {
 
 
+    /**
+     * Database connection url for memory.
+     */
     protected static final String MEMORY_DATABASE_URL = "jdbc:sqlite::memory:";
 
 
@@ -41,6 +47,24 @@ public class SQLiteMemoryTest extends SQLiteTest {
         final Connection connection =
             DriverManager.getConnection(MEMORY_DATABASE_URL);
         try {
+        } finally {
+            connection.close();
+        }
+    }
+
+
+    @Test
+    public void printMetadata() throws SQLException, JAXBException {
+
+        final Connection connection =
+            DriverManager.getConnection(MEMORY_DATABASE_URL);
+        try {
+            final DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+            final Metadata metadata = Metadata.newInstance(databaseMetaData);
+
+            MetadataPrinter.printMetadata(metadata);
+
         } finally {
             connection.close();
         }
