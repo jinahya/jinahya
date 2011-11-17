@@ -37,13 +37,14 @@ public class Functions extends EntrySetWrapper<Function> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param functionNamePattern
-     * @return
-     * @throws SQLException 
+     * Creates a new instance from given <code>databaseMetaData</code>.
+     *
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @param functionNamePattern function name pattern
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getFunctions(String, String, String) 
      */
@@ -62,13 +63,15 @@ public class Functions extends EntrySetWrapper<Function> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param functionNamePattern
-     * @param functions
-     * @throws SQLException 
+     * Gets functions from given <code>databaseMetaData</code> and adds to
+     * specified <code>functions</code>.
+     *
+     * @param databaseMetaData database meta data
+     * @param catalog catalog
+     * @param schemaPattern schema patterns
+     * @param functionNamePattern function name pattern
+     * @param functions collection to be filled
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getFunctions(String, String, String) 
      */
@@ -94,11 +97,13 @@ public class Functions extends EntrySetWrapper<Function> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param schema
-     * @param functionNamePattern
-     * @throws SQLException 
+     * Gets functions from given <code>databaseMetaData</code> and add to
+     * specified <code>schema</code>'s functions field.
+     *
+     * @param databaseMetaData database meta data
+     * @param schema schema
+     * @param functionNamePattern function name pattern
+     * @throws SQLException if an SQL error occurs.
      *
      * @see DatabaseMetaData#getFunctions(String, String, String)
      */

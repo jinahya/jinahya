@@ -20,6 +20,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 

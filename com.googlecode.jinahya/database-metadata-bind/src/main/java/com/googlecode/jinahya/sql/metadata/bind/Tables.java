@@ -97,18 +97,18 @@ public class Tables extends EntrySetWrapper<Table> {
 
                 Indices.getIndexInfo(databaseMetaData, table, false, false);
 
+
                 Identifiers.getBestRowIdentifier(
                     databaseMetaData, table, DatabaseMetaData.bestRowTemporary,
-                    true, table.getTemporayIdentifiers());
+                    true);
 
                 Identifiers.getBestRowIdentifier(
                     databaseMetaData, table,
-                    DatabaseMetaData.bestRowTransaction, true,
-                    table.getTransactionIdentifiers());
+                    DatabaseMetaData.bestRowTransaction, true);
 
                 Identifiers.getBestRowIdentifier(
                     databaseMetaData, table, DatabaseMetaData.bestRowSession,
-                    true, table.getSessionIdentifiers());
+                    true);
             }
         } finally {
             tableResultSet.close();
