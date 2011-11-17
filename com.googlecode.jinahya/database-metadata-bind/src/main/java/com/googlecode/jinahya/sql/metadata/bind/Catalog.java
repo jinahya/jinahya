@@ -37,11 +37,21 @@ import javax.xml.bind.annotation.XmlType;
 public class Catalog extends EntrySet {
 
 
+    /**
+     * Returns the value of 'TABLE_CAT' entry.
+     *
+     * @return 'TABLE_CAT' entry value.
+     */
     public String getTABLE_CAT() {
         return getValue("TABLE_CAT");
     }
 
 
+    /**
+     * Sets the value of 'TABLE_CAT' entry.
+     *
+     * @param TABLE_CAT 'TABLE_CAT' entry value.
+     */
     public void setTABLE_CAT(final String TABLE_CAT) {
         setValue("TABLE_CAT", TABLE_CAT);
     }
