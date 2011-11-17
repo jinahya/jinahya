@@ -35,10 +35,10 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> EntrySet type parameter.
+ * @param <S> EntrySet type parameter.
  */
 @XmlTransient
-public abstract class EntrySetWrapper<E extends EntrySet> {
+public abstract class EntrySetWrapper<S extends EntrySet> {
 
 
     /**
@@ -128,7 +128,7 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
      *
      * @param entrySetType EntrySet type
      */
-    public EntrySetWrapper(final Class<E> entrySetType) {
+    public EntrySetWrapper(final Class<S> entrySetType) {
         super();
 
         if (entrySetType == null) {
@@ -144,7 +144,12 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
     }
 
 
-    public Class<E> getEntrySetType() {
+    /**
+     * Returns the type of EntrySet.
+     *
+     * @return entrySetType
+     */
+    public Class<S> getEntrySetType() {
         return entrySetType;
     }
 
@@ -154,10 +159,10 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
      *
      * @return entries
      */
-    protected Collection<E> getEntrySets() {
+    protected Collection<S> getEntrySets() {
 
         if (entrySets == null) {
-            entrySets = new ArrayList<E>();
+            entrySets = new ArrayList<S>();
         }
 
         return entrySets;
@@ -165,13 +170,15 @@ public abstract class EntrySetWrapper<E extends EntrySet> {
 
 
     /**
-     * Accessible type.
+     * EntrySet type.
      */
-    protected final Class<E> entrySetType;
+    protected final Class<S> entrySetType;
 
 
-    /** Accessible collection. */
-    private Collection<E> entrySets;
+    /**
+     * EntrySet collection.
+     */
+    private Collection<S> entrySets;
 
 
 }
