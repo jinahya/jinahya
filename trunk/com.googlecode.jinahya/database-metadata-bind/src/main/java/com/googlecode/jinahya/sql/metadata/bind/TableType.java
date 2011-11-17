@@ -18,89 +18,26 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
+ * Binding for TableType.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class TableType {
+public class TableType extends EntrySet {
 
 
-    @XmlEnum
-    public enum Name {
-
-
-        TABLE(),
-        VIEW(),
-        SYSTEM_TABLE("SYSTEM TABLE"),
-        GLOBAL_TEMPORARY("GLOBAL TEMPORARY"),
-        LOCAL_TEMPORARY("LOCAL TEMPORARY"),
-        ALIAS(),
-        SYNONYM();
-
-
-        private Name() {
-            this.value = name();
-        }
-
-
-        private Name(final String value) {
-            this.value = value;
-        }
-
-
-        private final String value;
-
-
+    public String getTABLE_TYPE() {
+        return getValue("TABLE_TYPE");
     }
 
 
-    public String getCatalog() {
-        return catalog;
+    public void setTABLE_TYPE(final String TABLE_TYPE) {
+        setValue("TABLE_TYPE", TABLE_TYPE);
     }
-
-
-    public void setCatalog(final String catalog) {
-        this.catalog = catalog;
-    }
-
-
-    public String getSchema() {
-        return schema;
-    }
-
-
-    public void setSchema(final String schema) {
-        this.schema = schema;
-    }
-
-
-    public Name getName() {
-        return name;
-    }
-
-
-    public void setName(final Name name) {
-        this.name = name;
-    }
-
-
-    @XmlAttribute()
-    private String catalog;
-
-
-    @XmlAttribute()
-    private String schema;
-
-
-    @XmlValue
-    private Name name;
 
 
 }

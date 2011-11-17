@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
-                      "importedKeys", "indices", "primaryKeys", "privileges"})
+                      "importedKeys", "indices", "primaryKeys", "privileges",
+                      "versionColumns"})
 public class Table extends EntrySet {
 
 
@@ -234,6 +235,16 @@ public class Table extends EntrySet {
     }
 
 
+    public Collection<VersionColumn> getVersionColumns() {
+
+        if (versionColumns == null) {
+            versionColumns = new ArrayList<VersionColumn>();
+        }
+
+        return versionColumns;
+    }
+
+
     @XmlElement(name = "column")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Column> columns;
@@ -267,6 +278,11 @@ public class Table extends EntrySet {
     @XmlElement(name = "privilege")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<TablePrivilege> privileges;
+
+
+    @XmlElement(name = "versionColumn")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<VersionColumn> versionColumns;
 
 
 }

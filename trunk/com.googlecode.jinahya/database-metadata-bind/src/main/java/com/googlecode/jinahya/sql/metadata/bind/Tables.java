@@ -113,6 +113,10 @@ public class Tables extends EntrySetWrapper<Table> {
 
                 // -------------------------------------------------- privileges
                 TablePrivileges.getTablePrivileges(databaseMetaData, table);
+
+                // ---------------------------------------------- versionColumns
+                VersionColumns.getVersionColumns(databaseMetaData, table);
+
             }
         } finally {
             tableResultSet.close();
