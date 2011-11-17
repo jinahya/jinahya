@@ -4,6 +4,7 @@ Catalog
 Catalogs
 Column
 ColumnPrivilege
+ColumnPrivileges
 Columns
 ExportedKey
 ExportedKeys
@@ -20,5 +21,6 @@ Schema
 Schemas
 Table
 TablePrivilege
+TablePrivileges
 Tables
 

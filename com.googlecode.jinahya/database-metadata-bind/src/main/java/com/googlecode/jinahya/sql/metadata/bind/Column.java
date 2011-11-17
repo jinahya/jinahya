@@ -18,7 +18,12 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -26,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
+@XmlType(propOrder={"entries", "privileges"})
 public class Column extends EntrySet {
 
 
@@ -227,6 +233,26 @@ public class Column extends EntrySet {
     public void setIS_AUTOINCREMENT(final String IS_AUTOINCREMENT) {
         setValue("IS_AUTOINCREMENT", IS_AUTOINCREMENT);
     }
+
+
+    /**
+     * Returns privileges.
+     *
+     * @return privileges
+     */
+    public Collection<ColumnPrivilege> getPrivileges() {
+
+        if (privileges == null) {
+            privileges = new ArrayList<ColumnPrivilege>();
+        }
+
+        return privileges;
+    }
+
+
+    @XmlElement(name = "privilege")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ColumnPrivilege> privileges;
 
 
 }
