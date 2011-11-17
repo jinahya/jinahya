@@ -1,0 +1,17 @@
+#summary One-sentence summary of this page.
+#labels Featured,JDBC,JAXB
+
+= Introduction =
+
+Add your content here.
+
+= Apidocs =
+ * [1.0-alpha-2-SNAPSHOT http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/database-metadata-bind/1.0-alpha-2-SNAPSHOT/apidocs/index.html]
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
