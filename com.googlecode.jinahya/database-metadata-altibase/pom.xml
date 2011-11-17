@@ -17,7 +17,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>database-metadata-bind</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>com.altibase</groupId>
