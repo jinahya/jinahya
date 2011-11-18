@@ -29,7 +29,7 @@
           border-spacing:0;
           margin:0 0 1em;
           color:#000;
-          width:100%; 
+          width:100%;
           <xsl:comment>this is my addition :)</xsl:comment>
           }
           table a {
@@ -101,140 +101,64 @@
         </style>
       </head>
       <body>
+        <h1>Properties</h1>
         <xsl:apply-templates select="b:properties"/>
+        <h1>Catalogs</h1>
         <xsl:apply-templates select="b:catalogs"/>
+        <h1>Data Types</h1>
         <xsl:apply-templates select="b:dataTypes"/>
+        <h1>Schemas</h1>
         <xsl:apply-templates select="b:schemas"/>
+        <h1>Tables</h1>
         <xsl:apply-templates select="b:tables"/>
+        <h1>Table Types</h1>
         <xsl:apply-templates select="b:tableTypes"/>
       </body>
     </html>
   </xsl:template>
 
   <xsl:template match="b:properties">
-    <xsl:for-each select="b:property">
-      <table>
-        <caption>
-          <xsl:text>PROPERTIES</xsl:text>
-        </caption>
-        <thead>
-          <tr>
-            <th>NAME</th>
-            <th>MAX_LEN</th>
-            <th>DEAULT_VALUE</th>
-            <th>DESCRIPION</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <xsl:value-of select="b:NAME"/>
-            </td>
-            <td>
-              <xsl:value-of select="b:MAX_LEN/text()"/>
-            </td>
-            <td>
-              <xsl:value-of select="b:DEAULT_VALUE/text()"/>
-            </td>
-            <td>
-              <xsl:value-of select="b:DESCRIPTION/text()"/>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-        </tfoot>
-      </table>
-    </xsl:for-each>
+    <xsl:call-template name="entries-to-table">
+      <xsl:with-param name="caption" select="'PROPERTIES'"/>
+    </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="b:catalogs">
-    <table xmlns="http://www.w3.org/1999/xhtml">
-      <caption>
-        <xsl:text>CATALOGS</xsl:text>
-      </caption>
-      <thead>
-        <tr>
-          <th>TABLE_CAT</th>
-        </tr>
-      </thead>
-      <tbody>
-        <xsl:for-each select="b:catalog">
-          <tr>
-            <td>
-              <xsl:value-of select="b:entries/b:entry[@key='TABLE_CAT']"/>
-            </td>
-          </tr>
-        </xsl:for-each>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
+    <xsl:call-template name="entries-to-table">
+      <xsl:with-param name="caption" select="'Entries'"/>
+    </xsl:call-template>
+    <xsl:apply-templates select="functionColumns"/>
   </xsl:template>
+
+  <xsl:template match="b:functionColumns">
+    <xsl:call-template name="entries-to-table">
+      <xsl:with-param name="caption" select="'Function Columns'"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="b:dataTypes">
     <xsl:call-template name="dataTypes-to-table"/>
   </xsl:template>
 
   <xsl:template match="b:schemas">
-    <!--
-    <xsl:call-template name="entries-parents-to-table">
-      <xsl:with-param name="entries" select="b:entries"/>
+    <xsl:call-template name="entries-to-table">
+      <xsl:with-param name="caption" select="'SCHEMAS'"/>
     </xsl:call-template>
-    -->
-    <table xmlns="http://www.w3.org/1999/xhtml">
-      <caption>
-        <xsl:text>SCHEMAS</xsl:text>
-      </caption>
-      <thead>
-        <tr>
-          <th>TABLE_CATALOG</th>
-          <th>TABLE_SCHEM</th>
-        </tr>
-      </thead>
-      <tbody>
-        <xsl:for-each select="b:schema">
-          <tr>
-            <td>
-              <xsl:value-of select="b:entries/b:entry[@key='TABLE_CATALOG']"/>
-            </td>
-            <td>
-              <xsl:value-of select="b:entries/b:entry[@key='TABLE_SCHEM']"/>
-            </td>
-          </tr>
-        </xsl:for-each>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
   </xsl:template>
 
   <xsl:template match="b:tables">
+    <xsl:call-template name="entries-to-table">
+      <xsl:with-param name="caption" select="'SCHEMAS'"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="b:tableTypes">
     <xsl:call-template name="entries-to-table">
       <xsl:with-param name="caption" select="'TABLE TYPES'"/>
     </xsl:call-template>
-    <!--table xmlns="http://www.w3.org/1999/xhtml">
-      <caption>
-        <xsl:text>TABLE TYPES</xsl:text>        
-      </caption>
-      <thead>
-        <xsl:for-each select="b:tableType/b:entries">
-          <xsl:if test="position()=1">
-            <xsl:call-template name="entries-to-thead-row"/>
-          </xsl:if>
-        </xsl:for-each>
-      </thead>
-      <tbody>
-        <xsl:for-each select="b:tableType/b:entries">
-          <xsl:call-template name="entries-to-tbody-row"/>
-        </xsl:for-each>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table-->
   </xsl:template>
 
-  <xsl:template match="b:entries">                            <!-- b:entries -->
+  <xsl:template match="b:entries">
     <xsl:param name="caption"/>
     <table xmlns="http://www.w3.org/1999/xhtml">
       <xsl:if test="$caption">
@@ -260,4 +184,5 @@
       </tfoot>
     </table>
   </xsl:template>
+
 </xsl:stylesheet>
