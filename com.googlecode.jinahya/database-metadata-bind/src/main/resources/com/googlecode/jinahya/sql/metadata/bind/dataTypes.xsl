@@ -25,46 +25,49 @@
       <thead>
         <tr>
           <th>TYPE_NAME</th>
-          <th>DATA_TYPE</th>
+          <!--th>DATA_TYPE</th--> <!-- remarked -->
           <th>PRECISION</th>
-          <th>LITERAL_PREFIX</th>
-          <th>LITERAL_SURFIX</th>
-          <th>CREATE_PARAMS</th>
+          <!--th>LITERAL_PREFIX</th--> <!-- remarked -->
+          <!--th>LITERAL_SURFIX</th--> <!-- remarked -->
+          <!--th>CREATE_PARAMS</th--> <!-- remarked -->
           <th>NULLABLE</th>
           <th>CASE_SENSITIVE</th>
           <th>SEARCHABLE</th>
           <th>UNSIGNED_ATTRIBUTE</th>
           <th>FIXED_PREC_SCALE</th>
           <th>AUTO_INCREMENT</th>
-          <th>LOCAL_TYPE_NAME</th>
+          <!--th>LOCAL_TYPE_NAME</th--> <!-- remarked -->
           <th>MINIMUM_SCALE</th>
           <th>MAXIMUM_SCALE</th>
           <!--th>SQL_DATA_TYPE</th--> <!-- unused -->
           <!--th>SQL_DATETIME_SUB</th--> <!-- unused -->
-          <th>NUM_PREC_RADIX</th>
+          <!--th>NUM_PREC_RADIX</th--> <!-- remarked -->
         </tr>
       </thead>
       <tbody>
         <xsl:for-each select="b:dataType">
           <tr>
+            <xsl:attribute name="id">
+            <xsl:text>data-type</xsl:text><xsl:value-of select="b:entries/b:entry[@key='DATA_TYPE']"/>
+            </xsl:attribute>
             <td>
               <xsl:value-of select="b:entries/b:entry[@key='TYPE_NAME']"/>
             </td>
-            <td>
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='DATA_TYPE']"/>
-            </td>
+            </td-->
             <td>
               <xsl:value-of select="b:entries/b:entry[@key='PRECISION']"/>
             </td>
-            <td>
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='LITERNAL_PREFIX']"/>
-            </td>
-            <td>
+            </td-->
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='LITERAL_SUFFIX']"/>
-            </td>
-            <td>
+            </td-->
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='CREATE_PARAMS']"/>
-            </td>
+            </td-->
             <xsl:variable name="NULLABLE" select="b:entries/b:entry[@key='NULLABLE']"/>
             <xsl:variable name="NULLABLE_TITLE">
               <xsl:choose>
@@ -122,9 +125,9 @@
             <td>
               <xsl:value-of select="b:entries/b:entry[@key='AUTO_INCREMENT']"/>
             </td>
-            <td>
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='LOCAL_TYPE_NAME']"/>
-            </td>
+            </td-->
             <td>
               <xsl:value-of select="b:entries/b:entry[@key='MINIMUM_SCALE']"/>
             </td>
@@ -137,9 +140,9 @@
             <!--td>
                 <xsl:value-of select="b:entries/b:entry[@key='SQL_DATETIME_SUB']"/>
                 </td-->
-            <td>
+            <!--td>
               <xsl:value-of select="b:entries/b:entry[@key='NUM_PREC_RADIX']"/>
-            </td>
+            </td-->
           </tr>
         </xsl:for-each>
       </tbody>
