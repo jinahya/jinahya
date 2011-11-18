@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Binding for ExportedKey.
+ * ImportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -43,7 +43,7 @@ public class ImportedKey extends EntrySet {
     /**
      * Sets the value of 'PKTABLE_CAT' entry.
      *
-     * @param TABLE_CAT 'PKTABLE_CAT' entry value.
+     * @param PKTABLE_CAT 'PKTABLE_CAT' entry value.
      */
     public void setPKTABLE_CAT(final String PKTABLE_CAT) {
         setValue("PKTABLE_CAT", PKTABLE_CAT);
