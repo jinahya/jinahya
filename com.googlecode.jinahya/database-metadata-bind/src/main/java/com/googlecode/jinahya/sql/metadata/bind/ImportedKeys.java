@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * ExportedKey wrapper.
+ * Wrapper for <code>ImportedKey</code>s.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -46,41 +46,62 @@ public class ImportedKeys extends EntrySetWrapper<ImportedKey> {
      * @param schema schema
      * @param table table
      * @return a new instance
-     * @throws SQLException if an SQL error occurs.
+     * @throws SQLException if a database access error occurs
      */
     public static ImportedKeys newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schema, final String table)
         throws SQLException {
 
-        final ImportedKeys importedKeys = new ImportedKeys();
-        getImportedKeys(databaseMetaData, catalog, schema, table,
-                        importedKeys.getImportedKeys());
+        final ImportedKeys instance = new ImportedKeys();
 
-        return importedKeys;
+        getImportedKeys(databaseMetaData, catalog, schema, table,
+                        instance.getImportedKeys());
+
+        return instance;
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schema
+     * @param table
+     * @param importedKeys
+     * @throws SQLException if a database access error occurs
+     *
+     * @see DatabaseMetaData#getImportedKeys(String, String, String)
+     */
     public static void getImportedKeys(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schema, final String table,
         final Collection<ImportedKey> importedKeys)
         throws SQLException {
 
-        final ResultSet importedKeyResultSet =
+        final ResultSet resultSet =
             databaseMetaData.getImportedKeys(catalog, schema, table);
         try {
-            while (importedKeyResultSet.next()) {
+            while (resultSet.next()) {
                 final ImportedKey importedKey = EntrySet.newInstance(
-                    ImportedKey.class, importedKeyResultSet);
+                    ImportedKey.class, resultSet);
                 importedKeys.add(importedKey);
             }
         } finally {
-            importedKeyResultSet.close();
+            resultSet.close();
         }
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException if a database access error occurs
+     *
+     * @see #getImportedKeys(DatabaseMetaData, String, String, String,
+     *                       Collection) 
+     */
     public static void getImportedKeys(final DatabaseMetaData databaseMetaData,
                                        final Table table)
         throws SQLException {
