@@ -22,7 +22,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -89,13 +88,13 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
                 // --------------------------------------------------- functions
                 Functions.getAllFunctions(databaseMetaData, catalog);
 
-                // ----------------------------------------------------- schemas
-                Schemas.getAllSchemas(databaseMetaData, catalog);
-
                 // -------------------------------------------- procedureColumns
                 ProcedureColumns.getAllProcedureColumns(
                     databaseMetaData, catalog);
 
+                // ----------------------------------------------------- schemas
+                Schemas.getAllSchemas(databaseMetaData, catalog);
+                
                 // -------------------------------------------------------- UDTs
                 UDTs.getAllUDTs(databaseMetaData, catalog);
             }

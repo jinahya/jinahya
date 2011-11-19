@@ -52,7 +52,7 @@ public abstract class EntrySetWrapper<S extends EntrySet> {
      * @param output output
      * @throws JAXBException if JAXB error occurs
      */
-    public static <W extends EntrySetWrapper, O> void marshal(
+    public static <W extends EntrySetWrapper<?>, O> void marshal(
         final W wrapper, final Map<String, Object> properties,
         final Class<O> outputType, final O output)
         throws JAXBException {
@@ -87,13 +87,15 @@ public abstract class EntrySetWrapper<S extends EntrySet> {
      * <code>input</code>.
      *
      * @param <W> EntrySetWrapper type parameter
+     * @param <I> input type
      * @param wrapperType EntrySetWrapper type
      * @param properties unmarshaller properties
      * @param inputType input type
      * @param input input
+     * @return the wrapper instance.
      * @throws JAXBException if a JAXB error occurs.
      */
-    public static <W extends EntrySetWrapper, I> W unmarshal(
+    public static <W extends EntrySetWrapper<?>, I> W unmarshal(
         final Class<W> wrapperType, final Map<String, Object> properties,
         final Class<I> inputType, final I input)
         throws JAXBException {
