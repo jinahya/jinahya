@@ -18,10 +18,16 @@
 package com.googlecode.jinahya.sql;
 
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.util.Calendar;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -302,6 +308,102 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
         }
 
         return value.doubleValue();
+    }
+
+
+    /**
+     * Retrieves the value of the designated column in the current row of
+     * specified <code>resultSet</code> object as a <code>java.util.Date</code>
+     * object in the Java programming language.
+     *
+     * @param resultSet resultSet
+     * @param columnLabel the label for the column specified with the SQL AS
+     *        clause. If the SQL AS clause was not specified, then the label is
+     *        the name of the column
+     * @return the  column value; if the value id SQL <code>NULL</code>, the
+     *         value returned is <code>null</code>
+     * @throws SQLException if the columnLabel is not valid; if a database
+     *         access error occurs or this method is called on a closed result
+     *         set
+     */
+    protected static Date getTimestamp(final ResultSet resultSet,
+                                       final String columnLabel)
+        throws SQLException {
+
+        final Timestamp value = resultSet.getTimestamp(columnLabel);
+        if (value == null) {
+            return null;
+        }
+
+        return new Date(value.getTime());
+    }
+
+
+    protected static Date getTimestamp(final ResultSet resultSet,
+                                       final String columnLabel,
+                                       final Calendar cal)
+        throws SQLException {
+
+        final Timestamp value = resultSet.getTimestamp(columnLabel, cal);
+        if (value == null) {
+            return null;
+        }
+
+        return new Date(value.getTime());
+    }
+
+
+    protected static void setTimestamp(
+        final CallableStatement callableStatement, final int parameterIndex,
+        final Long value)
+        throws SQLException {
+
+        if (value == null) {
+            callableStatement.setNull(parameterIndex, Types.TIMESTAMP);
+        } else {
+            callableStatement.setTimestamp(
+                parameterIndex, new Timestamp(value.longValue()));
+        }
+    }
+
+
+    protected static void setTimestamp(
+        final PreparedStatement preparedStatement, final int parameterIndex,
+        final Long value)
+        throws SQLException {
+
+        if (value == null) {
+            preparedStatement.setNull(parameterIndex, Types.TIMESTAMP);
+        } else {
+            preparedStatement.setTimestamp(
+                parameterIndex, new Timestamp(value.longValue()));
+        }
+    }
+
+
+    protected static void setTimestamp(
+        final CallableStatement callableStatement, final int parameterIndex,
+        final Date value)
+        throws SQLException {
+
+        if (value == null) {
+            setTimestamp(callableStatement, parameterIndex, (Long) null);
+        } else {
+            setTimestamp(callableStatement, parameterIndex, value.getTime());
+        }
+    }
+
+
+    protected static void setTimestamp(
+        final PreparedStatement preparedStatement, final int parameterIndex,
+        final Date value)
+        throws SQLException {
+
+        if (value == null) {
+            setTimestamp(preparedStatement, parameterIndex, (Long) null);
+        } else {
+            setTimestamp(preparedStatement, parameterIndex, value.getTime());
+        }
     }
 
 
