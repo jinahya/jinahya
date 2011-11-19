@@ -36,6 +36,14 @@ import javax.sql.DataSource;
 public class TableSequenceManager extends SequenceManager {
 
 
+    /** result set type. */
+    private static final int TYPE = ResultSet.TYPE_SCROLL_SENSITIVE;
+
+
+    /** result set concurrency. */
+    private static final int CONCURRENCY = ResultSet.CONCUR_UPDATABLE;
+
+
     /**
      * Creates a new instance.
      *
@@ -75,9 +83,7 @@ public class TableSequenceManager extends SequenceManager {
             connection.setTransactionIsolation(
                 Connection.TRANSACTION_REPEATABLE_READ);
             try {
-                if (metaData.supportsResultSetConcurrency(
-                    ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE)) {
+                if (metaData.supportsResultSetConcurrency(TYPE, CONCURRENCY)) {
                     fetchConcurrently(connection, sequenceName, sequenceValues,
                                       fetchCount);
                 } else {
@@ -119,8 +125,7 @@ public class TableSequenceManager extends SequenceManager {
 
         final PreparedStatement preparedStatement = connection.prepareStatement(
             "SELECT * FROM " + table + " WHERE " + pkColumnName + " = ?"
-            + " FOR UPDATE",
-            ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            + " FOR UPDATE", TYPE, CONCURRENCY);
         try {
             int parameterIndex = 0;
             preparedStatement.setString(++parameterIndex, sequenceName);
@@ -181,16 +186,17 @@ public class TableSequenceManager extends SequenceManager {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
                 if (resultSet.next()) {
-                    insert(connection, sequenceName);
+                    insert(connection, sequenceName); // ---------------- INSERT
                     fetchSeparately(connection, sequenceName, sequenceValues,
                                     fetchCount);
+                    return;
                 }
 
                 long sequenceValue = resultSet.getLong(valueColumnName);
                 for (int i = 0; i < fetchCount; i++) {
                     sequenceValues.add(++sequenceValue);
                 }
-                update(connection, sequenceName, sequenceValue);
+                update(connection, sequenceName, sequenceValue); // ----- UPDATE
                 return;
 
             } finally {
