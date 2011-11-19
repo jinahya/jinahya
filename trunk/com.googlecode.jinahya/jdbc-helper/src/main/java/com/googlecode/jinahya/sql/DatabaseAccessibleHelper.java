@@ -95,17 +95,13 @@ public final class DatabaseAccessibleHelper {
         try {
             int parameterIndex = 0;
             preparedStatement.setLong(++parameterIndex, accessible.getId());
-
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
                 if (!resultSet.next()) {
                     return false;
                 }
-
                 accessible.read(resultSet);
-                
                 return true;
-
             } finally {
                 resultSet.close();
             }

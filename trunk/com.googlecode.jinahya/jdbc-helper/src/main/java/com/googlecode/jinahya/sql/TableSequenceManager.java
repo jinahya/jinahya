@@ -93,7 +93,6 @@ public class TableSequenceManager extends SequenceManager {
                     fetchConcurrently(connection, sequenceName, sequenceValues,
                                       fetchCount);
                 } else {
-
                     fetchSeparately(connection, sequenceName, sequenceValues,
                                     fetchCount);
                 }
