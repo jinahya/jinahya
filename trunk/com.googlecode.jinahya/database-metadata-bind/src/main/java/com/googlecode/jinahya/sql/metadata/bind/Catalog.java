@@ -73,6 +73,11 @@ public class Catalog extends EntrySet {
     }
 
 
+    /**
+     * Returns functions.
+     *
+     * @return functions.
+     */
     public Collection<Function> getFunctions() {
 
         if (functions == null) {
@@ -83,6 +88,11 @@ public class Catalog extends EntrySet {
     }
 
 
+    /**
+     * Returns functionColumns.
+     *
+     * @return functionColumns.
+     */
     public Collection<FunctionColumn> getFunctionColumns() {
 
         if (functionColumns == null) {
@@ -93,6 +103,11 @@ public class Catalog extends EntrySet {
     }
 
 
+    /**
+     * Returns procedureColumns.
+     *
+     * @return procedureColumns.
+     */
     public Collection<ProcedureColumn> getProcedureColumns() {
 
         if (procedureColumns == null) {
@@ -103,6 +118,11 @@ public class Catalog extends EntrySet {
     }
 
 
+    /**
+     * Procedures.
+     *
+     * @return procedures.
+     */
     public Collection<Procedure> getProcedures() {
 
         if (procedures == null) {
@@ -113,6 +133,11 @@ public class Catalog extends EntrySet {
     }
 
 
+    /**
+     * Returns UDTs.
+     *
+     * @return UDTs.
+     */
     public Collection<UDT> getUDTs() {
 
         if (UDTs == null) {
@@ -124,6 +149,38 @@ public class Catalog extends EntrySet {
 
 
     /**
+     * functions.
+     */
+    @XmlElement(name = "function")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Function> functions;
+
+
+    /**
+     * function columns.
+     */
+    @XmlElement(name = "functionColumn")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<FunctionColumn> functionColumns;
+
+
+    /**
+     * procedure columns.
+     */
+    @XmlElement(name = "procedureColumn")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ProcedureColumn> procedureColumns;
+
+
+    /**
+     * procedures.
+     */
+    @XmlElement(name = "procedure")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Procedure> procedures;
+
+
+    /**
      * schemas.
      */
     @XmlElement(name = "schema")
@@ -131,26 +188,9 @@ public class Catalog extends EntrySet {
     private Collection<Schema> schemas;
 
 
-    @XmlElement(name = "function")
-    @XmlElementWrapper(required = true, nillable = true)
-    public Collection<Function> functions;
-
-
-    @XmlElement(name = "functionColumn")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<FunctionColumn> functionColumns;
-
-
-    @XmlElement(name = "procedureColumn")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<ProcedureColumn> procedureColumns;
-
-
-    @XmlElement(name = "procedure")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Procedure> procedures;
-
-
+    /**
+     * UDTs.
+     */
     @XmlElement(name = "UDT")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<UDT> UDTs;
