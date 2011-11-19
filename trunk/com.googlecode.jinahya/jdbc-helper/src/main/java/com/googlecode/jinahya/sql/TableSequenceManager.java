@@ -36,14 +36,6 @@ import javax.sql.DataSource;
 public class TableSequenceManager extends SequenceManager {
 
 
-    /** result set type. */
-    private static final int TYPE = ResultSet.TYPE_SCROLL_SENSITIVE;
-
-
-    /** result set concurrency. */
-    private static final int CONCURRENCY = ResultSet.CONCUR_UPDATABLE;
-
-
     /**
      * Creates a new instance.
      *
@@ -80,27 +72,26 @@ public class TableSequenceManager extends SequenceManager {
         final int isolation = connection.getTransactionIsolation();
         try {
             connection.setAutoCommit(false);
-            if (false && metaData.supportsTransactionIsolationLevel(
-                Connection.TRANSACTION_SERIALIZABLE)) {
-                connection.setTransactionIsolation(
-                    Connection.TRANSACTION_SERIALIZABLE);
-            } else {
-                connection.setTransactionIsolation(
-                    Connection.TRANSACTION_REPEATABLE_READ);
-            }
+            connection.setTransactionIsolation(
+                Connection.TRANSACTION_REPEATABLE_READ);
             try {
-                if (metaData.supportsResultSetConcurrency(TYPE, CONCURRENCY)) {
+                if (metaData.supportsResultSetConcurrency(
+                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE)) {
                     fetchConcurrently(connection, sequenceName, sequenceValues,
                                       fetchCount);
                 } else {
                     fetchSeparately(connection, sequenceName, sequenceValues,
                                     fetchCount);
                 }
-                connection.commit();
+
+                connection.commit(); // --------------------------------- COMMIT
+
             } catch (SQLException sqle) {
                 try {
-                    connection.rollback();
+                    connection.rollback(); // ------------------------- ROLLBACK
                 } catch (SQLException sqle2) {
+                    throw sqle2;
                 }
                 throw sqle;
             }
@@ -166,7 +157,7 @@ public class TableSequenceManager extends SequenceManager {
 
 
     /**
-     * Selects current sequence value.
+     * Selects separately.
      *
      * @param connection connection
      * @param sequenceName sequence name
