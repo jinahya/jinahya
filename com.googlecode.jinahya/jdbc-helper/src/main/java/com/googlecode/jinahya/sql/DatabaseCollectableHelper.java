@@ -55,10 +55,10 @@ public final class DatabaseCollectableHelper {
             select(connection, tableName, idColumnName, collection);
             return collection;
         } catch (IllegalAccessException iae) {
-            throw new SQLException(
+            throw new RuntimeException(
                 "failed to create instance of " + collectableType, iae);
         } catch (InstantiationException ie) {
-            throw new SQLException(
+            throw new RuntimeException(
                 "failed to create instance of " + collectableType, ie);
         }
     }
@@ -114,11 +114,11 @@ public final class DatabaseCollectableHelper {
                         accessible.read(resultSet);
                         accessibles.add(accessible);
                     } catch (IllegalAccessException iae) {
-                        throw new SQLException(
+                        throw new RuntimeException(
                             "failed to create instance of " + accessibleType,
                             iae);
                     } catch (InstantiationException ie) {
-                        throw new SQLException(
+                        throw new RuntimeException(
                             "failed to create instance of " + accessibleType,
                             ie);
                     }
