@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class PrimaryKey extends EntrySet {
+public class PrimaryKey extends ChildEntrySet<Table> {
 
 
     /**

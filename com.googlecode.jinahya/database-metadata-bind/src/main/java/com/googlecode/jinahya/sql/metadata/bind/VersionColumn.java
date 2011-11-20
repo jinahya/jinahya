@@ -26,9 +26,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 @XmlType(propOrder = {"entries"})
-public class VersionColumn extends EntrySet {
+public class VersionColumn extends ChildEntrySet<Table> {
 
 
     public String getSCOPE() {

@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -29,22 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class Attribute extends EntrySet {
-
-
-    /**
-     * Creates a new instance from given <code>resultSet</code>.
-     * 
-     * @param resultSet resultSet
-     * @return a new instance
-     * @throws SQLException if an SQL error occurs.
-     */
-    public static Attribute newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(Attribute.class, resultSet);
-    }
+//@XmlRootElement
+public class Attribute extends ChildEntrySet<UDT> {
 
 
     /**

@@ -52,21 +52,23 @@ public class Schemas extends EntrySetWrapper<Schema> {
                                       final String schemaPattern)
         throws SQLException {
 
-        final Schemas schemas = new Schemas();
-        getSchemas(databaseMetaData, catalog, schemaPattern,
-                   schemas.getSchemas());
+        final Schemas instance = new Schemas();
 
-        return schemas;
+        getSchemas(databaseMetaData, catalog, schemaPattern,
+                   instance.getSchemas());
+
+        return instance;
     }
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param schemas
-     * @throws SQLException 
+     * Retrieves <code>Schema</code>s.
+     *
+     * @param databaseMetaData meta
+     * @param catalog catalog
+     * @param schemaPattern schema pattern
+     * @param schemas the collection to be filled
+     * @throws SQLException if a database access error occurs.
      *
      * @see DatabaseMetaData#getSchemas(String, String) 
      */
@@ -77,34 +79,23 @@ public class Schemas extends EntrySetWrapper<Schema> {
         throws SQLException {
 
         try {
-            final ResultSet schemaResultSet =
+            final ResultSet resultSEt =
                 databaseMetaData.getSchemas(catalog, schemaPattern);
             try {
-                while (schemaResultSet.next()) {
+                while (resultSEt.next()) {
 
                     // ------------------------------------------------- entries
                     final Schema schema = EntrySet.newInstance(
-                        Schema.class, schemaResultSet);
+                        Schema.class, resultSEt);
                     schemas.add(schema);
-
-                    // ---------------------------------------------- attributes
-                    Attributes.getAllAttributes(databaseMetaData, schema);
-
-                    // ----------------------------------------------- functions
-                    Functions.getAllFunctions(databaseMetaData, schema);
-
-                    // ---------------------------------------- procedureColumns
-                    ProcedureColumns.getAllProcedureColumns(
-                        databaseMetaData, schema);
 
                     // -------------------------------------------------- tables
                     Tables.getAllTables(databaseMetaData, schema);
 
-                    // ---------------------------------------------------- UDTs
-                    UDTs.getAllUDTs(databaseMetaData, schema);
                 }
+
             } finally {
-                schemaResultSet.close();
+                resultSEt.close();
             }
         } catch (AbstractMethodError ame) {
             //ame.printStackTrace(System.err);
@@ -119,7 +110,7 @@ public class Schemas extends EntrySetWrapper<Schema> {
      * @param schemaPattern schema pattern
      * @throws SQLException if an SQL error occurs
      *
-     * @see DatabaseMetaData#getSchemas(String, String) 
+     * @see DatabaseMetaData#getSchemas(String, String)
      */
     public static void getSchemas(final DatabaseMetaData databaseMetaData,
                                   final Catalog catalog,
@@ -129,19 +120,23 @@ public class Schemas extends EntrySetWrapper<Schema> {
 
         getSchemas(databaseMetaData, catalog.getTABLE_CAT(), schemaPattern,
                    catalog.getSchemas());
+
+        for (Schema schema : catalog.getSchemas()) {
+            schema.setParent(catalog);
+        }
     }
 
 
     /**
-     * 
-     * @param databaseMetaData database meta data
+     * Retrieves all <code>Schema</code> mapped to given <code>catalog</code>.
+     *
+     * @param databaseMetaData meta
      * @param catalog catalog
-     * @throws SQLException if an SQL error occurs.
+     * @throws SQLException if a database access error occurs.
      */
     public static void getAllSchemas(final DatabaseMetaData databaseMetaData,
                                      final Catalog catalog)
         throws SQLException {
-
 
         getSchemas(databaseMetaData, catalog, null);
     }

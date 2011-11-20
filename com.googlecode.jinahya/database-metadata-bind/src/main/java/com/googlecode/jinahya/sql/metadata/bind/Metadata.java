@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"properties", "catalogs", "dataTypes", "schemas",
+@XmlType(propOrder = {"catalogs", "dataTypes", "properties", "schemas",
                       "tables", "tableTypes"})
 public class Metadata {
 
@@ -53,12 +53,12 @@ public class Metadata {
 
         final Metadata instance = new Metadata();
 
-        Properties.getClientInfoProperties(
-            databaseMetaData, instance.getProperties());
-
         Catalogs.getCatalogs(databaseMetaData, instance.getCatalogs());
 
         DataTypes.getTypeInfo(databaseMetaData, instance.getDataTypes());
+
+        Properties.getClientInfoProperties(
+            databaseMetaData, instance.getProperties());
 
         Schemas.getSchemas(databaseMetaData, null, null, instance.getSchemas());
 
@@ -136,11 +136,6 @@ public class Metadata {
     }
 
 
-    @XmlElement(name = "property")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Property> properties;
-
-
     @XmlElement(name = "catalog")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Catalog> catalogs;
@@ -149,6 +144,11 @@ public class Metadata {
     @XmlElement(name = "dataType")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<DataType> dataTypes;
+
+
+    @XmlElement(name = "property")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Property> properties;
 
 
     @XmlElement(name = "schema")

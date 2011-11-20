@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
 public class Entries {
 
 
@@ -49,7 +48,9 @@ public class Entries {
     }
 
 
-    /** entries. */
+    /**
+     * entries.
+     */
     @XmlElement(name = "entry", nillable = true)
     private Collection<Entry> entries;
 

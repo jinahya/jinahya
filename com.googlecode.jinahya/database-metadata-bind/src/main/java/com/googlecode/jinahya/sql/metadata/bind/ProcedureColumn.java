@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries"})
-public class ProcedureColumn extends EntrySet {
+public class ProcedureColumn extends ChildEntrySet<Catalog> {
 
 
     public String getPROCEDURE_CAT() {

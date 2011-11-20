@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class VersionColumns extends EntrySetWrapper<VersionColumn> {
 
 
@@ -42,11 +42,10 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
      *
      * @param databaseMetaData database meta data
      * @param catalog catalog
-     * @param schema schema pattern
-     * @param table table name pattern
-     * @param columnNamePattern column name pattern
+     * @param schema schema
+     * @param table table
      * @return a new instance
-     * @throws SQLException if an SQL error occurs.
+     * @throws SQLException if a database access error occurs.
      */
     public static VersionColumns newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -62,26 +61,43 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schema
+     * @param table
+     * @param versionColumns
+     * @throws SQLException 
+     *
+     * @see DatabaseMetaData#getVersionColumns(String, String, String)
+     */
     public static void getVersionColumns(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schema, final String table,
         final Collection<VersionColumn> versionColumns)
         throws SQLException {
 
-        final ResultSet versionColumnResultSet =
+        final ResultSet resultSet =
             databaseMetaData.getVersionColumns(catalog, schema, table);
         try {
-            while (versionColumnResultSet.next()) {
+            while (resultSet.next()) {
                 final VersionColumn instance = EntrySet.newInstance(
-                    VersionColumn.class, versionColumnResultSet);
+                    VersionColumn.class, resultSet);
                 versionColumns.add(instance);
             }
         } finally {
-            versionColumnResultSet.close();
+            resultSet.close();
         }
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException 
+     */
     public static void getVersionColumns(
         final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {
@@ -89,6 +105,10 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
         getVersionColumns(databaseMetaData, table.getTABLE_CAT(),
                           table.getTABLE_SCHEM(), table.getTABLE_NAME(),
                           table.getVersionColumns());
+
+        for (VersionColumn versionColumn : table.getVersionColumns()) {
+            versionColumn.setParent(table);
+        }
     }
 
 
@@ -100,6 +120,11 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
     }
 
 
+    /**
+     * Returns versionColumns.
+     *
+     * @return versionColumns.
+     */
     @XmlElement(name = "versionColumn")
     public Collection<VersionColumn> getVersionColumns() {
         return super.getEntrySets();

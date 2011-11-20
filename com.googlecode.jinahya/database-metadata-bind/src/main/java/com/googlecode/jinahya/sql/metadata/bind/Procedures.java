@@ -84,65 +84,18 @@ public class Procedures extends EntrySetWrapper<Procedure> {
      * 
      * @param databaseMetaData
      * @param catalog
-     * @param schemaNamePattern
-     * @param procedureNamePattern
-     * @param columnNamePattern
-     * @throws SQLException 
-     */
-    public static void getProcedures(
-        final DatabaseMetaData databaseMetaData, final Catalog catalog,
-        final String schemaNamePattern, final String procedureNamePattern)
-        throws SQLException {
-
-        getProcedures(databaseMetaData, catalog.getTABLE_CAT(),
-                      schemaNamePattern, procedureNamePattern,
-                      catalog.getProcedures());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
      * @throws SQLException 
      */
     public static void getAllProcedures(
         final DatabaseMetaData databaseMetaData, final Catalog catalog)
         throws SQLException {
 
-        getProcedures(databaseMetaData, catalog, null, null);
-    }
+        getProcedures(databaseMetaData, catalog.getTABLE_CAT(), null, null,
+                      catalog.getProcedures());
 
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param schema
-     * @param procedureNamePattern
-     * @throws SQLException 
-     */
-    public static void getProcedures(final DatabaseMetaData databaseMetaData,
-                                     final Schema schema,
-                                     final String procedureNamePattern)
-        throws SQLException {
-
-        getProcedures(databaseMetaData, schema.getTABLE_CATALOG(),
-                      schema.getTABLE_SCHEM(), procedureNamePattern,
-                      schema.getProcedures());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData database meta data
-     * @param schema schema
-     * @throws SQLException if an SQL error occurs.
-     */
-    public static void getAllProcedures(final DatabaseMetaData databaseMetaData,
-                                        final Schema schema)
-        throws SQLException {
-
-        getProcedures(databaseMetaData, schema, null);
+        for (Procedure procedure : catalog.getProcedures()) {
+            procedure.setParent(catalog);
+        }
     }
 
 

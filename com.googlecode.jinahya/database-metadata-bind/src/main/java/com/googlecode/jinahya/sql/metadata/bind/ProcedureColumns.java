@@ -98,69 +98,19 @@ public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
      * 
      * @param databaseMetaData
      * @param catalog
-     * @param schemaNamePattern
-     * @param procedureNamePattern
-     * @param columnNamePattern
-     * @throws SQLException 
-     */
-    public static void getProcedureColumns(
-        final DatabaseMetaData databaseMetaData, final Catalog catalog,
-        final String schemaNamePattern, final String procedureNamePattern,
-        final String columnNamePattern)
-        throws SQLException {
-
-        getProcedureColumns(
-            databaseMetaData, catalog.getTABLE_CAT(), schemaNamePattern,
-            procedureNamePattern, columnNamePattern,
-            catalog.getProcedureColumns());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
      * @throws SQLException 
      */
     public static void getAllProcedureColumns(
         final DatabaseMetaData databaseMetaData, final Catalog catalog)
         throws SQLException {
 
-        getProcedureColumns(databaseMetaData, catalog, null, null, null);
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param schema
-     * @param procedureNamePattern
-     * @param columnNamePattern
-     * @throws SQLException 
-     */
-    public static void getProcedureColumns(
-        final DatabaseMetaData databaseMetaData, final Schema schema,
-        final String procedureNamePattern, final String columnNamePattern)
-        throws SQLException {
-
         getProcedureColumns(
-            databaseMetaData, schema.getTABLE_CATALOG(),
-            schema.getTABLE_SCHEM(), procedureNamePattern, columnNamePattern,
-            schema.getProcedureColumns());
-    }
+            databaseMetaData, catalog.getTABLE_CAT(), null, null, null,
+            catalog.getProcedureColumns());
 
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param schema
-     * @throws SQLException 
-     */
-    public static void getAllProcedureColumns(
-        final DatabaseMetaData databaseMetaData, final Schema schema)
-        throws SQLException {
-
-        getProcedureColumns(databaseMetaData, schema, null, null);
+        for (ProcedureColumn procedureColumn : catalog.getProcedureColumns()) {
+            procedureColumn.setParent(catalog);
+        }
     }
 
 

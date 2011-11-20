@@ -21,8 +21,9 @@ package com.googlecode.jinahya.sql.metadata.bind;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <P> 
  */
-public abstract class Privilege extends EntrySet {
+public abstract class Privilege<P extends EntrySet> extends ChildEntrySet<P> {
 
 
     public String getTABLE_CAT() {
@@ -93,7 +94,6 @@ public abstract class Privilege extends EntrySet {
     public void setIS_GRANTABLE(final String IS_GRANTABLE) {
         setValue("IS_GRANTABLE", IS_GRANTABLE);
     }
-
 
 }
 

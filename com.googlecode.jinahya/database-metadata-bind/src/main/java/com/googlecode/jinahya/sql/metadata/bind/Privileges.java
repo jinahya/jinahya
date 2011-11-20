@@ -29,18 +29,21 @@ import javax.xml.bind.annotation.XmlTransient;
  * Identifier collection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <P> Privilege type parameter.
+ * @param <V> Privilege type parameter.
+ * @param <P> parent type parameter
  */
 @XmlRootElement
 @XmlTransient
-public abstract class Privileges<P extends Privilege>
-    extends EntrySetWrapper<P> {
+public abstract class Privileges<V extends Privilege<P>, P extends EntrySet>
+    extends EntrySetWrapper<V> {
 
 
     /**
      * Creates a new instance.
+     *
+     * @param privilegeType 
      */
-    public Privileges(final Class<P> privilegeType) {
+    public Privileges(final Class<V> privilegeType) {
         super(privilegeType);
     }
 
@@ -51,7 +54,7 @@ public abstract class Privileges<P extends Privilege>
      * @return properties
      */
     @XmlElement(name = "privilege")
-    public Collection<P> getPrivileges() {
+    public Collection<V> getPrivileges() {
         return super.getEntrySets();
     }
 

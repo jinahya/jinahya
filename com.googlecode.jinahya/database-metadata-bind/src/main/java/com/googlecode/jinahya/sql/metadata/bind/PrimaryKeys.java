@@ -43,7 +43,7 @@ public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
         throws SQLException {
 
         final PrimaryKeys primaryKeys = new PrimaryKeys();
-        
+
         getPrimaryKeys(databaseMetaData, catalog, schema, table,
                        primaryKeys.getPrimaryKeys());
 
@@ -57,16 +57,16 @@ public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
         final Collection<PrimaryKey> primaryKeys)
         throws SQLException {
 
-        final ResultSet primaryKeyResultSet =
+        final ResultSet resultSet =
             databaseMetaData.getPrimaryKeys(catalog, schema, table);
         try {
-            while (primaryKeyResultSet.next()) {
+            while (resultSet.next()) {
                 final PrimaryKey primaryKey = EntrySet.newInstance(
-                    PrimaryKey.class, primaryKeyResultSet);
+                    PrimaryKey.class, resultSet);
                 primaryKeys.add(primaryKey);
             }
         } finally {
-            primaryKeyResultSet.close();
+            resultSet.close();
         }
     }
 
@@ -78,6 +78,10 @@ public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
         getPrimaryKeys(databaseMetaData, table.getTABLE_CAT(),
                        table.getTABLE_SCHEM(), table.getTABLE_NAME(),
                        table.getPrimaryKeys());
+
+        for (PrimaryKey primaryKey : table.getPrimaryKeys()) {
+            primaryKey.setParent(table);
+        }
     }
 
 

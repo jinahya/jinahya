@@ -24,7 +24,6 @@ import java.sql.SQLException;
 
 import java.util.Collection;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -32,8 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class TablePrivileges extends Privileges<TablePrivilege> {
+//@XmlRootElement
+public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
 
 
     public static TablePrivileges newInstance(
@@ -55,28 +54,27 @@ public class TablePrivileges extends Privileges<TablePrivilege> {
         final Collection<TablePrivilege> privileges)
         throws SQLException {
 
-        final ResultSet tablePrvilegeResultSet =
+        final ResultSet resultSet =
             databaseMetaData.getTablePrivileges(
             catalog, schemaPattern, tableNamePattern);
         try {
-            while (tablePrvilegeResultSet.next()) {
+            while (resultSet.next()) {
                 final TablePrivilege privilege = EntrySet.newInstance(
-                    TablePrivilege.class, tablePrvilegeResultSet);
+                    TablePrivilege.class, resultSet);
                 privileges.add(privilege);
             }
         } finally {
-            tablePrvilegeResultSet.close();
+            resultSet.close();
         }
     }
 
 
-    public static void getTablePrivileges(
-        final DatabaseMetaData databaseMetaData, final Table table)
+    public static void getAllTablePrivileges(
+        final DatabaseMetaData databaseMetaData, final Catalog catalog)
         throws SQLException {
 
-        getTablePrivileges(databaseMetaData, table.getTABLE_CAT(),
-                           table.getTABLE_SCHEM(), table.getTABLE_NAME(),
-                           table.getPrivileges());
+        getTablePrivileges(databaseMetaData, catalog.getTABLE_CAT(),
+                           null, null, catalog.getTablePrivileges());
     }
 
 

@@ -25,14 +25,13 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class Functions extends EntrySetWrapper<Function> {
 
 
@@ -46,7 +45,7 @@ public class Functions extends EntrySetWrapper<Function> {
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      *
-     * @see DatabaseMetaData#getFunctions(String, String, String) 
+     * @see DatabaseMetaData#getFunctions(String, String, String)
      */
     public static Functions newInstance(final DatabaseMetaData databaseMetaData,
                                         final String catalog,
@@ -73,7 +72,7 @@ public class Functions extends EntrySetWrapper<Function> {
      * @param functions collection to be filled
      * @throws SQLException if an SQL error occurs.
      *
-     * @see DatabaseMetaData#getFunctions(String, String, String) 
+     * @see DatabaseMetaData#getFunctions(String, String, String)
      */
     public static void getFunctions(final DatabaseMetaData databaseMetaData,
                                     final String catalog,
@@ -100,53 +99,22 @@ public class Functions extends EntrySetWrapper<Function> {
     }
 
 
-    public static void getFunctions(final DatabaseMetaData databaseMetaData,
-                                    final Catalog catalog,
-                                    final String schemaNamePattern,
-                                    final String functionNamePattern)
-        throws SQLException {
-
-        getFunctions(databaseMetaData, catalog.getTABLE_CAT(),
-                     schemaNamePattern, functionNamePattern,
-                     catalog.getFunctions());
-    }
-
-
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @throws SQLException if a database access error occurs.
+     */
     public static void getAllFunctions(final DatabaseMetaData databaseMetaData,
                                        final Catalog catalog)
         throws SQLException {
 
-        getFunctions(databaseMetaData, catalog, null, null);
-    }
+        getFunctions(databaseMetaData, catalog.getTABLE_CAT(), null, null,
+                     catalog.getFunctions());
 
-
-    /**
-     * Gets functions from given <code>databaseMetaData</code> and add to
-     * specified <code>schema</code>'s functions field.
-     *
-     * @param databaseMetaData database meta data
-     * @param schema schema
-     * @param functionNamePattern function name pattern
-     * @throws SQLException if an SQL error occurs.
-     *
-     * @see DatabaseMetaData#getFunctions(String, String, String)
-     */
-    public static void getFunctions(final DatabaseMetaData databaseMetaData,
-                                    final Schema schema,
-                                    final String functionNamePattern)
-        throws SQLException {
-
-        getFunctions(databaseMetaData, schema.getTABLE_CATALOG(),
-                     schema.getTABLE_SCHEM(), functionNamePattern,
-                     schema.getFunctions());
-    }
-
-
-    public static void getAllFunctions(final DatabaseMetaData databaseMetaData,
-                                       final Schema schema)
-        throws SQLException {
-
-        getFunctions(databaseMetaData, schema, null);
+        for (Function function : catalog.getFunctions()) {
+            function.setParent(catalog);
+        }
     }
 
 

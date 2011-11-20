@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Attributes collection.
+ * Attribute collection.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -38,14 +38,15 @@ public class Attributes extends EntrySetWrapper<Attribute> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param typeNamePattern
-     * @param attributeNamePattern
-     * @return
-     * @throws SQLException 
+     * Creates a new instance.
+     *
+     * @param databaseMetaData meta
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param typeNamePattern typeNamePattern
+     * @param attributeNamePattern attributeNamePattern
+     * @return a new instance.
+     * @throws SQLException if a database access error occurs.
      * 
      * @see DatabaseMetaData#getAttributes(String, String, String, String) 
      */
@@ -55,11 +56,12 @@ public class Attributes extends EntrySetWrapper<Attribute> {
         final String attributeNamePattern)
         throws SQLException {
 
-        final Attributes attributes = new Attributes();
-        getAttributes(databaseMetaData, catalog, schemaPattern, typeNamePattern,
-                      attributeNamePattern, attributes.getAttributes());
+        final Attributes instance = new Attributes();
 
-        return attributes;
+        getAttributes(databaseMetaData, catalog, schemaPattern, typeNamePattern,
+                      attributeNamePattern, instance.getAttributes());
+
+        return instance;
     }
 
 
@@ -71,9 +73,9 @@ public class Attributes extends EntrySetWrapper<Attribute> {
      * @param typeNamePattern
      * @param attributeNamePattern
      * @param attributes
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs
      * 
-     * @see DatabaseMetaData#getAttributes(String, String, String, String) 
+     * @see DatabaseMetaData#getAttributes(String, String, String, String)
      */
     public static void getAttributes(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -82,52 +84,36 @@ public class Attributes extends EntrySetWrapper<Attribute> {
         final Collection<Attribute> attributes)
         throws SQLException {
 
-        final ResultSet attributeResultSet = databaseMetaData.getAttributes(
+        final ResultSet resultSet = databaseMetaData.getAttributes(
             catalog, schemaPattern, typeNamePattern, attributeNamePattern);
         try {
-            while (attributeResultSet.next()) {
+            while (resultSet.next()) {
                 final Attribute attribute = EntrySet.newInstance(
-                    Attribute.class, attributeResultSet);
+                    Attribute.class, resultSet);
                 attributes.add(attribute);
             }
         } finally {
-            attributeResultSet.close();
+            resultSet.close();
         }
     }
 
 
     /**
      * 
-     * @param databaseMetaData
-     * @param schema
-     * @param typeNamePattern
-     * @param attributeNamePattern
-     * @throws SQLException 
-     *
-     * @see DatabaseMetaData#getAttributes(String, String, String, String) 
-     */
-    public static void getAttributes(
-        final DatabaseMetaData databaseMetaData, final Schema schema,
-        final String typeNamePattern, final String attributeNamePattern)
-        throws SQLException {
-
-        getAttributes(databaseMetaData, schema.getTABLE_CATALOG(),
-                      schema.getTABLE_SCHEM(), typeNamePattern,
-                      attributeNamePattern, schema.getAttributes());
-    }
-
-
-    /**
-     * 
      * @param databaseMetaData database meta data
-     * @param schema schema
-     * @throws SQLException if an SQL error occurs
+     * @param UDT UDT
+     * @throws SQLException if a database access error occurs.
      */
     public static void getAllAttributes(
-        final DatabaseMetaData databaseMetaData, final Schema schema)
+        final DatabaseMetaData databaseMetaData, final UDT UDT)
         throws SQLException {
 
-        getAttributes(databaseMetaData, schema, null, null);
+        getAttributes(databaseMetaData, UDT.getTYPE_CAT(), UDT.getTYPE_SCHEM(),
+                      UDT.getTYPE_NAME(), null, UDT.getAttributes());
+
+        for (Attribute attribute : UDT.getAttributes()) {
+            attribute.setParent(UDT);
+        }
     }
 
 

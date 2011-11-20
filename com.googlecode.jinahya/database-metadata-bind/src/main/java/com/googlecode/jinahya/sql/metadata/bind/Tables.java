@@ -96,6 +96,9 @@ public class Tables extends EntrySetWrapper<Table> {
                     Table.class, tableResultSet);
                 tables.add(table);
 
+                // -------------------------------------------- columnPrivileges
+                ColumnPrivileges.getAllColumnPrivileges(databaseMetaData, table);
+
                 // ----------------------------------------------------- columns
                 Columns.getAllColumns(databaseMetaData, table);
 
@@ -111,9 +114,6 @@ public class Tables extends EntrySetWrapper<Table> {
                 // ----------------------------------------------------- indices
                 Indices.getAllIndexInfo(databaseMetaData, table);
 
-                // -------------------------------------------------- privileges
-                TablePrivileges.getTablePrivileges(databaseMetaData, table);
-
                 // ---------------------------------------------- versionColumns
                 VersionColumns.getVersionColumns(databaseMetaData, table);
 
@@ -128,36 +128,18 @@ public class Tables extends EntrySetWrapper<Table> {
      * 
      * @param databaseMetaData
      * @param schema
-     * @param tableNamePattern
-     * @param types
      * @throws SQLException 
-     *
-     * @see #getTables(DatabaseMetaData, String, String, String, String[],
-     *                 Collection)
-     */
-    public static void getTables(final DatabaseMetaData databaseMetaData,
-                                 final Schema schema,
-                                 final String tableNamePattern,
-                                 final String[] types)
-        throws SQLException {
-
-        getTables(databaseMetaData, schema.getTABLE_CATALOG(),
-                  schema.getTABLE_SCHEM(), tableNamePattern, types,
-                  schema.getTables());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData database meta data
-     * @param schema schema
-     * @throws SQLException id an SQL error occurs.
      */
     public static void getAllTables(final DatabaseMetaData databaseMetaData,
                                     final Schema schema)
         throws SQLException {
 
-        getTables(databaseMetaData, schema, null, null);
+        getTables(databaseMetaData, schema.getTABLE_CATALOG(),
+                  schema.getTABLE_SCHEM(), null, null, schema.getTables());
+
+        for (Table table : schema.getTables()) {
+            table.setParent(schema);
+        }
     }
 
 

@@ -84,36 +84,37 @@ public class Indices extends EntrySetWrapper<Index> {
                                     final Collection<Index> indices)
         throws SQLException {
 
-        final ResultSet indexResultSet = databaseMetaData.getIndexInfo(
+        final ResultSet resultSet = databaseMetaData.getIndexInfo(
             catalog, schema, table, unique, approximate);
         try {
-            while (indexResultSet.next()) {
+            while (resultSet.next()) {
                 final Index index = EntrySet.newInstance(
-                    Index.class, indexResultSet);
+                    Index.class, resultSet);
                 indices.add(index);
             }
         } finally {
-            indexResultSet.close();
+            resultSet.close();
         }
     }
 
 
-    public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
-                                    final Table table, final boolean unique,
-                                    final boolean approximate)
-        throws SQLException {
-
-        getIndexInfo(databaseMetaData, table.getTABLE_CAT(),
-                     table.getTABLE_SCHEM(), table.getTABLE_NAME(), unique,
-                     approximate, table.getIndices());
-    }
-
-
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException if a database access error occurs.
+     */
     public static void getAllIndexInfo(final DatabaseMetaData databaseMetaData,
                                        final Table table)
         throws SQLException {
 
-        getIndexInfo(databaseMetaData, table, false, false);
+        getIndexInfo(databaseMetaData, table.getTABLE_CAT(),
+                     table.getTABLE_SCHEM(), table.getTABLE_NAME(), false,
+                     false, table.getIndices());
+
+        for (Index index : table.getIndices()) {
+            index.setParent(table);
+        }
     }
 
 

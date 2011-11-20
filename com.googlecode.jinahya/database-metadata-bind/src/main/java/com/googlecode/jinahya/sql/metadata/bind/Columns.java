@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class Columns extends EntrySetWrapper<Column> {
 
 
@@ -100,39 +100,19 @@ public class Columns extends EntrySetWrapper<Column> {
 
 
     /**
-     * Retrieves <code>Column</code>s of given <code>table</code> and adds them
-     * to <code>table</code>'s <code>columns</code> collection field.
+     * Retrieves all <code>Column</code>s for given <code>table</code>.
      *
-     * @param databaseMetaData database meta data
+     * @param databaseMetaData metadata.
      * @param table table
-     * @param columnNamePattern column name pattern
-     * @throws SQLException if an SQL error occurs.
-     *
-     * @see #getColumns(DatabaseMetaData, String, String, String, String,
-     *                  Collection)
-     */
-    public static void getColumns(final DatabaseMetaData databaseMetaData,
-                                  final Table table,
-                                  final String columnNamePattern)
-        throws SQLException {
-
-        getColumns(databaseMetaData, table.getTABLE_CAT(),
-                   table.getTABLE_SCHEM(), table.getTABLE_NAME(),
-                   columnNamePattern, table.getColumns());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param table
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs
      */
     public static void getAllColumns(final DatabaseMetaData databaseMetaData,
                                      final Table table)
         throws SQLException {
 
-        getColumns(databaseMetaData, table, null);
+        getColumns(databaseMetaData, table.getTABLE_CAT(),
+                   table.getTABLE_SCHEM(), table.getTABLE_NAME(), null,
+                   table.getColumns());
     }
 
 

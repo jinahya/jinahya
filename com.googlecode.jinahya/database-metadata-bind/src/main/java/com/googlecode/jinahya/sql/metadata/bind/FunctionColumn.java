@@ -18,15 +18,12 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class FunctionColumn extends EntrySet {
+//@XmlRootElement
+public class FunctionColumn extends ChildEntrySet<Catalog> {
 
 
     public String getFUNCTION_CAT() {

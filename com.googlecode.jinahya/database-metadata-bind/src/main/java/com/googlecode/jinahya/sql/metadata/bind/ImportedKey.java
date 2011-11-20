@@ -18,15 +18,12 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * ImportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class ImportedKey extends EntrySet {
 
 
@@ -178,6 +175,19 @@ public class ImportedKey extends EntrySet {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
+
+
+    public Table getTable() {
+        return table;
+    }
+
+
+    public void setTable(final Table table) {
+        this.table = table;
+    }
+
+
+    private Table table;
 
 
 }

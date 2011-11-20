@@ -18,12 +18,30 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import javax.xml.bind.annotation.XmlTransient;
+
+
 /**
- * Binding for table privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <P> parent type parameter
  */
-//@XmlRootElement
-public class TablePrivilege extends Privilege<Catalog> {
+@XmlTransient
+public abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
+
+
+    public final P getParent() {
+        return parent;
+    }
+
+
+    public final void setParent(final P parent) {
+        this.parent = parent;
+    }
+
+
+    private P parent;
+
+
 }
 

@@ -85,43 +85,19 @@ public class UDTs extends EntrySetWrapper<UDT> {
     }
 
 
-    public static void getUDTs(final DatabaseMetaData databaseMetaData,
-                               final Catalog catalog,
-                               final String schemaNamePattern,
-                               final String typeNamePattern, final int[] types)
-        throws SQLException {
-
-        getUDTs(databaseMetaData, catalog.getTABLE_CAT(), schemaNamePattern,
-                typeNamePattern, types, catalog.getUDTs());
-    }
-
-
     public static void getAllUDTs(final DatabaseMetaData databaseMetaData,
                                   final Catalog catalog)
         throws SQLException {
 
-        getUDTs(databaseMetaData, catalog, null, null, null);
+        getUDTs(databaseMetaData, catalog.getTABLE_CAT(), null, null, null,
+                catalog.getUDTs());
+
+        for (UDT udt : catalog.getUDTs()) {
+            udt.setParent(catalog);
+        }
     }
 
 
-    public static void getUDTs(final DatabaseMetaData databaseMetaData,
-                               final Schema schema,
-                               final String schemaNamePattern,
-                               final String typeNamePattern, final int[] types)
-        throws SQLException {
-
-        getUDTs(databaseMetaData, schema.getTABLE_CATALOG(),
-                schema.getTABLE_SCHEM(), typeNamePattern, types,
-                schema.getUDTs());
-    }
-
-
-    public static void getAllUDTs(final DatabaseMetaData databaseMetaData,
-                                  final Schema schema)
-        throws SQLException {
-
-        getUDTs(databaseMetaData, schema, null, null, null);
-    }
 
 
     /**

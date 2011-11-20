@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class ColumnPrivilege extends Privilege {
+//@XmlRootElement
+public class ColumnPrivilege extends Privilege<Table> {
 
 
     /**
@@ -47,6 +47,16 @@ public class ColumnPrivilege extends Privilege {
      */
     public void setCOLUMN_NAME(final String COLUMN_NAME) {
         setValue("COLUMN_NAME", COLUMN_NAME);
+    }
+
+
+    public Table getTable() {
+        return super.getParent();
+    }
+
+
+    public void setTable(final Table table) {
+        setParent(table);
     }
 
 

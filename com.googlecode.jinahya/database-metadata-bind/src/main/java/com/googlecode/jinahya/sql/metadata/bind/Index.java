@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Index extends EntrySet {
+public class Index extends ChildEntrySet<Table> {
 
 
     public String getTABLE_CAT() {
