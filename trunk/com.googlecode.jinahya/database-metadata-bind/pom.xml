@@ -20,6 +20,11 @@
         <version>2.0.16</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.8.2.2</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.3</version>
@@ -36,6 +41,11 @@
       <groupId>args4j</groupId>
       <artifactId>args4j</artifactId>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>

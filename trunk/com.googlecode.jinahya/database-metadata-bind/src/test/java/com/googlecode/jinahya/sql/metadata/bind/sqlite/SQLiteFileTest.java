@@ -15,26 +15,17 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind;
+package com.googlecode.jinahya.sql.metadata.bind.sqlite;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class SQLiteTest {
+public class SQLiteFileTest extends SQLiteTest {
 
 
-    protected static final String DRIVER_NAME = "org.sqlite.JDBC";
 
-
-    static {
-        try {
-            Class.forName(DRIVER_NAME);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
 
 
 }
