@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
 
 

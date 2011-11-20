@@ -30,16 +30,29 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
 
 
+    /**
+     * Returns parent.
+     *
+     * @return parent.
+     */
     public final P getParent() {
         return parent;
     }
 
 
+    /**
+     * Sets parent.
+     *
+     * @param parent parent
+     */
     public final void setParent(final P parent) {
         this.parent = parent;
     }
 
 
+    /**
+     * parent.
+     */
     private P parent;
 
 

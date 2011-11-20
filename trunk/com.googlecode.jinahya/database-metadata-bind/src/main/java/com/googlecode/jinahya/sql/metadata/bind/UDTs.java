@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,10 +32,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
 public class UDTs extends EntrySetWrapper<UDT> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaNamePattern
+     * @param typeNamePattern
+     * @param types
+     * @return
+     * @throws SQLException 
+     */
     public static UDTs newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaNamePattern, final String typeNamePattern,
@@ -85,6 +94,12 @@ public class UDTs extends EntrySetWrapper<UDT> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @throws SQLException 
+     */
     public static void getAllUDTs(final DatabaseMetaData databaseMetaData,
                                   final Catalog catalog)
         throws SQLException {
@@ -98,8 +113,6 @@ public class UDTs extends EntrySetWrapper<UDT> {
     }
 
 
-
-
     /**
      * Creates a new instance.
      */
@@ -108,6 +121,11 @@ public class UDTs extends EntrySetWrapper<UDT> {
     }
 
 
+    /**
+     * Returns UDTs.
+     *
+     * @return UDTs.
+     */
     @XmlElement(name = "UDT")
     public Collection<UDT> getUDTs() {
         return super.getEntrySets();
