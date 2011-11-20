@@ -15,10 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind;
+package com.googlecode.jinahya.sql.metadata.bind.sqlite;
 
 
 import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
+import com.googlecode.jinahya.sql.metadata.bind.Metadata;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -38,7 +39,7 @@ public class SQLiteMemoryTest extends SQLiteTest {
 
 
     /**
-     * Database connection url for memory.
+     * Database connection URL for memory.
      */
     protected static final String MEMORY_DATABASE_URL = "jdbc:sqlite::memory:";
 

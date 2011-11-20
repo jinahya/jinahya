@@ -15,25 +15,21 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata.bind;
-
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import org.testng.annotations.Test;
+package com.googlecode.jinahya.sql.metadata.bind.derby;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SQLiteFileTest extends SQLiteTest {
+public class DerbyTest {
 
 
+    protected final String EMBEDDED_DRIVER =
+        "org.apache.derby.jdbc.EmbeddedDriver";
 
 
-
+    public void testMemory() {
+    }
 }
 
