@@ -73,7 +73,7 @@ public class Schema extends ChildEntrySet<Catalog> {
 
 
     /**
-     * Tables.
+     * tables.
      */
     @XmlElement(name = "table")
     @XmlElementWrapper(required = true, nillable = true)

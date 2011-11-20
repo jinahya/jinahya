@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,7 +32,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class Columns extends EntrySetWrapper<Column> {
 
 

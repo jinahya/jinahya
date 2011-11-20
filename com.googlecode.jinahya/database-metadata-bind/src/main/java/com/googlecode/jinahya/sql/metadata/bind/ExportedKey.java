@@ -23,7 +23,6 @@ package com.googlecode.jinahya.sql.metadata.bind;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class ExportedKey extends ChildEntrySet<Table> {
 
 
@@ -175,7 +174,6 @@ public class ExportedKey extends ChildEntrySet<Table> {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
-
 
 
 }

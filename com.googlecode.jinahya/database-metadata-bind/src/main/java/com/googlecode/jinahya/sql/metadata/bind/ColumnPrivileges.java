@@ -24,15 +24,12 @@ import java.sql.SQLException;
 
 import java.util.Collection;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  * ColumnPrivilege wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
 
 

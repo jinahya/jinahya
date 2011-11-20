@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -26,7 +25,6 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 @XmlType(propOrder = {"entries"})
 public class VersionColumn extends ChildEntrySet<Table> {
 
