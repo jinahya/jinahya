@@ -32,10 +32,10 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
-                      "importedKeys", "indices", "primaryKeys", "privileges",
-                      "versionColumns"})
-public class Table extends EntrySet {
+@XmlType(propOrder = {"entries", "columnPrivileges", "columns", "exportedKeys",
+                      "identifiers", "importedKeys", "indices", "primaryKeys",
+                      "privileges", "versionColumns"})
+public class Table extends ChildEntrySet<Schema> {
 
 
     public String getTABLE_CAT() {
@@ -243,6 +243,21 @@ public class Table extends EntrySet {
 
         return versionColumns;
     }
+
+
+    public Collection<ColumnPrivilege> getColumnPrivileges() {
+
+        if (columnPrivileges == null) {
+            columnPrivileges = new ArrayList<ColumnPrivilege>();
+        }
+
+        return columnPrivileges;
+    }
+
+
+    @XmlElement(name = "columnPrivilege")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ColumnPrivilege> columnPrivileges;
 
 
     @XmlElement(name = "column")

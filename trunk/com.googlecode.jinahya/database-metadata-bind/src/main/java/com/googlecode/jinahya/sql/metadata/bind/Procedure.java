@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries"})
-public class Procedure extends EntrySet {
+public class Procedure extends ChildEntrySet<Catalog> {
 
 
     public String getPROCEDURE_CAT() {
@@ -89,7 +89,6 @@ public class Procedure extends EntrySet {
     public void setSPECIFIC_NAME(final String SPECIFIC_NAME) {
         setValue("SPECIFIC_NAME", SPECIFIC_NAME);
     }
-
 
 }
 

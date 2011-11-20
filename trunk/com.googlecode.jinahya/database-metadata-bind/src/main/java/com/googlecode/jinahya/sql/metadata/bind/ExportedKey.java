@@ -18,16 +18,13 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Binding for ExportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class ExportedKey extends EntrySet {
+//@XmlRootElement
+public class ExportedKey extends ChildEntrySet<Table> {
 
 
     /**
@@ -178,6 +175,7 @@ public class ExportedKey extends EntrySet {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
+
 
 
 }

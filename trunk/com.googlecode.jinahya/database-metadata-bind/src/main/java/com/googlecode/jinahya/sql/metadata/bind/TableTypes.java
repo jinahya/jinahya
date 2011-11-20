@@ -24,6 +24,7 @@ import java.sql.SQLException;
 
 import java.util.Collection;
 
+import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -37,6 +38,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TableTypes extends EntrySetWrapper<TableType> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @return
+     * @throws SQLException 
+     */
     public static TableTypes newInstance(
         final DatabaseMetaData databaseMetaData)
         throws SQLException {
@@ -89,10 +96,30 @@ public class TableTypes extends EntrySetWrapper<TableType> {
     }
 
 
+    /**
+     * 
+     * @param TABLE_TYPE
+     * @return 
+     */
+    public TableType getByTABLE_TYPE(final String TABLE_TYPE) {
+
+        for (TableType tableType : getTableTypes()) {
+            if (tableType.getTABLE_TYPE().equals(TABLE_TYPE)) {
+                return tableType;
+            }
+        }
+
+        return null;
+    }
+
+
     @XmlElement(name = "tableType")
     public Collection<TableType> getTableTypes() {
         return super.getEntrySets();
     }
+
+
+    private Map<String, TableType> tableTypes;
 
 
 }

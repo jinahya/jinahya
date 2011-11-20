@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class DataTypes extends EntrySetWrapper<DataType> {
 
 

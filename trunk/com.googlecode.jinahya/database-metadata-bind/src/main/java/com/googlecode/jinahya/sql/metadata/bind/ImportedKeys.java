@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class ImportedKeys extends EntrySetWrapper<ImportedKey> {
 
 
@@ -109,6 +108,10 @@ public class ImportedKeys extends EntrySetWrapper<ImportedKey> {
         getImportedKeys(databaseMetaData, table.getTABLE_CAT(),
                         table.getTABLE_SCHEM(), table.getTABLE_NAME(),
                         table.getImportedKeys());
+
+        for (ImportedKey importedKey : table.getImportedKeys()) {
+            importedKey.setTable(table);
+        }
     }
 
 

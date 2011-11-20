@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class Identifiers extends EntrySetWrapper<Identifier> {
 
 
@@ -106,63 +105,30 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
      * 
      * @param databaseMetaData
      * @param table
-     * @param scope
-     * @param nullable
-     * @param identifiers
-     * @throws SQLException 
-     *
-     * @see DatabaseMetaData#getBestRowIdentifier(String, String, String, int,
-     *      boolean) 
-     */
-    public static void getBestRowIdentifier(
-        final DatabaseMetaData databaseMetaData, final Table table,
-        final int scope, final boolean nullable,
-        final Collection<Identifier> identifiers)
-        throws SQLException {
-
-        getBestRowIdentifier(
-            databaseMetaData, table.getTABLE_CAT(), table.getTABLE_SCHEM(),
-            table.getTABLE_NAME(), scope, nullable, identifiers);
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param table
-     * @param scope
-     * @param nullable
-     * @throws SQLException 
-     */
-    public static void getBestRowIdentifier(
-        final DatabaseMetaData databaseMetaData, final Table table,
-        final int scope, final boolean nullable)
-        throws SQLException {
-
-        getBestRowIdentifier(
-            databaseMetaData, table.getTABLE_CAT(), table.getTABLE_SCHEM(),
-            table.getTABLE_NAME(), scope, nullable, table.getIdentifiers());
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData
-     * @param table
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs.
      */
     public static void getAllBestRowIdentifier(
         final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {
 
-        getBestRowIdentifier(databaseMetaData, table,
-                             DatabaseMetaData.bestRowTemporary, true);
+        getBestRowIdentifier(databaseMetaData, table.getTABLE_CAT(),
+                             table.getTABLE_SCHEM(), table.getTABLE_NAME(),
+                             DatabaseMetaData.bestRowTemporary, true,
+                             table.getIdentifiers());
 
-        getBestRowIdentifier(databaseMetaData, table,
-                             DatabaseMetaData.bestRowTransaction, true);
+        getBestRowIdentifier(databaseMetaData, table.getTABLE_CAT(),
+                             table.getTABLE_SCHEM(), table.getTABLE_NAME(),
+                             DatabaseMetaData.bestRowTransaction, true,
+                             table.getIdentifiers());
 
-        getBestRowIdentifier(databaseMetaData, table,
-                             DatabaseMetaData.bestRowSession, true);
+        getBestRowIdentifier(databaseMetaData, table.getTABLE_CAT(),
+                             table.getTABLE_SCHEM(), table.getTABLE_NAME(),
+                             DatabaseMetaData.bestRowSession, true,
+                             table.getIdentifiers());
+
+        for (Identifier identifier : table.getIdentifiers()) {
+            identifier.setParent(table);
+        }
     }
 
 

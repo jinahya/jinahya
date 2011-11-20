@@ -33,9 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"entries", "attributes", "functions", "procedureColumns",
-                      "procedures", "tables", "UDTs"})
-public class Schema extends EntrySet {
+@XmlType(propOrder = {"entries", "tables"})
+public class Schema extends ChildEntrySet<Catalog> {
 
 
     public String getTABLE_SCHEM() {
@@ -59,36 +58,6 @@ public class Schema extends EntrySet {
 
 
     /**
-     * Returns attributes.
-     *
-     * @return attributes
-     */
-    public Collection<Attribute> getAttributes() {
-
-        if (attributes == null) {
-            attributes = new ArrayList<Attribute>();
-        }
-
-        return attributes;
-    }
-
-
-    /**
-     * Returns functions.
-     *
-     * @return functions
-     */
-    public Collection<Function> getFunctions() {
-
-        if (functions == null) {
-            functions = new ArrayList<Function>();
-        }
-
-        return functions;
-    }
-
-
-    /**
      * Returns tables.
      *
      * @return tables
@@ -103,71 +72,12 @@ public class Schema extends EntrySet {
     }
 
 
-    public Collection<ProcedureColumn> getProcedureColumns() {
-
-        if (procedureColumns == null) {
-            procedureColumns = new ArrayList<ProcedureColumn>();
-        }
-
-        return procedureColumns;
-    }
-
-
-    public Collection<Procedure> getProcedures() {
-
-        if (procedures == null) {
-            procedures = new ArrayList<Procedure>();
-        }
-
-        return procedures;
-    }
-
-
-    public Collection<UDT> getUDTs() {
-
-        if (UDTs == null) {
-            UDTs = new ArrayList<UDT>();
-        }
-
-        return UDTs;
-    }
-
-
     /**
-     * attributes
+     * Tables.
      */
-    @XmlElement(name = "attribute")
-    @XmlElementWrapper(required = true, nillable = false)
-    private Collection<Attribute> attributes;
-
-
-    /**
-     * functions.
-     */
-    @XmlElement(name = "function")
-    @XmlElementWrapper(required = true, nillable = false)
-    private Collection<Function> functions;
-
-
-    @XmlElement(name = "procedureColumns")
-    @XmlElementWrapper(required = true, nillable = false)
-    private Collection<ProcedureColumn> procedureColumns;
-
-
-    @XmlElement(name = "procedure")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Procedure> procedures;
-
-
-    /** tables. */
     @XmlElement(name = "table")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Table> tables;
-
-
-    @XmlElement(name = "UDT")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<UDT> UDTs;
 
 
 }

@@ -30,11 +30,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TableType extends EntrySet {
 
 
+    /**
+     * Returns the value of <code>TABLE_TYPE</code> entry.
+     *
+     * @return TABLE_TYPE
+     */
     public String getTABLE_TYPE() {
         return getValue("TABLE_TYPE");
     }
 
 
+    /**
+     * Sets the value of 'TABLE_TYPE' entry.
+     *
+     * @param TABLE_TYPE TABLE_TYPE
+     */
     public void setTABLE_TYPE(final String TABLE_TYPE) {
         setValue("TABLE_TYPE", TABLE_TYPE);
     }

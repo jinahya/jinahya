@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
 
 
@@ -78,16 +77,16 @@ public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
         final Collection<ExportedKey> exportedKeys)
         throws SQLException {
 
-        final ResultSet exportedKeyResultSet =
+        final ResultSet resultSet =
             databaseMetaData.getExportedKeys(catalog, schema, table);
         try {
-            while (exportedKeyResultSet.next()) {
+            while (resultSet.next()) {
                 final ExportedKey exportedKey = EntrySet.newInstance(
-                    ExportedKey.class, exportedKeyResultSet);
+                    ExportedKey.class, resultSet);
                 exportedKeys.add(exportedKey);
             }
         } finally {
-            exportedKeyResultSet.close();
+            resultSet.close();
         }
     }
 
@@ -107,6 +106,10 @@ public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
         getExportedKeys(databaseMetaData, table.getTABLE_CAT(),
                         table.getTABLE_SCHEM(), table.getTABLE_NAME(),
                         table.getExportedKeys());
+
+        for (ExportedKey exportedKey : table.getExportedKeys()) {
+            exportedKey.setParent(table);
+        }
     }
 
 

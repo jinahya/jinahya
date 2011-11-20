@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -28,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries"})
-public class UDT extends EntrySet {
+public class UDT extends ChildEntrySet<Catalog> {
 
 
     public String getTYPE_CAT() {
@@ -99,6 +102,19 @@ public class UDT extends EntrySet {
     public void setBASE_TYPE(final String BASE_TYPE) {
         setValue("BASE_TYPE", BASE_TYPE);
     }
+
+
+    public Collection<Attribute> getAttributes() {
+
+        if (attributes == null) {
+            attributes = new ArrayList<Attribute>();
+        }
+
+        return attributes;
+    }
+
+
+    private Collection<Attribute> attributes;
 
 
 }

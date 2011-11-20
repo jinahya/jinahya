@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class ColumnPrivileges extends Privileges<ColumnPrivilege> {
+//@XmlRootElement
+public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
 
 
     public static ColumnPrivileges newInstance(
@@ -70,13 +70,17 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege> {
     }
 
 
-    public static void getColumnPrivileges(
-        final DatabaseMetaData databaseMetaData, final Column column)
+    public static void getAllColumnPrivileges(
+        final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {
 
-        getColumnPrivileges(databaseMetaData, column.getTABLE_CAT(),
-                            column.getTABLE_SCHEM(), column.getTABLE_NAME(),
-                            column.getCOLUMN_NAME(), column.getPrivileges());
+        getColumnPrivileges(databaseMetaData, table.getTABLE_CAT(),
+                            table.getTABLE_SCHEM(), table.getTABLE_NAME(), null,
+                            table.getColumnPrivileges());
+
+        for (ColumnPrivilege columnPrivilege : table.getColumnPrivileges()) {
+            columnPrivilege.setTable(table);
+        }
     }
 
 

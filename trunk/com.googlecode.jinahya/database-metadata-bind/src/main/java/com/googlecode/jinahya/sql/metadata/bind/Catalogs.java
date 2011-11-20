@@ -94,10 +94,11 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
 
                 // ----------------------------------------------------- schemas
                 Schemas.getAllSchemas(databaseMetaData, catalog);
-                
+
                 // -------------------------------------------------------- UDTs
                 UDTs.getAllUDTs(databaseMetaData, catalog);
             }
+
         } finally {
             catalogResultSet.close();
         }

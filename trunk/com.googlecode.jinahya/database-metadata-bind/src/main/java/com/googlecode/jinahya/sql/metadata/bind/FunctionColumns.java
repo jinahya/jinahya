@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -33,10 +32,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
+//@XmlRootElement
 public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param functionNamePattern
+     * @param columnNamePattern
+     * @return
+     * @throws SQLException if a database access error occurs.
+     */
     public static FunctionColumns newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String functionNamePattern,
@@ -52,6 +61,16 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param functionNamePattern
+     * @param columnNamePattern
+     * @param functionColumns
+     * @throws SQLException if a database access error occurs.
+     */
     public static void getFunctionColumns(
         final DatabaseMetaData databaseMetaData, String catalog,
         final String schemaPattern, final String functionNamePattern,
@@ -60,40 +79,39 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
         throws SQLException {
 
         try {
-            final ResultSet functionColumnResultSet =
+            final ResultSet resultSet =
                 databaseMetaData.getFunctionColumns(
                 catalog, schemaPattern, functionNamePattern, columnNamePattern);
             try {
-                while (functionColumnResultSet.next()) {
+                while (resultSet.next()) {
                     final FunctionColumn functionColumn = EntrySet.newInstance(
-                        FunctionColumn.class, functionColumnResultSet);
+                        FunctionColumn.class, resultSet);
                     functionColumns.add(functionColumn);
                 }
             } finally {
-                functionColumnResultSet.close();
+                resultSet.close();
             }
         } catch (AbstractMethodError ame) {
         }
     }
 
 
-    public static void getFunctionColumns(
-        final DatabaseMetaData databaseMetaData, final Catalog catalog,
-        final String schemaNamePattern, final String functionNamePattern,
-        final String columnNamePattern)
-        throws SQLException {
-
-        getFunctionColumns(databaseMetaData, catalog.getTABLE_CAT(),
-                           schemaNamePattern, functionNamePattern,
-                           columnNamePattern, catalog.getFunctionColumns());
-    }
-
-
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @throws SQLException if a database access error occurs.
+     */
     public static void getAllFunctionColumns(
         final DatabaseMetaData databaseMetaData, final Catalog catalog)
         throws SQLException {
 
-        getFunctionColumns(databaseMetaData, catalog, null, null, null);
+        getFunctionColumns(databaseMetaData, catalog.getTABLE_CAT(), null, null,
+                           null, catalog.getFunctionColumns());
+
+        for (FunctionColumn functionColumn : catalog.getFunctionColumns()) {
+            functionColumn.setParent(catalog);
+        }
     }
 
 
