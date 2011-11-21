@@ -6,6 +6,7 @@
 
   <xsl:import href="dataTypes.xsl"/>
   <xsl:import href="entries.xsl"/>
+  <xsl:import href="tables.xsl"/>
 
   <xsl:output method="xml" media-type="application/xhtml+xml"
               doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
@@ -147,8 +148,8 @@
   </xsl:template>
 
   <xsl:template match="b:tables">
-    <xsl:call-template name="entries-to-table">
-      <xsl:with-param name="caption" select="'SCHEMAS'"/>
+    <xsl:call-template name="tables-to-table">
+      <xsl:with-param name="caption" select="'TABLES'"/>
     </xsl:call-template>
   </xsl:template>
 
