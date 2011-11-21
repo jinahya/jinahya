@@ -30,10 +30,10 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <T> EntrySet type parameter
  */
-public abstract class MetadataTest<T extends EntrySet> {
+public abstract class AbstractTest<T extends EntrySet> {
 
 
-    public MetadataTest(final Class<T> metadataType) {
+    public AbstractTest(final Class<T> metadataType) {
         super();
 
         this.metadaType = metadataType;

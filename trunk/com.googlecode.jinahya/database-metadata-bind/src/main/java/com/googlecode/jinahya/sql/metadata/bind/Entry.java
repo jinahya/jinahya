@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
 
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlValue;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
+@XmlRootElement
 public class Entry {
 
 
@@ -97,10 +98,12 @@ public class Entry {
 
 
     @XmlAttribute(required = true)
+    //@XmlElement
     private String key;
 
 
     @XmlValue
+    //@XmlElement(nillable = true)
     private String value;
 
 

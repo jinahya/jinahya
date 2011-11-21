@@ -18,15 +18,29 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ColumnTest extends AbstractTest<Column> {
+public class EntryTest {
 
 
-    public ColumnTest() {
-        super(Column.class);
+    @Test
+    public void testMarshal() throws JAXBException {
+
+        final Marshaller marshaller =
+            DatabaseMetadataBindConstants.JAXB_CONTEXT.createMarshaller();
+
+        final Entry entry1 = Entry.newIntance("key", null);
+
+        marshaller.marshal(entry1, System.out);
+
     }
 
 
