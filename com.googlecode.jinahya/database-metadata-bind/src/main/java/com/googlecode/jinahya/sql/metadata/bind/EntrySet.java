@@ -257,11 +257,6 @@ public abstract class EntrySet {
             throw new NullPointerException("null key");
         }
 
-        if (value == null) {
-            getEntries().remove(key);
-            return;
-        }
-
         if (!getEntries().containsKey(key)) {
             getEntries().put(key, Entry.newIntance(key, value));
             return;

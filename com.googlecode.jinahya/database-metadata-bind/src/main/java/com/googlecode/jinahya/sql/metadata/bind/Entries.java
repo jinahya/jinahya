@@ -37,6 +37,7 @@ public class Entries {
      *
      * @return entries
      */
+    @XmlElement(name = "entry", nillable = true)
     protected Collection<Entry> getEntries() {
 
         if (entries == null) {
@@ -50,7 +51,6 @@ public class Entries {
     /**
      * entries.
      */
-    @XmlElement(name = "entry", nillable = true)
     private Collection<Entry> entries;
 
 
