@@ -25,16 +25,23 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 
-
 /**
  * TablePrivilege wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @return
+     * @throws SQLException if a database access error occurs.
+     */
     public static TablePrivileges newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String tableNamePattern)
@@ -48,6 +55,17 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schemaPattern
+     * @param tableNamePattern
+     * @param privileges
+     * @throws SQLException if a database access error occurs.
+     *
+     * @see DatabaseMetaData#getTablePrivileges(String, String, String)
+     */
     public static void getTablePrivileges(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String tableNamePattern,
@@ -69,6 +87,12 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @throws SQLException if a database access error occurs.
+     */
     public static void getAllTablePrivileges(
         final DatabaseMetaData databaseMetaData, final Catalog catalog)
         throws SQLException {

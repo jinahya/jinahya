@@ -97,7 +97,8 @@ public class Tables extends EntrySetWrapper<Table> {
                 tables.add(table);
 
                 // -------------------------------------------- columnPrivileges
-                ColumnPrivileges.getAllColumnPrivileges(databaseMetaData, table);
+                ColumnPrivileges.getAllColumnPrivileges(
+                    databaseMetaData, table);
 
                 // ----------------------------------------------------- columns
                 Columns.getAllColumns(databaseMetaData, table);
@@ -125,10 +126,11 @@ public class Tables extends EntrySetWrapper<Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param schema
-     * @throws SQLException 
+     * Retrieves all tables mapped to given <code>schema</code>.
+     *
+     * @param databaseMetaData meta
+     * @param schema schema
+     * @throws SQLException if database access error occurs.
      */
     public static void getAllTables(final DatabaseMetaData databaseMetaData,
                                     final Schema schema)

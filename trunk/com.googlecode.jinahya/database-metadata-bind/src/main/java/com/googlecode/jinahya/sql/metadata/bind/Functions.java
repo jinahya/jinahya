@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -81,20 +82,20 @@ public class Functions extends EntrySetWrapper<Function> {
                                     final Collection<Function> functions)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getFunctions")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getFunctions(
+            catalog, schemaPattern, functionNamePattern);
         try {
-            final ResultSet functionResultSet = databaseMetaData.getFunctions(
-                catalog, schemaPattern, functionNamePattern);
-            try {
-                while (functionResultSet.next()) {
-                    final Function function = EntrySet.newInstance(
-                        Function.class, functionResultSet);
-                    functions.add(function);
-                }
-            } finally {
-                functionResultSet.close();
+            while (resultSet.next()) {
+                final Function function = EntrySet.newInstance(
+                    Function.class, resultSet);
+                functions.add(function);
             }
-        } catch (AbstractMethodError ame) {
-            //
+        } finally {
+            resultSet.close();
         }
     }
 

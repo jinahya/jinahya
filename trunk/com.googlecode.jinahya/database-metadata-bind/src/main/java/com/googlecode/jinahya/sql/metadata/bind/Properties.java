@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,20 +71,19 @@ public class Properties extends EntrySetWrapper<Property> {
         final Collection<Property> properties)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getClientInfoProperties")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getClientInfoProperties();
         try {
-            final ResultSet propertyResultSet =
-                databaseMetaData.getClientInfoProperties();
-            try {
-                while (propertyResultSet.next()) {
-                    final Property property = EntrySet.newInstance(
-                        Property.class, propertyResultSet);
-                    properties.add(property);
-                }
-            } finally {
-                propertyResultSet.close();
+            while (resultSet.next()) {
+                final Property property = EntrySet.newInstance(
+                    Property.class, resultSet);
+                properties.add(property);
             }
-        } catch (AbstractMethodError ame) {
-            //ame.printStackTrace(System.err);
+        } finally {
+            resultSet.close();
         }
     }
 

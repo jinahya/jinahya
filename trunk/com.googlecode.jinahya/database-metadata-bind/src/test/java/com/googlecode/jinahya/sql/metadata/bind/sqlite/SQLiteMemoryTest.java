@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind.sqlite;
 
 
 import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import com.googlecode.jinahya.sql.metadata.bind.Metadata;
 
 import java.sql.Connection;
@@ -58,6 +59,9 @@ public class SQLiteMemoryTest extends SQLiteTest {
 
     @Test
     public void printMetadata() throws SQLException, JAXBException {
+
+        MethodNamesToOmit.addNameToInstance("getClientInfoProperties");
+        MethodNamesToOmit.addNameToInstance("getSchemas");
 
         final Connection connection =
             DriverManager.getConnection(MEMORY_DATABASE_URL);

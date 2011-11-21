@@ -159,6 +159,47 @@ public class Catalog extends EntrySet {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString() + "/" + getTABLE_CAT();
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Catalog)) {
+            return false;
+        }
+
+        final Catalog catalog = (Catalog) obj;
+
+        if (!(getTABLE_CAT() == catalog.getTABLE_CAT())
+            || (getTABLE_CAT() != null
+                && getTABLE_CAT().equals(catalog.getTABLE_CAT()))) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int hashCode = 17;
+
+        hashCode = 37 * hashCode
+                   + (getTABLE_CAT() == null ? 0 : getTABLE_CAT().hashCode());
+
+        return hashCode;
+    }
+
+
     /**
      * functions.
      */

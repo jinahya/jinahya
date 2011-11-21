@@ -20,6 +20,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+
 import org.testng.annotations.Test;
 
 

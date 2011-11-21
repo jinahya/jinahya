@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,11 +40,11 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
 
     /**
      * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param functionNamePattern
-     * @param columnNamePattern
+     * @param databaseMetaData meta
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param functionNamePattern functionNamePattern
+     * @param columnNamePattern columnNamePattern
      * @return
      * @throws SQLException if a database access error occurs.
      */
@@ -52,12 +54,13 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
         final String columnNamePattern)
         throws SQLException {
 
-        final FunctionColumns functionColumns = new FunctionColumns();
+        final FunctionColumns instance = new FunctionColumns();
+
         getFunctionColumns(databaseMetaData, catalog, schemaPattern,
                            functionNamePattern, columnNamePattern,
-                           functionColumns.getFunctionColumns());
+                           instance.getFunctionColumns());
 
-        return functionColumns;
+        return instance;
     }
 
 
@@ -78,20 +81,21 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
         final Collection<FunctionColumn> functionColumns)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getFunctionColumns")) {
+            return;
+        }
+
+        final ResultSet resultSet =
+            databaseMetaData.getFunctionColumns(
+            catalog, schemaPattern, functionNamePattern, columnNamePattern);
         try {
-            final ResultSet resultSet =
-                databaseMetaData.getFunctionColumns(
-                catalog, schemaPattern, functionNamePattern, columnNamePattern);
-            try {
-                while (resultSet.next()) {
-                    final FunctionColumn functionColumn = EntrySet.newInstance(
-                        FunctionColumn.class, resultSet);
-                    functionColumns.add(functionColumn);
-                }
-            } finally {
-                resultSet.close();
+            while (resultSet.next()) {
+                final FunctionColumn functionColumn = EntrySet.newInstance(
+                    FunctionColumn.class, resultSet);
+                functionColumns.add(functionColumn);
             }
-        } catch (AbstractMethodError ame) {
+        } finally {
+            resultSet.close();
         }
     }
 

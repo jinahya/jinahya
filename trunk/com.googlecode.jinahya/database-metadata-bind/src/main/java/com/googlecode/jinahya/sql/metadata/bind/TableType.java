@@ -50,5 +50,46 @@ public class TableType extends EntrySet {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString() + "/" + getTABLE_TYPE();
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof TableType)) {
+            return false;
+        }
+
+        final TableType tableType = (TableType) obj;
+
+        if (!(getTABLE_TYPE() == tableType.getTABLE_TYPE())
+            || (getTABLE_TYPE() != null
+                && getTABLE_TYPE().equals(tableType.getTABLE_TYPE()))) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int hashCode = 17;
+
+        hashCode = 37 * hashCode
+                   + (getTABLE_TYPE() == null ? 0 : getTABLE_TYPE().hashCode());
+
+        return hashCode;
+    }
+
+
 }
 

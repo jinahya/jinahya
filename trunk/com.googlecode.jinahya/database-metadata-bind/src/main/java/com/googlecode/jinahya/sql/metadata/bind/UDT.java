@@ -21,15 +21,14 @@ package com.googlecode.jinahya.sql.metadata.bind;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * Binding for User Defined Types.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
 @XmlType(propOrder = {"entries"})
 public class UDT extends ChildEntrySet<Catalog> {
 
@@ -104,6 +103,11 @@ public class UDT extends ChildEntrySet<Catalog> {
     }
 
 
+    /**
+     * Returns attributes.
+     *
+     * @return attributes.
+     */
     public Collection<Attribute> getAttributes() {
 
         if (attributes == null) {
@@ -114,6 +118,9 @@ public class UDT extends ChildEntrySet<Catalog> {
     }
 
 
+    /**
+     * attributes.
+     */
     private Collection<Attribute> attributes;
 
 

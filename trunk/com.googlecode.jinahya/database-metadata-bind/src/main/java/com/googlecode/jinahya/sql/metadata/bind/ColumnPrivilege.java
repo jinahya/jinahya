@@ -18,15 +18,11 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Binding for column privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class ColumnPrivilege extends Privilege<Table> {
 
 
