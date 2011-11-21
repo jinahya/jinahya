@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> 
+ * @param <T> EntrySet type parameter
  */
 public abstract class MetadataTest<T extends EntrySet> {
 

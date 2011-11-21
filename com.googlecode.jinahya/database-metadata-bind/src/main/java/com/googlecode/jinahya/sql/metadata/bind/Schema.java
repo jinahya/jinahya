@@ -72,6 +72,61 @@ public class Schema extends ChildEntrySet<Catalog> {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString() + "/" + getTABLE_CATALOG() + "/"
+               + getTABLE_SCHEM();
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Schema)) {
+            return false;
+        }
+
+        final Schema schema = (Schema) obj;
+
+        if (!(getTABLE_CATALOG() == schema.getTABLE_CATALOG())
+            || (getTABLE_CATALOG() != null
+                && getTABLE_CATALOG().equals(schema.getTABLE_CATALOG()))) {
+
+            return false;
+        }
+
+        if (!(getTABLE_SCHEM() == schema.getTABLE_SCHEM())
+            || (getTABLE_SCHEM() != null
+                && getTABLE_SCHEM().equals(schema.getTABLE_SCHEM()))) {
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int hashCode = 17;
+
+        hashCode = 37 * hashCode
+                   + (getTABLE_CATALOG() == null
+                      ? 0 : getTABLE_CATALOG().hashCode());
+
+        hashCode = 37 * hashCode
+                   + (getTABLE_SCHEM() == null
+                      ? 0 : getTABLE_SCHEM().hashCode());
+
+        return hashCode;
+    }
+
+
     /**
      * tables.
      */

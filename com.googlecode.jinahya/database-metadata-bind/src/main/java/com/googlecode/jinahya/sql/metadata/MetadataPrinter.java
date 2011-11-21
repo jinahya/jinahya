@@ -27,6 +27,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
@@ -88,6 +90,16 @@ public class MetadataPrinter {
         }
 
 
+        public List<String> getMethodNamesToOmit() {
+
+            if (methodNamesToOmit == null) {
+                methodNamesToOmit = new ArrayList<String>();
+            }
+
+            return methodNamesToOmit;
+        }
+
+
         /**
          * JDBC driver class name.
          */
@@ -96,7 +108,7 @@ public class MetadataPrinter {
 
 
         /**
-         * Database connection url.
+         * Database connection URL.
          */
         @Option(name = "-url", required = true,
                 usage = "a database url of the form jdbc:subprotocol:subname")
@@ -117,6 +129,10 @@ public class MetadataPrinter {
          */
         @Option(name = "-password", usage = "the user's password")
         private String password;
+
+
+        @Option(name = "-omit", usage = "method names to omit")
+        private List<String> methodNamesToOmit;
 
 
     }
@@ -166,7 +182,8 @@ public class MetadataPrinter {
             throw new NullPointerException("null option");
         }
 
-        printMetadata(option.driver, option.url, option.user, option.password);
+        printMetadata(option.driver, option.url, option.user, option.password,
+                      option.getMethodNamesToOmit());
     }
 
 
@@ -174,9 +191,10 @@ public class MetadataPrinter {
      * Prints database metadata with given arguments.
      *
      * @param driver driver class name
-     * @param url database connection url
+     * @param url database connection URL
      * @param user database user
      * @param password database password
+     * @param methodNamesToOmit method names to omit
      * @throws ClassNotFoundException if driver class not found
      * @throws SQLException if an SQL error occurs.
      * @throws JAXBException if a JAXB error occurs
@@ -187,7 +205,7 @@ public class MetadataPrinter {
      */
     public static void printMetadata(
         final String driver, final String url, final String user,
-        final String password)
+        final String password, final List<String> methodNamesToOmit)
         throws ClassNotFoundException, SQLException, JAXBException {
 
         if (driver == null) {
@@ -198,6 +216,8 @@ public class MetadataPrinter {
             throw new NullPointerException("null url");
         }
 
+        MethodNamesToOmit.getInstance().getNames().addAll(methodNamesToOmit);
+        
         Class.forName(driver);
 
         final Connection connection;

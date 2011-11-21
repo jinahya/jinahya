@@ -42,7 +42,7 @@ public class TableTypes extends EntrySetWrapper<TableType> {
      * 
      * @param databaseMetaData
      * @return
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs
      */
     public static TableTypes newInstance(
         final DatabaseMetaData databaseMetaData)
@@ -58,13 +58,9 @@ public class TableTypes extends EntrySetWrapper<TableType> {
 
     /**
      * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param types
-     * @param tables
-     * @throws SQLException 
+     * @param databaseMetaData meta
+     * @param tableTypes collection to be filled
+     * @throws SQLException if a database access error occurs.
      *
      * @see DatabaseMetaData#getTables(String, String, String, String[]) 
      */

@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,28 +79,30 @@ public class UDTs extends EntrySetWrapper<UDT> {
         final int[] types, final Collection<UDT> userDefinedTypes)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getUDTs")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getUDTs(
+            catalog, schemaNamePattern, typeNamePattern, types);
         try {
-            final ResultSet resultSet = databaseMetaData.getUDTs(
-                catalog, schemaNamePattern, typeNamePattern, types);
-            try {
-                while (resultSet.next()) {
-                    final UDT instance = EntrySet.newInstance(
-                        UDT.class, resultSet);
-                    userDefinedTypes.add(instance);
-                }
-            } finally {
-                resultSet.close();
+            while (resultSet.next()) {
+                final UDT instance = EntrySet.newInstance(
+                    UDT.class, resultSet);
+                userDefinedTypes.add(instance);
             }
-        } catch (Exception e) {
+        } finally {
+            resultSet.close();
         }
     }
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @throws SQLException 
+     * Retrieves all UDTs mapped to given <code>catalog</code>.
+     *
+     * @param databaseMetaData meta
+     * @param catalog catalog
+     * @throws SQLException if a database access error occurs.
      */
     public static void getAllUDTs(final DatabaseMetaData databaseMetaData,
                                   final Catalog catalog)

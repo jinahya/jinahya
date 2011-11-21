@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Binding for attributes.
  *

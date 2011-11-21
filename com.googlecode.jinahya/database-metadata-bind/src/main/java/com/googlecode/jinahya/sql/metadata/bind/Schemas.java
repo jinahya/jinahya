@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,27 +79,26 @@ public class Schemas extends EntrySetWrapper<Schema> {
                                   final Collection<Schema> schemas)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getSchemas")) {
+            return;
+        }
+
+        final ResultSet resultSet =
+            databaseMetaData.getSchemas(catalog, schemaPattern);
         try {
-            final ResultSet resultSEt =
-                databaseMetaData.getSchemas(catalog, schemaPattern);
-            try {
-                while (resultSEt.next()) {
+            while (resultSet.next()) {
 
-                    // ------------------------------------------------- entries
-                    final Schema schema = EntrySet.newInstance(
-                        Schema.class, resultSEt);
-                    schemas.add(schema);
+                // ------------------------------------------------- entries
+                final Schema schema = EntrySet.newInstance(
+                    Schema.class, resultSet);
+                schemas.add(schema);
 
-                    // -------------------------------------------------- tables
-                    Tables.getAllTables(databaseMetaData, schema);
+                // -------------------------------------------------- tables
+                Tables.getAllTables(databaseMetaData, schema);
 
-                }
-
-            } finally {
-                resultSEt.close();
             }
-        } catch (AbstractMethodError ame) {
-            //ame.printStackTrace(System.err);
+        } finally {
+            resultSet.close();
         }
     }
 
