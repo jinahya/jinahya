@@ -18,9 +18,10 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import com.googlecode.jinahya.util.AbstractCollectable;
+
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -38,32 +39,30 @@ import org.xmlpull.v1.XmlSerializer;
  */
 @XmlTransient
 public abstract class AbstractXmlWrapper<T extends XmlTag>
-    extends AbstractXmlTag implements XmlWrapper<T> {
+    extends AbstractCollectable<T> implements XmlWrapper<T> {
 
 
     /**
      * Creates a new instance.
      *
      * @param tagType accessible type
-     * @param namespace XML namespace URI
-     * @param name XML local name
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
      */
-    public AbstractXmlWrapper(final Class<T> tagType,
-                                 final String namespace,
-                                 final String name) {
+    public AbstractXmlWrapper(final Class<T> tagType, final String namespaceURI,
+                              final String localName) {
 
-        super(namespace, name);
+        super(tagType);
 
-        if (tagType == null) {
-            throw new NullPointerException("null tagType");
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+        if (localName.trim().length() == 0) {
+            throw new IllegalArgumentException("emtpy localName");
         }
 
-        if (!AbstractXmlTag.class.isAssignableFrom(tagType)) {
-            throw new IllegalArgumentException(
-                tagType + " is not assignable to " + AbstractXmlTag.class);
-        }
-
-        this.tagType = tagType;
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
     }
 
 
@@ -95,32 +94,25 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
 
 
     @Override
-    public final Class<T> getAccessibleType() {
-        return tagType;
+    public final String getNamespaceURI() {
+        return namespaceURI;
     }
 
 
     @Override
-    public final Collection<T> getAccessibles() {
-
-        if (tags == null) {
-            return new ArrayList<T>();
-        }
-
-        return tags;
+    public final String getLocalName() {
+        return localName;
     }
 
 
     /**
-     * tagType.
+     * XML namespace URI.
      */
-    protected final Class<T> tagType;
+    protected final String namespaceURI;
 
 
-    /**
-     * tags.
-     */
-    private Collection<T> tags;
+    /** XML local name. */
+    protected final String localName;
 
 
 }

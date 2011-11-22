@@ -18,8 +18,7 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.googlecode.jinahya.util.AbstractCollectable;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,6 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlTransient
 public abstract class AbstractXmlCollectable<A extends XmlAccessible>
+    extends AbstractCollectable<A>
     implements XmlCollectable<A> {
 
 
@@ -41,67 +41,8 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
      * @param accessibleType accessible type
      */
     public AbstractXmlCollectable(final Class<A> accessibleType) {
-        super();
-
-        if (accessibleType == null) {
-            throw new NullPointerException("null elementType");
-        }
-
-        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
-            throw new IllegalArgumentException(
-                accessibleType + " is not assignable to "
-                + XmlAccessible.class);
-        }
-
-        this.accessibleType = accessibleType;
+        super(accessibleType);
     }
-
-
-    /**
-     * Creates a new instance of <code>accessibleType</code>.
-     *
-     * @return a new instance of <code>accessibleType</code>
-     */
-    protected A newAccessible() {
-        try {
-            return accessibleType.newInstance();
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + accessibleType, ie);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + accessibleType, iae);
-        }
-    }
-
-
-    @Override
-    public Collection<A> getAccessibles() {
-
-        if (accessibles == null) {
-            accessibles = new ArrayList<A>();
-        }
-
-        return accessibles;
-    }
-
-
-    @Override
-    public final Class<A> getAccessibleType() {
-        return accessibleType;
-    }
-
-
-    /**
-     * accessibleType.
-     */
-    protected final Class<A> accessibleType;
-
-
-    /**
-     * accessibles.
-     */
-    private Collection<A> accessibles;
 
 
 }
