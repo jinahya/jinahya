@@ -39,8 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <I> id type parameter
  */
 @XmlTransient
-public abstract class AbstractDatabaseAccessible<I>
-    implements DatabaseAccessible<I> {
+public abstract class AbstractDbAccessible<I> implements DbAccessible<I> {
 
 
     /**
@@ -417,9 +416,9 @@ public abstract class AbstractDatabaseAccessible<I>
      * @param idColumnName id column name
      * @param idType id type
      */
-    public AbstractDatabaseAccessible(final String tableName,
-                                      final String idColumnName,
-                                      final int idType) {
+    public AbstractDbAccessible(final String tableName,
+                                final String idColumnName,
+                                final int idType) {
         super();
 
         if (tableName == null) {
@@ -475,13 +474,62 @@ public abstract class AbstractDatabaseAccessible<I>
 
     @Override
     public boolean select(final Connection connection) throws SQLException {
-        return DatabaseAccessibleHelper.select(connection, this);
+
+        if (connection == null) {
+            throw new NullPointerException("null connection");
+        }
+
+        if (getId() == null) {
+            throw new IllegalStateException("null id");
+        }
+
+        final PreparedStatement preparedStatement = connection.prepareStatement(
+            "SELECT * FROM " + tableName
+            + " WHERE " + idColumnName + " = ?");
+        try {
+            int parameterIndex = 0;
+            preparedStatement.setObject(++parameterIndex, getId(), getIdType());
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            try {
+                if (!resultSet.next()) {
+                    return false;
+                }
+                read(resultSet);
+                return true;
+
+            } finally {
+                resultSet.close();
+            }
+        } finally {
+            preparedStatement.close();
+        }
     }
 
 
     @Override
     public boolean delete(final Connection connection) throws SQLException {
-        return DatabaseAccessibleHelper.delete(connection, this);
+
+        if (connection == null) {
+            throw new NullPointerException("null connection");
+        }
+
+        if (getId() == null) {
+            throw new IllegalStateException("null id");
+        }
+
+        final PreparedStatement preparedStatement = connection.prepareStatement(
+            "DELETE FROM " + tableName
+            + " WHERE " + idColumnName + " = ?");
+        try {
+            int parameterIndex = 0;
+            preparedStatement.setObject(++parameterIndex, id, idType);
+
+            return preparedStatement.executeUpdate() == 1;
+
+        } finally {
+            preparedStatement.close();
+        }
     }
 
 

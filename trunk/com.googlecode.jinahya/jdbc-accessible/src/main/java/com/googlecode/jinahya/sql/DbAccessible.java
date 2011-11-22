@@ -31,7 +31,7 @@ import java.sql.SQLException;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <I> id type parameter
  */
-public interface DatabaseAccessible<I> extends Accessible {
+public interface DbAccessible<I> extends Accessible {
 
 
     /**
