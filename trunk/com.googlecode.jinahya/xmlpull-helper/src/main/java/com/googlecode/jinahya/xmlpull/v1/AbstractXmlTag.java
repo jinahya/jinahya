@@ -18,18 +18,15 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractXmlPullTag implements XmlPullTag {
+@XmlTransient
+public abstract class AbstractXmlTag implements XmlTag {
 
 
     /**
@@ -38,37 +35,12 @@ public abstract class AbstractXmlPullTag implements XmlPullTag {
      * @param namespaceURI XML namespace URI
      * @param localName XML local name
      */
-    public AbstractXmlPullTag(final String namespaceURI,
-                              final String localName) {
+    public AbstractXmlTag(final String namespaceURI, final String localName) {
 
         super();
 
         this.namespaceURI = namespaceURI;
         this.localName = localName;
-    }
-
-
-    protected void requireStartTag(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
-    }
-
-
-    protected void requireEndTag(final XmlPullParser parser)
-        throws XmlPullParserException, IOException {
-
-        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
-    }
-
-
-    protected void startTag(final XmlSerializer serializer) throws IOException {
-        serializer.startTag(namespaceURI, localName);
-    }
-
-
-    protected void endTag(final XmlSerializer serializer) throws IOException {
-        serializer.endTag(namespaceURI, localName);
     }
 
 

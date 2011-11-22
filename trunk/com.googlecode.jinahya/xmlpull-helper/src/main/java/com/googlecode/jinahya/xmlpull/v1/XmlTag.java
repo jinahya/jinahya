@@ -23,7 +23,7 @@ package com.googlecode.jinahya.xmlpull.v1;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlPullTag extends XmlPullAccessible {
+public interface XmlTag extends XmlAccessible {
 
 
     /**

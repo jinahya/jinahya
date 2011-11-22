@@ -18,33 +18,39 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.util.Collection;
-
-
 /**
- * Interface for collectable.
+ * Constants for XmlPullHelper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> accessible type parameter
  */
-public interface XmlPullCollectable<A extends XmlPullAccessible>
-    extends XmlPullAccessible {
+public final class XmlConstants {
 
 
     /**
-     * Returns the type of child elements.
+     * Namespace URI for XMLSchema.
      *
-     * @return child type.
+     * @see <a href="http://www.w3.org/2001/XMLSchema">XML Schema</a>
      */
-    Class<A> getAccessibleType();
+    public static final String W3C_XML_SCHEMA_NS_URI =
+        "http://www.w3.org/2001/XMLSchema";
 
 
     /**
-     * Returns the child collection.
+     * Namespace URI for XML Schema instance.
      *
-     * @return child collection
+     * @see <a href="http://www.w3.org/2001/XMLSchema-instance">
+     *      XML Schema instance namespace.</a>
      */
-    Collection<A> getAccessibles();
+    public static final String W3C_XML_SCHEMA_INSTANCE_NS_URI =
+        "http://www.w3.org/2001/XMLSchema-instance";
+
+
+    /**
+     * Creates a new instance.
+     */
+    private XmlConstants() {
+        super();
+    }
 
 
 }

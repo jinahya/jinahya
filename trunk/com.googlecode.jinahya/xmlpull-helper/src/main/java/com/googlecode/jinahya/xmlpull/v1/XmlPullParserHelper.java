@@ -398,7 +398,7 @@ public final class XmlPullParserHelper {
         throws XmlPullParserException, IOException {
 
         final boolean nil = getBooleanAttribute(
-            parser, XmlPullConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil",
+            parser, XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil",
             false);
 
         String value = parser.nextText();

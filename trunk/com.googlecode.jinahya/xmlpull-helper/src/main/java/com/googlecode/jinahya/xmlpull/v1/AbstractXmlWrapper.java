@@ -22,7 +22,8 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,10 +34,11 @@ import org.xmlpull.v1.XmlSerializer;
  * Abstract element wrapper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> AbstractXmlElementWrapper type parameter
+ * @param <T> AbstractXmlElementWrapper type parameter
  */
-public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
-    extends AbstractXmlPullTag implements XmlPullCollectable<E> {
+@XmlTransient
+public abstract class AbstractXmlWrapper<T extends XmlTag>
+    extends AbstractXmlTag implements XmlWrapper<T> {
 
 
     /**
@@ -46,9 +48,9 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
      * @param namespace XML namespace URI
      * @param name XML local name
      */
-    public AbstractXmlPullTagWrapper(final Class<E> tagType,
-                                     final String namespace,
-                                     final String name) {
+    public AbstractXmlWrapper(final Class<T> tagType,
+                                 final String namespace,
+                                 final String name) {
 
         super(namespace, name);
 
@@ -56,9 +58,9 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
             throw new NullPointerException("null tagType");
         }
 
-        if (!AbstractXmlPullTag.class.isAssignableFrom(tagType)) {
+        if (!AbstractXmlTag.class.isAssignableFrom(tagType)) {
             throw new IllegalArgumentException(
-                tagType + " is not assignable to " + AbstractXmlPullTag.class);
+                tagType + " is not assignable to " + AbstractXmlTag.class);
         }
 
         this.tagType = tagType;
@@ -69,42 +71,40 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        requireStartTag(parser);
-
-        while (parser.nextTag() == XmlPullParser.START_TAG) {
-            final E tag = newTag();
-            tag.parse(parser);
-            getAccessibles().add(tag);
-        }
-
-        requireEndTag(parser);
+        new XmlWrapperSupport(this).parse(parser);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        startTag(serializer);
-
-        for (final Iterator<E> i = getAccessibles().iterator(); i.hasNext();) {
-            i.next().serialize(serializer);
-        }
-
-        endTag(serializer);
+        new XmlWrapperSupport(this).serialize(serializer);
     }
 
 
     @Override
-    public final Class<E> getAccessibleType() {
+    public final Class<T> getTagType() {
+        return getAccessibleType();
+    }
+
+
+    @Override
+    public final Collection<T> getTags() {
+        return getAccessibles();
+    }
+
+
+    @Override
+    public final Class<T> getAccessibleType() {
         return tagType;
     }
 
 
     @Override
-    public final Collection<E> getAccessibles() {
+    public final Collection<T> getAccessibles() {
 
         if (tags == null) {
-            return new ArrayList<E>();
+            return new ArrayList<T>();
         }
 
         return tags;
@@ -112,34 +112,15 @@ public abstract class AbstractXmlPullTagWrapper<E extends AbstractXmlPullTag>
 
 
     /**
-     * Creates a new instance of <code>tagType</code>.
-     *
-     * @return a new tag.
+     * tagType.
      */
-    protected E newTag() {
-
-        try {
-            return tagType.newInstance();
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + tagType, ie);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(
-                "failed to create a new instance of " + tagType, iae);
-        }
-    }
+    protected final Class<T> tagType;
 
 
     /**
-     * Tag type.
+     * tags.
      */
-    protected final Class<E> tagType;
-
-
-    /**
-     * Tags.
-     */
-    private Collection<E> tags;
+    private Collection<T> tags;
 
 
 }
