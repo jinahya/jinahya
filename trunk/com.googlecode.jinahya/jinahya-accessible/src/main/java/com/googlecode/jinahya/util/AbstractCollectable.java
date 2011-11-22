@@ -75,7 +75,7 @@ public class AbstractCollectable<A extends Accessible>
     /**
      * accessibleType.
      */
-    private final Class<A> accessibleType;
+    protected final Class<A> accessibleType;
 
 
     /**
