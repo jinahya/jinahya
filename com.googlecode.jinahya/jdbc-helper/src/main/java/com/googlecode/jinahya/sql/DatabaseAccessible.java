@@ -27,8 +27,9 @@ import java.sql.SQLException;
  * Interface for database mapped elements.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <I> id type parameter
  */
-public interface DatabaseAccessible {
+public interface DatabaseAccessible<I> {
 
 
     /**
@@ -36,7 +37,7 @@ public interface DatabaseAccessible {
      *
      * @return id
      */
-    Long getId();
+    I getId();
 
 
     /**
@@ -44,7 +45,14 @@ public interface DatabaseAccessible {
      *
      * @param id id
      */
-    void setId(Long id);
+    void setId(I id);
+
+
+    /**
+     * 
+     * @return id type
+     */
+    public int getIdType();
 
 
     /**
