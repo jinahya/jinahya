@@ -22,8 +22,10 @@ import java.util.Collection;
 
 
 /**
+ * Interface for classes collecting <code>Accessible</code>s.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <A> <code>Accessible</code> type parameter
  */
 public interface Collectable<A extends Accessible> {
 

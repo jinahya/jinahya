@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 /**
+ * Interface for basic accessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
