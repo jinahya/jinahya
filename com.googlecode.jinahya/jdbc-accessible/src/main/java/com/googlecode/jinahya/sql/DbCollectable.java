@@ -21,14 +21,13 @@ package com.googlecode.jinahya.sql;
 import com.googlecode.jinahya.util.Collectable;
 
 
-
 /**
  * Interface for collection type of accessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
-public interface DatabaseCollectable<A extends DatabaseAccessible<?>>
+public interface DbCollectable<A extends DbAccessible<?>>
     extends Collectable<A> {
 }
 

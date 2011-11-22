@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Abstract implementation of DatabaseAccessible with <code>idType</code> of
- * <code>Long</code>.
+ * <code>String</code>.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class DatabaseAccessibleWithLong
-    extends AbstractDatabaseAccessible<Long> {
+public abstract class DbAccessibleWithString
+    extends AbstractDbAccessible<String> {
 
 
     /**
@@ -40,10 +40,10 @@ public abstract class DatabaseAccessibleWithLong
      * @param tableName table name
      * @param idColumnName id column name
      */
-    public DatabaseAccessibleWithLong(final String tableName,
-                                      final String idColumnName) {
+    public DbAccessibleWithString(final String tableName,
+                                  final String idColumnName) {
 
-        this(tableName, idColumnName, Types.BIGINT);
+        this(tableName, idColumnName, Types.VARCHAR);
     }
 
 
@@ -54,9 +54,10 @@ public abstract class DatabaseAccessibleWithLong
      * @param idColumnName id column name
      * @param idType id type
      */
-    protected DatabaseAccessibleWithLong(final String tableName,
-                                         final String idColumnName,
-                                         final int idType) {
+    protected DbAccessibleWithString(final String tableName,
+                                     final String idColumnName,
+                                     final int idType) {
+
         super(tableName, idColumnName, idType);
     }
 

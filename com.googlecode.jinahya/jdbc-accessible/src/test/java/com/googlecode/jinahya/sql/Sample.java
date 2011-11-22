@@ -23,7 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.sql.Types;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "sample")
 @XmlType(propOrder = {"name", "age"})
-public class Sample extends DatabaseAccessibleWithLong {
+public class Sample extends DbAccessibleWithLong {
 
 
     public static final String TABLE_NAME = "SAMPLE";

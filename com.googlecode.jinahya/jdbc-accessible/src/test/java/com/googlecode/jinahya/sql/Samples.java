@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement(name = "samples")
-public class Samples extends AbstractDatabaseCollectable<Sample> {
+public class Samples extends AbstractDbCollectable<Sample> {
 
 
     /**

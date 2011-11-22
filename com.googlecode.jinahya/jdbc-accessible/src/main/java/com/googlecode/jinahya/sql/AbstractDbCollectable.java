@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <A> accessible type parameter
  */
 @XmlTransient
-public abstract class AbstractDatabaseCollectable<A extends DatabaseAccessible<?>>
+public abstract class AbstractDbCollectable<A extends DbAccessible<?>>
     extends AbstractCollectable<A>
-    implements DatabaseCollectable<A> {
+    implements DbCollectable<A> {
 
 
     /**
@@ -40,7 +40,7 @@ public abstract class AbstractDatabaseCollectable<A extends DatabaseAccessible<?
      *
      * @param accessibleType accessible type
      */
-    public AbstractDatabaseCollectable(final Class<A> accessibleType) {
+    public AbstractDbCollectable(final Class<A> accessibleType) {
         super(accessibleType);
     }
 
