@@ -34,47 +34,26 @@ import java.util.Collection;
 public final class DatabaseCollectableHelper {
 
 
-    /**
-     * Select a new instance.
-     *
-     * @param <C> collection type parameter
-     * @param connection connection
-     * @param tableName element table name
-     * @param idColumnName element id column name
-     * @param collectableType collectable type
-     * @return a new collection instance
-     * @throws SQLException if an SQL error occurs
-     */
-    public static <C extends DatabaseCollectable<?>> C select(
+    public static <C extends DatabaseCollectable<A>, A extends AbstractDatabaseAccessible<?>> C select(
         final Connection connection, final String tableName,
         final String idColumnName, final Class<C> collectableType)
         throws SQLException {
 
         try {
-            final C collection = collectableType.newInstance();
-            select(connection, tableName, idColumnName, collection);
-            return collection;
+            final C collectable = collectableType.newInstance();
+            select(connection, tableName, idColumnName, collectable);
+            return collectable;
         } catch (IllegalAccessException iae) {
             throw new RuntimeException(
-                "failed to create instance of " + collectableType, iae);
+                "failed to create a new instance of " + collectableType, iae);
         } catch (InstantiationException ie) {
             throw new RuntimeException(
-                "failed to create instance of " + collectableType, ie);
+                "failed to create a new instance of " + collectableType, ie);
         }
     }
 
 
-    /**
-     * Selects given <code>collectable</code>.
-     *
-     * @param <C> DatabaseCollectable type parameter
-     * @param connection connection
-     * @param tableName table name
-     * @param idColumnName id column name
-     * @param collectable collectable
-     * @throws SQLException if an SQL error occurs.
-     */
-    public static <C extends DatabaseCollectable<?>> void select(
+    public static <C extends DatabaseCollectable<A>, A extends DatabaseAccessible<?>> void select(
         final Connection connection, final String tableName,
         final String idColumnName, final C collectable)
         throws SQLException {
@@ -101,26 +80,22 @@ public final class DatabaseCollectableHelper {
         try {
             final ResultSet resultSet = preparedStatement.executeQuery();
             try {
-                @SuppressWarnings("unchecked")
-                final Collection<DatabaseAccessible> accessibles =
-                    (Collection<DatabaseAccessible>)
-                    collectable.getAccessibles();
-                final Class<? extends DatabaseAccessible> accessibleType =
-                    collectable.getAccessibleType();
+                final Class<A> accessibleType = collectable.getAccessibleType();
+                final Collection<A> accessibles = collectable.getAccessibles();
+                accessibles.clear();
                 while (resultSet.next()) {
                     try {
-                        final DatabaseAccessible accessible =
-                            accessibleType.newInstance();
+                        final A accessible = accessibleType.newInstance();
                         accessible.read(resultSet);
                         accessibles.add(accessible);
                     } catch (IllegalAccessException iae) {
                         throw new RuntimeException(
-                            "failed to create instance of " + accessibleType,
-                            iae);
+                            "failed to create a new instance of "
+                            + accessibleType, iae);
                     } catch (InstantiationException ie) {
                         throw new RuntimeException(
-                            "failed to create instance of " + accessibleType,
-                            ie);
+                            "failed to create a new instance of "
+                            + accessibleType, ie);
                     }
                 }
             } finally {
