@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<samples xmlns="http://jinahya.googlecode.com/xmlpull/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <sample id="0">
+    <name xsi:nil="true"/>
+    <age xsi:nil="true"/>
+  </sample>  
+  <sample id="1">
+    <name>name1</name>
+    <age>18</age>
+  </sample>  
+  <sample id="1">
+    <name>Jame</name>
+    <age>18</age>
+  </sample>  
+  <sample id="1">
+    <name>Ass Ignorant</name>
+    <age>20</age>
+  </sample>
+</samples>
