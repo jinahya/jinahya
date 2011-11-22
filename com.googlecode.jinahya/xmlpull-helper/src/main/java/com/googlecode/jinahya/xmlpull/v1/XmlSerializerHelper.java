@@ -40,7 +40,7 @@ public final class XmlSerializerHelper {
         throws IOException {
 
         serializer.attribute(
-            XmlPullConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil", "true");
+            XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil", "true");
     }
 
 

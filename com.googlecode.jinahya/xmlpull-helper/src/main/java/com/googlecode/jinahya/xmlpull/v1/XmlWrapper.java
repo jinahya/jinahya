@@ -18,38 +18,47 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
+import java.util.Collection;
 
 
 /**
+ * Interface XML tag.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface XmlPullAccessible {
+public interface XmlWrapper<T extends XmlTag> extends XmlCollectable<T> {
 
 
     /**
-     * Parses information from given <code>parser</code>.
+     * Returns tagType.
      *
-     * @param parser parser
-     * @throws XmlPullParserException if an XML error occurs.
-     * @throws IOException if an I/O error occurs.
+     * @return tagType.
      */
-    void parse(XmlPullParser parser)
-        throws XmlPullParserException, IOException;
+    Class<T> getTagType();
 
 
     /**
-     * Serializes information to given <code>serializer</code>.
+     * Returns tags.
      *
-     * @param serializer serializer
-     * @throws IOException if an I/O error occurs.
+     * @return tags.
      */
-    void serialize(XmlSerializer serializer) throws IOException;
+    Collection<T> getTags();
+
+
+    /**
+     * Returns XML namespace URi of this tag.
+     *
+     * @return XML namespace URI
+     */
+    String getNamespaceURI();
+
+
+    /**
+     * Returns XML local name of this tag.
+     *
+     * @return XML local name
+     */
+    String getLocalName();
 
 
 }

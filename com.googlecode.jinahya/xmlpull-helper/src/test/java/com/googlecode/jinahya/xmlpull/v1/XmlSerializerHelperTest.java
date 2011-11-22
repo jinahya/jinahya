@@ -120,7 +120,7 @@ public class XmlSerializerHelperTest extends XmlPullHelperTest {
 
         serializer.startDocument(ENCODING, Boolean.TRUE);
         serializer.setPrefix(
-            "xsi", XmlPullConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+            "xsi", XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
 
         serializer.startTag(null, "root");
 

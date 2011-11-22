@@ -18,39 +18,38 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
+
+
 /**
- * Constants for XmlPullHelper.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XmlPullConstants {
+public interface XmlAccessible {
 
 
     /**
-     * Namespace URI for XMLSchema.
+     * Parses information from given <code>parser</code>.
      *
-     * @see <a href="http://www.w3.org/2001/XMLSchema">XML Schema</a>
+     * @param parser parser
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
      */
-    public static final String W3C_XML_SCHEMA_NS_URI =
-        "http://www.w3.org/2001/XMLSchema";
+    void parse(XmlPullParser parser)
+        throws XmlPullParserException, IOException;
 
 
     /**
-     * Namespace URI for XML Schema instance.
+     * Serializes information to given <code>serializer</code>.
      *
-     * @see <a href="http://www.w3.org/2001/XMLSchema-instance">
-     *      XML Schema instance namespace.</a>
+     * @param serializer serializer
+     * @throws IOException if an I/O error occurs.
      */
-    public static final String W3C_XML_SCHEMA_INSTANCE_NS_URI =
-        "http://www.w3.org/2001/XMLSchema-instance";
-
-
-    /**
-     * Creates a new instance.
-     */
-    private XmlPullConstants() {
-        super();
-    }
+    void serialize(XmlSerializer serializer) throws IOException;
 
 
 }

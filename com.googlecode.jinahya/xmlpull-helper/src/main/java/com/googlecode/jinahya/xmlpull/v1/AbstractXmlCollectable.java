@@ -21,6 +21,8 @@ package com.googlecode.jinahya.xmlpull.v1;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  * Abstract XmlCollectable.
@@ -28,8 +30,9 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> XmlAccessible type parameter
  */
-public abstract class AbstractXmlPullCollectable<A extends XmlPullAccessible>
-    implements XmlPullCollectable<A> {
+@XmlTransient
+public abstract class AbstractXmlCollectable<A extends XmlAccessible>
+    implements XmlCollectable<A> {
 
 
     /**
@@ -37,17 +40,17 @@ public abstract class AbstractXmlPullCollectable<A extends XmlPullAccessible>
      *
      * @param accessibleType accessible type
      */
-    public AbstractXmlPullCollectable(final Class<A> accessibleType) {
+    public AbstractXmlCollectable(final Class<A> accessibleType) {
         super();
 
         if (accessibleType == null) {
             throw new NullPointerException("null elementType");
         }
 
-        if (!XmlPullAccessible.class.isAssignableFrom(accessibleType)) {
+        if (!XmlAccessible.class.isAssignableFrom(accessibleType)) {
             throw new IllegalArgumentException(
                 accessibleType + " is not assignable to "
-                + XmlPullAccessible.class);
+                + XmlAccessible.class);
         }
 
         this.accessibleType = accessibleType;
@@ -89,11 +92,15 @@ public abstract class AbstractXmlPullCollectable<A extends XmlPullAccessible>
     }
 
 
-    /** elementType. */
+    /**
+     * accessibleType.
+     */
     protected final Class<A> accessibleType;
 
 
-    /** elements. */
+    /**
+     * accessibles.
+     */
     private Collection<A> accessibles;
 
 

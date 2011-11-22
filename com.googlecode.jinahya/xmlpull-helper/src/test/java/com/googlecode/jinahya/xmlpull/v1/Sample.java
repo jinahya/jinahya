@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Sample extends AbstractXmlPullTag {
+public class Sample extends AbstractXmlTag {
 
 
     public static final String NAMESPACE_URI = null;
@@ -52,7 +52,8 @@ public class Sample extends AbstractXmlPullTag {
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        requireStartTag(parser); // ---------------------------------- START_TAG
+        parser.require(XmlPullParser.START_TAG, getNamespaceURI(),
+                       getLocalName());
 
         id = XmlPullParserHelper.getLongAttribute(parser, null, "id");
 
@@ -63,14 +64,16 @@ public class Sample extends AbstractXmlPullTag {
         age = XmlPullParserHelper.nextInt(parser);
 
         parser.nextTag();
-        requireEndTag(parser); // -------------------------------------- END_TAG
+
+        parser.require(XmlPullParser.END_TAG, getNamespaceURI(),
+                       getLocalName());
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        startTag(serializer); // ------------------------------------- START_TAG
+        serializer.startTag(getNamespaceURI(), getLocalName());
 
         serializer.attribute(namespaceURI, "id", Long.toString(id));
 
@@ -80,7 +83,7 @@ public class Sample extends AbstractXmlPullTag {
         XmlSerializerHelper.nillableSimpleTag(
             serializer, namespaceURI, "age", name);
 
-        endTag(serializer); // ----------------------------------------- END_TAG
+        serializer.endTag(getNamespaceURI(), getLocalName());
     }
 
 
