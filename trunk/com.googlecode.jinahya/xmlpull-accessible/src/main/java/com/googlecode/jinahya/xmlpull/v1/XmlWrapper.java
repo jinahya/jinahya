@@ -25,8 +25,10 @@ import java.util.Collection;
  * Interface XML tag.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <T> <code>XmlTag</code> type parameter
  */
-public interface XmlWrapper<T extends XmlTag> extends XmlCollectable<T> {
+public interface XmlWrapper<T extends XmlTag>
+    extends XmlCollectable<T>, XmlTag {
 
 
     /**
@@ -43,22 +45,6 @@ public interface XmlWrapper<T extends XmlTag> extends XmlCollectable<T> {
      * @return tags.
      */
     Collection<T> getTags();
-
-
-    /**
-     * Returns XML namespace URi of this tag.
-     *
-     * @return XML namespace URI
-     */
-    String getNamespaceURI();
-
-
-    /**
-     * Returns XML local name of this tag.
-     *
-     * @return XML local name
-     */
-    String getLocalName();
 
 
 }

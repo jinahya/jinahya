@@ -30,11 +30,9 @@ import org.xmlpull.v1.XmlSerializer;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <W> wrapper type parameter
  * @param <T> tag type parameter
  */
-public class XmlWrapperSupport<W extends XmlWrapper<T>, T extends XmlTag>
-    implements XmlAccessible {
+public class XmlWrapperSupport<T extends XmlTag> implements XmlAccessible {
 
 
     /**
@@ -42,7 +40,7 @@ public class XmlWrapperSupport<W extends XmlWrapper<T>, T extends XmlTag>
      *
      * @param wrapper wrapper
      */
-    public XmlWrapperSupport(final W wrapper) {
+    public XmlWrapperSupport(final XmlWrapper<T> wrapper) {
         super();
 
         if (wrapper == null) {
@@ -100,7 +98,7 @@ public class XmlWrapperSupport<W extends XmlWrapper<T>, T extends XmlTag>
     /**
      * wrapper.
      */
-    private final W wrapper;
+    private final XmlWrapper<T> wrapper;
 
 
 }
