@@ -35,9 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * Abstract implementation of DatabaseAccessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <I> id type parameter
  */
 @XmlTransient
-public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
+public abstract class AbstractDatabaseAccessible<I>
+    implements DatabaseAccessible<I> {
 
 
     /**
@@ -412,39 +414,49 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
      *
      * @param tableName table name
      * @param idColumnName id column name
+     * @param idType id type
      */
     public AbstractDatabaseAccessible(final String tableName,
-                                      final String idColumnName) {
+                                      final String idColumnName,
+                                      final int idType) {
         super();
 
         if (tableName == null) {
             throw new NullPointerException("null tableName");
         }
-        if (tableName.trim().isEmpty()) {
+        if (tableName.trim().length() == 0) { // no isEmpty() in PBP
             throw new IllegalArgumentException("empty tableName");
         }
 
         if (idColumnName == null) {
             throw new NullPointerException("null idColumnName");
         }
-        if (idColumnName.trim().isEmpty()) {
+        if (idColumnName.trim().length() == 0) {
             throw new IllegalArgumentException("empty idColumnName");
         }
 
         this.tableName = tableName;
         this.idColumnName = idColumnName;
+
+        this.idType = idType;
     }
 
 
     @Override
-    public Long getId() {
+    public I getId() {
         return id;
     }
 
 
     @Override
-    public void setId(final Long id) {
+    public void setId(final I id) {
         this.id = id;
+    }
+
+
+    @Override
+    public final int getIdType() {
+        return idType;
     }
 
 
@@ -478,16 +490,28 @@ public abstract class AbstractDatabaseAccessible implements DatabaseAccessible {
     }
 
 
-    /** table name. */
+    /**
+     * id.
+     */
+    private I id;
+
+
+    /**
+     * table name.
+     */
     protected final String tableName;
 
 
-    /** id column name. */
+    /**
+     * id column name.
+     */
     protected final String idColumnName;
 
 
-    /** id. */
-    private Long id;
+    /**
+     * idType.
+     */
+    private final int idType;
 
 
 }
