@@ -18,7 +18,8 @@
 package com.googlecode.jinahya.sql;
 
 
-import java.util.Collection;
+import com.googlecode.jinahya.util.Collectable;
+
 
 
 /**
@@ -27,24 +28,7 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
-public interface DatabaseCollectable<A extends DatabaseAccessible<?>> {
-
-
-    /**
-     * Return accessible type.
-     *
-     * @return accessible type
-     */
-    Class<A> getAccessibleType();
-
-
-    /**
-     * Returns accessible collection.
-     *
-     * @return accessible collection
-     */
-    Collection<A> getAccessibles();
-
-
+public interface DatabaseCollectable<A extends DatabaseAccessible<?>>
+    extends Collectable<A> {
 }
 

@@ -18,8 +18,7 @@
 package com.googlecode.jinahya.sql;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.googlecode.jinahya.util.AbstractCollectable;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,6 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlTransient
 public abstract class AbstractDatabaseCollectable<A extends DatabaseAccessible<?>>
+    extends AbstractCollectable<A>
     implements DatabaseCollectable<A> {
 
 
@@ -41,43 +41,8 @@ public abstract class AbstractDatabaseCollectable<A extends DatabaseAccessible<?
      * @param accessibleType accessible type
      */
     public AbstractDatabaseCollectable(final Class<A> accessibleType) {
-        super();
-
-        if (accessibleType == null) {
-            throw new NullPointerException("null accessibleType");
-        }
-
-        if (!DatabaseAccessible.class.isAssignableFrom(accessibleType)) {
-            throw new IllegalArgumentException(
-                accessibleType + " is not assignable to "
-                + DatabaseAccessible.class);
-        }
-
-        this.accessibleType = accessibleType;
+        super(accessibleType);
     }
-
-
-    @Override
-    public final Collection<A> getAccessibles() {
-
-        if (accessibles == null) {
-            accessibles = new ArrayList<A>();
-        }
-
-        return accessibles;
-    }
-
-
-    @Override
-    public final Class<A> getAccessibleType() {
-        return accessibleType;
-    }
-
-
-    private final Class<A> accessibleType;
-
-
-    private Collection<A> accessibles;
 
 
 }

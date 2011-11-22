@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql;
 
 
+import com.googlecode.jinahya.util.Accessible;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ import java.sql.SQLException;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <I> id type parameter
  */
-public interface DatabaseAccessible<I> {
+public interface DatabaseAccessible<I> extends Accessible {
 
 
     /**
@@ -49,7 +51,8 @@ public interface DatabaseAccessible<I> {
 
 
     /**
-     * 
+     * Returns the type of id.
+     *
      * @return id type
      */
     public int getIdType();
