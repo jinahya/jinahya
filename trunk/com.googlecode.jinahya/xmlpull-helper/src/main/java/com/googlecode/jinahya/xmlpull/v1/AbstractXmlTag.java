@@ -39,6 +39,13 @@ public abstract class AbstractXmlTag implements XmlTag {
 
         super();
 
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+        if (localName.trim().length() == 0) {
+            throw new IllegalArgumentException("emtpy localName");
+        }
+
         this.namespaceURI = namespaceURI;
         this.localName = localName;
     }

@@ -15,6 +15,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>jinahya-persistence-api</artifactId>
+        <version>1.0-alpha-1</version>
+      </dependency>
+      <dependency>
         <groupId>net.sf.kxml</groupId>
         <artifactId>kxml2</artifactId>
         <version>2.3.0</version>
@@ -32,6 +37,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>com.googlecode.jinahya</groupId>
+      <artifactId>jinahya-persistence-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>net.sf.kxml</groupId>
       <artifactId>kxml2</artifactId>
@@ -141,7 +151,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
-          <goals>install</goals>
+          <goals>deploy</goals>
           <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
         </configuration>
       </plugin>
@@ -244,7 +254,7 @@
       <id>sign-artifacts</id>
       <activation>
         <property>
-          <name>sign</name>
+          <name>performRelease</name>
           <value>true</value>
         </property>
       </activation>
@@ -262,48 +272,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>jsr14</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>compile-jsr14</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <source>1.5</source>
-                  <target>jsr14</target>
-                </configuration>
-              </execution>
-              <execution>
-                <id>testCompile-1.5</id>
-                <phase>test-compile</phase>
-                <goals>
-                  <goal>testCompile</goal>
-                </goals>
-                <configuration>
-                  <source>1.5</source>
-                  <target>1.5</target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <classifier>jsr14</classifier>
-            </configuration>
           </plugin>
         </plugins>
       </build>
