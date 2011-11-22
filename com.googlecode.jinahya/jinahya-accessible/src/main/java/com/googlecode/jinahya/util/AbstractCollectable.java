@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * Abstract implementation of <code>Collectable</code>.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
