@@ -28,9 +28,19 @@ import java.util.Collection;
 public interface Collectable<A extends Accessible> {
 
 
+    /**
+     * Returns accessibleType.
+     *
+     * @return accessibleType
+     */
     Class<A> getAccessibleType();
 
 
+    /**
+     * Returns accessibles.
+     *
+     * @return accessibles.
+     */
     Collection<A> getAccessibles();
 
 
