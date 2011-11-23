@@ -18,12 +18,16 @@
 package com.googlecode.jinahya.util;
 
 
+import java.io.Serializable;
+
+
+
 /**
  * Interface for basic accessible.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface Accessible {
+public interface Accessible extends Serializable {
     
 }
 

@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util;
 
 
+import java.io.Serializable;
+
 import java.util.Collection;
 
 
@@ -27,7 +29,7 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> <code>Accessible</code> type parameter
  */
-public interface Collectable<A extends Accessible> {
+public interface Collectable<A extends Accessible> extends Serializable {
 
 
     /**
@@ -39,9 +41,9 @@ public interface Collectable<A extends Accessible> {
 
 
     /**
-     * Returns accessibles.
+     * Returns a collection of <code>Accessible</code> type.
      *
-     * @return accessibles.
+     * @return accessible collection
      */
     Collection<A> getAccessibles();
 
