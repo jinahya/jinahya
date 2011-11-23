@@ -35,6 +35,10 @@ public class AbstractCollectable<A extends Accessible>
     implements Collectable<A> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -2652700145185793859L;
+
+
     /**
      * Creates a new instance.
      *
