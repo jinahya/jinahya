@@ -1,5 +1,7 @@
 #!/bin/sh
+current=`pwd`
+echo $current
 svn up
-./fix_newlines.sh
-./svn_apply_autoprops.py
+$current/fix_newlines.sh
+$current/svn_apply_autoprops.py
 svn ci -m reset
