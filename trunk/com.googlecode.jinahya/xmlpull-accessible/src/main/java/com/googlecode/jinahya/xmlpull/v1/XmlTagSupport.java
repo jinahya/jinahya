@@ -30,26 +30,26 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
-public class XmlTagSupport<A extends XmlAccessible> implements XmlAccessible {
+public class XmlTagSupport<A extends XmlAccessible> implements XmlTag {
 
 
     /**
      * Creates a new instance.
      *
-     * @param accessible accessible
+     * @param supported the object to be supported
      */
     public XmlTagSupport(final String namespaceURI, final String localName,
-                         final A accessible) {
+                         final A supported) {
         super();
 
-        if (accessible == null) {
-            throw new NullPointerException("null accessible");
+        if (supported == null) {
+            throw new NullPointerException("null supported");
         }
 
         this.namespaceURI = namespaceURI;
         this.localName = localName;
 
-        this.accessible = accessible;
+        this.supported = supported;
     }
 
 
@@ -59,7 +59,7 @@ public class XmlTagSupport<A extends XmlAccessible> implements XmlAccessible {
 
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
-        accessible.parse(parser);
+        supported.parse(parser);
 
         parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
@@ -70,28 +70,40 @@ public class XmlTagSupport<A extends XmlAccessible> implements XmlAccessible {
 
         serializer.startTag(namespaceURI, localName);
 
-        accessible.serialize(serializer);
+        supported.serialize(serializer);
 
         serializer.endTag(namespaceURI, localName);
+    }
+
+
+    @Override
+    public String getLocalName() {
+        return localName;
+    }
+
+
+    @Override
+    public String getNamespaceURI() {
+        return namespaceURI;
     }
 
 
     /**
      * XML namespace URI.
      */
-    private final String namespaceURI;
+    protected final String namespaceURI;
 
 
     /**
      * XML local name.
      */
-    private final String localName;
+    protected final String localName;
 
 
     /**
      * wrapper.
      */
-    private final A accessible;
+    protected final A supported;
 
 
 }
