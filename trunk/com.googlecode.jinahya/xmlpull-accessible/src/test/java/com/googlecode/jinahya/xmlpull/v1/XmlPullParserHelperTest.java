@@ -44,7 +44,8 @@ public class XmlPullParserHelperTest extends XmlPullHelperTest {
 
             final String xml =
                 "<test"
-                + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+                + " xmlns:xsi=\"" + XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+                + "\""
                 + " xsi:nil=\"true\"></test>";
 
             parser.setInput(new ByteArrayInputStream(xml.getBytes()), null);

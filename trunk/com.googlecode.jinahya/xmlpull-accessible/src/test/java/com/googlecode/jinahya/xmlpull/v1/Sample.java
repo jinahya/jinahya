@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import java.beans.Introspector;
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -35,7 +36,8 @@ public class Sample extends AbstractXmlTag {
     public static final String NAMESPACE_URI = null;
 
 
-    public static final String LOCAL_NAME = "sample";
+    public static final String LOCAL_NAME =
+        Introspector.decapitalize(Sample.class.getSimpleName());
 
 
     public Sample() {

@@ -38,6 +38,14 @@ import org.xmlpull.v1.XmlPullParserException;
 public final class XmlPullParserHelper {
 
 
+    public static boolean getXSINilAttribute(final XmlPullParser parser)
+        throws XmlPullParserException, IOException {
+
+        return getBooleanAttribute(
+            parser, XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil", false);
+    }
+
+
     /**
      * Parses an attribute as <code>xs:date</code>.
      *
@@ -397,12 +405,15 @@ public final class XmlPullParserHelper {
     public static String nextNillableText(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final boolean nil = getBooleanAttribute(
-            parser, XmlConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil",
-            false);
+        if (parser == null) {
+            throw new NullPointerException("null parser");
+        }
 
-        String value = parser.nextText();
-        if (value.length() == 0 && nil) {
+        final boolean nil = getXSINilAttribute(parser);
+
+        final String value = parser.nextText();
+
+        if ((value == null || value.length() == 0) && nil) {
             return null;
         }
 
@@ -584,23 +595,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a Boolean.
      *
      * @param parser parser
-     * @param namespace namespace
-     * @param name name
+     * @param namespaceURI namespace
+     * @param localName name
      * @return parsed Boolean value or null if attribute not found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Boolean getBooleanAttribute(final XmlPullParser parser,
-                                              final String namespace,
-                                              final String name)
+                                              final String namespaceURI,
+                                              final String localName)
         throws XmlPullParserException, IOException {
 
-        final String string = parser.getAttributeValue(namespace, name);
-        if (string == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return XSBooleanAdapter.parseXSBoolean(string);
+        return XSBooleanAdapter.parseXSBoolean(value);
     }
 
 
