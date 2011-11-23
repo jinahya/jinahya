@@ -44,6 +44,11 @@ public class Sample implements BitAccessible {
     }
 
 
+    public Sample() {
+        this("name", 1);
+    }
+
+
     private Sample(final String name, final int age) {
         super();
 

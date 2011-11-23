@@ -18,25 +18,15 @@
 package com.googlecode.jinahya.io;
 
 
-import java.util.Collection;
+import com.googlecode.jinahya.util.Collectable;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> BitAccessible type parameter
+ * @param <A> <code>BitAccessible</code> type parameter
  */
-public interface BitCollectable<T extends BitAccessible>
-    extends BitAccessible {
-
-
-    /**
-     * Returns accessibles.
-     *
-     * @return accessibles.
-     */
-    Collection<T> getAccessibles();
-
-
+public interface BitCollectable<A extends BitAccessible>
+    extends Collectable<A>, BitAccessible {
 }
 

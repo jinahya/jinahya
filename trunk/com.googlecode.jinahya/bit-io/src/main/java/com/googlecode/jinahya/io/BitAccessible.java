@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.util.Accessible;
+
 import java.io.IOException;
 
 
@@ -25,7 +27,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface BitAccessible {
+public interface BitAccessible extends Accessible {
 
 
     /**

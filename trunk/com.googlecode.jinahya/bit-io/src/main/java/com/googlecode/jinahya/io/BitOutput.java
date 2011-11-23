@@ -238,6 +238,24 @@ public class BitOutput {
 
 
     /**
+     * Writes a 32-bit signed Integer.
+     *
+     * @param value value to write
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeINTEGER(final Integer value) throws IOException {
+
+        final boolean notNull = value != null;
+
+        writeBoolean(notNull);
+
+        if (notNull) {
+            writeInt(value.intValue());
+        }
+    }
+
+
+    /**
      * Writes a float value.
      *
      * @param value the float value
@@ -245,6 +263,18 @@ public class BitOutput {
      */
     public final void writeFloat(final float value) throws IOException {
         writeInt(Float.floatToRawIntBits(value));
+    }
+
+
+    public void writeFLOAT(final Float value) throws IOException {
+
+        final boolean notNull = value != null;
+
+        writeBoolean(notNull);
+
+        if (notNull) {
+            writeFloat(value.floatValue());
+        }
     }
 
 
@@ -346,6 +376,23 @@ public class BitOutput {
 
 
     /**
+     * 
+     * @param value
+     * @throws IOException 
+     */
+    public void writeLONG(final Long value) throws IOException {
+
+        final boolean notNull = value != null;
+
+        writeBoolean(notNull);
+
+        if (notNull) {
+            writeLong(value.longValue());
+        }
+    }
+
+
+    /**
      * Writes a double value.
      *
      * @param value the value
@@ -357,6 +404,23 @@ public class BitOutput {
 
 
     /**
+     * 
+     * @param value
+     * @throws IOException 
+     */
+    public void writeDOUBLE(final Double value) throws IOException {
+
+        final boolean notNull = value != null;
+
+        writeBoolean(notNull);
+
+        if (notNull) {
+            writeDouble(value.doubleValue());
+        }
+    }
+
+
+    /**
      * Writes given <code>bytes</code>.
      *
      * @param bytes bytes to write
@@ -364,52 +428,15 @@ public class BitOutput {
      */
     public final void writeBytes(final byte[] bytes) throws IOException {
 
-        if (bytes == null) {
-            throw new NullPointerException("null bytes");
-        }
+        final boolean notNull = bytes != null;
 
-        writeBytes(bytes, 0, bytes.length);
-    }
+        writeBoolean(notNull);
 
-
-    /**
-     * Writes <code>length</code> bytes in <code>bytes</code> from
-     * <code>offset</code>.
-     *
-     * @param bytes bytes
-     * @param offset the start offset in <code>bytes</code>
-     * @param length number of bytes to write
-     * @throws IOException if an I/O error occurs.
-     */
-    public final void writeBytes(final byte[] bytes, final int offset,
-        final int length)
-        throws IOException {
-
-        if (bytes == null) {
-            throw new NullPointerException("null bytes");
-        }
-
-        if (offset < 0) {
-            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
-        }
-
-        if (length < 0) {
-            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
-        }
-        if (length > 65535) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > 65535");
-        }
-
-        if (offset + length > bytes.length) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length
-                + ") > bytes.length(" + bytes.length + ")");
-        }
-
-        writeUnsignedShort(0x0F, length); // 15
-        for (int i = 0; i < length; i++) {
-            writeUnsignedByte(0x08, bytes[offset + i] & 0xFF);
+        if (notNull) {
+            writeUnsignedInt(0x1F, bytes.length); // 31
+            for (int i = 0; i < bytes.length; i++) {
+                writeUnsignedByte(0x08, bytes[i] & 0xFF);
+            }
         }
     }
 
@@ -424,14 +451,16 @@ public class BitOutput {
      */
     public final void writeASCII(final String value) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
+        final boolean notNull = value != null;
 
-        final byte[] bytes = value.getBytes("US-ASCII");
-        writeUnsignedInt(0x1F, bytes.length);
-        for (int i = 0; i < bytes.length; i++) {
-            writeUnsignedByte(0x07, bytes[i] & 0xFF);
+        writeBoolean(notNull);
+
+        if (notNull) {
+            final byte[] bytes = value.getBytes("US-ASCII");
+            writeUnsignedInt(0x1F, bytes.length);
+            for (int i = 0; i < bytes.length; i++) {
+                writeUnsignedByte(0x07, bytes[i] & 0xFF);
+            }
         }
     }
 
@@ -441,7 +470,8 @@ public class BitOutput {
      *
      * @param value string to write
      * @throws IOException if an I/O error occurs
-     * @see DataOutput#writeUTF(String) 
+     * @see DataOutput#writeUTF(String)
+     * @deprecated Use {@link #writeString(String, String)}
      */
     public final void writeUTF(final String value) throws IOException {
 
@@ -482,6 +512,26 @@ public class BitOutput {
         writeUnsignedInt(0x10, bytes.length);
         for (int i = 0; i < bytes.length; i++) {
             writeUnsignedByte(0x08, bytes[i]);
+        }
+    }
+
+
+    /**
+     * Writes a <code>String</code>.
+     *
+     * @param value value to write
+     * @param charsetName character set name to serialize the String
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeString(final String value, final String charsetName)
+        throws IOException {
+
+        final boolean notNull = value != null;
+
+        writeBoolean(notNull);
+
+        if (notNull) {
+            writeBytes(value.getBytes(charsetName));
         }
     }
 
