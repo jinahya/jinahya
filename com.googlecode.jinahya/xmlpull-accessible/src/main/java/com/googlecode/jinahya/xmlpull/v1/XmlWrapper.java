@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import java.util.Collection;
-
-
 /**
  * Interface XML tag.
  *
@@ -29,23 +26,5 @@ import java.util.Collection;
  */
 public interface XmlWrapper<T extends XmlTag>
     extends XmlCollectable<T>, XmlTag {
-
-
-    /**
-     * Returns tagType.
-     *
-     * @return tagType.
-     */
-    Class<T> getTagType();
-
-
-    /**
-     * Returns tags.
-     *
-     * @return tags.
-     */
-    Collection<T> getTags();
-
-
 }
 
