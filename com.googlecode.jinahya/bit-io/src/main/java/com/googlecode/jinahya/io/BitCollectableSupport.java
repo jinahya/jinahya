@@ -18,10 +18,8 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.util.AbstractCollectable;
-
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Collection;
 
 
 /**
@@ -29,37 +27,45 @@ import java.util.Iterator;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> <code>BitAccessible</code> type parameter
  */
-public abstract class AbstractBitCollectable<A extends BitAccessible>
-    extends AbstractCollectable<A>
-    implements BitCollectable<A> {
+public abstract class BitCollectableSupport<A extends BitAccessible>
+    implements BitAccessible {
 
 
     /** count length. */
-    private static final int COUNT_LENGTH = 31;
+    private static final int SIZE_BIT_LENGTH = 31;
 
 
     /**
      * Creates a new instance.
      *
-     * @param accessibleType accessible type
+     * @param collectable collectable.
      */
-    public AbstractBitCollectable(final Class<A> accessibleType) {
-        super(accessibleType);
+    public BitCollectableSupport(final BitCollectable<A> collectable) {
+        super();
+
+        if (collectable == null) {
+            throw new NullPointerException("null collectable");
+        }
+
+        this.collectable = collectable;
     }
 
 
     @Override
-    public void read(BitInput input) throws IOException {
+    public void read(final BitInput input) throws IOException {
 
-        getAccessibles().clear();
+        final Class<A> accessibleType = collectable.getAccessibleType();
+        final Collection<A> accessibles = collectable.getAccessibles();
 
-        final int count = input.readUnsignedInt(COUNT_LENGTH);
+        accessibles.clear();
 
-        for (int i = 0; i < count; i++) {
+        final int size = input.readUnsignedInt(SIZE_BIT_LENGTH); // ------- SIZE
+
+        for (int i = 0; i < size; i++) {
             try {
                 final A accessible = accessibleType.newInstance();
-                accessible.read(input);
-                getAccessibles().add(accessible);
+                accessible.read(input); // -------------------------- ACCESSIBLE
+                accessibles.add(accessible);
             } catch (InstantiationException ie) {
                 throw new RuntimeException(
                     "faild to create a new instance of " + accessibleType, ie);
@@ -72,14 +78,22 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
 
 
     @Override
-    public void write(BitOutput output) throws IOException {
+    public void write(final BitOutput output) throws IOException {
 
-        output.writeUnsignedInt(COUNT_LENGTH, getAccessibles().size());
+        final Collection<A> accessibles = collectable.getAccessibles();
 
-        for (final Iterator<A> i = getAccessibles().iterator(); i.hasNext();) {
-            i.next().write(output);
+        output.writeUnsignedInt(SIZE_BIT_LENGTH, accessibles.size()); // -- SIZE
+
+        for (final A accessible : accessibles) {
+            accessible.write(output); // ---------------------------- ACCESSIBLE
         }
     }
+
+
+    /**
+     * collectable.
+     */
+    private final BitCollectable<A> collectable;
 
 
 }

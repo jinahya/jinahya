@@ -36,12 +36,6 @@ public class Samples extends AbstractBitCollectable<Sample> {
 
 
     @Override
-    protected Sample createAccessible() {
-        return Sample.newInstance("unknown", 1);
-    }
-
-
-    @Override
     public boolean equals(final Object obj) {
 
         if (this == obj) {

@@ -85,7 +85,7 @@ public class BitInput {
 
         if (required > 0) {
             return (readUnsignedByte(length - required) << required)
-                | readUnsignedByte(required);
+                   | readUnsignedByte(required);
         }
 
         int value = 0x00;
@@ -225,6 +225,24 @@ public class BitInput {
 
 
     /**
+     * Reads an 32-bit signed <code>Integer</code>.
+     *
+     * @return the read Integer or null if null flag read.
+     * @throws IOException if an I/O error occurs.
+     */
+    public final Integer readINTEGER() throws IOException {
+
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            return Integer.valueOf(readInt());
+        }
+
+        return null;
+    }
+
+
+    /**
      * Reads a float value.
      *
      * @return float value
@@ -232,6 +250,23 @@ public class BitInput {
      */
     public final float readFloat() throws IOException {
         return Float.intBitsToFloat(readInt(32));
+    }
+
+
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     */
+    public Float readFLOAT() throws IOException {
+
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            return Float.valueOf(readFloat());
+        }
+
+        return null;
     }
 
 
@@ -311,6 +346,23 @@ public class BitInput {
 
 
     /**
+     * 
+     * @return
+     * @throws IOException 
+     */
+    public Long readLONG() throws IOException {
+
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            return Long.valueOf(readLong());
+        }
+
+        return null;
+    }
+
+
+    /**
      * Reads a 64-bit double value.
      *
      * @return double value
@@ -318,6 +370,23 @@ public class BitInput {
      */
     public final double readDouble() throws IOException {
         return Double.longBitsToDouble(readLong());
+    }
+
+
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     */
+    public Double readDOUBLE() throws IOException {
+
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            return Double.valueOf(readDouble());
+        }
+
+        return null;
     }
 
 
@@ -330,13 +399,17 @@ public class BitInput {
      */
     public final byte[] readBytes() throws IOException {
 
-        final byte[] bytes = new byte[readUnsignedInt(0x0F)]; // 15
+        final boolean notNull = readBoolean();
 
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) readUnsignedByte(8);
+        if (notNull) {
+            final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
+            for (int i = 0; i < value.length; i++) {
+                value[i] = (byte) readUnsignedByte(0x08);
+            }
+            return value;
         }
 
-        return bytes;
+        return null;
     }
 
 
@@ -350,12 +423,17 @@ public class BitInput {
      */
     public final String readASCII() throws IOException {
 
-        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) readUnsignedByte(0x07);
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
+            for (int i = 0; i < bytes.length; i++) {
+                bytes[i] = (byte) readUnsignedByte(0x07);
+            }
+            return new String(bytes, "US-ASCII");
         }
 
-        return new String(bytes, "US-ASCII");
+        return null;
     }
 
 
@@ -364,7 +442,8 @@ public class BitInput {
      *
      * @return a String
      * @throws IOException if an I/O error occurs.
-     * @see DataInput#readUTF() 
+     * @see DataInput#readUTF()
+     * @deprecated use {@link #readString(java.lang.String)}
      */
     public final String readUTF() throws IOException {
 
@@ -410,8 +489,8 @@ public class BitInput {
                         "illegal third byte: " + second);
                 }
                 caw.write(((first & 0x0F) << 12)
-                    | ((second & 0x3F) << 6)
-                    | (third & 0x3F));
+                          | ((second & 0x3F) << 6)
+                          | (third & 0x3F));
                 continue;
             }
 
@@ -419,6 +498,18 @@ public class BitInput {
         }
 
         return caw.toString();
+    }
+
+
+    public String readString(final String charsetName) throws IOException {
+
+        final boolean notNull = readBoolean();
+
+        if (notNull) {
+            return new String(readBytes(), charsetName);
+        }
+
+        return null;
     }
 
 
