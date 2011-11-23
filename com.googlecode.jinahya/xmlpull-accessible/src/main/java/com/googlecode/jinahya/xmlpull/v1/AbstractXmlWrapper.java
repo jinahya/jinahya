@@ -70,6 +70,10 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
+        if (parser == null) {
+            throw new NullPointerException("null parser");
+        }
+
         new XmlWrapperSupport<T>(namespaceURI, localName, this).parse(parser);
     }
 
@@ -77,7 +81,12 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        new XmlWrapperSupport<T>(namespaceURI, localName, this).serialize(serializer);
+        if (serializer == null) {
+            throw new NullPointerException("null serializer");
+        }
+        
+        new XmlWrapperSupport<T>(
+            namespaceURI, localName, this).serialize(serializer);
     }
 
 
