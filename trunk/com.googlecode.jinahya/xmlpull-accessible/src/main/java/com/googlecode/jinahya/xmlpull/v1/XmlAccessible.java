@@ -19,6 +19,7 @@ package com.googlecode.jinahya.xmlpull.v1;
 
 
 import com.googlecode.jinahya.util.Accessible;
+
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParser;
