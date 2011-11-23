@@ -30,21 +30,27 @@ import org.xmlpull.v1.XmlSerializer;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> tag type parameter
+ * @param <T> tag type parameter
  */
-public class XmlWrapperSupport<A extends XmlAccessible>
-    extends XmlTagSupport<XmlCollectable<A>> {
+public class XmlWrapperSupport<T extends XmlTag>
+    extends AbstractXmlCollectable<T> implements XmlWrapper<T> {
 
 
     /**
      * Creates a new instance.
      *
+     * @param namespaceURI XML namespace URI
+     * @param localName XML local name
      * @param supported the object to be supported
      */
     public XmlWrapperSupport(final String namespaceURI, final String localName,
-                             final XmlCollectable<A> supported) {
+                             final XmlCollectable<T> supported) {
 
-        super(namespaceURI, localName, supported);
+        super(supported.getAccessibleType());
+
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
+        this.supported = supported;
     }
 
 
@@ -54,14 +60,14 @@ public class XmlWrapperSupport<A extends XmlAccessible>
 
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
-        final Class<A> tagType = supported.getAccessibleType();
-        final Collection<A> tags = supported.getAccessibles();
+        final Class<T> tagType = supported.getAccessibleType();
+        final Collection<T> tags = supported.getAccessibles();
 
         tags.clear();
 
         while (parser.nextTag() == XmlPullParser.START_TAG) {
             try {
-                final A tag = tagType.newInstance();
+                final T tag = tagType.newInstance();
                 tag.parse(parser);
                 tags.add(tag);
             } catch (InstantiationException ie) {
@@ -82,12 +88,42 @@ public class XmlWrapperSupport<A extends XmlAccessible>
 
         serializer.startTag(namespaceURI, localName);
 
-        for (A tag : supported.getAccessibles()) {
+        for (T tag : supported.getAccessibles()) {
             tag.serialize(serializer);
         }
 
         serializer.endTag(namespaceURI, localName);
     }
+
+
+    @Override
+    public String getLocalName() {
+        return localName;
+    }
+
+
+    @Override
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
+
+
+    /**
+     * XML namespace URI.
+     */
+    protected final String namespaceURI;
+
+
+    /**
+     * XML local name.
+     */
+    protected final String localName;
+
+
+    /**
+     * supported.
+     */
+    protected final XmlCollectable<T> supported;
 
 
 }

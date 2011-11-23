@@ -22,8 +22,6 @@ import com.googlecode.jinahya.util.AbstractCollectable;
 
 import java.io.IOException;
 
-import java.util.Collection;
-
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -54,15 +52,7 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
 
         super(tagType);
 
-        if (localName == null) {
-            throw new NullPointerException("null localName");
-        }
-        if (localName.trim().length() == 0) {
-            throw new IllegalArgumentException("emtpy localName");
-        }
-
-        this.namespaceURI = namespaceURI;
-        this.localName = localName;
+        support = new XmlWrapperSupport<T>(namespaceURI, localName, this);
     }
 
 
@@ -74,7 +64,7 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
             throw new NullPointerException("null parser");
         }
 
-        new XmlWrapperSupport<T>(namespaceURI, localName, this).parse(parser);
+        support.parse(parser);
     }
 
 
@@ -84,44 +74,27 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
         if (serializer == null) {
             throw new NullPointerException("null serializer");
         }
-        
-        new XmlWrapperSupport<T>(
-            namespaceURI, localName, this).serialize(serializer);
+
+        support.serialize(serializer);
     }
 
 
     @Override
-    public final Class<T> getTagType() {
-        return getAccessibleType();
+    public String getNamespaceURI() {
+        return support.getNamespaceURI();
     }
 
 
     @Override
-    public final Collection<T> getTags() {
-        return getAccessibles();
-    }
-
-
-    @Override
-    public final String getNamespaceURI() {
-        return namespaceURI;
-    }
-
-
-    @Override
-    public final String getLocalName() {
-        return localName;
+    public String getLocalName() {
+        return support.getLocalName();
     }
 
 
     /**
-     * XML namespace URI.
+     * XmlWrapperSupport.
      */
-    protected final String namespaceURI;
-
-
-    /** XML local name. */
-    protected final String localName;
+    private final XmlWrapperSupport<T> support;
 
 
 }
