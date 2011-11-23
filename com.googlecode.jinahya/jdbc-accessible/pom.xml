@@ -17,12 +17,12 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>jinahya-accessible</artifactId>
-        <version>1.0-alpha-1</version>
+        <version>${project.dependency.jinahya-accessible.version}</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.3</version>
+        <version>6.3.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -41,6 +41,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.dependency.jinahya-accessible.version>1.0-alpha-2</project.dependency.jinahya-accessible.version>
   </properties>
 
   <build>
@@ -150,7 +151,7 @@
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
                 <links>
-                  <link>http://www.xmlpull.org/v1/doc/api/</link>
+                  <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/${project.dependency.jinahya-accessible.version}/apidocs/</link>
                 </links>
               </configuration>
             </plugin>
