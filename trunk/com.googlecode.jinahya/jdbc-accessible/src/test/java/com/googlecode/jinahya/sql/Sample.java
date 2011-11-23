@@ -23,12 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -42,8 +36,6 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Entity()
-@Table(name = Sample.TABLE_NAME)//"SAMPLE")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "sample")
 @XmlType(propOrder = {"name", "age"})
@@ -124,8 +116,6 @@ public class Sample extends DbAccessibleWithLong {
     }
 
 
-    @Id
-    @Column(name = ID_COLUMN_NAME)
     @XmlAttribute(required = true)
     @Override
     public Long getId() {
@@ -153,15 +143,11 @@ public class Sample extends DbAccessibleWithLong {
     }
 
 
-    @Basic(optional = false)
-    @Column(nullable = false)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String name;
 
 
-    @Basic()
-    @Column()
     @XmlElement()
     @XmlSchemaType(name = "nonNegativeInteger")
     private Integer age;
