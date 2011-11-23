@@ -70,14 +70,14 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        new XmlWrapperSupport<T>(this).parse(parser);
+        new XmlWrapperSupport<T>(namespaceURI, localName, this).parse(parser);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        new XmlWrapperSupport<T>(this).serialize(serializer);
+        new XmlWrapperSupport<T>(namespaceURI, localName, this).serialize(serializer);
     }
 
 

@@ -38,16 +38,19 @@ public class XmlWrapperSupport<T extends XmlTag> implements XmlAccessible {
     /**
      * Creates a new instance.
      *
-     * @param wrapper wrapper
+     * @param collectable collectable
      */
-    public XmlWrapperSupport(final XmlWrapper<T> wrapper) {
+    public XmlWrapperSupport(final String namespaceURI, final String localName,
+                             final XmlCollectable<T> collectable) {
         super();
 
-        if (wrapper == null) {
-            throw new NullPointerException("null wrapper");
+        if (collectable == null) {
+            throw new NullPointerException("null collectable");
         }
 
-        this.wrapper = wrapper;
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
+        this.collectable = collectable;
     }
 
 
@@ -55,50 +58,60 @@ public class XmlWrapperSupport<T extends XmlTag> implements XmlAccessible {
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, wrapper.getNamespaceURI(),
-                       wrapper.getLocalName());
+        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
-        final Class<T> tagType = wrapper.getTagType();
-        final Collection<T> tags = wrapper.getTags();
+        final Class<T> accessibleType = collectable.getAccessibleType();
+        final Collection<T> accessibles = collectable.getAccessibles();
 
-        tags.clear();
+        accessibles.clear();
 
         while (parser.nextTag() == XmlPullParser.START_TAG) {
             try {
-                final T tag = tagType.newInstance();
-                tag.parse(parser);
-                tags.add(tag);
+                final T accessible = accessibleType.newInstance();
+                accessible.parse(parser);
+                accessibles.add(accessible);
             } catch (InstantiationException ie) {
                 throw new RuntimeException(
-                    "failed to create a new instance of " + tagType, ie);
+                    "failed to create a new instance of " + accessibleType, ie);
             } catch (IllegalAccessException iae) {
                 throw new RuntimeException(
-                    "failed to create a new instance of " + tagType, iae);
+                    "failed to create a new instance of " + accessibleType, iae);
             }
         }
 
-        parser.require(XmlPullParser.END_TAG, wrapper.getNamespaceURI(),
-                       wrapper.getLocalName());
+        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        serializer.startTag(wrapper.getNamespaceURI(), wrapper.getLocalName());
+        serializer.startTag(namespaceURI, localName);
 
-        for (T tag : wrapper.getTags()) {
+        for (T tag : collectable.getAccessibles()) {
             tag.serialize(serializer);
         }
 
-        serializer.endTag(wrapper.getNamespaceURI(), wrapper.getLocalName());
+        serializer.endTag(namespaceURI, localName);
     }
 
 
     /**
-     * wrapper.
+     * XML namespace URI.
      */
-    private final XmlWrapper<T> wrapper;
+    private final String namespaceURI;
+
+
+    /**
+     * XML local name.
+     */
+    private final String localName;
+
+
+    /**
+     * collectable.
+     */
+    private final XmlCollectable<T> collectable;
 
 
 }

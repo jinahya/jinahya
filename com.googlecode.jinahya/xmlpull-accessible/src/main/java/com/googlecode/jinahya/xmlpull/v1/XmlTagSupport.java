@@ -28,24 +28,28 @@ import org.xmlpull.v1.XmlSerializer;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> tag type parameter
+ * @param <A> accessible type parameter
  */
-public class XmlTagSupport<T extends XmlTag> implements XmlAccessible {
+public class XmlTagSupport<A extends XmlAccessible> implements XmlAccessible {
 
 
     /**
      * Creates a new instance.
      *
-     * @param tag tag
+     * @param accessible accessible
      */
-    public XmlTagSupport(final T tag) {
+    public XmlTagSupport(final String namespaceURI, final String localName,
+                         final A accessible) {
         super();
 
-        if (tag == null) {
-            throw new NullPointerException("null tag");
+        if (accessible == null) {
+            throw new NullPointerException("null accessible");
         }
 
-        this.tag = tag;
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
+
+        this.accessible = accessible;
     }
 
 
@@ -53,31 +57,41 @@ public class XmlTagSupport<T extends XmlTag> implements XmlAccessible {
     public void parse(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        parser.require(XmlPullParser.START_TAG, tag.getNamespaceURI(),
-                       tag.getLocalName());
+        parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
-        tag.parse(parser);
+        accessible.parse(parser);
 
-        parser.require(XmlPullParser.END_TAG, tag.getNamespaceURI(),
-                       tag.getLocalName());
+        parser.require(XmlPullParser.END_TAG, namespaceURI, localName);
     }
 
 
     @Override
     public void serialize(final XmlSerializer serializer) throws IOException {
 
-        serializer.startTag(tag.getNamespaceURI(), tag.getLocalName());
+        serializer.startTag(namespaceURI, localName);
 
-        tag.serialize(serializer);
+        accessible.serialize(serializer);
 
-        serializer.endTag(tag.getNamespaceURI(), tag.getLocalName());
+        serializer.endTag(namespaceURI, localName);
     }
+
+
+    /**
+     * XML namespace URI.
+     */
+    private final String namespaceURI;
+
+
+    /**
+     * XML local name.
+     */
+    private final String localName;
 
 
     /**
      * wrapper.
      */
-    private final T tag;
+    private final A accessible;
 
 
 }

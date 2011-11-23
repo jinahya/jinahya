@@ -18,12 +18,16 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
+import com.googlecode.jinahya.util.Collectable;
+
+
 /**
  * Interface for collectable.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> accessible type parameter
  */
-public interface XmlCollectable<A extends XmlAccessible> extends XmlAccessible {
+public interface XmlCollectable<A extends XmlAccessible>
+    extends Collectable<A>, XmlAccessible {
 }
 
