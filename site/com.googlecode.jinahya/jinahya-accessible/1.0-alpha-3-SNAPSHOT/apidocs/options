@@ -1,23 +1,23 @@
 -classpath
-'/var/lib/jenkins/workspace/jinahya.googlecode.com jinahya-accessible/target/classes'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-accessible/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'/var/lib/jenkins/workspace/jinahya.googlecode.com jinahya-accessible/src/main/java'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-accessible/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2011. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/var/lib/jenkins/workspace/jinahya.googlecode.com jinahya-accessible/target/site/apidocs'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-accessible/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'jinahya-accessible 1.0-alpha-3-SNAPSHOT API'
 -linkoffline
-'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com jinahya-accessible/target/javadoc-bundle-options'
+'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-accessible/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
