@@ -18,6 +18,7 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 || long || 2 ~ 64 || ||
 || bytes || 31 + 8N || N: number of bytes ||
 || ASCII || 31 + 7N || N: number of characters ||
+|| String || 31 + 8N || N: number of bytes ||
 || UTF || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
 
 
