@@ -87,11 +87,7 @@ public abstract class AbstractFilter implements Filter {
      */
     protected ServletContext getServletContext() {
 
-        if (filterConfig == null) {
-            throw new IllegalStateException("no filterConfig");
-        }
-
-        return filterConfig.getServletContext();
+        return getFilterConfig().getServletContext();
     }
 
 

@@ -35,6 +35,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.xml.transform.OutputKeys;
@@ -67,9 +68,22 @@ public abstract class XSLTFilter extends AbstractFilter {
                          final FilterChain chain)
         throws IOException, ServletException {
 
+        if (request instanceof HttpServletRequest) {
+            throw new IllegalArgumentException(
+                request + " is not an instance of" + HttpServletRequest.class);
+        }
+
+        if (request instanceof HttpServletResponse) {
+            throw new IllegalArgumentException(
+                response + " is not an instance of"
+                + HttpServletResponse.class);
+        }
+
+        final HttpServletRequest httpRequest = (HttpServletRequest) request;
+        final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
         final BufferedHttpServletResponseWrapper responseWrapper =
-            new BufferedHttpServletResponseWrapper(
-            (HttpServletResponse) response);
+            new BufferedHttpServletResponseWrapper(httpResponse);
 
         chain.doFilter(request, responseWrapper); // ------------- doFilter(...)
 
@@ -133,10 +147,9 @@ public abstract class XSLTFilter extends AbstractFilter {
             transformer.setParameter(parameter.getKey(), parameter.getValue());
         }
 
-        ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_OK);
-        ((HttpServletResponse) response).setContentType(getOutputContentType());
-        ((HttpServletResponse) response).setCharacterEncoding(
-            getOutputCharacterEncoding());
+        httpResponse.setStatus(HttpServletResponse.SC_OK);
+        httpResponse.setContentType(getOutputContentType());
+        httpResponse.setCharacterEncoding(getOutputCharacterEncoding());
 
         try {
             transformer.transform(

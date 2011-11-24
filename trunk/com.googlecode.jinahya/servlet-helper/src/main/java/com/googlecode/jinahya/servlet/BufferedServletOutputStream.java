@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.servlet.http;
+package com.googlecode.jinahya.servlet;
 
 
 import java.io.ByteArrayOutputStream;
@@ -29,22 +29,22 @@ import javax.servlet.ServletOutputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedHttpServletOutputStream extends ServletOutputStream {
+public class BufferedServletOutputStream extends ServletOutputStream {
 
 
     /**
      * Creates a new instance.
      */
-    public BufferedHttpServletOutputStream() {
+    public BufferedServletOutputStream() {
         super();
 
-        bufferStream = new ByteArrayOutputStream();
+        outputStream = new ByteArrayOutputStream();
     }
 
 
     @Override
     public void write(final int b) throws IOException {
-        bufferStream.write(b);
+        outputStream.write(b);
     }
 
 
@@ -52,7 +52,7 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
      * Reset this OutputStream.
      */
     public final void reset() {
-        bufferStream.reset();
+        outputStream.reset();
     }
 
 
@@ -62,14 +62,14 @@ public class BufferedHttpServletOutputStream extends ServletOutputStream {
      * @return buffered bytes
      */
     public final byte[] getBytes() {
-        return bufferStream.toByteArray();
+        return outputStream.toByteArray();
     }
 
 
     /**
      * buffer stream.
      */
-    private final ByteArrayOutputStream bufferStream;
+    private final ByteArrayOutputStream outputStream;
 
 
 }
