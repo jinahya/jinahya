@@ -35,6 +35,10 @@ public abstract class AbstractXmlCollectable<A extends XmlAccessible>
     implements XmlCollectable<A> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -8914164757188592435L;
+
+
     /**
      * Creates a new instance.
      *

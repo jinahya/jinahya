@@ -40,6 +40,10 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
     extends AbstractCollectable<T> implements XmlWrapper<T> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -6172537467324275879L;
+
+
     /**
      * Creates a new instance.
      *
