@@ -53,7 +53,7 @@ public class BitOutput {
 
     /**
      * Writes an unsigned byte value. This method doesn't check the validity of
-     * the value and writes the lower <code>length<code> bits in
+     * the value and writes the lower <code>length</code> bits in
      * <code>value</code>.
      *
      * @param length bit length between 0 (exclusive) and 8 (inclusive).
@@ -433,10 +433,23 @@ public class BitOutput {
         writeBoolean(notNull);
 
         if (notNull) {
-            writeUnsignedInt(0x1F, bytes.length); // 31
-            for (int i = 0; i < bytes.length; i++) {
-                writeUnsignedByte(0x08, bytes[i] & 0xFF);
-            }
+            writeNonNullBytes(bytes);
+        }
+    }
+
+
+    /**
+     * 
+     * @param bytes
+     * @throws IOException 
+     */
+    private final void writeNonNullBytes(final byte[] bytes)
+        throws IOException {
+
+        writeUnsignedInt(0x1F, bytes.length); // 31
+
+        for (int i = 0; i < bytes.length; i++) {
+            writeUnsignedByte(0x08, bytes[i] & 0xFF);
         }
     }
 
@@ -531,7 +544,7 @@ public class BitOutput {
         writeBoolean(notNull);
 
         if (notNull) {
-            writeBytes(value.getBytes(charsetName));
+            writeNonNullBytes(value.getBytes(charsetName));
         }
     }
 

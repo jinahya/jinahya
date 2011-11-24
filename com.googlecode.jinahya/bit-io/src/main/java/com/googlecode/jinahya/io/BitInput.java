@@ -391,8 +391,9 @@ public class BitInput {
 
 
     /**
-     * Reads a byte array. First, a 31-bit unsigned integer is read for the byte
-     * array length. And then each byte is read as 8-bit unsigned byte.
+     * Reads a byte array. First, a 1-bit boolean is read for null flag. And if
+     * not null, a 31-bit unsigned integer is read for the byte array length.
+     * And then each byte is read as 8-bit unsigned byte.
      *
      * @return a byte array
      * @throws IOException if an I/O error occurs.
@@ -402,11 +403,7 @@ public class BitInput {
         final boolean notNull = readBoolean();
 
         if (notNull) {
-            final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
-            for (int i = 0; i < value.length; i++) {
-                value[i] = (byte) readUnsignedByte(0x08);
-            }
-            return value;
+            return readNonNullBytes();
         }
 
         return null;
@@ -414,9 +411,26 @@ public class BitInput {
 
 
     /**
-     * Reads a 7-bit ASCII String. First, a 31-bit unsigned integer is read for
-     * the character count following the characters which each is read as 7-bit
-     * unsigned byte.
+     * Reads a byte array.
+     *
+     * @return read byte array
+     * @throws IOException if an I/O error occurs.
+     */
+    private byte[] readNonNullBytes() throws IOException {
+
+        final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) readUnsignedByte(0x08);
+        }
+
+        return value;
+    }
+
+
+    /**
+     * Reads a 7-bit ASCII String. First, a 1-bit boolean is read for null flag.
+     * And if not null, a 31-bit unsigned integer is read for the character
+     * count following the characters which each is read as 7-bit unsigned byte.
      *
      * @return an ASCII String
      * @throws IOException if an I/O error occurs.
@@ -501,12 +515,19 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads a string.
+     *
+     * @param charsetName character set name
+     * @return the read String
+     * @throws IOException if an I/O error occurs.
+     */
     public String readString(final String charsetName) throws IOException {
 
         final boolean notNull = readBoolean();
 
         if (notNull) {
-            return new String(readBytes(), charsetName);
+            return new String(readNonNullBytes(), charsetName);
         }
 
         return null;
