@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.xmlpull.v1;
 
 
-import javax.xml.XMLConstants;
-
-
-
 /**
  * Constants for XmlPullHelper.
  *

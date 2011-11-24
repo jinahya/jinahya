@@ -38,6 +38,14 @@ import org.xmlpull.v1.XmlPullParserException;
 public final class XmlPullParserHelper {
 
 
+    /**
+     * Parses <code>xsi:nill</code> attribute.
+     *
+     * @param parser parser
+     * @return <code>xsi:nill</code> value
+     * @throws XmlPullParserException if an XML error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
     public static boolean getXSINilAttribute(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
@@ -50,23 +58,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as <code>xs:date</code>.
      *
      * @param parser parser
-     * @param namespace namespace
-     * @param name name
+     * @param namespaceURI namespace
+     * @param localName name
      * @return parsed Date value or null if no attribute found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Date getXSDateAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name)
+                                          final String namespaceURI,
+                                          final String localName)
         throws XmlPullParserException, IOException {
 
-        final String dateString = parser.getAttributeValue(namespace, name);
-        if (dateString == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return XSDateAdapter.parseXSDate(dateString);
+        return XSDateAdapter.parseXSDate(value);
     }
 
 
@@ -74,23 +82,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as <code>xs:time</code>.
      *
      * @param parser parser
-     * @param namespace tag namespace
-     * @param name tag name
+     * @param namespaceURI tag namespace
+     * @param localName tag name
      * @return parsed Date value or null if no attribute found.
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Date getXSTimeAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name)
+                                          final String namespaceURI,
+                                          final String localName)
         throws XmlPullParserException, IOException {
 
-        final String timeString = parser.getAttributeValue(namespace, name);
-        if (timeString == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return XSTimeAdapter.parseXSTime(timeString);
+        return XSTimeAdapter.parseXSTime(value);
     }
 
 
@@ -98,23 +106,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as <code>xs:dateTime</code>.
      *
      * @param parser parser
-     * @param namespace tag namespace
-     * @param name tag name
+     * @param namespaceURI tag namespace
+     * @param localName tag name
      * @return parsed Date or null if no attribute found.
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Date getXSDateTimeAttribute(final XmlPullParser parser,
-                                              final String namespace,
-                                              final String name)
+                                              final String namespaceURI,
+                                              final String localName)
         throws XmlPullParserException, IOException {
 
-        final String dateTimeString = parser.getAttributeValue(namespace, name);
-        if (dateTimeString == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return XSDateTimeAdapter.parseXSDateTime(dateTimeString);
+        return XSDateTimeAdapter.parseXSDateTime(value);
     }
 
 
@@ -133,12 +141,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return XSDateAdapter.parseXSDate(string);
+        return XSDateAdapter.parseXSDate(text);
     }
 
 
@@ -157,12 +165,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return XSTimeAdapter.parseXSTime(string);
+        return XSTimeAdapter.parseXSTime(text);
     }
 
 
@@ -181,12 +189,12 @@ public final class XmlPullParserHelper {
             throw new NullPointerException("null parser");
         }
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return XSDateTimeAdapter.parseXSDateTime(string);
+        return XSDateTimeAdapter.parseXSDateTime(text);
     }
 
 
@@ -194,23 +202,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as an Integer.
      *
      * @param parser parser
-     * @param namespace namespace
-     * @param name name
+     * @param namespaceURI namespace
+     * @param localName name
      * @return parsed Integer value or null if the tag is an empty.
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Integer getIntAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name)
+                                          final String namespaceURI,
+                                          final String localName)
         throws XmlPullParserException, IOException {
 
-        final String string = parser.getAttributeValue(namespace, name);
-        if (string == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return Integer.valueOf(string);
+        return Integer.valueOf(value);
     }
 
 
@@ -218,8 +226,8 @@ public final class XmlPullParserHelper {
      * Parses an attribute as an int.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @param defaultValue default value
      * @return parsed int value or <code>defaultValue</code> if attribute not
      *         found
@@ -227,11 +235,12 @@ public final class XmlPullParserHelper {
      * @throws IOException if an I/O error occurs.
      */
     public static int getIntAttribute(final XmlPullParser parser,
-                                      final String namespace, final String name,
+                                      final String namespaceURI,
+                                      final String localName,
                                       final int defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Integer value = getIntAttribute(parser, namespace, name);
+        final Integer value = getIntAttribute(parser, namespaceURI, localName);
         if (value == null) {
             return defaultValue;
         }
@@ -244,23 +253,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a Long.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @return parsed Long value or null if attribute not found
      * @throws XmlPullParserException if an XML error occurs
      * @throws IOException if an I/O error occurs.
      */
     public static Long getLongAttribute(final XmlPullParser parser,
-                                        final String namespace,
-                                        final String name)
+                                        final String namespaceURI,
+                                        final String localName)
         throws XmlPullParserException, IOException {
 
-        final String string = parser.getAttributeValue(namespace, name);
-        if (string == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return Long.valueOf(string);
+        return Long.valueOf(value);
     }
 
 
@@ -268,8 +277,8 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a long.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @param defaultValue default value
      * @return parsed long value or <code>defaultValue</code> if attribute not
      *         found.
@@ -277,12 +286,12 @@ public final class XmlPullParserHelper {
      * @throws IOException if an I/O error occurs.
      */
     public static long getLongAttribute(final XmlPullParser parser,
-                                        final String namespace,
-                                        final String name,
+                                        final String namespaceURI,
+                                        final String localName,
                                         final long defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Long value = getLongAttribute(parser, namespace, name);
+        final Long value = getLongAttribute(parser, namespaceURI, localName);
         if (value == null) {
             return defaultValue;
         }
@@ -295,23 +304,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a Float.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @return parsed Float value or null if attribute not found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Float getFloatAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name)
+                                          final String namespaceURI,
+                                          final String localName)
         throws XmlPullParserException, IOException {
 
-        final String string = parser.getAttributeValue(namespace, name);
-        if (string == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return Float.valueOf(string);
+        return Float.valueOf(value);
     }
 
 
@@ -319,8 +328,8 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a float.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @param defaultValue default value
      * @return parsed float value or <code>defaultValue</code> if attribute not
      *         found.
@@ -328,12 +337,12 @@ public final class XmlPullParserHelper {
      * @throws IOException if an I/O error occurs.
      */
     public static float getFloatAttribute(final XmlPullParser parser,
-                                          final String namespace,
-                                          final String name,
+                                          final String namespaceURI,
+                                          final String localName,
                                           final float defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Float value = getFloatAttribute(parser, namespace, name);
+        final Float value = getFloatAttribute(parser, namespaceURI, localName);
         if (value == null) {
             return defaultValue;
         }
@@ -346,23 +355,23 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a Double.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @return parsed Double value or null if attribute not found
      * @throws XmlPullParserException if an XML error occurs.
      * @throws IOException if an I/O error occurs.
      */
     public static Double getDoubleAttribute(final XmlPullParser parser,
-                                            final String namespace,
-                                            final String name)
+                                            final String namespaceURI,
+                                            final String localName)
         throws XmlPullParserException, IOException {
 
-        final String string = parser.getAttributeValue(namespace, name);
-        if (string == null) {
+        final String value = parser.getAttributeValue(namespaceURI, localName);
+        if (value == null) {
             return null;
         }
 
-        return Double.valueOf(string);
+        return Double.valueOf(value);
     }
 
 
@@ -370,8 +379,8 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a double.
      *
      * @param parser parser
-     * @param namespace attribute namespace
-     * @param name attribute name
+     * @param namespaceURI attribute namespace
+     * @param localName attribute name
      * @param defaultValue default value
      * @return parsed double value or <code>defaultValue</code> if attribute not
      *         found.
@@ -379,12 +388,13 @@ public final class XmlPullParserHelper {
      * @throws IOException if an I/O error occurs.
      */
     public static double getDoubleAttribute(final XmlPullParser parser,
-                                            final String namespace,
-                                            final String name,
+                                            final String namespaceURI,
+                                            final String localName,
                                             final double defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Double value = getDoubleAttribute(parser, namespace, name);
+        final Double value = getDoubleAttribute(
+            parser, namespaceURI, localName);
         if (value == null) {
             return defaultValue;
         }
@@ -411,13 +421,13 @@ public final class XmlPullParserHelper {
 
         final boolean nil = getXSINilAttribute(parser);
 
-        final String value = parser.nextText();
+        final String text = parser.nextText();
 
-        if ((value == null || value.length() == 0) && nil) {
+        if ((text == null || text.length() == 0) && nil) {
             return null;
         }
 
-        return value;
+        return text;
     }
 
 
@@ -432,12 +442,12 @@ public final class XmlPullParserHelper {
     public static Integer nextInt(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return Integer.valueOf(string);
+        return Integer.valueOf(text);
     }
 
 
@@ -455,12 +465,12 @@ public final class XmlPullParserHelper {
                               final int defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Integer value = nextInt(parser);
-        if (value == null) {
+        final Integer text = nextInt(parser);
+        if (text == null) {
             return defaultValue;
         }
 
-        return value.intValue();
+        return text.intValue();
     }
 
 
@@ -475,12 +485,12 @@ public final class XmlPullParserHelper {
     public static Long nextLong(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return Long.valueOf(string);
+        return Long.valueOf(text);
     }
 
 
@@ -517,12 +527,12 @@ public final class XmlPullParserHelper {
     public static Float nextFloat(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return Float.valueOf(string);
+        return Float.valueOf(text);
     }
 
 
@@ -559,12 +569,12 @@ public final class XmlPullParserHelper {
     public static Double nextDouble(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return Double.valueOf(string);
+        return Double.valueOf(text);
     }
 
 
@@ -619,8 +629,8 @@ public final class XmlPullParserHelper {
      * Parses an attribute as a boolean.
      *
      * @param parser parser
-     * @param namespace namespace
-     * @param name name
+     * @param namespaceURI namespace
+     * @param localName name
      * @param defaultValue default value
      * @return parsed boolean value or <code>defaultValue</code> if no attribute
      *         found.
@@ -628,17 +638,18 @@ public final class XmlPullParserHelper {
      * @throws IOException if an I/O error occurs
      */
     public static boolean getBooleanAttribute(final XmlPullParser parser,
-                                              final String namespace,
-                                              final String name,
+                                              final String namespaceURI,
+                                              final String localName,
                                               final boolean defaultValue)
         throws XmlPullParserException, IOException {
 
-        final Boolean value = getBooleanAttribute(parser, namespace, name);
+        final Boolean value = getBooleanAttribute(
+            parser, namespaceURI, localName);
         if (value == null) {
             return defaultValue;
         }
 
-        return value;
+        return value.booleanValue();
     }
 
 
@@ -653,12 +664,12 @@ public final class XmlPullParserHelper {
     public static Boolean nextBoolean(final XmlPullParser parser)
         throws XmlPullParserException, IOException {
 
-        final String string = nextNillableText(parser);
-        if (string == null) {
+        final String text = nextNillableText(parser);
+        if (text == null) {
             return null;
         }
 
-        return XSBooleanAdapter.parseXSBoolean(string);
+        return XSBooleanAdapter.parseXSBoolean(text);
     }
 
 
