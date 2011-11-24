@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.servlet.http;
 
 
+import com.googlecode.jinahya.servlet.BufferedServletOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -45,7 +47,7 @@ public class BufferedHttpServletResponseWrapper
 
         super(response);
 
-        outputStream = new BufferedHttpServletOutputStream();
+        outputStream = new BufferedServletOutputStream();
     }
 
 
@@ -103,7 +105,7 @@ public class BufferedHttpServletResponseWrapper
     /**
      * output stream.
      */
-    private final BufferedHttpServletOutputStream outputStream;
+    private final BufferedServletOutputStream outputStream;
 
 
     /**

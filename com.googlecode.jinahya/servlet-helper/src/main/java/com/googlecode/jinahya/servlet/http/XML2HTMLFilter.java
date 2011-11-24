@@ -49,7 +49,6 @@ public abstract class XML2HTMLFilter extends XSLTFilter {
      * {@inheritDoc}
      *
      * @return {@link XSLTFilter#PREFERRED_CHARACTER_ENCODING}
-     *         ({@value com.googlecode.jinahya.servlet.http.XSLTFilter#PREFERRED_CHARACTER_ENCODING})
      */
     @Override
     protected String getOutputCharacterEncoding() {
@@ -61,7 +60,6 @@ public abstract class XML2HTMLFilter extends XSLTFilter {
      * {@inheritDoc}
      *
      * @return {@link #MEDIA_TYPE_APPLICATION_XHTML_XML}
-     *         ({@value MEDIA_TYPE_APPLICATION_XHTML_XML})
      */
     @Override
     protected String getOutputContentType() {
