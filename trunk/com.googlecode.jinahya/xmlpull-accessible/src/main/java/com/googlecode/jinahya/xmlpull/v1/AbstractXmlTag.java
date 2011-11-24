@@ -29,6 +29,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractXmlTag implements XmlTag {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -7803837515706819615L;
+
+
     /**
      * Creates a new instance.
      *

@@ -33,9 +33,15 @@ import org.xmlpull.v1.XmlSerializer;
 public class XmlTagSupport<A extends XmlAccessible> implements XmlTag {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = 1489176338354618335L;
+
+
     /**
      * Creates a new instance.
      *
+     * @param namespaceURI XML namespace name
+     * @param localName XML local name
      * @param supported the object to be supported
      */
     public XmlTagSupport(final String namespaceURI, final String localName,
@@ -89,7 +95,7 @@ public class XmlTagSupport<A extends XmlAccessible> implements XmlTag {
 
 
     /**
-     * XML namespace URI.
+     * XML namespace name.
      */
     protected final String namespaceURI;
 
@@ -101,7 +107,7 @@ public class XmlTagSupport<A extends XmlAccessible> implements XmlTag {
 
 
     /**
-     * wrapper.
+     * supported.
      */
     protected final A supported;
 

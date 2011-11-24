@@ -36,10 +36,14 @@ public class XmlWrapperSupport<T extends XmlTag>
     extends AbstractXmlCollectable<T> implements XmlWrapper<T> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = 6366421039387557728L;
+
+
     /**
      * Creates a new instance.
      *
-     * @param namespaceURI XML namespace URI
+     * @param namespaceURI XML namespace name
      * @param localName XML local name
      * @param supported the object to be supported
      */
@@ -109,7 +113,7 @@ public class XmlWrapperSupport<T extends XmlTag>
 
 
     /**
-     * XML namespace URI.
+     * XML namespace name.
      */
     protected final String namespaceURI;
 
