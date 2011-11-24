@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,8 +31,13 @@ import java.util.Map;
  * Dependency resolving utility.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @param <E> element type parameter
  */
 public class DependencyResolver<E> implements Serializable {
+
+
+    /** GENERATED. */
+    private static final long serialVersionUID = -1081443162006459712L;
 
 
     /**
@@ -43,6 +49,10 @@ public class DependencyResolver<E> implements Serializable {
     public static <T> DependencyResolver<T> synchronizedInstance() {
 
         return new DependencyResolver<T>() {
+
+
+            /** GENERATED. */
+            private static final long serialVersionUID = -8590529468641354399L;
 
 
             @Override
