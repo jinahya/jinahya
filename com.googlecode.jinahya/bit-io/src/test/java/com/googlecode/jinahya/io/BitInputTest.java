@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -37,7 +38,7 @@ import org.testng.annotations.Test;
 public class BitInputTest {
 
 
-    private static final Random RANDOM = new Random();
+    protected static final Random RANDOM = new Random();
 
 
     @Test(invocationCount = 64)
@@ -151,7 +152,7 @@ public class BitInputTest {
             new ByteArrayInputStream(baos.toByteArray());
         final BitInput bi = new BitInput(bais);
         final float actual = bi.readFloat();
-        Assert.assertEquals(bi.align(), 0);
+        Assert.assertEquals(bi.align(1), 0);
 
         Assert.assertEquals(actual, expected);
     }
@@ -220,7 +221,7 @@ public class BitInputTest {
             new ByteArrayInputStream(baos.toByteArray());
         final BitInput bi = new BitInput(bais);
         final double actual = bi.readDouble();
-        Assert.assertEquals(bi.align(), 0);
+        Assert.assertEquals(bi.align(1), 0);
 
         Assert.assertEquals(actual, expected);
     }

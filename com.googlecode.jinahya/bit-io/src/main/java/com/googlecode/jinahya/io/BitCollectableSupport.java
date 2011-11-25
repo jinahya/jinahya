@@ -18,8 +18,11 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.util.AbstractCollectable;
+
 import java.io.IOException;
-import java.util.Collection;
+
+import java.util.Iterator;
 
 
 /**
@@ -27,45 +30,51 @@ import java.util.Collection;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> <code>BitAccessible</code> type parameter
  */
-public abstract class BitCollectableSupport<A extends BitAccessible>
-    implements BitAccessible {
+public class BitCollectableSupport<A extends BitAccessible>
+    extends AbstractCollectable<A>
+    implements BitCollectable<A> {
 
 
     /** count length. */
-    private static final int SIZE_BIT_LENGTH = 31;
+    private static final int ACCESSIBLE_SIZE_LENGTH = 31;
 
 
     /**
      * Creates a new instance.
      *
-     * @param collectable collectable.
+     * @param supported the object to be supported.
+     * @param accessibleType accessibleType
      */
-    public BitCollectableSupport(final BitCollectable<A> collectable) {
-        super();
+    public BitCollectableSupport(final BitCollectable<A> supported,
+                                 final Class<A> accessibleType) {
+        super(accessibleType);
 
-        if (collectable == null) {
-            throw new NullPointerException("null collectable");
+        if (supported == null) {
+            throw new NullPointerException("null supported");
         }
 
-        this.collectable = collectable;
+        if (!BitAccessible.class.isAssignableFrom(accessibleType)) {
+            throw new IllegalArgumentException(
+                accessibleType + " is not assignable to "
+                + BitAccessible.class);
+        }
+
+        this.supported = supported;
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        final Class<A> accessibleType = collectable.getAccessibleType();
-        final Collection<A> accessibles = collectable.getAccessibles();
+        getAccessibles().clear();
 
-        accessibles.clear();
-
-        final int size = input.readUnsignedInt(SIZE_BIT_LENGTH); // ------- SIZE
+        final int size = input.readUnsignedInt(ACCESSIBLE_SIZE_LENGTH);
 
         for (int i = 0; i < size; i++) {
             try {
                 final A accessible = accessibleType.newInstance();
-                accessible.read(input); // -------------------------- ACCESSIBLE
-                accessibles.add(accessible);
+                accessible.read(input);
+                getAccessibles().add(accessible);
             } catch (InstantiationException ie) {
                 throw new RuntimeException(
                     "faild to create a new instance of " + accessibleType, ie);
@@ -80,20 +89,29 @@ public abstract class BitCollectableSupport<A extends BitAccessible>
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        final Collection<A> accessibles = collectable.getAccessibles();
+        output.writeUnsignedInt(
+            ACCESSIBLE_SIZE_LENGTH, getAccessibles().size());
 
-        output.writeUnsignedInt(SIZE_BIT_LENGTH, accessibles.size()); // -- SIZE
-
-        for (final A accessible : accessibles) {
-            accessible.write(output); // ---------------------------- ACCESSIBLE
+        for (final Iterator<A> i = getAccessibles().iterator(); i.hasNext();) {
+            i.next().write(output);
         }
     }
 
 
     /**
-     * collectable.
+     * Returns supported.
+     *
+     * @return supported.
      */
-    private final BitCollectable<A> collectable;
+    public BitCollectable<A> getSupported() {
+        return supported;
+    }
+
+
+    /**
+     * supported.
+     */
+    private final BitCollectable<A> supported;
 
 
 }
