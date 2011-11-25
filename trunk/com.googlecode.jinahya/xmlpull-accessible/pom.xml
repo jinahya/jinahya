@@ -61,7 +61,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.dependency.jinahya-accessible.version>1.0-alpha-2</project.dependency.jinahya-accessible.version>
+    <project.dependency.jinahya-accessible.version>1.0-alpha-3</project.dependency.jinahya-accessible.version>
   </properties>
 
   <build>

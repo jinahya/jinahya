@@ -35,6 +35,10 @@ public abstract class AbstractDbCollectable<A extends DbAccessible<?>>
     implements DbCollectable<A> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -4134427247884877603L;
+
+
     /**
      * Creates a new instance.
      *
