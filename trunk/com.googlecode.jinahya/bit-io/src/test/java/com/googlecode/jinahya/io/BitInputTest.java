@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
 
@@ -35,61 +34,10 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitInputTest {
+public class BitInputTest extends BitIOTest {
 
 
-    protected static final Random RANDOM = new Random();
-
-
-    @Test(invocationCount = 64)
-    public void testReadUnsignedByte() throws IOException {
-
-        for (int length = 1; length <= 8; length++) {
-
-            final int expected = RANDOM.nextInt() >>> (32 - length);
-
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final DataOutputStream dos = new DataOutputStream(baos);
-            dos.write(expected << (8 - length));
-            dos.flush();
-            baos.flush();
-
-            final ByteArrayInputStream bais =
-                new ByteArrayInputStream(baos.toByteArray());
-            final BitInput bi = new BitInput(bais);
-            final int actual = bi.readUnsignedByte(length);
-            bi.align(1);
-
-            Assert.assertEquals(actual, expected);
-        }
-    }
-
-
-    @Test(invocationCount = 64)
-    public void testReadUnsignedShort() throws IOException {
-
-        for (int length = 1; length <= 16; length++) {
-
-            final int expected = RANDOM.nextInt() >>> (32 - length);
-
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final DataOutputStream dos = new DataOutputStream(baos);
-            dos.writeShort(expected << (16 - length));
-            dos.flush();
-            baos.flush();
-
-            final ByteArrayInputStream bais =
-                new ByteArrayInputStream(baos.toByteArray());
-            final BitInput bi = new BitInput(bais);
-            final int actual = bi.readUnsignedShort(length);
-            bi.align(2);
-
-            Assert.assertEquals(actual, expected);
-        }
-    }
-
-
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadUnsignedInt() throws IOException {
 
         for (int length = 1; length < 32; length++) {
@@ -113,7 +61,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadInt() throws IOException {
 
         for (int length = 2; length <= 32; length++) {
@@ -137,7 +85,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadFloat() throws IOException {
 
         final float expected = RANDOM.nextFloat();
@@ -158,7 +106,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadUnsignedLong() throws IOException {
 
         for (int length = 1; length < 64; length++) {
@@ -182,7 +130,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadLong() throws IOException {
 
         for (int length = 2; length <= 64; length++) {
@@ -206,7 +154,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadDouble() throws IOException {
 
         final double expected = RANDOM.nextDouble();
@@ -227,7 +175,7 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testReadUTF() throws IOException {
 
         final String expected =
