@@ -61,13 +61,13 @@ public class AbstractCollectable<A extends Accessible>
 
 
     @Override
-    public final Class<A> getAccessibleType() {
+    public Class<A> getAccessibleType() {
         return accessibleType;
     }
 
 
     @Override
-    public final Collection<A> getAccessibles() {
+    public Collection<A> getAccessibles() {
 
         if (accessibles == null) {
             accessibles = new ArrayList<A>();
