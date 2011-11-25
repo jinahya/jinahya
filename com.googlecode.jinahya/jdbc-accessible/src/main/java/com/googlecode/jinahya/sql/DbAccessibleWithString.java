@@ -34,6 +34,10 @@ public abstract class DbAccessibleWithString
     extends AbstractDbAccessible<String> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -1774698565940979073L;
+
+
     /**
      * Creates a new instance.
      *

@@ -42,6 +42,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractDbAccessible<I> implements DbAccessible<I> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = 3739608928247867895L;
+
+
     /**
      * Reads a Byte from given ResultSet.
      *

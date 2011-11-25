@@ -33,6 +33,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class DbAccessibleWithLong extends AbstractDbAccessible<Long> {
 
 
+    /** GENERATED .*/
+    private static final long serialVersionUID = -128009167651353709L;
+
+
     /**
      * Creates a new instance.
      *
