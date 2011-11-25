@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,86 +33,19 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class LongTest {//extends BitIOTest{
-
-
-    private static final Random RANDOM = new Random();
-
-
-    private static final int unsignedLength() {
-        return checkUnsignedLength(RANDOM.nextInt(63) + 1); // 1 - 63
-    }
-
-
-    private static final int checkUnsignedLength(final int length) {
-        Assert.assertTrue(length >= 1);
-        Assert.assertTrue(length < Long.SIZE);
-        return length;
-    }
-
-
-    private static final int signedLength() {
-        return checkSignedLength(RANDOM.nextInt(63) + 2); // 2 - 64
-    }
-
-
-    private static final int checkSignedLength(final int length) {
-        Assert.assertTrue(length > 1);
-        Assert.assertTrue(length <= Long.SIZE);
-        return length;
-    }
-
-
-    private static final Long unsignedValue(final int length,
-                                            final boolean nullable) {
-
-        checkUnsignedLength(length);
-
-        if (nullable && RANDOM.nextBoolean()) {
-            return null;
-        }
-
-        final long value = RANDOM.nextLong() >>> (Long.SIZE - length);
-
-        Assert.assertTrue((value >> length) == 0L);
-
-        return value;
-    }
-
-
-    private static final Long signedValue(final int length,
-                                          final boolean nullable) {
-
-        checkSignedLength(length);
-
-        if (nullable && RANDOM.nextBoolean()) {
-            return null;
-        }
-
-        final long value = RANDOM.nextLong() >> (Long.SIZE - length);
-
-        if (length < Long.SIZE) {
-            if (value < 0L) {
-                Assert.assertTrue((value >> length) == -1L);
-            } else {
-                Assert.assertTrue((value >> length) == 0L);
-            }
-        }
-
-        return value;
-    }
+public class LongTest extends BitIOTest {
 
 
     @Test
     public void testUnsignedLong() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> values = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedLongLength();
             values.add((long) length);
-            final long value = unsignedValue(length, false);
+            final long value = newUnsignedLongValue(length, false);
             values.add(value);
         }
 
@@ -141,13 +73,13 @@ public class LongTest {//extends BitIOTest{
     @Test
     public void testLong() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> list = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedLongLength();
             list.add((long) length);
-            final long value = signedValue(length, false);
+            final long value = newSignedLongValue(length, false);
             list.add(value);
         }
 
@@ -175,13 +107,13 @@ public class LongTest {//extends BitIOTest{
     @Test
     public void testUnsignedLONG() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> list = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedLongLength();
             list.add((long) length);
-            final Long value = unsignedValue(length, true);
+            final Long value = newUnsignedLongValue(length, true);
             list.add(value);
         }
 
@@ -209,13 +141,13 @@ public class LongTest {//extends BitIOTest{
     @Test
     public void testUnsignedLONGWithDefaultValue() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> list = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedLongLength();
             list.add((long) length);
-            final Long value = unsignedValue(length, true);
+            final Long value = newUnsignedLongValue(length, true);
             list.add(value);
         }
 
@@ -233,7 +165,7 @@ public class LongTest {//extends BitIOTest{
         for (int i = 0; i < list.size(); i += 2) {
             final int length = list.get(i).intValue();
             final Long expected = list.get(i + 1);
-            final Long defaultValue = unsignedValue(length, true);
+            final Long defaultValue = newUnsignedLongValue(length, true);
             final Long actual = bi.readUnsignedLONG(length, defaultValue);
             if (expected == null) {
                 Assert.assertEquals(actual, defaultValue);
@@ -248,13 +180,13 @@ public class LongTest {//extends BitIOTest{
     @Test
     public void testLONG() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> list = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedLongLength();
             list.add((long) length);
-            final Long value = signedValue(length, true);
+            final Long value = newSignedLongValue(length, true);
             list.add(value);
         }
 
@@ -282,13 +214,13 @@ public class LongTest {//extends BitIOTest{
     @Test
     public void testLONGWithDefaultValue() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Long> list = new ArrayList<Long>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedLongLength();
             list.add((long) length);
-            final Long value = signedValue(length, true);
+            final Long value = newSignedLongValue(length, true);
             list.add(value);
         }
 
@@ -306,7 +238,7 @@ public class LongTest {//extends BitIOTest{
         for (int i = 0; i < list.size(); i += 2) {
             final int length = list.get(i).intValue();
             final Long expected = list.get(i + 1);
-            final Long defaultValue = signedValue(length, true);
+            final Long defaultValue = newSignedLongValue(length, true);
             final Long actual = bi.readLONG(length, defaultValue);
             if (expected == null) {
                 Assert.assertEquals(actual, defaultValue);

@@ -18,16 +18,11 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
 
 import org.testng.Assert;
-import org.testng.annotations.Test;
 
 
 /**
@@ -42,13 +37,15 @@ public class BitIOTest {
 
 
     /** count. */
-    protected static final int INVOCATION_COUNT = 128;
+    protected static final int INVOCATION_COUNT = 64;
 
 
-    protected static final int STRING_LENGTH = 1024;
+    /** string length. */
+    protected static final int STRING_LENGTH = 128;
 
 
-    protected static final int BYTES_LENGTH = 1024;
+    /** bytes length. */
+    protected static final int BYTES_LENGTH = 128;
 
 
     protected static final int newStringLength() {
@@ -127,24 +124,131 @@ public class BitIOTest {
     }
 
 
-    @Test(invocationCount = 64)
-    public void testUTF() throws IOException {
+    protected static final int newUnsignedIntLength() {
+        return checkUnsignedIntLength(RANDOM.nextInt(31) + 1); // 1 - 31
+    }
 
-        final String expected = newString(false);
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
-        output.writeUTF(expected);
-        output.align(1);
-        baos.flush();
+    protected static final int checkUnsignedIntLength(final int length) {
+        Assert.assertTrue(length >= 1);
+        Assert.assertTrue(length < Integer.SIZE);
+        return length;
+    }
 
-        final ByteArrayInputStream bais =
-            new ByteArrayInputStream(baos.toByteArray());
-        final BitInput input = new BitInput(bais);
-        final String actual = input.readUTF();
-        input.align(1);
 
-        Assert.assertEquals(actual, expected);
+    protected static final int newSignedIntLength() {
+        return checkSignedIntLength(RANDOM.nextInt(31) + 2); // 2 - 32
+    }
+
+
+    protected static final int checkSignedIntLength(final int length) {
+        Assert.assertTrue(length > 1);
+        Assert.assertTrue(length <= Integer.SIZE);
+        return length;
+    }
+
+
+    protected static final Integer newUnsignedIntValue(final int length,
+                                                       final boolean nullable) {
+
+        checkUnsignedIntLength(length);
+
+        if (nullable && RANDOM.nextBoolean()) {
+            return null;
+        }
+
+        final int value = RANDOM.nextInt() >>> (Integer.SIZE - length);
+
+        Assert.assertTrue((value >> length) == 0);
+
+        return value;
+    }
+
+
+    protected static final Integer newSignedIntValue(final int length,
+                                                     final boolean nullable) {
+
+        checkSignedIntLength(length);
+
+        if (nullable && RANDOM.nextBoolean()) {
+            return null;
+        }
+
+        final int value = RANDOM.nextInt() >> (Integer.SIZE - length);
+
+        if (length < Integer.SIZE) {
+            if (value < 0L) {
+                Assert.assertTrue((value >> length) == -1);
+            } else {
+                Assert.assertTrue((value >> length) == 0);
+            }
+        }
+
+        return value;
+    }
+
+
+    protected static final int newUnsignedLongLength() {
+        return checkUnsignedLongLength(RANDOM.nextInt(63) + 1); // 1 - 63
+    }
+
+
+    protected static final int checkUnsignedLongLength(final int length) {
+        Assert.assertTrue(length >= 1);
+        Assert.assertTrue(length < Long.SIZE);
+        return length;
+    }
+
+
+    protected static final int newSignedLongLength() {
+        return checkSignedLongLength(RANDOM.nextInt(63) + 2); // 2 - 64
+    }
+
+
+    protected static final int checkSignedLongLength(final int length) {
+        Assert.assertTrue(length > 1);
+        Assert.assertTrue(length <= Long.SIZE);
+        return length;
+    }
+
+
+    protected static final Long newUnsignedLongValue(final int length,
+                                                     final boolean nullable) {
+
+        checkUnsignedLongLength(length);
+
+        if (nullable && RANDOM.nextBoolean()) {
+            return null;
+        }
+
+        final long value = RANDOM.nextLong() >>> (Long.SIZE - length);
+
+        Assert.assertTrue((value >> length) == 0L);
+
+        return value;
+    }
+
+
+    protected static final Long newSignedLongValue(final int length,
+                                                   final boolean nullable) {
+
+        checkSignedLongLength(length);
+
+        if (nullable && RANDOM.nextBoolean()) {
+            return null;
+        }
+
+        final long value = RANDOM.nextLong() >> (Long.SIZE - length);
+
+        if (length < Long.SIZE) {
+            if (value < 0L) {
+                Assert.assertTrue((value >> length) == -1L);
+            } else {
+                Assert.assertTrue((value >> length) == 0L);
+            }
+        }
+
+        return value;
     }
 
 

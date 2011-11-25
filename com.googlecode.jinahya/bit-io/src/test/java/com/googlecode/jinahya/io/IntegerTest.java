@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,87 +33,19 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class IntegerTest {
-
-
-    /** random. */
-    protected static final Random RANDOM = new Random();
-
-
-    private static final int unsignedLength() {
-        return checkUnsignedLength(RANDOM.nextInt(31) + 1); // 1 - 31
-    }
-
-
-    private static final int checkUnsignedLength(final int length) {
-        Assert.assertTrue(length >= 1);
-        Assert.assertTrue(length < Integer.SIZE);
-        return length;
-    }
-
-
-    private static final int signedLength() {
-        return checkSignedLength(RANDOM.nextInt(31) + 2); // 2 - 32
-    }
-
-
-    private static final int checkSignedLength(final int length) {
-        Assert.assertTrue(length > 1);
-        Assert.assertTrue(length <= Integer.SIZE);
-        return length;
-    }
-
-
-    private static final Integer unsignedValue(final int length,
-                                               final boolean nullable) {
-
-        checkUnsignedLength(length);
-
-        if (nullable && RANDOM.nextBoolean()) {
-            return null;
-        }
-
-        final int value = RANDOM.nextInt() >>> (Integer.SIZE - length);
-
-        Assert.assertTrue((value >> length) == 0);
-
-        return value;
-    }
-
-
-    private static final Integer signedValue(final int length,
-                                             final boolean nullable) {
-
-        checkSignedLength(length);
-
-        if (nullable && RANDOM.nextBoolean()) {
-            return null;
-        }
-
-        final int value = RANDOM.nextInt() >> (Integer.SIZE - length);
-
-        if (length < Integer.SIZE) {
-            if (value < 0L) {
-                Assert.assertTrue((value >> length) == -1);
-            } else {
-                Assert.assertTrue((value >> length) == 0);
-            }
-        }
-
-        return value;
-    }
+public class IntegerTest extends BitIOTest {
 
 
     @Test
     public void testUnsignedInt() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedIntLength();
             list.add(length);
-            final int value = unsignedValue(length, false);
+            final int value = newUnsignedIntValue(length, false);
             list.add(value);
         }
 
@@ -142,13 +73,13 @@ public class IntegerTest {
     @Test
     public void testInt() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedIntLength();
             list.add(length);
-            final int value = signedValue(length, false);
+            final int value = newSignedIntValue(length, false);
             list.add(value);
         }
 
@@ -176,13 +107,13 @@ public class IntegerTest {
     @Test
     public void testUnsignedINTEGER() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedIntLength();
             list.add(length);
-            final Integer value = unsignedValue(length, true);
+            final Integer value = newUnsignedIntValue(length, true);
             list.add(value);
         }
 
@@ -210,13 +141,13 @@ public class IntegerTest {
     @Test
     public void testUnsignedINTEGERWithDefaultValue() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
 
         for (int i = 0; i < count; i++) {
-            final int length = unsignedLength();
+            final int length = newUnsignedIntLength();
             list.add(length);
-            final Integer value = unsignedValue(length, true);
+            final Integer value = newUnsignedIntValue(length, true);
             list.add(value);
         }
 
@@ -234,7 +165,7 @@ public class IntegerTest {
         for (int i = 0; i < list.size(); i += 2) {
             final int length = list.get(i);
             final Integer expected = list.get(i + 1);
-            final Integer defaultValue = unsignedValue(length, true);
+            final Integer defaultValue = newUnsignedIntValue(length, true);
             final Integer actual = bi.readUnsignedINTEGER(length, defaultValue);
             if (expected == null) {
                 Assert.assertEquals(actual, defaultValue);
@@ -249,12 +180,12 @@ public class IntegerTest {
     @Test
     public void testINTEGER() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedIntLength();
             list.add(length);
-            final Integer value = signedValue(length, true);
+            final Integer value = newSignedIntValue(length, true);
             list.add(value);
         }
 
@@ -282,12 +213,12 @@ public class IntegerTest {
     @Test
     public void testINTEGERWithDefaultValue() throws IOException {
 
-        final int count = RANDOM.nextInt(128) + 128;
+        final int count = newCount();
         final List<Integer> list = new ArrayList<Integer>(count * 2);
         for (int i = 0; i < count; i++) {
-            final int length = signedLength();
+            final int length = newSignedIntLength();
             list.add(length);
-            final Integer value = signedValue(length, true);
+            final Integer value = newSignedIntValue(length, true);
             list.add(value);
         }
 
@@ -305,7 +236,7 @@ public class IntegerTest {
         for (int i = 0; i < list.size(); i += 2) {
             final int length = list.get(i);
             final Integer expected = list.get(i + 1);
-            final Integer defaultValue = signedValue(length, true);
+            final Integer defaultValue = newSignedIntValue(length, true);
             final Integer actual = bi.readINTEGER(length, defaultValue);
             if (expected == null) {
                 Assert.assertEquals(actual, defaultValue);

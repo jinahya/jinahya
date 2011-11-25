@@ -35,13 +35,10 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitOutputTest {
+public class BitOutputTest extends BitIOTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUnsignedByte() throws IOException {
 
         for (int length = 1; length <= 8; length++) {
@@ -65,7 +62,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUnsignedShort() throws IOException {
 
         for (int length = 2; length <= 16; length++) {
@@ -89,7 +86,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUnsignedInt() throws IOException {
 
         for (int length = 1; length < 32; length++) {
@@ -113,7 +110,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 10)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteInt() throws IOException {
 
         for (int length = 2; length <= 32; length++) {
@@ -137,7 +134,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteFloat() throws IOException {
 
         final float expected = RANDOM.nextFloat();
@@ -158,7 +155,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUnsignedLong() throws IOException {
 
         for (int length = 1; length < 64; length++) {
@@ -182,7 +179,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteLong() throws IOException {
 
         for (int length = 2; length <= 64; length++) {
@@ -206,7 +203,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteDouble() throws IOException {
 
         final double expected = RANDOM.nextFloat();
@@ -227,7 +224,7 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 64)
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUTF() throws IOException {
 
         final String expected =
