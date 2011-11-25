@@ -1,5 +1,5 @@
 -classpath
-'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-accessible/target/classes:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/jinahya-accessible/1.0-alpha-2/jinahya-accessible-1.0-alpha-2.jar'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-accessible/target/classes:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/jinahya-accessible/1.0-alpha-3/jinahya-accessible-1.0-alpha-3.jar'
 -encoding
 'UTF-8'
 -protected
@@ -17,7 +17,7 @@
 -doctitle
 'jdbc-accessible 1.0-alpha-3-SNAPSHOT API'
 -link
-'http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/1.0-alpha-2/apidocs'
+'http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/1.0-alpha-3/apidocs'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-accessible/target/javadoc-bundle-options'
 -use
