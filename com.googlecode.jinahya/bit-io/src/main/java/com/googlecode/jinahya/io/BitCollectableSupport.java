@@ -18,11 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.util.AbstractCollectable;
-
-import java.io.IOException;
-
-import java.util.Iterator;
+import java.util.Collection;
 
 
 /**
@@ -31,70 +27,28 @@ import java.util.Iterator;
  * @param <A> <code>BitAccessible</code> type parameter
  */
 public class BitCollectableSupport<A extends BitAccessible>
-    extends AbstractCollectable<A>
-    implements BitCollectable<A> {
+    extends AbstractBitCollectable<A> {
 
 
-    /** count length. */
-    private static final int ACCESSIBLE_SIZE_LENGTH = 31;
+    /** GENERATED. */
+    private static final long serialVersionUID = 2715873935405106762L;
 
 
     /**
      * Creates a new instance.
      *
      * @param supported the object to be supported.
-     * @param accessibleType accessibleType
      */
-    public BitCollectableSupport(final BitCollectable<A> supported,
-                                 final Class<A> accessibleType) {
-        super(accessibleType);
-
-        if (supported == null) {
-            throw new NullPointerException("null supported");
-        }
-
-        if (!BitAccessible.class.isAssignableFrom(accessibleType)) {
-            throw new IllegalArgumentException(
-                accessibleType + " is not assignable to "
-                + BitAccessible.class);
-        }
+    public BitCollectableSupport(final BitCollectable<A> supported) {
+        super(supported.getAccessibleType());
 
         this.supported = supported;
     }
 
 
     @Override
-    public void read(final BitInput input) throws IOException {
-
-        getAccessibles().clear();
-
-        final int size = input.readUnsignedInt(ACCESSIBLE_SIZE_LENGTH);
-
-        for (int i = 0; i < size; i++) {
-            try {
-                final A accessible = accessibleType.newInstance();
-                accessible.read(input);
-                getAccessibles().add(accessible);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(
-                    "faild to create a new instance of " + accessibleType, ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(
-                    "faild to create a new instance of " + accessibleType, iae);
-            }
-        }
-    }
-
-
-    @Override
-    public void write(final BitOutput output) throws IOException {
-
-        output.writeUnsignedInt(
-            ACCESSIBLE_SIZE_LENGTH, getAccessibles().size());
-
-        for (final Iterator<A> i = getAccessibles().iterator(); i.hasNext();) {
-            i.next().write(output);
-        }
+    public Collection<A> getAccessibles() {
+        return supported.getAccessibles();
     }
 
 

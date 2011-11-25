@@ -21,6 +21,7 @@ package com.googlecode.jinahya.io;
 import com.googlecode.jinahya.util.AbstractCollectable;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 
 /**
@@ -33,8 +34,12 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
     implements BitCollectable<A> {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = 6344599398970732643L;
+
+
     /** count length. */
-    private static final int COUNT_LENGTH = 31;
+    private static final int ACCESSIBLE_SIZE_LENGTH = 31;
 
 
     /**
@@ -50,13 +55,35 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
     @Override
     public void read(final BitInput input) throws IOException {
 
-        new BitCollectableSupport<A>(this, accessibleType).read(input);
+        getAccessibles().clear();
+
+        final int size = input.readUnsignedInt(ACCESSIBLE_SIZE_LENGTH);
+
+        for (int i = 0; i < size; i++) {
+            try {
+                final A accessible = accessibleType.newInstance();
+                accessible.read(input);
+                getAccessibles().add(accessible);
+            } catch (InstantiationException ie) {
+                throw new RuntimeException(
+                    "faild to create a new instance of " + accessibleType, ie);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(
+                    "faild to create a new instance of " + accessibleType, iae);
+            }
+        }
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
-        new BitCollectableSupport<A>(this, accessibleType).write(output);
+
+        output.writeUnsignedInt(
+            ACCESSIBLE_SIZE_LENGTH, getAccessibles().size());
+
+        for (final Iterator<A> i = getAccessibles().iterator(); i.hasNext();) {
+            i.next().write(output);
+        }
     }
 
 
