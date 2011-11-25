@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+
 import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -144,7 +145,7 @@ public class BitOutputTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);
         bo.writeFloat(expected);
-        Assert.assertEquals(bo.align(), 0);
+        Assert.assertEquals(bo.align(1), 0);
         baos.flush();
 
         final ByteArrayInputStream bais =
@@ -213,7 +214,7 @@ public class BitOutputTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);
         bo.writeDouble(expected);
-        Assert.assertEquals(bo.align(), 0);
+        Assert.assertEquals(bo.align(1), 0);
         baos.flush();
 
         final ByteArrayInputStream bais =

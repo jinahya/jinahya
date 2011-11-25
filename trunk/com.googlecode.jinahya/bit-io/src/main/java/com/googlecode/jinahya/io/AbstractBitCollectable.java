@@ -21,7 +21,6 @@ package com.googlecode.jinahya.io;
 import com.googlecode.jinahya.util.AbstractCollectable;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 
 /**
@@ -49,36 +48,15 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
 
 
     @Override
-    public void read(BitInput input) throws IOException {
+    public void read(final BitInput input) throws IOException {
 
-        getAccessibles().clear();
-
-        final int count = input.readUnsignedInt(COUNT_LENGTH);
-
-        for (int i = 0; i < count; i++) {
-            try {
-                final A accessible = accessibleType.newInstance();
-                accessible.read(input);
-                getAccessibles().add(accessible);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(
-                    "faild to create a new instance of " + accessibleType, ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(
-                    "faild to create a new instance of " + accessibleType, iae);
-            }
-        }
+        new BitCollectableSupport<A>(this, accessibleType).read(input);
     }
 
 
     @Override
-    public void write(BitOutput output) throws IOException {
-
-        output.writeUnsignedInt(COUNT_LENGTH, getAccessibles().size());
-
-        for (final Iterator<A> i = getAccessibles().iterator(); i.hasNext();) {
-            i.next().write(output);
-        }
+    public void write(final BitOutput output) throws IOException {
+        new BitCollectableSupport<A>(this, accessibleType).write(output);
     }
 
 

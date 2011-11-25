@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2011 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,50 +28,55 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BytesTest extends BitIOTest {
+public class StringTest extends BitIOTest {
 
 
     @Test(invocationCount = INVOCATION_COUNT)
-    public void testBytes() throws IOException {
+    public void testSTRING() throws IOException {
 
-        final byte[] expected = newBytes(false);
+        final String expected = newString(true);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput bo = new BitOutput(baos);
-        bo.writeBytes(expected);
-        bo.align(1);
+        final BitOutput output = new BitOutput(baos);
+        output.writeSTRING(expected, "UTF-8");
+        output.align(1);
         baos.flush();
 
         final ByteArrayInputStream bais =
             new ByteArrayInputStream(baos.toByteArray());
-        final BitInput bi = new BitInput(bais);
-        final byte[] actual = bi.readBytes();
-        bi.align(1);
+        final BitInput input = new BitInput(bais);
+        final String actual = input.readSTRING("UTF-8");
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
 
 
     @Test(invocationCount = INVOCATION_COUNT)
-    public void testBYTES() throws IOException {
+    public void testSTRINGWithDefaultValue() throws IOException {
 
-        final byte[] expected = newBytes(true);
+        final String expected = newString(true);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput bo = new BitOutput(baos);
-        bo.writeBYTES(expected);
-        bo.align(1);
+        final BitOutput output = new BitOutput(baos);
+        output.writeSTRING(expected, "UTF-8");
+        output.align(1);
         baos.flush();
 
         final ByteArrayInputStream bais =
             new ByteArrayInputStream(baos.toByteArray());
-        final BitInput bi = new BitInput(bais);
-        final byte[] actual = bi.readBYTES();
-        bi.align(1);
+        final BitInput input = new BitInput(bais);
+        final String defaultValue = newString(true);
+        final String actual = input.readSTRING("UTF-8", defaultValue);
+        input.align(1);
 
-        Assert.assertEquals(actual, expected);
+        if (expected == null) {
+            Assert.assertEquals(actual, defaultValue);
+        } else {
+            Assert.assertEquals(actual, expected);
+        }
     }
 
 

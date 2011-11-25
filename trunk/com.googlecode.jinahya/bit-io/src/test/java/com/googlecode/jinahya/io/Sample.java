@@ -18,16 +18,19 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.DataOutput;
 import java.io.IOException;
+import java.io.ObjectOutput;
+
 import java.util.Random;
+
+import org.apache.commons.lang.RandomStringUtils;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Sample implements BitAccessible {
+public class Sample {
 
 
     private static final String NAME_ENCODING = "UTF-8";
@@ -39,137 +42,158 @@ public class Sample implements BitAccessible {
     private static final Random RANDOM = new Random();
 
 
-    public static Sample newInstance(final String name, final int age) {
-        return new Sample(name, age);
-    }
+    public static Sample newInstance() {
 
+        final Sample sample = new Sample();
 
-    public Sample() {
-        this("name", 1);
-    }
-
-
-    private Sample(final String name, final int age) {
-        super();
-
-        if (name == null) {
-            throw new NullPointerException("null name");
-        }
-        if (name.trim().length() == 0) {
-            throw new IllegalArgumentException("empty name");
+        sample.boolean_ = RANDOM.nextBoolean();
+        if (RANDOM.nextBoolean()) {
+            sample.BOOLEAN_ = RANDOM.nextBoolean();
         }
 
-        if (age <= 0) {
-            throw new IllegalArgumentException("age(" + age + ") <= 0");
-        }
-        if (age > Byte.MAX_VALUE) {
-            throw new IllegalArgumentException(
-                "age(" + age + ") > " + Byte.MAX_VALUE);
+        sample.int_ = RANDOM.nextInt();
+        if (RANDOM.nextBoolean()) {
+            sample.INTEGER_ = RANDOM.nextInt();
         }
 
-        this.name = name;
-        this.age = age;
-    }
-
-
-    @Override
-    public void read(final BitInput input) throws IOException {
-
-        name = new String(input.readBytes(), NAME_ENCODING);
-        age = input.readUnsignedInt(AGE_LENGTH);
-        married = input.readBoolean();
-    }
-
-
-    @Override
-    public void write(final BitOutput output) throws IOException {
-
-        output.writeBytes(name.getBytes(NAME_ENCODING));
-        output.writeUnsignedInt(AGE_LENGTH, age);
-        output.writeBoolean(married);
-    }
-
-
-    public void write(final DataOutput output) throws IOException {
-        output.writeUTF(name);
-        output.writeByte(age);
-        output.writeBoolean(married);
-    }
-
-
-    public int getAge() {
-        return age;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-
-    public boolean isMarried() {
-        return married;
-    }
-
-
-    @Override
-    public boolean equals(final Object obj) {
-
-        if (this == obj) {
-            return true;
+        sample.FLOAT_ = RANDOM.nextFloat();
+        if (RANDOM.nextBoolean()) {
+            sample.FLOAT_ = RANDOM.nextFloat();
         }
 
-        if (!(obj instanceof Sample)) {
-            return false;
+        sample.long_ = RANDOM.nextLong();
+        if (RANDOM.nextBoolean()) {
+            sample.LONG_ = RANDOM.nextLong();
         }
 
-        final Sample sample = (Sample) obj;
-
-        if (!(name == sample.name
-              || (name != null && name.equals(sample.name)))) {
-            return false;
+        sample.double_ = RANDOM.nextDouble();
+        if (RANDOM.nextBoolean()) {
+            sample.DOUBLE_ = RANDOM.nextDouble();
         }
 
-        if (age != sample.age) {
-            return false;
+        sample.ascii_ = RandomStringUtils.randomAscii(RANDOM.nextInt(1024));
+        if (RANDOM.nextBoolean()) {
+            sample.ASCII_ = RandomStringUtils.randomAscii(RANDOM.nextInt(1024));
         }
 
-        if (married != sample.married) {
-            return false;
+        sample.string_ = RandomStringUtils.random(RANDOM.nextInt(1024));
+        if (RANDOM.nextBoolean()) {
+            sample.STRING_ = RandomStringUtils.random(RANDOM.nextInt(1024));
         }
 
-        return true;
+        sample.bytes_ = new byte[RANDOM.nextInt(1024)];
+        RANDOM.nextBytes(sample.bytes_);
+        if (RANDOM.nextBoolean()) {
+            sample.BYTES_ = new byte[RANDOM.nextInt(1024)];
+            RANDOM.nextBytes(sample.BYTES_);
+        }
+
+        return sample;
     }
 
 
-    @Override
-    public int hashCode() {
+    public void write(final BitOutput bo) throws IOException {
 
-        int result = 17;
+        bo.writeBoolean(boolean_);
+        bo.writeBOOLEAN(BOOLEAN_);
 
-        result = 37 * result + name.hashCode();
+        bo.writeInt(32, int_);
+        bo.writeINTEGER(32, INTEGER_);
 
-        result = 37 * result + age;
+        bo.writeFloat(float_);
+        bo.writeFLOAT(FLOAT_);
 
-        result = 37 * result + (married ? 0 : 1);
+        bo.writeLong(64, long_);
+        bo.writeLONG(64, LONG_);
 
-        return result;
+        bo.writeDouble(double_);
+        bo.writeDOUBLE(DOUBLE_);
+
+        bo.writeASCII(ascii_);
+        bo.writeASCII(ASCII_);
+
+        bo.writeSTRING(string_, "UTF-8");
+        bo.writeSTRING(STRING_, "UTF-8");
+
+        bo.writeBytes(bytes_);
+        bo.writeBYTES(BYTES_);
     }
 
 
-    @Override
-    public String toString() {
-        return super.toString() + "/" + name + "(" + age + "/" + married + ")";
+    public void write(final ObjectOutput oo) throws IOException {
+
+        oo.writeBoolean(boolean_);
+        oo.writeObject(BOOLEAN_);
+
+        oo.writeInt(int_);
+        oo.writeObject(INTEGER_);
+
+        oo.writeFloat(float_);
+        oo.writeObject(FLOAT_);
+
+        oo.writeLong(long_);
+        oo.writeObject(LONG_);
+
+        oo.writeDouble(double_);
+        oo.writeObject(DOUBLE_);
+
+        oo.writeUTF(ascii_);
+        oo.writeObject(ASCII_);
+
+        oo.writeUTF(string_);
+        oo.writeObject(STRING_);
+
+        oo.write(bytes_);
+        oo.writeObject(BYTES_);
     }
 
 
-    private String name;
+    public boolean boolean_;
 
 
-    private int age;
+    public Boolean BOOLEAN_;
 
 
-    private boolean married = RANDOM.nextBoolean();
+    public int int_;
+
+
+    public Integer INTEGER_;
+
+
+    public float float_;
+
+
+    public Float FLOAT_;
+
+
+    public long long_;
+
+
+    public Long LONG_;
+
+
+    public double double_;
+
+
+    public Double DOUBLE_;
+
+
+    public String ascii_;
+
+
+    public String ASCII_;
+
+
+    public String string_;
+
+
+    public String STRING_;
+
+
+    public byte[] bytes_;
+
+
+    public byte[] BYTES_;
 
 
 }
