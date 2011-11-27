@@ -60,7 +60,7 @@ bi.align(1); // align to octet
 || BYTES || 1 + Bytes || nullable byte array ||
 || ASCII || 1 + 31 + 7N || N: number of characters ||
 || STRING || 1 + Bytes || nullable String ||
-|| UTF (@deprecated) || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
+|| UTF (@deprecated) || 16 + 8N || !DataInput#readUTF / !DataOutput#writeUTF||
 
 
 = Apidocs =
