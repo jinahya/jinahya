@@ -40,9 +40,9 @@ BitInput bi = new BitInput(bais);
 String id = bi.readASCII();
 int grade = bi.readUnsignedInt(4);
 String name = bi.readSTRING("UTF-8");
-String age = bi.readUnsignedInt(7);
-String married = bi.readBoolean();
-String balance = bi.readUnsignedINTEGER(29);
+int age = bi.readUnsignedInt(7);
+boolean married = bi.readBoolean();
+Integer balance = bi.readUnsignedINTEGER(29);
 
 bi.align(1); // align to octet
 }}}
