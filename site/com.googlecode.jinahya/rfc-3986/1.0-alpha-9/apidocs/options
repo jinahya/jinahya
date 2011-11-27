@@ -1,0 +1,25 @@
+-classpath
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/rfc-3986-1.0-alpha-9/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/rfc-3986-1.0-alpha-9/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/rfc-3986-1.0-alpha-9/target/site/apidocs'
+-docencoding
+'UTF-8'
+-docfilessubdirs
+-doctitle
+'rfc-3986 1.0-alpha-9 API'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' 'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/rfc-3986-1.0-alpha-9/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'rfc-3986 1.0-alpha-9 API'
