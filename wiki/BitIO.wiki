@@ -25,7 +25,7 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 || BYTES || 1 + Bytes || nullable byte array ||
 || ASCII || 1 + 31 + 7N || N: number of characters ||
 || STRING || 1 + Bytes || nullable String ||
-|| UTF || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
+|| UTF<br/>@deprecated || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
 
 
 = Apidocs =
