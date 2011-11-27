@@ -53,7 +53,7 @@ bi.align(1); // align to octet
 || Int || 2 ~ 32 || signed int ||
 || INTEGER || 1 + Int || nullable signed Integer ||
 || unsignedLong || 1 ~ 63 || unsigned long ||
-|| unsignedLONG || 1 + unsignedLong || nullable unsigled Long ||
+|| unsignedLONG || 1 + unsignedLong || nullable unsigned Long ||
 || Long || 2 ~ 64 || signed long ||
 || LONG || 1 + Long || nullable signed Long ||
 || Bytes || 31 + 8N || N: number of bytes ||
