@@ -112,7 +112,25 @@ public class BitOutput {
 
 
     /**
-     * Writes a null flag for given <code>value</code>.
+     * Writes a 1-bit boolean null flag for given <code>value</code>.
+     *
+     * @param value value whose null flag is written.
+     * @return true is given <code>value</code> is null and the value must not
+     * be serialized; false otherwise.
+     * @throws IOException if an I/O error occurs.
+     */
+    protected boolean isNull(final Object value) throws IOException {
+
+        final boolean isNull = value == null;
+
+        writeBoolean(isNull);
+
+        return isNull;
+    }
+
+
+    /**
+     * Writes a 1-bit boolean null flag for given <code>value</code>.
      *
      * @param value the value be checked
      * @return true if object is not null and should be serialized; false
@@ -121,11 +139,7 @@ public class BitOutput {
      */
     protected boolean isNotNull(final Object value) throws IOException {
 
-        final boolean isNull = value == null;
-
-        writeBoolean(isNull);
-
-        return !isNull;
+        return !isNull(value);
     }
 
 
@@ -391,7 +405,7 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") > 0x40");
         }
 
-        if (length < Long.SIZE) {
+        if (length < 0x40) {
             if (value < 0L) {
                 if ((value >> length) != -1L) {
                     throw new IllegalArgumentException(
