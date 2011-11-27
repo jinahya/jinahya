@@ -12,19 +12,19 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 == Values ==
 || *type(get/set)* || *bit range* || *notes* ||
 || Boolean || 1 || 1 for true; 0 for false ||
-|| BOOLEAN || 1 + 1 || nullable Boolean ||
-|| unsigned int || 1 ~ 31 || ||
-|| unsignedINTEGER || 1 + (1 ~ 31) || nullable unsigned Integer||
+|| BOOLEAN || 1 + Boolean || nullable Boolean ||
+|| unsignedInt || 1 ~ 31 || ||
+|| unsignedINTEGER || 1 + unsignedInt || nullable unsigned Integer||
 || Int || 2 ~ 32 || signed int ||
-|| INTEGER || 1 + (2 ~ 32) || nullable signed Integer ||
+|| INTEGER || 1 + Int || nullable signed Integer ||
 || unsignedLong || 1 ~ 63 || unsigned long ||
-|| unsignedLONG || 1 + (1 ~ 63) || nullable unsigled Long ||
+|| unsignedLONG || 1 + unsignedLong || nullable unsigled Long ||
 || Long || 2 ~ 64 || signed long ||
-|| LONG || 1 + (2 ~ 64) || nullable signed Long ||
-|| bytes (byte[]) || 31 + 8N || N: number of bytes ||
-|| BYTES (byte[]) || 1 + 31 + 8N || N: number of bytes ||
+|| LONG || 1 + Long || nullable signed Long ||
+|| Bytes (byte[]) || 31 + 8N || N: number of bytes ||
+|| BYTES (byte[]) || 1 + Bytes || N: number of bytes ||
 || ASCII || 1 + 31 + 7N || N: number of characters ||
-|| STRING || 1 + 31 + 8N || N: number of bytes ||
+|| STRING || 1 + Bytes || N: number of bytes ||
 || UTF || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
 
 
