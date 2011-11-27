@@ -48,7 +48,7 @@ bi.align(1); // align to octet
 || *type(get/set)* || *bit range* || *notes* ||
 || Boolean || 1 || 1 for true; 0 for false ||
 || BOOLEAN || 1 + Boolean || nullable Boolean ||
-|| unsignedInt || 1 ~ 31 || ||
+|| unsignedInt || 1 ~ 31 || unsigned int ||
 || unsignedINTEGER || 1 + unsignedInt || nullable unsigned Integer ||
 || Int || 2 ~ 32 || signed int ||
 || INTEGER || 1 + Int || nullable signed Integer ||
