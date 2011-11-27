@@ -29,7 +29,7 @@ public class Base32Hex extends Base {
 
 
     /**
-     * base32hex alphabet.
+     * the alphabet for 'base32hex'.
      */
     private static final byte[] ALPHABAT = new byte[]{
         '0', '1', '2', '3', '4', '5', '6', '7',

@@ -28,7 +28,7 @@ public class Base16 extends Base {
 
 
     /**
-     * base16 alphabet.
+     * the alphabet for 'base16'.
      */
     private static final byte[] ALPHABET = new byte[]{
         '0', '1', '2', '3', '4', '5', '6', '7',
