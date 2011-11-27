@@ -16,7 +16,7 @@ class Sample {
     public String name;     // name; UTF-8 String
     public int age;         // age; 7-bit unsigned integer; maximum 127
     public boolean married; // married or not
-    public Integer balance; // 29-bit unsigned integer. null if hidden
+    public Integer balance; // account balance; 29-bit unsigned integer. null if hidden
 }
 
 
