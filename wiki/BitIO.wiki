@@ -27,7 +27,7 @@ bo.writeASCII(sample.id);             // 1 + 31 + 7N
 bo.writeSTRING(sample.name, "UTF-8"); // 1 + 31 + 8N
 bo.writeUnsignedInt(7, sample.age);   // 7
 bo.writeBoolean(sample.married);      // 1
-bo.writeINTEGER(29, sample.balance);  // 1 + 29
+bo.writeUnsignedINTEGER(29, sample.balance);  // 1 + 29
 
 output.align(1); // align to octet
 
@@ -39,7 +39,7 @@ String id = bi.readASCII();
 String name = bi.readSTRING("UTF-8");
 String age = bi.readUnsignedInt(7);
 String married = bi.readBoolean();
-String balance = bi.readINTEGER(29);
+String balance = bi.readUnsignedINTEGER(29);
 
 bi.align(1); // align to octet
 }}}
