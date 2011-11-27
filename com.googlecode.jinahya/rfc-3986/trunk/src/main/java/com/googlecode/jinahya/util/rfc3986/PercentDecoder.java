@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.rfc3986;
+package com.googlecode.jinahya.util.rfc3986;
 
 
 import java.io.ByteArrayInputStream;

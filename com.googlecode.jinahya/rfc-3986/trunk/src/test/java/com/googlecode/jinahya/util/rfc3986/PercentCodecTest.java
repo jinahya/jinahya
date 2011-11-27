@@ -15,10 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.rfc3986;
+package com.googlecode.jinahya.util.rfc3986;
 
 
 import java.io.IOException;
+
 import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
