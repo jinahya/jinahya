@@ -1,0 +1,26 @@
+-classpath
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-accessible-1.0-alpha-2/target/classes;C:/Users/onacit/.m2/repository/com/googlecode/jinahya/jinahya-accessible/1.0-alpha-1/jinahya-accessible-1.0-alpha-1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-accessible-1.0-alpha-2/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-accessible-1.0-alpha-2/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jdbc-accessible 1.0-alpha-2 API'
+-link
+'http://www.xmlpull.org/v1/doc/api'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' 'E:/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/jdbc-accessible-1.0-alpha-2/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'jdbc-accessible 1.0-alpha-2 API'
