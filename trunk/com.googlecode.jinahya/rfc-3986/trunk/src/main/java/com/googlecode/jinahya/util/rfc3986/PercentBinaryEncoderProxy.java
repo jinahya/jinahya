@@ -15,10 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.rfc3986;
+package com.googlecode.jinahya.util.rfc3986;
 
 
 import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -45,12 +46,13 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
 
 
     /** BinaryEncoder Class. */
-    private static final Class CLAZZ;
+    private static final Class BINARY_ENCODER_CLAZZ;
 
 
     static {
         try {
-            CLAZZ = Class.forName("org.apache.commons.codec.BinaryEncoder");
+            BINARY_ENCODER_CLAZZ = Class.forName(
+                "org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
@@ -58,12 +60,12 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
 
 
     /** EncoderException Constructor. */
-    private static final Constructor CONSTRUCTOR;
+    private static final Constructor ENCODER_EXCEPTION_CONSTRUCTOR;
 
 
     static {
         try {
-            CONSTRUCTOR = Class.forName(
+            ENCODER_EXCEPTION_CONSTRUCTOR = Class.forName(
                 "org.apache.commons.codec.EncoderException").getConstructor(
                 new Class[]{Throwable.class});
         } catch (ClassNotFoundException cnfe) {
@@ -81,7 +83,8 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
      */
     public static Object newInstance() {
         return Proxy.newProxyInstance(
-            CLAZZ.getClassLoader(), new Class[]{CLAZZ},
+            BINARY_ENCODER_CLAZZ.getClassLoader(),
+            new Class[]{BINARY_ENCODER_CLAZZ},
             new PercentBinaryEncoderProxy());
     }
 
@@ -106,8 +109,11 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
         try {
             return PercentEncoder.encode((byte[]) args[0]);
         } catch (IOException ioe) {
-            throw (Throwable) CONSTRUCTOR.newInstance(new Object[]{ioe});
+            throw (Throwable) ENCODER_EXCEPTION_CONSTRUCTOR.newInstance(
+                new Object[]{ioe});
         }
     }
+
+
 }
 
