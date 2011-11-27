@@ -12,20 +12,22 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 == Exampe ==
 {{{
 class Sample {
-    public String name; // US-ASCII; null if hidden
-    public int age; // 8-bit unsigned integer; maximum 255
-    public boolean married;
-    public Int balance; // 29-bit unsigned integer. null if hidden
+    public String id;       // identifier; US-ASCII
+    public String name;     // name; UTF-8 String
+    public int age;         // age; 7-bit unsigned integer; maximum 127
+    public boolean married; // married or not
+    public Integer balance; // 29-bit unsigned integer. null if hidden
 }
 
 
 ByteArrayOutputStream baos = new ByteArrayOutputStream();
 BitOutput bo= new BitOutput(baos);
 
-bo.writeASCII(sample.name);             // (1 + 31 + N) bits
-bo.writeUnsignedInt(8, sample.age);     // 8 bits
-bo.writeBoolean(sample.married);        // 1 bits
-bo.writeINTEGER(29, sample.balance);    // (1 + 29) bits
+bo.writeASCII(sample.id);             // 1 + 31 + 7N
+bo.writeSTRING(sample.name, "UTF-8"); // 1 + 31 + 8N
+bo.writeUnsignedInt(7, sample.age);   // 7
+bo.writeBoolean(sample.married);      // 1
+bo.writeINTEGER(29, sample.balance);  // 1 + 29
 
 output.align(1); // align to octet
 
@@ -33,8 +35,9 @@ output.align(1); // align to octet
 ByteArrayInputStream bais = new ByteArrayOutputStream(baos.toByteArray());
 BitInput bi = new BitInput(bais);
 
-String name = bi.readASCII();
-String age = bi.readUnsignedInt(8);
+String id = bi.readASCII();
+String name = bi.readSTRING("UTF-8");
+String age = bi.readUnsignedInt(7);
 String married = bi.readBoolean();
 String balance = bi.readINTEGER(29);
 
