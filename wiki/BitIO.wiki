@@ -1,5 +1,5 @@
 #summary Java Bit Level I/O.
-#labels Featured,Phase-Implementation
+#labels Featured,Phase-Implementation,Bit-LevelIO
 
 = Introduction =
 
