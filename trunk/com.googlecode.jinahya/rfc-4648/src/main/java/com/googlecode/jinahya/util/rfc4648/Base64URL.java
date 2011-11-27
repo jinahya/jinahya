@@ -29,7 +29,7 @@ public class Base64URL extends Base {
 
 
     /**
-     * base64url alphabet.
+     * alphabet for 'base64url'.
      */
     private static final byte[] ALPHABET = new byte[]{
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
