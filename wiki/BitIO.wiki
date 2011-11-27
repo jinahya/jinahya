@@ -29,7 +29,8 @@ You can read/write variable length of bits from/to !InputStream and !OutputStrea
 
 
 = Apidocs =
-  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-11-SNAPSHOT/apidocs/index.html 1.0-alpha-11]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-11-SNAPSHOT/apidocs/index.html 1.0-alpha-11-SNAPSHOT]
+  * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-10/apidocs/index.html 1.0-alpha-10]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-6/apidocs/index.html 1.0-alpha-6]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-5/apidocs/index.html 1.0-alpha-5]
   * [http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/bit-io/1.0-alpha-5-SNAPSHOT/apidocs/index.html 1.0-alpha-5-SNAPSHOT]
