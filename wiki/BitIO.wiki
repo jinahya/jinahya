@@ -48,7 +48,7 @@ bi.align(1); // align to octet
 }}}
 
 == Values ==
-|| *type(readXXX/writeXXX)* || *bit range* || *notes* ||
+|| *type* || *bit range* || *notes* ||
 || Boolean || 1 || 1 for true; 0 for false ||
 || BOOLEAN || 1 + Boolean || nullable Boolean ||
 || unsignedInt || 1 ~ 31 || unsigned int ||
