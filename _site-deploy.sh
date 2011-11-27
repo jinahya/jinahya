@@ -3,7 +3,7 @@ wd=`pwd`
 for i in `find . -name pom.xml -type f`
 do
     cd -P ${i%/*}
-    mvn site-deploy
+    mvn clean site-deploy clean
     cd $wd
 done
 exit 0
