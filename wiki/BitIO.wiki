@@ -59,10 +59,11 @@ bi.align(1); // align to octet
 || unsignedLONG || 1 + unsignedLong || nullable unsigned Long ||
 || Long || 2 ~ 64 || signed long ||
 || LONG || 1 + Long || nullable signed Long ||
-|| Bytes || 31 + 8N || N: number of bytes ||
+|| Bytes || 31 + 8N || non-nullable byte array; N: number of bytes ||
 || BYTES || 1 + Bytes || nullable byte array ||
-|| ASCII || 1 + 31 + 7N || N: number of characters ||
+|| String || Bytes || non-nullable String ||
 || STRING || 1 + Bytes || nullable String ||
+|| ASCII || 1 + 31 + 7N || N: number of characters ||
 || UTF (@deprecated) || 16 + 8N || !DataInput#readUTF / !DataOutput#writeUTF||
 
 
