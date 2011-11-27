@@ -34,6 +34,27 @@ public class StringTest extends BitIOTest {
 
 
     @Test(invocationCount = INVOCATION_COUNT)
+    public void testString() throws IOException {
+
+        final String expected = newString(false);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(baos);
+        output.writeString(expected, "UTF-8");
+        output.align(1);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(bais);
+        final String actual = input.readString("UTF-8");
+        input.align(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = INVOCATION_COUNT)
     public void testSTRING() throws IOException {
 
         final String expected = newString(true);

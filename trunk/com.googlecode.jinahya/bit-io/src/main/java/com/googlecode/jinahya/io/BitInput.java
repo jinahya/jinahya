@@ -720,6 +720,19 @@ public class BitInput {
 
 
     /**
+     * Reads a non-null String.
+     *
+     * @param charsetName charset name
+     * @return the String read.
+     * @throws IOException if an I/O error occurs.
+     */
+    public String readString(final String charsetName) throws IOException {
+
+        return new String(readBytes(), charsetName);
+    }
+
+
+    /**
      * Reads a nullable String. Identical to <code>readSTRING(null)</code>.
      *
      * @param charsetName the character set name for constructing a String with
@@ -759,7 +772,7 @@ public class BitInput {
             return defaultValue;
         }
 
-        return new String(readBytes(), charsetName);
+        return readString(charsetName);
     }
 
 

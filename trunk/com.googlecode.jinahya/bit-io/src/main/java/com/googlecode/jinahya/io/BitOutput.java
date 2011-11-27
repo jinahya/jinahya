@@ -617,6 +617,25 @@ public class BitOutput {
 
 
     /**
+     * Writes a non-null String.
+     *
+     * @param value value to be written
+     * @param charsetName charset name.
+     * @throws IOException if an I/O error occurs.
+     * @see #writeBytes(byte[])
+     */
+    public void writeString(final String value, final String charsetName)
+        throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        writeBytes(value.getBytes(charsetName));
+    }
+
+
+    /**
      * Writes a nullable String. First, a 1-bit boolean is written for a null
      * flag. And, if <code>value</code> is not null, the value of
      * <code>getBytes(charsetName)</code> is written via
@@ -631,7 +650,7 @@ public class BitOutput {
         throws IOException {
 
         if (isNotNull(value)) {
-            writeBytes(value.getBytes(charsetName));
+            writeString(value, charsetName);
         }
     }
 
