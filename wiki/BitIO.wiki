@@ -10,14 +10,19 @@ A simple wrapper for bit level I/O with In|!OutputStream.
 You can read/write variable length of bits from/to !InputStream and !OutputStream.
 
 == Values ==
-|| *type* || *bit range* || *notes* ||
-|| boolean || 1 || 1 for true; 0 for false ||
+|| *type(get/set)* || *bit range* || *notes* ||
+|| Boolean || 1 || 1 for true; 0 for false ||
+|| BOOLEAN || 1 + 1 || nullable Boolean ||
 || unsigned int || 1 ~ 31 || ||
-|| int || 2 ~ 32 || ||
-|| unsigned long || 1 ~ 63 || ||
-|| long || 2 ~ 64 || ||
-|| bytes || 31 + 8N || N: number of bytes ||
-|| BYTES || 1 + 31 + 8N || N: number of bytes ||
+|| unsignedINTEGER || 1 + (1 ~ 31) || nullable unsigned Integer||
+|| Int || 2 ~ 32 || signed int ||
+|| INTEGER || 1 + (2 ~ 32) || nullable signed Integer ||
+|| unsignedLong || 1 ~ 63 || unsigned long ||
+|| unsignedLONG || 1 + (1 ~ 63) || nullable unsigled Long ||
+|| Long || 2 ~ 64 || signed long ||
+|| LONG || 1 + (2 ~ 64) || nullable signed Long ||
+|| bytes (byte[]) || 31 + 8N || N: number of bytes ||
+|| BYTES (byte[]) || 1 + 31 + 8N || N: number of bytes ||
 || ASCII || 1 + 31 + 7N || N: number of characters ||
 || STRING || 1 + 31 + 8N || N: number of bytes ||
 || UTF || 16 + 8N || !DataInput#readUTF<br/>!DataOutput#writeUTF||
