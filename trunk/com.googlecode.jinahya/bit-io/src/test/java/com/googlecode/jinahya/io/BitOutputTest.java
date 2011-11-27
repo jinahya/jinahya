@@ -23,8 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import java.util.Random;
-
 import org.apache.commons.lang.RandomStringUtils;
 
 import org.testng.Assert;
