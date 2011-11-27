@@ -55,7 +55,7 @@ public interface DbAccessible<I> extends Accessible {
      *
      * @return id type
      */
-    public int getIdType();
+    int getIdType();
 
 
     /**
