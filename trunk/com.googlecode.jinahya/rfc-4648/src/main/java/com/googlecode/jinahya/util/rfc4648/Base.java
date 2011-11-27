@@ -230,17 +230,18 @@ public abstract class Base {
 
             for (int i = 0; i < charsPerWord; i++) {
 
-                int available = OCTET_SIZE - ((bitsPerChar * i) % OCTET_SIZE);
+                final int available =
+                    OCTET_SIZE - ((bitsPerChar * i) % OCTET_SIZE);
 
                 if (available >= bitsPerChar) {
                     try {
-                        int unsigned = input.readUnsignedInt(bitsPerChar);
+                        final int unsigned = input.readUnsignedInt(bitsPerChar);
                         output.write(encode[unsigned]);
                     } catch (EOFException eofe) { // i == 0
                         break outer;
                     }
                 } else { // need next octet
-                    int required = bitsPerChar - available;
+                    final int required = bitsPerChar - available;
                     int unsigned =
                         (input.readUnsignedInt(available) << required);
                     try {
@@ -331,7 +332,7 @@ public abstract class Base {
      *
      * @param input character input
      * @param output binary output
-     * @throws IOException if I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     public final void decode(final Reader input, final OutputStream output)
         throws IOException {
@@ -354,7 +355,7 @@ public abstract class Base {
      *
      * @param input character input
      * @param output binary output
-     * @throws IOException if I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     private void decode(final Reader input, final BitOutput output)
         throws IOException {
@@ -362,11 +363,10 @@ public abstract class Base {
         outer:
         while (true) {
 
-            int c;
 
             for (int i = 0; i < charsPerWord; i++) {
 
-                c = input.read();
+                int c = input.read();
 
                 if (c == -1) { // end of stream
 
@@ -412,7 +412,7 @@ public abstract class Base {
 
                 } else {
 
-                    int value = decode[c - SMALLEST_VISIBLE_ASCII];
+                    final int value = decode[c - SMALLEST_VISIBLE_ASCII];
                     if (value == -1) {
                         throw new IOException("bad character: " + (char) c);
                     }
@@ -423,11 +423,11 @@ public abstract class Base {
     }
 
 
-    /** Characters for encoding. */
+    /** characters for encoding. */
     private final byte[] encode;
 
 
-    /** Characters for decoding. */
+    /** characters for decoding. */
     private final byte[] decode;
 
 
@@ -445,5 +445,7 @@ public abstract class Base {
 
     /** number of characters per word. */
     private final int charsPerWord;
+
+
 }
 

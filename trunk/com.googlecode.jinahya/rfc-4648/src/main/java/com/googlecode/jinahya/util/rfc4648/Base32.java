@@ -28,7 +28,7 @@ public class Base32 extends Base {
 
 
     /**
-     * base32 alphabet.
+     * the alphabet for 'base32'.
      */
     private static final byte[] ALPHABET = new byte[]{
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',

@@ -28,7 +28,7 @@ public class Base64 extends Base {
 
 
     /**
-     * base64 alphabet.
+     * the alphabet for 'base64'.
      */
     private static final byte[] ALPHABET = new byte[]{
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
