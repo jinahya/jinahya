@@ -56,7 +56,8 @@ public abstract class AbstractXmlWrapper<T extends XmlTag>
 
         super(tagType);
 
-        support = new XmlWrapperSupport<T>(namespaceURI, localName, this);
+        support = new XmlWrapperSupport<T>(
+            this, tagType, namespaceURI, localName);
     }
 
 
