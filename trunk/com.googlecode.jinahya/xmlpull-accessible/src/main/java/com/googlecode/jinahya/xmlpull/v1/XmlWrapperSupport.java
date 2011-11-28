@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import java.util.Collection;
 
+import java.util.Iterator;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -43,18 +44,33 @@ public class XmlWrapperSupport<T extends XmlTag>
     /**
      * Creates a new instance.
      *
+     * @param supported the object to be supported
+     * @param tagType tag type
      * @param namespaceURI XML namespace name
      * @param localName XML local name
-     * @param supported the object to be supported
      */
-    public XmlWrapperSupport(final String namespaceURI, final String localName,
-                             final XmlCollectable<T> supported) {
+    public XmlWrapperSupport(final Object supported, final Class<T> tagType,
+                             final String namespaceURI,
+                             final String localName) {
 
-        super(supported.getAccessibleType());
+        super(tagType);
+
+        if (supported == null) {
+            throw new NullPointerException("null supported");
+        }
+
+        if (localName == null) {
+            throw new NullPointerException("null localName");
+        }
+        if (localName.trim().length() == 0) {
+            throw new IllegalArgumentException("empty localName");
+        }
+
+        this.supported = supported;
 
         this.namespaceURI = namespaceURI;
         this.localName = localName;
-        this.supported = supported;
+
     }
 
 
@@ -64,8 +80,8 @@ public class XmlWrapperSupport<T extends XmlTag>
 
         parser.require(XmlPullParser.START_TAG, namespaceURI, localName);
 
-        final Class<T> tagType = supported.getAccessibleType();
-        final Collection<T> tags = supported.getAccessibles();
+        final Class<T> tagType = getAccessibleType();
+        final Collection<T> tags = getAccessibles();
 
         tags.clear();
 
@@ -92,42 +108,49 @@ public class XmlWrapperSupport<T extends XmlTag>
 
         serializer.startTag(namespaceURI, localName);
 
-        for (T tag : supported.getAccessibles()) {
-            tag.serialize(serializer);
+        final Collection<T> tags = getAccessibles();
+
+        for (final Iterator<T> i = tags.iterator(); i.hasNext();) {
+            i.next().serialize(serializer);
         }
 
         serializer.endTag(namespaceURI, localName);
     }
 
 
-    @Override
-    public String getLocalName() {
-        return localName;
+    public final Object getSupported() {
+        return supported;
     }
 
 
     @Override
-    public String getNamespaceURI() {
+    public final String getNamespaceURI() {
         return namespaceURI;
     }
 
 
-    /**
-     * XML namespace name.
-     */
-    protected final String namespaceURI;
-
-
-    /**
-     * XML local name.
-     */
-    protected final String localName;
+    @Override
+    public final String getLocalName() {
+        return localName;
+    }
 
 
     /**
      * supported.
      */
-    protected final XmlCollectable<T> supported;
+    private final Object supported;
+
+
+    /**
+     * XML namespace name.
+     */
+    private final String namespaceURI;
+
+
+    /**
+     * XML local name.
+     */
+    private final String localName;
 
 
 }
