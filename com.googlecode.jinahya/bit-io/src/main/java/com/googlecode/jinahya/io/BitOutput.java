@@ -696,30 +696,55 @@ public class BitOutput {
     }
 
 
+    public void reset() {
+        set.clear();
+        index = 0x00;
+        count = 0x00;
+    }
+
+
+    /**
+     * Returns the available bits for writing in current octet.
+     *
+     * @return available bits for writing in current octet.
+     */
+    public int available() {
+        return 0x08 - index;
+    }
+
+
     /** output target .*/
-    private OutputStream out;
+    private final OutputStream out;
 
 
     /** bit set. */
-    private BitSet set = new BitSet(8);
+    private final BitSet set = new BitSet(8);
 
 
     /** bit index to write. */
-    private int index = 0;
+    private int index = 0x00;
 
 
     /** so far written octet count. */
-    private int count = 0;
+    private int count = 0x00;
 
 
-    /** test. */
+    /**
+     * Returns the value of count.
+     *
+     * @return count
+     */
     int getCount() {
         return count;
     }
 
 
-    /** test. */
-    void setCount(int count) {
+    /**
+     * Sets count.
+     *
+     * @param count count
+     */
+    void setCount(final int count) {
         this.count = count;
     }
 
