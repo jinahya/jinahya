@@ -26,6 +26,7 @@ import java.io.IOException;
 
 
 /**
+ * Interface for objects can accessible bits.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
