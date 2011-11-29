@@ -27,6 +27,7 @@ import java.util.Collection;
 
 
 /**
+ * Abstract BitCollectable.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <A> <code>BitAccessible</code> type parameter
@@ -54,6 +55,13 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
     }
 
 
+    /**
+     * Reads accessibles from given <code>input</code>. First, a 31-bit unsigned
+     * integer is read for accessible count. And reads all accessibles.
+     *
+     * @param input input
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void read(final BitInput input) throws IOException {
 
@@ -79,6 +87,13 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
     }
 
 
+    /**
+     * Writes accessibles to given <code>output</code>. First, a 31-bit unsigned
+     * integer is written for accessible count. And writes all accessibles.
+     *
+     * @param output output
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void write(final BitOutput output) throws IOException {
 

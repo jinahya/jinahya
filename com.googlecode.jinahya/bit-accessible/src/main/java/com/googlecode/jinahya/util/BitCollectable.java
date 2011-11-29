@@ -19,9 +19,10 @@ package com.googlecode.jinahya.util;
 
 
 /**
+ * Interface for objects can contain BitAccessibles.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> <code>BitAccessible</code> type parameter
+ * @param <A> accessible type parameter
  */
 public interface BitCollectable<A extends BitAccessible>
     extends Collectable<A>, BitAccessible {
