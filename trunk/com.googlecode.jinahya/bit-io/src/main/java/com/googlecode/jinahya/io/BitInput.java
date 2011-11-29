@@ -817,12 +817,29 @@ public class BitInput {
     }
 
 
+    public void reset() {
+        set.clear();
+        index = 0x08;
+        count = 0x00;
+    }
+
+
+    /**
+     * Returns the available bits for reading in current octet.
+     *
+     * @return available bits for reading in current octet.
+     */
+    public int available() {
+        return 0x08 - index;
+    }
+
+
     /** input source. */
-    private InputStream in;
+    private final InputStream in;
 
 
     /** bit set. */
-    private BitSet set = new BitSet(0x08);
+    private final BitSet set = new BitSet(0x08);
 
 
     /** bit index to read. */
@@ -833,14 +850,22 @@ public class BitInput {
     private int count = 0x00;
 
 
-    /** test. */
+    /**
+     * Returns count.
+     *
+     * @return count
+     */
     int getCount() {
         return count;
     }
 
 
-    /** test. */
-    void setCount(int count) {
+    /**
+     * Sets count.
+     *
+     * @param count count
+     */
+    void setCount(final int count) {
         this.count = count;
     }
 
