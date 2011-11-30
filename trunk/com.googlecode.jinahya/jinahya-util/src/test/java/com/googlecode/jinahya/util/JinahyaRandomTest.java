@@ -1,12 +1,3 @@
-
-
-package com.googlecode.jinahya.util;
-
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /*
  * Copyright 2011 Jin Kwon <jinahya at gmail.com>.
  *
@@ -22,6 +13,15 @@ import org.testng.annotations.Test;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+package com.googlecode.jinahya.util;
+
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
