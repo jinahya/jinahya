@@ -18,8 +18,13 @@
 package com.googlecode.jinahya.jdbc.realm.persistence;
 
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -27,7 +32,23 @@ import javax.persistence.Embeddable;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Embeddable
-public class RoleId {
+@XmlType(propOrder = {"serviceName", "roleName"})
+public class RoleId implements Serializable {
+
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+
+    public void setServiceName(final String serviceName) {
+
+        if (serviceName == null) {
+            throw new NullPointerException("null serviceName");
+        }
+
+        this.serviceName = serviceName;
+    }
 
 
     public String getRoleName() {
@@ -36,20 +57,61 @@ public class RoleId {
 
 
     public void setRoleName(final String roleName) {
+
+        if (roleName == null) {
+            throw new NullPointerException("null roleName");
+        }
+
         this.roleName = roleName;
     }
 
 
-    public Service getService() {
-        return service;
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (!(obj instanceof RoleId)) {
+            return false;
+        }
+
+        final RoleId casted = (RoleId) obj;
+
+        if (!(serviceName == casted.serviceName
+              || (serviceName != null
+                  && serviceName.equals(casted.serviceName)))) {
+            return false;
+        }
+
+        if (!(roleName == casted.roleName
+              || (roleName != null && roleName.equals(casted.roleName)))) {
+            return false;
+        }
+
+        return true;
     }
 
 
-    public void setService(Service service) {
-        this.service = service;
+    @Override
+    public int hashCode() {
+
+        int result = 17;
+
+        result = 37 * result + serviceName == null ? 0 : serviceName.hashCode();
+
+        result = 37 * result + roleName == null ? 0 : roleName.hashCode();
+
+        return result;
     }
 
-    private Service service;
+
+    @Column(name = "SERVICE_NAME", nullable = false)
+    @XmlElement(required = true, nillable = false)
+    private String serviceName;
+
+
+    @Column(name = "ROLE_NAME", nullable = false)
+    @XmlElement(required = true, nillable = false)
     private String roleName;
+
+
 }
 

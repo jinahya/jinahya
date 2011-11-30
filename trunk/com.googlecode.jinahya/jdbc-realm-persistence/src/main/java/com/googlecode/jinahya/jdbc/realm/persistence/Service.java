@@ -20,13 +20,16 @@ package com.googlecode.jinahya.jdbc.realm.persistence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.persistence.Table;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
@@ -35,10 +38,17 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"serviceName", "description"})
+@Entity
+@Table(name = Service.TABLE_NAME)
+@XmlType(propOrder = {"serviceName", "description", "roles"})
 public class Service {
 
+
+    public static final String TABLE_NAME = "SERVICE";
+
+
     public static final String SERVICE_NAME_COLUMN_NAME = "SERVICE_NAME";
+
 
     public String setServiceName() {
         return serviceName;
@@ -52,16 +62,6 @@ public class Service {
         }
 
         this.serviceName = serviceName;
-    }
-
-
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
     }
 
 
@@ -93,19 +93,15 @@ public class Service {
     private String serviceName;
 
 
-    @Basic(optional = false)
-    @Column(name = "ENABLED", nullable = false, unique = false)
-    @XmlAttribute(required = true)
-    private boolean enabled;
-
-
     @Basic(optional = true)
     @Column(name = "DESCRIPTION", nullable = true, unique = false)
     @XmlElement(required = true, nillable = true)
     private String description;
 
 
-    @OneToMany(mappedBy = "SERVICE_NAME")
+    @OneToMany(mappedBy = "service")
+    @XmlElement(name = "role")
+    @XmlElementWrapper(required = true)
     private Collection<Role> roles;
 
 

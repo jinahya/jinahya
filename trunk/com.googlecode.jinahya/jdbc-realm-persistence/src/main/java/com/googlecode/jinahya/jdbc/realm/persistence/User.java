@@ -23,12 +23,21 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
@@ -37,8 +46,16 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"userName", "password"})
+@Entity
+@Table(name = User.TABLE_NAME)
+@XmlType(propOrder = {"userName", "password", "roles"})
 public class User {
+
+
+    public static final String TABLE_NAME = "USER";
+
+
+    public static final String USER_NAME_COLUMN_NAME = "USER_NAME";
 
 
     private static final String PASSWORD_DIGEST_ALGORITHM = "SHA-512";
@@ -131,26 +148,42 @@ public class User {
 
         final StringBuilder builder = new StringBuilder(digested.length * 2);
         for (byte b : digested) {
-            if (b < 0x10) {
+            final int i = b & 0xFF;
+            if (i < 0x10) {
                 builder.append('0');
             }
-            builder.append(Integer.toHexString(b & 0xFF));
+            builder.append(Integer.toHexString(i));
         }
 
         setPassword(builder.toString());
     }
 
 
+    /**
+     * Returns a collection of Roles mapped to this User.
+     *
+     * @return roles.
+     */
+    public Collection<Role> getRoles() {
+
+        if (roles == null) {
+            roles = new ArrayList<Role>();
+        }
+
+        return roles;
+    }
+
+
     @Id
     @Basic(optional = false)
-    @Column(name = "USER_NAME", nullable = false, unique = true)
+    @Column(name = USER_NAME_COLUMN_NAME, nullable = false, unique = true)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String userName;
 
 
     @Basic(optional = false)
-    @Column(name = "ENABLED", nullable = false, unique = false)
+    @Column(name = "IS_ENABLED", nullable = false, unique = false)
     @XmlAttribute(required = true)
     private boolean enabled;
 
@@ -160,6 +193,18 @@ public class User {
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String password;
+
+
+    @JoinTable(name = User.TABLE_NAME + "_" + Role.TABLE_NAME,
+               joinColumns = {
+        @JoinColumn(name = User.USER_NAME_COLUMN_NAME)},
+               inverseJoinColumns = {
+        @JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME),
+        @JoinColumn(name = Role.ROLE_NAME_COLUMN_NAME)})
+    @ManyToMany
+    @XmlElement(name = "role")
+    @XmlElementWrapper(required = true)
+    private Collection<Role> roles;
 
 
 }

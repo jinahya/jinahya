@@ -18,15 +18,21 @@
 package com.googlecode.jinahya.jdbc.realm.persistence;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Id;
-
-import javax.persistence.JoinColumn;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.persistence.MapsId;
+
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,8 +40,31 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"userName", "password"})
+@Entity
+@Table(name = Role.TABLE_NAME)
+@XmlType(propOrder = {"id", "description"})
 public class Role {
+
+
+    public static final String TABLE_NAME = "ROLE";
+
+
+    public static final String ROLE_NAME_COLUMN_NAME = "ROLE_NAME";
+
+
+    public RoleId getId() {
+        return id;
+    }
+
+
+    public void setId(final RoleId id) {
+
+        if (id == null) {
+            throw new NullPointerException("null id");
+        }
+
+        this.id = id;
+    }
 
 
     public Service getService() {
@@ -53,37 +82,6 @@ public class Role {
     }
 
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-
-    public void setRoleName(String roleName) {
-
-        if (roleName == null) {
-            throw new NullPointerException("null roleName");
-        }
-
-        roleName = roleName.trim();
-
-        if (roleName.isEmpty()) {
-            throw new IllegalArgumentException("empty roleName");
-        }
-
-        this.roleName = roleName;
-    }
-
-
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-    }
-
-
     public String getDescription() {
         return description;
     }
@@ -95,30 +93,38 @@ public class Role {
     }
 
 
-    @JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME, nullable=false)
+    public Collection<User> getUsers() {
+
+        if (users == null) {
+            users = new ArrayList<User>();
+        }
+
+        return users;
+    }
+
+
+    @EmbeddedId
+    @XmlElement(required = true, nillable = false)
+    private RoleId id;
+
+
+    //@JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME, nullable = false)
     @ManyToOne(optional = false)
+    @MapsId("serviceName")
+    @XmlTransient
     private Service service;
 
 
-    @Id
-    @Basic(optional = false)
-    @Column(name = "ROLE_NAME", nullable = false, unique = true)
-    @XmlElement(required = true, nillable = false)
-    @XmlSchemaType(name = "token")
-    private String roleName;
-
-
-    @Basic(optional = false)
-    @Column(name = "ENABLED", nullable = false, unique = false)
-    @XmlAttribute(required = true)
-    private boolean enabled;
-
-
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "DESCRIPTION", nullable = true, unique = false)
     @XmlElement(required = true, nillable = true)
     @XmlSchemaType(name = "token")
     private String description;
+
+
+    @ManyToMany(mappedBy = "roles")
+    @XmlTransient
+    private Collection<User> users;
 
 
 }
