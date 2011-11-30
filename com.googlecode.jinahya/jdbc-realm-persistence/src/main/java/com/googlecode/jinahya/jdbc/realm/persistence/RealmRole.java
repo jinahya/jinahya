@@ -41,23 +41,23 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@Table(name = Role.TABLE_NAME)
+@Table(name = RealmRole.TABLE_NAME)
 @XmlType(propOrder = {"id", "description"})
-public class Role {
+public class RealmRole {
 
 
-    public static final String TABLE_NAME = "ROLE";
+    public static final String TABLE_NAME = "REALM_ROLE";
 
 
     public static final String ROLE_NAME_COLUMN_NAME = "ROLE_NAME";
 
 
-    public RoleId getId() {
+    public RealmRoleId getId() {
         return id;
     }
 
 
-    public void setId(final RoleId id) {
+    public void setId(final RealmRoleId id) {
 
         if (id == null) {
             throw new NullPointerException("null id");
@@ -67,12 +67,12 @@ public class Role {
     }
 
 
-    public Service getService() {
+    public RealmService getService() {
         return service;
     }
 
 
-    public void setService(final Service service) {
+    public void setService(final RealmService service) {
 
         if (service == null) {
             throw new NullPointerException("null service");
@@ -93,10 +93,10 @@ public class Role {
     }
 
 
-    public Collection<User> getUsers() {
+    public Collection<RealmUser> getUsers() {
 
         if (users == null) {
-            users = new ArrayList<User>();
+            users = new ArrayList<RealmUser>();
         }
 
         return users;
@@ -105,14 +105,14 @@ public class Role {
 
     @EmbeddedId
     @XmlElement(required = true, nillable = false)
-    private RoleId id;
+    private RealmRoleId id;
 
 
     //@JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME, nullable = false)
     @ManyToOne(optional = false)
     @MapsId("serviceName")
     @XmlTransient
-    private Service service;
+    private RealmService service;
 
 
     @Basic(optional = true)
@@ -124,7 +124,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @XmlTransient
-    private Collection<User> users;
+    private Collection<RealmUser> users;
 
 
 }
