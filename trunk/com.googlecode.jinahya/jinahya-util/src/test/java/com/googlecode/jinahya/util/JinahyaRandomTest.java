@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.util;
 
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -28,8 +29,34 @@ import org.testng.annotations.Test;
 public class JinahyaRandomTest {
 
 
-    @Test
-    public void test() {
+    @Test(invocationCount = 128)
+    public void testUnsignedInt() {
+
+        final JinahyaRandom random = new JinahyaRandom();
+
+        try {
+            random.nextUnsignedInt(-1, true);
+            Assert.fail("passed: nextUnsignedInt(-1, X)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedInt(0, true);
+            Assert.fail("passed: nextUnsignedInt(0, X)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedInt(32, true);
+            Assert.fail("passed: nextUnsignedInt(32, X)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedInt(33, true);
+            Assert.fail("passed: nextUnsignedInt(33, X)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        Assert.assertNotNull(random.nextUnsignedInt(
+            random.nextInt(31) + 1, false));
     }
 
 
