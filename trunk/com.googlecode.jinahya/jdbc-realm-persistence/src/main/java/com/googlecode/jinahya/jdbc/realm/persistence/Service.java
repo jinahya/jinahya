@@ -18,10 +18,13 @@
 package com.googlecode.jinahya.jdbc.realm.persistence;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -35,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {"serviceName", "description"})
 public class Service {
 
+    public static final String SERVICE_NAME_COLUMN_NAME = "SERVICE_NAME";
 
     public String setServiceName() {
         return serviceName;
@@ -71,9 +75,19 @@ public class Service {
     }
 
 
+    public Collection<Role> getRoles() {
+
+        if (roles == null) {
+            roles = new ArrayList<Role>();
+        }
+
+        return roles;
+    }
+
+
     @Id
     @Basic(optional = false)
-    @Column(name = "SERVICE_NAME", nullable = false, unique = true)
+    @Column(name = SERVICE_NAME_COLUMN_NAME, nullable = false, unique = true)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String serviceName;
@@ -89,6 +103,10 @@ public class Service {
     @Column(name = "DESCRIPTION", nullable = true, unique = false)
     @XmlElement(required = true, nillable = true)
     private String description;
+
+
+    @OneToMany(mappedBy = "SERVICE_NAME")
+    private Collection<Role> roles;
 
 
 }

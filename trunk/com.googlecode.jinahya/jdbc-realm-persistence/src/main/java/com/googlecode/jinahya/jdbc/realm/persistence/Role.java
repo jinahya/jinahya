@@ -22,6 +22,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -34,6 +36,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"userName", "password"})
 public class Role {
+
+
+    public Service getService() {
+        return service;
+    }
+
+
+    public void setService(final Service service) {
+
+        if (service == null) {
+            throw new NullPointerException("null service");
+        }
+
+        this.service = service;
+    }
 
 
     public String getRoleName() {
@@ -76,6 +93,11 @@ public class Role {
 
         this.description = description;
     }
+
+
+    @JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME, nullable=false)
+    @ManyToOne(optional = false)
+    private Service service;
 
 
     @Id
