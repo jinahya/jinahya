@@ -93,6 +93,9 @@ public final class Constants {
                                        final String suggestedFileName)
                 throws IOException {
 
+                System.out.println("namespaceUri: " + namespaceUri);
+                System.out.println("suggestedFileName: " + suggestedFileName);
+                
                 return output;
             }
 

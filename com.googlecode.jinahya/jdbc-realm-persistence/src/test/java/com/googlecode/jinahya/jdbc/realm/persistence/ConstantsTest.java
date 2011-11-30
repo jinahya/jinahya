@@ -42,7 +42,7 @@ public class ConstantsTest {
     @Test
     public static void testGenerateSchema() throws IOException {
 
-        Constants.generateSchema(System.out, "System.out");
+        Constants.generateSchema(System.out, "jdbc-realm-persistence.xsd");
     }
 
 
