@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2011-11-30T18:59:17.633">
+<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-realm-persistence/src/main/java/com/googlecode/jinahya/jdbc/realm/persistence/Constants.java">
+<violation beginline="62" endline="78" begincolumn="25" endcolumn="5" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="Constants" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+Unnecessary final modifier in final class
+</violation>
+<violation beginline="81" endline="106" begincolumn="25" endcolumn="5" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="Constants" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+Unnecessary final modifier in final class
+</violation>
+</file>
+<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-realm-persistence/src/main/java/com/googlecode/jinahya/jdbc/realm/persistence/package-info.java">
+<violation beginline="18" endline="18" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
+</violation>
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
+</violation>
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="39" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNs'
+</violation>
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
+</violation>
+<violation beginline="22" endline="22" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
+</violation>
+</file>
+</pmd>
