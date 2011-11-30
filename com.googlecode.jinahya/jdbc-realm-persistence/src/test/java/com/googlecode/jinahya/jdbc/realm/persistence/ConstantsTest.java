@@ -18,47 +18,32 @@
 package com.googlecode.jinahya.jdbc.realm.persistence;
 
 
+import java.io.IOException;
+
+import javax.xml.bind.JAXBContext;
+
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UserRole {
+public class ConstantsTest {
 
 
-    public User getUser() {
-        return user;
+    @Test
+    public static void testJAXB_CONTEXT() {
+
+        final JAXBContext context = Constants.JAXB_CONTEXT;
     }
 
 
-    public void setUser(final User user) {
+    @Test
+    public static void testGenerateSchema() throws IOException {
 
-        if (user == null) {
-            throw new NullPointerException("null user");
-        }
-
-        this.user = user;
+        Constants.generateSchema(System.out, "System.out");
     }
-
-
-    public Role getRole() {
-        return role;
-    }
-
-
-    public void setRole(final Role role) {
-
-        if (role == null) {
-            throw new NullPointerException("null role");
-        }
-
-        this.role = role;
-    }
-
-
-    private User user;
-
-
-    private Role role;
 
 
 }
