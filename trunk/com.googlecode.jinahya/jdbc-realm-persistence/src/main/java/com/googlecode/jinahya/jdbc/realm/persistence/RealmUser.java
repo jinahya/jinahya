@@ -47,12 +47,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@Table(name = User.TABLE_NAME)
+@Table(name = RealmUser.TABLE_NAME)
 @XmlType(propOrder = {"userName", "password", "roles"})
-public class User {
+public class RealmUser {
 
 
-    public static final String TABLE_NAME = "USER";
+    public static final String TABLE_NAME = "REALM_USER";
 
 
     public static final String USER_NAME_COLUMN_NAME = "USER_NAME";
@@ -164,10 +164,10 @@ public class User {
      *
      * @return roles.
      */
-    public Collection<Role> getRoles() {
+    public Collection<RealmRole> getRoles() {
 
         if (roles == null) {
-            roles = new ArrayList<Role>();
+            roles = new ArrayList<RealmRole>();
         }
 
         return roles;
@@ -195,16 +195,16 @@ public class User {
     private String password;
 
 
-    @JoinTable(name = User.TABLE_NAME + "_" + Role.TABLE_NAME,
+    @JoinTable(name = RealmUser.TABLE_NAME + "_" + RealmRole.TABLE_NAME,
                joinColumns = {
-        @JoinColumn(name = User.USER_NAME_COLUMN_NAME)},
+        @JoinColumn(name = RealmUser.USER_NAME_COLUMN_NAME)},
                inverseJoinColumns = {
-        @JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME),
-        @JoinColumn(name = Role.ROLE_NAME_COLUMN_NAME)})
+        @JoinColumn(name = RealmService.SERVICE_NAME_COLUMN_NAME),
+        @JoinColumn(name = RealmRole.ROLE_NAME_COLUMN_NAME)})
     @ManyToMany
     @XmlElement(name = "role")
     @XmlElementWrapper(required = true)
-    private Collection<Role> roles;
+    private Collection<RealmRole> roles;
 
 
 }

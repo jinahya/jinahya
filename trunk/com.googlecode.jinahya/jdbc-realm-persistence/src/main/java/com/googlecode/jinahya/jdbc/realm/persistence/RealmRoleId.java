@@ -24,6 +24,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Embeddable
 @XmlType(propOrder = {"serviceName", "roleName"})
-public class RoleId implements Serializable {
+public class RealmRoleId implements Serializable {
 
 
     public String getServiceName() {
@@ -69,11 +70,11 @@ public class RoleId implements Serializable {
     @Override
     public boolean equals(final Object obj) {
 
-        if (!(obj instanceof RoleId)) {
+        if (!(obj instanceof RealmRoleId)) {
             return false;
         }
 
-        final RoleId casted = (RoleId) obj;
+        final RealmRoleId casted = (RealmRoleId) obj;
 
         if (!(serviceName == casted.serviceName
               || (serviceName != null
@@ -105,11 +106,13 @@ public class RoleId implements Serializable {
 
     @Column(name = "SERVICE_NAME", nullable = false)
     @XmlElement(required = true, nillable = false)
+    @XmlSchemaType(name = "token")
     private String serviceName;
 
 
     @Column(name = "ROLE_NAME", nullable = false)
     @XmlElement(required = true, nillable = false)
+    @XmlSchemaType(name = "token")
     private String roleName;
 
 

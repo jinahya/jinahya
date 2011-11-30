@@ -39,12 +39,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@Table(name = Service.TABLE_NAME)
+@Table(name = RealmService.TABLE_NAME)
 @XmlType(propOrder = {"serviceName", "description", "roles"})
-public class Service {
+public class RealmService {
 
 
-    public static final String TABLE_NAME = "SERVICE";
+    public static final String TABLE_NAME = "REALM_SERVICE";
 
 
     public static final String SERVICE_NAME_COLUMN_NAME = "SERVICE_NAME";
@@ -75,10 +75,10 @@ public class Service {
     }
 
 
-    public Collection<Role> getRoles() {
+    public Collection<RealmRole> getRoles() {
 
         if (roles == null) {
-            roles = new ArrayList<Role>();
+            roles = new ArrayList<RealmRole>();
         }
 
         return roles;
@@ -102,7 +102,7 @@ public class Service {
     @OneToMany(mappedBy = "service")
     @XmlElement(name = "role")
     @XmlElementWrapper(required = true)
-    private Collection<Role> roles;
+    private Collection<RealmRole> roles;
 
 
 }
