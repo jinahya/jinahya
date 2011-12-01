@@ -136,16 +136,6 @@ public class JinahyaRandom extends Random {
 
 
     /**
-     * Generates an unsigned long.
-     *
-     * @return generated value
-     */
-    public long nextUnsignedLong() {
-        return nextUnsignedLong(Long.SIZE - 1);
-    }
-
-
-    /**
      * Generates an unsigned long in arbitrary bit length.
      *
      * @param maximumBits maximum bits between 1 (inclusive) and

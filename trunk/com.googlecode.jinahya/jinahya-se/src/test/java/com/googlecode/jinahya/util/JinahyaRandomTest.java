@@ -90,8 +90,6 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
         }
 
-        Assert.assertTrue(random.nextUnsignedInt() >= 0);
-
         final int maximumBits = random.nextInt(31) + 1; // 1 - 31
         Assert.assertTrue(random.nextUnsignedInt(maximumBits) >= 0);
     }
@@ -160,8 +158,6 @@ public class JinahyaRandomTest {
             Assert.fail("passed: nextUnsignedInt(65)");
         } catch (IllegalArgumentException iae) {
         }
-
-        Assert.assertTrue(random.nextUnsignedLong() >= 0L);
 
         final int maximumBits = random.nextInt(63) + 1; // 1 - 31
         Assert.assertTrue(random.nextUnsignedLong(maximumBits) >= 0L);
