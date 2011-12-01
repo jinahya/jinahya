@@ -39,6 +39,10 @@ import javax.xml.bind.SchemaOutputResolver;
 public abstract class JAXBSchemaGeneratorServlet extends HttpServlet {
 
 
+    /** GENERATED. */
+    private static final long serialVersionUID = -4515187927939394335L;
+
+
     @Override
     protected void doGet(final HttpServletRequest req,
                          final HttpServletResponse resp)
