@@ -15,6 +15,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>bit-io</artifactId>
+        <version>1.0-alpha-10</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.3.1</version>
@@ -22,6 +27,10 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>com.googlecode.jinahya</groupId>
+      <artifactId>bit-io</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -140,6 +149,10 @@
           <reportPlugins>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-project-info-reports-plugin</artifactId>
             </plugin>
             <plugin>
@@ -151,10 +164,6 @@
                 </links>
               </configuration>
             </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-jxr-plugin</artifactId>
-            </plugin>            
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-checkstyle-plugin</artifactId>
