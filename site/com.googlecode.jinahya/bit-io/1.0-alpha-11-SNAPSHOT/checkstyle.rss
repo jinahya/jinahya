@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 2,
-             Errors: 429,
+      <title>File: 5,
+             Errors: 434,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,6 +29,34 @@
           <tbody>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.util.AbstractBitCollectable.java">com/googlecode/jinahya/util/AbstractBitCollectable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.util.BitAccessible.java">com/googlecode/jinahya/util/BitAccessible.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.io.BitOutput.java">com/googlecode/jinahya/io/BitOutput.java</a>
                 </td>
                 <td>
@@ -39,6 +67,20 @@
                 </td>
                 <td>
                   210
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.util.BitCollectable.java">com/googlecode/jinahya/util/BitCollectable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>
