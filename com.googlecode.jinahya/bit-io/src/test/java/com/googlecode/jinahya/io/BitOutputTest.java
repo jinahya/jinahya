@@ -23,8 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import org.apache.commons.lang.RandomStringUtils;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -225,8 +223,7 @@ public class BitOutputTest extends BitIOTest {
     @Test(invocationCount = INVOCATION_COUNT)
     public void testWriteUTF() throws IOException {
 
-        final String expected =
-            RandomStringUtils.random(RANDOM.nextInt(64) + 64);
+        final String expected = newString(false);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(baos);
