@@ -19,6 +19,7 @@ package com.googlecode.jinahya.jdbc.realm.persistence;
 
 
 import java.nio.charset.Charset;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -55,33 +56,23 @@ import javax.xml.bind.annotation.XmlType;
 public class RealmUser {
 
 
-    /**
-     * The table name.
-     */
+    /** table name. */
     public static final String TABLE_NAME = "REALM_USER";
 
 
-    /**
-     * The USER_NAME column name. This is the ID Column name.
-     */
+    /** column name for userName. */
     public static final String USER_NAME_COLUMN_NAME = "USER_NAME";
 
 
-    /**
-     * The digest algorithm for password hashing.
-     */
+    /** digest algorithm for password hashing. */
     public static final String PASSWORD_DIGEST_ALGORITHM = "SHA-512";
 
 
-    /**
-     * The charset name for password encoding.
-     */
+    /** charset name for password encoding. */
     public static final String PASSWORD_CHARSET_NAME = "UTF-8";
 
 
-    /**
-     * The charset for password encoding.
-     */
+    /** charset for password encoding. */
     public static final Charset PASWORD_CHARSET =
         Charset.forName(PASSWORD_CHARSET_NAME);
 
@@ -205,6 +196,7 @@ public class RealmUser {
     }
 
 
+    /** userName. */
     @Id
     @Basic(optional = false)
     @Column(name = USER_NAME_COLUMN_NAME, nullable = false, unique = true)
@@ -213,6 +205,7 @@ public class RealmUser {
     private String userName;
 
 
+    /** password. */
     @Basic(optional = false)
     @Column(name = "PASSWORD", nullable = false, unique = false)
     //@XmlElement(required = true, nillable = false)
@@ -221,12 +214,14 @@ public class RealmUser {
     private String password;
 
 
+    /** enabled. */
     @Basic(optional = false)
     @Column(name = "IS_ENABLED", nullable = false, unique = false)
     @XmlAttribute(required = true)
     private boolean enabled;
 
 
+    /** roles. */
     @JoinTable(name = RealmUser.TABLE_NAME + "_" + RealmRole.TABLE_NAME,
                joinColumns = {
         @JoinColumn(name = RealmUser.USER_NAME_COLUMN_NAME)},
@@ -237,7 +232,4 @@ public class RealmUser {
     @XmlElement(name = "role")
     @XmlElementWrapper(required = true)
     private Collection<RealmRole> roles;
-
-
 }
-

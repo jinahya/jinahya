@@ -21,9 +21,12 @@ package com.googlecode.jinahya.jdbc.realm.persistence;
 import java.lang.reflect.Field;
 
 import java.security.NoSuchAlgorithmException;
+
 import java.util.Collection;
 import java.util.Random;
+
 import org.apache.commons.lang3.RandomStringUtils;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -151,7 +154,4 @@ public class RealmUserTest {
         Assert.assertNotNull(roles);
         Assert.assertTrue(roles.isEmpty());
     }
-
-
 }
-

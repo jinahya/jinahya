@@ -21,6 +21,7 @@ package com.googlecode.jinahya.jdbc.realm.persistence;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
@@ -32,18 +33,17 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ConstantsTest {
+public class JAXBTest {
 
 
-    @Test
-    public static void testJAXB_CONTEXT() {
-
-        final JAXBContext context = Constants.JAXB_CONTEXT;
+    private static JAXBContext getContext() throws JAXBException {
+        return JAXBContext.newInstance(
+            JAXBTest.class.getPackage().getName());
     }
 
 
     @Test
-    public static void testGenerateSchema() throws IOException {
+    public static void generateSchema() throws JAXBException, IOException {
 
         final Result output = new StreamResult(System.out) {
 
@@ -67,6 +67,6 @@ public class ConstantsTest {
         };
 
 
-        Constants.JAXB_CONTEXT.generateSchema(outputResolver);
+        getContext().generateSchema(outputResolver);
     }
 }

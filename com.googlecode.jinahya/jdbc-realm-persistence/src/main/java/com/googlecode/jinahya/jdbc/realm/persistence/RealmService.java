@@ -44,9 +44,11 @@ import javax.xml.bind.annotation.XmlType;
 public class RealmService {
 
 
+    /** table name. */
     public static final String TABLE_NAME = "REALM_SERVICE";
 
 
+    /** column name for serviceName. */
     public static final String SERVICE_NAME_COLUMN_NAME = "SERVICE_NAME";
 
 
@@ -66,11 +68,9 @@ public class RealmService {
      * @param serviceName serviceName
      */
     public void setServiceName(final String serviceName) {
-
         if (serviceName == null) {
             throw new NullPointerException("null serviceName");
         }
-
         this.serviceName = serviceName;
     }
 
@@ -101,15 +101,14 @@ public class RealmService {
      * @return roles.
      */
     public Collection<RealmRole> getRoles() {
-
         if (roles == null) {
             roles = new ArrayList<RealmRole>();
         }
-
         return roles;
     }
 
 
+    /** servcieName. */
     @Id
     @Basic(optional = false)
     @Column(name = SERVICE_NAME_COLUMN_NAME, nullable = false, unique = true)
@@ -118,17 +117,16 @@ public class RealmService {
     private String serviceName;
 
 
+    /** description. */
     @Basic(optional = true)
     @Column(name = "DESCRIPTION", nullable = true, unique = false)
     @XmlElement(required = true, nillable = true)
     private String description;
 
 
+    /** roles. */
     @OneToMany(mappedBy = "service")
     @XmlElement(name = "role")
     @XmlElementWrapper(required = true)
     private Collection<RealmRole> roles;
-
-
 }
-

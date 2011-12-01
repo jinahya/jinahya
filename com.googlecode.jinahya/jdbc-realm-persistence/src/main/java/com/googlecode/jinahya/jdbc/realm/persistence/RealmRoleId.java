@@ -125,17 +125,16 @@ public class RealmRoleId implements Serializable {
     }
 
 
+    /** serviceName. */
     @Column(name = RealmService.SERVICE_NAME_COLUMN_NAME, nullable = false)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String serviceName;
 
 
+    /** roleName. */
     @Column(name = RealmRole.ROLE_NAME_COLUMN_NAME, nullable = false)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String roleName;
-
-
 }
-

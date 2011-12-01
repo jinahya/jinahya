@@ -4,9 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya</groupId>
-  <artifactId>jdbc-realm-persistence</artifactId>
+  <artifactId>jdbc-realm-service</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -16,8 +16,8 @@
     <dependencies>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>jdbc-accessible</artifactId>
-        <version>${project.dependency.jdbc-accessible.version}</version>
+        <artifactId>jdbc-realm-persistence</artifactId>
+        <version>1.0-alpha-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>javax</groupId>
@@ -49,7 +49,7 @@
     </dependency>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>jdbc-accessible</artifactId>
+      <artifactId>jdbc-realm-persistence</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -71,7 +71,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.dependency.jdbc-accessible.version>1.0-alpha-2</project.dependency.jdbc-accessible.version>
   </properties>
 
   <build>
@@ -84,16 +83,6 @@
     </extensions>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>com.sun.tools.jxc.maven2</groupId>
-          <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-          <version>1.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.7</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -203,7 +192,6 @@
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
                 <links>
-                  <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-accessible/${project.dependency.jdbc-accessible.version}/apidocs/</link>
                   <link>http://download.oracle.com/docs/cd/E17410_01/javaee/6/api/</link>
                 </links>
               </configuration>
@@ -238,7 +226,7 @@
   </build>
   <reporting />
 
-  <name>jdbc-realm-persistence</name>
+  <name>jdbc-realm-service</name>
   <url>http://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -263,9 +251,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-realm-persistence</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-realm-persistence</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/jdbc-realm-persistence/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-realm-service</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jdbc-realm-service</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/jdbc-realm-service/</url>
   </scm>
   <prerequisites />
   <repositories>
