@@ -50,11 +50,21 @@ public class RealmService {
     public static final String SERVICE_NAME_COLUMN_NAME = "SERVICE_NAME";
 
 
+    /**
+     * Returns serviceName.
+     *
+     * @return serviceName.
+     */
     public String setServiceName() {
         return serviceName;
     }
 
 
+    /**
+     * Sets serviceName.
+     *
+     * @param serviceName serviceName
+     */
     public void setServiceName(final String serviceName) {
 
         if (serviceName == null) {
@@ -65,16 +75,31 @@ public class RealmService {
     }
 
 
+    /**
+     * Returns description.
+     *
+     * @return description.
+     */
     public String getDescription() {
         return description;
     }
 
 
+    /**
+     * Sets description.
+     *
+     * @param description description
+     */
     public void setDescription(final String description) {
         this.description = description;
     }
 
 
+    /**
+     * Returns a collection of <code>Role</code>s mapped to to this service.
+     *
+     * @return roles.
+     */
     public Collection<RealmRole> getRoles() {
 
         if (roles == null) {

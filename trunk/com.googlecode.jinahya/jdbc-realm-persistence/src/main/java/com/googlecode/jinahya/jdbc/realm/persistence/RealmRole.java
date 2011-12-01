@@ -52,11 +52,21 @@ public class RealmRole {
     public static final String ROLE_NAME_COLUMN_NAME = "ROLE_NAME";
 
 
+    /**
+     * Returns id.
+     *
+     * @return id.
+     */
     public RealmRoleId getId() {
         return id;
     }
 
 
+    /**
+     * Sets id.
+     *
+     * @param id id
+     */
     public void setId(final RealmRoleId id) {
 
         if (id == null) {
@@ -67,11 +77,21 @@ public class RealmRole {
     }
 
 
+    /**
+     * Returns service.
+     *
+     * @return service.
+     */
     public RealmService getService() {
         return service;
     }
 
 
+    /**
+     * Sets service.
+     *
+     * @param service service
+     */
     public void setService(final RealmService service) {
 
         if (service == null) {
@@ -82,17 +102,32 @@ public class RealmRole {
     }
 
 
+    /**
+     * Returns description.
+     *
+     * @return description.
+     */
     public String getDescription() {
         return description;
     }
 
 
+    /**
+     * Sets description.
+     *
+     * @param description description.
+     */
     public void setDescription(final String description) {
 
         this.description = description;
     }
 
 
+    /**
+     * Returns a collection of <code>RealmUser</code>s mapped to this role.
+     *
+     * @return users
+     */
     public Collection<RealmUser> getUsers() {
 
         if (users == null) {
