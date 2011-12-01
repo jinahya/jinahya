@@ -46,9 +46,11 @@ import javax.xml.bind.annotation.XmlType;
 public class RealmRole {
 
 
+    /** table name. */
     public static final String TABLE_NAME = "REALM_ROLE";
 
 
+    /** column name for roleName. */
     public static final String ROLE_NAME_COLUMN_NAME = "ROLE_NAME";
 
 
@@ -138,11 +140,13 @@ public class RealmRole {
     }
 
 
+    /** id. */
     @EmbeddedId
     @XmlElement(required = true, nillable = false)
     private RealmRoleId id;
 
 
+    /** service. */
     //@JoinColumn(name = Service.SERVICE_NAME_COLUMN_NAME, nullable = false)
     @ManyToOne(optional = false)
     @MapsId("serviceName")
@@ -150,6 +154,7 @@ public class RealmRole {
     private RealmService service;
 
 
+    /** description. */
     @Basic(optional = true)
     @Column(name = "DESCRIPTION", nullable = true, unique = false)
     @XmlElement(required = true, nillable = true)
@@ -157,10 +162,8 @@ public class RealmRole {
     private String description;
 
 
+    /** users. */
     @ManyToMany(mappedBy = "roles")
     @XmlTransient
     private Collection<RealmUser> users;
-
-
 }
-
