@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * An embeddable id for RealmRoles.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -37,11 +38,21 @@ import javax.xml.bind.annotation.XmlType;
 public class RealmRoleId implements Serializable {
 
 
+    /**
+     * Returns serviceName.
+     *
+     * @return serviceName
+     */
     public String getServiceName() {
         return serviceName;
     }
 
 
+    /**
+     * Sets serviceName.
+     *
+     * @param serviceName serviceName
+     */
     public void setServiceName(final String serviceName) {
 
         if (serviceName == null) {
@@ -52,11 +63,21 @@ public class RealmRoleId implements Serializable {
     }
 
 
+    /**
+     * Returns roleName.
+     *
+     * @return roleName.
+     */
     public String getRoleName() {
         return roleName;
     }
 
 
+    /**
+     * Sets roleName.
+     *
+     * @param roleName roleName
+     */
     public void setRoleName(final String roleName) {
 
         if (roleName == null) {
@@ -104,13 +125,13 @@ public class RealmRoleId implements Serializable {
     }
 
 
-    @Column(name = "SERVICE_NAME", nullable = false)
+    @Column(name = RealmService.SERVICE_NAME_COLUMN_NAME, nullable = false)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String serviceName;
 
 
-    @Column(name = "ROLE_NAME", nullable = false)
+    @Column(name = RealmRole.ROLE_NAME_COLUMN_NAME, nullable = false)
     @XmlElement(required = true, nillable = false)
     @XmlSchemaType(name = "token")
     private String roleName;
