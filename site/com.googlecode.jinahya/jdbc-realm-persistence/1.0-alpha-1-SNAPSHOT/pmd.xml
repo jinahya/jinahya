@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2011-12-01T13:57:29.677">
-<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-realm-persistence/src/main/java/com/googlecode/jinahya/jdbc/realm/persistence/Constants.java">
-<violation beginline="62" endline="78" begincolumn="25" endcolumn="5" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="Constants" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
-Unnecessary final modifier in final class
-</violation>
-<violation beginline="81" endline="106" begincolumn="25" endcolumn="5" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="Constants" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
-Unnecessary final modifier in final class
-</violation>
-</file>
+<pmd version="4.2.5" timestamp="2011-12-02T00:18:23.795">
 <file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-realm-persistence/src/main/java/com/googlecode/jinahya/jdbc/realm/persistence/RealmUser.java">
-<violation beginline="221" endline="221" begincolumn="20" endcolumn="27" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="RealmUser" variable="password" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+<violation beginline="214" endline="214" begincolumn="20" endcolumn="27" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="RealmUser" variable="password" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'password'.
 </violation>
 </file>
