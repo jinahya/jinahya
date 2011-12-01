@@ -19,8 +19,6 @@
 -link
 'http://docs.oracle.com/javase/7/docs/api'
 -link
-'http://download.oracle.com/docs/cd/E17410_01/javaee/6/api'
--link
 '../apidocs'
 -linkoffline
 'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-util/target/javadoc-bundle-options'
