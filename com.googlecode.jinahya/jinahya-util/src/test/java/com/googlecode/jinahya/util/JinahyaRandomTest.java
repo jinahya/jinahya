@@ -30,33 +30,65 @@ public class JinahyaRandomTest {
 
 
     @Test(invocationCount = 128)
+    public void testNextBytes() {
+
+        final JinahyaRandom random = new JinahyaRandom();
+
+        try {
+            random.nextBytes(-1);
+            Assert.fail("passed: nextBytes(-1)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        final int length = random.nextInt(128); // 0 - 127
+        Assert.assertEquals(random.nextBytes(length).length, length);
+
+        try {
+            random.nextBytes(-1, 0);
+            Assert.fail("passed: nextBytes(-1, 0)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            random.nextBytes(0, -1);
+            Assert.fail("passed: nextBytes(0, -1)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        final int minimumLength = random.nextInt(128);
+        final int maximumLength = random.nextInt(128) + minimumLength;
+        final byte[] nextBytes =
+            random.nextBytes(minimumLength, maximumLength);
+        Assert.assertTrue(nextBytes.length >= minimumLength);
+        Assert.assertTrue(nextBytes.length <= maximumLength);
+    }
+
+
+    @Test(invocationCount = 128)
     public void testUnsignedInt() {
 
         final JinahyaRandom random = new JinahyaRandom();
 
         try {
-            random.nextUnsignedInt(-1, true);
-            Assert.fail("passed: nextUnsignedInt(-1, X)");
+            random.nextUnsignedInt(-1);
+            Assert.fail("passed: nextUnsignedInt(-1)");
         } catch (IllegalArgumentException iae) {
         }
         try {
-            random.nextUnsignedInt(0, true);
-            Assert.fail("passed: nextUnsignedInt(0, X)");
+            random.nextUnsignedInt(0);
+            Assert.fail("passed: nextUnsignedInt(0)");
         } catch (IllegalArgumentException iae) {
         }
         try {
-            random.nextUnsignedInt(32, true);
-            Assert.fail("passed: nextUnsignedInt(32, X)");
+            random.nextUnsignedInt(32);
+            Assert.fail("passed: nextUnsignedInt(32)");
         } catch (IllegalArgumentException iae) {
         }
         try {
-            random.nextUnsignedInt(33, true);
-            Assert.fail("passed: nextUnsignedInt(33, X)");
+            random.nextUnsignedInt(33);
+            Assert.fail("passed: nextUnsignedInt(33)");
         } catch (IllegalArgumentException iae) {
         }
-
-        Assert.assertNotNull(random.nextUnsignedInt(
-            random.nextInt(31) + 1, false));
     }
 
 
