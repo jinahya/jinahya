@@ -89,7 +89,7 @@ public class JinahyaRandom extends Random {
      * Generates an unsigned integer.
      *
      * @param maximumBits maximum bits between 1 (inclusive) and
-     * {@value Integer#SIZE} (exclusive).
+     * {@value java.lang.Integer#SIZE} (exclusive).
      * @return generated value
      */
     public int nextUnsignedInt(final int maximumBits) {
@@ -112,7 +112,7 @@ public class JinahyaRandom extends Random {
      * Generates a signed integer in arbitrary bit length.
      *
      * @param maximumBits maximum bits between 1 (exclusive) and
-     * {@value Integer#SIZE} (inclusive).
+     * {@value java.lang.Integer#SIZE} (inclusive).
      * @return generated value
      */
     public int nextSignedInt(final int maximumBits) {
@@ -162,7 +162,7 @@ public class JinahyaRandom extends Random {
      * Generates a signed long in arbitrary bit length.
      *
      * @param maximumBits maximum bits between 1 (exclusive) and
-     * {@value Long#SIZE} (inclusive).
+     * {@value java.lang.Long#SIZE} (inclusive).
      * @return generated value
      */
     public long nextSignedLong(final int maximumBits) {
