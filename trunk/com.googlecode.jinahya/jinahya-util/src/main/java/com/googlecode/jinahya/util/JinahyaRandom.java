@@ -48,6 +48,10 @@ public class JinahyaRandom extends Random {
      */
     public byte[] nextBytes(final int length) {
 
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
         return nextBytes(length, length);
     }
 

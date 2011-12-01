@@ -65,7 +65,7 @@ public class JinahyaRandomTest {
 
 
     @Test(invocationCount = 128)
-    public void testUnsignedInt() {
+    public void testNextUnsignedInt() {
 
         final JinahyaRandom random = new JinahyaRandom();
 
@@ -88,6 +88,123 @@ public class JinahyaRandomTest {
             random.nextUnsignedInt(33);
             Assert.fail("passed: nextUnsignedInt(33)");
         } catch (IllegalArgumentException iae) {
+        }
+
+        Assert.assertTrue(random.nextUnsignedInt() >= 0);
+
+        final int maximumBits = random.nextInt(31) + 1; // 1 - 31
+        Assert.assertTrue(random.nextUnsignedInt(maximumBits) >= 0);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextSignedInt() {
+
+        final JinahyaRandom random = new JinahyaRandom();
+
+        try {
+            random.nextSignedInt(-1);
+            Assert.fail("passed: nextSignedInt(-1)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextSignedInt(0);
+            Assert.fail("passed: nextSignedInt(0)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextSignedInt(1);
+            Assert.fail("passed: nextSignedInt(1)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextSignedInt(33);
+            Assert.fail("passed: nextUnsignedInt(33)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        final int maximumBits = random.nextInt(31) + 2;
+        final int nextSignedInt = random.nextSignedInt(maximumBits);
+        if (maximumBits < Integer.SIZE) {
+            if (nextSignedInt >= 0) {
+                Assert.assertTrue(nextSignedInt >> maximumBits == 0);
+            } else {
+                Assert.assertTrue(nextSignedInt >> maximumBits == -1);
+            }
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testUnsignedLong() {
+
+        final JinahyaRandom random = new JinahyaRandom();
+
+        try {
+            random.nextUnsignedLong(-1);
+            Assert.fail("passed: nextUnsignedInt(-1)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedLong(0);
+            Assert.fail("passed: nextUnsignedInt(0)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedLong(64);
+            Assert.fail("passed: nextUnsignedInt(64)");
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            random.nextUnsignedLong(65);
+            Assert.fail("passed: nextUnsignedInt(65)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        Assert.assertTrue(random.nextUnsignedLong() >= 0L);
+
+        final int maximumBits = random.nextInt(63) + 1; // 1 - 31
+        Assert.assertTrue(random.nextUnsignedLong(maximumBits) >= 0L);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextSignedLong() {
+
+        final JinahyaRandom random = new JinahyaRandom();
+
+        try {
+            random.nextSignedLong(-1);
+            Assert.fail("passed: nextSignedLong(-1)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            random.nextSignedLong(0);
+            Assert.fail("passed: nextSignedLong(0)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            random.nextSignedLong(1);
+            Assert.fail("passed: nextSignedLong(1)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            random.nextSignedLong(65);
+            Assert.fail("passed: nextUnSignedLong(65)");
+        } catch (IllegalArgumentException iae) {
+        }
+
+        final int maximumBits = random.nextInt(63) + 2;
+        final long nextSignedLong = random.nextSignedLong(maximumBits);
+        if (maximumBits < Long.SIZE) {
+            if (nextSignedLong >= 0L) {
+                Assert.assertTrue(nextSignedLong >> maximumBits == 0L);
+            } else {
+                Assert.assertTrue(nextSignedLong >> maximumBits == -1L);
+            }
         }
     }
 
