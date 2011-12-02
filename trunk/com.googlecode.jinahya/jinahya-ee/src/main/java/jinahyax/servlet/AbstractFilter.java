@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.servlet;
+package jinahyax.servlet;
 
 
 import javax.servlet.Filter;
