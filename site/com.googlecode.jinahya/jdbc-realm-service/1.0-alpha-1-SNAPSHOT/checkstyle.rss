@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>jdbc-realm-service - Checkstyle report</title>
+    <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT</link>
+    <description>jdbc-realm-service - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2011</copyright>
+    <item>
+      <title>File: 3,
+             Errors: 7,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.jdbc.realm.service.xsd.persistence.ServiceSchemaServlet.java">com/googlecode/jinahya/jdbc/realm/service/xsd/persistence/ServiceSchemaServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.jdbc.realm.service.xsd.SchemaServlet.java">com/googlecode/jinahya/jdbc/realm/service/xsd/SchemaServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jdbc-realm-service/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.jdbc.realm.service.xsd.persistence.AllServlet.java">com/googlecode/jinahya/jdbc/realm/service/xsd/persistence/AllServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
