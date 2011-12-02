@@ -15,10 +15,8 @@
  */
 
 
-package com.googlecode.jinahya.servlet.http;
+package jinahyax.servlet.http;
 
-
-import com.googlecode.jinahya.servlet.AbstractFilter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,6 +44,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import jinahyax.servlet.AbstractFilter;
 
 
 /**

@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.servlet.http;
+package jinahyax.servlet.http;
 
 
 /**

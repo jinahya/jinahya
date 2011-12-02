@@ -15,10 +15,8 @@
  */
 
 
-package com.googlecode.jinahya.servlet.http;
+package jinahyax.servlet.http;
 
-
-import com.googlecode.jinahya.servlet.ServletResponseResult;
 
 import java.io.IOException;
 
@@ -30,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
+
+import jinahyax.servlet.ServletResponseResult;
 
 
 /**
