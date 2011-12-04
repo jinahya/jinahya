@@ -97,6 +97,34 @@ public class ChecksumInputStream extends FilterInputStream {
     }
 
 
+    /**
+     * Returns the underlying checksum's current checksum value.
+     *
+     * @return the underlying checksum's current checksum value.
+     */
+    public long getChecksumValue() {
+        return checksum.getValue();
+    }
+
+
+    /**
+     * Resets the underlying checksum to its initial value.
+     */
+    public void resetChecksum() {
+        checksum.reset();
+    }
+
+
+    /**
+     * Returns the checksum.
+     *
+     * @return the checksum.
+     */
+    public Checksum getChecksum() {
+        return checksum;
+    }
+
+
     /** checksum. */
     protected final Checksum checksum;
 
