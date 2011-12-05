@@ -22,7 +22,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.zip.Checksum;
+import java.security.MessageDigest;
 
 
 /**
@@ -30,24 +30,24 @@ import java.util.zip.Checksum;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ChecksumInputStream extends FilterInputStream {
+public class MessageDigestInputStream extends FilterInputStream {
 
 
     /**
      * Creates a new instance.
      *
      * @param input underlying input
-     * @param checksum checksum to be updated
+     * @param digest the digest to be updated
      */
-    public ChecksumInputStream(final InputStream input,
-                               final Checksum checksum) {
+    public MessageDigestInputStream(final InputStream input,
+                                    final MessageDigest digest) {
         super(input);
 
-        if (checksum == null) {
-            throw new NullPointerException("null checksum");
+        if (digest == null) {
+            throw new NullPointerException("null digest");
         }
 
-        this.checksum = checksum;
+        this.digest = digest;
     }
 
 
@@ -63,7 +63,7 @@ public class ChecksumInputStream extends FilterInputStream {
         final int b = super.read();
 
         if (b != -1) {
-            checksum.update(b);
+            digest.update((byte) b);
         }
 
         return b;
@@ -76,7 +76,7 @@ public class ChecksumInputStream extends FilterInputStream {
         final int read = super.read(b);
 
         if (read != -1) {
-            checksum.update(b, 0, read);
+            digest.update(b, 0, read);
         }
 
         return read;
@@ -90,7 +90,7 @@ public class ChecksumInputStream extends FilterInputStream {
         final int read = super.read(b, off, len);
 
         if (read != -1) {
-            checksum.update(b, off, read);
+            digest.update(b, off, read);
         }
 
         return read;
@@ -98,25 +98,27 @@ public class ChecksumInputStream extends FilterInputStream {
 
 
     /**
-     * Returns the underlying checksum's current checksum value.
+     * Completes the hash computation by performing final operations such as
+     * padding. The underlying digest is reset after this call is made.
      *
-     * @return the underlying checksum's current checksum value.
+     * @return the array of bytes for the resulting hash value.
+     * @see MessageDigest#digest()
      */
-    public long getChecksumValue() {
-        return checksum.getValue();
+    public byte[] digest() {
+        return digest.digest();
     }
 
 
     /**
-     * Resets the underlying checksum to its initial value.
+     * Resets the underlying digest for further use.
      */
-    public void resetChecksum() {
-        checksum.reset();
+    public void resetDigest() {
+        digest.reset();
     }
 
 
-    /** checksum. */
-    protected final Checksum checksum;
+    /** messageDigest. */
+    protected final MessageDigest digest;
 
 
 }
