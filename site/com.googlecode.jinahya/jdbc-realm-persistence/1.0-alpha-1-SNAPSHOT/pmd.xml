@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2011-12-05T00:16:08.892">
+<pmd version="4.2.5" timestamp="2011-12-06T00:20:09.687">
 <file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jdbc-realm-persistence/src/main/java/com/googlecode/jinahya/jdbc/realm/persistence/RealmUser.java">
 <violation beginline="214" endline="214" begincolumn="20" endcolumn="27" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jdbc.realm.persistence" class="RealmUser" variable="password" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'password'.
