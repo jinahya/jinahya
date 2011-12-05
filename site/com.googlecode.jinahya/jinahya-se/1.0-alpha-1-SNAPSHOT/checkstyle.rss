@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 8,
-             Errors: 79,
+      <title>File: 10,
+             Errors: 109,
              Warnings: 0,
              Infos: 0
       </title>
@@ -43,6 +43,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#jinahya.io.MessageDigestInputStream.java">jinahya/io/MessageDigestInputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#jinahyax.xml.bind.annotation.adapters.XmlArrayMapAdapter.java">jinahyax/xml/bind/annotation/adapters/XmlArrayMapAdapter.java</a>
                 </td>
                 <td>
@@ -53,6 +67,20 @@
                 </td>
                 <td>
                   8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#jinahya.io.MessageDigestOutputStream.java">jinahya/io/MessageDigestOutputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
                 </td>
               </tr>
                           <tr>
@@ -122,7 +150,7 @@
                   0
                 </td>
                 <td>
-                  19
+                  16
                 </td>
               </tr>
                           <tr>
