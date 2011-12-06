@@ -171,6 +171,8 @@ abstract class BitIOBase {
             octet |= (getBit(i) ? 0x01 : 0x00);
         }
 
+        update(octet);
+
         return octet;
     }
 
@@ -181,6 +183,8 @@ abstract class BitIOBase {
      * @param octet octet.
      */
     protected final void setOctet(int octet) {
+
+        update(octet);
 
         for (int i = Byte.SIZE - 1; i >= 0; i--) {
             setBit(i, (octet & 0x01) == 0x01);

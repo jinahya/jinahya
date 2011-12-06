@@ -40,23 +40,33 @@ public abstract class BitIOTest {
     protected static final int INVOCATION_COUNT = 64;
 
 
-    /** string length. */
-    protected static final int STRING_LENGTH = 128;
+    /** minimum string length. */
+    protected static final int MINIMUM_STRING_LENGTH = 128;
+
+
+    /** maximum string length. */
+    protected static final int MAXIMUM_STRING_LENGTH = 256;
 
 
     /** bytes length. */
-    protected static final int BYTES_LENGTH = 128;
+    protected static final int MINIMUM_BYTES_LENGTH = 128;
+
+
+    /** bytes length. */
+    protected static final int MAXIMUM_BYTES_LENGTH = 256;
 
 
     protected static final int newStringLength() {
 
-        return RANDOM.nextInt(STRING_LENGTH) + STRING_LENGTH;
+        return RANDOM.nextInt(MAXIMUM_STRING_LENGTH - MINIMUM_STRING_LENGTH)
+               + MINIMUM_STRING_LENGTH;
     }
 
 
     protected static final int newBytesLength() {
 
-        return RANDOM.nextInt(BYTES_LENGTH) + BYTES_LENGTH;
+        return RANDOM.nextInt(MAXIMUM_BYTES_LENGTH - MINIMUM_BYTES_LENGTH)
+               + MINIMUM_BYTES_LENGTH;
     }
 
 
