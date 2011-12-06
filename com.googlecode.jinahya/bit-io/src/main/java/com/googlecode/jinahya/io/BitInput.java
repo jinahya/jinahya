@@ -106,7 +106,7 @@ public class BitInput extends BitIOBase {
      */
     public boolean readBoolean() throws IOException {
 
-        return readUnsignedByte(1) == ONE;
+        return readUnsignedByte(ONE) == ONE;
     }
 
 
@@ -168,7 +168,7 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned short value.
      *
-     * @param length bit length between ONE (inclusive) and 0x10 (inclusive).
+     * @param length bit length between ONE (inclusive) and Short.SIZE (inclusive).
      * @return the unsigned short value read.
      * @throws IOException if an I/O error occurs.
      */
@@ -178,8 +178,9 @@ public class BitInput extends BitIOBase {
             throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
-        if (length > 0x10) {
-            throw new IllegalArgumentException("length(" + length + ") > 0x10");
+        if (length > Short.SIZE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Short.SIZE);
         }
 
         int quotient = length / Byte.SIZE;
@@ -213,18 +214,18 @@ public class BitInput extends BitIOBase {
             throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
-        if (length >= 0x20) { // 32
+        if (length >= Integer.SIZE) { // 32
             throw new IllegalArgumentException(
-                "length(" + length + ") >= 0x20");
+                "length(" + length + ") >= " + Integer.SIZE);
         }
 
-        final int quotient = length / 0x10;
-        final int remainder = length % 0x10;
+        final int quotient = length / Short.SIZE;
+        final int remainder = length % Short.SIZE;
 
         int value = ZERO;
         for (int i = 0; i < quotient; i++) {
-            value <<= 0x10;
-            value |= readUnsignedShort(0x10);
+            value <<= Short.SIZE;
+            value |= readUnsignedShort(Short.SIZE);
         }
 
         if (remainder > ZERO) {
@@ -279,7 +280,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a <code>length</code>-bit signed int.
      *
-     * @param length bit length between ONE (exclusive) and 0x20 (inclusive).
+     * @param length bit length between ONE (exclusive) and
+     * {@value java.lang.Integer#SIZE} (inclusive).
      * @return a unsigned int value read from the input.
      * @throws IOException if an I/O error occurs.
      */
@@ -287,11 +289,12 @@ public class BitInput extends BitIOBase {
 
         if (length <= ONE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= ONE");
+                "length(" + length + ") <= " + ONE);
         }
 
-        if (length > 0x20) { // 32
-            throw new IllegalArgumentException("length(" + length + ") > 0x20");
+        if (length > Integer.SIZE) { // 32
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Integer.SIZE);
         }
 
         return (((readBoolean() ? -1 : ZERO) << (length - 1))
@@ -343,7 +346,7 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs
      */
     public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt(0x20));
+        return Float.intBitsToFloat(readInt(Integer.SIZE));
     }
 
 
@@ -383,28 +386,29 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned long.
      *
-     * @param length bit length between ONE (inclusive) and 0x40 (exclusive)
+     * @param length bit length between ONE (inclusive) and Long.SIZE (exclusive)
      * @return an unsigned long value
      * @throws IOException if an I/O error occurs
      */
     public long readUnsignedLong(final int length) throws IOException {
 
         if (length < ONE) {
-            throw new IllegalArgumentException("length(" + length + ") < ONE");
-        }
-
-        if (length >= 0x40) {
             throw new IllegalArgumentException(
-                "length(" + length + ") >= 0x40");
+                "length(" + length + ") < " + ONE);
         }
 
-        final int quotient = length / 0x10;
-        final int remainder = length % 0x10;
+        if (length >= Long.SIZE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") >= " + Long.SIZE);
+        }
+
+        final int quotient = length / Short.SIZE;
+        final int remainder = length % Short.SIZE;
 
         long value = 0x00L;
         for (int i = 0; i < quotient; i++) {
-            value <<= 0x10;
-            value |= readUnsignedShort(0x10);
+            value <<= Short.SIZE;
+            value |= readUnsignedShort(Short.SIZE);
         }
 
         if (remainder > 0) {
@@ -457,7 +461,7 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a <code>length</code>-bit signed long value.
      *
-     * @param length bit length between ONE (exclusive) and 0x40 (inclusive).
+     * @param length bit length between ONE (exclusive) and Long.SIZE (inclusive).
      * @return the signed long value.
      * @throws IOException if an I/O error occurs.
      */
@@ -465,14 +469,15 @@ public class BitInput extends BitIOBase {
 
         if (length <= ONE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= ONE");
+                "length(" + length + ") <= " + ONE);
         }
 
-        if (length > 0x40) {
-            throw new IllegalArgumentException("length(" + length + ") > 0x40");
+        if (length > Long.SIZE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Long.SIZE);
         }
 
-        return (((readBoolean() ? -1L : 0x00L)
+        return (((readBoolean() ? -1L : 0L)
                  << (length - 1))
                 | readUnsignedLong(length - 1));
 
