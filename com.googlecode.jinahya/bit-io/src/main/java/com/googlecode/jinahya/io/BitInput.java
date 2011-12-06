@@ -25,15 +25,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UTFDataFormatException;
 
-import java.util.BitSet;
-
 
 /**
  * BitInput.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitInput {
+public class BitInput extends BitIOBase {
 
 
     /**
@@ -61,39 +59,37 @@ public class BitInput {
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        if (length <= 0x00) {
+        if (length <= ZERO) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= 0x00");
+                "length(" + length + ") <= " + ZERO);
         }
 
-        if (length > 0x08) {
-            throw new IllegalArgumentException("length(" + length + ") > 0x08");
+        if (length > Byte.SIZE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Byte.SIZE);
         }
 
-        if (index == 0x08) {
-            int octet = in.read();
+        if (index == Byte.SIZE) {
+            final int octet = in.read();
             if (octet == -1) {
                 throw new EOFException("eof");
             }
-            for (int i = 7; i >= 0; i--) {
-                set.set(i, (octet & 0x01) == 0x01);
-                octet >>= 1;
-            }
-            index = 0x00;
-            count++;
+            increaseCount();
+            setOctet(octet);
+            index = ZERO;
         }
 
-        int required = length - (0x08 - index);
+        final int required = length - (Byte.SIZE - index);
 
-        if (required > 0x00) {
+        if (required > ZERO) {
             return (readUnsignedByte(length - required) << required)
                    | readUnsignedByte(required);
         }
 
-        int value = 0x00;
+        int value = ZERO;
         for (int i = 0; i < length; i++) {
             value <<= 1;
-            value |= (set.get(index + i) ? 0x01 : 0x00);
+            value |= (getBit(index + i) ? ONE : ZERO);
         }
 
         index += length;
@@ -103,14 +99,14 @@ public class BitInput {
 
 
     /**
-     * Reads a 1-bit boolean value. 0x01 for true, 0x00 for false.
+     * Reads a 1-bit boolean value. ONE for true, ZERO for false.
      *
      * @return the read boolean value
      * @throws IOException if an I/O error occurs.
      */
     public boolean readBoolean() throws IOException {
 
-        return readUnsignedByte(1) == 0x01;
+        return readUnsignedByte(1) == ONE;
     }
 
 
@@ -172,27 +168,27 @@ public class BitInput {
     /**
      * Reads an unsigned short value.
      *
-     * @param length bit length between 0x01 (inclusive) and 0x10 (inclusive).
+     * @param length bit length between ONE (inclusive) and 0x10 (inclusive).
      * @return the unsigned short value read.
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 0x01");
+        if (length < ONE) {
+            throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
         if (length > 0x10) {
             throw new IllegalArgumentException("length(" + length + ") > 0x10");
         }
 
-        int quotient = length / 0x08;
-        int remainder = length % 0x08;
+        int quotient = length / Byte.SIZE;
+        int remainder = length % Byte.SIZE;
 
-        int value = 0x00;
+        int value = ZERO;
         for (int i = 0; i < quotient; i++) {
-            value <<= 0x08;
-            value |= readUnsignedByte(0x08);
+            value <<= Byte.SIZE;
+            value |= readUnsignedByte(Byte.SIZE);
         }
 
         if (remainder > 0) {
@@ -213,8 +209,8 @@ public class BitInput {
      */
     public int readUnsignedInt(final int length) throws IOException {
 
-        if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 0x01");
+        if (length < ONE) {
+            throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
         if (length >= 0x20) { // 32
@@ -225,13 +221,13 @@ public class BitInput {
         final int quotient = length / 0x10;
         final int remainder = length % 0x10;
 
-        int value = 0x00;
+        int value = ZERO;
         for (int i = 0; i < quotient; i++) {
             value <<= 0x10;
             value |= readUnsignedShort(0x10);
         }
 
-        if (remainder > 0x00) {
+        if (remainder > ZERO) {
             value <<= remainder;
             value |= readUnsignedShort(remainder);
         }
@@ -283,22 +279,22 @@ public class BitInput {
     /**
      * Reads a <code>length</code>-bit signed int.
      *
-     * @param length bit length between 0x01 (exclusive) and 0x20 (inclusive).
+     * @param length bit length between ONE (exclusive) and 0x20 (inclusive).
      * @return a unsigned int value read from the input.
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
 
-        if (length <= 0x01) {
+        if (length <= ONE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= 0x01");
+                "length(" + length + ") <= ONE");
         }
 
         if (length > 0x20) { // 32
             throw new IllegalArgumentException("length(" + length + ") > 0x20");
         }
 
-        return (((readBoolean() ? -1 : 0x00) << (length - 1))
+        return (((readBoolean() ? -1 : ZERO) << (length - 1))
                 | readUnsignedInt(length - 1));
     }
 
@@ -387,14 +383,14 @@ public class BitInput {
     /**
      * Reads an unsigned long.
      *
-     * @param length bit length between 0x01 (inclusive) and 0x40 (exclusive)
+     * @param length bit length between ONE (inclusive) and 0x40 (exclusive)
      * @return an unsigned long value
      * @throws IOException if an I/O error occurs
      */
     public long readUnsignedLong(final int length) throws IOException {
 
-        if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 0x01");
+        if (length < ONE) {
+            throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
         if (length >= 0x40) {
@@ -406,12 +402,12 @@ public class BitInput {
         final int remainder = length % 0x10;
 
         long value = 0x00L;
-        for (int i = 0x00; i < quotient; i++) {
+        for (int i = 0; i < quotient; i++) {
             value <<= 0x10;
             value |= readUnsignedShort(0x10);
         }
 
-        if (remainder > 0x00) {
+        if (remainder > 0) {
             value <<= remainder;
             value |= readUnsignedShort(remainder);
         }
@@ -461,15 +457,15 @@ public class BitInput {
     /**
      * Reads a <code>length</code>-bit signed long value.
      *
-     * @param length bit length between 0x01 (exclusive) and 0x40 (inclusive).
+     * @param length bit length between ONE (exclusive) and 0x40 (inclusive).
      * @return the signed long value.
      * @throws IOException if an I/O error occurs.
      */
     public long readLong(final int length) throws IOException {
 
-        if (length <= 0x01) {
+        if (length <= ONE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= 0x01");
+                "length(" + length + ") <= ONE");
         }
 
         if (length > 0x40) {
@@ -526,7 +522,7 @@ public class BitInput {
      * @throws IOException if an I/O error occurs.
      */
     public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong(0x40));
+        return Double.longBitsToDouble(readLong(Long.SIZE));
     }
 
 
@@ -574,7 +570,7 @@ public class BitInput {
         final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
 
         for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) readUnsignedByte(0x08);
+            value[i] = (byte) readUnsignedByte(Byte.SIZE);
         }
 
         return value;
@@ -667,11 +663,11 @@ public class BitInput {
 
         final CharArrayWriter caw = new CharArrayWriter();
 
-        int length = readUnsignedInt(0x10); // 16
+        int length = readUnsignedInt(Short.SIZE);
         int i = 0;
         for (; i < length; i++) {
 
-            int first = readUnsignedByte(0x08);
+            int first = readUnsignedByte(Byte.SIZE);
             if (first <= 0x7F) { // 0xxxxxxx
                 caw.write(first);
                 continue;
@@ -683,7 +679,7 @@ public class BitInput {
             }
 
             if (first <= 0xDF) { // 110xxxxx
-                int second = readUnsignedByte(0x08); // EOFException
+                int second = readUnsignedByte(Byte.SIZE); // EOFException
                 i++;
                 if (second > 0xBF) { // !10xxxxxxxx
                     throw new UTFDataFormatException(
@@ -694,13 +690,13 @@ public class BitInput {
             }
 
             if (first <= 0xEF) { // 1110xxxx
-                int second = readUnsignedByte(0x08); // EOFException
+                int second = readUnsignedByte(Byte.SIZE); // EOFException
                 i++;
                 if (second > 0xBF) { // !10xxxxxxxx
                     throw new UTFDataFormatException(
                         "illegal second byte: " + second);
                 }
-                int third = readUnsignedByte(0x08); // EOFException
+                int third = readUnsignedByte(Byte.SIZE); // EOFException
                 i++;
                 if (third > 0xBF) { // !10xxxxxxxx
                     throw new UTFDataFormatException(
@@ -783,6 +779,7 @@ public class BitInput {
      * @return the number of bits discarded for alignment.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public int align(final int length) throws IOException {
 
         if (length <= 0) {
@@ -791,12 +788,12 @@ public class BitInput {
 
         int bits = 0;
 
-        if (index < 8) { // bit index to read
-            bits += (8 - index);
-            readUnsignedByte(8 - index);
+        if (index < Byte.SIZE) { // bit index to read
+            bits = (Byte.SIZE - index);
+            readUnsignedByte(bits);
         }
 
-        int octets = count % length;
+        int octets = getCount() % length;
 
         if (octets == 0) {
             return bits;
@@ -809,65 +806,31 @@ public class BitInput {
         }
 
         for (; octets > 0; octets--) {
-            readUnsignedByte(0x08);
-            bits += 0x08;
+            readUnsignedByte(Byte.SIZE);
+            bits += Byte.SIZE;
         }
 
         return bits;
     }
 
 
-    public void reset() {
-        set.clear();
-        index = 0x08;
-        count = 0x00;
-    }
-
-
-    /**
+    /*
      * Returns the available bits for reading in current octet.
      *
      * @return available bits for reading in current octet.
      */
+    @Override
     public int available() {
-        return 0x08 - index;
+        return Byte.SIZE - index;
     }
 
 
-    /** input source. */
+    /** source input. */
     private final InputStream in;
 
 
-    /** bit set. */
-    private final BitSet set = new BitSet(0x08);
-
-
     /** bit index to read. */
-    private int index = 0x08;
-
-
-    /** so far read octet count. */
-    private int count = 0x00;
-
-
-    /**
-     * Returns count.
-     *
-     * @return count
-     */
-    int getCount() {
-        return count;
-    }
-
-
-    /**
-     * Sets count.
-     *
-     * @param count count
-     */
-    void setCount(final int count) {
-        this.count = count;
-    }
+    private int index = Byte.SIZE;
 
 
 }
