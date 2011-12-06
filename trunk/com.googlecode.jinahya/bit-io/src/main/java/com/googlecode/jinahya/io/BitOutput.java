@@ -53,16 +53,17 @@ public class BitOutput extends BitIOBase {
      * the value and writes the lower <code>length</code> bits in
      * <code>value</code>.
      *
-     * @param length bit length between 0x00 (exclusive) and 0x08 (inclusive).
+     * @param length bit length between 1 (inclusive) and
+     * {@value java.lang.Byte#SIZE} (inclusive).
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
      */
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        if (length <= ZERO) {
+        if (length < ONE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") <= " + ZERO);
+                "length(" + length + ") < " + ONE);
         }
 
         if (length > Byte.SIZE) {
@@ -156,7 +157,8 @@ public class BitOutput extends BitIOBase {
      * the value and writes the lower <code>length</code> bits in
      * <code>value</code>.
      *
-     * @param length bit length between 0x01 (inclusive) and Short.SIZE (inclusive)
+     * @param length bit length between 1 (exclusive) and
+     * {@value java.lang.Short#SIZE} (inclusive)
      * @param value value to write
      * @throws IOException if an I/O error occurs
      */
@@ -253,7 +255,7 @@ public class BitOutput extends BitIOBase {
                         "value(" + value + ") >> length(" + length + ") != -1");
                 }
             } else {
-                if ((value >> length) != 0x00) {
+                if ((value >> length) != 0) {
                     throw new IllegalArgumentException(
                         "value(" + value + ") >> length(" + length + ") != 0");
                 }
@@ -389,8 +391,8 @@ public class BitOutput extends BitIOBase {
     /**
      * Writes a signed long <code>value</code> in <code>length</code> bits.
      *
-     * @param length bit length between 1 (exclusive) and {@value #LONG_SIZE}
-     * (inclusive).
+     * @param length bit length between 1 (exclusive) and
+     * {@value java.lang.Long#SIZE} (inclusive).
      * @param value value to be written
      * @throws IOException if an I/O error occurs.
      */
@@ -570,11 +572,12 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a UTF string. Identical to {@link DataOutput#writeUTF(String)}.
+     * Writes a UTF string. Identical to
+     * {@link java.io.DataOutput#writeUTF(String)}.
      *
      * @param value string to write
      * @throws IOException if an I/O error occurs
-     * @see DataOutput#writeUTF(String)
+     * @see java.io.DataOutput#writeUTF(String)
      * @deprecated Not for Bit I/O. Use {@link #writeSTRING(String, String)}
      */
     public void writeUTF(final String value) throws IOException {
