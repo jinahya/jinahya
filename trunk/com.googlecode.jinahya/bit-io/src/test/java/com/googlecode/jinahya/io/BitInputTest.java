@@ -23,6 +23,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -190,6 +195,73 @@ public class BitInputTest extends BitIOTest {
         bi.align(1);
 
         Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = INVOCATION_COUNT)
+    public void testChecksum() throws IOException {
+
+        final byte[] bytes = newBytes(false);
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(bytes);
+        final BitInput bi = new BitInput(bais);
+        final Checksum ac = new CRC32();
+        bi.addChecksum(ac);
+
+        for (int i = 0; i < bytes.length; i++) {
+            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
+        }
+
+        final Checksum ec = new CRC32();
+        ec.update(bytes, 0, bytes.length);
+
+        final long actual = ac.getValue();
+        final long expected = ec.getValue();
+
+        Assert.assertEquals(actual, expected);
+
+        Assert.assertTrue(bi.removeChecksum(ac));
+    }
+
+
+    @Test(invocationCount = INVOCATION_COUNT)
+    public void testDigest() throws NoSuchAlgorithmException, IOException {
+
+        testDigest("MD2");
+        testDigest("MD5");
+        testDigest("SHA-1");
+        testDigest("SHA-256");
+        testDigest("SHA-384");
+        testDigest("SHA-512");
+
+    }
+
+
+    private void testDigest(final String algorithm)
+        throws NoSuchAlgorithmException, IOException {
+
+        final byte[] bytes = newBytes(false);
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(bytes);
+        final BitInput bi = new BitInput(bais);
+        final MessageDigest ad = MessageDigest.getInstance(algorithm);
+        bi.addDigest(ad);
+
+        for (int i = 0; i < bytes.length; i++) {
+            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
+        }
+
+        final MessageDigest ed = MessageDigest.getInstance(algorithm);
+        ed.update(bytes);
+
+        final byte[] actual = ad.digest();
+        final byte[] expected = ed.digest();
+
+        Assert.assertEquals(actual, expected);
+
+        Assert.assertTrue(bi.removeDigest(ad));
     }
 
 
