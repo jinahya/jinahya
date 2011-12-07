@@ -40,14 +40,14 @@ public class DependencyResolverTest {
 
         try {
             resolver.add(null, "null");
-            Assert.fail("passed: add() with null source");
+            Assert.fail("passed: add(null, E)");
         } catch (NullPointerException npe) {
             // expected
         }
 
         try {
-            resolver.add(null, (String[]) null);
-            Assert.fail("passed: add() with null targets");
+            resolver.add("null", (String[]) null);
+            Assert.fail("passed: add(E, null)");
         } catch (NullPointerException npe) {
             // expected
         }
@@ -112,7 +112,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testHasDependency() throws DependencyResolverException {
+    public void testContains() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -120,17 +120,19 @@ public class DependencyResolverTest {
         Assert.assertFalse(resolver.contains("A", "B"));
 
         resolver.add("A", "B");
-
         Assert.assertTrue(resolver.contains("A", "B"));
-
         resolver.remove("A", "B");
-
         Assert.assertFalse(resolver.contains("A", "B"));
+
+        resolver.add("A", (String) null);
+        Assert.assertTrue(resolver.contains("A", null));
+        resolver.remove("A", (String) null);
+        Assert.assertFalse(resolver.contains("A", null));
     }
 
 
     @Test
-    public void testRemoveDependency() throws DependencyResolverException {
+    public void testRemove() throws DependencyResolverException {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -140,21 +142,8 @@ public class DependencyResolverTest {
         resolver.add("A", "B");
 
         resolver.remove("A", "B");
-    }
-
-
-    @Test
-    public void testRemoveDependencies() {
-
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
 
         resolver.remove("A", "B", "C", "D", null);
-    }
-
-
-    @Test
-    public void testPerformance() {
     }
 
 
@@ -187,4 +176,7 @@ public class DependencyResolverTest {
             Assert.assertTrue(Modifier.isSynchronized(modifiers2));
         }
     }
+
+
 }
+

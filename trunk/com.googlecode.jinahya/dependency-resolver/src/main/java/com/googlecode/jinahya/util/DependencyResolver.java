@@ -354,9 +354,9 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Returns a single group of all dependencies in order.
+     * Returns a single group of all elements in order.
      *
-     * @return a single dependency group
+     * @return a list of all elements in order.
      */
     public List<E> getSingleGroup() {
 
@@ -371,11 +371,11 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Returns a list of horizontal dependency groups. Each group can be
-     * processed concurrently but all elements in a group must be processed in
-     * order.
+     * Finds and adds all direct or indirect targets from given
+     * <code>source</code>.
      *
-     * @return horizontal groups
+     * @param source source
+     * @param group target group
      */
     private void getSingleGroup(final E source, final List<E> group) {
 
@@ -391,9 +391,9 @@ public class DependencyResolver<E> implements Serializable {
             return;
         }
 
-        final List<E> targets = map.get(source);
-        if (targets != null) {
-            for (E target : targets) {
+        final List<E> list = map.get(source);
+        if (list != null) {
+            for (E target : list) {
                 if (target == null) {
                     continue;
                 }
@@ -406,10 +406,11 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Returns a list of vertical dependency groups. Each group can be processed
-     * concurrently but all elements in a group must be processed in order.
+     * Returns a list of horizontal dependency groups. Each group can be
+     * processed concurrently but all elements in a group must be processed in
+     * order.
      *
-     * @return vertical groups
+     * @return horizontal groups
      */
     public List<List<E>> getHorizontalGroups() {
 

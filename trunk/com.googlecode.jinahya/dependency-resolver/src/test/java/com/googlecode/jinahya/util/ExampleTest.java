@@ -61,45 +61,26 @@ public class ExampleTest {
 
 
     @Test
-    public void testGetDependencyGroups() {
+    public void test() {
 
         System.out.println("paths from O to R: "
                            + RESOLVER.getPaths("O", "R"));
-    }
 
-
-    @Test
-    public void testHasDependencies() {
 
         Assert.assertTrue(RESOLVER.containsAll("A", "F", "G"));
 
         Assert.assertFalse(RESOLVER.containsAll("H", "F", "G"));
-    }
-
-
-    @Test
-    public void testGetSingleGroup() {
 
         System.out.println("single: " + RESOLVER.getSingleGroup());
-    }
-
-
-    @Test
-    public void testGetVerticalGroup() {
 
         System.out.println("vertical: " + RESOLVER.getVerticalGroups());
-    }
-
-
-    @Test
-    public void testGetHorizontalGroup() {
 
         System.out.println("horizontal: " + RESOLVER.getHorizontalGroups());
-    }
 
-
-    public void testGetDependencyPaths() {
         System.out.println("from O to R: "
                            + RESOLVER.getPaths("O", "R"));
     }
+
+
 }
+
