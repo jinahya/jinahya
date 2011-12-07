@@ -25,6 +25,8 @@ import java.io.IOException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import java.util.zip.Adler32;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -37,6 +39,58 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitInputTest extends BitIOTest {
+
+
+    protected <C extends Checksum> void testChecksum(final C c1, final C c2)
+        throws IOException {
+
+        final byte[] bytes = newBytes(false);
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(bytes);
+        final BitInput bi = new BitInput(bais);
+        bi.addChecksum(c1);
+
+        for (int i = 0; i < bytes.length; i++) {
+            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
+        }
+
+        c2.update(bytes, 0, bytes.length);
+
+        final long actual = c1.getValue();
+        final long expected = c2.getValue();
+
+        Assert.assertEquals(actual, expected);
+
+        Assert.assertTrue(bi.removeChecksum(c1));
+    }
+
+
+    private static void testDigest(final String algorithm)
+        throws NoSuchAlgorithmException, IOException {
+
+        final byte[] bytes = newBytes(false);
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(bytes);
+        final BitInput bi = new BitInput(bais);
+        final MessageDigest ad = MessageDigest.getInstance(algorithm);
+        bi.addDigest(ad);
+
+        for (int i = 0; i < bytes.length; i++) {
+            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
+        }
+
+        final MessageDigest ed = MessageDigest.getInstance(algorithm);
+        ed.update(bytes);
+
+        final byte[] actual = ad.digest();
+        final byte[] expected = ed.digest();
+
+        Assert.assertEquals(actual, expected);
+
+        Assert.assertTrue(bi.removeDigest(ad));
+    }
 
 
     @Test(invocationCount = INVOCATION_COUNT)
@@ -201,27 +255,8 @@ public class BitInputTest extends BitIOTest {
     @Test(invocationCount = INVOCATION_COUNT)
     public void testChecksum() throws IOException {
 
-        final byte[] bytes = newBytes(false);
-
-        final ByteArrayInputStream bais =
-            new ByteArrayInputStream(bytes);
-        final BitInput bi = new BitInput(bais);
-        final Checksum ac = new CRC32();
-        bi.addChecksum(ac);
-
-        for (int i = 0; i < bytes.length; i++) {
-            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
-        }
-
-        final Checksum ec = new CRC32();
-        ec.update(bytes, 0, bytes.length);
-
-        final long actual = ac.getValue();
-        final long expected = ec.getValue();
-
-        Assert.assertEquals(actual, expected);
-
-        Assert.assertTrue(bi.removeChecksum(ac));
+        testChecksum(new CRC32(), new CRC32());
+        testChecksum(new Adler32(), new Adler32());
     }
 
 
@@ -235,33 +270,6 @@ public class BitInputTest extends BitIOTest {
         testDigest("SHA-384");
         testDigest("SHA-512");
 
-    }
-
-
-    private void testDigest(final String algorithm)
-        throws NoSuchAlgorithmException, IOException {
-
-        final byte[] bytes = newBytes(false);
-
-        final ByteArrayInputStream bais =
-            new ByteArrayInputStream(bytes);
-        final BitInput bi = new BitInput(bais);
-        final MessageDigest ad = MessageDigest.getInstance(algorithm);
-        bi.addDigest(ad);
-
-        for (int i = 0; i < bytes.length; i++) {
-            Assert.assertEquals(bi.readUnsignedInt(Byte.SIZE), bytes[i] & 0xFF);
-        }
-
-        final MessageDigest ed = MessageDigest.getInstance(algorithm);
-        ed.update(bytes);
-
-        final byte[] actual = ad.digest();
-        final byte[] expected = ed.digest();
-
-        Assert.assertEquals(actual, expected);
-
-        Assert.assertTrue(bi.removeDigest(ad));
     }
 
 

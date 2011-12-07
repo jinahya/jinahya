@@ -87,7 +87,7 @@ public class BitOutput extends BitIOBase {
         if (index == Byte.SIZE) {
             out.write(getOctet());
             increaseCount();
-            index = 0;
+            index = ZERO;
         }
     }
 
@@ -709,7 +709,6 @@ public class BitOutput extends BitIOBase {
      *
      * @return available bits for writing in current octet.
      */
-    @Override
     public int available() {
         return Byte.SIZE - index;
     }
