@@ -122,7 +122,7 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Adds dependencies from <code>source</code> to each of
+     * Adds direct dependencies from <code>source</code> to each of
      * <code>targets</code>.
      *
      * @param source source
@@ -140,9 +140,11 @@ public class DependencyResolver<E> implements Serializable {
             throw new NullPointerException("null targets");
         }
 
+        /*
         if (targets.length == 0) {
-            throw new IllegalArgumentException("empty targets");
+        throw new IllegalArgumentException("empty targets");
         }
+         */
 
         List<E> list = map.get(source);
 
@@ -206,8 +208,7 @@ public class DependencyResolver<E> implements Serializable {
      * @param source source
      * @param targets targets
      * @return true if <code>source</code> has dependencies to all of
-     *         <code>targets</code>; false if there is no dependency from
-     *         <code>source</code> to any of <code>targets</code>.
+     *         <code>targets</code>; false otherwise
      */
     public boolean containsAll(final E source, final E... targets) {
 
@@ -235,7 +236,7 @@ public class DependencyResolver<E> implements Serializable {
      *
      * @param source source
      * @param targets targets
-     * @return true if there is a dependency; false if there is none.
+     * @return true if there is a dependency; false otherwise
      */
     public boolean containsAny(final E source, final E... targets) {
 
@@ -285,6 +286,9 @@ public class DependencyResolver<E> implements Serializable {
 
         for (E auxiliary : list) {
             if (auxiliary == null) {
+                if (target == null) {
+                    return true;
+                }
                 continue;
             }
             if (contains(auxiliary, target)) {
