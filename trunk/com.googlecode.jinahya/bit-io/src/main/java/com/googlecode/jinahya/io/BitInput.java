@@ -824,7 +824,6 @@ public class BitInput extends BitIOBase {
      *
      * @return available bits for reading in current octet.
      */
-    @Override
     public int available() {
         return Byte.SIZE - index;
     }

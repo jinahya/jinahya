@@ -42,14 +42,12 @@ abstract class BitIOBase {
     protected static final int ONE = 1;
 
 
-    /**
+    /*
      * Returns the number of available bits for reading or writing.
      *
      * @return the number of available bits
-     */
     public abstract int available();
-
-
+     */
     /**
      * Aligns to given <code>length</code> as bytes.
      *
@@ -193,32 +191,6 @@ abstract class BitIOBase {
     }
 
 
-    /*
-    protected final void setOctet(final int bitOffset, final int bitLength,
-    int octet) {
-    
-    if (bitOffset < 0) {
-    throw new IllegalArgumentException(
-    "bitOffset(" + bitOffset + ") < 0");
-    }
-    
-    if (bitOffset >= Byte.SIZE) {
-    throw new IllegalArgumentException(
-    "bitOffset(" + bitOffset + ") >= " + Byte.SIZE);
-    }
-    
-    if (bitOffset + bitLength > Byte.SIZE) {
-    throw new IllegalArgumentException(
-    "bitOffset(" + bitOffset + ") + bitLength(" + bitLength
-    + ") > " + Byte.SIZE);
-    }
-    
-    for (int i = bitLength - 1; i >= 0; i--) {
-    setBit(bitOffset + i, (octet & 0x01) == 0x01);
-    octet >>= 1;
-    }
-    }
-     */
     /**
      * Increases count.
      */
