@@ -18,22 +18,25 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-
-
 /**
+ * An XmlAdapter for Crowd and Map of &lt;id, Staff&gt;.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Values extends ListValueType<Value> {
+public class CrowdAdapter extends ListMapAdapter<Crowd, Long, Staff> {
 
 
-    @XmlElement(name = "value")
+    /**
+     * Creates a new instance.
+     */
+    public CrowdAdapter() {
+        super(Crowd.class);
+    }
+
+
     @Override
-    public List<Value> getValues() {
-        return super.getValues();
+    protected Long getKey(final Staff value) {
+        return value.getId();
     }
 
 

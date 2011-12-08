@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -30,7 +31,24 @@ import java.util.Map;
  * @param <V> map value type parameter
  */
 public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
-    extends MapBoundAdapter<L, K, V> {
+    extends MapBoundTypeAdapter<L, K, V> {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param valueTypeClass the type of ValueType.
+     */
+    public ListMapAdapter(final Class<L> valueTypeClass) {
+
+        super();
+
+        if (valueTypeClass == null) {
+            throw new NullPointerException("null valueTypeClass");
+        }
+
+        this.valueTypeClass = valueTypeClass;
+    }
 
 
     @Override
@@ -61,7 +79,29 @@ public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
      * @param boundTypeSize size hint
      * @return a new ValueType instance
      */
-    protected abstract L newValueType(int boundTypeSize);
+    protected L newValueType(int boundTypeSize) {
+        try {
+            return valueTypeClass.newInstance();
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + valueTypeClass, ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(
+                "failed to create a new instance of " + valueTypeClass, iae);
+        }
+    }
+
+
+    @Override
+    protected Map<K, V> newBoundType(int valueTypeSize) {
+        return new HashMap<K, V>(valueTypeSize);
+    }
+
+
+    /**
+     * The type of ValueType.
+     */
+    protected final Class<L> valueTypeClass;
 
 
 }

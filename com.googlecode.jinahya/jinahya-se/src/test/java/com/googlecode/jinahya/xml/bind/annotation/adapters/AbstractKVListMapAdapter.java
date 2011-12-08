@@ -26,9 +26,8 @@ public abstract class AbstractKVListMapAdapter
     extends ListMapAdapter<Values, Key, Value> {
 
 
-    @Override
-    public final Values newValueType(final int boundTypeSize) {
-        return new Values();
+    public AbstractKVListMapAdapter() {
+        super(Values.class);
     }
 
 
