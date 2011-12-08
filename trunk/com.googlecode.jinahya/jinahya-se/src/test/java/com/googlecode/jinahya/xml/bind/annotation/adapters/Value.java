@@ -19,6 +19,10 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -26,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlType(propOrder = {"key", "name", "age"})
 public class Value implements Comparable<Value>, Serializable {
 
@@ -163,12 +168,15 @@ public class Value implements Comparable<Value>, Serializable {
     }
 
 
+    @XmlElement(required = true)
     private Key key;
 
 
+    @XmlElement(required = true)
     private String name;
 
 
+    @XmlElement(required = true)
     private int age;
 
 

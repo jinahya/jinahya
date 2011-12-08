@@ -35,13 +35,13 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class KeyValueArrayMapBoundType {
+public class KVArrayMapAdapterTest {
 
 
     @Test
     public void printXml() throws JAXBException {
 
-        final KeyValueArrayMapBoundType type = new KeyValueArrayMapBoundType();
+        final KVArrayMapAdapterTest type = new KVArrayMapAdapterTest();
         for (int i = 0; i < 10; i++) {
             final Key key = new Key();
             key.setId(i);
@@ -53,7 +53,7 @@ public class KeyValueArrayMapBoundType {
         }
 
         final JAXBContext context =
-            JAXBContext.newInstance(KeyValueArrayMapBoundType.class);
+            JAXBContext.newInstance(KVArrayMapAdapterTest.class);
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.marshal(type, System.out);
@@ -70,9 +70,7 @@ public class KeyValueArrayMapBoundType {
     }
 
 
-    //@XmlElement(name = "value")
-    //@XmlElementWrapper(required = true) // JAXB 2.2.2
-    @XmlJavaTypeAdapter(KeyValueArrayMapAdapter.class)
+    @XmlJavaTypeAdapter(KVArrayMapAdapter.class)
     private Map<Key, Value> values;
 
 

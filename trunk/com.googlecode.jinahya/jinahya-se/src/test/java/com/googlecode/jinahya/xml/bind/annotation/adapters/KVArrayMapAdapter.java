@@ -18,38 +18,22 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.Map;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-
 /**
- * An XmlAdapter for Map BoundTypes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <T> ValueType type parameter
- * @param <K> map key type parameter
- * @param <V> map value type parameter
  */
-public abstract class XmlMapAdapter<T, K, V> extends XmlAdapter<T, Map<K, V>> {
+public class KVArrayMapAdapter extends XmlArrayMapAdapter<Key, Value> {
 
 
-    /**
-     * Returns the map to put keys and values.
-     *
-     * @param valueTypeSize size hint
-     * @return the boundType
-     */
-    protected abstract Map<K, V> newBoundType(int valueTypeSize);
+    public KVArrayMapAdapter() {
+        super(Value.class);
+    }
 
 
-    /**
-     * Returns the key for specified <code>value</code>.
-     *
-     * @param value map value
-     * @return map key for specified <code>value</code>
-     */
-    protected abstract K getKey(V value);
+    @Override
+    protected Key getKey(final Value value) {
+        return value.getKey();
+    }
 
 
 }

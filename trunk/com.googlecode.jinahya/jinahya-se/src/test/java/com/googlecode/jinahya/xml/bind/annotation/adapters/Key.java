@@ -20,11 +20,16 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public class Key implements Comparable<Key>, Serializable {
 
 
@@ -83,6 +88,7 @@ public class Key implements Comparable<Key>, Serializable {
     }
 
 
+    @XmlElement(required = true)
     private long id;
 
 

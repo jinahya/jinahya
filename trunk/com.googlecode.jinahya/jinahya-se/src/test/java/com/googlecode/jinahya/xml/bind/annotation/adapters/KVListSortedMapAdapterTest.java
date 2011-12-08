@@ -18,9 +18,10 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.HashMap;
 import java.util.Map;
 
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -35,13 +36,14 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class KeyValueListMapBoundType {
+public class KVListSortedMapAdapterTest {
 
 
     @Test
     public void printXml() throws JAXBException {
 
-        final KeyValueListMapBoundType type = new KeyValueListMapBoundType();
+        final KVListSortedMapAdapterTest marshal =
+            new KVListSortedMapAdapterTest();
         for (int i = 0; i < 10; i++) {
             final Key key = new Key();
             key.setId(i);
@@ -49,31 +51,29 @@ public class KeyValueListMapBoundType {
             value.setKey(key);
             value.setName(Integer.toString(i));
             value.setAge(i);
-            type.getValues().put(key, value);
+            marshal.getValues().put(key, value);
         }
 
         final JAXBContext context =
-            JAXBContext.newInstance(KeyValueListMapBoundType.class);
+            JAXBContext.newInstance(KVListSortedMapAdapterTest.class);
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(type, System.out);
+        marshaller.marshal(marshal, System.out);
     }
 
 
-    public Map<Key, Value> getValues() {
+    private Map<Key, Value> getValues() {
 
         if (values == null) {
-            values = new HashMap<Key, Value>();
+            values = new TreeMap<Key, Value>();
         }
 
         return values;
     }
 
 
-    //@XmlElement(name = "value")
-    //@XmlElementWrapper(required = true) // JAXB 2.2.2
-    @XmlJavaTypeAdapter(KeyValueListMapAdapter.class)
-    private Map<Key, Value> values;
+    @XmlJavaTypeAdapter(KVListSortedMapAdapter.class)
+    private SortedMap<Key, Value> values;
 
 
 }

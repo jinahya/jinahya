@@ -22,16 +22,18 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KeyValueArrayMapAdapter extends XmlArrayMapAdapter<Key, Value> {
+public abstract class AbstractKVListMapAdapter
+    extends XmlListMapAdapter<KVListValueType, Key, Value> {
 
 
-    public KeyValueArrayMapAdapter() {
-        super(Value.class);
+    @Override
+    public final KVListValueType newValueType(final int boundTypeSize) {
+        return new KVListValueType();
     }
 
 
     @Override
-    protected Key getKey(final Value value) {
+    protected final Key getKey(final Value value) {
         return value.getKey();
     }
 

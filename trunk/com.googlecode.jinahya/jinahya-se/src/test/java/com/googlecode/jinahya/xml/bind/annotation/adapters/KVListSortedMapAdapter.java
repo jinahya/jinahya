@@ -19,19 +19,20 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 import java.util.Map;
-
+import java.util.TreeMap;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KeyValueListMapAdapter extends XmlMapAdapter<KeyValueListValueType, Map<Key, Value>, Key, Value> {
+public class KVListSortedMapAdapter
+    extends AbstractKVListMapAdapter {
 
 
     @Override
-    protected Key getKey(final Value value) {
-        return value.getKey();
+    protected Map<Key, Value> newBoundType(int valueTypeSize) {
+        return new TreeMap<Key, Value>();
     }
 
 

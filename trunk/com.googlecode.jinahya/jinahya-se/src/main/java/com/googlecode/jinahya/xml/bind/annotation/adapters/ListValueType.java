@@ -25,20 +25,27 @@ import java.util.List;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <V> value type parameter
  */
-public class ListValueType<V> {
+public abstract class ListValueType<V> {
 
 
+    /**
+     * Returns value list.
+     *
+     * @return value list
+     */
     public List<V> getValues() {
 
         if (values == null) {
             values = new ArrayList<V>();
         }
-        
+
         return values;
     }
 
 
+    /** values. */
     private List<V> values;
 
 
