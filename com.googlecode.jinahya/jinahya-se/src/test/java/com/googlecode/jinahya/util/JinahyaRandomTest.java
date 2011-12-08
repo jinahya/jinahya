@@ -94,7 +94,7 @@ public class JinahyaRandomTest {
         testNextBytesWithRange(random, 1, 2);
 
         final int minimumLength = random.nextInt(128);
-        final int maximumLength = random.nextInt(128) + minimumLength;
+        final int maximumLength = random.nextInt(128) + minimumLength + 1;
         testNextBytesWithRange(random, minimumLength, maximumLength);
     }
 

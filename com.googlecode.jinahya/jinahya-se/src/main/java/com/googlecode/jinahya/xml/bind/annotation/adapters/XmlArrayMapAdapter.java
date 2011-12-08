@@ -32,9 +32,14 @@ import java.util.Map;
  * @param <V> map value type parameter
  */
 public abstract class XmlArrayMapAdapter<K, V>
-    extends XmlMapAdapter<V[], Map<K, V>, K, V> {
+    extends XmlMapAdapter<V[], K, V> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param valueElementType element type
+     */
     public XmlArrayMapAdapter(final Class<V> valueElementType) {
         super();
 
@@ -49,6 +54,7 @@ public abstract class XmlArrayMapAdapter<K, V>
     @Override
     public V[] marshal(final Map<K, V> boundType) throws Exception {
 
+        @SuppressWarnings("unchecked")
         final V[] valueType =
             (V[]) Array.newInstance(valueElementType, boundType.size());
 
@@ -61,7 +67,7 @@ public abstract class XmlArrayMapAdapter<K, V>
     @Override
     public Map<K, V> unmarshal(final V[] valueType) throws Exception {
 
-        final Map<K, V> boundType = getBoundType(valueType.length);
+        final Map<K, V> boundType = newBoundType(valueType.length);
 
         for (V value : valueType) {
             boundType.put(getKey(value), value);
@@ -72,7 +78,7 @@ public abstract class XmlArrayMapAdapter<K, V>
 
 
     @Override
-    protected Map<K, V> getBoundType(int valueTypeSize) {
+    protected Map<K, V> newBoundType(final int valueTypeSize) {
         return new HashMap<K, V>(valueTypeSize);
     }
 

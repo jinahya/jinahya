@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -29,7 +28,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KeyValueListValueType extends ListValueType<Value> {
+public class KVListValueType extends ListValueType<Value> {
 
 
     @XmlElement(name = "value")

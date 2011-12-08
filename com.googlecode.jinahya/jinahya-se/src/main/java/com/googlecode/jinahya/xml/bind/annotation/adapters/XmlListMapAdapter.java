@@ -18,31 +18,49 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <L>
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class XmlListMapAdapter<K, V>
-    extends XmlCollectionMapAdapter<List<V>, Map<K, V>, K, V> {
+public abstract class XmlListMapAdapter<L extends ListValueType<V>, K, V>
+    extends XmlMapAdapter<L, K, V> {
 
 
     @Override
-    protected Map<K, V> getBoundType(final int valueTypeSize) {
-        return new HashMap<K, V>(valueTypeSize);
+    public L marshal(final Map<K, V> boundType) throws Exception {
+
+        final L valueType = newValueType(boundType.size());
+        valueType.getValues().addAll(boundType.values());
+
+        return valueType;
     }
 
 
     @Override
-    protected List<V> getValueType(final int boundTypeSize) {
-        return new ArrayList<V>(boundTypeSize);
+    public Map<K, V> unmarshal(final L valueType) throws Exception {
+
+        final Map<K, V> boundType = newBoundType(valueType.getValues().size());
+        for (V value : valueType.getValues()) {
+            boundType.put(getKey(value), value);
+        }
+
+        return boundType;
     }
+
+
+    /**
+     * 
+     * @param boundTypeSize
+     * @return 
+     */
+    protected abstract L newValueType(int boundTypeSize);
+
+
 }
 
