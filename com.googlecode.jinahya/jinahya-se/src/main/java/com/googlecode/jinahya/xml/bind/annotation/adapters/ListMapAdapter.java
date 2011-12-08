@@ -99,7 +99,7 @@ public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
 
 
     /**
-     * The type of ValueType.
+     * The type of ListValueType.
      */
     protected final Class<L> valueTypeClass;
 
