@@ -31,7 +31,8 @@ import java.util.Map;
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class ArrayMapAdapter<K, V> extends MapBoundAdapter<V[], K, V> {
+public abstract class ArrayMapAdapter<K, V>
+    extends MapBoundTypeAdapter<V[], K, V> {
 
 
     /**
