@@ -21,8 +21,11 @@ package jinahyax.xml.bind.annotation.adapters;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 
 /**
+ * An XmlAdapter for Collections and Maps.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <C> collection type parameter
@@ -32,37 +35,56 @@ import java.util.Map;
  */
 public abstract class XmlCollectionMapAdapter<C extends Collection<V>,
                                               M extends Map<K, V>, K, V>
-    extends XmlMapAdapter<C, M, K, V> {
+    extends XmlAdapter<C, M> {
 
 
     @Override
-    public C marshal(final M bound) throws Exception {
+    public C marshal(final M boundType) throws Exception {
 
-        final C value = newCollection();
-        value.addAll(bound.values());
+        final C valueType = getValueType(boundType.size());
+        valueType.addAll(boundType.values());
 
-        return value;
+        return valueType;
     }
 
 
     @Override
-    public M unmarshal(final C value) throws Exception {
+    public M unmarshal(final C valueType) throws Exception {
 
-        final M bound = newMap();
-        for (V mapValue : value) {
-            bound.put(getMapKey(mapValue), mapValue);
+        final M boundType = getBoundType(valueType.size());
+        for (V value : valueType) {
+            boundType.put(getKey(value), value);
         }
 
-        return bound;
+        return boundType;
     }
 
 
     /**
-     * Creates a new collection.
+     * Returns the collection to add values.
      *
-     * @return new collection
+     * @param boundTypeSize size hint
+     * @return the valueType
      */
-    protected abstract C newCollection();
+    protected abstract C getValueType(int boundTypeSize);
+
+
+    /**
+     * Returns the map to put keys and values.
+     *
+     * @param valueTypeSize size hint
+     * @return the boundType
+     */
+    protected abstract M getBoundType(int valueTypeSize);
+
+
+    /**
+     * Returns the key for specified <code>value</code>.
+     *
+     * @param value map value
+     * @return map key for specified <code>value</code>
+     */
+    protected abstract K getKey(V value);
 
 
 }
