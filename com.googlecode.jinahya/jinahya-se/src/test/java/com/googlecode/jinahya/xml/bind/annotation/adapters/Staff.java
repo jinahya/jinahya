@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-//@XmlType(propOrder = {"id", "name"})
 public class Staff implements Comparable<Staff>, Serializable {
 
 
