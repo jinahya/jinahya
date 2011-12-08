@@ -41,6 +41,29 @@ public class JinahyaRandom extends Random {
 
 
     /**
+     * Returns a random number between <code>minimum</code> and
+     * <code>maximum</code>.
+     *
+     * @param minimum minimum value (inclusive)
+     * @param maximum maximum value (exclusive)
+     * @return a number between <code>minimum</code> and <code>maximum</code>
+     */
+    public int nextInt(final int minimum, final int maximum) {
+
+        if (minimum < 0) {
+            throw new IllegalArgumentException("minimum(" + minimum + ") < 0");
+        }
+
+        if (minimum >= maximum) {
+            throw new IllegalArgumentException(
+                "minimum(" + minimum + ") >= maximum(" + maximum + ")");
+        }
+
+        return nextInt(maximum - minimum) + minimum;
+    }
+
+
+    /**
      * Generates a byte array in given <code>length</code>.
      *
      * @param length array length
@@ -70,15 +93,13 @@ public class JinahyaRandom extends Random {
                 "minimumLength(" + minimumLength + ") < 0");
         }
 
-        if (maximumLength < minimumLength) {
+        if (minimumLength > maximumLength) {
             throw new IllegalArgumentException(
-                "maximumLength(" + maximumLength + ") < minimumLength("
-                + minimumLength + ")");
+                "minimumLength(" + minimumLength + ") > maximumLength("
+                + maximumLength + ")");
         }
 
-        final int length = (minimumLength == maximumLength
-                            ? 0 : nextInt(maximumLength - minimumLength))
-                           + minimumLength;
+        final int length = nextInt(minimumLength, maximumLength + 1);
         final byte[] bytes = new byte[length];
         nextBytes(bytes);
         return bytes;
@@ -88,21 +109,21 @@ public class JinahyaRandom extends Random {
     /**
      * Generates an unsigned int in arbitrary bits.
      *
-     * @param minimumBits minimum bits
-     * @param maximumBits maximum bits
+     * @param minimumBits minimum bits (inclusive)
+     * @param maximumBits maximum bits (inclusive)
      * @return generated value.
      */
     public int nextUnsignedInt(final int minimumBits, final int maximumBits) {
 
-        if (minimumBits < 0x01) {
+        if (minimumBits < 1) {
             throw new IllegalArgumentException(
-                "minimumBits(" + minimumBits + ") < 0x01");
+                "minimumBits(" + minimumBits + ") < 1");
         }
 
-        if (maximumBits < minimumBits) {
+        if (minimumBits > maximumBits) {
             throw new IllegalArgumentException(
-                "maximumBits(" + maximumBits + ") < minimumBits("
-                + minimumBits + ")");
+                "minimumBits(" + minimumBits + ") > maximumBits("
+                + maximumBits + ")");
         }
 
         if (maximumBits >= Integer.SIZE) {
@@ -110,10 +131,7 @@ public class JinahyaRandom extends Random {
                 "maximumBits(" + maximumBits + ") >= " + Integer.SIZE);
         }
 
-        final int bits = (maximumBits == minimumBits
-                          ? 0 : nextInt(maximumBits - minimumBits + 1))
-                         + minimumBits;
-
+        final int bits = nextInt(minimumBits, maximumBits + 1);
         return nextUnsignedInt(bits);
     }
 
@@ -127,8 +145,8 @@ public class JinahyaRandom extends Random {
      */
     public int nextUnsignedInt(final int bits) {
 
-        if (bits < 0x01) {
-            throw new IllegalArgumentException("bits(" + bits + ") < 0x01");
+        if (bits < 1) {
+            throw new IllegalArgumentException("bits(" + bits + ") < 1");
         }
 
         if (bits >= Integer.SIZE) {
@@ -143,21 +161,21 @@ public class JinahyaRandom extends Random {
     /**
      * Generates a signed int in arbitrary bits.
      *
-     * @param minimumBits minimum bits
-     * @param maximumBits maximum bits
+     * @param minimumBits minimum bits (inclusive)
+     * @param maximumBits maximum bits (inclusive)
      * @return generated value.
      */
     public int nextSignedInt(final int minimumBits, final int maximumBits) {
 
-        if (minimumBits <= 0x01) {
+        if (minimumBits <= 1) {
             throw new IllegalArgumentException(
-                "minimumBits(" + minimumBits + ") <= 0x01");
+                "minimumBits(" + minimumBits + ") <= 1");
         }
 
-        if (maximumBits < minimumBits) {
+        if (minimumBits > maximumBits) {
             throw new IllegalArgumentException(
-                "maximumBits(" + maximumBits + ") < minimumBits("
-                + minimumBits + ")");
+                "minimumBits(" + minimumBits + ") > maximumBits("
+                + maximumBits + ")");
         }
 
         if (maximumBits > Integer.SIZE) {
@@ -165,10 +183,7 @@ public class JinahyaRandom extends Random {
                 "maximumBits(" + maximumBits + ") > " + Integer.SIZE);
         }
 
-        final int bits = (maximumBits == minimumBits
-                          ? 0 : nextInt(maximumBits - minimumBits + 1))
-                         + minimumBits;
-
+        final int bits = nextInt(minimumBits, maximumBits + 1);
         return nextSignedInt(bits);
     }
 
@@ -182,8 +197,8 @@ public class JinahyaRandom extends Random {
      */
     public int nextSignedInt(final int bits) {
 
-        if (bits <= 0x01) {
-            throw new IllegalArgumentException("bits(" + bits + ") <= 0x01");
+        if (bits <= 1) {
+            throw new IllegalArgumentException("bits(" + bits + ") <= 1");
         }
 
         if (bits > Integer.SIZE) {
@@ -191,34 +206,32 @@ public class JinahyaRandom extends Random {
                 "bits(" + bits + ") > " + Integer.SIZE);
         }
 
-        final int nextInt = nextInt();
-
         if (bits == Integer.SIZE) {
-            return nextInt;
+            return nextInt();
         }
 
-        return nextInt >> (Integer.SIZE - bits);
+        return nextInt() >> (Integer.SIZE - bits);
     }
 
 
     /**
      * Generates an unsigned long in arbitrary bits.
      *
-     * @param minimumBits minimum bits
-     * @param maximumBits maximum bits
+     * @param minimumBits minimum bits (inclusive)
+     * @param maximumBits maximum bits (inclusive)
      * @return generated value.
      */
     public long nextUnsignedLong(final int minimumBits, final int maximumBits) {
 
-        if (minimumBits < 0x01) {
+        if (minimumBits < 1) {
             throw new IllegalArgumentException(
-                "minimumBits(" + minimumBits + ") < 0x01");
+                "minimumBits(" + minimumBits + ") < 1");
         }
 
-        if (maximumBits < minimumBits) {
+        if (minimumBits > maximumBits) {
             throw new IllegalArgumentException(
-                "maximumBits(" + maximumBits + ") < minimumBits("
-                + minimumBits + ")");
+                "minimumBits(" + minimumBits + ") > maximumBits(" + maximumBits
+                + ")");
         }
 
         if (maximumBits >= Long.SIZE) {
@@ -226,10 +239,7 @@ public class JinahyaRandom extends Random {
                 "maximumBits(" + maximumBits + ") >= " + Long.SIZE);
         }
 
-        final int bits = (maximumBits == minimumBits
-                          ? 0 : nextInt(maximumBits - minimumBits + 1))
-                         + minimumBits;
-
+        final int bits = nextInt(minimumBits, maximumBits + 1);
         return nextUnsignedLong(bits);
     }
 
@@ -243,8 +253,8 @@ public class JinahyaRandom extends Random {
      */
     public long nextUnsignedLong(final int bits) {
 
-        if (bits < 0x01) {
-            throw new IllegalArgumentException("bits(" + bits + ") < 0x01");
+        if (bits < 1) {
+            throw new IllegalArgumentException("bits(" + bits + ") < 1");
         }
 
         if (bits >= Long.SIZE) {
@@ -259,21 +269,21 @@ public class JinahyaRandom extends Random {
     /**
      * Generates a signed int in arbitrary bits.
      *
-     * @param minimumBits minimum bits
-     * @param maximumBits maximum bits
+     * @param minimumBits minimum bits (inclusive)
+     * @param maximumBits maximum bits (inclusive)
      * @return generated value.
      */
     public long nextSignedLong(final int minimumBits, final int maximumBits) {
 
-        if (minimumBits <= 0x01) {
+        if (minimumBits <= 1) {
             throw new IllegalArgumentException(
-                "minimumBits(" + minimumBits + ") <= 0x01");
+                "minimumBits(" + minimumBits + ") <= 1");
         }
 
-        if (maximumBits < minimumBits) {
+        if (minimumBits > maximumBits) {
             throw new IllegalArgumentException(
-                "maximumBits(" + maximumBits + ") < minimumBits("
-                + minimumBits + ")");
+                "minimumBits(" + minimumBits + ") > maximumBits(" + maximumBits
+                + ")");
         }
 
         if (maximumBits > Long.SIZE) {
@@ -281,10 +291,7 @@ public class JinahyaRandom extends Random {
                 "maximumBits(" + maximumBits + ") > " + Long.SIZE);
         }
 
-        final int bits = (maximumBits == minimumBits
-                          ? 0 : nextInt(maximumBits - minimumBits + 1))
-                         + minimumBits;
-
+        final int bits = nextInt(minimumBits, maximumBits + 1);
         return nextSignedLong(bits);
     }
 
@@ -298,8 +305,8 @@ public class JinahyaRandom extends Random {
      */
     public long nextSignedLong(final int bits) {
 
-        if (bits <= 0x01) {
-            throw new IllegalArgumentException("bits(" + bits + ") <= 0x01");
+        if (bits <= 1) {
+            throw new IllegalArgumentException("bits(" + bits + ") <= 1");
         }
 
         if (bits > Long.SIZE) {
@@ -307,13 +314,11 @@ public class JinahyaRandom extends Random {
                 "bits(" + bits + ") > " + Long.SIZE);
         }
 
-        final long nextLong = nextLong();
-
         if (bits == Long.SIZE) {
-            return nextLong;
+            return nextLong();
         }
 
-        return nextLong >> (Long.SIZE - bits);
+        return nextLong() >> (Long.SIZE - bits);
     }
 
 
