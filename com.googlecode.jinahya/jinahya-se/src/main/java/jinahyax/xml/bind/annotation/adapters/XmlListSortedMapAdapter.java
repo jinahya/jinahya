@@ -18,20 +18,32 @@
 package jinahyax.xml.bind.annotation.adapters;
 
 
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S> set type parameter
- * @param <M> map type parameter
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class XmlSetMapAdapter<S extends Set<V>,
-                                       M extends Map<K, V>, K, V>
-    extends XmlCollectionMapAdapter<S, M, K, V> {
+public abstract class XmlListSortedMapAdapter<K, V>
+    extends XmlCollectionMapAdapter<List<V>, SortedMap<K, V>, K, V> {
+
+
+    @Override
+    protected SortedMap<K, V> getBoundType(final int valueTypeSize) {
+        return new TreeMap<K, V>(new HashMap<K, V>(valueTypeSize));
+    }
+
+
+    @Override
+    protected List<V> getValueType(final int boundTypeSize) {
+        return new ArrayList<V>(boundTypeSize);
+    }
 }
 
