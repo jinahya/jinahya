@@ -29,6 +29,31 @@ import org.testng.annotations.Test;
 public class JinahyaRandomTest {
 
 
+    private static void testNextBytesWithLength(final JinahyaRandom random,
+                                                final int length) {
+
+        Assert.assertTrue(length >= 0);
+
+        final byte[] bytes = random.nextBytes(length);
+
+        Assert.assertTrue(bytes.length == length);
+    }
+
+
+    private static void testNextBytesWithRange(final JinahyaRandom random,
+                                               final int minimumLength,
+                                               final int maximumLength) {
+
+        Assert.assertTrue(minimumLength >= 0);
+        Assert.assertTrue(maximumLength > minimumLength);
+
+        final byte[] bytes = random.nextBytes(minimumLength, maximumLength);
+
+        Assert.assertTrue(bytes.length >= minimumLength);
+        Assert.assertTrue(bytes.length < maximumLength);
+    }
+
+
     @Test(invocationCount = 128)
     public void testNextBytes() {
 
@@ -40,27 +65,37 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
         }
 
-        final int length = random.nextInt(128); // 0 - 127
-        Assert.assertEquals(random.nextBytes(length).length, length);
+        testNextBytesWithLength(random, 0);
+        testNextBytesWithLength(random, 1);
+        testNextBytesWithLength(random, random.nextInt(128)); // 0 - 127
 
         try {
             random.nextBytes(-1, 0);
             Assert.fail("passed: nextBytes(-1, 0)");
         } catch (IllegalArgumentException iae) {
+            // expected
         }
 
         try {
             random.nextBytes(0, -1);
             Assert.fail("passed: nextBytes(0, -1)");
         } catch (IllegalArgumentException iae) {
+            // expected
         }
+
+        try {
+            random.nextBytes(0, 0);
+            Assert.fail("passed: nextBytes(0, 0)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        testNextBytesWithRange(random, 0, 1);
+        testNextBytesWithRange(random, 1, 2);
 
         final int minimumLength = random.nextInt(128);
         final int maximumLength = random.nextInt(128) + minimumLength;
-        final byte[] nextBytes =
-            random.nextBytes(minimumLength, maximumLength);
-        Assert.assertTrue(nextBytes.length >= minimumLength);
-        Assert.assertTrue(nextBytes.length <= maximumLength);
+        testNextBytesWithRange(random, minimumLength, maximumLength);
     }
 
 

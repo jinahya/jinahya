@@ -15,17 +15,15 @@
  */
 
 
-package jinahyax.xml.bind.annotation.adapters;
+package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 import java.util.Collection;
 import java.util.Map;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
 
 /**
- * An XmlAdapter for Collections and Maps.
+ * An XmlMapAdapter for Collection ValueType.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <C> collection type parameter
@@ -35,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public abstract class XmlCollectionMapAdapter<C extends Collection<V>,
                                               M extends Map<K, V>, K, V>
-    extends XmlAdapter<C, M> {
+    extends XmlMapAdapter<C, M, K, V> {
 
 
     @Override
@@ -67,24 +65,6 @@ public abstract class XmlCollectionMapAdapter<C extends Collection<V>,
      * @return the valueType
      */
     protected abstract C getValueType(int boundTypeSize);
-
-
-    /**
-     * Returns the map to put keys and values.
-     *
-     * @param valueTypeSize size hint
-     * @return the boundType
-     */
-    protected abstract M getBoundType(int valueTypeSize);
-
-
-    /**
-     * Returns the key for specified <code>value</code>.
-     *
-     * @param value map value
-     * @return map key for specified <code>value</code>
-     */
-    protected abstract K getKey(V value);
 
 
 }

@@ -15,34 +15,25 @@
  */
 
 
-package jinahyax.xml.bind.annotation.adapters;
+package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <K> map key type parameter
- * @param <V> map value type parameter
  */
-public abstract class XmlListMapAdapter<K, V>
-    extends XmlCollectionMapAdapter<List<V>, Map<K, V>, K, V> {
+public class KeyValueListMapAdapter extends XmlMapAdapter<KeyValueListValueType, Map<Key, Value>, Key, Value> {
 
 
     @Override
-    protected Map<K, V> getBoundType(final int valueTypeSize) {
-        return new HashMap<K, V>(valueTypeSize);
+    protected Key getKey(final Value value) {
+        return value.getKey();
     }
 
 
-    @Override
-    protected List<V> getValueType(final int boundTypeSize) {
-        return new ArrayList<V>(boundTypeSize);
-    }
 }
 
