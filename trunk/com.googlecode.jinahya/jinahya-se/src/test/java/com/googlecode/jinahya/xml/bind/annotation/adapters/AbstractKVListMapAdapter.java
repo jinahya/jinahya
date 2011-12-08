@@ -23,12 +23,12 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public abstract class AbstractKVListMapAdapter
-    extends XmlListMapAdapter<KVListValueType, Key, Value> {
+    extends ListMapAdapter<Values, Key, Value> {
 
 
     @Override
-    public final KVListValueType newValueType(final int boundTypeSize) {
-        return new KVListValueType();
+    public final Values newValueType(final int boundTypeSize) {
+        return new Values();
     }
 
 

@@ -18,12 +18,11 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -35,32 +34,18 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class KVArrayMapAdapterTest {
+public class KVArrayMapAdapterTest extends AbstractKVMapAdapterTest {
 
 
     @Test
-    public void printXml() throws JAXBException {
+    public void printXml() throws JAXBException, IOException {
 
-        final KVArrayMapAdapterTest type = new KVArrayMapAdapterTest();
-        for (int i = 0; i < 10; i++) {
-            final Key key = new Key();
-            key.setId(i);
-            final Value value = new Value();
-            value.setKey(key);
-            value.setName(Integer.toString(i));
-            value.setAge(i);
-            type.getValues().put(key, value);
-        }
-
-        final JAXBContext context =
-            JAXBContext.newInstance(KVArrayMapAdapterTest.class);
-        final Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(type, System.out);
+        printXml(KVArrayMapAdapterTest.class, this);
     }
 
 
-    public Map<Key, Value> getValues() {
+    @Override
+    protected Map<Key, Value> getValues() {
 
         if (values == null) {
             values = new HashMap<Key, Value>();

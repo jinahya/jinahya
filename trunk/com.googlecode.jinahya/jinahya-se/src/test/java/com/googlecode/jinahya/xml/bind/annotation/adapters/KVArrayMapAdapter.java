@@ -22,7 +22,7 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVArrayMapAdapter extends XmlArrayMapAdapter<Key, Value> {
+public class KVArrayMapAdapter extends ArrayMapAdapter<Key, Value> {
 
 
     public KVArrayMapAdapter() {

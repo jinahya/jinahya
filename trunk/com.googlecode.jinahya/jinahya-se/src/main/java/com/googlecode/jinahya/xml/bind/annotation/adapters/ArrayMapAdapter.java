@@ -31,8 +31,7 @@ import java.util.Map;
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class XmlArrayMapAdapter<K, V>
-    extends XmlMapAdapter<V[], K, V> {
+public abstract class ArrayMapAdapter<K, V> extends MapAdapter<V[], K, V> {
 
 
     /**
@@ -40,7 +39,7 @@ public abstract class XmlArrayMapAdapter<K, V>
      *
      * @param valueElementType element type
      */
-    public XmlArrayMapAdapter(final Class<V> valueElementType) {
+    public ArrayMapAdapter(final Class<V> valueElementType) {
         super();
 
         if (valueElementType == null) {
