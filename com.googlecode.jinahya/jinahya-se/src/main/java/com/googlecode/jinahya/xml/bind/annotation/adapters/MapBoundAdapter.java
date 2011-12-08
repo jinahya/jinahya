@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class MapAdapter<T, K, V> extends XmlAdapter<T, Map<K, V>> {
+public abstract class MapBoundAdapter<T, K, V>
+    extends XmlAdapter<T, Map<K, V>> {
 
 
     /**

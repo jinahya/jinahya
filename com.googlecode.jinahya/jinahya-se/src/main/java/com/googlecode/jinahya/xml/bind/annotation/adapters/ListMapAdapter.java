@@ -30,7 +30,7 @@ import java.util.Map;
  * @param <V> map value type parameter
  */
 public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
-    extends MapAdapter<L, K, V> {
+    extends MapBoundAdapter<L, K, V> {
 
 
     @Override
