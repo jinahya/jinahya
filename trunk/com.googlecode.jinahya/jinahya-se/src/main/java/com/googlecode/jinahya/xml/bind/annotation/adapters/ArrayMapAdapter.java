@@ -38,7 +38,7 @@ public abstract class ArrayMapAdapter<K, V>
     /**
      * Creates a new instance.
      *
-     * @param valueElementType element type
+     * @param valueElementType the type of element type
      */
     public ArrayMapAdapter(final Class<V> valueElementType) {
         super();
@@ -83,8 +83,10 @@ public abstract class ArrayMapAdapter<K, V>
     }
 
 
-    /** element type. */
-    private final Class<V> valueElementType;
+    /**
+     * The type of array element.
+     */
+    protected final Class<V> valueElementType;
 
 
 }

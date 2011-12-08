@@ -89,7 +89,7 @@ public class DepartmentTest {
             new StreamSource(bais), Department.class).getValue();
 
         System.out.println("department.name: " + department.getName());
-        for (Staff person : department.getStaffs().values()) {
+        for (Staff person : department.getCrowd().values()) {
             System.out.println("department.staff: " + person);
         }
     }

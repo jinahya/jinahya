@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
-@XmlType(propOrder = {"name", "staffs"})
+@XmlType(propOrder = {"name", "crowd"})
 public class Department {
 
 
@@ -53,7 +53,7 @@ public class Department {
         final Department instance = new Department();
         instance.setName(name);
         for (Staff staff : staffs) {
-            instance.getStaffs().put(staff.getId(), staff);
+            instance.getCrowd().put(staff.getId(), staff);
         }
 
         return instance;
@@ -86,13 +86,13 @@ public class Department {
      *
      * @return a Map of &lt;Person#id&gt;, &lt;Person&gt;.
      */
-    public Map<Long, Staff> getStaffs() {
+    public Map<Long, Staff> getCrowd() {
 
-        if (staffs == null) {
-            staffs = new HashMap<Long, Staff>();
+        if (crowd == null) {
+            crowd = new HashMap<Long, Staff>();
         }
 
-        return staffs;
+        return crowd;
     }
 
 
@@ -103,7 +103,7 @@ public class Department {
      * @return the person mapped to given <code>id</code> or null if not found
      */
     public Staff getStaff(final long id) {
-        return getStaffs().get(id);
+        return getCrowd().get(id);
     }
 
 
@@ -114,7 +114,7 @@ public class Department {
 
     /** staffs of this department. */
     @XmlJavaTypeAdapter(CrowdAdapter.class)
-    private Map<Long, Staff> staffs;
+    private Map<Long, Staff> crowd;
 
 
 }
