@@ -18,13 +18,13 @@
 package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.util.Map;
+import java.io.IOException;
 
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import javax.xml.bind.JAXBContext;
+
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -36,33 +36,18 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class KVListSortedMapAdapterTest {
+public class KVListSortedMapAdapterTest extends AbstractKVMapAdapterTest {
 
 
     @Test
-    public void printXml() throws JAXBException {
+    public void printXml() throws JAXBException, IOException {
 
-        final KVListSortedMapAdapterTest marshal =
-            new KVListSortedMapAdapterTest();
-        for (int i = 0; i < 10; i++) {
-            final Key key = new Key();
-            key.setId(i);
-            final Value value = new Value();
-            value.setKey(key);
-            value.setName(Integer.toString(i));
-            value.setAge(i);
-            marshal.getValues().put(key, value);
-        }
-
-        final JAXBContext context =
-            JAXBContext.newInstance(KVListSortedMapAdapterTest.class);
-        final Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(marshal, System.out);
+        printXml(KVListSortedMapAdapterTest.class, this);
     }
 
 
-    private Map<Key, Value> getValues() {
+    @Override
+    protected Map<Key, Value> getValues() {
 
         if (values == null) {
             values = new TreeMap<Key, Value>();

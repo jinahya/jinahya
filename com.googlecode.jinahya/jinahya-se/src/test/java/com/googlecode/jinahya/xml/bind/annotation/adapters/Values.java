@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVListValueType extends ListValueType<Value> {
+public class Values extends ListValueType<Value> {
 
 
     @XmlElement(name = "value")

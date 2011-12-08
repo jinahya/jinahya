@@ -22,14 +22,15 @@ import java.util.Map;
 
 
 /**
+ * An XmlAdapter for ListValueType and Map.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <L>
+ * @param <L> ListValueType type parameter
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class XmlListMapAdapter<L extends ListValueType<V>, K, V>
-    extends XmlMapAdapter<L, K, V> {
+public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
+    extends MapAdapter<L, K, V> {
 
 
     @Override
@@ -55,9 +56,10 @@ public abstract class XmlListMapAdapter<L extends ListValueType<V>, K, V>
 
 
     /**
-     * 
-     * @param boundTypeSize
-     * @return 
+     * Returns the instance to add values.
+     *
+     * @param boundTypeSize size hint
+     * @return a new ValueType instance
      */
     protected abstract L newValueType(int boundTypeSize);
 

@@ -31,14 +31,14 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
-public abstract class XmlMapAdapter<T, K, V> extends XmlAdapter<T, Map<K, V>> {
+public abstract class MapAdapter<T, K, V> extends XmlAdapter<T, Map<K, V>> {
 
 
     /**
      * Returns the map to put keys and values.
      *
      * @param valueTypeSize size hint
-     * @return the boundType
+     * @return a new BoundType instance
      */
     protected abstract Map<K, V> newBoundType(int valueTypeSize);
 
