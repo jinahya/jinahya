@@ -15,35 +15,26 @@
  */
 
 
-package jinahyax.xml.bind.annotation.adapters;
-
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <K> map key type parameter
- * @param <V> map value type parameter
  */
-public abstract class XmlListSortedMapAdapter<K, V>
-    extends XmlCollectionMapAdapter<List<V>, SortedMap<K, V>, K, V> {
+public class KeyValueArrayMapAdapter extends XmlArrayMapAdapter<Key, Value> {
 
 
-    @Override
-    protected SortedMap<K, V> getBoundType(final int valueTypeSize) {
-        return new TreeMap<K, V>(new HashMap<K, V>(valueTypeSize));
+    public KeyValueArrayMapAdapter() {
+        super(Value.class);
     }
 
 
     @Override
-    protected List<V> getValueType(final int boundTypeSize) {
-        return new ArrayList<V>(boundTypeSize);
+    protected Key getKey(final Value value) {
+        return value.getKey();
     }
+
+
 }
 
