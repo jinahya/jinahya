@@ -19,6 +19,7 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 

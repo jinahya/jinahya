@@ -56,21 +56,41 @@ public class Staff implements Comparable<Staff>, Serializable {
     }
 
 
+    /**
+     * Returns id.
+     *
+     * @return id
+     */
     public long getId() {
         return id;
     }
 
 
+    /**
+     * Sets id.
+     *
+     * @param id id
+     */
     public void setId(final long id) {
         this.id = id;
     }
 
 
+    /**
+     * Returns name.
+     *
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
 
+    /**
+     * Sets name.
+     *
+     * @param name name
+     */
     public void setName(final String name) {
         this.name = name;
     }
@@ -153,10 +173,12 @@ public class Staff implements Comparable<Staff>, Serializable {
     }
 
 
+    /** id. */
     @XmlAttribute(required = true)
     private long id;
 
 
+    /** name. */
     @XmlValue
     private String name;
 

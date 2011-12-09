@@ -35,33 +35,63 @@ import javax.xml.bind.annotation.XmlType;
 public class Value implements Comparable<Value>, Serializable {
 
 
-    public int getAge() {
-        return age;
-    }
-
-
-    public void setAge(final int age) {
-        this.age = age;
-    }
-
-
+    /**
+     * Returns key.
+     *
+     * @return key
+     */
     public Key getKey() {
         return key;
     }
 
 
+    /**
+     * Sets key.
+     *
+     * @param key key
+     */
     public void setKey(final Key key) {
         this.key = key;
     }
 
 
+    /**
+     * Returns name.
+     *
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
 
+    /**
+     * Sets name.
+     *
+     * @param name name
+     */
     public void setName(final String name) {
         this.name = name;
+    }
+
+
+    /**
+     * Returns age.
+     *
+     * @return age
+     */
+    public int getAge() {
+        return age;
+    }
+
+
+    /**
+     * Sets age.
+     * 
+     * @param age age
+     */
+    public void setAge(final int age) {
+        this.age = age;
     }
 
 
