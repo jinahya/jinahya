@@ -36,10 +36,10 @@ import java.util.zip.Checksum;
 abstract class BitIOBase {
 
 
-    protected static final int ZERO = 0;
+    static final int ZERO = 0;
 
 
-    protected static final int ONE = 1;
+    static final int ONE = 1;
 
 
     /**
