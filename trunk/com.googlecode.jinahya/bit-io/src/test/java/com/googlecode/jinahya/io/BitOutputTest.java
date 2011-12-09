@@ -25,8 +25,10 @@ import java.io.IOException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,6 +38,13 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitOutputTest extends BitIOTest {
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testConstructorWithNullStream() {
+
+        final BitOutput bo = new BitOutput(null);
+    }
 
 
     @Test(invocationCount = INVOCATION_COUNT)

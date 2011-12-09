@@ -20,11 +20,12 @@ package com.googlecode.jinahya.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,11 +35,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class FloatTest {
-
-
-    /** random. */
-    protected static final Random RANDOM = new Random();
+public class FloatTest extends BitIOTest {
 
 
     @Test
@@ -128,6 +125,56 @@ public class FloatTest {
             }
         }
         bi.align(1);
+    }
+
+
+    @Test
+    public void testFloatForDataInput() throws IOException {
+
+        final int count = newCount();
+
+        final List<Float> values = new ArrayList<Float>(count);
+        for (int i = 0; i < count; i++) {
+            values.add(RANDOM.nextFloat());
+        }
+
+        final BufferedBitOutput bbo = new BufferedBitOutput();
+        for (float value : values) {
+            bbo.writeFloat(value);
+        }
+        Assert.assertEquals(bbo.align(1), 0);
+
+        final DataInputStream dis =
+            new DataInputStream(new ByteArrayInputStream(bbo.toByteArray()));
+        for (float expected : values) {
+            final float actual = dis.readFloat();
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test
+    public void testFloatForDataOutput() throws IOException {
+
+        final int count = newCount();
+
+        final List<Float> values = new ArrayList<Float>(count);
+        for (int i = 0; i < count; i++) {
+            values.add(RANDOM.nextFloat());
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
+        for (float value : values) {
+            dos.writeFloat(value);
+        }
+
+        final BufferedBitInput bbi = new BufferedBitInput(baos.toByteArray());
+        for (float expected : values) {
+            final float actual = bbi.readFloat();
+            Assert.assertEquals(actual, expected);
+        }
+        Assert.assertEquals(bbi.align(1), 0);
     }
 
 

@@ -113,8 +113,10 @@ public class BitInput extends BitIOBase {
 
     /**
      * Reads a 1-bit boolean value for a null flag.
-     * @return true it null and the value must not be read; false otherwise.
+     *
+     * @return true if null and the value must not be read; false otherwise.
      * @throws IOException if an I/O error occurs.
+     * @see #isNotNull()
      */
     protected boolean isNull() throws IOException {
         return readBoolean();
@@ -126,6 +128,7 @@ public class BitInput extends BitIOBase {
      *
      * @return true if not null and the value must be read; false otherwise.
      * @throws IOException if an I/O error occurs.
+     * @see #isNull()
      */
     protected boolean isNotNull() throws IOException {
         return !isNull();
@@ -273,8 +276,11 @@ public class BitInput extends BitIOBase {
                                        final Integer defaultValue)
         throws IOException {
 
-        return isNull()
-               ? defaultValue : Integer.valueOf(readUnsignedInt(length));
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Integer.valueOf(readUnsignedInt(length));
     }
 
 
@@ -336,7 +342,11 @@ public class BitInput extends BitIOBase {
     public Integer readINTEGER(final int length, final Integer defaultValue)
         throws IOException {
 
-        return isNull() ? defaultValue : Integer.valueOf(readInt(length));
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Integer.valueOf(readInt(length));
     }
 
 
@@ -380,7 +390,11 @@ public class BitInput extends BitIOBase {
      */
     public Float readFLOAT(final Float defaultValue) throws IOException {
 
-        return isNull() ? defaultValue : Float.valueOf(readFloat());
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Float.valueOf(readFloat());
     }
 
 
@@ -455,7 +469,11 @@ public class BitInput extends BitIOBase {
     public Long readUnsignedLONG(final int length, final Long defaultValue)
         throws IOException {
 
-        return isNull() ? defaultValue : Long.valueOf(readUnsignedLong(length));
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Long.valueOf(readUnsignedLong(length));
     }
 
 
@@ -517,7 +535,11 @@ public class BitInput extends BitIOBase {
     public Long readLONG(final int length, final Long defaultValue)
         throws IOException {
 
-        return isNull() ? defaultValue : Long.valueOf(readLong(length));
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Long.valueOf(readLong(length));
     }
 
 
@@ -560,7 +582,11 @@ public class BitInput extends BitIOBase {
      */
     public Double readDOUBLE(final Double defaultValue) throws IOException {
 
-        return isNull() ? defaultValue : Double.valueOf(readDouble());
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return Double.valueOf(readDouble());
     }
 
 
@@ -610,7 +636,11 @@ public class BitInput extends BitIOBase {
      */
     public byte[] readBYTES(final byte[] defaultValue) throws IOException {
 
-        return isNull() ? defaultValue : readBytes();
+        if (isNull()) {
+            return defaultValue;
+        }
+
+        return readBytes();
     }
 
 
@@ -648,7 +678,7 @@ public class BitInput extends BitIOBase {
             return defaultValue;
         }
 
-        byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
+        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) readUnsignedByte(0x07);
         }
@@ -831,7 +861,7 @@ public class BitInput extends BitIOBase {
 
 
     /** source input. */
-    private final InputStream in;
+    protected final InputStream in;
 
 
     /** bit index to read. */

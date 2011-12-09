@@ -718,7 +718,7 @@ public class BitOutput extends BitIOBase {
 
 
     /** target output. */
-    private final OutputStream out;
+    protected final OutputStream out;
 
 
     /** bit index to write. */
