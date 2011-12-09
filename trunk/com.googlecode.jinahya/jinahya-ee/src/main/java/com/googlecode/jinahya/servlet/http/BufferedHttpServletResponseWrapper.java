@@ -15,7 +15,7 @@
  */
 
 
-package jinahyax.servlet.http;
+package com.googlecode.jinahya.servlet.http;
 
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import jinahyax.servlet.BufferedServletOutputStream;
+import com.googlecode.jinahya.servlet.BufferedServletOutputStream;
 
 
 /**
