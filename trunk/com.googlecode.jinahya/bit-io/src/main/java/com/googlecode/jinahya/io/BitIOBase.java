@@ -36,9 +36,11 @@ import java.util.zip.Checksum;
 abstract class BitIOBase {
 
 
+    /** constant for 0x00. */
     static final int ZERO = 0;
 
 
+    /** constant for 0x01. */
     static final int ONE = 1;
 
 
