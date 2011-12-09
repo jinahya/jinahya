@@ -15,7 +15,7 @@
  */
 
 
-package jinahyax.servlet.http;
+package com.googlecode.jinahya.servlet.http;
 
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
 
-import jinahyax.servlet.ServletResponseResult;
+import com.googlecode.jinahya.servlet.ServletResponseResult;
 
 
 /**

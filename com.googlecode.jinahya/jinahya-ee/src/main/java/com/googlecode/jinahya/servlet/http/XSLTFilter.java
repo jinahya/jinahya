@@ -15,7 +15,7 @@
  */
 
 
-package jinahyax.servlet.http;
+package com.googlecode.jinahya.servlet.http;
 
 
 import java.io.ByteArrayInputStream;
@@ -45,7 +45,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import jinahyax.servlet.AbstractFilter;
+import com.googlecode.jinahya.servlet.AbstractFilter;
 
 
 /**

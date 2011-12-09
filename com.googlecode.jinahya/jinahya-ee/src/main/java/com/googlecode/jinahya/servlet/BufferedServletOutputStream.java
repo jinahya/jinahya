@@ -15,7 +15,7 @@
  */
 
 
-package jinahyax.servlet;
+package com.googlecode.jinahya.servlet;
 
 
 import java.io.ByteArrayOutputStream;
