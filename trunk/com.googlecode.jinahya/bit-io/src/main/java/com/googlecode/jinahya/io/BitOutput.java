@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.util.BitAccessible;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -656,9 +657,11 @@ public class BitOutput extends BitIOBase {
     public void writeSTRING(final String value, final String charsetName)
         throws IOException {
 
-        if (isNotNull(value)) {
-            writeString(value, charsetName);
+        if (isNull(value)) {
+            return;
         }
+
+        writeString(value, charsetName);
     }
 
 

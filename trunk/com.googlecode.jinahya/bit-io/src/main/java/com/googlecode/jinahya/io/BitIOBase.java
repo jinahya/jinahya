@@ -42,17 +42,11 @@ abstract class BitIOBase {
     protected static final int ONE = 1;
 
 
-    /*
-     * Returns the number of available bits for reading or writing.
-     *
-     * @return the number of available bits
-    public abstract int available();
-     */
     /**
      * Aligns to given <code>length</code> as bytes.
      *
      * @param length the number of bytes to align
-     * @return the number of bits written/read for alignment
+     * @return the number of bits padded/discarded for alignment
      * @throws IOException if an I/O error occurs.
      */
     public abstract int align(final int length) throws IOException;
@@ -163,8 +157,8 @@ abstract class BitIOBase {
      */
     protected final int getOctet() {
 
-        int octet = 0x00;
-        for (int i = 0; i < 8; i++) {
+        int octet = ZERO;
+        for (int i = 0; i < Byte.SIZE; i++) {
             octet <<= 1;
             octet |= (getBit(i) ? 0x01 : 0x00);
         }
@@ -204,7 +198,7 @@ abstract class BitIOBase {
      *
      * @param b byte to be updated
      */
-    protected final void update(final int b) {
+    private void update(final int b) {
 
         for (Checksum checksum : checksums) {
             checksum.update(b);

@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.util.BitAccessible;
 import java.io.CharArrayWriter;
 import java.io.DataInput;
 import java.io.EOFException;
