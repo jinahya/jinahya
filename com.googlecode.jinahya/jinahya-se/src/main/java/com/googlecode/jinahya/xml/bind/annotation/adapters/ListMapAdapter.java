@@ -79,7 +79,7 @@ public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
      * @param boundTypeSize size hint
      * @return a new ValueType instance
      */
-    protected L newValueType(int boundTypeSize) {
+    protected L newValueType(final int boundTypeSize) {
         try {
             return valueTypeClass.newInstance();
         } catch (InstantiationException ie) {
@@ -93,7 +93,7 @@ public abstract class ListMapAdapter<L extends ListValueType<V>, K, V>
 
 
     @Override
-    protected Map<K, V> newBoundType(int valueTypeSize) {
+    protected Map<K, V> newBoundType(final int valueTypeSize) {
         return new HashMap<K, V>(valueTypeSize);
     }
 
