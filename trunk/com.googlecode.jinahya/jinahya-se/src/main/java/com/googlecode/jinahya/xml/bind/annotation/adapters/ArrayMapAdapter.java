@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 /**
- * An XmlAdapter for Arrays and Map BoundType.
+ * An XmlAdapter for Array ValueType and Map BoundType.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <K> map key type parameter
