@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 6,
-             Errors: 266,
+      <title>File: 8,
+             Errors: 262,
              Warnings: 0,
              Infos: 0
       </title>
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  12
+                  6
                 </td>
               </tr>
                           <tr>
@@ -71,6 +71,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.io.BufferedBitInput.java">com/googlecode/jinahya/io/BufferedBitInput.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.io.BitOutput.java">com/googlecode/jinahya/io/BitOutput.java</a>
                 </td>
                 <td>
@@ -80,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  106
+                  110
                 </td>
               </tr>
                           <tr>
@@ -108,7 +122,21 @@
                   0
                 </td>
                 <td>
-                  143
+                  133
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com//checkstyle.html#com.googlecode.jinahya.io.BufferedBitOutput.java">com/googlecode/jinahya/io/BufferedBitOutput.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
                 </td>
               </tr>
                       </tbody>
