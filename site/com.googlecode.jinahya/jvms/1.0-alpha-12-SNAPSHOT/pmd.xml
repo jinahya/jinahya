@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2011-12-10T01:28:56.581">
+<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/cff/package-info.java">
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
+</violation>
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
+</violation>
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="39" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNs'
+</violation>
+<violation beginline="22" endline="22" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
+</violation>
+<violation beginline="23" endline="23" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
+</violation>
+</file>
+</pmd>
