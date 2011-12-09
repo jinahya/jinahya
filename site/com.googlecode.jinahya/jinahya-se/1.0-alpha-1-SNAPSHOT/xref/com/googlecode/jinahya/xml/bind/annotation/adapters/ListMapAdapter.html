@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment">     * @param boundTypeSize size hint</em>
 <a class="jxr_linenumber" name="80" href="#80">80</a>  <em class="jxr_javadoccomment">     * @return a new ValueType instance</em>
 <a class="jxr_linenumber" name="81" href="#81">81</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="82" href="#82">82</a>      <strong class="jxr_keyword">protected</strong> L newValueType(<strong class="jxr_keyword">int</strong> boundTypeSize) {
+<a class="jxr_linenumber" name="82" href="#82">82</a>      <strong class="jxr_keyword">protected</strong> L newValueType(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> boundTypeSize) {
 <a class="jxr_linenumber" name="83" href="#83">83</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="84" href="#84">84</a>              <strong class="jxr_keyword">return</strong> valueTypeClass.newInstance();
 <a class="jxr_linenumber" name="85" href="#85">85</a>          } <strong class="jxr_keyword">catch</strong> (InstantiationException ie) {
@@ -103,13 +103,13 @@
 <a class="jxr_linenumber" name="93" href="#93">93</a>  
 <a class="jxr_linenumber" name="94" href="#94">94</a>  
 <a class="jxr_linenumber" name="95" href="#95">95</a>      @Override
-<a class="jxr_linenumber" name="96" href="#96">96</a>      <strong class="jxr_keyword">protected</strong> Map&lt;K, V&gt; newBoundType(<strong class="jxr_keyword">int</strong> valueTypeSize) {
+<a class="jxr_linenumber" name="96" href="#96">96</a>      <strong class="jxr_keyword">protected</strong> Map&lt;K, V&gt; newBoundType(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> valueTypeSize) {
 <a class="jxr_linenumber" name="97" href="#97">97</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> HashMap&lt;K, V&gt;(valueTypeSize);
 <a class="jxr_linenumber" name="98" href="#98">98</a>      }
 <a class="jxr_linenumber" name="99" href="#99">99</a>  
 <a class="jxr_linenumber" name="100" href="#100">100</a> 
 <a class="jxr_linenumber" name="101" href="#101">101</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="102" href="#102">102</a> <em class="jxr_javadoccomment">     * The type of ValueType.</em>
+<a class="jxr_linenumber" name="102" href="#102">102</a> <em class="jxr_javadoccomment">     * The type of ListValueType.</em>
 <a class="jxr_linenumber" name="103" href="#103">103</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="104" href="#104">104</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Class&lt;L&gt; valueTypeClass;
 <a class="jxr_linenumber" name="105" href="#105">105</a> 

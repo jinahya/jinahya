@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="37" href="#37">37</a>  @XmlAccessorType(XmlAccessType.NONE)
 <a class="jxr_linenumber" name="38" href="#38">38</a>  @XmlRootElement
-<a class="jxr_linenumber" name="39" href="#39">39</a>  @XmlType(propOrder = {<span class="jxr_string">"name"</span>, <span class="jxr_string">"staffs"</span>})
+<a class="jxr_linenumber" name="39" href="#39">39</a>  @XmlType(propOrder = {<span class="jxr_string">"name"</span>, <span class="jxr_string">"crowd"</span>})
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../com/googlecode/jinahya/xml/bind/annotation/adapters/Department.html">Department</a> {
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
 <a class="jxr_linenumber" name="42" href="#42">42</a>  
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../../../com/googlecode/jinahya/xml/bind/annotation/adapters/Department.html">Department</a> instance = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../com/googlecode/jinahya/xml/bind/annotation/adapters/Department.html">Department</a>();
 <a class="jxr_linenumber" name="54" href="#54">54</a>          instance.setName(name);
 <a class="jxr_linenumber" name="55" href="#55">55</a>          <strong class="jxr_keyword">for</strong> (Staff staff : staffs) {
-<a class="jxr_linenumber" name="56" href="#56">56</a>              instance.getStaffs().put(staff.getId(), staff);
+<a class="jxr_linenumber" name="56" href="#56">56</a>              instance.getCrowd().put(staff.getId(), staff);
 <a class="jxr_linenumber" name="57" href="#57">57</a>          }
 <a class="jxr_linenumber" name="58" href="#58">58</a>  
 <a class="jxr_linenumber" name="59" href="#59">59</a>          <strong class="jxr_keyword">return</strong> instance;
@@ -96,13 +96,13 @@
 <a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="87" href="#87">87</a>  <em class="jxr_javadoccomment">     * @return a Map of &amp;lt;Person#id&amp;gt;, &amp;lt;Person&amp;gt;.</em>
 <a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="89" href="#89">89</a>      <strong class="jxr_keyword">public</strong> Map&lt;Long, Staff&gt; getStaffs() {
+<a class="jxr_linenumber" name="89" href="#89">89</a>      <strong class="jxr_keyword">public</strong> Map&lt;Long, Staff&gt; getCrowd() {
 <a class="jxr_linenumber" name="90" href="#90">90</a>  
-<a class="jxr_linenumber" name="91" href="#91">91</a>          <strong class="jxr_keyword">if</strong> (staffs == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="92" href="#92">92</a>              staffs = <strong class="jxr_keyword">new</strong> HashMap&lt;Long, Staff&gt;();
+<a class="jxr_linenumber" name="91" href="#91">91</a>          <strong class="jxr_keyword">if</strong> (crowd == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="92" href="#92">92</a>              crowd = <strong class="jxr_keyword">new</strong> HashMap&lt;Long, Staff&gt;();
 <a class="jxr_linenumber" name="93" href="#93">93</a>          }
 <a class="jxr_linenumber" name="94" href="#94">94</a>  
-<a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">return</strong> staffs;
+<a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">return</strong> crowd;
 <a class="jxr_linenumber" name="96" href="#96">96</a>      }
 <a class="jxr_linenumber" name="97" href="#97">97</a>  
 <a class="jxr_linenumber" name="98" href="#98">98</a>  
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="103" href="#103">103</a> <em class="jxr_javadoccomment">     * @return the person mapped to given &lt;code&gt;id&lt;/code&gt; or null if not found</em>
 <a class="jxr_linenumber" name="104" href="#104">104</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="105" href="#105">105</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../../../com/googlecode/jinahya/xml/bind/annotation/adapters/Staff.html">Staff</a> getStaff(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> id) {
-<a class="jxr_linenumber" name="106" href="#106">106</a>         <strong class="jxr_keyword">return</strong> getStaffs().get(id);
+<a class="jxr_linenumber" name="106" href="#106">106</a>         <strong class="jxr_keyword">return</strong> getCrowd().get(id);
 <a class="jxr_linenumber" name="107" href="#107">107</a>     }
 <a class="jxr_linenumber" name="108" href="#108">108</a> 
 <a class="jxr_linenumber" name="109" href="#109">109</a> 
@@ -124,7 +124,7 @@
 <a class="jxr_linenumber" name="114" href="#114">114</a> 
 <a class="jxr_linenumber" name="115" href="#115">115</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> staffs of this department. */</em>
 <a class="jxr_linenumber" name="116" href="#116">116</a>     @XmlJavaTypeAdapter(CrowdAdapter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="117" href="#117">117</a>     <strong class="jxr_keyword">private</strong> Map&lt;Long, Staff&gt; staffs;
+<a class="jxr_linenumber" name="117" href="#117">117</a>     <strong class="jxr_keyword">private</strong> Map&lt;Long, Staff&gt; crowd;
 <a class="jxr_linenumber" name="118" href="#118">118</a> 
 <a class="jxr_linenumber" name="119" href="#119">119</a> 
 <a class="jxr_linenumber" name="120" href="#120">120</a> }
