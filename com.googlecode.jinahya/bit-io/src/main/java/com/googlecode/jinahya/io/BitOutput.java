@@ -708,9 +708,9 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Returns the available bits for writing in current octet.
+     * Returns the number of bits available for writing in current octet.
      *
-     * @return available bits for writing in current octet.
+     * @return available bits for writing
      */
     public int available() {
         return Byte.SIZE - index;

@@ -17,7 +17,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>jinahya-accessible</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>${project.dependency.jinahya-accessible.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -51,6 +51,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.dependency.jinahya-accessible.version>1.0-alpha-3</project.dependency.jinahya-accessible.version>
   </properties>
 
   <build>
@@ -171,6 +172,11 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <links>
+                  <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/${project.dependency.jinahya-accessible.version}/apidocs</link>
+                </links>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
