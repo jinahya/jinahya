@@ -24,13 +24,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -50,35 +48,19 @@ public final class Zip {
      *
      * @param root root directory
      * @param child child pathname
-     * @return the directory
+     * @return the directory or the file
      * @throws IOException if an I/O error occurs.
      */
     private static File mkdirs(final File root, final String child)
         throws IOException {
 
-        return mkdirs(root, child, child.endsWith("/"));
-    }
-
-
-    /**
-     * Makes directories for given file name.
-     *
-     * @param root root directory
-     * @param child child pathname
-     * @param directory directory flag
-     * @return the directory
-     * @throws IOException if an I/O error occurs.
-     */
-    private static File mkdirs(final File root, final String child,
-                               final boolean directory)
-        throws IOException {
-
         if (root == null) {
-            throw new NullPointerException("null root");
+            throw new NullPointerException("null parent");
         }
 
         if (!root.isDirectory()) {
-            throw new IllegalArgumentException("root is not a directory");
+            throw new IllegalArgumentException(
+                "parent is not an existing directory");
         }
 
         if (child == null) {
@@ -87,7 +69,7 @@ public final class Zip {
 
         final File file = new File(root, child);
 
-        if (directory) {
+        if (child.endsWith("/")) {
             if (!file.isDirectory() && !file.mkdirs()) {
                 throw new IOException(
                     "failed to create a directory: " + file.getPath());
@@ -108,119 +90,122 @@ public final class Zip {
 
 
     /**
-     * Decompresses entries in <code>stream</code> into <code>root</code>.
+     * Compresses all files in <code>root</code> onto <code>stream</code>.
      *
-     * @param stream source zip stream
-     * @param root target directory to which entries going to be decompressed
-     * @throws IOException if an I/O error occurs.
+     * @param directory source directory
+     * @param stream target stream
+     * @throws IOException if an i/O error occurs.
      */
-    public static void unzip(final InputStream stream, final File root)
+    public static void zip(final File directory, final ZipOutputStream stream)
         throws IOException {
 
-        unzip(stream, StandardCharsets.UTF_8, root);
-    }
+        if (directory == null) {
+            throw new NullPointerException("null parent");
+        }
 
-
-    /**
-     * Decompresses entries in <code>stream</code> into <code>root</code>.
-     *
-     * @param stream source zip stream
-     * @param charset zip charset
-     * @param root target directory to which entries going to be decompressed
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void unzip(final InputStream stream, final Charset charset,
-                             final File root)
-        throws IOException {
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(
+                "parent is not an existing directory");
+        }
 
         if (stream == null) {
             throw new NullPointerException("null stream");
         }
 
-        if (charset == null) {
-            throw new NullPointerException("null charset");
-        }
-
-        unzip(new ZipInputStream(stream, charset), root);
-    }
-
-
-    /**
-     * Decompresses entries in <code>stream</code> into <code>root</code>.
-     *
-     * @param stream source zip stream
-     * @param root target directory to which entries going to be decompressed
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void unzip(final ZipInputStream stream, final File root)
-        throws IOException {
-
-        if (stream == null) {
-            throw new NullPointerException("null stream");
-        }
-
-        if (root == null) {
-            throw new NullPointerException("null directory");
-        }
-
-        if (!root.isDirectory()) {
-            throw new IllegalArgumentException("root doesn't exist");
-        }
-
+        final StringBuilder path = new StringBuilder();
         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-        for (ZipEntry entry; (entry = stream.getNextEntry()) != null;) {
-            final boolean directory = entry.isDirectory();
-            final File file = mkdirs(root, entry.getName(), directory);
-            if (!directory) {
-                IO.copy(stream, file, buffer);
-            }
+        for (File file : directory.listFiles()) {
+            zip(path, file, stream, buffer);
         }
     }
 
 
     /**
-     * Decompresses entries in <code>file</code> into <code>root</code>.
+     * Compresses given <code>file</code> onto <code>stream</code>.
      *
-     * @param file source zip file
-     * @param root target directory to which entries going to be decompressed
+     * @param path parent path
+     * @param file source file
+     * @param stream target stream
+     * @param buffer buffer to use
      * @throws IOException if an I/O error occurs.
      */
-    public static void unzip(final File file, final File root)
+    private static void zip(final StringBuilder path, final File file,
+                            final ZipOutputStream stream, final byte[] buffer)
         throws IOException {
 
-        unzip(file, StandardCharsets.UTF_8, root);
-    }
-
-
-    /**
-     * Decompresses entries in <code>file</code> into <code>root</code>.
-     *
-     * @param file source zip file
-     * @param charset zip charset
-     * @param root target directory to which entries going to be decompressed
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void unzip(final File file, final Charset charset,
-                             final File root)
-        throws IOException {
+        if (path == null) {
+            throw new NullPointerException("null path");
+        }
 
         if (file == null) {
             throw new NullPointerException("null file");
         }
 
-        if (!file.isFile()) {
-            throw new IllegalArgumentException("file doesn't exist");
+        if (!file.exists()) {
+            throw new IllegalArgumentException("file does not exist");
         }
 
-        if (charset == null) {
-            throw new NullPointerException("null charset");
+        if (stream == null) {
+            throw new NullPointerException("null stream");
         }
 
-        final ZipFile zipfile = new ZipFile(file, ZipFile.OPEN_READ, charset);
-        try {
-            unzip(zipfile, root);
-        } finally {
-            zipfile.close();
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (buffer.length == 0) {
+            throw new IllegalArgumentException("zero-length buffer");
+        }
+
+        if (file.isDirectory()) {
+            stream.putNextEntry(new ZipEntry(path + file.getName() + "/"));
+            stream.closeEntry();
+            final int length = path.length();
+            path.append(file.getName()).append("/");
+            for (File child : file.listFiles()) {
+                zip(path, child, stream, buffer);
+            }
+            path.delete(length, path.length());
+        } else {
+            stream.putNextEntry(new ZipEntry(path + file.getName()));
+            IO.copy(file, stream, buffer);
+            stream.closeEntry();
+        }
+    }
+
+
+    /**
+     * Decompresses entries in <code>stream</code> into <code>root</code>.
+     *
+     * @param stream source zip stream
+     * @param directory target directory to which entries going to be
+     * decompressed
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void unzip(final ZipInputStream stream, final File directory)
+        throws IOException {
+
+        if (stream == null) {
+            throw new NullPointerException("null stream");
+        }
+
+        if (directory == null) {
+            throw new NullPointerException("null directory");
+        }
+
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("root doesn't exist");
+        }
+
+        final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        for (ZipEntry entry = null; (entry = stream.getNextEntry()) != null;
+             stream.closeEntry()) {
+            final File file = mkdirs(directory, entry.getName());
+            if (entry.isDirectory()) {
+                assert file.isDirectory();
+            } else {
+                IO.copy(stream, file, buffer);
+            }
         }
     }
 
@@ -229,31 +214,34 @@ public final class Zip {
      * Decompress entries in <code>zipfile</code> into <code>root</code>.
      *
      * @param zipfile source zipfile
-     * @param root target directory to which entries going to be decompressed.
+     * @param directory target directory to which entries going to be
+     * decompressed.
      * @throws IOException if an I/O error occurs.
      */
-    public static void unzip(final ZipFile zipfile, final File root)
+    public static void unzip(final ZipFile zipfile, final File directory)
         throws IOException {
 
         if (zipfile == null) {
             throw new NullPointerException("null zipfile");
         }
 
-        if (root == null) {
+        if (directory == null) {
             throw new NullPointerException("null directory");
         }
 
-        if (!root.isDirectory()) {
-            throw new IllegalArgumentException("root doesn't exist");
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(
+                "directory is not an existing directory");
         }
 
         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-        final Enumeration<? extends ZipEntry> entries = zipfile.entries();
-        while (entries.hasMoreElements()) {
+        for (final Enumeration<? extends ZipEntry> entries = zipfile.entries();
+             entries.hasMoreElements();) {
             final ZipEntry entry = entries.nextElement();
-            final boolean directory = entry.isDirectory();
-            final File file = mkdirs(root, entry.getName(), directory);
-            if (!directory) {
+            final File file = mkdirs(directory, entry.getName());
+            if (entry.isDirectory()) {
+                assert file.isDirectory();
+            } else {
                 final InputStream input = zipfile.getInputStream(entry);
                 try {
                     IO.copy(input, file, buffer);
