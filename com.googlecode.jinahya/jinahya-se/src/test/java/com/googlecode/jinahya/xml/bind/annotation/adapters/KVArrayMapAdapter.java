@@ -25,6 +25,9 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 public class KVArrayMapAdapter extends ArrayMapAdapter<Key, Value> {
 
 
+    /**
+     * Creates a new instance.
+     */
     public KVArrayMapAdapter() {
         super(Value.class);
     }

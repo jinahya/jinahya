@@ -41,8 +41,8 @@ public class JinahyaRandom extends Random {
 
 
     /**
-     * Returns a random number between <code>minimum</code> and
-     * <code>maximum</code>.
+     * Returns a random number between <code>minimum</code> (inclusive) and
+     * <code>maximum</code> (exclusive).
      *
      * @param minimum minimum value (inclusive)
      * @param maximum maximum value (exclusive)

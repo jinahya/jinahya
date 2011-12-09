@@ -33,11 +33,21 @@ import javax.xml.bind.annotation.XmlElement;
 public class Key implements Comparable<Key>, Serializable {
 
 
+    /**
+     * Returns id.
+     *
+     * @return id
+     */
     public long getId() {
         return id;
     }
 
 
+    /**
+     * Sets id.
+     *
+     * @param id id
+     */
     public void setId(final long id) {
         this.id = id;
     }
