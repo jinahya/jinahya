@@ -18,8 +18,10 @@
 package com.googlecode.jinahya.io;
 
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +38,35 @@ public final class IO {
 
     /** default buffer size. */
     private static final int DEFAULT_BUFFER_SIZE = 8192;
+
+
+    public static long copy(final File file, final OutputStream output)
+        throws IOException {
+
+        return copy(file, output, new byte[DEFAULT_BUFFER_SIZE]);
+    }
+
+
+    public static long copy(final File file, final OutputStream output,
+                            final byte[] buffer)
+        throws IOException {
+
+        if (file == null) {
+            throw new NullPointerException("null file");
+        }
+
+        if (!file.isFile()) {
+            throw new IllegalArgumentException("file is not an existing file");
+        }
+
+        final InputStream input =
+            new BufferedInputStream(new FileInputStream(file));
+        try {
+            return copy(input, output, buffer);
+        } finally {
+            input.close();
+        }
+    }
 
 
     /**
