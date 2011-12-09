@@ -21,6 +21,8 @@ package com.googlecode.jinahya.io;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.FilterInputStream;
 import java.io.IOException;
 
 import java.security.MessageDigest;
@@ -93,26 +95,112 @@ public class BitInputTest extends BitIOTest {
     }
 
 
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testConstructorWithNullStream() {
+
+        final BitInput bi = new BitInput(null);
+    }
+
+
+    @Test
+    public void testReadUnsignedByte() throws IOException {
+
+        final BitInput bi = new BitInput(new ByteArrayInputStream(new byte[0]));
+
+        try {
+            bi.readUnsignedByte(-2);
+            Assert.fail("passed: readUnsignedByte(-2)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedByte(-1);
+            Assert.fail("passed: readUnsignedByte(-1)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedByte(9);
+            Assert.fail("passed: readUnsignedByte(9)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedByte(10);
+            Assert.fail("passed: readUnsignedByte(10)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            bi.readUnsignedByte(8);
+            Assert.fail("passed: an EOFException expected");
+        } catch (EOFException eofe) {
+            // expected
+        }
+    }
+
+
+    @Test
+    public void testReadUnsignedShort() throws IOException {
+
+        final BitInput bi = new BitInput(new ByteArrayInputStream(new byte[0]));
+
+        try {
+            bi.readUnsignedShort(-2);
+            Assert.fail("passed: readUnsignedByte(-2)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedShort(-1);
+            Assert.fail("passed: readUnsignedByte(-1)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedShort(17);
+            Assert.fail("passed: readUnsignedByte(17)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedShort(18);
+            Assert.fail("passed: readUnsignedByte(18)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+
     @Test(invocationCount = INVOCATION_COUNT)
     public void testReadUnsignedInt() throws IOException {
 
-        for (int length = 1; length < 32; length++) {
-
-            final int expected = RANDOM.nextInt() >>> (32 - length);
-
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final DataOutputStream dos = new DataOutputStream(baos);
-            dos.writeInt(expected << (32 - length));
-            dos.flush();
-            baos.flush();
-
-            final ByteArrayInputStream bais =
-                new ByteArrayInputStream(baos.toByteArray());
-            final BitInput bi = new BitInput(bais);
-            final int actual = bi.readUnsignedInt(length);
-            bi.align(4);
-
-            Assert.assertEquals(actual, expected);
+        final BitInput bi =
+            new BitInput(new ByteArrayInputStream(new byte[0]));
+        try {
+            bi.readUnsignedInt(-1);
+            Assert.fail("passed: readUnsignedInt(-1)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedInt(0);
+            Assert.fail("passed: readUnsignedInt(0)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedInt(32);
+            Assert.fail("passed: readUnsignedInt(32)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readUnsignedInt(33);
+            Assert.fail("passed: readUnsignedInt(33)");
+        } catch (IllegalArgumentException iae) {
+            // expected
         }
     }
 
@@ -120,23 +208,30 @@ public class BitInputTest extends BitIOTest {
     @Test(invocationCount = INVOCATION_COUNT)
     public void testReadInt() throws IOException {
 
-        for (int length = 2; length <= 32; length++) {
-
-            final int expected = RANDOM.nextInt() >> (32 - length);
-
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final DataOutputStream dos = new DataOutputStream(baos);
-            dos.writeInt(expected << (32 - length));
-            dos.flush();
-            baos.flush();
-
-            final ByteArrayInputStream bais =
-                new ByteArrayInputStream(baos.toByteArray());
-            final BitInput bi = new BitInput(bais);
-            final int actual = bi.readInt(length);
-            bi.align(4);
-
-            Assert.assertEquals(actual, expected);
+        final BitInput bi = new BitInput(new ByteArrayInputStream(new byte[0]));
+        try {
+            bi.readInt(0);
+            Assert.fail("passed: readInt(0)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readInt(1);
+            Assert.fail("passed: readInt(1)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readInt(33);
+            Assert.fail("passed: readInt(33)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            bi.readInt(34);
+            Assert.fail("passed: readInt(34)");
+        } catch (IllegalArgumentException iae) {
+            // expected
         }
     }
 
@@ -165,6 +260,35 @@ public class BitInputTest extends BitIOTest {
     @Test(invocationCount = INVOCATION_COUNT)
     public void testReadUnsignedLong() throws IOException {
 
+        {
+            final BitInput bi =
+                new BitInput(new ByteArrayInputStream(new byte[0]));
+            try {
+                bi.readUnsignedLong(-1);
+                Assert.fail("passed: readUnsignedLong(-1)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readUnsignedLong(0);
+                Assert.fail("passed: readUnsignedLong(0)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readUnsignedLong(64);
+                Assert.fail("passed: readUnsignedLong(64)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readUnsignedLong(65);
+                Assert.fail("passed: readUnsignedLong(65)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
+
         for (int length = 1; length < 64; length++) {
 
             final long expected = RANDOM.nextLong() >>> (64 - length);
@@ -188,6 +312,35 @@ public class BitInputTest extends BitIOTest {
 
     @Test(invocationCount = INVOCATION_COUNT)
     public void testReadLong() throws IOException {
+
+        {
+            final BitInput bi =
+                new BitInput(new ByteArrayInputStream(new byte[0]));
+            try {
+                bi.readLong(0);
+                Assert.fail("passed: readLong(0)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readLong(1);
+                Assert.fail("passed: readLong(1)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readLong(65);
+                Assert.fail("passed: readLong(65)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+            try {
+                bi.readLong(66);
+                Assert.fail("passed: readLong(66)");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
 
         for (int length = 2; length <= 64; length++) {
 
@@ -232,28 +385,15 @@ public class BitInputTest extends BitIOTest {
 
 
     @Test(invocationCount = INVOCATION_COUNT)
-    public void testReadUTF() throws IOException {
-
-        final String expected = newString(false);
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream(baos);
-        dos.writeUTF(expected);
-        dos.flush();
-        baos.flush();
-
-        final ByteArrayInputStream bais =
-            new ByteArrayInputStream(baos.toByteArray());
-        final BitInput bi = new BitInput(bais);
-        final String actual = bi.readUTF();
-        bi.align(1);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test(invocationCount = INVOCATION_COUNT)
     public void testChecksum() throws IOException {
+
+        final BitInput bi = new BitInput(new ByteArrayInputStream(new byte[0]));
+        try {
+            bi.addChecksum(null);
+            Assert.fail("passed: addChecksum(null)");
+        } catch (NullPointerException npe) {
+            // expected
+        }
 
         testChecksum(new CRC32(), new CRC32());
         testChecksum(new Adler32(), new Adler32());
@@ -262,6 +402,14 @@ public class BitInputTest extends BitIOTest {
 
     @Test(invocationCount = INVOCATION_COUNT)
     public void testDigest() throws NoSuchAlgorithmException, IOException {
+
+        final BitInput bi = new BitInput(new ByteArrayInputStream(new byte[0]));
+        try {
+            bi.addDigest(null);
+            Assert.fail("passed: addDigest(null)");
+        } catch (NullPointerException npe) {
+            // expected
+        }
 
         testDigest("MD2");
         testDigest("MD5");
