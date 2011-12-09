@@ -122,7 +122,7 @@ abstract class BitIOBase {
      * @return bit value
      * @see BitSet#get(int)
      */
-    protected final boolean getBit(final int bitIndex) {
+    final boolean getBit(final int bitIndex) {
         return set.get(bitIndex);
     }
 
@@ -134,7 +134,7 @@ abstract class BitIOBase {
      * @param value bit value
      * @see BitSet#set(int, boolean)
      */
-    protected final void setBit(final int bitIndex, final boolean value) {
+    final void setBit(final int bitIndex, final boolean value) {
 
         if (bitIndex < 0) {
             throw new IllegalArgumentException(
@@ -155,7 +155,7 @@ abstract class BitIOBase {
      *
      * @return octet
      */
-    protected final int getOctet() {
+    final int getOctet() {
 
         int octet = ZERO;
         for (int i = 0; i < Byte.SIZE; i++) {
@@ -174,7 +174,7 @@ abstract class BitIOBase {
      *
      * @param octet octet.
      */
-    protected final void setOctet(int octet) {
+    final void setOctet(int octet) {
 
         update(octet);
 
@@ -188,7 +188,7 @@ abstract class BitIOBase {
     /**
      * Increases count.
      */
-    protected final void increaseCount() {
+    final void increaseCount() {
         count++;
     }
 
