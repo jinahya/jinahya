@@ -46,13 +46,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"constants", "interfaces", "fields", "methods",
                       "attributes"})
-public class Classfilea {
+public class Classfile {
 
 
-    public static Classfilea readInstance(final DataInput input)
+    public static Classfile readInstance(final DataInput input)
         throws IOException {
 
-        final Classfilea instance = new Classfilea();
+        final Classfile instance = new Classfile();
         instance.read(input);
 
         return instance;

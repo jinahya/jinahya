@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 public class ClassFileTest {
 
 
-    private static void print(final Classfilea classFile)
+    private static void print(final Classfile classFile)
         throws JAXBException {
 
         final JAXBContext context = JAXBContext.newInstance(
@@ -55,7 +55,7 @@ public class ClassFileTest {
             ClassFileTest.class.getResourceAsStream(
             ClassFileTest.class.getSimpleName() + ".class"));
         try {
-            final Classfilea instance = Classfilea.readInstance(dis);
+            final Classfile instance = Classfile.readInstance(dis);
             print(instance);
         } finally {
             dis.close();
