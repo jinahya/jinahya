@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-abstract class _number extends Constant {
+abstract class _number extends AbstractConstant {
 
 
     public _number(final ConstantTag tag, final int count) {

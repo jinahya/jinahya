@@ -18,44 +18,22 @@
 package com.googlecode.jinahya.jvms.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum AccessFlag {
+public interface DataAccessible {
 
 
-    ACC_PUBLIC(0x0001),
-    ACC_FINAL(0x0010),
-    ACC_SUPER(0x0020),
-    ACC_INTERFACE(0x0200),
-    ACC_ABSTRACT(0x0400);
+    void read(DataInput input) throws IOException;
 
 
-    public static AccessFlag valueOf(final int value) {
-
-        for (AccessFlag tag : values()) {
-            if (tag.getValue() == value) {
-                return tag;
-            }
-        }
-
-        throw new IllegalArgumentException("no constant for " + value);
-    }
-
-
-    private AccessFlag(final int value) {
-        this.value = value;
-    }
-
-
-    //public abstract Constant newInfo();
-    public int getValue() {
-        return value;
-    }
-
-
-    protected final int value;
+    void write(DataOutput output) throws IOException;
 
 
 }

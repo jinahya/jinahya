@@ -15,52 +15,65 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
+
+import com.googlecode.jinahya.jvms.cff.DataAccessible;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"nameIndex", "descriptorIndex"})
-public class _NameAndType extends AbstractConstant {
-
-
-    protected _NameAndType() {
-        super(ConstantTag._NameAndType);
-    }
+public class InnerClass implements DataAccessible {
 
 
     @Override
     public void read(final DataInput input) throws IOException {
 
-        nameIndex = input.readUnsignedShort();
-        descriptorIndex = input.readUnsignedShort();
+        inenrClassInfoIndex = input.readUnsignedShort();
+
+        outerClassInfoIndex = input.readUnsignedShort();
+
+        innerNameIndex = input.readUnsignedShort();
+
+        innerClassAccessFlags = input.readUnsignedShort();
     }
 
 
     @Override
     public void write(final DataOutput output) throws IOException {
 
-        output.writeShort(nameIndex);
-        output.writeShort(descriptorIndex);
+        output.writeShort(inenrClassInfoIndex);
+
+        output.writeShort(outerClassInfoIndex);
+
+        output.writeShort(innerNameIndex);
+
+        output.writeShort(innerClassAccessFlags);
     }
 
 
     @XmlAttribute(required = true)
-    private int nameIndex;
+    private int inenrClassInfoIndex;
 
 
     @XmlAttribute(required = true)
-    private int descriptorIndex;
+    private int outerClassInfoIndex;
+
+
+    @XmlAttribute(required = true)
+    private int innerNameIndex;
+
+
+    @XmlAttribute(required = true)
+    private int innerClassAccessFlags;
 
 
 }

@@ -15,52 +15,49 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
+
+import com.googlecode.jinahya.jvms.cff.DataAccessible;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"nameIndex", "descriptorIndex"})
-public class _NameAndType extends AbstractConstant {
-
-
-    protected _NameAndType() {
-        super(ConstantTag._NameAndType);
-    }
+public class LineNumber implements DataAccessible {
 
 
     @Override
     public void read(final DataInput input) throws IOException {
 
-        nameIndex = input.readUnsignedShort();
-        descriptorIndex = input.readUnsignedShort();
+        startPc = input.readUnsignedShort();
+
+        lineNumber = input.readUnsignedShort();
     }
 
 
     @Override
     public void write(final DataOutput output) throws IOException {
 
-        output.writeShort(nameIndex);
-        output.writeShort(descriptorIndex);
+        output.writeShort(startPc);
+
+        output.writeShort(lineNumber);
     }
 
 
     @XmlAttribute(required = true)
-    private int nameIndex;
+    private int startPc;
 
 
     @XmlAttribute(required = true)
-    private int descriptorIndex;
+    private int lineNumber;
 
 
 }

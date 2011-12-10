@@ -18,11 +18,15 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
+import javax.xml.bind.annotation.XmlType;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class _Long extends _number_64 {
+@XmlType(name = "_Long")
+public class _Long extends _number64 {
 
 
     public _Long() {

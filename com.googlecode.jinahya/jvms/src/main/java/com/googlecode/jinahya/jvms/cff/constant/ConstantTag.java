@@ -92,7 +92,7 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _Integer();
         }
 
 
@@ -103,7 +103,7 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _Float();
         }
 
 
@@ -114,7 +114,7 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _Long();
         }
 
 
@@ -125,7 +125,7 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _Double();
         }
 
 
@@ -136,7 +136,7 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _NameAndType();
         }
 
 
@@ -147,22 +147,22 @@ public enum ConstantTag {
 
         @Override
         public Constant newInfo() {
-            return new _Class();
+            return new _Utf8();
         }
 
 
     };
 
 
-    public static ConstantTag valueOf(final int value) {
+    public static ConstantTag valueOf(final int tagValue) {
 
         for (ConstantTag tag : values()) {
-            if (tag.getValue() == value) {
+            if (tag.getValue() == tagValue) {
                 return tag;
             }
         }
 
-        throw new IllegalArgumentException("no constant for " + value);
+        throw new IllegalArgumentException("no constant for " + tagValue);
     }
 
 

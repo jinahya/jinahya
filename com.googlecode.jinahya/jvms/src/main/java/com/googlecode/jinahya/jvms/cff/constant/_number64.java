@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -25,12 +27,35 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(name = "_Float")
-public class _Float extends _number32 {
+@XmlTransient
+@XmlType(propOrder = {"highBytes", "lowBytes"})
+class _number64 extends _number {
 
 
-    public _Float() {
-        super(ConstantTag._Float);
+    protected _number64(final ConstantTag tag) {
+        super(tag, 2);
+    }
+
+
+    @XmlElement(required = true)
+    public int getHighBytes() {
+        return words[0];
+    }
+
+
+    public void setHighBytes(final int highBytes) {
+        words[0] = highBytes;
+    }
+
+
+    @XmlElement(required = true)
+    public int getLowBytes() {
+        return words[1];
+    }
+
+
+    public void setLowBytes(final int lowBytes) {
+        words[1] = lowBytes;
     }
 
 

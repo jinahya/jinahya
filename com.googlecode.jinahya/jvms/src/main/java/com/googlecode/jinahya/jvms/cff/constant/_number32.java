@@ -18,19 +18,31 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(name = "_Float")
-public class _Float extends _number32 {
+@XmlTransient
+class _number32 extends _number {
 
 
-    public _Float() {
-        super(ConstantTag._Float);
+    protected _number32(final ConstantTag tag) {
+        super(tag, 1);
+    }
+
+
+    @XmlElement(required = true)
+    public int getBytes() {
+        return words[0];
+    }
+
+
+    public void setBytes(final int bytes) {
+        words[0] = bytes;
     }
 
 

@@ -1,10 +1,10 @@
 
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSchema(namespace = CLASSFILE_CONSTANT_NS_URI,
+@XmlSchema(namespace = CLASSFILE_ATTRIBUTE_NS_URI,
            elementFormDefault = XmlNsForm.QUALIFIED,
            attributeFormDefault = XmlNsForm.UNQUALIFIED)
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
 
 import static com.googlecode.jinahya.jvms.cff.ClassfileXMLConstant.*;

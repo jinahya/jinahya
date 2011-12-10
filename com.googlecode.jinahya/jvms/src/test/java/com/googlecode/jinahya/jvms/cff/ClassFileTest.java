@@ -3,6 +3,15 @@
 package com.googlecode.jinahya.jvms.cff;
 
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import org.testng.annotations.Test;
+
+
+
 /*
  * Copyright 2011 Jin Kwon <jinahya at gmail.com>.
  *
@@ -23,5 +32,36 @@ package com.googlecode.jinahya.jvms.cff;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class ClassFileTest {
+
+
+    private static void print(final ClassFile classFile)
+        throws JAXBException {
+
+        final JAXBContext context = JAXBContext.newInstance(
+            "com.googlecode.jinahya.jvms.cff"
+            + ":com.googlecode.jinahya.jvms.cff.constant");
+
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        marshaller.marshal(classFile, System.out);
+    }
+
+
+    @Test
+    public static void testNewInstance() throws IOException, JAXBException {
+
+        final DataInputStream dis = new DataInputStream(
+            ClassFileTest.class.getResourceAsStream(
+            ClassFileTest.class.getSimpleName() + ".class"));
+        try {
+            final ClassFile instance = ClassFile.readInstance(dis);
+            print(instance);
+        } finally {
+            dis.close();
+        }
+    }
+
+
 }
 

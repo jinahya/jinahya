@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-abstract class _ref extends Constant {
+abstract class _ref extends AbstractConstant {
 
 
     protected _ref(final ConstantTag tag) {

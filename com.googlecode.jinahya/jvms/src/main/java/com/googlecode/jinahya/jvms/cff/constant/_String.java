@@ -23,13 +23,15 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class _String extends Constant {
+@XmlType(name = "_String")
+public class _String extends AbstractConstant {
 
 
     public _String() {

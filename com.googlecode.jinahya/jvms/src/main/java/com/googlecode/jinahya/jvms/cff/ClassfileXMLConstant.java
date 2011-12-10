@@ -22,11 +22,28 @@ package com.googlecode.jinahya.jvms.cff;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CFFXMLConstants {
+public class ClassfileXMLConstant {
 
 
-    public static final String CLASS_FILE_FORMAT_NAMESPACE_URI =
-        "http://jinahya.googlecode.com/jvms/cff";
+    public static final String CLASSFILE_NS_PREFIX = "cff";
+
+
+    public static final String CLASSFILE_NS_URI =
+        "http://jinahya.googlecode.com/jvms/classfile";
+
+
+    public static final String CLASSFILE_ATTRIBUTE_NS_PREFIX = "attr";
+
+
+    public static final String CLASSFILE_ATTRIBUTE_NS_URI =
+        CLASSFILE_NS_URI + "/attribute";
+
+
+    public static final String CLASSFILE_CONSTANT_NS_PREFIX = "cons";
+
+
+    public static final String CLASSFILE_CONSTANT_NS_URI =
+        CLASSFILE_NS_URI + "/constant";
 
 
     public static final String W3C_XML_SCHEMA_NS_PREIX = "xs";
