@@ -22,7 +22,7 @@ package com.googlecode.jinahya.jvms.cff;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ClassfileXMLConstant {
+public class ClassfileXMLConstanta {
 
 
     public static final String CLASSFILE_NS_PREFIX = "cff";
