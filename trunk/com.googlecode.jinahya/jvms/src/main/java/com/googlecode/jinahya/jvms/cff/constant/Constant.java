@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
-import com.googlecode.jinahya.jvms.cff.Classfilea;
+import com.googlecode.jinahya.jvms.cff.Classfile;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public abstract class Constant {
      *
      * @return the parent ClassFile
      */
-    public Classfilea getClassFile() {
+    public Classfile getClassFile() {
         return classFile;
     }
 
@@ -58,7 +58,7 @@ public abstract class Constant {
      *
      * @param classFile the parent ClassFile
      */
-    public void setClassFile(final Classfilea classFile) {
+    public void setClassFile(final Classfile classFile) {
         this.classFile = classFile;
     }
 
@@ -76,7 +76,7 @@ public abstract class Constant {
 
     /** parent ClassFile. */
     @XmlTransient
-    private Classfilea classFile;
+    private Classfile classFile;
 
 
     @XmlAttribute
