@@ -17,7 +17,7 @@
 package com.googlecode.jinahya.jvms.cff;
 
 
-import static com.googlecode.jinahya.jvms.cff.ClassfileXMLConstanta.*;
+import static com.googlecode.jinahya.jvms.cff.ClassfileXMLConstant.*;
 import static javax.xml.XMLConstants.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
