@@ -7,7 +7,7 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
-import static com.googlecode.jinahya.jvms.cff.ClassfileXMLConstanta.*;
+import static com.googlecode.jinahya.jvms.cff.ClassfileXMLConstant.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlNsForm;

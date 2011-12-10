@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.jvms.cff.attribute;
 
 
-import com.googlecode.jinahya.jvms.cff.ClassFile;
+import com.googlecode.jinahya.jvms.cff.Classfilea;
 import com.googlecode.jinahya.jvms.cff.DataAccessible;
 
 import java.io.ByteArrayInputStream;
@@ -82,7 +82,7 @@ public abstract class Attribute implements DataAccessible {
      *
      * @return the parent ClassFile
      */
-    public ClassFile getClassFile() {
+    public Classfilea getClassFile() {
         return classFile;
     }
 
@@ -92,14 +92,14 @@ public abstract class Attribute implements DataAccessible {
      *
      * @param classFile the parent ClassFile
      */
-    public void setClassFile(final ClassFile classFile) {
+    public void setClassFile(final Classfilea classFile) {
         this.classFile = classFile;
     }
 
 
     /** parent ClassFile. */
     @XmlTransient
-    private ClassFile classFile;
+    private Classfilea classFile;
 
 
     @XmlAttribute(required = true)

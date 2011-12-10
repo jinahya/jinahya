@@ -32,30 +32,30 @@ public enum ClassAccessFlag {
     ACC_ABSTRACT(0x0400);
 
 
-    public static ClassAccessFlag valueOf(final int value) {
+    public static ClassAccessFlag valueOf(final int accessFlag) {
 
-        for (ClassAccessFlag tag : values()) {
-            if (tag.getValue() == value) {
-                return tag;
+        for (ClassAccessFlag value : values()) {
+            if (value.getAccessFlag() == accessFlag) {
+                return value;
             }
         }
 
-        throw new IllegalArgumentException("no constant for " + value);
+        throw new IllegalArgumentException("no constant for " + accessFlag);
     }
 
 
-    private ClassAccessFlag(final int value) {
-        this.value = value;
+    private ClassAccessFlag(final int accessFlag) {
+        this.accessFlag = accessFlag;
     }
 
 
     //public abstract Constant newInfo();
-    public int getValue() {
-        return value;
+    public int getAccessFlag() {
+        return accessFlag;
     }
 
 
-    protected final int value;
+    protected final int accessFlag;
 
 
 }
