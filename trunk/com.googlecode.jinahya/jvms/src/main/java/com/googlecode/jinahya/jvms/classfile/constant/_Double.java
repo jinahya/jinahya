@@ -30,7 +30,7 @@ public class _Double extends _number64 {
 
 
     public _Double() {
-        super(ConstantTag._Double);
+        super(Tag._Double);
     }
 
 

@@ -30,7 +30,7 @@ public class _InterfaceMethodref extends _ref {
 
 
     public _InterfaceMethodref() {
-        super(ConstantTag.InterfaceMethodref);
+        super(Tag.InterfaceMethodref);
     }
 
 

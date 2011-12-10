@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
+import com.googlecode.jinahya.jvms.classfile.DataAccessible;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -25,7 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 
 /**
@@ -33,12 +36,59 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  * @See <a href="http://goo.gl/KnMEs">4.7.3 The Code Attribute</a>
  */
-@XmlType(name = "Code")
 public class Code extends Attribute {
 
 
+    public static class ExceptionTable implements DataAccessible {
+
+
+        @Override
+        public void read(final DataInput input) throws IOException {
+
+            startPc = input.readUnsignedShort();
+
+            endPc = input.readUnsignedShort();
+
+            handlerPc = input.readUnsignedShort();
+
+            catchType = input.readUnsignedShort();
+        }
+
+
+        @Override
+        public void write(final DataOutput output) throws IOException {
+
+            output.writeShort(startPc);
+
+            output.writeShort(endPc);
+
+            output.writeShort(handlerPc);
+
+            output.writeShort(catchType);
+        }
+
+
+        @XmlAttribute(required = true)
+        private int startPc;
+
+
+        @XmlAttribute(required = true)
+        private int endPc;
+
+
+        @XmlAttribute(required = true)
+        private int handlerPc;
+
+
+        @XmlAttribute(required = true)
+        private int catchType;
+
+
+    }
+
+
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         maxStack = input.readUnsignedShort();
 
@@ -47,8 +97,8 @@ public class Code extends Attribute {
         code = new byte[input.readInt()];
         input.readFully(code);
 
-        getExceptionTables().clear();
         final int exceptionTableLength = input.readUnsignedShort();
+        getExceptionTables().clear();
         for (int i = 0; i < exceptionTableLength; i++) {
             final ExceptionTable exceptionTable = new ExceptionTable();
             exceptionTable.read(input);
@@ -56,14 +106,16 @@ public class Code extends Attribute {
         }
 
         final int attributeCount = input.readUnsignedShort();
+        getAttributes().clear();
         for (int i = 0; i < attributeCount; i++) {
+            getAttributes().add(AttributeName.readAttribute(input, this));
         }
 
     }
 
 
     @Override
-    protected void writeContent(DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -98,18 +150,25 @@ public class Code extends Attribute {
     }
 
 
+    @XmlAttribute(required = true)
     private int maxStack;
 
 
+    @XmlAttribute(required = true)
     private int maxLocals;
 
 
+    @XmlElement(required = true)
     private byte[] code;
 
 
+    @XmlElement(name = "exceptionTable")
+    @XmlElementWrapper(required = true)
     private List<ExceptionTable> exceptionTables;
 
 
+    @XmlElement(name = "attribute")
+    @XmlElementWrapper(required = true)
     private List<Attribute> attributes;
 
 

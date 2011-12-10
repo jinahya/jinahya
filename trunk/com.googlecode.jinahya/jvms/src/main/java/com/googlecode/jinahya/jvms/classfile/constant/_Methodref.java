@@ -30,7 +30,7 @@ public class _Methodref extends _ref {
 
 
     public _Methodref() {
-        super(ConstantTag._Methodref);
+        super(Tag._Methodref);
     }
 
 

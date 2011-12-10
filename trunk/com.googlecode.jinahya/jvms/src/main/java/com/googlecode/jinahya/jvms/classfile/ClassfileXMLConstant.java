@@ -25,9 +25,6 @@ package com.googlecode.jinahya.jvms.classfile;
 public class ClassfileXMLConstant {
 
 
-    public static final String CLASSFILE_NS_PREFIX = "cff";
-
-
     public static final String CLASSFILE_NS_URI =
         "http://jinahya.googlecode.com/jvms/classfile";
 
@@ -44,12 +41,6 @@ public class ClassfileXMLConstant {
 
     public static final String CLASSFILE_CONSTANT_NS_URI =
         CLASSFILE_NS_URI + "/constant";
-
-
-    public static final String W3C_XML_SCHEMA_NS_PREIX = "xs";
-
-
-    public static final String W3C_XML_SCHEMA_INSTANCE_NS_PREIX = "xsi";
 
 
 }

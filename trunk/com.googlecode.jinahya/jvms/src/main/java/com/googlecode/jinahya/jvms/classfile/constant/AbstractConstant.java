@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class AbstractConstant extends Constant {
 
 
-    protected AbstractConstant(final ConstantTag tag) {
+    protected AbstractConstant(final Tag tag) {
         super();
 
         if (tag == null) {
@@ -42,13 +42,13 @@ public abstract class AbstractConstant extends Constant {
 
 
     @Override
-    public final ConstantTag getTag() {
+    public final Tag getTag() {
         return tag;
     }
 
 
     @XmlAttribute(required = true)
-    private final ConstantTag tag;
+    private final Tag tag;
 
 
 }

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 class _number32 extends _number {
 
 
-    protected _number32(final ConstantTag tag) {
+    protected _number32(final Tag tag) {
         super(tag, 1);
     }
 

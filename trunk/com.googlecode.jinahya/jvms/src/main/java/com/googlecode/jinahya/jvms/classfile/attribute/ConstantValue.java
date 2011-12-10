@@ -36,14 +36,14 @@ public class ConstantValue extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         constantValueIndex = input.readUnsignedShort();
     }
 
 
     @Override
-    protected void writeContent(DataOutput output) throws IOException {
+    protected void writeInfo(DataOutput output) throws IOException {
 
         output.writeShort(constantValueIndex);
     }

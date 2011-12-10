@@ -35,7 +35,7 @@ public class _Utf8 extends AbstractConstant {
 
 
     public _Utf8() {
-        super(ConstantTag._Utf8);
+        super(Tag._Utf8);
     }
 
 

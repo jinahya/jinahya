@@ -35,7 +35,7 @@ public class _NameAndType extends AbstractConstant {
 
 
     protected _NameAndType() {
-        super(ConstantTag._NameAndType);
+        super(Tag._NameAndType);
     }
 
 

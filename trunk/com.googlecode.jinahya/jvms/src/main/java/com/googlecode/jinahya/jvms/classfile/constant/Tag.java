@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlEnum(Integer.class)
-public enum ConstantTag {
+public enum Tag {
 
 
     @XmlEnumValue("7")
@@ -36,7 +36,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Class();
         }
 
@@ -47,7 +47,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Fieldref();
         }
 
@@ -58,7 +58,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Methodref();
         }
 
@@ -69,7 +69,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _InterfaceMethodref();
         }
 
@@ -80,7 +80,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _String();
         }
 
@@ -91,7 +91,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Integer();
         }
 
@@ -102,7 +102,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Float();
         }
 
@@ -113,7 +113,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Long();
         }
 
@@ -124,7 +124,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Double();
         }
 
@@ -135,7 +135,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _NameAndType();
         }
 
@@ -146,7 +146,7 @@ public enum ConstantTag {
 
 
         @Override
-        public Constant newInfo() {
+        public Constant newConstant() {
             return new _Utf8();
         }
 
@@ -154,10 +154,10 @@ public enum ConstantTag {
     };
 
 
-    public static ConstantTag valueOf(final int tagValue) {
+    public static Tag valueOf(final int tagValue) {
 
-        for (ConstantTag tag : values()) {
-            if (tag.getValue() == tagValue) {
+        for (Tag tag : values()) {
+            if (tag.value == tagValue) {
                 return tag;
             }
         }
@@ -166,7 +166,7 @@ public enum ConstantTag {
     }
 
 
-    private ConstantTag(final int value) {
+    private Tag(final int value) {
         this.value = value;
     }
 
@@ -176,7 +176,7 @@ public enum ConstantTag {
      *
      * @return a new <code>cp_info</code>.
      */
-    public abstract Constant newInfo();
+    public abstract Constant newConstant();
 
 
     /**

@@ -21,7 +21,7 @@ package com.googlecode.jinahya.jvms.classfile;
 import com.googlecode.jinahya.jvms.classfile.attribute.Attribute;
 import com.googlecode.jinahya.jvms.classfile.attribute.AttributeName;
 import com.googlecode.jinahya.jvms.classfile.constant.Constant;
-import com.googlecode.jinahya.jvms.classfile.constant.ConstantTag;
+import com.googlecode.jinahya.jvms.classfile.constant.Tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -45,13 +45,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"constants", "interfaces", "fields", "methods",
                       "attributes"})
-public class Classfile implements DataAccessible {
+public class ClassFile implements DataAccessible {
 
 
-    public static Classfile readInstance(final DataInput input)
+    public static ClassFile readInstance(final DataInput input)
         throws IOException {
 
-        final Classfile instance = new Classfile();
+        final ClassFile instance = new ClassFile();
         instance.read(input);
 
         return instance;
@@ -75,13 +75,13 @@ public class Classfile implements DataAccessible {
         //majorVersion = input.readUnsignedShort();
 
         version = Version.valueOf(input.readUnsignedShort(),
-                                     input.readUnsignedShort());
+                                  input.readUnsignedShort());
 
         // -------------------------------------------------------- constantPool
         final int constantPoolCount = input.readUnsignedShort();
         for (int i = 0; i < constantPoolCount - 1; i++) {
             final int tag = input.readUnsignedByte();
-            final Constant constant = ConstantTag.valueOf(tag).newInfo();
+            final Constant constant = Tag.valueOf(tag).newConstant();
             constant.setIndex(i);
             constant.read(input);
             getConstants().add(constant);
@@ -101,8 +101,11 @@ public class Classfile implements DataAccessible {
 
         // -------------------------------------------------------------- fields
         final int fieldsCount = input.readUnsignedShort();
+        getFields().clear();
         for (int i = 0; i < fieldsCount; i++) {
-            getFields().add(input.readUnsignedShort());
+            final Field field = new Field();
+            field.read(input);
+            getFields().add(field);
         }
 
         // ------------------------------------------------------------- methods
@@ -112,13 +115,10 @@ public class Classfile implements DataAccessible {
         }
 
         // ---------------------------------------------------------- attributes
-        getAttributes().clear();
         final int attributesCount = input.readUnsignedShort();
+        getAttributes().clear();
         for (int i = 0; i < attributesCount; i++) {
-            final Attribute attribute =
-                AttributeName.readAttribute(input, getConstants());
-            attribute.setClassfile(this);
-            getAttributes().add(attribute);
+            getAttributes().add(AttributeName.readAttribute(input, this));
         }
     }
 
@@ -157,8 +157,8 @@ public class Classfile implements DataAccessible {
 
         // -------------------------------------------------------------- fields
         output.writeShort(getFields().size());
-        for (Iterator<Integer> i = getFields().iterator(); i.hasNext();) {
-            output.writeShort(i.next());
+        for (Field field : fields) {
+            field.write(output);
         }
 
         // ------------------------------------------------------------- methods
@@ -175,6 +175,17 @@ public class Classfile implements DataAccessible {
     }
 
 
+    // ----------------------------------------------------------------- version
+    public Version getVersion() {
+        return version;
+    }
+
+
+    public void setVersion(final Version version) {
+        this.version = version;
+    }
+
+
     @XmlAttribute
     public int getMinorVersion() {
         return getVersion().minor;
@@ -187,11 +198,7 @@ public class Classfile implements DataAccessible {
     }
 
 
-    public Version getVersion() {
-        return version;
-    }
-
-
+    // --------------------------------------------------------------- constants
     public List<Constant> getConstants() {
 
         if (constants == null) {
@@ -202,21 +209,52 @@ public class Classfile implements DataAccessible {
     }
 
 
+    /**
+     * Returns the constant at given <code>index</code>.
+     *
+     * @param index constant index
+     * @return the constant at <code>index</code>
+     */
+    public Constant getConstant(final int index) {
+
+        return getConstants().get(index);
+    }
+
+
+    /**
+     * Returns the constant at given <code>index</code>.
+     *
+     * @param <C> constant type parameter
+     * @param index constant index
+     * @param type constant type
+     * @return the constant at <code>code</code>
+     */
+    public <C extends Constant> C getConstant(final int index,
+                                              final Class<C> type) {
+
+        return type.cast(getConstant(index));
+    }
+
+
+    // ------------------------------------------------------------- accessFlags
     public int getAccessFlags() {
         return accessFlags;
     }
 
 
+    // --------------------------------------------------------------- thisClass
     public int getThisClass() {
         return thisClass;
     }
 
 
+    // -------------------------------------------------------------- superClass
     public int getSuperClass() {
         return superClass;
     }
 
 
+    // -------------------------------------------------------------- interfaces
     public List<Integer> getInterfaces() {
 
         if (interfaces == null) {
@@ -227,16 +265,18 @@ public class Classfile implements DataAccessible {
     }
 
 
-    public List<Integer> getFields() {
+    // ------------------------------------------------------------------ fields
+    private List<Field> getFields() {
 
         if (fields == null) {
-            fields = new ArrayList<Integer>();
+            fields = new ArrayList<Field>();
         }
 
         return fields;
     }
 
 
+    // ----------------------------------------------------------------- methods
     public List<Integer> getMethods() {
 
         if (methods == null) {
@@ -247,6 +287,7 @@ public class Classfile implements DataAccessible {
     }
 
 
+    // -------------------------------------------------------------- attributes
     public List<Attribute> getAttributes() {
 
         if (attributes == null) {
@@ -296,7 +337,7 @@ public class Classfile implements DataAccessible {
 
     @XmlElement(name = "field")
     @XmlElementWrapper(required = true)
-    private List<Integer> fields;
+    private List<Field> fields;
 
 
     @XmlElement(name = "method")

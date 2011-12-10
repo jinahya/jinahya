@@ -37,7 +37,7 @@ public class LocalVariableTable extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         getLocalVariables().clear();
         final int localVariableTableLength = input.readUnsignedShort();
@@ -50,7 +50,7 @@ public class LocalVariableTable extends Attribute {
 
 
     @Override
-    protected void writeContent(final DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
 
         output.writeShort(getLocalVariables().size());
         for (LocalVariable localVariable : getLocalVariables()) {

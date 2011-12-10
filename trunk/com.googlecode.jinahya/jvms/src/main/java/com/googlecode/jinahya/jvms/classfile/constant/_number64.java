@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 class _number64 extends _number {
 
 
-    protected _number64(final ConstantTag tag) {
+    protected _number64(final Tag tag) {
         super(tag, 2);
     }
 

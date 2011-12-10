@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 abstract class _number extends AbstractConstant {
 
 
-    public _number(final ConstantTag tag, final int count) {
+    public _number(final Tag tag, final int count) {
         super(tag);
 
         words = new int[count];

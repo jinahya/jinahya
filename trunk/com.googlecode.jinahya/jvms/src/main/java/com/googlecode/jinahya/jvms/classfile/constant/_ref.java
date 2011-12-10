@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 abstract class _ref extends AbstractConstant {
 
 
-    protected _ref(final ConstantTag tag) {
+    protected _ref(final Tag tag) {
         super(tag);
     }
 

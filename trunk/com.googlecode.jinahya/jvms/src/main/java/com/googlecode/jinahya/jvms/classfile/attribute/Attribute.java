@@ -18,15 +18,12 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
-import com.googlecode.jinahya.jvms.classfile.Classfile;
+import com.googlecode.jinahya.jvms.classfile.ClassFile;
 import com.googlecode.jinahya.jvms.classfile.DataAccessible;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import com.googlecode.jinahya.jvms.classfile.constant._Utf8;
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -40,66 +37,102 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class Attribute implements DataAccessible {
 
 
+    public static Attribute readInstance(final DataInput input,
+                                         final ClassFile classfile)
+        throws IOException {
+
+        final AttributeInfo info = new AttributeInfo();
+        info.read(input);
+
+        final _Utf8 utf8 = classfile.getConstant(
+            info.getAttributeNameIndex(), _Utf8.class);
+        final String name = utf8.getValue();
+        final Attribute attribute = AttributeName.valueOf(name).newAttribute();
+        info.print(attribute);
+        attribute.setClassfile(classfile);
+        return attribute;
+    }
+
+
     @Override
-    public void read(final DataInput input) throws IOException {
+    public final void read(final DataInput input) throws IOException {
 
         nameIndex = input.readUnsignedShort();
 
-        final byte[] bytes = new byte[input.readInt()];
-        input.readFully(bytes);
-
-        final DataInputStream dis =
-            new DataInputStream(new ByteArrayInputStream(bytes));
-        readContent(dis);
+        readInfo(input);
     }
 
 
-    protected abstract void readContent(DataInput input) throws IOException;
+    protected abstract void readInfo(DataInput input) throws IOException;
 
 
     @Override
-    public void write(final DataOutput output) throws IOException {
+    public final void write(final DataOutput output) throws IOException {
 
         output.writeShort(nameIndex);
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream(baos);
-        writeContent(dos);
-        dos.flush();
-
-        final byte[] bytes = baos.toByteArray();
-        output.writeInt(bytes.length);
-        output.write(bytes);
+        writeInfo(output);
     }
 
 
-    protected abstract void writeContent(DataOutput output) throws IOException;
+    protected abstract void writeInfo(DataOutput output) throws IOException;
 
 
     // -------------------------------------------------------- parent classfile
     /**
-     * Returns the parent Classfile of this attribute.
+     * Returns the parent classfile of this attribute.
      *
-     * @return the parent Classfile
+     * @return the parent classfile
      */
-    public final Classfile getClassfile() {
+    public final ClassFile getClassfile() {
+
+        if (attribute != null) {
+            return attribute.getClassfile();
+        }
+
         return classfile;
     }
 
 
     /**
-     * Sets the parent Classfile of this attribute.
+     * Sets the parent classfile of this attribute.
      *
-     * @param classfile the parent Classfile
+     * @param classfile the parent classfile
      */
-    public final void setClassfile(final Classfile classfile) {
+    public final void setClassfile(final ClassFile classfile) {
         this.classfile = classfile;
     }
 
 
-    /** parent Classfile. */
+    // -------------------------------------------------------- parent attribute
+    /**
+     * Returns the parent attribute of this attribute.
+     *
+     * @return the parent attribute
+     */
+    public final Attribute getAttribute() {
+        return attribute;
+    }
+
+
+    /**
+     * Sets the parent attribute of this attribute.
+     *
+     * @param attribute the parent attribute
+     */
+    public final void setAttribute(final Attribute attribute) {
+        this.attribute = attribute;
+    }
+
+
+    /** parent classfile. */
     @XmlTransient
-    private Classfile classfile;
+    protected ClassFile classfile;
+
+
+    /** parent attribute. */
+    @XmlTransient
+    protected Attribute attribute;
 
 
     @XmlAttribute(required = true)

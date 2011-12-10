@@ -37,7 +37,7 @@ public class LineNumberTable extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         getLineNumbers().clear();
         final int numberOfClasses = input.readUnsignedShort();
@@ -50,7 +50,7 @@ public class LineNumberTable extends Attribute {
 
 
     @Override
-    protected void writeContent(final DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
 
         output.writeShort(getLineNumbers().size());
         for (LineNumber lineNumber : getLineNumbers()) {

@@ -30,7 +30,7 @@ public class _Fieldref extends _ref {
 
 
     public _Fieldref() {
-        super(ConstantTag._Fieldref);
+        super(Tag._Fieldref);
     }
 
 
