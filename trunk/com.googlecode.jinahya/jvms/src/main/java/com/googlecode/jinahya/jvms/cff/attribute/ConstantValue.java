@@ -15,48 +15,42 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @see <a href="http://goo.gl/TVYP9">4.7.2 The ConstantValue Attribute</a>
  */
-@XmlTransient
-@XmlType(propOrder = {"highBytes", "lowBytes"})
-class _number_64 extends _number {
+@XmlType(name = "ConstantValue")
+public class ConstantValue extends Attribute {
 
 
-    protected _number_64(final ConstantTag tag) {
-        super(tag, 2);
+    @Override
+    protected void readContent(final DataInput input) throws IOException {
+
+        constantValueIndex = input.readUnsignedShort();
     }
 
 
-    @XmlElement(required = true)
-    public int getHighBytes() {
-        return words[0];
+    @Override
+    protected void writeContent(DataOutput output) throws IOException {
+
+        output.writeShort(constantValueIndex);
     }
 
 
-    public void setHighBytes(final int highBytes) {
-        words[0] = highBytes;
-    }
-
-
-    @XmlElement(required = true)
-    public int getLowBytes() {
-        return words[1];
-    }
-
-
-    public void setLowBytes(final int lowBytes) {
-        words[1] = lowBytes;
-    }
+    @XmlAttribute(required = true)
+    private int constantValueIndex;
 
 
 }

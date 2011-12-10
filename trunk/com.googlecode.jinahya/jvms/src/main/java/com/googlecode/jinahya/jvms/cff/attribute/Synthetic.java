@@ -15,22 +15,29 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
 
-import javax.xml.bind.annotation.XmlType;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @see <a href="http://goo.gl/lmfP2">4.7.6 The Synthetic Attribute</a>
  */
-@XmlType(name = "_Float")
-public class _Float extends _number32 {
+public class Synthetic extends Attribute {
 
 
-    public _Float() {
-        super(ConstantTag._Float);
+    @Override
+    protected void readContent(final DataInput input) throws IOException {
+    }
+
+
+    @Override
+    protected void writeContent(final DataOutput output) throws IOException {
     }
 
 

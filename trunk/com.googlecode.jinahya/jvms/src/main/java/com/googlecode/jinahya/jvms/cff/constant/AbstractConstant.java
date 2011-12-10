@@ -18,20 +18,37 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(name = "_Float")
-public class _Float extends _number32 {
+@XmlTransient
+public abstract class AbstractConstant extends Constant {
 
 
-    public _Float() {
-        super(ConstantTag._Float);
+    protected AbstractConstant(final ConstantTag tag) {
+        super();
+
+        if (tag == null) {
+            throw new NullPointerException("null tag");
+        }
+
+        this.tag = tag;
     }
+
+
+    @Override
+    public final ConstantTag getTag() {
+        return tag;
+    }
+
+
+    @XmlAttribute(required = true)
+    private final ConstantTag tag;
 
 
 }

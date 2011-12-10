@@ -18,11 +18,15 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
+import javax.xml.bind.annotation.XmlType;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class _Integer extends _number_32 {
+@XmlType(name = "_Integer")
+public class _Integer extends _number32 {
 
 
     public _Integer() {

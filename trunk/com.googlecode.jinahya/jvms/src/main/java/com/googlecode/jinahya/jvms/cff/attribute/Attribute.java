@@ -15,13 +15,20 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
 
 import com.googlecode.jinahya.jvms.cff.ClassFile;
+import com.googlecode.jinahya.jvms.cff.DataAccessible;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -30,16 +37,43 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Constant {
+public abstract class Attribute implements DataAccessible {
 
 
-    public abstract ConstantTag getTag();
+    @Override
+    public void read(final DataInput input) throws IOException {
+
+        nameIndex = input.readUnsignedShort();
+
+        final byte[] bytes = new byte[input.readInt()];
+        input.readFully(bytes);
+
+        final DataInputStream dis =
+            new DataInputStream(new ByteArrayInputStream(bytes));
+        readContent(dis);
+    }
 
 
-    public abstract void read(final DataInput input) throws IOException;
+    protected abstract void readContent(DataInput input) throws IOException;
 
 
-    public abstract void write(final DataOutput output) throws IOException;
+    @Override
+    public void write(final DataOutput output) throws IOException {
+
+        output.writeShort(nameIndex);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final DataOutputStream dos = new DataOutputStream(baos);
+        writeContent(dos);
+        dos.flush();
+
+        final byte[] bytes = baos.toByteArray();
+        output.writeInt(bytes.length);
+        output.write(bytes);
+    }
+
+
+    protected abstract void writeContent(DataOutput output) throws IOException;
 
 
     // -------------------------------------------------------- parent ClassFile
@@ -63,24 +97,13 @@ public abstract class Constant {
     }
 
 
-    // ------------------------------------------------------------------- index
-    public Integer getIndex() {
-        return index;
-    }
-
-
-    public void setIndex(final Integer index) {
-        this.index = index;
-    }
-
-
     /** parent ClassFile. */
     @XmlTransient
     private ClassFile classFile;
 
 
-    @XmlAttribute
-    private Integer index;
+    @XmlAttribute(required = true)
+    private int nameIndex;
 
 
 }

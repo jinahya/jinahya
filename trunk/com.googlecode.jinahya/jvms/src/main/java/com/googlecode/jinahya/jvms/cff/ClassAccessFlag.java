@@ -15,35 +15,47 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
-
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+package com.googlecode.jinahya.jvms.cff;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlTransient
-class _number_32 extends _number {
+public enum ClassAccessFlag {
 
 
-    protected _number_32(final ConstantTag tag) {
-        super(tag, 1);
+    ACC_PUBLIC(0x0001),
+    ACC_FINAL(0x0010),
+    ACC_SUPER(0x0020),
+    ACC_INTERFACE(0x0200),
+    ACC_ABSTRACT(0x0400);
+
+
+    public static ClassAccessFlag valueOf(final int value) {
+
+        for (ClassAccessFlag tag : values()) {
+            if (tag.getValue() == value) {
+                return tag;
+            }
+        }
+
+        throw new IllegalArgumentException("no constant for " + value);
     }
 
 
-    @XmlElement(required = true)
-    public int getBytes() {
-        return words[0];
+    private ClassAccessFlag(final int value) {
+        this.value = value;
     }
 
 
-    public void setBytes(final int bytes) {
-        words[0] = bytes;
+    //public abstract Constant newInfo();
+    public int getValue() {
+        return value;
     }
+
+
+    protected final int value;
 
 
 }

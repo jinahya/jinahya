@@ -18,11 +18,15 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
+import javax.xml.bind.annotation.XmlType;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class _Double extends _number_64 {
+@XmlType(name = "_Double")
+public class _Double extends _number64 {
 
 
     public _Double() {

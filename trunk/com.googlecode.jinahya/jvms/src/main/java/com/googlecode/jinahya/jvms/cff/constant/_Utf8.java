@@ -23,38 +23,43 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class _Utf8 extends Constant {
+@XmlType(name = "_Utf8")
+public class _Utf8 extends AbstractConstant {
 
 
     public _Utf8() {
-        super(ConstantTag._Class);
+        super(ConstantTag._Utf8);
     }
 
 
     @Override
     public void read(final DataInput input) throws IOException {
 
-        bytes = new byte[input.readUnsignedShort()];
-        input.readFully(bytes);
+        value = input.readUTF();
     }
 
 
     @Override
     public void write(final DataOutput output) throws IOException {
 
-        output.writeShort(bytes.length);
-        output.write(bytes);
+        output.writeUTF(value);
+    }
+
+
+    public String getValue() {
+        return value;
     }
 
 
     @XmlElement(required = true)
-    private byte[] bytes;
+    private String value;
 
 
 }

@@ -15,23 +15,40 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff.constant;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
 
-import javax.xml.bind.annotation.XmlType;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-@XmlType(name = "_Float")
-public class _Float extends _number32 {
+public class SourceFile extends Attribute {
 
 
-    public _Float() {
-        super(ConstantTag._Float);
+    @Override
+    protected void readContent(final DataInput input) throws IOException {
+
+        sourceIndex = input.readUnsignedShort();
     }
+
+
+    @Override
+    protected void writeContent(final DataOutput output) throws IOException {
+
+        output.writeShort(sourceIndex);
+    }
+
+
+    @XmlAttribute(required = true)
+    private int sourceIndex;
 
 
 }

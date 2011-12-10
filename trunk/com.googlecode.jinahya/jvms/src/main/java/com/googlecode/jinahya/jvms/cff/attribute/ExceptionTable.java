@@ -15,43 +15,65 @@
  */
 
 
-package com.googlecode.jinahya.jvms.cff;
+package com.googlecode.jinahya.jvms.cff.attribute;
 
+
+import com.googlecode.jinahya.jvms.cff.DataAccessible;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Attribute {
+public class ExceptionTable implements DataAccessible {
 
 
+    @Override
     public void read(final DataInput input) throws IOException {
 
-        nameIndex = input.readUnsignedShort();
+        startPc = input.readUnsignedShort();
 
-        info = new byte[input.readInt()];
-        input.readFully(info);
+        endPc = input.readUnsignedShort();
+
+        handlerPc = input.readUnsignedShort();
+
+        catchType = input.readUnsignedShort();
     }
 
 
+    @Override
     public void write(final DataOutput output) throws IOException {
 
-        output.writeShort(nameIndex);
+        output.writeShort(startPc);
 
-        output.writeInt(info.length);
-        output.write(info);
+        output.writeShort(endPc);
+
+        output.writeShort(handlerPc);
+
+        output.writeShort(catchType);
     }
 
 
-    private int nameIndex;
+    @XmlAttribute(required = true)
+    private int startPc;
 
 
-    private byte[] info;
+    @XmlAttribute(required = true)
+    private int endPc;
+
+
+    @XmlAttribute(required = true)
+    private int handlerPc;
+
+
+    @XmlAttribute(required = true)
+    private int catchType;
 
 
 }

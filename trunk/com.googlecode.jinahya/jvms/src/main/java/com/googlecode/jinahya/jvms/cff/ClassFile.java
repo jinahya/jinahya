@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.jvms.cff;
 
 
+import com.googlecode.jinahya.jvms.cff.attribute.Attribute;
+import com.googlecode.jinahya.jvms.cff.attribute.AttributeName;
+import com.googlecode.jinahya.jvms.cff.constant.AbstractConstant;
 import com.googlecode.jinahya.jvms.cff.constant.Constant;
 import com.googlecode.jinahya.jvms.cff.constant.ConstantTag;
 
@@ -32,6 +35,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -39,14 +43,25 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlRootElement
 @XmlType(propOrder = {"constants", "interfaces", "fields", "methods",
                       "attributes"})
 public class ClassFile {
 
 
+    public static ClassFile readInstance(final DataInput input)
+        throws IOException {
+
+        final ClassFile instance = new ClassFile();
+        instance.read(input);
+
+        return instance;
+    }
+
+
     /**
-     * The <code>magic</code> item supplies the magic number identifying the
-     * class file format; it has the value <code>0xCAFEBABE</code>.
+     * The magic number identifying the class file format; it has the value
+     * <code>0xCAFEBABE</code>.
      */
     public static final int MAGIC = 0xCAFEBABE;
 
@@ -55,15 +70,19 @@ public class ClassFile {
 
         assert input.readInt() == MAGIC;
 
-        minorVersion = input.readUnsignedShort();
+        //minorVersion = input.readUnsignedShort();
 
-        majorVersion = input.readUnsignedShort();
+        //majorVersion = input.readUnsignedShort();
+
+        target = ClassTarget.valueOf(input.readUnsignedShort(),
+                                     input.readUnsignedShort());
 
         // -------------------------------------------------------- constantPool
         final int constantPoolCount = input.readUnsignedShort();
         for (int i = 0; i < constantPoolCount - 1; i++) {
             final int tag = input.readUnsignedByte();
             final Constant constant = ConstantTag.valueOf(tag).newInfo();
+            constant.setIndex(i);
             constant.read(input);
             getConstants().add(constant);
         }
@@ -93,10 +112,12 @@ public class ClassFile {
         }
 
         // ---------------------------------------------------------- attributes
+        getAttributes().clear();
         final int attributesCount = input.readUnsignedShort();
         for (int i = 0; i < attributesCount; i++) {
-            final Attribute attribute = new Attribute();
-            attribute.read(input);
+            final Attribute attribute =
+                AttributeName.readAttribute(input, getConstants());
+            attribute.setClassFile(this);
             getAttributes().add(attribute);
         }
     }
@@ -106,9 +127,13 @@ public class ClassFile {
 
         output.writeInt(MAGIC);
 
-        output.writeShort(minorVersion);
+        //output.writeShort(minorVersion);
 
-        output.writeShort(majorVersion);
+        //output.writeShort(majorVersion);
+
+        output.writeShort(target.minorVersion);
+
+        output.writeShort(target.majorVersion);
 
         // -------------------------------------------------------- constantPool
         output.writeShort(getConstants().size() + 1);
@@ -149,13 +174,20 @@ public class ClassFile {
     }
 
 
+    @XmlAttribute
     public int getMinorVersion() {
-        return minorVersion;
+        return getTarget().minorVersion;
     }
 
 
+    @XmlAttribute
     public int getMajorVersion() {
-        return majorVersion;
+        return getTarget().majorVersion;
+    }
+
+
+    public ClassTarget getTarget() {
+        return target;
     }
 
 
@@ -224,19 +256,26 @@ public class ClassFile {
     }
 
 
+    /*
     @XmlAttribute(required = true)
     private int minorVersion;
-
-
+     */
+    /*
     @XmlAttribute(required = true)
     private int majorVersion;
+     */
+    /** version. */
+    @XmlAttribute(required = true)
+    private ClassTarget target;
 
 
+    /** constants. */
     @XmlElement(name = "constant")
     @XmlElementWrapper(required = true)
     private List<Constant> constants;
 
 
+    /** accessFlags. */
     @XmlAttribute(required = true)
     private int accessFlags;
 

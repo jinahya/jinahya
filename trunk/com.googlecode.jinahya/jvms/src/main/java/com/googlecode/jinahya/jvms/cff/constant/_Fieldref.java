@@ -18,10 +18,14 @@
 package com.googlecode.jinahya.jvms.cff.constant;
 
 
+import javax.xml.bind.annotation.XmlType;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlType(name = "_Fieldref")
 public class _Fieldref extends _ref {
 
 
