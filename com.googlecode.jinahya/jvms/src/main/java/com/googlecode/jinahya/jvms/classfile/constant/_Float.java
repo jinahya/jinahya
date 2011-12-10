@@ -30,7 +30,7 @@ public class _Float extends _number32 {
 
 
     public _Float() {
-        super(ConstantTag._Float);
+        super(Tag._Float);
     }
 
 

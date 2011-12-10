@@ -10,9 +10,8 @@
                            namespaceURI = CLASSFILE_ATTRIBUTE_NS_URI),
                     @XmlNs(prefix = CLASSFILE_CONSTANT_NS_PREFIX,
                            namespaceURI = CLASSFILE_CONSTANT_NS_URI),
-                    @XmlNs(prefix = W3C_XML_SCHEMA_NS_PREIX,
-                           namespaceURI = W3C_XML_SCHEMA_NS_URI),
-                    @XmlNs(prefix = W3C_XML_SCHEMA_INSTANCE_NS_PREIX,
+                    @XmlNs(prefix = "xs", namespaceURI = W3C_XML_SCHEMA_NS_URI),
+                    @XmlNs(prefix = "xsi",
                            namespaceURI = W3C_XML_SCHEMA_INSTANCE_NS_URI)})
 package com.googlecode.jinahya.jvms.classfile;
 

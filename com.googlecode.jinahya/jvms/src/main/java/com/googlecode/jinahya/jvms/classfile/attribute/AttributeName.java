@@ -18,13 +18,11 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
-import com.googlecode.jinahya.jvms.classfile.constant.Constant;
+import com.googlecode.jinahya.jvms.classfile.ClassFile;
 import com.googlecode.jinahya.jvms.classfile.constant._Utf8;
 
 import java.io.DataInput;
 import java.io.IOException;
-
-import java.util.List;
 
 
 /**
@@ -46,43 +44,62 @@ public enum AttributeName {
 
 
     public static Attribute readAttribute(final DataInput input,
-                                          final List<Constant> constants)
+                                          final ClassFile parent)
         throws IOException {
 
-        final int attributeNameIndex = input.readUnsignedShort();
+        final AttributeInfo info = new AttributeInfo();
+        info.read(input);
 
-        final _Utf8 utf8 = (_Utf8) constants.get(attributeNameIndex);
-
-        for (AttributeName value : values()) {
-            if (value.name().equals(utf8.getValue())) {
-                return value.newAttribute();
-            }
-        }
-
-        throw new IllegalArgumentException(
-            "no constant for " + utf8.getValue());
+        final _Utf8 utf8 = parent.getConstant(
+            info.getAttributeNameIndex(), _Utf8.class);
+        final String name = utf8.getValue();
+        final Attribute attribute = valueOf(name).newAttribute();
+        info.print(attribute);
+        attribute.setClassfile(parent);
+        return attribute;
     }
 
 
-    private AttributeName(final Class<? extends Attribute> attributeClass) {
-        this.attributeClass = attributeClass;
+    public static Attribute readAttribute(final DataInput input,
+                                          final Attribute parent)
+        throws IOException {
+
+        final Attribute attribute = readAttribute(input, parent.getClassfile());
+        attribute.setAttribute(attribute);
+
+        return attribute;
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param attributeType target attribute type
+     */
+    private AttributeName(final Class<? extends Attribute> attributeType) {
+        this.attributeType = attributeType;
+    }
+
+
+    /**
+     * Creates a new target attribute.
+     *
+     * @return new attribute
+     */
     public Attribute newAttribute() {
         try {
-            return attributeClass.newInstance();
+            return attributeType.newInstance();
         } catch (InstantiationException ie) {
             throw new RuntimeException(
-                "failed to create a new instance of " + attributeClass, ie);
+                "failed to create a new instance of " + attributeType, ie);
         } catch (IllegalAccessException iae) {
             throw new RuntimeException(
-                "failed to create a new instance of " + attributeClass, iae);
+                "failed to create a new instance of " + attributeType, iae);
         }
     }
 
 
-    private final Class<? extends Attribute> attributeClass;
+    private final Class<? extends Attribute> attributeType;
 
 
 }

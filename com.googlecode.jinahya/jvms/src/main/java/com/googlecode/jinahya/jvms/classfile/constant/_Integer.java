@@ -30,7 +30,7 @@ public class _Integer extends _number32 {
 
 
     public _Integer() {
-        super(ConstantTag._Integer);
+        super(Tag._Integer);
     }
 
 

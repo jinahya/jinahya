@@ -22,7 +22,7 @@ package com.googlecode.jinahya.jvms.classfile;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum ClassAccessFlag {
+public enum FieldAccessFlag {
 
 
     ACC_PUBLIC(0x0001),
@@ -32,9 +32,9 @@ public enum ClassAccessFlag {
     ACC_ABSTRACT(0x0400);
 
 
-    public static ClassAccessFlag valueOf(final int accessFlagValue) {
+    public static FieldAccessFlag valueOf(final int accessFlagValue) {
 
-        for (ClassAccessFlag accessFlag : values()) {
+        for (FieldAccessFlag accessFlag : values()) {
             if (accessFlag.value == accessFlagValue) {
                 return accessFlag;
             }
@@ -45,7 +45,7 @@ public enum ClassAccessFlag {
     }
 
 
-    private ClassAccessFlag(final int value) {
+    private FieldAccessFlag(final int value) {
         this.value = value;
     }
 

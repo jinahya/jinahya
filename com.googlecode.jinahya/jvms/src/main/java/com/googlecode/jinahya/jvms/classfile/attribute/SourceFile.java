@@ -34,14 +34,14 @@ public class SourceFile extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         sourceIndex = input.readUnsignedShort();
     }
 
 
     @Override
-    protected void writeContent(final DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
 
         output.writeShort(sourceIndex);
     }

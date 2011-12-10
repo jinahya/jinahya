@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.jvms.classfile.constant;
 
 
-import com.googlecode.jinahya.jvms.classfile.Classfile;
+import com.googlecode.jinahya.jvms.classfile.ClassFile;
 import com.googlecode.jinahya.jvms.classfile.DataAccessible;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -32,16 +32,16 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class Constant implements DataAccessible {
 
 
-    public abstract ConstantTag getTag();
+    public abstract Tag getTag();
 
 
-    // -------------------------------------------------------- parent Classfile
+    // -------------------------------------------------------- parent classfile
     /**
      * Returns the parent Classfile of this attribute.
      *
      * @return the parent Classfile
      */
-    public final Classfile getClassfile() {
+    public final ClassFile getClassfile() {
         return classfile;
     }
 
@@ -51,25 +51,25 @@ public abstract class Constant implements DataAccessible {
      *
      * @param classfile the parent Classfile
      */
-    public final void setClassfile(final Classfile classfile) {
+    public final void setClassfile(final ClassFile classfile) {
         this.classfile = classfile;
     }
 
 
     // ------------------------------------------------------------------- index
-    public Integer getIndex() {
+    public final Integer getIndex() {
         return index;
     }
 
 
-    public void setIndex(final Integer index) {
+    public final void setIndex(final Integer index) {
         this.index = index;
     }
 
 
     /** parent ClassFile. */
     @XmlTransient
-    private Classfile classfile;
+    private ClassFile classfile;
 
 
     @XmlAttribute

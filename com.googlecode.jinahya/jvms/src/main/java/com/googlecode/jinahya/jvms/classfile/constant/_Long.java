@@ -30,7 +30,7 @@ public class _Long extends _number64 {
 
 
     public _Long() {
-        super(ConstantTag._Long);
+        super(Tag._Long);
     }
 
 

@@ -32,12 +32,12 @@ public class Deprecated extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
     }
 
 
     @Override
-    protected void writeContent(final DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
     }
 
 

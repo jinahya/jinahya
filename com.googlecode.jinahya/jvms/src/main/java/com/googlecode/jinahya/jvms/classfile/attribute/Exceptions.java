@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 
 
@@ -32,12 +33,11 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  * @see <a href="http://goo.gl/aA7dn">4.7.4 The Exceptions Attribute</a>
  */
-//@XmlType(name = "SourceFile")
 public class Exceptions extends Attribute {
 
 
     @Override
-    protected void readContent(final DataInput input) throws IOException {
+    protected void readInfo(final DataInput input) throws IOException {
 
         getIndices().clear();
         final int numberOfExceptions = input.readUnsignedShort();
@@ -48,7 +48,7 @@ public class Exceptions extends Attribute {
 
 
     @Override
-    protected void writeContent(final DataOutput output) throws IOException {
+    protected void writeInfo(final DataOutput output) throws IOException {
 
         output.writeShort(getIndices().size());
         for (int indiex : getIndices()) {

@@ -35,7 +35,7 @@ public class _Class extends AbstractConstant {
 
 
     public _Class() {
-        super(ConstantTag._Class);
+        super(Tag._Class);
     }
 
 

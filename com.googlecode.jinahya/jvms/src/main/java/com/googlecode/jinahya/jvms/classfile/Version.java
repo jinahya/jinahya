@@ -34,37 +34,37 @@ public enum Version {
      * 1.1.
      */
     @XmlEnumValue("1.1")
-    T11(3, 45),
+    V11(3, 45),
     /**
      * 1.2.
      */
     @XmlEnumValue("1.2")
-    T12(0, 46),
+    V12(0, 46),
     /**
      * 1.3.
      */
     @XmlEnumValue("1.3")
-    T13(0, 47),
+    V13(0, 47),
     /**
      * 1.4.
      */
     @XmlEnumValue("1.4")
-    T14(0, 48),
+    V14(0, 48),
     /**
      * 1.5.
      */
     @XmlEnumValue("1.5")
-    T15(0, 49),
+    V15(0, 49),
     /**
      * 1.6.
      */
     @XmlEnumValue("1.6")
-    T16(0, 50),
+    V16(0, 50),
     /**
      * 1.7.
      */
     @XmlEnumValue("1.7")
-    T17(0, 51);
+    V17(0, 51);
     //T18(0, 52),
     //T19(0, 53);
 
@@ -102,11 +102,11 @@ public enum Version {
     }
 
 
-    /** minorVersion. */
+    /** minor version. */
     protected final int minor;
 
 
-    /** majorVersion. */
+    /** major version. */
     protected final int major;
 
 
