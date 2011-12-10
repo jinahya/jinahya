@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.jvms.cff;
 
 
+import com.googlecode.jinahya.jvms.classfile.Classfile;
 import java.io.DataInputStream;
 import java.io.IOException;
 import javax.xml.bind.JAXBContext;
