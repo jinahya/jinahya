@@ -19,9 +19,8 @@ package com.googlecode.jinahya.jvms.cff.constant;
 
 
 import com.googlecode.jinahya.jvms.cff.Classfile;
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import com.googlecode.jinahya.jvms.cff.DataAccessible;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -30,36 +29,30 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Constant {
+public abstract class Constant implements DataAccessible {
 
 
     public abstract ConstantTag getTag();
 
 
-    public abstract void read(final DataInput input) throws IOException;
-
-
-    public abstract void write(final DataOutput output) throws IOException;
-
-
-    // -------------------------------------------------------- parent ClassFile
+    // -------------------------------------------------------- parent Classfile
     /**
-     * Returns the parent ClassFile of this attribute.
+     * Returns the parent Classfile of this attribute.
      *
-     * @return the parent ClassFile
+     * @return the parent Classfile
      */
-    public Classfile getClassFile() {
-        return classFile;
+    public final Classfile getClassfile() {
+        return classfile;
     }
 
 
     /**
-     * Sets the parent ClassFile of this attribute.
+     * Sets the parent Classfile of this attribute.
      *
-     * @param classFile the parent ClassFile
+     * @param classfile the parent Classfile
      */
-    public void setClassFile(final Classfile classFile) {
-        this.classFile = classFile;
+    public final void setClassfile(final Classfile classfile) {
+        this.classfile = classfile;
     }
 
 
@@ -76,7 +69,7 @@ public abstract class Constant {
 
     /** parent ClassFile. */
     @XmlTransient
-    private Classfile classFile;
+    private Classfile classfile;
 
 
     @XmlAttribute

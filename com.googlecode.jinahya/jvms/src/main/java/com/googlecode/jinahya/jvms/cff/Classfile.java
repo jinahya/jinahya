@@ -20,7 +20,6 @@ package com.googlecode.jinahya.jvms.cff;
 
 import com.googlecode.jinahya.jvms.cff.attribute.Attribute;
 import com.googlecode.jinahya.jvms.cff.attribute.AttributeName;
-import com.googlecode.jinahya.jvms.cff.constant.AbstractConstant;
 import com.googlecode.jinahya.jvms.cff.constant.Constant;
 import com.googlecode.jinahya.jvms.cff.constant.ConstantTag;
 
@@ -46,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"constants", "interfaces", "fields", "methods",
                       "attributes"})
-public class Classfile {
+public class Classfile implements DataAccessible {
 
 
     public static Classfile readInstance(final DataInput input)
@@ -66,6 +65,7 @@ public class Classfile {
     public static final int MAGIC = 0xCAFEBABE;
 
 
+    @Override
     public void read(final DataInput input) throws IOException {
 
         assert input.readInt() == MAGIC;
@@ -74,7 +74,7 @@ public class Classfile {
 
         //majorVersion = input.readUnsignedShort();
 
-        target = ClassTarget.valueOf(input.readUnsignedShort(),
+        version = Version.valueOf(input.readUnsignedShort(),
                                      input.readUnsignedShort());
 
         // -------------------------------------------------------- constantPool
@@ -117,12 +117,13 @@ public class Classfile {
         for (int i = 0; i < attributesCount; i++) {
             final Attribute attribute =
                 AttributeName.readAttribute(input, getConstants());
-            attribute.setClassFile(this);
+            attribute.setClassfile(this);
             getAttributes().add(attribute);
         }
     }
 
 
+    @Override
     public void write(final DataOutput output) throws IOException {
 
         output.writeInt(MAGIC);
@@ -131,9 +132,9 @@ public class Classfile {
 
         //output.writeShort(majorVersion);
 
-        output.writeShort(target.minorVersion);
+        output.writeShort(version.minor);
 
-        output.writeShort(target.majorVersion);
+        output.writeShort(version.major);
 
         // -------------------------------------------------------- constantPool
         output.writeShort(getConstants().size() + 1);
@@ -176,18 +177,18 @@ public class Classfile {
 
     @XmlAttribute
     public int getMinorVersion() {
-        return getTarget().minorVersion;
+        return getVersion().minor;
     }
 
 
     @XmlAttribute
     public int getMajorVersion() {
-        return getTarget().majorVersion;
+        return getVersion().major;
     }
 
 
-    public ClassTarget getTarget() {
-        return target;
+    public Version getVersion() {
+        return version;
     }
 
 
@@ -266,7 +267,7 @@ public class Classfile {
      */
     /** version. */
     @XmlAttribute(required = true)
-    private ClassTarget target;
+    private Version version;
 
 
     /** constants. */

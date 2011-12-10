@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlEnum
-public enum ClassTarget {
+public enum Version {
 
 
     /**
@@ -76,12 +76,11 @@ public enum ClassTarget {
      * @param majorVersion major version
      * @return matched constant
      */
-    public static ClassTarget valueOf(final int minorVersion,
-                                       final int majorVersion) {
+    public static Version valueOf(final int minorVersion,
+                                  final int majorVersion) {
 
-        for (ClassTarget value : values()) {
-            if (value.minorVersion == minorVersion
-                && value.majorVersion == majorVersion) {
+        for (Version value : values()) {
+            if (value.minor == minorVersion && value.major == majorVersion) {
                 return value;
             }
         }
@@ -94,21 +93,21 @@ public enum ClassTarget {
     /**
      * Creates a new instance.
      *
-     * @param minorVersion minorVersion
-     * @param majorVersion majorVersion
+     * @param minor minor version
+     * @param major major version
      */
-    private ClassTarget(final int minorVersion, final int majorVersion) {
-        this.minorVersion = minorVersion;
-        this.majorVersion = majorVersion;
+    private Version(final int minor, final int major) {
+        this.minor = minor;
+        this.major = major;
     }
 
 
     /** minorVersion. */
-    protected final int minorVersion;
+    protected final int minor;
 
 
     /** majorVersion. */
-    protected final int majorVersion;
+    protected final int major;
 
 
 }
