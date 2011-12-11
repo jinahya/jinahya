@@ -7,7 +7,7 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
-import static com.googlecode.jinahya.jvms.classfile.ClassfileXMLConstanta.*;
+import static com.googlecode.jinahya.jvms.classfile.ClassFileXMLConstant.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlNsForm;
