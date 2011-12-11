@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.jvms.classfile;
 
 
-import static com.googlecode.jinahya.jvms.classfile.ClassfileXMLConstanta.*;
+import static com.googlecode.jinahya.jvms.classfile.ClassFileXMLConstant.*;
 import static javax.xml.XMLConstants.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

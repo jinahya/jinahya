@@ -22,7 +22,7 @@ package com.googlecode.jinahya.jvms.classfile;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ClassfileXMLConstanta {
+public class ClassFileXMLConstant {
 
 
     public static final String CLASSFILE_NS_URI =
