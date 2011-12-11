@@ -1,23 +1,23 @@
 -classpath
-'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/jvms/target/classes'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/target/classes'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/jvms/src/main/java'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java'
 -author
 -bottom
 'Copyright &#169; 2011. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/jvms/target/site/apidocs'
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'jvms 1.0-alpha-12-SNAPSHOT API'
 -linkoffline
-'http://download.oracle.com/javase/1.5.0/docs/api' 'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/jvms/target/javadoc-bundle-options'
+'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle

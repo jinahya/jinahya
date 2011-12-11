@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="78" tokens="204">
-<file line="55" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\Field.java"/>
-<file line="56" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\Method.java"/>
+<file line="55" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/Field.java"/>
+<file line="56" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/Method.java"/>
 <codefragment>
 <![CDATA[
         System.out.println("attributesCount: " + attributesCount);
@@ -87,8 +87,8 @@
 </codefragment>
 </duplication>
 <duplication lines="41" tokens="163">
-<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\LineNumberTable.java"/>
-<file line="39" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\stackmap\StackMapTable.java"/>
+<file line="36" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/attribute/LineNumberTable.java"/>
+<file line="39" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/attribute/stackmap/StackMapTable.java"/>
 <codefragment>
 <![CDATA[
 public class StackMapTable extends Attribute {
@@ -136,8 +136,8 @@ public class StackMapTable extends Attribute {
 </codefragment>
 </duplication>
 <duplication lines="40" tokens="140">
-<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeInvisibleParameterAnnotations.java"/>
-<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeVisibleParameterAnnotations.java"/>
+<file line="36" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/attribute/RuntimeInvisibleParameterAnnotations.java"/>
+<file line="36" path="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/classfile/attribute/RuntimeVisibleParameterAnnotations.java"/>
 <codefragment>
 <![CDATA[
 public class RuntimeVisibleParameterAnnotations extends Attribute {
