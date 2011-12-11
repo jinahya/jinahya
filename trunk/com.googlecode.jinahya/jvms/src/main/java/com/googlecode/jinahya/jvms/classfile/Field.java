@@ -20,6 +20,7 @@ package com.googlecode.jinahya.jvms.classfile;
 
 import com.googlecode.jinahya.jvms.classfile.attribute.Attribute;
 
+import com.googlecode.jinahya.jvms.classfile.attribute.AttributeInfo;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -53,8 +54,10 @@ public class Field implements DataAccessible {
 
         final int attributesCount = input.readUnsignedShort();
         getAttributes().clear();
+        final AttributeInfo info = new AttributeInfo();
         for (int i = 0; i < attributesCount; i++) {
-            getAttributes().add(Attribute.readInstance(input, classfile));
+            info.read(input);
+            getAttributes().add(Attribute.newInstance(info, classFile));
         }
     }
 
@@ -64,14 +67,14 @@ public class Field implements DataAccessible {
     }
 
 
-    // --------------------------------------------------------------- classfile
-    public final ClassFile getClassfile() {
-        return classfile;
+    // -------------------------------------------------------- parent classFile
+    public final ClassFile getClassFile() {
+        return classFile;
     }
 
 
-    public final void setClassfile(final ClassFile classfile) {
-        this.classfile = classfile;
+    public final void setClassFile(final ClassFile classFile) {
+        this.classFile = classFile;
     }
 
 
@@ -106,7 +109,7 @@ public class Field implements DataAccessible {
 
     /** parent classfile. */
     @XmlTransient
-    private ClassFile classfile;
+    private ClassFile classFile;
 
 
     @XmlElement(required = true)

@@ -18,37 +18,36 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import javax.xml.bind.annotation.XmlAttribute;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class SourceDebugExtension extends Attribute {
 
 
     @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+    protected void readInfo(final AttributeInfo info, final DataInput input)
+        throws IOException {
 
-        sourceIndex = input.readUnsignedShort();
+        debugExtension = info.info;
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
+    protected void writeInfo(final AttributeInfo info, final DataOutput output)
+        throws IOException {
 
-        output.writeShort(sourceIndex);
+        output.write(debugExtension);
     }
 
 
-    @XmlAttribute(required = true)
-    private int sourceIndex;
+    private byte[] debugExtension;
 
 
 }

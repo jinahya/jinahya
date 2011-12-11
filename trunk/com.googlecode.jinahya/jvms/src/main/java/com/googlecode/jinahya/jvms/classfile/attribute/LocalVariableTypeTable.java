@@ -33,19 +33,19 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  * @see <a href="http://goo.gl/I6Fqj">4.7.9 The LocalVariableTable Attribute</a>
  */
-public class LocalVariableTable extends Attribute {
+public class LocalVariableTypeTable extends Attribute {
 
 
     @Override
     protected void readInfo(final AttributeInfo info, final DataInput input)
         throws IOException {
 
-        getLocalVariables().clear();
+        getLocalVariableTypes().clear();
         final int localVariableTableLength = input.readUnsignedShort();
         for (int i = 0; i < localVariableTableLength; i++) {
-            final LocalVariable localVariable = new LocalVariable();
-            localVariable.read(input);
-            getLocalVariables().add(localVariable);
+            final LocalVariableType localVariableType = new LocalVariableType();
+            localVariableType.read(input);
+            getLocalVariableTypes().add(localVariableType);
         }
     }
 
@@ -54,25 +54,25 @@ public class LocalVariableTable extends Attribute {
     protected void writeInfo(final AttributeInfo info, final DataOutput output)
         throws IOException {
 
-        output.writeShort(getLocalVariables().size());
-        for (LocalVariable localVariable : getLocalVariables()) {
-            localVariable.write(output);
+        output.writeShort(getLocalVariableTypes().size());
+        for (LocalVariableType localVariableType : getLocalVariableTypes()) {
+            localVariableType.write(output);
         }
     }
 
 
-    private List<LocalVariable> getLocalVariables() {
+    private List<LocalVariableType> getLocalVariableTypes() {
 
-        if (localVariables == null) {
-            localVariables = new ArrayList<LocalVariable>();
+        if (localVariableTypes == null) {
+            localVariableTypes = new ArrayList<LocalVariableType>();
         }
 
-        return localVariables;
+        return localVariableTypes;
     }
 
 
-    @XmlElement(name = "localVariable")
-    private List<LocalVariable> localVariables;
+    @XmlElement(name = "localVariableType")
+    private List<LocalVariableType> localVariableTypes;
 
 
 }

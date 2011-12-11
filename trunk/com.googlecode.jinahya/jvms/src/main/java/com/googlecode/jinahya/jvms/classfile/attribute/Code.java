@@ -88,13 +88,17 @@ public class Code extends Attribute {
 
 
     @Override
-    protected void readInfo(final DataInput input) throws IOException {
+    protected void readInfo(final AttributeInfo info, final DataInput input)
+        throws IOException {
 
         maxStack = input.readUnsignedShort();
+        System.out.println("code.maxStack: " + maxStack);
 
         maxLocals = input.readUnsignedShort();
+        System.out.println("code.maxLocals: " + maxLocals);
 
         code = new byte[input.readInt()];
+        System.out.println("code.code.length: " + code.length);
         input.readFully(code);
 
         final int exceptionTableLength = input.readUnsignedShort();
@@ -105,17 +109,16 @@ public class Code extends Attribute {
             getExceptionTables().add(exceptionTable);
         }
 
-        final int attributeCount = input.readUnsignedShort();
+        final int attributesCount = input.readUnsignedShort();
         getAttributes().clear();
-        for (int i = 0; i < attributeCount; i++) {
-            getAttributes().add(AttributeName.readAttribute(input, this));
-        }
-
+        Attribute.readInstances(attributesCount, input, classfile, attributes);
     }
 
 
     @Override
-    protected void writeInfo(final DataOutput output) throws IOException {
+    protected void writeInfo(final AttributeInfo info, final DataOutput output)
+        throws IOException {
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

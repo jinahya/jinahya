@@ -19,7 +19,7 @@ package com.googlecode.jinahya.jvms.classfile;
 
 
 import com.googlecode.jinahya.jvms.classfile.attribute.Attribute;
-import com.googlecode.jinahya.jvms.classfile.attribute.AttributeName;
+import com.googlecode.jinahya.jvms.classfile.attribute.AttributeInfo;
 import com.googlecode.jinahya.jvms.classfile.constant.Constant;
 import com.googlecode.jinahya.jvms.classfile.constant.Tag;
 
@@ -82,6 +82,7 @@ public class ClassFile implements DataAccessible {
         for (int i = 0; i < constantPoolCount - 1; i++) {
             final int tag = input.readUnsignedByte();
             final Constant constant = Tag.valueOf(tag).newConstant();
+            System.out.println("constant[" + (i + 1) + "].tag: " + constant.getTag());
             constant.setIndex(i);
             constant.read(input);
             getConstants().add(constant);
@@ -104,21 +105,30 @@ public class ClassFile implements DataAccessible {
         getFields().clear();
         for (int i = 0; i < fieldsCount; i++) {
             final Field field = new Field();
+            field.setClassFile(this);
             field.read(input);
             getFields().add(field);
         }
 
         // ------------------------------------------------------------- methods
         final int methodsCount = input.readUnsignedShort();
+        System.out.println("methodsCount: " + methodsCount);
+        getMethods().clear();
         for (int i = 0; i < methodsCount; i++) {
-            getMethods().add(input.readUnsignedShort());
+            final Method method = new Method();
+            method.setClassFile(this);
+            method.read(input);
+            System.out.println("method[" + i + "]: " + method);
+            getMethods().add(method);
         }
 
         // ---------------------------------------------------------- attributes
         final int attributesCount = input.readUnsignedShort();
         getAttributes().clear();
+        final AttributeInfo info = new AttributeInfo();
         for (int i = 0; i < attributesCount; i++) {
-            getAttributes().add(AttributeName.readAttribute(input, this));
+            info.read(input);
+            getAttributes().add(Attribute.newInstance(info, this));
         }
     }
 
@@ -163,14 +173,16 @@ public class ClassFile implements DataAccessible {
 
         // ------------------------------------------------------------- methods
         output.writeShort(getMethods().size());
-        for (Iterator<Integer> i = getMethods().iterator(); i.hasNext();) {
-            output.writeShort(i.next());
+        for (Method method : methods) {
+            method.write(output);
         }
 
         // ---------------------------------------------------------- attributes
         output.writeShort(getAttributes().size());
+        final AttributeInfo info = new AttributeInfo();
         for (Attribute attribute : getAttributes()) {
-            attribute.write(output);
+            info.parse(attribute);
+            info.write(output);
         }
     }
 
@@ -217,7 +229,7 @@ public class ClassFile implements DataAccessible {
      */
     public Constant getConstant(final int index) {
 
-        return getConstants().get(index);
+        return getConstants().get(index - 1);
     }
 
 
@@ -277,10 +289,10 @@ public class ClassFile implements DataAccessible {
 
 
     // ----------------------------------------------------------------- methods
-    public List<Integer> getMethods() {
+    public List<Method> getMethods() {
 
         if (methods == null) {
-            methods = new ArrayList<Integer>();
+            methods = new ArrayList<Method>();
         }
 
         return methods;
@@ -342,7 +354,7 @@ public class ClassFile implements DataAccessible {
 
     @XmlElement(name = "method")
     @XmlElementWrapper(required = true)
-    private List<Integer> methods;
+    private List<Method> methods;
 
 
     @XmlElement(name = "attribute")

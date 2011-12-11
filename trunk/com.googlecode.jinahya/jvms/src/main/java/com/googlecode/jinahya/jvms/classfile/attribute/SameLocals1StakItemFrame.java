@@ -18,37 +18,32 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
+import com.googlecode.jinahya.jvms.classfile.attribute.stackmap.StackMapFrame;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import javax.xml.bind.annotation.XmlAttribute;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class SameLocals1StakItemFrame extends StackMapFrame {
 
 
     @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+    public void read(DataInput input) throws IOException {
+        super.read(input);
 
-        sourceIndex = input.readUnsignedShort();
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
+    public void write(DataOutput output) throws IOException {
+        super.write(output);
 
-        output.writeShort(sourceIndex);
+
     }
-
-
-    @XmlAttribute(required = true)
-    private int sourceIndex;
 
 
 }

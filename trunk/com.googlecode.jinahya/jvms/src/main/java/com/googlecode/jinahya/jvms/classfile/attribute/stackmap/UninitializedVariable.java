@@ -15,40 +15,49 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile.attribute;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class UninitializedVariable extends AbstractVerificationType {
 
 
-    @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
-
-        sourceIndex = input.readUnsignedShort();
+    public UninitializedVariable() {
+        super(VerificationTypeTag.ITEM_Object);
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
-
-        output.writeShort(sourceIndex);
+    protected void readInfo(final DataInput input) throws IOException {
+        offset = input.readUnsignedShort();
     }
 
 
-    @XmlAttribute(required = true)
-    private int sourceIndex;
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+        output.writeShort(offset);
+    }
+
+
+    public int getOffset() {
+        return offset;
+    }
+
+
+    public void setOffset(final int offset) {
+        this.offset = offset;
+    }
+
+
+    private int offset;
 
 
 }

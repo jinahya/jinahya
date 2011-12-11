@@ -19,13 +19,13 @@ package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
 import com.googlecode.jinahya.jvms.classfile.ClassFile;
-import com.googlecode.jinahya.jvms.classfile.DataAccessible;
-
 import com.googlecode.jinahya.jvms.classfile.constant._Utf8;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,48 +34,44 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Attribute implements DataAccessible {
+public abstract class Attribute {
 
 
-    public static Attribute readInstance(final DataInput input,
-                                         final ClassFile classfile)
+    public static void readInstances(final int attributesCount,
+                                     final DataInput input,
+                                     final ClassFile classFile,
+                                     final Collection<Attribute> attributes)
         throws IOException {
 
         final AttributeInfo info = new AttributeInfo();
-        info.read(input);
+        for (int i = 0; i < attributesCount; i++) {
+            info.read(input);
+            attributes.add(newInstance(info, classFile));
+        }
+    }
 
-        final _Utf8 utf8 = classfile.getConstant(
-            info.getAttributeNameIndex(), _Utf8.class);
-        final String name = utf8.getValue();
-        final Attribute attribute = AttributeName.valueOf(name).newAttribute();
+
+    public static Attribute newInstance(final AttributeInfo info,
+                                        final ClassFile classFile)
+        throws IOException {
+
+        final _Utf8 utf8 = classFile.getConstant(
+            info.attributeNameIndex, _Utf8.class);
+        final AttributeName name = AttributeName.valueOf(utf8.getValue());
+        final Attribute attribute = name.newAttribute();
+        attribute.setClassfile(classFile);
         info.print(attribute);
-        attribute.setClassfile(classfile);
+
         return attribute;
     }
 
 
-    @Override
-    public final void read(final DataInput input) throws IOException {
-
-        nameIndex = input.readUnsignedShort();
-
-        readInfo(input);
-    }
+    protected abstract void readInfo(AttributeInfo info, DataInput input)
+        throws IOException;
 
 
-    protected abstract void readInfo(DataInput input) throws IOException;
-
-
-    @Override
-    public final void write(final DataOutput output) throws IOException {
-
-        output.writeShort(nameIndex);
-
-        writeInfo(output);
-    }
-
-
-    protected abstract void writeInfo(DataOutput output) throws IOException;
+    protected abstract void writeInfo(AttributeInfo info, DataOutput output)
+        throws IOException;
 
 
     // -------------------------------------------------------- parent classfile
@@ -85,11 +81,6 @@ public abstract class Attribute implements DataAccessible {
      * @return the parent classfile
      */
     public final ClassFile getClassfile() {
-
-        if (attribute != null) {
-            return attribute.getClassfile();
-        }
-
         return classfile;
     }
 
@@ -104,39 +95,13 @@ public abstract class Attribute implements DataAccessible {
     }
 
 
-    // -------------------------------------------------------- parent attribute
-    /**
-     * Returns the parent attribute of this attribute.
-     *
-     * @return the parent attribute
-     */
-    public final Attribute getAttribute() {
-        return attribute;
-    }
-
-
-    /**
-     * Sets the parent attribute of this attribute.
-     *
-     * @param attribute the parent attribute
-     */
-    public final void setAttribute(final Attribute attribute) {
-        this.attribute = attribute;
-    }
-
-
     /** parent classfile. */
     @XmlTransient
     protected ClassFile classfile;
 
 
-    /** parent attribute. */
-    @XmlTransient
-    protected Attribute attribute;
-
-
     @XmlAttribute(required = true)
-    private int nameIndex;
+    protected int nameIndex;
 
 
 }
