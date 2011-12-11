@@ -1,3 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="78" tokens="204">
+<file line="55" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\Field.java"/>
+<file line="56" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\Method.java"/>
+<codefragment>
+<![CDATA[
+        System.out.println("attributesCount: " + attributesCount);
+        getAttributes().clear();
+        final AttributeInfo info = new AttributeInfo();
+        for (int i = 0; i < attributesCount; i++) {
+            info.read(input);
+            getAttributes().add(Attribute.newInstance(info, classFile));
+        }
+    }
+
+
+    @Override
+    public void write(final DataOutput output) throws IOException {
+    }
+
+
+    // -------------------------------------------------------- parent classFile
+    public final ClassFile getClassFile() {
+        return classFile;
+    }
+
+
+    public final void setClassFile(final ClassFile classFile) {
+        this.classFile = classFile;
+    }
+
+
+    // ------------------------------------------------------------- accessFlags
+    public int getAccessFlags() {
+        return accessFlags;
+    }
+
+
+    // --------------------------------------------------------------- nameIndex
+    public int getNameIndex() {
+        return nameIndex;
+    }
+
+
+    // --------------------------------------------------------- descriptorIndex
+    public int getDescriptorIndex() {
+        return descriptorIndex;
+    }
+
+
+    // -------------------------------------------------------------- attributes
+    private List<Attribute> getAttributes() {
+
+        if (attributes == null) {
+            attributes = new ArrayList<Attribute>();
+        }
+
+        return attributes;
+    }
+
+
+    /** parent classfile. */
+    @XmlTransient
+    private ClassFile classFile;
+
+
+    @XmlElement(required = true)
+    private int accessFlags;
+
+
+    @XmlElement(required = true)
+    private int nameIndex;
+
+
+    @XmlElement(required = true)
+    private int descriptorIndex;
+
+
+    @XmlElement(name = "attribute")
+    @XmlElementWrapper(required = true)
+    private List<Attribute> attributes;
+
+
+}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="41" tokens="163">
+<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\LineNumberTable.java"/>
+<file line="39" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\stackmap\StackMapTable.java"/>
+<codefragment>
+<![CDATA[
+public class StackMapTable extends Attribute {
+
+
+    @Override
+    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+
+        getLineNumbers().clear();
+        final int numberOfClasses = input.readUnsignedShort();
+        for (int i = 0; i < numberOfClasses; i++) {
+            final LineNumber lineNumber = new LineNumber();
+            lineNumber.read(input);
+            getLineNumbers().add(lineNumber);
+        }
+    }
+
+
+    @Override
+    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
+
+        output.writeShort(getLineNumbers().size());
+        for (LineNumber lineNumber : getLineNumbers()) {
+            lineNumber.write(output);
+        }
+    }
+
+
+    private List<LineNumber> getLineNumbers() {
+
+        if (lineNumbers == null) {
+            lineNumbers = new ArrayList<LineNumber>();
+        }
+
+        return lineNumbers;
+    }
+
+
+    @XmlElement(name="lineNumber")
+    private List<LineNumber> lineNumbers;
+
+
+}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="40" tokens="140">
+<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeInvisibleParameterAnnotations.java"/>
+<file line="36" path="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeVisibleParameterAnnotations.java"/>
+<codefragment>
+<![CDATA[
+public class RuntimeVisibleParameterAnnotations extends Attribute {
+
+
+    @Override
+    protected void readInfo(final AttributeInfo info, final DataInput input)
+        throws IOException {
+
+        final int numParameters = input.readUnsignedShort();
+        getParameterAnnotations().clear();
+        for (int i = 0; i < numParameters; i++) {
+            final Annotations annotations = new Annotations();
+            annotations.read(input);
+            getParameterAnnotations().add(annotations);
+        }
+    }
+
+
+    @Override
+    protected void writeInfo(final AttributeInfo info, final DataOutput output)
+        throws IOException {
+
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    private List<Annotations> getParameterAnnotations() {
+
+        if (parameterAnnotations == null) {
+            parameterAnnotations = new ArrayList<Annotations>();
+        }
+
+        return parameterAnnotations;
+    }
+
+
+    @XmlElement(required = true)
+    private List<Annotations> parameterAnnotations;
+
+
+}
+]]>
+</codefragment>
+</duplication>
 </pmd-cpd>

@@ -1,2 +1,4 @@
-com.googlecode.jinahya.jvms.cff.constant
-com.googlecode.jinahya.jvms.cff
+com.googlecode.jinahya.jvms.classfile.attribute
+com.googlecode.jinahya.jvms.classfile.attribute.stackmap
+com.googlecode.jinahya.jvms.classfile
+com.googlecode.jinahya.jvms.classfile.constant

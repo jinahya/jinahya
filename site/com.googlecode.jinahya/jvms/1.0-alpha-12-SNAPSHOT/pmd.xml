@@ -1,19 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2011-12-10T01:28:56.581">
-<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jvms/src/main/java/com/googlecode/jinahya/jvms/cff/package-info.java">
-<violation beginline="19" endline="19" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+<pmd version="4.2.5" timestamp="2011-12-11T19:29:54.919">
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\ElementValue.java">
+<violation beginline="98" endline="98" begincolumn="17" endcolumn="31" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" class="ElementValue" variable="constValueIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'constValueIndex'.
+</violation>
+<violation beginline="101" endline="101" begincolumn="17" endcolumn="29" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" class="ElementValue" variable="typeNameIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'typeNameIndex'.
+</violation>
+<violation beginline="104" endline="104" begincolumn="17" endcolumn="30" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" class="ElementValue" variable="constNameIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'constNameIndex'.
+</violation>
+<violation beginline="107" endline="107" begincolumn="17" endcolumn="30" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" class="ElementValue" variable="classInfoIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'classInfoIndex'.
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\ElementValuePair.java">
+<violation beginline="27" endline="27" begincolumn="1" endcolumn="31" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.LinkedHashMap'
+</violation>
+<violation beginline="28" endline="28" begincolumn="1" endcolumn="21" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Map'
+</violation>
+<violation beginline="29" endline="29" begincolumn="1" endcolumn="44" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlElement'
+</violation>
+<violation beginline="54" endline="54" begincolumn="17" endcolumn="32" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" class="ElementValuePair" variable="elementNameIndex" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'elementNameIndex'.
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeInvisibleAnnotations.java">
+<violation beginline="25" endline="25" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.ArrayList'
+</violation>
+<violation beginline="26" endline="26" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.List'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\RuntimeVisibleAnnotations.java">
+<violation beginline="25" endline="25" begincolumn="1" endcolumn="27" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.ArrayList'
+</violation>
+<violation beginline="26" endline="26" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.List'
+</violation>
+<violation beginline="29" endline="29" begincolumn="1" endcolumn="51" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlElementWrapper'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\SourceDebugExtension.java">
+<violation beginline="21" endline="21" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.jvms.classfile.attribute" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.io.ByteArrayOutputStream'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\package-info.java">
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
 </violation>
-<violation beginline="20" endline="20" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+<violation beginline="12" endline="12" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
 </violation>
-<violation beginline="21" endline="21" begincolumn="1" endcolumn="39" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
-Avoid unused imports such as 'javax.xml.bind.annotation.XmlNs'
-</violation>
-<violation beginline="22" endline="22" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+<violation beginline="13" endline="13" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
 </violation>
-<violation beginline="23" endline="23" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\attribute\stackmap\package-info.java">
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
+</violation>
+<violation beginline="12" endline="12" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
+</violation>
+<violation beginline="13" endline="13" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
+</violation>
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\constant\package-info.java">
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
+</violation>
+<violation beginline="12" endline="12" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
+</violation>
+<violation beginline="13" endline="13" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
+</violation>
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
+</violation>
+</file>
+<file name="E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\jvms\src\main\java\com\googlecode\jinahya\jvms\classfile\package-info.java">
+<violation beginline="23" endline="23" begincolumn="1" endcolumn="47" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessType'
+</violation>
+<violation beginline="24" endline="24" begincolumn="1" endcolumn="49" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlAccessorType'
+</violation>
+<violation beginline="25" endline="25" begincolumn="1" endcolumn="39" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNs'
+</violation>
+<violation beginline="26" endline="26" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'javax.xml.bind.annotation.XmlNsForm'
+</violation>
+<violation beginline="27" endline="27" begincolumn="1" endcolumn="43" rule="UnusedImports" ruleset="Import Statement Rules" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'javax.xml.bind.annotation.XmlSchema'
 </violation>
 </file>
