@@ -74,7 +74,7 @@ public class ClassFile implements DataAccessible {
 
         //majorVersion = input.readUnsignedShort();
 
-        version = Version.valueOf(input.readUnsignedShort(),
+        version = ClassFileVersion.valueOf(input.readUnsignedShort(),
                                   input.readUnsignedShort());
 
         // -------------------------------------------------------- constantPool
@@ -188,12 +188,12 @@ public class ClassFile implements DataAccessible {
 
 
     // ----------------------------------------------------------------- version
-    public Version getVersion() {
+    public ClassFileVersion getVersion() {
         return version;
     }
 
 
-    public void setVersion(final Version version) {
+    public void setVersion(final ClassFileVersion version) {
         this.version = version;
     }
 
@@ -320,7 +320,7 @@ public class ClassFile implements DataAccessible {
      */
     /** version. */
     @XmlAttribute(required = true)
-    private Version version;
+    private ClassFileVersion version;
 
 
     /** constants. */
