@@ -15,32 +15,40 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
+
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ClassfileXMLConstant {
+public class SameFrameExtended extends SameFrame {
 
 
-    public static final String CLASSFILE_NS_URI =
-        "http://jinahya.googlecode.com/jvms/classfile";
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        super.readInfo(input);
+
+        offsetDelta = input.readUnsignedShort();
+    }
 
 
-    public static final String CLASSFILE_ATTRIBUTE_NS_PREFIX = "attr";
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        super.writeInfo(output);
+
+        output.writeShort(offsetDelta);
+    }
 
 
-    public static final String CLASSFILE_ATTRIBUTE_NS_URI =
-        CLASSFILE_NS_URI + "/attribute";
-
-
-    public static final String CLASSFILE_CONSTANT_NS_PREFIX = "cons";
-
-
-    public static final String CLASSFILE_CONSTANT_NS_URI =
-        CLASSFILE_NS_URI + "/constant";
+    private int offsetDelta;
 
 
 }

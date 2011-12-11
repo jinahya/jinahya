@@ -46,6 +46,12 @@ public abstract class StackMapFrame implements DataAccessible {
     }
 
 
+    protected abstract void readInfo(final DataInput input) throws IOException;
+
+
+    protected abstract void writeInfo(final DataOutput output) throws IOException;
+
+
     // ----------------------------------------------------------- previousFrame
     public StackMapFrame getPreviousFrame() {
         return previousFrame;
@@ -71,7 +77,7 @@ public abstract class StackMapFrame implements DataAccessible {
     public StackMapFrame previousFrame;
 
 
-    private int frameType;
+    protected int frameType;
 
 
 }

@@ -8,6 +8,8 @@
                            namespaceURI = CLASSFILE_NS_URI),
                     @XmlNs(prefix = CLASSFILE_ATTRIBUTE_NS_PREFIX,
                            namespaceURI = CLASSFILE_ATTRIBUTE_NS_URI),
+                    @XmlNs(prefix = CLASSFILE_ATTRIBUTE_STACKMAP_NS_PREFIX,
+                           namespaceURI = CLASSFILE_ATTRIBUTE_STACKMAP_NS_URI),
                     @XmlNs(prefix = CLASSFILE_CONSTANT_NS_PREFIX,
                            namespaceURI = CLASSFILE_CONSTANT_NS_URI),
                     @XmlNs(prefix = "xs", namespaceURI = W3C_XML_SCHEMA_NS_URI),
@@ -16,7 +18,7 @@
 package com.googlecode.jinahya.jvms.classfile;
 
 
-import static com.googlecode.jinahya.jvms.classfile.ClassfileXMLConstant.*;
+import static com.googlecode.jinahya.jvms.classfile.ClassfileXMLConstanta.*;
 import static javax.xml.XMLConstants.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

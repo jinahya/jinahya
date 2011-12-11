@@ -15,10 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile.attribute;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
-import com.googlecode.jinahya.jvms.classfile.attribute.stackmap.StackMapFrame;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -28,22 +27,36 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SameLocals1StakItemFrame extends StackMapFrame {
+public class AppendFrame extends StackMapFrame {
 
 
     @Override
-    public void read(DataInput input) throws IOException {
-        super.read(input);
+    protected void readInfo(final DataInput input) throws IOException {
 
+        offsetDelta = input.readUnsignedShort();
+
+        locals = new VerificationType[frameType - 251];
+        for (int i = 0; i < locals.length; i++) {
+            locals[i] = VerificationType.readInstance(input);
+        }
     }
 
 
     @Override
-    public void write(DataOutput output) throws IOException {
-        super.write(output);
+    protected void writeInfo(final DataOutput output) throws IOException {
 
+        output.writeShort(offsetDelta);
 
+        for (int i = 0; i < frameType - 251; i++) {
+            VerificationType.writeInstance(output, locals[i]);
+        }
     }
+
+
+    private int offsetDelta;
+
+
+    private VerificationType[] locals;
 
 
 }
