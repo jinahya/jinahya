@@ -1,10 +1,10 @@
 
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSchema(namespace = CLASSFILE_CONSTANT_NS_URI,
+@XmlSchema(namespace = CLASSFILE_ATTRIBUTE_STACKMAP_NS_URI,
            elementFormDefault = XmlNsForm.QUALIFIED,
            attributeFormDefault = XmlNsForm.UNQUALIFIED)
-package com.googlecode.jinahya.jvms.classfile.constant;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
 import static com.googlecode.jinahya.jvms.classfile.ClassfileXMLConstanta.*;

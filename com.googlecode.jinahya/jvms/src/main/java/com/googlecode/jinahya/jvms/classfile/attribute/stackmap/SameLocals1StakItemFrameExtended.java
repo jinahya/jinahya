@@ -27,17 +27,29 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SameFrame extends StackMapFrame {
+public class SameLocals1StakItemFrameExtended
+    extends SameLocals1StakItemFrame {
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
+
+        offsetDelta = input.readUnsignedShort();
+
+        super.readInfo(input);
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(offsetDelta);
+
+        super.writeInfo(output);
     }
+
+
+    private int offsetDelta;
 
 
 }

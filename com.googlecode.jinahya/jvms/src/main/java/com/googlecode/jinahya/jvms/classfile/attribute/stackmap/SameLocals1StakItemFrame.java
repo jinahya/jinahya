@@ -27,17 +27,24 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SameFrame extends StackMapFrame {
+public class SameLocals1StakItemFrame extends StackMapFrame {
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
+
+        verificationType = VerificationType.readInstance(input);
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
+
+        VerificationType.writeInstance(output, verificationType);
     }
+
+
+    private VerificationType verificationType;
 
 
 }

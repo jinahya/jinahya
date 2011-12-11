@@ -41,6 +41,7 @@ public class ClassFileTest {
         final JAXBContext context = JAXBContext.newInstance(
             "com.googlecode.jinahya.jvms.classfile"
             + ":com.googlecode.jinahya.jvms.classfile.attribute"
+            + ":com.googlecode.jinahya.jvms.classfile.attribute.stackmap"
             + ":com.googlecode.jinahya.jvms.classfile.constant");
 
         final Marshaller marshaller = context.createMarshaller();
