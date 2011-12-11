@@ -15,9 +15,12 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile.attribute;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
+import com.googlecode.jinahya.jvms.classfile.attribute.Attribute;
+import com.googlecode.jinahya.jvms.classfile.attribute.AttributeInfo;
+import com.googlecode.jinahya.jvms.classfile.attribute.LineNumber;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -30,21 +33,21 @@ import javax.xml.bind.annotation.XmlElement;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/MpYsa">4.7.5 The InnerClasses Attribute</a>
+ * @see <a href="http://goo.gl/DQwtJ">4.7.8 The LineNumberTable Attribute</a>
  */
 //@XmlType(name = "SourceFile")
-public class InnerClasses extends Attribute {
+public class StackMapTable extends Attribute {
 
 
     @Override
     protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
 
-        getInnerClasses().clear();
+        getLineNumbers().clear();
         final int numberOfClasses = input.readUnsignedShort();
         for (int i = 0; i < numberOfClasses; i++) {
-            final InnerClass innerClass = new InnerClass();
-            innerClass.read(input);
-            getInnerClasses().add(innerClass);
+            final LineNumber lineNumber = new LineNumber();
+            lineNumber.read(input);
+            getLineNumbers().add(lineNumber);
         }
     }
 
@@ -52,25 +55,25 @@ public class InnerClasses extends Attribute {
     @Override
     protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
 
-        output.writeShort(getInnerClasses().size());
-        for (InnerClass innerClass : getInnerClasses()) {
-            innerClass.write(output);
+        output.writeShort(getLineNumbers().size());
+        for (LineNumber lineNumber : getLineNumbers()) {
+            lineNumber.write(output);
         }
     }
 
 
-    private List<InnerClass> getInnerClasses() {
+    private List<LineNumber> getLineNumbers() {
 
-        if (innerClasses == null) {
-            innerClasses = new ArrayList<InnerClass>();
+        if (lineNumbers == null) {
+            lineNumbers = new ArrayList<LineNumber>();
         }
 
-        return innerClasses;
+        return lineNumbers;
     }
 
 
-    @XmlElement(name="innerClass")
-    private List<InnerClass> innerClasses;
+    @XmlElement(name="lineNumber")
+    private List<LineNumber> lineNumbers;
 
 
 }

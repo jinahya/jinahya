@@ -23,24 +23,53 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/LJZfv">4.7.10 The Deprecated Attribute</a>
+ * @See <a href="http://goo.gl/KnMEs">4.7.3 The Code Attribute</a>
  */
-public class Deprecated extends Attribute {
+public class RuntimeVisibleParameterAnnotations extends Attribute {
 
 
     @Override
     protected void readInfo(final AttributeInfo info, final DataInput input)
         throws IOException {
+
+        final int numParameters = input.readUnsignedShort();
+        getParameterAnnotations().clear();
+        for (int i = 0; i < numParameters; i++) {
+            final Annotations annotations = new Annotations();
+            annotations.read(input);
+            getParameterAnnotations().add(annotations);
+        }
     }
 
 
     @Override
     protected void writeInfo(final AttributeInfo info, final DataOutput output)
         throws IOException {
+
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    private List<Annotations> getParameterAnnotations() {
+
+        if (parameterAnnotations == null) {
+            parameterAnnotations = new ArrayList<Annotations>();
+        }
+
+        return parameterAnnotations;
+    }
+
+
+    @XmlElement(required = true)
+    private List<Annotations> parameterAnnotations;
 
 
 }

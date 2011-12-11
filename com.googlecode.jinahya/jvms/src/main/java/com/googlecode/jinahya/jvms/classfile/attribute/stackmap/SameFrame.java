@@ -15,33 +15,13 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile.attribute;
-
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/LJZfv">4.7.10 The Deprecated Attribute</a>
  */
-public class Deprecated extends Attribute {
-
-
-    @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input)
-        throws IOException {
-    }
-
-
-    @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output)
-        throws IOException {
-    }
-
-
+public class SameFrame extends StackMapFrame {
 }
 

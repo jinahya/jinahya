@@ -43,6 +43,14 @@ public class AttributeInfo implements DataAccessible {
 
         info = new byte[input.readInt()];
         input.readFully(info);
+        for (byte b : info) {
+            final int i = b & 0xFF;
+            if (i < 0x0A) {
+                System.out.print("0");
+            }
+            System.out.print(Integer.toHexString(i) + " ");
+        }
+        System.out.println();
     }
 
 
@@ -58,38 +66,32 @@ public class AttributeInfo implements DataAccessible {
 
     public void parse(final Attribute attribute) throws IOException {
 
+        attributeNameIndex = attribute.nameIndex;
+
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final DataOutputStream dos = new DataOutputStream(baos);
-        attribute.write(dos);
+        attribute.writeInfo(this, dos);
         dos.flush();
         baos.flush();
-
-        read(new DataInputStream(new ByteArrayInputStream(baos.toByteArray())));
+        info = baos.toByteArray();
     }
 
 
     public void print(final Attribute attribute) throws IOException {
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream(baos);
-        write(dos);
-        dos.flush();
-        baos.flush();
+        attribute.nameIndex = attributeNameIndex;
 
-        attribute.read(
-            new DataInputStream(new ByteArrayInputStream(baos.toByteArray())));
+        final ByteArrayInputStream bais = new ByteArrayInputStream(info);
+        final DataInputStream dis = new DataInputStream(bais);
+
+        attribute.readInfo(this, dis);
     }
 
 
-    public int getAttributeNameIndex() {
-        return attributeNameIndex;
-    }
+    protected int attributeNameIndex;
 
 
-    private int attributeNameIndex;
-
-
-    private byte[] info;
+    protected byte[] info;
 
 
 }

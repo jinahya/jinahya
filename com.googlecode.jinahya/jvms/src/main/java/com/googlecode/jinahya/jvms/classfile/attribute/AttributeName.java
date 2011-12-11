@@ -18,11 +18,8 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
-import com.googlecode.jinahya.jvms.classfile.ClassFile;
-import com.googlecode.jinahya.jvms.classfile.constant._Utf8;
+import com.googlecode.jinahya.jvms.classfile.attribute.stackmap.StackMapTable;
 
-import java.io.DataInput;
-import java.io.IOException;
 
 
 /**
@@ -31,44 +28,25 @@ import java.io.IOException;
  */
 public enum AttributeName {
 
-
-    SourceFile(SourceFile.class),
     ConstantValue(ConstantValue.class),
     Code(Code.class),
+    StackMapTable(StackMapTable.class),
     Exceptions(Exceptions.class),
     InnerClasses(InnerClasses.class),
+    EnclosingMethod(EnclosingMethod.class),
     Synthetic(Synthetic.class),
+    Signature(Signature.class),
+    SourceFile(SourceFile.class),
+    SourceDebugExtension(SourceDebugExtension.class),
     LineNumberTable(LineNumberTable.class),
     LocalVariableTable(LocalVariableTable.class),
-    Deprecated(Deprecated.class);
-
-
-    public static Attribute readAttribute(final DataInput input,
-                                          final ClassFile parent)
-        throws IOException {
-
-        final AttributeInfo info = new AttributeInfo();
-        info.read(input);
-
-        final _Utf8 utf8 = parent.getConstant(
-            info.getAttributeNameIndex(), _Utf8.class);
-        final String name = utf8.getValue();
-        final Attribute attribute = valueOf(name).newAttribute();
-        info.print(attribute);
-        attribute.setClassfile(parent);
-        return attribute;
-    }
-
-
-    public static Attribute readAttribute(final DataInput input,
-                                          final Attribute parent)
-        throws IOException {
-
-        final Attribute attribute = readAttribute(input, parent.getClassfile());
-        attribute.setAttribute(attribute);
-
-        return attribute;
-    }
+    LocalVariableTypeTable(LocalVariableTypeTable.class),
+    Deprecated(Deprecated.class),
+    RuntimeVisibleAnnotations(RuntimeVisibleAnnotations.class),
+    RuntimeInvisibleAnnotations(RuntimeInvisibleAnnotations.class),
+    RuntimeVisibleParameterAnnotations(RuntimeVisibleParameterAnnotations.class),
+    RuntimeInvisibleParameterAnnotations(RuntimeInvisibleParameterAnnotations.class),
+    AnnotationDefault(AnnotationDefault.class);
 
 
     /**

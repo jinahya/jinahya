@@ -18,37 +18,43 @@
 package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
+import com.googlecode.jinahya.jvms.classfile.DataAccessible;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import javax.xml.bind.annotation.XmlElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class ElementValuePair implements DataAccessible {
 
 
     @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+    public void read(final DataInput input) throws IOException {
 
-        sourceIndex = input.readUnsignedShort();
+        elementNameIndex = input.readUnsignedShort();
+
+        value = new ElementValue();
+        value.read(input);
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
-
-        output.writeShort(sourceIndex);
+    public void write(final DataOutput output) throws IOException {
     }
 
 
-    @XmlAttribute(required = true)
-    private int sourceIndex;
+    private int elementNameIndex;
+
+
+    private ElementValue value;
 
 
 }

@@ -37,7 +37,7 @@ public class Exceptions extends Attribute {
 
 
     @Override
-    protected void readInfo(final DataInput input) throws IOException {
+    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
 
         getIndices().clear();
         final int numberOfExceptions = input.readUnsignedShort();
@@ -48,7 +48,7 @@ public class Exceptions extends Attribute {
 
 
     @Override
-    protected void writeInfo(final DataOutput output) throws IOException {
+    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
 
         output.writeShort(getIndices().size());
         for (int indiex : getIndices()) {

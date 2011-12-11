@@ -28,27 +28,36 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class EnclosingMethod extends Attribute {
 
 
     @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+    protected void readInfo(final AttributeInfo info, final DataInput input)
+        throws IOException {
 
-        sourceIndex = input.readUnsignedShort();
+        classIndex = input.readUnsignedShort();
+
+        methodIndex = input.readUnsignedShort();
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
+    protected void writeInfo(final AttributeInfo info, final DataOutput output)
+        throws IOException {
 
-        output.writeShort(sourceIndex);
+        output.writeShort(classIndex);
+
+        output.writeShort(methodIndex);
     }
 
 
     @XmlAttribute(required = true)
-    private int sourceIndex;
+    private int classIndex;
+
+
+    @XmlAttribute(required = true)
+    private int methodIndex;
 
 
 }

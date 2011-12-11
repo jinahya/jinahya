@@ -15,31 +15,24 @@
  */
 
 
-package com.googlecode.jinahya.jvms.classfile.attribute;
+package com.googlecode.jinahya.jvms.classfile.attribute.stackmap;
 
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/LJZfv">4.7.10 The Deprecated Attribute</a>
  */
-public class Deprecated extends Attribute {
+@XmlTransient
+public abstract class AbstractVerificationType extends VerificationType {
 
 
-    @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input)
-        throws IOException {
-    }
+    protected AbstractVerificationType(final VerificationTypeTag tag) {
+        super();
 
-
-    @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output)
-        throws IOException {
+        setTag(tag);
     }
 
 

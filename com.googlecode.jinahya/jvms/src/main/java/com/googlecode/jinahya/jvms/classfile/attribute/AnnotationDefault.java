@@ -22,33 +22,37 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
+
+import javax.xml.bind.annotation.XmlElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @see <a href="http://goo.gl/BtFsn">4.7.7 The SourceFile Attribute</a>
+ * @See <a href="http://goo.gl/KnMEs">4.7.3 The Code Attribute</a>
  */
-public class SourceFile extends Attribute {
+public class AnnotationDefault extends Attribute {
 
 
     @Override
-    protected void readInfo(final AttributeInfo info, final DataInput input) throws IOException {
+    protected void readInfo(final AttributeInfo info, final DataInput input)
+        throws IOException {
 
-        sourceIndex = input.readUnsignedShort();
+        defaultValue = new ElementValue();
+        defaultValue.read(input);
     }
 
 
     @Override
-    protected void writeInfo(final AttributeInfo info, final DataOutput output) throws IOException {
+    protected void writeInfo(final AttributeInfo info, final DataOutput output)
+        throws IOException {
 
-        output.writeShort(sourceIndex);
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
-    @XmlAttribute(required = true)
-    private int sourceIndex;
+    @XmlElement(required = true)
+    private ElementValue defaultValue;
 
 
 }
