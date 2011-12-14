@@ -130,7 +130,6 @@ public class DependencyResolver<E> implements Serializable {
      *
      * @param source source
      * @param targets targets
-     * @throws DependencyResolverException if an error occurs.
      */
     public void add(final E source, final E... targets) {
 
