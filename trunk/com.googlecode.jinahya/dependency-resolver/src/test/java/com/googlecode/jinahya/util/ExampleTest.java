@@ -34,29 +34,25 @@ public class ExampleTest {
 
 
     static {
-        try {
-            RESOLVER.add("A", "B", "C", null);
+        RESOLVER.add("A", "B", "C", null);
 
-            RESOLVER.add("B", "F", null);
+        RESOLVER.add("B", "F", null);
 
-            RESOLVER.add("C", "G", null);
+        RESOLVER.add("C", "G", null);
 
-            RESOLVER.add("H", "B");
+        RESOLVER.add("H", "B");
 
-            RESOLVER.add("I", "J", "K");
+        RESOLVER.add("I", "J", "K");
 
-            RESOLVER.add("L", "K");
+        RESOLVER.add("L", "K");
 
-            RESOLVER.add("M", (String) null);
+        RESOLVER.add("M", (String) null);
 
-            RESOLVER.add("N", (String) null);
+        RESOLVER.add("N", (String) null);
 
-            RESOLVER.add("O", "P", "Q");
-            RESOLVER.add("P", "R");
-            RESOLVER.add("Q", "R");
-        } catch (DependencyResolverException dre) {
-            throw new InstantiationError(dre.getMessage());
-        }
+        RESOLVER.add("O", "P", "Q");
+        RESOLVER.add("P", "R");
+        RESOLVER.add("Q", "R");
     }
 
 
