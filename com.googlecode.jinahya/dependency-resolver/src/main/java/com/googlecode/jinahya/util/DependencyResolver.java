@@ -56,39 +56,42 @@ public class DependencyResolver<E> implements Serializable {
 
 
             @Override
-            public synchronized void add(T source, T... targets)
-                throws DependencyResolverException {
-
+            public synchronized void add(final T source, final T... targets) {
                 super.add(source, targets);
             }
 
 
             @Override
-            public synchronized void remove(T source, T... targets) {
+            public synchronized void remove(final T source,
+                                            final T... targets) {
                 super.remove(source, targets);
             }
 
 
             @Override
-            public synchronized boolean contains(T source, T target) {
+            public synchronized boolean contains(final T source,
+                                                 final T target) {
                 return super.contains(source, target);
             }
 
 
             @Override
-            public synchronized boolean containsAll(T source, T... target) {
+            public synchronized boolean containsAll(final T source,
+                                                    final T... target) {
                 return super.containsAll(source, target);
             }
 
 
             @Override
-            public synchronized boolean containsAny(T source, T... targets) {
+            public synchronized boolean containsAny(final T source,
+                                                    final T... targets) {
                 return super.containsAny(source, targets);
             }
 
 
             @Override
-            public synchronized List<List<T>> getPaths(T source, T target) {
+            public synchronized List<List<T>> getPaths(final T source,
+                                                       final T target) {
                 return super.getPaths(source, target);
             }
 
@@ -129,8 +132,7 @@ public class DependencyResolver<E> implements Serializable {
      * @param targets targets
      * @throws DependencyResolverException if an error occurs.
      */
-    public void add(final E source, final E... targets)
-        throws DependencyResolverException {
+    public void add(final E source, final E... targets) {
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -151,10 +153,14 @@ public class DependencyResolver<E> implements Serializable {
         for (E target : targets) {
 
             if (source.equals(target)) {
-                throw new DependencyResolverException("self dependency");
+                throw new IllegalArgumentException(
+                    "source(" + source + ") is equals to one of targets("
+                    + target + ")");
             }
             if (target != null && contains(target, source)) {
-                throw new CyclicDependencyException(source, target);
+                throw new IllegalStateException(
+                    "there is already a dependency from one of targets("
+                    + target + ") to the source(" + source + ")");
             }
 
             if (list == null) {

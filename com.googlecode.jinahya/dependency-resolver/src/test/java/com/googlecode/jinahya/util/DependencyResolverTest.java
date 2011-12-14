@@ -33,7 +33,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testAdd() throws DependencyResolverException {
+    public void testAdd() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -62,9 +62,8 @@ public class DependencyResolverTest {
     }
 
 
-    @Test(expectedExceptions = {DependencyResolverException.class})
-    public void testAddForSelfDependency()
-        throws DependencyResolverException {
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testAddForSelfDependency() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -73,9 +72,8 @@ public class DependencyResolverTest {
     }
 
 
-    @Test(expectedExceptions = {CyclicDependencyException.class})
-    public void testAddDependencyForCyclicDependency()
-        throws DependencyResolverException {
+    @Test(expectedExceptions = {IllegalStateException.class})
+    public void testAddDependencyForCyclicDependency() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -88,7 +86,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testAddDependencies() throws DependencyResolverException {
+    public void testAddDependencies() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -112,7 +110,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testContains() throws DependencyResolverException {
+    public void testContains() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
@@ -132,7 +130,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void testRemove() throws DependencyResolverException {
+    public void testRemove() {
 
         final DependencyResolver<String> resolver =
             new DependencyResolver<String>();
