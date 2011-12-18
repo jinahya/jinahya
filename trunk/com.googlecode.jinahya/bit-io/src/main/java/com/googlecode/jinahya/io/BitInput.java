@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.util.BitAccessible;
 import java.io.CharArrayWriter;
 import java.io.DataInput;
 import java.io.EOFException;
@@ -172,7 +171,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned short value.
      *
-     * @param length bit length between ONE (inclusive) and Short.SIZE (inclusive).
+     * @param length bit length between ONE (inclusive) and
+     * {@value java.lang.Short#SIZE} (inclusive).
      * @return the unsigned short value read.
      * @throws IOException if an I/O error occurs.
      */
@@ -187,8 +187,8 @@ public class BitInput extends BitIOBase {
                 "length(" + length + ") > " + Short.SIZE);
         }
 
-        int quotient = length / Byte.SIZE;
-        int remainder = length % Byte.SIZE;
+        final int quotient = length / Byte.SIZE;
+        final int remainder = length % Byte.SIZE;
 
         int value = ZERO;
         for (int i = 0; i < quotient; i++) {
@@ -208,7 +208,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an <code>length</code>-bit unsigned int value.
      *
-     * @param length bit length between 1 (inclusive) and 32 (exclusive).
+     * @param length bit length between 1 (inclusive) and
+     * {@value java.lang.Integer#SIZE} (exclusive).
      * @return the unsigned int value read from the input
      * @throws IOException if an I/O error occurs
      */
@@ -218,7 +219,7 @@ public class BitInput extends BitIOBase {
             throw new IllegalArgumentException("length(" + length + ") < ONE");
         }
 
-        if (length >= Integer.SIZE) { // 32
+        if (length >= Integer.SIZE) {
             throw new IllegalArgumentException(
                 "length(" + length + ") >= " + Integer.SIZE);
         }
@@ -401,7 +402,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned long.
      *
-     * @param length bit length between ONE (inclusive) and Long.SIZE (exclusive)
+     * @param length bit length between ONE (inclusive) and
+     * {@value java.lang.Long#SIZE} (exclusive)
      * @return an unsigned long value
      * @throws IOException if an I/O error occurs
      */
@@ -480,7 +482,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a <code>length</code>-bit signed long value.
      *
-     * @param length bit length between ONE (exclusive) and Long.SIZE (inclusive).
+     * @param length bit length between ONE (exclusive) and
+     * {@value java.lang.Long#SIZE} (inclusive).
      * @return the signed long value.
      * @throws IOException if an I/O error occurs.
      */
@@ -549,7 +552,7 @@ public class BitInput extends BitIOBase {
      * @return double value
      * @throws IOException if an I/O error occurs.
      */
-    public double readDouble() throws IOException {
+    public final double readDouble() throws IOException {
         return Double.longBitsToDouble(readLong(Long.SIZE));
     }
 
@@ -562,7 +565,7 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readDOUBLE(Double)
      */
-    public Double readDOUBLE() throws IOException {
+    public final Double readDOUBLE() throws IOException {
 
         return readDOUBLE(null);
     }
@@ -580,7 +583,8 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readDouble()
      */
-    public Double readDOUBLE(final Double defaultValue) throws IOException {
+    public final Double readDOUBLE(final Double defaultValue)
+        throws IOException {
 
         if (isNull()) {
             return defaultValue;
@@ -597,7 +601,7 @@ public class BitInput extends BitIOBase {
      * @return read byte array
      * @throws IOException if an I/O error occurs.
      */
-    public byte[] readBytes() throws IOException {
+    public final byte[] readBytes() throws IOException {
 
         final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
 
@@ -616,7 +620,7 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readBYTES(byte[])
      */
-    public byte[] readBYTES() throws IOException {
+    public final byte[] readBYTES() throws IOException {
 
         return readBYTES(null);
     }
@@ -634,7 +638,8 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readBytes()
      */
-    public byte[] readBYTES(final byte[] defaultValue) throws IOException {
+    public final byte[] readBYTES(final byte[] defaultValue)
+        throws IOException {
 
         if (isNull()) {
             return defaultValue;
@@ -652,7 +657,7 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readASCII(String)
      */
-    public String readASCII() throws IOException {
+    public final String readASCII() throws IOException {
 
         return readASCII(null);
     }
@@ -672,7 +677,8 @@ public class BitInput extends BitIOBase {
      * is set
      * @throws IOException if an I/O error occurs.
      */
-    public String readASCII(final String defaultValue) throws IOException {
+    public final String readASCII(final String defaultValue)
+        throws IOException {
 
         if (isNull()) {
             return defaultValue;
@@ -758,7 +764,8 @@ public class BitInput extends BitIOBase {
      * @return the String read.
      * @throws IOException if an I/O error occurs.
      */
-    public String readString(final String charsetName) throws IOException {
+    public final String readString(final String charsetName)
+        throws IOException {
 
         return new String(readBytes(), charsetName);
     }
@@ -773,7 +780,8 @@ public class BitInput extends BitIOBase {
      * @throws IOException if an I/O error occurs.
      * @see #readSTRING(String)
      */
-    public String readSTRING(final String charsetName) throws IOException {
+    public final String readSTRING(final String charsetName)
+        throws IOException {
 
         return readSTRING(charsetName, null);
     }
@@ -796,8 +804,8 @@ public class BitInput extends BitIOBase {
      * @see #readBytes()
      * @see String#String(byte[], String)
      */
-    public String readSTRING(final String charsetName,
-                             final String defaultValue)
+    public final String readSTRING(final String charsetName,
+                                   final String defaultValue)
         throws IOException {
 
         if (isNull()) {
@@ -818,8 +826,9 @@ public class BitInput extends BitIOBase {
     @Override
     public int align(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        if (length <= ZERO) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") <= " + ZERO);
         }
 
         int bits = 0;
@@ -850,18 +859,18 @@ public class BitInput extends BitIOBase {
     }
 
 
-    /*
+    /**
      * Returns the number of bits available for reading in current octet.
      *
      * @return available bits for reading
      */
-    public int available() {
+    public final int available() {
         return Byte.SIZE - index;
     }
 
 
     /** source input. */
-    protected final InputStream in;
+    final InputStream in;
 
 
     /** bit index to read. */
