@@ -138,14 +138,14 @@ abstract class BitIOBase {
      */
     final void setBit(final int bitIndex, final boolean value) {
 
-        if (bitIndex < 0) {
+        if (bitIndex < ZERO) {
             throw new IllegalArgumentException(
-                "bitIndex(" + bitIndex + ") < 0");
+                "bitIndex(" + bitIndex + ") < " + ZERO);
         }
 
-        if (bitIndex >= 8) {
+        if (bitIndex >= Byte.SIZE) {
             throw new IllegalArgumentException(
-                "bitIndex(" + bitIndex + ") >= 8");
+                "bitIndex(" + bitIndex + ") >= " + Byte.SIZE);
         }
 
         set.set(bitIndex, value);

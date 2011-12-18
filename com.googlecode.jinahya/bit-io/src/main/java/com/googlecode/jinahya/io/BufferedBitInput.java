@@ -22,12 +22,29 @@ import java.io.ByteArrayInputStream;
 
 
 /**
+ * A BitInput for a buffered bytes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class BufferedBitInput extends BitInput {
 
 
+    /**
+     * Creates a new instance buffering given <code>output</code>'s buffered
+     * bytes.
+     *
+     * @param output output
+     */
+    public BufferedBitInput(final BufferedBitOutput output) {
+        this(output.toByteArray());
+    }
+
+
+    /**
+     * Creates a new instance with given <code>bytes</code>.
+     *
+     * @param bytes bytes
+     */
     public BufferedBitInput(final byte[] bytes) {
         super(new ByteArrayInputStream(bytes));
     }

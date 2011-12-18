@@ -28,11 +28,19 @@ import java.io.ByteArrayOutputStream;
 public class BufferedBitOutput extends BitOutput {
 
 
+    /**
+     * Creates a new instance.
+     */
     public BufferedBitOutput() {
         super(new ByteArrayOutputStream());
     }
 
 
+    /**
+     * Returns the buffered bytes.
+     *
+     * @return buffered bytes.
+     */
     public byte[] toByteArray() {
         return ((ByteArrayOutputStream) out).toByteArray();
     }

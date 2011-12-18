@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.util.BitAccessible;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -348,7 +347,7 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes an unsigned long value
+     * Writes an unsigned long value.
      *
      * @param length bit length between 0x01 (inclusive) and 0x40 (exclusive)
      * @param value value to be written
@@ -712,17 +711,17 @@ public class BitOutput extends BitIOBase {
      *
      * @return available bits for writing
      */
-    public int available() {
+    public final int available() {
         return Byte.SIZE - index;
     }
 
 
     /** target output. */
-    protected final OutputStream out;
+    final OutputStream out;
 
 
     /** bit index to write. */
-    private int index = 0;
+    private int index = ZERO;
 
 
 }
