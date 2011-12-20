@@ -40,6 +40,115 @@ public class DependencyResolver<E> implements Serializable {
     private static final long serialVersionUID = -1081443162006459712L;
 
 
+    private static class SynchronizedDependencyResolver<E>
+        extends DependencyResolver<E> {
+
+
+        /** GENERATED. */
+        private static final long serialVersionUID = 7192788693612809266L;
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param resolver the resolver to be wrapped
+         */
+        private SynchronizedDependencyResolver(
+            final DependencyResolver<E> resolver) {
+
+            super();
+
+            if (resolver == null) {
+                throw new NullPointerException("null resolver");
+            }
+
+            this.resolver = resolver;
+        }
+
+
+        @Override
+        public synchronized void add(final E source, final E... targets) {
+            resolver.add(source, targets);
+        }
+
+
+        @Override
+        public synchronized void remove(final E source, final E... targets) {
+            resolver.remove(source, targets);
+        }
+
+
+        @Override
+        public synchronized boolean contains(final E source, final E target) {
+            return resolver.contains(source, target);
+        }
+
+
+        @Override
+        public synchronized boolean containsAll(final E source,
+                                                final E... target) {
+            return resolver.containsAll(source, target);
+        }
+
+
+        @Override
+        public synchronized boolean containsAny(final E source,
+                                                final E... targets) {
+            return resolver.containsAny(source, targets);
+        }
+
+
+        @Override
+        public synchronized List<List<E>> getPaths(final E source,
+                                                   final E target) {
+            return resolver.getPaths(source, target);
+        }
+
+
+        @Override
+        public synchronized List<E> getSingleGroup() {
+            return resolver.getSingleGroup();
+        }
+
+
+        @Override
+        public synchronized List<List<E>> getHorizontalGroups() {
+            return resolver.getHorizontalGroups();
+        }
+
+
+        @Override
+        public synchronized List<List<E>> getVerticalGroups() {
+            return resolver.getVerticalGroups();
+        }
+
+
+        @Override
+        public synchronized void clear() {
+            resolver.clear();
+        }
+
+
+        private final DependencyResolver<E> resolver;
+
+
+    };
+
+
+    /**
+     * Creates a synchronized instance of given <code>resolver</code>.
+     *
+     * @param <E> element type parameter
+     * @param resolver the resolver to be wrapped
+     * @return a synchronized instance
+     */
+    public static <E> DependencyResolver<E> sysnchronizedDependencyResolver(
+        final DependencyResolver<E> resolver) {
+
+        return new SynchronizedDependencyResolver(resolver);
+    }
+
+
     /**
      * Returns a synchronized instance.
      *
@@ -504,7 +613,7 @@ public class DependencyResolver<E> implements Serializable {
         assert single.isEmpty();
         /*
         if (!single.isEmpty()) {
-            groups.add(single);
+        groups.add(single);
         }
          */
 
