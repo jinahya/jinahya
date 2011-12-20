@@ -40,12 +40,21 @@ public class DependencyResolver<E> implements Serializable {
     private static final long serialVersionUID = -1081443162006459712L;
 
 
-    private static class SynchronizedDependencyResolver<E>
+    private static final class SynchronizedDependencyResolver<E>
         extends DependencyResolver<E> {
 
 
         /** GENERATED. */
         private static final long serialVersionUID = 7192788693612809266L;
+
+
+        /**
+         * Creates a new instance.
+         */
+        private SynchronizedDependencyResolver() {
+
+            this(new DependencyResolver<E>());
+        }
 
 
         /**
@@ -129,6 +138,7 @@ public class DependencyResolver<E> implements Serializable {
         }
 
 
+        /** wrapped resolver. */
         private final DependencyResolver<E> resolver;
 
 
@@ -145,91 +155,19 @@ public class DependencyResolver<E> implements Serializable {
     public static <E> DependencyResolver<E> sysnchronizedDependencyResolver(
         final DependencyResolver<E> resolver) {
 
-        return new SynchronizedDependencyResolver(resolver);
+        return new SynchronizedDependencyResolver<E>(resolver);
     }
 
 
     /**
      * Returns a synchronized instance.
      *
-     * @param <T> type parameter
+     * @param <E> element type parameter
      * @return a synchronized instance
      */
-    public static <T> DependencyResolver<T> synchronizedInstance() {
+    public static <E> DependencyResolver<E> synchronizedInstance() {
 
-        return new DependencyResolver<T>() {
-
-
-            /** GENERATED. */
-            private static final long serialVersionUID = -8590529468641354399L;
-
-
-            @Override
-            public synchronized void add(final T source, final T... targets) {
-                super.add(source, targets);
-            }
-
-
-            @Override
-            public synchronized void remove(final T source,
-                                            final T... targets) {
-                super.remove(source, targets);
-            }
-
-
-            @Override
-            public synchronized boolean contains(final T source,
-                                                 final T target) {
-                return super.contains(source, target);
-            }
-
-
-            @Override
-            public synchronized boolean containsAll(final T source,
-                                                    final T... target) {
-                return super.containsAll(source, target);
-            }
-
-
-            @Override
-            public synchronized boolean containsAny(final T source,
-                                                    final T... targets) {
-                return super.containsAny(source, targets);
-            }
-
-
-            @Override
-            public synchronized List<List<T>> getPaths(final T source,
-                                                       final T target) {
-                return super.getPaths(source, target);
-            }
-
-
-            @Override
-            public synchronized List<T> getSingleGroup() {
-                return super.getSingleGroup();
-            }
-
-
-            @Override
-            public synchronized List<List<T>> getHorizontalGroups() {
-                return super.getHorizontalGroups();
-            }
-
-
-            @Override
-            public synchronized List<List<T>> getVerticalGroups() {
-                return super.getVerticalGroups();
-            }
-
-
-            @Override
-            public synchronized void clear() {
-                super.clear();
-            }
-
-
-        };
+        return new SynchronizedDependencyResolver<E>();
     }
 
 
