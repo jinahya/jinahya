@@ -156,6 +156,7 @@ public class DependencyResolver<E> implements Serializable {
                     "source(" + source + ") is equals to one of targets("
                     + target + ")");
             }
+
             if (target != null && contains(target, source)) {
                 throw new IllegalStateException(
                     "there is already a dependency from one of targets("
@@ -264,8 +265,8 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Checks if there is a dependency from <code>source</code> to
-     * <code>target</code>.
+     * Checks if there is a direct or indirect dependency from
+     * <code>source</code> to <code>target</code>.
      *
      * @param source source
      * @param target target
@@ -277,6 +278,11 @@ public class DependencyResolver<E> implements Serializable {
 
         if (source == null) {
             throw new NullPointerException("null source");
+        }
+
+        if (source.equals(target)) {
+            throw new IllegalArgumentException(
+                "source(" + source + ") is equals to target(" + target + ")");
         }
 
         final List<E> list = map.get(source);
@@ -291,9 +297,11 @@ public class DependencyResolver<E> implements Serializable {
 
         for (E auxiliary : list) {
             if (auxiliary == null) {
+                /*
                 if (target == null) {
-                    return true;
+                return true;
                 }
+                 */
                 continue;
             }
             if (contains(auxiliary, target)) {
@@ -411,11 +419,11 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Returns a list of horizontal dependency groups. Each group can be
-     * processed concurrently but all elements in a group must be processed in
-     * order.
+     * Returns a list of horizontal dependency groups. Each group in the list
+     * can be processed concurrently but all elements in a group must be
+     * processed in order.
      *
-     * @return horizontal groups
+     * @return a list of horizontal groups
      */
     public List<List<E>> getHorizontalGroups() {
 
@@ -453,9 +461,12 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
+        assert single.isEmpty();
+        /*
         if (!single.isEmpty()) {
-            groups.add(single);
+        groups.add(single);
         }
+         */
 
         return groups;
     }
@@ -463,9 +474,10 @@ public class DependencyResolver<E> implements Serializable {
 
     /**
      * Returns a list of vertical dependency groups. Each element in a group can
-     * be processed concurrently but all groups must be processed in order.
+     * be processed concurrently but all groups in the list must be processed in
+     * order.
      *
-     * @return vertical groups
+     * @return a list of vertical groups
      */
     public List<List<E>> getVerticalGroups() {
 
@@ -489,9 +501,12 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
+        assert single.isEmpty();
+        /*
         if (!single.isEmpty()) {
             groups.add(single);
         }
+         */
 
         return groups;
     }

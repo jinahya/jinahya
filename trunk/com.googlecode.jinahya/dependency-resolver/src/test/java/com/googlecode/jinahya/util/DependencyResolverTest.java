@@ -21,6 +21,8 @@ package com.googlecode.jinahya.util;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import java.util.List;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -146,7 +148,7 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void checkSynchronizedInstanceInheritesAllPublicMethods()
+    public void checkSynchronizedInstanceInheritesAllMethods()
         throws NoSuchMethodException {
 
         final Class<?> class1 = new DependencyResolver<Object>().getClass();
@@ -166,12 +168,34 @@ public class DependencyResolverTest {
                 continue;
             }
 
+            if (!Modifier.isProtected(modifiers1)) {
+                continue;
+            }
+
             final Method method2 = class2.getDeclaredMethod(
                 method1.getName(), method1.getParameterTypes());
 
             final int modifiers2 = method2.getModifiers();
 
             Assert.assertTrue(Modifier.isSynchronized(modifiers2));
+        }
+    }
+
+
+    @Test
+    public void testGetVerticalGroups() {
+
+        final DependencyResolver<String> resolver =
+            new DependencyResolver<String>();
+
+        resolver.add("A", "B");
+        resolver.add("A", "C");
+        resolver.add("B", "C");
+
+        System.out.println("singleGroup: " + resolver.getSingleGroup());
+
+        for (List<String> verticalGroup : resolver.getVerticalGroups()) {
+            System.out.println("verticalGroup: " + verticalGroup);
         }
     }
 
