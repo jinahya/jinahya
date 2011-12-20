@@ -1,0 +1,24 @@
+-classpath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/dependency-resolver-1.0-alpha-14/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/dependency-resolver-1.0-alpha-14/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/dependency-resolver-1.0-alpha-14/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'dependency-resolver 1.0-alpha-14 API'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/Users/onacit/Documents/svnwc/jinahya.googlecode.com/tags/com.googlecode.jinahya/dependency-resolver-1.0-alpha-14/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'dependency-resolver 1.0-alpha-14 API'
