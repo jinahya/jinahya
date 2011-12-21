@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
+ * A virtual state for finished machines.
  *
  * @author Jin Kwon &lt;jinahya at gmail.com&gt;
  */

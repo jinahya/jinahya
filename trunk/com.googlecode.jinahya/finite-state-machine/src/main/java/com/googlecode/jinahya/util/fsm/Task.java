@@ -34,8 +34,8 @@ public interface Task {
 
 
     /**
-     * Checks if given <code>transition</code> matches to any of
-     * <code>matchers</code>.
+     * Checks if given <code>transition</code> matches to any of target
+     * matchers.
      *
      * @param transition transition to match.
      * @return true if matches; false otherwise

@@ -23,7 +23,7 @@ import java.util.List;
 
 
 /**
- * Transition between states.
+ * State transition of machines.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -172,10 +172,6 @@ public class Transition {
             throw new NullPointerException("null matchers");
         }
 
-        if (matchers.isEmpty()) {
-            throw new NullPointerException("empty matchers");
-        }
-
         for (TransitionMatcher matcher : matchers) {
             if (matcher.matches(this)) {
                 return true;
@@ -212,10 +208,6 @@ public class Transition {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
-        }
-
-        if (matchers.isEmpty()) {
-            throw new NullPointerException("empty matchers");
         }
 
         for (TransitionMatcher matcher : matchers) {
