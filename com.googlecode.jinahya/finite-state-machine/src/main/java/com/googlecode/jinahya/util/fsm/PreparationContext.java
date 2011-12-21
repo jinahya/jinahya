@@ -19,7 +19,7 @@ package com.googlecode.jinahya.util.fsm;
 
 
 /**
- * A context for a transition.
+ * A context for preparing for the transition.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -28,24 +28,24 @@ public interface PreparationContext extends TransitionContext {
 
     /**
      * Makes sure the task calling this method be performed after the task
-     * identified by <code>sourceTaskId</code>.
+     * identified by <code>previousTaskId</code>.
      *
-     * @param previousTaskId the id of task which must be performed before this
-     *        task
-     * @throws FSMException if sourceTaskId is unknown or illegal dependency
-     *         detected.
+     * @param previousTaskId the id of a task which must be performed before
+     * this task
+     * @throws FSMException if <code>previousTaskId</code> is unknown or an
+     * illegal dependency resolution detected.
      */
     void setPerformAfter(String previousTaskId) throws FSMException;
 
 
     /**
      * Make sure the task calling this method be performed before the task
-     * identified by <code>targetTaskId</code>.
+     * identified by <code>nextTaskId</code>.
      *
-     * @param nextTaskId the id of task which must be performed after this
-     *        task
-     * @throws FSMException if targetTaskId is unknown or illegal dependency
-     *         detected
+     * @param nextTaskId the id of a task which must be performed after this
+     * task
+     * @throws FSMException if <code>nextTaskId</code> is unknown or an illegal
+     * dependency resolution detected
      */
     void setPerformBefore(String nextTaskId) throws FSMException;
 }

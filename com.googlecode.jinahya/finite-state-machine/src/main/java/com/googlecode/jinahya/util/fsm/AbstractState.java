@@ -120,11 +120,11 @@ public abstract class AbstractState implements State {
     }
 
 
-    /** code. */
+    /** task code. */
     private final int code;
 
 
-    /** name. */
+    /** task name. */
     private final String name;
 
 

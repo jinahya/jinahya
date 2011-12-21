@@ -29,7 +29,7 @@ public interface TransitionMatcher {
     /**
      * A TransitionMatcher simply matches.
      */
-    TransitionMatcher YES = new TransitionMatcher() {
+    public static final TransitionMatcher YES = new TransitionMatcher() {
 
 
         @Override
@@ -41,13 +41,15 @@ public interface TransitionMatcher {
 
             return true;
         }
+
+
     };
 
 
     /**
      * A TransitionMatcher simply doesn't match.
      */
-    TransitionMatcher NO = new TransitionMatcher() {
+    public static final TransitionMatcher NO = new TransitionMatcher() {
 
 
         @Override
@@ -59,6 +61,8 @@ public interface TransitionMatcher {
 
             return false;
         }
+
+
     };
 
 
@@ -71,4 +75,7 @@ public interface TransitionMatcher {
      * @return true if matches; false otherwise
      */
     boolean matches(Transition transition);
+
+
 }
+
