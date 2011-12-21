@@ -164,14 +164,10 @@ public class DependencyResolverTest {
                 continue;
             }
 
-            if (!Modifier.isPublic(modifiers1)) {
+            if (Modifier.isPrivate(modifiers1)) {
                 continue;
             }
-
-            if (!Modifier.isProtected(modifiers1)) {
-                continue;
-            }
-
+            
             final Method method2 = class2.getDeclaredMethod(
                 method1.getName(), method1.getParameterTypes());
 
