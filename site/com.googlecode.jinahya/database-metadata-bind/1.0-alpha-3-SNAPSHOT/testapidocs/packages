@@ -1,3 +1,3 @@
-com.googlecode.jinahya.sql.metadata.bind
 com.googlecode.jinahya.sql.metadata.bind.derby
 com.googlecode.jinahya.sql.metadata.bind.sqlite
+com.googlecode.jinahya.sql.metadata.bind
