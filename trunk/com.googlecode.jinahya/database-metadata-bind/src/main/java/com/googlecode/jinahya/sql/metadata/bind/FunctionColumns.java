@@ -73,6 +73,8 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
      * @param columnNamePattern
      * @param functionColumns
      * @throws SQLException if a database access error occurs.
+     * @see java.sql.DatabaseMetaData#getFunctionColumns(java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String)
      */
     public static void getFunctionColumns(
         final DatabaseMetaData databaseMetaData, String catalog,
@@ -85,8 +87,7 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
             return;
         }
 
-        final ResultSet resultSet =
-            databaseMetaData.getFunctionColumns(
+        final ResultSet resultSet = databaseMetaData.getFunctionColumns(
             catalog, schemaPattern, functionNamePattern, columnNamePattern);
         try {
             while (resultSet.next()) {

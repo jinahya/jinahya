@@ -71,6 +71,11 @@ public class Metadata {
     }
 
 
+    /**
+     * Returns catalogs.
+     *
+     * @return catalogs.
+     */
     public Collection<Catalog> getCatalogs() {
 
         if (catalogs == null) {
@@ -78,6 +83,21 @@ public class Metadata {
         }
 
         return catalogs;
+    }
+
+
+    /**
+     * Returns dataTypes.
+     * 
+     * @return dataTypes.
+     */
+    public Collection<DataType> getDataTypes() {
+
+        if (dataTypes == null) {
+            dataTypes = new ArrayList<DataType>();
+        }
+
+        return dataTypes;
     }
 
 
@@ -96,6 +116,11 @@ public class Metadata {
     }
 
 
+    /**
+     * Returns schemas.
+     *
+     * @return schemas.
+     */
     public Collection<Schema> getSchemas() {
 
         if (schemas == null) {
@@ -106,6 +131,11 @@ public class Metadata {
     }
 
 
+    /**
+     * Returns tables.
+     *
+     * @return tables.
+     */
     public Collection<Table> getTables() {
 
         if (tables == null) {
@@ -116,16 +146,11 @@ public class Metadata {
     }
 
 
-    public Collection<DataType> getDataTypes() {
-
-        if (dataTypes == null) {
-            dataTypes = new ArrayList<DataType>();
-        }
-
-        return dataTypes;
-    }
-
-
+    /**
+     * Returns tableTypes.
+     *
+     * @return tableTypes.
+     */
     public Collection<TableType> getTableTypes() {
 
         if (tableTypes == null) {

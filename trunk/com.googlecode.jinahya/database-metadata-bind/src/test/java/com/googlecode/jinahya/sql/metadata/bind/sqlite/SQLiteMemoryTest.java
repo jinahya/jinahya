@@ -70,7 +70,7 @@ public class SQLiteMemoryTest extends SQLiteTest {
 
             final Metadata metadata = Metadata.newInstance(databaseMetaData);
 
-            MetadataPrinter.printMetadata(metadata);
+            MetadataPrinter.print(metadata);
 
         } finally {
             connection.close();
