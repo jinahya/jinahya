@@ -29,6 +29,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
@@ -47,7 +48,7 @@ public class MetadataPrinter {
     /**
      * Command line option.
      */
-    public static class ConnectionOption {
+    private static class ConnectionOption {
 
 
         public String getDriver() {
@@ -55,7 +56,7 @@ public class MetadataPrinter {
         }
 
 
-        public void setDriver(String driver) {
+        public void setDriver(final String driver) {
             this.driver = driver;
         }
 
@@ -65,7 +66,7 @@ public class MetadataPrinter {
         }
 
 
-        public void setPassword(String password) {
+        public void setPassword(final String password) {
             this.password = password;
         }
 
@@ -75,7 +76,7 @@ public class MetadataPrinter {
         }
 
 
-        public void setUrl(String url) {
+        public void setUrl(final String url) {
             this.url = url;
         }
 
@@ -85,7 +86,7 @@ public class MetadataPrinter {
         }
 
 
-        public void setUser(String user) {
+        public void setUser(final String user) {
             this.user = user;
         }
 
@@ -131,6 +132,9 @@ public class MetadataPrinter {
         private String password;
 
 
+        /**
+         * Methods to omit.
+         */
         @Option(name = "-omit", usage = "method names to omit")
         private List<String> methodNamesToOmit;
 
@@ -163,7 +167,7 @@ public class MetadataPrinter {
             return;
         }
 
-        printMetadata(option);
+        print(option);
     }
 
 
@@ -175,15 +179,15 @@ public class MetadataPrinter {
      * @throws SQLException if an SQL error occurs
      * @throws JAXBException if an JAXB error occurs.
      */
-    protected static void printMetadata(final ConnectionOption option)
+    private static void print(final ConnectionOption option)
         throws ClassNotFoundException, SQLException, JAXBException {
 
         if (option == null) {
             throw new NullPointerException("null option");
         }
 
-        printMetadata(option.driver, option.url, option.user, option.password,
-                      option.getMethodNamesToOmit());
+        print(option.driver, option.url, option.user, option.password,
+              option.getMethodNamesToOmit());
     }
 
 
@@ -203,9 +207,9 @@ public class MetadataPrinter {
      * @see DriverManager#getConnection(String)
      * @see DriverManager#getConnection(String, String, String)
      */
-    public static void printMetadata(
-        final String driver, final String url, final String user,
-        final String password, final List<String> methodNamesToOmit)
+    public static void print(final String driver, final String url,
+                             final String user, final String password,
+                             final List<String> methodNamesToOmit)
         throws ClassNotFoundException, SQLException, JAXBException {
 
         if (driver == null) {
@@ -217,7 +221,7 @@ public class MetadataPrinter {
         }
 
         MethodNamesToOmit.getInstance().getNames().addAll(methodNamesToOmit);
-        
+
         Class.forName(driver);
 
         final Connection connection;
@@ -230,7 +234,7 @@ public class MetadataPrinter {
             final Metadata metadata =
                 Metadata.newInstance(connection.getMetaData());
 
-            printMetadata(metadata);
+            print(metadata);
 
         } finally {
             connection.close();
@@ -238,7 +242,7 @@ public class MetadataPrinter {
     }
 
 
-    public static void printMetadata(final Metadata metadata)
+    public static void print(final Metadata metadata)
         throws SQLException, JAXBException {
 
         if (metadata == null) {

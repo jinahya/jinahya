@@ -22,7 +22,6 @@ package com.googlecode.jinahya.sql.metadata.bind;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class Identifier extends ChildEntrySet<Table> {
 
 
