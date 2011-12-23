@@ -1,0 +1,24 @@
+-classpath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/classes:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/jinahya-accessible/1.0-alpha-3/jinahya-accessible-1.0-alpha-3.jar:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/bit-io/1.0-alpha-10/bit-io-1.0-alpha-10.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'rfc-4648 1.0-alpha-4-SNAPSHOT API'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'rfc-4648 1.0-alpha-4-SNAPSHOT API'

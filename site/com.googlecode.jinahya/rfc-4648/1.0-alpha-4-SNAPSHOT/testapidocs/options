@@ -1,0 +1,26 @@
+-classpath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/classes:/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/test-classes:/var/lib/jenkins/.m2/repository/net/oauth/core/oauth/20100527/oauth-20100527.jar:/var/lib/jenkins/.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar:/var/lib/jenkins/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/bit-io/1.0-alpha-10/bit-io-1.0-alpha-10.jar:/var/lib/jenkins/.m2/repository/com/google/inject/guice/3.0/guice-3.0.jar:/var/lib/jenkins/.m2/repository/de/odysseus/juel/juel-impl/2.2.4/juel-impl-2.2.4.jar:/var/lib/jenkins/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/var/lib/jenkins/.m2/repository/org/apache/tomcat/el-api/6.0.33/el-api-6.0.33.jar:/var/lib/jenkins/.m2/repository/commons-io/commons-io/2.1/commons-io-2.1.jar:/var/lib/jenkins/.m2/repository/com/google/guava/guava/10.0.1/guava-10.0.1.jar:/var/lib/jenkins/.m2/repository/net/sf/ehcache/ehcache-core/2.3.2/ehcache-core-2.3.2.jar:/var/lib/jenkins/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/var/lib/jenkins/.m2/repository/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.jar:/var/lib/jenkins/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/var/lib/jenkins/.m2/repository/org/testng/testng/6.3.1/testng-6.3.1.jar:/var/lib/jenkins/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar:/var/lib/jenkins/.m2/repository/com/googlecode/jinahya/jinahya-accessible/1.0-alpha-3/jinahya-accessible-1.0-alpha-3.jar:/var/lib/jenkins/.m2/repository/com/thoughtworks/xstream/xstream/1.3.1/xstream-1.3.1.jar:/var/lib/jenkins/.m2/repository/org/json/json/20070829/json-20070829.jar:/var/lib/jenkins/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/var/lib/jenkins/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/var/lib/jenkins/.m2/repository/org/slf4j/slf4j-api/1.5.11/slf4j-api-1.5.11.jar:/var/lib/jenkins/.m2/repository/org/apache/shindig/shindig-common/3.0.0-beta3/shindig-common-3.0.0-beta3.jar:/var/lib/jenkins/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/var/lib/jenkins/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/var/lib/jenkins/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar:/var/lib/jenkins/.m2/repository/org/apache/tomcat/jasper-el/6.0.33/jasper-el-6.0.33.jar:/var/lib/jenkins/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'rfc-4648 1.0-alpha-4-SNAPSHOT Test API'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-4648/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'rfc-4648 1.0-alpha-4-SNAPSHOT Test API'
