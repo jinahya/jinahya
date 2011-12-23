@@ -1,0 +1,27 @@
+-classpath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-3986/target/classes:/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-3986/target/test-classes:/var/lib/jenkins/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/var/lib/jenkins/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/var/lib/jenkins/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/var/lib/jenkins/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/var/lib/jenkins/.m2/repository/org/testng/testng/6.3.1/testng-6.3.1.jar:/var/lib/jenkins/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/var/lib/jenkins/.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-3986/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-3986/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-docfilessubdirs
+-doctitle
+'rfc-3986 1.0-alpha-10-SNAPSHOT Test API'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya rfc-3986/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'rfc-3986 1.0-alpha-10-SNAPSHOT Test API'
