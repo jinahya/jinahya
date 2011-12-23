@@ -18,9 +18,14 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -29,8 +34,16 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries"})
-public class UDT extends ChildEntrySet<Catalog> {
+@XmlType(propOrder = {"entries", "attributes"})
+public class UserDataType extends CatalogChild {
+//extends ChildEntrySet<Catalog> {
+
+
+    public static UserDataType newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(UserDataType.class, resultSet);
+    }
 
 
     public String getTYPE_CAT() {
@@ -121,6 +134,8 @@ public class UDT extends ChildEntrySet<Catalog> {
     /**
      * attributes.
      */
+    @XmlElement(name = "attribute")
+    @XmlElementWrapper(required = true, nillable = true)
     private Collection<Attribute> attributes;
 
 

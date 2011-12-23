@@ -23,7 +23,8 @@ package com.googlecode.jinahya.sql.metadata.bind;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class Function extends ChildEntrySet<Catalog> {
+public class Function extends CatalogChild {
+//extends ChildEntrySet<Catalog> {
 
 
     public String getFUNCTION_CAT() {

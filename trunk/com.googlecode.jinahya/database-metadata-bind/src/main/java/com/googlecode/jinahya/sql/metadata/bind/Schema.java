@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,7 +37,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "tables"})
-public class Schema extends ChildEntrySet<Catalog> {
+public class Schema extends CatalogChild {
+//extends ChildEntrySet<Catalog> {
+
+
+    public static Schema newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(Schema.class, resultSet);
+    }
 
 
     public String getTABLE_SCHEM() {

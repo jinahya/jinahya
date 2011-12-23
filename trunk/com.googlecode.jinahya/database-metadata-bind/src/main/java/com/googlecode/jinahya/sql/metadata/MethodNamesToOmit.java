@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -77,10 +77,10 @@ public class MethodNamesToOmit {
      *
      * @return names.
      */
-    protected Collection<String> getNames() {
+    Set<String> getNames() {
 
         if (names == null) {
-            names = new ArrayList<String>();
+            names = new HashSet<String>();
         }
 
         return names;
@@ -98,7 +98,12 @@ public class MethodNamesToOmit {
     }
 
 
-    public void addName(final String name) {
+    /**
+     * Adds a method name
+     *.
+     * @param name method name
+     */
+    void addName(final String name) {
         if (!getNames().contains(name)) {
             getNames().add(name);
         }
@@ -108,7 +113,7 @@ public class MethodNamesToOmit {
     /**
      * names.
      */
-    private Collection<String> names;
+    private Set<String> names;
 
 
 }

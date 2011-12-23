@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -27,6 +30,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"entries"})
 public class Column extends ChildEntrySet<Table> {
+
+
+    public static Column newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(Column.class, resultSet);
+    }
 
 
     public String getTABLE_CAT() {

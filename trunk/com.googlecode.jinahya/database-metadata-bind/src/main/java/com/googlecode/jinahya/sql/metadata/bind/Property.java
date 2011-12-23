@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -28,6 +30,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Property extends EntrySet {
+
+
+    public static Property newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(Property.class, resultSet);
+    }
 
 
     /**

@@ -23,6 +23,7 @@ import com.googlecode.jinahya.sql.metadata.bind.Metadata;
 
 import java.io.IOException;
 
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -167,27 +168,11 @@ public class MetadataPrinter {
             return;
         }
 
-        print(option);
-    }
+        final Metadata metadata = print(
+            option.driver, option.url, option.user, option.password,
+            option.getMethodNamesToOmit());
 
-
-    /**
-     * Prints database metadata with given <code>option</code>.
-     *
-     * @param option database connection option
-     * @throws ClassNotFoundException if <code>option.driver</code> not found
-     * @throws SQLException if an SQL error occurs
-     * @throws JAXBException if an JAXB error occurs.
-     */
-    private static void print(final ConnectionOption option)
-        throws ClassNotFoundException, SQLException, JAXBException {
-
-        if (option == null) {
-            throw new NullPointerException("null option");
-        }
-
-        print(option.driver, option.url, option.user, option.password,
-              option.getMethodNamesToOmit());
+        print(metadata, System.out);
     }
 
 
@@ -207,9 +192,9 @@ public class MetadataPrinter {
      * @see DriverManager#getConnection(String)
      * @see DriverManager#getConnection(String, String, String)
      */
-    public static void print(final String driver, final String url,
-                             final String user, final String password,
-                             final List<String> methodNamesToOmit)
+    public static Metadata print(final String driver, final String url,
+                                 final String user, final String password,
+                                 final List<String> methodNamesToOmit)
         throws ClassNotFoundException, SQLException, JAXBException {
 
         if (driver == null) {
@@ -231,11 +216,7 @@ public class MetadataPrinter {
             connection = DriverManager.getConnection(url);
         }
         try {
-            final Metadata metadata =
-                Metadata.newInstance(connection.getMetaData());
-
-            print(metadata);
-
+            return Metadata.newInstance(connection.getMetaData());
         } finally {
             connection.close();
         }
@@ -245,8 +226,19 @@ public class MetadataPrinter {
     public static void print(final Metadata metadata)
         throws SQLException, JAXBException {
 
+        print(metadata, System.out);
+    }
+
+
+    public static void print(final Metadata metadata, final OutputStream output)
+        throws SQLException, JAXBException {
+
         if (metadata == null) {
             throw new NullPointerException("null metadata");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null output");
         }
 
         final Marshaller marshaller =
@@ -257,7 +249,7 @@ public class MetadataPrinter {
         marshaller.setProperty(
             Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
 
-        marshaller.marshal(metadata, System.out);
+        marshaller.marshal(metadata, output);
 
         System.out.flush();
     }

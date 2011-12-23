@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,17 +88,20 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
         final boolean nullable, final Collection<Identifier> identifiers)
         throws SQLException {
 
-        final ResultSet identifierResultSet =
-            databaseMetaData.getBestRowIdentifier(
+        if (MethodNamesToOmit.instanceContainsName("getBestRowIdentifier")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getBestRowIdentifier(
             catalog, schema, table, scope, nullable);
         try {
-            while (identifierResultSet.next()) {
+            while (resultSet.next()) {
                 final Identifier identifier = EntrySet.newInstance(
-                    Identifier.class, identifierResultSet);
+                    Identifier.class, resultSet);
                 identifiers.add(identifier);
             }
         } finally {
-            identifierResultSet.close();
+            resultSet.close();
         }
     }
 

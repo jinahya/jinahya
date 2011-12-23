@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,6 +70,7 @@ public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
      * @param table table
      * @param exportedKeys the collection to be filled
      * @throws SQLException if an SQL error occurs.
+     * @see DatabaseMetaData#getExportedKeys(String, String, String)
      */
     public static void getExportedKeys(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -76,12 +78,16 @@ public class ExportedKeys extends EntrySetWrapper<ExportedKey> {
         final Collection<ExportedKey> exportedKeys)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getExportedKeys")) {
+            return;
+        }
+
         final ResultSet resultSet =
             databaseMetaData.getExportedKeys(catalog, schema, table);
         try {
             while (resultSet.next()) {
-                final ExportedKey exportedKey = EntrySet.newInstance(
-                    ExportedKey.class, resultSet);
+                final ExportedKey exportedKey =
+                    ExportedKey.newInstance(resultSet);
                 exportedKeys.add(exportedKey);
             }
         } finally {

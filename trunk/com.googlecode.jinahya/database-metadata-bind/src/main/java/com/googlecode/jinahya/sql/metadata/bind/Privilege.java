@@ -21,7 +21,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <P> 
+ * @param <P>  parent type parameter
  */
 public abstract class Privilege<P extends EntrySet> extends ChildEntrySet<P> {
 

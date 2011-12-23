@@ -19,7 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
-import java.io.IOException;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UDTs extends EntrySetWrapper<UDT> {
+public class UserDataTypes extends EntrySetWrapper<UserDataType> {
 
 
     /**
@@ -48,14 +48,13 @@ public class UDTs extends EntrySetWrapper<UDT> {
      * @return
      * @throws SQLException 
      */
-    public static UDTs newInstance(
+    public static UserDataTypes newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaNamePattern, final String typeNamePattern,
         final int[] types)
         throws SQLException {
 
-        final UDTs instance = new UDTs();
-
+        final UserDataTypes instance = new UserDataTypes();
         getUDTs(databaseMetaData, catalog, schemaNamePattern, typeNamePattern,
                 types, instance.getUDTs());
 
@@ -72,11 +71,12 @@ public class UDTs extends EntrySetWrapper<UDT> {
      * @param types
      * @param userDefinedTypes
      * @throws SQLException if a database access error occurs
+     * @see DatabaseMetaData#getUDTs(String, String, String, int[])
      */
     public static void getUDTs(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaNamePattern, final String typeNamePattern,
-        final int[] types, final Collection<UDT> userDefinedTypes)
+        final int[] types, final Collection<UserDataType> userDefinedTypes)
         throws SQLException {
 
         if (MethodNamesToOmit.instanceContainsName("getUDTs")) {
@@ -87,8 +87,7 @@ public class UDTs extends EntrySetWrapper<UDT> {
             catalog, schemaNamePattern, typeNamePattern, types);
         try {
             while (resultSet.next()) {
-                final UDT instance = EntrySet.newInstance(
-                    UDT.class, resultSet);
+                final UserDataType instance = UserDataType.newInstance(resultSet);
                 userDefinedTypes.add(instance);
             }
         } finally {
@@ -111,7 +110,7 @@ public class UDTs extends EntrySetWrapper<UDT> {
         getUDTs(databaseMetaData, catalog.getTABLE_CAT(), null, null, null,
                 catalog.getUDTs());
 
-        for (UDT udt : catalog.getUDTs()) {
+        for (UserDataType udt : catalog.getUDTs()) {
             udt.setParent(catalog);
         }
     }
@@ -120,8 +119,8 @@ public class UDTs extends EntrySetWrapper<UDT> {
     /**
      * Creates a new instance.
      */
-    public UDTs() {
-        super(UDT.class);
+    public UserDataTypes() {
+        super(UserDataType.class);
     }
 
 
@@ -131,7 +130,7 @@ public class UDTs extends EntrySetWrapper<UDT> {
      * @return UDTs.
      */
     @XmlElement(name = "UDT")
-    public Collection<UDT> getUDTs() {
+    public Collection<UserDataType> getUDTs() {
         return super.getEntrySets();
     }
 

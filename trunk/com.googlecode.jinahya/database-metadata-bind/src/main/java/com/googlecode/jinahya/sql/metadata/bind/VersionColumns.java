@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,8 +67,7 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
      * @param schema
      * @param table
      * @param versionColumns
-     * @throws SQLException 
-     *
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getVersionColumns(String, String, String)
      */
     public static void getVersionColumns(
@@ -76,8 +76,12 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
         final Collection<VersionColumn> versionColumns)
         throws SQLException {
 
-        final ResultSet resultSet =
-            databaseMetaData.getVersionColumns(catalog, schema, table);
+        if (MethodNamesToOmit.instanceContainsName("getVersionColumns")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getVersionColumns(
+            catalog, schema, table);
         try {
             while (resultSet.next()) {
                 final VersionColumn instance = EntrySet.newInstance(
@@ -105,7 +109,7 @@ public class VersionColumns extends EntrySetWrapper<VersionColumn> {
                           table.getVersionColumns());
 
         for (VersionColumn versionColumn : table.getVersionColumns()) {
-            versionColumn.setParent(table);
+            versionColumn.setTable(table);
         }
     }
 

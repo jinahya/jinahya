@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Column wrapper.
+ * Procedures.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -38,14 +40,16 @@ public class Procedures extends EntrySetWrapper<Procedure> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param columnNamePattern
-     * @return
-     * @throws SQLException 
+     * Retrieves procedures.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param procedureNamePattern procedureNamePattern
+     * @return an instance of Procedures
+     * @throws SQLException if a database access error occurs.
+     * @see #getProcedures(java.sql.DatabaseMetaData, java.lang.String,
+     * java.lang.String, java.lang.String, java.util.Collection)
      */
     public static Procedures newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -60,31 +64,48 @@ public class Procedures extends EntrySetWrapper<Procedure> {
     }
 
 
+    /**
+     * Retrieves procedures.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param procedureNamePattern procedureNamePattern
+     * @param procedures procedures
+     * @throws SQLException if a database access error occurs.
+     * @see java.sql.DatabaseMetaData#getProcedures(java.lang.String,
+     * java.lang.String, java.lang.String)
+     */
     public static void getProcedures(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schemaPattern, final String procedureNamePattern,
         final Collection<Procedure> procedures)
         throws SQLException {
 
-        final ResultSet procedureResultSet = databaseMetaData.getProcedures(
+        if (MethodNamesToOmit.instanceContainsName("getProcedures")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getProcedures(
             catalog, schemaPattern, procedureNamePattern);
         try {
-            while (procedureResultSet.next()) {
+            while (resultSet.next()) {
                 final Procedure procedure = EntrySet.newInstance(
-                    Procedure.class, procedureResultSet);
+                    Procedure.class, resultSet);
                 procedures.add(procedure);
             }
         } finally {
-            procedureResultSet.close();
+            resultSet.close();
         }
     }
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @throws SQLException 
+     * Retrieves procedures.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @throws SQLException if a database access error occurs.
      */
     public static void getAllProcedures(
         final DatabaseMetaData databaseMetaData, final Catalog catalog)
@@ -94,7 +115,7 @@ public class Procedures extends EntrySetWrapper<Procedure> {
                       catalog.getProcedures());
 
         for (Procedure procedure : catalog.getProcedures()) {
-            procedure.setParent(catalog);
+            procedure.setCatalog(catalog);
         }
     }
 
@@ -107,6 +128,11 @@ public class Procedures extends EntrySetWrapper<Procedure> {
     }
 
 
+    /**
+     * Returns procedures.
+     *
+     * @return procedures.
+     */
     @XmlElement(name = "procedure")
     public Collection<Procedure> getProcedures() {
         return super.getEntrySets();

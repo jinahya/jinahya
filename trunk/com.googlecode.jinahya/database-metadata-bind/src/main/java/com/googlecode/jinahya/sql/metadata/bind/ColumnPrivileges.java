@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +27,7 @@ import java.util.Collection;
 
 
 /**
- * ColumnPrivilege wrapper.
+ * ColumnPrivileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -46,23 +47,37 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param catalog
+     * @param schema
+     * @param table
+     * @param columnNamePattern
+     * @param privileges
+     * @throws SQLException 
+     * @see DatabaseMetaData#getColumnPrivileges(String, String, String, String)
+     */
     public static void getColumnPrivileges(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schema, final String table, final String columnNamePattern,
         final Collection<ColumnPrivilege> privileges)
         throws SQLException {
 
-        final ResultSet columnPrvilegesResultSet =
-            databaseMetaData.getColumnPrivileges(
+        if (MethodNamesToOmit.instanceContainsName("getColumnPrivileges")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getColumnPrivileges(
             catalog, schema, table, columnNamePattern);
         try {
-            while (columnPrvilegesResultSet.next()) {
+            while (resultSet.next()) {
                 final ColumnPrivilege privilege = EntrySet.newInstance(
-                    ColumnPrivilege.class, columnPrvilegesResultSet);
+                    ColumnPrivilege.class, resultSet);
                 privileges.add(privilege);
             }
         } finally {
-            columnPrvilegesResultSet.close();
+            resultSet.close();
         }
     }
 

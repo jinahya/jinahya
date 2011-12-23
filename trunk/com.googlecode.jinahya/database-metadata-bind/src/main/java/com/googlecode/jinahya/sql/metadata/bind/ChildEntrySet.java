@@ -35,7 +35,7 @@ public abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
      *
      * @return parent.
      */
-    public final P getParent() {
+    protected final P getParent() {
         return parent;
     }
 
@@ -45,7 +45,7 @@ public abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
      *
      * @param parent parent
      */
-    public final void setParent(final P parent) {
+    protected final void setParent(final P parent) {
         this.parent = parent;
     }
 

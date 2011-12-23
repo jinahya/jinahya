@@ -22,7 +22,8 @@ package com.googlecode.jinahya.sql.metadata.bind;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Identifier extends ChildEntrySet<Table> {
+public class Identifier extends TableChild {
+//extends ChildEntrySet<Table> {
 
 
     public String getSCOPE() {

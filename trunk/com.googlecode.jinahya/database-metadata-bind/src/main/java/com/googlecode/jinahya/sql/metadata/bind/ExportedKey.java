@@ -18,12 +18,24 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  * Binding for ExportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ExportedKey extends ChildEntrySet<Table> {
+public class ExportedKey extends TableChild {
+//extends ChildEntrySet<Table> {
+
+
+    public static ExportedKey newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(ExportedKey.class, resultSet);
+    }
 
 
     /**
@@ -174,6 +186,16 @@ public class ExportedKey extends ChildEntrySet<Table> {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
+    /*
+    public Table getTable() {
+    return super.getParent();
+    }
+    
+    
+    public void setTable(final Table table) {
+    super.setParent(table);
+    }
+     */
 
 
 }
