@@ -18,44 +18,25 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
+ * Binding for ExportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
+abstract class TableChild extends ChildEntrySet<Table> {
 
 
-    @Override
-    public Entries marshal(final Map<String, Entry> bound)
-        throws Exception {
-
-        final Entries value = new Entries();
-
-        value.getEntries().addAll(bound.values());
-
-        return value;
+    public final Table getTable() {
+        return super.getParent();
     }
 
 
-    @Override
-    public Map<String, Entry> unmarshal(final Entries value)
-        throws Exception {
-
-        final Map<String, Entry> bound = new LinkedHashMap<String, Entry>();
-
-        for (Entry entry : value.getEntries()) {
-            bound.put(entry.getKey(), entry);
-        }
-
-        return bound;
+    public final void setTable(final Table table) {
+        super.setParent(table);
     }
 
 

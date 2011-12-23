@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,13 +73,17 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
                                    final Collection<Catalog> catalogs)
         throws SQLException {
 
-        final ResultSet catalogResultSet = databaseMetaData.getCatalogs();
+        if (MethodNamesToOmit.instanceContainsName("getCatalogs")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getCatalogs();
         try {
-            while (catalogResultSet.next()) {
+            while (resultSet.next()) {
 
                 // ----------------------------------------------------- entries
                 final Catalog catalog = EntrySet.newInstance(
-                    Catalog.class, catalogResultSet);
+                    Catalog.class, resultSet);
                 catalogs.add(catalog);
 
                 // --------------------------------------------- functionColumns
@@ -96,11 +101,11 @@ public class Catalogs extends EntrySetWrapper<Catalog> {
                 Schemas.getAllSchemas(databaseMetaData, catalog);
 
                 // -------------------------------------------------------- UDTs
-                UDTs.getAllUDTs(databaseMetaData, catalog);
+                UserDataTypes.getAllUDTs(databaseMetaData, catalog);
             }
 
         } finally {
-            catalogResultSet.close();
+            resultSet.close();
         }
     }
 

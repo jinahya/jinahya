@@ -74,6 +74,11 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.sun.tools.jxc.maven2</groupId>
+          <artifactId>maven-jaxb-schemagen-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        <plugin>
           <groupId>com.pyx4me</groupId>
           <artifactId>proguard-maven-plugin</artifactId>
           <version>2.0.4</version>
@@ -132,6 +137,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.3.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>jaxb2-maven-plugin</artifactId>
+          <version>1.3.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -212,6 +222,27 @@
               <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
           </reportPlugins>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>schemagen</id>
+            <goals>
+              <goal>schemagen</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludes>
+            <exclude>com/googlecode/jinahya/sql/metadata/MethodNamesToOmit.java</exclude>
+            <exclude>com/googlecode/jinahya/sql/metadata/bind/EntriesAdapter.java</exclude>
+          </excludes>
+          <includes>
+            <include>com/googlecode/jinahya/sql/metadata/bind/*.java</include>
+          </includes>
         </configuration>
       </plugin>
     </plugins>

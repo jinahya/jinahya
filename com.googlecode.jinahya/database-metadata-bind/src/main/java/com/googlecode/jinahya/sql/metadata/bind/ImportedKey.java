@@ -24,7 +24,8 @@ package com.googlecode.jinahya.sql.metadata.bind;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class ImportedKey extends EntrySet {
+public class ImportedKey extends TableChild {
+//extends EntrySet {
 
 
     /**
@@ -175,19 +176,6 @@ public class ImportedKey extends EntrySet {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
-
-
-    public Table getTable() {
-        return table;
-    }
-
-
-    public void setTable(final Table table) {
-        this.table = table;
-    }
-
-
-    private Table table;
 
 
 }

@@ -73,8 +73,7 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
      * @param columnNamePattern
      * @param functionColumns
      * @throws SQLException if a database access error occurs.
-     * @see java.sql.DatabaseMetaData#getFunctionColumns(java.lang.String,
-     * java.lang.String, java.lang.String, java.lang.String)
+     * @see DatabaseMetaData#getFunctionColumns(String, String, String, String)
      */
     public static void getFunctionColumns(
         final DatabaseMetaData databaseMetaData, String catalog,

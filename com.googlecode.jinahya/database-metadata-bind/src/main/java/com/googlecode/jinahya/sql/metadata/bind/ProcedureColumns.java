@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,7 +71,8 @@ public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
      * @param procedureNamePattern
      * @param columnNamePattern
      * @param procedureColumns
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs.
+     * @see DatabaseMetaData#getProcedureColumns(String, String, String, String)
      */
     public static void getProcedureColumns(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -79,17 +81,20 @@ public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
         final Collection<ProcedureColumn> procedureColumns)
         throws SQLException {
 
-        final ResultSet procedureColumnResultSet =
-            databaseMetaData.getProcedureColumns(
+        if (MethodNamesToOmit.instanceContainsName("getProcedureColumns")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getProcedureColumns(
             catalog, schemaPattern, procedureNamePattern, columnNamePattern);
         try {
-            while (procedureColumnResultSet.next()) {
+            while (resultSet.next()) {
                 final ProcedureColumn procedureColumn = EntrySet.newInstance(
-                    ProcedureColumn.class, procedureColumnResultSet);
+                    ProcedureColumn.class, resultSet);
                 procedureColumns.add(procedureColumn);
             }
         } finally {
-            procedureColumnResultSet.close();
+            resultSet.close();
         }
     }
 
@@ -109,7 +114,7 @@ public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
             catalog.getProcedureColumns());
 
         for (ProcedureColumn procedureColumn : catalog.getProcedureColumns()) {
-            procedureColumn.setParent(catalog);
+            procedureColumn.setCatalog(catalog);
         }
     }
 

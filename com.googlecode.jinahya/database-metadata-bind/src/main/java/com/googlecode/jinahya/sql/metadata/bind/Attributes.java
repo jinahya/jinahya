@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * Attribute collection.
+ * Attributes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -47,8 +49,7 @@ public class Attributes extends EntrySetWrapper<Attribute> {
      * @param attributeNamePattern attributeNamePattern
      * @return a new instance.
      * @throws SQLException if a database access error occurs.
-     * 
-     * @see DatabaseMetaData#getAttributes(String, String, String, String) 
+     * @see DatabaseMetaData#getAttributes(String, String, String, String)
      */
     public static Attributes newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -66,15 +67,15 @@ public class Attributes extends EntrySetWrapper<Attribute> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param typeNamePattern
-     * @param attributeNamePattern
-     * @param attributes
+     * Retrieves attributes.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param typeNamePattern typeNamePattern
+     * @param attributeNamePattern attributeNamePattern
+     * @param attributes attributes
      * @throws SQLException if a database access error occurs
-     * 
      * @see DatabaseMetaData#getAttributes(String, String, String, String)
      */
     public static void getAttributes(
@@ -83,6 +84,10 @@ public class Attributes extends EntrySetWrapper<Attribute> {
         final String attributeNamePattern,
         final Collection<Attribute> attributes)
         throws SQLException {
+
+        if (MethodNamesToOmit.instanceContainsName("getAttributes")) {
+            return;
+        }
 
         final ResultSet resultSet = databaseMetaData.getAttributes(
             catalog, schemaPattern, typeNamePattern, attributeNamePattern);
@@ -99,13 +104,14 @@ public class Attributes extends EntrySetWrapper<Attribute> {
 
 
     /**
-     * 
+     * Retrieves attributes.
+     *
      * @param databaseMetaData database meta data
      * @param UDT UDT
      * @throws SQLException if a database access error occurs.
      */
     public static void getAllAttributes(
-        final DatabaseMetaData databaseMetaData, final UDT UDT)
+        final DatabaseMetaData databaseMetaData, final UserDataType UDT)
         throws SQLException {
 
         getAttributes(databaseMetaData, UDT.getTYPE_CAT(), UDT.getTYPE_SCHEM(),

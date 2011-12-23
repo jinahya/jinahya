@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,10 +73,9 @@ public class Indices extends EntrySetWrapper<Index> {
      * @param unique
      * @param approximate
      * @param indices
-     * @throws SQLException 
-     *
+     * @throws SQLException if a database access error occurs
      * @see DatabaseMetaData#getIndexInfo(String, String, String, boolean,
-     *      boolean) 
+     * boolean) 
      */
     public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
                                     final String catalog, final String schema,
@@ -84,12 +84,15 @@ public class Indices extends EntrySetWrapper<Index> {
                                     final Collection<Index> indices)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getIndexInfo")) {
+            return;
+        }
+
         final ResultSet resultSet = databaseMetaData.getIndexInfo(
             catalog, schema, table, unique, approximate);
         try {
             while (resultSet.next()) {
-                final Index index = EntrySet.newInstance(
-                    Index.class, resultSet);
+                final Index index = Index.newInstance(resultSet);
                 indices.add(index);
             }
         } finally {

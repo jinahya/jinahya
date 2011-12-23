@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,16 +84,19 @@ public class Columns extends EntrySetWrapper<Column> {
                                   final Collection<Column> columns)
         throws SQLException {
 
-        final ResultSet columnResultSet = databaseMetaData.getColumns(
+        if (MethodNamesToOmit.instanceContainsName("getColumns")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getColumns(
             catalog, schemaPattern, tableNamePattern, columnNamePattern);
         try {
-            while (columnResultSet.next()) {
-                final Column column = EntrySet.newInstance(
-                    Column.class, columnResultSet);
+            while (resultSet.next()) {
+                final Column column = Column.newInstance(resultSet);
                 columns.add(column);
             }
         } finally {
-            columnResultSet.close();
+            resultSet.close();
         }
     }
 

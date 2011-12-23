@@ -23,7 +23,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Attribute extends ChildEntrySet<UDT> {
+public class Attribute extends ChildEntrySet<UserDataType> {
 
 
     /**

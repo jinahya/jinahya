@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,22 +40,31 @@ public class DataTypes extends EntrySetWrapper<DataType> {
         throws SQLException {
 
         final DataTypes instance = new DataTypes();
-
         getTypeInfo(databaseMetaData, instance.getDataTypes());
 
         return instance;
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param dataTypes
+     * @throws SQLException 
+     * @see DatabaseMetaData#getTypeInfo()
+     */
     public static void getTypeInfo(final DatabaseMetaData databaseMetaData,
                                    final Collection<DataType> dataTypes)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getTypeInfo")) {
+            return;
+        }
+
         final ResultSet resultSet = databaseMetaData.getTypeInfo();
         try {
             while (resultSet.next()) {
-                final DataType instance = EntrySet.newInstance(
-                    DataType.class, resultSet);
+                final DataType instance = DataType.newInstance(resultSet);
                 dataTypes.add(instance);
             }
         } finally {

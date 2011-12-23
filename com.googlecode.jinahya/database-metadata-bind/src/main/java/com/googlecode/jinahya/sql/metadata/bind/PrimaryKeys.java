@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,12 +58,15 @@ public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
         final Collection<PrimaryKey> primaryKeys)
         throws SQLException {
 
+        if (MethodNamesToOmit.instanceContainsName("getPrimaryKeys")) {
+            return;
+        }
+
         final ResultSet resultSet =
             databaseMetaData.getPrimaryKeys(catalog, schema, table);
         try {
             while (resultSet.next()) {
-                final PrimaryKey primaryKey = EntrySet.newInstance(
-                    PrimaryKey.class, resultSet);
+                final PrimaryKey primaryKey = PrimaryKey.newInstance(resultSet);
                 primaryKeys.add(primaryKey);
             }
         } finally {
@@ -80,7 +84,7 @@ public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
                        table.getPrimaryKeys());
 
         for (PrimaryKey primaryKey : table.getPrimaryKeys()) {
-            primaryKey.setParent(table);
+            primaryKey.setTable(table);
         }
     }
 

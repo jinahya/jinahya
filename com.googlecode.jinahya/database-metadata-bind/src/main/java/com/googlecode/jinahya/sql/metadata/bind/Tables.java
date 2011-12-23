@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,14 +87,17 @@ public class Tables extends EntrySetWrapper<Table> {
                                  final Collection<Table> tables)
         throws SQLException {
 
-        final ResultSet tableResultSet = databaseMetaData.getTables(
+        if (MethodNamesToOmit.instanceContainsName("getTables")) {
+            return;
+        }
+
+        final ResultSet resultSet = databaseMetaData.getTables(
             catalog, schemaPattern, tableNamePattern, types);
         try {
-            while (tableResultSet.next()) {
+            while (resultSet.next()) {
 
                 // ----------------------------------------------------- entries
-                final Table table = EntrySet.newInstance(
-                    Table.class, tableResultSet);
+                final Table table = Table.newInstance(resultSet);
                 tables.add(table);
 
                 // -------------------------------------------- columnPrivileges
@@ -120,7 +124,7 @@ public class Tables extends EntrySetWrapper<Table> {
 
             }
         } finally {
-            tableResultSet.close();
+            resultSet.close();
         }
     }
 
@@ -140,7 +144,7 @@ public class Tables extends EntrySetWrapper<Table> {
                   schema.getTABLE_SCHEM(), null, null, schema.getTables());
 
         for (Table table : schema.getTables()) {
-            table.setParent(schema);
+            table.setSchema(schema);
         }
     }
 

@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +55,6 @@ public class Schemas extends EntrySetWrapper<Schema> {
         throws SQLException {
 
         final Schemas instance = new Schemas();
-
         getSchemas(databaseMetaData, catalog, schemaPattern,
                    instance.getSchemas());
 
@@ -70,8 +70,7 @@ public class Schemas extends EntrySetWrapper<Schema> {
      * @param schemaPattern schema pattern
      * @param schemas the collection to be filled
      * @throws SQLException if a database access error occurs.
-     *
-     * @see DatabaseMetaData#getSchemas(String, String) 
+     * @see DatabaseMetaData#getSchemas(String, String)
      */
     public static void getSchemas(final DatabaseMetaData databaseMetaData,
                                   final String catalog,
@@ -83,46 +82,18 @@ public class Schemas extends EntrySetWrapper<Schema> {
             return;
         }
 
-        final ResultSet resultSet =
-            databaseMetaData.getSchemas(catalog, schemaPattern);
+        final ResultSet resultSet = databaseMetaData.getSchemas(
+            catalog, schemaPattern);
         try {
             while (resultSet.next()) {
-
-                // ------------------------------------------------- entries
-                final Schema schema = EntrySet.newInstance(
-                    Schema.class, resultSet);
+                // ----------------------------------------------------- entries
+                final Schema schema = Schema.newInstance(resultSet);
                 schemas.add(schema);
-
-                // -------------------------------------------------- tables
+                // ------------------------------------------------------ tables
                 Tables.getAllTables(databaseMetaData, schema);
-
             }
         } finally {
             resultSet.close();
-        }
-    }
-
-
-    /**
-     * 
-     * @param databaseMetaData database meta data
-     * @param catalog catalog
-     * @param schemaPattern schema pattern
-     * @throws SQLException if an SQL error occurs
-     *
-     * @see DatabaseMetaData#getSchemas(String, String)
-     */
-    public static void getSchemas(final DatabaseMetaData databaseMetaData,
-                                  final Catalog catalog,
-                                  final String schemaPattern)
-        throws SQLException {
-
-
-        getSchemas(databaseMetaData, catalog.getTABLE_CAT(), schemaPattern,
-                   catalog.getSchemas());
-
-        for (Schema schema : catalog.getSchemas()) {
-            schema.setParent(catalog);
         }
     }
 
@@ -138,7 +109,12 @@ public class Schemas extends EntrySetWrapper<Schema> {
                                      final Catalog catalog)
         throws SQLException {
 
-        getSchemas(databaseMetaData, catalog, null);
+        getSchemas(databaseMetaData, catalog.getTABLE_CAT(), null,
+                   catalog.getSchemas());
+
+        for (Schema schema : catalog.getSchemas()) {
+            schema.setCatalog(catalog);
+        }
     }
 
 
