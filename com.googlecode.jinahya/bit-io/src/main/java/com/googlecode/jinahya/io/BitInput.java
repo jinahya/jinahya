@@ -261,9 +261,10 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a nullable <code>length</code>-bit unsigned <code>Integer</code>
      * value. First, a 1-bit boolean is read for a null flag. And, if the flag
-     * is not set, the value of {@link #readUnsignedInt(length)} is returned. If
-     * the flag is set, the <code>defaultValue</code> is returned. This method
-     * doesn't check the <code>defaultValue</code>'s validity.
+     * is not set, the value of {@link #readUnsignedInt(int)} with
+     * <code>length</code> is returned. If the flag is set, the
+     * <code>defaultValue</code> is returned. This method doesn't check the
+     * <code>defaultValue</code>'s validity.
      *
      * @param length bit length. See {@link #readUnsignedInt(int)} for valid
      * range.
@@ -329,8 +330,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a nullable <code>length</code>-bit signed <code>Integer</code>
      * value. First, a 1-bit boolean is read for a null flag. And, if the flag
-     * is not set, the value of {@link #readInt(length)} is returned. If the
-     * flag is set, the <code>defaultValue</code> is returned.
+     * is not set, the value of {@link #readInt(int)} is returned. If the flag
+     * is set, the <code>defaultValue</code> is returned.
      *
      * @param length bit length. See {@link #readInt(int)} for valid range.
      * (inclusive)
