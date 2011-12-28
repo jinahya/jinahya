@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Columns extends EntrySetWrapper<Column> {
+public class Columns extends EntrySets<Column> {
 
 
     /**

@@ -219,7 +219,7 @@ public abstract class EntrySet {
      * @return entries
      */
     @XmlJavaTypeAdapter(EntriesAdapter.class)
-    public Map<String, Entry> getEntries() {
+    public final Map<String, Entry> getEntries() {
 
         if (entries == null) {
             entries = new LinkedHashMap<String, Entry>();
@@ -235,7 +235,12 @@ public abstract class EntrySet {
      * @param key entry key
      * @return entry value
      */
-    protected String getValue(final String key) {
+    public final String getValue(final String key) {
+
+        if (key == null) {
+            throw new NullPointerException("null key");
+        }
+
         final Entry entry = getEntries().get(key);
         if (entry == null) {
             return null;
@@ -251,18 +256,21 @@ public abstract class EntrySet {
      * @param key entry key
      * @param value entry value.
      */
-    protected void setValue(final String key, final String value) {
+    public final void setValue(final String key, final String value) {
 
         if (key == null) {
             throw new NullPointerException("null key");
         }
 
-        if (!getEntries().containsKey(key)) {
-            getEntries().put(key, Entry.newIntance(key, value));
+        Entry entry = getEntries().get(key);
+
+        if (entry == null) {
+            entry = Entry.newIntance(key, value);
+            getEntries().put(key, entry);
             return;
         }
 
-        getEntries().get(key).setValue(value);
+        entry.setValue(value);
     }
 
 

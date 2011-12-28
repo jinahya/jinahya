@@ -77,9 +77,9 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
             catalog, schemaPattern, tableNamePattern);
         try {
             while (resultSet.next()) {
-                final TablePrivilege privilege = EntrySet.newInstance(
-                    TablePrivilege.class, resultSet);
-                privileges.add(privilege);
+                final TablePrivilege tablePrivilege =
+                    TablePrivilege.newInstance(resultSet);
+                privileges.add(tablePrivilege);
             }
         } finally {
             resultSet.close();

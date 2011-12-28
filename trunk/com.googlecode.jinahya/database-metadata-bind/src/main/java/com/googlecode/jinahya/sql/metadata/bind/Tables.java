@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Tables extends EntrySetWrapper<Table> {
+public class Tables extends EntrySets<Table> {
 
 
     /**

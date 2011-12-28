@@ -19,9 +19,11 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Indices extends EntrySetWrapper<Index> {
+public class Indices extends EntrySets<Index> {
 
 
     /**

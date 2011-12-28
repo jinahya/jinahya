@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class ImportedKeys extends EntrySetWrapper<ImportedKey> {
+public class ImportedKeys extends EntrySets<ImportedKey> {
 
 
     /**
@@ -86,8 +87,8 @@ public class ImportedKeys extends EntrySetWrapper<ImportedKey> {
             databaseMetaData.getImportedKeys(catalog, schema, table);
         try {
             while (resultSet.next()) {
-                final ImportedKey importedKey = EntrySet.newInstance(
-                    ImportedKey.class, resultSet);
+                final ImportedKey importedKey =
+                    ImportedKey.newInstance(resultSet);
                 importedKeys.add(importedKey);
             }
         } finally {

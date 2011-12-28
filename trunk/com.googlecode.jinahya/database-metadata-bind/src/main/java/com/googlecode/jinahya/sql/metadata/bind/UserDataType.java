@@ -35,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlType(propOrder = {"entries", "attributes"})
-public class UserDataType extends CatalogChild {
-//extends ChildEntrySet<Catalog> {
+public class UserDataType extends ChildEntrySet<Catalog> {
 
 
     public static UserDataType newInstance(final ResultSet resultSet)

@@ -186,16 +186,6 @@ public class ExportedKey extends TableChild {
     public void setDEFERRABILITY(final String DEFERRABILITY) {
         setValue("DEFERRABILITY", DEFERRABILITY);
     }
-    /*
-    public Table getTable() {
-    return super.getParent();
-    }
-    
-    
-    public void setTable(final Table table) {
-    super.setParent(table);
-    }
-     */
 
 
 }

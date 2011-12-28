@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class PrimaryKeys extends EntrySetWrapper<PrimaryKey> {
+public class PrimaryKeys extends EntrySets<PrimaryKey> {
 
 
     public static PrimaryKeys newInstance(
