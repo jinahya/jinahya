@@ -18,12 +18,23 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  * Binding for column privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class ColumnPrivilege extends Privilege<Table> {
+
+
+    public static ColumnPrivilege newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(ColumnPrivilege.class, resultSet);
+    }
 
 
     /**

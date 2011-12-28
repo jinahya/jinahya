@@ -37,8 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries", "tables"})
-public class Schema extends CatalogChild {
-//extends ChildEntrySet<Catalog> {
+public class Schema extends ChildEntrySet<Catalog> {
 
 
     public static Schema newInstance(final ResultSet resultSet)

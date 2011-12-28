@@ -31,8 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"entries"})
-public class Procedure extends CatalogChild {
-//extends ChildEntrySet<Catalog> {
+public class Procedure extends ChildEntrySet<Catalog> {
 
 
     public static Procedure newInstance(final ResultSet resultSet)

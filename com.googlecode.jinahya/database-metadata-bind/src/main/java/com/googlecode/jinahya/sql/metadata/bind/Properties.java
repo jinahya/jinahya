@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Properties extends EntrySetWrapper<Property> {
+public class Properties extends EntrySets<Property> {
 
 
     /**

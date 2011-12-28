@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class Schemas extends EntrySetWrapper<Schema> {
+public class Schemas extends EntrySets<Schema> {
 
 
     /**
@@ -113,7 +113,7 @@ public class Schemas extends EntrySetWrapper<Schema> {
                    catalog.getSchemas());
 
         for (Schema schema : catalog.getSchemas()) {
-            schema.setCatalog(catalog);
+            schema.setParent(catalog);
         }
     }
 

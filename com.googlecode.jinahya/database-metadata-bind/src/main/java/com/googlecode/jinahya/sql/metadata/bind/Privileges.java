@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @XmlTransient
 public abstract class Privileges<V extends Privilege<P>, P extends EntrySet>
-    extends EntrySetWrapper<V> {
+    extends EntrySets<V> {
 
 
     /**

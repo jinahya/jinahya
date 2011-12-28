@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Wed Dec 28 21:07:51 KST 2011:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-0134-8491-c132-000005dac758 
+on database directory memory:E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\database-metadata-bind\memory  with class loader sun.misc.Launcher$AppClassLoader@4b6e3f87 
+Loaded from file:/C:/Users/onacit/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_02-b13
+user.dir=E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\database-metadata-bind
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

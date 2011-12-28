@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class VersionColumns extends EntrySetWrapper<VersionColumn> {
+public class VersionColumns extends EntrySets<VersionColumn> {
 
 
     /**

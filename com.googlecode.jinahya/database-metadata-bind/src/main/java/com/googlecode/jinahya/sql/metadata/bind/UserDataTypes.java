@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UserDataTypes extends EntrySetWrapper<UserDataType> {
+public class UserDataTypes extends EntrySets<UserDataType> {
 
 
     /**

@@ -33,6 +33,12 @@ import javax.xml.bind.annotation.XmlType;
 public class DataType extends EntrySet {
 
 
+    /**
+     * 
+     * @param resultSet
+     * @return
+     * @throws SQLException if a database access error occurs
+     */
     public static DataType newInstance(final ResultSet resultSet)
         throws SQLException {
 

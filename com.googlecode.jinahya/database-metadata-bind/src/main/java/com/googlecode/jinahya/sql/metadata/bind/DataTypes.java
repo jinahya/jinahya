@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class DataTypes extends EntrySetWrapper<DataType> {
+public class DataTypes extends EntrySets<DataType> {
 
 
     public static DataTypes newInstance(final DatabaseMetaData databaseMetaData)
@@ -50,7 +51,7 @@ public class DataTypes extends EntrySetWrapper<DataType> {
      * 
      * @param databaseMetaData
      * @param dataTypes
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getTypeInfo()
      */
     public static void getTypeInfo(final DatabaseMetaData databaseMetaData,

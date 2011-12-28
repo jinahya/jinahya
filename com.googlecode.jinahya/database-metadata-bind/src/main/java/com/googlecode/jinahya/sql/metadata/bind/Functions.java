@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class Functions extends EntrySetWrapper<Function> {
+public class Functions extends EntrySets<Function> {
 
 
     /**

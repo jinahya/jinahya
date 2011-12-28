@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
+public class FunctionColumns extends EntrySets<FunctionColumn> {
 
 
     /**
@@ -90,8 +90,8 @@ public class FunctionColumns extends EntrySetWrapper<FunctionColumn> {
             catalog, schemaPattern, functionNamePattern, columnNamePattern);
         try {
             while (resultSet.next()) {
-                final FunctionColumn functionColumn = EntrySet.newInstance(
-                    FunctionColumn.class, resultSet);
+                final FunctionColumn functionColumn =
+                    FunctionColumn.newInstance(resultSet);
                 functionColumns.add(functionColumn);
             }
         } finally {

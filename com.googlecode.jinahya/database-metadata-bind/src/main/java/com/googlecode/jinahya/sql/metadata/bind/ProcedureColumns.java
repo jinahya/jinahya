@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
+public class ProcedureColumns extends EntrySets<ProcedureColumn> {
 
 
     /**
@@ -114,7 +114,7 @@ public class ProcedureColumns extends EntrySetWrapper<ProcedureColumn> {
             catalog.getProcedureColumns());
 
         for (ProcedureColumn procedureColumn : catalog.getProcedureColumns()) {
-            procedureColumn.setCatalog(catalog);
+            procedureColumn.setParent(catalog);
         }
     }
 

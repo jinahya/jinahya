@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class Identifiers extends EntrySetWrapper<Identifier> {
+public class Identifiers extends EntrySets<Identifier> {
 
 
     /**
@@ -47,8 +47,7 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
      * @param scope
      * @param nullable
      * @return
-     * @throws SQLException 
-     * 
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getBestRowIdentifier(String, String, String, int,
      *      boolean) 
      */
@@ -78,7 +77,6 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
      * @param nullable nullable
      * @param identifiers identifiers to be filled
      * @throws SQLException if an SQL error occurs.
-     *
      * @see DatabaseMetaData#getBestRowIdentifier(String, String, String, int,
      *      boolean)
      */
@@ -96,8 +94,7 @@ public class Identifiers extends EntrySetWrapper<Identifier> {
             catalog, schema, table, scope, nullable);
         try {
             while (resultSet.next()) {
-                final Identifier identifier = EntrySet.newInstance(
-                    Identifier.class, resultSet);
+                final Identifier identifier = Identifier.newInstance(resultSet);
                 identifiers.add(identifier);
             }
         } finally {

@@ -18,13 +18,24 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlRootElement
-public class FunctionColumn extends CatalogChild {
-//extends ChildEntrySet<Catalog> {
+public class FunctionColumn extends ChildEntrySet<Catalog> {
+
+
+    public static FunctionColumn newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(FunctionColumn.class, resultSet);
+    }
 
 
     public String getFUNCTION_CAT() {

@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,7 +56,7 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
      * @param table
      * @param columnNamePattern
      * @param privileges
-     * @throws SQLException 
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getColumnPrivileges(String, String, String, String)
      */
     public static void getColumnPrivileges(
@@ -72,9 +73,9 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
             catalog, schema, table, columnNamePattern);
         try {
             while (resultSet.next()) {
-                final ColumnPrivilege privilege = EntrySet.newInstance(
-                    ColumnPrivilege.class, resultSet);
-                privileges.add(privilege);
+                final ColumnPrivilege columnPrivilege =
+                    ColumnPrivilege.newInstance(resultSet);
+                privileges.add(columnPrivilege);
             }
         } finally {
             resultSet.close();
@@ -82,6 +83,12 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
     }
 
 
+    /**
+     * 
+     * @param databaseMetaData
+     * @param table
+     * @throws SQLException if an database access error occurs.
+     */
     public static void getAllColumnPrivileges(
         final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {

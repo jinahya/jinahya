@@ -18,12 +18,23 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Identifier extends TableChild {
 //extends ChildEntrySet<Table> {
+
+
+    public static Identifier newInstance(final ResultSet resultSet)
+        throws SQLException {
+
+        return newInstance(Identifier.class, resultSet);
+    }
 
 
     public String getSCOPE() {
