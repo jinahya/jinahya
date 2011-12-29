@@ -25,23 +25,50 @@ package com.googlecode.jinahya.jvms.classfile;
 public enum ClassFileAccessFlag {
 
 
+    /**
+     * Declared <code>public</code>; may be accessed from outside its package.
+     */
     ACC_PUBLIC(0x0001),
+    /**
+     * Declared <code>final</code>; no subclasses allowed.
+     */
     ACC_FINAL(0x0010),
+    /**
+     * Treat superclass methods specially when invoked by the
+     * <i>invokespecial</i> instruction.
+     */
     ACC_SUPER(0x0020),
+    /**
+     * Is an interface, not a class.
+     */
     ACC_INTERFACE(0x0200),
-    ACC_ABSTRACT(0x0400);
+    /**
+     * Declared <code>abstract</code>; must not be instantiated.
+     */
+    ACC_ABSTRACT(0x0400),
+    /**
+     * Declared <code>synthetic</code>; not present in the source code.
+     */
+    ACC_SYNTHETIC(0x1000),
+    /**
+     * Declared as an annotation type.
+     */
+    ACC_ANNOTATION(0x2000),
+    /**
+     * Declared as an <code>enum</code> type.
+     */
+    ACC_ENUM(0x4000);
 
 
-    public static ClassFileAccessFlag valueOf(final int accessFlagValue) {
+    public static ClassFileAccessFlag valueOf(final int value) {
 
         for (ClassFileAccessFlag accessFlag : values()) {
-            if (accessFlag.value == accessFlagValue) {
+            if (accessFlag.value == value) {
                 return accessFlag;
             }
         }
 
-        throw new IllegalArgumentException(
-            "no constant for " + accessFlagValue);
+        throw new IllegalArgumentException("no constant for " + value);
     }
 
 
@@ -55,7 +82,7 @@ public enum ClassFileAccessFlag {
     }
 
 
-    /** acces flag. */
+    /** access flag value. */
     private final int value;
 
 
