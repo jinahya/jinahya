@@ -246,8 +246,10 @@ public class MetadataPrinter {
 
         marshaller.setProperty(
             Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        /*
         marshaller.setProperty(
             Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+         */
 
         marshaller.marshal(metadata, output);
 
@@ -255,5 +257,11 @@ public class MetadataPrinter {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
+    private MetadataPrinter() {
+        super();
+    }
 }
 

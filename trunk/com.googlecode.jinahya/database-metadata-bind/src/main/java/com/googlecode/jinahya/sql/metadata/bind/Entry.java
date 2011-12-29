@@ -18,9 +18,8 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
@@ -53,7 +52,7 @@ public class Entry {
      *
      * @return label
      */
-    public String getKey() {
+    public final String getKey() {
         return key;
     }
 
@@ -63,7 +62,7 @@ public class Entry {
      *
      * @param key key.
      */
-    public void setKey(final String key) {
+    public final void setKey(final String key) {
 
         if (key == null) {
             throw new NullPointerException("null key");
@@ -82,7 +81,7 @@ public class Entry {
      *
      * @return value.
      */
-    public String getValue() {
+    public final String getValue() {
         return value;
     }
 
@@ -92,18 +91,18 @@ public class Entry {
      *
      * @param value value
      */
-    public void setValue(final String value) {
+    public final void setValue(final String value) {
         this.value = value;
     }
 
 
-    @XmlAttribute(required = true)
-    //@XmlElement
+    //@XmlAttribute(required = true)
+    @XmlElement(required = true)
     private String key;
 
 
-    @XmlValue
-    //@XmlElement(nillable = true)
+    //@XmlValue
+    @XmlElement(required = true, nillable = true)
     private String value;
 
 

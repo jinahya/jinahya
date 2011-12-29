@@ -37,6 +37,13 @@ import javax.xml.bind.annotation.XmlElement;
 public class DataTypes extends EntrySets<DataType> {
 
 
+    /**
+     * Retrieved a new instance.
+     *
+     * @param databaseMetaData database metadata
+     * @return a new instance
+     * @throws SQLException if a database access error occurs.
+     */
     public static DataTypes newInstance(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
@@ -48,9 +55,10 @@ public class DataTypes extends EntrySets<DataType> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param dataTypes
+     * Retrieves data types.
+     *
+     * @param databaseMetaData database metadata
+     * @param dataTypes the collection to filled
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getTypeInfo()
      */

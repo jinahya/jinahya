@@ -86,11 +86,14 @@ public class Schemas extends EntrySets<Schema> {
             catalog, schemaPattern);
         try {
             while (resultSet.next()) {
-                // ----------------------------------------------------- entries
                 final Schema schema =
                     EntrySet.newInstance(Schema.class, resultSet);
                 schemas.add(schema);
-                // ------------------------------------------------------ tables
+            }
+            if (schemas.isEmpty()) {
+                schemas.add(Schema.newNullInstance(catalog));
+            }
+            for (Schema schema : schemas) {
                 Tables.getAllTables(databaseMetaData, schema);
             }
         } finally {

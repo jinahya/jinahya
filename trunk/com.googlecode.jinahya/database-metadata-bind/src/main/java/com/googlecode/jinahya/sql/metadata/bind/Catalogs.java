@@ -86,7 +86,13 @@ public class Catalogs extends EntrySets<Catalog> {
                 final Catalog catalog = EntrySet.newInstance(
                     Catalog.class, resultSet);
                 catalogs.add(catalog);
+            }
 
+            if (catalogs.isEmpty()) {
+                catalogs.add(Catalog.newNullInstance());
+            }
+
+            for (Catalog catalog : catalogs) {
                 // --------------------------------------------- functionColumns
                 FunctionColumns.getAllFunctionColumns(
                     databaseMetaData, catalog);
@@ -104,7 +110,6 @@ public class Catalogs extends EntrySets<Catalog> {
                 // -------------------------------------------------------- UDTs
                 UserDataTypes.getAllUDTs(databaseMetaData, catalog);
             }
-
         } finally {
             resultSet.close();
         }

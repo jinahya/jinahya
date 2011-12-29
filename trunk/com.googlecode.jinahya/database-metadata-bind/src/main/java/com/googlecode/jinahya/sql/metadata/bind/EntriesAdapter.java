@@ -34,28 +34,28 @@ public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
 
 
     @Override
-    public Entries marshal(final Map<String, Entry> bound)
+    public Entries marshal(final Map<String, Entry> boundType)
         throws Exception {
 
-        final Entries value = new Entries();
+        final Entries valueType = new Entries();
 
-        value.getEntries().addAll(bound.values());
+        valueType.getEntries().addAll(boundType.values());
 
-        return value;
+        return valueType;
     }
 
 
     @Override
-    public Map<String, Entry> unmarshal(final Entries value)
+    public Map<String, Entry> unmarshal(final Entries valueType)
         throws Exception {
 
-        final Map<String, Entry> bound = new LinkedHashMap<String, Entry>();
+        final Map<String, Entry> boundType = new LinkedHashMap<String, Entry>();
 
-        for (Entry entry : value.getEntries()) {
-            bound.put(entry.getKey(), entry);
+        for (Entry entry : valueType.getEntries()) {
+            boundType.put(entry.getKey(), entry);
         }
 
-        return bound;
+        return boundType;
     }
 
 

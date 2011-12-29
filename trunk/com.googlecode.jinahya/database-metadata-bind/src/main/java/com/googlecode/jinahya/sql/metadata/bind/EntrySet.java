@@ -218,11 +218,11 @@ public abstract class EntrySet {
      *
      * @return entries
      */
-    @XmlJavaTypeAdapter(EntriesAdapter.class)
     public final Map<String, Entry> getEntries() {
 
         if (entries == null) {
             entries = new LinkedHashMap<String, Entry>();
+            //entries = new HashMap<String, Entry>();
         }
 
         return entries;
@@ -275,6 +275,7 @@ public abstract class EntrySet {
 
 
     /** entries. */
+    @XmlJavaTypeAdapter(EntriesAdapter.class)
     private Map<String, Entry> entries;
 
 
