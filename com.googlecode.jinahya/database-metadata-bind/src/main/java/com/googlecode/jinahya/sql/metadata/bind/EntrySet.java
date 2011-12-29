@@ -202,8 +202,8 @@ public abstract class EntrySet {
 
         final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         final int columnCount = resultSetMetaData.getColumnCount();
-        for (int column = 1; column <= columnCount; column++) {
-            final String key = resultSetMetaData.getColumnLabel(column);
+        for (int i = 1; i <= columnCount; i++) {
+            final String key = resultSetMetaData.getColumnLabel(i);
             String value = String.valueOf(resultSet.getObject(key));
             if (resultSet.wasNull()) {
                 value = null;
