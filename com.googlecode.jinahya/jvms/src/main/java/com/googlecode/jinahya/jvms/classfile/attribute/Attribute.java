@@ -26,6 +26,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -59,7 +60,7 @@ public abstract class Attribute {
             info.attributeNameIndex, _Utf8.class);
         final AttributeName name = AttributeName.valueOf(utf8.getValue());
         final Attribute attribute = name.newAttribute();
-        attribute.setClassfile(classFile);
+        attribute.setClassFile(classFile);
         info.print(attribute);
 
         return attribute;
@@ -80,24 +81,24 @@ public abstract class Attribute {
      *
      * @return the parent classfile
      */
-    public final ClassFile getClassfile() {
-        return classfile;
+    public final ClassFile getClassFile() {
+        return classFile;
     }
 
 
     /**
      * Sets the parent classfile of this attribute.
      *
-     * @param classfile the parent classfile
+     * @param classFile the parent classfile
      */
-    public final void setClassfile(final ClassFile classfile) {
-        this.classfile = classfile;
+    public final void setClassFile(final ClassFile classFile) {
+        this.classFile = classFile;
     }
 
 
     /** parent classfile. */
     @XmlTransient
-    protected ClassFile classfile;
+    protected ClassFile classFile;
 
 
     @XmlAttribute(required = true)

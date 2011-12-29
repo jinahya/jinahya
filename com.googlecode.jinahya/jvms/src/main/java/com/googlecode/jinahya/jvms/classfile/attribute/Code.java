@@ -19,6 +19,7 @@ package com.googlecode.jinahya.jvms.classfile.attribute;
 
 
 import com.googlecode.jinahya.jvms.classfile.DataAccessible;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -111,7 +112,7 @@ public class Code extends Attribute {
 
         final int attributesCount = input.readUnsignedShort();
         getAttributes().clear();
-        Attribute.readInstances(attributesCount, input, classfile, attributes);
+        Attribute.readInstances(attributesCount, input, classFile, attributes);
     }
 
 
@@ -133,7 +134,7 @@ public class Code extends Attribute {
     }
 
 
-    public List<ExceptionTable> getExceptionTables() {
+    private List<ExceptionTable> getExceptionTables() {
 
         if (exceptionTables == null) {
             exceptionTables = new ArrayList<ExceptionTable>();
@@ -143,7 +144,7 @@ public class Code extends Attribute {
     }
 
 
-    public List<Attribute> getAttributes() {
+    private List<Attribute> getAttributes() {
 
         if (attributes == null) {
             attributes = new ArrayList<Attribute>();

@@ -44,8 +44,10 @@ public enum AttributeName {
     Deprecated(Deprecated.class),
     RuntimeVisibleAnnotations(RuntimeVisibleAnnotations.class),
     RuntimeInvisibleAnnotations(RuntimeInvisibleAnnotations.class),
-    RuntimeVisibleParameterAnnotations(RuntimeVisibleParameterAnnotations.class),
-    RuntimeInvisibleParameterAnnotations(RuntimeInvisibleParameterAnnotations.class),
+    RuntimeVisibleParameterAnnotations(
+        RuntimeVisibleParameterAnnotations.class),
+    RuntimeInvisibleParameterAnnotations(
+        RuntimeInvisibleParameterAnnotations.class),
     AnnotationDefault(AnnotationDefault.class);
 
 
