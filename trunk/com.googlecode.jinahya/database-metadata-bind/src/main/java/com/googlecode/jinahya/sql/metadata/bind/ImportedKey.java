@@ -18,26 +18,12 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-
-
 /**
  * ImportedKey.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
-public class ImportedKey extends TableChild {
-//extends EntrySet {
-
-
-    public static ImportedKey newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(ImportedKey.class, resultSet);
-    }
+public class ImportedKey extends ChildEntrySet<Table> {
 
 
     /**

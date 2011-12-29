@@ -34,12 +34,13 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @return
+     * Binds a new instance from given <code>databaseMetaData</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param tableNamePattern tableNamePattern
+     * @return a new instance
      * @throws SQLException if a database access error occurs.
      */
     public static TablePrivileges newInstance(
@@ -56,14 +57,14 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param privileges
-     * @throws SQLException if a database access error occurs.
+     * Retrieves table privileges.
      *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param tableNamePattern tableNamePattern
+     * @param privileges privilege collection
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getTablePrivileges(String, String, String)
      */
     public static void getTablePrivileges(
@@ -78,7 +79,7 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
         try {
             while (resultSet.next()) {
                 final TablePrivilege tablePrivilege =
-                    TablePrivilege.newInstance(resultSet);
+                    EntrySet.newInstance(TablePrivilege.class, resultSet);
                 privileges.add(tablePrivilege);
             }
         } finally {
@@ -88,9 +89,10 @@ public class TablePrivileges extends Privileges<TablePrivilege, Catalog> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
+     * Retrieves all table privileges for specified <code>catalog</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
      * @throws SQLException if a database access error occurs.
      */
     public static void getAllTablePrivileges(

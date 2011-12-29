@@ -46,6 +46,8 @@ public class VersionColumns extends EntrySets<VersionColumn> {
      * @param table table
      * @return a new instance
      * @throws SQLException if a database access error occurs.
+     * @see #getVersionColumns(DatabaseMetaData, String, String, String,
+     * Collection)
      */
     public static VersionColumns newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -62,12 +64,13 @@ public class VersionColumns extends EntrySets<VersionColumn> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schema
-     * @param table
-     * @param versionColumns
+     * Retrieves version columns.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param versionColumns version column collection
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getVersionColumns(String, String, String)
      */
@@ -96,10 +99,11 @@ public class VersionColumns extends EntrySets<VersionColumn> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param table
-     * @throws SQLException 
+     * Retrieves all version columns for specified <code>table</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param table table
+     * @throws SQLException if a database access error occurs.
      */
     public static void getVersionColumns(
         final DatabaseMetaData databaseMetaData, final Table table)
@@ -110,7 +114,7 @@ public class VersionColumns extends EntrySets<VersionColumn> {
                           table.getVersionColumns());
 
         for (VersionColumn versionColumn : table.getVersionColumns()) {
-            versionColumn.setTable(table);
+            versionColumn.setParent(table);
         }
     }
 

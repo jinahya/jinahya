@@ -94,7 +94,8 @@ public class Identifiers extends EntrySets<Identifier> {
             catalog, schema, table, scope, nullable);
         try {
             while (resultSet.next()) {
-                final Identifier identifier = Identifier.newInstance(resultSet);
+                final Identifier identifier =
+                    EntrySet.newInstance(Identifier.class, resultSet);
                 identifiers.add(identifier);
             }
         } finally {

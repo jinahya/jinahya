@@ -88,7 +88,7 @@ public class ImportedKeys extends EntrySets<ImportedKey> {
         try {
             while (resultSet.next()) {
                 final ImportedKey importedKey =
-                    ImportedKey.newInstance(resultSet);
+                    EntrySet.newInstance(ImportedKey.class, resultSet);
                 importedKeys.add(importedKey);
             }
         } finally {
@@ -102,7 +102,6 @@ public class ImportedKeys extends EntrySets<ImportedKey> {
      * @param databaseMetaData
      * @param table
      * @throws SQLException if a database access error occurs
-     *
      * @see #getImportedKeys(DatabaseMetaData, String, String, String,
      *                       Collection) 
      */
@@ -115,7 +114,7 @@ public class ImportedKeys extends EntrySets<ImportedKey> {
                         table.getImportedKeys());
 
         for (ImportedKey importedKey : table.getImportedKeys()) {
-            importedKey.setTable(table);
+            importedKey.setParent(table);
         }
     }
 

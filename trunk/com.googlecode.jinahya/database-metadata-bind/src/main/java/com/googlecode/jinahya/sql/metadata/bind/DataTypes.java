@@ -65,7 +65,8 @@ public class DataTypes extends EntrySets<DataType> {
         final ResultSet resultSet = databaseMetaData.getTypeInfo();
         try {
             while (resultSet.next()) {
-                final DataType instance = DataType.newInstance(resultSet);
+                final DataType instance =
+                    EntrySet.newInstance(DataType.class, resultSet);
                 dataTypes.add(instance);
             }
         } finally {

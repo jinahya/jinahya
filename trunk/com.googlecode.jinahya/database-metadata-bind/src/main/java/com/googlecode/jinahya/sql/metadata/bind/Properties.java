@@ -40,12 +40,12 @@ public class Properties extends EntrySets<Property> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @return
-     * @throws SQLException 
+     * Retrieves a new instance from specified <code>databaseMetaData</code>.
      *
-     * @see DatabaseMetaData#getClientInfoProperties() 
+     * @param databaseMetaData database metadata
+     * @return a new instance
+     * @throws SQLException if a database access error occurs.
+     * @see #getClientInfoProperties(DatabaseMetaData, Collection)
      */
     public static Properties newInstance(
         final DatabaseMetaData databaseMetaData)
@@ -60,11 +60,11 @@ public class Properties extends EntrySets<Property> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param properties
-     * @throws SQLException 
+     * Retrieves client info properties.
      *
+     * @param databaseMetaData database metadata
+     * @param properties property collection
+     * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getClientInfoProperties()
      */
     public static void getClientInfoProperties(
@@ -79,7 +79,8 @@ public class Properties extends EntrySets<Property> {
         final ResultSet resultSet = databaseMetaData.getClientInfoProperties();
         try {
             while (resultSet.next()) {
-                final Property property = Property.newInstance(resultSet);
+                final Property property =
+                    EntrySet.newInstance(Property.class, resultSet);
                 properties.add(property);
             }
         } finally {

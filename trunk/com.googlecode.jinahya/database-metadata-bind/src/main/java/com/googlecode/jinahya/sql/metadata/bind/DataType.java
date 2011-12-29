@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -31,19 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"entries"})
 public class DataType extends EntrySet {
-
-
-    /**
-     * 
-     * @param resultSet
-     * @return
-     * @throws SQLException if a database access error occurs
-     */
-    public static DataType newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(DataType.class, resultSet);
-    }
 
 
     public String getTYPE_NAME() {

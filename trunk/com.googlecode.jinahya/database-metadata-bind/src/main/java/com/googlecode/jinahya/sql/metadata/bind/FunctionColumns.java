@@ -91,7 +91,7 @@ public class FunctionColumns extends EntrySets<FunctionColumn> {
         try {
             while (resultSet.next()) {
                 final FunctionColumn functionColumn =
-                    FunctionColumn.newInstance(resultSet);
+                    EntrySet.newInstance(FunctionColumn.class, resultSet);
                 functionColumns.add(functionColumn);
             }
         } finally {

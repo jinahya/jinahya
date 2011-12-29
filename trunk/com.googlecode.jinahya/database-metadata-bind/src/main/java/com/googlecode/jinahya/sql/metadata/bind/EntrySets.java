@@ -174,7 +174,7 @@ public abstract class EntrySets<S extends EntrySet> {
     /**
      * EntrySet type.
      */
-    protected final Class<S> entrySetType;
+    private final Class<S> entrySetType;
 
 
     /**

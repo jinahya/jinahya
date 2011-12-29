@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -92,7 +93,8 @@ public class Columns extends EntrySets<Column> {
             catalog, schemaPattern, tableNamePattern, columnNamePattern);
         try {
             while (resultSet.next()) {
-                final Column column = Column.newInstance(resultSet);
+                final Column column =
+                    EntrySet.newInstance(Column.class, resultSet);
                 columns.add(column);
             }
         } finally {
