@@ -37,6 +37,20 @@ import javax.xml.bind.annotation.XmlType;
 public class Schema extends ChildEntrySet<Catalog> {
 
 
+    /**
+     * Creates a new null instance.
+     *
+     * @param catalog catalog name.
+     * @return a new null instance.
+     */
+    protected static final Schema newNullInstance(final String catalog) {
+        final Schema schema = new Schema();
+        schema.setValue("TABLE_CATALOG", catalog);
+        schema.setValue("TABLE_SCHEM", null);
+        return schema;
+    }
+
+
     public String getTABLE_SCHEM() {
         return getValue("TABLE_SCHEM");
     }

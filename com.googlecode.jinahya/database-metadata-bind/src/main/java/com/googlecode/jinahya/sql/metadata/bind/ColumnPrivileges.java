@@ -35,6 +35,17 @@ import java.util.Collection;
 public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
 
 
+    /**
+     * Retrieves a new instance.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param columnNamePattern columnNamePattern
+     * @return a new instance
+     * @throws SQLException if a database access error occurs.
+     */
     public static ColumnPrivileges newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
         final String schema, final String table, final String columnNamePattern)
@@ -49,13 +60,14 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schema
-     * @param table
-     * @param columnNamePattern
-     * @param privileges
+     * Retrieves column privileges.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param columnNamePattern columnNamePattern
+     * @param privileges the collection to be filled
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getColumnPrivileges(String, String, String, String)
      */
@@ -84,12 +96,15 @@ public class ColumnPrivileges extends Privileges<ColumnPrivilege, Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param table
+     * Retrieves all column privileges of given <code>table</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param table table
      * @throws SQLException if an database access error occurs.
+     * @see #getColumnPrivileges(DatabaseMetaData, String, String, String,
+     * String, Collection) 
      */
-    public static void getAllColumnPrivileges(
+    public static void getColumnPrivileges(
         final DatabaseMetaData databaseMetaData, final Table table)
         throws SQLException {
 

@@ -40,6 +40,18 @@ public class Catalog extends EntrySet {
 
 
     /**
+     * Creates a new null instance.
+     *
+     * @return a new null instance.
+     */
+    protected static final Catalog newNullInstance() {
+        final Catalog catalog = new Catalog();
+        catalog.setValue("TABLE_CAT", null);
+        return catalog;
+    }
+
+
+    /**
      * Returns the value of 'TABLE_CAT' entry.
      *
      * @return 'TABLE_CAT' entry value.
@@ -64,7 +76,7 @@ public class Catalog extends EntrySet {
      *
      * @return schemas
      */
-    public Collection<Schema> getSchemas() {
+    public final Collection<Schema> getSchemas() {
 
         if (schemas == null) {
             schemas = new ArrayList<Schema>();

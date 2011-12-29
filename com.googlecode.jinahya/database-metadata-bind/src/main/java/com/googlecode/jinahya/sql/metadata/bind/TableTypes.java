@@ -24,7 +24,6 @@ import java.sql.SQLException;
 
 import java.util.Collection;
 
-import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -112,12 +111,9 @@ public class TableTypes extends EntrySets<TableType> {
 
 
     @XmlElement(name = "tableType")
-    public Collection<TableType> getTableTypes() {
+    public final Collection<TableType> getTableTypes() {
         return super.getEntrySets();
     }
-
-
-    private Map<String, TableType> tableTypes;
 
 
 }

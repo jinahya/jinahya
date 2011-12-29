@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"catalogs", "dataTypes", "properties", "schemas",
-                      "tables", "tableTypes"})
+@XmlType(propOrder = {"catalogs", "dataTypes", "properties", /*"schemas",*/
+                      /*"tables", */ "tableTypes"})
 public class Metadata {
 
 
@@ -60,10 +60,14 @@ public class Metadata {
         Properties.getClientInfoProperties(
             databaseMetaData, instance.getProperties());
 
+        /*
         Schemas.getSchemas(databaseMetaData, null, null, instance.getSchemas());
+         */
 
+        /*
         Tables.getTables(databaseMetaData, null, null, null, null,
-                         instance.getTables());
+        instance.getTables());
+         */
 
         TableTypes.getTableTypes(databaseMetaData, instance.getTableTypes());
 
@@ -76,7 +80,7 @@ public class Metadata {
      *
      * @return catalogs.
      */
-    public Collection<Catalog> getCatalogs() {
+    public final Collection<Catalog> getCatalogs() {
 
         if (catalogs == null) {
             catalogs = new ArrayList<Catalog>();
@@ -88,10 +92,10 @@ public class Metadata {
 
     /**
      * Returns dataTypes.
-     * 
+     *
      * @return dataTypes.
      */
-    public Collection<DataType> getDataTypes() {
+    public final Collection<DataType> getDataTypes() {
 
         if (dataTypes == null) {
             dataTypes = new ArrayList<DataType>();
@@ -106,7 +110,7 @@ public class Metadata {
      *
      * @return properties.
      */
-    public Collection<Property> getProperties() {
+    public final Collection<Property> getProperties() {
 
         if (properties == null) {
             properties = new ArrayList<Property>();
@@ -116,42 +120,38 @@ public class Metadata {
     }
 
 
-    /**
+    /*
      * Returns schemas.
      *
      * @return schemas.
-     */
-    public Collection<Schema> getSchemas() {
-
-        if (schemas == null) {
-            schemas = new ArrayList<Schema>();
-        }
-
-        return schemas;
+    public final Collection<Schema> getSchemas() {
+    
+    if (schemas == null) {
+    schemas = new ArrayList<Schema>();
     }
-
-
-    /**
+    
+    return schemas;
+    }
+     */
+    /*
      * Returns tables.
      *
      * @return tables.
-     */
     public Collection<Table> getTables() {
-
-        if (tables == null) {
-            tables = new ArrayList<Table>();
-        }
-
-        return tables;
+    
+    if (tables == null) {
+    tables = new ArrayList<Table>();
     }
-
-
+    
+    return tables;
+    }
+     */
     /**
      * Returns tableTypes.
      *
      * @return tableTypes.
      */
-    public Collection<TableType> getTableTypes() {
+    public final Collection<TableType> getTableTypes() {
 
         if (tableTypes == null) {
             tableTypes = new ArrayList<TableType>();
@@ -176,16 +176,16 @@ public class Metadata {
     private Collection<Property> properties;
 
 
+    /*
     @XmlElement(name = "schema")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
-
-
+     */
+    /*
     @XmlElement(name = "table")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Table> tables;
-
-
+     */
     @XmlElement(name = "tableType")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<TableType> tableTypes;

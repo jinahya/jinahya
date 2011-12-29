@@ -102,7 +102,7 @@ public class Tables extends EntrySets<Table> {
                 tables.add(table);
 
                 // -------------------------------------------- columnPrivileges
-                ColumnPrivileges.getAllColumnPrivileges(
+                ColumnPrivileges.getColumnPrivileges(
                     databaseMetaData, table);
 
                 // ----------------------------------------------------- columns

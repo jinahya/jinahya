@@ -61,6 +61,8 @@ public class SQLiteMemoryTest extends SQLiteTest {
     public void printMetadata() throws SQLException, JAXBException {
 
         MethodNamesToOmit.addNameToInstance("getClientInfoProperties");
+        MethodNamesToOmit.addNameToInstance("getFunctionColumns");
+        MethodNamesToOmit.addNameToInstance("getFunctions");
         MethodNamesToOmit.addNameToInstance("getSchemas");
 
         final Connection connection =
