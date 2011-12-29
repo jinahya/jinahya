@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -36,13 +33,6 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"entries", "attributes"})
 public class UserDataType extends ChildEntrySet<Catalog> {
-
-
-    public static UserDataType newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(UserDataType.class, resultSet);
-    }
 
 
     public String getTYPE_CAT() {

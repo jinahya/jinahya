@@ -87,7 +87,8 @@ public class Schemas extends EntrySets<Schema> {
         try {
             while (resultSet.next()) {
                 // ----------------------------------------------------- entries
-                final Schema schema = Schema.newInstance(resultSet);
+                final Schema schema =
+                    EntrySet.newInstance(Schema.class, resultSet);
                 schemas.add(schema);
                 // ------------------------------------------------------ tables
                 Tables.getAllTables(databaseMetaData, schema);

@@ -88,7 +88,7 @@ public class ExportedKeys extends EntrySets<ExportedKey> {
         try {
             while (resultSet.next()) {
                 final ExportedKey exportedKey =
-                    ExportedKey.newInstance(resultSet);
+                    EntrySet.newInstance(ExportedKey.class, resultSet);
                 exportedKeys.add(exportedKey);
             }
         } finally {

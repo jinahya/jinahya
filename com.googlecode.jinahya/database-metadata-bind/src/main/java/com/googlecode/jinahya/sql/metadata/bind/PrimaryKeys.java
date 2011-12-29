@@ -66,7 +66,8 @@ public class PrimaryKeys extends EntrySets<PrimaryKey> {
             databaseMetaData.getPrimaryKeys(catalog, schema, table);
         try {
             while (resultSet.next()) {
-                final PrimaryKey primaryKey = PrimaryKey.newInstance(resultSet);
+                final PrimaryKey primaryKey =
+                    EntrySet.newInstance(PrimaryKey.class, resultSet);
                 primaryKeys.add(primaryKey);
             }
         } finally {
@@ -84,7 +85,7 @@ public class PrimaryKeys extends EntrySets<PrimaryKey> {
                        table.getPrimaryKeys());
 
         for (PrimaryKey primaryKey : table.getPrimaryKeys()) {
-            primaryKey.setTable(table);
+            primaryKey.setParent(table);
         }
     }
 

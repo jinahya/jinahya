@@ -18,24 +18,11 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-
 /**
  * Binding for table privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class TablePrivilege extends Privilege<Catalog> {
-
-
-    public static TablePrivilege newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(resultSet);
-    }
-
-
 }
 

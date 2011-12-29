@@ -39,18 +39,18 @@ public class Indices extends EntrySets<Index> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schema
-     * @param table
-     * @param unique
-     * @param approximate
-     * @return
-     * @throws SQLException 
+     * Creates a new instance.
      *
-     * @see DatabaseMetaData#getIndexInfo(String, String, String, boolean,
-     *      boolean) 
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param unique unique
+     * @param approximate approximate
+     * @return a new instance
+     * @throws SQLException if a database access error occurs.
+     * @see #getIndexInfo(DatabaseMetaData, String, String, String, boolean,
+     * boolean, Collection)
      */
     public static Indices newInstance(final DatabaseMetaData databaseMetaData,
                                       final String catalog, final String schema,
@@ -67,17 +67,18 @@ public class Indices extends EntrySets<Index> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schema
-     * @param table
-     * @param unique
-     * @param approximate
-     * @param indices
+     * Retrieves indices.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schema schema
+     * @param table table
+     * @param unique unique
+     * @param approximate approximate
+     * @param indices indices
      * @throws SQLException if a database access error occurs
      * @see DatabaseMetaData#getIndexInfo(String, String, String, boolean,
-     * boolean) 
+     * boolean)
      */
     public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
                                     final String catalog, final String schema,
@@ -94,7 +95,8 @@ public class Indices extends EntrySets<Index> {
             catalog, schema, table, unique, approximate);
         try {
             while (resultSet.next()) {
-                final Index index = Index.newInstance(resultSet);
+                final Index index =
+                    EntrySet.newInstance(Index.class, resultSet);
                 indices.add(index);
             }
         } finally {
@@ -104,13 +106,14 @@ public class Indices extends EntrySets<Index> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param table
+     * Retrieves indices of specified <code>table</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param table table
      * @throws SQLException if a database access error occurs.
      */
-    public static void getAllIndexInfo(final DatabaseMetaData databaseMetaData,
-                                       final Table table)
+    public static void getIndexInfo(final DatabaseMetaData databaseMetaData,
+                                    final Table table)
         throws SQLException {
 
         getIndexInfo(databaseMetaData, table.getTABLE_CAT(),
@@ -132,7 +135,7 @@ public class Indices extends EntrySets<Index> {
 
 
     @XmlElement(name = "index")
-    public Collection<Index> getIndices() {
+    public final Collection<Index> getIndices() {
         return super.getEntrySets();
     }
 

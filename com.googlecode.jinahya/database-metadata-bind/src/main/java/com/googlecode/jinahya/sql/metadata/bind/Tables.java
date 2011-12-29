@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata.bind;
 
 
 import com.googlecode.jinahya.sql.metadata.MethodNamesToOmit;
+
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,7 +49,6 @@ public class Tables extends EntrySets<Table> {
      * @param types types
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
-     *
      * @see #getTables(DatabaseMetaData, String, String, String, String[],
      *                 Collection)
      */
@@ -68,15 +68,15 @@ public class Tables extends EntrySets<Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaPattern
-     * @param tableNamePattern
-     * @param types
-     * @param tables
-     * @throws SQLException 
+     * Retrieves tables.
      *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaPattern schemaPattern
+     * @param tableNamePattern tableNamePattern
+     * @param types types
+     * @param tables table collection
+     * @throws SQLException if a database access error occurs
      * @see DatabaseMetaData#getTables(String, String, String, String[]) 
      */
     public static void getTables(final DatabaseMetaData databaseMetaData,
@@ -97,7 +97,8 @@ public class Tables extends EntrySets<Table> {
             while (resultSet.next()) {
 
                 // ----------------------------------------------------- entries
-                final Table table = Table.newInstance(resultSet);
+                final Table table =
+                    EntrySet.newInstance(Table.class, resultSet);
                 tables.add(table);
 
                 // -------------------------------------------- columnPrivileges
@@ -117,7 +118,7 @@ public class Tables extends EntrySets<Table> {
                 ImportedKeys.getImportedKeys(databaseMetaData, table);
 
                 // ----------------------------------------------------- indices
-                Indices.getAllIndexInfo(databaseMetaData, table);
+                Indices.getIndexInfo(databaseMetaData, table);
 
                 // ---------------------------------------------- versionColumns
                 VersionColumns.getVersionColumns(databaseMetaData, table);
@@ -144,7 +145,7 @@ public class Tables extends EntrySets<Table> {
                   schema.getTABLE_SCHEM(), null, null, schema.getTables());
 
         for (Table table : schema.getTables()) {
-            table.setSchema(schema);
+            table.setParent(schema);
         }
     }
 

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 
 /**
- * Column wrapper.
+ * User Data Type.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -40,13 +40,13 @@ public class UserDataTypes extends EntrySets<UserDataType> {
     /**
      * Creates a new instance.
      *
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaNamePattern
-     * @param typeNamePattern
-     * @param types
-     * @return
-     * @throws SQLException 
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaNamePattern schemaNamePattern
+     * @param typeNamePattern typeNamePattern
+     * @param types types
+     * @return a new instance
+     * @throws SQLException if a database access error occurs
      */
     public static UserDataTypes newInstance(
         final DatabaseMetaData databaseMetaData, final String catalog,
@@ -63,13 +63,14 @@ public class UserDataTypes extends EntrySets<UserDataType> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @param schemaNamePattern
-     * @param typeNamePattern
-     * @param types
-     * @param userDefinedTypes
+     * Retrieves user data types.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @param schemaNamePattern schemaNamePattern
+     * @param typeNamePattern typeNamePattern
+     * @param types types
+     * @param userDefinedTypes user data type collection
      * @throws SQLException if a database access error occurs
      * @see DatabaseMetaData#getUDTs(String, String, String, int[])
      */
@@ -87,7 +88,8 @@ public class UserDataTypes extends EntrySets<UserDataType> {
             catalog, schemaNamePattern, typeNamePattern, types);
         try {
             while (resultSet.next()) {
-                final UserDataType instance = UserDataType.newInstance(resultSet);
+                final UserDataType instance =
+                    EntrySet.newInstance(UserDataType.class, resultSet);
                 userDefinedTypes.add(instance);
             }
         } finally {
@@ -102,6 +104,8 @@ public class UserDataTypes extends EntrySets<UserDataType> {
      * @param databaseMetaData meta
      * @param catalog catalog
      * @throws SQLException if a database access error occurs.
+     * @see #getUDTs(DatabaseMetaData, String, String, String, int[],
+     * Collection)
      */
     public static void getAllUDTs(final DatabaseMetaData databaseMetaData,
                                   final Catalog catalog)

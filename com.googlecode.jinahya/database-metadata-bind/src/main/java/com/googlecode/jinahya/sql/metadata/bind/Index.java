@@ -18,27 +18,12 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-
 /**
  * Index binding.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class Index extends TableChild {
-//extends ChildEntrySet<Table> {
-
-
-    public static Index newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(Index.class, resultSet);
-    }
+public class Index extends ChildEntrySet<Table> {
 
 
     public String getTABLE_CAT() {

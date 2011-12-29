@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -32,13 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"entries"})
 public class Procedure extends ChildEntrySet<Catalog> {
-
-
-    public static Procedure newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(Procedure.class, resultSet);
-    }
 
 
     public String getPROCEDURE_CAT() {

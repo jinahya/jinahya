@@ -18,26 +18,11 @@
 package com.googlecode.jinahya.sql.metadata.bind;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.xml.bind.annotation.XmlType;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries"})
-public class VersionColumn extends TableChild {
-//extends ChildEntrySet<Table> {
-
-
-    public static VersionColumn newInstance(final ResultSet resultSet)
-        throws SQLException {
-
-        return newInstance(VersionColumn.class, resultSet);
-    }
+public class VersionColumn extends ChildEntrySet<Table> {
 
 
     public String getSCOPE() {

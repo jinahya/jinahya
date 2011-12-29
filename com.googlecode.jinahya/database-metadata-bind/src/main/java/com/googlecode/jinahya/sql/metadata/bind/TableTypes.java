@@ -39,9 +39,10 @@ public class TableTypes extends EntrySets<TableType> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @return
+     * Creates a new instance.
+     *
+     * @param databaseMetaData database metadata
+     * @return a new instance
      * @throws SQLException if a database access error occurs
      */
     public static TableTypes newInstance(
@@ -57,12 +58,13 @@ public class TableTypes extends EntrySets<TableType> {
 
 
     /**
-     * 
-     * @param databaseMetaData meta
-     * @param tableTypes collection to be filled
+     * Retrieved table types.
+     *
+     * @param databaseMetaData database metadata
+     * @param tableTypes the collection to be filled
      * @throws SQLException if a database access error occurs.
      *
-     * @see DatabaseMetaData#getTables(String, String, String, String[]) 
+     * @see DatabaseMetaData#getTables(String, String, String, String[])
      */
     public static void getTableTypes(final DatabaseMetaData databaseMetaData,
                                      final Collection<TableType> tableTypes)
