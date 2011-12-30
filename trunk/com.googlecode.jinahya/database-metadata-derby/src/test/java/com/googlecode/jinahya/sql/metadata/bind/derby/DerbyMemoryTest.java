@@ -19,14 +19,14 @@ Expecting a date here, found: 2011. 11. 20 Jin Kwon <jinahya at gmail.com>.
 package com.googlecode.jinahya.sql.metadata.bind.derby;
 
 
-import com.googlecode.jinahya.sql.metadata.MetadataPrinter;
-import com.googlecode.jinahya.sql.metadata.bind.Metadata;
+import com.googlecode.jinahya.sql.metadata.Metadata;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import java.util.Collections;
 import javax.xml.bind.JAXBException;
 
 import org.testng.annotations.Test;
@@ -54,9 +54,11 @@ public class DerbyMemoryTest extends DerbyTest {
         try {
             final DatabaseMetaData databaseMetaData = connection.getMetaData();
 
-            final Metadata metadata = Metadata.newInstance(databaseMetaData);
+            final Metadata metadata = Metadata.newInstance(
+                databaseMetaData, Collections.<String>emptyList());
 
-            MetadataPrinter.print(metadata);
+            Metadata.print(metadata, System.out);
+            System.out.println();
 
         } finally {
             connection.close();
