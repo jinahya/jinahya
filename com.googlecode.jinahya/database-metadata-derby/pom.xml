@@ -16,9 +16,9 @@
     <dependencies>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>database-metadata-bind</artifactId>
-        <version>1.0-alpha-3-SNAPSHOT</version>
-      </dependency>    
+        <artifactId>database-metadata</artifactId>
+        <version>1.0-alpha-1-SNAPSHOT</version>
+      </dependency> 
       <dependency>
         <groupId>org.apache.derby</groupId>
         <artifactId>derby</artifactId>
@@ -34,9 +34,9 @@
   <dependencies>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>database-metadata-bind</artifactId>
+      <artifactId>database-metadata</artifactId>
       <scope>compile</scope>
-    </dependency>    
+    </dependency>  
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
@@ -151,7 +151,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.googlecode.jinahya.sql.metadata.MetadataPrinter</mainClass>
+              <mainClass>com.googlecode.jinahya.sql.metadata.Metadata</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -222,27 +222,6 @@
               <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
           </reportPlugins>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxb2-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>schemagen</id>
-            <goals>
-              <goal>schemagen</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <excludes>
-            <exclude>com/googlecode/jinahya/sql/metadata/MethodNamesToOmit.java</exclude>
-            <exclude>com/googlecode/jinahya/sql/metadata/bind/EntriesAdapter.java</exclude>
-          </excludes>
-          <includes>
-            <include>com/googlecode/jinahya/sql/metadata/bind/*.java</include>
-          </includes>
         </configuration>
       </plugin>
     </plugins>
