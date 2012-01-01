@@ -1,17 +1,17 @@
 
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSchema(namespace = DatabaseMetadataConstants.TARGET_NAMESPACE,
+@XmlSchema(namespace = MetadataXMLConstants.METADATA_NS_URI,
            elementFormDefault = XmlNsForm.QUALIFIED,
            attributeFormDefault = XmlNsForm.UNQUALIFIED,
-           xmlns = {@XmlNs(prefix = "", namespaceURI = TARGET_NAMESPACE),
+           xmlns = {@XmlNs(prefix = "", namespaceURI = METADATA_NS_URI),
                     @XmlNs(prefix = "xs", namespaceURI = W3C_XML_SCHEMA_NS_URI),
                     @XmlNs(prefix = "xsi",
                            namespaceURI = W3C_XML_SCHEMA_INSTANCE_NS_URI)})
 package com.googlecode.jinahya.sql.metadata;
 
 
-import static com.googlecode.jinahya.sql.metadata.DatabaseMetadataConstants.*;
+import static com.googlecode.jinahya.sql.metadata.MetadataXMLConstants.*;
 
 import static javax.xml.XMLConstants.*;
 

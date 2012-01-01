@@ -22,20 +22,20 @@ package com.googlecode.jinahya.sql.metadata;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class DatabaseMetadataConstants {
+final class MetadataXMLConstants {
 
 
     /**
      * Target XML namespace name.
      */
-    public static final String TARGET_NAMESPACE =
+    public static final String METADATA_NS_URI =
         "http://jinahya.googlecode.com/sql/metadata";
 
 
     /**
      * Creates a new instance.
      */
-    private DatabaseMetadataConstants() {
+    private MetadataXMLConstants() {
         super();
     }
 
