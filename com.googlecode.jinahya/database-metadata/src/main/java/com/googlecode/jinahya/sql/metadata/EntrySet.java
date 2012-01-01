@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-abstract class EntrySet {
+public abstract class EntrySet {
 
 
     /**
