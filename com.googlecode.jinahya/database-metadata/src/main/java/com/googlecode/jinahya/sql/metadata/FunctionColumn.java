@@ -27,7 +27,6 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class FunctionColumn extends ChildEntrySet<Catalog> {
 
 

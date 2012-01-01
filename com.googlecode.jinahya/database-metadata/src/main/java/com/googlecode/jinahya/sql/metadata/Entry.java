@@ -19,14 +19,12 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
 public class Entry {
 
 
