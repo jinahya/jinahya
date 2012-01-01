@@ -32,10 +32,11 @@ public class PrimaryKey extends ChildEntrySet<Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param table
-     * @throws SQLException 
+     * Retrieves primary keys for given <code>table</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param table table
+     * @throws SQLException if a database access error occurs.
      */
     static void getPrimaryKeys(final DatabaseMetaData databaseMetaData,
                                final Table table)

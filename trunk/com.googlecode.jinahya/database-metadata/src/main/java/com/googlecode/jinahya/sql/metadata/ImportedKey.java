@@ -21,7 +21,6 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 
 
 /**
@@ -33,7 +32,8 @@ public class ImportedKey extends ChildEntrySet<Table> {
 
 
     /**
-     * 
+     * Retrieves imported keys for given <code>table</code>.
+     *
      * @param databaseMetaData database metadata
      * @param table table
      * @throws SQLException if a database access error occurs

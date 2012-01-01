@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -46,7 +47,7 @@ public class Schema extends ChildEntrySet<Catalog> {
      * @param catalog catalog name.
      * @return a new null instance.
      */
-    protected static Schema newNullInstance(final String catalog) {
+    private static Schema newNullInstance(final String catalog) {
         final Schema schema = new Schema();
         schema.setValue("TABLE_CATALOG", catalog);
         schema.setValue("TABLE_SCHEM", null);
