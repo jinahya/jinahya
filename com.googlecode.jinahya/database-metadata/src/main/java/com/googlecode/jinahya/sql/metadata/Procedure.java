@@ -37,7 +37,7 @@ public class Procedure extends ChildEntrySet<Catalog> {
      * @param catalog catalog
      * @throws SQLException if a database access error occurs.
      */
-    static void getAllProcedures(final DatabaseMetaData databaseMetaData,
+    static void getProcedures(final DatabaseMetaData databaseMetaData,
                                  final Catalog catalog)
         throws SQLException {
 

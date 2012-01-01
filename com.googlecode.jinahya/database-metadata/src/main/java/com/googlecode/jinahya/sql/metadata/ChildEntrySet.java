@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <P> parent type parameter
  */
 @XmlTransient
-abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
+public abstract class ChildEntrySet<P extends EntrySet> extends EntrySet {
 
 
     /**
