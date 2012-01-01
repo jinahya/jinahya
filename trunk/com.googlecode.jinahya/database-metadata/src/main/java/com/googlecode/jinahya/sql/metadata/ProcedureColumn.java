@@ -31,10 +31,11 @@ public class ProcedureColumn extends ChildEntrySet<Catalog> {
 
 
     /**
-     * 
-     * @param databaseMetaData
-     * @param catalog
-     * @throws SQLException 
+     * Retrieves procedure columns for given <code>catalog</code>.
+     *
+     * @param databaseMetaData database metadata
+     * @param catalog catalog
+     * @throws SQLException if a database access error occurs.
      */
     static void getProcedureColumns(final DatabaseMetaData databaseMetaData,
                                     final Catalog catalog)

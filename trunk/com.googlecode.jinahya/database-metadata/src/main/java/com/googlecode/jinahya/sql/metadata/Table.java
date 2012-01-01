@@ -21,12 +21,12 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
 @XmlType(propOrder = {"entries", "columnPrivileges", "columns", "exportedKeys",
                       "identifiers", "importedKeys", "indices", "primaryKeys",
                       "privileges", "versionColumns"})

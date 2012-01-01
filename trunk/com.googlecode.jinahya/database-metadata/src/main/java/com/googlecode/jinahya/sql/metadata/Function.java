@@ -27,12 +27,12 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlRootElement
 public class Function extends ChildEntrySet<Catalog> {
 
 
     /**
-     * 
+     * Retrieves functions for given <code>catalog</code>.
+     *
      * @param databaseMetaData database metadata
      * @param catalog catalog
      * @throws SQLException if a database access error occurs.
