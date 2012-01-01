@@ -86,11 +86,12 @@ public class Catalog extends EntrySet {
             }
 
             for (Catalog catalog : metadata.getCatalogs()) {
-                FunctionColumn.getFunctionColumns(databaseMetaData, catalog);
                 Function.getFunctions(databaseMetaData, catalog);
-                ProcedureColumn.getProcedureColumns(
-                    databaseMetaData, catalog);
+                FunctionColumn.getFunctionColumns(databaseMetaData, catalog);
+                Procedure.getProcedures(databaseMetaData, catalog);
+                ProcedureColumn.getProcedureColumns(databaseMetaData, catalog);
                 Schema.getSchemas(databaseMetaData, catalog);
+                TablePrivilege.getTablePrivileges(databaseMetaData, catalog);
                 UserDataType.getUserDataTypes(databaseMetaData, catalog);
             }
         } finally {
@@ -260,41 +261,31 @@ public class Catalog extends EntrySet {
     }
 
 
-    /**
-     * functions.
-     */
-    @XmlElement(name = "function")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Function> functions;
-
-
-    /**
-     * function columns.
-     */
+    /** function columns. */
     @XmlElement(name = "functionColumn")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<FunctionColumn> functionColumns;
 
 
-    /**
-     * procedure columns.
-     */
+    /** functions. */
+    @XmlElement(name = "function")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Function> functions;
+
+
+    /** procedure columns. */
     @XmlElement(name = "procedureColumn")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<ProcedureColumn> procedureColumns;
 
 
-    /**
-     * procedures.
-     */
+    /** procedures. */
     @XmlElement(name = "procedure")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Procedure> procedures;
 
 
-    /**
-     * schemas.
-     */
+    /** schemas. */
     @XmlElement(name = "schema")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
@@ -306,9 +297,7 @@ public class Catalog extends EntrySet {
     private Collection<TablePrivilege> tablePrivileges;
 
 
-    /**
-     * UDTs.
-     */
+    /** userDataTypes. */
     @XmlElement(name = "userDataType")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<UserDataType> userDataTypes;
