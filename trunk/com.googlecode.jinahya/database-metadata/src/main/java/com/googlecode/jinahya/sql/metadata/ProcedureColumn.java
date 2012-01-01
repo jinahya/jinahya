@@ -40,6 +40,10 @@ public class ProcedureColumn extends ChildEntrySet<Catalog> {
                                     final Catalog catalog)
         throws SQLException {
 
+        if (catalog.getValue("TABLE_CAT") == null) {
+            return;
+        }
+        
         if (catalog.getMetadata().excludes.contains("getProcedures")) {
             return;
         }
