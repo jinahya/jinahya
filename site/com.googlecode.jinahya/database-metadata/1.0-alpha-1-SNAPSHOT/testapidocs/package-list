@@ -1,1 +1,3 @@
 com.googlecode.jinahya.sql.metadata
+com.googlecode.jinahya.sql.metadata.derby
+com.googlecode.jinahya.sql.metadata.sqlite
