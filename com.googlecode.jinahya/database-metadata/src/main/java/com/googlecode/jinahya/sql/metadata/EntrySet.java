@@ -70,7 +70,7 @@ public abstract class EntrySet {
      * @param resultSet result set
      * @throws SQLException if an SQL error occurs.
      */
-    void read(final ResultSet resultSet) throws SQLException {
+    final void read(final ResultSet resultSet) throws SQLException {
 
         final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         final int columnCount = resultSetMetaData.getColumnCount();
