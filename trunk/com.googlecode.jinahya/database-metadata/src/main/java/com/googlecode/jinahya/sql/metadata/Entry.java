@@ -89,7 +89,7 @@ public class Entry {
      *
      * @param value value
      */
-    public final void setValue(final String value) {
+    final void setValue(final String value) {
         this.value = value;
     }
 
