@@ -148,13 +148,18 @@ public class DependencyResolverTest {
 
 
     @Test
-    public void checkSynchronizedInstanceInheritesAllMethods()
+    public void checkSynchronizedDependencyResolverInheritesAllMethods()
         throws NoSuchMethodException {
 
-        final Class<?> class1 = new DependencyResolver<Object>().getClass();
+        final DependencyResolver<Object> resolver1 =
+            new DependencyResolver<Object>();
 
-        final Class<?> class2 =
-            DependencyResolver.<Object>synchronizedInstance().getClass();
+        final Class<?> class1 = resolver1.getClass();
+
+        final DependencyResolver<Object> resolver2 =
+            DependencyResolver.sysnchronizedDependencyResolver(resolver1);
+
+        final Class<?> class2 = resolver2.getClass();
 
         for (Method method1 : class1.getDeclaredMethods()) {
 
@@ -167,7 +172,7 @@ public class DependencyResolverTest {
             if (Modifier.isPrivate(modifiers1)) {
                 continue;
             }
-            
+
             final Method method2 = class2.getDeclaredMethod(
                 method1.getName(), method1.getParameterTypes());
 

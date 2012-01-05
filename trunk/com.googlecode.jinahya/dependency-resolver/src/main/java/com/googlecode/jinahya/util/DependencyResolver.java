@@ -40,6 +40,7 @@ public class DependencyResolver<E> implements Serializable {
     private static final long serialVersionUID = -1081443162006459712L;
 
 
+    /** synchronized wrapper. */
     private static final class SynchronizedDependencyResolver<E>
         extends DependencyResolver<E> {
 
@@ -156,18 +157,6 @@ public class DependencyResolver<E> implements Serializable {
         final DependencyResolver<E> resolver) {
 
         return new SynchronizedDependencyResolver<E>(resolver);
-    }
-
-
-    /**
-     * Returns a synchronized instance.
-     *
-     * @param <E> element type parameter
-     * @return a synchronized instance
-     */
-    public static <E> DependencyResolver<E> synchronizedInstance() {
-
-        return new SynchronizedDependencyResolver<E>();
     }
 
 
@@ -508,7 +497,7 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
-        assert single.isEmpty();
+        //assert single.isEmpty();
         /*
         if (!single.isEmpty()) {
         groups.add(single);
@@ -548,7 +537,7 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
-        assert single.isEmpty();
+        //assert single.isEmpty();
         /*
         if (!single.isEmpty()) {
         groups.add(single);
