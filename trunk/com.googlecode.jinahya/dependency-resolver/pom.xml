@@ -92,6 +92,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.0</version>
+        </plugin>        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.11</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -108,32 +113,6 @@
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
-        <!--
-        <executions>
-          <execution>
-            <id>compile-1.1</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <source>1.3</source>
-              <target>1.1</target>
-            </configuration>
-          </execution>
-          <execution>
-            <id>testCompile-1.5</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-            <configuration>
-              <source>1.5</source>
-              <target>1.5</target>
-            </configuration>
-          </execution>
-        </executions>
-        -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -257,6 +236,75 @@
                 </goals>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>jsr14</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>1.5</source>
+              <target>jsr14</target>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <classifier>jsr14</classifier>  
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.pyx4me</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>compile</phase>
+                <goals>
+                  <goal>proguard</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <injar>classes</injar>
+              <libs>
+                <lib>${java.home}/lib/rt.jar</lib>
+                <lib>${java.home}/lib/jsse.jar</lib>
+              </libs>
+              <options>
+                <!--option>-dontshrink</option-->
+                <!--option>-dontoptimize</option-->
+                <!--option>-dontobfuscate</option-->
+                <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
+              </options>
+              <proguardVersion>4.4</proguardVersion>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.proguard</groupId>
+                <artifactId>proguard</artifactId>
+                <version>4.4</version>
+                <scope>runtime</scope>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>
