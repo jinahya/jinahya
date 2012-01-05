@@ -290,8 +290,8 @@
                 <lib>${java.home}/lib/jsse.jar</lib>
               </libs>
               <options>
-                <!--option>-dontshrink</option-->
-                <!--option>-dontoptimize</option-->
+                <option>-dontshrink</option>
+                <option>-dontoptimize</option>
                 <option>-dontobfuscate</option>
                 <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
               </options>
