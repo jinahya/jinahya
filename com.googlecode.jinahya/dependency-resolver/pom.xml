@@ -292,7 +292,7 @@
               <options>
                 <!--option>-dontshrink</option-->
                 <!--option>-dontoptimize</option-->
-                <!--option>-dontobfuscate</option-->
+                <option>-dontobfuscate</option>
                 <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
               </options>
               <proguardVersion>4.4</proguardVersion>
