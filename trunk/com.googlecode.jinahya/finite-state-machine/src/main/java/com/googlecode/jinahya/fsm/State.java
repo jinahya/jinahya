@@ -43,19 +43,6 @@ public interface State extends Serializable {
 
 
     /**
-     * The invalid state.
-     */
-    public static final State INVALID = new AbstractState(-2, "INVALID") {
-
-
-        /** GENERATED. */
-        private static final long serialVersionUID = -7766829699556888699L;
-
-
-    };
-
-
-    /**
      * Returns code.
      *
      * @return code
