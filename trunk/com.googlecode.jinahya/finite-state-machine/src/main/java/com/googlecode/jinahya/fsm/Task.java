@@ -32,7 +32,7 @@ public interface Task {
      * @param transition transition to match.
      * @return true if matches; false otherwise
      */
-    public abstract boolean matches(Transition transition);
+    boolean matches(Transition transition);
 
 
     /**
@@ -40,7 +40,7 @@ public interface Task {
      *
      * @param transition transition
      */
-    public abstract void perform(Transition transition);
+    void perform(Transition transition);
 
 
 }

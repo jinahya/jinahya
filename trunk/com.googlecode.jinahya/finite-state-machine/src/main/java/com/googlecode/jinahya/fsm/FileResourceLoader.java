@@ -31,7 +31,7 @@ import java.io.InputStream;
 public class FileResourceLoader implements ResourceLoader {
 
 
-    //@Override
+    @Override
     public InputStream loadResource(final String name)
         throws IOException, FSMException {
 

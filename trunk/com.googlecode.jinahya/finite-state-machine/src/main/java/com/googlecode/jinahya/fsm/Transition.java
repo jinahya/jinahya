@@ -130,7 +130,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
-    public final boolean matchesAny(final TransitionMatcher[] matchers) {
+    public final boolean matchesAny(final TransitionMatcher... matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -168,7 +168,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches all; false otherwise
      */
-    public final boolean matchesAll(final TransitionMatcher[] matchers) {
+    public final boolean matchesAll(final TransitionMatcher... matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
