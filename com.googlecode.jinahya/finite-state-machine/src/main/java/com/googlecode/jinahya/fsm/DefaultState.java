@@ -52,7 +52,7 @@ class DefaultState implements State {
     }
 
 
-    @Override
+    //@Override
     public boolean equals(final Object obj) {
 
         if (this == obj) {
@@ -77,7 +77,7 @@ class DefaultState implements State {
     }
 
 
-    @Override
+    //@Override
     public int hashCode() {
 
         int result = 17;
@@ -90,30 +90,20 @@ class DefaultState implements State {
     }
 
 
-    @Override
+    //@Override
     public String toString() {
         return super.toString() + "?code=" + code + "&name=" + name;
         //return "State(" + name + "(" + code + "))";
     }
 
 
-    /**
-     * Returns code.
-     *
-     * @return code
-     */
-    @Override
+    //@Override
     public final int code() {
         return code;
     }
 
 
-    /**
-     * Returns name.
-     *
-     * @return name
-     */
-    @Override
+    //@Override
     public final String name() {
         return name;
     }

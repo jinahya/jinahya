@@ -27,10 +27,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -48,7 +46,15 @@ public final class TaskLoader {
         "com.googlecode.jinahya.fsm.task.index";
 
 
-    public static Map<String, Task> loadTasks(
+    /**
+     * 
+     * @param contextPath package paths
+     * @param resourceLoader resource loader
+     * @param classLoader class loader
+     * @return a map of id and tasks.
+     * @throws FSMException if an error occurs.
+     */
+    public static Task[] loadTasks(
         final String contextPath, final ResourceLoader resourceLoader,
         final ClassLoader classLoader)
         throws FSMException {
@@ -124,27 +130,23 @@ public final class TaskLoader {
                         "loaded class(" + loaded + ") is not assignable to "
                         + Task.class);
                 }
-                taskClasses.add(loaded);
+                if (!taskClasses.contains(loaded)) {
+                    taskClasses.add(loaded);
+                }
             } catch (ClassNotFoundException cnfe) {
                 throw new FSMException(
                     "failed to load a class: " + className, cnfe);
             }
         }
 
-        final Map<String, Task> tasks = new HashMap<String, Task>();
-        for (Class<?> taskClass : taskClasses) {
+        final Task[] tasks = new Task[taskClasses.size()];
+        for (int i = 0; i < tasks.length; i++) {
+            final Class<?> taskClass = taskClasses.get(i);
             try {
                 final Constructor<?> constructor =
-                    taskClass.getConstructor((Class[]) null);
+                    taskClasses.get(i).getConstructor((Class[]) null);
                 try {
-                    final Task task =
-                        (Task) constructor.newInstance((Object[]) null);
-                    final String taskId = task.getId();
-                    if (tasks.containsKey(taskId)) {
-                        throw new FSMException(
-                            "duplicate task id: " + taskId);
-                    }
-                    tasks.put(taskId, task);
+                    tasks[i] = (Task) constructor.newInstance((Object[]) null);
                 } catch (InstantiationException ie) {
                     throw new FSMException(
                         "failed to create a new instance of " + taskClass, ie);
@@ -165,163 +167,14 @@ public final class TaskLoader {
     }
 
 
-    /*
-     * Creates a new instance.
-     *
-     * @param contextPath context path
-     * @param resourceLoader resource loader
-     * @param classLoader class loader
-     * @return a new instance
-     * @throws FSMException if an error occurs
-     */
-    private static TaskLoader newInstance(final String contextPath,
-                                           final ResourceLoader resourceLoader,
-                                           final ClassLoader classLoader)
-        throws FSMException {
-
-        if (contextPath == null) {
-            throw new NullPointerException("null contextPath");
-        }
-
-        if (resourceLoader == null) {
-            throw new NullPointerException("null resourceLoader");
-        }
-
-        if (classLoader == null) {
-            throw new NullPointerException("null classLoader");
-        }
-
-        // parse package names
-        final Set<String> packageNames = new HashSet<String>();
-        final StringTokenizer tokenizer = new StringTokenizer(contextPath, ":");
-        while (tokenizer.hasMoreTokens()) {
-            String packageName = tokenizer.nextToken();
-            packageName = packageName.trim();
-            if (packageName.length() == 0) {
-                continue;
-            }
-            packageNames.add(packageName);
-        }
-
-        // parse class names
-        final Set<String> classNames = new HashSet<String>();
-        for (String packageName : packageNames) {
-            final String resourceName =
-                packageName.replace('.', '/') + "/" + TASK_INDEX_FILENAME;
-            try {
-                final InputStream resource =
-                    resourceLoader.loadResource(resourceName);
-                if (resource == null) {
-                    throw new FSMException(
-                        "no index file for package(" + packageName + ")");
-                }
-                try {
-                    final BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(resource, "UTF-8"));
-                    try {
-                        for (String className = null;
-                             (className = reader.readLine()) != null;) {
-                            className = className.trim();
-                            if (className.length() == 0
-                                || className.startsWith("#")) {
-                                continue;
-                            }
-                            classNames.add(packageName + "." + className);
-                        }
-                    } finally {
-                        reader.close();
-                    }
-                } finally {
-                    resource.close();
-                }
-            } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-        }
-
-        final List<Class<?>> taskClasses =
-            new ArrayList<Class<?>>(classNames.size());
-
-        for (String className : classNames) {
-            try {
-                final Class<?> loaded = classLoader.loadClass(className);
-                if (!Task.class.isAssignableFrom(loaded)) {
-                    throw new FSMException(
-                        "loaded class(" + loaded + ") is not assignable to "
-                        + Task.class);
-                }
-                taskClasses.add(loaded);
-            } catch (ClassNotFoundException cnfe) {
-                throw new FSMException(
-                    "failed to load a class: " + className, cnfe);
-            }
-        }
-
-        return new TaskLoader(taskClasses);
-    }
-
-
     /**
      * Creates a new instance.
      *
      * @param taskClasses task classes
      */
-    private TaskLoader(final List<Class<?>> taskClasses) {
-
+    private TaskLoader() {
         super();
-
-        if (taskClasses == null) {
-            throw new NullPointerException("null taskClasses");
-        }
-
-        this.taskClasses = taskClasses;
     }
-
-
-    /*
-     * Returns a map of &lt;TASK_ID, TASK_Instance&gt;.
-     *
-     * @return a map of tasks.
-     * @throws FSMException if an error occurs.
-     */
-    private Map<String, Task> getTasks() throws FSMException {
-
-        final Map<String, Task> tasks = new HashMap<String, Task>();
-        for (Class<?> taskClass : taskClasses) {
-            try {
-                final Constructor<?> constructor =
-                    taskClass.getConstructor((Class[]) null);
-                try {
-                    final Task task =
-                        (Task) constructor.newInstance((Object[]) null);
-                    final String taskId = task.getId();
-                    if (tasks.containsKey(taskId)) {
-                        throw new FSMException(
-                            "duplicate task id: " + taskId);
-                    }
-                    tasks.put(taskId, task);
-                } catch (InstantiationException ie) {
-                    throw new FSMException(
-                        "failed to create a new instance: " + taskClass, ie);
-                } catch (IllegalAccessException iae) {
-                    throw new FSMException(
-                        "failed to create a new instance: " + taskClass, iae);
-                } catch (InvocationTargetException ite) {
-                    throw new FSMException(
-                        "failed to create a new instance: " + taskClass, ite);
-                }
-            } catch (NoSuchMethodException nsme) {
-                throw new FSMException(
-                    "no default constructor: " + taskClass, nsme);
-            }
-        }
-
-        return tasks;
-    }
-
-
-    /** task class list. */
-    private final List<Class<?>> taskClasses;
 
 
 }

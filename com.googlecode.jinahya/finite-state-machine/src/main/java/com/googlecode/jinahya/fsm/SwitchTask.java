@@ -29,14 +29,13 @@ public abstract class SwitchTask extends AbstractTask {
     /**
      * Creates a new instance.
      *
-     * @param id task id
      * @param onMatchers matchers for switching on; none null; none empty
      * @param offMatchers matchers for switching off; none null; none empty
      */
-    public SwitchTask(final String id, final TransitionMatcher[] onMatchers,
+    public SwitchTask(final TransitionMatcher[] onMatchers,
                       final TransitionMatcher[] offMatchers) {
 
-        super(id, onMatchers);
+        super(onMatchers);
 
         if (offMatchers == null) {
             throw new NullPointerException("null offMatchers");
@@ -61,46 +60,16 @@ public abstract class SwitchTask extends AbstractTask {
 
 
     @Override
-    public void prepare(final PreparationContext context) throws FSMException {
-        if (on) {
-            prepareOff(context);
-        } else {
-            prepareOn(context);
-        }
-    }
-
-
-    /**
-     * Prepares to be on.
-     *
-     * @param context transition context
-     * @throws FSMException if an error occurs.
-     */
-    protected abstract void prepareOn(final TransitionContext context)
-        throws FSMException;
-
-
-    /**
-     * Prepares to be off.
-     *
-     * @param context transition context
-     * @throws FSMException if an error occurs.
-     */
-    protected abstract void prepareOff(final TransitionContext context)
-        throws FSMException;
-
-
-    @Override
-    public void perform(final TransitionContext context) throws FSMException {
+    public void perform(final Transition transition) {
         if (on) {
             try {
-                performOff(context);
+                performOff(transition);
             } finally {
                 on = false;
             }
         } else { // off;
             try {
-                performOn(context);
+                performOn(transition);
             } finally {
                 on = true;
             }
@@ -111,21 +80,17 @@ public abstract class SwitchTask extends AbstractTask {
     /**
      * Performs for switched on.
      *
-     * @param context transition context
-     * @throws FSMException if an error occurs.
+     * @param transition transition
      */
-    protected abstract void performOn(final TransitionContext context)
-        throws FSMException;
+    protected abstract void performOn(final Transition transition);
 
 
     /**
      * Performs for switched off.
      *
-     * @param context transition context
-     * @throws FSMException if an error occurs.
+     * @param trasition transition
      */
-    protected abstract void performOff(final TransitionContext context)
-        throws FSMException;
+    protected abstract void performOff(final Transition trasition);
 
 
     /** matchers for switching off. */
@@ -134,4 +99,7 @@ public abstract class SwitchTask extends AbstractTask {
 
     /** on flag. */
     private volatile boolean on = false;
+
+
 }
+

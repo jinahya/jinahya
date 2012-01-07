@@ -47,7 +47,7 @@ public class ClassResourceLoader implements ResourceLoader {
     }
 
 
-    @Override
+    //@Override
     public InputStream loadResource(final String name)
         throws IOException, FSMException {
 
