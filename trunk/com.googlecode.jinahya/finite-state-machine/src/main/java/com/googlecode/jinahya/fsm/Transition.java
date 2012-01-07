@@ -200,6 +200,12 @@ public class Transition {
     }
 
 
+    /**
+     * Returns property value mapped to given <code>name</code>.
+     *
+     * @param name property name
+     * @return property value
+     */
     public final Object getProperty(final String name) {
 
         if (name == null) {
@@ -212,6 +218,13 @@ public class Transition {
     }
 
 
+    /**
+     * Sets property value mapped to given <code>name</code>.
+     *
+     * @param name property name
+     * @param value property value
+     * @return previous property value mapped to given <code>name</code>.
+     */
     public final Object setProperty(final String name, final Object value) {
 
         if (name == null) {

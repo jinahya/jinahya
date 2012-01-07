@@ -23,11 +23,11 @@ package com.googlecode.jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class AbstractState extends DefaultState {
+public abstract class AbstractState implements State {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = 470745634324513099L;
+    private static final long serialVersionUID = 1617832714763742755L;
 
 
     /**
@@ -37,12 +37,83 @@ public abstract class AbstractState extends DefaultState {
      * @param name state name
      */
     public AbstractState(final int code, final String name) {
-        super(code, name);
+        super();
 
-        if (code < 0) {
-            throw new IllegalArgumentException("negative code");
+        if (name == null) {
+            throw new NullPointerException("null name");
         }
+
+        if (name.trim().length() == 0) {
+            throw new IllegalArgumentException("empty name");
+        }
+
+        this.code = code;
+        this.name = name;
     }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof State)) { // (null instanceof XXX) -> false
+            return false;
+        }
+
+        final State casted = (State) obj;
+
+        if (code != casted.code()) {
+            return false;
+        }
+
+        if (!name.equals(casted.name())) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int result = 17;
+
+        result = 37 * result + code;
+
+        result = 37 * result + name.hashCode();
+
+        return result;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString() + "?code=" + code + "&name=" + name;
+    }
+
+
+    @Override
+    public final int code() {
+        return code;
+    }
+
+
+    @Override
+    public final String name() {
+        return name;
+    }
+
+
+    /** task code. */
+    private final int code;
+
+
+    /** task name. */
+    private final String name;
 
 
 }

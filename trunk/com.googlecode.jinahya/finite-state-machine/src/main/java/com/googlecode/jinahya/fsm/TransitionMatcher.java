@@ -26,9 +26,7 @@ package com.googlecode.jinahya.fsm;
 public interface TransitionMatcher {
 
 
-    /**
-     * A TransitionMatcher simply matches.
-     */
+    /** A matcher simply matches. */
     public static final TransitionMatcher YES = new TransitionMatcher() {
 
 
@@ -46,9 +44,7 @@ public interface TransitionMatcher {
     };
 
 
-    /**
-     * A TransitionMatcher simply doesn't match.
-     */
+    /** A matcher simply doesn't match. */
     public static final TransitionMatcher NO = new TransitionMatcher() {
 
 
@@ -67,9 +63,7 @@ public interface TransitionMatcher {
 
 
     /**
-     * Matches given <code>transition</code>. A
-     * <code>NullPointerException</code> will be thrown if specified
-     * <code>transition</code> is null.
+     * Matches given <code>transition</code>.
      *
      * @param transition the transition to match
      * @return true if matches; false otherwise
