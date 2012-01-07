@@ -47,14 +47,15 @@ public final class TaskLoader {
 
 
     /**
-     * 
+     * Loads tasks.
+     *
      * @param contextPath package paths
      * @param resourceLoader resource loader
      * @param classLoader class loader
-     * @return a map of id and tasks.
+     * @return a list of task instance.
      * @throws FSMException if an error occurs.
      */
-    public static Task[] loadTasks(
+    public static List<Task> loadTasks(
         final String contextPath, final ResourceLoader resourceLoader,
         final ClassLoader classLoader)
         throws FSMException {
@@ -139,14 +140,13 @@ public final class TaskLoader {
             }
         }
 
-        final Task[] tasks = new Task[taskClasses.size()];
-        for (int i = 0; i < tasks.length; i++) {
-            final Class<?> taskClass = taskClasses.get(i);
+        final List<Task> tasks = new ArrayList<Task>(taskClasses.size());
+        for (Class<?> taskClass : taskClasses) {
             try {
                 final Constructor<?> constructor =
-                    taskClasses.get(i).getConstructor((Class[]) null);
+                    taskClass.getConstructor((Class[]) null);
                 try {
-                    tasks[i] = (Task) constructor.newInstance((Object[]) null);
+                    tasks.add((Task) constructor.newInstance((Object[]) null));
                 } catch (InstantiationException ie) {
                     throw new FSMException(
                         "failed to create a new instance of " + taskClass, ie);
