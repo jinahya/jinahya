@@ -78,7 +78,9 @@ public abstract class Machine {
         }
 
         if (finished) {
-            throw new FSMException("already finished");
+            if (!state.equals(State.INVALID)) {
+                throw new FSMException("already finished");
+            }
         }
 
         final Transition transition = new Transition(this.state, state);
@@ -104,6 +106,10 @@ public abstract class Machine {
         }
 
         this.state = state;
+
+        if (finished) {
+            setState(State.INVALID);
+        }
     }
 
 

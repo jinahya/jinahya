@@ -32,13 +32,27 @@ public interface State extends Serializable {
     /**
      * The unknown state.
      */
-    public static final State UNKNOWN = new DefaultState(-1, "UNKNOWN");
+    public static final State UNKNOWN = new AbstractState(-1, "UNKNOWN") {
+
+
+        /** GENERATED. */
+        private static final long serialVersionUID = -7766829699556888699L;
+
+
+    };
 
 
     /**
      * The invalid state.
      */
-    public static final State INVALID = new DefaultState(-2, "INVALID");
+    public static final State INVALID = new AbstractState(-2, "INVALID") {
+
+
+        /** GENERATED. */
+        private static final long serialVersionUID = -7766829699556888699L;
+
+
+    };
 
 
     /**
