@@ -33,7 +33,7 @@ public abstract class SwitchTask extends AbstractTask {
      * @param offMatchers matchers for switching off; none null; none empty
      */
     public SwitchTask(final TransitionMatcher[] onMatchers,
-                      final TransitionMatcher[] offMatchers) {
+                      final TransitionMatcher... offMatchers) {
 
         super(onMatchers);
 
