@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>finite-state-machine</artifactId>
-  <version>1.0-alpha-21</version>
+  <version>1.0-alpha-22-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -191,9 +191,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/finite-state-machine-1.0-alpha-21</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/finite-state-machine-1.0-alpha-21</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/finite-state-machine-1.0-alpha-21</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/finite-state-machine</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/finite-state-machine</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/finite-state-machine</url>
   </scm>
   <prerequisites />
   <repositories>
