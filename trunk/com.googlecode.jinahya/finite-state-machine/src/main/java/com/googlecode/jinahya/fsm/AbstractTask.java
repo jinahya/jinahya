@@ -23,17 +23,17 @@ package com.googlecode.jinahya.fsm;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class AbstractTask extends Task {
+public abstract class AbstractTask implements Task {
 
 
     /**
      * Creates a new instance.
      *
-     * @param id task id
      * @param matchers transition matchers
      */
-    public AbstractTask(final String id, final TransitionMatcher... matchers) {
-        super(id);
+    public AbstractTask(final TransitionMatcher... matchers) {
+
+        super();
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");

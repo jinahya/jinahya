@@ -19,7 +19,10 @@ package com.googlecode.jinahya.fsm;
 
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,18 +36,11 @@ public class Transition {
     /**
      * Creates a new instance.
      *
-     * @param machine the machine that this transition occurred.
      * @param source source state
      * @param target target state
      */
-    public Transition(final Machine machine, final State source,
-                      final State target) {
-
+    public Transition(final State source, final State target) {
         super();
-
-        if (machine == null) {
-            throw new NullPointerException("null machine");
-        }
 
         if (source == null) {
             throw new NullPointerException("null source");
@@ -58,19 +54,8 @@ public class Transition {
             throw new IllegalArgumentException("source is equlas to target");
         }
 
-        this.machine = machine;
         this.source = source;
         this.target = target;
-    }
-
-
-    /**
-     * Returns machine.
-     *
-     * @return machine.
-     */
-    public final Machine getMachine() {
-        return machine;
     }
 
 
@@ -107,10 +92,6 @@ public class Transition {
 
         final Transition casted = (Transition) obj;
 
-        if (!machine.equals(casted.getMachine())) {
-            return false;
-        }
-
         if (!source.equals(casted.getSource())) {
             return false;
         }
@@ -128,8 +109,6 @@ public class Transition {
 
         int hashCode = 17;
 
-        hashCode = 37 * hashCode + machine.hashCode();
-
         hashCode = 37 * hashCode + source.hashCode();
 
         hashCode = 37 * hashCode + target.hashCode();
@@ -140,8 +119,8 @@ public class Transition {
 
     @Override
     public String toString() {
-        return super.toString() + "?machine=(" + machine + ")&source=(" + source
-               + ")&target=(" + target + ")";
+        return super.toString()
+               + "?source=(" + source + ")&target=(" + target + ")";
     }
 
 
@@ -151,7 +130,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches any; false otherwise
      */
-    public final boolean matchesAny(final TransitionMatcher... matchers) {
+    public final boolean matchesAny(final TransitionMatcher[] matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -189,7 +168,7 @@ public class Transition {
      * @param matchers matchers
      * @return true if matches all; false otherwise
      */
-    public final boolean matchesAll(final TransitionMatcher... matchers) {
+    public final boolean matchesAll(final TransitionMatcher[] matchers) {
 
         if (matchers == null) {
             throw new NullPointerException("null matchers");
@@ -221,8 +200,28 @@ public class Transition {
     }
 
 
-    /** machine. */
-    private final Machine machine;
+    public final Object getProperty(final String name) {
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+
+        synchronized (properties) {
+            return properties.get(name);
+        }
+    }
+
+
+    public final Object setProperty(final String name, final Object value) {
+
+        if (name == null) {
+            throw new NullPointerException("null name");
+        }
+
+        synchronized (properties) {
+            return properties.put(name, value);
+        }
+    }
 
 
     /** old state. */
@@ -231,6 +230,11 @@ public class Transition {
 
     /** new state. */
     private final State target;
+
+
+    /** properties. */
+    private final Map<String, Object> properties =
+        Collections.synchronizedMap(new HashMap<String, Object>());
 
 
 }

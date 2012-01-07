@@ -18,14 +18,8 @@
 package com.googlecode.jinahya.fsm;
 
 
-import com.googlecode.jinahya.util.DependencyResolver;
-
-
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 
 /**
@@ -41,14 +35,18 @@ public abstract class Machine {
      *
      * @param tasks tasks
      */
-    public Machine(final Map<String, Task> tasks) {
+    public Machine(final List<Task> tasks) {
         super();
 
         if (tasks == null) {
             throw new NullPointerException("null tasks");
         }
 
-        this.tasks = Collections.unmodifiableMap(tasks);
+        if (tasks.isEmpty()) {
+            throw new NullPointerException("empty tasks");
+        }
+
+        this.tasks = Collections.unmodifiableList(tasks);
     }
 
 
@@ -83,7 +81,7 @@ public abstract class Machine {
             throw new FSMException("already finished");
         }
 
-        final Transition transition = new Transition(this, this.state, state);
+        final Transition transition = new Transition(this.state, state);
 
         if (!isAllowed(transition)) {
             throw new FSMException("not allowed: " + transition);
@@ -97,34 +95,8 @@ public abstract class Machine {
             }
         }
 
-        final StringBuffer buffer = new StringBuffer();
-        final DependencyResolver<String> resolver =
-            new DependencyResolver<String>();
-        final TransitionContext context = TransitionContextFactory.newInstance(
-            transition, buffer, resolver);
-
-        // prepare
-        for (Entry<String, Task> entry : tasks.entrySet()) {
-            if (entry.getValue().matches(transition)) {
-                resolver.add(entry.getKey(), (String) null);
-            }
-        }
-
-        // prepare
-        for (Entry<String, Task> entry : tasks.entrySet()) {
-            buffer.delete(0, buffer.length());
-            buffer.append(entry.getKey());
-            entry.getValue().prepare((PreparationContext) context);
-        }
-        buffer.delete(0, buffer.length());
-
-        // perform
-        for (List<String> idGroup : resolver.getVerticalGroups()) {
-            final Task[] taskGroup = new Task[idGroup.size()];
-            for (int i = 0; i < taskGroup.length; i++) {
-                taskGroup[i] = tasks.get(idGroup.get(i));
-            }
-            perform(context, taskGroup);
+        for (Task task : tasks) {
+            task.perform(transition);
         }
 
         if (isFinishing(transition)) {
@@ -132,62 +104,6 @@ public abstract class Machine {
         }
 
         this.state = state;
-    }
-
-
-    /**
-     * Performs each of given <code>tasks</code> with specified
-     * <code>context</code>. Each task can be performed concurrently. This
-     * method must guarantee that all tasks are performed before return.
-     *
-     * @param context transition context
-     * @param tasks tasks
-     * @throws FSMException if an error occurs.
-     */
-    protected void perform(final TransitionContext context, Task... tasks)
-        throws FSMException {
-
-        for (Task task : tasks) {
-            task.perform(context);
-        }
-    }
-
-
-    /**
-     * Returns the property value mapped to given <code>name</code>.
-     *
-     * @param name property name
-     * @return property value; may be null if the value itself is null or there
-     *         is no value mapped to given <code>name</code>.
-     */
-    public final Object getProperty(final String name) {
-
-        if (name == null) {
-            throw new NullPointerException("null name");
-        }
-
-        return properties.get(name);
-    }
-
-
-    /**
-     * Sets a property.
-     *
-     * @param name property name
-     * @param value property value
-     * @return previously mapped value
-     */
-    public final Object setProperty(final String name, final Object value) {
-
-        if (name == null) {
-            throw new NullPointerException("null name");
-        }
-
-        if (value == null) {
-            return properties.remove(name);
-        } else {
-            return properties.put(name, value);
-        }
     }
 
 
@@ -228,7 +144,7 @@ public abstract class Machine {
 
 
     /** tasks. */
-    private final transient Map<String, Task> tasks;
+    private final transient List<Task> tasks;
 
 
     /** flag for started. */
@@ -241,11 +157,6 @@ public abstract class Machine {
 
     /** current state. */
     private volatile State state = State.UNKNOWN;
-
-
-    /** properties. */
-    private final Map<String, Object> properties =
-        Collections.synchronizedMap(new HashMap<String, Object>());
 
 
 }
