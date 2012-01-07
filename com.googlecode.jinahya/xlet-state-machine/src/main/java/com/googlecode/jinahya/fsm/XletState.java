@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
 /**
@@ -27,7 +27,7 @@ public final class XletState extends AbstractState {
 
 
     /** GENERATED. */
-    private static final long serialVersionUID = -8883596593544696325L;
+    private static final long serialVersionUID = -8985695749665467906L;
 
 
     /**
@@ -66,4 +66,7 @@ public final class XletState extends AbstractState {
     private XletState(final int code, final String name) {
         super(code, name);
     }
+
+
 }
+

@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
 import java.util.Arrays;
@@ -41,6 +41,8 @@ public final class XletTransitionMatcher {
             return transition.getSource().equals(State.UNKNOWN)
                    && transition.getTarget().equals(XletState.LOADED);
         }
+
+
     };
 
 
@@ -55,6 +57,8 @@ public final class XletTransitionMatcher {
             return transition.getSource().equals(XletState.LOADED)
                    && transition.getTarget().equals(XletState.PAUSED);
         }
+
+
     };
 
 
@@ -69,6 +73,8 @@ public final class XletTransitionMatcher {
             return (transition.getSource().equals(XletState.PAUSED)
                     && transition.getTarget().equals(XletState.ACTIVE));
         }
+
+
     };
 
 
@@ -83,6 +89,8 @@ public final class XletTransitionMatcher {
             return (transition.getSource().equals(XletState.ACTIVE)
                     && transition.getTarget().equals(XletState.PAUSED));
         }
+
+
     };
 
 
@@ -100,6 +108,8 @@ public final class XletTransitionMatcher {
                          || transition.getSource().equals(XletState.ACTIVE))
                         && transition.getTarget().equals(XletState.DESTROYED));
             }
+
+
         };
 
 
@@ -115,4 +125,7 @@ public final class XletTransitionMatcher {
     private XletTransitionMatcher() {
         super();
     }
+
+
 }
+

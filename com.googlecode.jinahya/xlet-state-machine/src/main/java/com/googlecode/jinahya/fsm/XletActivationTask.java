@@ -15,26 +15,24 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
 /**
- * A task switches on <code>startXlet</code> and switches off on
- * <code>pauseXlet</code> or <code>destroyXlet</code>.
+ * A task performs on <code>startXlet</code>.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public abstract class XletActivationSwitchTask extends SwitchTask {
+public abstract class XletActivationTask extends AbstractTask {
 
 
     /**
      * Creates a new instance.
-     *
-     * @param id task id
      */
-    public XletActivationSwitchTask(final String id) {
-        super(id, new TransitionMatcher[]{XletTransitionMatcher.START_XLET},
-              new TransitionMatcher[]{XletTransitionMatcher.PAUSE_XLET,
-                                      XletTransitionMatcher.DESTROY_XLET});
+    public XletActivationTask() {
+        super(XletTransitionMatcher.START_XLET);
     }
+
+
 }
+

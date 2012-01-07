@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
 /**
@@ -29,11 +29,9 @@ public abstract class XletInitializationSwitchTask extends SwitchTask {
 
     /**
      * Creates a new instance.
-     *
-     * @param id task id
      */
-    public XletInitializationSwitchTask(final String id) {
-        super(id, new TransitionMatcher[]{XletTransitionMatcher.INIT_XLET},
+    public XletInitializationSwitchTask() {
+        super(new TransitionMatcher[]{XletTransitionMatcher.INIT_XLET},
               new TransitionMatcher[]{XletTransitionMatcher.DESTROY_XLET});
     }
 }

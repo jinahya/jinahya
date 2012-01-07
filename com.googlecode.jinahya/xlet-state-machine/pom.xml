@@ -33,7 +33,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>finite-state-machine</artifactId>
-        <version>1.0-alpha-19</version>
+        <version>1.0-alpha-22</version>
       </dependency>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
@@ -213,9 +213,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xlet-state-machine/trunk</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xlet-state-machine/trunk</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/xlet-state-machine/trunk/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xlet-state-machine</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/xlet-state-machine</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/xlet-state-machine</url>
   </scm>
   <prerequisites />
   <repositories>
