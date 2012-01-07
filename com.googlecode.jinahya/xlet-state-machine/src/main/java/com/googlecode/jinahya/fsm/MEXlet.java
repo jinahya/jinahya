@@ -19,6 +19,7 @@ package com.googlecode.jinahya.fsm;
 
 
 import java.util.List;
+
 import javax.microedition.xlet.Xlet;
 import javax.microedition.xlet.XletContext;
 import javax.microedition.xlet.XletStateChangeException;
@@ -38,7 +39,6 @@ public abstract class MEXlet implements Xlet {
      * @param tasks tasks
      */
     public MEXlet(final List<Task> tasks) {
-
         super();
 
         machine = new XletMachine(tasks);
