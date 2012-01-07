@@ -42,10 +42,6 @@ public abstract class Machine {
             throw new NullPointerException("null tasks");
         }
 
-        if (tasks.isEmpty()) {
-            throw new NullPointerException("empty tasks");
-        }
-
         this.tasks = Collections.unmodifiableList(tasks);
     }
 
