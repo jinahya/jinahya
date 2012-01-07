@@ -15,16 +15,17 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
+import java.util.List;
 import javax.microedition.xlet.Xlet;
 import javax.microedition.xlet.XletContext;
 import javax.microedition.xlet.XletStateChangeException;
 
 
 /**
- * Xlet for Micro Edition.
+ * Xlet for ME.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -34,31 +35,13 @@ public abstract class MEXlet implements Xlet {
     /**
      * Creates a new instance.
      *
-     * @param taskContext task context
+     * @param tasks tasks
      */
-    public MEXlet(final TaskContext taskContext) {
-        this(new XletMachine(taskContext));
-    }
+    public MEXlet(final List<Task> tasks) {
 
-
-    /**
-     * Creates a new instance.
-     *
-     * @param machine machine
-     */
-    public MEXlet(final XletMachine machine) {
         super();
 
-        if (machine == null) {
-            throw new NullPointerException("null machine");
-        }
-
-        if (!machine.getState().equals(State.UNKNOWN)) {
-            throw new IllegalArgumentException(
-                "machine's state is not " + State.UNKNOWN);
-        }
-
-        this.machine = machine;
+        machine = new XletMachine(tasks);
     }
 
 

@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
 
 /**
@@ -28,10 +28,11 @@ public abstract class XletInitializationTask extends AbstractTask {
 
     /**
      * Creates a new instance.
-     *
-     * @param id task id
      */
-    public XletInitializationTask(final String id) {
-        super(id, XletTransitionMatcher.INIT_XLET);
+    public XletInitializationTask() {
+        super(XletTransitionMatcher.INIT_XLET);
     }
+
+
 }
+

@@ -15,7 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
+
+
+import java.util.List;
+
 
 
 /**
@@ -29,10 +33,10 @@ public class XletMachine extends Machine {
     /**
      * Creates a new instance.
      *
-     * @param taskContext task context
+     * @param tasks tasks
      */
-    public XletMachine(final TaskContext taskContext) {
-        super(taskContext);
+    public XletMachine(final List<Task> tasks) {
+        super(tasks);
     }
 
 

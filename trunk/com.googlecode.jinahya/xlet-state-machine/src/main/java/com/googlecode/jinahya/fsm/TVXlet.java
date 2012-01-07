@@ -15,8 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.util.fsm;
+package com.googlecode.jinahya.fsm;
 
+
+import java.util.List;
 
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
@@ -34,31 +36,13 @@ public abstract class TVXlet implements Xlet {
     /**
      * Creates a new instance.
      *
-     * @param taskContext task context
+     * @param tasks tasks
      */
-    public TVXlet(final TaskContext taskContext) {
-        this(new XletMachine(taskContext));
-    }
+    public TVXlet(final List<Task> tasks) {
 
-
-    /**
-     * Creates a new instance.
-     *
-     * @param machine machine
-     */
-    public TVXlet(final XletMachine machine) {
         super();
 
-        if (machine == null) {
-            throw new NullPointerException("null machine");
-        }
-
-        if (!machine.getState().equals(State.UNKNOWN)) {
-            throw new IllegalArgumentException(
-                "machine's state is not " + State.UNKNOWN);
-        }
-
-        this.machine = machine;
+        machine = new XletMachine(tasks);
     }
 
 
@@ -148,4 +132,7 @@ public abstract class TVXlet implements Xlet {
 
     /** xlet context. */
     private volatile XletContext xletContext;
+
+
 }
+
