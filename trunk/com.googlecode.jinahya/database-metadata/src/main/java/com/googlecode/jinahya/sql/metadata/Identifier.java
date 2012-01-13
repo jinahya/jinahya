@@ -31,8 +31,9 @@ public class Identifier extends ChildEntrySet<Table> {
 
 
     /**
-     * 
-     * @param databaseMetaData database metadata
+     * Retrieves identifiers for given <code>table</code>.
+     *
+     * @param databaseMetaData database meta data
      * @param table table
      * @throws SQLException if a database access error occurs.
      */
