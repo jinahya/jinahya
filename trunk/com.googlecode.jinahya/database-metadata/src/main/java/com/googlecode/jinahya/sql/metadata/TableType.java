@@ -32,9 +32,9 @@ public class TableType extends EntrySet {
 
 
     /**
-     * Retrieved table types.
+     * Retrieves table types.
      *
-     * @param databaseMetaData database metadata
+     * @param databaseMetaData database meta data
      * @param metadata metadata
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getTables(String, String, String, String[])
@@ -62,7 +62,8 @@ public class TableType extends EntrySet {
 
 
     /**
-     * Returns the value of <code>TABLE_TYPE</code> entry.
+     * Returns the value of
+     * <code>TABLE_TYPE</code> entry.
      *
      * @return TABLE_TYPE
      */
@@ -72,7 +73,8 @@ public class TableType extends EntrySet {
 
 
     /**
-     * Sets the value of 'TABLE_TYPE' entry.
+     * Sets the value of
+     * <code>TABLE_TYPE</code> entry.
      *
      * @param TABLE_TYPE TABLE_TYPE
      */
