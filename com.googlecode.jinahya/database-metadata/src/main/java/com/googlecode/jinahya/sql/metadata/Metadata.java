@@ -177,7 +177,7 @@ public class Metadata {
 
 
     /**
-     * Prints database meta data with given arguments.
+     * Binds database meta data with given arguments.
      *
      * @param driver driver class name
      * @param url database connection URL
@@ -261,9 +261,9 @@ public class Metadata {
     /**
      * Creates a new instance.
      *
-     * @param databaseMetaData database metadata
+     * @param databaseMetaData database meta data
      * @param excludes method names to excludes
-     * @return a new instance of Metadata
+     * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
     public static Metadata newInstance(final DatabaseMetaData databaseMetaData,

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
+class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
 
 
     @Override

@@ -31,7 +31,8 @@ public class VersionColumn extends ChildEntrySet<Table> {
 
 
     /**
-     * Retrieves all version columns for specified <code>table</code>.
+     * Retrieves all version columns for specified
+     * <code>table</code>.
      *
      * @param databaseMetaData database metadata
      * @param table table

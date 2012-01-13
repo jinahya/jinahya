@@ -19,12 +19,16 @@ package com.googlecode.jinahya.sql.metadata.sqlite;
 
 
 import com.googlecode.jinahya.sql.metadata.Metadata;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import java.util.Arrays;
+
 import javax.xml.bind.JAXBException;
+
 import org.testng.annotations.Test;
 
 

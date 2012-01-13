@@ -39,8 +39,9 @@ public abstract class EntrySet {
 
 
     /**
-     * Creates a new instance of <code>entrySetType</code> and reads information
-     * from specified <code>resultSet</code>.
+     * Creates a new instance of
+     * <code>entrySetType</code> and reads information from specified
+     * <code>resultSet</code>.
      *
      * @param <S> EntrySet type parameter
      * @param entrySetType EntrySet type
@@ -65,7 +66,8 @@ public abstract class EntrySet {
 
 
     /**
-     * Reads information from given <code>resultSet</code>.
+     * Reads information from given
+     * <code>resultSet</code>.
      *
      * @param resultSet result set
      * @throws SQLException if an SQL error occurs.
@@ -102,7 +104,8 @@ public abstract class EntrySet {
 
 
     /**
-     * Returns the value of an entry mapped to given <code>key</code>.
+     * Returns the value of an entry mapped to given
+     * <code>key</code>.
      *
      * @param key entry key
      * @return entry value
@@ -122,8 +125,8 @@ public abstract class EntrySet {
 
 
     /**
-     * Sets the value of an entry mapped to given <code>key</code>. A new entry
-     * will be created if there is not entry.
+     * Sets the value of an entry mapped to given
+     * <code>key</code>. A new entry will be created if there is not entry.
      *
      * @param key entry key
      * @param value entry value.
@@ -146,21 +149,36 @@ public abstract class EntrySet {
     }
 
 
+    /**
+     * Returns metadata.
+     *
+     * @return metadata
+     */
     final Metadata getMetadata() {
         return metadata;
     }
 
 
+    /**
+     * Sets metadata.
+     *
+     * @param metadata metadata
+     */
     void setMetadata(final Metadata metadata) {
         this.metadata = metadata;
     }
 
 
-    /** entries. */
+    /**
+     * entries.
+     */
     @XmlJavaTypeAdapter(EntriesAdapter.class)
     private Map<String, Entry> entries;
 
 
+    /**
+     * metadata.
+     */
     @XmlTransient
     private Metadata metadata;
 

@@ -40,7 +40,8 @@ public class UserDataType extends ChildEntrySet<Catalog> {
 
 
     /**
-     * Retrieves all UDTs mapped to given <code>catalog</code>.
+     * Retrieves all UDTs mapped to given
+     * <code>catalog</code>.
      *
      * @param databaseMetaData meta
      * @param catalog catalog
