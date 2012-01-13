@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import java.util.Collections;
 
 import javax.xml.bind.JAXBException;
@@ -42,14 +43,14 @@ public class DerbyMemoryTest extends DerbyTest {
      * Database connection URL for memory.
      */
     protected static final String MEMORY_DATABASE_URL =
-        "jdbc:derby:memory:memory;create=true";
+        "jdbc:derby:memory:memory";
 
 
     @Test
     public void printMetadata() throws SQLException, JAXBException {
 
         final Connection connection =
-            DriverManager.getConnection(MEMORY_DATABASE_URL);
+            DriverManager.getConnection(MEMORY_DATABASE_URL + ";create=true");
         try {
             final DatabaseMetaData databaseMetaData = connection.getMetaData();
 
@@ -58,20 +59,19 @@ public class DerbyMemoryTest extends DerbyTest {
 
             Metadata.print(metadata, System.out);
             System.out.println();
-
-            try {
-                DriverManager.getConnection(
-                    "jdbc:derby:memory:memory;drop=true");
-            } catch (SQLException sqle) {
-                final String state = sqle.getSQLState();
-                if ("08006".equals(state)) {
-                    return;
-                }
-                throw sqle;
-            }
-
         } finally {
             connection.close();
+        }
+
+        try {
+            DriverManager.getConnection(
+                MEMORY_DATABASE_URL + ";drop=true");
+        } catch (SQLException sqle) {
+            final String state = sqle.getSQLState();
+            if ("08006".equals(state)) {
+                return;
+            }
+            throw sqle;
         }
     }
 

@@ -157,7 +157,6 @@
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
-            <descriptorRef>project</descriptorRef>
           </descriptorRefs>
           <archive>
             <manifest>

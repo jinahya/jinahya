@@ -33,7 +33,7 @@ public class DerbyTest {
      * 
      * @return 
      */
-    protected static final OutputStream emptyErrorMethod() {
+    protected static OutputStream emptyErrorMethod() {
 
         return new OutputStream() {
 
@@ -49,7 +49,7 @@ public class DerbyTest {
 
     static {
         System.setProperty("derby.stream.error.method",
-                           DerbyTest.class.getName() + ".disableDerbyLogFile");
+                           DerbyTest.class.getName() + ".emptyErrorMethod");
     }
 
 
