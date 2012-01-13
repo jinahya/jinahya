@@ -25,6 +25,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Random;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 import org.testng.Assert;
@@ -35,17 +39,17 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RealmUserTest {
+public class UserTest {
 
 
     private static final Random RANDOM = new Random();
 
 
-    private static String getPassword(final RealmUser user)
+    private static String getPassword(final UserTest user)
         throws NoSuchFieldException, IllegalAccessException {
 
         final Field passwordField =
-            RealmUser.class.getDeclaredField("password");
+            UserTest.class.getDeclaredField("password");
         if (!passwordField.isAccessible()) {
             passwordField.setAccessible(true);
         }
@@ -53,11 +57,11 @@ public class RealmUserTest {
     }
 
 
-    private static void setPassword(final RealmUser user, final String password)
+    private static void setPassword(final UserTest user, final String password)
         throws NoSuchFieldException, IllegalAccessException {
 
         final Field passwordField =
-            RealmUser.class.getDeclaredField("password");
+            UserTest.class.getDeclaredField("password");
         if (!passwordField.isAccessible()) {
             passwordField.setAccessible(true);
         }
@@ -70,7 +74,7 @@ public class RealmUserTest {
                                          final String expected)
         throws NoSuchAlgorithmException {
 
-        final String actual = RealmUser.hashPassword(passwordInPlainText);
+        final String actual = User.hash(passwordInPlainText);
 
         Assert.assertEquals(actual, expected);
     }
@@ -89,57 +93,21 @@ public class RealmUserTest {
     @Test
     public void testGetUsername() {
 
-        final RealmUser user = new RealmUser();
+        final User user = new User();
 
-        user.getUserName();
+        user.getName();
     }
 
 
     @Test
     public void testSetUsername() {
 
-        final RealmUser user = new RealmUser();
-
-        try {
-            user.setUserName(null);
-            Assert.fail("passed: setUserName(null)");
-        } catch (NullPointerException npe) {
-            // expected
-        }
-
-        try {
-            user.setUserName("");
-            Assert.fail("passed: setUserName(\"\")");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        final User user = new User();
 
         final String expected = RandomStringUtils.randomAscii(128);
-        user.setUserName(expected);
+        user.setName(expected);
 
-        final String actual = user.getUserName();
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test
-    public void testIsEnabled() {
-
-        final RealmUser user = new RealmUser();
-
-        Assert.assertFalse(user.isEnabled());
-    }
-
-
-    @Test
-    public void testSetEnabled() {
-
-        final RealmUser user = new RealmUser();
-
-        final boolean expected = RANDOM.nextBoolean();
-        user.setEnabled(expected);
-
-        final boolean actual = user.isEnabled();
+        final String actual = user.getName();
         Assert.assertEquals(actual, expected);
     }
 
@@ -147,11 +115,41 @@ public class RealmUserTest {
     @Test
     public void testGetRoles() {
 
-        final RealmUser user = new RealmUser();
+        final User user = new User();
 
-        final Collection<RealmRole> roles = user.getRoles();
+        final Collection<Role> roles = user.getRoles();
 
         Assert.assertNotNull(roles);
         Assert.assertTrue(roles.isEmpty());
     }
+
+
+    @Test
+    public void testXml() throws JAXBException {
+
+        final Service service = new Service();
+        service.setName("service");
+
+        final Role role = new Role();
+        role.setName("role");
+
+        service.getRoles().add(role);
+
+        final User user = new User();
+        user.setName("user");
+
+        user.getRoles().add(role);
+
+        final JAXBContext context =
+            JAXBContext.newInstance(JAXBTest.class.getPackage().getName());
+
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        marshaller.marshal(user, System.out);
+        System.out.flush();
+    }
+
+
 }
+

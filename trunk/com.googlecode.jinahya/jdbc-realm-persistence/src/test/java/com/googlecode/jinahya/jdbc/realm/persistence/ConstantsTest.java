@@ -21,7 +21,9 @@ package com.googlecode.jinahya.jdbc.realm.persistence;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
+
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
@@ -36,14 +38,14 @@ public class ConstantsTest {
 
 
     @Test
-    public static void testJAXB_CONTEXT() {
+    public static JAXBContext getJAXBContext() throws JAXBException {
 
-        final JAXBContext context = Constants.JAXB_CONTEXT;
+        return JAXBContext.newInstance(JAXBTest.class.getPackage().getName());
     }
 
 
     @Test
-    public static void testGenerateSchema() throws IOException {
+    public static void testGenerateSchema() throws JAXBException, IOException {
 
         final Result output = new StreamResult(System.out) {
 
@@ -52,6 +54,8 @@ public class ConstantsTest {
             public String getSystemId() {
                 return "jdbc-realm-persistence.xsd";
             }
+
+
         };
 
         final SchemaOutputResolver outputResolver = new SchemaOutputResolver() {
@@ -64,9 +68,14 @@ public class ConstantsTest {
 
                 return output;
             }
+
+
         };
 
 
-        Constants.JAXB_CONTEXT.generateSchema(outputResolver);
+        getJAXBContext().generateSchema(outputResolver);
     }
+
+
 }
+
