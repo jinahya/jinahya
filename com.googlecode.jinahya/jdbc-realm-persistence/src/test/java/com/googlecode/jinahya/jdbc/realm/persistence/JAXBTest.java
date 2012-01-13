@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
@@ -36,7 +37,8 @@ import org.testng.annotations.Test;
 public class JAXBTest {
 
 
-    private static JAXBContext getContext() throws JAXBException {
+    @Test
+    static JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(
             JAXBTest.class.getPackage().getName());
     }
@@ -52,6 +54,8 @@ public class JAXBTest {
             public String getSystemId() {
                 return "jdbc-realm-persistence.xsd";
             }
+
+
         };
 
         final SchemaOutputResolver outputResolver = new SchemaOutputResolver() {
@@ -64,9 +68,17 @@ public class JAXBTest {
 
                 return output;
             }
+
+
         };
 
 
         getContext().generateSchema(outputResolver);
     }
+
+
+
+
+
 }
+

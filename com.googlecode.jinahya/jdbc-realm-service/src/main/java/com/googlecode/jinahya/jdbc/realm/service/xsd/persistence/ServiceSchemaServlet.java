@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.jdbc.realm.service.xsd.persistence;
 
 
-import com.googlecode.jinahya.jdbc.realm.persistence.RealmService;
+import com.googlecode.jinahya.jdbc.realm.persistence.Service;
 
 import java.io.IOException;
 
@@ -51,7 +51,7 @@ public class ServiceSchemaServlet extends HttpServlet {
 
         try {
             final JAXBContext context =
-                JAXBContext.newInstance(RealmService.class);
+                JAXBContext.newInstance(Service.class);
 
             final Result output = new StreamResult(resp.getOutputStream());
             output.setSystemId(req.getRequestURL().toString());

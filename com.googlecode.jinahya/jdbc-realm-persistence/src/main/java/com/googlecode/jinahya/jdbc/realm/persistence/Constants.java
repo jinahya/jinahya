@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
+
 package com.googlecode.jinahya.jdbc.realm.persistence;
+
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class Constants {
+final class Constants {
+
 
     /**
      * Target XML namesapce name.
@@ -31,10 +35,12 @@ public final class Constants {
     public static final String TARGET_NAMESPACE =
         "http://jinahya.googlecode.com/jdbc/realm/persistence";
 
+
     /**
      * The JAXBContext.
      */
     public static final JAXBContext JAXB_CONTEXT;
+
 
     static {
         try {
@@ -45,10 +51,14 @@ public final class Constants {
         }
     }
 
+
     /**
      * Creates a new instance.
      */
     private Constants() {
         super();
     }
+
+
 }
+

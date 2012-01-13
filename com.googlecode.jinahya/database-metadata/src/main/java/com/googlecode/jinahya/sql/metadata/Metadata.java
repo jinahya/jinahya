@@ -62,6 +62,7 @@ public class Metadata {
     private static class ConnectionOption {
 
 
+        /*
         public String getDriver() {
             return driver;
         }
@@ -110,6 +111,7 @@ public class Metadata {
 
             return excludes;
         }
+        */
 
 
         /** the JDBC driver class name. */
@@ -135,7 +137,7 @@ public class Metadata {
 
         /** method names to exclude. */
         @Option(name = "-exclude", usage = "method name to exclude")
-        private List<String> excludes;
+        private final List<String> excludes = new ArrayList<String>();
 
 
     }
@@ -168,14 +170,14 @@ public class Metadata {
 
         final Metadata metadata = bind(
             option.driver, option.url, option.user, option.password,
-            option.getExcludes());
+            option.excludes);
 
         print(metadata, System.out);
     }
 
 
     /**
-     * Prints database metadata with given arguments.
+     * Prints database meta data with given arguments.
      *
      * @param driver driver class name
      * @param url database connection URL

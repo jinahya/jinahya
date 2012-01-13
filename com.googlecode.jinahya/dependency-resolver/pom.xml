@@ -273,8 +273,7 @@
             </executions>
           </plugin>
           <plugin>
-            <!--groupId>com.pyx4me</groupId-->
-            <groupId>com.github.wvengen</groupId>
+            <groupId>com.pyx4me</groupId>
             <artifactId>proguard-maven-plugin</artifactId>
             <executions>
               <execution>
@@ -291,19 +290,17 @@
                 <lib>${java.home}/lib/jsse.jar</lib>
               </libs>
               <options>
-                <option>-dontshrink</option>
-                <option>-dontoptimize</option>
-                <option>-dontobfuscate</option>
-                <option>-keep class *</option>
+                <option>-keep class *</option>                
+                <option>-keepclassmembers class * { *; }</option>
                 <option>-keepattributes Exceptions,InnerClasses,Deprecated,SourceFile,LineNumberTable,EnclosingMethod</option>
               </options>
-              <proguardVersion>4.4</proguardVersion>
+              <proguardVersion>4.7</proguardVersion>
             </configuration>
             <dependencies>
               <dependency>
                 <groupId>net.sf.proguard</groupId>
                 <artifactId>proguard</artifactId>
-                <version>4.4</version>
+                <version>4.7</version>
                 <scope>runtime</scope>
               </dependency>
             </dependencies>
