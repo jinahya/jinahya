@@ -27,31 +27,33 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class FunctionColumn extends ChildEntrySet<Catalog> {
+public class FunctionColumn extends ChildEntrySet<Function> {
 
 
     /**
-     * 
-     * @param databaseMetaData database metadata
-     * @param catalog catalog
+     *
+     * @param databaseMetaData database meta data
+     * @param function catalog
      * @throws SQLException if a database access error occurs.
      */
     static void getFunctionColumns(final DatabaseMetaData databaseMetaData,
-                                   final Catalog catalog)
+                                   final Function function)
         throws SQLException {
 
-        if (catalog.getMetadata().excludes.contains("getFunctionColumns")) {
+        if (function.getMetadata().excludes.contains("getFunctionColumns")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getFunctionColumns(
-            catalog.getValue("TABLE_CAT"), null, null, null);
+            function.getValue("FUNCTION_CAT"),
+            function.getValue("FUNCTION_SCHEM"),
+            function.getValue("FUNCTION_NAME"), null);
         try {
             while (resultSet.next()) {
                 final FunctionColumn functionColumn =
                     EntrySet.newInstance(FunctionColumn.class, resultSet);
-                functionColumn.setParent(catalog);
-                catalog.getFunctionColumns().add(functionColumn);
+                functionColumn.setParent(function);
+                function.getColumns().add(functionColumn);
             }
         } finally {
             resultSet.close();

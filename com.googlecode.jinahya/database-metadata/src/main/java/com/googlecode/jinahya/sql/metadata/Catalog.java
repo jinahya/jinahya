@@ -35,9 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "functionColumns", "functions",
-                      "procedureColumns", "procedures", "schemas",
-                      "tablePrivileges", "userDataTypes"})
+@XmlType(propOrder = {"entries", "schemas"})
 public class Catalog extends EntrySet {
 
 
@@ -53,6 +51,24 @@ public class Catalog extends EntrySet {
     }
 
 
+    private static void putNullInstance(final Metadata metadata) {
+
+        if (metadata == null) {
+            throw new NullPointerException("null metadata");
+        }
+
+        if (!metadata.getCatalogs().isEmpty()) {
+            throw new IllegalArgumentException(
+                "metadata.catalogs is not empty");
+        }
+
+        final Catalog catalog = new Catalog();
+        catalog.setValue("TABLE_CAT", null);
+        catalog.setMetadata(metadata);
+        metadata.getCatalogs().add(catalog);
+    }
+
+
     /**
      * Retrieves all categories.
      *
@@ -65,7 +81,7 @@ public class Catalog extends EntrySet {
         throws SQLException {
 
         if (metadata.excludes.contains("getCatalogs")) {
-            metadata.getCatalogs().add(Catalog.newNullInstance());
+            putNullInstance(metadata);
             return;
         }
 
@@ -79,19 +95,11 @@ public class Catalog extends EntrySet {
             }
 
             if (metadata.getCatalogs().isEmpty()) {
-                final Catalog catalog = Catalog.newNullInstance();
-                catalog.setMetadata(metadata);
-                metadata.getCatalogs().add(catalog);
+                putNullInstance(metadata);
             }
 
             for (Catalog catalog : metadata.getCatalogs()) {
-                Function.getFunctions(databaseMetaData, catalog);
-                FunctionColumn.getFunctionColumns(databaseMetaData, catalog);
-                Procedure.getProcedures(databaseMetaData, catalog);
-                ProcedureColumn.getProcedureColumns(databaseMetaData, catalog);
                 Schema.getSchemas(databaseMetaData, catalog);
-                TablePrivilege.getTablePrivileges(databaseMetaData, catalog);
-                UserDataType.getUserDataTypes(databaseMetaData, catalog);
             }
         } finally {
             resultSet.close();
@@ -131,91 +139,6 @@ public class Catalog extends EntrySet {
         }
 
         return schemas;
-    }
-
-
-    /**
-     * Returns functions.
-     *
-     * @return functions.
-     */
-    public Collection<Function> getFunctions() {
-
-        if (functions == null) {
-            functions = new ArrayList<Function>();
-        }
-
-        return functions;
-    }
-
-
-    /**
-     * Returns functionColumns.
-     *
-     * @return functionColumns.
-     */
-    public Collection<FunctionColumn> getFunctionColumns() {
-
-        if (functionColumns == null) {
-            functionColumns = new ArrayList<FunctionColumn>();
-        }
-
-        return functionColumns;
-    }
-
-
-    /**
-     * Returns procedureColumns.
-     *
-     * @return procedureColumns.
-     */
-    public Collection<ProcedureColumn> getProcedureColumns() {
-
-        if (procedureColumns == null) {
-            procedureColumns = new ArrayList<ProcedureColumn>();
-        }
-
-        return procedureColumns;
-    }
-
-
-    /**
-     * Procedures.
-     *
-     * @return procedures.
-     */
-    public Collection<Procedure> getProcedures() {
-
-        if (procedures == null) {
-            procedures = new ArrayList<Procedure>();
-        }
-
-        return procedures;
-    }
-
-
-    /**
-     * Returns UDTs.
-     *
-     * @return UDTs.
-     */
-    public Collection<UserDataType> getUserDataTypes() {
-
-        if (userDataTypes == null) {
-            userDataTypes = new ArrayList<UserDataType>();
-        }
-
-        return userDataTypes;
-    }
-
-
-    public Collection<TablePrivilege> getTablePrivileges() {
-
-        if (tablePrivileges == null) {
-            tablePrivileges = new ArrayList<TablePrivilege>();
-        }
-
-        return tablePrivileges;
     }
 
 
@@ -260,46 +183,12 @@ public class Catalog extends EntrySet {
     }
 
 
-    /** function columns. */
-    @XmlElement(name = "functionColumn")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<FunctionColumn> functionColumns;
-
-
-    /** functions. */
-    @XmlElement(name = "function")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Function> functions;
-
-
-    /** procedure columns. */
-    @XmlElement(name = "procedureColumn")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<ProcedureColumn> procedureColumns;
-
-
-    /** procedures. */
-    @XmlElement(name = "procedure")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<Procedure> procedures;
-
-
-    /** schemas. */
+    /**
+     * schemas.
+     */
     @XmlElement(name = "schema")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Schema> schemas;
-
-
-    /** tablePrivileges. */
-    @XmlElement(name = "tablePrivilege")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<TablePrivilege> tablePrivileges;
-
-
-    /** userDataTypes. */
-    @XmlElement(name = "userDataType")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<UserDataType> userDataTypes;
 
 
 }

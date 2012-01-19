@@ -21,38 +21,46 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Procedure extends ChildEntrySet<Catalog> {
+public class Procedure extends ChildEntrySet<Schema> {
 
 
     /**
      * Retrieves procedures.
      *
      * @param databaseMetaData database metadata
-     * @param catalog catalog
+     * @param schema schema
      * @throws SQLException if a database access error occurs.
      */
     static void getProcedures(final DatabaseMetaData databaseMetaData,
-                                 final Catalog catalog)
+                              final Schema schema)
         throws SQLException {
 
-        if (catalog.getMetadata().excludes.contains("getProcedures")) {
+        if (schema.getMetadata().excludes.contains("getProcedures")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getProcedures(
-            catalog.getTABLE_CAT(), null, null);
+            schema.getValue("TABLE_CATALOG"), schema.getValue("TABLE_SCHEM"),
+            null);
         try {
             while (resultSet.next()) {
                 final Procedure procedure = EntrySet.newInstance(
                     Procedure.class, resultSet);
-                procedure.setParent(catalog);
-                catalog.getProcedures().add(procedure);
+                procedure.setParent(schema);
+                schema.getProcedures().add(procedure);
+
+                ProcedureColumn.getProcedureColumns(
+                    databaseMetaData, procedure);
             }
         } finally {
             resultSet.close();
@@ -118,6 +126,24 @@ public class Procedure extends ChildEntrySet<Catalog> {
     public void setSPECIFIC_NAME(final String SPECIFIC_NAME) {
         setValue("SPECIFIC_NAME", SPECIFIC_NAME);
     }
+
+
+    /**
+     * Returns procedure columns.
+     *
+     * @return procedure columns.
+     */
+    public Collection<ProcedureColumn> getColumns() {
+        if (columns == null) {
+            columns = new ArrayList<ProcedureColumn>();
+        }
+        return columns;
+    }
+
+
+    @XmlElement(name = "column")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ProcedureColumn> columns;
 
 
 }

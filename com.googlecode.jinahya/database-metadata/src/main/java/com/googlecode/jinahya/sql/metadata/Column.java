@@ -21,19 +21,27 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@XmlType(propOrder = {"entries", "privileges"})
 public class Column extends ChildEntrySet<Table> {
 
 
     /**
-     * Retrieves all <code>Column</code>s for given <code>table</code>.
+     * Retrieves all
+     * <code>Column</code>s for given
+     * <code>table</code>.
      *
-     * @param databaseMetaData metadata.
+     * @param databaseMetaData database meta data.
      * @param table table
      * @throws SQLException if a database access error occurs
      */
@@ -50,14 +58,29 @@ public class Column extends ChildEntrySet<Table> {
             table.getValue("TABLE_NAME"), null);
         try {
             while (resultSet.next()) {
+
                 final Column column =
                     EntrySet.newInstance(Column.class, resultSet);
                 column.setParent(table);
                 table.getColumns().add(column);
+
+                ColumnPrivilege.getColumnPrivileges(databaseMetaData, column);
             }
         } finally {
             resultSet.close();
         }
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public Collection<ColumnPrivilege> getPrivileges() {
+        if (privileges == null) {
+            privileges = new ArrayList<ColumnPrivilege>();
+        }
+        return privileges;
     }
 
 
@@ -259,6 +282,11 @@ public class Column extends ChildEntrySet<Table> {
     public void setIS_AUTOINCREMENT(final String IS_AUTOINCREMENT) {
         setValue("IS_AUTOINCREMENT", IS_AUTOINCREMENT);
     }
+
+
+    @XmlElement(name = "privilege")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<ColumnPrivilege> privileges;
 
 
 }

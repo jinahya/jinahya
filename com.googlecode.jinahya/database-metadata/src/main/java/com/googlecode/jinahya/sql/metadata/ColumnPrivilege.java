@@ -28,34 +28,53 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ColumnPrivilege extends Privilege<Table> {
+public class ColumnPrivilege extends Privilege<Column> {
 
 
-    /**
+    /*
      * Retrieves all column privileges of given <code>table</code>.
      *
-     * @param databaseMetaData database metadata
-     * @param table table
-     * @throws SQLException if an database access error occurs.
-     * @see DatabaseMetaData#getColumnPrivileges(String, String, String, String)
+     * @param databaseMetaData database meta data @param table table @throws
+     * SQLException if an database access error occurs. @see
+     * DatabaseMetaData#getColumnPrivileges(String, String, String, String)
+     * static void getColumnPrivileges(final DatabaseMetaData databaseMetaData,
+     * final Table table) throws SQLException {
+     *
+     * if (table.getMetadata().excludes.contains("getColumnPrivileges")) {
+     * return; }
+     *
+     * final ResultSet resultSet = databaseMetaData.getColumnPrivileges(
+     * table.getValue("TABLE_CAT"), table.getValue("TABLE_SCHEM"),
+     * table.getValue("TABLE_NAME"), null); try { while (resultSet.next()) {
+     * final ColumnPrivilege columnPrivilege =
+     * EntrySet.newInstance(ColumnPrivilege.class, resultSet);
+     * columnPrivilege.setParent(table);
+     * table.getColumnPrivileges().add(columnPrivilege); } } finally {
+     * resultSet.close(); } }
+     */
+    /**
+     *
+     * @param databaseMetaData database meta data
+     * @param column column
+     * @throws SQLException if a database access error occurs
      */
     static void getColumnPrivileges(final DatabaseMetaData databaseMetaData,
-                                    final Table table)
+                                    final Column column)
         throws SQLException {
 
-        if (table.getMetadata().excludes.contains("getColumnPrivileges")) {
+        if (column.getMetadata().excludes.contains("getColumnPrivileges")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getColumnPrivileges(
-            table.getValue("TABLE_CAT"), table.getValue("TABLE_SCHEM"),
-            table.getValue("TABLE_NAME"), null);
+            column.getValue("TABLE_CAT"), column.getValue("TABLE_SCHEM"),
+            column.getValue("TABLE_NAME"), column.getValue("COLUMN_NAME"));
         try {
             while (resultSet.next()) {
                 final ColumnPrivilege columnPrivilege =
                     EntrySet.newInstance(ColumnPrivilege.class, resultSet);
-                columnPrivilege.setParent(table);
-                table.getColumnPrivileges().add(columnPrivilege);
+                columnPrivilege.setParent(column);
+                column.getPrivileges().add(columnPrivilege);
             }
         } finally {
             resultSet.close();

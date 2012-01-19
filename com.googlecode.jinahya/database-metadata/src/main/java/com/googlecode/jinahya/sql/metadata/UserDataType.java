@@ -31,39 +31,40 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * Binding for User Defined Types.
+ * Binding for UDTs of a {@link Catalog}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlType(propOrder = {"entries", "attributes"})
-public class UserDataType extends ChildEntrySet<Catalog> {
+public class UserDataType extends ChildEntrySet<Schema> {
 
 
     /**
      * Retrieves all UDTs mapped to given
-     * <code>catalog</code>.
+     * <code>schema</code>.
      *
-     * @param databaseMetaData meta
-     * @param catalog catalog
+     * @param databaseMetaData database meta data
+     * @param schema schema
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getUDTs(String, String, String, int[])
      */
     static void getUserDataTypes(final DatabaseMetaData databaseMetaData,
-                                 final Catalog catalog)
+                                 final Schema schema)
         throws SQLException {
 
-        if (catalog.getMetadata().excludes.contains("getUDTs")) {
+        if (schema.getMetadata().excludes.contains("getUDTs")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getUDTs(
-            catalog.getTABLE_CAT(), null, null, null);
+            schema.getValue("TABLE_CATALOG"), schema.getValue(("TABLE_SCHEM")),
+            null, null);
         try {
             while (resultSet.next()) {
                 final UserDataType userDataType =
                     EntrySet.newInstance(UserDataType.class, resultSet);
-                userDataType.setParent(catalog);
-                catalog.getUserDataTypes().add(userDataType);
+                userDataType.setParent(schema);
+                schema.getUserDataTypes().add(userDataType);
             }
         } finally {
             resultSet.close();
