@@ -37,7 +37,7 @@ public class ExportedKey extends ChildEntrySet<Table> {
      *
      * @param databaseMetaData database meta data
      * @param table table
-     * @throws SQLException if an SQL error occurs.
+     * @throws SQLException if a database access error occurs.
      */
     public static void getExportedKeys(final DatabaseMetaData databaseMetaData,
                                        final Table table)

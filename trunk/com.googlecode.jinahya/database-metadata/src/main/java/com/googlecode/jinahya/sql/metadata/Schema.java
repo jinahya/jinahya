@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "tables"})
+@XmlType(propOrder = {"entries", "functions", "procedures", "tables",
+                      "userDataTypes"})
 public class Schema extends ChildEntrySet<Catalog> {
 
 
@@ -53,10 +54,30 @@ public class Schema extends ChildEntrySet<Catalog> {
     }
 
 
+    private static void putNullInstance(final Catalog catalog) {
+
+        if (catalog == null) {
+            throw new NullPointerException("null catalog");
+        }
+
+        if (!catalog.getSchemas().isEmpty()) {
+            throw new IllegalArgumentException("catalog.schemas is not empty");
+        }
+
+        final Schema schema = new Schema();
+        schema.setValue("TABLE_CATALOG", catalog.getValue("TABLE_CAT"));
+        schema.setValue("TABLE_SCHEM", null);
+        schema.setParent(catalog);
+        catalog.getSchemas().add(schema);
+    }
+
+
     /**
-     * Retrieves all <code>Schema</code> mapped to given <code>catalog</code>.
+     * Retrieves all
+     * <code>Schema</code> mapped to given
+     * <code>catalog</code>.
      *
-     * @param databaseMetaData meta
+     * @param databaseMetaData database meta data
      * @param catalog catalog
      * @throws SQLException if a database access error occurs.
      */
@@ -65,10 +86,7 @@ public class Schema extends ChildEntrySet<Catalog> {
         throws SQLException {
 
         if (catalog.getMetadata().excludes.contains("getSchemas")) {
-            final Schema schema = Schema.newNullInstance(
-                catalog.getValue("TABLE_CAT"));
-            schema.setParent(catalog);
-            catalog.getSchemas().add(schema);
+            putNullInstance(catalog);
             return;
         }
 
@@ -82,13 +100,12 @@ public class Schema extends ChildEntrySet<Catalog> {
                 catalog.getSchemas().add(schema);
             }
             if (catalog.getSchemas().isEmpty()) {
-                final Schema schema = Schema.newNullInstance(
-                    catalog.getValue("TABLE_CAT"));
-                schema.setParent(catalog);
-                catalog.getSchemas().add(schema);
+                putNullInstance(catalog);
             }
             for (Schema schema : catalog.getSchemas()) {
+                Function.getFunctions(databaseMetaData, schema);
                 Table.getTables(databaseMetaData, schema);
+                UserDataType.getUserDataTypes(databaseMetaData, schema);
             }
         } finally {
             resultSet.close();
@@ -117,17 +134,56 @@ public class Schema extends ChildEntrySet<Catalog> {
 
 
     /**
+     * Returns functions.
+     *
+     * @return functions
+     */
+    public Collection<Function> getFunctions() {
+        if (functions == null) {
+            functions = new ArrayList<Function>();
+        }
+        return functions;
+    }
+
+
+    /**
+     * Procedures.
+     *
+     * @return procedures.
+     */
+    public Collection<Procedure> getProcedures() {
+
+        if (procedures == null) {
+            procedures = new ArrayList<Procedure>();
+        }
+
+        return procedures;
+    }
+
+
+    /**
      * Returns tables.
      *
      * @return tables
      */
     public final Collection<Table> getTables() {
-
         if (tables == null) {
             tables = new ArrayList<Table>();
         }
-
         return tables;
+    }
+
+
+    /**
+     * Returns UDTs.
+     *
+     * @return UDTs.
+     */
+    public Collection<UserDataType> getUserDataTypes() {
+        if (userDataTypes == null) {
+            userDataTypes = new ArrayList<UserDataType>();
+        }
+        return userDataTypes;
     }
 
 
@@ -187,11 +243,35 @@ public class Schema extends ChildEntrySet<Catalog> {
 
 
     /**
+     * functions.
+     */
+    @XmlElement(name = "function")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Function> functions;
+
+
+    /**
+     * procedures.
+     */
+    @XmlElement(name = "procedure")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<Procedure> procedures;
+
+
+    /**
      * tables.
      */
     @XmlElement(name = "table")
     @XmlElementWrapper(required = true, nillable = true)
     private Collection<Table> tables;
+
+
+    /**
+     * UDTs.
+     */
+    @XmlElement(name = "userDataType")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<UserDataType> userDataTypes;
 
 
 }

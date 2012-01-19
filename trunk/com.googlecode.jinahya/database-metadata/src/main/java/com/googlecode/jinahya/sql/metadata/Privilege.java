@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 /**
+ * Binding for privileges.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <P>  parent type parameter

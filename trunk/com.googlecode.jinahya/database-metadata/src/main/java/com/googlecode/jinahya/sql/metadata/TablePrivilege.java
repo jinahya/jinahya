@@ -24,36 +24,37 @@ import java.sql.SQLException;
 
 
 /**
- * Binding for table privileges.
+ * Binding for privileges of a {@link Table}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TablePrivilege extends Privilege<Catalog> {
+public class TablePrivilege extends Privilege<Table> {
 
 
     /**
-     * Retrieves all table privileges for specified <code>catalog</code>.
+     * Retrieves privileges of given <code>table</code>.
      *
-     * @param databaseMetaData database metadata
-     * @param catalog catalog
+     * @param databaseMetaData database meta data
+     * @param table table
      * @throws SQLException if a database access error occurs.
      */
     static void getTablePrivileges(final DatabaseMetaData databaseMetaData,
-                                   final Catalog catalog)
+                                   final Table table)
         throws SQLException {
 
-        if (catalog.getMetadata().excludes.contains("getTablePrivileges")) {
+        if (table.getMetadata().excludes.contains("getTablePrivileges")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getTablePrivileges(
-            catalog.getValue("TABLE_CAT"), null, null);
+            table.getValue("TABLE_CAT"), table.getValue("TABLE_SCHEM"),
+            table.getValue("TABLE_NAME"));
         try {
             while (resultSet.next()) {
                 final TablePrivilege tablePrivilege =
                     EntrySet.newInstance(TablePrivilege.class, resultSet);
-                tablePrivilege.setParent(catalog);
-                catalog.getTablePrivileges().add(tablePrivilege);
+                tablePrivilege.setParent(table);
+                table.getPrivileges().add(tablePrivilege);
             }
         } finally {
             resultSet.close();

@@ -24,7 +24,7 @@ import java.sql.SQLException;
 
 
 /**
- * Binding for attributes.
+ * Binding for attributes of a {@link UserDataType}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -32,7 +32,8 @@ public class Attribute extends ChildEntrySet<UserDataType> {
 
 
     /**
-     * Retrieves attributes.
+     * Retrieves attributes of given
+     * <code>userDataType</code>.
      *
      * @param databaseMetaData database meta data
      * @param userDataType userDataType
@@ -54,15 +55,11 @@ public class Attribute extends ChildEntrySet<UserDataType> {
             while (resultSet.next()) {
                 final Attribute attribute = EntrySet.newInstance(
                     Attribute.class, resultSet);
-                attribute.setMetadata(userDataType.getMetadata());
+                attribute.setParent(userDataType);
                 userDataType.getAttributes().add(attribute);
             }
         } finally {
             resultSet.close();
-        }
-
-        for (Attribute attribute : userDataType.getAttributes()) {
-            attribute.setParent(userDataType);
         }
     }
 

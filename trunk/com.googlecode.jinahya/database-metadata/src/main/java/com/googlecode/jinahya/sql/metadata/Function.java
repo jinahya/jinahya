@@ -22,37 +22,50 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Function extends ChildEntrySet<Catalog> {
+@XmlType(propOrder = {"entries", "columns"})
+public class Function extends ChildEntrySet<Schema> {
 
 
     /**
-     * Retrieves functions for given <code>catalog</code>.
+     * Retrieves functions for given
+     * <code>schema</code>.
      *
-     * @param databaseMetaData database metadata
-     * @param catalog catalog
+     * @param databaseMetaData database meta data
+     * @param schema schema
      * @throws SQLException if a database access error occurs.
      */
     static void getFunctions(final DatabaseMetaData databaseMetaData,
-                             final Catalog catalog)
+                             final Schema schema)
         throws SQLException {
 
-        if (catalog.getMetadata().excludes.contains("getFunctions")) {
+        if (schema.getMetadata().excludes.contains("getFunctions")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getFunctions(
-            catalog.getValue("TABLE_CAT"), null, null);
+            schema.getValue("TABLE_CATALOG"), schema.getValue("TABLE_SCHEM"),
+            null);
         try {
             while (resultSet.next()) {
+
                 final Function function = EntrySet.newInstance(
                     Function.class, resultSet);
-                function.setParent(catalog);
-                catalog.getFunctions().add(function);
+                function.setParent(schema);
+                schema.getFunctions().add(function);
+
+                FunctionColumn.getFunctionColumns(databaseMetaData, function);
             }
         } finally {
             resultSet.close();
@@ -118,6 +131,27 @@ public class Function extends ChildEntrySet<Catalog> {
     public void setSPECIFIC_NAME(final String SPECIFIC_NAME) {
         setValue("SPECIFIC_NAME", SPECIFIC_NAME);
     }
+
+
+    /**
+     * Returns function columns.
+     *
+     * @return function columns
+     */
+    public Collection<FunctionColumn> getColumns() {
+        if (columns == null) {
+            columns = new ArrayList<FunctionColumn>();
+        }
+        return columns;
+    }
+
+
+    /**
+     * function columns.
+     */
+    @XmlElement(name = "column")
+    @XmlElementWrapper(required = true, nillable = true)
+    private Collection<FunctionColumn> columns;
 
 
 }

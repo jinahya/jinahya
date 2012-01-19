@@ -27,36 +27,39 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ProcedureColumn extends ChildEntrySet<Catalog> {
+public class ProcedureColumn extends ChildEntrySet<Procedure> {
 
 
     /**
-     * Retrieves procedure columns for given <code>catalog</code>.
+     * Retrieves procedure columns for given
+     * <code>procedure</code>.
      *
      * @param databaseMetaData database metadata
-     * @param catalog catalog
+     * @param procedure procedure
      * @throws SQLException if a database access error occurs.
      */
     static void getProcedureColumns(final DatabaseMetaData databaseMetaData,
-                                    final Catalog catalog)
+                                    final Procedure procedure)
         throws SQLException {
 
-        if (catalog.getValue("TABLE_CAT") == null) {
+        if (procedure.getValue("TABLE_CAT") == null) {
             return;
         }
-        
-        if (catalog.getMetadata().excludes.contains("getProcedures")) {
+
+        if (procedure.getMetadata().excludes.contains("getProcedures")) {
             return;
         }
 
         final ResultSet resultSet = databaseMetaData.getProcedureColumns(
-            catalog.getTABLE_CAT(), null, null, null);
+            procedure.getValue("PROCEDURE_CAT"),
+            procedure.getValue("PROCEDURE_SCHEM"),
+            procedure.getValue("PROCEDURE_NAME"), null);
         try {
             while (resultSet.next()) {
                 final ProcedureColumn procedureColumn = EntrySet.newInstance(
                     ProcedureColumn.class, resultSet);
-                procedureColumn.setParent(catalog);
-                catalog.getProcedureColumns().add(procedureColumn);
+                procedureColumn.setParent(procedure);
+                procedure.getColumns().add(procedureColumn);
             }
         } finally {
             resultSet.close();

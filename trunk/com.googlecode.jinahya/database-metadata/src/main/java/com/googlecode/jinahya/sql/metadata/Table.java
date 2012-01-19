@@ -34,18 +34,19 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "columnPrivileges", "columns", "exportedKeys",
-                      "identifiers", "importedKeys", "indices", "primaryKeys",
-                      "privileges", "versionColumns"})
+@XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
+                      "importedKeys", "indices", "primaryKeys", "privileges",
+                      "versionColumns"})
 public class Table extends ChildEntrySet<Schema> {
 
 
     /**
-     * Retrieves all tables mapped to given <code>schema</code>.
+     * Retrieves all tables mapped to given
+     * <code>schema</code>.
      *
-     * @param databaseMetaData meta
+     * @param databaseMetaData database meta data
      * @param schema schema
-     * @throws SQLException if database access error occurs.
+     * @throws SQLException if a database access error occurs.
      */
     static void getTables(final DatabaseMetaData databaseMetaData,
                           final Schema schema)
@@ -59,16 +60,18 @@ public class Table extends ChildEntrySet<Schema> {
             schema.getTABLE_CATALOG(), schema.getTABLE_SCHEM(), null, null);
         try {
             while (resultSet.next()) {
+
                 final Table table =
                     EntrySet.newInstance(Table.class, resultSet);
                 table.setParent(schema);
                 schema.getTables().add(table);
-                ColumnPrivilege.getColumnPrivileges(databaseMetaData, table);
+
                 Column.getColumns(databaseMetaData, table);
                 ExportedKey.getExportedKeys(databaseMetaData, table);
                 Identifier.getBestRowIdentifier(databaseMetaData, table);
                 ImportedKey.getImportedKeys(databaseMetaData, table);
                 Index.getIndexInfo(databaseMetaData, table);
+                TablePrivilege.getTablePrivileges(databaseMetaData, table);
                 VersionColumn.getVersionColumns(databaseMetaData, table);
             }
         } finally {
@@ -254,6 +257,11 @@ public class Table extends ChildEntrySet<Schema> {
     }
 
 
+    /**
+     * Returns imported keys.
+     *
+     * @return imported keys.
+     */
     public Collection<ImportedKey> getImportedKeys() {
 
         if (importedKeys == null) {
@@ -264,6 +272,11 @@ public class Table extends ChildEntrySet<Schema> {
     }
 
 
+    /**
+     * Returns primary keys.
+     *
+     * @return primary keys.
+     */
     public Collection<PrimaryKey> getPrimaryKeys() {
 
         if (primaryKeys == null) {
@@ -274,6 +287,11 @@ public class Table extends ChildEntrySet<Schema> {
     }
 
 
+    /**
+     * Returns version columns.
+     *
+     * @return version columns
+     */
     public Collection<VersionColumn> getVersionColumns() {
 
         if (versionColumns == null) {
@@ -282,21 +300,6 @@ public class Table extends ChildEntrySet<Schema> {
 
         return versionColumns;
     }
-
-
-    public Collection<ColumnPrivilege> getColumnPrivileges() {
-
-        if (columnPrivileges == null) {
-            columnPrivileges = new ArrayList<ColumnPrivilege>();
-        }
-
-        return columnPrivileges;
-    }
-
-
-    @XmlElement(name = "columnPrivilege")
-    @XmlElementWrapper(required = true, nillable = true)
-    private Collection<ColumnPrivilege> columnPrivileges;
 
 
     @XmlElement(name = "column")

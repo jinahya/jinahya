@@ -34,7 +34,7 @@ public class Property extends EntrySet {
     /**
      * Retrieves client info properties.
      *
-     * @param databaseMetaData database metadata
+     * @param databaseMetaData database meta data
      * @param metadata metadata
      * @throws SQLException if a database access error occurs.
      * @see DatabaseMetaData#getClientInfoProperties()
