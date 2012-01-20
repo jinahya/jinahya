@@ -18,45 +18,41 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <P> parent type parameter
  */
 @XmlTransient
-class EntriesAdapter extends XmlAdapter<Entries, Map<String, Entry>> {
+public abstract class ChildPairSet<P extends PairSet> extends PairSet {
 
 
-    @Override
-    public Entries marshal(final Map<String, Entry> boundType)
-        throws Exception {
-
-        final Entries valueType = new Entries();
-
-        valueType.getEntries().addAll(boundType.values());
-
-        return valueType;
+    /**
+     * Returns parent.
+     *
+     * @return parent.
+     */
+    final P getParent() {
+        return parent;
     }
 
 
-    @Override
-    public Map<String, Entry> unmarshal(final Entries valueType)
-        throws Exception {
-
-        final Map<String, Entry> boundType = new LinkedHashMap<String, Entry>();
-
-        for (Entry entry : valueType.getEntries()) {
-            boundType.put(entry.getKey(), entry);
-        }
-
-        return boundType;
+    /**
+     * Sets parent.
+     *
+     * @param parent parent
+     */
+    final void setParent(final P parent) {
+        this.parent = parent;
+        setMetadata(this.parent.getMetadata());
     }
+
+
+    /** parent. */
+    private P parent;
 
 
 }

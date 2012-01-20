@@ -34,10 +34,10 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "columns", "exportedKeys", "identifiers",
+@XmlType(propOrder = {"pairs", "columns", "exportedKeys", "identifiers",
                       "importedKeys", "indices", "primaryKeys", "privileges",
                       "versionColumns"})
-public class Table extends ChildEntrySet<Schema> {
+public class Table extends ChildPairSet<Schema> {
 
 
     /**
@@ -62,7 +62,7 @@ public class Table extends ChildEntrySet<Schema> {
             while (resultSet.next()) {
 
                 final Table table =
-                    EntrySet.newInstance(Table.class, resultSet);
+                    PairSet.newInstance(Table.class, resultSet);
                 table.setParent(schema);
                 schema.getTables().add(table);
 

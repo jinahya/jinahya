@@ -28,8 +28,8 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@XmlType(propOrder = {"entries"})
-public class DataType extends EntrySet {
+//@XmlType(propOrder = {"pairs"})
+public class DataType extends PairSet {
 
 
     /**
@@ -52,7 +52,7 @@ public class DataType extends EntrySet {
         try {
             while (resultSet.next()) {
                 final DataType dataType =
-                    EntrySet.newInstance(DataType.class, resultSet);
+                    PairSet.newInstance(DataType.class, resultSet);
                 dataType.setMetadata(metadata);
                 metadata.getDataTypes().add(dataType);
             }

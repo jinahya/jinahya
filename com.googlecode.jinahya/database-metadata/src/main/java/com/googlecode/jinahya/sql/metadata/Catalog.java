@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "schemas"})
-public class Catalog extends EntrySet {
+@XmlType(propOrder = {"pairs", "schemas"})
+public class Catalog extends PairSet {
 
 
     /**
@@ -88,7 +88,7 @@ public class Catalog extends EntrySet {
         final ResultSet resultSet = databaseMetaData.getCatalogs();
         try {
             while (resultSet.next()) {
-                final Catalog catalog = EntrySet.newInstance(
+                final Catalog catalog = PairSet.newInstance(
                     Catalog.class, resultSet);
                 catalog.setMetadata(metadata);
                 metadata.getCatalogs().add(catalog);

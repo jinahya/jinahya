@@ -27,7 +27,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class FunctionColumn extends ChildEntrySet<Function> {
+public class FunctionColumn extends ChildPairSet<Function> {
 
 
     /**
@@ -51,7 +51,7 @@ public class FunctionColumn extends ChildEntrySet<Function> {
         try {
             while (resultSet.next()) {
                 final FunctionColumn functionColumn =
-                    EntrySet.newInstance(FunctionColumn.class, resultSet);
+                    PairSet.newInstance(FunctionColumn.class, resultSet);
                 functionColumn.setParent(function);
                 function.getColumns().add(functionColumn);
             }

@@ -21,8 +21,10 @@ package com.googlecode.jinahya.sql.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
@@ -32,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "privileges"})
-public class Column extends ChildEntrySet<Table> {
+@XmlType(propOrder = {"pairs", "privileges"})
+public class Column extends ChildPairSet<Table> {
 
 
     /**
@@ -60,7 +62,7 @@ public class Column extends ChildEntrySet<Table> {
             while (resultSet.next()) {
 
                 final Column column =
-                    EntrySet.newInstance(Column.class, resultSet);
+                    PairSet.newInstance(Column.class, resultSet);
                 column.setParent(table);
                 table.getColumns().add(column);
 

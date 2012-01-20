@@ -24,7 +24,7 @@ package com.googlecode.jinahya.sql.metadata;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <P>  parent type parameter
  */
-public abstract class Privilege<P extends EntrySet> extends ChildEntrySet<P> {
+public abstract class Privilege<P extends PairSet> extends ChildPairSet<P> {
 
 
     public String getTABLE_CAT() {

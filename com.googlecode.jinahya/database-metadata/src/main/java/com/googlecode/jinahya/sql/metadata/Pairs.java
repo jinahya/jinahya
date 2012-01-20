@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Entries {
+public class Pairs {
 
 
     /**
@@ -37,10 +37,10 @@ public class Entries {
      *
      * @return entries
      */
-    protected final Collection<Entry> getEntries() {
+    protected final Collection<Pair> getEntries() {
 
         if (entries == null) {
-            entries = new ArrayList<Entry>();
+            entries = new ArrayList<Pair>();
         }
 
         return entries;
@@ -51,7 +51,7 @@ public class Entries {
      * entries.
      */
     @XmlElement(name = "entry", nillable = true)
-    private Collection<Entry> entries;
+    private Collection<Pair> entries;
 
 
 }

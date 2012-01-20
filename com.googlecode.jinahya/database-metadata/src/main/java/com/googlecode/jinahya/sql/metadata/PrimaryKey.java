@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PrimaryKey extends ChildEntrySet<Table> {
+public class PrimaryKey extends ChildPairSet<Table> {
 
 
     /**
@@ -52,7 +52,7 @@ public class PrimaryKey extends ChildEntrySet<Table> {
         try {
             while (resultSet.next()) {
                 final PrimaryKey primaryKey =
-                    EntrySet.newInstance(PrimaryKey.class, resultSet);
+                    PairSet.newInstance(PrimaryKey.class, resultSet);
                 primaryKey.setParent(table);
                 table.getPrimaryKeys().add(primaryKey);
             }

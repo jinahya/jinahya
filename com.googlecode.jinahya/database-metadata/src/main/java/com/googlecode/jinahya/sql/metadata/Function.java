@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "columns"})
-public class Function extends ChildEntrySet<Schema> {
+@XmlType(propOrder = {"pairs", "columns"})
+public class Function extends ChildPairSet<Schema> {
 
 
     /**
@@ -60,7 +60,7 @@ public class Function extends ChildEntrySet<Schema> {
         try {
             while (resultSet.next()) {
 
-                final Function function = EntrySet.newInstance(
+                final Function function = PairSet.newInstance(
                     Function.class, resultSet);
                 function.setParent(schema);
                 schema.getFunctions().add(function);
