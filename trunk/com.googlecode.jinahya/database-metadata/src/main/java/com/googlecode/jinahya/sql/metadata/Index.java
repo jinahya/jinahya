@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Index extends ChildEntrySet<Table> {
+public class Index extends ChildPairSet<Table> {
 
 
     /**
@@ -52,7 +52,7 @@ public class Index extends ChildEntrySet<Table> {
         try {
             while (resultSet.next()) {
                 final Index index =
-                    EntrySet.newInstance(Index.class, resultSet);
+                    PairSet.newInstance(Index.class, resultSet);
                 index.setParent(table);
                 table.getIndices().add(index);
             }

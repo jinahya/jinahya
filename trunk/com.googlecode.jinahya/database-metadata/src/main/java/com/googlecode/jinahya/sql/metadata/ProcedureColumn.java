@@ -27,7 +27,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ProcedureColumn extends ChildEntrySet<Procedure> {
+public class ProcedureColumn extends ChildPairSet<Procedure> {
 
 
     /**
@@ -56,7 +56,7 @@ public class ProcedureColumn extends ChildEntrySet<Procedure> {
             procedure.getValue("PROCEDURE_NAME"), null);
         try {
             while (resultSet.next()) {
-                final ProcedureColumn procedureColumn = EntrySet.newInstance(
+                final ProcedureColumn procedureColumn = PairSet.newInstance(
                     ProcedureColumn.class, resultSet);
                 procedureColumn.setParent(procedure);
                 procedure.getColumns().add(procedureColumn);

@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "functions", "procedures", "tables",
+@XmlType(propOrder = {"pairs", "functions", "procedures", "tables",
                       "userDataTypes"})
-public class Schema extends ChildEntrySet<Catalog> {
+public class Schema extends ChildPairSet<Catalog> {
 
 
     /**
@@ -95,7 +95,7 @@ public class Schema extends ChildEntrySet<Catalog> {
         try {
             while (resultSet.next()) {
                 final Schema schema =
-                    EntrySet.newInstance(Schema.class, resultSet);
+                    PairSet.newInstance(Schema.class, resultSet);
                 schema.setParent(catalog);
                 catalog.getSchemas().add(schema);
             }

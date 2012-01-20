@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TableType extends EntrySet {
+public class TableType extends PairSet {
 
 
     /**
@@ -50,7 +50,7 @@ public class TableType extends EntrySet {
         final ResultSet resultSet = databaseMetaData.getTableTypes();
         try {
             while (resultSet.next()) {
-                final TableType tableType = EntrySet.newInstance(
+                final TableType tableType = PairSet.newInstance(
                     TableType.class, resultSet);
                 tableType.setMetadata(metadata);
                 metadata.getTableTypes().add(tableType);

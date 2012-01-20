@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlTransient
-public abstract class EntrySet {
+public abstract class PairSet {
 
 
     /**
@@ -49,7 +49,7 @@ public abstract class EntrySet {
      * @return a new instance
      * @throws SQLException if an SQL error occurs.
      */
-    static <S extends EntrySet> S newInstance(final Class<S> entrySetType,
+    static <S extends PairSet> S newInstance(final Class<S> entrySetType,
                                               final ResultSet resultSet)
         throws SQLException {
 
@@ -82,7 +82,7 @@ public abstract class EntrySet {
             if (resultSet.wasNull()) {
                 value = null;
             }
-            getEntries().put(key, Entry.newIntance(key, value));
+            getPairs().put(key, Pair.newIntance(key, value));
         }
     }
 
@@ -92,14 +92,12 @@ public abstract class EntrySet {
      *
      * @return entries
      */
-    final Map<String, Entry> getEntries() {
-
-        if (entries == null) {
-            entries = new LinkedHashMap<String, Entry>();
+    public final Map<String, Pair> getPairs() {
+        if (pairs == null) {
+            pairs = new LinkedHashMap<String, Pair>();
             //entries = new HashMap<String, Entry>();
         }
-
-        return entries;
+        return pairs;
     }
 
 
@@ -116,7 +114,7 @@ public abstract class EntrySet {
             throw new NullPointerException("null key");
         }
 
-        final Entry entry = getEntries().get(key);
+        final Pair entry = getPairs().get(key);
         if (entry == null) {
             return null;
         }
@@ -137,11 +135,11 @@ public abstract class EntrySet {
             throw new NullPointerException("null key");
         }
 
-        Entry entry = getEntries().get(key);
+        Pair entry = getPairs().get(key);
 
         if (entry == null) {
-            entry = Entry.newIntance(key, value);
-            getEntries().put(key, entry);
+            entry = Pair.newIntance(key, value);
+            getPairs().put(key, entry);
             return;
         }
 
@@ -172,8 +170,8 @@ public abstract class EntrySet {
     /**
      * entries.
      */
-    @XmlJavaTypeAdapter(EntriesAdapter.class)
-    private Map<String, Entry> entries;
+    @XmlJavaTypeAdapter(PairsAdapter.class)
+    private Map<String, Pair> pairs;
 
 
     /**

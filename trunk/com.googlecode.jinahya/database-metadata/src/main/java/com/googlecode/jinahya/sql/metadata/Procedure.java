@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Procedure extends ChildEntrySet<Schema> {
+public class Procedure extends ChildPairSet<Schema> {
 
 
     /**
@@ -54,7 +54,7 @@ public class Procedure extends ChildEntrySet<Schema> {
             null);
         try {
             while (resultSet.next()) {
-                final Procedure procedure = EntrySet.newInstance(
+                final Procedure procedure = PairSet.newInstance(
                     Procedure.class, resultSet);
                 procedure.setParent(schema);
                 schema.getProcedures().add(procedure);

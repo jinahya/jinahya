@@ -52,7 +52,7 @@ public class TablePrivilege extends Privilege<Table> {
         try {
             while (resultSet.next()) {
                 final TablePrivilege tablePrivilege =
-                    EntrySet.newInstance(TablePrivilege.class, resultSet);
+                    PairSet.newInstance(TablePrivilege.class, resultSet);
                 tablePrivilege.setParent(table);
                 table.getPrivileges().add(tablePrivilege);
             }

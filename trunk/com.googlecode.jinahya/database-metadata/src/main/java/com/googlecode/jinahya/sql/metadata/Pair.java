@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Entry {
+public class Pair {
 
 
     /**
@@ -35,9 +35,9 @@ public class Entry {
      * @param value value
      * @return a new instance.
      */
-    public static Entry newIntance(final String key, final String value) {
+    public static Pair newIntance(final String key, final String value) {
 
-        final Entry instance = new Entry();
+        final Pair instance = new Pair();
         instance.setKey(key);
         instance.setValue(value);
 

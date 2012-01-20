@@ -27,7 +27,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Identifier extends ChildEntrySet<Table> {
+public class Identifier extends ChildPairSet<Table> {
 
 
     /**
@@ -55,7 +55,7 @@ public class Identifier extends ChildEntrySet<Table> {
             try {
                 while (resultSet.next()) {
                     final Identifier identifier =
-                        EntrySet.newInstance(Identifier.class, resultSet);
+                        PairSet.newInstance(Identifier.class, resultSet);
                     identifier.setParent(table);
                     table.getIdentifiers().add(identifier);
                 }

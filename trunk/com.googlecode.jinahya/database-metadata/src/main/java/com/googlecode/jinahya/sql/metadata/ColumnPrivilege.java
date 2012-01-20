@@ -72,7 +72,7 @@ public class ColumnPrivilege extends Privilege<Column> {
         try {
             while (resultSet.next()) {
                 final ColumnPrivilege columnPrivilege =
-                    EntrySet.newInstance(ColumnPrivilege.class, resultSet);
+                    PairSet.newInstance(ColumnPrivilege.class, resultSet);
                 columnPrivilege.setParent(column);
                 column.getPrivileges().add(columnPrivilege);
             }

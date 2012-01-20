@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Property extends EntrySet {
+public class Property extends PairSet {
 
 
     /**
@@ -51,7 +51,7 @@ public class Property extends EntrySet {
         try {
             while (resultSet.next()) {
                 final Property property =
-                    EntrySet.newInstance(Property.class, resultSet);
+                    PairSet.newInstance(Property.class, resultSet);
                 property.setMetadata(metadata);
                 metadata.getProperties().add(property);
             }

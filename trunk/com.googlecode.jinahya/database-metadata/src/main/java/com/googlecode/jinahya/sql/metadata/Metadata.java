@@ -63,79 +63,69 @@ public class Metadata {
 
 
         /*
-        public String getDriver() {
-            return driver;
-        }
-
-
-        public void setDriver(final String driver) {
-            this.driver = driver;
-        }
-
-
-        public String getPassword() {
-            return password;
-        }
-
-
-        public void setPassword(final String password) {
-            this.password = password;
-        }
-
-
-        public String getUrl() {
-            return url;
-        }
-
-
-        public void setUrl(final String url) {
-            this.url = url;
-        }
-
-
-        public String getUser() {
-            return user;
-        }
-
-
-        public void setUser(final String user) {
-            this.user = user;
-        }
-
-
-        public List<String> getExcludes() {
-
-            if (excludes == null) {
-                excludes = new ArrayList<String>();
-            }
-
-            return excludes;
-        }
-        */
-
-
-        /** the JDBC driver class name. */
+         * public String getDriver() { return driver; }
+         *
+         *
+         * public void setDriver(final String driver) { this.driver = driver; }
+         *
+         *
+         * public String getPassword() { return password; }
+         *
+         *
+         * public void setPassword(final String password) { this.password =
+         * password; }
+         *
+         *
+         * public String getUrl() { return url; }
+         *
+         *
+         * public void setUrl(final String url) { this.url = url; }
+         *
+         *
+         * public String getUser() { return user; }
+         *
+         *
+         * public void setUser(final String user) { this.user = user; }
+         *
+         *
+         * public List<String> getExcludes() {
+         *
+         * if (excludes == null) { excludes = new ArrayList<String>(); }
+         *
+         * return excludes; }
+         */
+        /**
+         * the JDBC driver class name.
+         */
         @Option(name = "-driver", usage = "database driver name")
         private String driver;
 
 
-        /** the connection URL. */
+        /**
+         * the connection URL.
+         */
         @Option(name = "-url", required = true,
                 usage = "a database url of the form jdbc:subprotocol:subname")
         private String url;
 
 
-        /** the database user. */
+        /**
+         * the database user.
+         */
         @Option(name = "-user", usage = "the database user")
         private String user;
 
 
-        /** the user's password. */
+        /**
+         * the user's password.
+         */
         @Option(name = "-password", usage = "the user's password")
         private String password;
 
 
-        /** method names to exclude. */
+        /**
+         * method names to exclude.
+         */
         @Option(name = "-exclude", usage = "method name to exclude")
         private final List<String> excludes = new ArrayList<String>();
 
@@ -197,15 +187,17 @@ public class Metadata {
                                 final List<String> excludes)
         throws ClassNotFoundException, SQLException, JAXBException {
 
-        if (driver == null) {
-            throw new NullPointerException("null driver");
-        }
-
         if (url == null) {
             throw new NullPointerException("null url");
         }
 
-        Class.forName(driver);
+        if (url.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty url");
+        }
+
+        if (driver != null) {
+            Class.forName(driver);
+        }
 
         Connection connection = null;
         try {
@@ -224,7 +216,33 @@ public class Metadata {
 
 
     /**
-     * Prints given <code>metadata</code> to specified <code>output</code>.
+     * Creates a new instance.
+     *
+     * @param databaseMetaData database meta data
+     * @param excludes method names to excludes
+     * @return a new instance
+     * @throws SQLException if an SQL error occurs.
+     */
+    public static Metadata newInstance(final DatabaseMetaData databaseMetaData,
+                                       final Collection<String> excludes)
+        throws SQLException {
+
+        final Metadata metadata = new Metadata();
+        metadata.excludes.addAll(excludes);
+
+        Catalog.getCatalogs(databaseMetaData, metadata);
+        DataType.getTypeInfo(databaseMetaData, metadata);
+        Property.getClientInfoProperties(databaseMetaData, metadata);
+        TableType.getTableTypes(databaseMetaData, metadata);
+
+        return metadata;
+    }
+
+
+    /**
+     * Prints given
+     * <code>metadata</code> to specified
+     * <code>output</code>.
      *
      * @param metadata metadata
      * @param output output
@@ -250,35 +268,11 @@ public class Metadata {
         marshaller.setProperty(
             Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         /*
-        marshaller.setProperty(
-        Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "");
+         * marshaller.setProperty( Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION,
+         * "");
          */
 
         marshaller.marshal(metadata, output);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param databaseMetaData database meta data
-     * @param excludes method names to excludes
-     * @return a new instance
-     * @throws SQLException if an SQL error occurs.
-     */
-    public static Metadata newInstance(final DatabaseMetaData databaseMetaData,
-                                       final Collection<String> excludes)
-        throws SQLException {
-
-        final Metadata metadata = new Metadata();
-        metadata.excludes.addAll(excludes);
-
-        Catalog.getCatalogs(databaseMetaData, metadata);
-        DataType.getTypeInfo(databaseMetaData, metadata);
-        Property.getClientInfoProperties(databaseMetaData, metadata);
-        TableType.getTableTypes(databaseMetaData, metadata);
-
-        return metadata;
     }
 
 

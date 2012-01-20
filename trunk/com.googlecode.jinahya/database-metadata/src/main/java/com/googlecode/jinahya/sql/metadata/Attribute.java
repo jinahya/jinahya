@@ -28,7 +28,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Attribute extends ChildEntrySet<UserDataType> {
+public class Attribute extends ChildPairSet<UserDataType> {
 
 
     /**
@@ -53,7 +53,7 @@ public class Attribute extends ChildEntrySet<UserDataType> {
             userDataType.getValue("TYPE_NAME"), null);
         try {
             while (resultSet.next()) {
-                final Attribute attribute = EntrySet.newInstance(
+                final Attribute attribute = PairSet.newInstance(
                     Attribute.class, resultSet);
                 attribute.setParent(userDataType);
                 userDataType.getAttributes().add(attribute);

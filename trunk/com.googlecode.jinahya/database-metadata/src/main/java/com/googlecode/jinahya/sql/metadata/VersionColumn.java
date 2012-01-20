@@ -27,7 +27,7 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class VersionColumn extends ChildEntrySet<Table> {
+public class VersionColumn extends ChildPairSet<Table> {
 
 
     /**
@@ -51,7 +51,7 @@ public class VersionColumn extends ChildEntrySet<Table> {
             table.getValue("TABLE_NAME"));
         try {
             while (resultSet.next()) {
-                final VersionColumn versionColumn = EntrySet.newInstance(
+                final VersionColumn versionColumn = PairSet.newInstance(
                     VersionColumn.class, resultSet);
                 versionColumn.setParent(table);
                 table.getVersionColumns().add(versionColumn);

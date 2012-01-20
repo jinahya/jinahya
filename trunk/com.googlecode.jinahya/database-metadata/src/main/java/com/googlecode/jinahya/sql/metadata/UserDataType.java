@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlType(propOrder = {"entries", "attributes"})
-public class UserDataType extends ChildEntrySet<Schema> {
+@XmlType(propOrder = {"pairs", "attributes"})
+public class UserDataType extends ChildPairSet<Schema> {
 
 
     /**
@@ -62,7 +62,7 @@ public class UserDataType extends ChildEntrySet<Schema> {
         try {
             while (resultSet.next()) {
                 final UserDataType userDataType =
-                    EntrySet.newInstance(UserDataType.class, resultSet);
+                    PairSet.newInstance(UserDataType.class, resultSet);
                 userDataType.setParent(schema);
                 schema.getUserDataTypes().add(userDataType);
             }
