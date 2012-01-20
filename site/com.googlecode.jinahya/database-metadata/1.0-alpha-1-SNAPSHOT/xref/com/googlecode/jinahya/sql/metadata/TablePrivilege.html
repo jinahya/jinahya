@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="52" href="#52">52</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="53" href="#53">53</a>              <strong class="jxr_keyword">while</strong> (resultSet.next()) {
 <a class="jxr_linenumber" name="54" href="#54">54</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/TablePrivilege.html">TablePrivilege</a> tablePrivilege =
-<a class="jxr_linenumber" name="55" href="#55">55</a>                      EntrySet.newInstance(TablePrivilege.<strong class="jxr_keyword">class</strong>, resultSet);
+<a class="jxr_linenumber" name="55" href="#55">55</a>                      PairSet.newInstance(TablePrivilege.<strong class="jxr_keyword">class</strong>, resultSet);
 <a class="jxr_linenumber" name="56" href="#56">56</a>                  tablePrivilege.setParent(table);
 <a class="jxr_linenumber" name="57" href="#57">57</a>                  table.getPrivileges().add(tablePrivilege);
 <a class="jxr_linenumber" name="58" href="#58">58</a>              }

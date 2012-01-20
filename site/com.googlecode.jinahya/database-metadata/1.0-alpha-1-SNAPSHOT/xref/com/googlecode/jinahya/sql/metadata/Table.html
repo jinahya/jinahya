@@ -44,10 +44,10 @@
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> * @author Jin Kwon &lt;jinahya at gmail.com&gt;</em>
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="37" href="#37">37</a>  @XmlType(propOrder = {<span class="jxr_string">"entries"</span>, <span class="jxr_string">"columns"</span>, <span class="jxr_string">"exportedKeys"</span>, <span class="jxr_string">"identifiers"</span>,
+<a class="jxr_linenumber" name="37" href="#37">37</a>  @XmlType(propOrder = {<span class="jxr_string">"pairs"</span>, <span class="jxr_string">"columns"</span>, <span class="jxr_string">"exportedKeys"</span>, <span class="jxr_string">"identifiers"</span>,
 <a class="jxr_linenumber" name="38" href="#38">38</a>                        <span class="jxr_string">"importedKeys"</span>, <span class="jxr_string">"indices"</span>, <span class="jxr_string">"primaryKeys"</span>, <span class="jxr_string">"privileges"</span>,
 <a class="jxr_linenumber" name="39" href="#39">39</a>                        <span class="jxr_string">"versionColumns"</span>})
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Table.html">Table</a> <strong class="jxr_keyword">extends</strong> ChildEntrySet&lt;Schema&gt; {
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Table.html">Table</a> <strong class="jxr_keyword">extends</strong> ChildPairSet&lt;Schema&gt; {
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
 <a class="jxr_linenumber" name="42" href="#42">42</a>  
 <a class="jxr_linenumber" name="43" href="#43">43</a>      <em class="jxr_javadoccomment">/**</em>
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="62" href="#62">62</a>              <strong class="jxr_keyword">while</strong> (resultSet.next()) {
 <a class="jxr_linenumber" name="63" href="#63">63</a>  
 <a class="jxr_linenumber" name="64" href="#64">64</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Table.html">Table</a> table =
-<a class="jxr_linenumber" name="65" href="#65">65</a>                      EntrySet.newInstance(Table.<strong class="jxr_keyword">class</strong>, resultSet);
+<a class="jxr_linenumber" name="65" href="#65">65</a>                      PairSet.newInstance(Table.<strong class="jxr_keyword">class</strong>, resultSet);
 <a class="jxr_linenumber" name="66" href="#66">66</a>                  table.setParent(schema);
 <a class="jxr_linenumber" name="67" href="#67">67</a>                  schema.getTables().add(table);
 <a class="jxr_linenumber" name="68" href="#68">68</a>  

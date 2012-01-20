@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * @author Jin Kwon &lt;jinahya at gmail.com&gt;</em>
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/VersionColumn.html">VersionColumn</a> <strong class="jxr_keyword">extends</strong> ChildEntrySet&lt;Table&gt; {
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/VersionColumn.html">VersionColumn</a> <strong class="jxr_keyword">extends</strong> ChildPairSet&lt;Table&gt; {
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
 <a class="jxr_linenumber" name="32" href="#32">32</a>  
 <a class="jxr_linenumber" name="33" href="#33">33</a>      <em class="jxr_javadoccomment">/**</em>
@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="51" href="#51">51</a>              table.getValue(<span class="jxr_string">"TABLE_NAME"</span>));
 <a class="jxr_linenumber" name="52" href="#52">52</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="53" href="#53">53</a>              <strong class="jxr_keyword">while</strong> (resultSet.next()) {
-<a class="jxr_linenumber" name="54" href="#54">54</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/VersionColumn.html">VersionColumn</a> versionColumn = EntrySet.newInstance(
+<a class="jxr_linenumber" name="54" href="#54">54</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/VersionColumn.html">VersionColumn</a> versionColumn = PairSet.newInstance(
 <a class="jxr_linenumber" name="55" href="#55">55</a>                      VersionColumn.<strong class="jxr_keyword">class</strong>, resultSet);
 <a class="jxr_linenumber" name="56" href="#56">56</a>                  versionColumn.setParent(table);
 <a class="jxr_linenumber" name="57" href="#57">57</a>                  table.getVersionColumns().add(versionColumn);

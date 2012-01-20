@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> * @author Jin Kwon &lt;jinahya at gmail.com&gt;</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/ExportedKey.html">ExportedKey</a> <strong class="jxr_keyword">extends</strong> ChildEntrySet&lt;Table&gt; {
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/ExportedKey.html">ExportedKey</a> <strong class="jxr_keyword">extends</strong> ChildPairSet&lt;Table&gt; {
 <a class="jxr_linenumber" name="32" href="#32">32</a>  
 <a class="jxr_linenumber" name="33" href="#33">33</a>  
 <a class="jxr_linenumber" name="34" href="#34">34</a>      <em class="jxr_javadoccomment">/**</em>
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="54" href="#54">54</a>              <strong class="jxr_keyword">while</strong> (resultSet.next()) {
 <a class="jxr_linenumber" name="55" href="#55">55</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/ExportedKey.html">ExportedKey</a> exportedKey =
-<a class="jxr_linenumber" name="56" href="#56">56</a>                      EntrySet.newInstance(ExportedKey.<strong class="jxr_keyword">class</strong>, resultSet);
+<a class="jxr_linenumber" name="56" href="#56">56</a>                      PairSet.newInstance(ExportedKey.<strong class="jxr_keyword">class</strong>, resultSet);
 <a class="jxr_linenumber" name="57" href="#57">57</a>                  exportedKey.setParent(table);
 <a class="jxr_linenumber" name="58" href="#58">58</a>                  table.getExportedKeys().add(exportedKey);
 <a class="jxr_linenumber" name="59" href="#59">59</a>              }

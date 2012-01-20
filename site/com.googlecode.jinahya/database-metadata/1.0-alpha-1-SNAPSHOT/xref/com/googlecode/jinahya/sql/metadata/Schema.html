@@ -45,9 +45,9 @@
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment"> * @author Jin Kwon &lt;jinahya at gmail.com&gt;</em>
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  @XmlType(propOrder = {<span class="jxr_string">"entries"</span>, <span class="jxr_string">"functions"</span>, <span class="jxr_string">"procedures"</span>, <span class="jxr_string">"tables"</span>,
+<a class="jxr_linenumber" name="38" href="#38">38</a>  @XmlType(propOrder = {<span class="jxr_string">"pairs"</span>, <span class="jxr_string">"functions"</span>, <span class="jxr_string">"procedures"</span>, <span class="jxr_string">"tables"</span>,
 <a class="jxr_linenumber" name="39" href="#39">39</a>                        <span class="jxr_string">"userDataTypes"</span>})
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Schema.html">Schema</a> <strong class="jxr_keyword">extends</strong> ChildEntrySet&lt;Catalog&gt; {
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Schema.html">Schema</a> <strong class="jxr_keyword">extends</strong> ChildPairSet&lt;Catalog&gt; {
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
 <a class="jxr_linenumber" name="42" href="#42">42</a>  
 <a class="jxr_linenumber" name="43" href="#43">43</a>      <em class="jxr_javadoccomment">/**</em>
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="96" href="#96">96</a>              <strong class="jxr_keyword">while</strong> (resultSet.next()) {
 <a class="jxr_linenumber" name="97" href="#97">97</a>                  <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/jinahya/sql/metadata/Schema.html">Schema</a> schema =
-<a class="jxr_linenumber" name="98" href="#98">98</a>                      EntrySet.newInstance(Schema.<strong class="jxr_keyword">class</strong>, resultSet);
+<a class="jxr_linenumber" name="98" href="#98">98</a>                      PairSet.newInstance(Schema.<strong class="jxr_keyword">class</strong>, resultSet);
 <a class="jxr_linenumber" name="99" href="#99">99</a>                  schema.setParent(catalog);
 <a class="jxr_linenumber" name="100" href="#100">100</a>                 catalog.getSchemas().add(schema);
 <a class="jxr_linenumber" name="101" href="#101">101</a>             }
