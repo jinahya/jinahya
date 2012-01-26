@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+  <title>Use of select(Locator[]) with Service-Bound Xlets</title>
+
+
+</head>
+
+
+  <body>
+
+<h2>Use of select(Locator[]) with Service-Bound Xlets</h2>
+In some specifications incorporating Java TV, there is no mechanism to obtain the <code>ServiceComponent</code>
+that refers to xlets associated with the current service. Similarly,
+there may be no mechanism for obtaining a locator to a service
+component that represents a set of xlets that are part of a service.
+For this reason, the handling of service-bound xlets with this method
+is subject to some rather special rules.<br>
+<br>
+If locators to xlets are listed then the specified xlets will be
+started or will continue running, according to the normal rules of
+starting and stopping xlets. Other running xlets in the service context
+will be stopped, as is consistent with the normal rules of running
+xlets. If no locators to xlets are passed in this method, then the
+results depend on whether the instance of <code>ServiceContext</code> is the xlet&rsquo;s &ldquo;primary&rdquo; service context or not.<br>
+<br>
+If the instance of <code>ServiceContext</code> represents the service context in which the calling xlet is running, then it is called the &ldquo;primary<br>
+service context.&rdquo; An xlet may obtain its primary service context by passing its <code>XletContext</code> to<span style="font-family: monospace;"> </span><code>ServiceContextFactory.getServiceContext(XletContext)</code>. The primary service context also appears in the list of service contexts returned by <code>ServiceContextFactory.getServiceContexts()</code>.<br>
+<br>
+<span style="font-style: italic;">For the primary service context only</span>,
+when selection succeeds in a call where no locators to xlets passed as
+arguments, the terminal will select the same xlets as would be selected
+by calling <code>select(Service)</code> on the service of which the
+specified service components are members. &nbsp;For example,&nbsp; the
+components belong to the same service as is currently being presented,
+then there will be no change to the running xlets.<br>
+<br>
+In some specifications incorporating Java TV, an xlet may obtain instances of <code>ServiceContext</code> that are not the xlet&rsquo;s primary service<br>
+context. For such <code>ServiceContext</code> instances, there is no
+special handling of the xlet service components. Thus, if no locators
+to xlets are passed in as argument, xlets running in that service
+context are stopped, and no new xlets are launched.<br>
+
+</body>
+</html>

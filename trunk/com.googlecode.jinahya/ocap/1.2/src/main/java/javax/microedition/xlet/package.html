@@ -1,0 +1,144 @@
+<!
+  @(#)package.html	1.15 00/11/06
+
+  Copyright 1998-2000 by Sun Microsystems, Inc.,
+  901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
+  All rights reserved.
+
+  This software is the confidential and proprietary information
+  of Sun Microsystems, Inc. ("Confidential Information").  You
+  shall not disclose such Confidential Information and shall use
+  it only in accordance with the terms of the license agreement
+  you entered into with Sun.
+>
+<html>
+<head>
+</head>
+<body>
+
+<p>
+Provides interfaces used by applications and the application manager
+to communicate.  This package defines two entities: the
+<code>Xlet</code> and the <code>XletContext</code>.  The central
+function of this set of interfaces is to model and manage the states
+an application can be in.  <code>Xlet</code> is an interface that must
+be implemented by the primary class of an application.  When an
+application is loaded, one instance of this primary class is created.
+The application is controlled via method calls on this instance.
+Methods of <code>Xlet</code> are used by the application manager to
+deliver state change requests to the application.  An application is
+provided with an instance of <code>XletContext</code>, which it can
+use to deliver state change notifications to the application manager.
+Each <code>Xlet</code> receives its own instance of
+<code>XletContext</code>.  An application might have a graphical
+representation, or it might be a headless &quot;service.&quot;
+<p>
+This interface allows an application manager to create,
+initialize, start, pause, and destroy an application.
+<p>
+The following is a description of the <code>Xlet</code> state model.
+Note that an <code>Xlet</code> is not required to maintain an explicit
+internal model of its state; however it must nonetheless behave as
+described by the following model.
+<p>
+
+<table BORDER  >
+<tr>
+<td>
+<center><b>State Name</b></center>
+</td>
+
+<td>
+<center><b>Description</b></center>
+</td>
+</tr>
+
+<tr>
+<td><i>Loaded</i></td>
+
+<td>The application has been loaded but has not been initialized. 
+<br>This state is entered:
+<UL>
+<LI>After the application's <code>Xlet</code> instance has been
+created.  This causes the xlet's no-argument
+constructor to be called.  The application typically does little or no
+initialization in this step.  If an exception is thrown from the
+constructor, the application is considered to be destroyed; it will
+receive no further <code>Xlet</code> callbacks, and its resources will
+be eligible for reclamation. <p>
+</UL>
+<b>Note:</b> This state is entered only once per application
+instance.</td>
+</tr>
+
+<tr> 
+<td><i>Paused</i></td>
+
+<td>The application is initialized and quiescent. It should keep
+itself ready to become active quickly.  As a secondary goal, it should
+attempt to minimize resource usage.  <br>This state is entered:
+<UL>
+<LI>From the <i>Loaded</i> state after the <code>initXlet</code> method
+returns successfully.
+<LI>From the <i>Active</i> state after the <code>pauseXlet</code>
+method returns successfully.
+<LI>From the <i>Active</i> state upon entering the
+<code>XletContext.notifyPaused</code> method.
+</UL>
+
+</tr>
+
+<tr>
+<td><i>Active</i></td>
+
+<td>The application is functioning normally and executing.
+<br>This state is entered:
+<UL>
+<LI>From the <i>Paused</I> after the <code>startXlet()</code> method
+returns successfully.
+</UL>
+<b>Note:</b> Applications that are in the <i>Paused</i> state may
+identify to the application manager that they would like to be brought
+into the <i>Active</i> state by calling
+<code>XletContext.resumeRequest</code>.  Calling this method provides
+no guarantee that their startXlet method will be called.  </td> </tr>
+
+<tr>
+<td><i>Destroyed</i></td>
+
+<td>The application has released all of its resources and terminated.
+<br>This state is entered:
+<UL>
+<LI>When the <code>Xlet</code>'s <code>destroyXlet()</code> method
+returns successfully.  The <code>destroyXlet()</code> method shall
+release all resources held and perform any necessary clean up so the
+application may be garbage collected.
+
+<LI>Upon entering the <code>XletContext.notifyDestroyed()</code>
+method.  The <code>Xlet</code> perform its clean up actions before
+calling the <code>notifyDestroyed()</code> method.
+
+<LI>When the <code>Xlet</code> fails to respond to a state change
+notification within a reasonable amount of time.  The precise length
+of time is implementation dependent.
+</ul>
+<b>Note:</b> This state is only entered once, and is the terminal
+state.  Once an application is in the destroyed state, all of its
+resources are eligible for reclamation.</td> </tr>
+</table>
+
+<p>
+This Profile supports the simultaneous execution of multiple Xlets.
+Each xlet is loaded by a unique class loader, and receives a distinct
+copy of each user defined class.  Therefore it is impossible for xlets
+to communicate by sharing instances through static data members of
+user defined classes.
+</p>
+<p>
+If a suitable API is available on the target platform, applications
+may create their own additional classloaders.  Each such classloader
+must have its application's classloader as an ancestor.
+</p>
+
+</body>
+</html>
