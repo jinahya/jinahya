@@ -16,6 +16,8 @@
 'UTF-8'
 -doctitle
 'ocap-ds I05 API'
+-link
+'https://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/ocap-api/1.2.1'
 -linkoffline
 'http://download.oracle.com/javase/1.3/docs/api' 'E:/svnwc/jinahya.googlecode.com/trunk/com.googlecode.jinahya/ocap-ds/I05/target/javadoc-bundle-options'
 -use
