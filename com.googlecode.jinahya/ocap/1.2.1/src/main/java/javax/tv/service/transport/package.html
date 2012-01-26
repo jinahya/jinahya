@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides additional information about the transport mechanisms that
+deliver the content the SI data describes. The <tt>SIManager</tt>
+provides access to instances of the <tt>Transport</tt> interface,
+which is extended to represent an MPEG-2 multiplex.  The subtypes of
+Transport are:
+<ul>
+<li>{@link javax.tv.service.transport.TransportStreamCollection},
+representing one or more transport streams.  A {@link
+javax.tv.service.transport.TransportStream} delivers services and
+service information to the receiver.<p>
+
+<li>{@link javax.tv.service.transport.NetworkCollection}, representing
+one or more networks.  A {@link javax.tv.service.transport.Network}
+typically aggregates transport streams.<p>
+
+<li>{@link javax.tv.service.transport.BouquetCollection}, representing
+one or more bouquets.  A {@link javax.tv.service.transport.Bouquet}
+aggregates services, and may span transport stream and network
+boundaries.
+</ul>
+
+One may use the {@link javax.tv.service.navigation.SIElementFilter
+SIElementFilter} API to determine the services carried by individual
+bouquets, networks, and transport streams.
+<br>&nbsp;
+</body>
+</html>

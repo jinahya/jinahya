@@ -202,7 +202,6 @@
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
-            
           </reportPlugins>
         </configuration>
       </plugin>

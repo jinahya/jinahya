@@ -51,7 +51,9 @@ public abstract class ChildPairSet<P extends PairSet> extends PairSet {
     }
 
 
-    /** parent. */
+    /**
+     * parent.
+     */
     private P parent;
 
 

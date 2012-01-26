@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <title>Package org.ocap.hn.upnp</title>
+    </head>
+<body bgcolor="white">
+
+    Provides mechanisms for application access to a Host device Universal Plug
+    and Play (UPnP) implementation.  An application can use the
+    <tt>org.ocap.hn.upnp</tt> package in order to directly invoke UPnP
+    functionality.  The package contains three sub-packages containing client,
+    server, and common functionality:
+    <ul>
+        <li>{@link org.ocap.hn.upnp.client}</li>
+        <li>{@link org.ocap.hn.upnp.server}</li>
+        <li>{@link org.ocap.hn.upnp.common}</li>
+    </ul>
+    There are two entry points (singletons) into the package for client and
+    server functionality:
+    <ol>
+        <li>
+            <b>Client:</b> The UPnP Control Point class
+            ({@link org.ocap.hn.upnp.client.UPnPControlPoint})
+            provides access to devices and services on a home network.
+        </li>
+        <li>
+            <b>Server:</b> The UPnP Device Manager class
+            ({@link org.ocap.hn.upnp.server.UPnPDeviceManager})
+            provides management of devices and
+            services in the local Host device.
+        </li>
+    </ol>
+    
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <title>Package org.ocap.hn.upnp.server</title>
+    </head>
+<body>
+    Provides UPnP server functionality, permitting management of devices and services in the local Host device.
+
+    <p>The UPnP Device Manager class ({@link org.ocap.hn.upnp.server.UPnPDeviceManager})
+    provides the ability for an application to create devices and cause the Host device to
+    expose them using the UPnP discovery process.  Application created devices
+    are UPnP compliant and may contain services with actions and state
+    variables.  An application uses the {@link org.ocap.hn.upnp.server.UPnPDeviceManager#createDevice UPnPDeviceManager.createDevice}
+    method to create a device and passes in a {@link org.ocap.hn.upnp.server.UPnPManagedDevice} object
+    that contains a hierarcy of objects that represents all of the device
+    information including service ({@link org.ocap.hn.upnp.server.UPnPManagedService}) objects.  The
+    object hierarchy matches the UPnP device architecture definition, e.g. a
+    device contains sub-devices, and services.
+    </p>
+
+    <p>An application can set itself as an action handler by calling the
+    {@link org.ocap.hn.upnp.server.UPnPManagedService#setActionHandler UPnPManagedService.setActionHandler(UPnPActionHandler)} method.  The application
+    will be notified when an action request is received for the managed service.
+    The application will create a response and return it to the Host
+    implementation which will send the UPnP response.  Similarly, an application
+    can set itself as a state variable handler by calling the
+    {@link org.ocap.hn.upnp.server.UPnPManagedService#setHandler UPnPManagedService.setHandler(UPnPManagedStateVariableHandler)} method.  The application will
+    be notified when a control point subscribes to or unsubscribes from the
+    service or has requested the
+    value of a state variable through the QueryStateVariable action.
+    </p>
+
+</body>
+</html>

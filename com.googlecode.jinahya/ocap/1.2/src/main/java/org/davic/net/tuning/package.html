@@ -1,0 +1,47 @@
+<html>
+<body>
+Provides access to tuning - MPEG multiplex selection.
+Note that in a digital TV system the role of tuning is different from its
+role in an analog TV system. The service selection API in MHP provides
+functionality closer to the role of tuning in an analog TV system.<p>
+This javadoc has been edited to match the contents of the MHP
+specification. The following errata agreed in DVB have been 
+implemented with respect to the original DAVIC work.
+<ul>
+<li>NetworkInterfaceController.reserve() (DVB issue #776)<p>
+Change the reason why a NoFreeInterfaceException is thrown to be
+"raised if the requested network interface can not be reserved"
+<li>NetworkInterfaceController.tune() (DVB issue #773)<p>
+Replace "this NetworkInterface" with "the NetworkInterface reserved 
+by this NetworkInterfaceController" in both signatures of this method.
+<li>NetworkInterfaceController.reserve() (DVB issue #778)<p>
+The following from the semantic of this method: <p>
+If this NetworkInterfaceController has already reserved another NetworkInterface, then it will 
+either release that NetworkInterface and reserve the specified one, or throw an exception.
+If the specified NetworkInterface has already been reserved by this NetworkInterfaceController,
+then this method does nothing.<p>
+is replaced with the following:<p> 
+If this NetworkInterfaceController has currently reserved another NetworkInterface, then it 
+will either release that NetworkInterface and reserve an appropriate one, or throw an exception.
+If a NetworkInterface that is able to tune to the specified transport stream is currently 
+reserved by this NetworkInterfaceController, then this method does nothing.
+<li>NetworkInterfaceController.reserveFor() (DVB issue #780)<p>
+The following from the semantic of this method:<p>
+If this NetworkInterfaceController has already reserved another NetworkInterface, then it will 
+either release that NetworkInterface and reserve an appropriate one, or throw an exception.
+If NetworkInterfaceController has already reserved a NetworkInterface that is able to tune to 
+the specified transport stream, then this method does nothing.<p>
+is replaced with the following:<p>
+If this NetworkInterfaceController has currently reserved another NetworkInterface, then it 
+will either release that NetworkInterface and reserve an appropriate one, or throw an exception.
+If a NetworkInterface that is able to tune to the specified transport stream is currently 
+reserved by this NetworkInterfaceController, then this method does nothing.
+<li>NetworkInterface - Constructor (DVB issue #2554)
+This class is considered to have a no argument protected constructor with the following 
+statement attached to it:<p>
+This constructor is provided for the use of implementations and specifications which extend 
+this specification. Applications shall not define sub-classes of this class. Implementations 
+are not required to behave correctly if any such application defined sub-classes are used.
+</ul>
+</body>
+</html>
