@@ -9,7 +9,7 @@
     <copyright>&#169;2011 - 2012</copyright>
     <item>
       <title>File: 8,
-             Errors: 8,
+             Errors: 15,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base64URL.java">com/googlecode/jinahya/util/rfc4648/Base64URL.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base64URL.java">com/googlecode/jinahya/rfc4648/Base64URL.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base32.java">com/googlecode/jinahya/util/rfc4648/Base32.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base.java">com/googlecode/jinahya/rfc4648/Base.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base64.java">com/googlecode/jinahya/rfc4648/Base64.java</a>
                 </td>
                 <td>
                   0
@@ -57,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base64.java">com/googlecode/jinahya/util/rfc4648/Base64.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base32Hex.java">com/googlecode/jinahya/rfc4648/Base32Hex.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +85,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.BaseBinaryEncoderProxy.java">com/googlecode/jinahya/util/rfc4648/BaseBinaryEncoderProxy.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.BaseBinaryDecoderProxy.java">com/googlecode/jinahya/rfc4648/BaseBinaryDecoderProxy.java</a>
                 </td>
                 <td>
                   0
@@ -80,12 +94,12 @@
                   0
                 </td>
                 <td>
-                  2
+                  5
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base16.java">com/googlecode/jinahya/util/rfc4648/Base16.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base16.java">com/googlecode/jinahya/rfc4648/Base16.java</a>
                 </td>
                 <td>
                   0
@@ -99,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base.java">com/googlecode/jinahya/util/rfc4648/Base.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.Base32.java">com/googlecode/jinahya/rfc4648/Base32.java</a>
                 </td>
                 <td>
                   0
@@ -108,12 +122,12 @@
                   0
                 </td>
                 <td>
-                  3
+                  0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.BaseBinaryDecoderProxy.java">com/googlecode/jinahya/util/rfc4648/BaseBinaryDecoderProxy.java</a>
+                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.rfc4648.BaseBinaryEncoderProxy.java">com/googlecode/jinahya/rfc4648/BaseBinaryEncoderProxy.java</a>
                 </td>
                 <td>
                   0
@@ -122,21 +136,7 @@
                   0
                 </td>
                 <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/checkstyle.html#com.googlecode.jinahya.util.rfc4648.Base32Hex.java">com/googlecode/jinahya/util/rfc4648/Base32Hex.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  4
                 </td>
               </tr>
                       </tbody>
