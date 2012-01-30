@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+  <body>
+Provides facilities for inter-Xlet communication (IXC). &nbsp;The class
+IXCRegistry is the bootstrap mechanism for obtaining references to remote
+objects residing in other Xlets executing on the same machine, but in separate
+classloaders.
+
+
+ <br>
+ 
+<h2>Remote Call Semantics</h2>
+ An object may be communicated to another Xlet in two ways:  A reference
+to the remote object can be passed, or a copy of the remote object can be
+made.  These two techniques are called  as pass by remote reference, and
+pass by remote copy.  When an object that has been bound to the IXC Registry
+via a method of <code>javax.microedition.xlet.ixc.IxcRegistry</code> is imported 
+by another, it shall be passed by remote reference.<br>
+ <br>
+ 
+<h3>Objects Passed by Remote Reference</h3> An object that is passed
+by remote reference must implement one or more remote interfaces.  A remote
+interface is an interface that extends, either directly or indirectly,
+the marker interface <code> java.rmi.Remote</code>.  The declared type
+of a parameter or a return value for a remote method invocation must
+be a remote interface, or a class whose instances are serializable.
+If a remote interface that is application-defined, the interface
+definition must be included in both the sending and receiving Xlet.
+If the two xlets contain identically named remote interfaces that
+contain different declarations, the result of attempting to use these
+interfaces for inter-Xlet communication is undefined, and possibly
+implementation dependent.<br>
+ <br>
+When an object is passed by remote reference to a different Xlet, the
+receiving Xlet does not receive a direct reference to the exported
+object; rather, it receives an instance of a stub class.  This stub
+class will not be a subclass of the remote object's runtime type;
+rather, it will be a platform-generated class that implements the
+remote interface type(s) that are implemented by the remote object.
+It will include implementations of all methods
+specified by the remote interface(s), and will contain no other members
+accessible to the application.  These methods are called "remote
+methods".  Remote methods invoked on this stub class instance will be
+forwarded to the object in the original Xlet, and executed in the
+context of that Xlet.<br>
+ <br>
+The IXC implementation generates
+all stub classes in the Xlet's class loader, that is, the class loader
+returned by <code>XletContext.getClassLoader()</code> for the
+<code>XletContext</code> passed to
+<code>IxcRegistry.getRegistry(XletContext)</code>.
+Thus, applications must include the definition of any needed remote
+interfaces in the search path of the main xlet class loader.  Any
+remote interfaces defined in class loaders created by the xlet
+will not be found by the platform when attempting to generate
+a stub class.  Note that this does not apply to objects being
+<i>exported</i>, only for objects being imported.<br>
+<br>
+Note: The remote methods specified by a remote interface include all
+methods specified by that interface, including the methods inherited
+from superinterfaces.  This applies even for methods inherited from
+superinterfaces that do not themselves extend
+<code>java.rmi.Remote</code>, either directly or indirectly.
+The definition of the stub class shall be automatically created by the
+platform.  This differs from traditional network RMI as implemented in
+Sun platforms through JDK 1.3, where the stub classes are created by
+the developer using a tool such as rmic.  If stub classes produced by
+rmic or any other off-line tool are present, the platform shall silently
+ignore them for the purposes of inter-Xlet communication.<br>
+ <br>
+The stub class that is generated shall include a definition for all of
+the methods specified by the remote interface type(s).  A remote
+interface is an interface that extends <code>java.rmi.Remote</code>,
+either directly or indirectly.  These remote methods must be declared
+as follows:<br>
+ 
+<ul>
+   <li>Each method must declare <code>java.rmi.RemoteException </code>in
+its throws clause, in addition to any application-specific exceptions.</li>
+   <li>A remote object passed by remote reference as an argument or return 
+value must be declared as an interface that extends <code>java.rmi.Remote</code>
+ , and not as an application class that implements this remote interface.</li>
+   <li>The type of each method argument must either be a remote interface, 
+a class or interface that implements <code>java.io.Serializable</code>, or 
+a primitive type.</li>
+   <li>The type of each return value must either be a remote interface, a class or interface that implements <code>java.io.Serializable</code>, a primitive type, or void.</li>
+ 
+</ul>
+ If any remote method does not follow these rules, the platform cannot generate 
+a stub class.  When one is required, a <code>StubException</code> shall
+ be thrown to the caller.<br>
+ <br>
+ 
+<h4>Lifecycle Considerations for Remote Objects</h4>
+When an Xlet is destroyed, the objects it has exported are unbound
+from the IXC registry.  However, it is possible that other Xlets may
+still have remote references to some of the Xlet's objects.  If a
+method is invoked on one of these remote objects, the platform may
+fail to execute the method, and instead throw a RemoteException.  If a
+remote method call is in progress when the Xlet receiving the call is
+destroyed, the calling Xlet may receive a <code> RemoteException
+</code>on the calling thread, and the remote method invocation may be
+abruptly terminated.  If a remote method has started executing code in
+the implementation of the remote object when the Xlet making the call
+is destroyed, the call shall run to completion, unless the Xlet
+receiving the call is also destroyed.<br>
+ <br>
+ 
+<h4>Exceptions in Remote Method Calls</h4>
+ If an exception is thrown from a remote method, a remote copy of that exception 
+shall be made in the context of the calling Xlet.  This copy of the exception 
+shall be thrown to the caller.<br>
+ <br>
+ 
+<h4>Re-exported Objects</h4>
+ It is possible that an object passed from one Xlet to another might be passed 
+back to the original Xlet.  This could happen through any number of intervening 
+Xlets.  If this happens, the original Xlet will receive the instance that 
+it originally exported.  If it compares the instance it receives with the 
+original instance using the Java == operator, the result will be true.  Because 
+of this, there is no need to provide an override of <code>java.lang.Object.equals()</code>
+  or <code>java.lang.Object.hashCode(</code>) for remote objects.<br>
+ <br>
+This behavior is different than network RMI, as implemented in Sun's
+JDK through 1.3.  In Sun's implementation of network RMI, a remote
+stub object is given to the original Xlet, but stubs and remote
+objects are required to have a special version of the
+<code>equals()</code> and <code>hashCode()</code> methods.<br>
+ <br>
+ 
+<h3>Objects Passed by Remote Copy</h3>
+ An object is passed by remote copy when a method argument or return value 
+is passed, where the class of that object does not implement <code>java.rmi.Remote</code>
+ .  Additionally, a remote method call exception is communicated to the receiving 
+Xlet by remote copy, as described above.<br>
+ <br>
+ When an object is passed by remote copy, it is serialized into a byte stream 
+in the context of the exporting Xlet, and deserialized in the context of the
+importing Xlet.  Serialization is performed as defined for <code>java.io.Serializable</code>
+ .  Application-defined classes may be serialized, but the definition of
+the application-defined class must be present in both Xlets, and the external 
+forms of both versions of the class must be compatible.  If any error in serialization
+or de-serialization occurs, an instance of <code>java.rmi.RemoteException 
+</code>shall be thrown.<br>
+ <br>
+ 
+<h4>Treatment of Primitive Types</h4>
+ Primitive types passed as method arguments or return values are copied.<br>
+ <br>
+ 
+<h3>Classloading Considerations</h3>
+ <br>
+ The presence of inter-xlet communication does not allow the loading of one 
+Xlet's classes from another.  No classloader that loads classes from a remote 
+Xlet for remote method calls is created (unlike network RMI, which creates 
+a special <code>RMIClassLoader </code>for remote objects).  Rather, a copy 
+of each application-defined remote interface and serializable object involved 
+in a remote method invocation must be present in both Xlets.  If this is not
+the case, the platform shall generate a <code>RemoteException </code> and
+throw it in the calling thread.<br>
+ <br>
+ 
+<h3>Thread Usage</h3>
+ A remote method may or may not execute in separate underlying thread.  If 
+an application makes a remote method invocation to a remote object in a different 
+application, and that second application calls back to the first in the same 
+&#8220;thread,&#8221; then the first application might or might not observe that the original
+calling thread and the callback thread are the same instance of java.lang.Thread.<br>
+ <br>
+ If an application makes simultaneous remote calls in separate threads, then 
+the remote execution shall appear to be carried out in parallel.<br>
+ <br>
+ 
+<blockquote>Note:  This is not meant to rule out thread-pooling techniques. 
+ Specifically, an implementation may choose to serialize such remote calls, 
+as long as the first one completes within a reasonably short time, relative 
+to the normal scheduling rules of Java threads.<br>
+   <br>
+   </blockquote>
+   
+  <h3>Garbage Collection of Remote Objects</h3>
+ When a non-destroyed Xlet contains a reachable instance of a stub for a
+remote object, that remote object shall not be garbage collected, unless
+the remote Xlet is destroyed.  When an exported object no longer has any
+remote stub objects that are reachable in other non-destroyed Xlets, and
+when that exported object is also not reachable locally within its Xlet,
+then that remote object shall be considered unreachable, and thus eligible
+for reclamation.<br>
+   <br>
+ When an Xlet is destroyed, other Xlets may hold remote references to objects 
+within the Xlet being destroyed.  In this case, the referenced objects may 
+be dereferenced and ultimately garbage collected.  If this is done, then attempts
+to invoke remote methods on these objects shall result in a <code> RemoteException
+  </code>to the caller.<br>
+
+
+<h3>Security Considerations</h3>
+    <p>
+    When a remote call is made, it will be executed within
+    an <code>AccessControlContext</code> that limits the set of granted
+    permissions.  This <code>AccessControlContext</code> is that of the
+    creator of the <code>IxcRegistry</code> that is <i>exporting</i> the
+    object; it is obtained with <code>AccessController.getContext()</code>
+    in the first call to <code>IxcRegistry.getRegistry(XletContext)</code>
+    for a given <code>XletContext</code> instance.
+    See {@link java.security.AccessController}
+    and {@link java.security.AccessControlContext} for information about this
+    mechanism.
+    <p>
+    Inter-xlet communication will work with any valid
+    <code>XletContext</code>, that is, with any <code>XletContext</code>
+    that returns a
+    valid, non-null <code>ClassLoader</code>.  This class loader will be used
+    to load the automatically generated stub classes.
+    Access to <code>ClassLoader</code>
+    instances from application code is
+    limited.  See <code>java.lang.RuntimePermission("getClassLoader")</code>
+    for details.
+
+@see javax.microedition.xlet.ixc.IxcRegistry
+@see java.rmi.Remote
+@see java.rmi.registry.Registry
+
+   <br>
+     
+  </body>
+  </html>

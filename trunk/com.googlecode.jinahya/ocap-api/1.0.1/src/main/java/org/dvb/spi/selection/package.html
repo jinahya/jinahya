@@ -1,0 +1,412 @@
+<html><body>
+<p>
+This package defines an SPI for selection of services and service
+components. 
+The providers defined in this package allow the presentation of 
+services whose location is not announced using standard signalling.
+One a SelectionProvider has been installed, the standard MHP APIs,
+such as the JavaTV service selection API, can be used to present
+those services.
+<h2>Examples of API usage</h2>
+<H3>Switched Digital</H3>
+<P>The following table shows the sequence of API calls involved in
+a service selection operation, both API calls between an application
+and the implementation and between the implementation and a
+SelectionProvider.<p>
+The table covers both the case when the service location is
+known and when the location is unknown. The first column indicates
+if the step applies when the service location is unknown. The second
+column indicates whether the step applies when the service location
+is known. Most steps either apply in both cases at the same point in
+the sequence or only apply when the service location is unknown. 
+Two steps apply in both cases but at different points in the sequence.
+<p>
+<TABLE BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0>
+<THEAD>
+<TR>
+<TD><P ALIGN=CENTER><I>Unknown Service Location</I></TD>
+<TD><P ALIGN=CENTER><I>Known Service Location</I></TD>
+<TD><P ALIGN=CENTER><I>Step</I></TD>
+<TD><P ALIGN=CENTER><I>API call by application</I></TD>
+<TD><P ALIGN=CENTER><I>API call to/from provider</I></TD>
+</TR>
+</THEAD>
+<TBODY>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Provider is installed</TD>
+<TD>{@link org.dvb.spi.ProviderRegistry#registerSystemBound ProviderRegistry.registerSystemBound}</TD>
+<TD>{@link org.dvb.spi.Provider#providerRegistered Provider.providerRegistered}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Provider is initialised</TD>
+<TD>None</TD>
+<TD>{@link org.dvb.spi.selection.SelectionProvider#init SelectionProvider.init}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Implementation asks provider for supported services</TD>
+<TD>None</TD>
+<TD>{@link org.dvb.spi.selection.SelectionProvider#getServiceList}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Each supported service is merged into the service list of the receiver</TD>
+<TD>None</TD>
+<TD>Methods on each ServiceReference returned from {@link org.dvb.spi.selection.SelectionProvider#getServiceList}</TD>
+</TR>
+
+<TR>
+<TD>N</TD>
+<TD>Y</TD>
+<TD>Extract tuning information for service</TD>
+<TD>None</TD>
+<TD>For MHP, {@link org.dvb.locator.FrequencyLocator#getDeliverySystemDescriptor}</TD>
+</TR>
+
+<TR>
+<TD COLSPAN=4 WIDTH="100%" VALIGN=TOP><P ALIGN=CENTER><FONT SIZE=3>Some time later</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Application obtains service object corresponding to locator of service</TD>
+<TD>SIManager.getService(LocatorFactory.createLocator( "dvb://'movie-channel-1.broadcaster-b.com'")</TD>
+<TD>None</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Application asks for service to be presented</TD>
+<TD>ServiceContext.select(Service)</TD>
+<TD>None</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Create session for the presentation of the requested service.</TD>
+<TD>None</TD>
+<TD>1) new ServiceReference(..)<p>2)
+   {@link org.dvb.spi.selection.SelectionProvider#newSession SelectionProvider.newSession}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Implementation asks provider to present channel.</TD>
+<TD>None</TD>
+<TD>{@link org.dvb.spi.selection.SelectionSession#select SelectionSession.select}</TD>
+<TD></TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Provider asks head-end for channel</TD>
+<TD>None</TD>
+<TD>Existing java.net APIs</TD>
+<TD></TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Head-end returns reference to channel location</TD>
+<TD>None</TD>
+<TD>Existing java.net APIs</TD>
+<TD></TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Provider passes on reference to channel location to implementation</TD>
+<TD>None</TD>
+<TD>1a) For MHP, new FrequencyLocator(...)
+<p>1b) For OCAP, new OCAPLocator(int&nbsp;frequency, int&nbsp;programNumber,int&nbsp;modulationFormat, ...) 
+<p>2) Return from call to {@link org.dvb.spi.selection.SelectionSession#select}
+</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Extract tuning information for service</TD>
+<TD>None</TD>
+<TD>For MHP, {@link org.dvb.locator.FrequencyLocator#getDeliverySystemDescriptor}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Implementation tunes to appropriate frequency etc</TD>
+<TD>None</TD>
+<TD>None</TD>
+</TR>
+
+<TR>
+<TD>N</TD>
+<TD>Y</TD>
+<TD>Create session for the presentation of the requested service.</TD>
+<TD>None</TD>
+<TD>1) new ServiceReference(..)<p>
+    2) {@link org.dvb.spi.selection.SelectionProvider#newSession SelectionProvider.newSession}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Inform provider that implementation is ready to receive content</TD>
+<TD>None</TD>
+<TD>{@link org.dvb.spi.selection.SelectionSession#selectionReady SelectionSession.selectionReady}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>N</TD>
+<TD>Provider tells server to send content</TD>
+<TD>Provider sends message to switched digital server</TD>
+<TD>Existing java.net APIs</TD>
+<TD></TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Content arrives</TD>
+<TD>1) new NormalContentEvent<p>2) ServiceContextListener.receiveServiceContextEvent(..)</TD>
+<TD>None</TD>
+</TR>
+
+<TR>
+<TD COLSPAN=4 WIDTH="100%" VALIGN=TOP><P ALIGN=CENTER><FONT SIZE=3>Some time later</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Content stops being presented (change to new channel, ...)</TD>
+<TD>Either none or ServiceContext.select() with a different service.</TD>
+<TD>{@link org.dvb.spi.selection.SelectionSession#destroy SelectionSession.destroy}</TD>
+</TR>
+
+<TR>
+<TD>Y</TD>
+<TD>Y</TD>
+<TD>Content may stop being delivered</TD>
+<TD>Provider may tell head-end that this content is no longer needed if the head-end is counting the
+number of users of the content</TD>
+<TD>Existing java.net APIs</TD>
+</TR>
+
+</TBODY>
+</TABLE>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+

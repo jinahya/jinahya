@@ -1,0 +1,24 @@
+<html><body>
+<p>
+This package defines a central registry for all DVB Service Provider Interface
+(SPI) providers.  This encourages a consistent architecture for such providers.
+Additionally, it gives some support for debugging.  For example, a list of
+installed providers might be useful in a crash log.
+</p><p>
+In normal operation, xlets using a provider never get a direct reference
+to that provider.  Rather, xlets interact with the terminal through
+standardized APIs, such as Java TV.  The service underlying those
+underlying APIs can be:
+<ul>
+  <li>An integrated part of the implementation, or
+  <li>interoperable downloaded code, either in the form of an 
+      xlet-bound or a system-bound provider.  
+</ul>
+</p><p>
+NOTE:  The Java platform class <code>java.security.Provider</code> is
+unrelated to the providers defined in this package and its subpackages.
+Additionally, <code>java.security.Provider</code> in the Java platform
+is typically associated with a completely different lifecycle model.
+</p>
+</body></html>
+

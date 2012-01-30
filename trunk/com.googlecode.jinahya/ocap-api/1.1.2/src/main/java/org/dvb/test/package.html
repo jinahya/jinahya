@@ -1,0 +1,105 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+</head>
+<body>
+
+<h1>
+Broadcast model</h1>
+In a broadcast-based conformance system, there are effectively three main
+entities involved in an automated test process:
+<ol>
+<li>
+The test server that is used to hold and initiate all of the tests.</li>
+
+<li>
+The test client which runs the tests and logs the results.</li>
+
+<li>
+The broadcast chain that is used to transfer applications and application
+data from the server to the client.</li>
+</ol>
+<img SRC="doc-files/image001.gif" ALT="The broadcast / conformance test model" NOSAVE >
+<p>The communication order is as follows:
+<ol>
+<li>
+The test-server uses the "reset for next test" mechanism to set the test
+client into a known default state, ready to receive the test-application.</li>
+
+<li>
+The test-server uses the "broadcast chain" mechanism to supply the test-application
+to the test client and to signal that the test-application should be executed.</li>
+
+<li>
+The test-client runs the test-application.</li>
+
+<li>
+The test-application either:</li>
+
+<ul>
+<li>
+&nbsp;finishes within a given timelimit, the result of the test is known
+and shall be considered to be the value reported by the test application
+for the purposes of compliance.</li>
+
+<ul>
+<li>
+Optionally, the test-client may signal to the test-server that the test-application
+has finished executing and that the test-client is ready to be reset in
+order to receive the next test-application.</li>
+</ul>
+
+<li>
+fails to finish the test-application within a given timeout, the result
+of the test is unknown and shall be treated as a failure for the purposes
+of compliance. The test-server may treat the test-client as ready to be
+reset in order to receive the next application.</li>
+</ul>
+</ol>
+[Successive tests are then repeated from stage 1.]
+<h2>
+"Reset for next test"</h2>
+The "reset for next test" path is used by the test server to reset the
+test client to receive the next test. The reset for next test API is considered
+to be a private implementation issue between the test-server and test-client
+and therefore has no public Java API implications. Note that this "communication"
+needs to take place prior to any application being executed. Note that
+the precise manner of the reset mechanism is intentionally not specified
+-- in the worst case, this may involve "power cycling" the test client.
+<h2>
+Test log</h2>
+Communication from the test client to the test log is considered as write-only
+access. Hence, results from successive tests cannot overwrite results from
+previous ones. Multiple (intermediate) results may be sent to the test
+log for any given test. It is recommended that all communication to the
+test log is synchronous.
+<p>See the DVBTest.log method for details of the proposed API and implementation
+issues.
+<h2>
+"Test completed"</h2>
+The "test completed" path is used by the test client to indicate to the
+test server that it has completed the previous test and is now able to
+accept a subsequent one. Note that this communication path is an optimisation,
+since direct communication from the client to the server is not actually
+required, e.g. the server might simply "time-out" the client, and then
+perform a "reset for next test" action. However, this optimisation may
+be important when large numbers of tests are being performed on a "capable"
+platform, since e.g. if a 30 second timeout is applied for 1000 test cases
+which typically run within say 6 seconds, then the timeout implies a typical
+running time of 500 minutes, i.e. ~4.5 hours --- rather than 100 minutes,
+i.e. ~1.5 hours.
+<p>See the DVBTest.terminate method for details of the proposed API and
+implementation issues.
+<h2>
+Access test log</h2>
+The mechanism by which the test-log is accessed is not considered in this
+document, this is a private mechanism, which might include reading a file
+from flash / RAM. Similarly, the mechanism by which results are recovered
+from the test log is not considered in this document, e.g. the test-log
+may actually reside on the test server, e.g. as in the case that results
+are transmitted over an IP connection.
+<br>&nbsp;
+</body>
+</html>

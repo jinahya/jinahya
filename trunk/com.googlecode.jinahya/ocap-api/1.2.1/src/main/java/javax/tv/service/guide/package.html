@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides APIs to support electronic program guides (EPGs), including program
+schedules, program events and program ratings. The <tt>ProgramSchedule</tt>
+interface can be used to retrieve the current <tt>ProgramEvent</tt>, the
+next <tt>ProgramEvent,</tt> or a <tt>ProgramEvent</tt> in the future. Each
+<tt>ProgramEvent</tt> can be queried for its name, start time and end time,
+description, and rating.
+<p>Rating related information is organized into rating regions such as
+countries, groups of countries, or arbitrary geographical regions.
+Each region may have a multiple rating dimensions such as the MPAA rating,
+FCC TV rating, DVB age-based rating, broadcaster specific rating, etc.
+Each dimension contains multiple levels; each <tt>ProgramEvent</tt> is
+labeled with one of these levels for all supported rating regions.
+<br>
+</body>
+</html>

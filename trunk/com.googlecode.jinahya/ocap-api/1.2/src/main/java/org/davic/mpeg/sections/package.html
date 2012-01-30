@@ -1,0 +1,61 @@
+<html>
+<body>
+Provides access to MPEG-2 section filtering.<p>
+The following errata agreed in DVB have been implemented with respect to
+the original DAVIC work.
+<ul>
+<li>org.davic.mpeg.sections.SectionFilter.startFiltering (appData,pid,
+tableId)exceptions.  (DVB issue #30)<p>
+Like other startFiltering methods, <code>org.davic.mpeg.sections.SectionFilter.startFiltering
+(appData, pid, tableId)</code> shall throw an IllegalFilterDefinitionException where : 
+the java integer parameters are either negative or outside the range allowed by the
+MPEG specification.<p>
+<li>org.davic.mpeg.sections.Section.getData. (DVB issue #44) <p>
+Remove the following text from the methods of org.davic.mpeg.sections.Section
+"(everything after the length field, not including a CRC check)". <p>
+<li>org.davic.mpeg.sections.SectionFilterGroup.attach. (DVB issue #125)<p>
+A NotAuthorizedException is added to the list of the exceptions which can be
+thrown by this method.
+<li>Section.getFullStatus (DVB issue #855)<p>
+This method is considered to have the following text appended to its description:
+"Returns true when the Section object contains valid data."
+<li>SectionFilter (DVB issue #869)<p>
+In the description of this class there are 12 instances of a cross reference to H7.
+In each case this should be a reference to E.8.1.
+<li>RingSectionFilter (DVB issue #879)<p>
+Is considered to have the following text appended to its description: <p>
+All sections in a ring section filter are initialised to empty when the ring section
+filter is first created. Clearing them to empty any time after this is the responsibility 
+of the application. Starting a ring section filter shall not clear any of the sections to empty.
+<li>Section.clone (DVB issue #862)<p>
+Section is considered to have the method clone() with the following behaviour. <p>
+A cloned Section object is a new and separate object. It is unaffected by changes in the state 
+of the original Section object or restarting of the SectionFilter the source Section object 
+originated from. The clone method must be implemented without declaring exceptions.
+<li>SectionFilter.startFiltering(all signatures) (DVB issue #3330)<p>
+In these methods,the description of when the FilterResourceException shall be thrown is 
+considered to have the following text appended to its description:
+When a SectionFilterGroup is detached, either by the client or through resource withdrawal,
+started SectionFilters shall remain started. Hence if the SectionFilterGroup is re-attached,
+those filters shall re-activate.<p>
+In MHP 1.0.1, this was applied to SectionFilter.start which has been corrected (DVB issue #2208).
+<li>SectionFilter.startFiltering(java.lang.Object,int,int) (DVB issue #868)<p>
+This method is considered to have the following text appended to its description:<p>
+Note that this is applied whether the parent section filter group is connected to a TS or not.
+<li>SectionFilterGroup constructor (DVB issue #882)<p>
+The constructors for SectionFilterGroup are considered to have the following text appended 
+to their description:<p>
+Throws illegal argument exception if numberOfFilters <1.
+<li>SectionFilterGroup (DVB issue #889)<p>
+The methods with a parameter called sectionSize shall be considered to have the
+following text appended to their description.<p>
+Throws IllegalArgumentException if sectionSize <1.
+<li>SectionFilterGroup.newRingSectionFilter (DVB issue #892)<p>
+These methods shall be considered to have the following text appended to their description.<p>
+Throws IllegalArgumentException if ringSize <1.
+<li>SectionFilterGroup Constructor(int,boolean) (DVB issue #909)<p>
+This is considered to have the following text appended to its description:<p>
+The scope of the resourcePriority shall be a single application only.
+</ul>
+</body>
+</html>

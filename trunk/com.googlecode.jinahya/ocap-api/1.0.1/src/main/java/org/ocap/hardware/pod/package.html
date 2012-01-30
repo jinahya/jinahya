@@ -1,0 +1,67 @@
+<body>
+This package provides a way to set and get OpenCable CableCARD Resource related
+parameters.  
+
+<p>The following CableCARD Resources are covered by this package:
+
+<ul>
+  <li>Application Information Resource
+  <li>Generic Feature Control Support Resource
+</ul>
+
+<p>The {@link org.ocap.hardware.pod.POD} class provides access to information 
+and functions related to the CableCARD Resources listed above. It is based on a 
+generic singleton model; only privileged applications that have 
+MonitorAppPermission(“podApplication”), such as the Monitor Application, 
+can get an instance of it via the POD.getInstance() method. Other 
+{@link org.ocap.hardware.pod.POD} methods do not check the permissions settings 
+of the invoking object.
+
+<h3>Application Information Resource</h3><a name="podapp"></a>
+
+<p>The CableCARD device has zero or more 
+{@link org.ocap.hardware.pod.PODApplication}s. The 
+{@link org.ocap.hardware.pod.POD#getApplications} method returns an array of
+{@link org.ocap.hardware.pod.PODApplication} instances. The 
+{@link org.ocap.hardware.pod.PODApplication} class provides access to the 
+parameters defined in the Application Information Resource of the OpenCable 
+CableCARD Interface Specification.   
+
+<p><b>Example:</b>
+<blockquote>
+<pre>
+  import org.ocap.hardware.pod.*;
+  ...
+  POD pod = POD.getInstance();
+  PODApplication[] apps = pod.getApplications();
+  String name = apps[0].getName();
+  ...
+</pre>
+</blockquote>
+
+<h3>Generic Feature Control Support Resource</h3><a name="hparam"></a>
+
+<p>OCAP applications may modify the Feature parameter in the Host device via the
+{@link org.ocap.hardware.pod.POD#updateHostParam} method.  Applications can also 
+get notified and reject update of the Feature parameter via the 
+{@link org.ocap.hardware.pod.HostParamHandler}, when the CableCARD device 
+attempts to change Feature parameters. The 
+{@link org.ocap.hardware.pod.HostParamHandler} is registered via the 
+{@link org.ocap.hardware.pod.POD#setHostParamHandler} method.
+
+<p><b>Example:</b>
+<blockquote>
+<pre>
+  import org.ocap.hardware.pod.*;
+  ...
+  POD pod = POD.getInstance();
+  int acOutlet = 7;
+  byte[] unswitched = {0X02};
+  byte[] value = pod.getHostParam(acOutlet);
+  ...
+  pod.updateHostParam(acOutlet, unswitchted);
+  ...
+</pre>
+</blockquote>
+
+</body>
