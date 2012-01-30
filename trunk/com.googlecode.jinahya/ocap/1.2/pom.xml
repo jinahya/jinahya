@@ -1,6 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya</groupId>
@@ -12,10 +13,58 @@
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-  <dependencyManagement/>
-  <dependencies/>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-api</artifactId>
+        <version>1.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-ds</artifactId>
+        <version>I04</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-dvr</artifactId>
+        <version>I07</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-fp</artifactId>
+        <version>I05</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-hn</artifactId>
+        <version>I07</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-api</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-ds</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-dvr</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-fp</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>ocap-hn</artifactId>
+      </dependency>
+  </dependencies>
   <properties>
-    <!--project.build.sourceEncoding>UTF-8</project.build.sourceEncoding-->
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -35,6 +84,11 @@
     </extensions>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -70,6 +124,11 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.7</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -83,6 +142,24 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>src-dependencies</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <classifier>sources</classifier>
+              <includes>**/*.*</includes>
+              <outputDirectory>${project.build.directory}/sources</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <executions>
           <execution>
@@ -91,6 +168,22 @@
             <goals>
               <goal>sign</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <includeDependencySources>true</includeDependencySources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -123,25 +216,44 @@
           </reportPlugins>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/sources</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting />
 
   <name>ocap</name>
-  <url>http://www.cablelabs.com</url>
-  
+  <url>http://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <licenses/>
+  <organization>
+    <name>CableLabs</name>
+    <url>http://www.cablelabs.com</url>
+  </organization>
+
   <distributionManagement>
     <repository>
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
     <site>
-      <!--
-      <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-      -->
       <id>jinahya.com</id>
-      <url>dav:http://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+      <url>dav:${project.url}</url>
     </site>
   </distributionManagement>
 </project>
