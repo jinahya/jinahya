@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="Author" content="Jon Courtney and Brent Foust">
+
+    <title>package</title>
+    <!-- Edited by Brent Foust -->
+    <!-- Edited by Pat Ladd -->
+  </head>
+
+  <body>
+    <p>This package contains APIs for controlling the lifecycle of
+    applications. This package is primarily used by the monitor application.</p>
+
+    <h2><a name="AppReg">Application Registration</a></h2>
+
+    <p>This package provides methods for registering and unregistering unbound
+    applications.  The AppManagerProxy.registerUnboundApp(InputStream) method
+    registers unbound applications specified by the InputStream that contains
+    XAIT data. This is a similar function described as the signalling of unbound
+    application using the XAIT (See section 11.2.2.1 <i>Signalling of Unbound
+    Applications).</i>  The AppManagerProxy.unregisterUnboundApp(AppID) method
+    unregisters an unbound application specified by AppID.</p>
+
+    <p>The format of the XAIT SHALL follow Section 11.2.2.3 OCAP 1.0 XAIT 
+    stated in this Specification.</p>
+
+    <p>This is sample code of registering and unregistering an unbound 
+    application.</p>
+
+<pre>
+import org.ocap.application.*;
+import org.dvb.application.*;
+import java.io.*;
+
+
+public class MARegistering {
+    /**
+     * Constructor of this class. 
+     */
+    public MARegistering(byte [] xaitData) {
+
+        AppManagerProxy appMgrProxy = AppManagerProxy.getInstance();
+
+        /* register unbound applications. */
+        try {
+            ByteArrayInputStream xait = 
+                    new ByteArrayInputStream(xaitData);
+            appMgrProxy.registerUnboundApp(xait);
+        } 
+        catch (IOException e) {
+        }
+
+        /* unregister an unbound application that is registered by a    */
+        /* sample XAIT defined by the xaitData.                         */
+        AppID appid = new AppID(0x1234, 0xABCD);
+        appMgrProxy.unregisterUnboundApp(appid);
+    }
+}
+</pre>
+
+    <h2><a name="AppInfo">Application Information</a></h2>
+
+    <p>The org.ocap.application.OcapAppAttributes shall be used instead
+    of the org.dvb.application.AppAttributes.</p>
+
+    <h2><a name="XAITUpdatingMgmt">XAIT updating Management</a></h2>
+
+    <p>In order to manage the updating of network signaled applications on the 
+    receiver, the monitor application MAY reject a new XAIT to abort updating 
+    unbound application information in the AppsDatabase. It can set the 
+    AppSignalHandler via AppManagerProxy.setAppSignalHandler(AppSignalHandler). 
+    When a new XAIT is received, the 
+    AppSignalHandler.notifyXAITUpdate(OcapAppAttributes[]) is called to allow 
+    the monitor application to make a decision of whether to update unbound 
+    application information. </p>
+
+    <p>This is sample code to abort updating unbound application
+    information.</p>
+
+<pre>
+This is sample code to abort updating unbound application information.
+import org.ocap.application.*;
+import org.dvb.application.*;
+import java.security.*;
+import java.util.*;
+
+
+public class MAXaitUpdater implements AppSignalHandler {
+    /**
+     * Constructor of this class. 
+     */
+    public MAXaitUpdater() {
+        AppManagerProxy appMgrProxy = AppManagerProxy.getInstance();
+
+        /* Register AppSignalHandler. */
+        appMgrProxy.setAppSignalHandler(this);
+    }
+
+    /**
+     * Implement the notifyXAITUpdate method defined in the AppSignalHandler. 
+     */
+    public boolean notifyXAITUpdate(OcapAppAttributes[] newApps) {
+        /* Investigate the signaled applications. */
+        AppID appid = newApps[0].getIdentifier();
+        int controlCode = newApps[0].getApplicationControlCode();
+
+        /* Write a code to make decision here. */
+
+        /* The monitor applicaiton abort the updating of this XAIT. */
+        return false;
+    }
+}
+</pre>
+
+    <h2><a name="PolicySecurity">Policy and Security Management</a></h2>
+
+    <p>Black and white list support is provided by the AppFilter class.
+    The application manager allows a filter to be set which all applications 
+    must pass through before being run.</p>
+
+    <p>The monitor application can register an application filter to prevent 
+    applications from running. When an application is being launched, the 
+    application manager tests the application against the filter. If the test
+    fails, the application will be blocked as described in Chapter 21.  See
+    <CODE>AppManagerProxy.setAppFilter</CODE> method for filter registration.</p>
+
+    <p>This is sample code of application filtering. The monitor application 
+    MAY create a unique application filter class that extends the <CODE>
+    org.dvb.application.AppsDatabaseFilter</CODE> class. It MAY implement an 
+    unique algorithm to filter an application in the accept() method.</p>
+
+<pre>
+import org.ocap.application.*;
+import org.dvb.application.*;
+
+public class MAAppFilter extends AppsDatabaseFilter {
+    /**
+     * Constructor of this class. 
+     */
+    public MAAppFilter() {
+        AppManagerProxy appMgrProxy = AppManagerProxy.getInstance();
+
+        /* Register an application filter. */
+        appMgrProxy.setAppFilter(this);
+    }
+
+    /**
+     * Implement the accept() method defined in the AppsDatabaseFilter. 
+     */
+    public boolean accept(AppID appid) {
+        int REJECTED_OID = 0x1234;
+        
+        /* Investigate the specified applications. */
+        if(appid.getOID() == REJECTED_OID) {
+            return false;
+        }
+        return true;
+    }
+}
+</pre>
+
+    <p>The monitor application MAY set the SecurityPolicyHandler via the
+    AppManagerProxy.setSecurityPolicyHandler(SecurityPolicyHandler) method. For
+    those applications that pass through the current application filter, the 
+    SecurityPolicyHandler.getAppPermissions(PermissionsInformation) method is 
+    called.  The monitor application can get a PermissionCollection and return 
+    it as the return value of getAppPermissions method.  The application is 
+    launched using the modified PermissionCollection.</p>
+
+    <p>Monitor applications that set the SecurityPolicyHandler should take
+    care when setting permissions for Host Device Manufacturer applications
+    (i.e. applications where PermissionCollection.isManufacturerApp()
+    returns true).  Denying permissions to Host Device Manufacturer
+    applications may cause an extremely poor user experience.
+    </p>
+
+    <p>This is sample code for modifying PermissionCollection.
+    It denies the AppsControlPermission to a specified application,
+    but grants all other requested permissions.
+    </p>
+
+<pre>
+import org.ocap.application.*;
+import org.dvb.application.*;
+import java.security.*;
+import java.util.*;
+
+
+public class MAPermissionModifier implements SecurityPolicyHandler {
+    /**
+     * Constructor of this class. 
+     */
+    public MAPermissionModifier() {
+        AppManagerProxy appMgrProxy = AppManagerProxy.getInstance();
+
+        /* Register SecurityPolicyHandler applications. */
+        appMgrProxy.setSecurityPolicyHandler(this);
+    }
+
+    /**
+     * Implement the getAppPermission method defined in SecurityPolicyHandler. 
+     */
+    public PermissionCollection getAppPermissions(
+            PermissionInformation permissionInfo) {
+
+        /* Investigate the requested PermissionCollection here. */
+        AppID appid = permissionInfo.getAppID();
+        PermissionCollection requestedPermissionCollection 
+                = permissionInfo.getRequestedPermissions();
+
+        /* Give manufacturer applications everything they ask for */
+        if (permissionInfo.isManufacturerApp()) {
+            return requestedPermissionCollection;
+        }
+
+        /* Start with the basic permissions for unsigned applications */
+        /* Note that we are guaranteed that these permissions will always */
+        /* be a subset of the requested permissions */
+        Permissions newPermissionCollection = new Permissions();
+        Enumeration e = PermissionInformation.getUnsignedAppPermissions().elements();
+        while (e.hasMoreElements()) {
+            newPermissionCollection.add((Permission)e.nextElement())
+        }
+
+
+        /* The permission we are going to deny */
+        Permission appsControlPermission = new AppsControlPermission();
+        AppId denyAppsControlPermissionAppId = new AppId(1, 2);
+
+        /* Modify the PermissionCollection here. */
+        /* Note that the modified permissions shall be a subset of the */
+        /* requested permission. */
+        e = requestedPermissionCollection.elements();
+        while (e.hasMoreElements()) {
+            Permission requested = (Permission)e.nextElement();
+            if (!newPermissionCollection.implies(requested)) {
+                /* It's not a permission we have already granted.  Test it. */
+                /* (The above test is an optimization to avoid granting */
+                /* the unsigned app permissions twice) */
+                if (requested.implies(appsControlPermission)
+                 && appid.equals(denyAppsControlPermissionAppId)) {
+                     /* Deny requested permission */
+                } else {
+                     /* ... could have other tests here ... */
+                     /* Grant requested permission */
+                    newPermissionCollection.add(requested);
+                }
+            }
+        }
+ 
+
+        return newPermissionCollection;
+    }
+}
+</pre>
+
+  </body>
+</html>
+

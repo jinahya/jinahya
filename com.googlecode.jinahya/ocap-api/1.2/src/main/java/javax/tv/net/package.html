@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides access to IP datagrams transmitted in the broadcast stream.
+Applications implemented using the Java TV API can access IP datagrams
+transmitted in the broadcast stream through use of the normal datagram
+reception mechanisms of the <tt>java.net</tt> package. Unicast IP datagrams
+are received via the <tt>java.net.DatagramSocket</tt> class; multicast
+IP datagrams are received via the <tt>java.net.MulticastSocket</tt> class.
+<p>To enable reception of multicast IP datagrams, the Java TV API assigns
+a locally-unique IP address to service components carrying encapsulated
+IP datagrams. These addresses are generated dynamically from the set of
+IP addresses reserved for use in private networks (see RFC 1918 for more
+information). Television applications determine the local IP address assigned
+to a given service component using the class <tt>javax.net.InterfaceMap</tt>.
+Applications then use this IP address to indicate the network interface
+from which instances of <tt>java.net.MulticastSocket</tt> or <tt>java.net.DatagramSocket</tt>
+receive multicast datagrams.
+<br>
+</body>
+</html>
