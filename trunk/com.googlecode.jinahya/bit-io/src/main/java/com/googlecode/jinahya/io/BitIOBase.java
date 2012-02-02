@@ -36,16 +36,21 @@ import java.util.zip.Checksum;
 abstract class BitIOBase {
 
 
-    /** constant for 0x00. */
+    /**
+     * constant for 0x00.
+     */
     static final int ZERO = 0;
 
 
-    /** constant for 0x01. */
+    /**
+     * constant for 0x01.
+     */
     static final int ONE = 1;
 
 
     /**
-     * Aligns to given <code>length</code> as bytes.
+     * Aligns to given
+     * <code>length</code> as bytes.
      *
      * @param length the number of bytes to align
      * @return the number of bits padded/discarded for alignment
@@ -65,7 +70,8 @@ abstract class BitIOBase {
 
 
     /**
-     * Adds specified <code>checksum</code>.
+     * Adds specified
+     * <code>checksum</code>.
      *
      * @param checksum checksum to add
      */
@@ -80,7 +86,8 @@ abstract class BitIOBase {
 
 
     /**
-     * Removes specified <code>checksum</code>.
+     * Removes specified
+     * <code>checksum</code>.
      *
      * @param checksum checksum to remove
      * @return true if removed; false otherwise
@@ -92,7 +99,8 @@ abstract class BitIOBase {
 
 
     /**
-     * Adds specified <code>digest</code>.
+     * Adds specified
+     * <code>digest</code>.
      *
      * @param digest digest to add
      */
@@ -107,7 +115,8 @@ abstract class BitIOBase {
 
 
     /**
-     * Removes specified <code>digest</code>.
+     * Removes specified
+     * <code>digest</code>.
      *
      * @param digest digest to remove
      * @return true if removed; false otherwise
@@ -212,19 +221,27 @@ abstract class BitIOBase {
     }
 
 
-    /** bit set. */
+    /**
+     * bit set.
+     */
     private final BitSet set = new BitSet(Byte.SIZE);
 
 
-    /** number of octets written/read so far. */
+    /**
+     * number of octets written/read so far.
+     */
     private int count = 0x00;
 
 
-    /** checksums. */
+    /**
+     * checksums.
+     */
     private final List<Checksum> checksums = new ArrayList<Checksum>();
 
 
-    /** digests. */
+    /**
+     * digests.
+     */
     private final List<MessageDigest> digests = new ArrayList<MessageDigest>();
 
 

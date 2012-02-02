@@ -19,7 +19,8 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.IOException;
-import junit.framework.Assert;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -53,7 +54,7 @@ public class BitIOBaseTest {
         } catch (IllegalArgumentException iae) {
             // expected
         }
-        
+
         try {
             base.setBit(-1, true);
             Assert.fail("passed: setBit(-1, )");
@@ -67,7 +68,7 @@ public class BitIOBaseTest {
         } catch (IllegalArgumentException iae) {
             // expected
         }
-        
+
         try {
             base.setBit(9, true);
             Assert.fail("passed: setBit(9, )");

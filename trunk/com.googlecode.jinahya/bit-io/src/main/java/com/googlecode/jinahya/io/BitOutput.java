@@ -50,11 +50,12 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes an unsigned byte value. This method doesn't check the validity of
-     * the value and writes the lower <code>length</code> bits in
+     * the value and writes the lower
+     * <code>length</code> bits in
      * <code>value</code>.
      *
-     * @param length bit length between 1 (inclusive) and
-     * {@value java.lang.Byte#SIZE} (inclusive).
+     * @param length bit length between 1 (inclusive) and {@value
+     * java.lang.Byte#SIZE} (inclusive).
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
      */
@@ -105,11 +106,13 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a 1-bit boolean null flag for given <code>value</code>.
+     * Writes a 1-bit boolean null flag for given
+     * <code>value</code>.
      *
      * @param value value whose null flag is written.
-     * @return true is given <code>value</code> is null and the value must not
-     * be serialized; false otherwise.
+     * @return true is given
+     * <code>value</code> is null and the value must not be serialized; false
+     * otherwise.
      * @throws IOException if an I/O error occurs.
      */
     protected boolean isNull(final Object value) throws IOException {
@@ -123,7 +126,8 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a 1-bit boolean null flag for given <code>value</code>.
+     * Writes a 1-bit boolean null flag for given
+     * <code>value</code>.
      *
      * @param value the value be checked
      * @return true if object is not null and should be serialized; false
@@ -139,7 +143,8 @@ public class BitOutput extends BitIOBase {
     /**
      * Writes a 1-bit Boolean value. FIrst, a 1-bit boolean value is written for
      * null flag, And, if not null, the value is written via
-     * {@link #writeBoolean(boolean)} with its <code>booleanValue()</code>.
+     * {@link #writeBoolean(boolean)} with its
+     * <code>booleanValue()</code>.
      *
      * @param value the value to be written
      * @throws IOException if an I/O error occurs.
@@ -154,11 +159,12 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes an unsigned short value. This method doesn't check the validity of
-     * the value and writes the lower <code>length</code> bits in
+     * the value and writes the lower
+     * <code>length</code> bits in
      * <code>value</code>.
      *
-     * @param length bit length between 1 (exclusive) and
-     * {@value java.lang.Short#SIZE} (inclusive)
+     * @param length bit length between 1 (exclusive) and {@value
+     * java.lang.Short#SIZE} (inclusive)
      * @param value value to write
      * @throws IOException if an I/O error occurs
      */
@@ -189,9 +195,10 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes an unsigned int value. An <code>IllegalArgumentException</code>
-     * will be thrown if <code>length</code> or <code>value</code> is out of
-     * valid range.
+     * Writes an unsigned int value. An
+     * <code>IllegalArgumentException</code> will be thrown if
+     * <code>length</code> or
+     * <code>value</code> is out of valid range.
      *
      * @param length bit length between 1 (inclusive) and 32 (exclusive)
      * @param value the unsigned int value to be written
@@ -229,7 +236,8 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a <code>length</code>-bit signed int.
+     * Writes a
+     * <code>length</code>-bit signed int.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @param value signed int value
@@ -276,11 +284,14 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a <code>length</code>-bit unsigned Integer. First, a 1-bit boolean
-     * value is written for a null flag. And, if the <code>value</code> is not
-     * null, the value of <code>intValue()</code> is written via
-     * {@link #writeUnsignedInt(int, int)} with specified <code>length</code>
-     * and the value's <code>intValue()</code>.
+     * Writes a
+     * <code>length</code>-bit unsigned Integer. First, a 1-bit boolean value is
+     * written for a null flag. And, if the
+     * <code>value</code> is not null, the value of
+     * <code>intValue()</code> is written via
+     * {@link #writeUnsignedInt(int, int)} with specified
+     * <code>length</code> and the value's
+     * <code>intValue()</code>.
      *
      * @param length the bit length; See {@link #writeUnsignedInt(int, int)} for
      * valid range.
@@ -298,9 +309,11 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a <code>length</code>-bit signed Integer. First, a 1-bit boolean
-     * value is written for a null flag. And, if the <code>value</code> is not
-     * null, the value of <code>intValue()</code> is written via
+     * Writes a
+     * <code>length</code>-bit signed Integer. First, a 1-bit boolean value is
+     * written for a null flag. And, if the
+     * <code>value</code> is not null, the value of
+     * <code>intValue()</code> is written via
      * {@link #writeInt(int, int)}.
      *
      * @param length the bit length; See {@link #writeInt(int, int)} for valid
@@ -330,8 +343,9 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a <code>Float</code> value. First, a 1-bit boolean is written for
-     * the null flag. And, if the value is not null, the value of
+     * Writes a
+     * <code>Float</code> value. First, a 1-bit boolean is written for the null
+     * flag. And, if the value is not null, the value of
      * <code>floatValue()</code> is written via {@link #writeFloat(float)}.
      *
      * @param value value to be written
@@ -389,10 +403,12 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a signed long <code>value</code> in <code>length</code> bits.
+     * Writes a signed long
+     * <code>value</code> in
+     * <code>length</code> bits.
      *
-     * @param length bit length between 1 (exclusive) and
-     * {@value java.lang.Long#SIZE} (inclusive).
+     * @param length bit length between 1 (exclusive) and {@value
+     * java.lang.Long#SIZE} (inclusive).
      * @param value value to be written
      * @throws IOException if an I/O error occurs.
      */
@@ -443,7 +459,8 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes a nullable unsigned Long value. First, a 1-bit boolean is written
-     * for a null flag. And, if <code>value</code> is not null, the value of
+     * for a null flag. And, if
+     * <code>value</code> is not null, the value of
      * <code>longValue()</code> is written via
      * {@link #writeUnsignedLong(int, long)}.
      *
@@ -463,7 +480,8 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes a nullable signed Long value. First, a 1-bit boolean is written
-     * for a null flag. And, if <code>value</code> is not null, the value of
+     * for a null flag. And, if
+     * <code>value</code> is not null, the value of
      * <code>longValue()</code> is written via {@link #writeLong(int, long)}.
      *
      * @param length the bit length
@@ -492,8 +510,9 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a nullable Double value. First, a 1-bit boolean is written
-     * for a null flag. And, if <code>value</code> is not null, the value of
+     * Writes a nullable Double value. First, a 1-bit boolean is written for a
+     * null flag. And, if
+     * <code>value</code> is not null, the value of
      * <code>doubleValue()</code> is written via {@link #writeDouble(double)}.
      *
      * @param value the value to be written
@@ -521,7 +540,12 @@ public class BitOutput extends BitIOBase {
             throw new NullPointerException("null value");
         }
 
-        writeUnsignedInt(0x1F, value.length); // 31
+        if (value.length > 65536) {
+            throw new IllegalArgumentException(
+                "too long value: " + value.length);
+        }
+
+        writeUnsignedShort(0x10, value.length); // 31
 
         for (int i = 0; i < value.length; i++) {
             writeUnsignedByte(Byte.SIZE, value[i] & 0xFF);
@@ -530,9 +554,10 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Writes a nullable byte array. First, a 1-bit boolean is written
-     * for a null flag. And, if the <code>value</code> is not null, the value is
-     * written via {@link #writeBytes(byte[])}.
+     * Writes a nullable byte array. First, a 1-bit boolean is written for a
+     * null flag. And, if the
+     * <code>value</code> is not null, the value is written via
+     * {@link #writeBytes(byte[])}.
      *
      * @param value the byte array to be written
      * @throws IOException if an I/O error occurs.
@@ -548,25 +573,28 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes a 7-bit ASCII string. First, a 1-bit boolean is written for a null
-     * flag. And, if the <code>value</code> is not null, a 31-bit unsigned
-     * integer is written for the character count following all characters which
-     * each is written as 7-bit unsigned byte.
+     * flag. And, if the
+     * <code>value</code> is not null, a 16-bit unsigned integer is written for
+     * the character count following all characters which each is written as
+     * 7-bit unsigned byte.
      *
      * @param value the ASCII string to be written
      * @throws IOException if an I/O error occurs
      */
     public void writeASCII(final String value) throws IOException {
 
-        if (isNotNull(value)) {
-            final byte[] bytes = value.getBytes("US-ASCII");
-            writeUnsignedInt(0x1F, bytes.length);
-            for (int i = 0; i < bytes.length; i++) {
-                if (bytes[i] < 0) {
-                    throw new IllegalArgumentException(
-                        "value(" + value + ") is not an ASCII String");
-                }
-                writeUnsignedByte(0x07, bytes[i] & 0xFF);
+        if (isNull(value)) {
+            return;
+        }
+
+        final byte[] bytes = value.getBytes("US-ASCII");
+        writeUnsignedInt(0x10, bytes.length);
+        for (int i = 0; i < bytes.length; i++) {
+            if (bytes[i] < 0) {
+                throw new IllegalArgumentException(
+                    "value(" + value + ") is not an ASCII String");
             }
+            writeUnsignedByte(0x07, bytes[i] & 0xFF);
         }
     }
 
@@ -644,7 +672,8 @@ public class BitOutput extends BitIOBase {
 
     /**
      * Writes a nullable String. First, a 1-bit boolean is written for a null
-     * flag. And, if <code>value</code> is not null, the value of
+     * flag. And, if
+     * <code>value</code> is not null, the value of
      * <code>getBytes(charsetName)</code> is written via
      * {@link #writeBytes(byte[])}.
      *
@@ -665,7 +694,8 @@ public class BitOutput extends BitIOBase {
 
 
     /**
-     * Aligns to given <code>length</code> as bytes.
+     * Aligns to given
+     * <code>length</code> as bytes.
      *
      * @param length the number of bytes to align
      * @return the bits padded to align
@@ -716,11 +746,15 @@ public class BitOutput extends BitIOBase {
     }
 
 
-    /** target output. */
+    /**
+     * target output.
+     */
     final OutputStream out;
 
 
-    /** bit index to write. */
+    /**
+     * bit index to write.
+     */
     private int index = ZERO;
 
 
