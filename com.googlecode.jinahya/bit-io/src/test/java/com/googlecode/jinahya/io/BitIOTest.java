@@ -49,7 +49,7 @@ public abstract class BitIOTest {
 
 
     /** bytes length. */
-    protected static final int MINIMUM_BYTES_LENGTH = 128;
+    protected static final int MINIMUM_BYTES_LENGTH = 0;
 
 
     /** bytes length. */

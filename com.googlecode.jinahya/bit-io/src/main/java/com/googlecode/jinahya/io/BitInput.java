@@ -138,8 +138,8 @@ public class BitInput extends BitIOBase {
      * Reads a nullable 1-bit Boolean value. Identical to
      * <code>readBOOLEAN(null)</code>.
      *
-     * @return the read Boolean value or <code>null</code> if the null flag is
-     * set
+     * @return the read Boolean value or
+     * <code>null</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readBOOLEAN(Boolean)
      */
@@ -157,8 +157,8 @@ public class BitInput extends BitIOBase {
      *
      * @param defaultValue the default value to be returned if the null flag is
      * set
-     * @return the Boolean value read or the <code>defaultValue</code> if null
-     * flag is set
+     * @return the Boolean value read or the
+     * <code>defaultValue</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readBoolean()
      */
@@ -171,8 +171,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned short value.
      *
-     * @param length bit length between ONE (inclusive) and
-     * {@value java.lang.Short#SIZE} (inclusive).
+     * @param length bit length between ONE (inclusive) and {@value
+     * java.lang.Short#SIZE} (inclusive).
      * @return the unsigned short value read.
      * @throws IOException if an I/O error occurs.
      */
@@ -206,10 +206,11 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads an <code>length</code>-bit unsigned int value.
+     * Reads an
+     * <code>length</code>-bit unsigned int value.
      *
-     * @param length bit length between 1 (inclusive) and
-     * {@value java.lang.Integer#SIZE} (exclusive).
+     * @param length bit length between 1 (inclusive) and {@value
+     * java.lang.Integer#SIZE} (exclusive).
      * @return the unsigned int value read from the input
      * @throws IOException if an I/O error occurs
      */
@@ -243,12 +244,15 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit unsigned <code>Integer</code>
-     * value. Identical to <code>readUnsignedINTEGER(length, null)</code>.
+     * Reads a nullable
+     * <code>length</code>-bit unsigned
+     * <code>Integer</code> value. Identical to
+     * <code>readUnsignedINTEGER(length, null)</code>.
      *
      * @param length bit length; See {@link #readUnsignedInt(int)} for valid
      * range.
-     * @return the read Integer or <code>null</code> if the null flag is set.
+     * @return the read Integer or
+     * <code>null</code> if the null flag is set.
      * @throws IOException if an I/O error occurs.
      * @see #readUnsignedINTEGER(int, Integer)
      */
@@ -259,9 +263,11 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit unsigned <code>Integer</code>
-     * value. First, a 1-bit boolean is read for a null flag. And, if the flag
-     * is not set, the value of {@link #readUnsignedInt(int)} with
+     * Reads a nullable
+     * <code>length</code>-bit unsigned
+     * <code>Integer</code> value. First, a 1-bit boolean is read for a null
+     * flag. And, if the flag is not set, the value of {@link #readUnsignedInt(int)}
+     * with
      * <code>length</code> is returned. If the flag is set, the
      * <code>defaultValue</code> is returned. This method doesn't check the
      * <code>defaultValue</code>'s validity.
@@ -269,8 +275,8 @@ public class BitInput extends BitIOBase {
      * @param length bit length. See {@link #readUnsignedInt(int)} for valid
      * range.
      * @param defaultValue the defaultValue returned if the null flag is set
-     * @return the Integer value or <code>defaultValue</code> if the null flag
-     * is set.
+     * @return the Integer value or
+     * <code>defaultValue</code> if the null flag is set.
      * @throws IOException if an I/O error occurs.
      * @see #readUnsignedInt(int)
      */
@@ -287,10 +293,11 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a <code>length</code>-bit signed int.
+     * Reads a
+     * <code>length</code>-bit signed int.
      *
-     * @param length bit length between ONE (exclusive) and
-     * {@value java.lang.Integer#SIZE} (inclusive).
+     * @param length bit length between ONE (exclusive) and {@value
+     * java.lang.Integer#SIZE} (inclusive).
      * @return a unsigned int value read from the input.
      * @throws IOException if an I/O error occurs.
      */
@@ -312,8 +319,10 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit signed <code>Integer</code>.
-     * Identical to <code>readINTEGER(length, null)</code>.
+     * Reads a nullable
+     * <code>length</code>-bit signed
+     * <code>Integer</code>. Identical to
+     * <code>readINTEGER(length, null)</code>.
      *
      * @param length bit length; See {@link #readInt(int)} for valid range.
      * (inclusive)
@@ -328,16 +337,18 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit signed <code>Integer</code>
-     * value. First, a 1-bit boolean is read for a null flag. And, if the flag
-     * is not set, the value of {@link #readInt(int)} is returned. If the flag
-     * is set, the <code>defaultValue</code> is returned.
+     * Reads a nullable
+     * <code>length</code>-bit signed
+     * <code>Integer</code> value. First, a 1-bit boolean is read for a null
+     * flag. And, if the flag is not set, the value of {@link #readInt(int)} is
+     * returned. If the flag is set, the
+     * <code>defaultValue</code> is returned.
      *
      * @param length bit length. See {@link #readInt(int)} for valid range.
      * (inclusive)
      * @param defaultValue the defaultValue returned if the null flag is set
-     * @return the read Integer value or <code>defaultValue</code> if the null
-     * flag is set.
+     * @return the read Integer value or
+     * <code>defaultValue</code> if the null flag is set.
      * @throws IOException if an I/O error occurs.
      * @see #readInt(int)
      */
@@ -364,7 +375,8 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>Float</code> value. Identical to
+     * Reads a nullable
+     * <code>Float</code> value. Identical to
      * <code>readFLOAT(null)</code>.
      *
      * @return the read Float value or null if a null flag read
@@ -378,15 +390,16 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>Float</code> value. First, a 1-bit boolean is read
-     * for a null flag. And, if the flag is not set, the value of
+     * Reads a nullable
+     * <code>Float</code> value. First, a 1-bit boolean is read for a null flag.
+     * And, if the flag is not set, the value of
      * {@link #readFloat()} is returned. If the flag is set, the
      * <code>defaultValue</code> is returned.
      *
      * @param defaultValue the defaultValue to be returned if the null flag is
      * set
-     * @return the Float value or the <code>defaultValue</code> if a null flag
-     * is set.
+     * @return the Float value or the
+     * <code>defaultValue</code> if a null flag is set.
      * @throws IOException if an I/O error occurs.
      * @see #readFloat()
      */
@@ -403,8 +416,8 @@ public class BitInput extends BitIOBase {
     /**
      * Reads an unsigned long.
      *
-     * @param length bit length between ONE (inclusive) and
-     * {@value java.lang.Long#SIZE} (exclusive)
+     * @param length bit length between ONE (inclusive) and {@value
+     * java.lang.Long#SIZE} (exclusive)
      * @return an unsigned long value
      * @throws IOException if an I/O error occurs
      */
@@ -439,12 +452,14 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit unsigned Long value. Identical
-     * to <code>readUnsignedLONG(length, null)</code>.
+     * Reads a nullable
+     * <code>length</code>-bit unsigned Long value. Identical to
+     * <code>readUnsignedLONG(length, null)</code>.
      *
      * @param length the bit length; See {@link #readUnsignedLong(int)} for
      * valid range.
-     * @return the Long value or the <code>null</code> if null flag is set
+     * @return the Long value or the
+     * <code>null</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readUnsignedLONG(int, Long)
      */
@@ -455,17 +470,19 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit unsigned Long value. First, a
-     * 1-bit boolean value is read for a null flag. And, if the null flag is not
-     * set, a value read via {@link #readUnsignedLong(int)} is returned.
-     * If the null flag is set, the <code>defaultValue</code> is returned. This
-     * method doesn't check the <code>defaultValue</code>'s validity.
+     * Reads a nullable
+     * <code>length</code>-bit unsigned Long value. First, a 1-bit boolean value
+     * is read for a null flag. And, if the null flag is not set, a value read
+     * via {@link #readUnsignedLong(int)} is returned. If the null flag is set,
+     * the
+     * <code>defaultValue</code> is returned. This method doesn't check the
+     * <code>defaultValue</code>'s validity.
      *
      * @param length the bit length; See {@link #readUnsignedLong(int)} for
      * valid range.
      * @param defaultValue the default value returned if the null flag is set
-     * @return the Long value or the <code>defaultValue</code> if null flag is
-     * set
+     * @return the Long value or the
+     * <code>defaultValue</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readUnsignedLong(int)
      */
@@ -481,10 +498,11 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a <code>length</code>-bit signed long value.
+     * Reads a
+     * <code>length</code>-bit signed long value.
      *
-     * @param length bit length between ONE (exclusive) and
-     * {@value java.lang.Long#SIZE} (inclusive).
+     * @param length bit length between ONE (exclusive) and {@value
+     * java.lang.Long#SIZE} (inclusive).
      * @return the signed long value.
      * @throws IOException if an I/O error occurs.
      */
@@ -508,11 +526,13 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit signed Long value. Identical to
+     * Reads a nullable
+     * <code>length</code>-bit signed Long value. Identical to
      * <code>readLONG(length, null)</code>.
      *
      * @param length the bit length; See {@link #readLong(int)} for valid range.
-     * @return the Long value or the <code>null</code> if null flag is set
+     * @return the Long value or the
+     * <code>null</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readLONG(int, Long)
      */
@@ -523,16 +543,17 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable <code>length</code>-bit signed Long value. First, a
-     * 1-bit boolean value is read for a null flag. And, if the null flag is not
-     * set, a value read via {@link #readLong(int)} is returned.
-     * If the null flag is set, the <code>defaultValue</code> is returned. This
-     * method doesn't check the <code>defaultValue</code>'s validity.
+     * Reads a nullable
+     * <code>length</code>-bit signed Long value. First, a 1-bit boolean value
+     * is read for a null flag. And, if the null flag is not set, a value read
+     * via {@link #readLong(int)} is returned. If the null flag is set, the
+     * <code>defaultValue</code> is returned. This method doesn't check the
+     * <code>defaultValue</code>'s validity.
      *
      * @param length the bit length; See {@link #readLong(int)} for valid range.
      * @param defaultValue the default value returned if the null flag is set
-     * @return the Long value or the <code>defaultValue</code> if null flag is
-     * set
+     * @return the Long value or the
+     * <code>defaultValue</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readLong(int)
      */
@@ -562,7 +583,8 @@ public class BitInput extends BitIOBase {
      * Reads a nullable Double value. Identical to
      * <code>readDOUBLE(null)</code>.
      *
-     * @return the Double value or <code>null</code> if null flag is set
+     * @return the Double value or
+     * <code>null</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readDOUBLE(Double)
      */
@@ -579,8 +601,8 @@ public class BitInput extends BitIOBase {
      * <code>defaultValue</code> is returned.
      *
      * @param defaultValue the default value returned if the null flag is set
-     * @return the Double value or the <code>defaultValue</code> if null flag is
-     * set
+     * @return the Double value or the
+     * <code>defaultValue</code> if null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readDouble()
      */
@@ -596,7 +618,7 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a non-null byte array. First, a 31-bit unsigned integer is read for
+     * Reads a non-null byte array. First, a 16-bit unsigned integer is read for
      * the byte count. And each byte is read.
      *
      * @return read byte array
@@ -604,7 +626,7 @@ public class BitInput extends BitIOBase {
      */
     public final byte[] readBytes() throws IOException {
 
-        final byte[] value = new byte[readUnsignedInt(0x1F)]; // 31
+        final byte[] value = new byte[readUnsignedInt(0x10)]; // 16
 
         for (int i = 0; i < value.length; i++) {
             value[i] = (byte) readUnsignedByte(Byte.SIZE);
@@ -615,9 +637,11 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable byte array. Identical to <code>readBYTES(null)</code>.
+     * Reads a nullable byte array. Identical to
+     * <code>readBYTES(null)</code>.
      *
-     * @return a byte array or <code>null</code> if the null flag is set
+     * @return a byte array or
+     * <code>null</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readBYTES(byte[])
      */
@@ -635,7 +659,8 @@ public class BitInput extends BitIOBase {
      *
      * @param defaultValue the default value to be returned if the null flag is
      * set.
-     * @return a byte array or <code>defaultValue</code> if the null flag set
+     * @return a byte array or
+     * <code>defaultValue</code> if the null flag set
      * @throws IOException if an I/O error occurs.
      * @see #readBytes()
      */
@@ -654,7 +679,8 @@ public class BitInput extends BitIOBase {
      * Reads a nullable 7-bit ASCII String. Identical to
      * <code>readASCII(null)</code>.
      *
-     * @return the ASCII String or <code>null</code> if the null flag is set
+     * @return the ASCII String or
+     * <code>null</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readASCII(String)
      */
@@ -665,17 +691,17 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable 7-bit ASCII String. First, a 1-bit boolean is read for
-     * a null flag. And, if the null flag is not set, a 31-bit unsigned integer
-     * is read for the character count following the characters which each is
-     * read as a 7-bit unsigned byte. If the null flag is set, the
+     * Reads a nullable 7-bit ASCII String. First, a 1-bit boolean is read for a
+     * null flag. And, if the null flag is not set, a 16-bit unsigned integer is
+     * read for the character count following the characters which each is read
+     * as a 7-bit unsigned byte. If the null flag is set, the
      * <code>defaultValue</code> is returned. This method doesn't check the
      * <code>defaultValue</code>'s validity.
      *
      * @param defaultValue the default value to be returned if the null flag is
      * set.
-     * @return a read ASCII String or <code>defaultValue</code> if the null flag
-     * is set
+     * @return a read ASCII String or
+     * <code>defaultValue</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      */
     public final String readASCII(final String defaultValue)
@@ -685,7 +711,7 @@ public class BitInput extends BitIOBase {
             return defaultValue;
         }
 
-        final byte[] bytes = new byte[readUnsignedInt(0x1F)]; // 31
+        final byte[] bytes = new byte[readUnsignedShort(0x10)]; // 16
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) readUnsignedByte(0x07);
         }
@@ -773,11 +799,13 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable String. Identical to <code>readSTRING(null)</code>.
+     * Reads a nullable String. Identical to
+     * <code>readSTRING(null)</code>.
      *
      * @param charsetName the character set name for constructing a String with
      * raw bytes
-     * @return a String value read or <code>null</code> if the null flag is set
+     * @return a String value read or
+     * <code>null</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readSTRING(String)
      */
@@ -791,16 +819,17 @@ public class BitInput extends BitIOBase {
     /**
      * Reads a nullable String. First, a 1-bit boolean is read for a null flag.
      * And, if the null flag is not set, the value from {@link #readBytes()} is
-     * returned as a String created with <code>characterSet</code>.
-     * If the null flag is set, the <code>defaultValue</code> is returned. This
-     * method doesn't check the <code>defaultValue</code>'s validity.
+     * returned as a String created with
+     * <code>characterSet</code>. If the null flag is set, the
+     * <code>defaultValue</code> is returned. This method doesn't check the
+     * <code>defaultValue</code>'s validity.
      *
      * @param charsetName the character set name for constructing a String with
      * raw bytes.
      * @param defaultValue the default value to be returned if the null flag is
      * set.
-     * @return a String value or <code>defaultValue</code> if the null flag is
-     * set
+     * @return a String value or
+     * <code>defaultValue</code> if the null flag is set
      * @throws IOException if an I/O error occurs.
      * @see #readBytes()
      * @see String#String(byte[], String)
@@ -818,7 +847,8 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Align to given <code>length</code> octets.
+     * Align to given
+     * <code>length</code> octets.
      *
      * @param length number of octets to align; must be non-zero positive.
      * @return the number of bits discarded for alignment.
@@ -870,11 +900,15 @@ public class BitInput extends BitIOBase {
     }
 
 
-    /** source input. */
+    /**
+     * source input.
+     */
     final InputStream in;
 
 
-    /** bit index to read. */
+    /**
+     * bit index to read.
+     */
     private int index = Byte.SIZE;
 
 
