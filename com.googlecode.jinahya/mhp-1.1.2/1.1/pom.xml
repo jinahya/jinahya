@@ -184,9 +184,9 @@ This entire project is provided 'as-is', without any express or implied warranty
   </contributors>
 
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.code4tv/mhp-1.1.2/1.1/</connection>
-    <developerConnection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.code4tv/mhp-1.1.2/1.1/</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.code4tv/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}/</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}/${project.version}</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/mhp-1.1.2/1.1</url>
   </scm>
   <distributionManagement>
     <snapshotRepository>
