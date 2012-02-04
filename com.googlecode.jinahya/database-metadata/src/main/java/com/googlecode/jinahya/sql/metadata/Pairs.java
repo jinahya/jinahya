@@ -39,19 +39,19 @@ public class Pairs {
      */
     protected final Collection<Pair> getEntries() {
 
-        if (entries == null) {
-            entries = new ArrayList<Pair>();
+        if (pairs == null) {
+            pairs = new ArrayList<Pair>();
         }
 
-        return entries;
+        return pairs;
     }
 
 
     /**
      * entries.
      */
-    @XmlElement(name = "entry", nillable = true)
-    private Collection<Pair> entries;
+    @XmlElement(name = "pair", nillable = true)
+    private Collection<Pair> pairs;
 
 
 }
