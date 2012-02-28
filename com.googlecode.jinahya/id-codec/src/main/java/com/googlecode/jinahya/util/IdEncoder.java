@@ -67,9 +67,7 @@ public class IdEncoder {
      */
     public static String encodeId(final long decoded) {
 
-        if (decoded < 0L) {
-            throw new IllegalArgumentException("decoded(" + decoded + ") < 0L");
-        }
+
 
         return PrivateInstanceHolder.INSTANCE.encode(decoded);
     }
@@ -84,8 +82,37 @@ public class IdEncoder {
      * @return encoded value.
      */
     public String encode(final long decoded) {
-        return Long.toString(decoded, Character.MAX_RADIX)
-               + RANDOM.nextInt(0x0A);
+
+        if (decoded < 0L) {
+            throw new IllegalArgumentException("decoded(" + decoded + ") < 0L");
+        }
+
+        //System.out.println("encode: " + decoded);
+        return block((short) ((decoded >> 30) & Short.MAX_VALUE)) + "-"
+               + block((short) ((decoded >> 15) & Short.MAX_VALUE)) + "-"
+               + block((short) (decoded & Short.MAX_VALUE));
+        /*
+         * String encoded = Long.toString(decoded); encoded = new
+         * StringBuilder(encoded).reverse().toString(); return
+         * Long.toString(Long.parseLong(encoded), Character.MAX_RADIX);
+         */
+    }
+
+
+    private String block(final short decoded) {
+
+        if (decoded < 0) {
+            throw new IllegalArgumentException("decoded(" + decoded + ") < 0");
+        }
+
+        final String concatenated = Integer.toString(decoded) + (RANDOM.nextInt(9) + 1);
+        final String reversed = new StringBuilder(concatenated).reverse().toString();
+        final String block = Integer.toString(Integer.parseInt(reversed), Character.MAX_RADIX);
+
+        System.out.println("\tencode.block: " + decoded + " / " + block);
+
+        return block;
+
     }
 
 
