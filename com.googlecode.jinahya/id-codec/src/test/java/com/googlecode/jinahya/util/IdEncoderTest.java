@@ -29,17 +29,23 @@ public class IdEncoderTest {
 
 
     private static void test(final long decoded) {
-        System.out.println(decoded + " / " + IdEncoder.encodeId(decoded));
+        System.out.println(
+            "decode: " + decoded + " / " + IdEncoder.encodeId(decoded));
     }
 
 
     @Test
     public void test() {
-        for (long decoded = 50L; decoded < 100L; decoded++) {
+
+        for (long decoded = -50L; decoded < 50L; decoded++) {
             test(decoded);
             test(decoded);
         }
+
+        test(-100000000L);
+
         test(100000000L);
+        
         test(Long.MAX_VALUE);
     }
 

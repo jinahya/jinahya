@@ -75,44 +75,35 @@ public class IdEncoder {
 
     /**
      * Encodes given
-     * <code>decodec</code>.
+     * <code>decoded</code>.
      *
      * @param decoded the value to be encoded
      *
-     * @return encoded value.
+     * @return the encoded value.
      */
     public String encode(final long decoded) {
 
-        if (decoded < 0L) {
-            throw new IllegalArgumentException("decoded(" + decoded + ") < 0L");
-        }
-
-        //System.out.println("encode: " + decoded);
-        return block((short) ((decoded >> 30) & Short.MAX_VALUE)) + "-"
-               + block((short) ((decoded >> 15) & Short.MAX_VALUE)) + "-"
-               + block((short) (decoded & Short.MAX_VALUE));
-        /*
-         * String encoded = Long.toString(decoded); encoded = new
-         * StringBuilder(encoded).reverse().toString(); return
-         * Long.toString(Long.parseLong(encoded), Character.MAX_RADIX);
-         */
+        return block(decoded >>> 32) + "-" + block(decoded & 0xFFFFFFFFL);
     }
 
 
-    private String block(final short decoded) {
+    private String block(final long decoded) {
 
-        if (decoded < 0) {
-            throw new IllegalArgumentException("decoded(" + decoded + ") < 0");
+        if (decoded > 0xFFFFFFFFL) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") > 0xFFFFFFFFL");
         }
 
-        final String concatenated = Integer.toString(decoded) + (RANDOM.nextInt(9) + 1);
-        final String reversed = new StringBuilder(concatenated).reverse().toString();
-        final String block = Integer.toString(Integer.parseInt(reversed), Character.MAX_RADIX);
+        final String concatenated =
+            Long.toString(decoded) + (RANDOM.nextInt(9) + 1);
 
-        System.out.println("\tencode.block: " + decoded + " / " + block);
+        final String reversed =
+            new StringBuilder(concatenated).reverse().toString();
+
+        final String block =
+            Long.toString(Long.parseLong(reversed), Character.MAX_RADIX);
 
         return block;
-
     }
 
 

@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.StringTokenizer;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -78,30 +75,26 @@ public class IdDecoder {
             throw new NullPointerException("null encoded");
         }
 
-        if (encoded.length() < 2) {
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length() + ") < 2");
-        }
-
-        System.out.println("encoded: " + encoded);
-
         final String[] tokens = encoded.split("-");
-        return (block(tokens[0]) << 30) | (block(tokens[1]) << 15) | block(tokens[2]);
+        assert tokens.length == 2;
+        
+        return (block(tokens[0]) << 32) | (block(tokens[1]));
     }
 
 
-    public long block(final String encoded) {
+    private long block(final String encoded) {
 
         final String parsed =
-            Integer.toString(Integer.parseInt(encoded, Character.MAX_RADIX));
+            Long.toString(Long.parseLong(encoded, Character.MAX_RADIX));
 
         final String reversed = new StringBuilder(parsed).reverse().toString();
 
-        final long block= Integer.parseInt(reversed.substring(0, reversed.length() - 1));
+        final long decoded =
+            Long.parseLong(reversed.substring(0, reversed.length() - 1));
 
-        System.out.println("\tdecode.block: " + encoded + " / " + block);
-        
-        return block;
+        //System.out.println("\tdecode.block: " + encoded + " / " + decoded);
+
+        return decoded;
     }
 
 
