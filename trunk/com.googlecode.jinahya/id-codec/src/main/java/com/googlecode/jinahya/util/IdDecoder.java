@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 /**
+ * Decoder for Database IDs.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -91,8 +92,6 @@ public class IdDecoder {
 
         final long decoded =
             Long.parseLong(reversed.substring(0, reversed.length() - 1));
-
-        //System.out.println("\tdecode.block: " + encoded + " / " + decoded);
 
         return decoded;
     }

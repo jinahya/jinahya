@@ -22,6 +22,7 @@ import java.util.Random;
 
 
 /**
+ * Encoder for Database IDs.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -100,10 +101,10 @@ public class IdEncoder {
         final String reversed =
             new StringBuilder(concatenated).reverse().toString();
 
-        final String block =
+        final String encoded =
             Long.toString(Long.parseLong(reversed), Character.MAX_RADIX);
 
-        return block;
+        return encoded;
     }
 
 
