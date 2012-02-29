@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.util;
 
 
+import java.util.regex.Matcher;
+
+
 /**
  * Decoder for Database IDs.
  *
@@ -76,24 +79,26 @@ public class IdDecoder {
             throw new NullPointerException("null encoded");
         }
 
-        final String[] tokens = encoded.split("-");
-        assert tokens.length == 2;
-        
-        return (block(tokens[0]) << 32) | (block(tokens[1]));
+        final Matcher matcher = IdCodec.PATTERN.matcher(encoded);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("illegal pattern: " + encoded);
+        }
+
+        return (block(matcher.group(1)) << 32) | (block(matcher.group(2)));
     }
 
 
     private long block(final String encoded) {
 
-        final String parsed =
-            Long.toString(Long.parseLong(encoded, Character.MAX_RADIX));
+        final StringBuilder builder = new StringBuilder(
+            Long.toString(Long.parseLong(encoded, Character.MAX_RADIX)));
 
-        final String reversed = new StringBuilder(parsed).reverse().toString();
+        builder.reverse();
 
-        final long decoded =
-            Long.parseLong(reversed.substring(0, reversed.length() - 1));
+        builder.deleteCharAt(builder.length() - 1);
+        builder.deleteCharAt(builder.length() - 1);
 
-        return decoded;
+        return Long.parseLong(builder.toString());
     }
 
 

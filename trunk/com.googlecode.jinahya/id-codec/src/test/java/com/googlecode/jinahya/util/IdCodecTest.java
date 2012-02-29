@@ -34,9 +34,15 @@ public class IdCodecTest {
 
 
     private static void test(final long decoded) {
-        final String encoded = IdEncoder.encodeId(decoded);
-        Assert.assertEquals(IdDecoder.decodeId(encoded), decoded);
-        System.out.println("codec: " + decoded + " / " + encoded);
+
+        final String encoded1 = IdCodec.encodeId(decoded);
+        Assert.assertEquals(IdCodec.decodeId(encoded1), decoded);
+
+        final String encoded2 = IdCodec.encodeId(decoded);
+        Assert.assertEquals(IdCodec.decodeId(encoded2), decoded);
+
+        System.out.printf(
+            "%1$20d %2$20s %3$20s\n", decoded, encoded1, encoded2);
     }
 
 
@@ -47,16 +53,19 @@ public class IdCodecTest {
 
 
     @Test
-    public void test() {
-
-        for (long decoded = 0L; decoded < 100L; decoded++) {
+    public void test2() {
+        System.out.printf("%1$20s %2$20s %3$20s\n", "id", "encoded1",
+            "encoded2");
+        System.out.printf("%1$20s %1$20s %1$20s\n", "--------------------");
+        for (long decoded = -5L; decoded < 5L; decoded++) {
+            test(decoded);
             test(decoded);
         }
-
-        test(1000000L);
-        test(1000001L);
-
+        test(-100000000L);
+        test(100000000L);
         test(Long.MIN_VALUE);
+        test(Long.MIN_VALUE);
+        test(Long.MAX_VALUE);
         test(Long.MAX_VALUE);
     }
 
