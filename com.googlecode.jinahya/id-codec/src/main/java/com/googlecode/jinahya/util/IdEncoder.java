@@ -84,27 +84,25 @@ public class IdEncoder {
      */
     public String encode(final long decoded) {
 
-        return block(decoded >>> 32) + "-" + block(decoded & 0xFFFFFFFFL);
+        final String encoded =
+            block(decoded >>> 32) + "-" + block(decoded & 0xFFFFFFFFL);
+        assert IdCodec.PATTERN.matcher(encoded).matches();
+
+        return encoded;
     }
 
 
     private String block(final long decoded) {
 
-        if (decoded > 0xFFFFFFFFL) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") > 0xFFFFFFFFL");
-        }
+        final StringBuilder builder = new StringBuilder(Long.toString(decoded));
 
-        final String concatenated =
-            Long.toString(decoded) + (RANDOM.nextInt(9) + 1);
+        builder.append(Integer.toString(RANDOM.nextInt(9) + 1));
+        builder.append(Integer.toString(RANDOM.nextInt(9) + 1));
 
-        final String reversed =
-            new StringBuilder(concatenated).reverse().toString();
+        builder.reverse();
 
-        final String encoded =
-            Long.toString(Long.parseLong(reversed), Character.MAX_RADIX);
-
-        return encoded;
+        return Long.toString(
+            Long.parseLong(builder.toString()), Character.MAX_RADIX);
     }
 
 
