@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 import java.util.Random;
+import java.util.UUID;
 
 
 /**
@@ -59,6 +60,26 @@ public class IdEncoder {
 
 
     /**
+     * Encodes given <code>decoded</code>.
+     * 
+     * @param decoded the value to be encoded
+     * @return the encoded value
+     */
+    public static String encodeUUID(final UUID decoded) {
+
+        if (decoded == null) {
+            throw new NullPointerException("null decoded");
+        }
+
+        final String encoded = encodeId(decoded.getMostSignificantBits()) + "-"
+                               + encodeId(decoded.getLeastSignificantBits());
+        assert IdCodec.DOUBLE_PATTERN.matcher(encoded).matches();
+
+        return encoded;
+    }
+
+
+    /**
      * Encodes given
      * <code>decoded</code>.
      *
@@ -67,9 +88,6 @@ public class IdEncoder {
      * @return the decoded value.
      */
     public static String encodeId(final long decoded) {
-
-
-
         return PrivateInstanceHolder.INSTANCE.encode(decoded);
     }
 
@@ -86,7 +104,7 @@ public class IdEncoder {
 
         final String encoded =
             block(decoded >>> 32) + "-" + block(decoded & 0xFFFFFFFFL);
-        assert IdCodec.PATTERN.matcher(encoded).matches();
+        assert IdCodec.SINGLE_PATTERN.matcher(encoded).matches();
 
         return encoded;
     }

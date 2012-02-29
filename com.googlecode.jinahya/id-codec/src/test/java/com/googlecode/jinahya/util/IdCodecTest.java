@@ -19,6 +19,7 @@ package com.googlecode.jinahya.util;
 
 
 import java.util.Random;
+import java.util.UUID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -55,7 +56,7 @@ public class IdCodecTest {
     @Test
     public void test2() {
         System.out.printf("%1$20s %2$20s %3$20s\n", "id", "encoded1",
-            "encoded2");
+                          "encoded2");
         System.out.printf("%1$20s %1$20s %1$20s\n", "--------------------");
         for (long decoded = -5L; decoded < 5L; decoded++) {
             test(decoded);
@@ -67,6 +68,18 @@ public class IdCodecTest {
         test(Long.MIN_VALUE);
         test(Long.MAX_VALUE);
         test(Long.MAX_VALUE);
+    }
+
+
+    @Test(invocationCount = 1024)
+    public void testUUID() {
+        final UUID original = UUID.randomUUID();
+        final String encoded = IdCodec.encodeUUID(original);
+        final UUID decoded = IdCodec.decodeUUID(encoded);
+        Assert.assertEquals(decoded, original);
+        Assert.assertEquals(decoded.getMostSignificantBits(), original.getMostSignificantBits());
+        Assert.assertEquals(decoded.getLeastSignificantBits(), original.getLeastSignificantBits());
+        System.out.printf("%1$36s %2$40s\n", original.toString(), encoded);
     }
 
 
