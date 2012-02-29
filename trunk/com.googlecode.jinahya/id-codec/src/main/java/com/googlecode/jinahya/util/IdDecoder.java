@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.util;
 
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 
 
@@ -69,6 +70,27 @@ public class IdDecoder {
      * Decodes given
      * <code>encoded</code>.
      *
+     * @param encoded the value to be decoded
+     * @return the decoded value
+     */
+    public static UUID decodeUUID(final String encoded) {
+
+        final Matcher matcher = IdCodec.DOUBLE_PATTERN.matcher(encoded);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("illegal pattern: " + encoded);
+        }
+
+        final long mostSigBits = decodeId(matcher.group(1));
+        final long leastSigBits = decodeId(matcher.group(4));
+
+        return new UUID(mostSigBits, leastSigBits);
+    }
+
+
+    /**
+     * Decodes given
+     * <code>encoded</code>.
+     *
      * @param encoded the value to be decoded.
      *
      * @return the decoded value
@@ -79,7 +101,7 @@ public class IdDecoder {
             throw new NullPointerException("null encoded");
         }
 
-        final Matcher matcher = IdCodec.PATTERN.matcher(encoded);
+        final Matcher matcher = IdCodec.SINGLE_PATTERN.matcher(encoded);
         if (!matcher.matches()) {
             throw new IllegalArgumentException("illegal pattern: " + encoded);
         }

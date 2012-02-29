@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.util;
 
 
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -29,15 +30,38 @@ import java.util.regex.PatternSyntaxException;
 public class IdCodec {
 
 
+    private static final String SINGLE_PATTERN_STRING =
+        "([a-z0-9]+)-([a-z0-9]+)";
+
+
     /**
      * the encoded output pattern.
      */
-    static final Pattern PATTERN;
+    static final Pattern SINGLE_PATTERN;
 
 
     static {
         try {
-            PATTERN = Pattern.compile("([a-z0-9]+)-([a-z0-9]+)");
+            SINGLE_PATTERN = Pattern.compile(SINGLE_PATTERN_STRING);
+        } catch (PatternSyntaxException pse) {
+            throw new InstantiationError("pattern compilation failed");
+        }
+    }
+
+
+    private static final String DOUBLE_PATTERN_STRING =
+        "(" + SINGLE_PATTERN_STRING + ")-(" + SINGLE_PATTERN_STRING + ")";
+
+
+    /**
+     * the encoded output pattern for UUID.
+     */
+    static final Pattern DOUBLE_PATTERN;
+
+
+    static {
+        try {
+            DOUBLE_PATTERN = Pattern.compile(DOUBLE_PATTERN_STRING);
         } catch (PatternSyntaxException pse) {
             throw new InstantiationError("pattern compilation failed");
         }
@@ -51,7 +75,7 @@ public class IdCodec {
 
 
         /**
-         * instance.
+         * INSTANCE.
          */
         private static final IdCodec INSTANCE = new IdCodec();
 
@@ -80,6 +104,18 @@ public class IdCodec {
 
 
     /**
+     * Encodes given
+     * <code>decoded</code>.
+     *
+     * @param decoded the value to be encoded
+     * @return the encoded value
+     */
+    public static String encodeUUID(final UUID decoded) {
+        return IdEncoder.encodeUUID(decoded);
+    }
+
+
+    /**
      * Decodes given
      * <code>encoded</code>.
      *
@@ -88,6 +124,18 @@ public class IdCodec {
      */
     public static long decodeId(final String encoded) {
         return PrivateInstanceHolder.INSTANCE.decode(encoded);
+    }
+
+
+    /**
+     * Decodes given
+     * <code>encoded</code>.
+     *
+     * @param encoded the value to be decoded
+     * @return the decoded value
+     */
+    public static UUID decodeUUID(final String encoded) {
+        return IdDecoder.decodeUUID(encoded);
     }
 
 
