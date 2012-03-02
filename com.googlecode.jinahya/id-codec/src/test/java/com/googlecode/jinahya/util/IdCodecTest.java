@@ -77,8 +77,10 @@ public class IdCodecTest {
         final String encoded = IdCodec.encodeUUID(original);
         final UUID decoded = IdCodec.decodeUUID(encoded);
         Assert.assertEquals(decoded, original);
-        Assert.assertEquals(decoded.getMostSignificantBits(), original.getMostSignificantBits());
-        Assert.assertEquals(decoded.getLeastSignificantBits(), original.getLeastSignificantBits());
+        Assert.assertEquals(decoded.getMostSignificantBits(),
+                            original.getMostSignificantBits());
+        Assert.assertEquals(decoded.getLeastSignificantBits(),
+                            original.getLeastSignificantBits());
         System.out.printf("%1$36s %2$40s\n", original.toString(), encoded);
     }
 

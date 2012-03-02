@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.util;
 
 
+import java.util.Random;
+import java.util.UUID;
 import org.testng.annotations.Test;
 
 
@@ -28,9 +30,30 @@ import org.testng.annotations.Test;
 public class IdEncoderTest {
 
 
+    private static final Random RANDOM = new Random();
+
+
     private static void test(final long decoded) {
         System.out.println(
             "decode: " + decoded + " / " + IdEncoder.encodeId(decoded));
+    }
+
+
+    @Test(invocationCount = 1024)
+    public void testEncodeId() {
+        IdEncoder.encodeId(RANDOM.nextLong());
+    }
+
+
+    @Test(invocationCount = 1024)
+    public void testEncodeUUID() {
+        IdEncoder.encodeUUID(UUID.randomUUID());
+    }
+
+
+    @Test(invocationCount = 1024)
+    public void testEncode() {
+        new IdEncoder().encode(RANDOM.nextLong());
     }
 
 
@@ -45,7 +68,7 @@ public class IdEncoderTest {
         test(-100000000L);
 
         test(100000000L);
-        
+
         test(Long.MAX_VALUE);
     }
 
