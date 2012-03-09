@@ -33,12 +33,6 @@ public class IdEncoderTest {
     private static final Random RANDOM = new Random();
 
 
-    private static void test(final long decoded) {
-        System.out.println(
-            "decode: " + decoded + " / " + IdEncoder.encodeId(decoded));
-    }
-
-
     @Test(invocationCount = 1024)
     public void testEncodeId() {
         IdEncoder.encodeId(RANDOM.nextLong());
@@ -54,22 +48,6 @@ public class IdEncoderTest {
     @Test(invocationCount = 1024)
     public void testEncode() {
         new IdEncoder().encode(RANDOM.nextLong());
-    }
-
-
-    @Test
-    public void test() {
-
-        for (long decoded = -50L; decoded < 50L; decoded++) {
-            test(decoded);
-            test(decoded);
-        }
-
-        test(-100000000L);
-
-        test(100000000L);
-
-        test(Long.MAX_VALUE);
     }
 
 
