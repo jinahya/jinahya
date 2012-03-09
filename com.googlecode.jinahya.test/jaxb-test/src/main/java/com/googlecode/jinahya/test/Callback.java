@@ -24,25 +24,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Callback {
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
+
         final JAXBContext context = JAXBContext.newInstance(Callback.class);
 
-        Callback callback = new Callback();
-
-        callback.setId(0L);
-        callback.setName("name");
+        final Callback before = new Callback();
+        before.id = 0L;
+        before.name = "name";
 
         final StringWriter writer = new StringWriter();
-
-        context.createMarshaller().marshal(callback, writer);
+        context.createMarshaller().marshal(before, writer);
+        writer.flush();
 
         final String xml = writer.toString();
-
         System.out.println(xml);
 
         final StringReader reader = new StringReader(xml);
-
-        callback = (Callback) context.createUnmarshaller().unmarshal(reader);
+        final Callback after =
+            (Callback) context.createUnmarshaller().unmarshal(reader);
     }
 
 
@@ -66,26 +65,27 @@ public class Callback {
     }
 
 
-    /*
     private void beforeMarshal(Marshaller marshaller) {
-        System.out.println("- beforeMarshal(" + marshaller + ")");
+        System.out.println("beforeMarshal(" + marshaller + ")");
     }
-    */
 
 
     private void afterMarshal(final Marshaller marshaller) {
-        System.out.println("- afterMarshal(" + marshaller + ")");
-        new Exception().printStackTrace(System.out);
+        System.out.println("afterMarshal(" + marshaller + ")");
     }
 
 
-    private void beforeUnmarshal(Unmarshaller unmarshaller, Object parent) {
-        System.out.println("- beforeUnmarshal(" + unmarshaller + ", " + parent + ")");
+    private void beforeUnmarshal(final Unmarshaller unmarshaller,
+                                 final Object parent) {
+        System.out.println(
+            "beforeUnmarshal(" + unmarshaller + ", " + parent + ")");
     }
 
 
-    private void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
-        System.out.println("- afterUnmarshal(" + unmarshaller + ", " + parent + ")");
+    private void afterUnmarshal(final Unmarshaller unmarshaller,
+                                final Object parent) {
+        System.out.println(
+            "afterUnmarshal(" + unmarshaller + ", " + parent + ")");
     }
 
 
