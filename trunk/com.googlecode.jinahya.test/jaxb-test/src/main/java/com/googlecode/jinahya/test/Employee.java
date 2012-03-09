@@ -5,6 +5,8 @@ package com.googlecode.jinahya.test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -12,7 +14,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -21,16 +27,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Callback {
+public class Employee {
 
 
     public static void main(final String[] args) throws Exception {
 
-        final JAXBContext context = JAXBContext.newInstance(Callback.class);
+        final JAXBContext context = JAXBContext.newInstance(Employee.class);
 
-        final Callback before = new Callback();
+        final Employee before = new Employee();
         before.id = 0L;
         before.name = "name";
+        for (long childId = 0L; childId <= 10L; childId++) {
+            final Employee child = new Employee();
+            child.id = childId;
+            child.name = Long.toString(childId);
+            child.manager = before;
+            before.getSubordinates().add(child);
+        }
 
         final StringWriter writer = new StringWriter();
         context.createMarshaller().marshal(before, writer);
@@ -40,8 +53,8 @@ public class Callback {
         System.out.println(xml);
 
         final StringReader reader = new StringReader(xml);
-        final Callback after =
-            (Callback) context.createUnmarshaller().unmarshal(reader);
+        final Employee after =
+            (Employee) context.createUnmarshaller().unmarshal(reader);
     }
 
 
@@ -50,7 +63,7 @@ public class Callback {
     }
 
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -60,13 +73,33 @@ public class Callback {
     }
 
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
 
-    private void beforeMarshal(Marshaller marshaller) {
+    public Employee getManager() {
+        return manager;
+    }
+
+
+    public void setManager(final Employee manager) {
+        this.manager = manager;
+    }
+
+
+    public Collection<Employee> getSubordinates() {
+        if (subordinates == null) {
+            subordinates = new ArrayList<Employee>();
+        }
+        return subordinates;
+    }
+
+
+    private void beforeMarshal(final Marshaller marshaller) {
         System.out.println("beforeMarshal(" + marshaller + ")");
+        System.out.println("id: " + id);
+        employeeId = Long.toString(id);
     }
 
 
@@ -86,15 +119,34 @@ public class Callback {
                                 final Object parent) {
         System.out.println(
             "afterUnmarshal(" + unmarshaller + ", " + parent + ")");
+
+        //System.out.println(employeeId);
+        id = Long.parseLong(employeeId);
+
+        //this.parent = (Callback) parent;
     }
 
 
-    @XmlAttribute
+    @XmlTransient
     private Long id;
+
+
+    @XmlAttribute
+    @XmlID
+    private String employeeId;
 
 
     @XmlElement
     private String name;
+
+
+    @XmlIDREF
+    private Employee manager;
+
+
+    @XmlElement(name = "subordinate")
+    @XmlIDREF
+    private Collection<Employee> subordinates;
 
 
 }
