@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 
 package com.googlecode.jinahya.test;
@@ -18,15 +14,15 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CallbackTest {
+public class EmployeeTest {
 
 
     @Test
     public void test() throws JAXBException {
 
-        final JAXBContext context = JAXBContext.newInstance(Callback.class);
+        final JAXBContext context = JAXBContext.newInstance(Employee.class);
 
-        Callback callback = new Callback();
+        Employee callback = new Employee();
 
         callback.setId(0L);
         callback.setName("name");
@@ -41,7 +37,7 @@ public class CallbackTest {
 
         final StringReader reader = new StringReader(xml);
 
-        callback = (Callback) context.createUnmarshaller().unmarshal(reader);
+        callback = (Employee) context.createUnmarshaller().unmarshal(reader);
 
     }
 
