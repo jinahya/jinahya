@@ -7,6 +7,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -14,11 +17,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.NONE)
 public class Employee {
 
 
@@ -68,6 +69,18 @@ public class Employee {
     }
 
 
+    @XmlAttribute
+    @XmlID
+    public String getEmployeeId() {
+        return Long.toString(id);
+    }
+
+
+    public void setEmployeeId(final String employeeId) {
+        id = Long.parseLong(employeeId);
+    }
+
+
     public String getName() {
         return name;
     }
@@ -98,8 +111,6 @@ public class Employee {
 
     private void beforeMarshal(final Marshaller marshaller) {
         System.out.println("beforeMarshal(" + marshaller + ")");
-        System.out.println("id: " + id);
-        employeeId = Long.toString(id);
     }
 
 
@@ -119,31 +130,23 @@ public class Employee {
                                 final Object parent) {
         System.out.println(
             "afterUnmarshal(" + unmarshaller + ", " + parent + ")");
-
-        //System.out.println(employeeId);
-        id = Long.parseLong(employeeId);
-
-        //this.parent = (Callback) parent;
     }
 
 
-    @XmlTransient
+    @Id
     private Long id;
-
-
-    @XmlAttribute
-    @XmlID
-    private String employeeId;
 
 
     @XmlElement
     private String name;
 
 
+    @ManyToOne
     @XmlIDREF
     private Employee manager;
 
 
+    @OneToMany(mappedBy = "manager")
     @XmlElement(name = "subordinate")
     @XmlIDREF
     private Collection<Employee> subordinates;

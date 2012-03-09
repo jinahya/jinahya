@@ -42,14 +42,12 @@ public class Company {
         employee1.getSubordinates().add(employee2);
         company.getEmployees().add(employee2);
 
-        /*
         final Employee employee3 = new Employee();
         employee3.setId(3L);
         employee3.setName("Anne Jones");
         employee3.setManager(employee1);
         employee1.getSubordinates().add(employee3);
         company.getEmployees().add(employee3);
-        */
 
         final StringWriter writer = new StringWriter();
         final Marshaller marshaller = context.createMarshaller();
