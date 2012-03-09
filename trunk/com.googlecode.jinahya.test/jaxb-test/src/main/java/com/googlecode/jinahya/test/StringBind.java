@@ -30,7 +30,7 @@ import javax.xml.transform.stream.StreamResult;
  */
 @XmlRootElement(name = "bind")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(propOrder = {"token", "normalized", "string"})
+@XmlType(propOrder = {"token", "norma", "strin"})
 public class StringBind {
 
 
@@ -39,8 +39,7 @@ public class StringBind {
 
         final JAXBContext context = JAXBContext.newInstance(StringBind.class);
 
-        // print XML Schema
-
+        // XML Schema ----------------------------------------------------------
         final StringWriter schemaWriter = new StringWriter();
         context.generateSchema(new SchemaOutputResolver() {
 
@@ -50,9 +49,16 @@ public class StringBind {
                                        final String suggestedFileName)
                 throws IOException {
 
-                final StreamResult result = new StreamResult(schemaWriter);
-                result.setSystemId(suggestedFileName);
-                return result;
+                return new StreamResult(schemaWriter) {
+
+
+                    @Override
+                    public String getSystemId() {
+                        return suggestedFileName;
+                    }
+
+
+                };
             }
 
 
@@ -63,37 +69,31 @@ public class StringBind {
 
         final String unprocessed = "\t ab\r\n   c\t \r \n";
 
-        // marshal
-        final StringBind marshal = new StringBind();
-        marshal.token = marshal.normalized = marshal.string = unprocessed;
+        // marshal -------------------------------------------------------------
+        final StringBind marshalling = new StringBind();
+        marshalling.token = unprocessed;
+        marshalling.norma = unprocessed;
+        marshalling.strin = unprocessed;
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        final StringWriter marshalWriter = new StringWriter();
-        marshaller.marshal(marshal, marshalWriter);
-        marshalWriter.flush();
+        final StringWriter writer = new StringWriter();
+        marshaller.marshal(marshalling, writer);
+        writer.flush();
         System.out.println("-------------------------------------- marshalled");
-        System.out.println(marshalWriter.toString());
+        System.out.println(writer.toString());
 
-        // unmarshal
-        final String xml =
-            "<bind>"
-            + "<token>" + unprocessed + "</token>"
-            + "<normalized>" + unprocessed + "</normalized>"
-            + "<string>" + unprocessed + "</string>"
-            + "</bind>";
+        // unmarshal -----------------------------------------------------------
         final Unmarshaller unmarshaller = context.createUnmarshaller();
-        final StringBind unmarshalled =
-            (StringBind) unmarshaller.unmarshal(new StringReader(xml));
+        final StringBind unmarshalled = (StringBind) unmarshaller.unmarshal(
+            new StringReader(writer.toString()));
         System.out.println("------------------------------------ unmarshalled");
-        System.out.println(unmarshalled);
+        System.out.println(unmarshalled.toString());
     }
 
 
     @Override
     public String toString() {
-        return "token: " + token
-               + "\nnormalized: " + normalized
-               + "\nstring: " + string;
+        return "token: " + token + "\nnorma: " + norma + "\nstrin: " + strin;
     }
 
 
@@ -106,11 +106,11 @@ public class StringBind {
     @XmlElement
     @XmlSchemaType(name = "normalizedString")
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    private String normalized;
+    private String norma;
 
 
     @XmlElement
-    private String string;
+    private String strin;
 
 
 }
