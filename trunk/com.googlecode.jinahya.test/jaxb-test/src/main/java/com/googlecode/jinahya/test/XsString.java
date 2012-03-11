@@ -28,16 +28,16 @@ import javax.xml.transform.stream.StreamResult;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement(name = "bind")
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(propOrder = {"token", "norma", "strin"})
-public class StringBind {
+public class XsString {
 
 
     public static void main(final String[] args)
         throws JAXBException, IOException {
 
-        final JAXBContext context = JAXBContext.newInstance(StringBind.class);
+        final JAXBContext context = JAXBContext.newInstance(XsString.class);
 
         // XML Schema ----------------------------------------------------------
         final StringWriter schemaWriter = new StringWriter();
@@ -70,7 +70,7 @@ public class StringBind {
         final String unprocessed = "\t ab\r\n   c\t \r \n";
 
         // marshal -------------------------------------------------------------
-        final StringBind marshalling = new StringBind();
+        final XsString marshalling = new XsString();
         marshalling.token = unprocessed;
         marshalling.norma = unprocessed;
         marshalling.strin = unprocessed;
@@ -84,7 +84,7 @@ public class StringBind {
 
         // unmarshal -----------------------------------------------------------
         final Unmarshaller unmarshaller = context.createUnmarshaller();
-        final StringBind unmarshalled = (StringBind) unmarshaller.unmarshal(
+        final XsString unmarshalled = (XsString) unmarshaller.unmarshal(
             new StringReader(writer.toString()));
         System.out.println("------------------------------------ unmarshalled");
         System.out.println(unmarshalled.toString());
