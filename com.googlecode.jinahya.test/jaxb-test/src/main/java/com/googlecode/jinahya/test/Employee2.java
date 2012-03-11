@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class Employee1 {
+public class Employee2 {
 
 
     public Long getId() {
@@ -47,19 +47,19 @@ public class Employee1 {
     }
 
 
-    public Employee1 getManager() {
+    public Employee2 getManager() {
         return manager;
     }
 
 
-    public void setManager(final Employee1 manager) {
+    public void setManager(final Employee2 manager) {
         this.manager = manager;
     }
 
 
-    public Collection<Employee1> getSubordinates() {
+    public Collection<Employee2> getSubordinates() {
         if (subordinates == null) {
-            subordinates = new ArrayList<Employee1>();
+            subordinates = new ArrayList<Employee2>();
         }
         return subordinates;
     }
@@ -78,13 +78,13 @@ public class Employee1 {
 
     @ManyToOne
     @XmlIDREF
-    private Employee1 manager;
+    private Employee2 manager;
 
 
     @OneToMany(mappedBy = "manager")
     @XmlElement(name = "subordinate")
     @XmlIDREF
-    private Collection<Employee1> subordinates;
+    private Collection<Employee2> subordinates;
 
 
 }

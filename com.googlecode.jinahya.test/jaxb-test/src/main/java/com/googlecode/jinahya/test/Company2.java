@@ -21,28 +21,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Company1 {
+public class Company2 {
 
 
     public static void main(final String[] args) throws Exception {
 
-        final JAXBContext context = JAXBContext.newInstance(Company1.class);
+        final JAXBContext context = JAXBContext.newInstance(Company2.class);
 
-        final Company1 company = new Company1();
+        final Company2 company = new Company2();
 
-        final Employee1 employee1 = new Employee1();
+        final Employee2 employee1 = new Employee2();
         employee1.setId(1L);
         employee1.setName("Jane Doe");
         company.getEmployees().add(employee1);
 
-        final Employee1 employee2 = new Employee1();
+        final Employee2 employee2 = new Employee2();
         employee2.setId(2L);
         employee2.setName("John Smith");
         employee2.setManager(employee1);
         employee1.getSubordinates().add(employee2);
         company.getEmployees().add(employee2);
 
-        final Employee1 employee3 = new Employee1();
+        final Employee2 employee3 = new Employee2();
         employee3.setId(3L);
         employee3.setName("Anne Jones");
         employee3.setManager(employee1);
@@ -59,21 +59,21 @@ public class Company1 {
         System.out.println(xml);
 
         final StringReader reader = new StringReader(xml);
-        final Company1 after =
-            (Company1) context.createUnmarshaller().unmarshal(reader);
+        final Company2 after =
+            (Company2) context.createUnmarshaller().unmarshal(reader);
     }
 
 
-    public Collection<Employee1> getEmployees() {
+    public Collection<Employee2> getEmployees() {
         if (employees == null) {
-            employees = new ArrayList<Employee1>();
+            employees = new ArrayList<Employee2>();
         }
         return employees;
     }
 
 
     @XmlElement(name = "employee")
-    private Collection<Employee1> employees;
+    private Collection<Employee2> employees;
 
 
 }
