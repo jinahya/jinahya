@@ -1,0 +1,28 @@
+-classpath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-ee/target/classes:/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-ee/target/test-classes:/var/lib/jenkins/.m2/repository/javax/javaee-api/6.0/javaee-api-6.0.jar:/var/lib/jenkins/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/var/lib/jenkins/.m2/repository/com/beust/jcommander/1.12/jcommander-1.12.jar:/var/lib/jenkins/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/var/lib/jenkins/.m2/repository/org/testng/testng/6.4/testng-6.4.jar:/var/lib/jenkins/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/var/lib/jenkins/.m2/repository/org/glassfish/main/extras/glassfish-embedded-all/3.1.2/glassfish-embedded-all-3.1.2.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-ee/src/test/java'
+-author
+-bottom
+'Copyright &#169; 2011-2012. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-ee/target/site/testapidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'jinahya-ee 1.0-alpha-3-SNAPSHOT Test API'
+-link
+'http://download.oracle.com/javaee/6/api'
+-link
+'../apidocs'
+-linkoffline
+'http://download.oracle.com/javase/1.5.0/docs/api' '/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-ee/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'jinahya-ee 1.0-alpha-3-SNAPSHOT Test API'
