@@ -127,7 +127,7 @@ public abstract class Base {
      * @return encoded characters
      * @throws IOException if an I/O error occurs.
      */
-    public byte[] encode(final byte[] input) throws IOException {
+    public final byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -144,7 +144,7 @@ public abstract class Base {
      * @return encoded characters
      * @throws IOException if an I/O error occurs.
      */
-    public byte[] encode(final InputStream input) throws IOException {
+    public final byte[] encode(final InputStream input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
