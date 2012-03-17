@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011 - 2012</copyright>
     <item>
-      <title>File: 8,
-             Errors: 62,
+      <title>File: 9,
+             Errors: 66,
              Warnings: 0,
              Infos: 0
       </title>
@@ -137,6 +137,20 @@
                 </td>
                 <td>
                   7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.StringLongAdapter.java">com/googlecode/jinahya/xml/bind/annotation/adapters/StringLongAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                       </tbody>
