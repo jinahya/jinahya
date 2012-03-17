@@ -1,0 +1,649 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>X509Certificate xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/java/security/cert/X509Certificate.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment">&lt;p&gt;This is not an official specification document, and usage is restricted.</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment">&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment">&lt;a name="notice"&gt;&lt;strong&gt;&lt;center&gt;</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <em class="jxr_comment">NOTICE</em>
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <em class="jxr_comment">&lt;/center&gt;&lt;/strong&gt;&lt;br&gt;</em>
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <em class="jxr_comment">&lt;br&gt;</em>
+<a class="jxr_linenumber" name="8" href="#8">8</a>   
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_comment">(c) 2005-2007 Sun Microsystems, Inc. All Rights Reserved.</em>
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_comment">Neither this file nor any files generated from it describe a complete</em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_comment">specification, and they may only be used as described below. For</em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_comment">example, no permission is given for you to incorporate this file, in</em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_comment">whole or in part, in an implementation of a Java specification.</em>
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_comment">Sun Microsystems Inc. owns the copyright in this file and it is provided</em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_comment">to you for informative, as opposed to normative, use. The file and any</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_comment">files generated from it may be used to generate other informative</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_comment">documentation, such as a unified set of documents of API signatures for</em>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_comment">a platform that includes technologies expressed as Java APIs. The file</em>
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_comment">may also be used to produce "compilation stubs," which allow</em>
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_comment">applications to be compiled and validated for such platforms.</em>
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_comment">Any work generated from this file, such as unified javadocs or compiled</em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_comment">stub files, must be accompanied by this notice in its entirety.</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_comment">This work corresponds to the API signatures of JSR 219: Foundation</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_comment">Profile 1.1. In the event of a discrepency between this work and the</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_comment">JSR 219 specification, which is available at</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_comment"><a href="http://www.jcp.org/en/jsr/detail?id=219," target="alexandria_uri">http://www.jcp.org/en/jsr/detail?id=219,</a> the latter takes precedence.</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_comment">*/</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  
+<a class="jxr_linenumber" name="33" href="#33">33</a>  
+<a class="jxr_linenumber" name="34" href="#34">34</a>    
+<a class="jxr_linenumber" name="35" href="#35">35</a>  
+<a class="jxr_linenumber" name="36" href="#36">36</a>  
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">package</strong> java.security.cert;
+<a class="jxr_linenumber" name="38" href="#38">38</a>  
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> java.math.BigInteger;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> java.security.Principal;
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> java.security.PublicKey;
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
+<a class="jxr_linenumber" name="44" href="#44">44</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <strong class="jxr_keyword">import</strong> javax.security.auth.x500.X500Principal;
+<a class="jxr_linenumber" name="46" href="#46">46</a>  
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment"> * Abstract class for X.509 certificates. This provides a standard</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment"> * way to access all the attributes of an X.509 certificate.</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment"> * In June of 1996, the basic X.509 v3 format was completed by</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment"> * ISO/IEC and ANSI X9, which is described below in ASN.1:</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment"> * Certificate  ::=  SEQUENCE  {</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment"> *     tbsCertificate       TBSCertificate,</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment"> *     signatureAlgorithm   AlgorithmIdentifier,</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment"> *     signature            BIT STRING  }</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment"> * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment"> * These certificates are widely used to support authentication and</em>
+<a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment"> * other functionality in Internet security systems. Common applications</em>
+<a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment"> * include Privacy Enhanced Mail (PEM), Transport Layer Security (SSL),</em>
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment"> * code signing for trusted software distribution, and Secure Electronic</em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment"> * Transactions (SET).</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment"> * These certificates are managed and vouched for by &lt;em&gt;Certificate</em>
+<a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment"> * Authorities&lt;/em&gt; (CAs). CAs are services which create certificates by</em>
+<a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment"> * placing data in the X.509 standard format and then digitally signing</em>
+<a class="jxr_linenumber" name="70" href="#70">70</a>  <em class="jxr_javadoccomment"> * that data. CAs act as trusted third parties, making introductions</em>
+<a class="jxr_linenumber" name="71" href="#71">71</a>  <em class="jxr_javadoccomment"> * between principals who have no direct knowledge of each other.</em>
+<a class="jxr_linenumber" name="72" href="#72">72</a>  <em class="jxr_javadoccomment"> * CA certificates are either signed by themselves, or by some other</em>
+<a class="jxr_linenumber" name="73" href="#73">73</a>  <em class="jxr_javadoccomment"> * CA such as a "root" CA.</em>
+<a class="jxr_linenumber" name="74" href="#74">74</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="75" href="#75">75</a>  <em class="jxr_javadoccomment"> * More information can be found in RFC 2459,</em>
+<a class="jxr_linenumber" name="76" href="#76">76</a>  <em class="jxr_javadoccomment"> * "Internet X.509 Public Key Infrastructure Certificate and CRL</em>
+<a class="jxr_linenumber" name="77" href="#77">77</a>  <em class="jxr_javadoccomment"> * Profile" at &lt;A HREF="<a href="http://www.ietf.org/rfc/rfc2459.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2459.txt</a>"&gt; </em>
+<a class="jxr_linenumber" name="78" href="#78">78</a>  <em class="jxr_javadoccomment"> * <a href="http://www.ietf.org/rfc/rfc2459.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2459.txt</a> &lt;/A&gt;.</em>
+<a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="80" href="#80">80</a>  <em class="jxr_javadoccomment"> * The ASN.1 definition of &lt;code&gt;tbsCertificate&lt;/code&gt; is:</em>
+<a class="jxr_linenumber" name="81" href="#81">81</a>  <em class="jxr_javadoccomment"> * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="82" href="#82">82</a>  <em class="jxr_javadoccomment"> * TBSCertificate  ::=  SEQUENCE  {</em>
+<a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment"> *     version         [0]  EXPLICIT Version DEFAULT v1,</em>
+<a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment"> *     serialNumber         CertificateSerialNumber,</em>
+<a class="jxr_linenumber" name="85" href="#85">85</a>  <em class="jxr_javadoccomment"> *     signature            AlgorithmIdentifier,</em>
+<a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment"> *     issuer               Name,</em>
+<a class="jxr_linenumber" name="87" href="#87">87</a>  <em class="jxr_javadoccomment"> *     validity             Validity,</em>
+<a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment"> *     subject              Name,</em>
+<a class="jxr_linenumber" name="89" href="#89">89</a>  <em class="jxr_javadoccomment"> *     subjectPublicKeyInfo SubjectPublicKeyInfo,</em>
+<a class="jxr_linenumber" name="90" href="#90">90</a>  <em class="jxr_javadoccomment"> *     issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL,</em>
+<a class="jxr_linenumber" name="91" href="#91">91</a>  <em class="jxr_javadoccomment"> *                          -- If present, version must be v2 or v3</em>
+<a class="jxr_linenumber" name="92" href="#92">92</a>  <em class="jxr_javadoccomment"> *     subjectUniqueID [2]  IMPLICIT UniqueIdentifier OPTIONAL,</em>
+<a class="jxr_linenumber" name="93" href="#93">93</a>  <em class="jxr_javadoccomment"> *                          -- If present, version must be v2 or v3</em>
+<a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_javadoccomment"> *     extensions      [3]  EXPLICIT Extensions OPTIONAL</em>
+<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment"> *                          -- If present, version must be v3</em>
+<a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment"> *     }</em>
+<a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment"> * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="99" href="#99">99</a>  <em class="jxr_javadoccomment"> * Certificates are instantiated using a certificate factory. The following is</em>
+<a class="jxr_linenumber" name="100" href="#100">100</a> <em class="jxr_javadoccomment"> * an example of how to instantiate an X.509 certificate:</em>
+<a class="jxr_linenumber" name="101" href="#101">101</a> <em class="jxr_javadoccomment"> * &lt;pre&gt; </em>
+<a class="jxr_linenumber" name="102" href="#102">102</a> <em class="jxr_javadoccomment"> * InputStream inStream = new FileInputStream("fileName-of-cert");</em>
+<a class="jxr_linenumber" name="103" href="#103">103</a> <em class="jxr_javadoccomment"> * CertificateFactory cf = CertificateFactory.getInstance("X.509");</em>
+<a class="jxr_linenumber" name="104" href="#104">104</a> <em class="jxr_javadoccomment"> * X509Certificate cert = (X509Certificate)cf.generateCertificate(inStream);</em>
+<a class="jxr_linenumber" name="105" href="#105">105</a> <em class="jxr_javadoccomment"> * inStream.close();</em>
+<a class="jxr_linenumber" name="106" href="#106">106</a> <em class="jxr_javadoccomment"> * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="107" href="#107">107</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="108" href="#108">108</a> <em class="jxr_javadoccomment"> * @author Hemma Prafullchandra</em>
+<a class="jxr_linenumber" name="109" href="#109">109</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="110" href="#110">110</a> <em class="jxr_javadoccomment"> * @version 1.27</em>
+<a class="jxr_linenumber" name="111" href="#111">111</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="112" href="#112">112</a> <em class="jxr_javadoccomment"> * @see Certificate</em>
+<a class="jxr_linenumber" name="113" href="#113">113</a> <em class="jxr_javadoccomment"> * @see CertificateFactory</em>
+<a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment"> * @see X509Extension</em>
+<a class="jxr_linenumber" name="115" href="#115">115</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="116" href="#116">116</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../java/security/cert/X509Certificate.html">X509Certificate</a> <strong class="jxr_keyword">extends</strong> <a href="../../../java/security/Certificate.html">Certificate</a>
+<a class="jxr_linenumber" name="117" href="#117">117</a>     <strong class="jxr_keyword">implements</strong> <a href="../../../java/security/cert/X509Extension.html">X509Extension</a>
+<a class="jxr_linenumber" name="118" href="#118">118</a> {
+<a class="jxr_linenumber" name="119" href="#119">119</a> 
+<a class="jxr_linenumber" name="120" href="#120">120</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="121" href="#121">121</a> <em class="jxr_javadoccomment">     * Constructor for X.509 certificates.</em>
+<a class="jxr_linenumber" name="122" href="#122">122</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="123" href="#123">123</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../java/security/cert/X509Certificate.html">X509Certificate</a>() { 
+<a class="jxr_linenumber" name="124" href="#124">124</a>     	<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"X.509"</span>);
+<a class="jxr_linenumber" name="125" href="#125">125</a>     }
+<a class="jxr_linenumber" name="126" href="#126">126</a> 
+<a class="jxr_linenumber" name="127" href="#127">127</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="128" href="#128">128</a> <em class="jxr_javadoccomment">     * Checks that the certificate is currently valid. It is if</em>
+<a class="jxr_linenumber" name="129" href="#129">129</a> <em class="jxr_javadoccomment">     * the current date and time are within the validity period given in the</em>
+<a class="jxr_linenumber" name="130" href="#130">130</a> <em class="jxr_javadoccomment">     * certificate.</em>
+<a class="jxr_linenumber" name="131" href="#131">131</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="132" href="#132">132</a> <em class="jxr_javadoccomment">     * The validity period consists of two date/time values: </em>
+<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">     * the first and last dates (and times) on which the certificate </em>
+<a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_javadoccomment">     * is valid. It is defined in</em>
+<a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_javadoccomment">     * ASN.1 as:</em>
+<a class="jxr_linenumber" name="136" href="#136">136</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="137" href="#137">137</a> <em class="jxr_javadoccomment">     * validity             Validity&lt;p&gt;</em>
+<a class="jxr_linenumber" name="138" href="#138">138</a> <em class="jxr_javadoccomment">     * Validity ::= SEQUENCE {</em>
+<a class="jxr_linenumber" name="139" href="#139">139</a> <em class="jxr_javadoccomment">     *     notBefore      CertificateValidityDate,</em>
+<a class="jxr_linenumber" name="140" href="#140">140</a> <em class="jxr_javadoccomment">     *     notAfter       CertificateValidityDate }&lt;p&gt;</em>
+<a class="jxr_linenumber" name="141" href="#141">141</a> <em class="jxr_javadoccomment">     * CertificateValidityDate ::= CHOICE {</em>
+<a class="jxr_linenumber" name="142" href="#142">142</a> <em class="jxr_javadoccomment">     *     utcTime        UTCTime,</em>
+<a class="jxr_linenumber" name="143" href="#143">143</a> <em class="jxr_javadoccomment">     *     generalTime    GeneralizedTime }</em>
+<a class="jxr_linenumber" name="144" href="#144">144</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_javadoccomment">     * @exception CertificateExpiredException if the certificate has expired.</em>
+<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_javadoccomment">     * @exception CertificateNotYetValidException if the certificate is not</em>
+<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_javadoccomment">     * yet valid.</em>
+<a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="150" href="#150">150</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> checkValidity()
+<a class="jxr_linenumber" name="151" href="#151">151</a>         <strong class="jxr_keyword">throws</strong> CertificateExpiredException, CertificateNotYetValidException;
+<a class="jxr_linenumber" name="152" href="#152">152</a> 
+<a class="jxr_linenumber" name="153" href="#153">153</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="154" href="#154">154</a> <em class="jxr_javadoccomment">     * Checks that the given date is within the certificate's</em>
+<a class="jxr_linenumber" name="155" href="#155">155</a> <em class="jxr_javadoccomment">     * validity period. In other words, this determines whether the </em>
+<a class="jxr_linenumber" name="156" href="#156">156</a> <em class="jxr_javadoccomment">     * certificate would be valid at the given date/time.</em>
+<a class="jxr_linenumber" name="157" href="#157">157</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="158" href="#158">158</a> <em class="jxr_javadoccomment">     * @param date the Date to check against to see if this certificate</em>
+<a class="jxr_linenumber" name="159" href="#159">159</a> <em class="jxr_javadoccomment">     *        is valid at that date/time.</em>
+<a class="jxr_linenumber" name="160" href="#160">160</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="161" href="#161">161</a> <em class="jxr_javadoccomment">     * @exception CertificateExpiredException if the certificate has expired</em>
+<a class="jxr_linenumber" name="162" href="#162">162</a> <em class="jxr_javadoccomment">     * with respect to the &lt;code&gt;date&lt;/code&gt; supplied.</em>
+<a class="jxr_linenumber" name="163" href="#163">163</a> <em class="jxr_javadoccomment">     * @exception CertificateNotYetValidException if the certificate is not</em>
+<a class="jxr_linenumber" name="164" href="#164">164</a> <em class="jxr_javadoccomment">     * yet valid with respect to the &lt;code&gt;date&lt;/code&gt; supplied.</em>
+<a class="jxr_linenumber" name="165" href="#165">165</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="166" href="#166">166</a> <em class="jxr_javadoccomment">     * @see #checkValidity()</em>
+<a class="jxr_linenumber" name="167" href="#167">167</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="168" href="#168">168</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> checkValidity(<a href="../../../java/util/Date.html">Date</a> date)
+<a class="jxr_linenumber" name="169" href="#169">169</a>         <strong class="jxr_keyword">throws</strong> CertificateExpiredException, CertificateNotYetValidException;
+<a class="jxr_linenumber" name="170" href="#170">170</a> 
+<a class="jxr_linenumber" name="171" href="#171">171</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="172" href="#172">172</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;version&lt;/code&gt; (version number) value from the</em>
+<a class="jxr_linenumber" name="173" href="#173">173</a> <em class="jxr_javadoccomment">     * certificate.</em>
+<a class="jxr_linenumber" name="174" href="#174">174</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="175" href="#175">175</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="176" href="#176">176</a> <em class="jxr_javadoccomment">     * version  [0] EXPLICIT Version DEFAULT v1&lt;p&gt;</em>
+<a class="jxr_linenumber" name="177" href="#177">177</a> <em class="jxr_javadoccomment">     * Version ::=  INTEGER  {  v1(0), v2(1), v3(2)  }</em>
+<a class="jxr_linenumber" name="178" href="#178">178</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="179" href="#179">179</a> <em class="jxr_javadoccomment">     * @return the version number, i.e. 1, 2 or 3.</em>
+<a class="jxr_linenumber" name="180" href="#180">180</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="181" href="#181">181</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">int</strong> getVersion();
+<a class="jxr_linenumber" name="182" href="#182">182</a> 
+<a class="jxr_linenumber" name="183" href="#183">183</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="184" href="#184">184</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;serialNumber&lt;/code&gt; value from the certificate.</em>
+<a class="jxr_linenumber" name="185" href="#185">185</a> <em class="jxr_javadoccomment">     * The serial number is an integer assigned by the certification</em>
+<a class="jxr_linenumber" name="186" href="#186">186</a> <em class="jxr_javadoccomment">     * authority to each certificate. It must be unique for each</em>
+<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_javadoccomment">     * certificate issued by a given CA (i.e., the issuer name and</em>
+<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_javadoccomment">     * serial number identify a unique certificate).</em>
+<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_javadoccomment">     * serialNumber     CertificateSerialNumber&lt;p&gt;</em>
+<a class="jxr_linenumber" name="192" href="#192">192</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="193" href="#193">193</a> <em class="jxr_javadoccomment">     * CertificateSerialNumber  ::=  INTEGER</em>
+<a class="jxr_linenumber" name="194" href="#194">194</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="195" href="#195">195</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="196" href="#196">196</a> <em class="jxr_javadoccomment">     * @return the serial number.</em>
+<a class="jxr_linenumber" name="197" href="#197">197</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="198" href="#198">198</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/math/BigInteger.html">BigInteger</a> getSerialNumber();
+<a class="jxr_linenumber" name="199" href="#199">199</a> 
+<a class="jxr_linenumber" name="200" href="#200">200</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="201" href="#201">201</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;issuer&lt;/code&gt; (issuer distinguished name) value from </em>
+<a class="jxr_linenumber" name="202" href="#202">202</a> <em class="jxr_javadoccomment">     * the certificate. The issuer name identifies the entity that signed (and</em>
+<a class="jxr_linenumber" name="203" href="#203">203</a> <em class="jxr_javadoccomment">     * issued) the certificate. </em>
+<a class="jxr_linenumber" name="204" href="#204">204</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="205" href="#205">205</a> <em class="jxr_javadoccomment">     * &lt;p&gt;The issuer name field contains an</em>
+<a class="jxr_linenumber" name="206" href="#206">206</a> <em class="jxr_javadoccomment">     * X.500 distinguished name (DN).</em>
+<a class="jxr_linenumber" name="207" href="#207">207</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="208" href="#208">208</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="209" href="#209">209</a> <em class="jxr_javadoccomment">     * issuer    Name&lt;p&gt;</em>
+<a class="jxr_linenumber" name="210" href="#210">210</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="211" href="#211">211</a> <em class="jxr_javadoccomment">     * Name ::= CHOICE { RDNSequence }</em>
+<a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_javadoccomment">     * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName</em>
+<a class="jxr_linenumber" name="213" href="#213">213</a> <em class="jxr_javadoccomment">     * RelativeDistinguishedName ::=</em>
+<a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_javadoccomment">     *     SET OF AttributeValueAssertion</em>
+<a class="jxr_linenumber" name="215" href="#215">215</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="216" href="#216">216</a> <em class="jxr_javadoccomment">     * AttributeValueAssertion ::= SEQUENCE {</em>
+<a class="jxr_linenumber" name="217" href="#217">217</a> <em class="jxr_javadoccomment">     *                               AttributeType,</em>
+<a class="jxr_linenumber" name="218" href="#218">218</a> <em class="jxr_javadoccomment">     *                               AttributeValue }</em>
+<a class="jxr_linenumber" name="219" href="#219">219</a> <em class="jxr_javadoccomment">     * AttributeType ::= OBJECT IDENTIFIER</em>
+<a class="jxr_linenumber" name="220" href="#220">220</a> <em class="jxr_javadoccomment">     * AttributeValue ::= ANY</em>
+<a class="jxr_linenumber" name="221" href="#221">221</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="222" href="#222">222</a> <em class="jxr_javadoccomment">     * The &lt;code&gt;Name&lt;/code&gt; describes a hierarchical name composed of</em>
+<a class="jxr_linenumber" name="223" href="#223">223</a> <em class="jxr_javadoccomment">     * attributes,</em>
+<a class="jxr_linenumber" name="224" href="#224">224</a> <em class="jxr_javadoccomment">     * such as country name, and corresponding values, such as US.</em>
+<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">     * The type of the &lt;code&gt;AttributeValue&lt;/code&gt; component is determined by</em>
+<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">     * the &lt;code&gt;AttributeType&lt;/code&gt;; in general it will be a </em>
+<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">     * &lt;code&gt;directoryString&lt;/code&gt;. A &lt;code&gt;directoryString&lt;/code&gt; is usually </em>
+<a class="jxr_linenumber" name="228" href="#228">228</a> <em class="jxr_javadoccomment">     * one of &lt;code&gt;PrintableString&lt;/code&gt;,</em>
+<a class="jxr_linenumber" name="229" href="#229">229</a> <em class="jxr_javadoccomment">     * &lt;code&gt;TeletexString&lt;/code&gt; or &lt;code&gt;UniversalString&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * @return a Principal whose name is the issuer distinguished name.</em>
+<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="233" href="#233">233</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/security/Principal.html">Principal</a> getIssuerDN();
+<a class="jxr_linenumber" name="234" href="#234">234</a> 
+<a class="jxr_linenumber" name="235" href="#235">235</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="236" href="#236">236</a> <em class="jxr_javadoccomment">     * Returns the issuer (issuer distinguished name) value from the</em>
+<a class="jxr_linenumber" name="237" href="#237">237</a> <em class="jxr_javadoccomment">     * certificate as an &lt;code&gt;X500Principal&lt;/code&gt;. </em>
+<a class="jxr_linenumber" name="238" href="#238">238</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="239" href="#239">239</a> <em class="jxr_javadoccomment">     * It is recommended that subclasses override this method to provide </em>
+<a class="jxr_linenumber" name="240" href="#240">240</a> <em class="jxr_javadoccomment">     * an efficient implementation.</em>
+<a class="jxr_linenumber" name="241" href="#241">241</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="242" href="#242">242</a> <em class="jxr_javadoccomment">     * @return an &lt;code&gt;X500Principal&lt;/code&gt; representing the issuer</em>
+<a class="jxr_linenumber" name="243" href="#243">243</a> <em class="jxr_javadoccomment">     *		distinguished name</em>
+<a class="jxr_linenumber" name="244" href="#244">244</a> <em class="jxr_javadoccomment">     * @since 1.4</em>
+<a class="jxr_linenumber" name="245" href="#245">245</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="246" href="#246">246</a>     <strong class="jxr_keyword">public</strong> <a href="../../../javax/security/auth/x500/X500Principal.html">X500Principal</a> getIssuerX500Principal() {
+<a class="jxr_linenumber" name="247" href="#247">247</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="248" href="#248">248</a>     }
+<a class="jxr_linenumber" name="249" href="#249">249</a> 
+<a class="jxr_linenumber" name="250" href="#250">250</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="251" href="#251">251</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;subject&lt;/code&gt; (subject distinguished name) value </em>
+<a class="jxr_linenumber" name="252" href="#252">252</a> <em class="jxr_javadoccomment">     * from the certificate.  If the &lt;code&gt;subject&lt;/code&gt; value is empty,</em>
+<a class="jxr_linenumber" name="253" href="#253">253</a> <em class="jxr_javadoccomment">     * then the &lt;code&gt;getName()&lt;/code&gt; method of the returned</em>
+<a class="jxr_linenumber" name="254" href="#254">254</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Principal&lt;/code&gt; object returns an empty string ("").</em>
+<a class="jxr_linenumber" name="255" href="#255">255</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_javadoccomment">     * &lt;p&gt; The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="258" href="#258">258</a> <em class="jxr_javadoccomment">     * subject    Name</em>
+<a class="jxr_linenumber" name="259" href="#259">259</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="260" href="#260">260</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="261" href="#261">261</a> <em class="jxr_javadoccomment">     * &lt;p&gt;See {@link #getIssuerDN() getIssuerDN} for &lt;code&gt;Name&lt;/code&gt; </em>
+<a class="jxr_linenumber" name="262" href="#262">262</a> <em class="jxr_javadoccomment">     * and other relevant definitions.</em>
+<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> <em class="jxr_javadoccomment">     * @return a Principal whose name is the subject name.</em>
+<a class="jxr_linenumber" name="265" href="#265">265</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="266" href="#266">266</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/security/Principal.html">Principal</a> getSubjectDN();
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="269" href="#269">269</a> <em class="jxr_javadoccomment">     * Returns the subject (subject distinguished name) value from the</em>
+<a class="jxr_linenumber" name="270" href="#270">270</a> <em class="jxr_javadoccomment">     * certificate as an &lt;code&gt;X500Principal&lt;/code&gt;.  If the subject value</em>
+<a class="jxr_linenumber" name="271" href="#271">271</a> <em class="jxr_javadoccomment">     * is empty, then the &lt;code&gt;getName()&lt;/code&gt; method of the returned</em>
+<a class="jxr_linenumber" name="272" href="#272">272</a> <em class="jxr_javadoccomment">     * &lt;code&gt;X500Principal&lt;/code&gt; object returns an empty string ("").</em>
+<a class="jxr_linenumber" name="273" href="#273">273</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="274" href="#274">274</a> <em class="jxr_javadoccomment">     * It is recommended that subclasses override this method to provide</em>
+<a class="jxr_linenumber" name="275" href="#275">275</a> <em class="jxr_javadoccomment">     * an efficient implementation.</em>
+<a class="jxr_linenumber" name="276" href="#276">276</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="277" href="#277">277</a> <em class="jxr_javadoccomment">     * @return an &lt;code&gt;X500Principal&lt;/code&gt; representing the subject</em>
+<a class="jxr_linenumber" name="278" href="#278">278</a> <em class="jxr_javadoccomment">     *		distinguished name</em>
+<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">     * @since 1.4</em>
+<a class="jxr_linenumber" name="280" href="#280">280</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="281" href="#281">281</a>     <strong class="jxr_keyword">public</strong> <a href="../../../javax/security/auth/x500/X500Principal.html">X500Principal</a> getSubjectX500Principal() {
+<a class="jxr_linenumber" name="282" href="#282">282</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="283" href="#283">283</a>     }
+<a class="jxr_linenumber" name="284" href="#284">284</a> 
+<a class="jxr_linenumber" name="285" href="#285">285</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="286" href="#286">286</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;notBefore&lt;/code&gt; date from the validity period of </em>
+<a class="jxr_linenumber" name="287" href="#287">287</a> <em class="jxr_javadoccomment">     * the certificate.</em>
+<a class="jxr_linenumber" name="288" href="#288">288</a> <em class="jxr_javadoccomment">     * The relevant ASN.1 definitions are:</em>
+<a class="jxr_linenumber" name="289" href="#289">289</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="290" href="#290">290</a> <em class="jxr_javadoccomment">     * validity             Validity&lt;p&gt;</em>
+<a class="jxr_linenumber" name="291" href="#291">291</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="292" href="#292">292</a> <em class="jxr_javadoccomment">     * Validity ::= SEQUENCE {</em>
+<a class="jxr_linenumber" name="293" href="#293">293</a> <em class="jxr_javadoccomment">     *     notBefore      CertificateValidityDate,</em>
+<a class="jxr_linenumber" name="294" href="#294">294</a> <em class="jxr_javadoccomment">     *     notAfter       CertificateValidityDate }&lt;p&gt;</em>
+<a class="jxr_linenumber" name="295" href="#295">295</a> <em class="jxr_javadoccomment">     * CertificateValidityDate ::= CHOICE {</em>
+<a class="jxr_linenumber" name="296" href="#296">296</a> <em class="jxr_javadoccomment">     *     utcTime        UTCTime,</em>
+<a class="jxr_linenumber" name="297" href="#297">297</a> <em class="jxr_javadoccomment">     *     generalTime    GeneralizedTime }</em>
+<a class="jxr_linenumber" name="298" href="#298">298</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="299" href="#299">299</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="300" href="#300">300</a> <em class="jxr_javadoccomment">     * @return the start date of the validity period.</em>
+<a class="jxr_linenumber" name="301" href="#301">301</a> <em class="jxr_javadoccomment">     * @see #checkValidity</em>
+<a class="jxr_linenumber" name="302" href="#302">302</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="303" href="#303">303</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/util/Date.html">Date</a> getNotBefore();
+<a class="jxr_linenumber" name="304" href="#304">304</a> 
+<a class="jxr_linenumber" name="305" href="#305">305</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="306" href="#306">306</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;notAfter&lt;/code&gt; date from the validity period of </em>
+<a class="jxr_linenumber" name="307" href="#307">307</a> <em class="jxr_javadoccomment">     * the certificate. See {@link #getNotBefore() getNotBefore}</em>
+<a class="jxr_linenumber" name="308" href="#308">308</a> <em class="jxr_javadoccomment">     * for relevant ASN.1 definitions.</em>
+<a class="jxr_linenumber" name="309" href="#309">309</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="310" href="#310">310</a> <em class="jxr_javadoccomment">     * @return the end date of the validity period.</em>
+<a class="jxr_linenumber" name="311" href="#311">311</a> <em class="jxr_javadoccomment">     * @see #checkValidity</em>
+<a class="jxr_linenumber" name="312" href="#312">312</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="313" href="#313">313</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/util/Date.html">Date</a> getNotAfter();
+<a class="jxr_linenumber" name="314" href="#314">314</a> 
+<a class="jxr_linenumber" name="315" href="#315">315</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="316" href="#316">316</a> <em class="jxr_javadoccomment">     * Gets the DER-encoded certificate information, the</em>
+<a class="jxr_linenumber" name="317" href="#317">317</a> <em class="jxr_javadoccomment">     * &lt;code&gt;tbsCertificate&lt;/code&gt; from this certificate.</em>
+<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">     * This can be used to verify the signature independently.</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">     * @return the DER-encoded certificate information.</em>
+<a class="jxr_linenumber" name="321" href="#321">321</a> <em class="jxr_javadoccomment">     * @exception CertificateEncodingException if an encoding error occurs.</em>
+<a class="jxr_linenumber" name="322" href="#322">322</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="323" href="#323">323</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> byte[] getTBSCertificate()
+<a class="jxr_linenumber" name="324" href="#324">324</a>         <strong class="jxr_keyword">throws</strong> CertificateEncodingException;
+<a class="jxr_linenumber" name="325" href="#325">325</a> 
+<a class="jxr_linenumber" name="326" href="#326">326</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="327" href="#327">327</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;signature&lt;/code&gt; value (the raw signature bits) from </em>
+<a class="jxr_linenumber" name="328" href="#328">328</a> <em class="jxr_javadoccomment">     * the certificate.</em>
+<a class="jxr_linenumber" name="329" href="#329">329</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="330" href="#330">330</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="331" href="#331">331</a> <em class="jxr_javadoccomment">     * signature     BIT STRING  </em>
+<a class="jxr_linenumber" name="332" href="#332">332</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="333" href="#333">333</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="334" href="#334">334</a> <em class="jxr_javadoccomment">     * @return the signature.</em>
+<a class="jxr_linenumber" name="335" href="#335">335</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="336" href="#336">336</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> byte[] getSignature();
+<a class="jxr_linenumber" name="337" href="#337">337</a> 
+<a class="jxr_linenumber" name="338" href="#338">338</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="339" href="#339">339</a> <em class="jxr_javadoccomment">     * Gets the signature algorithm name for the certificate</em>
+<a class="jxr_linenumber" name="340" href="#340">340</a> <em class="jxr_javadoccomment">     * signature algorithm. An example is the string "SHA-1/DSA".</em>
+<a class="jxr_linenumber" name="341" href="#341">341</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="342" href="#342">342</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="343" href="#343">343</a> <em class="jxr_javadoccomment">     * signatureAlgorithm   AlgorithmIdentifier&lt;p&gt;</em>
+<a class="jxr_linenumber" name="344" href="#344">344</a> <em class="jxr_javadoccomment">     * AlgorithmIdentifier  ::=  SEQUENCE  {</em>
+<a class="jxr_linenumber" name="345" href="#345">345</a> <em class="jxr_javadoccomment">     *     algorithm               OBJECT IDENTIFIER,</em>
+<a class="jxr_linenumber" name="346" href="#346">346</a> <em class="jxr_javadoccomment">     *     parameters              ANY DEFINED BY algorithm OPTIONAL  }</em>
+<a class="jxr_linenumber" name="347" href="#347">347</a> <em class="jxr_javadoccomment">     *                             -- contains a value of the type</em>
+<a class="jxr_linenumber" name="348" href="#348">348</a> <em class="jxr_javadoccomment">     *                             -- registered for use with the</em>
+<a class="jxr_linenumber" name="349" href="#349">349</a> <em class="jxr_javadoccomment">     *                             -- algorithm object identifier value</em>
+<a class="jxr_linenumber" name="350" href="#350">350</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="351" href="#351">351</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="352" href="#352">352</a> <em class="jxr_javadoccomment">     * &lt;p&gt;The algorithm name is determined from the &lt;code&gt;algorithm&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="353" href="#353">353</a> <em class="jxr_javadoccomment">     * OID string.</em>
+<a class="jxr_linenumber" name="354" href="#354">354</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="355" href="#355">355</a> <em class="jxr_javadoccomment">     * @return the signature algorithm name.</em>
+<a class="jxr_linenumber" name="356" href="#356">356</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="357" href="#357">357</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/lang/String.html">String</a> getSigAlgName();
+<a class="jxr_linenumber" name="358" href="#358">358</a> 
+<a class="jxr_linenumber" name="359" href="#359">359</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="360" href="#360">360</a> <em class="jxr_javadoccomment">     * Gets the signature algorithm OID string from the certificate.</em>
+<a class="jxr_linenumber" name="361" href="#361">361</a> <em class="jxr_javadoccomment">     * An OID is represented by a set of nonnegative whole numbers separated</em>
+<a class="jxr_linenumber" name="362" href="#362">362</a> <em class="jxr_javadoccomment">     * by periods.</em>
+<a class="jxr_linenumber" name="363" href="#363">363</a> <em class="jxr_javadoccomment">     * For example, the string "1.2.840.10040.4.3" identifies the SHA-1</em>
+<a class="jxr_linenumber" name="364" href="#364">364</a> <em class="jxr_javadoccomment">     * with DSA signature algorithm, as per RFC 2459.</em>
+<a class="jxr_linenumber" name="365" href="#365">365</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="366" href="#366">366</a> <em class="jxr_javadoccomment">     * &lt;p&gt;See {@link #getSigAlgName() getSigAlgName} for </em>
+<a class="jxr_linenumber" name="367" href="#367">367</a> <em class="jxr_javadoccomment">     * relevant ASN.1 definitions.</em>
+<a class="jxr_linenumber" name="368" href="#368">368</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="369" href="#369">369</a> <em class="jxr_javadoccomment">     * @return the signature algorithm OID string.</em>
+<a class="jxr_linenumber" name="370" href="#370">370</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="371" href="#371">371</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../java/lang/String.html">String</a> getSigAlgOID();
+<a class="jxr_linenumber" name="372" href="#372">372</a> 
+<a class="jxr_linenumber" name="373" href="#373">373</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="374" href="#374">374</a> <em class="jxr_javadoccomment">     * Gets the DER-encoded signature algorithm parameters from this</em>
+<a class="jxr_linenumber" name="375" href="#375">375</a> <em class="jxr_javadoccomment">     * certificate's signature algorithm. In most cases, the signature</em>
+<a class="jxr_linenumber" name="376" href="#376">376</a> <em class="jxr_javadoccomment">     * algorithm parameters are null; the parameters are usually</em>
+<a class="jxr_linenumber" name="377" href="#377">377</a> <em class="jxr_javadoccomment">     * supplied with the certificate's public key.</em>
+<a class="jxr_linenumber" name="378" href="#378">378</a> <em class="jxr_javadoccomment">     * If access to individual parameter values is needed then use</em>
+<a class="jxr_linenumber" name="379" href="#379">379</a> <em class="jxr_javadoccomment">     * {@link java.security.AlgorithmParameters AlgorithmParameters}</em>
+<a class="jxr_linenumber" name="380" href="#380">380</a> <em class="jxr_javadoccomment">     * and instantiate with the name returned by</em>
+<a class="jxr_linenumber" name="381" href="#381">381</a> <em class="jxr_javadoccomment">     * {@link #getSigAlgName() getSigAlgName}.</em>
+<a class="jxr_linenumber" name="382" href="#382">382</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="383" href="#383">383</a> <em class="jxr_javadoccomment">     * &lt;p&gt;See {@link #getSigAlgName() getSigAlgName} for </em>
+<a class="jxr_linenumber" name="384" href="#384">384</a> <em class="jxr_javadoccomment">     * relevant ASN.1 definitions.</em>
+<a class="jxr_linenumber" name="385" href="#385">385</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="386" href="#386">386</a> <em class="jxr_javadoccomment">     * @return the DER-encoded signature algorithm parameters, or</em>
+<a class="jxr_linenumber" name="387" href="#387">387</a> <em class="jxr_javadoccomment">     *         null if no parameters are present.</em>
+<a class="jxr_linenumber" name="388" href="#388">388</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="389" href="#389">389</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> byte[] getSigAlgParams();
+<a class="jxr_linenumber" name="390" href="#390">390</a> 
+<a class="jxr_linenumber" name="391" href="#391">391</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="392" href="#392">392</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;issuerUniqueID&lt;/code&gt; value from the certificate.</em>
+<a class="jxr_linenumber" name="393" href="#393">393</a> <em class="jxr_javadoccomment">     * The issuer unique identifier is present in the certificate</em>
+<a class="jxr_linenumber" name="394" href="#394">394</a> <em class="jxr_javadoccomment">     * to handle the possibility of reuse of issuer names over time.</em>
+<a class="jxr_linenumber" name="395" href="#395">395</a> <em class="jxr_javadoccomment">     * RFC 2459 recommends that names not be reused and that</em>
+<a class="jxr_linenumber" name="396" href="#396">396</a> <em class="jxr_javadoccomment">     * conforming certificates not make use of unique identifiers.</em>
+<a class="jxr_linenumber" name="397" href="#397">397</a> <em class="jxr_javadoccomment">     * Applications conforming to that profile should be capable of</em>
+<a class="jxr_linenumber" name="398" href="#398">398</a> <em class="jxr_javadoccomment">     * parsing unique identifiers and making comparisons.</em>
+<a class="jxr_linenumber" name="399" href="#399">399</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="400" href="#400">400</a> <em class="jxr_javadoccomment">     * &lt;p&gt;The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="401" href="#401">401</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="402" href="#402">402</a> <em class="jxr_javadoccomment">     * issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL&lt;p&gt;</em>
+<a class="jxr_linenumber" name="403" href="#403">403</a> <em class="jxr_javadoccomment">     * UniqueIdentifier  ::=  BIT STRING</em>
+<a class="jxr_linenumber" name="404" href="#404">404</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="405" href="#405">405</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="406" href="#406">406</a> <em class="jxr_javadoccomment">     * @return the issuer unique identifier or null if it is not</em>
+<a class="jxr_linenumber" name="407" href="#407">407</a> <em class="jxr_javadoccomment">     * present in the certificate.</em>
+<a class="jxr_linenumber" name="408" href="#408">408</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="409" href="#409">409</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">boolean</strong>[] getIssuerUniqueID();
+<a class="jxr_linenumber" name="410" href="#410">410</a> 
+<a class="jxr_linenumber" name="411" href="#411">411</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="412" href="#412">412</a> <em class="jxr_javadoccomment">     * Gets the &lt;code&gt;subjectUniqueID&lt;/code&gt; value from the certificate.</em>
+<a class="jxr_linenumber" name="413" href="#413">413</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="414" href="#414">414</a> <em class="jxr_javadoccomment">     * &lt;p&gt;The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="415" href="#415">415</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="416" href="#416">416</a> <em class="jxr_javadoccomment">     * subjectUniqueID  [2]  IMPLICIT UniqueIdentifier OPTIONAL&lt;p&gt;</em>
+<a class="jxr_linenumber" name="417" href="#417">417</a> <em class="jxr_javadoccomment">     * UniqueIdentifier  ::=  BIT STRING</em>
+<a class="jxr_linenumber" name="418" href="#418">418</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="419" href="#419">419</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="420" href="#420">420</a> <em class="jxr_javadoccomment">     * @return the subject unique identifier or null if it is not</em>
+<a class="jxr_linenumber" name="421" href="#421">421</a> <em class="jxr_javadoccomment">     * present in the certificate.</em>
+<a class="jxr_linenumber" name="422" href="#422">422</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="423" href="#423">423</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">boolean</strong>[] getSubjectUniqueID();
+<a class="jxr_linenumber" name="424" href="#424">424</a> 
+<a class="jxr_linenumber" name="425" href="#425">425</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="426" href="#426">426</a> <em class="jxr_javadoccomment">     * Gets a boolean array representing bits of</em>
+<a class="jxr_linenumber" name="427" href="#427">427</a> <em class="jxr_javadoccomment">     * the &lt;code&gt;KeyUsage&lt;/code&gt; extension, (OID = 2.5.29.15).</em>
+<a class="jxr_linenumber" name="428" href="#428">428</a> <em class="jxr_javadoccomment">     * The key usage extension defines the purpose (e.g., encipherment,</em>
+<a class="jxr_linenumber" name="429" href="#429">429</a> <em class="jxr_javadoccomment">     * signature, certificate signing) of the key contained in the</em>
+<a class="jxr_linenumber" name="430" href="#430">430</a> <em class="jxr_javadoccomment">     * certificate.</em>
+<a class="jxr_linenumber" name="431" href="#431">431</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="432" href="#432">432</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="433" href="#433">433</a> <em class="jxr_javadoccomment">     * KeyUsage ::= BIT STRING {</em>
+<a class="jxr_linenumber" name="434" href="#434">434</a> <em class="jxr_javadoccomment">     *     digitalSignature        (0),</em>
+<a class="jxr_linenumber" name="435" href="#435">435</a> <em class="jxr_javadoccomment">     *     nonRepudiation          (1),</em>
+<a class="jxr_linenumber" name="436" href="#436">436</a> <em class="jxr_javadoccomment">     *     keyEncipherment         (2),</em>
+<a class="jxr_linenumber" name="437" href="#437">437</a> <em class="jxr_javadoccomment">     *     dataEncipherment        (3),</em>
+<a class="jxr_linenumber" name="438" href="#438">438</a> <em class="jxr_javadoccomment">     *     keyAgreement            (4),</em>
+<a class="jxr_linenumber" name="439" href="#439">439</a> <em class="jxr_javadoccomment">     *     keyCertSign             (5),</em>
+<a class="jxr_linenumber" name="440" href="#440">440</a> <em class="jxr_javadoccomment">     *     cRLSign                 (6),</em>
+<a class="jxr_linenumber" name="441" href="#441">441</a> <em class="jxr_javadoccomment">     *     encipherOnly            (7),</em>
+<a class="jxr_linenumber" name="442" href="#442">442</a> <em class="jxr_javadoccomment">     *     decipherOnly            (8) }</em>
+<a class="jxr_linenumber" name="443" href="#443">443</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="444" href="#444">444</a> <em class="jxr_javadoccomment">     * RFC 2459 recommends that when used, this be marked</em>
+<a class="jxr_linenumber" name="445" href="#445">445</a> <em class="jxr_javadoccomment">     * as a critical extension.</em>
+<a class="jxr_linenumber" name="446" href="#446">446</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="447" href="#447">447</a> <em class="jxr_javadoccomment">     * @return the KeyUsage extension of this certificate, represented as</em>
+<a class="jxr_linenumber" name="448" href="#448">448</a> <em class="jxr_javadoccomment">     * an array of booleans. The order of KeyUsage values in the array is</em>
+<a class="jxr_linenumber" name="449" href="#449">449</a> <em class="jxr_javadoccomment">     * the same as in the above ASN.1 definition. The array will contain a</em>
+<a class="jxr_linenumber" name="450" href="#450">450</a> <em class="jxr_javadoccomment">     * value for each KeyUsage defined above. If the KeyUsage list encoded</em>
+<a class="jxr_linenumber" name="451" href="#451">451</a> <em class="jxr_javadoccomment">     * in the certificate is longer than the above list, it will not be</em>
+<a class="jxr_linenumber" name="452" href="#452">452</a> <em class="jxr_javadoccomment">     * truncated. Returns null if this certificate does not</em>
+<a class="jxr_linenumber" name="453" href="#453">453</a> <em class="jxr_javadoccomment">     * contain a KeyUsage extension.</em>
+<a class="jxr_linenumber" name="454" href="#454">454</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="455" href="#455">455</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">boolean</strong>[] getKeyUsage();
+<a class="jxr_linenumber" name="456" href="#456">456</a> 
+<a class="jxr_linenumber" name="457" href="#457">457</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="458" href="#458">458</a> <em class="jxr_javadoccomment">     * Gets an unmodifiable list of Strings representing the OBJECT</em>
+<a class="jxr_linenumber" name="459" href="#459">459</a> <em class="jxr_javadoccomment">     * IDENTIFIERs of the &lt;code&gt;ExtKeyUsageSyntax&lt;/code&gt; field of the</em>
+<a class="jxr_linenumber" name="460" href="#460">460</a> <em class="jxr_javadoccomment">     * extended key usage extension, (OID = 2.5.29.37).  It indicates</em>
+<a class="jxr_linenumber" name="461" href="#461">461</a> <em class="jxr_javadoccomment">     * one or more purposes for which the certified public key may be</em>
+<a class="jxr_linenumber" name="462" href="#462">462</a> <em class="jxr_javadoccomment">     * used, in addition to or in place of the basic purposes</em>
+<a class="jxr_linenumber" name="463" href="#463">463</a> <em class="jxr_javadoccomment">     * indicated in the key usage extension field.  The ASN.1</em>
+<a class="jxr_linenumber" name="464" href="#464">464</a> <em class="jxr_javadoccomment">     * definition for this is:</em>
+<a class="jxr_linenumber" name="465" href="#465">465</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="466" href="#466">466</a> <em class="jxr_javadoccomment">     * ExtKeyUsageSyntax ::= SEQUENCE SIZE (1..MAX) OF KeyPurposeId&lt;p&gt;</em>
+<a class="jxr_linenumber" name="467" href="#467">467</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="468" href="#468">468</a> <em class="jxr_javadoccomment">     * KeyPurposeId ::= OBJECT IDENTIFIER&lt;p&gt;</em>
+<a class="jxr_linenumber" name="469" href="#469">469</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="470" href="#470">470</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="471" href="#471">471</a> <em class="jxr_javadoccomment">     * Key purposes may be defined by any organization with a</em>
+<a class="jxr_linenumber" name="472" href="#472">472</a> <em class="jxr_javadoccomment">     * need. Object identifiers used to identify key purposes shall be</em>
+<a class="jxr_linenumber" name="473" href="#473">473</a> <em class="jxr_javadoccomment">     * assigned in accordance with IANA or ITU-T Rec. X.660 |</em>
+<a class="jxr_linenumber" name="474" href="#474">474</a> <em class="jxr_javadoccomment">     * ISO/IEC/ITU 9834-1.</em>
+<a class="jxr_linenumber" name="475" href="#475">475</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="476" href="#476">476</a> <em class="jxr_javadoccomment">     * This method was added to version 1.4 of the Java 2 Platform Standard </em>
+<a class="jxr_linenumber" name="477" href="#477">477</a> <em class="jxr_javadoccomment">     * Edition. In order to maintain backwards compatibility with existing </em>
+<a class="jxr_linenumber" name="478" href="#478">478</a> <em class="jxr_javadoccomment">     * service providers, this method is not &lt;code&gt;abstract&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="479" href="#479">479</a> <em class="jxr_javadoccomment">     * and it provides a default implementation. Subclasses</em>
+<a class="jxr_linenumber" name="480" href="#480">480</a> <em class="jxr_javadoccomment">     * should override this method with a correct implementation.</em>
+<a class="jxr_linenumber" name="481" href="#481">481</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="482" href="#482">482</a> <em class="jxr_javadoccomment">     * @return the ExtendedKeyUsage extension of this certificate,</em>
+<a class="jxr_linenumber" name="483" href="#483">483</a> <em class="jxr_javadoccomment">     *         as an unmodifiable list of object identifiers represented</em>
+<a class="jxr_linenumber" name="484" href="#484">484</a> <em class="jxr_javadoccomment">     *         as Strings. Returns null if this certificate does not</em>
+<a class="jxr_linenumber" name="485" href="#485">485</a> <em class="jxr_javadoccomment">     *         contain an ExtendedKeyUsage extension.</em>
+<a class="jxr_linenumber" name="486" href="#486">486</a> <em class="jxr_javadoccomment">     * @throws CertificateParsingException if the extension cannot be decoded</em>
+<a class="jxr_linenumber" name="487" href="#487">487</a> <em class="jxr_javadoccomment">     * @since 1.4</em>
+<a class="jxr_linenumber" name="488" href="#488">488</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="489" href="#489">489</a>     <strong class="jxr_keyword">public</strong> <a href="../../../java/util/List.html">List</a> getExtendedKeyUsage() <strong class="jxr_keyword">throws</strong> CertificateParsingException {
+<a class="jxr_linenumber" name="490" href="#490">490</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="491" href="#491">491</a>     }
+<a class="jxr_linenumber" name="492" href="#492">492</a> 
+<a class="jxr_linenumber" name="493" href="#493">493</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="494" href="#494">494</a> <em class="jxr_javadoccomment">     * Gets the certificate constraints path length from the</em>
+<a class="jxr_linenumber" name="495" href="#495">495</a> <em class="jxr_javadoccomment">     * critical &lt;code&gt;BasicConstraints&lt;/code&gt; extension, (OID = 2.5.29.19).</em>
+<a class="jxr_linenumber" name="496" href="#496">496</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="497" href="#497">497</a> <em class="jxr_javadoccomment">     * The basic constraints extension identifies whether the subject</em>
+<a class="jxr_linenumber" name="498" href="#498">498</a> <em class="jxr_javadoccomment">     * of the certificate is a Certificate Authority (CA) and </em>
+<a class="jxr_linenumber" name="499" href="#499">499</a> <em class="jxr_javadoccomment">     * how deep a certification path may exist through that CA. The </em>
+<a class="jxr_linenumber" name="500" href="#500">500</a> <em class="jxr_javadoccomment">     * &lt;code&gt;pathLenConstraint&lt;/code&gt; field (see below) is meaningful</em>
+<a class="jxr_linenumber" name="501" href="#501">501</a> <em class="jxr_javadoccomment">     * only if &lt;code&gt;cA&lt;/code&gt; is set to TRUE. In this case, it gives the</em>
+<a class="jxr_linenumber" name="502" href="#502">502</a> <em class="jxr_javadoccomment">     * maximum number of CA certificates that may follow this certificate in a</em>
+<a class="jxr_linenumber" name="503" href="#503">503</a> <em class="jxr_javadoccomment">     * certification path. A value of zero indicates that only an end-entity</em>
+<a class="jxr_linenumber" name="504" href="#504">504</a> <em class="jxr_javadoccomment">     * certificate may follow in the path.</em>
+<a class="jxr_linenumber" name="505" href="#505">505</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="506" href="#506">506</a> <em class="jxr_javadoccomment">     * Note that for RFC 2459 this extension is always marked</em>
+<a class="jxr_linenumber" name="507" href="#507">507</a> <em class="jxr_javadoccomment">     * critical if &lt;code&gt;cA&lt;/code&gt; is TRUE, meaning this certificate belongs</em>
+<a class="jxr_linenumber" name="508" href="#508">508</a> <em class="jxr_javadoccomment">     * to a Certificate Authority.</em>
+<a class="jxr_linenumber" name="509" href="#509">509</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="510" href="#510">510</a> <em class="jxr_javadoccomment">     * The ASN.1 definition for this is:</em>
+<a class="jxr_linenumber" name="511" href="#511">511</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="512" href="#512">512</a> <em class="jxr_javadoccomment">     * BasicConstraints ::= SEQUENCE {</em>
+<a class="jxr_linenumber" name="513" href="#513">513</a> <em class="jxr_javadoccomment">     *     cA                  BOOLEAN DEFAULT FALSE,</em>
+<a class="jxr_linenumber" name="514" href="#514">514</a> <em class="jxr_javadoccomment">     *     pathLenConstraint   INTEGER (0..MAX) OPTIONAL }</em>
+<a class="jxr_linenumber" name="515" href="#515">515</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="516" href="#516">516</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="517" href="#517">517</a> <em class="jxr_javadoccomment">     * @return the value of &lt;code&gt;pathLenConstraint&lt;/code&gt; if the</em>
+<a class="jxr_linenumber" name="518" href="#518">518</a> <em class="jxr_javadoccomment">     * BasicConstraints extension is present in the certificate and the</em>
+<a class="jxr_linenumber" name="519" href="#519">519</a> <em class="jxr_javadoccomment">     * subject of the certificate is a CA, otherwise -1.</em>
+<a class="jxr_linenumber" name="520" href="#520">520</a> <em class="jxr_javadoccomment">     * If the subject of the certificate is a CA and</em>
+<a class="jxr_linenumber" name="521" href="#521">521</a> <em class="jxr_javadoccomment">     * &lt;code&gt;pathLenConstraint&lt;/code&gt; does not appear,</em>
+<a class="jxr_linenumber" name="522" href="#522">522</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Integer.MAX_VALUE&lt;/code&gt; is returned to indicate that there is no</em>
+<a class="jxr_linenumber" name="523" href="#523">523</a> <em class="jxr_javadoccomment">     * limit to the allowed length of the certification path.</em>
+<a class="jxr_linenumber" name="524" href="#524">524</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="525" href="#525">525</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">int</strong> getBasicConstraints();
+<a class="jxr_linenumber" name="526" href="#526">526</a> 
+<a class="jxr_linenumber" name="527" href="#527">527</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="528" href="#528">528</a> <em class="jxr_javadoccomment">     * Gets an immutable collection of subject alternative names from the</em>
+<a class="jxr_linenumber" name="529" href="#529">529</a> <em class="jxr_javadoccomment">     * &lt;code&gt;SubjectAltName&lt;/code&gt; extension, (OID = 2.5.29.17).</em>
+<a class="jxr_linenumber" name="530" href="#530">530</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="531" href="#531">531</a> <em class="jxr_javadoccomment">     * The ASN.1 definition of the &lt;code&gt;SubjectAltName&lt;/code&gt; extension is:</em>
+<a class="jxr_linenumber" name="532" href="#532">532</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="533" href="#533">533</a> <em class="jxr_javadoccomment">     * SubjectAltName ::= GeneralNames</em>
+<a class="jxr_linenumber" name="534" href="#534">534</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="535" href="#535">535</a> <em class="jxr_javadoccomment">     * GeneralNames :: = SEQUENCE SIZE (1..MAX) OF GeneralName</em>
+<a class="jxr_linenumber" name="536" href="#536">536</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="537" href="#537">537</a> <em class="jxr_javadoccomment">     * GeneralName ::= CHOICE {</em>
+<a class="jxr_linenumber" name="538" href="#538">538</a> <em class="jxr_javadoccomment">     *      otherName                       [0]     OtherName,</em>
+<a class="jxr_linenumber" name="539" href="#539">539</a> <em class="jxr_javadoccomment">     *      rfc822Name                      [1]     IA5String,</em>
+<a class="jxr_linenumber" name="540" href="#540">540</a> <em class="jxr_javadoccomment">     *      dNSName                         [2]     IA5String,</em>
+<a class="jxr_linenumber" name="541" href="#541">541</a> <em class="jxr_javadoccomment">     *      x400Address                     [3]     ORAddress,</em>
+<a class="jxr_linenumber" name="542" href="#542">542</a> <em class="jxr_javadoccomment">     *      directoryName                   [4]     Name,</em>
+<a class="jxr_linenumber" name="543" href="#543">543</a> <em class="jxr_javadoccomment">     *      ediPartyName                    [5]     EDIPartyName,</em>
+<a class="jxr_linenumber" name="544" href="#544">544</a> <em class="jxr_javadoccomment">     *      uniformResourceIdentifier       [6]     IA5String,</em>
+<a class="jxr_linenumber" name="545" href="#545">545</a> <em class="jxr_javadoccomment">     *      iPAddress                       [7]     OCTET STRING,</em>
+<a class="jxr_linenumber" name="546" href="#546">546</a> <em class="jxr_javadoccomment">     *      registeredID                    [8]     OBJECT IDENTIFIER}</em>
+<a class="jxr_linenumber" name="547" href="#547">547</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="548" href="#548">548</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="549" href="#549">549</a> <em class="jxr_javadoccomment">     * If this certificate does not contain a &lt;code&gt;SubjectAltName&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="550" href="#550">550</a> <em class="jxr_javadoccomment">     * extension, &lt;code&gt;null&lt;/code&gt; is returned. Otherwise, a </em>
+<a class="jxr_linenumber" name="551" href="#551">551</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Collection&lt;/code&gt; is returned with an entry representing each </em>
+<a class="jxr_linenumber" name="552" href="#552">552</a> <em class="jxr_javadoccomment">     * &lt;code&gt;GeneralName&lt;/code&gt; included in the extension. Each entry is a </em>
+<a class="jxr_linenumber" name="553" href="#553">553</a> <em class="jxr_javadoccomment">     * &lt;code&gt;List&lt;/code&gt; whose first entry is an &lt;code&gt;Integer&lt;/code&gt; </em>
+<a class="jxr_linenumber" name="554" href="#554">554</a> <em class="jxr_javadoccomment">     * (the name type, 0-8) and whose second entry is a &lt;code&gt;String&lt;/code&gt; </em>
+<a class="jxr_linenumber" name="555" href="#555">555</a> <em class="jxr_javadoccomment">     * or a byte array (the name, in string or ASN.1 DER encoded form, </em>
+<a class="jxr_linenumber" name="556" href="#556">556</a> <em class="jxr_javadoccomment">     * respectively).</em>
+<a class="jxr_linenumber" name="557" href="#557">557</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="558" href="#558">558</a> <em class="jxr_javadoccomment">     * RFC 822, DNS, and URI names are returned as &lt;code&gt;String&lt;/code&gt;s, </em>
+<a class="jxr_linenumber" name="559" href="#559">559</a> <em class="jxr_javadoccomment">     * using the well-established string formats for those types (subject to</em>
+<a class="jxr_linenumber" name="560" href="#560">560</a> <em class="jxr_javadoccomment">     * the restrictions included in RFC 2459). IPv4 address names are </em>
+<a class="jxr_linenumber" name="561" href="#561">561</a> <em class="jxr_javadoccomment">     * returned using dotted quad notation. IPv6 address names are returned</em>
+<a class="jxr_linenumber" name="562" href="#562">562</a> <em class="jxr_javadoccomment">     * in the form "a1:a2:...:a8", where a1-a8 are hexadecimal values </em>
+<a class="jxr_linenumber" name="563" href="#563">563</a> <em class="jxr_javadoccomment">     * representing the eight 16-bit pieces of the address. OID names are </em>
+<a class="jxr_linenumber" name="564" href="#564">564</a> <em class="jxr_javadoccomment">     * returned as &lt;code&gt;String&lt;/code&gt;s represented as a series of nonnegative </em>
+<a class="jxr_linenumber" name="565" href="#565">565</a> <em class="jxr_javadoccomment">     * integers separated by periods. And directory names (distinguished names) </em>
+<a class="jxr_linenumber" name="566" href="#566">566</a> <em class="jxr_javadoccomment">     * are returned in RFC 2253 string format. No standard string format is </em>
+<a class="jxr_linenumber" name="567" href="#567">567</a> <em class="jxr_javadoccomment">     * defined for otherNames, X.400 names, EDI party names, or any </em>
+<a class="jxr_linenumber" name="568" href="#568">568</a> <em class="jxr_javadoccomment">     * other type of names. They are returned as byte arrays </em>
+<a class="jxr_linenumber" name="569" href="#569">569</a> <em class="jxr_javadoccomment">     * containing the ASN.1 DER encoded form of the name.</em>
+<a class="jxr_linenumber" name="570" href="#570">570</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="571" href="#571">571</a> <em class="jxr_javadoccomment">     * Note that the &lt;code&gt;Collection&lt;/code&gt; returned may contain more</em>
+<a class="jxr_linenumber" name="572" href="#572">572</a> <em class="jxr_javadoccomment">     * than one name of the same type. Also, note that the returned</em>
+<a class="jxr_linenumber" name="573" href="#573">573</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Collection&lt;/code&gt; is immutable and any entries containing byte </em>
+<a class="jxr_linenumber" name="574" href="#574">574</a> <em class="jxr_javadoccomment">     * arrays are cloned to protect against subsequent modifications.</em>
+<a class="jxr_linenumber" name="575" href="#575">575</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="576" href="#576">576</a> <em class="jxr_javadoccomment">     * This method was added to version 1.4 of the Java 2 Platform Standard </em>
+<a class="jxr_linenumber" name="577" href="#577">577</a> <em class="jxr_javadoccomment">     * Edition. In order to maintain backwards compatibility with existing </em>
+<a class="jxr_linenumber" name="578" href="#578">578</a> <em class="jxr_javadoccomment">     * service providers, this method is not &lt;code&gt;abstract&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="579" href="#579">579</a> <em class="jxr_javadoccomment">     * and it provides a default implementation. Subclasses</em>
+<a class="jxr_linenumber" name="580" href="#580">580</a> <em class="jxr_javadoccomment">     * should override this method with a correct implementation.</em>
+<a class="jxr_linenumber" name="581" href="#581">581</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="582" href="#582">582</a> <em class="jxr_javadoccomment">     * @return an immutable &lt;code&gt;Collection&lt;/code&gt; of subject alternative </em>
+<a class="jxr_linenumber" name="583" href="#583">583</a> <em class="jxr_javadoccomment">     * names (or &lt;code&gt;null&lt;/code&gt;)</em>
+<a class="jxr_linenumber" name="584" href="#584">584</a> <em class="jxr_javadoccomment">     * @throws CertificateParsingException if the extension cannot be decoded</em>
+<a class="jxr_linenumber" name="585" href="#585">585</a> <em class="jxr_javadoccomment">     * @since 1.4</em>
+<a class="jxr_linenumber" name="586" href="#586">586</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="587" href="#587">587</a>     <strong class="jxr_keyword">public</strong> <a href="../../../java/util/Collection.html">Collection</a> getSubjectAlternativeNames()
+<a class="jxr_linenumber" name="588" href="#588">588</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../java/security/cert/CertificateParsingException.html">CertificateParsingException</a>
+<a class="jxr_linenumber" name="589" href="#589">589</a>     {
+<a class="jxr_linenumber" name="590" href="#590">590</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="591" href="#591">591</a>     }
+<a class="jxr_linenumber" name="592" href="#592">592</a> 
+<a class="jxr_linenumber" name="593" href="#593">593</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="594" href="#594">594</a> <em class="jxr_javadoccomment">     * Gets an immutable collection of issuer alternative names from the</em>
+<a class="jxr_linenumber" name="595" href="#595">595</a> <em class="jxr_javadoccomment">     * &lt;code&gt;IssuerAltName&lt;/code&gt; extension, (OID = 2.5.29.18).</em>
+<a class="jxr_linenumber" name="596" href="#596">596</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="597" href="#597">597</a> <em class="jxr_javadoccomment">     * The ASN.1 definition of the &lt;code&gt;IssuerAltName&lt;/code&gt; extension is:</em>
+<a class="jxr_linenumber" name="598" href="#598">598</a> <em class="jxr_javadoccomment">     * &lt;pre&gt;</em>
+<a class="jxr_linenumber" name="599" href="#599">599</a> <em class="jxr_javadoccomment">     * IssuerAltName ::= GeneralNames</em>
+<a class="jxr_linenumber" name="600" href="#600">600</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;</em>
+<a class="jxr_linenumber" name="601" href="#601">601</a> <em class="jxr_javadoccomment">     * The ASN.1 definition of &lt;code&gt;GeneralNames&lt;/code&gt; is defined</em>
+<a class="jxr_linenumber" name="602" href="#602">602</a> <em class="jxr_javadoccomment">     * in {@link #getSubjectAlternativeNames getSubjectAlternativeNames}.</em>
+<a class="jxr_linenumber" name="603" href="#603">603</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="604" href="#604">604</a> <em class="jxr_javadoccomment">     * If this certificate does not contain an &lt;code&gt;IssuerAltName&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="605" href="#605">605</a> <em class="jxr_javadoccomment">     * extension, &lt;code&gt;null&lt;/code&gt; is returned. Otherwise, a </em>
+<a class="jxr_linenumber" name="606" href="#606">606</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Collection&lt;/code&gt; is returned with an entry representing each </em>
+<a class="jxr_linenumber" name="607" href="#607">607</a> <em class="jxr_javadoccomment">     * &lt;code&gt;GeneralName&lt;/code&gt; included in the extension. Each entry is a </em>
+<a class="jxr_linenumber" name="608" href="#608">608</a> <em class="jxr_javadoccomment">     * &lt;code&gt;List&lt;/code&gt; whose first entry is an &lt;code&gt;Integer&lt;/code&gt; </em>
+<a class="jxr_linenumber" name="609" href="#609">609</a> <em class="jxr_javadoccomment">     * (the name type, 0-8) and whose second entry is a &lt;code&gt;String&lt;/code&gt; </em>
+<a class="jxr_linenumber" name="610" href="#610">610</a> <em class="jxr_javadoccomment">     * or a byte array (the name, in string or ASN.1 DER encoded form, </em>
+<a class="jxr_linenumber" name="611" href="#611">611</a> <em class="jxr_javadoccomment">     * respectively). For more details about the formats used for each</em>
+<a class="jxr_linenumber" name="612" href="#612">612</a> <em class="jxr_javadoccomment">     * name type, see the &lt;code&gt;getSubjectAlternativeNames&lt;/code&gt; method.</em>
+<a class="jxr_linenumber" name="613" href="#613">613</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="614" href="#614">614</a> <em class="jxr_javadoccomment">     * Note that the &lt;code&gt;Collection&lt;/code&gt; returned may contain more</em>
+<a class="jxr_linenumber" name="615" href="#615">615</a> <em class="jxr_javadoccomment">     * than one name of the same type. Also, note that the returned</em>
+<a class="jxr_linenumber" name="616" href="#616">616</a> <em class="jxr_javadoccomment">     * &lt;code&gt;Collection&lt;/code&gt; is immutable and any entries containing byte </em>
+<a class="jxr_linenumber" name="617" href="#617">617</a> <em class="jxr_javadoccomment">     * arrays are cloned to protect against subsequent modifications.</em>
+<a class="jxr_linenumber" name="618" href="#618">618</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="619" href="#619">619</a> <em class="jxr_javadoccomment">     * This method was added to version 1.4 of the Java 2 Platform Standard </em>
+<a class="jxr_linenumber" name="620" href="#620">620</a> <em class="jxr_javadoccomment">     * Edition. In order to maintain backwards compatibility with existing </em>
+<a class="jxr_linenumber" name="621" href="#621">621</a> <em class="jxr_javadoccomment">     * service providers, this method is not &lt;code&gt;abstract&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="622" href="#622">622</a> <em class="jxr_javadoccomment">     * and it provides a default implementation. Subclasses</em>
+<a class="jxr_linenumber" name="623" href="#623">623</a> <em class="jxr_javadoccomment">     * should override this method with a correct implementation.</em>
+<a class="jxr_linenumber" name="624" href="#624">624</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="625" href="#625">625</a> <em class="jxr_javadoccomment">     * @return an immutable &lt;code&gt;Collection&lt;/code&gt; of issuer alternative </em>
+<a class="jxr_linenumber" name="626" href="#626">626</a> <em class="jxr_javadoccomment">     * names (or &lt;code&gt;null&lt;/code&gt;)</em>
+<a class="jxr_linenumber" name="627" href="#627">627</a> <em class="jxr_javadoccomment">     * @throws CertificateParsingException if the extension cannot be decoded</em>
+<a class="jxr_linenumber" name="628" href="#628">628</a> <em class="jxr_javadoccomment">     * @since 1.4</em>
+<a class="jxr_linenumber" name="629" href="#629">629</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="630" href="#630">630</a>     <strong class="jxr_keyword">public</strong> <a href="../../../java/util/Collection.html">Collection</a> getIssuerAlternativeNames()
+<a class="jxr_linenumber" name="631" href="#631">631</a>         <strong class="jxr_keyword">throws</strong> <a href="../../../java/security/cert/CertificateParsingException.html">CertificateParsingException</a>
+<a class="jxr_linenumber" name="632" href="#632">632</a>     {
+<a class="jxr_linenumber" name="633" href="#633">633</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="634" href="#634">634</a>     }
+<a class="jxr_linenumber" name="635" href="#635">635</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

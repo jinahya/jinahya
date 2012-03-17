@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HSwitchable xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/org/havi/ui/HSwitchable.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.havi.ui;
+<a class="jxr_linenumber" name="2" href="#2">2</a>   
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment"> * Copyright 2000-2003 by HAVi, Inc. Java is a trademark of Sun</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <em class="jxr_comment"> * Microsystems, Inc. All rights reserved.  </em>
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="7" href="#7">7</a>   
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> java.awt.Graphics;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   
+<a class="jxr_linenumber" name="10" href="#10">10</a>  
+<a class="jxr_linenumber" name="11" href="#11">11</a>  
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> * This interface is implemented for all user interface components that can be actioned such that they &amp;quot;toggle&amp;quot; on and off and maintain the chosen state. &lt;h3&gt;Event Behavior&lt;/h3&gt; Subclasses of    {@link org.havi.ui.HComponent    HComponent}    which implement    {@link org.havi.ui.HSwitchable    HSwitchable}    must respond to   {@link org.havi.ui.event.HFocusEvent    HFocusEvent}    and    {@link org.havi.ui.event.HActionEvent    HActionEvent}    events. &lt;p&gt;  Applications should assume that classes which implement    {@link org.havi.ui.HSwitchable    HSwitchable}    can generate events of the types    {@link org.havi.ui.event.HFocusEvent    HFocusEvent}    and    {@link org.havi.ui.event.HActionEvent    HActionEvent}    in response to other types of input event. &lt;p&gt; An application may add one or more    {@link org.havi.ui.event.HActionListener    HActionListener}    listeners to the component. The    {@link org.havi.ui.event.HActionListener#actionPerformed    actionPerformed}   method of the    {@link org.havi.ui.event.HActionListener    HActionListener}    is invoked whenever the    {@link org.havi.ui.HSwitchable    HSwitchable}    is actioned. &lt;p&gt;  HAVi action events are discussed in detail in the    {@link org.havi.ui.HActionInputPreferred    HActionInputPreferred}   interface description. &lt;h3&gt;Interaction States&lt;/h3&gt; The following interaction states are valid for this    {@link org.havi.ui.HSwitchable    HSwitchable}    component: &lt;p&gt;&lt;ul&gt; &lt;li&gt;    {@link org.havi.ui.HState#NORMAL_STATE    NORMAL_STATE}   &lt;li&gt;    {@link org.havi.ui.HState#FOCUSED_STATE    FOCUSED_STATE}   &lt;li&gt;    {@link org.havi.ui.HState#ACTIONED_STATE    ACTIONED_STATE}   	 &lt;li&gt;    {@link org.havi.ui.HState#ACTIONED_FOCUSED_STATE    ACTIONED_FOCUSED_STATE}   	 &lt;li&gt;    {@link org.havi.ui.HState#DISABLED_STATE    DISABLED_STATE}   &lt;li&gt;    {@link org.havi.ui.HState#DISABLED_FOCUSED_STATE    DISABLED_FOCUSED_STATE}   &lt;li&gt;    {@link org.havi.ui.HState#DISABLED_ACTIONED_STATE    DISABLED_ACTIONED_STATE}   	 &lt;li&gt;    {@link org.havi.ui.HState#DISABLED_ACTIONED_FOCUSED_STATE    DISABLED_ACTIONED_FOCUSED_STATE}   	 &lt;/ul&gt;&lt;p&gt; The state machine diagram below shows the valid state  transitions for an    {@link org.havi.ui.HSwitchable      HSwitchable}    component. &lt;p&gt;&lt;table border&gt; &lt;tr&gt;&lt;td&gt;&lt;img src="../../../images/HSwitchable_state.gif"&gt;&lt;/td&gt;&lt;/tr&gt; &lt;/table&gt;&lt;p&gt; Unlike    {@link org.havi.ui.HActionable    HActionable}    components there are no automatic transitions to other states. Actioned states (i.e. those with the    {@link org.havi.ui.HState#ACTIONED_STATE_BIT    ACTIONED_STATE_BIT}    bit set may persist after any registered    {@link org.havi.ui.event.HActionListener    HActionListener}    listeners have been called, until a further    {@link org.havi.ui.event.HActionEvent    HActionEvent}   is received. &lt;h3&gt;Platform Classes&lt;/h3&gt; The following HAVi platform classes implement or inherit the    {@link org.havi.ui.HSwitchable    HSwitchable}    interface. These classes shall all generate both    {@link org.havi.ui.event.HFocusEvent    HFocusEvent}    and   {@link org.havi.ui.event.HActionEvent    HActionEvent}    events in addition to any other events specified in the respective class descriptions. &lt;p&gt;&lt;ul&gt; &lt;li&gt;    {@link org.havi.ui.HToggleButton    HToggleButton}   &lt;/ul&gt; </em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_javadoccomment"> * @see org.havi.ui.HNavigable</em>
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_javadoccomment"> * @see org.havi.ui.HActionable</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment"> * @see org.havi.ui.HActionInputPreferred    </em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment"> * @see org.havi.ui.event.HActionEvent</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment"> * @see  org.havi.ui.event.HActionListener</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../org/havi/ui/HSwitchable.html">HSwitchable</a> 
+<a class="jxr_linenumber" name="22" href="#22">22</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../org/havi/ui/HActionable.html">HActionable</a>
+<a class="jxr_linenumber" name="23" href="#23">23</a>  {
+<a class="jxr_linenumber" name="24" href="#24">24</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 * Returns the current switchable state of this  {@link org.havi.ui.HSwitchable  HSwitchable} .</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 * @return  the current switchable state of this  {@link org.havi.ui.HSwitchable  HSwitchable}  .</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">	 * @uml.property  name="switchableState"</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getSwitchableState();
+<a class="jxr_linenumber" name="30" href="#30">30</a>      
+<a class="jxr_linenumber" name="31" href="#31">31</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">	 * Sets the current state of the button. Note that ActionListeners are only called when an ACTION_PERFORMED event is received, or if they are called directly, e.g. via &lt;code&gt;processActionEvent&lt;/code&gt;, they are not called by  {@link org.havi.ui.HToggleButton#setSwitchableState  setSwitchableState} .</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment">	 * @uml.property  name="switchableState"</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSwitchableState(<strong class="jxr_keyword">boolean</strong> state);
+<a class="jxr_linenumber" name="36" href="#36">36</a>      
+<a class="jxr_linenumber" name="37" href="#37">37</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">	 * Associate a sound to be played when the interaction state of the  {@link org.havi.ui.HSwitchable  HSwitchable}  makes the following transitions: &lt;p&gt;&lt;ul&gt; &lt;li&gt;  {@link org.havi.ui.HState#ACTIONED_STATE  ACTIONED_STATE}  to  {@link org.havi.ui.HState#NORMAL_STATE  NORMAL_STATE} &lt;li&gt;  {@link org.havi.ui.HState#ACTIONED_FOCUSED_STATE  ACTIONED_FOCUSED_STATE}  to  {@link org.havi.ui.HState#FOCUSED_STATE  FOCUSED_STATE} &lt;/ul&gt;&lt;p&gt;</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @param sound  a sound to be played when the  {@link org.havi.ui.HSwitchable  HSwitchable}  transitions from an  actioned state.  If sound content is already set, the original  content is replaced. To remove the sound specify a null  {@link org.havi.ui.HSound  HSound}  .</em>
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 * @uml.property  name="unsetActionSound"</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setUnsetActionSound(<a href="../../../org/havi/ui/HSound.html">HSound</a> sound);
+<a class="jxr_linenumber" name="43" href="#43">43</a>      
+<a class="jxr_linenumber" name="44" href="#44">44</a>      <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment">       </em>
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">     * Get the sound to be played when the interaction state of</em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">     * the {@link org.havi.ui.HSwitchable HSwitchable} makes the</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">     * following transitions:</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     * &lt;p&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * &lt;li&gt; {@link org.havi.ui.HState#ACTIONED_STATE ACTIONED_STATE} to {@link org.havi.ui.HState#NORMAL_STATE NORMAL_STATE}</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     * &lt;li&gt; {@link org.havi.ui.HState#ACTIONED_FOCUSED_STATE ACTIONED_FOCUSED_STATE} to {@link org.havi.ui.HState#FOCUSED_STATE FOCUSED_STATE}</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">     * &lt;/ul&gt;&lt;p&gt;</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">     * @return the sound to be played when the {@link</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">     * org.havi.ui.HSwitchable HSwitchable} transitions from an</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">     * actioned state.</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>      <strong class="jxr_keyword">public</strong> <a href="../../../org/havi/ui/HSound.html">HSound</a> getUnsetActionSound();
+<a class="jxr_linenumber" name="58" href="#58">58</a>  }
+<a class="jxr_linenumber" name="59" href="#59">59</a>  
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

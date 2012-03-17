@@ -34,6 +34,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/fathm_ft.o \
 	${OBJECTDIR}/first.o
 
 
@@ -60,6 +61,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c_primer_plus_fifth_edition.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c_primer_plus_fifth_edition ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/fathm_ft.o: fathm_ft.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/fathm_ft.o fathm_ft.c
 
 ${OBJECTDIR}/first.o: first.c 
 	${MKDIR} -p ${OBJECTDIR}

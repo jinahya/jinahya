@@ -19,9 +19,7 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.IOException;
-
 import java.security.MessageDigest;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -53,7 +51,9 @@ abstract class BitIOBase {
      * <code>length</code> as bytes.
      *
      * @param length the number of bytes to align
+     *
      * @return the number of bits padded/discarded for alignment
+     *
      * @throws IOException if an I/O error occurs.
      */
     public abstract int align(final int length) throws IOException;
@@ -90,6 +90,7 @@ abstract class BitIOBase {
      * <code>checksum</code>.
      *
      * @param checksum checksum to remove
+     *
      * @return true if removed; false otherwise
      */
     public final boolean removeChecksum(final Checksum checksum) {
@@ -119,6 +120,7 @@ abstract class BitIOBase {
      * <code>digest</code>.
      *
      * @param digest digest to remove
+     *
      * @return true if removed; false otherwise
      */
     public final boolean removeDigest(final MessageDigest digest) {
@@ -130,7 +132,9 @@ abstract class BitIOBase {
      * Returns bit value.
      *
      * @param bitIndex bit index
+     *
      * @return bit value
+     *
      * @see BitSet#get(int)
      */
     final boolean getBit(final int bitIndex) {
@@ -143,6 +147,7 @@ abstract class BitIOBase {
      *
      * @param bitIndex bit index
      * @param value bit value
+     *
      * @see BitSet#set(int, boolean)
      */
     final void setBit(final int bitIndex, final boolean value) {

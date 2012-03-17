@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>UserEventFilter xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/org/ocap/event/UserEventFilter.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment">// UserEventFilter.java</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment">// Created October 24, 2001, 11:50 AM</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">package</strong> org.ocap.event;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_javadoccomment"> * Only one instance of the class that implements this interface can be </em>
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> * registered to EventManager via the EventManager.setUserEventFilter() </em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> * method. EventManager calls UserEventFilter.filterUserEvent() before a</em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> * UserEvent is forwarded to any listening applications for events specified </em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> * by the UserEventRepository set via the EventManager.setFilteredRepository() </em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_javadoccomment"> * method.</em>
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../org/ocap/event/UserEventFilter.html">UserEventFilter</a>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  {
+<a class="jxr_linenumber" name="18" href="#18">18</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_javadoccomment">     * Called by the platform to filter user input events specified in the </em>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment">     * UserEventRepository when the event is received. The EventFilter may </em>
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment">     * modify values in the UserEvent and/or change the applications to which </em>
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment">     * the event is forwarded. The UserEventFilter.filterUserEvent() returns </em>
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment">     * a UserEventAction instance which specifies the event to be forwarded</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">     * and the list of AppIDs to which the event is forwarded. If it returns </em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">     * null, the event is consumed, i.e., the event is not forwarded to any </em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">     * applications.</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">     *@param e the UserEvent which was received</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">     *@return null if the event is to be terminated.  Otherwise, a </em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">     * UserEventAction object that contains the event to distribute,</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">     * and a list of AppIDs to which to distribute it.</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>      <strong class="jxr_keyword">public</strong> <a href="../../../org/ocap/event/UserEventAction.html">UserEventAction</a> filterUserEvent(<a href="../../../org/ocap/event/UserEvent.html">UserEvent</a> e);
+<a class="jxr_linenumber" name="35" href="#35">35</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

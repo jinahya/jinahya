@@ -19,7 +19,6 @@ package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
 import java.util.Map;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
@@ -39,16 +38,20 @@ public abstract class MapBoundTypeAdapter<T, K, V>
      * Returns the map to put keys and values.
      *
      * @param valueTypeSize size hint
+     *
      * @return a new BoundType instance
      */
     protected abstract Map<K, V> newBoundType(int valueTypeSize);
 
 
     /**
-     * Returns the key for specified <code>value</code>.
+     * Returns the key for specified
+     * <code>value</code>.
      *
      * @param value map value
-     * @return map key for specified <code>value</code>
+     *
+     * @return map key for specified
+     * <code>value</code>
      */
     protected abstract K getKey(V value);
 

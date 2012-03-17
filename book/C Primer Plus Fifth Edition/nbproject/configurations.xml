@@ -12,6 +12,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>fathm_ft.c</itemPath>
       <itemPath>first.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

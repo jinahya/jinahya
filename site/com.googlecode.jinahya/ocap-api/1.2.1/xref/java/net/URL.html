@@ -1,0 +1,760 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>URL xref</title>
+<link type="text/css" rel="stylesheet" href="../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../apidocs/java/net/URL.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment">&lt;p&gt;This is not an official specification document, and usage is restricted.</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment">&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment">&lt;a name="notice"&gt;&lt;strong&gt;&lt;center&gt;</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <em class="jxr_comment">NOTICE</em>
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <em class="jxr_comment">&lt;/center&gt;&lt;/strong&gt;&lt;br&gt;</em>
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <em class="jxr_comment">&lt;br&gt;</em>
+<a class="jxr_linenumber" name="8" href="#8">8</a>   
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_comment">(c) 2005-2007 Sun Microsystems, Inc. All Rights Reserved.</em>
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_comment">Neither this file nor any files generated from it describe a complete</em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_comment">specification, and they may only be used as described below. For</em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_comment">example, no permission is given for you to incorporate this file, in</em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_comment">whole or in part, in an implementation of a Java specification.</em>
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_comment">Sun Microsystems Inc. owns the copyright in this file and it is provided</em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_comment">to you for informative, as opposed to normative, use. The file and any</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_comment">files generated from it may be used to generate other informative</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_comment">documentation, such as a unified set of documents of API signatures for</em>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_comment">a platform that includes technologies expressed as Java APIs. The file</em>
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_comment">may also be used to produce "compilation stubs," which allow</em>
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_comment">applications to be compiled and validated for such platforms.</em>
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_comment">Any work generated from this file, such as unified javadocs or compiled</em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_comment">stub files, must be accompanied by this notice in its entirety.</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_comment">&lt;p&gt;</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_comment">This work corresponds to the API signatures of JSR 219: Foundation</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_comment">Profile 1.1. In the event of a discrepency between this work and the</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_comment">JSR 219 specification, which is available at</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_comment"><a href="http://www.jcp.org/en/jsr/detail?id=219," target="alexandria_uri">http://www.jcp.org/en/jsr/detail?id=219,</a> the latter takes precedence.</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_comment">*/</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  
+<a class="jxr_linenumber" name="33" href="#33">33</a>  
+<a class="jxr_linenumber" name="34" href="#34">34</a>    
+<a class="jxr_linenumber" name="35" href="#35">35</a>  
+<a class="jxr_linenumber" name="36" href="#36">36</a>  
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">package</strong> java.net;
+<a class="jxr_linenumber" name="38" href="#38">38</a>  
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> java.io.InputStream;
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> java.util.Hashtable;
+<a class="jxr_linenumber" name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> java.util.StringTokenizer;
+<a class="jxr_linenumber" name="44" href="#44">44</a>  
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment"> * Class &lt;code&gt;URL&lt;/code&gt; represents a Uniform Resource</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment"> * Locator, a pointer to a "resource" on the World</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment"> * Wide Web. A resource can be something as simple as a file or a</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment"> * directory, or it can be a reference to a more complicated object,</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment"> * such as a query to a database or to a search engine. More</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment"> * information on the types of URLs and their formats can be found at:</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment"> * &lt;blockquote&gt;</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment"> *     &lt;a href="<a href="http://archive.ncsa.uiuc.edu/SDG/Software/Mosaic/Demo/url-primer.html" target="alexandria_uri">http://archive.ncsa.uiuc.edu/SDG/Software/Mosaic/Demo/url-primer.html</a>"&gt;</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment"> *    &lt;i&gt;<a href="http://archive.ncsa.uiuc.edu/SDG/Software/Mosaic/Demo/url-primer.html&lt;/i&gt;&lt;/a&gt;" target="alexandria_uri">http://archive.ncsa.uiuc.edu/SDG/Software/Mosaic/Demo/url-primer.html&lt;/i&gt;&lt;/a&gt;</a></em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment"> * &lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment"> * In general, a URL can be broken into several parts. The previous</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment"> * example of a URL indicates that the protocol to use is</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment"> * &lt;code&gt;http&lt;/code&gt; (HyperText Transfer Protocol) and that the</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment"> * information resides on a host machine named</em>
+<a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment"> * &lt;code&gt;www.ncsa.uiuc.edu&lt;/code&gt;. The information on that host</em>
+<a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment"> * machine is named &lt;code&gt;/SDG/Software/Mosaic/Demo/url-primer.html&lt;/code&gt;. The exact</em>
+<a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment"> * meaning of this name on the host machine is both protocol</em>
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment"> * dependent and host dependent. The information normally resides in</em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment"> * a file, but it could be generated on the fly. This component of</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment"> * the URL is called the &lt;i&gt;path&lt;/i&gt; component.</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment"> * A URL can optionally specify a "port", which is the</em>
+<a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment"> * port number to which the TCP connection is made on the remote host</em>
+<a class="jxr_linenumber" name="70" href="#70">70</a>  <em class="jxr_javadoccomment"> * machine. If the port is not specified, the default port for</em>
+<a class="jxr_linenumber" name="71" href="#71">71</a>  <em class="jxr_javadoccomment"> * the protocol is used instead. For example, the default port for</em>
+<a class="jxr_linenumber" name="72" href="#72">72</a>  <em class="jxr_javadoccomment"> * &lt;code&gt;http&lt;/code&gt; is &lt;code&gt;80&lt;/code&gt;. An alternative port could be</em>
+<a class="jxr_linenumber" name="73" href="#73">73</a>  <em class="jxr_javadoccomment"> * specified as:</em>
+<a class="jxr_linenumber" name="74" href="#74">74</a>  <em class="jxr_javadoccomment"> * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="75" href="#75">75</a>  <em class="jxr_javadoccomment"> *     <a href="http://archive.ncsa.uiuc.edu:80/SDG/Software/Mosaic/Demo/url-primer.html" target="alexandria_uri">http://archive.ncsa.uiuc.edu:80/SDG/Software/Mosaic/Demo/url-primer.html</a></em>
+<a class="jxr_linenumber" name="76" href="#76">76</a>  <em class="jxr_javadoccomment"> * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="77" href="#77">77</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="78" href="#78">78</a>  <em class="jxr_javadoccomment"> * The syntax of &lt;code&gt;URL&lt;/code&gt; is defined by  &lt;a</em>
+<a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment"> * href="<a href="http://www.ietf.org/rfc/rfc2396.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2396.txt</a>""&gt;&lt;i&gt;RFC&amp;nbsp;2396: Uniform</em>
+<a class="jxr_linenumber" name="80" href="#80">80</a>  <em class="jxr_javadoccomment"> * Resource Identifiers (URI): Generic Syntax&lt;/i&gt;&lt;/a&gt;, amended by &lt;a</em>
+<a class="jxr_linenumber" name="81" href="#81">81</a>  <em class="jxr_javadoccomment"> * href="<a href="http://www.ietf.org/rfc/rfc2732.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2732.txt</a>"&gt;&lt;i&gt;RFC&amp;nbsp;2732: Format for</em>
+<a class="jxr_linenumber" name="82" href="#82">82</a>  <em class="jxr_javadoccomment"> * Literal IPv6 Addresses in URLs&lt;/i&gt;&lt;/a&gt;.</em>
+<a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment"> * A URL may have appended to it a "fragment", also known</em>
+<a class="jxr_linenumber" name="85" href="#85">85</a>  <em class="jxr_javadoccomment"> * as a "ref" or a "reference". The fragment is indicated by the sharp</em>
+<a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment"> * sign character "#" followed by more characters. For example,</em>
+<a class="jxr_linenumber" name="87" href="#87">87</a>  <em class="jxr_javadoccomment"> * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment"> *     <a href="http://java.sun.com/index.html" target="alexandria_uri">http://java.sun.com/index.html</a>#chapter1</em>
+<a class="jxr_linenumber" name="89" href="#89">89</a>  <em class="jxr_javadoccomment"> * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="90" href="#90">90</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="91" href="#91">91</a>  <em class="jxr_javadoccomment"> * This fragment is not technically part of the URL. Rather, it</em>
+<a class="jxr_linenumber" name="92" href="#92">92</a>  <em class="jxr_javadoccomment"> * indicates that after the specified resource is retrieved, the</em>
+<a class="jxr_linenumber" name="93" href="#93">93</a>  <em class="jxr_javadoccomment"> * application is specifically interested in that part of the</em>
+<a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_javadoccomment"> * document that has the tag &lt;code&gt;chapter1&lt;/code&gt; attached to it. The</em>
+<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment"> * meaning of a tag is resource specific.</em>
+<a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment"> * An application can also specify a "relative URL",</em>
+<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment"> * which contains only enough information to reach the resource</em>
+<a class="jxr_linenumber" name="99" href="#99">99</a>  <em class="jxr_javadoccomment"> * relative to another URL. Relative URLs are frequently used within</em>
+<a class="jxr_linenumber" name="100" href="#100">100</a> <em class="jxr_javadoccomment"> * HTML pages. For example, if the contents of the URL:</em>
+<a class="jxr_linenumber" name="101" href="#101">101</a> <em class="jxr_javadoccomment"> * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="102" href="#102">102</a> <em class="jxr_javadoccomment"> *     <a href="http://java.sun.com/index.html" target="alexandria_uri">http://java.sun.com/index.html</a></em>
+<a class="jxr_linenumber" name="103" href="#103">103</a> <em class="jxr_javadoccomment"> * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="104" href="#104">104</a> <em class="jxr_javadoccomment"> * contained within it the relative URL:</em>
+<a class="jxr_linenumber" name="105" href="#105">105</a> <em class="jxr_javadoccomment"> * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="106" href="#106">106</a> <em class="jxr_javadoccomment"> *     FAQ.html</em>
+<a class="jxr_linenumber" name="107" href="#107">107</a> <em class="jxr_javadoccomment"> * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="108" href="#108">108</a> <em class="jxr_javadoccomment"> * it would be a shorthand for:</em>
+<a class="jxr_linenumber" name="109" href="#109">109</a> <em class="jxr_javadoccomment"> * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="110" href="#110">110</a> <em class="jxr_javadoccomment"> *     <a href="http://java.sun.com/FAQ.html" target="alexandria_uri">http://java.sun.com/FAQ.html</a></em>
+<a class="jxr_linenumber" name="111" href="#111">111</a> <em class="jxr_javadoccomment"> * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="112" href="#112">112</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="113" href="#113">113</a> <em class="jxr_javadoccomment"> * The relative URL need not specify all the components of a URL. If</em>
+<a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment"> * the protocol, host name, or port number is missing, the value is</em>
+<a class="jxr_linenumber" name="115" href="#115">115</a> <em class="jxr_javadoccomment"> * inherited from the fully specified URL. The file component must be</em>
+<a class="jxr_linenumber" name="116" href="#116">116</a> <em class="jxr_javadoccomment"> * specified. The optional fragment is not inherited.</em>
+<a class="jxr_linenumber" name="117" href="#117">117</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="118" href="#118">118</a> <em class="jxr_javadoccomment"> * @author  James Gosling</em>
+<a class="jxr_linenumber" name="119" href="#119">119</a> <em class="jxr_javadoccomment"> * @version 1.106, 03/12/05</em>
+<a class="jxr_linenumber" name="120" href="#120">120</a> <em class="jxr_javadoccomment"> * @since JDK1.0 </em>
+<a class="jxr_linenumber" name="121" href="#121">121</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="122" href="#122">122</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../java/net/URL.html">URL</a> <strong class="jxr_keyword">implements</strong> java.io.Serializable
+<a class="jxr_linenumber" name="123" href="#123">123</a> {
+<a class="jxr_linenumber" name="124" href="#124">124</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -7627629688361524110L;
+<a class="jxr_linenumber" name="125" href="#125">125</a> 
+<a class="jxr_linenumber" name="126" href="#126">126</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="127" href="#127">127</a> <em class="jxr_javadoccomment">     * The protocol to use (ftp, http, nntp, ... etc.) .</em>
+<a class="jxr_linenumber" name="128" href="#128">128</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="129" href="#129">129</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="130" href="#130">130</a>     <strong class="jxr_keyword">private</strong> <a href="../../java/lang/String.html">String</a> protocol;
+<a class="jxr_linenumber" name="131" href="#131">131</a> 
+<a class="jxr_linenumber" name="132" href="#132">132</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">     * The host name to connect to.</em>
+<a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="136" href="#136">136</a>     <strong class="jxr_keyword">private</strong> <a href="../../java/lang/String.html">String</a> host;
+<a class="jxr_linenumber" name="137" href="#137">137</a> 
+<a class="jxr_linenumber" name="138" href="#138">138</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="139" href="#139">139</a> <em class="jxr_javadoccomment">     * The protocol port to connect to.</em>
+<a class="jxr_linenumber" name="140" href="#140">140</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="141" href="#141">141</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="142" href="#142">142</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> port;
+<a class="jxr_linenumber" name="143" href="#143">143</a> 
+<a class="jxr_linenumber" name="144" href="#144">144</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_javadoccomment">     * The specified file name on that host. &lt;code&gt;file&lt;/code&gt; is</em>
+<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_javadoccomment">     * defined as &lt;code&gt;path[?query]&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="149" href="#149">149</a>     <strong class="jxr_keyword">private</strong> <a href="../../java/lang/String.html">String</a> file;
+<a class="jxr_linenumber" name="150" href="#150">150</a> 
+<a class="jxr_linenumber" name="151" href="#151">151</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="152" href="#152">152</a> <em class="jxr_javadoccomment">     * The authority part of this URL.</em>
+<a class="jxr_linenumber" name="153" href="#153">153</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="154" href="#154">154</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="155" href="#155">155</a>     <strong class="jxr_keyword">private</strong> <a href="../../java/lang/String.html">String</a> authority;
+<a class="jxr_linenumber" name="156" href="#156">156</a> 
+<a class="jxr_linenumber" name="157" href="#157">157</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="158" href="#158">158</a> <em class="jxr_javadoccomment">     * # reference.</em>
+<a class="jxr_linenumber" name="159" href="#159">159</a> <em class="jxr_javadoccomment">     * @serial</em>
+<a class="jxr_linenumber" name="160" href="#160">160</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="161" href="#161">161</a>     <strong class="jxr_keyword">private</strong> <a href="../../java/lang/String.html">String</a> ref;
+<a class="jxr_linenumber" name="162" href="#162">162</a> 
+<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> hashCode;
+<a class="jxr_linenumber" name="164" href="#164">164</a> 
+<a class="jxr_linenumber" name="165" href="#165">165</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="166" href="#166">166</a> <em class="jxr_javadoccomment">     * Creates a &lt;code&gt;URL&lt;/code&gt; object from the specified</em>
+<a class="jxr_linenumber" name="167" href="#167">167</a> <em class="jxr_javadoccomment">     * &lt;code&gt;protocol&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;port&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="168" href="#168">168</a> <em class="jxr_javadoccomment">     * number, and &lt;code&gt;file&lt;/code&gt;.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">     * &lt;code&gt;host&lt;/code&gt; can be expressed as a host name or a literal</em>
+<a class="jxr_linenumber" name="171" href="#171">171</a> <em class="jxr_javadoccomment">     * IP address. If IPv6 literal address is used, it should be</em>
+<a class="jxr_linenumber" name="172" href="#172">172</a> <em class="jxr_javadoccomment">     * enclosed in square brackets (&lt;tt&gt;'['&lt;/tt&gt; and &lt;tt&gt;']'&lt;/tt&gt;), as</em>
+<a class="jxr_linenumber" name="173" href="#173">173</a> <em class="jxr_javadoccomment">     * specified by &lt;a</em>
+<a class="jxr_linenumber" name="174" href="#174">174</a> <em class="jxr_javadoccomment">     * href="<a href="http://www.ietf.org/rfc/rfc2732.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2732.txt</a>"&gt;RFC&amp;nbsp;2732&lt;/a&gt;;</em>
+<a class="jxr_linenumber" name="175" href="#175">175</a> <em class="jxr_javadoccomment">     * However, the literal IPv6 address format defined in &lt;a</em>
+<a class="jxr_linenumber" name="176" href="#176">176</a> <em class="jxr_javadoccomment">     * href="<a href="http://www.ietf.org/rfc/rfc2373.txt" target="alexandria_uri">http://www.ietf.org/rfc/rfc2373.txt</a>"&gt;&lt;i&gt;RFC&amp;nbsp;2373: IP</em>
+<a class="jxr_linenumber" name="177" href="#177">177</a> <em class="jxr_javadoccomment">     * Version 6 Addressing Architecture&lt;/i&gt;&lt;/a&gt; is also accepted.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="178" href="#178">178</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="179" href="#179">179</a> <em class="jxr_javadoccomment">     * Specifying a &lt;code&gt;port&lt;/code&gt; number of &lt;code&gt;-1&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="180" href="#180">180</a> <em class="jxr_javadoccomment">     * indicates that the URL should use the default port for the</em>
+<a class="jxr_linenumber" name="181" href="#181">181</a> <em class="jxr_javadoccomment">     * protocol.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="182" href="#182">182</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="183" href="#183">183</a> <em class="jxr_javadoccomment">     * If this is the first URL object being created with the specified</em>
+<a class="jxr_linenumber" name="184" href="#184">184</a> <em class="jxr_javadoccomment">     * protocol, a &lt;i&gt;stream protocol handler&lt;/i&gt; object, an instance of</em>
+<a class="jxr_linenumber" name="185" href="#185">185</a> <em class="jxr_javadoccomment">     * class &lt;code&gt;URLStreamHandler&lt;/code&gt;, is created for that protocol:</em>
+<a class="jxr_linenumber" name="186" href="#186">186</a> <em class="jxr_javadoccomment">     * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_javadoccomment">     * &lt;li&gt;If the application has previously set up an instance of</em>
+<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_javadoccomment">     *     &lt;code&gt;URLStreamHandlerFactory&lt;/code&gt; as the stream handler factory,</em>
+<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">     *     then the &lt;code&gt;createURLStreamHandler&lt;/code&gt; method of that instance</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">     *     is called with the protocol string as an argument to create the</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_javadoccomment">     *     stream protocol handler.</em>
+<a class="jxr_linenumber" name="192" href="#192">192</a> <em class="jxr_javadoccomment">     * &lt;li&gt;If no &lt;code&gt;URLStreamHandlerFactory&lt;/code&gt; has yet been set up,</em>
+<a class="jxr_linenumber" name="193" href="#193">193</a> <em class="jxr_javadoccomment">     *     or if the factory's &lt;code&gt;createURLStreamHandler&lt;/code&gt; method</em>
+<a class="jxr_linenumber" name="194" href="#194">194</a> <em class="jxr_javadoccomment">     *     returns &lt;code&gt;null&lt;/code&gt;, then the constructor finds the</em>
+<a class="jxr_linenumber" name="195" href="#195">195</a> <em class="jxr_javadoccomment">     *     value of the system property:</em>
+<a class="jxr_linenumber" name="196" href="#196">196</a> <em class="jxr_javadoccomment">     *     &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="197" href="#197">197</a> <em class="jxr_javadoccomment">     *         java.protocol.handler.pkgs</em>
+<a class="jxr_linenumber" name="198" href="#198">198</a> <em class="jxr_javadoccomment">     *     &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="199" href="#199">199</a> <em class="jxr_javadoccomment">     *     If the value of that system property is not &lt;code&gt;null&lt;/code&gt;,</em>
+<a class="jxr_linenumber" name="200" href="#200">200</a> <em class="jxr_javadoccomment">     *     it is interpreted as a list of packages separated by a vertical</em>
+<a class="jxr_linenumber" name="201" href="#201">201</a> <em class="jxr_javadoccomment">     *     slash character '&lt;code&gt;|&lt;/code&gt;'. The constructor tries to load</em>
+<a class="jxr_linenumber" name="202" href="#202">202</a> <em class="jxr_javadoccomment">     *     the class named:</em>
+<a class="jxr_linenumber" name="203" href="#203">203</a> <em class="jxr_javadoccomment">     *     &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="204" href="#204">204</a> <em class="jxr_javadoccomment">     *         &amp;lt;&lt;i&gt;package&lt;/i&gt;&amp;gt;.&amp;lt;&lt;i&gt;protocol&lt;/i&gt;&amp;gt;.Handler</em>
+<a class="jxr_linenumber" name="205" href="#205">205</a> <em class="jxr_javadoccomment">     *     &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="206" href="#206">206</a> <em class="jxr_javadoccomment">     *     where &amp;lt;&lt;i&gt;package&lt;/i&gt;&amp;gt; is replaced by the name of the package</em>
+<a class="jxr_linenumber" name="207" href="#207">207</a> <em class="jxr_javadoccomment">     *     and &amp;lt;&lt;i&gt;protocol&lt;/i&gt;&amp;gt; is replaced by the name of the protocol.</em>
+<a class="jxr_linenumber" name="208" href="#208">208</a> <em class="jxr_javadoccomment">     *     If this class does not exist, or if the class exists but it is not</em>
+<a class="jxr_linenumber" name="209" href="#209">209</a> <em class="jxr_javadoccomment">     *     a subclass of &lt;code&gt;URLStreamHandler&lt;/code&gt;, then the next package</em>
+<a class="jxr_linenumber" name="210" href="#210">210</a> <em class="jxr_javadoccomment">     *     in the list is tried.</em>
+<a class="jxr_linenumber" name="211" href="#211">211</a> <em class="jxr_javadoccomment">     * &lt;li&gt;If the previous step fails to find a protocol handler, then the</em>
+<a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_javadoccomment">     *     constructor tries to load from a system default package.</em>
+<a class="jxr_linenumber" name="213" href="#213">213</a> <em class="jxr_javadoccomment">     *     &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_javadoccomment">     *         &amp;lt;&lt;i&gt;system default package&lt;/i&gt;&amp;gt;.&amp;lt;&lt;i&gt;protocol&lt;/i&gt;&amp;gt;.Handler</em>
+<a class="jxr_linenumber" name="215" href="#215">215</a> <em class="jxr_javadoccomment">     *     &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="216" href="#216">216</a> <em class="jxr_javadoccomment">     *     If this class does not exist, or if the class exists but it is not a</em>
+<a class="jxr_linenumber" name="217" href="#217">217</a> <em class="jxr_javadoccomment">     *     subclass of &lt;code&gt;URLStreamHandler&lt;/code&gt;, then a</em>
+<a class="jxr_linenumber" name="218" href="#218">218</a> <em class="jxr_javadoccomment">     *     &lt;code&gt;MalformedURLException&lt;/code&gt; is thrown.</em>
+<a class="jxr_linenumber" name="219" href="#219">219</a> <em class="jxr_javadoccomment">     * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="220" href="#220">220</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="221" href="#221">221</a> <em class="jxr_javadoccomment">     * &lt;p&gt;No validation of the inputs is performed by this constructor.</em>
+<a class="jxr_linenumber" name="222" href="#222">222</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="223" href="#223">223</a> <em class="jxr_javadoccomment">     * @param      protocol   the name of the protocol to use.</em>
+<a class="jxr_linenumber" name="224" href="#224">224</a> <em class="jxr_javadoccomment">     * @param      host       the name of the host.</em>
+<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">     * @param      port       the port number on the host.</em>
+<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">     * @param      file       the file on the host</em>
+<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  if an unknown protocol is specified.</em>
+<a class="jxr_linenumber" name="228" href="#228">228</a> <em class="jxr_javadoccomment">     * @see        java.lang.System#getProperty(java.lang.String)</em>
+<a class="jxr_linenumber" name="229" href="#229">229</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#setURLStreamHandlerFactory(</em>
+<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_javadoccomment">     *			java.net.URLStreamHandlerFactory)</em>
+<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler</em>
+<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandlerFactory#createURLStreamHandler(</em>
+<a class="jxr_linenumber" name="233" href="#233">233</a> <em class="jxr_javadoccomment">     *                  java.lang.String)</em>
+<a class="jxr_linenumber" name="234" href="#234">234</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="235" href="#235">235</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/lang/String.html">String</a> protocol, <a href="../../java/lang/String.html">String</a> host, <strong class="jxr_keyword">int</strong> port, <a href="../../java/lang/String.html">String</a> file)
+<a class="jxr_linenumber" name="236" href="#236">236</a>         <strong class="jxr_keyword">throws</strong> <a href="../../java/net/MalformedURLException.html">MalformedURLException</a>
+<a class="jxr_linenumber" name="237" href="#237">237</a>     { }
+<a class="jxr_linenumber" name="238" href="#238">238</a> 
+<a class="jxr_linenumber" name="239" href="#239">239</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="240" href="#240">240</a> <em class="jxr_javadoccomment">     * Creates a URL from the specified &lt;code&gt;protocol&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="241" href="#241">241</a> <em class="jxr_javadoccomment">     * name, &lt;code&gt;host&lt;/code&gt; name, and &lt;code&gt;file&lt;/code&gt; name. The</em>
+<a class="jxr_linenumber" name="242" href="#242">242</a> <em class="jxr_javadoccomment">     * default port for the specified protocol is used.</em>
+<a class="jxr_linenumber" name="243" href="#243">243</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="244" href="#244">244</a> <em class="jxr_javadoccomment">     * This method is equivalent to calling the four-argument</em>
+<a class="jxr_linenumber" name="245" href="#245">245</a> <em class="jxr_javadoccomment">     * constructor with the arguments being &lt;code&gt;protocol&lt;/code&gt;,</em>
+<a class="jxr_linenumber" name="246" href="#246">246</a> <em class="jxr_javadoccomment">     * &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;-1&lt;/code&gt;, and &lt;code&gt;file&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="247" href="#247">247</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="248" href="#248">248</a> <em class="jxr_javadoccomment">     * No validation of the inputs is performed by this constructor.</em>
+<a class="jxr_linenumber" name="249" href="#249">249</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="250" href="#250">250</a> <em class="jxr_javadoccomment">     * @param      protocol   the name of the protocol to use.</em>
+<a class="jxr_linenumber" name="251" href="#251">251</a> <em class="jxr_javadoccomment">     * @param      host       the name of the host.</em>
+<a class="jxr_linenumber" name="252" href="#252">252</a> <em class="jxr_javadoccomment">     * @param      file       the file on the host.</em>
+<a class="jxr_linenumber" name="253" href="#253">253</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  if an unknown protocol is specified.</em>
+<a class="jxr_linenumber" name="254" href="#254">254</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="255" href="#255">255</a> <em class="jxr_javadoccomment">     *			int, java.lang.String)</em>
+<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/lang/String.html">String</a> protocol, <a href="../../java/lang/String.html">String</a> host, <a href="../../java/lang/String.html">String</a> file)
+<a class="jxr_linenumber" name="258" href="#258">258</a>         <strong class="jxr_keyword">throws</strong> <a href="../../java/net/MalformedURLException.html">MalformedURLException</a>
+<a class="jxr_linenumber" name="259" href="#259">259</a>     { }
+<a class="jxr_linenumber" name="260" href="#260">260</a> 
+<a class="jxr_linenumber" name="261" href="#261">261</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="262" href="#262">262</a> <em class="jxr_javadoccomment">     * Creates a &lt;code&gt;URL&lt;/code&gt; object from the specified</em>
+<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">     * &lt;code&gt;protocol&lt;/code&gt;, &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;port&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> <em class="jxr_javadoccomment">     * number, &lt;code&gt;file&lt;/code&gt;, and &lt;code&gt;handler&lt;/code&gt;. Specifying</em>
+<a class="jxr_linenumber" name="265" href="#265">265</a> <em class="jxr_javadoccomment">     * a &lt;code&gt;port&lt;/code&gt; number of &lt;code&gt;-1&lt;/code&gt; indicates that</em>
+<a class="jxr_linenumber" name="266" href="#266">266</a> <em class="jxr_javadoccomment">     * the URL should use the default port for the protocol. Specifying</em>
+<a class="jxr_linenumber" name="267" href="#267">267</a> <em class="jxr_javadoccomment">     * a &lt;code&gt;handler&lt;/code&gt; of &lt;code&gt;null&lt;/code&gt; indicates that the URL</em>
+<a class="jxr_linenumber" name="268" href="#268">268</a> <em class="jxr_javadoccomment">     * should use a default stream handler for the protocol, as outlined</em>
+<a class="jxr_linenumber" name="269" href="#269">269</a> <em class="jxr_javadoccomment">     * for:</em>
+<a class="jxr_linenumber" name="270" href="#270">270</a> <em class="jxr_javadoccomment">     *     java.net.URL#URL(java.lang.String, java.lang.String, int,</em>
+<a class="jxr_linenumber" name="271" href="#271">271</a> <em class="jxr_javadoccomment">     *                      java.lang.String)</em>
+<a class="jxr_linenumber" name="272" href="#272">272</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="273" href="#273">273</a> <em class="jxr_javadoccomment">     * &lt;p&gt;If the handler is not null and there is a security manager,</em>
+<a class="jxr_linenumber" name="274" href="#274">274</a> <em class="jxr_javadoccomment">     * the security manager's &lt;code&gt;checkPermission&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="275" href="#275">275</a> <em class="jxr_javadoccomment">     * method is called with a</em>
+<a class="jxr_linenumber" name="276" href="#276">276</a> <em class="jxr_javadoccomment">     * &lt;code&gt;NetPermission("specifyStreamHandler")&lt;/code&gt; permission.</em>
+<a class="jxr_linenumber" name="277" href="#277">277</a> <em class="jxr_javadoccomment">     * This may result in a SecurityException.</em>
+<a class="jxr_linenumber" name="278" href="#278">278</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">     * No validation of the inputs is performed by this constructor.</em>
+<a class="jxr_linenumber" name="280" href="#280">280</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="281" href="#281">281</a> <em class="jxr_javadoccomment">     * @param      protocol   the name of the protocol to use.</em>
+<a class="jxr_linenumber" name="282" href="#282">282</a> <em class="jxr_javadoccomment">     * @param      host       the name of the host.</em>
+<a class="jxr_linenumber" name="283" href="#283">283</a> <em class="jxr_javadoccomment">     * @param      port       the port number on the host.</em>
+<a class="jxr_linenumber" name="284" href="#284">284</a> <em class="jxr_javadoccomment">     * @param      file       the file on the host</em>
+<a class="jxr_linenumber" name="285" href="#285">285</a> <em class="jxr_javadoccomment">     * @param	   handler    the stream handler for the URL.</em>
+<a class="jxr_linenumber" name="286" href="#286">286</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  if an unknown protocol is specified.</em>
+<a class="jxr_linenumber" name="287" href="#287">287</a> <em class="jxr_javadoccomment">     * @exception  SecurityException</em>
+<a class="jxr_linenumber" name="288" href="#288">288</a> <em class="jxr_javadoccomment">     *        if a security manager exists and its</em>
+<a class="jxr_linenumber" name="289" href="#289">289</a> <em class="jxr_javadoccomment">     *        &lt;code&gt;checkPermission&lt;/code&gt; method doesn't allow</em>
+<a class="jxr_linenumber" name="290" href="#290">290</a> <em class="jxr_javadoccomment">     *        specifying a stream handler explicitly.</em>
+<a class="jxr_linenumber" name="291" href="#291">291</a> <em class="jxr_javadoccomment">     * @see        java.lang.System#getProperty(java.lang.String)</em>
+<a class="jxr_linenumber" name="292" href="#292">292</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#setURLStreamHandlerFactory(</em>
+<a class="jxr_linenumber" name="293" href="#293">293</a> <em class="jxr_javadoccomment">     *			java.net.URLStreamHandlerFactory)</em>
+<a class="jxr_linenumber" name="294" href="#294">294</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler</em>
+<a class="jxr_linenumber" name="295" href="#295">295</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandlerFactory#createURLStreamHandler(</em>
+<a class="jxr_linenumber" name="296" href="#296">296</a> <em class="jxr_javadoccomment">     *			java.lang.String)</em>
+<a class="jxr_linenumber" name="297" href="#297">297</a> <em class="jxr_javadoccomment">     * @see        SecurityManager#checkPermission</em>
+<a class="jxr_linenumber" name="298" href="#298">298</a> <em class="jxr_javadoccomment">     * @see        java.net.NetPermission</em>
+<a class="jxr_linenumber" name="299" href="#299">299</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="300" href="#300">300</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/lang/String.html">String</a> protocol, <a href="../../java/lang/String.html">String</a> host, <strong class="jxr_keyword">int</strong> port, <a href="../../java/lang/String.html">String</a> file,
+<a class="jxr_linenumber" name="301" href="#301">301</a>         <a href="../../java/net/URLStreamHandler.html">URLStreamHandler</a> handler) <strong class="jxr_keyword">throws</strong> MalformedURLException
+<a class="jxr_linenumber" name="302" href="#302">302</a>     { }
+<a class="jxr_linenumber" name="303" href="#303">303</a> 
+<a class="jxr_linenumber" name="304" href="#304">304</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="305" href="#305">305</a> <em class="jxr_javadoccomment">     * Creates a &lt;code&gt;URL&lt;/code&gt; object from the &lt;code&gt;String&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="306" href="#306">306</a> <em class="jxr_javadoccomment">     * representation.</em>
+<a class="jxr_linenumber" name="307" href="#307">307</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="308" href="#308">308</a> <em class="jxr_javadoccomment">     * This constructor is equivalent to a call to the two-argument</em>
+<a class="jxr_linenumber" name="309" href="#309">309</a> <em class="jxr_javadoccomment">     * constructor with a &lt;code&gt;null&lt;/code&gt; first argument.</em>
+<a class="jxr_linenumber" name="310" href="#310">310</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="311" href="#311">311</a> <em class="jxr_javadoccomment">     * @param      spec   the &lt;code&gt;String&lt;/code&gt; to parse as a URL.</em>
+<a class="jxr_linenumber" name="312" href="#312">312</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  If the string specifies an</em>
+<a class="jxr_linenumber" name="313" href="#313">313</a> <em class="jxr_javadoccomment">     *               unknown protocol.</em>
+<a class="jxr_linenumber" name="314" href="#314">314</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.net.URL, java.lang.String)</em>
+<a class="jxr_linenumber" name="315" href="#315">315</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="316" href="#316">316</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/lang/String.html">String</a> spec) <strong class="jxr_keyword">throws</strong> MalformedURLException { }
+<a class="jxr_linenumber" name="317" href="#317">317</a> 
+<a class="jxr_linenumber" name="318" href="#318">318</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">     * Creates a URL by parsing the given spec within a specified context.</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="321" href="#321">321</a> <em class="jxr_javadoccomment">     * The new URL is created from the given context URL and the spec</em>
+<a class="jxr_linenumber" name="322" href="#322">322</a> <em class="jxr_javadoccomment">     * argument as described in</em>
+<a class="jxr_linenumber" name="323" href="#323">323</a> <em class="jxr_javadoccomment">     * RFC2396 &amp;quot;Uniform Resource Identifiers : Generic * Syntax&amp;quot; :</em>
+<a class="jxr_linenumber" name="324" href="#324">324</a> <em class="jxr_javadoccomment">     * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="325" href="#325">325</a> <em class="jxr_javadoccomment">     *          &amp;lt;scheme&amp;gt;://&amp;lt;authority&amp;gt;&amp;lt;path&amp;gt;?&amp;lt;query&amp;gt;#&amp;lt;fragment&amp;gt;</em>
+<a class="jxr_linenumber" name="326" href="#326">326</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="327" href="#327">327</a> <em class="jxr_javadoccomment">     * The reference is parsed into the scheme, authority, path, query and</em>
+<a class="jxr_linenumber" name="328" href="#328">328</a> <em class="jxr_javadoccomment">     * fragment parts. If the path component is empty and the scheme,</em>
+<a class="jxr_linenumber" name="329" href="#329">329</a> <em class="jxr_javadoccomment">     * authority, and query components are undefined, then the new URL is a</em>
+<a class="jxr_linenumber" name="330" href="#330">330</a> <em class="jxr_javadoccomment">     * reference to the current document. Otherwise, the fragment and query</em>
+<a class="jxr_linenumber" name="331" href="#331">331</a> <em class="jxr_javadoccomment">     * parts present in the spec are used in the new URL.</em>
+<a class="jxr_linenumber" name="332" href="#332">332</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="333" href="#333">333</a> <em class="jxr_javadoccomment">     * If the scheme component is defined in the given spec and does not match</em>
+<a class="jxr_linenumber" name="334" href="#334">334</a> <em class="jxr_javadoccomment">     * the scheme of the context, then the new URL is created as an absolute</em>
+<a class="jxr_linenumber" name="335" href="#335">335</a> <em class="jxr_javadoccomment">     * URL based on the spec alone. Otherwise the scheme component is inherited</em>
+<a class="jxr_linenumber" name="336" href="#336">336</a> <em class="jxr_javadoccomment">     * from the context URL.</em>
+<a class="jxr_linenumber" name="337" href="#337">337</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="338" href="#338">338</a> <em class="jxr_javadoccomment">     * If the authority component is present in the spec then the spec is</em>
+<a class="jxr_linenumber" name="339" href="#339">339</a> <em class="jxr_javadoccomment">     * treated as absolute and the spec authority and path will replace the</em>
+<a class="jxr_linenumber" name="340" href="#340">340</a> <em class="jxr_javadoccomment">     * context authority and path. If the authority component is absent in the</em>
+<a class="jxr_linenumber" name="341" href="#341">341</a> <em class="jxr_javadoccomment">     * spec then the authority of the new URL will be inherited from the</em>
+<a class="jxr_linenumber" name="342" href="#342">342</a> <em class="jxr_javadoccomment">     * context.</em>
+<a class="jxr_linenumber" name="343" href="#343">343</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="344" href="#344">344</a> <em class="jxr_javadoccomment">     * If the spec's path component begins with a slash character</em>
+<a class="jxr_linenumber" name="345" href="#345">345</a> <em class="jxr_javadoccomment">     * &amp;quot;/&amp;quot; then the</em>
+<a class="jxr_linenumber" name="346" href="#346">346</a> <em class="jxr_javadoccomment">     * path is treated as absolute and the spec path replaces the context path.</em>
+<a class="jxr_linenumber" name="347" href="#347">347</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="348" href="#348">348</a> <em class="jxr_javadoccomment">     * Otherwise, the path is treated as a relative path and is appended to the</em>
+<a class="jxr_linenumber" name="349" href="#349">349</a> <em class="jxr_javadoccomment">     * context path, as described in RFC2396. Also, in this case, </em>
+<a class="jxr_linenumber" name="350" href="#350">350</a> <em class="jxr_javadoccomment">     * the path is canonicalized through the removal of directory </em>
+<a class="jxr_linenumber" name="351" href="#351">351</a> <em class="jxr_javadoccomment">     * changes made by occurences of &amp;quot;..&amp;quot; and &amp;quot;.&amp;quot;.</em>
+<a class="jxr_linenumber" name="352" href="#352">352</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="353" href="#353">353</a> <em class="jxr_javadoccomment">     * For a more detailed description of URL parsing, refer to RFC2396.</em>
+<a class="jxr_linenumber" name="354" href="#354">354</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="355" href="#355">355</a> <em class="jxr_javadoccomment">     * @param      context   the context in which to parse the specification.</em>
+<a class="jxr_linenumber" name="356" href="#356">356</a> <em class="jxr_javadoccomment">     * @param      spec      the &lt;code&gt;String&lt;/code&gt; to parse as a URL.</em>
+<a class="jxr_linenumber" name="357" href="#357">357</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  if no protocol is specified, or an</em>
+<a class="jxr_linenumber" name="358" href="#358">358</a> <em class="jxr_javadoccomment">     *               unknown protocol is found.</em>
+<a class="jxr_linenumber" name="359" href="#359">359</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="360" href="#360">360</a> <em class="jxr_javadoccomment">     *			int, java.lang.String)</em>
+<a class="jxr_linenumber" name="361" href="#361">361</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler</em>
+<a class="jxr_linenumber" name="362" href="#362">362</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler#parseURL(java.net.URL,</em>
+<a class="jxr_linenumber" name="363" href="#363">363</a> <em class="jxr_javadoccomment">     *			java.lang.String, int, int)</em>
+<a class="jxr_linenumber" name="364" href="#364">364</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="365" href="#365">365</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/net/URL.html">URL</a> context, <a href="../../java/lang/String.html">String</a> spec) <strong class="jxr_keyword">throws</strong> MalformedURLException { }
+<a class="jxr_linenumber" name="366" href="#366">366</a> 
+<a class="jxr_linenumber" name="367" href="#367">367</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="368" href="#368">368</a> <em class="jxr_javadoccomment">     * Creates a URL by parsing the given spec with the specified handler</em>
+<a class="jxr_linenumber" name="369" href="#369">369</a> <em class="jxr_javadoccomment">     * within a specified context. If the handler is null, the parsing</em>
+<a class="jxr_linenumber" name="370" href="#370">370</a> <em class="jxr_javadoccomment">     * occurs as with the two argument constructor.</em>
+<a class="jxr_linenumber" name="371" href="#371">371</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="372" href="#372">372</a> <em class="jxr_javadoccomment">     * @param      context   the context in which to parse the specification.</em>
+<a class="jxr_linenumber" name="373" href="#373">373</a> <em class="jxr_javadoccomment">     * @param      spec      the &lt;code&gt;String&lt;/code&gt; to parse as a URL.</em>
+<a class="jxr_linenumber" name="374" href="#374">374</a> <em class="jxr_javadoccomment">     * @param	   handler   the stream handler for the URL.</em>
+<a class="jxr_linenumber" name="375" href="#375">375</a> <em class="jxr_javadoccomment">     * @exception  MalformedURLException  if no protocol is specified, or an</em>
+<a class="jxr_linenumber" name="376" href="#376">376</a> <em class="jxr_javadoccomment">     *               unknown protocol is found.</em>
+<a class="jxr_linenumber" name="377" href="#377">377</a> <em class="jxr_javadoccomment">     * @exception  SecurityException</em>
+<a class="jxr_linenumber" name="378" href="#378">378</a> <em class="jxr_javadoccomment">     *        if a security manager exists and its</em>
+<a class="jxr_linenumber" name="379" href="#379">379</a> <em class="jxr_javadoccomment">     *        &lt;code&gt;checkPermission&lt;/code&gt; method doesn't allow</em>
+<a class="jxr_linenumber" name="380" href="#380">380</a> <em class="jxr_javadoccomment">     *        specifying a stream handler.</em>
+<a class="jxr_linenumber" name="381" href="#381">381</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="382" href="#382">382</a> <em class="jxr_javadoccomment">     *			int, java.lang.String)</em>
+<a class="jxr_linenumber" name="383" href="#383">383</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler</em>
+<a class="jxr_linenumber" name="384" href="#384">384</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandler#parseURL(java.net.URL,</em>
+<a class="jxr_linenumber" name="385" href="#385">385</a> <em class="jxr_javadoccomment">     *			java.lang.String, int, int)</em>
+<a class="jxr_linenumber" name="386" href="#386">386</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="387" href="#387">387</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URL.html">URL</a>(<a href="../../java/net/URL.html">URL</a> context, <a href="../../java/lang/String.html">String</a> spec, <a href="../../java/net/URLStreamHandler.html">URLStreamHandler</a> handler)
+<a class="jxr_linenumber" name="388" href="#388">388</a>         <strong class="jxr_keyword">throws</strong> <a href="../../java/net/MalformedURLException.html">MalformedURLException</a>
+<a class="jxr_linenumber" name="389" href="#389">389</a>     { }
+<a class="jxr_linenumber" name="390" href="#390">390</a> 
+<a class="jxr_linenumber" name="391" href="#391">391</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="392" href="#392">392</a> <em class="jxr_javadoccomment">     * Sets the fields of the URL. This is not a public method so that</em>
+<a class="jxr_linenumber" name="393" href="#393">393</a> <em class="jxr_javadoccomment">     * only URLStreamHandlers can modify URL fields. URLs are</em>
+<a class="jxr_linenumber" name="394" href="#394">394</a> <em class="jxr_javadoccomment">     * otherwise constant.</em>
+<a class="jxr_linenumber" name="395" href="#395">395</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="396" href="#396">396</a> <em class="jxr_javadoccomment">     * @param protocol the name of the protocol to use</em>
+<a class="jxr_linenumber" name="397" href="#397">397</a> <em class="jxr_javadoccomment">     * @param host the name of the host</em>
+<a class="jxr_linenumber" name="398" href="#398">398</a> <em class="jxr_javadoccomment">     *       @param port the port number on the host</em>
+<a class="jxr_linenumber" name="399" href="#399">399</a> <em class="jxr_javadoccomment">     * @param file the file on the host</em>
+<a class="jxr_linenumber" name="400" href="#400">400</a> <em class="jxr_javadoccomment">     * @param ref the internal reference in the URL</em>
+<a class="jxr_linenumber" name="401" href="#401">401</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="402" href="#402">402</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> set(<a href="../../java/lang/String.html">String</a> protocol, <a href="../../java/lang/String.html">String</a> host, <strong class="jxr_keyword">int</strong> port, <a href="../../java/lang/String.html">String</a> file,
+<a class="jxr_linenumber" name="403" href="#403">403</a>         <a href="../../java/lang/String.html">String</a> ref)
+<a class="jxr_linenumber" name="404" href="#404">404</a>     { }
+<a class="jxr_linenumber" name="405" href="#405">405</a> 
+<a class="jxr_linenumber" name="406" href="#406">406</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="407" href="#407">407</a> <em class="jxr_javadoccomment">     * Sets the specified 8 fields of the URL. This is not a public method so</em>
+<a class="jxr_linenumber" name="408" href="#408">408</a> <em class="jxr_javadoccomment">     * that only URLStreamHandlers can modify URL fields. URLs are otherwise</em>
+<a class="jxr_linenumber" name="409" href="#409">409</a> <em class="jxr_javadoccomment">     * constant.</em>
+<a class="jxr_linenumber" name="410" href="#410">410</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="411" href="#411">411</a> <em class="jxr_javadoccomment">     * @param protocol the name of the protocol to use</em>
+<a class="jxr_linenumber" name="412" href="#412">412</a> <em class="jxr_javadoccomment">     * @param host the name of the host</em>
+<a class="jxr_linenumber" name="413" href="#413">413</a> <em class="jxr_javadoccomment">     * @param port the port number on the host</em>
+<a class="jxr_linenumber" name="414" href="#414">414</a> <em class="jxr_javadoccomment">     * @param authority the authority part for the url</em>
+<a class="jxr_linenumber" name="415" href="#415">415</a> <em class="jxr_javadoccomment">     * @param userInfo the username and password</em>
+<a class="jxr_linenumber" name="416" href="#416">416</a> <em class="jxr_javadoccomment">     * @param path the file on the host</em>
+<a class="jxr_linenumber" name="417" href="#417">417</a> <em class="jxr_javadoccomment">     * @param ref the internal reference in the URL</em>
+<a class="jxr_linenumber" name="418" href="#418">418</a> <em class="jxr_javadoccomment">     * @param query the query part of this URL</em>
+<a class="jxr_linenumber" name="419" href="#419">419</a> <em class="jxr_javadoccomment">     * @since 1.3</em>
+<a class="jxr_linenumber" name="420" href="#420">420</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="421" href="#421">421</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> set(<a href="../../java/lang/String.html">String</a> protocol, <a href="../../java/lang/String.html">String</a> host, <strong class="jxr_keyword">int</strong> port, <a href="../../java/lang/String.html">String</a> authority,
+<a class="jxr_linenumber" name="422" href="#422">422</a>         <a href="../../java/lang/String.html">String</a> userInfo, <a href="../../java/lang/String.html">String</a> path, <a href="../../java/lang/String.html">String</a> query, <a href="../../java/lang/String.html">String</a> ref)
+<a class="jxr_linenumber" name="423" href="#423">423</a>     { }
+<a class="jxr_linenumber" name="424" href="#424">424</a> 
+<a class="jxr_linenumber" name="425" href="#425">425</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="426" href="#426">426</a> <em class="jxr_javadoccomment">     * Gets the query part of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="427" href="#427">427</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="428" href="#428">428</a> <em class="jxr_javadoccomment">     * @return  the query part of this &lt;code&gt;URL&lt;/code&gt;, </em>
+<a class="jxr_linenumber" name="429" href="#429">429</a> <em class="jxr_javadoccomment">     * or &lt;CODE&gt;null&lt;/CODE&gt; if one does not exist</em>
+<a class="jxr_linenumber" name="430" href="#430">430</a> <em class="jxr_javadoccomment">     * @since 1.3</em>
+<a class="jxr_linenumber" name="431" href="#431">431</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="432" href="#432">432</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getQuery() {
+<a class="jxr_linenumber" name="433" href="#433">433</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="434" href="#434">434</a>     }
+<a class="jxr_linenumber" name="435" href="#435">435</a> 
+<a class="jxr_linenumber" name="436" href="#436">436</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="437" href="#437">437</a> <em class="jxr_javadoccomment">     * Gets the path part of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="438" href="#438">438</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="439" href="#439">439</a> <em class="jxr_javadoccomment">     * @return  the path part of this &lt;code&gt;URL&lt;/code&gt;, or an</em>
+<a class="jxr_linenumber" name="440" href="#440">440</a> <em class="jxr_javadoccomment">     * empty string if one does not exist</em>
+<a class="jxr_linenumber" name="441" href="#441">441</a> <em class="jxr_javadoccomment">     * @since 1.3</em>
+<a class="jxr_linenumber" name="442" href="#442">442</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="443" href="#443">443</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getPath() {
+<a class="jxr_linenumber" name="444" href="#444">444</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="445" href="#445">445</a>     }
+<a class="jxr_linenumber" name="446" href="#446">446</a> 
+<a class="jxr_linenumber" name="447" href="#447">447</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="448" href="#448">448</a> <em class="jxr_javadoccomment">     * Gets the userInfo part of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="449" href="#449">449</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="450" href="#450">450</a> <em class="jxr_javadoccomment">     * @return  the userInfo part of this &lt;code&gt;URL&lt;/code&gt;, or </em>
+<a class="jxr_linenumber" name="451" href="#451">451</a> <em class="jxr_javadoccomment">     * &lt;CODE&gt;null&lt;/CODE&gt; if one does not exist</em>
+<a class="jxr_linenumber" name="452" href="#452">452</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="453" href="#453">453</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getUserInfo() {
+<a class="jxr_linenumber" name="454" href="#454">454</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="455" href="#455">455</a>     }
+<a class="jxr_linenumber" name="456" href="#456">456</a> 
+<a class="jxr_linenumber" name="457" href="#457">457</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="458" href="#458">458</a> <em class="jxr_javadoccomment">     * Gets the authority part of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="459" href="#459">459</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="460" href="#460">460</a> <em class="jxr_javadoccomment">     * @return  the authority part of this &lt;code&gt;URL&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="461" href="#461">461</a> <em class="jxr_javadoccomment">     * @since 1.3</em>
+<a class="jxr_linenumber" name="462" href="#462">462</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="463" href="#463">463</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getAuthority() {
+<a class="jxr_linenumber" name="464" href="#464">464</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="465" href="#465">465</a>     }
+<a class="jxr_linenumber" name="466" href="#466">466</a> 
+<a class="jxr_linenumber" name="467" href="#467">467</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="468" href="#468">468</a> <em class="jxr_javadoccomment">     * Gets the port number of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="469" href="#469">469</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="470" href="#470">470</a> <em class="jxr_javadoccomment">     * @return  the port number, or -1 if the port is not set</em>
+<a class="jxr_linenumber" name="471" href="#471">471</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="472" href="#472">472</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getPort() {
+<a class="jxr_linenumber" name="473" href="#473">473</a>         <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="474" href="#474">474</a>     }
+<a class="jxr_linenumber" name="475" href="#475">475</a> 
+<a class="jxr_linenumber" name="476" href="#476">476</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="477" href="#477">477</a> <em class="jxr_javadoccomment">     * Gets the default port number of the protocol associated</em>
+<a class="jxr_linenumber" name="478" href="#478">478</a> <em class="jxr_javadoccomment">     * with this &lt;code&gt;URL&lt;/code&gt;. If the URL scheme or the URLStreamHandler</em>
+<a class="jxr_linenumber" name="479" href="#479">479</a> <em class="jxr_javadoccomment">     * for the URL do not define a default port number,</em>
+<a class="jxr_linenumber" name="480" href="#480">480</a> <em class="jxr_javadoccomment">     * then -1 is returned.</em>
+<a class="jxr_linenumber" name="481" href="#481">481</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="482" href="#482">482</a> <em class="jxr_javadoccomment">     * @return  the port number</em>
+<a class="jxr_linenumber" name="483" href="#483">483</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="484" href="#484">484</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getDefaultPort() {
+<a class="jxr_linenumber" name="485" href="#485">485</a>         <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="486" href="#486">486</a>     }
+<a class="jxr_linenumber" name="487" href="#487">487</a> 
+<a class="jxr_linenumber" name="488" href="#488">488</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="489" href="#489">489</a> <em class="jxr_javadoccomment">     * Gets the protocol name of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="490" href="#490">490</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="491" href="#491">491</a> <em class="jxr_javadoccomment">     * @return  the protocol of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="492" href="#492">492</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="493" href="#493">493</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getProtocol() {
+<a class="jxr_linenumber" name="494" href="#494">494</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="495" href="#495">495</a>     }
+<a class="jxr_linenumber" name="496" href="#496">496</a> 
+<a class="jxr_linenumber" name="497" href="#497">497</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="498" href="#498">498</a> <em class="jxr_javadoccomment">     * Gets the host name of this &lt;code&gt;URL&lt;/code&gt;, if applicable.</em>
+<a class="jxr_linenumber" name="499" href="#499">499</a> <em class="jxr_javadoccomment">     * The format of the host conforms to RFC 2732, i.e. for a</em>
+<a class="jxr_linenumber" name="500" href="#500">500</a> <em class="jxr_javadoccomment">     * literal IPv6 address, this method will return the IPv6 address</em>
+<a class="jxr_linenumber" name="501" href="#501">501</a> <em class="jxr_javadoccomment">     * enclosed in square brackets (&lt;tt&gt;'['&lt;/tt&gt; and &lt;tt&gt;']'&lt;/tt&gt;).</em>
+<a class="jxr_linenumber" name="502" href="#502">502</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="503" href="#503">503</a> <em class="jxr_javadoccomment">     * @return  the host name of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="504" href="#504">504</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="505" href="#505">505</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getHost() {
+<a class="jxr_linenumber" name="506" href="#506">506</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="507" href="#507">507</a>     }
+<a class="jxr_linenumber" name="508" href="#508">508</a> 
+<a class="jxr_linenumber" name="509" href="#509">509</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="510" href="#510">510</a> <em class="jxr_javadoccomment">     * Gets the file name of this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="511" href="#511">511</a> <em class="jxr_javadoccomment">     * The returned file portion will be</em>
+<a class="jxr_linenumber" name="512" href="#512">512</a> <em class="jxr_javadoccomment">     * the same as &lt;CODE&gt;getPath()&lt;/CODE&gt;, plus the concatenation of</em>
+<a class="jxr_linenumber" name="513" href="#513">513</a> <em class="jxr_javadoccomment">     * the value of &lt;CODE&gt;getQuery()&lt;/CODE&gt;, if any. If there is </em>
+<a class="jxr_linenumber" name="514" href="#514">514</a> <em class="jxr_javadoccomment">     * no query portion, this method and &lt;CODE&gt;getPath()&lt;/CODE&gt; will</em>
+<a class="jxr_linenumber" name="515" href="#515">515</a> <em class="jxr_javadoccomment">     * return identical results.</em>
+<a class="jxr_linenumber" name="516" href="#516">516</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="517" href="#517">517</a> <em class="jxr_javadoccomment">     * @return  the file name of this &lt;code&gt;URL&lt;/code&gt;,</em>
+<a class="jxr_linenumber" name="518" href="#518">518</a> <em class="jxr_javadoccomment">     * or an empty string if one does not exist</em>
+<a class="jxr_linenumber" name="519" href="#519">519</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="520" href="#520">520</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getFile() {
+<a class="jxr_linenumber" name="521" href="#521">521</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="522" href="#522">522</a>     }
+<a class="jxr_linenumber" name="523" href="#523">523</a> 
+<a class="jxr_linenumber" name="524" href="#524">524</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="525" href="#525">525</a> <em class="jxr_javadoccomment">     * Gets the anchor (also known as the "reference") of this</em>
+<a class="jxr_linenumber" name="526" href="#526">526</a> <em class="jxr_javadoccomment">     * &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="527" href="#527">527</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="528" href="#528">528</a> <em class="jxr_javadoccomment">     * @return  the anchor (also known as the "reference") of this</em>
+<a class="jxr_linenumber" name="529" href="#529">529</a> <em class="jxr_javadoccomment">     *          &lt;code&gt;URL&lt;/code&gt;, or &lt;CODE&gt;null&lt;/CODE&gt; if one does not exist</em>
+<a class="jxr_linenumber" name="530" href="#530">530</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="531" href="#531">531</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> getRef() {
+<a class="jxr_linenumber" name="532" href="#532">532</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="533" href="#533">533</a>     }
+<a class="jxr_linenumber" name="534" href="#534">534</a> 
+<a class="jxr_linenumber" name="535" href="#535">535</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="536" href="#536">536</a> <em class="jxr_javadoccomment">     * Compares this URL for equality with another object.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="537" href="#537">537</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="538" href="#538">538</a> <em class="jxr_javadoccomment">     * If the given object is not a URL then this method immediately returns</em>
+<a class="jxr_linenumber" name="539" href="#539">539</a> <em class="jxr_javadoccomment">     * &lt;code&gt;false&lt;/code&gt;.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="540" href="#540">540</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="541" href="#541">541</a> <em class="jxr_javadoccomment">     * Two URL objects are equal if they have the same protocol, reference</em>
+<a class="jxr_linenumber" name="542" href="#542">542</a> <em class="jxr_javadoccomment">     * equivalent hosts, have the same port number on the host, and the same</em>
+<a class="jxr_linenumber" name="543" href="#543">543</a> <em class="jxr_javadoccomment">     * file and fragment of the file.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="544" href="#544">544</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="545" href="#545">545</a> <em class="jxr_javadoccomment">     * Two hosts are considered equivalent if both host names can be resolved</em>
+<a class="jxr_linenumber" name="546" href="#546">546</a> <em class="jxr_javadoccomment">     * into the same IP addresses; else if either host name can't be</em>
+<a class="jxr_linenumber" name="547" href="#547">547</a> <em class="jxr_javadoccomment">     * resolved, the host names must be equal without regard to case; or both</em>
+<a class="jxr_linenumber" name="548" href="#548">548</a> <em class="jxr_javadoccomment">     * host names equal to null.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="549" href="#549">549</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="550" href="#550">550</a> <em class="jxr_javadoccomment">     * Since hosts comparison requires name resolution, this operation is a</em>
+<a class="jxr_linenumber" name="551" href="#551">551</a> <em class="jxr_javadoccomment">     * blocking operation. &lt;p&gt;</em>
+<a class="jxr_linenumber" name="552" href="#552">552</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="553" href="#553">553</a> <em class="jxr_javadoccomment">     * Note: The defined behavior for &lt;code&gt;equals&lt;/code&gt; is known to</em>
+<a class="jxr_linenumber" name="554" href="#554">554</a> <em class="jxr_javadoccomment">     * be inconsistent with virtual hosting in HTTP.</em>
+<a class="jxr_linenumber" name="555" href="#555">555</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="556" href="#556">556</a> <em class="jxr_javadoccomment">     * @param   obj   the URL to compare against.</em>
+<a class="jxr_linenumber" name="557" href="#557">557</a> <em class="jxr_javadoccomment">     * @return  &lt;code&gt;true&lt;/code&gt; if the objects are the same;</em>
+<a class="jxr_linenumber" name="558" href="#558">558</a> <em class="jxr_javadoccomment">     *          &lt;code&gt;false&lt;/code&gt; otherwise.</em>
+<a class="jxr_linenumber" name="559" href="#559">559</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="560" href="#560">560</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(<a href="../../java/lang/Object.html">Object</a> obj) {
+<a class="jxr_linenumber" name="561" href="#561">561</a>         <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="562" href="#562">562</a>     }
+<a class="jxr_linenumber" name="563" href="#563">563</a> 
+<a class="jxr_linenumber" name="564" href="#564">564</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="565" href="#565">565</a> <em class="jxr_javadoccomment">     * Creates an integer suitable for hash table indexing.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="566" href="#566">566</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="567" href="#567">567</a> <em class="jxr_javadoccomment">     * The hash code is based upon all the URL components relevant for URL</em>
+<a class="jxr_linenumber" name="568" href="#568">568</a> <em class="jxr_javadoccomment">     * comparison. As such, this operation is a blocking operation.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="569" href="#569">569</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="570" href="#570">570</a> <em class="jxr_javadoccomment">     * @return  a hash code for this &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="571" href="#571">571</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="572" href="#572">572</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="573" href="#573">573</a>         <strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="574" href="#574">574</a>     }
+<a class="jxr_linenumber" name="575" href="#575">575</a> 
+<a class="jxr_linenumber" name="576" href="#576">576</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="577" href="#577">577</a> <em class="jxr_javadoccomment">     * Compares two URLs, excluding the fragment component.&lt;p&gt;</em>
+<a class="jxr_linenumber" name="578" href="#578">578</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="579" href="#579">579</a> <em class="jxr_javadoccomment">     * Returns &lt;code&gt;true&lt;/code&gt; if this &lt;code&gt;URL&lt;/code&gt; and the</em>
+<a class="jxr_linenumber" name="580" href="#580">580</a> <em class="jxr_javadoccomment">     * &lt;code&gt;other&lt;/code&gt; argument are equal without taking the</em>
+<a class="jxr_linenumber" name="581" href="#581">581</a> <em class="jxr_javadoccomment">     * fragment component into consideration.</em>
+<a class="jxr_linenumber" name="582" href="#582">582</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="583" href="#583">583</a> <em class="jxr_javadoccomment">     * @param   other   the &lt;code&gt;URL&lt;/code&gt; to compare against.</em>
+<a class="jxr_linenumber" name="584" href="#584">584</a> <em class="jxr_javadoccomment">     * @return  &lt;code&gt;true&lt;/code&gt; if they reference the same remote object;</em>
+<a class="jxr_linenumber" name="585" href="#585">585</a> <em class="jxr_javadoccomment">     *          &lt;code&gt;false&lt;/code&gt; otherwise.</em>
+<a class="jxr_linenumber" name="586" href="#586">586</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="587" href="#587">587</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> sameFile(<a href="../../java/net/URL.html">URL</a> other) {
+<a class="jxr_linenumber" name="588" href="#588">588</a>         <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="589" href="#589">589</a>     }
+<a class="jxr_linenumber" name="590" href="#590">590</a> 
+<a class="jxr_linenumber" name="591" href="#591">591</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="592" href="#592">592</a> <em class="jxr_javadoccomment">     * Constructs a string representation of this &lt;code&gt;URL&lt;/code&gt;. The</em>
+<a class="jxr_linenumber" name="593" href="#593">593</a> <em class="jxr_javadoccomment">     * string is created by calling the &lt;code&gt;toExternalForm&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="594" href="#594">594</a> <em class="jxr_javadoccomment">     * method of the stream protocol handler for this object.</em>
+<a class="jxr_linenumber" name="595" href="#595">595</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="596" href="#596">596</a> <em class="jxr_javadoccomment">     * @return  a string representation of this object.</em>
+<a class="jxr_linenumber" name="597" href="#597">597</a> <em class="jxr_javadoccomment">     * @see     java.net.URL#URL(java.lang.String, java.lang.String, int,</em>
+<a class="jxr_linenumber" name="598" href="#598">598</a> <em class="jxr_javadoccomment">     *			java.lang.String)</em>
+<a class="jxr_linenumber" name="599" href="#599">599</a> <em class="jxr_javadoccomment">     * @see     java.net.URLStreamHandler#toExternalForm(java.net.URL)</em>
+<a class="jxr_linenumber" name="600" href="#600">600</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="601" href="#601">601</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> toString() {
+<a class="jxr_linenumber" name="602" href="#602">602</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="603" href="#603">603</a>     }
+<a class="jxr_linenumber" name="604" href="#604">604</a> 
+<a class="jxr_linenumber" name="605" href="#605">605</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="606" href="#606">606</a> <em class="jxr_javadoccomment">     * Constructs a string representation of this &lt;code&gt;URL&lt;/code&gt;. The</em>
+<a class="jxr_linenumber" name="607" href="#607">607</a> <em class="jxr_javadoccomment">     * string is created by calling the &lt;code&gt;toExternalForm&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="608" href="#608">608</a> <em class="jxr_javadoccomment">     * method of the stream protocol handler for this object.</em>
+<a class="jxr_linenumber" name="609" href="#609">609</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="610" href="#610">610</a> <em class="jxr_javadoccomment">     * @return  a string representation of this object.</em>
+<a class="jxr_linenumber" name="611" href="#611">611</a> <em class="jxr_javadoccomment">     * @see     java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="612" href="#612">612</a> <em class="jxr_javadoccomment">     *			int, java.lang.String)</em>
+<a class="jxr_linenumber" name="613" href="#613">613</a> <em class="jxr_javadoccomment">     * @see     java.net.URLStreamHandler#toExternalForm(java.net.URL)</em>
+<a class="jxr_linenumber" name="614" href="#614">614</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="615" href="#615">615</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/lang/String.html">String</a> toExternalForm() {
+<a class="jxr_linenumber" name="616" href="#616">616</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="617" href="#617">617</a>     }
+<a class="jxr_linenumber" name="618" href="#618">618</a> 
+<a class="jxr_linenumber" name="619" href="#619">619</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="620" href="#620">620</a> <em class="jxr_javadoccomment">     * Returns a &lt;code&gt;URLConnection&lt;/code&gt; object that represents a</em>
+<a class="jxr_linenumber" name="621" href="#621">621</a> <em class="jxr_javadoccomment">     * connection to the remote object referred to by the &lt;code&gt;URL&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="622" href="#622">622</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="623" href="#623">623</a> <em class="jxr_javadoccomment">     * &lt;p&gt;A new connection is opened every time by calling the</em>
+<a class="jxr_linenumber" name="624" href="#624">624</a> <em class="jxr_javadoccomment">     * &lt;code&gt;openConnection&lt;/code&gt; method of the protocol handler for</em>
+<a class="jxr_linenumber" name="625" href="#625">625</a> <em class="jxr_javadoccomment">     * this URL.</em>
+<a class="jxr_linenumber" name="626" href="#626">626</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="627" href="#627">627</a> <em class="jxr_javadoccomment">     * &lt;p&gt;If for the URL's protocol (such as HTTP or JAR), there</em>
+<a class="jxr_linenumber" name="628" href="#628">628</a> <em class="jxr_javadoccomment">     * exists a public, specialized URLConnection subclass belonging</em>
+<a class="jxr_linenumber" name="629" href="#629">629</a> <em class="jxr_javadoccomment">     * to one of the following packages or one of their subpackages:</em>
+<a class="jxr_linenumber" name="630" href="#630">630</a> <em class="jxr_javadoccomment">     * java.lang, java.io, java.util, java.net, the connection</em>
+<a class="jxr_linenumber" name="631" href="#631">631</a> <em class="jxr_javadoccomment">     * returned will be of that subclass. For example, for HTTP an</em>
+<a class="jxr_linenumber" name="632" href="#632">632</a> <em class="jxr_javadoccomment">     * HttpURLConnection will be returned, and for JAR a</em>
+<a class="jxr_linenumber" name="633" href="#633">633</a> <em class="jxr_javadoccomment">     * JarURLConnection will be returned.</em>
+<a class="jxr_linenumber" name="634" href="#634">634</a> <em class="jxr_javadoccomment">     * NOTE: &lt;B&gt;java.net.HttpURLConnection&lt;/B&gt; is found in J2ME CDC profiles </em>
+<a class="jxr_linenumber" name="635" href="#635">635</a> <em class="jxr_javadoccomment">     * such as J2ME Foundation Profile.</em>
+<a class="jxr_linenumber" name="636" href="#636">636</a> <em class="jxr_javadoccomment">     * Subclasses of these should</em>
+<a class="jxr_linenumber" name="637" href="#637">637</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="638" href="#638">638</a> <em class="jxr_javadoccomment">     * @return     a &lt;code&gt;URLConnection&lt;/code&gt; to the URL.</em>
+<a class="jxr_linenumber" name="639" href="#639">639</a> <em class="jxr_javadoccomment">     * @exception  IOException  if an I/O exception occurs.</em>
+<a class="jxr_linenumber" name="640" href="#640">640</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="641" href="#641">641</a> <em class="jxr_javadoccomment">     *             int, java.lang.String)</em>
+<a class="jxr_linenumber" name="642" href="#642">642</a> <em class="jxr_javadoccomment">     * @see        java.net.URLConnection</em>
+<a class="jxr_linenumber" name="643" href="#643">643</a> <em class="jxr_javadoccomment">     * @see java.net.URLStreamHandler#openConnection(java.net.URL)</em>
+<a class="jxr_linenumber" name="644" href="#644">644</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="645" href="#645">645</a>     <strong class="jxr_keyword">public</strong> <a href="../../java/net/URLConnection.html">URLConnection</a> openConnection() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="646" href="#646">646</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="647" href="#647">647</a>     }
+<a class="jxr_linenumber" name="648" href="#648">648</a> 
+<a class="jxr_linenumber" name="649" href="#649">649</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="650" href="#650">650</a> <em class="jxr_javadoccomment">     * Opens a connection to this &lt;code&gt;URL&lt;/code&gt; and returns an</em>
+<a class="jxr_linenumber" name="651" href="#651">651</a> <em class="jxr_javadoccomment">     * &lt;code&gt;InputStream&lt;/code&gt; for reading from that connection. This</em>
+<a class="jxr_linenumber" name="652" href="#652">652</a> <em class="jxr_javadoccomment">     * method is a shorthand for:</em>
+<a class="jxr_linenumber" name="653" href="#653">653</a> <em class="jxr_javadoccomment">     * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="654" href="#654">654</a> <em class="jxr_javadoccomment">     *     openConnection().getInputStream()</em>
+<a class="jxr_linenumber" name="655" href="#655">655</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="656" href="#656">656</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="657" href="#657">657</a> <em class="jxr_javadoccomment">     * @return     an input stream for reading from the URL connection.</em>
+<a class="jxr_linenumber" name="658" href="#658">658</a> <em class="jxr_javadoccomment">     * @exception  IOException  if an I/O exception occurs.</em>
+<a class="jxr_linenumber" name="659" href="#659">659</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#openConnection()</em>
+<a class="jxr_linenumber" name="660" href="#660">660</a> <em class="jxr_javadoccomment">     * @see        java.net.URLConnection#getInputStream()</em>
+<a class="jxr_linenumber" name="661" href="#661">661</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="662" href="#662">662</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../java/io/InputStream.html">InputStream</a> openStream() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="663" href="#663">663</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="664" href="#664">664</a>     }
+<a class="jxr_linenumber" name="665" href="#665">665</a> 
+<a class="jxr_linenumber" name="666" href="#666">666</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="667" href="#667">667</a> <em class="jxr_javadoccomment">     * Gets the contents of this URL. This method is a shorthand for:</em>
+<a class="jxr_linenumber" name="668" href="#668">668</a> <em class="jxr_javadoccomment">     * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="669" href="#669">669</a> <em class="jxr_javadoccomment">     *     openConnection().getContent()</em>
+<a class="jxr_linenumber" name="670" href="#670">670</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="671" href="#671">671</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="672" href="#672">672</a> <em class="jxr_javadoccomment">     * @return     the contents of this URL.</em>
+<a class="jxr_linenumber" name="673" href="#673">673</a> <em class="jxr_javadoccomment">     * @exception  IOException  if an I/O exception occurs.</em>
+<a class="jxr_linenumber" name="674" href="#674">674</a> <em class="jxr_javadoccomment">     * @see        java.net.URLConnection#getContent()</em>
+<a class="jxr_linenumber" name="675" href="#675">675</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="676" href="#676">676</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../java/lang/Object.html">Object</a> getContent() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="677" href="#677">677</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="678" href="#678">678</a>     }
+<a class="jxr_linenumber" name="679" href="#679">679</a> 
+<a class="jxr_linenumber" name="680" href="#680">680</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="681" href="#681">681</a> <em class="jxr_javadoccomment">     * Gets the contents of this URL. This method is a shorthand for:</em>
+<a class="jxr_linenumber" name="682" href="#682">682</a> <em class="jxr_javadoccomment">     * &lt;blockquote&gt;&lt;pre&gt;</em>
+<a class="jxr_linenumber" name="683" href="#683">683</a> <em class="jxr_javadoccomment">     *     openConnection().getContent(Class[])</em>
+<a class="jxr_linenumber" name="684" href="#684">684</a> <em class="jxr_javadoccomment">     * &lt;/pre&gt;&lt;/blockquote&gt;</em>
+<a class="jxr_linenumber" name="685" href="#685">685</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="686" href="#686">686</a> <em class="jxr_javadoccomment">     * @param classes an array of Java types</em>
+<a class="jxr_linenumber" name="687" href="#687">687</a> <em class="jxr_javadoccomment">     * @return     the content object of this URL that is the first match of</em>
+<a class="jxr_linenumber" name="688" href="#688">688</a> <em class="jxr_javadoccomment">     *               the types specified in the classes array.</em>
+<a class="jxr_linenumber" name="689" href="#689">689</a> <em class="jxr_javadoccomment">     *               null if none of the requested types are supported.</em>
+<a class="jxr_linenumber" name="690" href="#690">690</a> <em class="jxr_javadoccomment">     * @exception  IOException  if an I/O exception occurs.</em>
+<a class="jxr_linenumber" name="691" href="#691">691</a> <em class="jxr_javadoccomment">     * @see        java.net.URLConnection#getContent(Class[])</em>
+<a class="jxr_linenumber" name="692" href="#692">692</a> <em class="jxr_javadoccomment">     * @since 1.3</em>
+<a class="jxr_linenumber" name="693" href="#693">693</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="694" href="#694">694</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a href="../../java/lang/Object.html">Object</a> getContent(<a href="../../java/lang/Class.html">Class</a>[] classes) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="695" href="#695">695</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="696" href="#696">696</a>     }
+<a class="jxr_linenumber" name="697" href="#697">697</a> 
+<a class="jxr_linenumber" name="698" href="#698">698</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="699" href="#699">699</a> <em class="jxr_javadoccomment">     * Sets an application's &lt;code&gt;URLStreamHandlerFactory&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="700" href="#700">700</a> <em class="jxr_javadoccomment">     * This method can be called at most once in a given Java Virtual</em>
+<a class="jxr_linenumber" name="701" href="#701">701</a> <em class="jxr_javadoccomment">     * Machine.</em>
+<a class="jxr_linenumber" name="702" href="#702">702</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="703" href="#703">703</a> <em class="jxr_javadoccomment">     *&lt;p&gt; The &lt;code&gt;URLStreamHandlerFactory&lt;/code&gt; instance is used to</em>
+<a class="jxr_linenumber" name="704" href="#704">704</a> <em class="jxr_javadoccomment">     *construct a stream protocol handler from a protocol name.</em>
+<a class="jxr_linenumber" name="705" href="#705">705</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="706" href="#706">706</a> <em class="jxr_javadoccomment">     * &lt;p&gt; If there is a security manager, this method first calls</em>
+<a class="jxr_linenumber" name="707" href="#707">707</a> <em class="jxr_javadoccomment">     * the security manager's &lt;code&gt;checkSetFactory&lt;/code&gt; method</em>
+<a class="jxr_linenumber" name="708" href="#708">708</a> <em class="jxr_javadoccomment">     * to ensure the operation is allowed.</em>
+<a class="jxr_linenumber" name="709" href="#709">709</a> <em class="jxr_javadoccomment">     * This could result in a SecurityException.</em>
+<a class="jxr_linenumber" name="710" href="#710">710</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="711" href="#711">711</a> <em class="jxr_javadoccomment">     * @param      fac   the desired factory.</em>
+<a class="jxr_linenumber" name="712" href="#712">712</a> <em class="jxr_javadoccomment">     * @exception  Error  if the application has already set a factory.</em>
+<a class="jxr_linenumber" name="713" href="#713">713</a> <em class="jxr_javadoccomment">     * @exception  SecurityException  if a security manager exists and its</em>
+<a class="jxr_linenumber" name="714" href="#714">714</a> <em class="jxr_javadoccomment">     *             &lt;code&gt;checkSetFactory&lt;/code&gt; method doesn't allow</em>
+<a class="jxr_linenumber" name="715" href="#715">715</a> <em class="jxr_javadoccomment">     *		   the operation.</em>
+<a class="jxr_linenumber" name="716" href="#716">716</a> <em class="jxr_javadoccomment">     * @see        java.net.URL#URL(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="717" href="#717">717</a> <em class="jxr_javadoccomment">     *             int, java.lang.String)</em>
+<a class="jxr_linenumber" name="718" href="#718">718</a> <em class="jxr_javadoccomment">     * @see        java.net.URLStreamHandlerFactory</em>
+<a class="jxr_linenumber" name="719" href="#719">719</a> <em class="jxr_javadoccomment">     * @see        SecurityManager#checkSetFactory</em>
+<a class="jxr_linenumber" name="720" href="#720">720</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="721" href="#721">721</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setURLStreamHandlerFactory(<a href="../../java/net/URLStreamHandlerFactory.html">URLStreamHandlerFactory</a> fac)
+<a class="jxr_linenumber" name="722" href="#722">722</a>     { }
+<a class="jxr_linenumber" name="723" href="#723">723</a> 
+<a class="jxr_linenumber" name="724" href="#724">724</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="725" href="#725">725</a> <em class="jxr_javadoccomment">     * readObject is called to restore the state of the URL from the</em>
+<a class="jxr_linenumber" name="726" href="#726">726</a> <em class="jxr_javadoccomment">     * stream.  It reads the components of the URL and finds the local</em>
+<a class="jxr_linenumber" name="727" href="#727">727</a> <em class="jxr_javadoccomment">     * stream handler.</em>
+<a class="jxr_linenumber" name="728" href="#728">728</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="729" href="#729">729</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> readObject(java.io.ObjectInputStream s)
+<a class="jxr_linenumber" name="730" href="#730">730</a>         <strong class="jxr_keyword">throws</strong> IOException, <a href="../../java/lang/ClassNotFoundException.html">ClassNotFoundException</a>
+<a class="jxr_linenumber" name="731" href="#731">731</a>     { }
+<a class="jxr_linenumber" name="732" href="#732">732</a> 
+<a class="jxr_linenumber" name="733" href="#733">733</a>     <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> </em>
+<a class="jxr_linenumber" name="734" href="#734">734</a> <em class="jxr_javadoccomment">     * WriteObject is called to save the state of the URL to an</em>
+<a class="jxr_linenumber" name="735" href="#735">735</a> <em class="jxr_javadoccomment">     * ObjectOutputStream. The handler is not saved since it is</em>
+<a class="jxr_linenumber" name="736" href="#736">736</a> <em class="jxr_javadoccomment">     * specific to this system.</em>
+<a class="jxr_linenumber" name="737" href="#737">737</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="738" href="#738">738</a> <em class="jxr_javadoccomment">     * @serialData the default write object value. When read back in,</em>
+<a class="jxr_linenumber" name="739" href="#739">739</a> <em class="jxr_javadoccomment">     * the reader must ensure that calling getURLStreamHandler with</em>
+<a class="jxr_linenumber" name="740" href="#740">740</a> <em class="jxr_javadoccomment">     * the protocol variable returns a valid URLStreamHandler and</em>
+<a class="jxr_linenumber" name="741" href="#741">741</a> <em class="jxr_javadoccomment">     * throw an IOException if it does not.</em>
+<a class="jxr_linenumber" name="742" href="#742">742</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="743" href="#743">743</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> writeObject(java.io.ObjectOutputStream s)
+<a class="jxr_linenumber" name="744" href="#744">744</a>         <strong class="jxr_keyword">throws</strong> <a href="../../java/io/IOException.html">IOException</a>
+<a class="jxr_linenumber" name="745" href="#745">745</a>     { }
+<a class="jxr_linenumber" name="746" href="#746">746</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
