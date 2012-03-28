@@ -18,11 +18,10 @@
 package com.googlecode.jinahya.persistence;
 
 
-import com.googlecode.jinahya.persistence.Genealogy.ChildrenFinder;
-import com.googlecode.jinahya.persistence.Genealogy.ParentFinder;
 import java.util.ArrayList;
 import java.util.Collection;
-import junit.framework.Assert;
+import org.testng.Assert;
+
 import org.testng.annotations.Test;
 
 
@@ -31,38 +30,6 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class GenealogyTest {
-
-
-    private static final ParentFinder<Entity> PARENT_FINDER =
-        new ParentFinder<Entity>() {
-
-
-            @Override
-            public Entity findParent(final Entity of) {
-                if (of == null) {
-                    throw new NullPointerException("null of");
-                }
-                return of.parent;
-            }
-
-
-        };
-
-
-    private static final ChildrenFinder<Entity> CHILDREN_FINDER =
-        new ChildrenFinder<Entity>() {
-
-
-            @Override
-            public Collection<Entity> findChildren(final Entity of) {
-                if (of == null) {
-                    throw new NullPointerException("null of");
-                }
-                return of.children;
-            }
-
-
-        };
 
 
     private static class Entity {
@@ -76,15 +43,15 @@ public class GenealogyTest {
         public void setParent(final Entity parent) {
 
             if (parent == this) {
-                throw new IllegalStateException("parent == this");
+                throw new IllegalArgumentException("parent == this");
             }
 
-            if (Genealogy.isAncestor(this, parent, PARENT_FINDER)) {
-                throw new IllegalStateException(
+            if (Genealogy.isAncestor(Entity.class, this, parent, "parent")) {
+                throw new IllegalArgumentException(
                     "this is an ancestor of parent");
             }
 
-            if (Genealogy.isDescendant(parent, this, CHILDREN_FINDER)) {
+            if (Genealogy.isDescendant(Entity.class, parent, this, "children")) {
                 throw new IllegalStateException(
                     "parent is a descendant of this");
             }
@@ -118,34 +85,34 @@ public class GenealogyTest {
         final Entity is = new Entity();
 
         try {
-            Genealogy.isAncestor(is, null, PARENT_FINDER);
+            Genealogy.isAncestor(Entity.class, is, null, "parent");
             Assert.fail("passed isAncestor(, null,)");
         } catch (NullPointerException npe) {
             // expected
         }
 
-        Assert.assertFalse(Genealogy.isAncestor(null, of, PARENT_FINDER));
+        Assert.assertFalse(Genealogy.isAncestor(Entity.class, null, of, "parent"));
 
-        Assert.assertFalse(Genealogy.isAncestor(is, of, PARENT_FINDER));
+        Assert.assertFalse(Genealogy.isAncestor(Entity.class, is, of, "parent"));
 
         of.setParent(tm);
-        Assert.assertTrue(Genealogy.isAncestor(tm, of, PARENT_FINDER));
+        Assert.assertTrue(Genealogy.isAncestor(tm, of, "parent"));
 
         tm.setParent(is);
-        Assert.assertTrue(Genealogy.isAncestor(is, of, PARENT_FINDER));
+        Assert.assertTrue(Genealogy.isAncestor(Entity.class, is, of, "parent"));
 
 
         try {
             tm.setParent(of);
             Assert.fail("cyclic");
-        } catch (IllegalStateException ise) {
+        } catch (IllegalArgumentException ise) {
             // expected
         }
-        
+
         try {
             is.setParent(of);
             Assert.fail("cyclic");
-        } catch (IllegalStateException ise) {
+        } catch (IllegalArgumentException ise) {
             // expected
         }
 
