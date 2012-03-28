@@ -129,28 +129,41 @@ public final class Genealogy {
      *
      * @param <T> type parameter
      * @param type type
-     * @param of the base object
-     * @param name the field or property name
+     * @param of of
+     * @param name field or property name
      *
-     * @return the value of given field or property
-     *
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws IntrospectionException
-     * @throws InvocationTargetException
+     * @return
      */
     private static <T> T getValue(final Class<T> type, final T of,
-                                  final String name)
-        throws NoSuchFieldException, IllegalAccessException,
-               IntrospectionException, InvocationTargetException {
+                                  final String name) {
 
-        T value = getFieldValue(type, of, name);
-
-        if (value == null) {
-            value = getPropertyValue(type, of, name);
+        try {
+            final Field field = of.getClass().getDeclaredField(name);
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            try {
+                return type.cast(field.get(of));
+            } catch (IllegalAccessException iae) {
+            }
+        } catch (NoSuchFieldException nfe) {
         }
 
-        return value;
+        try {
+            final PropertyDescriptor propetyDescriptor =
+                new PropertyDescriptor(name, type);
+            final Method readMethod = propetyDescriptor.getReadMethod();
+            if (readMethod != null) {
+                try {
+                    return type.cast(readMethod.invoke(of));
+                } catch (IllegalAccessException iae) {
+                } catch (InvocationTargetException ite) {
+                }
+            }
+        } catch (IntrospectionException ie) {
+        }
+
+        return null;
     }
 
 
@@ -162,16 +175,9 @@ public final class Genealogy {
      * @param name
      *
      * @return
-     *
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws IntrospectionException
-     * @throws InvocationTargetException
      */
     private static <T> Collection<T> getValueAsCollection(
-        final Class<T> type, final T of, final String name)
-        throws NoSuchFieldException, IllegalAccessException,
-               IntrospectionException, InvocationTargetException {
+        final Class<T> type, final T of, final String name) {
 
         return asCollection(type, getValue(type, of, name));
     }
