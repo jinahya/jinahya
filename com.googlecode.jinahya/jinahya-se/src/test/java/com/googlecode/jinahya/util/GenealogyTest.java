@@ -32,27 +32,27 @@ import org.testng.annotations.Test;
 public class GenealogyTest {
 
 
-    private static class Entity {
+    private static class SPMC {
 
 
-        public Entity getParent() {
+        public SPMC getParent() {
             return parent;
         }
 
 
-        public void setParent(final Entity parent) {
+        public void setParent(final SPMC parent) {
 
             if (parent == this) {
                 throw new IllegalArgumentException("parent == this");
             }
 
-            if (Genealogy.isAncestor(Entity.class, this, parent, "parent")) {
+            if (Genealogy.isAncestor(SPMC.class, this, parent, "parent")) {
                 throw new IllegalArgumentException(
                     "this is an ancestor of parent");
             }
 
             if (Genealogy.isDescendant(
-                Entity.class, parent, this, "children")) {
+                SPMC.class, parent, this, "children")) {
                 throw new IllegalStateException(
                     "parent is a descendant of this");
             }
@@ -61,18 +61,18 @@ public class GenealogyTest {
         }
 
 
-        public Collection<Entity> getChildren() {
+        public Collection<SPMC> getChildren() {
             if (children == null) {
-                children = new ArrayList<Entity>();
+                children = new ArrayList<SPMC>();
             }
             return children;
         }
 
 
-        private Entity parent;
+        private SPMC parent;
 
 
-        private Collection<Entity> children;
+        private Collection<SPMC> children;
 
 
     }
@@ -81,28 +81,28 @@ public class GenealogyTest {
     @Test
     public void test() {
 
-        final Entity of = new Entity();
-        final Entity tm = new Entity();
-        final Entity is = new Entity();
+        final SPMC of = new SPMC();
+        final SPMC tm = new SPMC();
+        final SPMC is = new SPMC();
 
         try {
-            Genealogy.isAncestor(Entity.class, is, null, "parent");
+            Genealogy.isAncestor(SPMC.class, is, null, "parent");
             Assert.fail("passed isAncestor(, null,)");
         } catch (NullPointerException npe) {
             // expected
         }
 
         Assert.assertFalse(Genealogy.isAncestor(
-            Entity.class, null, of, "parent"));
+            SPMC.class, null, of, "parent"));
 
         Assert.assertFalse(Genealogy.isAncestor(
-            Entity.class, is, of, "parent"));
+            SPMC.class, is, of, "parent"));
 
         of.setParent(tm);
-        Assert.assertTrue(Genealogy.isAncestor(Entity.class, tm, of, "parent"));
+        Assert.assertTrue(Genealogy.isAncestor(SPMC.class, tm, of, "parent"));
 
         tm.setParent(is);
-        Assert.assertTrue(Genealogy.isAncestor(Entity.class, is, of, "parent"));
+        Assert.assertTrue(Genealogy.isAncestor(SPMC.class, is, of, "parent"));
 
 
         try {

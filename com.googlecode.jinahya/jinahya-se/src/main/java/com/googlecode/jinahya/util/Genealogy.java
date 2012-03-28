@@ -105,7 +105,7 @@ public final class Genealogy {
      * @param <T> type parameter
      * @param type type
      * @param of the base object
-     * @param name name of the field
+     * @param name field name
      *
      * @return the field value
      *
@@ -129,7 +129,7 @@ public final class Genealogy {
      *
      * @param <T> type parameter
      * @param type type
-     * @param of of
+     * @param of the base object
      * @param name field or property name
      *
      * @return
