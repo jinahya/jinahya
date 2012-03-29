@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2012-03-28T00:22:07.509">
+<pmd version="4.2.5" timestamp="2012-03-30T00:23:48.980">
 <file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-se/src/main/java/com/googlecode/jinahya/io/IO.java">
 <violation beginline="119" endline="119" begincolumn="25" endcolumn="80" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="com.googlecode.jinahya.io" class="IO" method="copy" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
 Avoid unused private methods such as 'copy(InputStream,OutputStream)'.
+</violation>
+</file>
+<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-se/src/main/java/com/googlecode/jinahya/util/Genealogy.java">
+<violation beginline="86" endline="87" begincolumn="26" endcolumn="60" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
+Avoid unused private methods such as 'getPropertyValue(Class,T,String)'.
+</violation>
+<violation beginline="115" endline="116" begincolumn="26" endcolumn="57" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
+Avoid unused private methods such as 'getFieldValue(Class,T,String)'.
+</violation>
+<violation beginline="147" endline="148" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="149" endline="150" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="159" endline="160" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="160" endline="161" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="163" endline="164" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
 </violation>
 </file>
 </pmd>
