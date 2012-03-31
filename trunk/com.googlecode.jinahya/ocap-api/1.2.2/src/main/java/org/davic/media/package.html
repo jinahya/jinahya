@@ -1,0 +1,63 @@
+<html>
+<body>
+Provides various extensions to the Java Media Framework for
+the control of TV oriented audio / video content.<p>
+This javadoc has been edited to match the contents of the MHP
+specification. <p>
+The following classes and interfaces not required in the MHP specification
+have been removed. 
+<ul>
+<li>AccessDeniedEvent
+<li>InvalidEventIDException
+<li>InvalidEventNameException
+<li>MediaTimeEvent
+<li>MediaTimeEventControl
+<li>MediaTimeEventListener
+<li>ResourceIOMediaException
+<li>StreamEvent
+<li>StreamEventControl
+<li>StreamEventListener
+<li>HardwareDataSource
+<li>StartUp
+</ul>
+The following errata agreed in DVB have been implemented with respect to the original DAVIC work.
+<ul>
+<li>MediaTimePositionChangedEvent. (DVB issue #121) <p>
+Add the following constructor:
+<code>MediaTimePositionChangedEvent (Controller from, int previous, int current, int target, Time mediaTime)</code>
+<li>FreezeControl.resume (DVB issue #754)<p>
+The following is added to the description of this method.<p>
+If the player is started and if decoding of the media stream is not frozen then calls to this 
+method shall have no effect otherwise an exception is thrown.
+<li>NotAuthorizedMediaException (DVB issue #770)<p>
+The standard constructors for this exception, a no-argument one and one with a single
+'reason' parameter have been removed and replaced with appropriate ones. The new ones
+enable values to be passed in for the various 'get' methods in the exception.
+<li>FreezeControl.resume (DVB issue  #2363)<p>
+In the description of this method (as modified by DVB issue #754), replace<p>
+If the player is started and if decoding of the media stream is not frozen then calls to this 
+method shall have no effect otherwise an exception is thrown.<p>
+With<p>
+If the player is started and if decoding of the media stream is not frozen then calls to this 
+method shall have no effect.<p>If the player is not started then the exception shall be thrown.
+<li>MediaTimePositionChangedEvent - Constructor (DVB issue #2820)<p>
+Add the following definitions for the parameters of this constructor
+from - the controller whose media position was changed previous 
+previous - the state the controller was in before this event current 
+current - the state the controller was in at the time the event was generated target 
+target - the state that the controller is heading to mediaTime 
+mediaTime - the media time after the change
+<li>NotAuthorizedMediaException - Constructors (DVB issue #770, #776, #2696, #2821, #2696)<p>
+Existing constructors replaced by <p>
+NotAuthorizedMediaException( org.davic.mpeg.Service, int reason ) <p>
+NotAuthorizedMediaException( org.davic.mpeg.ServiceElementaryStream[], int reason[] )<p>
+NotAuthorizedMediaException( org.davic.mpeg.ElementaryStream[], int[], int[] )<p>
+NotAuthorizedMediaException(Service, int major_reason,int minor_reason)<p>
+<li>LanguageControl (DVB issue #2281)
+The following description of semantics is considered to be present:<p>
+If more than one stream with the same language exists, the behaviour of 
+selectLanguage(String)is to select the first listed in the network signalling. 
+NOTE:This is equivalent to item b under 11.4.2.3,"Default media player behaviour".
+</ul>
+</body>
+</html>

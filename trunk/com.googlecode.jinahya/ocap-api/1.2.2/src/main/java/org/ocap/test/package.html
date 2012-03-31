@@ -1,0 +1,114 @@
+<body>
+OCAP testing communications.
+<p>
+OCAP testing requires the test applications executing on OCAP devices be
+able to communicate with an Automated Test Environment (ATE) in a
+manufacturer-independent manner. This differs from the MHP test
+environment, in which MHP device manufacturers provide
+manufacturer-specific implementations to communicate between an ATE and
+an MHP device. The need to communicate with an ATE in a manufacturer-
+independent manner indicates that the OCAP devices SHALL communicate
+with the ATE using a common, defined communications mechanism.
+
+</p>
+<p>
+Since OCAP devices, by definition, must support TCP/IP and UDP/IP for
+interaction channel protocols, TCP/IP and UDP/IP sockets have been
+chosen as the mechanism by which OCAP devices will communicate with an
+OCAP ATE. The interaction channel provides either TCP/IP or UDP/IP
+protocol, via the RF connector labeled 'Cable In' on the OCAP Host
+Device, and the CableCARD. Though the OCAP Host Device supports both
+TCP/IP and UDP/IP, only one of them SHALL be used for the ATE, according
+to the type of CableCARD, once communication between the ATE and Host
+device has been established (see item b) below).
+</p>
+
+
+<p>
+<h2>OCAP compliance testing </h2>
+Due to the large number of OCAP Host Devices which are expected to be 
+made available by manufacturers during certification testing "waves", 
+OCAP compliance testing will need to be able to take advantage of a 
+common, scalable hardware infrastructure. 
+<br>
+The proposed connectivity diagram is shown below in Figure W-1:
+<br>
+<center>
+<img src="doc-files/OCAPNetwork.png" alt="OCAP Test Network"/>
+<br>
+Figure W-1 - Connectivity Diagram </p>.
+</center>
+<br>
+<p class=MsoNormal><br>
+This diagram is intended to show how multiple ATEs can be connected on a common
+IP network with multiple OCAP Host Devices. On the left is a single Out-Of-Band
+(OOB) channel which can transmit a location of a common test Monitor
+Application to all OCAP Host Devices being tested. In-band (IB) delivery
+channels are used to stream test applications, and are controlled by a particular
+ATE instance. All of these IB and OOB channels are multiplexed onto a common RF
+cable which is shared by all OCAP Host Devices being tested. <br>
+Each OCAP Host Device that is being tested is associated with a test harness
+comprised of reset, IR, and media capture subsystems. These subsystems are
+controlled by a particular ATE instance. The ATE instances are shown on the
+right side of the drawing. <br>
+At configuration time, an instance of the ATE is associated with a particular
+IB delivery channel, an OCAP Host Device being tested, and its associated test
+harness components. <br>
+During compliance testing, a particular OCAP Host Device establishes a
+communication channel with a particular instance of the ATE. The ATE is
+responsible for preparing test applications to be loaded onto the OCAP Host
+Device (via its associated IB delivery channel), and for responding to requests
+made by test applications executing on the OCAP Host Device being tested. </p>
+
+
+<p>
+<p>The scenario for establishing communications between an OCAP Host Device
+being tested and an ATE is as follows (details are addressed in the CableLabs'
+ATE documentation): <br>
+a) The ATE uses the &quot;reset for next test&quot; mechanism to set the OCAP
+Host Device being tested into a known default state, ready to receive the
+test-application. This involves a power-cycle of the OCAP Host Device being
+tested. <br>
+b) The ATE begins sending IP datagrams to the IP address of the OCAP Host
+Device it is associated with. <br>
+c) The OCAP Host Device powers up out of reset and reads an XAIT from the out-of-band
+communications channel, signaling the OCAP Host Device to load a Test Monitor
+Application (an unbound application) from an in-band communications channel. <br>
+d) The Test Monitor Application invokes <code><span style='font-size:10.0pt'>OcapSystem.monitorConfiguredSignal()</span></code>
+to enable conformance testing APIs (<code><span style='font-size:10.0pt'>org.ocap.test.OCAPTest</span></code>).
+When monitorConfiguredSignal is called, the implementation will enable the
+conformance testing APIs (see <a
+href="../OcapSystem.html#monitorConfiguredSignal">org.ocap.OcapSystem.monitorConfiguredSignal</a>
+for details and OCAP testing communications below). <br>
+e) Test Monitor Application requests configuration parameters including
+information on the initial channel to tune to using the communications channel
+established in step c. <br>
+f) Tuning to the specified channel initiates a service containing the bound
+testlet application. <br>
+g) Test application executes on OCAP Host Device, communicating with the ATE as
+required via the communications channel opened up in step c. </p>
+
+
+
+<p>
+<h2>OCAP testing communications</h2>
+<p class=MsoNormal>OCAP testing requires that test applications executing on
+OCAP devices be able to communicate with an Automated Test Environment (ATE) in
+a manufacturer-independent manner. The need to communicate with an ATE in a
+manufacturer-independent manner means that OCAP Host Devices SHALL communicate
+with the ATE using a common, bi-directional interaction channel. In an effort
+to isolate OCAP Host Device implementations from the need to implement
+interaction channel protocols, which are necessary only for use in compliance testing,
+the class <code><span style='font-size:10.0pt'>org.ocap.test.OCAPTest</span></code>
+has been defined. This class presents an API to test framework classes which
+can be used for compliance testing. The conceptual diagram of this
+communications structure is presented below: </p>
+<br>
+<center>
+<img src="doc-files/issStack.png" alt="conceptual diagram"/>
+<br>
+Figure W-2 - Interaction Subsystem Design Diagram.
+</center>
+</p>
+
+</body>
