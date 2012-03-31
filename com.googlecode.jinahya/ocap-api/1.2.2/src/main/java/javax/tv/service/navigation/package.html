@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides APIs to navigate through services and hierarchical service information.
+The Navigation package serves two main functions:
+<ul>
+<li>
+It provides access to detailed SI data about each <tt>Service</tt>.</li>
+
+<li>
+It provides a mechanism to group Services based on various filtering criteria.</li>
+</ul>
+Additional information
+about a service can be obtained through the <tt>ServiceDetails</tt> object.
+In contrast to the <tt>Service</tt> interface, <tt>ServiceDetails</tt>
+represents service meta-data that exists in the broadcast. It provides
+such information as the description of the service, the service type and
+the service components.
+
+<p>A <tt>ServiceComponent</tt> represents an individual media or data
+element associated with a <tt>Service</tt>. It can also be associated
+with a <tt>ProgramEvent</tt> if such information is available. The current
+<tt>ProgramEvent</tt> will provide <tt>ServiceComponent</tt> objects belonging
+to the <tt>Service</tt> on which it is carried.
+
+<p>The <tt>SIManager</tt> can also be used to generate a collection of
+services called a <tt>ServiceList</tt> based on filtering criteria represented
+by a <tt>ServiceFilter</tt> object. The filtering criterion may be a specific
+network, transport stream, bouquet, user favorite services, <tt>Locator</tt>,
+etc. A resulting <tt>ServiceList</tt> can be used to sort by service names
+or numbers and to navigate through the <tt>Service</tt> objects it contains.
+The base class <tt>ServiceFilter</tt> is extended to support predefined
+filters such as the <tt>SIElementFilter</tt>, <tt>LocatorFilter</tt>, <tt>PreferenceFilter</tt>,
+etc., which can used to create <tt>ServiceList</tt> objects based on various
+filtering criteria. Applications may define custom filters by extending
+the <tt>ServiceFilter</tt> class and overriding its <tt>accept()</tt> method.
+If no <tt>ServiceFilter</tt> is specified for the filtering operation,
+a default collection representing all services known to the receiver (the
+"installed services") will be generated.
+<br>
+</body>
+</html>

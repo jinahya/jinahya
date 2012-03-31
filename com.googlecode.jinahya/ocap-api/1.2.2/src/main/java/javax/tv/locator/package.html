@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides a means for referencing data and resources accessible via the
+Java TV APIs. The <tt>Locator</tt> interface serves as an opaque
+reference to the location information of entities which are
+addressable within a television receiver.  For example, locators
+can reference broadcast filesystems, portions of service information,
+sources of audio/video content, and interactive applications.
+
+<p>
+A given locator may
+represent transport-independent data and have multiple mappings to
+transport-dependent locators. Methods are provided for discovery of
+such circumstances and for transformation to transport-dependent
+locators.
+
+<p>
+An instance of <tt>Locator</tt> that references a <code>Service</code>
+or <code>ServiceComponent</code> can be converted to a
+<tt>javax.media.MediaLocator</tt> instance through use of the method
+<tt>Locator.toExternalForm()</tt>.
+<br>
+</body>
+</html>
