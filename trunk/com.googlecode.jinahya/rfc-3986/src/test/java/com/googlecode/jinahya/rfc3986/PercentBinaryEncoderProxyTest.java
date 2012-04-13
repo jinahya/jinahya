@@ -19,10 +19,8 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.util.Random;
-
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.binary.Base64;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -72,5 +70,7 @@ public class PercentBinaryEncoderProxyTest {
 
         Assert.assertEquals(actual, expected);
     }
+
+
 }
 

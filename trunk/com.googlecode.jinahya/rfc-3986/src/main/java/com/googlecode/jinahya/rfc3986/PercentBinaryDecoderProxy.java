@@ -18,22 +18,22 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.IOException;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.nio.charset.Charset;
 
 
 /**
- * Proxy for <code>org.apache.commons.codec.BinaryDecoder</code>.
+ * Proxy for
+ * <code>org.apache.commons.codec.BinaryDecoder</code>.
  *
  * <blockquote><pre>
  * // create
  * final BinaryDecoder decoder = (BinaryDecoder)
  *     PercentBinaryDecoderProxy.newInstance();
- * 
+ *
  * // decode
  * decoder.decode(byte[]);
  * </code></pre>
@@ -44,7 +44,9 @@ import java.lang.reflect.Proxy;
 public class PercentBinaryDecoderProxy implements InvocationHandler {
 
 
-    /** BinaryDecoder Class. */
+    /**
+     * BinaryDecoder Class.
+     */
     private static final Class BINARY_DECODER_CLAZZ;
 
 
@@ -58,7 +60,9 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
     }
 
 
-    /** DecoderException Constructor. */
+    /**
+     * DecoderException Constructor.
+     */
     private static final Constructor DECODER_EXCEPTION_CONSTRUCTOR;
 
 
@@ -105,12 +109,11 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        try {
-            return PercentDecoder.decode((byte[]) args[0]);
-        } catch (IOException ioe) {
-            throw (Throwable) DECODER_EXCEPTION_CONSTRUCTOR.newInstance(
-                new Object[]{ioe});
+        if (args[0] instanceof String) {
+            args[0] = ((String) args[0]).getBytes(Charset.forName("US-ASCII"));
         }
+
+        return PercentDecoder.decode((byte[]) args[0]);
     }
 
 

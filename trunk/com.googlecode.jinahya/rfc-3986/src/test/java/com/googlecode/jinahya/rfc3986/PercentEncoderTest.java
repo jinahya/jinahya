@@ -23,11 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-
 import java.util.Random;
-
 import org.apache.commons.lang.RandomStringUtils;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -69,5 +66,7 @@ public class PercentEncoderTest {
 
         Assert.assertEquals(encoded1, encoded2);
     }
+
+
 }
 

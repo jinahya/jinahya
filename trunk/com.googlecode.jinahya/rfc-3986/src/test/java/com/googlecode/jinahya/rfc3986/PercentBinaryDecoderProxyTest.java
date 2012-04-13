@@ -19,10 +19,8 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.util.Random;
-
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.binary.Base64;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -52,7 +50,7 @@ public class PercentBinaryDecoderProxyTest {
 
         try {
             decoder.decode((byte[]) null);
-            Assert.fail("passed: decode((Object) null)");
+            Assert.fail("passed: decode((byte[]) null)");
         } catch (NullPointerException npe) {
             // ok
         }
@@ -72,5 +70,7 @@ public class PercentBinaryDecoderProxyTest {
 
         Assert.assertEquals(actual, expected);
     }
+
+
 }
 

@@ -23,11 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
 import java.util.Random;
-
 import org.apache.commons.lang.RandomStringUtils;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
