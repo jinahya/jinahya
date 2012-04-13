@@ -19,11 +19,8 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.io.IOException;
-
 import java.util.Random;
-
 import org.apache.commons.lang.RandomStringUtils;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

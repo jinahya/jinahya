@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.IOException;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -27,25 +25,28 @@ import java.lang.reflect.Proxy;
 
 
 /**
- * Proxy for <code>org.apache.commons.codec.BinaryEncoder</code>.
+ * Proxy for
+ * <code>org.apache.commons.codec.BinaryEncoder</code>.
  *
  * <blockquote><pre>
  * // create
  * final BinaryEncoder encoder = (BinaryEncoder)
  *     PercentBinaryEncoderProxy.newInstance();
- * 
+ *
  * // encode
  * encoder.encode(byte[]);
  * </blockquote></pre>
- * 
- * 
+ *
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/SId47">BinaryEncoder (Apache Commons Codec)</a>
  */
 public class PercentBinaryEncoderProxy implements InvocationHandler {
 
 
-    /** BinaryEncoder Class. */
+    /**
+     * BinaryEncoder Class.
+     */
     private static final Class BINARY_ENCODER_CLAZZ;
 
 
@@ -59,7 +60,9 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     }
 
 
-    /** EncoderException Constructor. */
+    /**
+     * EncoderException Constructor.
+     */
     private static final Constructor ENCODER_EXCEPTION_CONSTRUCTOR;
 
 
@@ -106,12 +109,11 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        try {
-            return PercentEncoder.encode((byte[]) args[0]);
-        } catch (IOException ioe) {
-            throw (Throwable) ENCODER_EXCEPTION_CONSTRUCTOR.newInstance(
-                new Object[]{ioe});
+        if (args[0] instanceof String) {
+            args[0] = ((String) args[0]).getBytes("UTF-8");
         }
+
+        return PercentEncoder.encode((byte[]) args[0]);
     }
 
 
