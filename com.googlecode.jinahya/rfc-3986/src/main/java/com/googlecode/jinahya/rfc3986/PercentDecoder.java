@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -46,10 +45,9 @@ public class PercentDecoder {
      *
      * @return decoded output
      *
-     * @throws UnsupportedEncodingException
+     * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(final String input)
-        throws UnsupportedEncodingException {
+    public static byte[] decode(final String input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -66,20 +64,18 @@ public class PercentDecoder {
      * @param input input to decode
      *
      * @return decoding output
+     *
+     * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(final byte[] input) {
+    public static byte[] decode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            decode(new ByteArrayInputStream(input), output);
-            output.flush();
-        } catch (IOException ioe) {
-            ioe.printStackTrace(System.err);
-        }
+        decode(new ByteArrayInputStream(input), output);
+        output.flush();
 
         return output.toByteArray();
     }
@@ -172,11 +168,11 @@ public class PercentDecoder {
             case 0x31: // '1'
             case 0x32: // '2'
             case 0x33: // '3'
-            case 0x34:
-            case 0x35:
-            case 0x36:
-            case 0x37:
-            case 0x38:
+            case 0x34: // '4'
+            case 0x35: // '5'
+            case 0x36: // '6'
+            case 0x37: // '7'
+            case 0x38: // '8'
             case 0x39: // '9'
                 return ascii - 0x30; // 0x00 - 0x09
             case 0x41: // 'A'

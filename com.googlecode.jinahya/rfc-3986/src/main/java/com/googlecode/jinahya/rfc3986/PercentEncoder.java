@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 
@@ -45,10 +44,9 @@ public class PercentEncoder {
      *
      * @return encoding output
      *
-     * @throws UnsupportedEncodingException
+     * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final String input)
-        throws UnsupportedEncodingException {
+    public static byte[] encode(final String input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -65,20 +63,18 @@ public class PercentEncoder {
      * @param input bytes to encode
      *
      * @return encoding output
+     *
+     * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final byte[] input) {
+    public static byte[] encode(final byte[] input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            encode(new ByteArrayInputStream(input), output);
-            output.flush();
-        } catch (IOException ioe) {
-            ioe.printStackTrace(System.err);
-        }
+        encode(new ByteArrayInputStream(input), output);
+        output.flush();
 
         return output.toByteArray();
     }
