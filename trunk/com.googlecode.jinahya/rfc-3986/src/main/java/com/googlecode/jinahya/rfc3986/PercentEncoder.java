@@ -157,21 +157,31 @@ public class PercentEncoder {
      *
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
      */
-    private static int itoa(final int i) throws IOException {
+    private static int itoa(final int integer) throws IOException {
 
-        if (i < 0x00) {
-            throw new IllegalArgumentException("wrong integer: " + i);
+        switch (integer) {
+            case 0x00:
+            case 0x01:
+            case 0x02:
+            case 0x03:
+            case 0x04:
+            case 0x05:
+            case 0x06:
+            case 0x07:
+            case 0x08:
+            case 0x09:
+                return integer + 0x30; // '0' - '9'
+            case 0x0A:
+            case 0x0B:
+            case 0x0C:
+            case 0x0D:
+            case 0x0E:
+            case 0x0F:
+                return integer + 0x37; // 'A' - 'F'
+            default:
+                throw new IllegalArgumentException(
+                    "illegal integer: " + integer);
         }
-
-        if (i <= 0x09) { // 0x00 ~ 0x09
-            return i + 0x30; // 0x30('0'), 0x31('1'), ...
-        }
-
-        if (i <= 0x0F) { // 0x0A ~ 0x0F
-            return i + 0x37; // 0x41('A'), 0x42('B'), ...
-        }
-
-        throw new IllegalArgumentException("wrong integer: " + i);
     }
 
 

@@ -134,10 +134,7 @@ public class PercentDecoder {
             throw new NullPointerException("null output");
         }
 
-        final char[] hex = new char[2];
-
-        int h;
-        int l;
+        int high, low;
         for (int c = -1; (c = input.read()) != -1;) {
             if ((c >= 0x30 && c <= 0x39) // digit
                 || (c >= 0x41 && c <= 0x5A) // upper case alpha
@@ -148,13 +145,13 @@ public class PercentDecoder {
                 if (c != 0x25) {
                     throw new IOException("expected '%'");
                 }
-                if ((h = input.read()) == -1) {
+                if ((high = input.read()) == -1) {
                     throw new EOFException("eof");
                 }
-                if ((l = input.read()) == -1) {
+                if ((low = input.read()) == -1) {
                     throw new EOFException("eof");
                 }
-                output.write(atoi(h) << 4 | atoi(l));
+                output.write(atoi(high) << 4 | atoi(low));
             }
         }
     }
@@ -163,39 +160,42 @@ public class PercentDecoder {
     /**
      * Converts a single 7-bit ASCII value to a 4-bit unsigned integer.
      *
-     * @param a 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
+     * @param ascii 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
      * 0x46), or lower alpha (0x61 ~ 0x66)
      *
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      */
-    private static int atoi(final int a) {
+    private static int atoi(final int ascii) {
 
-        if (a < 0x30) { // ~ 0x2F('/')
-            throw new IllegalArgumentException("wrong ascii: " + a);
+        switch (ascii) {
+            case 0x30: // '0'
+            case 0x31: // '1'
+            case 0x32: // '2'
+            case 0x33: // '3'
+            case 0x34:
+            case 0x35:
+            case 0x36:
+            case 0x37:
+            case 0x38:
+            case 0x39: // '9'
+                return ascii - 0x30; // 0x00 - 0x09
+            case 0x41: // 'A'
+            case 0x42: // 'B'
+            case 0x43: // 'C'
+            case 0x44: // 'D'
+            case 0x45: // 'E'
+            case 0x46: // 'F'
+                return ascii - 0x37;
+            case 0x61: // 'a'
+            case 0x62: // 'b'
+            case 0x63: // 'c'
+            case 0x64: // 'd'
+            case 0x65: // 'e'
+            case 0x66: // 'f'
+                return ascii - 0x57;
+            default:
+                throw new IllegalArgumentException("illegal asccii");
         }
-
-        if (a <= 0x39) { // 0x30('0') ~ 0x39('9')
-            return a - 0x30; // 0x00, 0x01, ...
-        }
-
-        if (a <= 0x40) { // 0x3A(':') ~ 0x40('@')
-            throw new IllegalArgumentException("wrong ascii: " + a);
-        }
-
-        if (a <= 0x46) { // 0x41('A') ~ 0x46('F')
-            return a - 0x37; // 0x0A, 0x0B, ...
-        }
-
-        if (a <= 0x60) { // 0x47('G') ~ 0x60('`')
-            throw new IllegalArgumentException("wrong ascii: " + a);
-        }
-
-        if (a <= 0x66) { // 0x61('a') ~ 0x66('f')
-            return a - 0x57; // 0x0A, 0x0B, ...
-        }
-
-        // 0x67('g') ~
-        throw new IllegalArgumentException("wrong ascii: " + a);
     }
 
 
