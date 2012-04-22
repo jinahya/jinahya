@@ -175,8 +175,7 @@ public class PercentEncoder {
             case 0x0F:
                 return integer + 0x37; // 'A' - 'F'
             default:
-                throw new IllegalArgumentException(
-                    "illegal integer: " + integer);
+                throw new IOException("illegal integer: " + integer);
         }
     }
 
