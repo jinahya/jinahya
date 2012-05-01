@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -37,5 +35,7 @@ public class Base64URLEncodingTest
     public Base64URLEncodingTest() {
         super(new Base64URL(), getCommons(), Modifier.TO_SAME);
     }
+
+
 }
 

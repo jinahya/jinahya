@@ -20,11 +20,9 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -146,5 +144,7 @@ public class BaseBinaryEncoderProxyTest {
 
         test(TestVectors.BASE64URL, base, commons);
     }
+
+
 }
 

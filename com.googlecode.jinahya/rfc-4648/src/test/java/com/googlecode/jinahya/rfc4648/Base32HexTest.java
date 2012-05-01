@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -30,5 +28,7 @@ public class Base32HexTest extends BaseTest<Base32Hex> {
     public Base32HexTest() {
         super(new Base32Hex());
     }
+
+
 }
 

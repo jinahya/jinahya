@@ -20,9 +20,7 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import org.apache.commons.codec.BinaryDecoder;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -31,7 +29,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <B>
- * @param <D> 
+ * @param <D>
  */
 @Test(singleThreaded = true)
 public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
@@ -68,5 +66,7 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
 
 
     protected final Modifier modifier;
+
+
 }
 

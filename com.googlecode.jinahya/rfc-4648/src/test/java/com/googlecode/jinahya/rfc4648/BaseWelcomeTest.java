@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-
 import org.testng.annotations.Test;
 
 
@@ -103,5 +102,7 @@ public class BaseWelcomeTest {
         final byte[] decoded = base.decode(encoded);
         assert Arrays.equals(decoded, original) : "fail";
     }
+
+
 }
 

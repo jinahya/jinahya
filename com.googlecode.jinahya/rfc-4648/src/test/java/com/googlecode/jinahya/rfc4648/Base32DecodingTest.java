@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -37,5 +35,7 @@ public class Base32DecodingTest
     public Base32DecodingTest() {
         super(new Base32(), getCommons(), Modifier.TO_SAME);
     }
+
+
 }
 
