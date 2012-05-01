@@ -144,8 +144,14 @@ public class PercentDecoder {
                 if ((high = input.read()) == -1) {
                     throw new EOFException("eof");
                 }
+                if (high > 0x0F) {
+                    throw new IOException("illegal hexdig: " + high);
+                }
                 if ((low = input.read()) == -1) {
                     throw new EOFException("eof");
+                }
+                if (low > 0x0F) {
+                    throw new IOException("illegal hexdig: " + low);
                 }
                 output.write(atoi(high) << 4 | atoi(low));
             }
@@ -160,10 +166,8 @@ public class PercentDecoder {
      * 0x46), or lower alpha (0x61 ~ 0x66)
      *
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
-     *
-     * @throws IOException if ascii is not a valid HEXDIG
      */
-    private static int atoi(final int ascii) throws IOException {
+    private static int atoi(final int ascii) {
 
         switch (ascii) {
             case 0x30: // '0'
@@ -192,7 +196,7 @@ public class PercentDecoder {
             case 0x66: // 'f'
                 return ascii - 0x57;
             default:
-                throw new IOException("illegal ascii: " + ascii);
+                throw new IllegalArgumentException("illegal ascii: " + ascii);
         }
     }
 

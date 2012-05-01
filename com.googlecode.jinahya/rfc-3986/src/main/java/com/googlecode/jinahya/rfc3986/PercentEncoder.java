@@ -153,7 +153,7 @@ public class PercentEncoder {
      *
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
      */
-    private static int itoa(final int integer) throws IOException {
+    private static int itoa(final int integer) {
 
         switch (integer) {
             case 0x00:
@@ -175,7 +175,8 @@ public class PercentEncoder {
             case 0x0F:
                 return integer + 0x37; // 'A' - 'F'
             default:
-                throw new IOException("illegal integer: " + integer);
+                throw new IllegalArgumentException(
+                    "illegal integer: " + integer);
         }
     }
 
