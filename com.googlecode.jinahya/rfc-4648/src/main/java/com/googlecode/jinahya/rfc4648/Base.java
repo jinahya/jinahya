@@ -20,7 +20,6 @@ package com.googlecode.jinahya.rfc4648;
 
 import com.googlecode.jinahya.io.BitInput;
 import com.googlecode.jinahya.io.BitOutput;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -41,19 +40,27 @@ import java.io.Writer;
 public abstract class Base {
 
 
-    /** Default pad character. */
+    /**
+     * Default pad character.
+     */
     static final char PAD = '=';
 
 
-    /** MAGIC NUMBER: OCTET SIZE. */
+    /**
+     * MAGIC NUMBER: OCTET SIZE.
+     */
     private static final int OCTET_SIZE = 8;
 
 
-    /** MAGIC NUMBER: ASCII SIZE. */
+    /**
+     * MAGIC NUMBER: ASCII SIZE.
+     */
     private static final int ASCII_SIZE = 128;
 
 
-    /** MAGIC NUMBER: SMALLEST VISIBLE ASCII. */
+    /**
+     * MAGIC NUMBER: SMALLEST VISIBLE ASCII.
+     */
     private static final int SMALLEST_VISIBLE_ASCII = 33;
 
 
@@ -62,9 +69,19 @@ public abstract class Base {
      *
      * @param a the first operand
      * @param b the second operand
+     *
      * @return calculated least common multiple
      */
     private static int lcm(final int a, final int b) {
+
+        if (a < 0) {
+            throw new IllegalArgumentException("a(" + a + ") < 0");
+        }
+
+        if (b < 0) {
+            throw new IllegalArgumentException("b(" + b + ") < 0");
+        }
+        
         return ((a * b) / gcd(a, b));
     }
 
@@ -74,14 +91,28 @@ public abstract class Base {
      *
      * @param a the first operand
      * @param b the second operand
+     *
      * @return calculated greatest common devisor
      */
     private static int gcd(final int a, final int b) {
+
+        if (a < 0) {
+            throw new IllegalArgumentException("a(" + a + ") < 0");
+        }
+
+        if (b < 0) {
+            throw new IllegalArgumentException("b(" + b + ") < 0");
+        }
+
+        if (a < b) {
+            return gcd(b, a);
+        }
+
         if (b == 0) {
             return a;
-        } else {
-            return gcd(b, a % b);
         }
+
+        return gcd(b, a % b);
     }
 
 
@@ -121,10 +152,13 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes in <code>input</code> and returns encoded characters.
+     * Encodes bytes in
+     * <code>input</code> and returns encoded characters.
      *
      * @param input byte input
+     *
      * @return encoded characters
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final byte[] encode(final byte[] input) throws IOException {
@@ -138,10 +172,13 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from <code>input</code> and return encoded characters.
+     * Encodes bytes from
+     * <code>input</code> and return encoded characters.
      *
      * @param input byte input
+     *
      * @return encoded characters
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final byte[] encode(final InputStream input) throws IOException {
@@ -160,10 +197,13 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from <code>input</code> and writes to <code>output</code>.
+     * Encodes bytes from
+     * <code>input</code> and writes to
+     * <code>output</code>.
      *
      * @param input input
      * @param output output
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final void encode(final InputStream input, final OutputStream output)
@@ -184,11 +224,13 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from given <code>input</code> and writes those encoded
-     * characters to <code>output</code>.
+     * Encodes bytes from given
+     * <code>input</code> and writes those encoded characters to
+     * <code>output</code>.
      *
      * @param input binary input
      * @param output character output
+     *
      * @throws IOException if an I/O error occurs
      */
     public final void encode(final InputStream input, final Writer output)
@@ -207,11 +249,13 @@ public abstract class Base {
 
 
     /**
-     * Encodes bits from <code>input</code> and write those encoded characters
-     * to <code>output</code>.
+     * Encodes bits from
+     * <code>input</code> and write those encoded characters to
+     * <code>output</code>.
      *
      * @param input binary input
      * @param output character output
+     *
      * @throws IOException if an I/O error occurs
      */
     private void encode(final BitInput input, final Writer output)
@@ -263,10 +307,13 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters in <code>input</code> and return decoded bytes.
+     * Decodes characters in
+     * <code>input</code> and return decoded bytes.
      *
      * @param input character input
+     *
      * @return decoded bytes
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final byte[] decode(final byte[] input) throws IOException {
@@ -280,10 +327,13 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from <code>input</code> and return decoded bytes.
+     * Decodes characters from
+     * <code>input</code> and return decoded bytes.
      *
      * @param input character input
+     *
      * @return decoded bytes
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final byte[] decode(final InputStream input) throws IOException {
@@ -302,11 +352,13 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from <code>input</code> and writes decoded bytes to
+     * Decodes characters from
+     * <code>input</code> and writes decoded bytes to
      * <code>output</code>.
      *
      * @param input input
      * @param output output
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final void decode(final InputStream input, final OutputStream output)
@@ -327,11 +379,13 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from <code>input</code> and writes decoded bytes to
+     * Decodes characters from
+     * <code>input</code> and writes decoded bytes to
      * <code>output</code>.
      *
      * @param input character input
      * @param output binary output
+     *
      * @throws IOException if an I/O error occurs
      */
     public final void decode(final Reader input, final OutputStream output)
@@ -350,11 +404,13 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from <code>input</code> and writes decoded binary to
+     * Decodes characters from
+     * <code>input</code> and writes decoded binary to
      * <code>output</code>.
      *
      * @param input character input
      * @param output binary output
+     *
      * @throws IOException if an I/O error occurs
      */
     private void decode(final Reader input, final BitOutput output)
@@ -423,27 +479,39 @@ public abstract class Base {
     }
 
 
-    /** characters for encoding. */
+    /**
+     * characters for encoding.
+     */
     private final byte[] encode;
 
 
-    /** characters for decoding. */
+    /**
+     * characters for decoding.
+     */
     private final byte[] decode;
 
 
-    /** flag for padding. */
+    /**
+     * flag for padding.
+     */
     private final boolean padding;
 
 
-    /** number of bits per character. */
+    /**
+     * number of bits per character.
+     */
     private final int bitsPerChar;
 
 
-    /** number of bytes per word. */
+    /**
+     * number of bytes per word.
+     */
     private final int bytesPerWord;
 
 
-    /** number of characters per word. */
+    /**
+     * number of characters per word.
+     */
     private final int charsPerWord;
 
 
