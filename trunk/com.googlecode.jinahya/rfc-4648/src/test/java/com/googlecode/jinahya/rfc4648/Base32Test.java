@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -30,4 +28,7 @@ public class Base32Test extends BaseTest<Base32> {
     public Base32Test() {
         super(new Base32());
     }
+
+
 }
+

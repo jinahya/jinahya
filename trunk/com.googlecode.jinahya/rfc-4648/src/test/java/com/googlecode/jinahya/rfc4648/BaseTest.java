@@ -20,7 +20,6 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.io.IOException;
 import java.util.Random;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -75,5 +74,7 @@ public abstract class BaseTest<B extends Base> {
 
 
     protected final B base;
+
+
 }
 
