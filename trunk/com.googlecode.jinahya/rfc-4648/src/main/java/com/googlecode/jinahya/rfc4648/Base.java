@@ -81,8 +81,10 @@ public abstract class Base {
         if (b < 0) {
             throw new IllegalArgumentException("b(" + b + ") < 0");
         }
-        
-        return ((a * b) / gcd(a, b));
+
+        return (a / gcd(a, b)) * b;
+
+        //return ((a * b) / gcd(a, b));
     }
 
 
