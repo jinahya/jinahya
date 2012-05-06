@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2012-05-06T00:27:55.649">
+<pmd version="4.2.5" timestamp="2012-05-07T00:27:08.291">
 <file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-se/src/main/java/com/googlecode/jinahya/io/IO.java">
 <violation beginline="119" endline="119" begincolumn="25" endcolumn="80" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="com.googlecode.jinahya.io" class="IO" method="copy" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
 Avoid unused private methods such as 'copy(InputStream,OutputStream)'.
