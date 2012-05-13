@@ -109,10 +109,6 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        if (args[0] instanceof String) {
-            args[0] = ((String) args[0]).getBytes("UTF-8");
-        }
-
         return PercentEncoder.encode((byte[]) args[0]);
     }
 

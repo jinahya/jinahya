@@ -109,10 +109,6 @@ public class PercentBinaryDecoderProxy implements InvocationHandler {
             throw new NullPointerException("null source");
         }
 
-        if (args[0] instanceof String) {
-            args[0] = ((String) args[0]).getBytes(Charset.forName("US-ASCII"));
-        }
-
         return PercentDecoder.decode((byte[]) args[0]);
     }
 

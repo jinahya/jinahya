@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 
@@ -43,16 +44,18 @@ public class PercentEncoder {
      * @param input string to encode
      *
      * @return encoding output
-     *
-     * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final String input) throws IOException {
+    public static byte[] encode(final String input) {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        return encode(input.getBytes("UTF-8"));
+        try {
+            return encode(input.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("'UTF-8' is not supported");
+        }
     }
 
 
@@ -63,18 +66,20 @@ public class PercentEncoder {
      * @param input bytes to encode
      *
      * @return encoding output
-     *
-     * @throws IOException if an I/O error occurs
      */
-    public static byte[] encode(final byte[] input) throws IOException {
+    public static byte[] encode(final byte[] input) {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        encode(new ByteArrayInputStream(input), output);
-        output.flush();
+        try {
+            encode(new ByteArrayInputStream(input), output);
+            output.flush();
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
 
         return output.toByteArray();
     }
@@ -138,7 +143,7 @@ public class PercentEncoder {
             } else {
                 output.write(0x25); // '%'
                 output.write(itoa(b >> 4));
-                output.write(itoa(b & 0xF));
+                output.write(itoa(b & 0x0F));
             }
         }
     }
@@ -153,9 +158,9 @@ public class PercentEncoder {
      *
      * @return 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~ 0x46)
      */
-    private static int itoa(final int integer) {
+    private static int itoa(final int i) {
 
-        switch (integer) {
+        switch (i) {
             case 0x00:
             case 0x01:
             case 0x02:
@@ -166,17 +171,17 @@ public class PercentEncoder {
             case 0x07:
             case 0x08:
             case 0x09:
-                return integer + 0x30; // '0' - '9'
+                return i + 0x30; // '0' - '9'
             case 0x0A:
             case 0x0B:
             case 0x0C:
             case 0x0D:
             case 0x0E:
             case 0x0F:
-                return integer + 0x37; // 'A' - 'F'
+                return i + 0x37; // 'A' - 'F'
             default:
                 throw new IllegalArgumentException(
-                    "illegal integer: " + integer);
+                    "illegal integer: " + i);
         }
     }
 

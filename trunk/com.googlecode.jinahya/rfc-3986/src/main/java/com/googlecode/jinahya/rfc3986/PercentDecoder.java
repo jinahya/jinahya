@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -44,16 +45,18 @@ public class PercentDecoder {
      * @param input input to decode
      *
      * @return decoded output
-     *
-     * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(final String input) throws IOException {
+    public static byte[] decode(final String input) {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        return decode(input.getBytes("US-ASCII"));
+        try {
+            return decode(input.getBytes("US-ASCII"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("'US-ASCII' is not supported?");
+        }
     }
 
 
@@ -64,18 +67,21 @@ public class PercentDecoder {
      * @param input input to decode
      *
      * @return decoding output
-     *
-     * @throws IOException if an I/O error occurs
      */
-    public static byte[] decode(final byte[] input) throws IOException {
+    public static byte[] decode(final byte[] input) {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        decode(new ByteArrayInputStream(input), output);
-        output.flush();
+        final ByteArrayOutputStream output =
+            new ByteArrayOutputStream(input.length * 3);
+        try {
+            decode(new ByteArrayInputStream(input), output);
+            output.flush();
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
 
         return output.toByteArray();
     }
@@ -130,7 +136,7 @@ public class PercentDecoder {
             throw new NullPointerException("null output");
         }
 
-        int high, low;
+        int h, l;
         for (int c = -1; (c = input.read()) != -1;) {
             if ((c >= 0x30 && c <= 0x39) // digit
                 || (c >= 0x41 && c <= 0x5A) // upper case alpha
@@ -141,19 +147,13 @@ public class PercentDecoder {
                 if (c != 0x25) {
                     throw new IOException("0x25('%') expected but got: " + c);
                 }
-                if ((high = input.read()) == -1) {
+                if ((h = input.read()) == -1) {
                     throw new EOFException("eof");
                 }
-                if (high > 0x0F) {
-                    throw new IOException("illegal hexdig: " + high);
-                }
-                if ((low = input.read()) == -1) {
+                if ((l = input.read()) == -1) {
                     throw new EOFException("eof");
                 }
-                if (low > 0x0F) {
-                    throw new IOException("illegal hexdig: " + low);
-                }
-                output.write(atoi(high) << 4 | atoi(low));
+                output.write(atoi(h) << 4 | atoi(l));
             }
         }
     }
@@ -162,14 +162,14 @@ public class PercentDecoder {
     /**
      * Converts a single 7-bit ASCII value to a 4-bit unsigned integer.
      *
-     * @param ascii 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
+     * @param a 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
      * 0x46), or lower alpha (0x61 ~ 0x66)
      *
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      */
-    private static int atoi(final int ascii) {
+    private static int atoi(final int a) {
 
-        switch (ascii) {
+        switch (a) {
             case 0x30: // '0'
             case 0x31: // '1'
             case 0x32: // '2'
@@ -180,23 +180,23 @@ public class PercentDecoder {
             case 0x37: // '7'
             case 0x38: // '8'
             case 0x39: // '9'
-                return ascii - 0x30; // 0x00 - 0x09
+                return a - 0x30; // 0x00 - 0x09
             case 0x41: // 'A'
             case 0x42: // 'B'
             case 0x43: // 'C'
             case 0x44: // 'D'
             case 0x45: // 'E'
             case 0x46: // 'F'
-                return ascii - 0x37;
+                return a - 0x37;
             case 0x61: // 'a'
             case 0x62: // 'b'
             case 0x63: // 'c'
             case 0x64: // 'd'
             case 0x65: // 'e'
             case 0x66: // 'f'
-                return ascii - 0x57;
+                return a - 0x57;
             default:
-                throw new IllegalArgumentException("illegal ascii: " + ascii);
+                throw new IllegalArgumentException("illegal ascii: " + a);
         }
     }
 
