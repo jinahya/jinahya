@@ -165,7 +165,7 @@ public final class IO {
     /**
      * Creates a new instance.
      */
-    private IO() {
+    protected IO() {
         super();
     }
 
