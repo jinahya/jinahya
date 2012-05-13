@@ -2,4 +2,5 @@ com.googlecode.jinahya.crypto
 com.googlecode.jinahya.io
 com.googlecode.jinahya.util
 com.googlecode.jinahya.util.zip
+com.googlecode.jinahya.xml.bind
 com.googlecode.jinahya.xml.bind.annotation.adapters
