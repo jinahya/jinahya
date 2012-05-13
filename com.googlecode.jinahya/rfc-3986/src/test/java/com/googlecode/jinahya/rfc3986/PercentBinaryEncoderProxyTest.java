@@ -50,7 +50,7 @@ public class PercentBinaryEncoderProxyTest {
 
         try {
             encoder.encode((byte[]) null);
-            Assert.fail("passed: encode((Object) null)");
+            Assert.fail("passed: encode((byte[]) null)");
         } catch (NullPointerException npe) {
             // ok
         }
