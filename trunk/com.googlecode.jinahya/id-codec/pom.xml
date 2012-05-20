@@ -17,7 +17,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.4</version>
+        <version>6.5.2</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -31,7 +31,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.dependency.jinahya-accessible.version>1.0-alpha-3</project.dependency.jinahya-accessible.version>
   </properties>
 
   <build>
@@ -166,11 +165,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <links>
-                  <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/${project.dependency.jinahya-accessible.version}/apidocs</link>
-                </links>
-              </configuration>
+              <configuration/>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>

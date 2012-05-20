@@ -34,7 +34,7 @@ public class IdCodecTest {
     private static final Random RANDOM = new Random();
 
 
-    private static void test(final long decoded) {
+    private static void encodeAndAssert(final long decoded) {
 
         final String encoded1 = IdCodec.encodeId(decoded);
         Assert.assertEquals(IdCodec.decodeId(encoded1), decoded);
@@ -49,39 +49,42 @@ public class IdCodecTest {
 
     @Test(invocationCount = 1024)
     public void testRandom() {
-        test(RANDOM.nextLong());
+        encodeAndAssert(RANDOM.nextLong());
     }
 
 
     @Test
-    public void test2() {
+    public void testFiveToFive() {
         System.out.printf("%1$20s %2$20s %3$20s\n", "id", "encoded1",
                           "encoded2");
         System.out.printf("%1$20s %1$20s %1$20s\n", "--------------------");
         for (long decoded = -5L; decoded < 5L; decoded++) {
-            test(decoded);
-            test(decoded);
+            encodeAndAssert(decoded);
+            encodeAndAssert(decoded);
         }
-        test(-100000000L);
-        test(100000000L);
-        test(Long.MIN_VALUE);
-        test(Long.MIN_VALUE);
-        test(Long.MAX_VALUE);
-        test(Long.MAX_VALUE);
+        encodeAndAssert(-100000000L);
+        encodeAndAssert(100000000L);
+        encodeAndAssert(Long.MIN_VALUE);
+        encodeAndAssert(Long.MIN_VALUE);
+        encodeAndAssert(Long.MAX_VALUE);
+        encodeAndAssert(Long.MAX_VALUE);
     }
 
 
     @Test(invocationCount = 1024)
     public void testUUID() {
         final UUID original = UUID.randomUUID();
-        final String encoded = IdCodec.encodeUUID(original);
-        final UUID decoded = IdCodec.decodeUUID(encoded);
-        Assert.assertEquals(decoded, original);
-        Assert.assertEquals(decoded.getMostSignificantBits(),
-                            original.getMostSignificantBits());
-        Assert.assertEquals(decoded.getLeastSignificantBits(),
-                            original.getLeastSignificantBits());
-        System.out.printf("%1$36s %2$40s\n", original.toString(), encoded);
+        for (int i = 0; i < 5; i++) {
+            final String encoded = IdCodec.encodeUUID(original);
+            final UUID decoded = IdCodec.decodeUUID(encoded);
+            Assert.assertEquals(decoded, original);
+            Assert.assertEquals(decoded.getMostSignificantBits(),
+                                original.getMostSignificantBits());
+            Assert.assertEquals(decoded.getLeastSignificantBits(),
+                                original.getLeastSignificantBits());
+            System.out.printf("%1$36s %2$40s\n", original.toString(), encoded);
+        }
+        System.out.println();
     }
 
 

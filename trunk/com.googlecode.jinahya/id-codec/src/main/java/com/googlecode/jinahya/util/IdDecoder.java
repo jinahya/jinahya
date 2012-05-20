@@ -31,9 +31,9 @@ public class IdDecoder {
 
 
     /**
-     * Instance holder.
+     * Private instance holder.
      */
-    private static class PrivateInstanceHolder {
+    private static final class PrivateInstanceHolder {
 
 
         /**
@@ -110,6 +110,12 @@ public class IdDecoder {
     }
 
 
+    /**
+     * Decodes a single block.
+     *
+     * @param encoded single block to decode
+     * @return decoded block
+     */
     private long block(final String encoded) {
 
         final StringBuilder builder = new StringBuilder(
