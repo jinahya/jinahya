@@ -30,6 +30,9 @@ import java.util.regex.PatternSyntaxException;
 public class IdCodec {
 
 
+    /**
+     * Pattern string for single block.
+     */
     private static final String SINGLE_PATTERN_STRING =
         "([a-z0-9]+)-([a-z0-9]+)";
 
@@ -49,6 +52,9 @@ public class IdCodec {
     }
 
 
+    /**
+     * Pattern string for double block.
+     */
     private static final String DOUBLE_PATTERN_STRING =
         "(" + SINGLE_PATTERN_STRING + ")-(" + SINGLE_PATTERN_STRING + ")";
 
@@ -69,9 +75,9 @@ public class IdCodec {
 
 
     /**
-     * private instance holder.
+     * Private instance holder.
      */
-    private static class PrivateInstanceHolder {
+    private static final class PrivateInstanceHolder {
 
 
         /**
