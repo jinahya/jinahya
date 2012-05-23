@@ -104,16 +104,17 @@ public final class JinahyaCharacter {
             throw new IllegalArgumentException("empty codePoints");
         }
 
-        final boolean isJavaIdentifierStart =
-            Character.isJavaIdentifierStart(codePoints[0]);
-        boolean areJavaIdentifierPart = true;
+        if (!Character.isJavaIdentifierStart(codePoints[0])) {
+            return false;
+        }
+
         for (int i = 1; i < codePoints.length; i++) {
             if (!Character.isJavaIdentifierPart(codePoints[i])) {
-                areJavaIdentifierPart = false;
+                return false;
             }
         }
 
-        return isJavaIdentifierStart && areJavaIdentifierPart;
+        return true;
     }
 
 
