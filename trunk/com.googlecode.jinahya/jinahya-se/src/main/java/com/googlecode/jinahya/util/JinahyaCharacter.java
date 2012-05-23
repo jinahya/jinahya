@@ -90,6 +90,72 @@ public final class JinahyaCharacter {
 
 
     /**
+     *
+     * @param codePoints
+     * @return
+     */
+    public static boolean isJavaIdentifier(final int[] codePoints) {
+
+        if (codePoints == null) {
+            throw new NullPointerException("null codePoints");
+        }
+
+        if (codePoints.length == 0) {
+            throw new IllegalArgumentException("empty codePoints");
+        }
+
+        final boolean isJavaIdentifierStart =
+            Character.isJavaIdentifierStart(codePoints[0]);
+        boolean areJavaIdentifierPart = true;
+        for (int i = 1; i < codePoints.length; i++) {
+            if (!Character.isJavaIdentifierPart(codePoints[i])) {
+                areJavaIdentifierPart = false;
+            }
+        }
+
+        return isJavaIdentifierStart && areJavaIdentifierPart;
+    }
+
+
+    /**
+     *
+     * @param seq
+     * @return
+     */
+    public static boolean isJavaIdentifier(final CharSequence seq) {
+
+        if (seq == null) {
+            throw new NullPointerException("null seq");
+        }
+
+        if (seq.length() == 0) {
+            throw new IllegalArgumentException("empty seq");
+        }
+
+        return isJavaIdentifier(codePoints(seq, 0, seq.length()));
+    }
+
+
+    /**
+     *
+     * @param a
+     * @return
+     */
+    public static boolean isJavaIdentifier(final char[] a) {
+
+        if (a == null) {
+            throw new NullPointerException("null a");
+        }
+
+        if (a.length == 0) {
+            throw new IllegalArgumentException("empty a");
+        }
+
+        return isJavaIdentifier(codePoints(a, 0, a.length));
+    }
+
+
+    /**
      * PRIVATE.
      */
     private JinahyaCharacter() {
