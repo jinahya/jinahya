@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011 - 2012</copyright>
     <item>
-      <title>File: 13,
-             Errors: 168,
+      <title>File: 14,
+             Errors: 174,
              Warnings: 0,
              Infos: 0
       </title>
@@ -95,6 +95,20 @@
                 </td>
                 <td>
                   10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.util.JinahyaCollections.java">com/googlecode/jinahya/util/JinahyaCollections.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
                 </td>
               </tr>
                           <tr>
