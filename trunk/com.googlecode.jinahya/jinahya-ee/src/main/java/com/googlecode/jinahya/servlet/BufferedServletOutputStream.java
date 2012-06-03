@@ -20,7 +20,6 @@ package com.googlecode.jinahya.servlet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 import javax.servlet.ServletOutputStream;
 
 
