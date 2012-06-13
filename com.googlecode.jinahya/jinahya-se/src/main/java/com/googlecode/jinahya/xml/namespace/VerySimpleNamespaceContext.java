@@ -32,9 +32,10 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param prefix
-     * @param namespaceURI
+     * @param prefix XML namespace prefix
+     * @param namespaceURI XML namespace URI
      */
     public VerySimpleNamespaceContext(final String prefix,
                                       final String namespaceURI) {
