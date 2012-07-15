@@ -18,17 +18,15 @@
 package com.googlecode.jinahya.xml.namespace;
 
 
-import java.util.Collections;
-import java.util.Iterator;
 import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
 
 
 /**
+ * Very simple implementation for NamespaceContext.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class VerySimpleNamespaceContext implements NamespaceContext {
+public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
 
 
     /**
@@ -45,8 +43,18 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
             throw new NullPointerException("null prefix");
         }
 
+        if (isPredefinedPrefix(prefix)) {
+            throw new IllegalArgumentException(
+                "prefix(" + prefix + ") is one of predefined");
+        }
+
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
+        }
+
+        if (isPredefinedNamespaceURI(namespaceURI)) {
+            throw new IllegalArgumentException(
+                "namespaceURI(" + namespaceURI + ") is one of predefined");
         }
 
         this.prefix = prefix;
@@ -61,16 +69,8 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
             throw new IllegalArgumentException("null prefix");
         }
 
-        if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
-            return XMLConstants.NULL_NS_URI;
-        }
-
-        if (XMLConstants.XML_NS_PREFIX.equals(prefix)) {
-            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-        }
-
-        if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix)) {
-            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+        if (isPredefinedPrefix(prefix)) {
+            return getPredefinedNamespaceURI(prefix);
         }
 
         if (this.prefix.equals(prefix)) {
@@ -84,16 +84,12 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
     @Override
     public String getPrefix(final String namespaceURI) {
 
-        if (XMLConstants.NULL_NS_URI.equals(namespaceURI)) {
-            return XMLConstants.DEFAULT_NS_PREFIX;
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("null namespaceURI");
         }
 
-        if (XMLConstants.XML_NS_URI.equals(namespaceURI)) {
-            return XMLConstants.XML_NS_PREFIX;
-        }
-
-        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return XMLConstants.XMLNS_ATTRIBUTE;
+        if (isPredefinedNamespaceURI(namespaceURI)) {
+            return getPredefinedPrefix(namespaceURI);
         }
 
         if (this.namespaceURI.equals(namespaceURI)) {
@@ -101,24 +97,6 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
         }
 
         return null;
-    }
-
-
-    @Override
-    @SuppressWarnings("rawtypes")
-    public Iterator getPrefixes(final String namespaceURI) {
-
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("null namespaceURI");
-        }
-
-        final String prefix = getPrefix(namespaceURI);
-
-        if (prefix == null) {
-            return Collections.emptyIterator();
-        }
-
-        return Collections.singleton(prefix).iterator();
     }
 
 

@@ -20,9 +20,7 @@ package com.googlecode.jinahya.util;
 
 import com.googlecode.jinahya.io.BitInput;
 import com.googlecode.jinahya.io.BitOutput;
-
 import java.io.IOException;
-
 import java.util.Collection;
 
 
@@ -30,18 +28,23 @@ import java.util.Collection;
  * Abstract BitCollectable.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <A> <code>BitAccessible</code> type parameter
+ * @param <A>
+ * <code>BitAccessible</code> type parameter
  */
 public abstract class AbstractBitCollectable<A extends BitAccessible>
     extends AbstractCollectable<A>
     implements BitCollectable<A> {
 
 
-    /** GENERATED. */
+    /**
+     * GENERATED.
+     */
     private static final long serialVersionUID = 6344599398970732643L;
 
 
-    /** count length. */
+    /**
+     * count length.
+     */
     private static final int ACCESSIBLE_SIZE_LENGTH = 31;
 
 
@@ -56,10 +59,12 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
 
 
     /**
-     * Reads accessibles from given <code>input</code>. First, a 31-bit unsigned
-     * integer is read for accessible count. And reads all accessibles.
+     * Reads accessibles from given
+     * <code>input</code>. First, a 31-bit unsigned integer is read for
+     * accessible count. And reads all accessibles.
      *
      * @param input input
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -88,10 +93,12 @@ public abstract class AbstractBitCollectable<A extends BitAccessible>
 
 
     /**
-     * Writes accessibles to given <code>output</code>. First, a 31-bit unsigned
-     * integer is written for accessible count. And writes all accessibles.
+     * Writes accessibles to given
+     * <code>output</code>. First, a 31-bit unsigned integer is written for
+     * accessible count. And writes all accessibles.
      *
      * @param output output
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override

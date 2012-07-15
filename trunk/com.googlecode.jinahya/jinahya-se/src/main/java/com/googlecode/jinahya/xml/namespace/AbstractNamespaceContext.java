@@ -31,16 +31,33 @@ import javax.xml.namespace.NamespaceContext;
 public abstract class AbstractNamespaceContext implements NamespaceContext {
 
 
+    protected static boolean isPredefinedPrefix(final String prefix) {
+
+        return XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)
+               || XMLConstants.XML_NS_PREFIX.equals(prefix)
+               || XMLConstants.XMLNS_ATTRIBUTE.equals(prefix);
+    }
+
+
+    protected static boolean isPredefinedNamespaceURI(
+        final String namespaceURI) {
+
+        return XMLConstants.NULL_NS_URI.equals(namespaceURI)
+               || XMLConstants.XML_NS_URI.equals(namespaceURI)
+               || XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI);
+    }
+
+
     /**
      *
      * @param prefix
      *
      * @return
      */
-    protected String getPredefinedNamespaceURI(final String prefix) {
+    protected static String getPredefinedNamespaceURI(final String prefix) {
 
         if (prefix == null) {
-            throw new IllegalArgumentException("null prefix");
+            throw new NullPointerException("null prefix");
         }
 
         if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
@@ -55,7 +72,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
             return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
         }
 
-        return XMLConstants.NULL_NS_URI;
+        throw new IllegalArgumentException("not predefined");
     }
 
 
@@ -65,7 +82,11 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
      *
      * @return
      */
-    protected String getPredefinedPrefix(final String namespaceURI) {
+    protected static String getPredefinedPrefix(final String namespaceURI) {
+
+        if (namespaceURI == null) {
+            throw new NullPointerException("null namespaceURI");
+        }
 
         if (XMLConstants.NULL_NS_URI.equals(namespaceURI)) {
             return XMLConstants.DEFAULT_NS_PREFIX;
@@ -79,7 +100,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
             return XMLConstants.XMLNS_ATTRIBUTE;
         }
 
-        return null;
+        throw new IllegalArgumentException("not predefined");
     }
 
 
