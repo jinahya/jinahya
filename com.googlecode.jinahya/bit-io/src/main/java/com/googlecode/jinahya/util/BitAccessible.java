@@ -20,7 +20,6 @@ package com.googlecode.jinahya.util;
 
 import com.googlecode.jinahya.io.BitInput;
 import com.googlecode.jinahya.io.BitOutput;
-
 import java.io.IOException;
 
 
@@ -33,18 +32,22 @@ public interface BitAccessible extends Accessible {
 
 
     /**
-     * Reads information from given <code>input</code>.
+     * Reads information from given
+     * <code>input</code>.
      *
      * @param input input
+     *
      * @throws IOException if an I/O error occurs.
      */
     void read(BitInput input) throws IOException;
 
 
     /**
-     * Writes information to given <code>output</code>.
+     * Writes information to given
+     * <code>output</code>.
      *
      * @param output output
+     *
      * @throws IOException if an I/O error occurs.
      */
     void write(BitOutput output) throws IOException;
