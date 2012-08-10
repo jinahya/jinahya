@@ -30,8 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -106,8 +106,16 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("null storageUser");
         }
 
+        if (storageUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty storageUser");
+        }
+
         if (storagePass == null) {
             throw new IllegalArgumentException("null storagePass");
+        }
+
+        if (storagePass.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty storagePass");
         }
 
         this.storageUser = storageUser;
@@ -141,7 +149,9 @@ public class UcloudStorageClient {
 
         if (responseCode == 200) {
             storageUrl = connection.getHeaderField("X-Storage-URL");
+            System.out.println("storageUrl: " + storageUrl);
             authToken = connection.getHeaderField("X-Auth-Token");
+            System.out.println("authToken: " + authToken);
             return true;
         }
 
@@ -152,38 +162,36 @@ public class UcloudStorageClient {
 
 
     /**
-     * Lists container names.
      *
-     * @return a list of container names or <code>null</code> if failed
-     */
-    /**
-     *
-     * @param containerNames
      * @param queryParams
+     * @param containerNames
      * @return
      * @throws IOException
      */
-    public boolean readContainerNames(final List<String> containerNames,
-                                      final Map<String, String> queryParams)
+    public boolean readContainerNames(final Map<String, String> queryParams,
+                                      final Collection<String> containerNames)
         throws IOException {
 
-        System.out.println("readContainerNames(" + containerNames + ", "
-                           + queryParams + ")");
-
-        if (containerNames == null) {
-            throw new IllegalArgumentException("null containerNames");
-        }
+        System.out.println("readContainerNames(" + queryParams + ", "
+                           + containerNames + ")");
 
         if (queryParams == null) {
             // ok
             //throw new IllegalArgumentException("null queryParams");
         }
 
+        if (containerNames == null) {
+            throw new IllegalArgumentException("null containerNames");
+        }
+
         if (!authenticate()) {
             return false;
         }
 
+        final String path = storageUrl;
+        System.out.println("path: " + storageUrl);
         final URL url = new URL(append(storageUrl, queryParams));
+        System.out.println("url: " + url.toExternalForm());
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -317,7 +325,7 @@ public class UcloudStorageClient {
      */
     public boolean readObjectNames(final String containerName,
                                    final Map<String, String> queryParams,
-                                   final List<String> objectNames)
+                                   final Collection<String> objectNames)
         throws IOException {
 
         if (containerName == null) {
@@ -325,7 +333,8 @@ public class UcloudStorageClient {
         }
 
         if (queryParams == null) {
-            throw new IllegalArgumentException("null queryParams");
+            // ok
+            //throw new IllegalArgumentException("null queryParams");
         }
 
         if (objectNames == null) {
@@ -336,14 +345,15 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final URL url = new URL(append(
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8"),
-            queryParams));
+        final String path =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
+        System.out.println("path: " + path);
+        final URL url = new URL(append(path, queryParams));
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("PUT");
+        connection.setRequestMethod("GET");
         connection.setDoOutput(true);
         connection.setRequestProperty("X-Auth-Token", authToken);
 
@@ -580,7 +590,7 @@ public class UcloudStorageClient {
             @Override
             public void setLength(long length) {
                 if (contentLength != null) {
-                    contentLength[0] = length;
+                    contentLength[0] = Long.valueOf(length);
                 }
             }
 
@@ -844,5 +854,7 @@ public class UcloudStorageClient {
 
 
     private transient String responseMessage;
+
+
 }
 
