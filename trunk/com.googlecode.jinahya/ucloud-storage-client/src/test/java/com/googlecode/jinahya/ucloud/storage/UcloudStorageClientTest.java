@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -95,15 +96,14 @@ public class UcloudStorageClientTest {
         final Map<String, String> queryParams = new HashMap<String, String>();
         queryParams.put("format", "json");
 
-        client.readContainerNames(containerNames,
-                                  Collections.<String, String>emptyMap());
+        client.readContainerNames(Collections.<String, String>emptyMap(), containerNames);
         for (String containerName : containerNames) {
             System.out.println("containerName: " + containerName);
         }
     }
 
 
-    @Test(dependsOnMethods = {"testCreateContainer"})
+    @Test(dependsOnMethods = {"testReadContainerNames"})
     public void testUpdateObject() throws IOException {
 
         System.out.println("testUpdateObject()");
@@ -133,6 +133,26 @@ public class UcloudStorageClientTest {
                 client.updateObject(
                     containerName, objectName, "application/octet-stream", -1L,
                     new ByteArrayInputStream(contentData));
+            }
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testUpdateObject"})
+    public void testReadObjectNames() throws IOException {
+
+        System.out.println("readObjectNames()");
+        
+        final UcloudStorageClient client =
+            new UcloudStorageClient(storageUser, storagePass);
+
+        final Collection<String> objectNames = new ArrayList<String>();
+        for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
+            objectNames.clear();
+            client.readObjectNames(containerName, null, objectNames);
+            for (String objectName : objectNames) {
+                System.out.println("\tobjectName: " + objectName);
             }
         }
     }
@@ -200,5 +220,7 @@ public class UcloudStorageClientTest {
 
 
     private String storagePass;
+
+
 }
 
