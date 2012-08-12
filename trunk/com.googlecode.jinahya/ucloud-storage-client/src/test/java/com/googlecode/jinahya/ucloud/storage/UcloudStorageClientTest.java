@@ -94,9 +94,9 @@ public class UcloudStorageClientTest {
         final List<String> containerNames = new ArrayList<String>();
 
         final Map<String, String> queryParams = new HashMap<String, String>();
-        queryParams.put("format", "json");
+        queryParams.put("format", "xml");
 
-        client.readContainerNames(Collections.<String, String>emptyMap(), containerNames);
+        client.readContainerNames(queryParams, containerNames);
         for (String containerName : containerNames) {
             System.out.println("containerName: " + containerName);
         }
@@ -146,11 +146,14 @@ public class UcloudStorageClientTest {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
+        final Map<String, String> queryParams = new HashMap<String, String>();
+        queryParams.put("format", "xml");
+
         final Collection<String> objectNames = new ArrayList<String>();
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
             objectNames.clear();
-            client.readObjectNames(containerName, null, objectNames);
+            client.readObjectNames(containerName, queryParams, objectNames);
             for (String objectName : objectNames) {
                 System.out.println("\tobjectName: " + objectName);
             }
