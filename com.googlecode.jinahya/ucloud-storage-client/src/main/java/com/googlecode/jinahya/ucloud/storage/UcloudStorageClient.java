@@ -54,7 +54,9 @@ public class UcloudStorageClient {
      *
      * @param baseUrl base url
      * @param queryParams query params
+     *
      * @return append url
+     *
      * @throws UnsupportedEncodingException
      */
     private static String append(final String baseUrl,
@@ -127,6 +129,7 @@ public class UcloudStorageClient {
      * Authenticates.
      *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     private boolean authenticate() throws IOException {
@@ -165,7 +168,9 @@ public class UcloudStorageClient {
      *
      * @param queryParams
      * @param containerNames
+     *
      * @return
+     *
      * @throws IOException
      */
     public boolean readContainerNames(final Map<String, String> queryParams,
@@ -188,8 +193,6 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String path = storageUrl;
-        System.out.println("path: " + storageUrl);
         final URL url = new URL(append(storageUrl, queryParams));
         System.out.println("url: " + url.toExternalForm());
 
@@ -198,6 +201,9 @@ public class UcloudStorageClient {
 
         connection.setRequestMethod("GET");
         connection.setRequestProperty("X-Auth-Token", authToken);
+        if (queryParams != null && !queryParams.containsKey("format")) {
+            connection.setRequestProperty("Accept", "text/plain");
+        }
 
         setTimeout(connection);
 
@@ -228,7 +234,9 @@ public class UcloudStorageClient {
      * Creates a container.
      *
      * @param containerName container name
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean createContainer(final String containerName)
@@ -274,7 +282,9 @@ public class UcloudStorageClient {
      * <code>containerName</code>.
      *
      * @param containerName container name
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean deleteContainer(final String containerName)
@@ -315,12 +325,76 @@ public class UcloudStorageClient {
     }
 
 
+    public boolean readObjectNamesx(final String containerName,
+                                   final Map<String, String> queryParams,
+                                   final Collection<String> objectNames)
+        throws IOException {
+
+        if (containerName == null) {
+            throw new IllegalArgumentException("null containerName");
+        }
+
+        if (queryParams == null) {
+            // ok
+            //throw new IllegalArgumentException("null queryParams");
+        }
+
+        if (objectNames == null) {
+            throw new IllegalArgumentException("null objects");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String path =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
+        System.out.println("path: " + path);
+        final URL url = new URL(append(path, queryParams));
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("X-Auth-Token", authToken);
+        if (queryParams != null && !queryParams.containsKey("format")) {
+            connection.setRequestProperty("Accept", "text/plain");
+        }
+
+        setTimeout(connection);
+
+        connection.connect();
+
+        setResponse(connection);
+
+        if (responseCode == 200) {
+            final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            for (String line = null; (line = reader.readLine()) != null;) {
+                objectNames.add(line);
+            }
+            reader.close();
+        }
+
+        connection.disconnect();
+
+        if (responseCode == 200 || responseCode == 204) {
+            return true;
+        }
+
+        return false;
+    }
+
+
     /**
      *
      * @param containerName
      * @param queryParams
      * @param objectNames
+     *
      * @return true if succeeded false otherwise
+     *
      * @throws IOException if an I/O error occurs
      */
     public boolean readObjectNames(final String containerName,
@@ -356,6 +430,9 @@ public class UcloudStorageClient {
         connection.setRequestMethod("GET");
         connection.setDoOutput(true);
         connection.setRequestProperty("X-Auth-Token", authToken);
+        if (queryParams != null && !queryParams.containsKey("format")) {
+            connection.setRequestProperty("Accept", "text/plain");
+        }
 
         setTimeout(connection);
 
@@ -388,7 +465,9 @@ public class UcloudStorageClient {
      * @param objectName object name
      * @param contentType content type
      * @param contentData content data
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs
      */
     public boolean updateObject(final String containerName,
@@ -437,7 +516,9 @@ public class UcloudStorageClient {
      * @param contentType content type
      * @param contentLength content length; <code>-1L</code> for unknown
      * @param contentData content data
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs
      */
     public boolean updateObject(final String containerName,
@@ -546,7 +627,9 @@ public class UcloudStorageClient {
      * @param contentLength the array whose first index is set to content
      * length; may be <code>null</code> but must not be zero-length
      * @param contentData the output stream to which content data is written
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean readObject(final String containerName,
@@ -602,6 +685,8 @@ public class UcloudStorageClient {
                     contentData.write(buffer, 0, read);
                 }
             }
+
+
         };
 
         return readObject(containerName, objectName, contentConsumer);
@@ -682,7 +767,9 @@ public class UcloudStorageClient {
      *
      * @param containerName container name
      * @param objectName object name
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean deleteObject(final String containerName,
