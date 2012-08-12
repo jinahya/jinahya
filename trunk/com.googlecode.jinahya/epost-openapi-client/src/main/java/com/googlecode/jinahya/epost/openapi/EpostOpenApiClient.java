@@ -19,7 +19,6 @@ package com.googlecode.jinahya.epost.openapi;
 
 
 import java.io.IOException;
-import java.lang.Class;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
@@ -72,18 +71,13 @@ public class EpostOpenApiClient {
      * Queries.
      *
      * @param query query
-     * @param results results map from <code>address</code>
-     * to <code>postcd</code>.
+     * @param results results map from address to postal codes.
      *
      * @return true if succeeded(200); false otherwise
      *
      * @throws IOException if an I/O error occurs.
-     * @throws ParserConfigurationException See <a
-     * href="http://docs.oracle.com/javase/7/docs/api/javax/xml/parsers/SAXParserFactory.html#newInstance()">SAXParserFactory.html#newInstance()</a>
-     * @throws SAXException See <a
-     * href="http://docs.oracle.com/javase/7/docs/api/javax/xml/parsers/SAXParser.html#parse(java.io.InputStream,
-     * org.xml.sax.helpers.DefaultHandler)">SAXParser.html#parse(java.io.InputStream,
-     * org.xml.sax.helpers.DefaultHandler)</a>
+     * @throws ParserConfigurationException if a SAX configuration error occurs.
+     * @throws SAXException if a SAX exception occurs.
      */
     public boolean query(final String query, final Map<String, String> results)
         throws IOException, ParserConfigurationException, SAXException {
@@ -235,7 +229,8 @@ public class EpostOpenApiClient {
 
         responseCode = connection.getResponseCode();
         responseMessage = connection.getResponseMessage();
-        System.out.println("response: " + responseCode + " " + responseMessage);
+//        System.out.println("response: " + responseCode + " "
+//                           + responseMessage);
     }
 
 

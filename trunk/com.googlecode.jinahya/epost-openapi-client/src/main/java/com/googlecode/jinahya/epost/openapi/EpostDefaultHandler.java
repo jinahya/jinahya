@@ -46,8 +46,8 @@ public class EpostDefaultHandler extends DefaultHandler {
     public void characters(final char[] ch, final int start, final int length)
         throws SAXException {
 
-        System.out.println("characters(" + ch + ", " + start + ", " + length
-                           + ")");
+//        System.out.println("characters(" + ch + ", " + start + ", " + length
+//                           + ")");
 
         // by default, do nothing.
         super.characters(ch, start, length);
@@ -61,8 +61,8 @@ public class EpostDefaultHandler extends DefaultHandler {
                              final String qName, final Attributes attributes)
         throws SAXException {
 
-        System.out.println("startElement(" + uri + ", " + localName + ", "
-                           + qName + ", " + attributes + ")");
+//        System.out.println("startElement(" + uri + ", " + localName + ", "
+//                           + qName + ", " + attributes + ")");
 
         // by default, do nothing
         super.startElement(uri, localName, qName, attributes);
@@ -78,8 +78,8 @@ public class EpostDefaultHandler extends DefaultHandler {
                            final String qName)
         throws SAXException {
 
-        System.out.println("endElement(" + uri + ", " + localName + ", " + qName
-                           + ")");
+//        System.out.println("endElement(" + uri + ", " + localName + ", "
+//                           + qName + ")");
 
         // by default, do nothing
         super.endElement(uri, localName, qName);

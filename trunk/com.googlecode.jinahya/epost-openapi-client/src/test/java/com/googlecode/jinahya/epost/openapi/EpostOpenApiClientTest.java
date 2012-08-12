@@ -37,7 +37,10 @@ public class EpostOpenApiClientTest {
 
 
     private static final String[] QUERIES = new String[]{
-        "구의1동"
+        "횡성군",
+        "서원면",
+        "유현1리",
+        "독산1동"
     };
 
 
@@ -60,10 +63,12 @@ public class EpostOpenApiClientTest {
         final Map<String, String> results = new LinkedHashMap<String, String>();
 
         for (String query : QUERIES) {
+            results.clear();
+            System.out.println("query: " + query);
             client.query(query, results);
             for (Entry<String, String> entry : results.entrySet()) {
-                System.out.println("address: " + entry.getKey() + " postcd: "
-                                   + entry.getValue());
+                System.out.println("\t" + entry.getValue() + " "
+                                   + entry.getKey());
             }
         }
     }
