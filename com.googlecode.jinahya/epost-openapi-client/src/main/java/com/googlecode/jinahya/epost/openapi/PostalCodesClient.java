@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class EpostOpenApiClient {
+public class PostalCodesClient {
 
 
     private static final SAXParserFactory SAX_PARSER_FACTORY =
@@ -52,15 +52,11 @@ public class EpostOpenApiClient {
      *
      * @param regkey regkey
      */
-    public EpostOpenApiClient(final String regkey) {
+    public PostalCodesClient(final String regkey) {
         super();
 
         if (regkey == null) {
             throw new IllegalArgumentException("null regkey");
-        }
-
-        if (regkey.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty regkey");
         }
 
         this.regkey = regkey;
@@ -115,7 +111,7 @@ public class EpostOpenApiClient {
         if (responseCode == 200) {
             final SAXParser parser = SAX_PARSER_FACTORY.newSAXParser();
             parser.parse(connection.getInputStream(),
-                         new EpostDefaultHandler(results));
+                         new PostalCodesHandler(results));
             return true;
         }
 

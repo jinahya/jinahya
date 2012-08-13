@@ -33,7 +33,7 @@ import org.xml.sax.SAXException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class EpostOpenApiClientTest {
+public class PostalCodeClientTest {
 
 
     private static final String[] QUERIES = new String[]{
@@ -47,9 +47,9 @@ public class EpostOpenApiClientTest {
     @BeforeClass()
     public void readKey() {
 
-        authKey = System.getProperty("authKey");
-        if (authKey == null) {
-            throw new SkipException("no authKey");
+        regkey = System.getProperty("regkey");
+        if (regkey == null) {
+            throw new SkipException("no regkey");
         }
     }
 
@@ -58,7 +58,7 @@ public class EpostOpenApiClientTest {
     public void testCreateContainer()
         throws IOException, ParserConfigurationException, SAXException {
 
-        final EpostOpenApiClient client = new EpostOpenApiClient(authKey);
+        final PostalCodesClient client = new PostalCodesClient(regkey);
 
         final Map<String, String> results = new LinkedHashMap<String, String>();
 
@@ -74,7 +74,7 @@ public class EpostOpenApiClientTest {
     }
 
 
-    private String authKey;
+    private String regkey;
 
 
 }
