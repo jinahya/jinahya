@@ -28,10 +28,10 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class EpostDefaultHandler extends DefaultHandler {
+public class PostalCodesHandler extends DefaultHandler {
 
 
-    public EpostDefaultHandler(final Map<String, String> results) {
+    public PostalCodesHandler(final Map<String, String> results) {
         super();
 
         if (results == null) {
@@ -46,12 +46,6 @@ public class EpostDefaultHandler extends DefaultHandler {
     public void characters(final char[] ch, final int start, final int length)
         throws SAXException {
 
-//        System.out.println("characters(" + ch + ", " + start + ", " + length
-//                           + ")");
-
-        // by default, do nothing.
-        super.characters(ch, start, length);
-
         builder.append(ch, start, length);
     }
 
@@ -60,12 +54,6 @@ public class EpostDefaultHandler extends DefaultHandler {
     public void startElement(final String uri, final String localName,
                              final String qName, final Attributes attributes)
         throws SAXException {
-
-//        System.out.println("startElement(" + uri + ", " + localName + ", "
-//                           + qName + ", " + attributes + ")");
-
-        // by default, do nothing
-        super.startElement(uri, localName, qName, attributes);
 
         if ("address".equals(qName) || "postcd".equals(qName)) {
             builder.delete(0, builder.length());
@@ -77,12 +65,6 @@ public class EpostDefaultHandler extends DefaultHandler {
     public void endElement(final String uri, final String localName,
                            final String qName)
         throws SAXException {
-
-//        System.out.println("endElement(" + uri + ", " + localName + ", "
-//                           + qName + ")");
-
-        // by default, do nothing
-        super.endElement(uri, localName, qName);
 
         if ("address".equals(qName)) {
             address = builder.toString();
