@@ -20,6 +20,7 @@ package com.googlecode.jinahya.epost.openapi;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,6 +40,7 @@ import javax.xml.transform.stream.StreamResult;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Path("/postalCodes.xsd")
+@RequestScoped
 public class PostalCodesXsdResource {
 
 
