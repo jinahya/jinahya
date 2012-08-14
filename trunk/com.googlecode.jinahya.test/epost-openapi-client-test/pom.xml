@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.googlecode.jinahya.test</groupId>
+  <artifactId>epost-openapi-client-test</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>epost-openapi-client-test</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+  </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>6.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>epost-openapi-client</artifactId>
+        <version>1.0-alpha-1-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.jinahya</groupId>
+      <artifactId>epost-openapi-client</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
