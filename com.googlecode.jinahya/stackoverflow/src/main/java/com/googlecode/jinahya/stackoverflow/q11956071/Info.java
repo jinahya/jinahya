@@ -38,12 +38,12 @@ public class Info {
 
 
     @XmlElement(name = "item")
-    public List<Item> getItems() {
+    private List<Item> getItems() {
         return new ArrayList<Item>(getMap().values());
     }
 
 
-    public void setItems(final List<Item> items) {
+    private void setItems(final List<Item> items) {
         getMap().clear();
         for (Item item : items) {
             getMap().put(item.getKey(), item);
