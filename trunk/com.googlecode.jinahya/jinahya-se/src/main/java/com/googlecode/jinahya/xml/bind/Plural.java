@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * General class for wrapper classes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <S> singular type parameter
@@ -33,66 +34,60 @@ public class Plural<S> {
 
 
     /**
+     * Creates a new instance of
+     * <code>pluralType<code>.
      *
      * @param <P> plural type parameter
      * @param <S> singular type parameter
      * @param pluralType plural type
-     * @param singulars singular collection
      *
-     * @return a new plural
-     *
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @return a new instance of given <code>pluralType<code>
      */
     public static <P extends Plural<S>, S> P newInstance(
-        final Class<P> pluralType, final Collection<? extends S> singulars)
-        throws InstantiationException, IllegalAccessException {
+        final Class<P> pluralType) {
 
-        if (pluralType == null) {
-            throw new NullPointerException("null pluralType");
-        }
-
-        if (singulars == null) {
-            throw new NullPointerException("null singluars");
-        }
-
-        return newInstance(pluralType.newInstance(), singulars);
+        return newInstance(pluralType, null);
     }
 
 
     /**
+     * Creates a new instance of given
+     * <code>pluralType</code> contains specified
+     * <code>singulars</code>.
      *
      * @param <P> plural type parameter
      * @param <S> singular type parameter
-     * @param plural plural
-     * @param singulars singular collection
+     * @param pluralType plural type
+     * @param singulars singular collection; <code>null</code> allowed
      *
-     * @return given
-     * <code>plural</code>
+     * @return a new instance of given <code>pluralType<code>
      */
-    protected static <P extends Plural<S>, S> P newInstance(
-        final P plural, final Collection<? extends S> singulars) {
+    public static <P extends Plural<S>, S> P newInstance(
+        final Class<P> pluralType, final Collection<? extends S> singulars) {
 
-        if (plural == null) {
-            throw new NullPointerException("null");
+        if (pluralType == null) {
+            throw new IllegalArgumentException("null pluralType");
         }
 
-        if (singulars == null) {
-            throw new NullPointerException("null singluars");
+        try {
+            final P instance = pluralType.newInstance();
+            if (singulars != null) {
+                instance.getSingulars().addAll(singulars);
+            }
+            return instance;
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
         }
-
-        plural.setSingulars(new ArrayList<S>(singulars.size()));
-        plural.getSingulars().addAll(singulars);
-
-        return plural;
     }
 
 
     /**
+     * Returns singular collection.
      *
      * @return singular collection
      */
-    @XmlTransient
     protected final Collection<S> getSingulars() {
         if (singulars == null) {
             singulars = new ArrayList<S>();
@@ -102,18 +97,8 @@ public class Plural<S> {
 
 
     /**
-     *
-     * @param singulars singular collection
-     */
-    protected final void setSingulars(final Collection<S> singulars) {
-        this.singulars = singulars;
-    }
-
-
-    /**
      * singular collection.
      */
-    @XmlTransient
     private Collection<S> singulars;
 
 
