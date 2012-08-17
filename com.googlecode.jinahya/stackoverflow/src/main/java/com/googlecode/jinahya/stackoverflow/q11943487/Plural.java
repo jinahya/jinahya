@@ -21,12 +21,15 @@ package com.googlecode.jinahya.stackoverflow.q11943487;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+//@XmlRootElement
+@XmlTransient
 public class Plural<S> {
 
 

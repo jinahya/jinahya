@@ -24,7 +24,10 @@ import java.io.IOException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 import org.testng.annotations.Test;
 
 
@@ -38,7 +41,7 @@ public class ItemsTest {
     @Test
     public void testXml() throws JAXBException, IOException {
 
-        final Items marshallable = new Items();
+        final Items marshallable = Plural.newInstance(Items.class);
         for (int i = 0; i < 5; i++) {
             marshallable.getItems().add(Item.newInstance(i, "name" + i));
         }
@@ -63,6 +66,27 @@ public class ItemsTest {
         for (Item item : unmarshalled.getItems()) {
             System.out.println("unmarshalled.item: " + item);
         }
+    }
+
+
+    @Test
+    public void testXsd() throws JAXBException, IOException {
+
+        final JAXBContext context = JAXBContext.newInstance(Items.class);
+
+        context.generateSchema(new SchemaOutputResolver() {
+            @Override
+            public Result createOutput(final String namespaceUri,
+                                       final String suggestedFileName)
+                throws IOException {
+                return new StreamResult(System.out) {
+                    @Override
+                    public String getSystemId() {
+                        return "noid";
+                    }
+                };
+            }
+        });
     }
 }
 
