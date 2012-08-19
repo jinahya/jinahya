@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2012-08-19T00:25:03.179">
+<pmd version="4.2.5" timestamp="2012-08-20T00:21:55.034">
 <file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-se/src/main/java/com/googlecode/jinahya/io/IO.java">
 <violation beginline="119" endline="119" begincolumn="25" endcolumn="80" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="com.googlecode.jinahya.io" class="IO" method="copy" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
 Avoid unused private methods such as 'copy(InputStream,OutputStream)'.
@@ -26,6 +26,14 @@ Avoid empty catch blocks
 </violation>
 <violation beginline="163" endline="164" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.jinahya.util" class="Genealogy" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
+</violation>
+</file>
+<file name="/var/lib/jenkins/workspace/jinahya.googlecode.com com.googlecode.jinahya jinahya-se/src/main/java/com/googlecode/jinahya/xml/namespace/AbstractNamespaceContext.java">
+<violation beginline="22" endline="22" begincolumn="1" endcolumn="25" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.xml.namespace" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.HashMap'
+</violation>
+<violation beginline="24" endline="24" begincolumn="1" endcolumn="21" rule="UnusedImports" ruleset="Import Statement Rules" package="com.googlecode.jinahya.xml.namespace" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.util.Map'
 </violation>
 </file>
 </pmd>
