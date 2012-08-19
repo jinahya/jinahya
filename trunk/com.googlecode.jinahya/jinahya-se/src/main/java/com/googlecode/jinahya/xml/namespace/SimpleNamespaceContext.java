@@ -48,8 +48,8 @@ public class SimpleNamespaceContext extends AbstractNamespaceContext {
             throw new IllegalArgumentException("null prefix");
         }
 
-        if (isPredefinedPrefix(prefix)) {
-            return getPredefinedNamespaceURI(prefix);
+        if (isReservedPrefix(prefix)) {
+            return getReservedNamespaceURI(prefix);
         }
 
         for (int i = list.size() - 1; i >= 1; i -= 2) {
@@ -69,8 +69,8 @@ public class SimpleNamespaceContext extends AbstractNamespaceContext {
             throw new IllegalArgumentException("null namespaceURI");
         }
 
-        if (isPredefinedNamespaceURI(namespaceURI)) {
-            return getPredefinedPrefix(namespaceURI);
+        if (isReservedNamespaceURI(namespaceURI)) {
+            return getReservedPrefix(namespaceURI);
         }
 
         for (int i = list.size() - 1; i >= 1; i -= 2) {
@@ -115,7 +115,7 @@ public class SimpleNamespaceContext extends AbstractNamespaceContext {
             throw new NullPointerException("null prefix");
         }
 
-        if (isPredefinedPrefix(prefix)) {
+        if (isReservedPrefix(prefix)) {
             throw new IllegalArgumentException("predefined prefix: " + prefix);
         }
 
@@ -123,7 +123,7 @@ public class SimpleNamespaceContext extends AbstractNamespaceContext {
             throw new NullPointerException("null namespaceURI");
         }
 
-        if (isPredefinedNamespaceURI(namespaceURI)) {
+        if (isReservedNamespaceURI(namespaceURI)) {
             throw new IllegalArgumentException(
                 "predefined namespaceURI: " + namespaceURI);
         }

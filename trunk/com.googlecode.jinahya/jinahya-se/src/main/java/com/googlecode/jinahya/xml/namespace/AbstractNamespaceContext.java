@@ -19,7 +19,9 @@ package com.googlecode.jinahya.xml.namespace;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
@@ -31,7 +33,11 @@ import javax.xml.namespace.NamespaceContext;
 public abstract class AbstractNamespaceContext implements NamespaceContext {
 
 
-    protected static boolean isPredefinedPrefix(final String prefix) {
+    protected static boolean isReservedPrefix(final String prefix) {
+
+        if (prefix == null) {
+            throw new IllegalArgumentException("null prefix");
+        }
 
         return XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)
                || XMLConstants.XML_NS_PREFIX.equals(prefix)
@@ -39,8 +45,11 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
     }
 
 
-    protected static boolean isPredefinedNamespaceURI(
-        final String namespaceURI) {
+    protected static boolean isReservedNamespaceURI(final String namespaceURI) {
+
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("null namespaceURI");
+        }
 
         return XMLConstants.NULL_NS_URI.equals(namespaceURI)
                || XMLConstants.XML_NS_URI.equals(namespaceURI)
@@ -54,10 +63,10 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
      *
      * @return
      */
-    protected static String getPredefinedNamespaceURI(final String prefix) {
+    protected static String getReservedNamespaceURI(final String prefix) {
 
         if (prefix == null) {
-            throw new NullPointerException("null prefix");
+            throw new IllegalArgumentException("null pefix");
         }
 
         if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
@@ -82,7 +91,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
      *
      * @return
      */
-    protected static String getPredefinedPrefix(final String namespaceURI) {
+    protected static String getReservedPrefix(final String namespaceURI) {
 
         if (namespaceURI == null) {
             throw new NullPointerException("null namespaceURI");
