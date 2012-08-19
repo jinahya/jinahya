@@ -20,6 +20,7 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -46,7 +47,7 @@ public class Plural<S> {
     public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType) {
 
-        return newInstance(pluralType, null);
+        return newInstance(pluralType, Collections.<S>emptyList());
     }
 
 
@@ -69,11 +70,13 @@ public class Plural<S> {
             throw new IllegalArgumentException("null pluralType");
         }
 
+        if (singulars == null) {
+            throw new IllegalArgumentException("null singulars");
+        }
+
         try {
             final P instance = pluralType.newInstance();
-            if (singulars != null) {
-                instance.getSingulars().addAll(singulars);
-            }
+            instance.getSingulars().addAll(singulars);
             return instance;
         } catch (InstantiationException ie) {
             throw new RuntimeException(ie);
@@ -89,9 +92,11 @@ public class Plural<S> {
      * @return singular collection
      */
     protected final Collection<S> getSingulars() {
+
         if (singulars == null) {
             singulars = new ArrayList<S>();
         }
+
         return singulars;
     }
 
