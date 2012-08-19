@@ -18,7 +18,10 @@
 package com.googlecode.jinahya.xml.namespace;
 
 
+import java.util.Collections;
+import java.util.Iterator;
 import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 
 
 /**
@@ -26,7 +29,7 @@ import javax.xml.XMLConstants;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
+public class VerySimpleNamespaceContext implements NamespaceContext {
 
 
     /**
@@ -37,28 +40,35 @@ public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
      */
     public VerySimpleNamespaceContext(final String prefix,
                                       final String namespaceURI) {
+
+        this(prefix, namespaceURI, null);
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param prefix XML namespace prefix
+     * @param namespaceURI XML namespace URI
+     * @param defaultNamespaceURI default XML namespace URI
+     */
+    public VerySimpleNamespaceContext(final String prefix,
+                                      final String namespaceURI,
+                                      final String defaultNamespaceURI) {
         super();
 
         if (prefix == null) {
-            throw new NullPointerException("null prefix");
-        }
-
-        if (isPredefinedPrefix(prefix)) {
-            throw new IllegalArgumentException(
-                "prefix(" + prefix + ") is one of predefined");
+            throw new IllegalArgumentException("null prefix");
         }
 
         if (namespaceURI == null) {
-            throw new NullPointerException("null namespaceURI");
-        }
-
-        if (isPredefinedNamespaceURI(namespaceURI)) {
-            throw new IllegalArgumentException(
-                "namespaceURI(" + namespaceURI + ") is one of predefined");
+            throw new IllegalArgumentException("null namespaceURI");
         }
 
         this.prefix = prefix;
         this.namespaceURI = namespaceURI;
+
+        this.defaultNamespaceURI = defaultNamespaceURI;
     }
 
 
@@ -69,8 +79,20 @@ public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
             throw new IllegalArgumentException("null prefix");
         }
 
-        if (isPredefinedPrefix(prefix)) {
-            return getPredefinedNamespaceURI(prefix);
+        if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
+            if (defaultNamespaceURI != null) {
+                return defaultNamespaceURI;
+            } else {
+                return XMLConstants.NULL_NS_URI;
+            }
+        }
+
+        if (XMLConstants.XML_NS_PREFIX.equals(prefix)) {
+            return XMLConstants.XML_NS_URI;
+        }
+
+        if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix)) {
+            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
         }
 
         if (this.prefix.equals(prefix)) {
@@ -88,8 +110,17 @@ public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
             throw new IllegalArgumentException("null namespaceURI");
         }
 
-        if (isPredefinedNamespaceURI(namespaceURI)) {
-            return getPredefinedPrefix(namespaceURI);
+        if (defaultNamespaceURI != null
+            && defaultNamespaceURI.equals(namespaceURI)) {
+            return XMLConstants.DEFAULT_NS_PREFIX;
+        }
+
+        if (XMLConstants.XML_NS_URI.equals(namespaceURI)) {
+            return XMLConstants.XML_NS_PREFIX;
+        }
+
+        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+            return XMLConstants.XMLNS_ATTRIBUTE;
         }
 
         if (this.namespaceURI.equals(namespaceURI)) {
@@ -100,8 +131,26 @@ public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
     }
 
 
+    @Override
+    @SuppressWarnings({"rawtypes"})
+    public Iterator getPrefixes(final String namespaceURI) {
+
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("null namespaceURI");
+        }
+
+        final String prefix = getPrefix(namespaceURI);
+
+        if (prefix == null) {
+            return Collections.emptyIterator();
+        }
+
+        return Collections.singletonList(prefix).iterator();
+    }
+
+
     /**
-     * prefix.
+     * namespace prefix.
      */
     private final String prefix;
 
@@ -110,6 +159,12 @@ public class VerySimpleNamespaceContext extends AbstractNamespaceContext {
      * namespaceURI.
      */
     private final String namespaceURI;
+
+
+    /**
+     * default namespaceURI.
+     */
+    private final String defaultNamespaceURI;
 
 
 }
