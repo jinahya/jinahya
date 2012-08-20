@@ -27,33 +27,63 @@ import java.io.InputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentProducer extends AbstractContentProducer {
+public class BufferedContentProducer implements ContentProducer {
+
+
+    public BufferedContentProducer(final byte[] data) {
+        this("application/octet-stream", data);
+    }
 
 
     /**
      * Creates a new instance.
      *
      * @param type content type
-     * @param bufferedContentData buffered content data
+     * @param data content data
      */
-    public BufferedContentProducer(final String type,
-                                   final byte[] bufferedContentData) {
+    public BufferedContentProducer(final String type, final byte[] data) {
+        super();
 
-        super(type, bufferedContentData.length);
+        if (type == null) {
+            throw new IllegalArgumentException("null type");
+        }
 
-        this.bufferedContentData = bufferedContentData;
+        if (type.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty type");
+        }
+
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
+        }
+
+        this.type = type;
+        this.data = data;
+    }
+
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
+
+    @Override
+    public long getLength() {
+        return data.length;
     }
 
 
     @Override
     public InputStream getData() throws IOException {
-        return new ByteArrayInputStream(bufferedContentData);
+        return new ByteArrayInputStream(data);
     }
 
 
-    /**
-     * buffered content data.
-     */
-    private final byte[] bufferedContentData;
+    private final String type;
+
+
+    private final byte[] data;
+
+
 }
 
