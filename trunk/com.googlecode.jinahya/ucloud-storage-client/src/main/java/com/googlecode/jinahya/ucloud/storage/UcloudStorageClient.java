@@ -48,6 +48,19 @@ public class UcloudStorageClient {
 
 
     /**
+     * Content type for unknown.
+     */
+    protected static final String UNKNOWN_CONTENT_TYPE =
+        "application/octet-stream";
+
+
+    /**
+     * Content length for unknown.
+     */
+    protected static final long UNKNOWN_CONTENT_LENGTH = -1L;
+
+
+    /**
      * Appends given
      * <code>queryParams</code> to specified
      * <code>baseUrl</code>.
@@ -152,9 +165,7 @@ public class UcloudStorageClient {
 
         if (responseCode == 200) {
             storageUrl = connection.getHeaderField("X-Storage-URL");
-            System.out.println("storageUrl: " + storageUrl);
             authToken = connection.getHeaderField("X-Auth-Token");
-            System.out.println("authToken: " + authToken);
             return true;
         }
 
@@ -326,8 +337,8 @@ public class UcloudStorageClient {
 
 
     public boolean readObjectNamesx(final String containerName,
-                                   final Map<String, String> queryParams,
-                                   final Collection<String> objectNames)
+                                    final Map<String, String> queryParams,
+                                    final Collection<String> objectNames)
         throws IOException {
 
         if (containerName == null) {
@@ -489,25 +500,6 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean updateObject(final String containerName,
-                                final String objectName,
-                                final ContentProducer contentProducer)
-        throws IOException {
-
-        System.out.println("updateObject(" + containerName + "," + objectName
-                           + "," + contentProducer + ")");
-
-        if (contentProducer == null) {
-            throw new IllegalArgumentException("null contentProducer");
-        }
-
-        return updateObject(containerName, objectName,
-                            contentProducer.getType(),
-                            contentProducer.getLength(),
-                            contentProducer.getData());
-    }
-
-
     /**
      * Updates object.
      *
@@ -544,8 +536,64 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("null contentType");
         }
 
+        if (contentLength < -1L) {
+            throw new IllegalArgumentException(
+                "contentLength(" + contentLength + ") < -1L");
+        }
+
         if (contentData == null) {
             throw new IllegalArgumentException("null contentData");
+        }
+
+        final ContentProducer contentProducer = new ContentProducer() {
+            @Override
+            public String getType() {
+                return contentType;
+            }
+
+
+            @Override
+            public long getLength() {
+                return contentLength;
+            }
+
+
+            @Override
+            public InputStream getData() throws IOException {
+                return contentData;
+            }
+        };
+
+        return updateObject(containerName, objectName, contentProducer);
+    }
+
+
+    /**
+     *
+     * @param containerName
+     * @param objectName
+     * @param contentProducer
+     * @return
+     * @throws IOException
+     */
+    public boolean updateObject(final String containerName,
+                                final String objectName,
+                                final ContentProducer contentProducer)
+        throws IOException {
+
+        System.out.println("updateObject(" + containerName + "," + objectName
+                           + "," + contentProducer + ")");
+
+        if (containerName == null) {
+            throw new IllegalArgumentException("null containerName");
+        }
+
+        if (objectName == null) {
+            throw new IllegalArgumentException("null objectName");
+        }
+
+        if (contentProducer == null) {
+            throw new IllegalArgumentException("null contentProducer");
         }
 
         if (!createContainer(containerName)) {
@@ -562,20 +610,21 @@ public class UcloudStorageClient {
         connection.setRequestMethod("PUT");
         connection.setDoOutput(true);
         connection.setRequestProperty("X-Auth-Token", authToken);
+        String contentType = contentProducer.getType();
+        if (contentType == null || contentType.trim().isEmpty()) {
+            contentType = "application/octet-stream";
+        }
         connection.setRequestProperty("Content-Type", contentType);
-        final boolean chunked = contentLength == -1L;
-        if (chunked) {
-            connection.setRequestProperty("Transfer-Encoding", "chunked");
+        long contentLength = contentProducer.getLength();
+        if (contentLength < -1L) {
+            contentLength = -1L;
+        }
+        if (contentLength == -1L) {
+            connection.setChunkedStreamingMode(4096);
         } else {
             connection.setRequestProperty(
                 "Content-Length", Long.toString(contentLength));
         }
-
-        /*
-         * Note that ucloud storage actaully don't work for
-         * 'Transfer-Encoding: chunked' as it intended.
-         * They just reads all octets and sets 'Connection: close'
-         */
 
         setTimeout(connection);
 
@@ -583,25 +632,12 @@ public class UcloudStorageClient {
 
         final OutputStream output = connection.getOutputStream();
         final byte[] buffer = new byte[8192];
+        final InputStream contentData = contentProducer.getData();
         for (int read = -1; (read = contentData.read(buffer)) != -1;) {
             if (read == 0) {
                 continue;
             }
-            if (false && chunked) {
-                output.write(Integer.toHexString(read).getBytes("US-ASCII"));
-                output.write('\r');
-                output.write('\n');
-            }
             output.write(buffer, 0, read);
-            if (false && chunked) {
-                output.write('\r');
-                output.write('\n');
-            }
-        }
-        if (false && chunked) {
-            output.write('0');
-            output.write('\r');
-            output.write('\n');
         }
         output.flush();
 
@@ -631,6 +667,7 @@ public class UcloudStorageClient {
      * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs.
+     * @deprecated Use {@link #readObject(String, String, ContentConsumer)}
      */
     public boolean readObject(final String containerName,
                               final String objectName,
@@ -685,8 +722,6 @@ public class UcloudStorageClient {
                     contentData.write(buffer, 0, read);
                 }
             }
-
-
         };
 
         return readObject(containerName, objectName, contentConsumer);
@@ -744,12 +779,7 @@ public class UcloudStorageClient {
             } catch (InvocationTargetException ite) {
             }
 
-            final InputStream input = connection.getInputStream();
-            try {
-                contentConsumer.setData(input);
-            } finally {
-                input.close();
-            }
+            contentConsumer.setData(connection.getInputStream());
         }
 
         connection.disconnect();

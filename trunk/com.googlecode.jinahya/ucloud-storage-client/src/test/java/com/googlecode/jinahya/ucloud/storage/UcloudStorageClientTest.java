@@ -19,11 +19,9 @@ package com.googlecode.jinahya.ucloud.storage;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +92,14 @@ public class UcloudStorageClientTest {
         final List<String> containerNames = new ArrayList<String>();
 
         final Map<String, String> queryParams = new HashMap<String, String>();
-        queryParams.put("format", "xml");
 
+        queryParams.put("format", "json");
+        client.readContainerNames(queryParams, containerNames);
+        for (String containerName : containerNames) {
+            System.out.println("containerName: " + containerName);
+        }
+
+        queryParams.put("format", "json");
         client.readContainerNames(queryParams, containerNames);
         for (String containerName : containerNames) {
             System.out.println("containerName: " + containerName);
@@ -113,12 +117,13 @@ public class UcloudStorageClientTest {
 
         final Random random = new Random();
 
-//        final byte[] contentData = new byte[1048576];
-//        random.nextBytes(contentData);
+        final byte[] contentData = new byte[1048576];
+        //final byte[] contentData = new byte[100];
+        random.nextBytes(contentData);
 
         for (String containerName : CONTAINER_NAMES) {
-            final byte[] contentData = new byte[random.nextInt(100)];
-            random.nextBytes(contentData);
+            //final byte[] contentData = new byte[random.nextInt(100)];
+            //random.nextBytes(contentData);
             for (String objectName : OBJECT_NAMES) {
                 client.updateObject(
                     containerName, objectName, "application/octet-stream",
@@ -142,7 +147,7 @@ public class UcloudStorageClientTest {
     public void testReadObjectNames() throws IOException {
 
         System.out.println("readObjectNames()");
-        
+
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
@@ -150,10 +155,22 @@ public class UcloudStorageClientTest {
         queryParams.put("format", "xml");
 
         final Collection<String> objectNames = new ArrayList<String>();
+
+        queryParams.put("format", "json");
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
             objectNames.clear();
             client.readObjectNames(containerName, queryParams, objectNames);
+            for (String objectName : objectNames) {
+                System.out.println("\tobjectName: " + objectName);
+            }
+        }
+
+        queryParams.put("format", "xml");
+        for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
+            objectNames.clear();
+            client.readObjectNames(containerName, null, objectNames);
             for (String objectName : objectNames) {
                 System.out.println("\tobjectName: " + objectName);
             }
@@ -169,21 +186,15 @@ public class UcloudStorageClientTest {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final String[] contentType = new String[1];
-        final Long[] contentLength = new Long[1];
-        final ByteArrayOutputStream contentData = new ByteArrayOutputStream();
-
         for (String containerName : CONTAINER_NAMES) {
             for (String objectName : OBJECT_NAMES) {
-                contentType[0] = null;
-                contentLength[0] = null;
-                contentData.reset();
-                client.readObject(containerName, objectName, contentType,
-                                  contentLength, contentData);
-                System.out.println("contentType: " + contentType[0]);
-                System.out.println("contentLength: " + contentLength[0]);
-                System.out.println("contentData.length: "
-                                   + contentData.toByteArray().length);
+                final BufferedContentConsumer contentConsumer =
+                    new BufferedContentConsumer();
+
+                client.readObject(containerName, objectName, contentConsumer);
+                System.out.println("type: " + contentConsumer.getType());
+                System.out.println("length: " + contentConsumer.getLength());
+                System.out.println("data: " + contentConsumer.getData());
             }
         }
     }

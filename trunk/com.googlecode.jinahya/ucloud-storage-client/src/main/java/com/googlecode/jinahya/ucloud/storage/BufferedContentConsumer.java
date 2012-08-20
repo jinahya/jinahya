@@ -27,7 +27,49 @@ import java.io.InputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentConsumer extends AbstractContentConsumer {
+public class BufferedContentConsumer implements ContentConsumer {
+
+
+    /**
+     * Returns type.
+     *
+     * @return type
+     */
+    public String getType() {
+        return type;
+    }
+
+
+    @Override
+    public void setType(final String type) {
+
+        if (type == null) {
+            throw new IllegalArgumentException("null type");
+        }
+
+        this.type = type;
+    }
+
+
+    /**
+     * Returns length.
+     *
+     * @return length
+     */
+    public long getLength() {
+        return length;
+    }
+
+
+    @Override
+    public void setLength(final long length) {
+
+        if (length < -1L) {
+            throw new IllegalArgumentException("length(" + length + ") < -1L");
+        }
+
+        this.length = length;
+    }
 
 
     @Override
@@ -40,23 +82,37 @@ public class BufferedContentConsumer extends AbstractContentConsumer {
         }
         baos.flush();
 
-        bufferedContentData = baos.toByteArray();
+        this.data = baos.toByteArray();
     }
 
 
     /**
-     * Returns buffered content data.
+     * Returns buffered data.
      *
-     * @return content data
+     * @return data
      */
-    public byte[] getBufferedContentData() {
-        return bufferedContentData;
+    public byte[] getData() {
+        return data;
     }
 
 
     /**
-     * buffered content data.
+     * type.
      */
-    private byte[] bufferedContentData;
+    private String type;
+
+
+    /**
+     * length.
+     */
+    private long length;
+
+
+    /**
+     * data.
+     */
+    private byte[] data;
+
+
 }
 
