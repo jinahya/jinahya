@@ -1,4 +1,5 @@
 com.googlecode.jinahya.xml.namespace
 com.googlecode.jinahya.xml.bind.annotation.adapters
+com.googlecode.jinahya.xml.bind
 com.googlecode.jinahya.crypto
 com.googlecode.jinahya.util
