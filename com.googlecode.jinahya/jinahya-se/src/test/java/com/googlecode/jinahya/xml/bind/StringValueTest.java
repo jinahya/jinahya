@@ -18,25 +18,24 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlTransient;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlTransient
-public abstract class Value<R> extends NillableValue<R> {
+public class StringValueTest extends ValueTest<StringValue, String> {
+
+
+    public StringValueTest() {
+        super(StringValue.class);
+    }
 
 
     @Override
-    protected void setRaw(final R raw) {
-
-        if (raw == null) {
-            throw new IllegalArgumentException("null value");
-        }
-
-        super.setRaw(raw);
+    protected String generateRaw() {
+        return RandomStringUtils.random(10);
     }
 
 

@@ -29,6 +29,25 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class NillableValue<T> {
 
 
+    public static <V extends NillableValue<R>, R> V newInstance(
+        final Class<V> type, final R raw) {
+
+        if (type == null) {
+            throw new IllegalArgumentException("null type");
+        }
+
+        try {
+            final V instance = type.newInstance();
+            instance.setRaw(raw);
+            return instance;
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        }
+    }
+
+
     @Override
     public int hashCode() {
         int hash = 7;
