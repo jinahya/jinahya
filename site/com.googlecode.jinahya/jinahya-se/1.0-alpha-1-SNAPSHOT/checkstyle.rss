@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011 - 2012</copyright>
     <item>
-      <title>File: 17,
-             Errors: 225,
+      <title>File: 28,
+             Errors: 284,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.crypto.CipherHelper.java">com/googlecode/jinahya/crypto/CipherHelper.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.LongValue.java">com/googlecode/jinahya/xml/bind/LongValue.java</a>
                 </td>
                 <td>
                   0
@@ -38,7 +38,7 @@
                   0
                 </td>
                 <td>
-                  33
+                  4
                 </td>
               </tr>
                           <tr>
@@ -99,34 +99,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.namespace.SimpleNamespaceContext.java">com/googlecode/jinahya/xml/namespace/SimpleNamespaceContext.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.ArrayMapAdapter.java">com/googlecode/jinahya/xml/bind/annotation/adapters/ArrayMapAdapter.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  10
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.util.JinahyaCollections.java">com/googlecode/jinahya/util/JinahyaCollections.java</a>
                 </td>
                 <td>
@@ -155,6 +127,34 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.NillableStringValue.java">com/googlecode/jinahya/xml/bind/NillableStringValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.StringValue.java">com/googlecode/jinahya/xml/bind/StringValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.XmlIDAdapter.java">com/googlecode/jinahya/xml/bind/annotation/adapters/XmlIDAdapter.java</a>
                 </td>
                 <td>
@@ -178,12 +178,12 @@
                   0
                 </td>
                 <td>
-                  5
+                  4
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.IO.java">com/googlecode/jinahya/io/IO.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.NillableDoubleValue.java">com/googlecode/jinahya/xml/bind/NillableDoubleValue.java</a>
                 </td>
                 <td>
                   0
@@ -192,12 +192,12 @@
                   0
                 </td>
                 <td>
-                  7
+                  4
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.util.Genealogy.java">com/googlecode/jinahya/util/Genealogy.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.NillableBooleanValue.java">com/googlecode/jinahya/xml/bind/NillableBooleanValue.java</a>
                 </td>
                 <td>
                   0
@@ -206,7 +206,21 @@
                   0
                 </td>
                 <td>
-                  51
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.BooleanValue.java">com/googlecode/jinahya/xml/bind/BooleanValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                           <tr>
@@ -239,7 +253,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.ListValueType.java">com/googlecode/jinahya/xml/bind/annotation/adapters/ListValueType.java</a>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.DoubleValue.java">com/googlecode/jinahya/xml/bind/DoubleValue.java</a>
                 </td>
                 <td>
                   0
@@ -248,7 +262,7 @@
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
               </tr>
                           <tr>
@@ -263,6 +277,146 @@
                 </td>
                 <td>
                   4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.crypto.CipherHelper.java">com/googlecode/jinahya/crypto/CipherHelper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  33
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.NillableLongValue.java">com/googlecode/jinahya/xml/bind/NillableLongValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.namespace.SimpleNamespaceContext.java">com/googlecode/jinahya/xml/namespace/SimpleNamespaceContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.ArrayMapAdapter.java">com/googlecode/jinahya/xml/bind/annotation/adapters/ArrayMapAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.NillableValue.java">com/googlecode/jinahya/xml/bind/NillableValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.IO.java">com/googlecode/jinahya/io/IO.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.util.Genealogy.java">com/googlecode/jinahya/util/Genealogy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  51
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.Value.java">com/googlecode/jinahya/xml/bind/Value.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.package-info.java">com/googlecode/jinahya/xml/bind/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.xml.bind.annotation.adapters.ListValueType.java">com/googlecode/jinahya/xml/bind/annotation/adapters/ListValueType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                       </tbody>
