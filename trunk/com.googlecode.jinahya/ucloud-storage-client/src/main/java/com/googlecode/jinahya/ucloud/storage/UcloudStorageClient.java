@@ -524,44 +524,68 @@ public class UcloudStorageClient {
                            + "," + contentType + "," + contentLength + ","
                            + contentData + ")");
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
+        final ContentDataProducer contentDataProducer =
+            new ContentDataProducer() {
 
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
 
-        if (contentType == null) {
-            throw new IllegalArgumentException("null contentType");
-        }
+                @Override
+                public InputStream getContentData() throws IOException {
+                    return contentData;
+                }
 
-        if (contentLength < -1L) {
-            throw new IllegalArgumentException(
-                "contentLength(" + contentLength + ") < -1L");
-        }
 
-        if (contentData == null) {
-            throw new IllegalArgumentException("null contentData");
-        }
+            };
+
+        return updateObject(containerName, objectName, contentType,
+                            contentLength, contentDataProducer);
+
+    }
+
+
+    /**
+     *
+     * @param containerName
+     * @param objectName
+     * @param contentType
+     * @param contentLength
+     * @param contentDataProducer
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    public boolean updateObject(final String containerName,
+                                final String objectName,
+                                final String contentType,
+                                final long contentLength,
+                                final ContentDataProducer contentDataProducer)
+        throws IOException {
+
+        System.out.println("updateObject(" + containerName + "," + objectName
+                           + ", " + contentType + "," + contentLength + ","
+                           + contentDataProducer + ")");
 
         final ContentProducer contentProducer = new ContentProducer() {
+
+
             @Override
-            public String getType() {
+            public String getContentType() {
                 return contentType;
             }
 
 
             @Override
-            public long getLength() {
+            public long getContentLength() {
                 return contentLength;
             }
 
 
             @Override
-            public InputStream getData() throws IOException {
-                return contentData;
+            public InputStream getContentData() throws IOException {
+                return contentDataProducer.getContentData();
             }
+
+
         };
 
         return updateObject(containerName, objectName, contentProducer);
@@ -573,7 +597,9 @@ public class UcloudStorageClient {
      * @param containerName
      * @param objectName
      * @param contentProducer
+     *
      * @return
+     *
      * @throws IOException
      */
     public boolean updateObject(final String containerName,
@@ -610,16 +636,16 @@ public class UcloudStorageClient {
         connection.setRequestMethod("PUT");
         connection.setDoOutput(true);
         connection.setRequestProperty("X-Auth-Token", authToken);
-        String contentType = contentProducer.getType();
-        if (contentType == null || contentType.trim().isEmpty()) {
+        String contentType = contentProducer.getContentType();
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
         connection.setRequestProperty("Content-Type", contentType);
-        long contentLength = contentProducer.getLength();
-        if (contentLength < -1L) {
-            contentLength = -1L;
+        long contentLength = contentProducer.getContentLength();
+        if (contentLength < UNKNOWN_CONTENT_LENGTH) {
+            contentLength = UNKNOWN_CONTENT_LENGTH;
         }
-        if (contentLength == -1L) {
+        if (contentLength == UNKNOWN_CONTENT_LENGTH) {
             connection.setChunkedStreamingMode(4096);
         } else {
             connection.setRequestProperty(
@@ -632,7 +658,7 @@ public class UcloudStorageClient {
 
         final OutputStream output = connection.getOutputStream();
         final byte[] buffer = new byte[8192];
-        final InputStream contentData = contentProducer.getData();
+        final InputStream contentData = contentProducer.getContentData();
         for (int read = -1; (read = contentData.read(buffer)) != -1;) {
             if (read == 0) {
                 continue;
@@ -654,26 +680,18 @@ public class UcloudStorageClient {
 
 
     /**
-     * Reads an object.
      *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentType the array whose first index is set to content type;
-     * may be <code>null</code> but must not be zero-length.
-     * @param contentLength the array whose first index is set to content
-     * length; may be <code>null</code> but must not be zero-length
-     * @param contentData the output stream to which content data is written
+     * @param containerName
+     * @param objectName
+     * @param contentDataConsumer
      *
-     * @return true if succeeded; false otherwise
+     * @return
      *
-     * @throws IOException if an I/O error occurs.
-     * @deprecated Use {@link #readObject(String, String, ContentConsumer)}
+     * @throws IOException
      */
     public boolean readObject(final String containerName,
                               final String objectName,
-                              final String[] contentType,
-                              final Long[] contentLength,
-                              final OutputStream contentData)
+                              final ContentDataConsumer contentDataConsumer)
         throws IOException {
 
         if (containerName == null) {
@@ -684,50 +702,47 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("null objectName");
         }
 
-        if (contentType != null && contentType.length == 0) {
-            throw new IllegalArgumentException(
-                "contentType.length(" + contentType.length + ") == 0");
-        }
-
-        if (contentLength != null && contentLength.length == 0) {
-            throw new IllegalArgumentException(
-                "contentLength.length(" + contentLength.length + ") == 0");
-        }
-
-        if (contentData == null) {
-            throw new IllegalArgumentException("null contentData");
+        if (contentDataConsumer == null) {
+            throw new IllegalArgumentException("null contentDataConsumer");
         }
 
         final ContentConsumer contentConsumer = new ContentConsumer() {
+
+
             @Override
-            public void setType(final String type) {
-                if (contentType != null) {
-                    contentType[0] = type;
-                }
+            public void setContentType(final String contentType) {
             }
 
 
             @Override
-            public void setLength(long length) {
-                if (contentLength != null) {
-                    contentLength[0] = Long.valueOf(length);
-                }
+            public void setContentLength(final long contentLength) {
             }
 
 
             @Override
-            public void setData(final InputStream data) throws IOException {
-                final byte[] buffer = new byte[8192];
-                for (int read = -1; (read = data.read(buffer)) != -1;) {
-                    contentData.write(buffer, 0, read);
-                }
+            public void setContentData(final InputStream contentData)
+                throws IOException {
+
+                contentDataConsumer.setContentData(contentData);
             }
+
+
         };
 
         return readObject(containerName, objectName, contentConsumer);
     }
 
 
+    /**
+     *
+     * @param containerName
+     * @param objectName
+     * @param contentConsumer
+     *
+     * @return
+     *
+     * @throws IOException
+     */
     public boolean readObject(final String containerName,
                               final String objectName,
                               final ContentConsumer contentConsumer)
@@ -767,19 +782,20 @@ public class UcloudStorageClient {
 
         if (responseCode == 200) {
 
-            contentConsumer.setType(connection.getContentType());
+            contentConsumer.setContentType(connection.getContentType());
 
-            contentConsumer.setLength(connection.getContentLength());
+            contentConsumer.setContentLength(connection.getContentLength());
             try {
                 // getCotnentLengthLong(); Since 7.0
-                contentConsumer.setLength((Long) URLConnection.class.getMethod(
+                contentConsumer.setContentLength(
+                    (Long) URLConnection.class.getMethod(
                     "getContentLengthLong").invoke(connection));
             } catch (NoSuchMethodException nsme) {
             } catch (IllegalAccessException iae) {
             } catch (InvocationTargetException ite) {
             }
 
-            contentConsumer.setData(connection.getInputStream());
+            contentConsumer.setContentData(connection.getInputStream());
         }
 
         connection.disconnect();

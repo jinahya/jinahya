@@ -18,23 +18,19 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface ContentProducer {
+public interface ContentProducer extends ContentDataProducer {
 
 
     /**
      * Returns type.
      *
-     * @return type; <code>null</code> for unknown
+     * @return content type; <code>null</code> for unknown
      */
-    String getType();
+    String getContentType();
 
 
     /**
@@ -42,15 +38,8 @@ public interface ContentProducer {
      *
      * @return content length; <code>-1L</code> for unknown
      */
-    long getLength();
+    long getContentLength();
 
 
-    /**
-     * Returns data.
-     *
-     * @return data
-     * @throws IOException if an I/O error occurs.
-     */
-    InputStream getData() throws IOException;
 }
 

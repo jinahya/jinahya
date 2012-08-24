@@ -18,16 +18,12 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentConsumer implements ContentConsumer {
+public class BufferedContentConsumer extends BufferedContentDataConsumer
+    implements ContentConsumer {
 
 
     /**
@@ -35,19 +31,14 @@ public class BufferedContentConsumer implements ContentConsumer {
      *
      * @return type
      */
-    public String getType() {
-        return type;
+    public String getContentType() {
+        return contentType;
     }
 
 
     @Override
-    public void setType(final String type) {
-
-        if (type == null) {
-            throw new IllegalArgumentException("null type");
-        }
-
-        this.type = type;
+    public void setContentType(final String contentType) {
+        this.contentType = contentType;
     }
 
 
@@ -56,62 +47,33 @@ public class BufferedContentConsumer implements ContentConsumer {
      *
      * @return length
      */
-    public long getLength() {
-        return length;
+    public long getContentLength() {
+        return contentLength;
     }
 
 
     @Override
-    public void setLength(final long length) {
+    public void setContentLength(final long contentLength) {
 
-        if (length < -1L) {
-            throw new IllegalArgumentException("length(" + length + ") < -1L");
+        if (contentLength < -1L) {
+            throw new IllegalArgumentException(
+                "length(" + contentLength + ") < -1L");
         }
 
-        this.length = length;
-    }
-
-
-    @Override
-    public void setData(final InputStream data) throws IOException {
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[8192];
-        for (int read = -1; (read = data.read(buffer)) != -1;) {
-            baos.write(buffer, 0, read);
-        }
-        baos.flush();
-
-        this.data = baos.toByteArray();
-    }
-
-
-    /**
-     * Returns buffered data.
-     *
-     * @return data
-     */
-    public byte[] getData() {
-        return data;
+        this.contentLength = contentLength;
     }
 
 
     /**
      * type.
      */
-    private String type;
+    private String contentType;
 
 
     /**
      * length.
      */
-    private long length;
-
-
-    /**
-     * data.
-     */
-    private byte[] data;
+    private long contentLength;
 
 
 }

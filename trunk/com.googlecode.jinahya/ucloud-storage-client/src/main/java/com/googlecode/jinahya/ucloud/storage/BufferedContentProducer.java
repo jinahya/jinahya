@@ -18,71 +18,50 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentProducer implements ContentProducer {
+public class BufferedContentProducer extends BufferedContentDataProducer
+    implements ContentProducer {
 
 
     public BufferedContentProducer(final byte[] data) {
-        this("application/octet-stream", data);
+        this(null, data);
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param type content type
-     * @param data content data
+     * @param contentType content type
+     * @param contentData content data
      */
-    public BufferedContentProducer(final String type, final byte[] data) {
-        super();
+    public BufferedContentProducer(final String contentType,
+                                   final byte[] contentData) {
+        super(contentData);
 
-        if (type == null) {
-            throw new IllegalArgumentException("null type");
-        }
-
-        if (type.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty type");
-        }
-
-        if (data == null) {
-            throw new IllegalArgumentException("null data");
-        }
-
-        this.type = type;
-        this.data = data;
+        this.contentType = contentType;
+        this.contentLength = contentData.length;
     }
 
 
     @Override
-    public String getType() {
-        return type;
+    public String getContentType() {
+        return contentType;
     }
 
 
     @Override
-    public long getLength() {
-        return data.length;
+    public long getContentLength() {
+        return contentLength;
     }
 
 
-    @Override
-    public InputStream getData() throws IOException {
-        return new ByteArrayInputStream(data);
-    }
+    private final String contentType;
 
 
-    private final String type;
-
-
-    private final byte[] data;
+    private final long contentLength;
 
 
 }

@@ -34,11 +34,7 @@ public class BufferedContentProducerTest {
 
         new BufferedContentProducer("application/octet-stream", new byte[0]);
 
-        try {
-            new BufferedContentProducer(null, new byte[0]);
-            Assert.fail("passed: new BufferedContentProducer(null, N/A)");
-        } catch (IllegalArgumentException iae) {
-        }
+        new BufferedContentProducer(null, new byte[0]);
 
         try {
             new BufferedContentProducer("application/octet-stream", null);
@@ -46,5 +42,7 @@ public class BufferedContentProducerTest {
         } catch (IllegalArgumentException iae) {
         }
     }
+
+
 }
 
