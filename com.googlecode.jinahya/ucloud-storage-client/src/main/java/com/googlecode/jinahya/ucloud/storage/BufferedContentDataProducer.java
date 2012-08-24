@@ -18,46 +18,36 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.awt.Container;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement(name = "account")
-public class AccountInfo {
+public class BufferedContentDataProducer implements ContentDataProducer {
 
 
-    public String getName() {
-        return name;
-    }
+    public BufferedContentDataProducer(final byte[] contentData) {
+        super();
 
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-
-    public Collection<Container> getContainers() {
-        if (containers == null) {
-            containers = new ArrayList<Container>();
+        if (contentData == null) {
+            throw new IllegalArgumentException("null contentData");
         }
-        return containers;
+
+        this.contentData = contentData;
     }
 
 
-    @XmlAttribute
-    private String name;
+    @Override
+    public InputStream getContentData() throws IOException {
+        return new ByteArrayInputStream(contentData);
+    }
 
 
-    @XmlElement(name = "container")
-    private Collection<Container> containers;
+    private final byte[] contentData;
 
 
 }

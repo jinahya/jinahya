@@ -18,27 +18,25 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public interface ContentConsumer extends ContentDataConsumer {
+public interface ContentDataProducer {
 
 
     /**
-     * Sets content type.
+     * Returns content data.
      *
-     * @param contentType content type; <code>null</code> if unknown.
-     */
-    void setContentType(String contentType);
-
-
-    /**
-     * Sets content length.
+     * @return content data
      *
-     * @param contentLength content length. <code>-1L</code> if unknown.
+     * @throws IOException if an I/O error occurs.
      */
-    void setContentLength(long contentLength);
+    InputStream getContentData() throws IOException;
 
 
 }

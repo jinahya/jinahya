@@ -21,19 +21,22 @@ package com.googlecode.jinahya.ucloud.storage;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ContentLocatorEmbeddable {
+public class ContentLocator {
 
 
     private static final int OBJECT_NAME_BITS = 20;
 
 
-    private static final long MAXIMUM_OBJECTS_IN_A_CONTAINER = 1048575L;
+    private static final long OBJECT_IN_A_CONTAINER =
+        ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
 
     private static final String UNKNOWN_CONTENT_TYPE =
@@ -46,28 +49,22 @@ public class ContentLocatorEmbeddable {
     /**
      * Creates a new instance.
      *
-     * @param containerPrefix container prefix
-     * @param id id
+     * @param containerNamePrefix container prefix
+     * @param sequence id
      *
      * @return a new instance
      */
-    public static ContentLocatorEmbeddable newInstance(
-        String containerPrefix, final long id) {
+    public static ContentLocator newInstance(
+        final String containerNamePrefix, final long sequence) {
 
-        if (containerPrefix == null) {
-            containerPrefix = "";
-        }
-
-        containerPrefix = containerPrefix.trim();
-
-        final ContentLocatorEmbeddable instance =
-            new ContentLocatorEmbeddable();
+        final ContentLocator instance =
+            new ContentLocator();
 
         instance.containerName =
-            containerPrefix + Long.toString(id >>> OBJECT_NAME_BITS);
+            containerNamePrefix + Long.toString(sequence >>> OBJECT_NAME_BITS);
 
         instance.objectName =
-            Long.toString(MAXIMUM_OBJECTS_IN_A_CONTAINER & id);
+            Long.toString(sequence & OBJECT_IN_A_CONTAINER);
 
         return instance;
     }
@@ -80,28 +77,53 @@ public class ContentLocatorEmbeddable {
 
 
     // ------------------------------------------------------------- OBJECT_NAME
+    /**
+     * Returns object name.
+     *
+     * @return object name
+     */
     public String getObjectName() {
         return objectName;
     }
 
 
     // ------------------------------------------------------------ CONTENT_TYPE
+    /**
+     * Returns content type.
+     *
+     * @return content type
+     */
     public String getContentType() {
         return contentType;
     }
 
 
+    /**
+     * Sets content type.
+     *
+     * @param contentType content type
+     */
     public void setContentType(final String contentType) {
         this.contentType = contentType;
     }
 
 
     // ---------------------------------------------------------- CONTENT_LENGTH
+    /**
+     * Returns content length.
+     *
+     * @return content length
+     */
     public long getContentLength() {
         return contentLength;
     }
 
 
+    /**
+     * Sets content length.
+     *
+     * @param contentLength content length
+     */
     public void setContentLength(final long contentLength) {
 
         if (contentType == null) {
@@ -114,29 +136,36 @@ public class ContentLocatorEmbeddable {
 
     @Override
     public String toString() {
-        return containerName + "/" + objectName + "|" + contentType + "|"
+        return containerName + "|" + objectName + "|" + contentType + "|"
                + contentLength;
     }
 
 
     @Basic
     @Column(name = "CONTAINER_NAME")
+    @NotNull
+    @XmlElement(required = true)
     private String containerName;
 
 
     @Basic
     @Column(name = "OBJECT_NAME")
+    @NotNull
+    @XmlElement(required = true)
     private String objectName;
 
 
     @Basic
     @Column(name = "CONTENT_TYPE")
+    @NotNull
+    @XmlElement(required = true)
     private String contentType = UNKNOWN_CONTENT_TYPE;
 
 
     @Basic
     @Column(name = "CONTENT_LENGTH")
     @Min(UNKNOWN_CONTENT_LENGTH)
+    @XmlElement(required = true)
     private long contentLength = UNKNOWN_CONTENT_LENGTH;
 
 
