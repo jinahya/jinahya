@@ -192,9 +192,12 @@ public class UcloudStorageClientTest {
                     new BufferedContentConsumer();
 
                 client.readObject(containerName, objectName, contentConsumer);
-                System.out.println("type: " + contentConsumer.getContentType());
-                System.out.println("length: " + contentConsumer.getContentLength());
-                System.out.println("data: " + contentConsumer.getContentData());
+                System.out.println(
+                    "contentType: " + contentConsumer.getContentType());
+                System.out.println(
+                    "contentLength: " + contentConsumer.getContentLength());
+                System.out.println(
+                    "contentData: " + contentConsumer.getContentData());
             }
         }
     }
