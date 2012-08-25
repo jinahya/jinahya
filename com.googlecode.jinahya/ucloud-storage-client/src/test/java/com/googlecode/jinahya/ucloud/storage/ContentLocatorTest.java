@@ -37,43 +37,8 @@ public class ContentLocatorTest {
     public void testNewInstance() {
 
         for (long i = 0L; i < 10L; i++) {
-            final ContentLocator locator =
-                ContentLocator.newInstance(null, i);
-            System.out.println(locator);
-            Assert.assertNotNull(locator.getContainerName());
-            Assert.assertNotNull(locator.getObjectName());
-        }
-
-        System.out.println(Long.MIN_VALUE >>> 20);
-        System.out.println(Long.MAX_VALUE >>> 20);
-
-        {
-            final ContentLocator locator =
-                ContentLocator.newInstance(null, -1L);
-            System.out.println(locator);
-            Assert.assertNotNull(locator.getContainerName());
-            Assert.assertNotNull(locator.getObjectName());
-        }
-
-        {
-            final ContentLocator locator =
-                ContentLocator.newInstance(null, 1L);
-            System.out.println(locator);
-            Assert.assertNotNull(locator.getContainerName());
-            Assert.assertNotNull(locator.getObjectName());
-        }
-
-        {
-            final ContentLocator locator =
-                ContentLocator.newInstance(null, Long.MIN_VALUE);
-            System.out.println(locator);
-            Assert.assertNotNull(locator.getContainerName());
-            Assert.assertNotNull(locator.getObjectName());
-        }
-
-        {
-            final ContentLocator locator =
-                ContentLocator.newInstance(null, Long.MAX_VALUE);
+            final ContentLocator locator = new ContentLocator();
+            locator.setSequenceNumber(i);
             System.out.println(locator);
             Assert.assertNotNull(locator.getContainerName());
             Assert.assertNotNull(locator.getObjectName());

@@ -20,15 +20,21 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@Embeddable
+@MappedSuperclass
 public class ContentLocator {
 
 
@@ -39,38 +45,62 @@ public class ContentLocator {
         ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
 
-    private static final String UNKNOWN_CONTENT_TYPE =
+    /**
+     * Constant for an unknown content type.
+     */
+    public static final String UNKNOWN_CONTENT_TYPE =
         "application/octet-stream";
 
 
-    private static final long UNKNOWN_CONTENT_LENGTH = -1L;
+    /**
+     * Constant for an unknown content length.
+     */
+    public static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
     /**
-     * Creates a new instance.
+     * Returns container name prefix.
      *
-     * @param containerNamePrefix container prefix
-     * @param sequence id
-     *
-     * @return a new instance
+     * @return container name prefix
      */
-    public static ContentLocator newInstance(
-        final String containerNamePrefix, final long sequence) {
+    public String getContainerNamePrefix() {
+        return containerNamePrefix;
+    }
 
-        final ContentLocator instance =
-            new ContentLocator();
 
-        instance.containerName =
-            containerNamePrefix + Long.toString(sequence >>> OBJECT_NAME_BITS);
+    /**
+     * Sets container name prefix.
+     *
+     * @param containerNamePrefix container name prefix
+     */
+    public void setContainerNamePrefix(final String containerNamePrefix) {
+        this.containerNamePrefix = containerNamePrefix;
+        if (this.containerNamePrefix == null) {
+            this.containerNamePrefix = "";
+        }
+    }
 
-        instance.objectName =
-            Long.toString(sequence & OBJECT_IN_A_CONTAINER);
 
-        return instance;
+    /**
+     * Sets sequence number.
+     *
+     * @param sequenceNumber sequence number
+     */
+    public void setSequenceNumber(final long sequenceNumber) {
+
+        containerName = containerNamePrefix
+                        + Long.toString(sequenceNumber >>> OBJECT_NAME_BITS);
+
+        objectName = Long.toString(sequenceNumber & OBJECT_IN_A_CONTAINER);
     }
 
 
     // ---------------------------------------------------------- CONTAINER_NAME
+    /**
+     * Returns container name.
+     *
+     * @return container name
+     */
     public String getContainerName() {
         return containerName;
     }
@@ -125,11 +155,6 @@ public class ContentLocator {
      * @param contentLength content length
      */
     public void setContentLength(final long contentLength) {
-
-        if (contentType == null) {
-            throw new IllegalArgumentException("null contentType");
-        }
-
         this.contentLength = contentLength;
     }
 
@@ -141,16 +166,21 @@ public class ContentLocator {
     }
 
 
+    @Transient
+    @XmlTransient
+    private String containerNamePrefix = "";
+
+
     @Basic
     @Column(name = "CONTAINER_NAME")
-    @NotNull
+    //@NotNull
     @XmlElement(required = true)
     private String containerName;
 
 
     @Basic
     @Column(name = "OBJECT_NAME")
-    @NotNull
+    //@NotNull
     @XmlElement(required = true)
     private String objectName;
 
