@@ -27,9 +27,9 @@ public class BufferedContentConsumer extends BufferedContentDataConsumer
 
 
     /**
-     * Returns type.
+     * Returns content type.
      *
-     * @return type
+     * @return content type
      */
     public String getContentType() {
         return contentType;
@@ -43,9 +43,9 @@ public class BufferedContentConsumer extends BufferedContentDataConsumer
 
 
     /**
-     * Returns length.
+     * Returns content length.
      *
-     * @return length
+     * @return content length
      */
     public long getContentLength() {
         return contentLength;
@@ -65,13 +65,13 @@ public class BufferedContentConsumer extends BufferedContentDataConsumer
 
 
     /**
-     * type.
+     * content type.
      */
     private String contentType;
 
 
     /**
-     * length.
+     * content length.
      */
     private long contentLength;
 

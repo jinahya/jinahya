@@ -50,9 +50,9 @@ public class BufferedContentDataConsumer implements ContentDataConsumer {
 
 
     /**
-     * Returns buffered data.
+     * Returns buffered content data.
      *
-     * @return data
+     * @return content data
      */
     public byte[] getContentData() {
         return contentData;
@@ -60,7 +60,7 @@ public class BufferedContentDataConsumer implements ContentDataConsumer {
 
 
     /**
-     * data.
+     * content data.
      */
     private byte[] contentData;
 
