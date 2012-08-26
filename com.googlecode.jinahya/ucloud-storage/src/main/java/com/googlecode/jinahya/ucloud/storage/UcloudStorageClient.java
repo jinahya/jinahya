@@ -65,29 +65,29 @@ public class UcloudStorageClient {
      * <code>queryParams</code> to specified
      * <code>baseUrl</code>.
      *
-     * @param baseUrl base url
-     * @param queryParams query params
+     * @param url base url
+     * @param params query params
      *
      * @return append url
      *
      * @throws UnsupportedEncodingException
      */
-    private static String append(final String baseUrl,
-                                 final Map<String, String> queryParams)
+    private static String append(final String url,
+                                 final Map<String, String> params)
         throws UnsupportedEncodingException {
 
-        if (baseUrl == null) {
-            throw new IllegalArgumentException("null baseUri");
+        if (url == null) {
+            throw new IllegalArgumentException("null url");
         }
 
-        if (queryParams == null || queryParams.isEmpty()) {
-            return baseUrl;
+        if (params == null || params.isEmpty()) {
+            return url;
         }
 
-        final StringBuilder builder = new StringBuilder(baseUrl);
+        final StringBuilder builder = new StringBuilder(url);
 
         final Iterator<Entry<String, String>> entries =
-            queryParams.entrySet().iterator();
+            params.entrySet().iterator();
         if (entries.hasNext()) {
             builder.append("?");
             final Entry<String, String> entry = entries.next();
@@ -121,17 +121,17 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("null storageUser");
         }
 
-        if (storageUser.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty storageUser");
-        }
+//        if (storageUser.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty storageUser");
+//        }
 
         if (storagePass == null) {
             throw new IllegalArgumentException("null storagePass");
         }
 
-        if (storagePass.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty storagePass");
-        }
+//        if (storagePass.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty storagePass");
+//        }
 
         this.storageUser = storageUser;
         this.storagePass = storagePass;

@@ -15,31 +15,14 @@
  */
 
 
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
+           elementFormDefault = XmlNsForm.QUALIFIED,
+           namespace = "http://jinahya.googlecode.com/ucloud/storage")
 package com.googlecode.jinahya.ucloud.storage;
 
 
-/**
- *
- * @author Jin Kwon <jinahya at gmail.com>
- */
-public interface ContentProducer extends ContentDataProducer {
-
-
-    /**
-     * Returns content type.
-     *
-     * @return content type; <code>null</code> for unknown
-     */
-    String getContentType();
-
-
-    /**
-     * Return content length.
-     *
-     * @return content length; <code>-1L</code> for unknown
-     */
-    long getContentLength();
-
-
-}
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;

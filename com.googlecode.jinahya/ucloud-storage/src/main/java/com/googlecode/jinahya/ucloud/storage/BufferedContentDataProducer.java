@@ -30,6 +30,11 @@ import java.io.InputStream;
 public class BufferedContentDataProducer implements ContentDataProducer {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param contentData content data
+     */
     public BufferedContentDataProducer(final byte[] contentData) {
         super();
 
@@ -47,6 +52,9 @@ public class BufferedContentDataProducer implements ContentDataProducer {
     }
 
 
+    /**
+     * content data.
+     */
     private final byte[] contentData;
 
 

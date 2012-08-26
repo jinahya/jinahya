@@ -26,8 +26,13 @@ public class BufferedContentProducer extends BufferedContentDataProducer
     implements ContentProducer {
 
 
-    public BufferedContentProducer(final byte[] data) {
-        this(null, data);
+    /**
+     * Creates a new instance.
+     *
+     * @param contentData content data
+     */
+    public BufferedContentProducer(final byte[] contentData) {
+        this(null, contentData);
     }
 
 
