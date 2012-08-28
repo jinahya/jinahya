@@ -31,7 +31,6 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
@@ -69,6 +68,9 @@ public class UcloudStorageClient {
     protected static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
+    /**
+     * UTC TimeZone.
+     */
     private static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
 
 
@@ -205,7 +207,9 @@ public class UcloudStorageClient {
      *
      * @param storageContainers the collecion to which informations are added
      * @param queryParameters query parameters
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean readStorageContainers(
@@ -550,16 +554,17 @@ public class UcloudStorageClient {
 
 
     /**
+     * Updates object content.
      *
-     * @param containerName
-     * @param objectName
-     * @param contentType
-     * @param contentLength
-     * @param contentDataProducer
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentType content type
+     * @param contentLength content length
+     * @param contentDataProducer content data producer
      *
-     * @return
+     * @return true if succeeded; false otherwise
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     public boolean updateObject(final String containerName,
                                 final String objectName,
@@ -600,14 +605,15 @@ public class UcloudStorageClient {
 
 
     /**
+     * Updates object content.
      *
-     * @param containerName
-     * @param objectName
-     * @param contentProducer
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentProducer content producer
      *
-     * @return
+     * @return true if succeeded; false otherwise
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public boolean updateObject(final String containerName,
                                 final String objectName,
@@ -688,14 +694,15 @@ public class UcloudStorageClient {
 
 
     /**
+     * Reads object content.
      *
-     * @param containerName
-     * @param objectName
-     * @param contentDataConsumer
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentDataConsumer content data consumer
      *
-     * @return
+     * @return true if succeeded; false otherwise
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     public boolean readObject(final String containerName,
                               final String objectName,
@@ -748,14 +755,15 @@ public class UcloudStorageClient {
 
 
     /**
+     * Reads object content.
      *
-     * @param containerName
-     * @param objectName
-     * @param contentConsumer
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentConsumer content consumer
      *
-     * @return
+     * @return true if succeeded; false otherwise
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public boolean readObject(final String containerName,
                               final String objectName,
