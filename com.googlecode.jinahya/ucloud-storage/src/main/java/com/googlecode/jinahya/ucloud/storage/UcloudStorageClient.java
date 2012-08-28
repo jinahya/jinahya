@@ -242,8 +242,8 @@ public class UcloudStorageClient {
                 final InputStream input = connection.getInputStream();
                 try {
                     try {
-                        final List<Map<String, String>> results =
-                            SimpleHandler.parse(input, "container");
+                        final Collection<Map<String, String>> results =
+                            StorageHandler.parse(input, "container");
                         for (Map<String, String> result : results) {
                             final StorageContainer storageContainer =
                                 new StorageContainer();
@@ -430,8 +430,8 @@ public class UcloudStorageClient {
                 final InputStream input = connection.getInputStream();
                 try {
                     try {
-                        final List<Map<String, String>> results =
-                            SimpleHandler.parse(input, "object");
+                        final Collection<Map<String, String>> results =
+                            StorageHandler.parse(input, "object");
                         for (Map<String, String> result : results) {
                             final StorageObject storageObject =
                                 new StorageObject();
