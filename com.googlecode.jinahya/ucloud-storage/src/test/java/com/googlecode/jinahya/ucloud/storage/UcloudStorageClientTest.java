@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.testng.SkipException;
@@ -35,6 +34,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@Test(singleThreaded = true)
 public class UcloudStorageClientTest {
 
 
@@ -84,44 +84,40 @@ public class UcloudStorageClientTest {
 
 
     @Test(dependsOnMethods = {"testCreateContainer"})
-    public void testReadContainerNames() throws IOException {
+    public void testReadStorageContainers() throws IOException {
+
+        System.out.println("--------------------- testReadStorageContainers()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final List<String> containerNames = new ArrayList<String>();
+        final Collection<StorageContainer> storageContainers =
+            new ArrayList<StorageContainer>();
 
-        final Map<String, String> queryParams = new HashMap<String, String>();
+        client.readStorageContainers(storageContainers, null);
 
-        queryParams.put("format", "json");
-        client.readContainerNames(queryParams, containerNames);
-        for (String containerName : containerNames) {
-            System.out.println("containerName: " + containerName);
-        }
-
-        queryParams.put("format", "json");
-        client.readContainerNames(queryParams, containerNames);
-        for (String containerName : containerNames) {
-            System.out.println("containerName: " + containerName);
+        for (StorageContainer storageContainer : storageContainers) {
+            System.out.println("\tstorageContainer: " + storageContainer);
         }
     }
 
 
-    @Test(dependsOnMethods = {"testReadContainerNames"})
+    @Test(dependsOnMethods = {"testReadStorageContainers"})
     public void testUpdateObject() throws IOException {
 
-        System.out.println("testUpdateObject()");
+        System.out.println("------------------------------ testUpdateObject()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         final Random random = new Random();
 
-        final byte[] contentData = new byte[1048576];
-        //final byte[] contentData = new byte[100];
+        //final byte[] contentData = new byte[1048576];
+        final byte[] contentData = new byte[100];
         random.nextBytes(contentData);
 
         for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
             //final byte[] contentData = new byte[random.nextInt(100)];
             //random.nextBytes(contentData);
             for (String objectName : OBJECT_NAMES) {
@@ -144,60 +140,53 @@ public class UcloudStorageClientTest {
 
 
     @Test(dependsOnMethods = {"testUpdateObject"})
-    public void testReadObjectNames() throws IOException {
+    public void testReadStorageObjects() throws IOException {
 
-        System.out.println("readObjectNames()");
+        System.out.println("------------------------ testReadStorageObjects()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final Map<String, String> queryParams = new HashMap<String, String>();
-        queryParams.put("format", "xml");
+        final Collection<StorageObject> storageObjects =
+            new ArrayList<StorageObject>();
 
-        final Collection<String> objectNames = new ArrayList<String>();
+        final Map<String, Object> queryParameters =
+            new HashMap<String, Object>();
 
-        queryParams.put("format", "json");
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
-            objectNames.clear();
-            client.readObjectNames(containerName, queryParams, objectNames);
-            for (String objectName : objectNames) {
-                System.out.println("\tobjectName: " + objectName);
-            }
-        }
-
-        queryParams.put("format", "xml");
-        for (String containerName : CONTAINER_NAMES) {
-            System.out.println("containerName: " + containerName);
-            objectNames.clear();
-            client.readObjectNames(containerName, null, objectNames);
-            for (String objectName : objectNames) {
-                System.out.println("\tobjectName: " + objectName);
+            storageObjects.clear();
+            client.readStorageObjects(containerName, storageObjects,
+                                      queryParameters);
+            for (StorageObject storageObject : storageObjects) {
+                System.out.println("\tstorageObject: " + storageObject);
             }
         }
     }
 
 
-    @Test(dependsOnMethods = {"testUpdateObject"})
+    @Test(dependsOnMethods = {"testReadStorageObjects"})
     public void testReadObject() throws IOException {
 
-        System.out.println("testReadObject()");
+        System.out.println("-------------------------------- testReadObject()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
             for (String objectName : OBJECT_NAMES) {
+                System.out.println("\tobjectName: " + objectName);
                 final BufferedContentConsumer contentConsumer =
                     new BufferedContentConsumer();
 
                 client.readObject(containerName, objectName, contentConsumer);
                 System.out.println(
-                    "contentType: " + contentConsumer.getContentType());
+                    "\t\tcontentType: " + contentConsumer.getContentType());
                 System.out.println(
-                    "contentLength: " + contentConsumer.getContentLength());
+                    "\t\tcontentLength: " + contentConsumer.getContentLength());
                 System.out.println(
-                    "contentData: " + contentConsumer.getContentData());
+                    "\t\tcontentData: " + contentConsumer.getContentData());
             }
         }
     }
@@ -206,13 +195,15 @@ public class UcloudStorageClientTest {
     @Test(dependsOnMethods = {"testReadObject"})
     public void testDeleteObject() throws IOException {
 
-        System.out.println("testDeleteObject()");
+        System.out.println("------------------------------ testDeleteObject()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
             for (String objectName : OBJECT_NAMES) {
+                System.out.println("\tobjectName: " + objectName);
                 client.deleteObject(containerName, objectName);
             }
         }
@@ -222,12 +213,13 @@ public class UcloudStorageClientTest {
     @Test(dependsOnMethods = {"testDeleteObject"})
     public void testDeleteContainer() throws IOException {
 
-        System.out.println("testDeleteContainer()");
+        System.out.println("--------------------------- testDeleteContainer()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
             client.deleteContainer(containerName);
         }
     }
