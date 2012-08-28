@@ -21,8 +21,8 @@ package com.googlecode.jinahya.ucloud.storage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -36,36 +36,38 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SimpleHandler extends DefaultHandler {
+public class StorageHandler extends DefaultHandler {
 
 
-    private static final SAXParserFactory PARSER_FACTORY =
+    protected static final SAXParserFactory PARSER_FACTORY =
         SAXParserFactory.newInstance();
 
 
     /**
      *
-     * @param input
-     * @param parentQName
+     * @param input input source
+     * @param parentQName parent qName
      * @return
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      */
-    public static List<Map<String, String>> parse(final InputStream input,
-                                                  final String parentQName)
+    public static Collection<Map<String, String>> parse(
+        final InputStream input, final String parentQName)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final List<Map<String, String>> results =
-            new ArrayList<Map<String, String>>();
-
-        final DefaultHandler handler = new SimpleHandler(parentQName, results);
+        final StorageHandler handler = new StorageHandler(parentQName);
 
         final SAXParser parser = PARSER_FACTORY.newSAXParser();
 
         parser.parse(input, handler);
 
-        return results;
+        return handler.getResults();
+    }
+
+
+    public StorageHandler(final String parentQName) {
+        this(parentQName, new ArrayList<Map<String, String>>());
     }
 
 
@@ -74,8 +76,8 @@ public class SimpleHandler extends DefaultHandler {
      * @param parentQName
      * @param results
      */
-    public SimpleHandler(final String parentQName,
-                         final List<Map<String, String>> results) {
+    public StorageHandler(final String parentQName,
+                          final Collection<Map<String, String>> results) {
 
         super();
 
@@ -89,6 +91,26 @@ public class SimpleHandler extends DefaultHandler {
 
         this.parentQName = parentQName;
         this.results = results;
+    }
+
+
+    /**
+     * Returns parentQName.
+     *
+     * @return parentQName
+     */
+    public String getParentQName() {
+        return parentQName;
+    }
+
+
+    /**
+     * Returns results
+     *
+     * @return results
+     */
+    public Collection<Map<String, String>> getResults() {
+        return results;
     }
 
 
@@ -108,6 +130,7 @@ public class SimpleHandler extends DefaultHandler {
     public void endElement(final String uri, final String localName,
                            final String qName)
         throws SAXException {
+
         //super.endElement(uri, localName, qName);
 
         if (parentQName.equals(qName)) {
@@ -140,7 +163,7 @@ public class SimpleHandler extends DefaultHandler {
     private final String parentQName;
 
 
-    private final List<Map<String, String>> results;
+    private final Collection<Map<String, String>> results;
 
 
     private transient Map<String, String> result;
