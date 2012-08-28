@@ -967,6 +967,14 @@ public class UcloudStorageClient {
     }
 
 
+    /**
+     * Sets response code and message from given
+     * <code>connection</code>.
+     *
+     * @param connection connection
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     private void setResponse(final HttpURLConnection connection)
         throws IOException {
 
@@ -1002,27 +1010,51 @@ public class UcloudStorageClient {
     }
 
 
+    /**
+     * storage user.
+     */
     private final String storageUser;
 
 
+    /**
+     * storage pass.
+     */
     private final String storagePass;
 
 
+    /**
+     * storage url.
+     */
     private transient String storageUrl;
 
 
+    /**
+     * auth token.
+     */
     private transient String authToken;
 
 
+    /**
+     * Connect timeout.
+     */
     private transient Integer connectTimeout;
 
 
+    /**
+     * Read timeout.
+     */
     private transient Integer readTimeout;
 
 
+    /**
+     * HTTP response code.
+     */
     private transient int responseCode;
 
 
+    /**
+     * HTTP response message.
+     */
     private transient String responseMessage;
 
 
