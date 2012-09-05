@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class EmbeddableObjectLocatorTest {
+public class EmbeddableContentLocatorTest {
 
 
     private static final Random RANDOM = new Random();
@@ -38,8 +38,8 @@ public class EmbeddableObjectLocatorTest {
     public void testNewInstance() {
 
         for (long i = 0L; i < 10L; i++) {
-            final EmbeddableObjectLocator locator =
-                new EmbeddableObjectLocator();
+            final EmbeddableContentLocator locator =
+                new EmbeddableContentLocator();
             locator.setContainerName(null, i);
             locator.setObjectName(null, i);
             System.out.println(locator);
@@ -52,7 +52,7 @@ public class EmbeddableObjectLocatorTest {
     @Test
     public void testSetContainerName() {
 
-        final EmbeddableObjectLocator locator = new EmbeddableObjectLocator();
+        final EmbeddableContentLocator locator = new EmbeddableContentLocator();
 
         locator.setContainerName(null);
         locator.setContainerName(RandomStringUtils.random(100));
@@ -70,7 +70,7 @@ public class EmbeddableObjectLocatorTest {
     @Test
     public void testSetObjectName() {
 
-        final EmbeddableObjectLocator locator = new EmbeddableObjectLocator();
+        final EmbeddableContentLocator locator = new EmbeddableContentLocator();
 
         locator.setObjectName(null);
         locator.setObjectName(RandomStringUtils.random(100));
