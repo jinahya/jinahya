@@ -112,11 +112,20 @@ public class EmbeddableContentLocator {
     public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
 
 
+    /**
+     * Creates a new instance with given arguments.
+     *
+     * @param containerNamePrefix container name prefix
+     * @param objectNamePrefix object name prefix
+     * @param sequenceNumber sequence number
+     * @return a new instance
+     */
     public static EmbeddableContentLocator newInstance(
         final String containerNamePrefix, final String objectNamePrefix,
         final long sequenceNumber) {
 
-        final EmbeddableContentLocator instance = new EmbeddableContentLocator();
+        final EmbeddableContentLocator instance =
+            new EmbeddableContentLocator();
 
         instance.setContainerName(containerNamePrefix, sequenceNumber);
         instance.setObjectName(objectNamePrefix, sequenceNumber);
