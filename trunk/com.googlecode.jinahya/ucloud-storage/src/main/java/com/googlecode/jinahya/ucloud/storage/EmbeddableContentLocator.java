@@ -35,12 +35,18 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @Embeddable
 @MappedSuperclass
-public class EmbeddableObjectLocator {
+public class EmbeddableContentLocator {
 
 
+    /**
+     * The number of lower bits for object names.
+     */
     private static final int OBJECT_NAME_BITS = 20;
 
 
+    /**
+     * The maximum number of objects in a container.
+     */
     private static final long OBJECTS_IN_A_CONTAINER =
         ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
@@ -106,11 +112,11 @@ public class EmbeddableObjectLocator {
     public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
 
 
-    public static EmbeddableObjectLocator newInstance(
+    public static EmbeddableContentLocator newInstance(
         final String containerNamePrefix, final String objectNamePrefix,
         final long sequenceNumber) {
 
-        final EmbeddableObjectLocator instance = new EmbeddableObjectLocator();
+        final EmbeddableContentLocator instance = new EmbeddableContentLocator();
 
         instance.setContainerName(containerNamePrefix, sequenceNumber);
         instance.setObjectName(objectNamePrefix, sequenceNumber);
