@@ -19,6 +19,7 @@ package com.googlecode.jinahya.ucloud.storage;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,11 +75,16 @@ public class UcloudStorageClientTest {
     @Test
     public void testCreateContainer() throws IOException {
 
+        System.out.println("--------------------------- testCreateContainer()");
+
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         for (String containerName : CONTAINER_NAMES) {
+            System.out.println("\tcontainerName: " + containerName);
             client.createContainer(containerName);
+            System.out.println("\t\tresponse: " + client.getResponseCode() + " "
+                               + client.getResponseMessage());
         }
     }
 
@@ -94,7 +100,9 @@ public class UcloudStorageClientTest {
         final Collection<StorageContainer> storageContainers =
             new ArrayList<StorageContainer>();
 
-        client.readStorageContainers(storageContainers, null);
+        client.readStorageContainers(null, storageContainers);
+        System.out.println("\tresponse: " + client.getResponseCode() + " "
+                           + client.getResponseMessage());
 
         for (StorageContainer storageContainer : storageContainers) {
             System.out.println("\tstorageContainer: " + storageContainer);
@@ -112,23 +120,26 @@ public class UcloudStorageClientTest {
 
         final Random random = new Random();
 
-        //final byte[] contentData = new byte[1048576];
         final byte[] contentData = new byte[100];
         random.nextBytes(contentData);
 
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
-            //final byte[] contentData = new byte[random.nextInt(100)];
-            //random.nextBytes(contentData);
             for (String objectName : OBJECT_NAMES) {
+                System.out.println("\tusing byte array");
                 client.updateObject(
                     containerName, objectName, "application/octet-stream",
                     contentData);
+                System.out.println("\t\tresponse: " + client.getResponseCode()
+                                   + " " + client.getResponseMessage());
             }
             for (String objectName : OBJECT_NAMES) {
+                System.out.println("\tusing input stream");
                 client.updateObject(
                     containerName, objectName, "application/octet-stream",
                     contentData.length, new ByteArrayInputStream(contentData));
+                System.out.println("\t\tresponse: " + client.getResponseCode()
+                                   + " " + client.getResponseMessage());
             }
             for (String objectName : OBJECT_NAMES) {
                 client.updateObject(
@@ -156,8 +167,8 @@ public class UcloudStorageClientTest {
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
             storageObjects.clear();
-            client.readStorageObjects(containerName, storageObjects,
-                                      queryParameters);
+            client.readStorageObjects(containerName,
+                                      queryParameters, storageObjects);
             for (StorageObject storageObject : storageObjects) {
                 System.out.println("\tstorageObject: " + storageObject);
             }
@@ -175,10 +186,14 @@ public class UcloudStorageClientTest {
 
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final DefaultContentConsumer contentConsumer =
+                new DefaultContentConsumer(baos);
+
             for (String objectName : OBJECT_NAMES) {
                 System.out.println("\tobjectName: " + objectName);
-                final BufferedContentConsumer contentConsumer =
-                    new BufferedContentConsumer();
+                baos.reset();
 
                 client.readObject(containerName, objectName, contentConsumer);
                 System.out.println(
@@ -186,7 +201,7 @@ public class UcloudStorageClientTest {
                 System.out.println(
                     "\t\tcontentLength: " + contentConsumer.getContentLength());
                 System.out.println(
-                    "\t\tcontentData: " + contentConsumer.getContentData());
+                    "\t\tcontentData: " + baos.toByteArray());
             }
         }
     }

@@ -18,30 +18,43 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import junit.framework.Assert;
-import org.testng.annotations.Test;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentProducerTest {
+public class DefaultContentDataProducer implements ContentDataProducer {
 
 
-    @Test
-    public void testConstructors() {
+    /**
+     * Creates a new instance.
+     *
+     * @param contentData content data
+     */
+    public DefaultContentDataProducer(final InputStream contentData) {
+        super();
 
-        new BufferedContentProducer("application/octet-stream", new byte[0]);
-
-        new BufferedContentProducer(null, new byte[0]);
-
-        try {
-            new BufferedContentProducer("application/octet-stream", null);
-            Assert.fail("passed: new BufferedContentProducer(N/A, null)");
-        } catch (IllegalArgumentException iae) {
+        if (contentData == null) {
+            throw new IllegalArgumentException("null contentData");
         }
+
+        this.contentData = contentData;
     }
+
+
+    @Override
+    public InputStream getContentData() throws IOException {
+        return contentData;
+    }
+
+
+    /**
+     * content data.
+     */
+    private final InputStream contentData;
 
 
 }
