@@ -22,11 +22,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement
 @XmlType(propOrder = {"address", "code"})
 public class PostalCode {
 
@@ -53,6 +55,13 @@ public class PostalCode {
         Pattern.compile(CODE_PATTERN_REGEX);
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param address address
+     * @param code code
+     * @return a new instance
+     */
     public static PostalCode newInstance(final String address,
                                          final String code) {
 
@@ -104,6 +113,9 @@ public class PostalCode {
      *
      * @return address
      */
+    @Transient
+    @XmlAttribute
+    @XmlSchemaType(name = "token")
     public String getAddress1() {
         return CODE_RANGE_PATTERN.matcher(address).replaceAll("");
     }
@@ -139,6 +151,13 @@ public class PostalCode {
     }
 
 
+    /**
+     *
+     * @return
+     */
+    @Transient
+    @XmlAttribute
+    @XmlSchemaType(name = "token")
     public String getCode1() {
 
         final Matcher matcher = CODE_PATTERN.matcher(code);
@@ -150,6 +169,9 @@ public class PostalCode {
     }
 
 
+    @Transient
+    @XmlAttribute
+    @XmlSchemaType(name = "token")
     public String getCode2() {
 
         final Matcher matcher = CODE_PATTERN.matcher(code);
@@ -169,6 +191,7 @@ public class PostalCode {
     @NotNull
     @Size(min = 1)
     @XmlElement(required = true)
+    @XmlSchemaType(name = "token")
     private String address;
 
 
@@ -180,6 +203,7 @@ public class PostalCode {
     @NotNull
     @Size(min = 1)
     @XmlElement(required = true)
+    @XmlSchemaType(name = "token")
     private String code;
 
 
