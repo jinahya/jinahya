@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 
@@ -27,35 +25,36 @@ import java.io.InputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentDataProducer implements ContentDataProducer {
+public class DefaultContentProducer extends DefaultContentDataProducer
+    implements ContentProducer {
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param contentData content data
-     */
-    public BufferedContentDataProducer(final byte[] contentData) {
-        super();
+    public DefaultContentProducer(final String contentType,
+                                  final long contentLength,
+                                  final InputStream contentData) {
+        super(contentData);
 
-        if (contentData == null) {
-            throw new IllegalArgumentException("null contentData");
-        }
-
-        this.contentData = contentData;
+        this.contentType = contentType;
+        this.contentLength = contentLength;
     }
 
 
     @Override
-    public InputStream getContentData() throws IOException {
-        return new ByteArrayInputStream(contentData);
+    public String getContentType() {
+        return contentType;
     }
 
 
-    /**
-     * content data.
-     */
-    private final byte[] contentData;
+    @Override
+    public long getContentLength() {
+        return contentLength;
+    }
+
+
+    private final String contentType;
+
+
+    private final long contentLength;
 
 
 }

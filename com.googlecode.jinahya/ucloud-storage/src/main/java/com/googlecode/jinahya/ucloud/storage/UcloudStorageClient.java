@@ -31,6 +31,7 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
@@ -86,6 +87,30 @@ public class UcloudStorageClient {
     }
 
 
+    private static final int RESPONSE_CODE_200_OK = 200;
+
+
+    private static final int RESPONSE_CODE_201_CREATED = 201;
+
+
+    private static final int RESPONSE_CODE_202_ACCEPTED = 202;
+
+
+    private static final int RESPONSE_CODE_204_NO_CONTENT = 204;
+
+
+    private static final int RESPONSE_CODE_403_FORBIDDEN = 403;
+
+
+    private static final int RESPONSE_CODE_404_NOT_FOUND = 404;
+
+
+    private static final int CHUNK_LENGTH = 4096;
+
+
+    private static final int BUFFER_LENGTH = 4096;
+
+
     /**
      * Appends given
      * <code>queryParams</code> to specified
@@ -96,10 +121,10 @@ public class UcloudStorageClient {
      *
      * @return append url
      *
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException 'UTF-8' not recognized?
      */
-    private static String append(final String baseUrl,
-                                 final Map<String, Object> queryParameters)
+    static String append(final String baseUrl,
+                         final Map<String, Object> queryParameters)
         throws UnsupportedEncodingException {
 
         if (baseUrl == null) {
@@ -120,8 +145,7 @@ public class UcloudStorageClient {
             final String key = entry.getKey();
             final Object value = entry.getValue();
             if (key != null && value != null) {
-                builder.append(URLEncoder.encode(key, "UTF-8")).
-                    append("=").
+                builder.append(URLEncoder.encode(key, "UTF-8")).append("=").
                     append(URLEncoder.encode(value.toString(), "UTF-8"));
             }
         }
@@ -133,12 +157,63 @@ public class UcloudStorageClient {
             if (key == null || value == null) {
                 continue;
             }
-            builder.append(URLEncoder.encode(key, "UTF-8")).
-                append("=").
+            builder.append(URLEncoder.encode(key, "UTF-8")).append("=").
                 append(URLEncoder.encode(value.toString(), "UTF-8"));
         }
 
         return builder.toString();
+    }
+
+
+    /**
+     * Copy bytes from given
+     * <code>input</code> to specified
+     * <code>output</code>.
+     *
+     * @param input input
+     * @param output output
+     * @throws IOException if an I/O error occurs
+     */
+    static void copy(final InputStream input, final OutputStream output)
+        throws IOException {
+
+        copy(input, output, new byte[BUFFER_LENGTH]);
+    }
+
+
+    /**
+     * Copy bytes from given
+     * <code>input</code> to specified
+     * <code>output</code>.
+     *
+     * @param input input
+     * @param output output
+     * @param buffer buffer
+     * @throws IOException if an I/O error occurs
+     */
+    static void copy(final InputStream input, final OutputStream output,
+                     final byte[] buffer)
+        throws IOException {
+
+        if (input == null) {
+            throw new IllegalArgumentException("null input");
+        }
+
+        if (output == null) {
+            throw new IllegalArgumentException("null output");
+        }
+
+        if (buffer == null) {
+            throw new IllegalArgumentException("null buffer");
+        }
+
+        if (buffer.length == 0) {
+            throw new IllegalArgumentException("zero-length buffer");
+        }
+
+        for (int read = -1; (read = input.read(buffer)) != -1;) {
+            output.write(buffer, 0, read);
+        }
     }
 
 
@@ -156,8 +231,16 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("null storageUser");
         }
 
+        if (storageUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty storageUser");
+        }
+
         if (storagePass == null) {
             throw new IllegalArgumentException("null storagePass");
+        }
+
+        if (storagePass.isEmpty()) {
+            throw new IllegalArgumentException("empty storagePass");
         }
 
         this.storageUser = storageUser;
@@ -187,38 +270,38 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
-
-        setResponse(connection);
-
-        if (responseCode == 200) {
-            storageUrl = connection.getHeaderField("X-Storage-URL");
-            authToken = connection.getHeaderField("X-Auth-Token");
-            return true;
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK) {
+                storageUrl = connection.getHeaderField("X-Storage-URL");
+                authToken = connection.getHeaderField("X-Auth-Token");
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
-
-        connection.disconnect();
 
         return false;
     }
 
 
     /**
-     * Reads container information.
+     * Reads information of containers.
      *
-     * @param storageContainers the collecion to which informations are added
-     * @param queryParameters query parameters
+     * @param queryParameters query parameters; <code>null</code> is allowed
+     * @param storageContainers the collecion to which results are added
      *
      * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs.
      */
     public boolean readStorageContainers(
-        final Collection<StorageContainer> storageContainers,
-        final Map<String, Object> queryParameters)
+        final Map<String, Object> queryParameters,
+        final Collection<StorageContainer> storageContainers)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "readStorageContainers({0}, {1})",
-                   new Object[]{storageContainers, queryParameters});
+//        LOGGER.log(Level.INFO, "readStorageContainers({0}, {1})",
+//                   new Object[]{storageContainers, queryParameters});
 
         if (storageContainers == null) {
             throw new IllegalArgumentException("null storageContainers");
@@ -239,10 +322,10 @@ public class UcloudStorageClient {
 
         setTimeouts(connection);
 
+        connection.connect();
         try {
-            connection.connect();
-            setResponse(connection);
-            if (responseCode == 200) {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK) {
                 final InputStream input = connection.getInputStream();
                 try {
                     try {
@@ -269,12 +352,12 @@ public class UcloudStorageClient {
                     input.close();
                 }
             }
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
         } finally {
             connection.disconnect();
-        }
-
-        if (responseCode == 200 || responseCode == 204) {
-            return true;
         }
 
         return false;
@@ -282,7 +365,8 @@ public class UcloudStorageClient {
 
 
     /**
-     * Creates a container.
+     * Creates a container named as given
+     * <code>containerName</code>.
      *
      * @param containerName container name
      *
@@ -293,18 +377,22 @@ public class UcloudStorageClient {
     public boolean createContainer(final String containerName)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "createContainer({0})", containerName);
+//        LOGGER.log(Level.INFO, "createContainer({0})", containerName);
 
         if (containerName == null) {
             throw new IllegalArgumentException("null containerName");
+        }
+
+        if (containerName.isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
         }
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + "/"
-                               + URLEncoder.encode(containerName, "UTF-8");
+        final String baseUrl =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
 
         final URL url = new URL(baseUrl);
 
@@ -317,13 +405,15 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
+        try {
+            setResponses(connection);
 
-        setResponse(connection);
-
-        connection.disconnect();
-
-        if (responseCode == 201 || responseCode == 202) {
-            return true;
+            if (responseCode == RESPONSE_CODE_201_CREATED
+                || responseCode == RESPONSE_CODE_202_ACCEPTED) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
 
         return false;
@@ -331,8 +421,7 @@ public class UcloudStorageClient {
 
 
     /**
-     * Deletes a container named as given
-     * <code>containerName</code>.
+     * Deletes a container.
      *
      * @param containerName container name
      *
@@ -343,18 +432,22 @@ public class UcloudStorageClient {
     public boolean deleteContainer(final String containerName)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "deleteContainer({0})", containerName);
+//        LOGGER.log(Level.INFO, "deleteContainer({0})", containerName);
 
         if (containerName == null) {
             throw new IllegalArgumentException("null containerName");
+        }
+
+        if (containerName.isEmpty()) {
+            throw new IllegalArgumentException("emtpy containerName");
         }
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + "/"
-                               + URLEncoder.encode(containerName, "UTF-8");
+        final String baseUrl =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
 
         final URL url = new URL(baseUrl);
 
@@ -367,13 +460,15 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
+        try {
+            setResponses(connection);
 
-        setResponse(connection);
-
-        connection.disconnect();
-
-        if (responseCode == 204 || responseCode == 404) {
-            return true;
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT
+                || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
 
         return false;
@@ -381,27 +476,31 @@ public class UcloudStorageClient {
 
 
     /**
+     * Reads objects information of a container.
      *
-     * @param containerName
-     * @param storageObjects
-     * @param queryParameters
+     * @param containerName container name
+     * @param queryParameters query parameters; <code>null</code> is allowed
+     * @param storageObjects the collection to which all results are added
      *
-     * @return true if succeeded false otherwise
+     * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs
      */
     public boolean readStorageObjects(
-        final String containerName,
-        final Collection<StorageObject> storageObjects,
-        final Map<String, Object> queryParameters)
+        final String containerName, final Map<String, Object> queryParameters,
+        final Collection<StorageObject> storageObjects)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "readStorageObjects({0}, {1}, {2})",
-                   new Object[]{containerName, storageObjects,
-                                queryParameters});
+//        LOGGER.log(Level.INFO, "readStorageObjects({0}, {1}, {2})",
+//                   new Object[]{containerName, queryParameters,
+//                                storageObjects});
 
         if (containerName == null) {
             throw new IllegalArgumentException("null containerName");
+        }
+
+        if (containerName.isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
         }
 
         if (storageObjects == null) {
@@ -420,8 +519,8 @@ public class UcloudStorageClient {
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("GET");
         connection.setDoOutput(true);
+        connection.setRequestMethod("GET");
         connection.setRequestProperty("X-Auth-Token", authToken);
         connection.setRequestProperty("Accept", "application/xml");
 
@@ -429,8 +528,8 @@ public class UcloudStorageClient {
 
         connection.connect();
         try {
-            setResponse(connection);
-            if (responseCode == 200) {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK) {
                 final InputStream input = connection.getInputStream();
                 try {
                     try {
@@ -464,12 +563,12 @@ public class UcloudStorageClient {
                     input.close();
                 }
             }
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
         } finally {
             connection.disconnect();
-        }
-
-        if (responseCode == 200 || responseCode == 204) {
-            return true;
         }
 
         return false;
@@ -477,10 +576,11 @@ public class UcloudStorageClient {
 
 
     /**
+     * Updates an object's content.
      *
      * @param containerName container name
      * @param objectName object name
-     * @param contentType content type
+     * @param contentType content type; <code>null</code> for unknown
      * @param contentData content data
      *
      * @return true if succeeded; false otherwise
@@ -493,9 +593,9 @@ public class UcloudStorageClient {
                                 final byte[] contentData)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3})",
-                   new Object[]{containerName, objectName, contentType,
-                                contentData});
+//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3})",
+//                   new Object[]{containerName, objectName, contentType,
+//                                contentData});
 
         if (contentData == null) {
             throw new IllegalArgumentException("null contentData");
@@ -508,11 +608,11 @@ public class UcloudStorageClient {
 
 
     /**
-     * Updates object.
+     * Updates an object's content.
      *
      * @param containerName container name
      * @param objectName object name
-     * @param contentType content type
+     * @param contentType content type; <code>null</code> for unknown
      * @param contentLength content length; <code>-1L</code> for unknown
      * @param contentData content data
      *
@@ -527,25 +627,16 @@ public class UcloudStorageClient {
                                 final InputStream contentData)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
-                   new Object[]{containerName, objectName, contentType,
-                                contentLength, contentData});
+//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
+//                   new Object[]{containerName, objectName, contentType,
+//                                contentLength, contentData});
 
         if (contentData == null) {
             throw new IllegalArgumentException("null contentData");
         }
 
         final ContentDataProducer contentDataProducer =
-            new ContentDataProducer() {
-
-
-                @Override
-                public InputStream getContentData() throws IOException {
-                    return contentData;
-                }
-
-
-            };
+            new DefaultContentDataProducer(contentData);
 
         return updateObject(containerName, objectName, contentType,
                             contentLength, contentDataProducer);
@@ -554,12 +645,12 @@ public class UcloudStorageClient {
 
 
     /**
-     * Updates object content.
+     * Updates an object's content.
      *
      * @param containerName container name
      * @param objectName object name
-     * @param contentType content type
-     * @param contentLength content length
+     * @param contentType content type; <code>null</code> for unknown
+     * @param contentLength content length; <code>-1L</code> for unknown
      * @param contentDataProducer content data producer
      *
      * @return true if succeeded; false otherwise
@@ -573,9 +664,13 @@ public class UcloudStorageClient {
                                 final ContentDataProducer contentDataProducer)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
-                   new Object[]{containerName, objectName, contentType,
-                                contentLength, contentDataProducer});
+//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
+//                   new Object[]{containerName, objectName, contentType,
+//                                contentLength, contentDataProducer});
+
+        if (contentDataProducer == null) {
+            throw new IllegalArgumentException("null contentDataProducer");
+        }
 
         final ContentProducer contentProducer = new ContentProducer() {
 
@@ -605,7 +700,7 @@ public class UcloudStorageClient {
 
 
     /**
-     * Updates object content.
+     * Updates an object's content.
      *
      * @param containerName container name
      * @param objectName object name
@@ -620,38 +715,40 @@ public class UcloudStorageClient {
                                 final ContentProducer contentProducer)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2})",
-                   new Object[]{containerName, objectName, contentProducer});
-
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
+//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2})",
+//                   new Object[]{containerName, objectName, contentProducer});
 
         if (objectName == null) {
             throw new IllegalArgumentException("null objectName");
+        }
+
+        if (objectName.isEmpty()) {
+            throw new IllegalArgumentException("empty objectName");
         }
 
         if (contentProducer == null) {
             throw new IllegalArgumentException("null contentProducer");
         }
 
-        if (!createContainer(containerName)) {
+        if (!createContainer(containerName)) { // containerName check here
             return false;
         }
 
-        final URL url = new URL(
+        final String baseUrl =
             storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
-            + URLEncoder.encode(objectName, "UTF-8"));
+            + URLEncoder.encode(objectName, "UTF-8");
+
+        final URL url = new URL(baseUrl);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("PUT");
         connection.setDoOutput(true);
+        connection.setRequestMethod("PUT");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
         String contentType = contentProducer.getContentType();
-        if (contentType == null) {
+        if (contentType == null || contentType.trim().isEmpty()) {
             contentType = UNKNOWN_CONTENT_TYPE;
         }
         connection.setRequestProperty("Content-Type", contentType);
@@ -661,7 +758,7 @@ public class UcloudStorageClient {
             contentLength = UNKNOWN_CONTENT_LENGTH;
         }
         if (contentLength == UNKNOWN_CONTENT_LENGTH) {
-            connection.setChunkedStreamingMode(4096);
+            connection.setChunkedStreamingMode(CHUNK_LENGTH);
         } else {
             connection.setRequestProperty(
                 "Content-Length", Long.toString(contentLength));
@@ -670,26 +767,60 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
-
-        final OutputStream output = connection.getOutputStream();
-
-        final InputStream contentData = contentProducer.getContentData();
-
-        final byte[] buffer = new byte[8192];
-        for (int read = -1; (read = contentData.read(buffer)) != -1;) {
-            output.write(buffer, 0, read);
-        }
-        output.flush();
-
-        setResponse(connection);
-
-        connection.disconnect();
-
-        if (responseCode == 201) {
-            return true;
+        try {
+            final OutputStream output = connection.getOutputStream();
+            try {
+                final InputStream input = contentProducer.getContentData();
+                copy(input, output);
+                output.flush();
+            } finally {
+                output.close();
+            }
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_201_CREATED) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
 
         return false;
+    }
+
+
+    /**
+     * Reads an object's content.
+     *
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentDataOutput the output stream to which content is written
+     * @return true if succeeded; false otherwise
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean readObject(final String containerName,
+                              final String objectName,
+                              final OutputStream contentDataOutput)
+        throws IOException {
+
+        if (contentDataOutput == null) {
+            throw new IllegalArgumentException("null contentDataOutput");
+        }
+
+        final ContentDataConsumer contentDataConsumer =
+            new ContentDataConsumer() {
+
+
+                @Override
+                public void setContentData(final InputStream contentData)
+                    throws IOException {
+
+                    copy(contentData, contentDataOutput);
+                }
+
+
+            };
+
+        return readObject(containerName, objectName, contentDataConsumer);
     }
 
 
@@ -709,17 +840,9 @@ public class UcloudStorageClient {
                               final ContentDataConsumer contentDataConsumer)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
-                   new Object[]{containerName, objectName,
-                                contentDataConsumer});
-
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
+//        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
+//                   new Object[]{containerName, objectName,
+//                                contentDataConsumer});
 
         if (contentDataConsumer == null) {
             throw new IllegalArgumentException("null contentDataConsumer");
@@ -770,15 +893,23 @@ public class UcloudStorageClient {
                               final ContentConsumer contentConsumer)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
-                   new Object[]{containerName, objectName, contentConsumer});
+//        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
+//                   new Object[]{containerName, objectName, contentConsumer});
 
         if (containerName == null) {
             throw new IllegalArgumentException("null containerName");
         }
 
+        if (containerName.isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
+        }
+
         if (objectName == null) {
             throw new IllegalArgumentException("null objectName");
+        }
+
+        if (objectName.isEmpty()) {
+            throw new IllegalArgumentException("empty objectName");
         }
 
         if (contentConsumer == null) {
@@ -789,9 +920,9 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String baseUrl = storageUrl + "/"
-                               + URLEncoder.encode(containerName, "UTF-8") + "/"
-                               + URLEncoder.encode(objectName, "UTF-8");
+        final String baseUrl =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
+            + URLEncoder.encode(objectName, "UTF-8");
 
         final URL url = new URL(baseUrl);
 
@@ -804,31 +935,29 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
-
-        setResponse(connection);
-
-        if (responseCode == 200) {
-
-            contentConsumer.setContentType(connection.getContentType());
-
-            contentConsumer.setContentLength(connection.getContentLength());
-            try {
-                // getContentLengthLong(); Since 7.0
-                contentConsumer.setContentLength(
-                    (Long) URLConnection.class.getMethod(
-                    "getContentLengthLong").invoke(connection));
-            } catch (NoSuchMethodException nsme) {
-            } catch (IllegalAccessException iae) {
-            } catch (InvocationTargetException ite) {
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK) {
+                contentConsumer.setContentType(connection.getContentType());
+                long contentLength = connection.getContentLength();
+                try {
+                    // getContentLengthLong(); Since 7.0
+                    contentLength =
+                        ((Long) URLConnection.class.
+                         getMethod("getContentLengthLong").invoke(connection)).
+                        longValue();
+                } catch (NoSuchMethodException nsme) {
+                } catch (IllegalAccessException iae) {
+                } catch (InvocationTargetException ite) {
+                }
+                contentConsumer.setContentLength(contentLength);
+                contentConsumer.setContentData(connection.getInputStream());
             }
-
-            contentConsumer.setContentData(connection.getInputStream());
-        }
-
-        connection.disconnect();
-
-        if (responseCode == 200) {
-            return true;
+            if (responseCode == RESPONSE_CODE_200_OK) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
 
         return false;
@@ -849,24 +978,32 @@ public class UcloudStorageClient {
                                 final String objectName)
         throws IOException {
 
-        LOGGER.log(Level.INFO, "deleteObject({0}, {1})",
-                   new Object[]{containerName, objectName});
+//        LOGGER.log(Level.INFO, "deleteObject({0}, {1})",
+//                   new Object[]{containerName, objectName});
 
         if (containerName == null) {
             throw new IllegalArgumentException("null containerName");
+        }
+
+        if (containerName.isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
         }
 
         if (objectName == null) {
             throw new IllegalArgumentException("null objectName");
         }
 
+        if (objectName.isEmpty()) {
+            throw new IllegalArgumentException("empty objectName");
+        }
+
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + "/"
-                               + URLEncoder.encode(containerName, "UTF-8") + "/"
-                               + URLEncoder.encode(objectName, "UTF-8");
+        final String baseUrl =
+            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
+            + URLEncoder.encode(objectName, "UTF-8");
 
         final URL url = new URL(baseUrl);
 
@@ -879,13 +1016,14 @@ public class UcloudStorageClient {
         setTimeouts(connection);
 
         connection.connect();
-
-        setResponse(connection);
-
-        connection.disconnect();
-
-        if (responseCode == 204 || responseCode == 404) {
-            return true;
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT
+                || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
         }
 
         return false;
@@ -975,7 +1113,7 @@ public class UcloudStorageClient {
      *
      * @throws IOException if an I/O error occurs.
      */
-    private void setResponse(final HttpURLConnection connection)
+    private void setResponses(final HttpURLConnection connection)
         throws IOException {
 
         if (connection == null) {
@@ -984,6 +1122,8 @@ public class UcloudStorageClient {
 
         responseCode = connection.getResponseCode();
         responseMessage = connection.getResponseMessage();
+
+        headerFields = connection.getHeaderFields();
 
 //        LOGGER.log(Level.INFO, "response: {0} {1}",
 //                   new Object[]{responseCode, responseMessage});
@@ -1007,6 +1147,16 @@ public class UcloudStorageClient {
      */
     public String getResponseMessage() {
         return responseMessage;
+    }
+
+
+    /**
+     * Returns last HTTP response header fields.
+     *
+     * @return response header fields
+     */
+    public Map<String, List<String>> getHeaderFields() {
+        return headerFields;
     }
 
 
@@ -1056,6 +1206,12 @@ public class UcloudStorageClient {
      * HTTP response message.
      */
     private transient String responseMessage;
+
+
+    /**
+     * HTTP response header fields.
+     */
+    private transient Map<String, List<String>> headerFields;
 
 
 }
