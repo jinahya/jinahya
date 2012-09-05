@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -330,7 +329,7 @@ public class UcloudStorageClient {
                 try {
                     try {
                         final Collection<Map<String, String>> results =
-                            StorageHandler.parse(input, "container");
+                            SimpleHandler.parse(input, "container");
                         for (Map<String, String> result : results) {
                             final StorageContainer storageContainer =
                                 new StorageContainer();
@@ -534,7 +533,7 @@ public class UcloudStorageClient {
                 try {
                     try {
                         final Collection<Map<String, String>> results =
-                            StorageHandler.parse(input, "object");
+                            SimpleHandler.parse(input, "object");
                         for (Map<String, String> result : results) {
                             final StorageObject storageObject =
                                 new StorageObject();

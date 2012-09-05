@@ -36,7 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StorageHandler extends DefaultHandler {
+class SimpleHandler extends DefaultHandler {
 
 
     protected static final SAXParserFactory PARSER_FACTORY =
@@ -56,7 +56,7 @@ public class StorageHandler extends DefaultHandler {
         final InputStream input, final String parentQName)
         throws ParserConfigurationException, SAXException, IOException {
 
-        final StorageHandler handler = new StorageHandler(parentQName);
+        final SimpleHandler handler = new SimpleHandler(parentQName);
 
         final SAXParser parser = PARSER_FACTORY.newSAXParser();
 
@@ -66,7 +66,7 @@ public class StorageHandler extends DefaultHandler {
     }
 
 
-    public StorageHandler(final String parentQName) {
+    public SimpleHandler(final String parentQName) {
         this(parentQName, new ArrayList<Map<String, String>>());
     }
 
@@ -76,7 +76,7 @@ public class StorageHandler extends DefaultHandler {
      * @param parentQName
      * @param results
      */
-    public StorageHandler(final String parentQName,
+    public SimpleHandler(final String parentQName,
                           final Collection<Map<String, String>> results) {
 
         super();
