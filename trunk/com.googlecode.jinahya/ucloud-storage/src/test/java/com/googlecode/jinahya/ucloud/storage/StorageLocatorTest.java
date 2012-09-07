@@ -136,14 +136,21 @@ public class StorageLocatorTest {
     }
 
 
-//    @Test
-//    public static void testNewInstance() {
-//
-//        final String containerNamePrefix = RandomStringUtils.random(RANDOM.nextInt(50));
-//        final String container
-//        
-//        final ExtendedStorageLocator instance = StorageLocator.newInstance(ExtendedStorageLocator.class, RandomStringUtils.random(RANDOM), null, OBJECT_NAME_BITS)
-//    }
+    @Test
+    public static void testNewInstance() {
+
+        final String containerNamePrefix =
+            RandomStringUtils.random(RANDOM.nextInt(50));
+        final String objectNamePrefix =
+            RandomStringUtils.random(RANDOM.nextInt(255));
+        final ExtendedStorageLocator instance = StorageLocator.newInstance(
+            ExtendedStorageLocator.class, containerNamePrefix, objectNamePrefix,
+            RANDOM.nextLong());
+        System.out.println(instance.getContainerName());
+        System.out.println(instance.getObjectName());
+    }
+
+
     @Test
     public static void testOBJECT_NAME_BITS() {
 

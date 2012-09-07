@@ -55,8 +55,8 @@ public class StorageLocator {
             try {
                 final L storageLocator = constructor.newInstance();
                 try {
-                    final Field field =
-                        StorageLocator.class.getField("containerName");
+                    final Field field = StorageLocator.class.
+                        getDeclaredField("containerName");
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
@@ -66,8 +66,8 @@ public class StorageLocator {
                     throw new RuntimeException(nsfe);
                 }
                 try {
-                    final Field field =
-                        StorageLocator.class.getField("objectName");
+                    final Field field = StorageLocator.class.
+                        getDeclaredField("objectName");
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
@@ -76,6 +76,7 @@ public class StorageLocator {
                 } catch (NoSuchFieldException nsfe) {
                     throw new RuntimeException(nsfe);
                 }
+                return storageLocator;
             } catch (InstantiationException ie) {
                 throw new RuntimeException(ie);
             } catch (IllegalAccessException iae) {
@@ -86,8 +87,6 @@ public class StorageLocator {
         } catch (NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
         }
-
-        return null;
     }
 
 
@@ -191,6 +190,7 @@ public class StorageLocator {
      *
      * @param containerNamePrefix container name prefix
      * @param sequenceNumber sequence number
+     *
      * @return a container name
      */
     private static String compositeContainerName(
@@ -211,6 +211,7 @@ public class StorageLocator {
      *
      * @param objectNamePrefix object name prefix
      * @param sequenceNumber sequence number
+     *
      * @return an object name
      */
     private static String compositeObjectName(final String objectNamePrefix,
