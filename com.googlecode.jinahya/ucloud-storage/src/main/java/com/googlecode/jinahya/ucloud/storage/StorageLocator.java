@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -32,22 +35,63 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @MappedSuperclass
-public class ContentLocator {
+public class StorageLocator {
 
 
-    /**
-     * The number of lower bits for object names.
-     */
-    private static final int OBJECT_NAME_BITS = 20;
+    public static <L extends StorageLocator> L newInstance(
+        final Class<L> storageLocatorType, final String containerNamePrefix,
+        final String objectNamePrefix, final long sequenceNumber) {
+
+        if (storageLocatorType == null) {
+            throw new IllegalArgumentException("null storageLocatorType");
+        }
+
+        try {
+            final Constructor<L> constructor =
+                storageLocatorType.getDeclaredConstructor();
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            try {
+                final L storageLocator = constructor.newInstance();
+                try {
+                    final Field field =
+                        StorageLocator.class.getField("containerName");
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    field.set(storageLocator, compositeContainerName(
+                        containerNamePrefix, sequenceNumber));
+                } catch (NoSuchFieldException nsfe) {
+                    throw new RuntimeException(nsfe);
+                }
+                try {
+                    final Field field =
+                        StorageLocator.class.getField("objectName");
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    field.set(storageLocator, compositeObjectName(
+                        objectNamePrefix, sequenceNumber));
+                } catch (NoSuchFieldException nsfe) {
+                    throw new RuntimeException(nsfe);
+                }
+            } catch (InstantiationException ie) {
+                throw new RuntimeException(ie);
+            } catch (IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
+
+        return null;
+    }
 
 
-    /**
-     * The maximum number of objects in a container.
-     */
-    private static final long OBJECTS_NAME_MASK =
-        ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
-
-
+    // ------------------------------------------------------------ @contentType
     /**
      * Constant for an unknown content type.
      */
@@ -56,45 +100,22 @@ public class ContentLocator {
 
 
     /**
-     * Constant for an unknown content length.
-     */
-    public static final long UNKNOWN_CONTENT_LENGTH = -1L;
-
-
-    /**
-     * The minimum size of containerName.
-     */
-    public static final int CONTAINER_NAME_SIZE_MIN = 1;
-
-
-    /**
-     * The maximum size of containerName.
-     */
-    public static final int CONTAINER_NAME_SIZE_MAX = 255;
-
-
-    /**
-     * The minimum size of objectName.
-     */
-    public static final int OBJECT_NAME_SIZE_MIN = 1;
-
-
-    /**
-     * The maximum size of objectName.
-     */
-    public static final int OBJECT_NAME_SIZE_MAX = 255;
-
-
-    /**
      * The minimum size of contentType.
      */
-    public static final int CONTENT_TYPE_SIZE_MIN = 1;
+    public static final int CONTENT_TYPE_SIZE_MIN = 3; // a/b
 
 
     /**
      * The maximum size of contentType.
      */
     public static final int CONTENT_TYPE_SIZE_MAX = 255;
+
+
+    // ---------------------------------------------------------- @contentLength
+    /**
+     * Constant for an unknown content length.
+     */
+    public static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
     /**
@@ -109,7 +130,58 @@ public class ContentLocator {
     public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
 
 
+    // ---------------------------------------------------------- @containerName
+    /**
+     * The minimum size of containerName.
+     */
+    public static final int CONTAINER_NAME_SIZE_MIN = 1;
+
+
+    /**
+     * The maximum size of containerName.
+     */
+    public static final int CONTAINER_NAME_SIZE_MAX = 255;
+
+
+    // ------------------------------------------------------------- @objectName
+    /**
+     * The minimum size of objectName.
+     */
+    public static final int OBJECT_NAME_SIZE_MIN = 1;
+
+
+    /**
+     * The maximum size of objectName.
+     */
+    public static final int OBJECT_NAME_SIZE_MAX = 255;
+
+
+    // ------------------------------------------------------- @prefix/@sequence
+    /**
+     * The delimiter.
+     */
     private static final char PREFIX_SEQUENCE_DELIMITER = '*';
+
+
+    /**
+     * The number of lower bits for object names.
+     */
+    private static final int OBJECT_NAME_BITS = 20;
+
+
+    /**
+     * The maximum number of objects in a container.
+     */
+    private static final long OBJECT_NAME_MASK =
+        ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
+
+
+    private static final int CONTAINER_NAME_FORMAT_WIDTH =
+        Long.toString((-1L >>> OBJECT_NAME_BITS)).length();
+
+
+    private static final int OBJECT_NAME_FORMAT_WIDTH =
+        Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length();
 
 
     /**
@@ -121,11 +193,14 @@ public class ContentLocator {
      * @param sequenceNumber sequence number
      * @return a container name
      */
-    public static final String compositeContainerName(
+    private static String compositeContainerName(
         final String containerNamePrefix, final long sequenceNumber) {
 
-        return (containerNamePrefix == null ? "" : containerNamePrefix + "*")
-               + Long.toString(sequenceNumber >>> OBJECT_NAME_BITS);
+        return ((containerNamePrefix == null
+                 || containerNamePrefix.trim().isEmpty())
+                ? "" : (containerNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
+               + (String.format("%0" + CONTAINER_NAME_FORMAT_WIDTH + "d",
+                                (sequenceNumber >>> OBJECT_NAME_BITS)));
     }
 
 
@@ -138,11 +213,14 @@ public class ContentLocator {
      * @param sequenceNumber sequence number
      * @return an object name
      */
-    public static final String compositeObjectName(
-        final String objectNamePrefix, final long sequenceNumber) {
+    private static String compositeObjectName(final String objectNamePrefix,
+                                              final long sequenceNumber) {
 
-        return (objectNamePrefix == null ? "" : (objectNamePrefix + "*"))
-               + Long.toString(sequenceNumber & OBJECTS_NAME_MASK);
+        return ((objectNamePrefix == null
+                 || objectNamePrefix.trim().isEmpty())
+                ? "" : (objectNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
+               + (String.format("%0" + OBJECT_NAME_FORMAT_WIDTH + "d",
+                                (sequenceNumber & OBJECT_NAME_MASK)));
     }
 
 
