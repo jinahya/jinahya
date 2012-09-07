@@ -227,39 +227,35 @@ public class StorageLocatorTest {
     }
 
 
-    //@Test
-    public void testSetContainerName() {
+    @Test
+    public void testContainerName() {
 
         final StorageLocator locator = new StorageLocator();
 
         locator.setContainerName(null);
-        locator.setContainerName(RandomStringUtils.random(100));
+        Assert.assertNull(locator.getContainerName());
 
-        for (int i = 0; i < 100; i++) {
-            final String containerNamePrefix =
-                RandomStringUtils.random(RANDOM.nextInt(10));
-            locator.setContainerName(containerNamePrefix, i);
-            Assert.assertTrue(
-                locator.getContainerName().startsWith(containerNamePrefix));
-        }
+        final String expected = RandomStringUtils.random(RANDOM.nextInt(128));
+        locator.setContainerName(expected);
+
+        final String actual = locator.getContainerName();
+        Assert.assertEquals(actual, expected);
     }
 
 
-    //@Test
-    public void testSetObjectName() {
+    @Test
+    public void testObjectName() {
 
         final StorageLocator locator = new StorageLocator();
 
         locator.setObjectName(null);
-        locator.setObjectName(RandomStringUtils.random(100));
+        Assert.assertNull(locator.getObjectName());
 
-        for (int i = 0; i < 100; i++) {
-            final String objectNamePrefix =
-                RandomStringUtils.random(RANDOM.nextInt(10));
-            locator.setObjectName(objectNamePrefix, i);
-            Assert.assertTrue(
-                locator.getObjectName().startsWith(objectNamePrefix));
-        }
+        final String expected = RandomStringUtils.random(RANDOM.nextInt(128));
+        locator.setObjectName(expected);
+
+        final String actual = locator.getObjectName();
+        Assert.assertEquals(actual, expected);
     }
 
 
