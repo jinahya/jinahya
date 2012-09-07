@@ -20,11 +20,9 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -33,9 +31,8 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Embeddable
 @MappedSuperclass
-public class EmbeddableContentLocator {
+public class ContentLocator {
 
 
     /**
@@ -47,7 +44,7 @@ public class EmbeddableContentLocator {
     /**
      * The maximum number of objects in a container.
      */
-    private static final long OBJECTS_IN_A_CONTAINER =
+    private static final long OBJECTS_NAME_MASK =
         ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
 
@@ -112,25 +109,40 @@ public class EmbeddableContentLocator {
     public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
 
 
+    private static final char PREFIX_SEQUENCE_DELIMITER = '*';
+
+
     /**
-     * Creates a new instance with given arguments.
+     * Composites a containerName with given
+     * <code>containerNamePrefix</code> and
+     * <code>sequenceNumber</code>.
      *
      * @param containerNamePrefix container name prefix
+     * @param sequenceNumber sequence number
+     * @return a container name
+     */
+    public static final String compositeContainerName(
+        final String containerNamePrefix, final long sequenceNumber) {
+
+        return (containerNamePrefix == null ? "" : containerNamePrefix + "*")
+               + Long.toString(sequenceNumber >>> OBJECT_NAME_BITS);
+    }
+
+
+    /**
+     * Composites an objectName with given
+     * <code>objectNamePrefix</code> and
+     * <code>sequenceNumber</code>.
+     *
      * @param objectNamePrefix object name prefix
      * @param sequenceNumber sequence number
-     * @return a new instance
+     * @return an object name
      */
-    public static EmbeddableContentLocator newInstance(
-        final String containerNamePrefix, final String objectNamePrefix,
-        final long sequenceNumber) {
+    public static final String compositeObjectName(
+        final String objectNamePrefix, final long sequenceNumber) {
 
-        final EmbeddableContentLocator instance =
-            new EmbeddableContentLocator();
-
-        instance.setContainerName(containerNamePrefix, sequenceNumber);
-        instance.setObjectName(objectNamePrefix, sequenceNumber);
-
-        return instance;
+        return (objectNamePrefix == null ? "" : (objectNamePrefix + "*"))
+               + Long.toString(sequenceNumber & OBJECTS_NAME_MASK);
     }
 
 
@@ -150,7 +162,7 @@ public class EmbeddableContentLocator {
      *
      * @param containerName containerName
      */
-    public void setContainerName(final String containerName) {
+    protected void setContainerName(final String containerName) {
         this.containerName = containerName;
     }
 
@@ -166,9 +178,8 @@ public class EmbeddableContentLocator {
     public void setContainerName(final String containerNamePrefix,
                                  final long sequenceNumber) {
 
-        containerName =
-            (containerNamePrefix == null ? "" : containerNamePrefix)
-            + Long.toString(sequenceNumber >>> OBJECT_NAME_BITS);
+        setContainerName(
+            compositeContainerName(containerNamePrefix, sequenceNumber));
     }
 
 
@@ -204,8 +215,7 @@ public class EmbeddableContentLocator {
     public void setObjectName(final String objectNamePrefix,
                               final long sequenceNumber) {
 
-        objectName = (objectNamePrefix == null ? "" : objectNamePrefix)
-                     + Long.toString(sequenceNumber & OBJECTS_IN_A_CONTAINER);
+        setObjectName(compositeObjectName(objectNamePrefix, sequenceNumber));
     }
 
 
@@ -263,7 +273,7 @@ public class EmbeddableContentLocator {
      */
     @Basic
     @Column(name = "CONTAINER_NAME")
-    @NotNull
+    //@NotNull
     @Size(min = CONTAINER_NAME_SIZE_MIN, max = CONTAINER_NAME_SIZE_MAX)
     @XmlElement(required = true)
     private String containerName;
@@ -274,7 +284,7 @@ public class EmbeddableContentLocator {
      */
     @Basic
     @Column(name = "OBJECT_NAME")
-    @NotNull
+    //@NotNull
     @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
     @XmlElement(required = true)
     private String objectName;
@@ -284,7 +294,7 @@ public class EmbeddableContentLocator {
      * content type.
      */
     @Basic(optional = false)
-    @Column(name = "CONTENT_TYPE", nullable = false)
+    @Column(name = "CONTENT_TYPE")
     @Size(min = CONTENT_TYPE_SIZE_MIN, max = CONTENT_TYPE_SIZE_MAX)
     @XmlElement(required = true)
     private String contentType = UNKNOWN_CONTENT_TYPE;
@@ -294,11 +304,11 @@ public class EmbeddableContentLocator {
      * content length.
      */
     @Basic(optional = false)
-    @Column(name = "CONTENT_LENGTH", nullable = false)
+    @Column(name = "CONTENT_LENGTH")
     @Min(CONTENT_LENGTH_MIN)
     @Max(CONTENT_LENGTH_MAX)
     @XmlElement(required = true)
-    private Long contentLength = UNKNOWN_CONTENT_LENGTH;
+    private long contentLength = UNKNOWN_CONTENT_LENGTH;
 
 
 }
