@@ -38,6 +38,17 @@ import javax.xml.bind.annotation.XmlElement;
 public class StorageLocator {
 
 
+    /**
+     * Creates a new instance of given
+     * <code>storageLocatorType</code>.
+     *
+     * @param <L> storage locator type parameter
+     * @param storageLocatorType storage locator type
+     * @param containerNamePrefix container name prefix
+     * @param objectNamePrefix object name prefix
+     * @param sequenceNumber sequence number
+     * @return a new instance of <code>storageLocatorType</code>.
+     */
     public static <L extends StorageLocator> L newInstance(
         final Class<L> storageLocatorType, final String containerNamePrefix,
         final String objectNamePrefix, final long sequenceNumber) {
@@ -194,12 +205,32 @@ public class StorageLocator {
         ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
 
+    /**
+     * the print format length for container names.
+     */
+    private static final int CONTAINER_NAME_FORMAT_WIDTH =
+        Long.toString((-1L >>> OBJECT_NAME_BITS)).length();
+
+
+    /**
+     * the print format for container names.
+     */
     private static final String CONTAINER_NAME_FORMAT =
-        "%0" + Long.toString((-1L >>> OBJECT_NAME_BITS)).length() + "d";
+        "%0" + CONTAINER_NAME_FORMAT_WIDTH + "d";
 
 
+    /**
+     * the print format length for object names.
+     */
+    private static final int OBJECT_NAME_FORMAT_WIDTH =
+        Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length();
+
+
+    /**
+     * the print format for object names.
+     */
     private static final String OBJECT_NAME_FORMAT =
-        "%0" + Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length() + "d";
+        "%0" + OBJECT_NAME_FORMAT_WIDTH + "d";
 
 
     /**
@@ -276,8 +307,7 @@ public class StorageLocator {
     public void setContainerName(final String containerNamePrefix,
                                  final long sequenceNumber) {
 
-        setContainerName(
-            getContainerName(containerNamePrefix, sequenceNumber));
+        setContainerName(getContainerName(containerNamePrefix, sequenceNumber));
     }
 
 

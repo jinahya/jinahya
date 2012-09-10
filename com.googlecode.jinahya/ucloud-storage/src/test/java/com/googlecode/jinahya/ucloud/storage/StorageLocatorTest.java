@@ -102,9 +102,9 @@ public class StorageLocatorTest {
     public static void testNewInstance() {
 
         final String containerNamePrefix =
-            RandomStringUtils.random(RANDOM.nextInt(50));
+            RandomStringUtils.randomAscii(RANDOM.nextInt(49));
         final String objectNamePrefix =
-            RandomStringUtils.random(RANDOM.nextInt(255));
+            RandomStringUtils.randomAscii(RANDOM.nextInt(255));
         final ExtendedStorageLocator instance = StorageLocator.newInstance(
             ExtendedStorageLocator.class, containerNamePrefix, objectNamePrefix,
             RANDOM.nextLong());
