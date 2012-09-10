@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -76,12 +75,12 @@ public class StorageObject {
     }
 
 
-    public Date getLastModified() {
+    public long getLastModified() {
         return lastModified;
     }
 
 
-    public void setLastModified(final Date lastModified) {
+    public void setLastModified(final long lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -118,7 +117,7 @@ public class StorageObject {
 
     @NotNull
     @XmlElement(required = true)
-    private Date lastModified;
+    private long lastModified;
 
 
 }
