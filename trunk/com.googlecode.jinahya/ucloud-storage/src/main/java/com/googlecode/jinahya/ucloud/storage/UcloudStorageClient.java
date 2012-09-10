@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +109,128 @@ public class UcloudStorageClient {
 
 
     private static final int BUFFER_LENGTH = 4096;
+
+
+    private static final String PATH_SEPARATOR = "/";
+
+
+    private static final int MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH = 256;
+
+
+    private static final int MAXIMUM_ENCODED_OBJECT_NAME_LENGTH = 1024;
+
+
+    /**
+     * Returns 'Content-Length' header value from given
+     * <code>connection</code>.
+     *
+     * @param connection connection
+     * @return parsed value.
+     */
+    private static long getContentLength(final URLConnection connection) {
+
+        if (connection == null) {
+            throw new IllegalArgumentException("null connection");
+        }
+
+        long contentLength = connection.getContentLength();
+
+        try {
+            // getContentLengthLong(); Since 7.0
+            contentLength =
+                ((Long) URLConnection.class.
+                 getMethod("getContentLengthLong").invoke(connection)).
+                longValue();
+        } catch (NoSuchMethodException nsme) {
+        } catch (IllegalAccessException iae) {
+        } catch (InvocationTargetException ite) {
+        }
+
+        return contentLength;
+    }
+
+
+    /**
+     * URL-encodes given
+     * <code>containerName</code>.
+     *
+     * @param containerName container name
+     * @return the URL-encoded container name
+     * @throws UnsupportedEncodingException if 'UTF-8' is not supported
+     */
+    private static String encodeContainerName(final String containerName)
+        throws UnsupportedEncodingException {
+
+        if (containerName == null) {
+            throw new IllegalArgumentException("null containerName");
+        }
+
+        final String trimmedContainerName = containerName.trim();
+
+        if (trimmedContainerName.isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
+        }
+
+        if (!containerName.equals(trimmedContainerName)) {
+            throw new IllegalArgumentException("trimmable containerName");
+        }
+
+        if (trimmedContainerName.contains(PATH_SEPARATOR)) {
+            throw new IllegalArgumentException(
+                "containerName contains PATH_SEPARATOR(\"" + PATH_SEPARATOR
+                + "\")");
+        }
+
+        final String encodedContainerName =
+            URLEncoder.encode(containerName, "UTF-8");
+        if (encodedContainerName.length()
+            > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
+            throw new IllegalArgumentException(
+                "containerName's URL-encoded length("
+                + encodedContainerName.length()
+                + " > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH("
+                + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
+        }
+
+        return encodedContainerName;
+    }
+
+
+    /**
+     * URL-encodes given
+     * <code>obectName</code>.
+     *
+     * @param objectName object name
+     * @return the URL-encoded object name
+     * @throws UnsupportedEncodingException if 'UTF-8' is not supported
+     */
+    private static String encodeObjectName(final String objectName)
+        throws UnsupportedEncodingException {
+
+        if (objectName == null) {
+            throw new IllegalArgumentException("null objectName");
+        }
+
+        final String trimmedObjectName = objectName.trim();
+
+        if (trimmedObjectName.isEmpty()) {
+            throw new IllegalArgumentException("empty objectName");
+        }
+
+        if (!objectName.equals(trimmedObjectName)) {
+            throw new IllegalArgumentException("trimmable objectName");
+        }
+
+        final String encodedObjectName = URLEncoder.encode(objectName, "UTF-8");
+        if (encodedObjectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
+            throw new IllegalArgumentException(
+                "objectName's URL-encoded length(" + encodedObjectName.length()
+                + "> MAXIMUM_ENCODED_OBJECT_NAME_LENGTH("
+                + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
+        }
+
+        return encodedObjectName;
+    }
 
 
     /**
@@ -285,6 +408,64 @@ public class UcloudStorageClient {
 
 
     /**
+     *
+     * @param containerName container name
+     * @param storageContainer storage container
+     * @return true if succeeded; false otherwise
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean readStorageContainer(final String containerName,
+                                        final StorageContainer storageContainer)
+        throws IOException {
+
+//        LOGGER.log(Level.INFO, "readStorageContainers({0}, {1})",
+//                   new Object[]{containerName, storageContainer});
+
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        if (storageContainer == null) {
+            throw new IllegalArgumentException("null storageContainer");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName;
+
+        final URL url = new URL(baseUrl);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                storageContainer.setName(containerName);
+                storageContainer.setCount(Long.parseLong(
+                    connection.getHeaderField("X-Container-Object-Count")));
+                storageContainer.setBytes(Long.parseLong(
+                    connection.getHeaderField("X-Container-Bytes-Used")));
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
      * Reads information of containers.
      *
      * @param queryParameters query parameters; <code>null</code> is allowed
@@ -378,20 +559,14 @@ public class UcloudStorageClient {
 
 //        LOGGER.log(Level.INFO, "createContainer({0})", containerName);
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (containerName.isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName;
 
         final URL url = new URL(baseUrl);
 
@@ -433,20 +608,14 @@ public class UcloudStorageClient {
 
 //        LOGGER.log(Level.INFO, "deleteContainer({0})", containerName);
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (containerName.isEmpty()) {
-            throw new IllegalArgumentException("emtpy containerName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName;
 
         final URL url = new URL(baseUrl);
 
@@ -464,6 +633,74 @@ public class UcloudStorageClient {
 
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT
                 || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
+     *
+     * @param containerName
+     * @param objectName
+     * @param storageObject
+     * @return
+     * @throws IOException
+     */
+    public boolean readStorageObject(final String containerName,
+                                     final String objectName,
+                                     final StorageObject storageObject)
+        throws IOException {
+
+//        LOGGER.log(Level.INFO, "readStorageObject({0}, {1}, {2})",
+//                   new Object[]{containerName, objectName,
+//                                storageObject});
+
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        final String encodedObjectName = encodeObjectName(objectName);
+
+        if (storageObject == null) {
+            throw new IllegalArgumentException("null storageObjects");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName + PATH_SEPARATOR
+                               + encodedObjectName;
+
+        final URL url = new URL(baseUrl);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                storageObject.setName(connection.getHeaderField(objectName));
+                storageObject.setHash(connection.getHeaderField("Etag"));
+                storageObject.setBytes(getContentLength(connection));
+                storageObject.setContentType(
+                    connection.getHeaderField("Content-Type"));
+                storageObject.setLastModified(
+                    new Date(connection.getLastModified()));
+            }
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
                 return true;
             }
         } finally {
@@ -494,13 +731,7 @@ public class UcloudStorageClient {
 //                   new Object[]{containerName, queryParameters,
 //                                storageObjects});
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (containerName.isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
         if (storageObjects == null) {
             throw new IllegalArgumentException("null storageObjects");
@@ -510,8 +741,8 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName;
 
         final URL url = new URL(append(baseUrl, queryParameters));
 
@@ -528,7 +759,7 @@ public class UcloudStorageClient {
         connection.connect();
         try {
             setResponses(connection);
-            if (responseCode == RESPONSE_CODE_200_OK) {
+            if (responseCode == RESPONSE_CODE_200_OK) { // NOT 204
                 final InputStream input = connection.getInputStream();
                 try {
                     try {
@@ -717,25 +948,17 @@ public class UcloudStorageClient {
 //        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2})",
 //                   new Object[]{containerName, objectName, contentProducer});
 
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
-        if (objectName.isEmpty()) {
-            throw new IllegalArgumentException("empty objectName");
-        }
+        final String encodedObjectName = encodeObjectName(objectName);
 
-        if (contentProducer == null) {
-            throw new IllegalArgumentException("null contentProducer");
-        }
-
-        if (!createContainer(containerName)) { // containerName check here
+        if (!createContainer(containerName)) {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
-            + URLEncoder.encode(objectName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName + PATH_SEPARATOR
+                               + encodedObjectName;
 
         final URL url = new URL(baseUrl);
 
@@ -895,21 +1118,9 @@ public class UcloudStorageClient {
 //        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
 //                   new Object[]{containerName, objectName, contentConsumer});
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
-        if (containerName.isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
-
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
-
-        if (objectName.isEmpty()) {
-            throw new IllegalArgumentException("empty objectName");
-        }
+        final String encodedObjectName = encodeObjectName(objectName);
 
         if (contentConsumer == null) {
             throw new IllegalArgumentException("null contentConsumer");
@@ -919,9 +1130,9 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
-            + URLEncoder.encode(objectName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName + PATH_SEPARATOR
+                               + encodedObjectName;
 
         final URL url = new URL(baseUrl);
 
@@ -938,18 +1149,7 @@ public class UcloudStorageClient {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_200_OK) {
                 contentConsumer.setContentType(connection.getContentType());
-                long contentLength = connection.getContentLength();
-                try {
-                    // getContentLengthLong(); Since 7.0
-                    contentLength =
-                        ((Long) URLConnection.class.
-                         getMethod("getContentLengthLong").invoke(connection)).
-                        longValue();
-                } catch (NoSuchMethodException nsme) {
-                } catch (IllegalAccessException iae) {
-                } catch (InvocationTargetException ite) {
-                }
-                contentConsumer.setContentLength(contentLength);
+                contentConsumer.setContentLength(getContentLength(connection));
                 contentConsumer.setContentData(connection.getInputStream());
             }
             if (responseCode == RESPONSE_CODE_200_OK) {
@@ -980,29 +1180,17 @@ public class UcloudStorageClient {
 //        LOGGER.log(Level.INFO, "deleteObject({0}, {1})",
 //                   new Object[]{containerName, objectName});
 
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
+        final String encodedContainerName = encodeContainerName(containerName);
 
-        if (containerName.isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
-
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
-
-        if (objectName.isEmpty()) {
-            throw new IllegalArgumentException("empty objectName");
-        }
+        final String encodedObjectName = encodeObjectName(objectName);
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8") + "/"
-            + URLEncoder.encode(objectName, "UTF-8");
+        final String baseUrl = storageUrl + PATH_SEPARATOR
+                               + encodedContainerName + PATH_SEPARATOR
+                               + encodedObjectName;
 
         final URL url = new URL(baseUrl);
 
