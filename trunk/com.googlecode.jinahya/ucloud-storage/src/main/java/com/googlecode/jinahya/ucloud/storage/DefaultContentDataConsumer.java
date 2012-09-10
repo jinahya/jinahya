@@ -54,7 +54,7 @@ public class DefaultContentDataConsumer implements ContentDataConsumer {
             throw new IllegalArgumentException("null contentData");
         }
 
-        UcloudStorageClient.copy(contentData, this.contentData);
+        StorageClient.copy(contentData, this.contentData);
         this.contentData.flush();
     }
 

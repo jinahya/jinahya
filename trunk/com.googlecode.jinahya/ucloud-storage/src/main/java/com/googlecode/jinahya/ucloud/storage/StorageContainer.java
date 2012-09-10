@@ -71,17 +71,26 @@ public class StorageContainer {
     }
 
 
+    /**
+     * name.
+     */
     @NotNull
     @Size(min = 1)
     @XmlElement(required = true)
     private String name;
 
 
+    /**
+     * count.
+     */
     @Min(0L)
     @XmlElement(required = true)
     private long count;
 
 
+    /**
+     * bytes.
+     */
     @Min(0L)
     @XmlElement(required = true)
     private long bytes;

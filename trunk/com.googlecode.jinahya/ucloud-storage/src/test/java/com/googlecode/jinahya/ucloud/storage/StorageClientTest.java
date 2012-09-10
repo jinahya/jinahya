@@ -27,35 +27,35 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Test(singleThreaded = true)
-public class UcloudStorageClientTest {
+public class StorageClientTest {
 
 
     @Test
     public void testConstructor() {
 
         try {
-            new UcloudStorageClient(null, "storagePass");
+            new StorageClient(null, "storagePass");
             Assert.fail("passed: new UcloudStorageClient(null, N/A)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            new UcloudStorageClient("", "storagePass");
+            new StorageClient("", "storagePass");
             Assert.fail("passed: new UcloudStorageClient(\"\", N/A)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            new UcloudStorageClient("storageUser", null);
+            new StorageClient("storageUser", null);
             Assert.fail("passed: new UcloudStorageClient(N/A, null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            new UcloudStorageClient("storageUser", "");
+            new StorageClient("storageUser", "");
             Assert.fail("passed: new UcloudStorageClient(N/A, \"\")");
         } catch (IllegalArgumentException iae) {
             // expected

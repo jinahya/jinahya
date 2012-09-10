@@ -39,6 +39,11 @@ public class DefaultContentConsumer extends DefaultContentDataConsumer
     }
 
 
+    /**
+     * Returns content type.
+     *
+     * @return content type.
+     */
     public String getContentType() {
         return contentType;
     }
@@ -50,6 +55,11 @@ public class DefaultContentConsumer extends DefaultContentDataConsumer
     }
 
 
+    /**
+     * Returns content length.
+     *
+     * @return content length
+     */
     public long getContentLength() {
         return contentLength;
     }
@@ -61,9 +71,15 @@ public class DefaultContentConsumer extends DefaultContentDataConsumer
     }
 
 
+    /**
+     * content type.
+     */
     private String contentType;
 
 
+    /**
+     * content length.
+     */
     private long contentLength;
 
 

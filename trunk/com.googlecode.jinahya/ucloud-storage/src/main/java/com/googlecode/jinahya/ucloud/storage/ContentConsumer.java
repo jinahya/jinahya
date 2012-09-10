@@ -28,7 +28,7 @@ public interface ContentConsumer extends ContentDataConsumer {
     /**
      * Sets content type.
      *
-     * @param contentType content type; <code>null</code> if unknown.
+     * @param contentType content type; <code>null</code> for unknown.
      */
     void setContentType(String contentType);
 
@@ -36,7 +36,7 @@ public interface ContentConsumer extends ContentDataConsumer {
     /**
      * Sets content length.
      *
-     * @param contentLength content length. <code>-1L</code> if unknown.
+     * @param contentLength content length. <code>-1L</code> for unknown.
      */
     void setContentLength(long contentLength);
 
