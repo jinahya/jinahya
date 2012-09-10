@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
@@ -69,6 +71,8 @@ public class UcloudStorageClientHttpTest {
             throw new SkipException("no storagePass");
             //Assert.fail("missing property 'storagePass'");
         }
+
+        client = new UcloudStorageClient(storageUser, storagePass);
     }
 
 
@@ -90,27 +94,6 @@ public class UcloudStorageClientHttpTest {
 
 
     @Test(dependsOnMethods = {"testCreateContainer"})
-    public void testReadStorageContainers() throws IOException {
-
-        System.out.println("--------------------- testReadStorageContainers()");
-
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
-
-        final Collection<StorageContainer> storageContainers =
-            new ArrayList<StorageContainer>();
-
-        client.readStorageContainers(null, storageContainers);
-        System.out.println("\tresponse: " + client.getResponseCode() + " "
-                           + client.getResponseMessage());
-
-        for (StorageContainer storageContainer : storageContainers) {
-            System.out.println("\tstorageContainer: " + storageContainer);
-        }
-    }
-
-
-    @Test(dependsOnMethods = {"testReadStorageContainers"})
     public void testUpdateObject() throws IOException {
 
         System.out.println("------------------------------ testUpdateObject()");
@@ -146,32 +129,6 @@ public class UcloudStorageClientHttpTest {
 
 
     @Test(dependsOnMethods = {"testUpdateObject"})
-    public void testReadStorageObjects() throws IOException {
-
-        System.out.println("------------------------ testReadStorageObjects()");
-
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
-
-        final Collection<StorageObject> storageObjects =
-            new ArrayList<StorageObject>();
-
-        final Map<String, Object> queryParameters =
-            new HashMap<String, Object>();
-
-        for (String containerName : CONTAINER_NAMES) {
-            System.out.println("containerName: " + containerName);
-            storageObjects.clear();
-            client.readStorageObjects(containerName,
-                                      queryParameters, storageObjects);
-            for (StorageObject storageObject : storageObjects) {
-                System.out.println("\tstorageObject: " + storageObject);
-            }
-        }
-    }
-
-
-    @Test(dependsOnMethods = {"testReadStorageObjects"})
     public void testReadObject() throws IOException {
 
         System.out.println("-------------------------------- testReadObject()");
@@ -202,7 +159,98 @@ public class UcloudStorageClientHttpTest {
     }
 
 
-    @Test(dependsOnMethods = {"testReadObject"})
+    @Test(dependsOnMethods = {"testUpdateObject"})
+    public void testReadStorageObjects() throws IOException {
+
+        System.out.println("------------------------ testReadStorageObjects()");
+
+        final UcloudStorageClient client =
+            new UcloudStorageClient(storageUser, storagePass);
+
+        final Collection<StorageObject> storageObjects =
+            new ArrayList<StorageObject>();
+
+        final Map<String, Object> queryParameters =
+            new HashMap<String, Object>();
+
+        for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
+            storageObjects.clear();
+            client.readStorageObjects(containerName,
+                                      queryParameters, storageObjects);
+            for (StorageObject storageObject : storageObjects) {
+                System.out.println("\tstorageObject: " + storageObject);
+            }
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testReadStorageObjects"})
+    public void testReadStorageObject() throws IOException {
+
+        System.out.println("------------------------- testReadStorageObject()");
+
+        for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + containerName);
+            final StorageObject storageObject = new StorageObject();
+            for (String objectName : OBJECT_NAMES) {
+                System.out.println("\tobjectName: " + objectName);
+                final boolean result = client.readStorageObject(
+                    containerName, objectName, storageObject);
+                System.out.println("\t\tresult: " + result);
+                System.out.println("\t\tresponse: " + client.getResponseCode()
+                                   + " " + client.getResponseMessage());
+                System.out.println("\t\tstorageObject: " + storageObject);
+                for (Entry<String, List<String>> headerField :
+                     client.getHeaderFields().entrySet()) {
+                    System.out.println("\t\t" + headerField.getKey() + ": "
+                                       + headerField.getValue());
+                }
+            }
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testReadStorageObject"})
+    public void testReadStorageContainers() throws IOException {
+
+        System.out.println("--------------------- testReadStorageContainers()");
+
+        final Collection<StorageContainer> storageContainers =
+            new ArrayList<StorageContainer>();
+
+        client.readStorageContainers(null, storageContainers);
+
+        for (StorageContainer storageContainer : storageContainers) {
+            System.out.println("storageContainer: " + storageContainer);
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testReadStorageContainers"})
+    public void testReadStorageContainer() throws IOException {
+
+        System.out.println("---------------------- testReadStorageContainer()");
+
+        final StorageContainer storageContainer = new StorageContainer();
+        for (String containerName : CONTAINER_NAMES) {
+            System.out.println("containerName: " + storageContainer);
+            final boolean result = client.readStorageContainer(
+                containerName, storageContainer);
+            System.out.println("result: " + result);
+            System.out.println("\tresponse: " + client.getResponseCode()
+                               + " " + client.getResponseMessage());
+            System.out.println("\tstorageContainer: " + storageContainer);
+            for (Entry<String, List<String>> headerField :
+                 client.getHeaderFields().entrySet()) {
+                System.out.println("\t\t" + headerField.getKey() + ": "
+                                   + headerField.getValue());
+            }
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testReadStorageContainer"})
     public void testDeleteObject() throws IOException {
 
         System.out.println("------------------------------ testDeleteObject()");
@@ -214,7 +262,9 @@ public class UcloudStorageClientHttpTest {
             System.out.println("containerName: " + containerName);
             for (String objectName : OBJECT_NAMES) {
                 System.out.println("\tobjectName: " + objectName);
-                client.deleteObject(containerName, objectName);
+                final boolean result =
+                    client.deleteObject(containerName, objectName);
+                System.out.println("\t\tresult: " + result);
                 System.out.println("\t\tresponse: " + client.getResponseCode()
                                    + " " + client.getResponseMessage());
             }
@@ -243,6 +293,9 @@ public class UcloudStorageClientHttpTest {
 
 
     private String storagePass;
+
+
+    private UcloudStorageClient client;
 
 
 }
