@@ -696,8 +696,7 @@ public class UcloudStorageClient {
                 storageObject.setBytes(getContentLength(connection));
                 storageObject.setContentType(
                     connection.getHeaderField("Content-Type"));
-                storageObject.setLastModified(
-                    new Date(connection.getLastModified()));
+                storageObject.setLastModified(connection.getLastModified());
             }
             if (responseCode == RESPONSE_CODE_200_OK
                 || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
@@ -779,7 +778,7 @@ public class UcloudStorageClient {
                                 result.get("last_modified"));
                             lastModified.setTimeZone(UTC_TIME_ZONE);
                             storageObject.setLastModified(
-                                lastModified.getTime());
+                                lastModified.getTime().getTime());
                             storageObjects.add(storageObject);
                         }
                     } catch (ParserConfigurationException pce) {

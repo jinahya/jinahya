@@ -94,44 +94,6 @@ public class StorageLocatorTest {
     }
 
 
-    private static final int CONTAINER_NAME_FORMAT_WIDTH;
-
-
-    static {
-        try {
-            final Field field = StorageLocator.class.getDeclaredField(
-                "CONTAINER_NAME_FORMAT_WIDTH");
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            CONTAINER_NAME_FORMAT_WIDTH = field.getInt(null);
-        } catch (NoSuchFieldException nsfe) {
-            throw new InstantiationError(nsfe.toString());
-        } catch (IllegalAccessException iae) {
-            throw new InstantiationError(iae.toString());
-        }
-    }
-
-
-    private static final int OBJECT_NAME_FORMAT_WIDTH;
-
-
-    static {
-        try {
-            final Field field = StorageLocator.class.getDeclaredField(
-                "OBJECT_NAME_FORMAT_WIDTH");
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            OBJECT_NAME_FORMAT_WIDTH = field.getInt(null);
-        } catch (NoSuchFieldException nsfe) {
-            throw new InstantiationError(nsfe.toString());
-        } catch (IllegalAccessException iae) {
-            throw new InstantiationError(iae.toString());
-        }
-    }
-
-
     private static class ExtendedStorageLocator extends StorageLocator {
     }
 
@@ -166,26 +128,6 @@ public class StorageLocatorTest {
         final String expected = String.valueOf(PREFIX_SEQUENCE_DELIMITER);
         final String actual = URLEncoder.encode(expected, "UTF-8");
         Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test
-    public static void testCONTAINER_NAME_FORMAT_WIDTH() {
-
-        Assert.assertTrue(CONTAINER_NAME_FORMAT_WIDTH > 0);
-        System.out.println("CONTAINER_NAME_FORMAT_WIDTH: "
-                           + CONTAINER_NAME_FORMAT_WIDTH);
-    }
-
-
-    @Test
-    public static void testOBJECT_NAME_FORMAT_WIDTH() {
-
-        Assert.assertTrue(OBJECT_NAME_FORMAT_WIDTH > 0);
-        Assert.assertEquals(OBJECT_NAME_FORMAT_WIDTH,
-                            Long.toString(OBJECT_NAME_MASK).length());
-        System.out.println("OBJECT_NAME_FORMAT_WIDTH: "
-                           + OBJECT_NAME_FORMAT_WIDTH);
     }
 
 

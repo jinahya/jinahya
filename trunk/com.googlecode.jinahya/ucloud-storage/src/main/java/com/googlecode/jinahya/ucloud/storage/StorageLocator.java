@@ -60,7 +60,7 @@ public class StorageLocator {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    field.set(storageLocator, compositeContainerName(
+                    field.set(storageLocator, getContainerName(
                         containerNamePrefix, sequenceNumber));
                 } catch (NoSuchFieldException nsfe) {
                     throw new RuntimeException(nsfe);
@@ -71,7 +71,7 @@ public class StorageLocator {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    field.set(storageLocator, compositeObjectName(
+                    field.set(storageLocator, getObjectName(
                         objectNamePrefix, sequenceNumber));
                 } catch (NoSuchFieldException nsfe) {
                     throw new RuntimeException(nsfe);
@@ -129,6 +129,25 @@ public class StorageLocator {
     public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
 
 
+    // ----------------------------------------------------------- @lastModified
+    /**
+     * Constant for an unknown content length.
+     */
+    public static final long UNKNOWN_LAST_MODIFIED = 0L;
+
+
+    /**
+     * The minimum value of contentLength.
+     */
+    public static final long LAST_MODIFIED_MIN = UNKNOWN_LAST_MODIFIED;
+
+
+    /**
+     * The maximum value of contentLength.
+     */
+    public static final long LAST_MODIFIED_MAX = Long.MAX_VALUE;
+
+
     // ---------------------------------------------------------- @containerName
     /**
      * The minimum size of containerName.
@@ -175,20 +194,16 @@ public class StorageLocator {
         ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
 
 
-    private static final int CONTAINER_NAME_FORMAT_WIDTH =
-        Long.toString((-1L >>> OBJECT_NAME_BITS)).length();
-
-
     private static final String CONTAINER_NAME_FORMAT =
-        "%0" + CONTAINER_NAME_FORMAT_WIDTH + "d";
+        "%0" + Long.toString((-1L >>> OBJECT_NAME_BITS)).length() + "d";
 
 
-    private static final int OBJECT_NAME_FORMAT_WIDTH =
-        Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length();
+    private static final String OBJECT_NAME_FORMAT =
+        "%0" + Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length() + "d";
 
 
     /**
-     * Composites a containerName with given
+     * Makes a containerName with given
      * <code>containerNamePrefix</code> and
      * <code>sequenceNumber</code>.
      *
@@ -197,8 +212,8 @@ public class StorageLocator {
      *
      * @return a container name
      */
-    private static String compositeContainerName(
-        final String containerNamePrefix, final long sequenceNumber) {
+    private static String getContainerName(final String containerNamePrefix,
+                                           final long sequenceNumber) {
 
         return ((containerNamePrefix == null
                  || containerNamePrefix.trim().isEmpty())
@@ -209,7 +224,7 @@ public class StorageLocator {
 
 
     /**
-     * Composites an objectName with given
+     * Makes an objectName with given
      * <code>objectNamePrefix</code> and
      * <code>sequenceNumber</code>.
      *
@@ -218,13 +233,13 @@ public class StorageLocator {
      *
      * @return an object name
      */
-    private static String compositeObjectName(final String objectNamePrefix,
-                                              final long sequenceNumber) {
+    private static String getObjectName(final String objectNamePrefix,
+                                        final long sequenceNumber) {
 
         return ((objectNamePrefix == null
                  || objectNamePrefix.trim().isEmpty())
                 ? "" : (objectNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
-               + (String.format("%0" + OBJECT_NAME_FORMAT_WIDTH + "d",
+               + (String.format(OBJECT_NAME_FORMAT,
                                 (sequenceNumber & OBJECT_NAME_MASK)));
     }
 
@@ -262,7 +277,7 @@ public class StorageLocator {
                                  final long sequenceNumber) {
 
         setContainerName(
-            compositeContainerName(containerNamePrefix, sequenceNumber));
+            getContainerName(containerNamePrefix, sequenceNumber));
     }
 
 
@@ -298,7 +313,7 @@ public class StorageLocator {
     public void setObjectName(final String objectNamePrefix,
                               final long sequenceNumber) {
 
-        setObjectName(compositeObjectName(objectNamePrefix, sequenceNumber));
+        setObjectName(getObjectName(objectNamePrefix, sequenceNumber));
     }
 
 
@@ -344,10 +359,31 @@ public class StorageLocator {
     }
 
 
+    // ----------------------------------------------------------- LAST_MODIFIED
+    /**
+     * Returns lastModified.
+     *
+     * @return lastModified
+     */
+    public long getLastModified() {
+        return lastModified;
+    }
+
+
+    /**
+     * Sets lastModified.
+     *
+     * @param lastModified lastModified
+     */
+    public void setLastModified(final long lastModified) {
+        this.lastModified = lastModified;
+    }
+
+
     @Override
     public String toString() {
         return containerName + "|" + objectName + "|" + contentType + "|"
-               + contentLength;
+               + contentLength + "|" + lastModified;
     }
 
 
@@ -377,7 +413,7 @@ public class StorageLocator {
      * content type.
      */
     @Basic(optional = false)
-    @Column(name = "CONTENT_TYPE")
+    @Column(name = "CONTENT_TYPE", nullable = false)
     @Size(min = CONTENT_TYPE_SIZE_MIN, max = CONTENT_TYPE_SIZE_MAX)
     @XmlElement(required = true)
     private String contentType = UNKNOWN_CONTENT_TYPE;
@@ -387,11 +423,22 @@ public class StorageLocator {
      * content length.
      */
     @Basic(optional = false)
-    @Column(name = "CONTENT_LENGTH")
+    @Column(name = "CONTENT_LENGTH", nullable = false)
     @Min(CONTENT_LENGTH_MIN)
     @Max(CONTENT_LENGTH_MAX)
     @XmlElement(required = true)
     private long contentLength = UNKNOWN_CONTENT_LENGTH;
+
+
+    /**
+     * last modified.
+     */
+    @Basic(optional = false)
+    @Column(name = "LAST_MODIFIED", nullable = false)
+    @Min(LAST_MODIFIED_MIN)
+    @Max(LAST_MODIFIED_MAX)
+    @XmlElement(required = true)
+    private long lastModified = UNKNOWN_LAST_MODIFIED;
 
 
 }
