@@ -39,7 +39,7 @@ import org.xml.sax.helpers.DefaultHandler;
 class SimpleHandler extends DefaultHandler {
 
 
-    protected static final SAXParserFactory PARSER_FACTORY =
+    private static final SAXParserFactory PARSER_FACTORY =
         SAXParserFactory.newInstance();
 
 
@@ -77,7 +77,7 @@ class SimpleHandler extends DefaultHandler {
      * @param results
      */
     public SimpleHandler(final String parentQName,
-                          final Collection<Map<String, String>> results) {
+                         final Collection<Map<String, String>> results) {
 
         super();
 

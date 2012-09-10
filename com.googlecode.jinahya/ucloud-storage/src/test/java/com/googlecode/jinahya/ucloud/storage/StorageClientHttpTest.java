@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Test(singleThreaded = true)
-public class UcloudStorageClientHttpTest {
+public class StorageClientHttpTest {
 
 
     private static final String[] CONTAINER_NAMES = new String[]{
@@ -72,7 +72,7 @@ public class UcloudStorageClientHttpTest {
             //Assert.fail("missing property 'storagePass'");
         }
 
-        client = new UcloudStorageClient(storageUser, storagePass);
+        client = new StorageClient(storageUser, storagePass);
     }
 
 
@@ -80,9 +80,6 @@ public class UcloudStorageClientHttpTest {
     public void testCreateContainer() throws IOException {
 
         System.out.println("--------------------------- testCreateContainer()");
-
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
 
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("\tcontainerName: " + containerName);
@@ -97,9 +94,6 @@ public class UcloudStorageClientHttpTest {
     public void testUpdateObject() throws IOException {
 
         System.out.println("------------------------------ testUpdateObject()");
-
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
 
         final Random random = new Random();
 
@@ -133,9 +127,6 @@ public class UcloudStorageClientHttpTest {
 
         System.out.println("-------------------------------- testReadObject()");
 
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
-
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
 
@@ -163,9 +154,6 @@ public class UcloudStorageClientHttpTest {
     public void testReadStorageObjects() throws IOException {
 
         System.out.println("------------------------ testReadStorageObjects()");
-
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
 
         final Collection<StorageObject> storageObjects =
             new ArrayList<StorageObject>();
@@ -255,9 +243,6 @@ public class UcloudStorageClientHttpTest {
 
         System.out.println("------------------------------ testDeleteObject()");
 
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
-
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
             for (String objectName : OBJECT_NAMES) {
@@ -277,9 +262,6 @@ public class UcloudStorageClientHttpTest {
 
         System.out.println("--------------------------- testDeleteContainer()");
 
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
-
         for (String containerName : CONTAINER_NAMES) {
             System.out.println("containerName: " + containerName);
             client.deleteContainer(containerName);
@@ -295,7 +277,7 @@ public class UcloudStorageClientHttpTest {
     private String storagePass;
 
 
-    private UcloudStorageClient client;
+    private StorageClient client;
 
 
 }

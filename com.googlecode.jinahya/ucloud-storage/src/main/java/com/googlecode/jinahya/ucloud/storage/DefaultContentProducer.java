@@ -29,6 +29,13 @@ public class DefaultContentProducer extends DefaultContentDataProducer
     implements ContentProducer {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param contentType content type
+     * @param contentLength content length
+     * @param contentData content data
+     */
     public DefaultContentProducer(final String contentType,
                                   final long contentLength,
                                   final InputStream contentData) {
@@ -51,9 +58,15 @@ public class DefaultContentProducer extends DefaultContentDataProducer
     }
 
 
+    /**
+     * content type.
+     */
     private final String contentType;
 
 
+    /**
+     * content length.
+     */
     private final long contentLength;
 
 

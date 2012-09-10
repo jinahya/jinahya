@@ -54,8 +54,8 @@ public class ContentDataStreamingOutput implements StreamingOutput {
     @Override
     public void write(final OutputStream output) throws IOException {
 
-        final UcloudStorageClient client =
-            new UcloudStorageClient(storageUser, storagePass);
+        final StorageClient client =
+            new StorageClient(storageUser, storagePass);
 
         final ContentDataConsumer contentDataConsumer =
             new DefaultContentDataConsumer(output);

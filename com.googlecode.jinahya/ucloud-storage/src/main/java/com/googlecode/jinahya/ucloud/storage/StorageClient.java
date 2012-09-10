@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UcloudStorageClient {
+public class StorageClient {
 
 
     /**
@@ -79,7 +79,7 @@ public class UcloudStorageClient {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(UcloudStorageClient.class.getPackage().getName());
+        Logger.getLogger(StorageClient.class.getPackage().getName());
 
 
     static {
@@ -345,7 +345,7 @@ public class UcloudStorageClient {
      * @param storageUser user id
      * @param storagePass api key
      */
-    public UcloudStorageClient(final String storageUser,
+    public StorageClient(final String storageUser,
                                final String storagePass) {
         super();
 

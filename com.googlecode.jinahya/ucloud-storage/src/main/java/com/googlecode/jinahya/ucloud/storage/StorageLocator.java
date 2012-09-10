@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
@@ -134,12 +133,10 @@ public class StorageLocator {
     public static final long CONTENT_LENGTH_MIN = UNKNOWN_CONTENT_LENGTH;
 
 
-    /**
-     * The maximum value of contentLength.
-     */
-    public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
-
-
+//    /**
+//     * The maximum value of contentLength.
+//     */
+//    public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
     // ----------------------------------------------------------- @lastModified
     /**
      * Constant for an unknown content length.
@@ -153,12 +150,10 @@ public class StorageLocator {
     public static final long LAST_MODIFIED_MIN = UNKNOWN_LAST_MODIFIED;
 
 
-    /**
-     * The maximum value of contentLength.
-     */
-    public static final long LAST_MODIFIED_MAX = Long.MAX_VALUE;
-
-
+//    /**
+//     * The maximum value of contentLength.
+//     */
+//    public static final long LAST_MODIFIED_MAX = Long.MAX_VALUE;
     // ---------------------------------------------------------- @containerName
     /**
      * The minimum size of containerName.
@@ -424,7 +419,7 @@ public class StorageLocator {
     @Column(name = "CONTAINER_NAME")
     //@NotNull
     @Size(min = CONTAINER_NAME_SIZE_MIN, max = CONTAINER_NAME_SIZE_MAX)
-    @XmlElement(required = true)
+    @XmlElement(nillable = true, required = true)
     private String containerName;
 
 
@@ -435,7 +430,7 @@ public class StorageLocator {
     @Column(name = "OBJECT_NAME")
     //@NotNull
     @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
-    @XmlElement(required = true)
+    @XmlElement(nillable = true, required = true)
     private String objectName;
 
 
@@ -455,7 +450,7 @@ public class StorageLocator {
     @Basic(optional = false)
     @Column(name = "CONTENT_LENGTH", nullable = false)
     @Min(CONTENT_LENGTH_MIN)
-    @Max(CONTENT_LENGTH_MAX)
+    //@Max(CONTENT_LENGTH_MAX)
     @XmlElement(required = true)
     private long contentLength = UNKNOWN_CONTENT_LENGTH;
 
@@ -466,7 +461,7 @@ public class StorageLocator {
     @Basic(optional = false)
     @Column(name = "LAST_MODIFIED", nullable = false)
     @Min(LAST_MODIFIED_MIN)
-    @Max(LAST_MODIFIED_MAX)
+    //@Max(LAST_MODIFIED_MAX)
     @XmlElement(required = true)
     private long lastModified = UNKNOWN_LAST_MODIFIED;
 
