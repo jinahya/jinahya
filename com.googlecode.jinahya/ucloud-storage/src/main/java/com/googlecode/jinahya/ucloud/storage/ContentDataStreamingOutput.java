@@ -19,7 +19,6 @@ package com.googlecode.jinahya.ucloud.storage;
 
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import javax.ws.rs.core.StreamingOutput;
 
@@ -28,7 +27,7 @@ import javax.ws.rs.core.StreamingOutput;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ContentStreamingOutput implements StreamingOutput {
+public class ContentDataStreamingOutput implements StreamingOutput {
 
 
     /**
@@ -39,10 +38,10 @@ public class ContentStreamingOutput implements StreamingOutput {
      * @param containerName container name
      * @param objectName object name
      */
-    public ContentStreamingOutput(final String storageUser,
-                                  final String storagePass,
-                                  final String containerName,
-                                  final String objectName) {
+    public ContentDataStreamingOutput(final String storageUser,
+                                      final String storagePass,
+                                      final String containerName,
+                                      final String objectName) {
         super();
 
         this.storageUser = storageUser;
@@ -58,24 +57,10 @@ public class ContentStreamingOutput implements StreamingOutput {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final ContentDataConsumer consumer = new ContentDataConsumer() {
+        final ContentDataConsumer contentDataConsumer =
+            new DefaultContentDataConsumer(output);
 
-
-            @Override
-            public void setContentData(final InputStream contentData)
-                throws IOException {
-
-                final byte[] buffer = new byte[8192];
-                for (int read = -1; (read = contentData.read(buffer)) != -1;) {
-                    output.write(buffer, 0, read);
-                }
-                output.flush();
-            }
-
-
-        };
-
-        client.readObject(containerName, objectName, consumer);
+        client.readObject(containerName, objectName, contentDataConsumer);
     }
 
 
