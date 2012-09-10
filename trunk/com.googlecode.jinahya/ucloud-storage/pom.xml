@@ -70,6 +70,11 @@
         <artifactId>maven-svn-wagon</artifactId>
         <version>1.4</version>
       </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>2.2</version>
+      </extension>
     </extensions>
     <pluginManagement>
       <plugins>
@@ -212,7 +217,10 @@
   <reporting />
 
   <name>ucloud-storage</name>
+  <url>http://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <!--
   <url>http://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  -->
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>
@@ -268,9 +276,15 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
     -->
+    <!--
     <site>
       <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+    </site>
+    -->
+    <site>
+      <id>jinahya.com</id>
+      <url>dav:${project.url}</url>
     </site>
   </distributionManagement>
   <profiles>
