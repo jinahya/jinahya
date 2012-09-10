@@ -152,7 +152,7 @@ public class StorageLocator {
     /**
      * The maximum size of objectName.
      */
-    public static final int OBJECT_NAME_SIZE_MAX = 255;
+    public static final int OBJECT_NAME_SIZE_MAX = 255; // 1024?
 
 
     // ------------------------------------------------------- @prefix/@sequence
@@ -179,6 +179,10 @@ public class StorageLocator {
         Long.toString((-1L >>> OBJECT_NAME_BITS)).length();
 
 
+    private static final String CONTAINER_NAME_FORMAT =
+        "%0" + CONTAINER_NAME_FORMAT_WIDTH + "d";
+
+
     private static final int OBJECT_NAME_FORMAT_WIDTH =
         Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length();
 
@@ -199,7 +203,7 @@ public class StorageLocator {
         return ((containerNamePrefix == null
                  || containerNamePrefix.trim().isEmpty())
                 ? "" : (containerNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
-               + (String.format("%0" + CONTAINER_NAME_FORMAT_WIDTH + "d",
+               + (String.format(CONTAINER_NAME_FORMAT,
                                 (sequenceNumber >>> OBJECT_NAME_BITS)));
     }
 
