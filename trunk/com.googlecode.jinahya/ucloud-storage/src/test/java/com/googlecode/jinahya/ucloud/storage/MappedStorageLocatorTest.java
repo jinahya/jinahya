@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StorageLocatorTest {
+public class MappedStorageLocatorTest {
 
 
     private static final Random RANDOM = new Random();
@@ -42,7 +42,7 @@ public class StorageLocatorTest {
 
     static {
         try {
-            final Field field = StorageLocator.class.getDeclaredField(
+            final Field field = MappedStorageLocator.class.getDeclaredField(
                 "OBJECT_NAME_BITS");
             if (!field.isAccessible()) {
                 field.setAccessible(true);
@@ -61,7 +61,7 @@ public class StorageLocatorTest {
 
     static {
         try {
-            final Field field = StorageLocator.class.getDeclaredField(
+            final Field field = MappedStorageLocator.class.getDeclaredField(
                 "OBJECT_NAME_MASK");
             if (!field.isAccessible()) {
                 field.setAccessible(true);
@@ -80,7 +80,7 @@ public class StorageLocatorTest {
 
     static {
         try {
-            final Field field = StorageLocator.class.getDeclaredField(
+            final Field field = MappedStorageLocator.class.getDeclaredField(
                 "PREFIX_SEQUENCE_DELIMITER");
             if (!field.isAccessible()) {
                 field.setAccessible(true);
@@ -94,7 +94,7 @@ public class StorageLocatorTest {
     }
 
 
-    private static class ExtendedStorageLocator extends StorageLocator {
+    private static class ExtendedStorageLocator extends MappedStorageLocator {
     }
 
 
@@ -105,7 +105,7 @@ public class StorageLocatorTest {
             RandomStringUtils.randomAscii(RANDOM.nextInt(49));
         final String objectNamePrefix =
             RandomStringUtils.randomAscii(RANDOM.nextInt(255));
-        final ExtendedStorageLocator instance = StorageLocator.newInstance(
+        final ExtendedStorageLocator instance = MappedStorageLocator.newInstance(
             ExtendedStorageLocator.class, containerNamePrefix, objectNamePrefix,
             RANDOM.nextLong());
         System.out.println(instance.getContainerName());
@@ -134,7 +134,7 @@ public class StorageLocatorTest {
     @Test
     public void testNameAndLength() {
 
-        final StorageLocator locator = new StorageLocator();
+        final MappedStorageLocator locator = new MappedStorageLocator();
 
         testNameAndLength(locator, Long.MIN_VALUE);
         testNameAndLength(locator, -1L);
@@ -144,7 +144,7 @@ public class StorageLocatorTest {
     }
 
 
-    private void testNameAndLength(final StorageLocator storageLocator,
+    private void testNameAndLength(final MappedStorageLocator storageLocator,
                                    final long sequenceNumber) {
 
         storageLocator.setContainerName(null, sequenceNumber);
@@ -160,7 +160,7 @@ public class StorageLocatorTest {
     @Test(invocationCount = 100)
     public void testSequenceNumber() {
 
-        final StorageLocator locator = new StorageLocator();
+        final MappedStorageLocator locator = new MappedStorageLocator();
 
         final long expected = RANDOM.nextLong();
         locator.setContainerName(null, expected);
@@ -179,7 +179,7 @@ public class StorageLocatorTest {
     @Test
     public void testContainerName() {
 
-        final StorageLocator locator = new StorageLocator();
+        final MappedStorageLocator locator = new MappedStorageLocator();
 
         locator.setContainerName(null);
         Assert.assertNull(locator.getContainerName());
@@ -195,7 +195,7 @@ public class StorageLocatorTest {
     @Test
     public void testObjectName() {
 
-        final StorageLocator locator = new StorageLocator();
+        final MappedStorageLocator locator = new MappedStorageLocator();
 
         locator.setObjectName(null);
         Assert.assertNull(locator.getObjectName());
