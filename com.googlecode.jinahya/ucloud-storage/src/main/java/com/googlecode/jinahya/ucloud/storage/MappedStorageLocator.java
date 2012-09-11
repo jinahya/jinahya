@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @MappedSuperclass
-public class StorageLocator {
+public class MappedStorageLocator {
 
 
     /**
@@ -49,7 +49,7 @@ public class StorageLocator {
      * @param sequenceNumber sequence number
      * @return a new instance of <code>storageLocatorType</code>.
      */
-    public static <L extends StorageLocator> L newInstance(
+    public static <L extends MappedStorageLocator> L newInstance(
         final Class<L> storageLocatorType, final String containerNamePrefix,
         final String objectNamePrefix, final long sequenceNumber) {
 
@@ -66,7 +66,7 @@ public class StorageLocator {
             try {
                 final L storageLocator = constructor.newInstance();
                 try {
-                    final Field field = StorageLocator.class.
+                    final Field field = MappedStorageLocator.class.
                         getDeclaredField("containerName");
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
@@ -77,7 +77,7 @@ public class StorageLocator {
                     throw new RuntimeException(nsfe);
                 }
                 try {
-                    final Field field = StorageLocator.class.
+                    final Field field = MappedStorageLocator.class.
                         getDeclaredField("objectName");
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
