@@ -25,6 +25,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -133,10 +134,6 @@ public class StorageLocator {
     public static final long CONTENT_LENGTH_MIN = UNKNOWN_CONTENT_LENGTH;
 
 
-//    /**
-//     * The maximum value of contentLength.
-//     */
-//    public static final long CONTENT_LENGTH_MAX = Long.MAX_VALUE;
     // ----------------------------------------------------------- @lastModified
     /**
      * Constant for an unknown content length.
@@ -150,10 +147,6 @@ public class StorageLocator {
     public static final long LAST_MODIFIED_MIN = UNKNOWN_LAST_MODIFIED;
 
 
-//    /**
-//     * The maximum value of contentLength.
-//     */
-//    public static final long LAST_MODIFIED_MAX = Long.MAX_VALUE;
     // ---------------------------------------------------------- @containerName
     /**
      * The minimum size of containerName.
@@ -286,7 +279,7 @@ public class StorageLocator {
      *
      * @param containerName containerName
      */
-    protected void setContainerName(final String containerName) {
+    public void setContainerName(final String containerName) {
         this.containerName = containerName;
     }
 
@@ -439,6 +432,7 @@ public class StorageLocator {
      */
     @Basic(optional = false)
     @Column(name = "CONTENT_TYPE", nullable = false)
+    @NotNull
     @Size(min = CONTENT_TYPE_SIZE_MIN, max = CONTENT_TYPE_SIZE_MAX)
     @XmlElement(required = true)
     private String contentType = UNKNOWN_CONTENT_TYPE;
@@ -451,6 +445,7 @@ public class StorageLocator {
     @Column(name = "CONTENT_LENGTH", nullable = false)
     @Min(CONTENT_LENGTH_MIN)
     //@Max(CONTENT_LENGTH_MAX)
+    @NotNull
     @XmlElement(required = true)
     private long contentLength = UNKNOWN_CONTENT_LENGTH;
 
@@ -462,6 +457,7 @@ public class StorageLocator {
     @Column(name = "LAST_MODIFIED", nullable = false)
     @Min(LAST_MODIFIED_MIN)
     //@Max(LAST_MODIFIED_MAX)
+    @NotNull
     @XmlElement(required = true)
     private long lastModified = UNKNOWN_LAST_MODIFIED;
 
