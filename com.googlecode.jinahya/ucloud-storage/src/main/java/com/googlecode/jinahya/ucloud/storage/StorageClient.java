@@ -59,14 +59,14 @@ public class StorageClient {
     /**
      * Content type for unknown.
      */
-    protected static final String UNKNOWN_CONTENT_TYPE =
+    private static final String UNKNOWN_CONTENT_TYPE =
         "application/octet-stream";
 
 
     /**
      * Content length for unknown.
      */
-    protected static final long UNKNOWN_CONTENT_LENGTH = -1L;
+    private static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
     /**

@@ -62,7 +62,7 @@ public class DefaultContentDataConsumer implements ContentDataConsumer {
     /**
      * content data.
      */
-    protected final OutputStream contentData;
+    private final OutputStream contentData;
 
 
 }
