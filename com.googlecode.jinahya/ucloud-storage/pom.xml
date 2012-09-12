@@ -290,12 +290,10 @@
       <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
     -->
-    <!--
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
     </site>
-    -->
   </distributionManagement>
   <profiles>
     <profile>
