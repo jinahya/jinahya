@@ -177,7 +177,16 @@ public class MappedStorageLocatorTest {
 
 
     @Test
-    public void testContainerName() {
+    public void testGetContainerName() {
+
+        final MappedStorageLocator locator = new MappedStorageLocator();
+
+        Assert.assertNull(locator.getContainerName());
+    }
+
+
+    @Test
+    public void testSetContainerName() {
 
         final MappedStorageLocator locator = new MappedStorageLocator();
 
@@ -193,7 +202,16 @@ public class MappedStorageLocatorTest {
 
 
     @Test
-    public void testObjectName() {
+    public void testGetObjectName() {
+
+        final MappedStorageLocator locator = new MappedStorageLocator();
+
+        Assert.assertNull(locator.getObjectName());
+    }
+
+
+    @Test
+    public void testSetObjectName() {
 
         final MappedStorageLocator locator = new MappedStorageLocator();
 

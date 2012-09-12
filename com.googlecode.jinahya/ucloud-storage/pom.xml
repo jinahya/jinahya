@@ -66,14 +66,19 @@
   <build>
     <extensions>
       <extension>
-        <groupId>com.google.code.maven-svn-wagon</groupId>
-        <artifactId>maven-svn-wagon</artifactId>
-        <version>1.4</version>
-      </extension>
-      <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>2.2</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.openjpa</groupId>
+        <artifactId>openjpa-all</artifactId>
+        <version>2.2.0</version>
+      </extension>
+      <extension>
+        <groupId>com.google.code.maven-svn-wagon</groupId>
+        <artifactId>maven-svn-wagon</artifactId>
+        <version>1.4</version>
       </extension>
     </extensions>
     <pluginManagement>
@@ -145,6 +150,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <compilerArgument>-Aopenjpa.metamodel=true</compilerArgument>
           <source>1.5</source>
           <target>1.5</target>
           <showDeprecation>true</showDeprecation>
