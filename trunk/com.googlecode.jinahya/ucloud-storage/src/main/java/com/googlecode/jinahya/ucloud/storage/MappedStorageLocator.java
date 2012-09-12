@@ -24,8 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -101,52 +99,6 @@ public class MappedStorageLocator {
     }
 
 
-    // ------------------------------------------------------------ @contentType
-    /**
-     * Constant for an unknown content type.
-     */
-    public static final String UNKNOWN_CONTENT_TYPE =
-        "application/octet-stream";
-
-
-    /**
-     * The minimum size of contentType.
-     */
-    public static final int CONTENT_TYPE_SIZE_MIN = 3; // a/b
-
-
-    /**
-     * The maximum size of contentType.
-     */
-    public static final int CONTENT_TYPE_SIZE_MAX = 255;
-
-
-    // ---------------------------------------------------------- @contentLength
-    /**
-     * Constant for an unknown content length.
-     */
-    public static final long UNKNOWN_CONTENT_LENGTH = -1L;
-
-
-    /**
-     * The minimum value of contentLength.
-     */
-    public static final long CONTENT_LENGTH_MIN = UNKNOWN_CONTENT_LENGTH;
-
-
-    // ----------------------------------------------------------- @lastModified
-    /**
-     * Constant for an unknown content length.
-     */
-    public static final long UNKNOWN_LAST_MODIFIED = 0L;
-
-
-    /**
-     * The minimum value of contentLength.
-     */
-    public static final long LAST_MODIFIED_MIN = UNKNOWN_LAST_MODIFIED;
-
-
     // ---------------------------------------------------------- @containerName
     /**
      * The minimum size of containerName.
@@ -157,7 +109,7 @@ public class MappedStorageLocator {
     /**
      * The maximum size of containerName.
      */
-    public static final int CONTAINER_NAME_SIZE_MAX = 255;
+    public static final int CONTAINER_NAME_SIZE_MAX = 64;
 
 
     // ------------------------------------------------------------- @objectName
@@ -170,16 +122,10 @@ public class MappedStorageLocator {
     /**
      * The maximum size of objectName.
      */
-    public static final int OBJECT_NAME_SIZE_MAX = 255; // 1024?
+    public static final int OBJECT_NAME_SIZE_MAX = 255; // 256?
 
 
     // ------------------------------------------------------- @prefix/@sequence
-    /**
-     * The delimiter.
-     */
-    private static final char PREFIX_SEQUENCE_DELIMITER = '*';
-
-
     /**
      * The number of lower bits for object names.
      */
@@ -222,6 +168,12 @@ public class MappedStorageLocator {
 
 
     /**
+     * The delimiter.
+     */
+    private static final char PREFIX_SEQUENCE_DELIMITER = '*';
+
+
+    /**
      * Makes a containerName with given
      * <code>containerNamePrefix</code> and
      * <code>sequenceNumber</code>.
@@ -231,12 +183,11 @@ public class MappedStorageLocator {
      *
      * @return a container name
      */
-    private static String getContainerName(final String containerNamePrefix,
-                                           final long sequenceNumber) {
+    public static String getContainerName(final String containerNamePrefix,
+                                          final long sequenceNumber) {
 
-        return ((containerNamePrefix == null
-                 || containerNamePrefix.trim().isEmpty())
-                ? "" : (containerNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
+        return (containerNamePrefix == null
+                ? "" : (containerNamePrefix + PREFIX_SEQUENCE_DELIMITER))
                + (String.format(CONTAINER_NAME_FORMAT,
                                 (sequenceNumber >>> OBJECT_NAME_BITS)));
     }
@@ -252,12 +203,11 @@ public class MappedStorageLocator {
      *
      * @return an object name
      */
-    private static String getObjectName(final String objectNamePrefix,
-                                        final long sequenceNumber) {
+    public static String getObjectName(final String objectNamePrefix,
+                                       final long sequenceNumber) {
 
-        return ((objectNamePrefix == null
-                 || objectNamePrefix.trim().isEmpty())
-                ? "" : (objectNamePrefix.trim() + PREFIX_SEQUENCE_DELIMITER))
+        return (objectNamePrefix == null
+                ? "" : (objectNamePrefix + PREFIX_SEQUENCE_DELIMITER))
                + (String.format(OBJECT_NAME_FORMAT,
                                 (sequenceNumber & OBJECT_NAME_MASK)));
     }
@@ -280,6 +230,15 @@ public class MappedStorageLocator {
      * @param containerName containerName
      */
     public void setContainerName(final String containerName) {
+
+//        if (containerName == null) {
+//            throw new IllegalArgumentException("null containerName");
+//        }
+//
+//        if (containerName.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty containerName");
+//        }
+
         this.containerName = containerName;
     }
 
@@ -316,6 +275,15 @@ public class MappedStorageLocator {
      * @param objectName objectName
      */
     public void setObjectName(final String objectName) {
+
+//        if (objectName == null) {
+//            throw new IllegalArgumentException("null objectName");
+//        }
+//
+//        if (objectName.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty objectName");
+//        }
+
         this.objectName = objectName;
     }
 
@@ -335,73 +303,9 @@ public class MappedStorageLocator {
     }
 
 
-    // ------------------------------------------------------------ CONTENT_TYPE
-    /**
-     * Returns content type.
-     *
-     * @return content type
-     */
-    public String getContentType() {
-        return contentType;
-    }
-
-
-    /**
-     * Sets content type.
-     *
-     * @param contentType content type
-     */
-    public void setContentType(final String contentType) {
-        this.contentType = contentType;
-    }
-
-
-    // ---------------------------------------------------------- CONTENT_LENGTH
-    /**
-     * Returns content length.
-     *
-     * @return content length
-     */
-    public long getContentLength() {
-        return contentLength;
-    }
-
-
-    /**
-     * Sets content length.
-     *
-     * @param contentLength content length
-     */
-    public void setContentLength(final long contentLength) {
-        this.contentLength = contentLength;
-    }
-
-
-    // ----------------------------------------------------------- LAST_MODIFIED
-    /**
-     * Returns lastModified.
-     *
-     * @return lastModified
-     */
-    public long getLastModified() {
-        return lastModified;
-    }
-
-
-    /**
-     * Sets lastModified.
-     *
-     * @param lastModified lastModified
-     */
-    public void setLastModified(final long lastModified) {
-        this.lastModified = lastModified;
-    }
-
-
     @Override
     public String toString() {
-        return containerName + "|" + objectName + "|" + contentType + "|"
-               + contentLength + "|" + lastModified;
+        return containerName + "/" + objectName;
     }
 
 
@@ -425,41 +329,6 @@ public class MappedStorageLocator {
     @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
     @XmlElement(nillable = true, required = true)
     private String objectName;
-
-
-    /**
-     * content type.
-     */
-    @Basic(optional = false)
-    @Column(name = "CONTENT_TYPE", nullable = false)
-    @NotNull
-    @Size(min = CONTENT_TYPE_SIZE_MIN, max = CONTENT_TYPE_SIZE_MAX)
-    @XmlElement(required = true)
-    private String contentType = UNKNOWN_CONTENT_TYPE;
-
-
-    /**
-     * content length.
-     */
-    @Basic(optional = false)
-    @Column(name = "CONTENT_LENGTH", nullable = false)
-    @Min(CONTENT_LENGTH_MIN)
-    //@Max(CONTENT_LENGTH_MAX)
-    @NotNull
-    @XmlElement(required = true)
-    private long contentLength = UNKNOWN_CONTENT_LENGTH;
-
-
-    /**
-     * last modified.
-     */
-    @Basic(optional = false)
-    @Column(name = "LAST_MODIFIED", nullable = false)
-    @Min(LAST_MODIFIED_MIN)
-    //@Max(LAST_MODIFIED_MAX)
-    @NotNull
-    @XmlElement(required = true)
-    private long lastModified = UNKNOWN_LAST_MODIFIED;
 
 
 }
