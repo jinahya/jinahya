@@ -25,10 +25,11 @@ import javax.persistence.EntityManager;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class EntityFacadeSupport<E, I> {
+public class EntityFacadeSupport {
 
 
     /**
+     * Finds an entity instance.
      *
      * @param <E> entity instance type parameter
      * @param <I> primary key type parameter
@@ -36,23 +37,22 @@ public class EntityFacadeSupport<E, I> {
      * @param entityClass entity class
      * @param primaryKey primary key
      *
-     * @return found entity instance or
-     * <code>null</code> if not found
+     * @return found entity instance or <code>null</code> if not found
      */
     public static <E, I> E find(final EntityManager entityManager,
                                 final Class<E> entityClass,
                                 final I primaryKey) {
 
         if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
+            throw new IllegalArgumentException("null entityManager");
         }
 
         if (entityClass == null) {
-            throw new NullPointerException("null entityClass");
+            throw new IllegalArgumentException("null entityClass");
         }
 
         if (primaryKey == null) {
-            throw new NullPointerException("null primaryKey");
+            throw new IllegalArgumentException("null primaryKey");
         }
 
         return entityManager.find(entityClass, primaryKey);
@@ -60,25 +60,26 @@ public class EntityFacadeSupport<E, I> {
 
 
     /**
+     * Persists an entity instance.
      *
-     * @param <E>
-     * @param entityManager
-     * @param entityClass
-     * @param entity
+     * @param <E> entity type parameter
+     * @param entityManager entity manager
+     * @param entityClass entity class
+     * @param entity entity
      */
     public static <E> void persist(final EntityManager entityManager,
                                    final Class<E> entityClass, final E entity) {
 
         if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
+            throw new IllegalArgumentException("null entityManager");
         }
 
         if (entityClass == null) {
-            throw new NullPointerException("null entityClass");
+            throw new IllegalArgumentException("null entityClass");
         }
 
         if (entity == null) {
-            throw new NullPointerException("null entity");
+            throw new IllegalArgumentException("null entity");
         }
 
         entityManager.persist(entity);
@@ -86,28 +87,28 @@ public class EntityFacadeSupport<E, I> {
 
 
     /**
+     * Merges an entity instance.
      *
-     * @param <E>
-     * @param entityManager
-     * @param entityClass
-     * @param entity
+     * @param <E> entity type parameter
+     * @param entityManager entity manager
+     * @param entityClass entity class
+     * @param entity entity instance
      *
-     * @return merged entity instance or
-     * <code>null</code> if removed
+     * @return merged entity instance or <code>null</code> if removed
      */
     public static <E> E merge(final EntityManager entityManager,
                               final Class<E> entityClass, final E entity) {
 
         if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
+            throw new IllegalArgumentException("null entityManager");
         }
 
         if (entityClass == null) {
-            throw new NullPointerException("null entityClass");
+            throw new IllegalArgumentException("null entityClass");
         }
 
         if (entity == null) {
-            throw new NullPointerException("null entity");
+            throw new IllegalArgumentException("null entity");
         }
 
         try {
@@ -120,26 +121,30 @@ public class EntityFacadeSupport<E, I> {
 
 
     /**
+     * Removes an entity instance.
      *
-     * @param <E>
-     * @param <I>
+     * @param <E> entity type parameter
+     * @param <I> primary key type parameter
      * @param entityManager entity manager
      * @param entityClass entity class
      * @param primaryKey primary key
      *
-     * @return removed entity instance or
-     * <code>null</code> if not found
+     * @return removed entity instance or <code>null</code> if not found
      */
     public static <E, I> E remove(final EntityManager entityManager,
                                   final Class<E> entityClass,
                                   final I primaryKey) {
 
         if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
+            throw new IllegalArgumentException("null entityManager");
+        }
+
+        if (entityClass == null) {
+            throw new IllegalArgumentException("null entityClass");
         }
 
         if (primaryKey == null) {
-            throw new NullPointerException("null primaryKey");
+            throw new IllegalArgumentException("null primaryKey");
         }
 
         final E entity = find(entityManager, entityClass, primaryKey);
@@ -154,109 +159,113 @@ public class EntityFacadeSupport<E, I> {
 
     /**
      * Creates a new instance.
-     *
-     * @param entityClass
      */
-    public EntityFacadeSupport(final Class<E> entityClass) {
+    protected EntityFacadeSupport() {
         super();
-
-        if (entityClass == null) {
-            throw new NullPointerException("null entityClass");
-        }
-
-        this.entityClass = entityClass;
     }
 
-
-    /**
-     *
-     * @param entityManager entity manager
-     * @param primaryKey primary key
-     *
-     * @return found entity instance or
-     * <code>null</code> if not found
-     */
-    public E find(final EntityManager entityManager, final I primaryKey) {
-
-        if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
-        }
-
-        if (primaryKey == null) {
-            throw new NullPointerException("null primaryKey");
-        }
-
-        return find(entityManager, entityClass, primaryKey);
-    }
-
-
-    /**
-     *
-     * @param entityManager entity manager
-     * @param entity entity instance
-     */
-    public void persist(final EntityManager entityManager, final E entity) {
-
-        if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
-        }
-
-        if (entity == null) {
-            throw new NullPointerException("null entity");
-        }
-
-        persist(entityManager, entityClass, entity);
-    }
-
-
-    /**
-     *
-     * @param entityManager entity manager
-     * @param entity entity instance
-     *
-     * @return merged instance
-     */
-    public E merge(final EntityManager entityManager, final E entity) {
-
-        if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
-        }
-
-        if (entity == null) {
-            throw new NullPointerException("null entity");
-        }
-
-        return merge(entityManager, entityClass, entity);
-    }
-
-
-    /**
-     *
-     * @param entityManager entity manager
-     * @param primaryKey primary key
-     *
-     * @return the removed entity instance or
-     * <code>null</code> if not found
-     */
-    public E remove(final EntityManager entityManager, final I primaryKey) {
-
-        if (entityManager == null) {
-            throw new NullPointerException("null entityManager");
-        }
-
-        if (primaryKey == null) {
-            throw new NullPointerException("null primaryKey");
-        }
-
-        return remove(entityManager, entityClass, primaryKey);
-    }
-
-
-    /**
-     * entity class.
-     */
-    private final Class<E> entityClass;
-
+//    /**
+//     * Creates a new instance.
+//     *
+//     * @param entityClass
+//     */
+//    public EntityFacadeSupport(final Class<E> entityClass) {
+//        super();
+//
+//        if (entityClass == null) {
+//            throw new IllegalArgumentException("null null entityClass");
+//        }
+//
+//        this.entityClass = entityClass;
+//    }
+//
+//
+//    /**
+//     *
+//     * @param entityManager entity manager
+//     * @param primaryKey primary key
+//     *
+//     * @return found entity instance or <code>null</code> if not found
+//     */
+//    public E find(final EntityManager entityManager, final I primaryKey) {
+//
+//        if (entityManager == null) {
+//            throw new NullPointerException("null entityManager");
+//        }
+//
+//        if (primaryKey == null) {
+//            throw new NullPointerException("null primaryKey");
+//        }
+//
+//        return find(entityManager, entityClass, primaryKey);
+//    }
+//
+//
+//    /**
+//     *
+//     * @param entityManager entity manager
+//     * @param entity entity instance
+//     */
+//    public void persist(final EntityManager entityManager, final E entity) {
+//
+//        if (entityManager == null) {
+//            throw new NullPointerException("null entityManager");
+//        }
+//
+//        if (entity == null) {
+//            throw new NullPointerException("null entity");
+//        }
+//
+//        persist(entityManager, entityClass, entity);
+//    }
+//
+//
+//    /**
+//     *
+//     * @param entityManager entity manager
+//     * @param entity entity instance
+//     *
+//     * @return merged instance
+//     */
+//    public E merge(final EntityManager entityManager, final E entity) {
+//
+//        if (entityManager == null) {
+//            throw new NullPointerException("null entityManager");
+//        }
+//
+//        if (entity == null) {
+//            throw new NullPointerException("null entity");
+//        }
+//
+//        return merge(entityManager, entityClass, entity);
+//    }
+//
+//
+//    /**
+//     *
+//     * @param entityManager entity manager
+//     * @param primaryKey primary key
+//     *
+//     * @return the removed entity instance or <code>null</code> if not found
+//     */
+//    public E remove(final EntityManager entityManager, final I primaryKey) {
+//
+//        if (entityManager == null) {
+//            throw new NullPointerException("null entityManager");
+//        }
+//
+//        if (primaryKey == null) {
+//            throw new NullPointerException("null primaryKey");
+//        }
+//
+//        return remove(entityManager, entityClass, primaryKey);
+//    }
+//
+//
+//    /**
+//     * entity class.
+//     */
+//    private final Class<E> entityClass;
 
 }
 
