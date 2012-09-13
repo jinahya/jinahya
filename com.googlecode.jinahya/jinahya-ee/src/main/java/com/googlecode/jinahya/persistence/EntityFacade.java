@@ -21,7 +21,7 @@ package com.googlecode.jinahya.persistence;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> entity instance type parameter
+ * @param <E> entity type parameter
  * @param <I> primary key type parameter
  */
 public interface EntityFacade<E, I> {
