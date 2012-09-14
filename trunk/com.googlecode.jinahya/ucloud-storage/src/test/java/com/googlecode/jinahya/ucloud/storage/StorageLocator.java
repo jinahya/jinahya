@@ -20,22 +20,44 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAttribute;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@Entity
+@Table(name = "STORAGE_LOCATOR",
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames={"CONTAINER_NAME", "OBJECT_NAME"},
+                             name="UNIQUE_OBJECT_NAME_BY_CONTAINER_NAME")
+       })
 class StorageLocator extends MappedStorageLocator {
 
 
+    // ---------------------------------------------------------- DELETED_MILLIS
+    /**
+     * Returns deletedMillis.
+     *
+     * @return
+     */
     public Long getDeletedMillis() {
         return deletedMillis;
     }
 
 
+    /**
+     * Sets deletedMillis.
+     *
+     * @param deletedMillis deletedMillis
+     */
     public void setDeletedMillis(final Long deletedMillis) {
 
         if (deletedMillis != null && this.deletedMillis != null) {
@@ -46,15 +68,35 @@ class StorageLocator extends MappedStorageLocator {
     }
 
 
+    // ---------------------------------------------------------------------- ID
+    /**
+     * Returns id.
+     *
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
+
+
+    /**
+     * deletedMillis.
+     */
+    @Basic
+    @Column(name = "DELETED_MILLIS")
+    @XmlAttribute
+    private Long deletedMillis;
+
+
+    /**
+     * id.
+     */
     @Column(name = "ID", nullable = false)
     @GeneratedValue
     @Id
+    @NotNull
+    @XmlAttribute
     private Long id;
-
-
-    @Basic
-    @Column(name = "DELETED_MILLIS")
-    private Long deletedMillis;
 
 
 }

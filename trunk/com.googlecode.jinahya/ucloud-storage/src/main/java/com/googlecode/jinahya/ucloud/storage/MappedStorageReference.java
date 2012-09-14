@@ -22,65 +22,54 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <L> storage locator type parameter
  */
 @MappedSuperclass
-public class MappedStorageReference {
+public class MappedStorageReference<L extends MappedStorageLocator> {
 
 
     /**
      * Creates a new instance of given
-     * <code>storageReferenceType</code>.
+     * <code>storageReferencetype</code> with specified
+     * <code>storageObject</code>.
      *
-     * @param R storage refernce type parameter
-     * @param storageRefereceType storage reference type
-     * @param containerName container name
-     * @param objectName object name
-     * @return a new instance of given <code>storageReferenceType</code>.
+     * @param <R> storage reference type parameter
+     * @param <L> storage locator type parameter
+     * @param storageReferenceType storage reference type
+     * @param storageLocator storage locator
+     *
+     * @return
      */
-    protected static <R extends MappedStorageReference> R newInstance(
-        final Class<R> storageRefereceType, final String containerName,
-        final String objectName) {
+    protected static <R extends MappedStorageReference<L>, L extends MappedStorageLocator> R newInstance(
+        final Class<R> storageReferenceType, final L storageLocator) {
 
-        if (storageRefereceType == null) {
+        if (storageReferenceType == null) {
             throw new IllegalArgumentException("null storageReferenceType");
         }
 
-        if (Modifier.isAbstract(storageRefereceType.getModifiers())) {
+        if (storageLocator == null) {
+            throw new IllegalArgumentException("null storageLocator");
+        }
+
+        if (Modifier.isAbstract(storageReferenceType.getModifiers())) {
             throw new IllegalArgumentException(
                 "abstract storageReferenceType: "
-                + storageRefereceType.getName());
-        }
-
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (containerName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
-
-        if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
-        }
-
-        if (objectName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty objectName");
+                + storageReferenceType.getName());
         }
 
         try {
             final Constructor<R> constructor =
-                storageRefereceType.getDeclaredConstructor();
+                storageReferenceType.getDeclaredConstructor();
             if (!constructor.isAccessible()) {
                 constructor.setAccessible(true);
             }
@@ -88,21 +77,11 @@ public class MappedStorageReference {
                 final R instance = constructor.newInstance();
                 try {
                     final Field field = MappedStorageReference.class.
-                        getDeclaredField("containerName");
+                        getDeclaredField("storageLocator");
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    field.set(instance, containerName);
-                } catch (NoSuchFieldException nsfe) {
-                    throw new RuntimeException(nsfe);
-                }
-                try {
-                    final Field field = MappedStorageReference.class.
-                        getDeclaredField("objectName");
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    field.set(instance, objectName);
+                    field.set(instance, storageLocator);
                 } catch (NoSuchFieldException nsfe) {
                     throw new RuntimeException(nsfe);
                 }
@@ -120,80 +99,25 @@ public class MappedStorageReference {
     }
 
 
-    // ---------------------------------------------------------- @containerName
+    // ------------------------------------------------------ STORAGE_LOCATOR_ID
     /**
-     * The minimum size of containerName.
-     */
-    public static final int CONTAINER_NAME_SIZE_MIN = 1;
-
-
-    /**
-     * The maximum size of containerName.
-     */
-    public static final int CONTAINER_NAME_SIZE_MAX = 63; // = 256 / 4 - 1?
-
-
-    // ------------------------------------------------------------- @objectName
-    /**
-     * The minimum size of objectName.
-     */
-    public static final int OBJECT_NAME_SIZE_MIN = 1;
-
-
-    /**
-     * The maximum size of objectName.
-     */
-    public static final int OBJECT_NAME_SIZE_MAX = 255; // = 1024 / 4 - 1?
-
-
-    // ---------------------------------------------------------- CONTAINER_NAME
-    /**
-     * Returns container name.
+     * Returns storageLocator.
      *
-     * @return container name
+     * @return storageLocator
      */
-    public String getContainerName() {
-        return containerName;
-    }
-
-
-    // ------------------------------------------------------------- OBJECT_NAME
-    /**
-     * Returns object name.
-     *
-     * @return object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-
-    @Override
-    public String toString() {
-        return containerName + "/" + objectName;
+    protected L getStorageLocator() {
+        return storageLocator;
     }
 
 
     /**
-     * container name.
+     * storageLocator.
      */
-    @Basic(optional = false)
-    @Column(name = "CONTAINER_NAME", updatable = false)
+    @JoinColumn(name = "STOAGE_LOCATOR_ID", nullable = false)
+    @OneToOne(optional = false)
     @NotNull
-    @Size(min = CONTAINER_NAME_SIZE_MIN, max = CONTAINER_NAME_SIZE_MAX)
-    @XmlElement(nillable = true, required = true)
-    private String containerName;
-
-
-    /**
-     * object name.
-     */
-    @Basic(optional = false)
-    @Column(name = "OBJECT_NAME", updatable = false)
-    @NotNull
-    @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
-    @XmlElement(nillable = true, required = true)
-    private String objectName;
+    @XmlTransient
+    private L storageLocator;
 
 
 }

@@ -19,7 +19,6 @@ package com.googlecode.jinahya.ucloud.storage;
 
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -45,6 +44,7 @@ public class MappedStorageLocator {
      * @param containerNamePrefix container name prefix
      * @param objectNamePrefix object name prefix
      * @param sequenceNumber sequence number
+     *
      * @return a new instance of <code>storageLocatorType</code>.
      */
     public static <L extends MappedStorageLocator> L newInstance(
@@ -62,30 +62,10 @@ public class MappedStorageLocator {
                 constructor.setAccessible(true);
             }
             try {
-                final L storageLocator = constructor.newInstance();
-                try {
-                    final Field field = MappedStorageLocator.class.
-                        getDeclaredField("containerName");
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    field.set(storageLocator, getContainerName(
-                        containerNamePrefix, sequenceNumber));
-                } catch (NoSuchFieldException nsfe) {
-                    throw new RuntimeException(nsfe);
-                }
-                try {
-                    final Field field = MappedStorageLocator.class.
-                        getDeclaredField("objectName");
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    field.set(storageLocator, getObjectName(
-                        objectNamePrefix, sequenceNumber));
-                } catch (NoSuchFieldException nsfe) {
-                    throw new RuntimeException(nsfe);
-                }
-                return storageLocator;
+                final L instance = constructor.newInstance();
+                instance.setContainerName(containerNamePrefix, sequenceNumber);
+                instance.setObjectName(objectNamePrefix, sequenceNumber);
+                return instance;
             } catch (InstantiationException ie) {
                 throw new RuntimeException(ie);
             } catch (IllegalAccessException iae) {
