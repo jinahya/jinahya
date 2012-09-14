@@ -109,7 +109,7 @@ public class MappedStorageLocator {
     /**
      * The maximum size of containerName.
      */
-    public static final int CONTAINER_NAME_SIZE_MAX = 64;
+    public static final int CONTAINER_NAME_SIZE_MAX = 63; // = 256 / 4 - 1?
 
 
     // ------------------------------------------------------------- @objectName
@@ -122,7 +122,7 @@ public class MappedStorageLocator {
     /**
      * The maximum size of objectName.
      */
-    public static final int OBJECT_NAME_SIZE_MAX = 255; // 256?
+    public static final int OBJECT_NAME_SIZE_MAX = 255; // = 1024 / 4 - 1?
 
 
     // ------------------------------------------------------- @prefix/@sequence
