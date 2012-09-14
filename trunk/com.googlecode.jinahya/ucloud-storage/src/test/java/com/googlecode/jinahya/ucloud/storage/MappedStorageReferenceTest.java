@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MappedStorageLocatorTest {
+public class MappedStorageReferenceTest {
 
 
     private static final Random RANDOM = new Random();
@@ -95,7 +95,6 @@ public class MappedStorageLocatorTest {
 
     @Test
     public static void testNewInstance() {
-
 //        final String containerNamePrefix =
 //            RandomStringUtils.randomAscii(RANDOM.nextInt(49));
 //        final String objectNamePrefix =
