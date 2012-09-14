@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlAttribute;
            @UniqueConstraint(columnNames={"CONTAINER_NAME", "OBJECT_NAME"},
                              name="UNIQUE_OBJECT_NAME_BY_CONTAINER_NAME")
        })
-class StorageLocator extends MappedStorageLocator {
+public class StorageLocator extends MappedStorageLocator {
 
 
     // ---------------------------------------------------------- DELETED_MILLIS
