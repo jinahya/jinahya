@@ -5,12 +5,16 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="ucloudStorageTestPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.googlecode.jinahya.ucloud.storage.StorageLocator</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory.ucloudStorageTestDB;create=true"/>
       <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.password" value=""/>      
-      <property name="eclipselink.target-database" value="DERBY"/>
+      <property name="eclipselink.ddl-generation" value="create-tables" />
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      <property name="eclipselink.target-database"
+                value="org.eclipse.persistence.platform.database.DerbyPlatform"/>
       <property name="eclipselink.logging.level" value="INFO"/>
     </properties>
   </persistence-unit>

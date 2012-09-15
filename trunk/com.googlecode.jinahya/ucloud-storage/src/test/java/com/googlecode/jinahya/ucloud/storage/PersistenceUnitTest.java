@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -49,9 +48,6 @@ public class PersistenceUnitTest {
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, SQLException {
 
-//        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-//        DriverManager.getConnection("jdbc:derby:memory:ucloud-storage;create=true").close();
-
         ENTITY_MANAGER_FACTORY =
             Persistence.createEntityManagerFactory("ucloudStorageTestPU");
 
@@ -66,6 +62,11 @@ public class PersistenceUnitTest {
 
     @Test
     public void test() {
+
+        final StorageLocator locator = new StorageLocator();
+        ENTTIY_MANAGER.persist(locator);
+        System.out.println(locator.getId());
+    
     }
 
 
