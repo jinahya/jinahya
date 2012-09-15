@@ -25,15 +25,27 @@ package com.googlecode.jinahya.persistence;
 public final class PKV {
 
 
+    /**
+     * table name.
+     */
     public static final String TABLE = "PKV";
 
 
+    /**
+     * primary key colum name.
+     */
     public static final String PK_COLUMN_NAME = "PK";
 
 
+    /**
+     * primary key value column name.
+     */
     public static final String VALUE_COLUMN_NAME = "PV";
 
 
+    /**
+     *
+     */
     private PKV() {
         super();
     }
