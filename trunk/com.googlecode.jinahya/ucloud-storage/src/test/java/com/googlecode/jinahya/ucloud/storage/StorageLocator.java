@@ -18,14 +18,17 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
 
 
@@ -34,12 +37,26 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = StorageLocator.NQ_LIST,
+                query = "SELECT l FROM StorageLocator AS l ORDER BY l.id ASC")
+})
 @Table(name = "STORAGE_LOCATOR",
        uniqueConstraints = {
-           @UniqueConstraint(columnNames={"CONTAINER_NAME", "OBJECT_NAME"},
-                             name="UNIQUE_OBJECT_NAME_BY_CONTAINER_NAME")
-       })
+    @UniqueConstraint(columnNames = {"CONTAINER_NAME", "OBJECT_NAME"},
+                      name = "UNIQUE_OBJECT_NAME_BY_CONTAINER_NAME")
+})
 public class StorageLocator extends MappedStorageLocator {
+
+
+    public static final String NQ_LIST = "StorageLocator.NQ_LIST";
+
+
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER =
+        Logger.getLogger(StorageLocator.class.getName());
 
 
     // ---------------------------------------------------------- DELETED_MILLIS
@@ -60,11 +77,20 @@ public class StorageLocator extends MappedStorageLocator {
      */
     public void setDeletedMillis(final Long deletedMillis) {
 
+        LOGGER.log(Level.INFO, "setDeletedMillis({0})", deletedMillis);
+
         if (deletedMillis != null && this.deletedMillis != null) {
             return;
         }
 
         this.deletedMillis = deletedMillis;
+    }
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "/" + deletedMillis + "/" + id + "/"
+               + getContainerName() + "/" + getObjectName();
     }
 
 
@@ -94,7 +120,7 @@ public class StorageLocator extends MappedStorageLocator {
     @Column(name = "ID", nullable = false)
     @GeneratedValue
     @Id
-    @NotNull
+//    @NotNull
     @XmlAttribute
     private Long id;
 
