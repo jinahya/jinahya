@@ -33,7 +33,7 @@ import java.io.OutputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class IO {
+public class IO {
 
 
     /** default buffer size. */
@@ -137,15 +137,15 @@ public final class IO {
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new IllegalArgumentException("null input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null output");
+            throw new IllegalArgumentException("null output");
         }
 
         if (buffer == null) {
-            throw new NullPointerException("null buffer");
+            throw new IllegalArgumentException("null buffer");
         }
 
         if (buffer.length == 0) {
