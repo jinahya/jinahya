@@ -19,10 +19,13 @@ package com.googlecode.jinahya.ucloud.storage;
 
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -45,6 +48,9 @@ public class PersistenceUnitTest {
     private static EntityManager ENTTIY_MANAGER;
 
 
+    private static final Random RANDOM = new Random();
+
+
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, SQLException {
 
@@ -63,10 +69,57 @@ public class PersistenceUnitTest {
     @Test
     public void test() {
 
-        final StorageLocator locator = new StorageLocator();
-        ENTTIY_MANAGER.persist(locator);
-        System.out.println(locator.getId());
-    
+        ENTTIY_MANAGER.getTransaction().begin();
+
+        for (int i = 0; i < 10; i++) {
+
+            final StorageLocator storageLocator = new StorageLocator();
+            ENTTIY_MANAGER.persist(storageLocator);
+            System.out.println("storageLocator.id: "
+                               + storageLocator.getId());
+
+            storageLocator.setContainerName(null, i);
+            storageLocator.setObjectName(null, i);
+
+            final StorageReference storageReference =
+                StorageReference.newInstance(storageLocator);
+            ENTTIY_MANAGER.persist(storageReference);
+            System.out.println("storageReference.id: "
+                               + storageReference.getId());
+
+            if (RANDOM.nextBoolean()) {
+                ENTTIY_MANAGER.remove(storageReference);
+            }
+        }
+
+        ENTTIY_MANAGER.getTransaction().commit();
+
+
+        ENTTIY_MANAGER.getTransaction().begin();
+
+        {
+            final Query query = ENTTIY_MANAGER.createNamedQuery(
+                StorageLocator.NQ_LIST);
+            @SuppressWarnings("unchecked")
+            final List<StorageLocator> storageLocators =
+                (List<StorageLocator>) query.getResultList();
+            for (StorageLocator storageReference : storageLocators) {
+                System.out.println(storageReference);
+            }
+        }
+
+        {
+            final Query query = ENTTIY_MANAGER.createNamedQuery(
+                StorageReference.NQ_LIST);
+            @SuppressWarnings("unchecked")
+            final List<StorageReference> storageReferences =
+                (List<StorageReference>) query.getResultList();
+            for (StorageReference storageReference : storageReferences) {
+                System.out.println(storageReference);
+            }
+        }
+
+        ENTTIY_MANAGER.getTransaction().commit();
     }
 
 

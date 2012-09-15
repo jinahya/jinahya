@@ -25,11 +25,6 @@
         <version>3.1</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.derby</groupId>
-        <artifactId>derby</artifactId>
-        <version>10.9.1.0</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>4.2.1</version>
@@ -44,6 +39,7 @@
         <artifactId>hibernate-entitymanager</artifactId>
         <version>4.1.7.Final</version>
       </dependency>
+
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
@@ -58,22 +54,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>eclipselink</artifactId>
-      <version>2.3.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>2.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
-      <version>2.3.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
@@ -83,13 +63,6 @@
       <artifactId>commons-lang3</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
-      <scope>test</scope>
-    </dependency>
-    -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
@@ -207,53 +180,6 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-        <!--
-        <configuration>
-          <compilerArgument>-Aopenjpa.metamodel=true</compilerArgument>
-          <fork>true</fork>
-          <source>1.6</source>
-          <target>1.6</target>
-          <showDeprecation>true</showDeprecation>
-          <showWarnings>true</showWarnings>
-          <verbose>true</verbose>
-        </configuration>
-        -->
-        <executions>
-          <!--
-          <execution>
-            <id>generate-openjpa-metamodel</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <compilerArgument>-Aopenjpa.metamodel=true</compilerArgument>
-              <fork>true</fork>
-              <generatedSourcesDirectory>${project.build.directory}/generated-sources</generatedSourcesDirectory>
-              <source>1.6</source>
-              <optimize>true</optimize>
-              <proc>only</proc>
-              <showDeprecation>true</showDeprecation>
-              <showWarnings>true</showWarnings>
-              <target>1.6</target>
-              <verbose>true</verbose>
-            </configuration>
-          </execution>
-          -->
-          <!--
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <source>1.6</source>
-              <target>1.6</target>
-            </configuration>
-          </execution>
-          -->
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.bsc.maven</groupId>
@@ -266,7 +192,7 @@
             </goals>
             <phase>generate-sources</phase>
             <configuration>
-              <processors>                                
+              <processors>  
                 <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
               </processors>
             </configuration>
@@ -344,9 +270,6 @@
 
   <name>ucloud-storage</name>
   <url>http://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-  <!--
-  <url>http://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-  -->
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>
@@ -387,12 +310,6 @@
         <enabled>true</enabled>
       </snapshots>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
-      <id>eclipselink</id>
-      <layout>default</layout>
-      <name>Repository for library EclipseLink (JPA 2.0)</name>
     </repository>
   </repositories>
   <pluginRepositories />
