@@ -18,15 +18,17 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.lang.reflect.Modifier;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <R> raw value type parameter
  */
 @XmlTransient
-public abstract class NillableValue<T> {
+public abstract class NillableValue<R> {
 
 
     public static <V extends NillableValue<R>, R> V newInstance(
@@ -34,6 +36,10 @@ public abstract class NillableValue<T> {
 
         if (type == null) {
             throw new IllegalArgumentException("null type");
+        }
+
+        if (Modifier.isAbstract(type.getModifiers())) {
+            throw new IllegalArgumentException("abstract type");
         }
 
         try {
@@ -49,14 +55,6 @@ public abstract class NillableValue<T> {
 
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + (this.raw != null ? this.raw.hashCode() : 0);
-        return hash;
-    }
-
-
-    @Override
     public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
@@ -65,7 +63,7 @@ public abstract class NillableValue<T> {
             return false;
         }
         @SuppressWarnings("unchecked")
-        final NillableValue<T> other = (NillableValue<T>) obj;
+        final NillableValue<R> other = (NillableValue<R>) obj;
         if (this.raw != other.raw
             && (this.raw == null || !this.raw.equals(other.raw))) {
             return false;
@@ -74,12 +72,20 @@ public abstract class NillableValue<T> {
     }
 
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.raw != null ? this.raw.hashCode() : 0);
+        return hash;
+    }
+
+
     /**
      * Returns raw value.
      *
      * @return raw value
      */
-    protected T getRaw() {
+    public R getRaw() {
         return raw;
     }
 
@@ -89,13 +95,13 @@ public abstract class NillableValue<T> {
      *
      * @param raw raw value
      */
-    protected void setRaw(final T raw) {
+    public void setRaw(final R raw) {
         this.raw = raw;
 
     }
 
 
-    private T raw;
+    private R raw;
 
 
 }

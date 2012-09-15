@@ -15,28 +15,36 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind;
+package com.googlecode.jinahya.io;
 
 
-import javax.xml.bind.annotation.XmlTransient;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Random;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlTransient
-public abstract class Value<R> extends NillableValue<R> {
+public class BlackOutputStreamTest {
 
 
-    @Override
-    public void setRaw(final R raw) {
+    private static final Random RANDOM = new Random();
 
-        if (raw == null) {
-            throw new IllegalArgumentException("null raw");
+
+    @Test
+    public void testWrite() throws IOException {
+
+        final OutputStream out = new BlackOutputStream();
+
+        for (int i = 0; i < 1048576; i++) {
+            out.write(RANDOM.nextInt());
         }
+        out.flush();
 
-        super.setRaw(raw);
+        out.close();
     }
 
 
