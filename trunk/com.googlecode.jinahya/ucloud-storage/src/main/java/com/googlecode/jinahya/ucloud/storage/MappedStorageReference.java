@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <L> storage locator type parameter
  */
 @MappedSuperclass
+@XmlTransient
 public class MappedStorageReference<L extends MappedStorageLocator> {
 
 
@@ -113,7 +114,7 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
     /**
      * storageLocator.
      */
-    @JoinColumn(name = "STOAGE_LOCATOR_ID", nullable = false)
+    @JoinColumn(name = "STORAGE_LOCATOR_ID", nullable = false)
     @OneToOne(optional = false)
     @NotNull
     @XmlTransient
