@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -76,6 +77,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     /**
      * id.
      */
+    @Column(name = "ID", nullable = false)
     @GeneratedValue
     @Id
     @NotNull
