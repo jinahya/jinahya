@@ -57,14 +57,14 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
             throw new IllegalArgumentException("null storageReferenceType");
         }
 
-        if (storageLocator == null) {
-            throw new IllegalArgumentException("null storageLocator");
-        }
-
         if (Modifier.isAbstract(storageReferenceType.getModifiers())) {
             throw new IllegalArgumentException(
                 "abstract storageReferenceType: "
                 + storageReferenceType.getName());
+        }
+
+        if (storageLocator == null) {
+            throw new IllegalArgumentException("null storageLocator");
         }
 
         try {

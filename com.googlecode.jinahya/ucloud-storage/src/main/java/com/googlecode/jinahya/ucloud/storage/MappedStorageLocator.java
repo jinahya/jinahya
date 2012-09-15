@@ -63,8 +63,10 @@ public class MappedStorageLocator {
             }
             try {
                 final L instance = constructor.newInstance();
-                instance.setContainerName(containerNamePrefix, sequenceNumber);
-                instance.setObjectName(objectNamePrefix, sequenceNumber);
+                instance.setContainerName(
+                    getContainerName(containerNamePrefix, sequenceNumber));
+                instance.setObjectName(
+                    getObjectName(objectNamePrefix, sequenceNumber));
                 return instance;
             } catch (InstantiationException ie) {
                 throw new RuntimeException(ie);
@@ -211,20 +213,17 @@ public class MappedStorageLocator {
      */
     public void setContainerName(final String containerName) {
 
-//        if (containerName == null) {
-//            throw new IllegalArgumentException("null containerName");
-//        }
-//
-//        if (containerName.trim().isEmpty()) {
-//            throw new IllegalArgumentException("empty containerName");
-//        }
+        if (containerName != null && containerName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty containerName");
+        }
 
         this.containerName = containerName;
     }
 
 
     /**
-     * Sets containerName with given
+     * Sets
+     * <code>containerName</code> with given
      * <code>containerNamePrefix</code> and
      * <code>sequenceNumber</code>.
      *
@@ -256,20 +255,17 @@ public class MappedStorageLocator {
      */
     public void setObjectName(final String objectName) {
 
-//        if (objectName == null) {
-//            throw new IllegalArgumentException("null objectName");
-//        }
-//
-//        if (objectName.trim().isEmpty()) {
-//            throw new IllegalArgumentException("empty objectName");
-//        }
+        if (objectName != null && objectName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty objectName");
+        }
 
         this.objectName = objectName;
     }
 
 
     /**
-     * Sets objectName with given
+     * Sets
+     * <code>objectName</code> with given
      * <code>objectNamePrefix</code> and
      * <code>sequenceNumber</code>.
      *
