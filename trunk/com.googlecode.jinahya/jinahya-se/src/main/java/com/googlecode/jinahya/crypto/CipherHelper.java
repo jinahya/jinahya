@@ -34,11 +34,15 @@ import javax.crypto.ShortBufferException;
 public class CipherHelper {
 
 
+    private static final int INPUTBUF_LENGTH = 8192;
+
+
     /**
      *
      * @param cipher
      * @param input
      * @param output
+     *
      *
      * @throws IOException
      * @throws IllegalBlockSizeException
@@ -48,7 +52,7 @@ public class CipherHelper {
                                final OutputStream output)
         throws IOException, IllegalBlockSizeException, BadPaddingException {
 
-        doFinal(cipher, input, output, new byte[1024]);
+        doFinal(cipher, input, output, new byte[INPUTBUF_LENGTH]);
     }
 
 
@@ -69,25 +73,27 @@ public class CipherHelper {
         throws IOException, IllegalBlockSizeException, BadPaddingException {
 
         if (cipher == null) {
-            throw new NullPointerException("null cipher");
+            throw new IllegalArgumentException("null cipher");
         }
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new IllegalArgumentException("null input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null os");
+            throw new IllegalArgumentException("null output");
         }
 
         if (inputBuf == null) {
-            throw new NullPointerException("null inputBuf");
+            throw new IllegalArgumentException("null inputBuf");
         }
+
         if (inputBuf.length == 0) {
-            throw new NullPointerException("empty inputBuf");
+            throw new IllegalArgumentException("empty inputBuf");
         }
 
         byte[] outputBuf = new byte[cipher.getOutputSize(inputBuf.length)];
+
         int outputLen;
 
         for (int inputLen = -1; (inputLen = input.read(outputBuf)) != -1;) {
@@ -95,23 +101,23 @@ public class CipherHelper {
                 try {
                     outputLen = cipher.update(
                         inputBuf, 0, inputLen, outputBuf, 0);
-                    output.write(outputBuf, 0, outputLen);
                     break;
                 } catch (ShortBufferException sbe) {
                     outputBuf = new byte[outputBuf.length * 2];
                 }
             }
+            output.write(outputBuf, 0, outputLen);
         }
 
         while (true) {
             try {
                 outputLen = cipher.doFinal(outputBuf, 0);
-                output.write(outputBuf, 0, outputLen);
                 break;
             } catch (ShortBufferException sbe) {
                 outputBuf = new byte[outputBuf.length * 2];
             }
         }
+        output.write(outputBuf, 0, outputLen);
     }
 
 
