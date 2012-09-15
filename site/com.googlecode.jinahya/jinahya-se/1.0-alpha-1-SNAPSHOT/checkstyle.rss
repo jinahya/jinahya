@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011 - 2012</copyright>
     <item>
-      <title>File: 28,
-             Errors: 284,
+      <title>File: 30,
+             Errors: 288,
              Warnings: 0,
              Infos: 0
       </title>
@@ -71,6 +71,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.WhiteInputStream.java">com/googlecode/jinahya/io/WhiteInputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.util.JinahyaCharacter.java">com/googlecode/jinahya/util/JinahyaCharacter.java</a>
                 </td>
                 <td>
@@ -95,6 +109,20 @@
                 </td>
                 <td>
                   26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.BlackOutputStream.java">com/googlecode/jinahya/io/BlackOutputStream.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>
@@ -346,21 +374,7 @@
                   0
                 </td>
                 <td>
-                  22
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.IO.java">com/googlecode/jinahya/io/IO.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
+                  20
                 </td>
               </tr>
                           <tr>
@@ -375,6 +389,20 @@
                 </td>
                 <td>
                   51
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-se/1.0-alpha-1-SNAPSHOT/checkstyle.html#com.googlecode.jinahya.io.IO.java">com/googlecode/jinahya/io/IO.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
                 </td>
               </tr>
                           <tr>

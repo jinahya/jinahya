@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> * @author Jin Kwon &lt;jinahya at gmail.com&gt;</em>
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/googlecode/jinahya/io/IO.html">IO</a> {
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/googlecode/jinahya/io/IO.html">IO</a> {
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>  
 <a class="jxr_linenumber" name="39" href="#39">39</a>      <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> default buffer size. */</em>
@@ -147,15 +147,15 @@
 <a class="jxr_linenumber" name="137" href="#137">137</a>         <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="138" href="#138">138</a> 
 <a class="jxr_linenumber" name="139" href="#139">139</a>         <strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="140" href="#140">140</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"null input"</span>);
+<a class="jxr_linenumber" name="140" href="#140">140</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"null input"</span>);
 <a class="jxr_linenumber" name="141" href="#141">141</a>         }
 <a class="jxr_linenumber" name="142" href="#142">142</a> 
 <a class="jxr_linenumber" name="143" href="#143">143</a>         <strong class="jxr_keyword">if</strong> (output == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="144" href="#144">144</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"null output"</span>);
+<a class="jxr_linenumber" name="144" href="#144">144</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"null output"</span>);
 <a class="jxr_linenumber" name="145" href="#145">145</a>         }
 <a class="jxr_linenumber" name="146" href="#146">146</a> 
 <a class="jxr_linenumber" name="147" href="#147">147</a>         <strong class="jxr_keyword">if</strong> (buffer == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"null buffer"</span>);
+<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"null buffer"</span>);
 <a class="jxr_linenumber" name="149" href="#149">149</a>         }
 <a class="jxr_linenumber" name="150" href="#150">150</a> 
 <a class="jxr_linenumber" name="151" href="#151">151</a>         <strong class="jxr_keyword">if</strong> (buffer.length == 0) {
