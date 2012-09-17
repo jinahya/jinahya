@@ -66,9 +66,9 @@ public class MappedStorageLocator {
             try {
                 final L instance = constructor.newInstance();
                 instance.setContainerName(
-                    getContainerName(containerNamePrefix, sequenceNumber));
+                    formatContainerName(containerNamePrefix, sequenceNumber));
                 instance.setObjectName(
-                    getObjectName(objectNamePrefix, sequenceNumber));
+                    formatObjectName(objectNamePrefix, sequenceNumber));
                 return instance;
             } catch (InstantiationException ie) {
                 throw new RuntimeException(ie);
@@ -113,52 +113,84 @@ public class MappedStorageLocator {
     /**
      * The number of lower bits for object names.
      */
-    private static final int OBJECT_NAME_BITS = 20;
+    private static final int OBJECT_NAME_SEQUENCE_BITS = 20;
 
 
     /**
      * The maximum number of objects in a container.
      */
-    private static final long OBJECT_NAME_MASK =
-        ((long) Math.pow(2.0d, OBJECT_NAME_BITS)) - 1L;
+    private static final long OBJECT_NAME_SEQUENCE_MASK =
+        ((long) Math.pow(2.0d, OBJECT_NAME_SEQUENCE_BITS)) - 1L;
 
 
     /**
      * the print format length for container names.
      */
-    private static final int CONTAINER_NAME_FORMAT_WIDTH =
-        Long.toString((-1L >>> OBJECT_NAME_BITS)).length();
+    private static final int CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH =
+        Long.toString((-1L >>> OBJECT_NAME_SEQUENCE_BITS)).length();
 
 
     /**
      * the print format for container names.
      */
-    private static final String CONTAINER_NAME_FORMAT =
-        "%0" + CONTAINER_NAME_FORMAT_WIDTH + "d";
-
-
-    /**
-     * the print format length for object names.
-     */
-    private static final int OBJECT_NAME_FORMAT_WIDTH =
-        Long.toString((Long.MAX_VALUE & OBJECT_NAME_MASK)).length();
-
-
-    /**
-     * the print format for object names.
-     */
-    private static final String OBJECT_NAME_FORMAT =
-        "%0" + OBJECT_NAME_FORMAT_WIDTH + "d";
+    private static final String CONTAINER_NAME_SEQUENCE_FORMAT =
+        "%0" + CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH + "d";
 
 
     /**
      * The delimiter.
      */
-    private static final char PREFIX_SEQUENCE_DELIMITER = '*';
+    private static final String PREFIX_SEQUENCE_DELIMITER = "*";
 
 
     /**
-     * Makes a containerName with given
+     * The minimum length of
+     * <code>containerNamePrefix</code>.
+     */
+    public static final int CONTAINER_NAME_PREFIX_SIZE_MIN = 0;
+
+
+    /**
+     * The maximum length of
+     * <code>containerNamePrefix</code>.
+     */
+    public static final int CONTAINER_NAME_PREFIX_SIZE_MAX = 48;
+//        CONTAINER_NAME_SIZE_MAX - (CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH
+//                                   + PREFIX_SEQUENCE_DELIMITER.length());
+
+
+    /**
+     * the print format length for object names.
+     */
+    private static final int OBJECT_NAME_SEQUENCE_FORMAT_WIDTH =
+        Long.toString(OBJECT_NAME_SEQUENCE_MASK).length();
+
+
+    /**
+     * the print format for object names.
+     */
+    private static final String OBJECT_NAME_SEQUENCE_FORMAT =
+        "%0" + OBJECT_NAME_SEQUENCE_FORMAT_WIDTH + "d";
+
+
+    /**
+     * The minimum length of
+     * <code>objectPrefixName</code>.
+     */
+    public static final int OBJECT_NAME_PREFIX_SIZE_MIN = 0;
+
+
+    /**
+     * The maximum length of
+     * <code>objectNamePrefix</code>.
+     */
+    public static final int OBJECT_NAME_PREFIX_SIZE_MAX = 247;
+//        OBJECT_NAME_SIZE_MAX - (OBJECT_NAME_SEQUENCE_FORMAT_WIDTH
+//                                + PREFIX_SEQUENCE_DELIMITER.length());
+
+
+    /**
+     * Formats a containerName with given
      * <code>containerNamePrefix</code> and
      * <code>sequenceNumber</code>.
      *
@@ -167,13 +199,14 @@ public class MappedStorageLocator {
      *
      * @return a container name
      */
-    public static String getContainerName(final String containerNamePrefix,
-                                          final long sequenceNumber) {
+    public static String formatContainerName(final String containerNamePrefix,
+                                             final long sequenceNumber) {
 
-        return (containerNamePrefix == null
-                ? "" : (containerNamePrefix + PREFIX_SEQUENCE_DELIMITER))
-               + (String.format(CONTAINER_NAME_FORMAT,
-                                (sequenceNumber >>> OBJECT_NAME_BITS)));
+        return ((containerNamePrefix == null ? "" : containerNamePrefix)
+                + PREFIX_SEQUENCE_DELIMITER
+                + (String.format(
+                   CONTAINER_NAME_SEQUENCE_FORMAT,
+                   (sequenceNumber >>> OBJECT_NAME_SEQUENCE_BITS))));
     }
 
 
@@ -187,13 +220,14 @@ public class MappedStorageLocator {
      *
      * @return an object name
      */
-    public static String getObjectName(final String objectNamePrefix,
-                                       final long sequenceNumber) {
+    public static String formatObjectName(final String objectNamePrefix,
+                                          final long sequenceNumber) {
 
-        return (objectNamePrefix == null
-                ? "" : (objectNamePrefix + PREFIX_SEQUENCE_DELIMITER))
-               + (String.format(OBJECT_NAME_FORMAT,
-                                (sequenceNumber & OBJECT_NAME_MASK)));
+        return ((objectNamePrefix == null ? "" : objectNamePrefix)
+                + PREFIX_SEQUENCE_DELIMITER
+                + (String.format(
+                   OBJECT_NAME_SEQUENCE_FORMAT,
+                   (sequenceNumber & OBJECT_NAME_SEQUENCE_MASK))));
     }
 
 
@@ -235,7 +269,7 @@ public class MappedStorageLocator {
     public void setContainerName(final String containerNamePrefix,
                                  final long sequenceNumber) {
 
-        setContainerName(getContainerName(containerNamePrefix, sequenceNumber));
+        setContainerName(formatContainerName(containerNamePrefix, sequenceNumber));
     }
 
 
@@ -277,7 +311,7 @@ public class MappedStorageLocator {
     public void setObjectName(final String objectNamePrefix,
                               final long sequenceNumber) {
 
-        setObjectName(getObjectName(objectNamePrefix, sequenceNumber));
+        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
     }
 
 
