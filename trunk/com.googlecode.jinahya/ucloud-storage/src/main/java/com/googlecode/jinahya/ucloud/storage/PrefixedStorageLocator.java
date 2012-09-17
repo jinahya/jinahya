@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @MappedSuperclass
+@XmlTransient
 public abstract class PrefixedStorageLocator extends MappedStorageLocator {
 
 

@@ -37,6 +37,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -57,6 +58,7 @@ import javax.xml.bind.annotation.XmlAttribute;
        uniqueConstraints = {
     @UniqueConstraint(columnNames = {"STORAGE_LOCATOR_ID"},
                       name = "UNIQUE_STORAGE_LOCATORE")})
+@XmlRootElement
 public class StorageReference extends MappedStorageReference<StorageLocator> {
 
 
@@ -170,7 +172,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
      * createdMillis.
      */
     @Basic(optional = false)
-    @Column(name = "CREATED_MILLIS", nullable = false)
+    @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
     @XmlAttribute
     private long createdMillis;
 
@@ -178,7 +180,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     /**
      * id.
      */
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID", nullable = false, updatable = false)
     @GeneratedValue
     @Id
 //    @NotNull // Hibernate doesn't like this!

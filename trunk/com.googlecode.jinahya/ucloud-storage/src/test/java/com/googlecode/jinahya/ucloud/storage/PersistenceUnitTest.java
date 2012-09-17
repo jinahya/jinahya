@@ -98,18 +98,15 @@ public class PersistenceUnitTest {
     }
 
 
-    //@Test
-    public void test() {
+    @Test
+    public void test() throws JAXBException, IOException {
 
         ENTTIY_MANAGER.getTransaction().begin();
 
         for (int i = 0; i < 10; i++) {
-
             final StorageLocator storageLocator = newStorageLocator();
-
             final StorageReference storageReference =
                 newStorageReference(storageLocator);
-
             if (RANDOM.nextBoolean()) {
                 ENTTIY_MANAGER.remove(storageReference);
             }
@@ -123,7 +120,6 @@ public class PersistenceUnitTest {
         {
             final TypedQuery<Long> query = ENTTIY_MANAGER.createNamedQuery(
                 StorageLocator.NQ_COUNT, Long.class);
-            @SuppressWarnings("unchecked")
             final long count = query.getSingleResult();
             LOGGER.log(Level.INFO, "storageLocators.count: {0}", count);
         }
@@ -135,7 +131,8 @@ public class PersistenceUnitTest {
             final List<StorageLocator> storageLocators =
                 (List<StorageLocator>) query.getResultList();
             for (StorageLocator storageLocator : storageLocators) {
-                LOGGER.log(Level.INFO, "storageLocator: {0}", storageLocator);
+                LOGGER.log(Level.INFO, "storageLocator\r\n{0}",
+                           storageLocator.toXml());
             }
         }
 
@@ -146,7 +143,8 @@ public class PersistenceUnitTest {
             final List<StorageReference> storageReferences =
                 (List<StorageReference>) query.getResultList();
             for (StorageReference storageReference : storageReferences) {
-                System.out.println(storageReference);
+                LOGGER.log(Level.INFO, "storageReference\r\n{0}",
+                           storageReference.toXml());
             }
         }
 

@@ -180,7 +180,7 @@ public class StorageConsumer {
     /**
      * id.
      */
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID", nullable = false, updatable = false)
     @GeneratedValue
     @Id
 //    @NotNull // Hibernate doesn't like this!
