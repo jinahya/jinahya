@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Mon Sep 17 18:32:43 KST 2012:
- 클래스 로더 sun.misc.Launcher$AppClassLoader@77f2fbff이(가) 있는 데이터베이스 디렉토리 memory:E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage\ucloudStorageTestDB 에서 
- Derby 버전 The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): 인스턴스 a816c00e-0139-d392-991f-000005d00408 부팅 중 
-
+Mon Sep 17 22:07:36 KST 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0139-d457-532c-000005b5d2e8 
+on database directory memory:E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage\ucloudStorageTestDB  with class loader sun.misc.Launcher$AppClassLoader@717e5fde 
+Loaded from file:/C:/Users/onacit/.m2/repository/org/glassfish/main/extras/glassfish-embedded-all/3.1.2.2/glassfish-embedded-all-3.1.2.2.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_07-b10
+java.runtime.version=1.7.0_07-b11
 user.dir=E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage
 derby.system.home=null
-데이터베이스 클래스 로더가 시작되었습니다 - derby.database.classpath=''
+Database Class Loader started - derby.database.classpath=''
