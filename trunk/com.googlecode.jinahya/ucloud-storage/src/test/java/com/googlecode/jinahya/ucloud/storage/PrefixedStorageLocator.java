@@ -20,26 +20,23 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.management.ObjectName;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -47,29 +44,21 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name = StorageConsumer.NQ_COUNT,
-                query = "SELECT COUNT(c) FROM StorageConsumer AS c"),
-    @NamedQuery(name = StorageConsumer.NQ_LIST,
-                query = "SELECT c FROM StorageConsumer AS c"
-                        + " ORDER BY c.createdMillis ASC, c.id ASC")
+@Table(name = "PREIXED_STORAGE_LOCATOR",
+       uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"CONTAINER_NAME", "OBJECT_NAME"},
+                      name = "UNIQUE_OBJECT_NAME_BY_CONTAINER_NAME")
 })
-@Table(name = "STORAGE_CONSUMER")
 @XmlRootElement
-public class StorageConsumer {
-
-
-    public static final String NQ_COUNT = "StorageConsumer.NQ_COUNT";
-
-
-    public static final String NQ_LIST = "StorageConsumer.NQ_LIST";
+@XmlType(propOrder = {"containerName", "objectName"})
+public class PrefixedStorageLocator extends PrefixedMappedStorageLocator {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageConsumer.class.getName());
+        Logger.getLogger(PrefixedMappedStorageLocator.class.getName());
 
 
     // ---------------------------------------------------------- CREATED_MILLIS
@@ -80,6 +69,34 @@ public class StorageConsumer {
      */
     public long getCreatedMillis() {
         return createdMillis;
+    }
+
+
+    // ---------------------------------------------------------- DELETED_MILLIS
+    /**
+     * Returns deletedMillis.
+     *
+     * @return
+     */
+    public Long getDeletedMillis() {
+        return deletedMillis;
+    }
+
+
+    /**
+     * Sets deletedMillis.
+     *
+     * @param deletedMillis deletedMillis
+     */
+    public void setDeletedMillis(final Long deletedMillis) {
+
+        LOGGER.log(Level.INFO, "setDeletedMillis({0})", deletedMillis);
+
+        if (deletedMillis != null && this.deletedMillis != null) {
+            return;
+        }
+
+        this.deletedMillis = deletedMillis;
     }
 
 
@@ -94,42 +111,6 @@ public class StorageConsumer {
     }
 
 
-    // ------------------------------------------------------ STORAGE_REFERENCE1
-    public StorageReference getStorageReference1() {
-        return storageReference1;
-    }
-
-
-    public void setStorageReference1(final StorageReference storageReference1) {
-        this.storageReference1 = storageReference1;
-    }
-
-
-    @Transient
-    @XmlAttribute
-    public Long getStorageReference1Id() {
-        return storageReference1 == null ? null : storageReference1.getId();
-    }
-
-
-    // ------------------------------------------------------ STORAGE_REFERENCE2
-    public StorageReference getStorageReference2() {
-        return storageReference2;
-    }
-
-
-    public void setStorageReference2(final StorageReference storageReference2) {
-        this.storageReference2 = storageReference2;
-    }
-
-
-    @Transient
-    @XmlAttribute
-    public Long getStorageReference2Id() {
-        return storageReference2 == null ? null : storageReference2.getId();
-    }
-
-
     // ------------------------------------------------------------- @PrePersist
     @PrePersist
     protected void _PrePersist() {
@@ -140,17 +121,21 @@ public class StorageConsumer {
     @Override
     public String toString() {
         return super.toString()
-               + "?createdMillis=" + Long.toHexString(createdMillis)
+               + "?createdMillis=" + createdMillis
+               + "&deletedMillis=" + String.valueOf(deletedMillis)
                + "&id=" + String.valueOf(id)
-               + "&storageReference1=" + String.valueOf(storageReference1)
-               + "&storageReference2=" + String.valueOf(storageReference2);
+               + "&containerNamePrefix="
+               + String.valueOf(getContainerNamePrefix())
+               + "&objectNamePrefix=" + String.valueOf(getObjectNamePrefix())
+               + "&containerName=" + String.valueOf(getContainerName())
+               + "&objectName=" + String.valueOf(getObjectName());
     }
 
 
     public String toXml() throws JAXBException, IOException {
 
         final JAXBContext context =
-            JAXBContext.newInstance(StorageConsumer.class);
+            JAXBContext.newInstance(PrefixedMappedStorageLocator.class);
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -167,6 +152,12 @@ public class StorageConsumer {
     }
 
 
+    @Override
+    protected Long getSequenceNumber() {
+        return id;
+    }
+
+
     /**
      * createdMillis.
      */
@@ -174,6 +165,15 @@ public class StorageConsumer {
     @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
     @XmlAttribute
     private long createdMillis;
+
+
+    /**
+     * deletedMillis.
+     */
+    @Basic
+    @Column(name = "DELETED_MILLIS")
+    @XmlAttribute
+    private Long deletedMillis;
 
 
     /**
@@ -185,24 +185,6 @@ public class StorageConsumer {
 //    @NotNull // Hibernate doesn't like this!
     @XmlAttribute
     private Long id;
-
-
-    /**
-     * storageReference1.
-     */
-    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "STORAGE_REFERENCE1")
-    @XmlTransient
-    private StorageReference storageReference1;
-
-
-    /**
-     * storageReference2.
-     */
-    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "STORAGE_REFERENCE2")
-    @XmlTransient
-    private StorageReference storageReference2;
 
 
 }

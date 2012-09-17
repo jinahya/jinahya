@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @MappedSuperclass
 @XmlTransient
-public abstract class PrefixedStorageLocator extends MappedStorageLocator {
+public abstract class PrefixedMappedStorageLocator
+    extends MappedStorageLocator {
 
 
     /**
@@ -44,9 +45,10 @@ public abstract class PrefixedStorageLocator extends MappedStorageLocator {
      * @param prefixedStorageLocatorType
      * @param containerNamePrefix
      * @param objectNamePrefix
+     *
      * @return
      */
-    protected static <L extends PrefixedStorageLocator> L newInstance(
+    protected static <L extends PrefixedMappedStorageLocator> L newInstance(
         final Class<L> prefixedStorageLocatorType,
         final String containerNamePrefix, final String objectNamePrefix) {
 
