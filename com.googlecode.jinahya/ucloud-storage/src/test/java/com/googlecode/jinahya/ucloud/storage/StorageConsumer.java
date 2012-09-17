@@ -20,23 +20,27 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.logging.Logger;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -45,47 +49,28 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = StorageReference.NQ_COUNT,
-                query = "SELECT COUNT(r)"
-                        + " FROM StorageReference AS r"),
-    @NamedQuery(name = StorageReference.NQ_LIST,
-                query = "SELECT r"
-                        + " FROM StorageReference AS r"
-                        + " ORDER BY r.createdMillis ASC, r.id ASC")
+    @NamedQuery(name = StorageConsumer.NQ_COUNT,
+                query = "SELECT COUNT(c) FROM StorageConsumer AS c"),
+    @NamedQuery(name = StorageConsumer.NQ_LIST,
+                query = "SELECT c FROM StorageConsumer AS c"
+                        + " ORDER BY c.createdMillis ASC, c.id ASC")
 })
-@Table(name = "STORAGE_REFERENCE",
-       uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"STORAGE_LOCATOR_ID"},
-                      name = "UNIQUE_STORAGE_LOCATORE")})
-public class StorageReference extends MappedStorageReference<StorageLocator> {
+@Table(name = "STORAGE_CONSUMER")
+@XmlRootElement
+public class StorageConsumer {
 
 
-    public static final String NQ_COUNT = "StorageReference.NQ_COUNT";
+    public static final String NQ_COUNT = "StorageConsumer.NQ_COUNT";
 
 
-    public static final String NQ_LIST = "StorageReference.NQ_LIST";
+    public static final String NQ_LIST = "StorageConsumer.NQ_LIST";
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageReference.class.getName());
-
-
-    /**
-     * Creates a new instance with given
-     * <code>storageLocator</code>.
-     *
-     * @param storageLocator storageLocator
-     *
-     * @return a new instance
-     */
-    public static StorageReference newInstance(
-        final StorageLocator storageLocator) {
-
-        return newInstance(StorageReference.class, storageLocator);
-    }
+        Logger.getLogger(StorageConsumer.class.getName());
 
 
     // ---------------------------------------------------------- CREATED_MILLIS
@@ -110,46 +95,63 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     }
 
 
-    // ------------------------------------------------------ STORAGE_LOCATOR_ID
+    // ------------------------------------------------------ STORAGE_REFERENCE1
+    public StorageReference getStorageReference1() {
+        return storageReference1;
+    }
+
+
+    public void setStorageReference1(final StorageReference storageReference1) {
+        this.storageReference1 = storageReference1;
+    }
+
+
     @Transient
     @XmlAttribute
-    @SuppressWarnings({"unused"})
-    private Long getStorageLocatorId() {
+    public Long getStorageReference1Id() {
+        return storageReference1 == null ? null : storageReference1.getId();
+    }
 
-        final StorageLocator storageLocator = getStorageLocator();
-        return storageLocator == null ? null : storageLocator.getId();
+
+    // ------------------------------------------------------ STORAGE_REFERENCE2
+    public StorageReference getStorageReference2() {
+        return storageReference2;
+    }
+
+
+    public void setStorageReference2(final StorageReference storageReference2) {
+        this.storageReference2 = storageReference2;
+    }
+
+
+    @Transient
+    @XmlAttribute
+    public Long getStorageReference2Id() {
+        return storageReference2 == null ? null : storageReference2.getId();
     }
 
 
     // ------------------------------------------------------------- @PrePersist
     @PrePersist
     protected void _PrePersist() {
-
         createdMillis = System.currentTimeMillis();
-    }
-
-
-    // -------------------------------------------------------------- @PreRemove
-    @PreRemove
-    protected void _PreRemove() {
-
-        getStorageLocator().setDeletedMillis(System.currentTimeMillis());
     }
 
 
     @Override
     public String toString() {
         return super.toString()
-               + "?createdMillis=" + createdMillis
+               + "?createdMillis=" + Long.toHexString(createdMillis)
                + "&id=" + String.valueOf(id)
-               + "&storageLocator=" + String.valueOf(getStorageLocator());
+               + "&storageReference1=" + String.valueOf(storageReference1)
+               + "&storageReference2=" + String.valueOf(storageReference2);
     }
 
 
     public String toXml() throws JAXBException, IOException {
 
         final JAXBContext context =
-            JAXBContext.newInstance(StorageReference.class);
+            JAXBContext.newInstance(StorageConsumer.class);
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -170,7 +172,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
      * createdMillis.
      */
     @Basic(optional = false)
-    @Column(name = "CREATED_MILLIS", nullable = false)
+    @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
     @XmlAttribute
     private long createdMillis;
 
@@ -184,6 +186,24 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
 //    @NotNull // Hibernate doesn't like this!
     @XmlAttribute
     private Long id;
+
+
+    /**
+     * storageReference1.
+     */
+    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "STORAGE_REFERENCE1")
+    @XmlTransient
+    private StorageReference storageReference1;
+
+
+    /**
+     * storageReference2.
+     */
+    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "STORAGE_REFERENCE2")
+    @XmlTransient
+    private StorageReference storageReference2;
 
 
 }
