@@ -124,6 +124,7 @@ public class StorageClient {
      * <code>connection</code>.
      *
      * @param connection connection
+     *
      * @return parsed value.
      */
     private static long getContentLength(final URLConnection connection) {
@@ -154,7 +155,9 @@ public class StorageClient {
      * <code>containerName</code>.
      *
      * @param containerName container name
+     *
      * @return the URL-encoded container name
+     *
      * @throws UnsupportedEncodingException if 'UTF-8' is not supported
      */
     private static String encodeContainerName(final String containerName)
@@ -200,7 +203,9 @@ public class StorageClient {
      * <code>obectName</code>.
      *
      * @param objectName object name
+     *
      * @return the URL-encoded object name
+     *
      * @throws UnsupportedEncodingException if 'UTF-8' is not supported
      */
     private static String encodeObjectName(final String objectName)
@@ -293,6 +298,7 @@ public class StorageClient {
      *
      * @param input input
      * @param output output
+     *
      * @throws IOException if an I/O error occurs
      */
     static void copy(final InputStream input, final OutputStream output)
@@ -310,6 +316,7 @@ public class StorageClient {
      * @param input input
      * @param output output
      * @param buffer buffer
+     *
      * @throws IOException if an I/O error occurs
      */
     static void copy(final InputStream input, final OutputStream output,
@@ -410,7 +417,9 @@ public class StorageClient {
      *
      * @param containerName container name
      * @param storageContainer storage container
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs
      */
     public boolean readStorageContainer(final String containerName,
@@ -643,12 +652,16 @@ public class StorageClient {
 
 
     /**
+     * Reads a
+     * <code>StorageObject</code>.
      *
-     * @param containerName
-     * @param objectName
-     * @param storageObject
-     * @return
-     * @throws IOException
+     * @param containerName container name
+     * @param objectName object name
+     * @param storageObject the storageObject
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
      */
     public boolean readStorageObject(final String containerName,
                                      final String objectName,
@@ -1014,7 +1027,9 @@ public class StorageClient {
      * @param containerName container name
      * @param objectName object name
      * @param contentDataOutput the output stream to which content is written
+     *
      * @return true if succeeded; false otherwise
+     *
      * @throws IOException if an I/O error occurs
      */
     public boolean readObject(final String containerName,
