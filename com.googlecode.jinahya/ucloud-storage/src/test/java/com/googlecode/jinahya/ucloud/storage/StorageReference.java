@@ -135,6 +135,8 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     @PreRemove
     protected void _PreRemove() {
 
+        LOGGER.info("_PreRemove()");
+        
         getStorageLocator().setDeletedMillis(System.currentTimeMillis());
     }
 
