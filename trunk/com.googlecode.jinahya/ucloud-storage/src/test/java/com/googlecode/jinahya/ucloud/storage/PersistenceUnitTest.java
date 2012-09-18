@@ -75,8 +75,12 @@ public class PersistenceUnitTest {
         final StorageLocator storageLocator = new StorageLocator();
         ENTTIY_MANAGER.persist(storageLocator);
 
-        storageLocator.setContainerName(null, storageLocator.getId());
-        storageLocator.setObjectName(null, storageLocator.getId());
+        storageLocator.setContainerName(
+            MappedStorageLocator.formatContainerName(
+            null, storageLocator.getId()));
+        storageLocator.setObjectName(
+            MappedStorageLocator.formatObjectName(
+            null, storageLocator.getId()));
 
         return storageLocator;
     }

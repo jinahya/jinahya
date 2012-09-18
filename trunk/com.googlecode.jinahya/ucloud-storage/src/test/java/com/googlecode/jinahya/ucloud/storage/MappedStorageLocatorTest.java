@@ -18,9 +18,7 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -105,8 +103,6 @@ public class MappedStorageLocatorTest {
 //        final String actual = URLEncoder.encode(expected, "UTF-8");
 //        Assert.assertEquals(actual, expected);
 //    }
-
-
     @Test
     public void testNameAndLength() {
 
@@ -123,8 +119,10 @@ public class MappedStorageLocatorTest {
     private void testNameAndLength(final MappedStorageLocator storageLocator,
                                    final long sequenceNumber) {
 
-        storageLocator.setContainerName(null, sequenceNumber);
-        storageLocator.setObjectName(null, sequenceNumber);
+        storageLocator.setContainerName(
+            MappedStorageLocator.formatContainerName(null, sequenceNumber));
+        storageLocator.setObjectName(
+            MappedStorageLocator.formatObjectName(null, sequenceNumber));
         final String containerName = storageLocator.getContainerName();
         final String objectName = storageLocator.getObjectName();
         System.out.printf("%20d %16s (%2d) %8s (%2d)\n", sequenceNumber,
@@ -150,8 +148,6 @@ public class MappedStorageLocatorTest {
 //
 //        Assert.assertEquals(actual, expected);
 //    }
-
-
     @Test
     public void testGetContainerName() {
 

@@ -113,6 +113,12 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
 
 
     // ------------------------------------------------------ STORAGE_LOCATOR_ID
+    /**
+     * Returns
+     * <code>storageLocator</code>'s id.
+     *
+     * @return storageLocator's id.
+     */
     @Transient
     @XmlAttribute
     @SuppressWarnings({"unused"})
@@ -136,7 +142,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     protected void _PreRemove() {
 
         LOGGER.info("_PreRemove()");
-        
+
         getStorageLocator().setDeletedMillis(System.currentTimeMillis());
     }
 
@@ -150,6 +156,11 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     }
 
 
+    /**
+     *
+     * @return @throws JAXBException
+     * @throws IOException
+     */
     public String toXml() throws JAXBException, IOException {
 
         final JAXBContext context =

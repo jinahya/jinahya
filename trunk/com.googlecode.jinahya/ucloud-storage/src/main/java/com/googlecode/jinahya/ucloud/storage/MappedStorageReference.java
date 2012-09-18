@@ -49,7 +49,7 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
      * @param storageReferenceType storage reference type
      * @param storageLocator storage locator
      *
-     * @return
+     * @return a new instance of given <code>storageReferenceType</code>.
      */
     protected static <R extends MappedStorageReference<L>, L extends MappedStorageLocator> R newInstance(
         final Class<R> storageReferenceType, final L storageLocator) {

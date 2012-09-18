@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -35,52 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @MappedSuperclass
 @XmlTransient
 public class MappedStorageLocator {
-
-
-    /**
-     * Creates a new instance of given
-     * <code>storageLocatorType</code>.
-     *
-     * @param <L> storage locator type parameter
-     * @param storageLocatorType storage locator type
-     * @param containerNamePrefix container name prefix
-     * @param objectNamePrefix object name prefix
-     * @param sequenceNumber sequence number
-     *
-     * @return a new instance of <code>storageLocatorType</code>.
-     */
-    public static <L extends MappedStorageLocator> L newInstance(
-        final Class<L> storageLocatorType, final String containerNamePrefix,
-        final String objectNamePrefix, final long sequenceNumber) {
-
-        if (storageLocatorType == null) {
-            throw new IllegalArgumentException("null storageLocatorType");
-        }
-
-        try {
-            final Constructor<L> constructor =
-                storageLocatorType.getDeclaredConstructor();
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                final L instance = constructor.newInstance();
-                instance.setContainerName(
-                    formatContainerName(containerNamePrefix, sequenceNumber));
-                instance.setObjectName(
-                    formatObjectName(objectNamePrefix, sequenceNumber));
-                return instance;
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
-    }
 
 
     // ---------------------------------------------------------- @containerName
@@ -257,20 +209,21 @@ public class MappedStorageLocator {
     }
 
 
-    /**
-     * Sets
-     * <code>containerName</code> with given
-     * <code>containerNamePrefix</code> and
-     * <code>sequenceNumber</code>.
-     *
-     * @param containerNamePrefix container name prefix
-     * @param sequenceNumber sequence number
-     */
-    public void setContainerName(final String containerNamePrefix,
-                                 final long sequenceNumber) {
-
-        setContainerName(formatContainerName(containerNamePrefix, sequenceNumber));
-    }
+//    /**
+//     * Sets
+//     * <code>containerName</code> with given
+//     * <code>containerNamePrefix</code> and
+//     * <code>sequenceNumber</code>.
+//     *
+//     * @param containerNamePrefix container name prefix
+//     * @param sequenceNumber sequence number
+//     */
+//    public void setContainerName(final String containerNamePrefix,
+//                                 final long sequenceNumber) {
+//
+//        setContainerName(
+//            formatContainerName(containerNamePrefix, sequenceNumber));
+//    }
 
 
     // ------------------------------------------------------------- OBJECT_NAME
@@ -299,25 +252,26 @@ public class MappedStorageLocator {
     }
 
 
-    /**
-     * Sets
-     * <code>objectName</code> with given
-     * <code>objectNamePrefix</code> and
-     * <code>sequenceNumber</code>.
-     *
-     * @param objectNamePrefix object name prefix
-     * @param sequenceNumber sequence number
-     */
-    public void setObjectName(final String objectNamePrefix,
-                              final long sequenceNumber) {
-
-        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
-    }
+//    /**
+//     * Sets
+//     * <code>objectName</code> with given
+//     * <code>objectNamePrefix</code> and
+//     * <code>sequenceNumber</code>.
+//     *
+//     * @param objectNamePrefix object name prefix
+//     * @param sequenceNumber sequence number
+//     */
+//    public void setObjectName(final String objectNamePrefix,
+//                              final long sequenceNumber) {
+//
+//        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
+//    }
 
 
     @Override
     public String toString() {
-        return containerName + "/" + objectName;
+        return super.toString() + "?containerName=" + containerName
+               + "&objectName=" + objectName;
     }
 
 
