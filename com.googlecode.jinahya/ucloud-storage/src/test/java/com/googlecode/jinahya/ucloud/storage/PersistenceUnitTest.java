@@ -65,6 +65,11 @@ public class PersistenceUnitTest {
     }
 
 
+    @AfterClass
+    public static void tearDown() {
+    }
+
+
     private static StorageLocator newStorageLocator() {
 
         final StorageLocator storageLocator = new StorageLocator();
@@ -90,11 +95,6 @@ public class PersistenceUnitTest {
         ENTTIY_MANAGER.persist(storageReference);
 
         return storageReference;
-    }
-
-
-    @AfterClass
-    public static void tearDown() {
     }
 
 
