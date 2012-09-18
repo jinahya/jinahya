@@ -30,7 +30,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +78,7 @@ public class StorageClient {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageClient.class.getPackage().getName());
+        Logger.getLogger(StorageClient.class.getName());
 
 
     static {
@@ -171,9 +170,9 @@ public class StorageClient {
             throw new IllegalArgumentException("empty containerName");
         }
 
-        if (!containerName.equals(trimmedContainerName)) {
-            throw new IllegalArgumentException("trimmable containerName");
-        }
+//        if (!containerName.equals(trimmedContainerName)) {
+//            throw new IllegalArgumentException("trimmable containerName");
+//        }
 
         if (trimmedContainerName.contains(PATH_SEPARATOR)) {
             throw new IllegalArgumentException(
@@ -186,7 +185,7 @@ public class StorageClient {
         if (encodedContainerName.length()
             > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
             throw new IllegalArgumentException(
-                "containerName's URL-encoded length("
+                "containerName's encoded length("
                 + encodedContainerName.length()
                 + " > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH("
                 + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
@@ -217,14 +216,14 @@ public class StorageClient {
             throw new IllegalArgumentException("empty objectName");
         }
 
-        if (!objectName.equals(trimmedObjectName)) {
-            throw new IllegalArgumentException("trimmable objectName");
-        }
+//        if (!objectName.equals(trimmedObjectName)) {
+//            throw new IllegalArgumentException("trimmable objectName");
+//        }
 
         final String encodedObjectName = URLEncoder.encode(objectName, "UTF-8");
         if (encodedObjectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
             throw new IllegalArgumentException(
-                "objectName's URL-encoded length(" + encodedObjectName.length()
+                "objectName's encoded length(" + encodedObjectName.length()
                 + "> MAXIMUM_ENCODED_OBJECT_NAME_LENGTH("
                 + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
         }
@@ -345,8 +344,8 @@ public class StorageClient {
      * @param storageUser user id
      * @param storagePass api key
      */
-    public StorageClient(final String storageUser,
-                               final String storagePass) {
+    public StorageClient(final String storageUser, final String storagePass) {
+
         super();
 
         if (storageUser == null) {
