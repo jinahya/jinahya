@@ -150,7 +150,7 @@ public class StorageLocator extends MappedStorageLocator {
     @Override
     public String toString() {
         return super.toString()
-               + "?createdMillis=" + createdMillis
+               + "&createdMillis=" + createdMillis
                + "&deletedMillis=" + String.valueOf(deletedMillis)
                + "&id=" + String.valueOf(id)
                + "&containerName=" + String.valueOf(getContainerName())
@@ -158,6 +158,14 @@ public class StorageLocator extends MappedStorageLocator {
     }
 
 
+    /**
+     * Prints this instance as XML.
+     *
+     * @return an XML presentation
+     *
+     * @throws JAXBException if a JAXB error occurs
+     * @throws IOException if an I/O error occurs
+     */
     public String toXml() throws JAXBException, IOException {
 
         final JAXBContext context =
