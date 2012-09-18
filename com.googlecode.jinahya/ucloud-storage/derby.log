@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Sep 18 09:56:57 KST 2012:
+Tue Sep 18 09:59:57 KST 2012:
  클래스 로더 sun.misc.Launcher$AppClassLoader@717e5fde이(가) 있는 데이터베이스 디렉토리 memory:E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage\ucloudStorageTestDB 에서 
- Derby 버전 The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): 인스턴스 a816c00e-0139-d6e0-c333-000005b64eb8 부팅 중 
+ Derby 버전 The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): 인스턴스 a816c00e-0139-d6e3-7e81-000005834838 부팅 중 
 
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_07-b10
