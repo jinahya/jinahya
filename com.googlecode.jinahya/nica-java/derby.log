@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Tue Sep 18 21:37:24 KST 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0139-d962-0a6e-0000059a5d78 
+on database directory memory:E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage\ucloudStorageTestDB  with class loader sun.misc.Launcher$AppClassLoader@1fc82208 
+Loaded from file:/C:/Users/onacit/.m2/repository/org/glassfish/main/extras/glassfish-embedded-all/3.1.2.2/glassfish-embedded-all-3.1.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_07-b11
+user.dir=E:\svnwc\jinahya.googlecode.com\trunk\com.googlecode.jinahya\ucloud-storage
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
