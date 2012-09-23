@@ -21,6 +21,9 @@ package com.googlecode.jinahya.nica.util;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Random;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,6 +33,37 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class HEXTest {
+
+
+    private static final Random RANDOM = new Random();
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodingDecoding() {
+
+        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        RANDOM.nextBytes(expected);
+
+        final byte[] encoded = HEX.encode(expected);
+
+        final byte[] actual = HEX.decode(encoded);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodingDecodingString() {
+
+        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        RANDOM.nextBytes(expected);
+
+        final String encoded = HEX.encodeToString(expected);
+
+        final byte[] actual = HEX.decodeFromString(encoded);
+
+        Assert.assertEquals(actual, expected);
+    }
 
 
     @Test
