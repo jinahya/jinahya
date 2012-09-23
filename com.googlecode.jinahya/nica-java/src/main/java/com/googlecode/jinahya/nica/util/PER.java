@@ -57,7 +57,11 @@ public class PER {
         for (int i = 0; i < decoded.length; i++) {
             if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) // [0-9]
                 || (decoded[i] >= 0x41 && decoded[i] <= 0x5A) // [a-z]
-                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A)) { // [A-Z]
+                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A)
+                || decoded[i] == 0x2D // '-'
+                || decoded[i] == 0x5F // '_'
+                || decoded[i] == 0x2E // '.'
+                || decoded[i] == 0x7E) { // '~'
                 encoded.write(decoded[i]);
             } else {
                 encoded.write(0x25); // '%'
@@ -65,10 +69,7 @@ public class PER {
                 encoded.write(hex[0]);
                 encoded.write(hex[1]);
             }
-
-
         }
-
 
         return encoded.toByteArray();
     }
@@ -98,9 +99,13 @@ public class PER {
             new ByteArrayOutputStream(encoded.length);
 
         for (int i = 0; i < encoded.length; i++) {
-            if (encoded[i] >= 0x30 && encoded[i] <= 0x39 // [0-9]
-                || encoded[i] >= 0x41 && encoded[i] <= 0x5A // [a-z]
-                || encoded[i] >= 0x61 && encoded[i] <= 0x7A) { // [A-Z]              
+            if ((encoded[i] >= 0x30 && encoded[i] <= 0x39) // [0-9]
+                || (encoded[i] >= 0x41 && encoded[i] <= 0x5A) // [a-z]
+                || (encoded[i] >= 0x61 && encoded[i] <= 0x7A)
+                || encoded[i] == 0x2D // '-'
+                || encoded[i] == 0x5F // '_'
+                || encoded[i] == 0x2E // '.'
+                || encoded[i] == 0x7E) { // '~'                
                 decoded.write(encoded[i]);
             } else if (encoded[i] == 0x25) {
                 decoded.write(HEX.decodeSingle(encoded, ++i));
@@ -119,11 +124,6 @@ public class PER {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
-        }
-
-        if ((encoded.length() & 0x01) == 0x01) {
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length() + ") is not even");
         }
 
         try {

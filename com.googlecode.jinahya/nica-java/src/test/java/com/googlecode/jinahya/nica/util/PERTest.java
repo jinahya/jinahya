@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -43,6 +42,20 @@ public class PERTest {
         final byte[] encoded = PER.encode(expected);
 
         final byte[] actual = PER.decode(encoded);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodingDecodingString() {
+
+        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        RANDOM.nextBytes(expected);
+
+        final String encoded = PER.encodeToString(expected);
+
+        final byte[] actual = PER.decodeFromString(encoded);
 
         Assert.assertEquals(actual, expected);
     }
