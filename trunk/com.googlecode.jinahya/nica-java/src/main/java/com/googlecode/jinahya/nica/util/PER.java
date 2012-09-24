@@ -120,27 +120,6 @@ public class PER {
     }
 
 
-    /**
-     * 
-     * @param encoded
-     * @return 
-     * @deprecated 
-     */
-    public static byte[] decodeFromString(final String encoded) {
-
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
-
-        try {
-            return decode(encoded.getBytes("US-ASCII"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-//            throw new RuntimeException("\"US-ASCII\" is not supported?");
-        }
-    }
-
-
     public static byte[] encode(final byte[] decoded) {
 
         LOGGER.log(Level.INFO, "decoded.length: {0}", decoded.length);

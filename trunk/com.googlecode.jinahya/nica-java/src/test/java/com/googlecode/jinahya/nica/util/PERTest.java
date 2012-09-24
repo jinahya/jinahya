@@ -55,7 +55,7 @@ public class PERTest {
 
         final String encoded = PER.encodeToString(expected);
 
-        final byte[] actual = PER.decodeFromString(encoded);
+        final byte[] actual = PER.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
