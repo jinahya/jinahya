@@ -22,8 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -60,7 +58,7 @@ public class HEXTest {
 
         final String encoded = HEX.encodeToString(expected);
 
-        final byte[] actual = HEX.decodeFromString(encoded);
+        final byte[] actual = HEX.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
@@ -91,8 +89,7 @@ public class HEXTest {
         for (Iterator<String> i = Arrays.asList(v).iterator(); i.hasNext();) {
             final String expected = i.next();
             final String encoded = i.next();
-            final String actual =
-                new String(HEX.decodeFromString(encoded), "US-ASCII");
+            final String actual = HEX.decodeToString(encoded);
             Assert.assertEquals(actual, expected);
         }
     }

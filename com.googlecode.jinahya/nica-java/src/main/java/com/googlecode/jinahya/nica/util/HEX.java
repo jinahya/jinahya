@@ -41,6 +41,12 @@ public class HEX {
     }
 
 
+    /**
+     * Encodes a half octet.
+     *
+     * @param decoded half octet
+     * @return encoded ascii
+     */
     private static int encodeHalf(final int decoded) {
 
         LOGGER.log(Level.INFO, "encodedHalf({0})", decoded);
@@ -70,6 +76,13 @@ public class HEX {
     }
 
 
+    /**
+     * Encodes a single octet.
+     *
+     * @param decoded the octet to encode
+     * @param encoded the byte array to which encoded asciis are written
+     * @param offset offset in the array
+     */
     protected static void encodeSingle(final int decoded, final byte[] encoded,
                                        final int offset) {
 
@@ -95,6 +108,13 @@ public class HEX {
     }
 
 
+    /**
+     * Encodes given
+     * <code>decoded</code>.
+     *
+     * @param decoded the octets to encode
+     * @return decoded asciis
+     */
     public static byte[] encode(final byte[] decoded) {
 
         LOGGER.log(Level.INFO, "decoded.length: {0}", decoded.length);
@@ -115,6 +135,28 @@ public class HEX {
     }
 
 
+    public static byte[] encode(final String decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        try {
+            return encode(decoded.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" not supported?", uee);
+//            throw new RuntimeException("\"UTF-8\" not supported?");
+        }
+    }
+
+
+    /**
+     * Encodes given
+     * <code>decoded</code> and returns as an ascii string.
+     *
+     * @param decoded the octets to encode
+     * @return encoded ascii string
+     */
     public static String encodeToString(final byte[] decoded) {
 
         if (decoded == null) {
@@ -125,6 +167,21 @@ public class HEX {
             return new String(encode(decoded), "US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+        }
+    }
+
+
+    public static String encodeToString(final String decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        try {
+            return encodeToString(decoded.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+//            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
@@ -212,21 +269,39 @@ public class HEX {
     }
 
 
-    public static byte[] decodeFromString(final String encoded) {
+    public static byte[] decode(final String encoded) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
-        }
-
-        if ((encoded.length() & 0x01) == 0x01) {
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length() + ") is not even");
         }
 
         try {
             return decode(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+//            throw new RuntimeException("\"US-ASCII\" is not supported?");
+        }
+    }
+
+
+    public static String decodeToString(final byte[] encoded) {
+
+        try {
+            return new String(decode(encoded), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+//            throw new RuntimeException("\"UTF-8\" is not supported?");
+        }
+    }
+
+
+    public static String decodeToString(final String encoded) {
+
+        try {
+            return decodeToString(encoded.getBytes("US-ASCII"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+//            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
