@@ -38,7 +38,7 @@ public class PER {
 
 
     static {
-//        LOGGER.setLevel(Level.OFF);
+        LOGGER.setLevel(Level.OFF);
     }
 
 
