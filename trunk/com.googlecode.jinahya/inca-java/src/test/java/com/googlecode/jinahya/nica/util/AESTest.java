@@ -64,19 +64,10 @@ public class AESTest {
             final String actual = AES.encryptToString(key, iv, decrypted);
             Assert.assertTrue(actual.startsWith(expected));
         }
-
-        for (int i = 0; i < vectors.length; i += 3) {
-            final byte[] iv = HEX.decode(vectors[i]);
-            final String expected = vectors[i + 1].toUpperCase();
-            final String encrypted = vectors[i + 2].toUpperCase();
-            final String actual = AES.decryptToString(key, iv, encrypted);
-            System.out.println(actual + " " + expected);
-            //Assert.assertTrue(actual.startsWith(expected));
-        }
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(invocationCount = 128)
     public static void testEncryptDecrypt() {
 
         final byte[] key = new byte[AES.KEY_SIZE_IN_BYTES];
@@ -86,11 +77,12 @@ public class AESTest {
         RANDOM.nextBytes(iv);
 
         final byte[] expected = new byte[RANDOM.nextInt(1024)];
+        RANDOM.nextBytes(expected);
 
         final byte[] encrypted = AES.encrypt(key, iv, expected);
-        
+
         final byte[] actual = AES.decrypt(key, iv, encrypted);
-        
+
         Assert.assertEquals(actual, expected);
     }
 

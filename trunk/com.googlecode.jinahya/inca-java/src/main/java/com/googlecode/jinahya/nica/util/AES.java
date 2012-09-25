@@ -189,7 +189,7 @@ public class AES {
             throw new IllegalArgumentException("null decrypted");
         }
 
-        return encrypt(new SecretKeySpec(key, NAME), new IvParameterSpec(iv),
+        return decrypt(new SecretKeySpec(key, NAME), new IvParameterSpec(iv),
                        encrypted);
     }
 
@@ -208,6 +208,7 @@ public class AES {
      * @param key encryption key
      * @param iv initialization vector
      * @param encrypted encrypted hex string
+     *
      * @return decrypted output as a utf string
      */
     public static String decryptToString(final byte[] key, final byte[] iv,
@@ -224,6 +225,7 @@ public class AES {
      * @param key encryption key
      * @param iv initialization vector
      * @param encrypted encrypted hex string
+     *
      * @return decrypted output as a utf string
      */
     public static String decryptToString(final byte[] key, final byte[] iv,
