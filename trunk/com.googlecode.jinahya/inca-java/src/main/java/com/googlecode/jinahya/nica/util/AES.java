@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -137,6 +136,16 @@ public class AES {
     }
 
 
+    /**
+     * Decrypts given
+     * <code>encrypted</code>.
+     *
+     * @param key encryption key
+     * @param params parameters
+     * @param encrypted encrypted bytes to decrypt
+     *
+     * @return decrypted bytes
+     */
     public static byte[] decrypt(final Key key, final IvParameterSpec params,
                                  final byte[] encrypted) {
 
@@ -162,6 +171,16 @@ public class AES {
     }
 
 
+    /**
+     * Decrypts given
+     * <code>encrypted</code>.
+     *
+     * @param key encryption key
+     * @param iv initialization vector
+     * @param encrypted encrypted octets to decrypt
+     *
+     * @return decrypted bytes
+     */
     public static byte[] decrypt(final byte[] key, final byte[] iv,
                                  final byte[] encrypted) {
 
@@ -194,6 +213,16 @@ public class AES {
     }
 
 
+    /**
+     * Decrypts given
+     * <code>encrypted</code>.
+     *
+     * @param key encryption key
+     * @param iv initialization vector
+     * @param encrypted encrypted hex string
+     *
+     * @return decrypted bytes
+     */
     public static byte[] decrypt(final byte[] key, final byte[] iv,
                                  final String encrypted) {
 
@@ -202,14 +231,14 @@ public class AES {
 
 
     /**
-     * Descrypts given
-     * <code>encrypted</code> and returns output as a utf string.
+     * Decrypts given
+     * <code>encrypted</code> and returns output as a hex string.
      *
      * @param key encryption key
      * @param iv initialization vector
      * @param encrypted encrypted hex string
      *
-     * @return decrypted output as a utf string
+     * @return decrypted output as a hex string
      */
     public static String decryptToString(final byte[] key, final byte[] iv,
                                          final byte[] encrypted) {
@@ -220,13 +249,13 @@ public class AES {
 
     /**
      * Decrypts given
-     * <code>encrypted</code> and returns output as a utf string.
+     * <code>encrypted</code> and returns output as a hex string.
      *
      * @param key encryption key
      * @param iv initialization vector
      * @param encrypted encrypted hex string
      *
-     * @return decrypted output as a utf string
+     * @return decrypted output as a hex string
      */
     public static String decryptToString(final byte[] key, final byte[] iv,
                                          final String encrypted) {
