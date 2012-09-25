@@ -28,47 +28,47 @@ public enum CodeProperty {
     /**
      * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
      */
-    NICA_USER_COUNTRY3,
+    INCA_USER_COUNTRY3,
     /**
      * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
      */
-    NICA_USER_COUNTRY2,
+    INCA_USER_COUNTRY2,
     /**
      * User country/region name in en_US.
      */
-    NICA_USER_COUNTRY,
+    INCA_USER_COUNTRY,
     /**
      * 3-letter lowercase language code. ISO 639-2.
      */
-    NICA_USER_LANGUAGE3,
+    INCA_USER_LANGUAGE3,
     /**
      * 2-letter lowercase language code. ISO 639-1.
      */
-    NICA_USER_LANGUAGE2,
+    INCA_USER_LANGUAGE2,
     /**
      * User language name in en_US.
      */
-    NICA_USER_LANGUAGE,
+    INCA_USER_LANGUAGE,
     /**
      * Current time in milliseconds since 1970.
      */
-    NICA_SYSTEM_MILLIS,
+    INCA_SYSTEM_MILLIS,
     /**
      * System version. OS version.
      */
-    NICA_SYSTEM_VERSION,
+    INCA_SYSTEM_VERSION,
     /**
      * System identifier. OS name.
      */
-    NICA_SYSTEM_ID,
+    INCA_SYSTEM_ID,
     /**
      * Device's version.
      */
-    NICA_DEVICE_VERSION,
+    INCA_DEVICE_VERSION,
     /**
      * Globally unique device identifier.
      */
-    NICA_DEVICE_ID
+    INCA_DEVICE_ID
 
 
 }

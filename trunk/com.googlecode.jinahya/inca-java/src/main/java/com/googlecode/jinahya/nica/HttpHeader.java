@@ -23,11 +23,13 @@ package com.googlecode.jinahya.nica;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public enum HttpHeader {
-    
 
-    NICA_NAME,
-    NICA_INIT,
-    NICA_CODE,
-    NICA_AUTH
+
+    INCA_INIT,
+    INCA_NAME,
+    INCA_CODE,
+    INCA_AUTH
+
+
 }
 
