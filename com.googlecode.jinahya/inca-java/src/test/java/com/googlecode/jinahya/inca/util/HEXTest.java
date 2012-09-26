@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.inca.util;
 
 
-import com.googlecode.jinahya.inca.util.HEX;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Iterator;
