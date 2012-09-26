@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.inca.util;
 
 
-import com.googlecode.jinahya.inca.util.KVP;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;

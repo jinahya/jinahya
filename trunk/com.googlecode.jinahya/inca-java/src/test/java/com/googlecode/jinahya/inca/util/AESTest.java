@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.inca.util;
 
 
-import com.googlecode.jinahya.inca.util.AES;
-import com.googlecode.jinahya.inca.util.HEX;
 import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;

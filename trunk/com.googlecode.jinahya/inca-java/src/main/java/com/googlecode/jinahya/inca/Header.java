@@ -22,7 +22,7 @@ package com.googlecode.jinahya.inca;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum HttpHeader {
+public enum Header {
 
 
     /**
@@ -48,7 +48,7 @@ public enum HttpHeader {
      *
      * @param fieldName http header field-name.
      */
-    private HttpHeader(final String fieldName) {
+    private Header(final String fieldName) {
 //        super();
 
         if (fieldName == null) {

@@ -22,53 +22,53 @@ package com.googlecode.jinahya.inca;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum CodeProperty {
+public enum Code {
 
 
     /**
      * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
      */
-    INCA_USER_COUNTRY3,
+    USER_COUNTRY3,
     /**
      * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
      */
-    INCA_USER_COUNTRY2,
+    USER_COUNTRY2,
     /**
      * User country/region name in en_US.
      */
-    INCA_USER_COUNTRY,
+    USER_COUNTRY,
     /**
      * 3-letter lowercase language code. ISO 639-2.
      */
-    INCA_USER_LANGUAGE3,
+    USER_LANGUAGE3,
     /**
      * 2-letter lowercase language code. ISO 639-1.
      */
-    INCA_USER_LANGUAGE2,
+    USER_LANGUAGE2,
     /**
      * User language name in en_US.
      */
-    INCA_USER_LANGUAGE,
+    USER_LANGUAGE,
     /**
      * Current time in milliseconds since 1970.
      */
-    INCA_SYSTEM_MILLIS,
+    SYSTEM_MILLIS,
     /**
      * System version. OS version.
      */
-    INCA_SYSTEM_VERSION,
+    SYSTEM_VERSION,
     /**
      * System identifier. OS name.
      */
-    INCA_SYSTEM_ID,
+    SYSTEM_ID,
     /**
      * Device's version.
      */
-    INCA_DEVICE_VERSION,
+    DEVICE_VERSION,
     /**
      * Globally unique device identifier.
      */
-    INCA_DEVICE_ID
+    DEVICE_ID
 
 
 }
