@@ -260,6 +260,30 @@ public class HEX {
     }
 
 
+    protected static int decodeSingle(final String encoded, final int offset) {
+
+        LOGGER.log(Level.INFO, "decodeSingle({0}, {1})",
+                   new Object[]{encoded, offset});
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= encoded.length() - 1) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= encoded.length(" + encoded.length()
+                + ") - 1");
+        }
+
+        return (decodeHalf((encoded.charAt(offset)) << 4)
+                | decodeHalf((encoded.charAt(offset + 1))));
+    }
+
+
     /**
      * Decodes given
      * <code>encoded</code>.

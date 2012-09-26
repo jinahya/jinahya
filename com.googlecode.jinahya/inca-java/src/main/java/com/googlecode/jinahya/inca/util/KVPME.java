@@ -29,6 +29,13 @@ import java.util.Hashtable;
 public class KVPME {
 
 
+    /**
+     * Exchanges.
+     *
+     * @param a array
+     * @param i i
+     * @param j j
+     */
     private static void exchange(final String[] a, final int i, final int j) {
         final String t = a[i];
         a[i] = a[j];
@@ -36,6 +43,15 @@ public class KVPME {
     }
 
 
+    /**
+     * Sorts given
+     * <code>keys</code> along with values.
+     *
+     * @param keys keys
+     * @param values values
+     * @param low low
+     * @param high high
+     */
     private static void quicksort(final String[] keys, final String[] values,
                                   final int low, final int high) {
 
@@ -66,16 +82,25 @@ public class KVPME {
     }
 
 
+    /**
+     * Encodes given
+     * <code>decoded</code>.
+     *
+     * @param decoded key-value pairs to encode
+     * @return encoded hex string
+     */
     public static String encode(final Hashtable decoded) {
 
         if (decoded == null) {
             throw new IllegalArgumentException("null decoded");
         }
 
+        if (decoded.isEmpty()) {
+            throw new IllegalArgumentException("empty decoded");
+        }
+
         final String[] normalizedKeys = new String[decoded.size()];
         final String[] normalizedValues = new String[decoded.size()];
-
-        int length = 0;
 
         final Enumeration keys = decoded.keys();
         for (int i = 0; keys.hasMoreElements(); i++) {
@@ -86,7 +111,6 @@ public class KVPME {
                     "illegal key (not a string): " + key);
             }
             normalizedKeys[i] = PER.encodeToString((String) key);
-            length += normalizedKeys[i].length();
 
             final Object value = decoded.get(key);
             if (!(value instanceof String)) {
@@ -94,16 +118,16 @@ public class KVPME {
                     "illegal value (not a string): " + value);
             }
             normalizedValues[i] = PER.encodeToString((String) value);
-            length += (normalizedValues[i].length() + 1); // '='
-        }
-
-        if (normalizedKeys.length > 0) {
-            length += (normalizedKeys.length - 1); // '&'
         }
 
         quicksort(normalizedKeys, normalizedValues, 0,
                   normalizedKeys.length - 1);
 
+        int length = normalizedKeys.length * 2; // '=', '&'
+        for (int i = 0; i < normalizedKeys.length; i++) {
+            length += normalizedKeys[i].length();
+            length += normalizedValues[i].length();
+        }
         final StringBuffer buffer = new StringBuffer(length);
         if (normalizedKeys.length > 0) {
             buffer.append(normalizedKeys[0]).
@@ -114,46 +138,105 @@ public class KVPME {
             buffer.append('&').
                 append(normalizedKeys[i]).
                 append('=').
-                append(normalizedValues[0]);
+                append(normalizedValues[i]);
         }
 
         return buffer.toString();
     }
 
 
+    private static void decodePair(final String encoded, final int beginIndex,
+                                   final int endIndex,
+                                   final Hashtable decoded) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (encoded.length() == 0) {
+            throw new IllegalArgumentException("empty encoded");
+        }
+
+        if (beginIndex < 0) {
+            throw new IllegalArgumentException(
+                "beginIndex(" + beginIndex + ") < 0");
+        }
+
+        if (beginIndex >= encoded.length()) {
+            throw new IllegalArgumentException(
+                "beginIndex(" + beginIndex + ") >= encoded.length("
+                + encoded.length() + ")");
+        }
+
+        if (endIndex <= beginIndex) {
+            throw new IllegalArgumentException(
+                "endIndex(" + endIndex + ") <= beginIndex(" + beginIndex + ")");
+        }
+
+        if (endIndex > encoded.length()) {
+            throw new IllegalArgumentException(
+                "endIndex(" + endIndex + ") <= encoded.length("
+                + encoded.length() + ")");
+        }
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        final int equalSignIndex = encoded.indexOf('=', beginIndex);
+        if (equalSignIndex == -1) {
+            throw new IllegalArgumentException("no equal sign in range");
+        }
+        if (equalSignIndex > endIndex) {
+            throw new IllegalArgumentException("no equal sign in range");
+        }
+
+        final String key = PER.decodeToString(
+            encoded.substring(beginIndex, equalSignIndex));
+        final String value = PER.decodeToString(
+            encoded.substring(equalSignIndex + 1, endIndex));
+
+        final Object previous = decoded.put(key, value);
+        if (previous != null) {
+            throw new IllegalArgumentException(
+                "duplicate pair for key: " + key);
+        }
+    }
+
+
+    /**
+     * Decodes given
+     * <code>encoded</code>.
+     *
+     * @param encoded encoded hex string
+     * @return decoded key-value pairs
+     */
     public static Hashtable decode(final String encoded) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
 
+        if (encoded.length() == 0) {
+            throw new IllegalArgumentException("empty encoded");
+        }
+
         final Hashtable decoded = new Hashtable();
 
-        int fromIndex = 0;
-        for (int index = -1; (index = encoded.indexOf('&', fromIndex)) != -1;
-             fromIndex += index) {
-            final String pair = encoded.substring(fromIndex, index);
-            final int amp = pair.indexOf('&');
-            if (amp == -1) {
-                throw new IllegalArgumentException(
-                    "no ampersand index in pair: " + pair);
-            }
-            final String key = HEX.decodeToString(pair.substring(0, amp));
-            final String value = HEX.decodeToString(pair.substring(amp + 1));
-
-            final Object previous = decoded.put(key, value);
-            if (previous != null) {
-                throw new IllegalArgumentException(
-                    "duplicate pair for key: " + key);
-            }
-
-            fromIndex = index + 1;
+        int f = 0;
+        for (int i = -1; (i = encoded.indexOf('&', f)) != -1; f = i + 1) {
+            decodePair(encoded, f, i, decoded);
         }
+
+        decodePair(encoded, f, encoded.length(), decoded);
 
         return decoded;
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected KVPME() {
         super();
     }
