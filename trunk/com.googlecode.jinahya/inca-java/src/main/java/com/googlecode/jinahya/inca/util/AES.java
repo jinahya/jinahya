@@ -18,23 +18,17 @@
 package com.googlecode.jinahya.inca.util;
 
 
-import java.security.Key;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AES {
+public abstract class AES {
 
 
-    public static final int KEY_SIZE = 128;
+    public static final int KEY_SIZE = 0x80; // 128
 
 
-    public static final int KEY_SIZE_IN_BYTES = 128 / 8;
+    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08;
 
 
     public static final String NAME = "AES";
@@ -50,124 +44,60 @@ public class AES {
         NAME + "/" + MODE + "/" + PADDING;
 
 
-    public static byte[] encrypt(final Key key, final IvParameterSpec params,
-                                 final byte[] decrypted) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (params == null) {
-            throw new IllegalArgumentException("null params");
-        }
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        try {
-            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.ENCRYPT_MODE, key, params);
-            return cipher.doFinal(decrypted);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public static byte[] encrypt(final byte[] key, final byte[] iv,
-                                 final byte[] decrypted) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        if (iv == null) {
-            throw new IllegalArgumentException("null iv");
-        }
-
-        if (iv.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return encrypt(new SecretKeySpec(key, NAME), new IvParameterSpec(iv),
-                       decrypted);
-    }
-
-
-    public static byte[] encrypt(final byte[] key, final byte[] iv,
-                                 final String decrypted) {
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return encrypt(key, iv, HEX.decode(decrypted));
-    }
-
-
-    public static String encryptToString(final byte[] key, final byte[] iv,
-                                         final byte[] decrypted) {
-
-        return HEX.encodeToString(encrypt(key, iv, decrypted));
-    }
-
-
-    public static String encryptToString(final byte[] key, final byte[] iv,
-                                         final String decrypted) {
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return HEX.encodeToString(encrypt(key, iv, HEX.decode(decrypted)));
-    }
-
-
     /**
-     * Decrypts given
-     * <code>encrypted</code>.
+     * Encrypts given
+     * <code>decrypted</code>.
      *
-     * @param key encryption key
-     * @param params parameters
-     * @param encrypted encrypted bytes to decrypt
-     *
-     * @return decrypted bytes
+     * @param decrypted the bytes to encrypt
+     * @return encrypted output
      */
-    public static byte[] decrypt(final Key key, final IvParameterSpec params,
-                                 final byte[] encrypted) {
+    public abstract byte[] encrypt(final byte[] decrypted);
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
 
-        if (params == null) {
-            throw new IllegalArgumentException("null params");
-        }
+    /**
+     * Encrypts given
+     * <code>decrypted</code>.
+     *
+     * @param decrypted the string to encrypt
+     * @return encrypted output
+     */
+    public byte[] encrypt(final String decrypted) {
 
-        if (encrypted == null) {
+        if (decrypted == null) {
             throw new IllegalArgumentException("null decrypted");
         }
 
-        try {
-            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.DECRYPT_MODE, key, params);
-            return cipher.doFinal(encrypted);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        return encrypt(HEX.decode(decrypted));
+    }
+
+
+    /**
+     * Encrypts given
+     * <code>decrypted</code> and returns output as a hex string.
+     *
+     * @param decrypted the bytes to encrypt
+     * @return encrypted output as a hex string
+     */
+    public String encryptToString(final byte[] decrypted) {
+
+        return HEX.encodeToString(encrypt(decrypted));
+    }
+
+
+    /**
+     * Encrypts given
+     * <code>decrypted</code> and returns output as a hex string.
+     *
+     * @param decrypted the bytes to encrypt
+     * @return encrypted output as a hex string
+     */
+    public String encryptToString(final String decrypted) {
+
+        if (decrypted == null) {
+            throw new IllegalArgumentException("null decrypted");
         }
+
+        return HEX.encodeToString(encrypt(HEX.decode(decrypted)));
     }
 
 
@@ -175,58 +105,24 @@ public class AES {
      * Decrypts given
      * <code>encrypted</code>.
      *
-     * @param key encryption key
-     * @param iv initialization vector
      * @param encrypted encrypted octets to decrypt
      *
      * @return decrypted bytes
      */
-    public static byte[] decrypt(final byte[] key, final byte[] iv,
-                                 final byte[] encrypted) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        if (iv == null) {
-            throw new IllegalArgumentException("null iv");
-        }
-
-        if (iv.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        if (encrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return decrypt(new SecretKeySpec(key, NAME), new IvParameterSpec(iv),
-                       encrypted);
-    }
+    public abstract byte[] decrypt(final byte[] encrypted);
 
 
     /**
      * Decrypts given
      * <code>encrypted</code>.
      *
-     * @param key encryption key
-     * @param iv initialization vector
      * @param encrypted encrypted hex string
      *
      * @return decrypted bytes
      */
-    public static byte[] decrypt(final byte[] key, final byte[] iv,
-                                 final String encrypted) {
+    public byte[] decrypt(final String encrypted) {
 
-        return decrypt(key, iv, HEX.decode(encrypted));
+        return decrypt(HEX.decode(encrypted));
     }
 
 
@@ -234,16 +130,13 @@ public class AES {
      * Decrypts given
      * <code>encrypted</code> and returns output as a hex string.
      *
-     * @param key encryption key
-     * @param iv initialization vector
      * @param encrypted encrypted hex string
      *
      * @return decrypted output as a hex string
      */
-    public static String decryptToString(final byte[] key, final byte[] iv,
-                                         final byte[] encrypted) {
+    public String decryptToString(final byte[] encrypted) {
 
-        return HEX.encodeToString(decrypt(key, iv, encrypted));
+        return HEX.encodeToString(decrypt(encrypted));
     }
 
 
@@ -251,24 +144,13 @@ public class AES {
      * Decrypts given
      * <code>encrypted</code> and returns output as a hex string.
      *
-     * @param key encryption key
-     * @param iv initialization vector
      * @param encrypted encrypted hex string
      *
      * @return decrypted output as a hex string
      */
-    public static String decryptToString(final byte[] key, final byte[] iv,
-                                         final String encrypted) {
+    public String decryptToString(final String encrypted) {
 
-        return HEX.encodeToString(decrypt(key, iv, encrypted));
-    }
-
-
-    /**
-     * Creates a new instance.
-     */
-    protected AES() {
-        super();
+        return HEX.encodeToString(decrypt(encrypted));
     }
 
 

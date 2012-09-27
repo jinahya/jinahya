@@ -348,19 +348,26 @@ public class HEX {
         try {
             return new String(decode(encoded), "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" is not supported?");
+//            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
 
+    /**
+     * Decodes given
+     * <code>encoded</code> and returns output as a utf string.
+     *
+     * @param encoded encoded ascii string
+     * @return decoded output as a utf string
+     */
     public static String decodeToString(final String encoded) {
 
         try {
             return decodeToString(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-//            throw new RuntimeException("\"US-ASCII\" is not supported?");
+//            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
