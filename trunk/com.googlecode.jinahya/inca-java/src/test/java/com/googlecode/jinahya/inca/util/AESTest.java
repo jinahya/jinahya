@@ -40,7 +40,7 @@ public abstract class AESTest<A extends AES> {
 
     static {
         try {
-            GENERATOR = KeyGenerator.getInstance(AESBC.NAME);
+            GENERATOR = KeyGenerator.getInstance(AES.NAME);
             GENERATOR.init(128);
         } catch (NoSuchAlgorithmException nsae) {
             throw new InstantiationError(nsae.getMessage());

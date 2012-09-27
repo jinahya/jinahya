@@ -19,28 +19,16 @@ package com.googlecode.jinahya.inca.util;
 
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHA {
+public abstract class SHA {
 
 
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(SHA.class.getName());
-
-
-    static {
-//        LOGGER.setLevel(Level.OFF);
-    }
+    public static final String NAME = "SHA-512";
 
 
     /**
@@ -50,20 +38,7 @@ public class SHA {
      * @param unhashed the octets to hash
      * @return hashed output
      */
-    public static byte[] hash(final byte[] unhashed) {
-
-        LOGGER.log(Level.INFO, "hash({0})", unhashed);
-
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
-        }
-
-        try {
-            return MessageDigest.getInstance("SHA-512").digest(unhashed);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"SHA-512 not available?", nsae);
-        }
-    }
+    public abstract byte[] hash(final byte[] unhashed);
 
 
     /**
@@ -73,9 +48,7 @@ public class SHA {
      * @param unhashed the string to hash
      * @return hashed output as octets
      */
-    public static byte[] hash(final String unhashed) {
-
-        LOGGER.log(Level.INFO, "hash({0})", unhashed);
+    public byte[] hash(final String unhashed) {
 
         if (unhashed == null) {
             throw new IllegalArgumentException("null unhashed");
@@ -84,8 +57,7 @@ public class SHA {
         try {
             return hash(unhashed.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new IllegalArgumentException("\"UTF-8\" not supported?", uee);
-//            throw new IllegalArgumentException("\"UTF-8\" not supported?");
+            throw new IllegalArgumentException("\"UTF-8\" not supported?");
         }
     }
 
@@ -97,9 +69,7 @@ public class SHA {
      * @param unhashed the octets to hash
      * @return hashed output as a hex string.
      */
-    public static String hashToString(final byte[] unhashed) {
-
-        LOGGER.log(Level.INFO, "hasToString({0})", unhashed);
+    public String hashToString(final byte[] unhashed) {
 
         if (unhashed == null) {
             throw new IllegalArgumentException("null unhashed");
@@ -116,9 +86,7 @@ public class SHA {
      * @param unhashed the string to hash
      * @return hashed output as a hex string
      */
-    public static String hashToString(final String unhashed) {
-
-        LOGGER.log(Level.INFO, "hasToString({0})", unhashed);
+    public String hashToString(final String unhashed) {
 
         if (unhashed == null) {
             throw new IllegalArgumentException("null unhashed");
@@ -127,17 +95,8 @@ public class SHA {
         try {
             return hashToString(unhashed.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new IllegalArgumentException("\"UTF-8\" not supported?", uee);
-//            throw new IllegalArgumentException("\"UTF-8\" not supported?");
+            throw new IllegalArgumentException("\"UTF-8\" not supported?");
         }
-    }
-
-
-    /**
-     * Creates a new instance.
-     */
-    protected SHA() {
-        super();
     }
 
 
