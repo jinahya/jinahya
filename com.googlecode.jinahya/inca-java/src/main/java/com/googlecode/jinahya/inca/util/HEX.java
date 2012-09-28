@@ -19,8 +19,6 @@ package com.googlecode.jinahya.inca.util;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -31,25 +29,12 @@ public class HEX {
 
 
     /**
-     * logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(HEX.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.OFF);
-    }
-
-
-    /**
      * Encodes a half octet.
      *
      * @param decoded half octet
      * @return encoded ascii
      */
     private static int encodeHalf(final int decoded) {
-
-        LOGGER.log(Level.INFO, "encodedHalf({0})", decoded);
 
         switch (decoded) {
             case 0x00:
@@ -86,9 +71,6 @@ public class HEX {
     protected static void encodeSingle(final int decoded, final byte[] encoded,
                                        final int offset) {
 
-        LOGGER.log(Level.INFO, "encodedSingle({0}, {1}, {2})",
-                   new Object[]{decoded, encoded, offset});
-
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
@@ -116,8 +98,6 @@ public class HEX {
      * @return decoded asciis
      */
     public static byte[] encode(final byte[] decoded) {
-
-        LOGGER.log(Level.INFO, "decoded.length: {0}", decoded.length);
 
         if (decoded == null) {
             throw new IllegalArgumentException("null decoded");
@@ -151,8 +131,7 @@ public class HEX {
         try {
             return encode(decoded.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" not supported?");
+            throw new RuntimeException("\"UTF-8\" not supported?");
         }
     }
 
@@ -173,7 +152,7 @@ public class HEX {
         try {
             return new String(encode(decoded), "US-ASCII");
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
@@ -201,8 +180,6 @@ public class HEX {
 
 
     private static int decodeHalf(final int encoded) {
-
-        LOGGER.log(Level.INFO, "decodeHalf({0})", encoded);
 
         switch (encoded) {
             case 0x30: // '0'
@@ -238,9 +215,6 @@ public class HEX {
 
     protected static int decodeSingle(final byte[] encoded, final int offset) {
 
-        LOGGER.log(Level.INFO, "decodeSingle({0}, {1})",
-                   new Object[]{encoded, offset});
-
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
@@ -261,9 +235,6 @@ public class HEX {
 
 
     protected static int decodeSingle(final String encoded, final int offset) {
-
-        LOGGER.log(Level.INFO, "decodeSingle({0}, {1})",
-                   new Object[]{encoded, offset});
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
@@ -330,8 +301,7 @@ public class HEX {
         try {
             return decode(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-//            throw new RuntimeException("\"US-ASCII\" is not supported?");
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
@@ -348,7 +318,6 @@ public class HEX {
         try {
             return new String(decode(encoded), "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-//            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
             throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
@@ -366,7 +335,6 @@ public class HEX {
         try {
             return decodeToString(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
-//            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }

@@ -20,8 +20,6 @@ package com.googlecode.jinahya.inca.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -29,17 +27,6 @@ import java.util.logging.Logger;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class PER {
-
-
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(PER.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.OFF);
-    }
 
 
     /**
@@ -89,8 +76,6 @@ public class PER {
      */
     public static byte[] decode(final String encoded) {
 
-        LOGGER.log(Level.INFO, "decode({0})", encoded);
-
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
@@ -98,8 +83,7 @@ public class PER {
         try {
             return decode(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-//            throw new RuntimeException("\"US-ASCII\" is not supported?");
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
@@ -120,8 +104,7 @@ public class PER {
         try {
             return new String(decode(encoded), "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" is not supported?");
+            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
@@ -142,8 +125,7 @@ public class PER {
         try {
             return new String(decode(encoded), "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" is not supported?");
+            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
@@ -195,8 +177,6 @@ public class PER {
      */
     public static byte[] encode(final String decoded) {
 
-        LOGGER.log(Level.INFO, "encode({0})", decoded);
-
         if (decoded == null) {
             throw new IllegalArgumentException("null decoded");
         }
@@ -204,8 +184,7 @@ public class PER {
         try {
             return encode(decoded.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" not supported?");
+            throw new RuntimeException("\"UTF-8\" not supported?");
         }
     }
 
@@ -226,7 +205,7 @@ public class PER {
         try {
             return new String(encode(decoded), "US-ASCII");
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
     }
 
@@ -247,8 +226,7 @@ public class PER {
         try {
             return encodeToString(decoded.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" is not supported?");
+            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 

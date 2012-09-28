@@ -98,7 +98,7 @@ public class AESBC extends AES {
         try {
             engine = (BlockCipher) engineClass.newInstance();
             final String algorithmName = engine.getAlgorithmName();
-            if (!NAME.equals(algorithmName)) {
+            if (!ALGORITHM.equals(algorithmName)) {
                 throw new RuntimeException(
                     "wrong engine.algorithmName:" + algorithmName);
             }
@@ -146,7 +146,7 @@ public class AESBC extends AES {
         try {
             engine = (BlockCipher) engineClass.newInstance();
             final String algorithmName = engine.getAlgorithmName();
-            if (!NAME.equals(algorithmName)) {
+            if (!ALGORITHM.equals(algorithmName)) {
                 throw new RuntimeException(
                     "wrong engine.algorithmName:" + algorithmName);
             }
