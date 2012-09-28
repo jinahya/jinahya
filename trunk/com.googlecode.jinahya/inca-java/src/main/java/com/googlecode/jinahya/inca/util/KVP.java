@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 
 /**
@@ -31,17 +30,6 @@ import java.util.logging.Logger;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class KVP {
-
-
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(KVP.class.getName());
-
-
-    static {
-//        LOGGER.setLevel(Level.OFF);
-    }
 
 
     /**

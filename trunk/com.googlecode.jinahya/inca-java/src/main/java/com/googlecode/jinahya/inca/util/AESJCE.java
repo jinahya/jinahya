@@ -62,7 +62,7 @@ public class AESJCE extends AES {
                 + KEY_SIZE_IN_BYTES + ")");
         }
 
-        this.key = new SecretKeySpec(key, NAME);
+        this.key = new SecretKeySpec(key, ALGORITHM);
         this.params = new IvParameterSpec(iv);
     }
 

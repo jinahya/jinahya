@@ -20,8 +20,6 @@ package com.googlecode.jinahya.inca.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -31,31 +29,17 @@ import java.util.logging.Logger;
 public class SHAJCA extends SHA {
 
 
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER =
-        Logger.getLogger(SHAJCA.class.getName());
-
-
-    static {
-//        LOGGER.setLevel(Level.OFF);
-    }
-
-
     @Override
     public byte[] hash(final byte[] unhashed) {
-
-        LOGGER.log(Level.INFO, "hash({0})", unhashed);
 
         if (unhashed == null) {
             throw new IllegalArgumentException("null unhashed");
         }
 
         try {
-            return MessageDigest.getInstance(NAME).digest(unhashed);
+            return MessageDigest.getInstance(ALGORITHM).digest(unhashed);
         } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + NAME + "\" not available?");
+            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
         }
     }
 

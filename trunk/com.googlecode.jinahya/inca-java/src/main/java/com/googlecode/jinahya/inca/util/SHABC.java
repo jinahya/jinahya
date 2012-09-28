@@ -38,7 +38,9 @@ public class SHABC extends SHA {
 
         final Digest digest = new SHA512Digest();
         digest.update(unhashed, 0, unhashed.length);
+
         final byte[] hashed = new byte[digest.getDigestSize()];
+
         digest.doFinal(hashed, 0);
 
         return hashed;

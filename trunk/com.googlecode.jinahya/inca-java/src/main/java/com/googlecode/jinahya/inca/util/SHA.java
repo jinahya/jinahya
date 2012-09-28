@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 public abstract class SHA {
 
 
-    public static final String NAME = "SHA-512";
+    public static final String ALGORITHM = "SHA-512";
 
 
     /**

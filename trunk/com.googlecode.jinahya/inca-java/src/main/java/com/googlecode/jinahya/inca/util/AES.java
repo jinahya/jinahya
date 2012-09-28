@@ -31,7 +31,7 @@ public abstract class AES {
     public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08;
 
 
-    public static final String NAME = "AES";
+    public static final String ALGORITHM = "AES";
 
 
     public static final String MODE = "CBC";
@@ -41,7 +41,7 @@ public abstract class AES {
 
 
     public static final String TRANSFORMATION =
-        NAME + "/" + MODE + "/" + PADDING;
+        ALGORITHM + "/" + MODE + "/" + PADDING;
 
 
     /**
