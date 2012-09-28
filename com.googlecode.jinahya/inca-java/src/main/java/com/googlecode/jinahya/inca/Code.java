@@ -62,11 +62,11 @@ public enum Code {
      */
     SYSTEM_ID,
     /**
-     * Device's version.
+     * Device version.
      */
     DEVICE_VERSION,
     /**
-     * Globally unique device identifier.
+     * Device identifier. Must be globally unique.
      */
     DEVICE_ID
 
