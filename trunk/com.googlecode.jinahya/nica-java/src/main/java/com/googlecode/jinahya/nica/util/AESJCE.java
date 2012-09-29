@@ -32,6 +32,22 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESJCE extends AES {
 
 
+    public static final Key newKey(final byte[] key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
+                + AES.KEY_SIZE_IN_BYTES + ")");
+        }
+
+        return new SecretKeySpec(key, ALGORITHM);
+    }
+
+
     /**
      * Creates a new instance.
      *

@@ -18,33 +18,55 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.security.MessageDigest;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.Mac;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHAJCA extends SHA {
+public class MACJCE extends MAC {
 
 
-    public static final String ALGORITHM = "SHA-512";
+    public static final String ALGORITHM = "HmacSHA512";
+
+
+    public MACJCE(final byte[] key) {
+        super();
+
+        this.key = AESJCE.newKey(key);
+    }
 
 
     @Override
-    public byte[] hash(final byte[] unhashed) {
+    public byte[] authenticate(byte[] unauthenciated) {
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+        if (unauthenciated == null) {
+            throw new IllegalArgumentException("null unauthenticated");
         }
 
         try {
-            return MessageDigest.getInstance(ALGORITHM).digest(unhashed);
+            final Mac mac = Mac.getInstance(ALGORITHM);
+            try {
+                mac.init(key);
+                return mac.doFinal(unauthenciated);
+            } catch (InvalidKeyException ike) {
+                throw new RuntimeException(ike);
+            }
         } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
+            throw new RuntimeException(
+                "\"" + ALGORITHM + "\" is not supported?", nsae);
         }
     }
+
+
+    /**
+     * key.
+     */
+    private final Key key;
 
 
 }

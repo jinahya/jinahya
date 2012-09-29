@@ -47,6 +47,10 @@ public class AESBC extends AES {
     /**
      * Creates a new instance for given
      * <code>engineClass</code>.
+     *
+     * @param engineClass
+     * @param key
+     * @param iv
      */
     public AESBC(final Class engineClass, final byte[] key, final byte[] iv) {
         super();

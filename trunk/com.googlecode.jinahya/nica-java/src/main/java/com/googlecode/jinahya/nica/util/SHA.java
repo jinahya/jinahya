@@ -28,14 +28,12 @@ import java.io.UnsupportedEncodingException;
 public abstract class SHA {
 
 
-    public static final String ALGORITHM = "SHA-512";
-
-
     /**
      * Hashes given
      * <code>unhashed</code>.
      *
      * @param unhashed the octets to hash
+     *
      * @return hashed output
      */
     public abstract byte[] hash(final byte[] unhashed);
@@ -46,6 +44,7 @@ public abstract class SHA {
      * <code>unhashed</code>.
      *
      * @param unhashed the string to hash
+     *
      * @return hashed output as octets
      */
     public byte[] hash(final String unhashed) {
@@ -67,6 +66,7 @@ public abstract class SHA {
      * <code>unhashed</code> and returns as a hex string.
      *
      * @param unhashed the octets to hash
+     *
      * @return hashed output as a hex string.
      */
     public String hashToString(final byte[] unhashed) {
@@ -84,6 +84,7 @@ public abstract class SHA {
      * <code>unhashed</code> and returns as a hex string.
      *
      * @param unhashed the string to hash
+     *
      * @return hashed output as a hex string
      */
     public String hashToString(final String unhashed) {
