@@ -18,32 +18,16 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHAJCA extends SHA {
-
-
-    public static final String ALGORITHM = "SHA-512";
+public class MACJCETest extends MACTest<MACJCE> {
 
 
     @Override
-    public byte[] hash(final byte[] unhashed) {
-
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
-        }
-
-        try {
-            return MessageDigest.getInstance(ALGORITHM).digest(unhashed);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
-        }
+    protected MACJCE newInstance(final byte[] key) {
+        return new MACJCE(key);
     }
 
 
