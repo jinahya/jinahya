@@ -28,25 +28,25 @@ public enum Header {
     /**
      * Header for initialization vector.
      */
-    INIT("Inca-Init"),
+    INIT("Nica-Init"),
     /**
      * Header for names.
      */
-    NAME("Inca-Name"),
+    NAME("Nica-Name"),
     /**
      * Header for encrypted properties.
      */
-    CODE("Inca-Code"),
+    CODE("Nica-Code"),
     /**
      * Header for HMAC.
      */
-    AUTH("Inca-Auth");
+    AUTH("Nica-Auth");
 
 
     /**
      * Creates a new instance.
      *
-     * @param fieldName http header field-name.
+     * @param fieldName HTTP header field-name.
      */
     private Header(final String fieldName) {
 //        super();
