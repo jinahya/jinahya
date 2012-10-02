@@ -25,9 +25,9 @@ package com.googlecode.jinahya.nica;
 public enum Platform {
 
 
-    ANDROID("/systems/android"),
-    IOS("/systems/ios"),
-    TIZEN("/systems/tizen");
+    ANDROID("/platforms/android"),
+    IOS("/platforms/ios"),
+    TIZEN("/platforms/tizen");
 
 
     public static Platform fromValue(final String value) {
