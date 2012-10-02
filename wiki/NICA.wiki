@@ -24,6 +24,21 @@ Add your content here.  Format your content with:
 == Codes ==
 === Android ===
 || *Name*               || *Value* || *Notes *||
+|| {{{USER_COUNTRY3}}}  || <code language="java"></code>||||
+|| {{{USER_COUNTRY2}}}  || <code language="java"></code>||||
+|| {{{USER_COUNTRY}}}   || <code language="java"></code>||||
+|| {{{USER_LANGUAGE3}}} || <code language="java"></code>||||
+|| {{{USER_LANGUAGE2}}} || <code language="java"></code>||||
+|| {{{USER_LANGUAGE}}}  || <code language="java">;</code>||||
+|| {{{SYSTEM_MILLIS}}}  || <code language="java">System.currentTimeMillis();</code>||||
+|| {{{SYSTEM_VERSION}}} || <code language="java"></code>||||
+|| {{{SYSTEM_NAME}}}    || <code language="java"></code>||||
+|| {{{SYSTEM_ID}}}      || <code language="java"></code>||||
+|| {{{DEVICE_VERSION}}} || <code language="java"></code>|| need to be discussed ||
+|| {{{DEVICE_NAME}}}    || <code language="java"></code> || need to be discussed ||
+|| {{{DEVICE_ID}}}      || <code language="java">Settings.Secure.getString(CONTEXT, Secure.ANDROID_ID)</code>||||
+=== Android ===
+|| *Name*               || *Value* || *Notes *||
 || {{{USER_COUNTRY3}}}  || <code language="java">Locale.getDefault().getISO3Language(); // MissingResourceException</code>||||
 || {{{USER_COUNTRY2}}}  || <code language="java">Locale.getDefault().getLanguage();</code>||||
 || {{{USER_COUNTRY}}}   || <code language="java">Locale.getDefault().getDisplayCountry(new Locale("en", "US"));</code>||||
@@ -31,8 +46,8 @@ Add your content here.  Format your content with:
 || {{{USER_LANGUAGE2}}} || <code language="java">Locale.getDefault().getLanguage();</code>||||
 || {{{USER_LANGUAGE}}}  || <code language="java">Locale.getDefault().getDisplayLanguage(new Locale("en", "US"));</code>||||
 || {{{SYSTEM_MILLIS}}}  || <code language="java">System.currentTimeMillis();</code>||||
-|| {{{SYSTEM_VERSION}}} || <code language="java">Build.VERSION.RELEASE</code>||||
-|| {{{SYSTEM_NAME}}}    || <code language="java">Build.VERSION.CODENAME</code>||||
+|| {{{SYSTEM_VERSION}}} || <code language="c++">[[UIDevice currentDevice] systemVersion]</code>||||
+|| {{{SYSTEM_NAME}}}    || <code>[[UIDevice currentDevice] systemName]</code>||||
 || {{{SYSTEM_ID}}}      || <code language="java">Build.ID</code>||||
 || {{{DEVICE_VERSION}}} || <code language="java">Build.DEVICE</code>|| need to be discussed ||
 || {{{DEVICE_NAME}}}    || <code language="java">Build.MODEL</code> || need to be discussed ||
