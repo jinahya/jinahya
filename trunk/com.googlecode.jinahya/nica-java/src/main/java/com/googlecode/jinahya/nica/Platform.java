@@ -51,45 +51,45 @@ public enum Platform {
      * Finds a constants mapped to given
      * <code>value</code>.
      *
-     * @param value value
+     * @param id value
      * @return found constant
      */
-    public static Platform fromValue(final String value) {
+    public static Platform fromId(final String id) {
 
-        if (value == null) {
-            throw new IllegalArgumentException("null value");
+        if (id == null) {
+            throw new IllegalArgumentException("null id");
         }
 
-        for (Platform constant : values()) {
-            if (constant.value.equals(value)) {
-                return constant;
+        for (Platform value : values()) {
+            if (value.id.equals(id)) {
+                return value;
             }
         }
 
         throw new IllegalArgumentException(
-            "constant not found for value: " + value);
+            "constant not found for id: " + id);
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param value value
+     * @param id identifier
      */
-    private Platform(final String value) {
+    private Platform(final String id) {
 
-        if (value == null) {
-            throw new IllegalArgumentException("null value");
+        if (id == null) {
+            throw new IllegalArgumentException("null id");
         }
 
-        this.value = value;
+        this.id = id;
     }
 
 
     /**
      * value.
      */
-    private final String value;
+    private final String id;
 
 
 }
