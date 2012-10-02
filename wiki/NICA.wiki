@@ -16,10 +16,10 @@ Add your content here.  Format your content with:
 == Platforms ==
 || *Name*        || *Value*                        || *Notes* ||
 || [http://www.android.com Android]       || {{{/platforms/android}}}       || http://www.android.com ||
-|| [http://www.blackberry.com !BlackBerry]   || {{{/platforms/blackberry}}}    || http://worldwide.blackberry.com ||
+|| [http://www.blackberry.com BlackBerry]   || {{{/platforms/blackberry}}}    || http://worldwide.blackberry.com ||
 || [http://www.apple.com/ios iOS]           || {{{/platforms/ios}}}           ||||
-|| Tizen         || {{{/platforms/tizen}}}         ||||
-|| Windows Phone || {{{/platforms/windows_phone}}} ||||
+|| [http://www.tizen.org Tizen]         || {{{/platforms/tizen}}}         ||||
+|| [http://www.windowsphone.com Windows Phone] || {{{/platforms/windows_phone}}} ||||
 
 == Codes ==
 === Android ===
