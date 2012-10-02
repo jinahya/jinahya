@@ -32,7 +32,7 @@ public enum Platform {
     /**
      * BlackBerry.
      */
-    BLACK_BERRY("/platforms/black_berry"),
+    BLACKBERRY("/platforms/blackberry"),
     /**
      * iOS.
      */
