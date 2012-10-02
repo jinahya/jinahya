@@ -62,16 +62,16 @@ Add your content here.  Format your content with:
 === Windows Phone ===
 || *Name*               || *Value* || *Notes *||
 || {{{USER_COUNTRY3}}}  || _N/A?_ ||||
-|| {{{USER_COUNTRY2}}}  || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_COUNTRY2}}}  || <code></code> ||||
 || {{{USER_COUNTRY}}}   || _N/A?_ ||||
 || {{{USER_LANGUAGE3}}} || _N/A?_ ||||
-|| {{{USER_LANGUAGE2}}} || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_LANGUAGE2}}} || <code></code> ||||
 || {{{USER_LANGUAGE}}}  || _N/A?_ ||||
-|| {{{SYSTEM_MILLIS}}}  || <code>[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000];</code>||||
-|| {{{SYSTEM_VERSION}}} || <code language="c++">[[UIDevice currentDevice] systemVersion]</code>||||
-|| {{{SYSTEM_NAME}}}    || <code>[[UIDevice currentDevice] systemName]</code>||||
+|| {{{SYSTEM_MILLIS}}}  || <code></code>||||
+|| {{{SYSTEM_VERSION}}} || <code></code>||||
+|| {{{SYSTEM_NAME}}}    || <code></code>||||
 || {{{SYSTEM_ID}}}      || ||||
-|| {{{DEVICE_VERSION}}} || || ||
-|| {{{DEVICE_NAME}}}    || <code>[[UIDevice currentDevice] model]</code> ||  ||
-|| {{{DEVICE_ID}}}      || || This should be a globally unique value. ||
+|| {{{DEVICE_VERSION}}} || <code language="cs">DeviceStatus.getDeviceHardwareVersion();</code> || ||
+|| {{{DEVICE_NAME}}}    || <code language="cs">DeviceStatus.getDeviceName();</code> ||  ||
+|| {{{DEVICE_ID}}}      || <code language="cs">DeviceExtendedProperties.GetValue("DeviceUniqueId");</code> || ||
 || {{{PLATFORM_ID}}}    || {{{/platforms/windows_phone}}} || [NICA#Platforms] ||
