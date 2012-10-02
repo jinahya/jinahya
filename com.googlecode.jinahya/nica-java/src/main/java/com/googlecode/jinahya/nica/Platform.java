@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum SystemId {
+public enum Platform {
 
 
     ANDROID("/systems/android"),
@@ -30,13 +30,13 @@ public enum SystemId {
     TIZEN("/systems/tizen");
 
 
-    public static SystemId fromValue(final String value) {
+    public static Platform fromValue(final String value) {
 
         if (value == null) {
             throw new IllegalArgumentException("null value");
         }
 
-        for (SystemId constant : values()) {
+        for (Platform constant : values()) {
             if (constant.value.equals(value)) {
                 return constant;
             }
@@ -47,7 +47,7 @@ public enum SystemId {
     }
 
 
-    private SystemId(final String value) {
+    private Platform(final String value) {
 
         if (value == null) {
             throw new IllegalArgumentException("null value");
@@ -57,6 +57,9 @@ public enum SystemId {
     }
 
 
+    /**
+     *
+     */
     private final String value;
 
 
