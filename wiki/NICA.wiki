@@ -1,0 +1,35 @@
+#summary One-sentence summary of this page.
+#labels Java
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+== Platforms ==
+||*Name*||*Value*||*Notes||
+||Android||{{{/platforms/android}}}||||
+
+== Codes ==
+=== Android ===
+||Name||Value||Notes||
+||{{{USER_COUNTRY3}}}||<code language="java">Locale.getDefault().getISO3Language(); // MissingResourceException</code>||||
+||{{{USER_COUNTRY2}}}||<code language="java">Locale.getDefault().getLanguage();</code>||||
+||{{{USER_COUNTRY}}}||<code language="java">Locale.getDefault().getDisplayCountry(new Locale("en", "US"));</code>||||
+||{{{USER_LANGUAGE3}}}||<code language="java">Locale.getDefault().getISO3Language(); // MissingResourceException</code>||||
+||{{{USER_LANGUAGE2}}}||<code language="java">Locale.getDefault().getLanguage();</code>||||
+||{{{USER_LANGUAGE}}}||<code language="java">Locale.getDefault().getDisplayLanguage(new Locale("en", "US"));</code>||||
+||{{{SYSTEM_MILLIS}}}||<code language="java">System.currentTimeMillis();</code>||||
+||{{{SYSTEM_VERSION}}}||<code language="java">android.os.Build.VERSION.RELEASE</code>||||
+||{{{SYSTEM_NAME}}}||||
+||{{{SYSTEM_ID}}}||<code language="java">android.os.Build.ID</code>||||
+||{{{DEVICE_VERSION}}}||||
+||{{{DEVICE_NAME}}}||||
+||{{{DEVICE_ID}}}||||
