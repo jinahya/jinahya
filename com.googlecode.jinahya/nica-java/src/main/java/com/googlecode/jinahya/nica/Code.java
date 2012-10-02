@@ -76,7 +76,11 @@ public enum Code {
     /**
      * Device identifier. Must be globally unique.
      */
-    DEVICE_ID
+    DEVICE_ID,
+    /**
+     * platform identifier.
+     */
+    PLATFORM_ID;
 
 
 }
