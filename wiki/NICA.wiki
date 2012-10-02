@@ -64,7 +64,7 @@ Add your content here.  Format your content with:
 || {{{USER_COUNTRY3}}}  || _N/A?_ ||||
 || {{{USER_COUNTRY2}}}  || <code></code> ||||
 || {{{USER_COUNTRY}}}   || _N/A?_ ||||
-|| {{{USER_LANGUAGE3}}} || _N/A?_ ||||
+|| {{{USER_LANGUAGE3}}} ||  <code language="cs">CultureInfo.ThreeLetterISOLanguageName</code> [http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.threeletterisolanguagename.aspx]||||
 || {{{USER_LANGUAGE2}}} || <code></code> ||||
 || {{{USER_LANGUAGE}}}  || _N/A?_ ||||
 || {{{SYSTEM_MILLIS}}}  || <code language="cs">(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds</code> ||||
