@@ -1,6 +1,8 @@
 #summary One-sentence summary of this page.
 #labels Java,Android,iOS,Tizen,WindowsPhone,Mobile
 
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
 Add your content here.
@@ -40,16 +42,16 @@ Add your content here.  Format your content with:
 
 === iOS ===
 || *Name*               || *Value* || *Notes *||
-|| {{{USER_COUNTRY3}}}  || _N/A_ ||||
-|| {{{USER_COUNTRY2}}}  || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]</code>||||
-|| {{{USER_COUNTRY}}}   || <code language="java">Locale.getDefault().getDisplayCountry(new Locale("en", "US"));</code>||||
-|| {{{USER_LANGUAGE3}}} || _N/A_ ||||
-|| {{{USER_LANGUAGE2}}} || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]</code>||||
-|| {{{USER_LANGUAGE}}}  || <code language="java">Locale.getDefault().getDisplayLanguage(new Locale("en", "US"));</code>||||
-|| {{{SYSTEM_MILLIS}}}  || <code language="java">System.currentTimeMillis();</code>||||
+|| {{{USER_COUNTRY3}}}  || _N/A?_ ||||
+|| {{{USER_COUNTRY2}}}  || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_COUNTRY}}}   || _N/A?_ ||||
+|| {{{USER_LANGUAGE3}}} || _N/A?_ ||||
+|| {{{USER_LANGUAGE2}}} || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_LANGUAGE}}}  || _N/A?_ ||||
+|| {{{SYSTEM_MILLIS}}}  || <code>[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000];</code>||||
 || {{{SYSTEM_VERSION}}} || <code language="c++">[[UIDevice currentDevice] systemVersion]</code>||||
 || {{{SYSTEM_NAME}}}    || <code>[[UIDevice currentDevice] systemName]</code>||||
-|| {{{SYSTEM_ID}}}      || <code language="java">Build.ID</code>||||
-|| {{{DEVICE_VERSION}}} || <code language="java">Build.DEVICE</code>|| need to be discussed ||
-|| {{{DEVICE_NAME}}}    || <code language="java">Build.MODEL</code> || need to be discussed ||
-|| {{{DEVICE_ID}}}      || <code language="java">Settings.Secure.getString(CONTEXT, Secure.ANDROID_ID)</code>||||
+|| {{{SYSTEM_ID}}}      || ||||
+|| {{{DEVICE_VERSION}}} || || need to be discussed ||
+|| {{{DEVICE_NAME}}}    ||  || need to be discussed ||
+|| {{{DEVICE_ID}}}      || ||||
