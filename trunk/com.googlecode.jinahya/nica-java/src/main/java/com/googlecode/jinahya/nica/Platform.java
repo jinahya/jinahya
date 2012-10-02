@@ -25,13 +25,35 @@ package com.googlecode.jinahya.nica;
 public enum Platform {
 
 
+    /**
+     * Android.
+     */
     ANDROID("/platforms/android"),
+    /**
+     * BlackBerry.
+     */
     BLACK_BERRY("/platforms/black_berry"),
+    /**
+     * iOS.
+     */
     IOS("/platforms/ios"),
+    /**
+     * Tizen.
+     */
     TIZEN("/platforms/tizen"),
+    /**
+     * Windows Phone.
+     */
     WINDOWS_PHONE("/platforms/windows_phone");
 
 
+    /**
+     * Finds a constants mapped to given
+     * <code>value</code>.
+     *
+     * @param value value
+     * @return found constant
+     */
     public static Platform fromValue(final String value) {
 
         if (value == null) {
@@ -49,6 +71,11 @@ public enum Platform {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param value value
+     */
     private Platform(final String value) {
 
         if (value == null) {
@@ -60,7 +87,7 @@ public enum Platform {
 
 
     /**
-     *
+     * value.
      */
     private final String value;
 
