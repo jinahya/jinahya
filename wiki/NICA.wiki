@@ -1,5 +1,5 @@
 #summary One-sentence summary of this page.
-#labels Java
+#labels Java,Android,iOS,Tizen,WindowsPhone,Mobile
 
 = Introduction =
 
@@ -14,12 +14,12 @@ Add your content here.  Format your content with:
   * Automatic links to other wiki pages
 
 == Platforms ==
-|| *Name*        || *Value*                        || *Notes* ||
-|| [http://www.android.com Android]       || {{{/platforms/android}}}       || http://www.android.com ||
-|| [http://www.blackberry.com BlackBerry]   || {{{/platforms/blackberry}}}    || http://worldwide.blackberry.com ||
-|| [http://www.apple.com/ios iOS]           || {{{/platforms/ios}}}           ||||
-|| [http://www.tizen.org Tizen]         || {{{/platforms/tizen}}}         ||||
-|| [http://www.windowsphone.com Windows Phone] || {{{/platforms/windows_phone}}} ||||
+|| *Name*                                      || *Value*                        || *Notes* ||
+|| [http://www.android.com Android]            || {{{/platforms/android}}}       || ||
+|| [http://www.blackberry.com BlackBerry]      || {{{/platforms/blackberry}}}    || ||
+|| [http://www.apple.com/ios iOS]              || {{{/platforms/ios}}}           || ||
+|| [http://www.tizen.org Tizen]                || {{{/platforms/tizen}}}         || ||
+|| [http://www.windowsphone.com Windows Phone] || {{{/platforms/windows_phone}}} || ||
 
 == Codes ==
 === Android ===
