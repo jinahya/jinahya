@@ -24,6 +24,7 @@ Add your content here.  Format your content with:
 || [http://www.windowsphone.com Windows Phone] || {{{/platforms/windows_phone}}} || ||
 
 == Codes ==
+
 === Android ===
 || *Name*               || *Value* || *Notes *||
 || {{{USER_COUNTRY3}}}  || <code language="java">Locale.getDefault().getISO3Language(); // MissingResourceException</code>||||
@@ -39,6 +40,7 @@ Add your content here.  Format your content with:
 || {{{DEVICE_VERSION}}} || <code language="java">Build.DEVICE</code>|| need to be discussed ||
 || {{{DEVICE_NAME}}}    || <code language="java">Build.MODEL</code> || need to be discussed ||
 || {{{DEVICE_ID}}}      || <code language="java">Settings.Secure.getString(CONTEXT, Secure.ANDROID_ID)</code>||||
+|| {{{PLATFORM_ID}}}    || {{{/platforms/android}}} || [NICA#Codes] ||
 
 === iOS ===
 || *Name*               || *Value* || *Notes *||
@@ -52,6 +54,22 @@ Add your content here.  Format your content with:
 || {{{SYSTEM_VERSION}}} || <code language="c++">[[UIDevice currentDevice] systemVersion]</code>||||
 || {{{SYSTEM_NAME}}}    || <code>[[UIDevice currentDevice] systemName]</code>||||
 || {{{SYSTEM_ID}}}      || ||||
-|| {{{DEVICE_VERSION}}} || || need to be discussed ||
-|| {{{DEVICE_NAME}}}    ||  || need to be discussed ||
-|| {{{DEVICE_ID}}}      || ||||
+|| {{{DEVICE_VERSION}}} || || ||
+|| {{{DEVICE_NAME}}}    || <code>[[UIDevice currentDevice] model]</code> ||  ||
+|| {{{DEVICE_ID}}}      || || This should be a globally unique value. ||
+
+=== Windows Phone ===
+|| *Name*               || *Value* || *Notes *||
+|| {{{USER_COUNTRY3}}}  || _N/A?_ ||||
+|| {{{USER_COUNTRY2}}}  || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_COUNTRY}}}   || _N/A?_ ||||
+|| {{{USER_LANGUAGE3}}} || _N/A?_ ||||
+|| {{{USER_LANGUAGE2}}} || <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode];</code> ||||
+|| {{{USER_LANGUAGE}}}  || _N/A?_ ||||
+|| {{{SYSTEM_MILLIS}}}  || <code>[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000];</code>||||
+|| {{{SYSTEM_VERSION}}} || <code language="c++">[[UIDevice currentDevice] systemVersion]</code>||||
+|| {{{SYSTEM_NAME}}}    || <code>[[UIDevice currentDevice] systemName]</code>||||
+|| {{{SYSTEM_ID}}}      || ||||
+|| {{{DEVICE_VERSION}}} || || ||
+|| {{{DEVICE_NAME}}}    || <code>[[UIDevice currentDevice] model]</code> ||  ||
+|| {{{DEVICE_ID}}}      || || This should be a globally unique value. ||
