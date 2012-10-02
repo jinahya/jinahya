@@ -26,8 +26,10 @@ public enum Platform {
 
 
     ANDROID("/platforms/android"),
+    BLACK_BERRY("/platforms/black_berry"),
     IOS("/platforms/ios"),
-    TIZEN("/platforms/tizen");
+    TIZEN("/platforms/tizen"),
+    WINDOWS_PHONE("/platforms/windows_phone");
 
 
     public static Platform fromValue(final String value) {
