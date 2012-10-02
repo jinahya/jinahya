@@ -15,8 +15,8 @@ Add your content here.  Format your content with:
 
 == Platforms ==
 || *Name*        || *Value*                        || *Notes* ||
-|| Android       || {{{/platforms/android}}}       ||||
-|| BlackBerry    || {{{/platforms/black_berry}}}   ||||
+|| Android       || {{{/platforms/android}}}       || http://www.android.com ||
+|| !BlackBerry   || {{{/platforms/blackberry}}}    || http://worldwide.blackberry.com ||
 || iOS           || {{{/platforms/ios}}}           ||||
 || Tizen         || {{{/platforms/tizen}}}         ||||
 || Windows Phone || {{{/platforms/windows_phone}}} ||||
