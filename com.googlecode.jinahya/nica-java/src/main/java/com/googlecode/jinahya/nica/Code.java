@@ -58,7 +58,7 @@ public enum Code {
      */
     SYSTEM_VERSION,
     /**
-     * System name.
+     * System name. OS name.
      */
     SYSTEM_NAME,
     /**
