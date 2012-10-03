@@ -27,8 +27,8 @@ public class AESJCETest extends AESTest<AESJCE> {
 
 
     @Override
-    protected AESJCE newInstance(final byte[] key, final byte[] iv) {
-        return new AESJCE(key, iv);
+    protected AESJCE newInstance(final byte[] key) {
+        return new AESJCE(key);
     }
 
 
