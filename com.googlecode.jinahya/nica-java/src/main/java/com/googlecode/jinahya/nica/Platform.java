@@ -83,6 +83,10 @@ public enum Platform {
             throw new IllegalArgumentException("null id");
         }
 
+        if (id.isEmpty()) {
+            throw new IllegalArgumentException("empty id");
+        }
+
         this.id = id;
     }
 

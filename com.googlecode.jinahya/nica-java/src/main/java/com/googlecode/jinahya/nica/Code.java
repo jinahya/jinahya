@@ -61,18 +61,18 @@ public enum Code {
      * System name. OS name.
      */
     SYSTEM_NAME,
-    /**
-     * System identifier.
-     */
-    SYSTEM_ID,
-    /**
-     * Device's version.
-     */
-    DEVICE_VERSION,
-    /**
-     * Device's name.
-     */
-    DEVICE_NAME,
+//    /**
+//     * System identifier.
+//     */
+//    SYSTEM_ID,
+//    /**
+//     * Device's version.
+//     */
+//    DEVICE_VERSION,
+//    /**
+//     * Device's name.
+//     */
+//    DEVICE_NAME,
     /**
      * Device identifier. Must be globally unique.
      */
