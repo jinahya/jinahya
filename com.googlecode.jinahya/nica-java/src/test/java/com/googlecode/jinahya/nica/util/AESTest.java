@@ -66,14 +66,14 @@ public abstract class AESTest<A extends AES> {
         final byte[] key = generateKey();
         final byte[] iv = generateIv();
 
-        final A aes = newInstance(key, iv);
+        final A aes = newInstance(key);
 
         final byte[] expected = new byte[RANDOM.nextInt(1024)];
         RANDOM.nextBytes(expected);
 
-        final byte[] encrypted = aes.encrypt(expected);
+        final byte[] encrypted = aes.encrypt(iv, expected);
 
-        final byte[] actual = aes.decrypt(encrypted);
+        final byte[] actual = aes.decrypt(iv, encrypted);
 
         Assert.assertEquals(actual, expected);
     }
@@ -83,7 +83,7 @@ public abstract class AESTest<A extends AES> {
      *
      * @return
      */
-    protected abstract A newInstance(final byte[] key, final byte[] iv);
+    protected abstract A newInstance(final byte[] key);
 
 
 }

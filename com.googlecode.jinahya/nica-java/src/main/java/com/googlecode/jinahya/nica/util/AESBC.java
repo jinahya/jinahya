@@ -18,11 +18,9 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
-import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.engines.AESLightEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -37,33 +35,13 @@ public class AESBC extends AES {
 
 
     /**
-     * Creates a new instance.
-     */
-    public AESBC(final byte[] key, final byte[] iv) {
-        this(AESEngine.class, key, iv);
-    }
-
-
-    /**
      * Creates a new instance for given
      * <code>engineClass</code>.
      *
-     * @param engineClass
      * @param key
-     * @param iv
      */
-    public AESBC(final Class engineClass, final byte[] key, final byte[] iv) {
+    public AESBC(final byte[] key) {
         super();
-
-        if (engineClass == null) {
-            throw new IllegalArgumentException("null engineClass");
-        }
-
-        if (!BlockCipher.class.isAssignableFrom(engineClass)) {
-            throw new IllegalArgumentException(
-                "engineClass(" + engineClass + ") is not assignable to "
-                + BlockCipher.class);
-        }
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -75,47 +53,31 @@ public class AESBC extends AES {
                 + KEY_SIZE_IN_BYTES + ")");
         }
 
-        if (iv == null) {
-            throw new IllegalArgumentException("null iv");
-        }
-
-        if (iv.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        this.engineClass = engineClass;
-
-        cipherParameters = new ParametersWithIV(new KeyParameter(key), iv);
+        this.key = key.clone();
     }
 
 
     //@Override
-    public byte[] encrypt(final byte[] decrypted) {
+    public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
+
+        if (iv == null) {
+            throw new IllegalArgumentException("null iv");
+        }
+
+        if (iv.length != AES.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != AES.KEY_SIZE_IN_BYTES("
+                + AES.KEY_SIZE_IN_BYTES + ")");
+        }
 
         if (decrypted == null) {
             throw new IllegalArgumentException("null decrypted");
         }
 
-        final BlockCipher engine;
-        try {
-            engine = (BlockCipher) engineClass.newInstance();
-            final String algorithmName = engine.getAlgorithmName();
-            if (!ALGORITHM.equals(algorithmName)) {
-                throw new RuntimeException(
-                    "wrong engine.algorithmName:" + algorithmName);
-            }
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(ie.getMessage());
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae.getMessage());
-        }
-
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(engine));
+            new CBCBlockCipher(new AESLightEngine()));
 
-        cipher.init(true, cipherParameters);
+        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
 
         final byte[] encrypted =
             new byte[cipher.getOutputSize(decrypted.length)];
@@ -140,30 +102,26 @@ public class AESBC extends AES {
 
 
     //@Override
-    public byte[] decrypt(final byte[] encrypted) {
+    public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
+
+        if (iv == null) {
+            throw new IllegalArgumentException("null iv");
+        }
+
+        if (iv.length != AES.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
+                + KEY_SIZE_IN_BYTES + ")");
+        }
 
         if (encrypted == null) {
             throw new IllegalArgumentException("null encrypted");
         }
 
-        final BlockCipher engine;
-        try {
-            engine = (BlockCipher) engineClass.newInstance();
-            final String algorithmName = engine.getAlgorithmName();
-            if (!ALGORITHM.equals(algorithmName)) {
-                throw new RuntimeException(
-                    "wrong engine.algorithmName:" + algorithmName);
-            }
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(ie.getMessage());
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae.getMessage());
-        }
-
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(engine));
+            new CBCBlockCipher(new AESLightEngine()));
 
-        cipher.init(false, cipherParameters);
+        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
 
         final byte[] decrypted =
             new byte[cipher.getOutputSize(encrypted.length)];
@@ -188,15 +146,9 @@ public class AESBC extends AES {
 
 
     /**
-     * engine class.
+     * key.
      */
-    private final Class engineClass;
-
-
-    /**
-     * cipher parameters.
-     */
-    private final CipherParameters cipherParameters;
+    private final byte[] key;
 
 
 }

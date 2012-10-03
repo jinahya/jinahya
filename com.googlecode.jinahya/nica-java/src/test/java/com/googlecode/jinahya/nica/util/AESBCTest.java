@@ -27,8 +27,8 @@ public class AESBCTest extends AESTest<AESBC> {
 
 
     @Override
-    protected AESBC newInstance(final byte[] key, final byte[] iv) {
-        return new AESBC(key, iv);
+    protected AESBC newInstance(final byte[] key) {
+        return new AESBC(key);
     }
 
 

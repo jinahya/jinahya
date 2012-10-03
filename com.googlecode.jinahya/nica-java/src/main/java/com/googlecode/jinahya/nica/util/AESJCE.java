@@ -19,7 +19,6 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.Key;
-import java.security.spec.AlgorithmParameterSpec;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -55,7 +54,7 @@ public class AESJCE extends AES {
      * @param iv {@value AbstractAES#KEY_SIZE_IN_BYTES}-bit initialization
      * vector
      */
-    public AESJCE(final byte[] key, final byte[] iv) {
+    public AESJCE(final byte[] key) {
         super();
 
         if (key == null) {
@@ -68,6 +67,13 @@ public class AESJCE extends AES {
                 + KEY_SIZE_IN_BYTES + ")");
         }
 
+        this.key = new SecretKeySpec(key, ALGORITHM);
+    }
+
+
+    @Override
+    public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
+
         if (iv == null) {
             throw new IllegalArgumentException("null iv");
         }
@@ -78,21 +84,13 @@ public class AESJCE extends AES {
                 + KEY_SIZE_IN_BYTES + ")");
         }
 
-        this.key = new SecretKeySpec(key, ALGORITHM);
-        this.params = new IvParameterSpec(iv);
-    }
-
-
-    @Override
-    public byte[] encrypt(final byte[] decrypted) {
-
         if (decrypted == null) {
             throw new IllegalArgumentException("null decrypted");
         }
 
         try {
             final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.ENCRYPT_MODE, key, params);
+            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
             return cipher.doFinal(decrypted);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -101,7 +99,17 @@ public class AESJCE extends AES {
 
 
     @Override
-    public byte[] decrypt(final byte[] encrypted) {
+    public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
+
+        if (iv == null) {
+            throw new IllegalArgumentException("null iv");
+        }
+
+        if (iv.length != KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
+                + KEY_SIZE_IN_BYTES + ")");
+        }
 
         if (encrypted == null) {
             throw new IllegalArgumentException("null encrypted");
@@ -109,7 +117,7 @@ public class AESJCE extends AES {
 
         try {
             final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.DECRYPT_MODE, key, params);
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
             return cipher.doFinal(encrypted);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -121,12 +129,6 @@ public class AESJCE extends AES {
      * key.
      */
     private final Key key;
-
-
-    /**
-     * params.
-     */
-    private final AlgorithmParameterSpec params;
 
 
 }

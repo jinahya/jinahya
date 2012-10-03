@@ -29,6 +29,7 @@ import com.googlecode.jinahya.nica.util.HEX;
 import com.googlecode.jinahya.nica.util.KVP;
 import com.googlecode.jinahya.nica.util.MACJCE;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
@@ -95,8 +96,8 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
         final Locale locale = Locale.getDefault();
         try {
-            constantCodes.put(Code.USER_LANGUAGE3.name(),
-                              locale.getISO3Language());
+            putConstantCode(Code.USER_LANGUAGE3.name(),
+                            locale.getISO3Language());
         } catch (MissingResourceException mre) {
         }
         constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
@@ -137,14 +138,19 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         codes.clear();
         codes.putAll(variableCodes);
         codes.putAll(constantCodes);
-        final String base = KVP.encode(codes);
-        final String code = new AESJCE(key, iv).encryptToString(base);
-        request.setHeader(Header.CODE.fieldName(), code);
+        final byte[] base;
+        try {
+            base = KVP.encode(codes).getBytes("US-ASCII");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
+        }
+        final byte[] code = new AESJCE(key).encrypt(iv, base);
+        request.setHeader(Header.CODE.fieldName(), HEX.encodeToString(code));
         variableCodes.clear();
 
         // ----------------------------------------------------------- Nica-Auth
-        final String auth = new MACJCE(key).authenticateToString(base);
-        request.setHeader(Header.AUTH.fieldName(), auth);
+        final byte[] auth = new MACJCE(key).authenticate(base);
+        request.setHeader(Header.AUTH.fieldName(), HEX.encodeToString(auth));
     }
 
 
@@ -154,7 +160,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * @param key key
      * @param value value
      */
-    public void putConstantCode(final String key, final String value) {
+    public final void putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -182,7 +188,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      *
      * @return previous value
      */
-    public String putVariableCode(final String key, final String value) {
+    public final String putVariableCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");

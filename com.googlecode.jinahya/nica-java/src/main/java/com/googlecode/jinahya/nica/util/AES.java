@@ -48,110 +48,24 @@ public abstract class AES {
      * Encrypts given
      * <code>decrypted</code>.
      *
+     * @param iv initialization vector
      * @param decrypted the bytes to encrypt
+     *
      * @return encrypted output
      */
-    public abstract byte[] encrypt(final byte[] decrypted);
-
-
-    /**
-     * Encrypts given
-     * <code>decrypted</code>.
-     *
-     * @param decrypted the string to encrypt
-     * @return encrypted output
-     */
-    public byte[] encrypt(final String decrypted) {
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return encrypt(HEX.decode(decrypted));
-    }
-
-
-    /**
-     * Encrypts given
-     * <code>decrypted</code> and returns output as a hex string.
-     *
-     * @param decrypted the bytes to encrypt
-     * @return encrypted output as a hex string
-     */
-    public String encryptToString(final byte[] decrypted) {
-
-        return HEX.encodeToString(encrypt(decrypted));
-    }
-
-
-    /**
-     * Encrypts given
-     * <code>decrypted</code> and returns output as a hex string.
-     *
-     * @param decrypted the bytes to encrypt
-     * @return encrypted output as a hex string
-     */
-    public String encryptToString(final String decrypted) {
-
-        if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
-        }
-
-        return HEX.encodeToString(encrypt(HEX.decode(decrypted)));
-    }
+    public abstract byte[] encrypt(final byte[] iv, final byte[] decrypted);
 
 
     /**
      * Decrypts given
      * <code>encrypted</code>.
      *
-     * @param encrypted encrypted octets to decrypt
+     * @param iv initialization vector
+     * @param encrypted encrypted bytes to decrypt
      *
      * @return decrypted bytes
      */
-    public abstract byte[] decrypt(final byte[] encrypted);
-
-
-    /**
-     * Decrypts given
-     * <code>encrypted</code>.
-     *
-     * @param encrypted encrypted hex string
-     *
-     * @return decrypted bytes
-     */
-    public byte[] decrypt(final String encrypted) {
-
-        return decrypt(HEX.decode(encrypted));
-    }
-
-
-    /**
-     * Decrypts given
-     * <code>encrypted</code> and returns output as a hex string.
-     *
-     * @param encrypted encrypted hex string
-     *
-     * @return decrypted output as a hex string
-     */
-    public String decryptToString(final byte[] encrypted) {
-
-        return HEX.encodeToString(decrypt(encrypted));
-    }
-
-
-    /**
-     * Decrypts given
-     * <code>encrypted</code> and returns output as a hex string.
-     *
-     * @param encrypted encrypted hex string
-     *
-     * @return decrypted output as a hex string
-     */
-    public String decryptToString(final String encrypted) {
-
-        return HEX.encodeToString(decrypt(encrypted));
-    }
+    public abstract byte[] decrypt(final byte[] iv, final byte[] encrypted);
 
 
 }
