@@ -36,7 +36,7 @@ public class HEXTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test(invocationCount = 128)
+    @Test
     public static void testEncodingDecoding() {
 
         final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
@@ -50,7 +50,7 @@ public class HEXTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public static void testEncodingDecodingString() {
 
         final byte[] expected = new byte[RANDOM.nextInt(512) + 512];

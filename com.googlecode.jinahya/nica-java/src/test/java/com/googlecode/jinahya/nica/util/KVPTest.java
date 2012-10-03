@@ -46,7 +46,7 @@ public class KVPTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test//(invocationCount = 128)
     public void testEncodingDecoding() {
 
         final Map<String, String> expected = new HashMap<String, String>();

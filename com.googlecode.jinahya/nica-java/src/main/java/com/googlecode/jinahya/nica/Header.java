@@ -26,15 +26,15 @@ public enum Header {
 
 
     /**
-     * Header for initialization vector.
-     */
-    INIT("Nica-Init"),
-    /**
      * Header for names.
      */
     NAME("Nica-Name"),
     /**
-     * Header for encrypted properties.
+     * Header for initialization vector.
+     */
+    INIT("Nica-Init"),
+    /**
+     * Header for encrypted code.
      */
     CODE("Nica-Code"),
     /**
