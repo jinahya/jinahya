@@ -55,6 +55,10 @@ public enum Header {
             throw new IllegalArgumentException("null fieldName");
         }
 
+        if (fieldName.isEmpty()) {
+            throw new IllegalArgumentException("empty fieldName");
+        }
+
         this.fieldName = fieldName;
     }
 
