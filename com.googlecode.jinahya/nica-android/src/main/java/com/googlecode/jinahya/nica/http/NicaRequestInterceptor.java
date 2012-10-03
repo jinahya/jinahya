@@ -42,6 +42,7 @@ import org.apache.http.protocol.HttpContext;
 
 
 /**
+ * A RequestInterceptor which sets NICA headers.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -58,7 +59,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * Creates a new instance.
      *
      * @param context context
-     * @param key keys
+     * @param key key
      * @param names names
      */
     public NicaRequestInterceptor(final Context context, final byte[] key,
@@ -198,7 +199,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     /**
      * context.
      */
-    private final Context context;
+    protected final Context context;
 
 
     /**
