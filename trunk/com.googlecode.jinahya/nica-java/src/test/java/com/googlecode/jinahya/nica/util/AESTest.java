@@ -41,7 +41,7 @@ public abstract class AESTest<A extends AES> {
     static {
         try {
             GENERATOR = KeyGenerator.getInstance(AES.ALGORITHM);
-            GENERATOR.init(128);
+            GENERATOR.init(AES.KEY_SIZE);
         } catch (NoSuchAlgorithmException nsae) {
             throw new InstantiationError(nsae.getMessage());
         }
@@ -60,7 +60,7 @@ public abstract class AESTest<A extends AES> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public void testEncryptDecrypt() {
 
         final byte[] key = generateKey();

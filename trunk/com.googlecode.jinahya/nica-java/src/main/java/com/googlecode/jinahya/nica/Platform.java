@@ -75,7 +75,7 @@ public enum Platform {
     /**
      * Creates a new instance.
      *
-     * @param id identifier
+     * @param id id
      */
     private Platform(final String id) {
 
@@ -91,13 +91,18 @@ public enum Platform {
     }
 
 
+    /**
+     * Returns id.
+     *
+     * @return id
+     */
     public String getId() {
         return id;
     }
 
 
     /**
-     * value.
+     * id.
      */
     private final String id;
 

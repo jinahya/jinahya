@@ -96,7 +96,7 @@ public class KVPMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public static void testEncodingDecoding() {
 
         final Hashtable<String, String> expected =
@@ -117,7 +117,7 @@ public class KVPMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public static void testEncodingAgainstSE() {
 
         final Hashtable<String, String> expected =
@@ -138,7 +138,7 @@ public class KVPMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test
     public static void testDecodingAgainstSE() {
 
 

@@ -35,7 +35,7 @@ public class MACBCTest extends MACTest<MACBC> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test//(invocationCount = 128)
     public void testAuthenticateAgainstJCE() {
 
         final byte[] key = AESJCETest.generateKey();
@@ -50,7 +50,7 @@ public class MACBCTest extends MACTest<MACBC> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test//(invocationCount = 128)
     public void testAuthenticateWithStringAgainstJCE() {
 
         final byte[] key = AESJCETest.generateKey();

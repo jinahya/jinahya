@@ -49,7 +49,7 @@ public abstract class MACTest<M extends MAC> {
     protected abstract M newInstance(byte[] key);
 
 
-    @Test(invocationCount = 128)
+    @Test//(invocationCount = 128)
     public void testAuthenticate() {
 
         final M mac = newInstance(AESTest.generateKey());
@@ -65,7 +65,7 @@ public abstract class MACTest<M extends MAC> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test//(invocationCount = 128)
     public void testAuthenticateWithString() {
 
         final M mac = newInstance(AESTest.generateKey());
