@@ -22,6 +22,7 @@ import android.content.Context;
 import android.provider.Settings.Secure;
 import com.googlecode.jinahya.nica.Code;
 import com.googlecode.jinahya.nica.Header;
+import com.googlecode.jinahya.nica.Platform;
 import com.googlecode.jinahya.nica.util.AES;
 import com.googlecode.jinahya.nica.util.AESJCE;
 import com.googlecode.jinahya.nica.util.HEX;
@@ -51,9 +52,6 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * random.
      */
     private static final Random RANDOM = new SecureRandom();
-
-
-    private static final Locale EN_US = new Locale("en", "US");
 
 
     /**
@@ -95,23 +93,28 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         this.name = KVP.encode(names);
 
         final Locale locale = Locale.getDefault();
-        codes.put(Code.USER_LANGUAGE.name(),
-                  locale.getDisplayLanguage(Locale.ENGLISH));
-        codes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
         try {
-            codes.put(Code.USER_LANGUAGE2.name(), locale.getISO3Language());
+            constantCodes.put(Code.USER_LANGUAGE3.name(),
+                              locale.getISO3Language());
         } catch (MissingResourceException mre) {
         }
-        codes.put(Code.USER_COUNTRY.name(),
-                  locale.getDisplayCountry(Locale.ENGLISH));
-        codes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
+        constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
+//        codes.put(Code.USER_LANGUAGE.name(),
+//                  locale.getDisplayLanguage(Locale.ENGLISH));
         try {
-            codes.put(Code.USER_COUNTRY3.name(), locale.getISO3Country());
+            constantCodes.put(Code.USER_COUNTRY3.name(),
+                              locale.getISO3Country());
         } catch (MissingResourceException mre) {
         }
-        codes.put(Code.DEVICE_ID.name(),
-                  Secure.getString(this.context.getContentResolver(),
-                                   Secure.ANDROID_ID));
+        constantCodes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
+//        codes.put(Code.USER_COUNTRY.name(),
+//                  locale.getDisplayCountry(Locale.ENGLISH));
+
+        constantCodes.put(Code.DEVICE_ID.name(),
+                          Secure.getString(this.context.getContentResolver(),
+                                           Secure.ANDROID_ID));
+
+        constantCodes.put(Code.PLATFORM_ID.name(), Platform.ANDROID.getId());
     }
 
 
@@ -127,17 +130,68 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         RANDOM.nextBytes(iv);
         request.setHeader(Header.INIT.fieldName(), HEX.encodeToString(iv));
 
-
         // ----------------------------------------------------------- Nica-Code
-        codes.put(Code.SYSTEM_MILLIS.name(),
-                  Long.toString(System.currentTimeMillis()));
+        variableCodes.put(Code.SYSTEM_MILLIS.name(),
+                          Long.toString(System.currentTimeMillis()));
+        codes.clear();
+        codes.putAll(variableCodes);
+        codes.putAll(constantCodes);
         final String base = KVP.encode(codes);
         final String code = new AESJCE(key, iv).encryptToString(base);
         request.setHeader(Header.CODE.fieldName(), code);
+        variableCodes.clear();
 
         // ----------------------------------------------------------- Nica-Auth
         final String auth = new MACJCE(key).authenticateToString(base);
         request.setHeader(Header.AUTH.fieldName(), auth);
+    }
+
+
+    /**
+     * Puts a constant code.
+     *
+     * @param key key
+     * @param value value
+     */
+    public void putConstantCode(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        if (constantCodes.containsKey(key)) {
+            throw new IllegalArgumentException(
+                "key(" + key + ") is already oocupied");
+        }
+
+        constantCodes.put(key, value);
+    }
+
+
+    /**
+     * Puts a variable code. Note that variable codes are cleared after they
+     * used.
+     *
+     * @param key key
+     * @param value value
+     *
+     * @return previous value
+     */
+    public String putVariableCode(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return variableCodes.put(key, value);
     }
 
 
@@ -162,7 +216,16 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     /**
      * codes.
      */
-    private final Map<String, String> codes = new HashMap<String, String>();
+    private final Map<String, String> constantCodes =
+        new HashMap<String, String>();
+
+
+    private final Map<String, String> variableCodes =
+        new HashMap<String, String>();
+
+
+    private final transient Map<String, String> codes =
+        new HashMap<String, String>();
 
 
 }

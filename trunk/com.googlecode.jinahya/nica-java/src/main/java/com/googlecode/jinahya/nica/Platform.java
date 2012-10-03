@@ -52,6 +52,7 @@ public enum Platform {
      * <code>value</code>.
      *
      * @param id value
+     *
      * @return found constant
      */
     public static Platform fromId(final String id) {
@@ -83,6 +84,11 @@ public enum Platform {
         }
 
         this.id = id;
+    }
+
+
+    public String getId() {
+        return id;
     }
 
 

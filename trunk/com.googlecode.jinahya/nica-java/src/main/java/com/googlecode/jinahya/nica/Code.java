@@ -33,10 +33,10 @@ public enum Code {
      * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
      */
     USER_COUNTRY2,
-    /**
-     * User country/region name in en_US.
-     */
-    USER_COUNTRY,
+//    /**
+//     * User country/region name in en_US.
+//     */
+//    USER_COUNTRY,
     /**
      * 3-letter lowercase language code. ISO 639-2.
      */
@@ -45,10 +45,10 @@ public enum Code {
      * 2-letter lowercase language code. ISO 639-1.
      */
     USER_LANGUAGE2,
-    /**
-     * User language name in en_US.
-     */
-    USER_LANGUAGE,
+//    /**
+//     * User language name in en_US.
+//     */
+//    USER_LANGUAGE,
     /**
      * Current time in milliseconds since 1970.
      */
