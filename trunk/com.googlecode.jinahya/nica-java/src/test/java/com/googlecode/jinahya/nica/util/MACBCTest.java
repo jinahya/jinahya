@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.logging.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,6 +30,10 @@ import org.testng.annotations.Test;
 public class MACBCTest extends MACTest<MACBC> {
 
 
+    private static final Logger LOGGER =
+        Logger.getLogger(MACBCTest.class.getName());
+
+
     @Override
     protected MACBC newInstance(final byte[] key) {
         return new MACBC(key);
@@ -38,6 +43,8 @@ public class MACBCTest extends MACTest<MACBC> {
     @Test//(invocationCount = 128)
     public void testAuthenticateAgainstJCE() {
 
+        LOGGER.info("testAuthenticateAgainstJCE");
+        
         final byte[] key = AESJCETest.generateKey();
 
         final byte[] unauthenticated = newUnauthenticated();
@@ -52,6 +59,8 @@ public class MACBCTest extends MACTest<MACBC> {
 
     @Test//(invocationCount = 128)
     public void testAuthenticateWithStringAgainstJCE() {
+
+        LOGGER.info("testAuthenticateWithStringAgainstJCE");
 
         final byte[] key = AESJCETest.generateKey();
 
