@@ -27,20 +27,20 @@ Add your content here.  Format your content with:
 
 === Android ===
 || *Name*                   || *Value* || *Notes *||
-|| {{{USER_COUNTRY3}}}      || <code language="java">Locale.getDefault().getISO3Language();</code> ||||
-|| {{{USER_COUNTRY2}}}      || <code language="java">Locale.getDefault().getLanguage();</code> ||||
-|| ~~{{{USER_COUNTRY}}}~~   || ~~<code language="java">Locale.getDefault().getDisplayCountry(new Locale("en", "US"));</code>~~ ||||
-|| {{{USER_LANGUAGE3}}}     || <code language="java">Locale.getDefault().getISO3Language();</code> ||||
-|| {{{USER_LANGUAGE2}}}     || <code language="java">Locale.getDefault().getLanguage();</code> ||||
-|| ~~{{{USER_LANGUAGE}}}~~  || <code language="java">Locale.getDefault().getDisplayLanguage(new Locale("en", "US"));</code> ||||
-|| {{{SYSTEM_MILLIS}}}      || <code language="java">System.currentTimeMillis();</code> ||||
-|| {{{SYSTEM_VERSION}}}     || <code language="java">Build.VERSION.RELEASE</code> ||||
-|| {{{SYSTEM_NAME}}}        || <code language="java">Build.VERSION.CODENAME</code> ||||
-|| ~~{{{SYSTEM_ID}}}~~      || <code language="java">Build.ID</code> ||||
-|| ~~{{{DEVICE_VERSION}}}~~ || <code language="java">Build.DEVICE</code>|| need to be discussed ||
-|| ~~{{{DEVICE_NAME}}}~~    || <code language="java">Build.MODEL</code> || need to be discussed ||
-|| {{{DEVICE_ID}}}          || <code language="java">Settings.Secure.getString(CONTEXT, Secure.ANDROID_ID)</code> ||||
-|| {{{PLATFORM_ID}}}        || {{{/platforms/android}}} || [NICA#Platforms] ||
+|| {{{USER_COUNTRY3}}}      || <code language="java">Locale.getDefault().getISO3Language();</code>                              ||||
+|| {{{USER_COUNTRY2}}}      || <code language="java">Locale.getDefault().getLanguage();</code>                                  ||||
+|| ~~{{{USER_COUNTRY}}}~~   || ~~<code language="java">Locale.getDefault().getDisplayCountry(new Locale("en", "US"));</code>~~  ||||
+|| {{{USER_LANGUAGE3}}}     || <code language="java">Locale.getDefault().getISO3Language();</code>                              ||||
+|| {{{USER_LANGUAGE2}}}     || <code language="java">Locale.getDefault().getLanguage();</code>                                  ||||
+|| ~~{{{USER_LANGUAGE}}}~~  || ~~<code language="java">Locale.getDefault().getDisplayLanguage(new Locale("en", "US"));</code>~~ ||||
+|| {{{SYSTEM_MILLIS}}}      || <code language="java">System.currentTimeMillis();</code>                                         ||||
+|| {{{SYSTEM_VERSION}}}     || <code language="java">Build.VERSION.RELEASE</code>                                               ||||
+|| {{{SYSTEM_NAME}}}        || <code language="java">Build.VERSION.CODENAME</code>                                              ||||
+|| ~~{{{SYSTEM_ID}}}~~      || ~~<code language="java">Build.ID</code>~~                                                        ||||
+|| ~~{{{DEVICE_VERSION}}}~~ || ~~<code language="java">Build.DEVICE</code>~~                                                    || need to be discussed ||
+|| ~~{{{DEVICE_NAME}}}~~    || ~~<code language="java">Build.MODEL</code>~~                                                     || need to be discussed ||
+|| {{{DEVICE_ID}}}          || <code language="java">Settings.Secure.getString(CONTEXT, Secure.ANDROID_ID)</code>               ||||
+|| {{{PLATFORM_ID}}}        || {{{/platforms/android}}}                                                                         || [NICA#Platforms] ||
 
 === iOS ===
 || *Name*                   || *Value* || *Notes *||
