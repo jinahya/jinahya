@@ -63,10 +63,10 @@ Add your content here.  Format your content with:
 || *Name*               || *Value* || *Notes *||
 || {{{USER_COUNTRY3}}}  || <code language="cs">RegionInfo.ThreeLetterISORegionName</code> [http://msdn.microsoft.com/en-us/library/system.globalization.regioninfo.threeletterisoregionname.aspx] ||||
 || {{{USER_COUNTRY2}}}  || <code language="cs">RegionInfo.TwoLetterISORegionName</code> [http://msdn.microsoft.com/en-us/library/system.globalization.regioninfo.twoletterisoregionname.aspx] ||||
-|| ~~{{{USER_COUNTRY}}}~~   || ~~<code language="cs">RegionInfo.EnglishName</code>http://msdn.microsoft.com/en-us/library/system.globalization.regioninfo.englishname.aspx~~ ||||
+|| ~~{{{USER_COUNTRY}}}~~   || ~~<code language="cs">RegionInfo.EnglishName</code>http://msdn.microsoft.com/en-us/library/system.globalization.regioninfo.englishname.aspx ~~ ||||
 || {{{USER_LANGUAGE3}}} ||  <code language="cs">CultureInfo.ThreeLetterISOLanguageName</code> [http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.threeletterisolanguagename.aspx]||||
 || {{{USER_LANGUAGE2}}} || <code language="cs">CultureInfo.TwoLetterISOLanguageName</code> [http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.twoletterisolanguagename.aspx] ||||
-|| ~~{{{USER_LANGUAGE}}}~~  || ~~<code language="cs">CultureInfo.EnglishName</code>http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.englishname.aspx~~ ||||
+|| ~~{{{USER_LANGUAGE}}}~~  || ~~<code language="cs">CultureInfo.EnglishName</code>http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.englishname.aspx ~~ ||||
 || {{{SYSTEM_MILLIS}}}  || <code language="cs">(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds</code> ||||
 || {{{SYSTEM_VERSION}}} || <code></code>||||
 || {{{SYSTEM_NAME}}}    || <code></code>||||
