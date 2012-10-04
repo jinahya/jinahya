@@ -71,7 +71,7 @@ Add your content here.  Format your content with:
 || {{{SYSTEM_VERSION}}} || <code></code>||||
 || {{{SYSTEM_NAME}}}    || <code></code>||||
 || {{{SYSTEM_ID}}}      || ||||
-|| {{{DEVICE_VERSION}}} || <code language="cs">DeviceStatus.getDeviceHardwareVersion();</code> http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.devicestatus.devicehardwareversion.aspx http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.devicestatus.devicefirmwareversion.aspx || ||
+|| {{{DEVICE_VERSION}}} || <code language="cs">DeviceStatus.getDeviceHardwareVersion();</code>http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.devicestatus.devicehardwareversion.aspx<br/>http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.devicestatus.devicefirmwareversion.aspx || ||
 || {{{DEVICE_NAME}}}    || <code language="cs">DeviceStatus.getDeviceName();</code> http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.devicestatus.devicename.aspx ||  ||
 || {{{DEVICE_ID}}}      || <code language="cs">DeviceExtendedProperties.GetValue("DeviceUniqueId");</code> http://msdn.microsoft.com/en-us/library/windowsphone/develop/microsoft.phone.info.deviceextendedproperties.aspx || ||
 || {{{PLATFORM_ID}}}    || {{{/platforms/windows_phone}}} || [NICA#Platforms] ||
