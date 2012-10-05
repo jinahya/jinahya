@@ -53,7 +53,9 @@ public class AESBC extends AES {
                 + KEY_SIZE_IN_BYTES + ")");
         }
 
-        this.key = key.clone();
+//        this.key = key.clone();
+
+        this.keyParameter = new KeyParameter(key);
     }
 
 
@@ -77,7 +79,8 @@ public class AESBC extends AES {
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
             new CBCBlockCipher(new AESLightEngine()));
 
-        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
+//        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
+        cipher.init(true, new ParametersWithIV(keyParameter, iv));
 
         final byte[] encrypted =
             new byte[cipher.getOutputSize(decrypted.length)];
@@ -121,7 +124,8 @@ public class AESBC extends AES {
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
             new CBCBlockCipher(new AESLightEngine()));
 
-        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
+//        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
+        cipher.init(false, new ParametersWithIV(keyParameter, iv));
 
         final byte[] decrypted =
             new byte[cipher.getOutputSize(encrypted.length)];
@@ -148,7 +152,10 @@ public class AESBC extends AES {
     /**
      * key.
      */
-    private final byte[] key;
+//    private final byte[] key;
+
+
+    private final KeyParameter keyParameter;
 
 
 }

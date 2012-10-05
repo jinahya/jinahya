@@ -29,47 +29,57 @@ public abstract class MAC {
 
 
     /**
+     * Authenticates given
+     * <code>message</code>.
      *
-     * @param unauthenciated
-     *
-     * @return
+     * @param message the message to authenticate
+     * @return authentication output
      */
-    public abstract byte[] authenticate(final byte[] unauthenciated);
+    public abstract byte[] authenticate(final byte[] message);
 
 
     /**
+     * Authenticates given
+     * <code>message</code>.
      *
-     * @param unauthenticated
-     *
-     * @return
+     * @param message the message to authenticate; must be UTF-8 decodable
+     * @return authentication output
      */
-    public String authenticateToString(final byte[] unauthenticated) {
-        return HEX.encodeToString(unauthenticated);
-    }
+    public byte[] authenticate(final String message) {
 
-
-    /**
-     *
-     * @param unauthenticated
-     *
-     * @return
-     */
-    public byte[] authenticate(final String unauthenticated) {
-
-        if (unauthenticated == null) {
-            throw new IllegalArgumentException("null unauthenticated");
+        if (message == null) {
+            throw new IllegalArgumentException("null message");
         }
 
         try {
-            return authenticate(unauthenticated.getBytes("UTF-8"));
+            return authenticate(message.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
 
-    public String authenticateToString(final String unauthenticated) {
-        return HEX.encodeToString(authenticate(unauthenticated));
+    /**
+     * Authenticates given
+     * <code>message</code> and returns output as a HEX string.
+     *
+     * @param message the message to authenticate
+     * @return authentication output as a HEX string
+     */
+    public String authenticateToString(final byte[] message) {
+        return HEX.encodeToString(message);
+    }
+
+
+    /**
+     * Authenticates given
+     * <code>message</code> and returns output as a HEX string.
+     *
+     * @param message the message to authenticate
+     * @return authentication output as a HEX string
+     */
+    public String authenticateToString(final String message) {
+        return HEX.encodeToString(authenticate(message));
     }
 
 

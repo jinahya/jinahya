@@ -42,9 +42,9 @@ public class MACJCE extends MAC {
 
 
     @Override
-    public byte[] authenticate(byte[] unauthenciated) {
+    public byte[] authenticate(byte[] message) {
 
-        if (unauthenciated == null) {
+        if (message == null) {
             throw new IllegalArgumentException("null unauthenticated");
         }
 
@@ -52,7 +52,7 @@ public class MACJCE extends MAC {
             final Mac mac = Mac.getInstance(ALGORITHM);
             try {
                 mac.init(key);
-                return mac.doFinal(unauthenciated);
+                return mac.doFinal(message);
             } catch (InvalidKeyException ike) {
                 throw new RuntimeException(ike);
             }
