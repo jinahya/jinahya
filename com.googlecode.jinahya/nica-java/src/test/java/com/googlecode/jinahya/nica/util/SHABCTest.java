@@ -38,7 +38,7 @@ public class SHABCTest extends SHATest<SHABC> {
     @Test
     public void testHashAgainstJCA() {
 
-        final byte[] unhashed = newUnhashed();
+        final byte[] unhashed = newData();
 
         final byte[] actual = newInstance().hash(unhashed);
 
@@ -51,7 +51,7 @@ public class SHABCTest extends SHATest<SHABC> {
     @Test
     public void testHashToStringAgainstJCA() {
 
-        final byte[] unhashed = newUnhashed();
+        final byte[] unhashed = newData();
 
         final String actual = newInstance().hashToString(unhashed);
 
@@ -64,7 +64,7 @@ public class SHABCTest extends SHATest<SHABC> {
     @Test
     public void testHashWithStringAgainstJCA() {
 
-        final String unhashed = newUnhashedString();
+        final String unhashed = newDataAsString();
 
         final byte[] actual = newInstance().hash(unhashed);
 
@@ -77,7 +77,7 @@ public class SHABCTest extends SHATest<SHABC> {
     @Test
     public void testHashToStringWithStringAgainstJCA() {
 
-        final String unhashed = newUnhashedString();
+        final String unhashed = newDataAsString();
 
         final String actual = newInstance().hashToString(unhashed);
 

@@ -29,20 +29,52 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 public class SHABC extends SHA {
 
 
-    //@Override
-    public byte[] hash(final byte[] unhashed) {
+    private static final Digest DIGEST = new SHA512Digest();
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+
+    /**
+     * Creates a new synchronized instance.
+     *
+     * @return a new synchronized instance.
+     */
+    public static SHA newSynchronizedInstance() {
+
+        return new SHABC() {
+
+
+            //@Override
+            public byte[] hash(final byte[] data) {
+
+                if (data == null) {
+                    throw new IllegalArgumentException("null data");
+                }
+
+                synchronized (DIGEST) {
+                    DIGEST.reset();
+                    DIGEST.update(data, 0, data.length);
+                    final byte[] hashed = new byte[DIGEST.getDigestSize()];
+                    DIGEST.doFinal(hashed, 0);
+                    return hashed;
+                }
+
+            }
+
+
+        };
+    }
+
+
+    //@Override
+    public byte[] hash(final byte[] data) {
+
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
 
         final Digest digest = new SHA512Digest();
-        digest.update(unhashed, 0, unhashed.length);
-
+        digest.update(data, 0, data.length);
         final byte[] hashed = new byte[digest.getDigestSize()];
-
         digest.doFinal(hashed, 0);
-
         return hashed;
     }
 

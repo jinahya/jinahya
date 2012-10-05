@@ -35,10 +35,9 @@ public class AESBC extends AES {
 
 
     /**
-     * Creates a new instance for given
-     * <code>engineClass</code>.
+     * Creates a new instance.
      *
-     * @param key
+     * @param key key
      */
     public AESBC(final byte[] key) {
         super();
@@ -49,11 +48,8 @@ public class AESBC extends AES {
 
         if (key.length != KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
+                "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
         }
-
-//        this.key = key.clone();
 
         this.keyParameter = new KeyParameter(key);
     }
@@ -79,7 +75,6 @@ public class AESBC extends AES {
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
             new CBCBlockCipher(new AESLightEngine()));
 
-//        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
         cipher.init(true, new ParametersWithIV(keyParameter, iv));
 
         final byte[] encrypted =
@@ -124,7 +119,6 @@ public class AESBC extends AES {
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
             new CBCBlockCipher(new AESLightEngine()));
 
-//        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
         cipher.init(false, new ParametersWithIV(keyParameter, iv));
 
         final byte[] decrypted =
@@ -152,9 +146,6 @@ public class AESBC extends AES {
     /**
      * key.
      */
-//    private final byte[] key;
-
-
     private final KeyParameter keyParameter;
 
 

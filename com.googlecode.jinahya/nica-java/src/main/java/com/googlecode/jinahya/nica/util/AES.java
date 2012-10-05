@@ -25,21 +25,39 @@ package com.googlecode.jinahya.nica.util;
 public abstract class AES {
 
 
+    /**
+     * key size in bits.
+     */
     public static final int KEY_SIZE = 0x80; // 128
 
 
-    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08;
+    /**
+     * key size in bytes.
+     */
+    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08; // 16
 
 
+    /**
+     * algorithm.
+     */
     public static final String ALGORITHM = "AES";
 
 
+    /**
+     * mode.
+     */
     public static final String MODE = "CBC";
 
 
+    /**
+     * padding.
+     */
     public static final String PADDING = "PKCS5Padding";
 
 
+    /**
+     * transformation.
+     */
     public static final String TRANSFORMATION =
         ALGORITHM + "/" + MODE + "/" + PADDING;
 
