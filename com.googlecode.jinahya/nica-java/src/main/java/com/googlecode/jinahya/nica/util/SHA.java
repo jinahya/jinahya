@@ -43,8 +43,7 @@ public abstract class SHA {
      * Hashes given
      * <code>unhashed</code>.
      *
-     * @param unhashed the string to hash
-     *
+     * @param unhashed the string to hash; must be UTF-8 decodable
      * @return hashed output as octets
      */
     public byte[] hash(final String unhashed) {
@@ -63,7 +62,7 @@ public abstract class SHA {
 
     /**
      * Hashes given
-     * <code>unhashed</code> and returns as a hex string.
+     * <code>unhashed</code> and returns as a HEX string.
      *
      * @param unhashed the octets to hash
      *
@@ -81,11 +80,11 @@ public abstract class SHA {
 
     /**
      * Hashes given
-     * <code>unhashed</code> and returns as a hex string.
+     * <code>unhashed</code> and returns as a HEX string.
      *
      * @param unhashed the string to hash
      *
-     * @return hashed output as a hex string
+     * @return hashed output as a HEX string
      */
     public String hashToString(final String unhashed) {
 
@@ -93,11 +92,7 @@ public abstract class SHA {
             throw new IllegalArgumentException("null unhashed");
         }
 
-        try {
-            return hashToString(unhashed.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new IllegalArgumentException("\"UTF-8\" not supported?");
-        }
+        return HEX.encodeToString(hash(unhashed));
     }
 
 

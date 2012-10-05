@@ -19,7 +19,9 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -31,6 +33,36 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESJCE extends AES {
 
 
+    private static final KeyGenerator KEY_GENERATOR;
+
+
+    static {
+        try {
+            KEY_GENERATOR = KeyGenerator.getInstance(ALGORITHM);
+            KEY_GENERATOR.init(KEY_SIZE);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new InstantiationError(nsae.getMessage());
+        }
+    }
+
+
+    /**
+     * Generates a new Key.
+     *
+     * @return a new SecretKey
+     */
+    public static final Key newKey() {
+        return KEY_GENERATOR.generateKey();
+    }
+
+
+    /**
+     * Creates a new Key with given
+     * <code>key</code>.
+     *
+     * @param key key
+     * @return a new SecretKey
+     */
     public static final Key newKey(final byte[] key) {
 
         if (key == null) {
@@ -57,17 +89,7 @@ public class AESJCE extends AES {
     public AESJCE(final byte[] key) {
         super();
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
-        }
-
-        this.key = new SecretKeySpec(key, ALGORITHM);
+        this.key = newKey(key);
     }
 
 
@@ -80,8 +102,7 @@ public class AESJCE extends AES {
 
         if (iv.length != KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
+                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
         if (decrypted == null) {
@@ -107,8 +128,7 @@ public class AESJCE extends AES {
 
         if (iv.length != KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
+                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
         if (encrypted == null) {

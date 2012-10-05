@@ -29,6 +29,9 @@ import java.security.NoSuchAlgorithmException;
 public class SHAJCA extends SHA {
 
 
+    /**
+     * algorithm.
+     */
     public static final String ALGORITHM = "SHA-512";
 
 

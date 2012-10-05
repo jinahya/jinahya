@@ -39,24 +39,25 @@ public class MACBC extends MAC {
 
         if (key.length != AES.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + AES.KEY_SIZE_IN_BYTES + ")");
+                "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
         }
 
-        this.key = key.clone();
+//        this.key = key.clone();
+        keyParameter = new KeyParameter(key);
     }
 
 
     @Override
-    public byte[] authenticate(byte[] unauthenciated) {
+    public byte[] authenticate(byte[] message) {
 
-        if (unauthenciated == null) {
-            throw new IllegalArgumentException("null unauthenticated");
+        if (message == null) {
+            throw new IllegalArgumentException("null message");
         }
 
         final HMac mac = new HMac(new SHA512Digest());
-        mac.init(new KeyParameter(key));
-        mac.update(unauthenciated, 0, unauthenciated.length);
+//        mac.init(new KeyParameter(key));
+        mac.init(keyParameter);
+        mac.update(message, 0, message.length);
 
         final byte[] authenticated = new byte[mac.getMacSize()];
         mac.doFinal(authenticated, 0);
@@ -68,7 +69,11 @@ public class MACBC extends MAC {
     /**
      * key.
      */
-    private final byte[] key;
+//    private final byte[] key;
+    /**
+     * keyParameter.
+     */
+    private final KeyParameter keyParameter;
 
 
 }

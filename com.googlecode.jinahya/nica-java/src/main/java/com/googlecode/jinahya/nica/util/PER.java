@@ -55,6 +55,10 @@ public class PER {
                 || encoded[i] == 0x7E) { // '~'                
                 decoded.write(encoded[i]);
             } else if (encoded[i] == 0x25) {
+                if ((i + 2) >= encoded.length) {
+                    throw new IllegalArgumentException(
+                        "illegal encoded: " + encoded[i]);
+                }
                 decoded.write(HEX.decodeSingle(encoded, ++i));
                 ++i;
             } else {
@@ -71,7 +75,7 @@ public class PER {
      * Decodes given
      * <code>encoded</code>.
      *
-     * @param encoded the string to decode
+     * @param encoded the US-ASCII string to decode
      * @return decoded output as octets
      */
     public static byte[] decode(final String encoded) {
@@ -90,7 +94,7 @@ public class PER {
 
     /**
      * Decodes given
-     * <code>encoded</code> and returns as a string.
+     * <code>encoded</code> and returns output as an UTF-8 string.
      *
      * @param encoded the octets to decode
      * @return decoded output as a string
@@ -111,7 +115,7 @@ public class PER {
 
     /**
      * Decodes given
-     * <code>encoded</code> and returns as a string.
+     * <code>encoded</code> and returns as an UTF-8 string.
      *
      * @param encoded the string to decode
      * @return decoded output as a string
@@ -150,7 +154,7 @@ public class PER {
         for (int i = 0; i < decoded.length; i++) {
             if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) // [0-9]
                 || (decoded[i] >= 0x41 && decoded[i] <= 0x5A) // [a-z]
-                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A)
+                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A) // [A-Z]
                 || decoded[i] == 0x2D // '-'
                 || decoded[i] == 0x5F // '_'
                 || decoded[i] == 0x2E // '.'
@@ -172,7 +176,7 @@ public class PER {
      * Encodes given
      * <code>decoded</code>.
      *
-     * @param decoded the string to encode
+     * @param decoded the UTF-8 string to encode
      * @return decoded output as octets
      */
     public static byte[] encode(final String decoded) {
@@ -191,7 +195,7 @@ public class PER {
 
     /**
      * Encodes given
-     * <code>decoded</code> and returns as a string.
+     * <code>decoded</code> and returns as a US-ASCII encoded string.
      *
      * @param decoded the octets to encode
      * @return encoded output as a string
@@ -212,9 +216,9 @@ public class PER {
 
     /**
      * Encodes given
-     * <code>decoded</code> and returns as a string
+     * <code>decoded</code> and returns as a US-ASCII encoded string.
      *
-     * @param decoded the string to encode
+     * @param decoded the string to encode; must be UTF-8 decodable
      * @return encoded output as a string
      */
     public static String encodeToString(final String decoded) {
