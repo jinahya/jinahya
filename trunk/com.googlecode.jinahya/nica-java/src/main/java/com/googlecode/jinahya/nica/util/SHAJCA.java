@@ -35,15 +35,58 @@ public class SHAJCA extends SHA {
     public static final String ALGORITHM = "SHA-512";
 
 
-    @Override
-    public byte[] hash(final byte[] unhashed) {
+    /**
+     * shared MessageDigest instance for synchronized instances.
+     */
+    private static final MessageDigest DIGEST;
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+
+    static {
+        try {
+            DIGEST = MessageDigest.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new InstantiationError(nsae.getMessage());
+        }
+    }
+
+
+    /**
+     * Creates a new synchronized instance.
+     *
+     * @return a new synchronized instance
+     */
+    public static SHA newSynchronizedInstance() {
+
+        return new SHAJCA() {
+
+
+            @Override
+            public byte[] hash(final byte[] data) {
+
+                if (data == null) {
+                    throw new IllegalArgumentException("null data");
+                }
+
+                synchronized (DIGEST) {
+                    DIGEST.reset();
+                    return DIGEST.digest(data);
+                }
+            }
+
+
+        };
+    }
+
+
+    @Override
+    public byte[] hash(final byte[] data) {
+
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
 
         try {
-            return MessageDigest.getInstance(ALGORITHM).digest(unhashed);
+            return MessageDigest.getInstance(ALGORITHM).digest(data);
         } catch (NoSuchAlgorithmException nsae) {
             throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
         }

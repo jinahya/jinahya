@@ -32,7 +32,8 @@ public class HEX {
      * Encodes a half octet.
      *
      * @param decoded half octet
-     * @return encoded ascii
+     *
+     * @return encoded output
      */
     private static int encodeHalf(final int decoded) {
 
@@ -65,7 +66,7 @@ public class HEX {
      * Encodes a single octet.
      *
      * @param decoded the octet to encode
-     * @param encoded the byte array to which encoded asciis are written
+     * @param encoded the byte array to which encoded output are written
      * @param offset offset in the array
      */
     protected static void encodeSingle(final int decoded, final byte[] encoded,
@@ -94,8 +95,9 @@ public class HEX {
      * Encodes given
      * <code>decoded</code>.
      *
-     * @param decoded the octets to encode
-     * @return decoded asciis
+     * @param decoded the bytes to encode
+     *
+     * @return encoded output
      */
     public static byte[] encode(final byte[] decoded) {
 
@@ -120,7 +122,8 @@ public class HEX {
      * <code>decoded</code>.
      *
      * @param decoded the string to encode
-     * @return encoded octets
+     *
+     * @return encoded output
      */
     public static byte[] encode(final String decoded) {
 
@@ -138,10 +141,11 @@ public class HEX {
 
     /**
      * Encodes given
-     * <code>decoded</code> and returns as an ascii string.
+     * <code>decoded</code> and returns as an ASCII string.
      *
-     * @param decoded the octets to encode
-     * @return encoded ascii string
+     * @param decoded the bytes to encode
+     *
+     * @return encoded output as an ASCII string
      */
     public static String encodeToString(final byte[] decoded) {
 
@@ -162,6 +166,7 @@ public class HEX {
      * <code>decoded</code> and returns as a string.
      *
      * @param decoded the string to encode
+     *
      * @return encoded output as a string
      */
     public static String encodeToString(final String decoded) {
@@ -259,8 +264,9 @@ public class HEX {
      * Decodes given
      * <code>encoded</code>.
      *
-     * @param encoded encoded octets
-     * @return decoded octets
+     * @param encoded the bytes to decode
+     *
+     * @return decoded output
      */
     public static byte[] decode(final byte[] encoded) {
 
@@ -289,8 +295,9 @@ public class HEX {
      * Decodes given
      * <code>encoded</code>.
      *
-     * @param encoded encoded string
-     * @return decoded octets
+     * @param encoded the string to decode
+     *
+     * @return decoded output
      */
     public static byte[] decode(final String encoded) {
 
@@ -311,6 +318,7 @@ public class HEX {
      * <code>encoded</code> and returns as a string.
      *
      * @param encoded encoded octets
+     *
      * @return decoded output as a string
      */
     public static String decodeToString(final byte[] encoded) {
@@ -328,6 +336,7 @@ public class HEX {
      * <code>encoded</code> and returns output as a utf string.
      *
      * @param encoded encoded ascii string
+     *
      * @return decoded output as a utf string
      */
     public static String decodeToString(final String encoded) {

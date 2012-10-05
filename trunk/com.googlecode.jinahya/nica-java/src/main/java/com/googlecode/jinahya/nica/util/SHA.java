@@ -30,30 +30,31 @@ public abstract class SHA {
 
     /**
      * Hashes given
-     * <code>unhashed</code>.
+     * <code>data</code>.
      *
-     * @param unhashed the octets to hash
+     * @param data data to hash
      *
      * @return hashed output
      */
-    public abstract byte[] hash(final byte[] unhashed);
+    public abstract byte[] hash(final byte[] data);
 
 
     /**
      * Hashes given
-     * <code>unhashed</code>.
+     * <code>data</code>.
      *
-     * @param unhashed the string to hash; must be UTF-8 decodable
-     * @return hashed output as octets
+     * @param data the string to hash
+     *
+     * @return hashed output
      */
-    public byte[] hash(final String unhashed) {
+    public byte[] hash(final String data) {
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
 
         try {
-            return hash(unhashed.getBytes("UTF-8"));
+            return hash(data.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
             throw new IllegalArgumentException("\"UTF-8\" not supported?");
         }
@@ -62,19 +63,19 @@ public abstract class SHA {
 
     /**
      * Hashes given
-     * <code>unhashed</code> and returns as a HEX string.
+     * <code>data</code> and returns as a HEX string.
      *
-     * @param unhashed the octets to hash
+     * @param data data to hash
      *
-     * @return hashed output as a hex string.
+     * @return hashed output as a HEX string.
      */
-    public String hashToString(final byte[] unhashed) {
+    public String hashToString(final byte[] data) {
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
 
-        return HEX.encodeToString(hash(unhashed));
+        return HEX.encodeToString(hash(data));
     }
 
 
@@ -82,17 +83,17 @@ public abstract class SHA {
      * Hashes given
      * <code>unhashed</code> and returns as a HEX string.
      *
-     * @param unhashed the string to hash
+     * @param data the string to hash
      *
      * @return hashed output as a HEX string
      */
-    public String hashToString(final String unhashed) {
+    public String hashToString(final String data) {
 
-        if (unhashed == null) {
-            throw new IllegalArgumentException("null unhashed");
+        if (data == null) {
+            throw new IllegalArgumentException("null data");
         }
 
-        return HEX.encodeToString(hash(unhashed));
+        return HEX.encodeToString(hash(data));
     }
 
 

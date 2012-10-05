@@ -34,14 +34,14 @@ public abstract class SHATest<S extends SHA> {
     protected static final Random RANDOM = new Random();
 
 
-    protected static byte[] newUnhashed() {
+    protected static byte[] newData() {
         final byte[] unhashed = new byte[RANDOM.nextInt(1024)];
         RANDOM.nextBytes(unhashed);
         return unhashed;
     }
 
 
-    protected static String newUnhashedString() {
+    protected static String newDataAsString() {
         return RandomStringUtils.random(RANDOM.nextInt(1024));
     }
 
@@ -61,7 +61,7 @@ public abstract class SHATest<S extends SHA> {
             // expected;
         }
 
-        final byte[] unhashed = newUnhashed();
+        final byte[] unhashed = newData();
         final byte[] hashed = sha.hash(unhashed);
     }
 
@@ -78,7 +78,7 @@ public abstract class SHATest<S extends SHA> {
             // expected;
         }
 
-        final String unhashed = newUnhashedString();
+        final String unhashed = newDataAsString();
         final byte[] hashed = sha.hash(unhashed);
     }
 
@@ -95,7 +95,7 @@ public abstract class SHATest<S extends SHA> {
             // expected;
         }
 
-        final byte[] unhashed = newUnhashed();
+        final byte[] unhashed = newData();
         final String hashed = sha.hashToString(unhashed);
     }
 
@@ -112,7 +112,7 @@ public abstract class SHATest<S extends SHA> {
             // expected;
         }
 
-        final String unhashed = newUnhashedString();
+        final String unhashed = newDataAsString();
         final String hashed = sha.hashToString(unhashed);
     }
 
