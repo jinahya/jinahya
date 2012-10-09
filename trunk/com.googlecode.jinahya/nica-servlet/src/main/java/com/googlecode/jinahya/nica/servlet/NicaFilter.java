@@ -20,9 +20,12 @@ package com.googlecode.jinahya.nica.servlet;
 
 import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.util.AES;
+import com.googlecode.jinahya.nica.util.AESJCE;
 import com.googlecode.jinahya.nica.util.HEX;
 import com.googlecode.jinahya.nica.util.KVP;
+import com.googlecode.jinahya.nica.util.MACJCE;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import javax.servlet.Filter;
@@ -52,8 +55,8 @@ public abstract class NicaFilter implements Filter {
         final HttpServletResponse hesponse = (HttpServletResponse) response;
 
         // ----------------------------------------------------------- Nica-Name
-        final String name = hequest.getHeader(Header.NAME.fieldName());
-        if (name == null) {
+        final String nicaName = hequest.getHeader(Header.NAME.fieldName());
+        if (nicaName == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing required header: " + Header.NAME.fieldName());
@@ -61,13 +64,12 @@ public abstract class NicaFilter implements Filter {
         }
         final Map<String, String> names;
         try {
-            names = KVP.decode(name);
+            names = KVP.decode(nicaName);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "failed to decode header value: " + Header.NAME.fieldName()
-                + ": " + name);
+                "failed to decode: " + Header.NAME.fieldName());
             return;
         }
         if (names.isEmpty()) {
@@ -75,88 +77,118 @@ public abstract class NicaFilter implements Filter {
         }
 
         // ----------------------------------------------------------- Nica-Init
-        final String init = hequest.getHeader(Header.INIT.fieldName());
-        if (init == null) {
+        final String nicaInit = hequest.getHeader(Header.INIT.fieldName());
+        if (nicaInit == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing required header: " + Header.INIT.fieldName());
             return;
         }
-        final byte[] iv;
+        final byte[] init;
         try {
-            iv = HEX.decode(init);
+            init = HEX.decode(nicaInit);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "failed to decode header value: " + Header.INIT.fieldName()
-                + ": " + init);
+                "wrong header value: " + Header.INIT.fieldName() + ": "
+                + e.getMessage());
             return;
         }
-        if (iv.length != AES.KEY_SIZE_IN_BYTES) {
+        if (init.length != AES.KEY_SIZE_IN_BYTES) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header value: " + Header.INIT.fieldName()
-                + ": " + init);
+                "wrong header value: " + Header.INIT.fieldName());
             return;
         }
 
         // ----------------------------------------------------------- Nica-Code
-        final String code = hequest.getHeader(Header.CODE.fieldName());
-        if (code == null) {
+        final String nicaCode = hequest.getHeader(Header.CODE.fieldName());
+        if (nicaCode == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing required header: " + Header.CODE.fieldName());
             return;
         }
-        final Map<String, String> codes;
-        try {
-            codes = KVP.decode(code);
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            hesponse.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "failed to decode header value: " + Header.CODE.fieldName()
-                + ": " + code);
-            return;
-        }
-        if (codes.isEmpty()) {
-            // ok
-        }
+
 
         // ----------------------------------------------------------- Nica-Auth
-        final String auth = hequest.getHeader(Header.AUTH.fieldName());
-        if (auth == null) {
+        final String nicaAuth = hequest.getHeader(Header.AUTH.fieldName());
+        if (nicaAuth == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing required header: " + Header.AUTH.fieldName());
             return;
         }
-        final byte[] au;
+        final byte[] auth;
         try {
-            au = HEX.decode(auth);
+            auth = HEX.decode(nicaAuth);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "failed to decode header value: " + Header.AUTH.fieldName()
-                + ": " + auth);
+                + ": " + nicaAuth);
             return;
         }
 
-
-        final byte[] key = getKey(Collections.unmodifiableMap(names));
-        if (key == null) {
+        // ---------------------------------------------------------------- key_
+        final byte[] key_ = getKey(Collections.unmodifiableMap(names));
+        if (key_ == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST, "key not found");
             return;
         }
-        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+        if (key_.length != AES.KEY_SIZE_IN_BYTES) {
             hesponse.sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                "bad implementation: key.length(" + key.length + ") != "
+                "bad implementation: key.length(" + key_.length + ") != "
                 + AES.KEY_SIZE_IN_BYTES);
             return;
+        }
+
+        // ---------------------------------------------------------------- base
+        final byte[] base;
+        try {
+            base = new AESJCE(key_).decrypt(init, HEX.decode(nicaCode));
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "decryption failed: " + e.getMessage());
+            return;
+        }
+
+        // ---------------------------------------------------------------- auth
+        final byte[] auth2;
+        try {
+            auth2 = new MACJCE(key_).authenticate(base);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "authentication failed: " + e.getMessage());
+            return;
+        }
+        if (!Arrays.equals(auth, auth2)) {
+            hesponse.sendError(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "authentication failed: not equal");
+            return;
+        }
+
+        final Map<String, String> codes;
+        try {
+            codes = KVP.decode(new String(base, "US-ASCII"));
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "failed to decode decrypted code");
+            return;
+        }
+        if (codes.isEmpty()) {
+            // ok
         }
 
 
