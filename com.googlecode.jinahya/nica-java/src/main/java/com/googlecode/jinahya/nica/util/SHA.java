@@ -29,6 +29,18 @@ public abstract class SHA {
 
 
     /**
+     * Output size in bits.
+     */
+    public static int OUTPUT_SIZE = 0x200; // 512
+
+
+    /**
+     * Output size in bytes.
+     */
+    public static final int OUTPUT_SIZE_IN_BYTES = OUTPUT_SIZE / 0x08; // 64
+
+
+    /**
      * Hashes given
      * <code>data</code>.
      *

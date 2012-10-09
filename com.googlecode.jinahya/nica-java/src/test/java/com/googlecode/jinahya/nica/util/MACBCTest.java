@@ -30,6 +30,9 @@ import org.testng.annotations.Test;
 public class MACBCTest extends MACTest<MACBC> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(MACBCTest.class.getName());
 
@@ -44,14 +47,14 @@ public class MACBCTest extends MACTest<MACBC> {
     public void testAuthenticateAgainstJCE() {
 
         LOGGER.info("testAuthenticateAgainstJCE");
-        
+
         final byte[] key = AESJCETest.generateKey();
 
-        final byte[] unauthenticated = newUnauthenticated();
+        final byte[] message = newMessage();
 
-        final byte[] expected = new MACJCE(key).authenticate(unauthenticated);
+        final byte[] expected = new MACJCE(key).authenticate(message);
 
-        final byte[] actual = newInstance(key).authenticate(unauthenticated);
+        final byte[] actual = newInstance(key).authenticate(message);
 
         Assert.assertEquals(actual, expected);
     }
@@ -64,11 +67,11 @@ public class MACBCTest extends MACTest<MACBC> {
 
         final byte[] key = AESJCETest.generateKey();
 
-        final String unauthenticated = newUnauthenticatedAsString();
+        final String message = newMessageAsString();
 
-        final byte[] expected = new MACJCE(key).authenticate(unauthenticated);
+        final byte[] expected = new MACJCE(key).authenticate(message);
 
-        final byte[] actual = newInstance(key).authenticate(unauthenticated);
+        final byte[] actual = newInstance(key).authenticate(message);
 
         Assert.assertEquals(actual, expected);
     }

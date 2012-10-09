@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 /**
+ * An abstract class for AES encryption/decryption.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -26,37 +27,37 @@ public abstract class AES {
 
 
     /**
-     * key size in bits.
+     * Key size in bits.
      */
     public static final int KEY_SIZE = 0x80; // 128
 
 
     /**
-     * key size in bytes.
+     * Key size in bytes.
      */
     public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08; // 16
 
 
     /**
-     * algorithm.
+     * Cipher algorithm.
      */
     public static final String ALGORITHM = "AES";
 
 
     /**
-     * mode.
+     * Cipher mode.
      */
     public static final String MODE = "CBC";
 
 
     /**
-     * padding.
+     * Cipher padding.
      */
     public static final String PADDING = "PKCS5Padding";
 
 
     /**
-     * transformation.
+     * Cipher transformation.
      */
     public static final String TRANSFORMATION =
         ALGORITHM + "/" + MODE + "/" + PADDING;
@@ -79,9 +80,9 @@ public abstract class AES {
      * <code>encrypted</code>.
      *
      * @param iv initialization vector
-     * @param encrypted encrypted bytes to decrypt
+     * @param encrypted the bytes to decrypt
      *
-     * @return decrypted bytes
+     * @return decrypted output
      */
     public abstract byte[] decrypt(final byte[] iv, final byte[] encrypted);
 
