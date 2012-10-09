@@ -70,6 +70,9 @@ public abstract class NicaFilter implements Filter {
                 + ": " + name);
             return;
         }
+        if (names.isEmpty()) {
+            // ok
+        }
 
         // ----------------------------------------------------------- Nica-Init
         final String init = hequest.getHeader(Header.INIT.fieldName());
@@ -116,6 +119,9 @@ public abstract class NicaFilter implements Filter {
                 "failed to decode header value: " + Header.CODE.fieldName()
                 + ": " + code);
             return;
+        }
+        if (codes.isEmpty()) {
+            // ok
         }
 
         // ----------------------------------------------------------- Nica-Auth
