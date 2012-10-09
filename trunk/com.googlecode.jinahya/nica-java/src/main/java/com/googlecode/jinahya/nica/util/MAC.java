@@ -67,7 +67,7 @@ public abstract class MAC {
      * @return authentication output as a HEX string
      */
     public String authenticateToString(final byte[] message) {
-        return HEX.encodeToString(message);
+        return HEX.encodeToString(authenticate(message));
     }
 
 

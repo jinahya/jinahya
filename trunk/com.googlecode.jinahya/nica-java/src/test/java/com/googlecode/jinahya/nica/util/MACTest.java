@@ -34,14 +34,14 @@ public abstract class MACTest<M extends MAC> {
     protected static final Random RANDOM = new Random();
 
 
-    protected static byte[] newUnauthenticated() {
-        final byte[] unauthenticated = new byte[RANDOM.nextInt(1024)];
-        RANDOM.nextBytes(unauthenticated);
-        return unauthenticated;
+    protected static byte[] newMessage() {
+        final byte[] message = new byte[RANDOM.nextInt(1024)];
+        RANDOM.nextBytes(message);
+        return message;
     }
 
 
-    protected static String newUnauthenticatedAsString() {
+    protected static String newMessageAsString() {
         return RandomStringUtils.random(RANDOM.nextInt(1024));
     }
 
@@ -61,7 +61,8 @@ public abstract class MACTest<M extends MAC> {
             // expected
         }
 
-        mac.authenticate(newUnauthenticated());
+        final byte[] output = mac.authenticate(newMessage());
+        Assert.assertTrue(output.length == SHA.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -77,7 +78,42 @@ public abstract class MACTest<M extends MAC> {
             // expected
         }
 
-        mac.authenticate(newUnauthenticatedAsString());
+        final byte[] output = mac.authenticate(newMessageAsString());
+        Assert.assertTrue(output.length == SHA.OUTPUT_SIZE_IN_BYTES);
+    }
+
+
+    @Test//(invocationCount = 128)
+    public void testAuthenticateToString() {
+
+        final M mac = newInstance(AESTest.generateKey());
+
+        try {
+            mac.authenticateToString((byte[]) null);
+            Assert.fail("passed: authenticate((byte[]) null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        final String output = mac.authenticateToString(newMessage());
+        Assert.assertTrue(output.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
+    }
+
+
+    @Test//(invocationCount = 128)
+    public void testAuthenticateToStringWithString() {
+
+        final M mac = newInstance(AESTest.generateKey());
+
+        try {
+            mac.authenticateToString((String) null);
+            Assert.fail("passed: authenticate((String) null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        final String output = mac.authenticateToString(newMessageAsString());
+        Assert.assertTrue(output.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 

@@ -63,6 +63,8 @@ public abstract class SHATest<S extends SHA> {
 
         final byte[] unhashed = newData();
         final byte[] hashed = sha.hash(unhashed);
+
+        Assert.assertTrue(hashed.length == SHA.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -80,6 +82,7 @@ public abstract class SHATest<S extends SHA> {
 
         final String unhashed = newDataAsString();
         final byte[] hashed = sha.hash(unhashed);
+        Assert.assertTrue(hashed.length == SHA.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -97,6 +100,7 @@ public abstract class SHATest<S extends SHA> {
 
         final byte[] unhashed = newData();
         final String hashed = sha.hashToString(unhashed);
+        Assert.assertTrue(hashed.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
@@ -114,6 +118,7 @@ public abstract class SHATest<S extends SHA> {
 
         final String unhashed = newDataAsString();
         final String hashed = sha.hashToString(unhashed);
+        Assert.assertTrue(hashed.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
