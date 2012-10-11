@@ -47,7 +47,7 @@ public class MACBC extends MAC {
     }
 
 
-    @Override
+    //@Override
     public byte[] authenticate(byte[] message) {
 
         if (message == null) {
