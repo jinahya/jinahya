@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class KVP {
      * <code>decoded</code>.
      *
      * @param decoded a map of keys and values to encode
+     *
      * @return encoded string
      */
     public static String encode(final Map<String, String> decoded) {
@@ -46,17 +48,17 @@ public class KVP {
         }
 
         if (decoded.isEmpty()) {
-            throw new IllegalArgumentException("empty decoded");
+            return "";
         }
 
         final Map<String, String> encoded = new TreeMap<String, String>();
 
         for (Entry<String, String> entry : decoded.entrySet()) {
             if (entry.getKey() == null) {
-                throw new IllegalArgumentException("illegal key: null");
+                throw new IllegalArgumentException("null key");
             }
             if (entry.getValue() == null) {
-                throw new IllegalArgumentException("illegal value: null");
+                throw new IllegalArgumentException("null value");
             }
             encoded.put(PER.encodeToString(entry.getKey()),
                         PER.encodeToString(entry.getValue()));
@@ -68,15 +70,12 @@ public class KVP {
             length += entry.getValue().length();
         }
 
-        final StringBuilder builder = new StringBuilder(length);
+        final StringBuilder builder = new StringBuilder(length - 1);
         final Iterator<Entry<String, String>> entries =
             encoded.entrySet().iterator();
         if (entries.hasNext()) {
             final Entry<String, String> entry = entries.next();
-            builder.
-                append(entry.getKey()).
-                append('=').
-                append(entry.getValue());
+            builder.append(entry.getKey()).append('=').append(entry.getValue());
         }
         while (entries.hasNext()) {
             final Entry<String, String> entry = entries.next();
@@ -95,6 +94,7 @@ public class KVP {
      * <code>encoded</code>.
      *
      * @param encoded encoded
+     *
      * @return a map of decoded keys and values.
      */
     public static Map<String, String> decode(final String encoded) {
@@ -104,7 +104,7 @@ public class KVP {
         }
 
         if (encoded.isEmpty()) {
-            throw new IllegalArgumentException("empty encoded");
+            return Collections.<String, String>emptyMap();
         }
 
         final Map<String, String> decoded = new HashMap<String, String>();
@@ -112,11 +112,11 @@ public class KVP {
         for (String pair : encoded.split("&")) {
             final int index = pair.indexOf('=');
             if (index == -1) {
-                throw new IllegalArgumentException("illegal pair: " + pair);
+                throw new IllegalArgumentException("illegal encoded");
             }
             final String key = pair.substring(0, index);
-            final String value = pair.substring(index + 1);
-            decoded.put(PER.decodeToString(key), PER.decodeToString(value));
+            final String val = pair.substring(index + 1);
+            decoded.put(PER.decodeToString(key), PER.decodeToString(val));
         }
 
         return decoded;

@@ -31,9 +31,17 @@ import javax.crypto.Mac;
 public class MACJCE extends MAC {
 
 
+    /**
+     * Encryption algorithm.
+     */
     public static final String ALGORITHM = "HmacSHA512";
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param key encryption key.
+     */
     public MACJCE(final byte[] key) {
         super();
 

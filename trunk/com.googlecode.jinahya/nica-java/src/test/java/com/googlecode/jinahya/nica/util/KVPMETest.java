@@ -50,12 +50,12 @@ public class KVPMETest {
         final Hashtable<String, String> decoded =
             new Hashtable<String, String>();
 
-        try {
-            KVPME.encode(decoded);
-            Assert.fail("passed: encode([EMPTY])");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+//        try {
+//            KVPME.encode(decoded);
+//            Assert.fail("passed: encode([EMPTY])");
+//        } catch (IllegalArgumentException iae) {
+//            // expected
+//        }
 
         decoded.put(RandomStringUtils.random(RANDOM.nextInt(16)),
                     RandomStringUtils.random(RANDOM.nextInt(16)));
@@ -74,60 +74,79 @@ public class KVPMETest {
             // expected
         }
 
-        try {
-            KVPME.decode("");
-            Assert.fail("passed: decode([EMPTY])");
-        } catch (IllegalArgumentException iae) {
-            // expected
+//        try {
+//            KVPME.decode("");
+//            Assert.fail("passed: decode([EMPTY])");
+//        } catch (IllegalArgumentException iae) {
+//            // expected
+//        }
+
+        {
+            final Hashtable decoded = KVPME.decode("");
+            Assert.assertTrue(decoded.isEmpty());
         }
 
-        final Hashtable decoded = KVPME.decode("=");
+        {
+            try {
+                final Hashtable decoded = KVPME.decode("&");
+                Assert.fail("passed: decode(\"&\")");
+            } catch (IllegalArgumentException iae) {
+                // expected;
+            }
+        }
+
+        {
+            final Hashtable decoded = KVPME.decode("=");
+            Assert.assertTrue(decoded.size() == 1);
+        }
+
+        {
+            try {
+                final Hashtable decoded = KVPME.decode("=&=");
+                Assert.fail("passed: decode(\"=&=\")");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
     }
 
 
-    private static void testEncodingDecoding(
-        final Hashtable<String, String> expected) {
-
+    private static void testEncodeDecode(final Hashtable expected) {
         final String encoded = KVPME.encode(expected);
-
-        final Hashtable<String, String> actual = KVPME.decode(encoded);
-
+        final Hashtable actual = KVPME.decode(encoded);
         Assert.assertEquals(actual, expected);
     }
 
 
     @Test
-    public static void testEncodingDecoding() {
+    public static void testEncodeDecode() {
 
-        final Hashtable<String, String> expected =
-            new Hashtable<String, String>();
+        final Hashtable expected = new Hashtable();
 
-        expected.put("", "");
-        testEncodingDecoding(expected);
+        testEncodeDecode(expected);
         expected.clear();
 
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
             final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String value = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, value);
+            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
+            expected.put(key, val);
         }
 
-        testEncodingDecoding(expected);
+        testEncodeDecode(expected);
     }
 
 
     @Test
     public static void testEncodingAgainstSE() {
 
-        final Hashtable<String, String> expected =
-            new Hashtable<String, String>();
+        final Hashtable expected = new Hashtable();
 
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
             final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String value = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, value);
+            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
+            expected.put(key, val);
         }
 
         final String encoded = KVPME.encode(expected);
@@ -147,13 +166,13 @@ public class KVPMETest {
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
             final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String value = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, value);
+            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
+            expected.put(key, val);
         }
 
         final String encoded = KVP.encode(expected);
 
-        final Hashtable<String, String> actual = KVPME.decode(encoded);
+        final Hashtable actual = KVPME.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
