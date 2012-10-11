@@ -30,7 +30,7 @@ public class SHAJCA extends SHA {
 
 
     /**
-     * algorithm.
+     * Hash algorithm.
      */
     public static final String ALGORITHM = "SHA-512";
 

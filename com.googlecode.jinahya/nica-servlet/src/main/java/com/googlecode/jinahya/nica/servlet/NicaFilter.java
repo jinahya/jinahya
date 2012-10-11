@@ -47,25 +47,31 @@ public abstract class NicaFilter implements Filter {
 
     /**
      * The attribute name for decoded value of {@link Header#NAME}. The value is
-     * an instance of
+     * an instance of unmodifiable
      * <code>Map&lt;String, String&gt;</code>.
      */
-    private static final String REQUEST_ATTRIBUTE_NICA_NAMES = "NICA_NAMES";
+    protected static final String ATTRIBUTE_NICA_NAMES =
+        NicaFilter.class.getName() + "#names";
 
 
     /**
      * The attribute name for decoded value of {@link Header#CODE}. The value is
-     * an instance of
+     * an instance of unmodifiable
      * <code>Map&lt;String, String&gt;</code>.
      */
-    private static final String REQUEST_ATTRIBUTE_NICA_CODES = "NICA_CODES";
+    protected static final String ATTRIBUTE_NICA_CODES =
+        NicaFilter.class.getName() + "#codes";
 
 
     /**
+     * Returns the value mapped to given
+     * <code>key</code>.
      *
-     * @param request
-     * @param key
-     * @return
+     * @param request HttpServletRequest instance
+     * @param key key
+     *
+     * @return the value mapped to given <code>key</code> or <code>null</code>
+     * if not found
      */
     protected static final String getNicaName(final ServletRequest request,
                                               final String key) {
@@ -78,9 +84,9 @@ public abstract class NicaFilter implements Filter {
             throw new IllegalArgumentException("null key");
         }
 
+        @SuppressWarnings("unchecked")
         final Map<String, String> names =
-            (Map<String, String>) request.getAttribute(
-            REQUEST_ATTRIBUTE_NICA_NAMES);
+            (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_NAMES);
 
         if (names == null) {
             return null;
@@ -90,8 +96,18 @@ public abstract class NicaFilter implements Filter {
     }
 
 
-    protected static final String getNicaCode(final ServletRequest request,
-                                              final String key) {
+    /**
+     * Return the value mapped to given
+     * <code>key</code>.
+     *
+     * @param request ServletRequest instance
+     * @param key key
+     *
+     * @return the value mapped to give <code>key</code> or <code>nul</code> if
+     * not found
+     */
+    protected static String getNicaCode(final ServletRequest request,
+                                        final String key) {
 
         if (request == null) {
             throw new IllegalArgumentException("null request");
@@ -101,9 +117,9 @@ public abstract class NicaFilter implements Filter {
             throw new IllegalArgumentException("null key");
         }
 
+        @SuppressWarnings("unchecked")
         final Map<String, String> codes =
-            (Map<String, String>) request.getAttribute(
-            REQUEST_ATTRIBUTE_NICA_CODES);
+            (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_CODES);
 
         if (codes == null) {
             return null;
@@ -113,15 +129,179 @@ public abstract class NicaFilter implements Filter {
     }
 
 
-    protected static void process(final HttpServletRequest request,
-                                  final HttpServletResponse response,
-                                  final KeyLocator locator)
+//    protected static void process(final HttpServletRequest request,
+//                                  final HttpServletResponse response,
+//                                  final KeyLocator locator)
+//        throws IOException, ServletException {
+//
+//        // ----------------------------------------------------------- Nica-Name
+//        final String nicaName = request.getHeader(Header.NAME.fieldName());
+//        if (nicaName == null) {
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "missing header: " + Header.NAME.fieldName());
+//            return;
+//        }
+//        final Map<String, String> names;
+//        try {
+//            names = KVP.decode(nicaName);
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.NAME.fieldName() + ": "
+//                + e.getMessage());
+//            return;
+//        }
+//        if (names.isEmpty()) {
+//            // ok
+//        }
+//        final byte[] key_;
+//        try {
+//            key_ = locator.locateKey(Collections.unmodifiableMap(names));
+//        } catch (Exception e) {
+//            System.err.println("error while locating key: " + e.getMessage());
+//            e.printStackTrace(System.err);
+//            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//        if (key_ == null) {
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+//                               "no key found");
+//            return;
+//        }
+//        if (key_.length != AES.KEY_SIZE_IN_BYTES) {
+//            System.err.println("wrong key size: " + key_.length);
+//            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return;
+//        }
+//
+//        // ----------------------------------------------------------- Nica-Init
+//        final String nicaInit = request.getHeader(Header.INIT.fieldName());
+//        if (nicaInit == null) {
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "missing header: " + Header.INIT.fieldName());
+//            return;
+//        }
+//        final byte[] init;
+//        try {
+//            init = HEX.decode(nicaInit);
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.INIT.fieldName() + ": "
+//                + e.getMessage());
+//            return;
+//        }
+//        if (init.length != AES.KEY_SIZE_IN_BYTES) {
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.INIT.fieldName() + ": size");
+//            return;
+//        }
+//
+//        // ----------------------------------------------------------- Nica-Code
+//        final String nicaCode = request.getHeader(Header.CODE.fieldName());
+//        if (nicaCode == null) {
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "missing header: " + Header.CODE.fieldName());
+//            return;
+//        }
+//        final byte[] base;
+//        try {
+//            base = new AESJCE(key_).decrypt(init, HEX.decode(nicaCode));
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.CODE.fieldName() + ": "
+//                + e.getMessage());
+//            return;
+//        }
+//        final Map<String, String> codes;
+//        try {
+//            codes = KVP.decode(new String(base, "US-ASCII"));
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.CODE.fieldName() + ": "
+//                + e.getMessage());
+//            return;
+//        }
+//        if (codes.isEmpty()) {
+//            // ok
+//        }
+//
+//        // ----------------------------------------------------------- Nica-Auth
+//        final String nicaAuth = request.getHeader(Header.AUTH.fieldName());
+//        if (nicaAuth == null) {
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "missing header: " + Header.AUTH.fieldName());
+//            return;
+//        }
+//        final byte[] auth;
+//        try {
+//            auth = HEX.decode(nicaAuth);
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "wrong header: " + Header.AUTH.fieldName() + ": "
+//                + e.getMessage());
+//            return;
+//        }
+//        final byte[] aut_;
+//        try {
+//            aut_ = new MACJCE(key_).authenticate(base);
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//            response.sendError(
+//                HttpServletResponse.SC_BAD_REQUEST,
+//                "authentication failed: " + e.getMessage());
+//            return;
+//        }
+//        if (!Arrays.equals(auth, aut_)) {
+//            response.sendError(
+//                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+//                "authentication failed: not equal");
+//            return;
+//        }
+//
+//        request.setAttribute(ATTRIBUTE_NAMES, names);
+//        request.setAttribute(ATTRIBUTE_CODES, codes);
+//    }
+    @Override
+    public void doFilter(final ServletRequest request,
+                         final ServletResponse response,
+                         final FilterChain chain)
         throws IOException, ServletException {
 
+//        final KeyLocator locator = new KeyLocator() {
+//
+//
+//            @Override
+//            public byte[] locateKey(final Map<String, String> names) {
+//                return NicaFilter.this.locateKey(names);
+//            }
+//
+//
+//        };
+
+        final HttpServletRequest hequest = (HttpServletRequest) request;
+        final HttpServletResponse hesponse = (HttpServletResponse) response;
+
+//        process((HttpServletRequest) request, (HttpServletResponse) response,
+//                locator);
+
         // ----------------------------------------------------------- Nica-Name
-        final String nicaName = request.getHeader(Header.NAME.fieldName());
+        final String nicaName = hequest.getHeader(Header.NAME.fieldName());
         if (nicaName == null) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing header: " + Header.NAME.fieldName());
             return;
@@ -131,7 +311,7 @@ public abstract class NicaFilter implements Filter {
             names = KVP.decode(nicaName);
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.NAME.fieldName() + ": "
                 + e.getMessage());
@@ -142,28 +322,28 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] key_;
         try {
-            key_ = locator.locateKey(Collections.unmodifiableMap(names));
+            key_ = locateKey(Collections.unmodifiableMap(names));
         } catch (Exception e) {
             System.err.println("error while locating key: " + e.getMessage());
             e.printStackTrace(System.err);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         if (key_ == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+            hesponse.sendError(HttpServletResponse.SC_BAD_REQUEST,
                                "no key found");
             return;
         }
         if (key_.length != AES.KEY_SIZE_IN_BYTES) {
             System.err.println("wrong key size: " + key_.length);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
         // ----------------------------------------------------------- Nica-Init
-        final String nicaInit = request.getHeader(Header.INIT.fieldName());
+        final String nicaInit = hequest.getHeader(Header.INIT.fieldName());
         if (nicaInit == null) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing header: " + Header.INIT.fieldName());
             return;
@@ -173,23 +353,23 @@ public abstract class NicaFilter implements Filter {
             init = HEX.decode(nicaInit);
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.INIT.fieldName() + ": "
                 + e.getMessage());
             return;
         }
         if (init.length != AES.KEY_SIZE_IN_BYTES) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.INIT.fieldName() + ": size");
             return;
         }
 
         // ----------------------------------------------------------- Nica-Code
-        final String nicaCode = request.getHeader(Header.CODE.fieldName());
+        final String nicaCode = hequest.getHeader(Header.CODE.fieldName());
         if (nicaCode == null) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing header: " + Header.CODE.fieldName());
             return;
@@ -199,7 +379,7 @@ public abstract class NicaFilter implements Filter {
             base = new AESJCE(key_).decrypt(init, HEX.decode(nicaCode));
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.CODE.fieldName() + ": "
                 + e.getMessage());
@@ -210,7 +390,7 @@ public abstract class NicaFilter implements Filter {
             codes = KVP.decode(new String(base, "US-ASCII"));
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.CODE.fieldName() + ": "
                 + e.getMessage());
@@ -221,9 +401,9 @@ public abstract class NicaFilter implements Filter {
         }
 
         // ----------------------------------------------------------- Nica-Auth
-        final String nicaAuth = request.getHeader(Header.AUTH.fieldName());
+        final String nicaAuth = hequest.getHeader(Header.AUTH.fieldName());
         if (nicaAuth == null) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "missing header: " + Header.AUTH.fieldName());
             return;
@@ -233,7 +413,7 @@ public abstract class NicaFilter implements Filter {
             auth = HEX.decode(nicaAuth);
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.AUTH.fieldName() + ": "
                 + e.getMessage());
@@ -244,46 +424,20 @@ public abstract class NicaFilter implements Filter {
             aut_ = new MACJCE(key_).authenticate(base);
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "authentication failed: " + e.getMessage());
             return;
         }
         if (!Arrays.equals(auth, aut_)) {
-            response.sendError(
+            hesponse.sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 "authentication failed: not equal");
             return;
         }
 
-        request.setAttribute(REQUEST_ATTRIBUTE_NICA_NAMES, names);
-        request.setAttribute(REQUEST_ATTRIBUTE_NICA_CODES, codes);
-    }
-
-
-    @Override
-    public void doFilter(final ServletRequest request,
-                         final ServletResponse response,
-                         final FilterChain chain)
-        throws IOException, ServletException {
-
-        final KeyLocator locator = new KeyLocator() {
-
-
-            @Override
-            public byte[] locateKey(final Map<String, String> names) {
-                return NicaFilter.this.locateKey(names);
-            }
-
-
-        };
-
-        process((HttpServletRequest) request, (HttpServletResponse) response,
-                locator);
-
-        if (response.isCommitted()) {
-            return;
-        }
+        hequest.setAttribute(ATTRIBUTE_NICA_NAMES, names);
+        hequest.setAttribute(ATTRIBUTE_NICA_CODES, codes);
 
         chain.doFilter(request, response);
     }
@@ -294,6 +448,7 @@ public abstract class NicaFilter implements Filter {
      * <code>names</code>.
      *
      * @param names an unmodifiable map of names for locating key
+     *
      * @return located key or <code>null</code> if not found
      */
     protected abstract byte[] locateKey(Map<String, String> names);

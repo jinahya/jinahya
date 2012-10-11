@@ -36,33 +36,31 @@ public class KVPTest {
     private static final Random RANDOM = new Random();
 
 
-    private void testEncodingDecoding(final Map<String, String> expected) {
-
+    private void testEncodeDecode(final Map<String, String> expected) {
         final String encoded = KVP.encode(expected);
-
         final Map<String, String> actual = KVP.decode(encoded);
-
         Assert.assertEquals(actual, expected);
     }
 
 
     @Test//(invocationCount = 128)
-    public void testEncodingDecoding() {
+    public void testEncodeDecode() {
 
         final Map<String, String> expected = new HashMap<String, String>();
 
+        testEncodeDecode(expected);
+
         expected.put("", "");
-        testEncodingDecoding(expected);
+        testEncodeDecode(expected);
 
         expected.clear();
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
             final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String value = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, value);
+            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
+            expected.put(key, val);
         }
-
-        testEncodingDecoding(expected);
+        testEncodeDecode(expected);
     }
 
 
