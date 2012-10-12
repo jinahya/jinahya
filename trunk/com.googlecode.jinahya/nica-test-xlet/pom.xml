@@ -20,11 +20,6 @@
         <version>1.1</version>
       </dependency>
       <dependency>
-        <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>lcrypto-j2me</artifactId>
-        <version>1.47</version>
-      </dependency>
-      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.8</version>
@@ -32,11 +27,6 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>lcrypto-j2me</artifactId>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
       <artifactId>code4tv-mhp-1.1.2</artifactId>
