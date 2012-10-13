@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -92,12 +93,13 @@ public class KVP {
             throw new IllegalArgumentException("null encoded");
         }
 
+        if (encoded.isEmpty()) {
+            return Collections.<String, String>emptyMap();
+        }
+
         final Map<String, String> decoded = new HashMap<String, String>();
 
         for (String pair : encoded.split("&")) {
-            if (pair.isEmpty()) {
-                continue;
-            }
             final int index = pair.indexOf('=');
             if (index == -1) {
                 throw new IllegalArgumentException("illegal encoded");

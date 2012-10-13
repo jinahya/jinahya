@@ -22,6 +22,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -34,7 +35,7 @@ public class MACJCE extends MAC {
     /**
      * Encryption algorithm.
      */
-    public static final String ALGORITHM = "HmacSHA512";
+    private static final String ALGORITHM = "HmacSHA512";
 
 
     /**
@@ -45,7 +46,16 @@ public class MACJCE extends MAC {
     public MACJCE(final byte[] key) {
         super();
 
-        this.key = AESJCE.newKey(key);
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
+        }
+
+        this.key = new SecretKeySpec(key, ALGORITHM);
     }
 
 

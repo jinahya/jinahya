@@ -37,7 +37,7 @@ public class AESBC extends AES {
     /**
      * Creates a new instance.
      *
-     * @param key key
+     * @param key encryption key
      */
     public AESBC(final byte[] key) {
         super();
@@ -62,10 +62,9 @@ public class AESBC extends AES {
             throw new IllegalArgumentException("null iv");
         }
 
-        if (iv.length != AES.KEY_SIZE_IN_BYTES) {
+        if (iv.length != KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != AES.KEY_SIZE_IN_BYTES("
-                + AES.KEY_SIZE_IN_BYTES + ")");
+                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
         if (decrypted == null) {
@@ -106,10 +105,9 @@ public class AESBC extends AES {
             throw new IllegalArgumentException("null iv");
         }
 
-        if (iv.length != AES.KEY_SIZE_IN_BYTES) {
+        if (iv.length != KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != KEY_SIZE_IN_BYTES("
-                + KEY_SIZE_IN_BYTES + ")");
+                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
         if (encrypted == null) {

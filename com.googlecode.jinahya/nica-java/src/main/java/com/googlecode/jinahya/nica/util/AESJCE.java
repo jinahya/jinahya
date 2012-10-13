@@ -19,9 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -33,37 +31,13 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESJCE extends AES {
 
 
-    private static final KeyGenerator KEY_GENERATOR;
-
-
-    static {
-        try {
-            KEY_GENERATOR = KeyGenerator.getInstance(ALGORITHM);
-            KEY_GENERATOR.init(KEY_SIZE);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new InstantiationError(nsae.getMessage());
-        }
-    }
-
-
     /**
-     * Generates a new Key.
+     * Creates a new instance.
      *
-     * @return a new SecretKey
+     * @param key encryption key
      */
-    public static final Key newKey() {
-        return KEY_GENERATOR.generateKey();
-    }
-
-
-    /**
-     * Creates a new Key with given
-     * <code>key</code>.
-     *
-     * @param key key
-     * @return a new SecretKey
-     */
-    public static final Key newKey(final byte[] key) {
+    public AESJCE(final byte[] key) {
+        super();
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -71,25 +45,10 @@ public class AESJCE extends AES {
 
         if (key.length != AES.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + AES.KEY_SIZE_IN_BYTES + ")");
+                "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
-        return new SecretKeySpec(key, ALGORITHM);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param key {@value AbstractAES#KEY_SIZE}-bit secret key.
-     * @param iv {@value AbstractAES#KEY_SIZE_IN_BYTES}-bit initialization
-     * vector
-     */
-    public AESJCE(final byte[] key) {
-        super();
-
-        this.key = newKey(key);
+        this.key = new SecretKeySpec(key, ALGORITHM);
     }
 
 
