@@ -47,37 +47,37 @@ public class KVPME {
      * Sorts given
      * <code>keys</code> along with values.
      *
-     * @param keys keys
-     * @param vals values
+     * @param k keys
+     * @param v values
      * @param l low
      * @param h high
      */
-    private static void quicksort(final String[] keys, final String[] vals,
+    private static void quicksort(final String[] k, final String[] v,
                                   final int l, final int h) {
 
         int i = l;
         int j = h;
-        final String pivot = keys[l + (h - l) / 2];
+        final String p = k[l + (h - l) / 2];
 
         while (i <= j) {
-            while (keys[i].compareTo(pivot) < 0) {
+            while (k[i].compareTo(p) < 0) {
                 i++;
             }
-            while (keys[j].compareTo(pivot) > 0) {
+            while (k[j].compareTo(p) > 0) {
                 j--;
             }
             if (i <= j) {
-                exchange(keys, i, j);
-                exchange(vals, i, j);
+                exchange(k, i, j);
+                exchange(v, i, j);
                 i++;
                 j--;
             }
         }
         if (l < j) {
-            quicksort(keys, vals, l, j);
+            quicksort(k, v, l, j);
         }
         if (i < h) {
-            quicksort(keys, vals, i, h);
+            quicksort(k, v, i, h);
         }
     }
 
@@ -101,7 +101,7 @@ public class KVPME {
         }
 
         final String[] normalizedKeys = new String[decoded.size()];
-        final String[] normalizedVals = new String[decoded.size()];
+        final String[] normalizedValues = new String[decoded.size()];
 
         final Enumeration keys = decoded.keys();
         for (int i = 0; keys.hasMoreElements(); i++) {
@@ -119,28 +119,23 @@ public class KVPME {
                     "value(" + value + ") is not an instance of "
                     + String.class);
             }
-            normalizedVals[i] = PER.encodeToString((String) value);
+            normalizedValues[i] = PER.encodeToString((String) value);
         }
 
-        quicksort(normalizedKeys, normalizedVals, 0,
+        quicksort(normalizedKeys, normalizedValues, 0,
                   normalizedKeys.length - 1);
 
-        int length = normalizedKeys.length * 2; // '=', '&'
-        for (int i = 0; i < normalizedKeys.length; i++) {
-            length += normalizedKeys[i].length();
-            length += normalizedVals[i].length();
-        }
-        final StringBuffer buffer = new StringBuffer(length - 1);
+        final StringBuffer buffer = new StringBuffer();
         if (normalizedKeys.length > 0) {
             buffer.append(normalizedKeys[0]).
                 append('=').
-                append(normalizedVals[0]);
+                append(normalizedValues[0]);
         }
         for (int i = 1; i < normalizedKeys.length; i++) {
             buffer.append('&').
                 append(normalizedKeys[i]).
                 append('=').
-                append(normalizedVals[i]);
+                append(normalizedValues[i]);
         }
 
         return buffer.toString();

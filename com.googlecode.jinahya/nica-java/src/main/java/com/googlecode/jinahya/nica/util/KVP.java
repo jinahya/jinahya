@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,10 +46,6 @@ public class KVP {
             throw new IllegalArgumentException("null decoded");
         }
 
-        if (decoded.isEmpty()) {
-            return "";
-        }
-
         final Map<String, String> encoded = new TreeMap<String, String>();
 
         for (Entry<String, String> entry : decoded.entrySet()) {
@@ -64,13 +59,7 @@ public class KVP {
                         PER.encodeToString(entry.getValue()));
         }
 
-        int length = encoded.size() * 2; // '=', '&'
-        for (Entry<String, String> entry : encoded.entrySet()) {
-            length += entry.getKey().length();
-            length += entry.getValue().length();
-        }
-
-        final StringBuilder builder = new StringBuilder(length - 1);
+        final StringBuilder builder = new StringBuilder();
         final Iterator<Entry<String, String>> entries =
             encoded.entrySet().iterator();
         if (entries.hasNext()) {
@@ -103,20 +92,23 @@ public class KVP {
             throw new IllegalArgumentException("null encoded");
         }
 
-        if (encoded.isEmpty()) {
-            return Collections.<String, String>emptyMap();
-        }
-
         final Map<String, String> decoded = new HashMap<String, String>();
 
         for (String pair : encoded.split("&")) {
+            if (pair.isEmpty()) {
+                continue;
+            }
             final int index = pair.indexOf('=');
             if (index == -1) {
                 throw new IllegalArgumentException("illegal encoded");
             }
             final String key = pair.substring(0, index);
             final String val = pair.substring(index + 1);
-            decoded.put(PER.decodeToString(key), PER.decodeToString(val));
+            final String previous = decoded.put(
+                PER.decodeToString(key), PER.decodeToString(val));
+            if (previous != null) {
+                throw new IllegalArgumentException("duplicated entry");
+            }
         }
 
         return decoded;
