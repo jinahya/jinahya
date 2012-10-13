@@ -62,8 +62,8 @@ public enum Code {
      */
     SYSTEM_NAME,
     /**
-     * System(OS) identifier. Must be , if specified, unique in a
-     * <code>PLATFORM_ID</code>.
+     * System(OS) identifier. Must be , if specified, unique by
+     * {@link #PLATFORM_ID}.
      */
     SYSTEM_ID,
     /**
@@ -75,8 +75,7 @@ public enum Code {
      */
     DEVICE_NAME,
     /**
-     * Device identifier. Must be unique in a
-     * <code>PLATFORM_ID</code>.
+     * Device identifier. Must be unique by {@link #PLATFORM_ID}.
      */
     DEVICE_ID,
     /**
