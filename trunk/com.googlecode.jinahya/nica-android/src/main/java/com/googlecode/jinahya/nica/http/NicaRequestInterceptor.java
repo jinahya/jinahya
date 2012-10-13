@@ -78,16 +78,11 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
         if (key.length != AES.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != KEY_SIZE_IN_BYTES("
-                + AES.KEY_SIZE_IN_BYTES + ")");
+                "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
         }
 
         if (names == null) {
             throw new IllegalArgumentException("null names");
-        }
-
-        if (names.isEmpty()) {
-            throw new IllegalArgumentException("empty names");
         }
 
         this.context = context;
@@ -101,22 +96,22 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         } catch (MissingResourceException mre) {
         }
         constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
-//        codes.put(Code.USER_LANGUAGE.name(),
-//                  locale.getDisplayLanguage(Locale.ENGLISH));
+        constantCodes.put(Code.USER_LANGUAGE.name(),
+                          locale.getDisplayLanguage(Locale.ENGLISH));
         try {
             constantCodes.put(Code.USER_COUNTRY3.name(),
                               locale.getISO3Country());
         } catch (MissingResourceException mre) {
         }
         constantCodes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
-//        codes.put(Code.USER_COUNTRY.name(),
-//                  locale.getDisplayCountry(Locale.ENGLISH));
+        constantCodes.put(Code.USER_COUNTRY.name(),
+                          locale.getDisplayCountry(Locale.ENGLISH));
 
         constantCodes.put(Code.DEVICE_ID.name(),
                           Secure.getString(this.context.getContentResolver(),
                                            Secure.ANDROID_ID));
 
-        constantCodes.put(Code.PLATFORM_ID.name(), Platform.ANDROID.getId());
+        constantCodes.put(Code.PLATFORM_ID.name(), Platform.ANDROID.id());
     }
 
 
@@ -135,7 +130,8 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         // ----------------------------------------------------------- Nica-Code
         variableCodes.put(Code.SYSTEM_MILLIS.name(),
                           Long.toString(System.currentTimeMillis()));
-        codes.clear();
+        final Map<String, String> codes = new HashMap<String, String>(
+            constantCodes.size() + variableCodes.size());
         codes.putAll(variableCodes);
         codes.putAll(constantCodes);
         final byte[] base;
@@ -221,17 +217,16 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
     /**
-     * codes.
+     * constant codes.
      */
     private final Map<String, String> constantCodes =
         new HashMap<String, String>();
 
 
-    private final Map<String, String> variableCodes =
-        new HashMap<String, String>();
-
-
-    private final transient Map<String, String> codes =
+    /**
+     * variable codes.
+     */
+    private final transient Map<String, String> variableCodes =
         new HashMap<String, String>();
 
 

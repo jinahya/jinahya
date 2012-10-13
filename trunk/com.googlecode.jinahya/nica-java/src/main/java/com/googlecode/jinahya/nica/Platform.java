@@ -96,7 +96,7 @@ public enum Platform {
      *
      * @return id
      */
-    public String getId() {
+    public String id() {
         return id;
     }
 
