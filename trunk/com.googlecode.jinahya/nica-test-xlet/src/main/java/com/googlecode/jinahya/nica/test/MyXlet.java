@@ -49,11 +49,11 @@ public class MyXlet implements Xlet {
 
     public void startXlet() throws XletStateChangeException {
 
-        final byte[] key = new byte[AES.KEY_SIZE_IN_BYTES];
-        RANDOM.nextBytes(key);
+
 
         // ----------------------------------------------------------- Nica-Name
         final Hashtable names = new Hashtable();
+        names.put("USER_ID", "000000");
         final String nicaName = KVPME.encode(names);
         System.out.println("[NICA] Nica-Name: " + nicaName);
 
@@ -65,6 +65,12 @@ public class MyXlet implements Xlet {
 
         // ----------------------------------------------------------- Nica-Code
         final Hashtable codes = new Hashtable();
+        codes.put("NAME_en", "Jin Kwon");
+        codes.put("NAME_ko", "권 진");
+        codes.put("NAME_zh", "權 辰");
+        codes.put("SOCIAL_SECURITY_NUMBER", "000-00-0000");
+        codes.put("CREDIT_CARD_NUMBER", "0000-0000-0000-0000");
+        codes.put("ADDRESS", "46 Linden Street, Riverdale, New York");
         final byte[] base;
         try {
             base = KVPME.encode(codes).getBytes("US-ASCII");
@@ -72,6 +78,9 @@ public class MyXlet implements Xlet {
             uee.printStackTrace(System.err);
             throw new XletStateChangeException(uee.getMessage());
         }
+        System.out.println("[NICA] Nica-Base: " + KVPME.encode(codes));
+        final byte[] key = new byte[AES.KEY_SIZE_IN_BYTES];
+        RANDOM.nextBytes(key);
         final byte[] code = new AESBC(key).encrypt(iv, base);
         final String nicaCodes = HEX.encodeToString(code);
         System.out.println("[NICA] Nica-Code: " + nicaCodes);
