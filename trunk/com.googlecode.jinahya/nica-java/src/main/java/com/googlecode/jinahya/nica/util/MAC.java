@@ -33,6 +33,7 @@ public abstract class MAC {
      * <code>message</code>.
      *
      * @param message the message to authenticate
+     *
      * @return authentication output
      */
     public abstract byte[] authenticate(final byte[] message);
@@ -42,7 +43,8 @@ public abstract class MAC {
      * Authenticates given
      * <code>message</code>.
      *
-     * @param message the message to authenticate; must be UTF-8 decodable
+     * @param message the message to authenticate
+     *
      * @return authentication output
      */
     public byte[] authenticate(final String message) {
@@ -64,6 +66,7 @@ public abstract class MAC {
      * <code>message</code> and returns output as a HEX string.
      *
      * @param message the message to authenticate
+     *
      * @return authentication output as a HEX string
      */
     public String authenticateToString(final byte[] message) {
@@ -76,6 +79,7 @@ public abstract class MAC {
      * <code>message</code> and returns output as a HEX string.
      *
      * @param message the message to authenticate
+     *
      * @return authentication output as a HEX string
      */
     public String authenticateToString(final String message) {

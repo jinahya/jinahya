@@ -30,6 +30,11 @@ import org.bouncycastle.crypto.params.KeyParameter;
 public class MACBC extends MAC {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param key encryption key
+     */
     public MACBC(final byte[] key) {
         super();
 
@@ -42,7 +47,6 @@ public class MACBC extends MAC {
                 "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
         }
 
-//        this.key = key.clone();
         keyParameter = new KeyParameter(key);
     }
 
@@ -55,7 +59,6 @@ public class MACBC extends MAC {
         }
 
         final HMac mac = new HMac(new SHA512Digest());
-//        mac.init(new KeyParameter(key));
         mac.init(keyParameter);
         mac.update(message, 0, message.length);
 
@@ -66,10 +69,6 @@ public class MACBC extends MAC {
     }
 
 
-    /**
-     * key.
-     */
-//    private final byte[] key;
     /**
      * keyParameter.
      */
