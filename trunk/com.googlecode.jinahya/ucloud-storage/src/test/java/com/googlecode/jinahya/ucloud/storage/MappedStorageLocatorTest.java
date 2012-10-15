@@ -67,6 +67,25 @@ public class MappedStorageLocatorTest {
 
 
     @Test
+    public static void testCONTAINER_NAME_PREFIX_SIZE_MAX() {
+
+        final int CONTAINER_NAME_PREFIX_SIZE_MAX =
+            getStaticFieldValueInt("CONTAINER_NAME_PREFIX_SIZE_MAX");
+
+        final int CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH =
+            getStaticFieldValueInt("CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH");
+        final String PREFIX_SEQUENCE_DELIMITER =
+            getStaticFieldValueString("PREFIX_SEQUENCE_DELIMITER");
+
+        Assert.assertEquals(
+            CONTAINER_NAME_PREFIX_SIZE_MAX,
+            MappedStorageLocator.CONTAINER_NAME_SIZE_MAX
+            - CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH
+            - PREFIX_SEQUENCE_DELIMITER.length());
+    }
+
+
+    @Test
     public static void testOBJECT_NAME_PREFIX_SIZE_MAX() {
 
         final int OBJECT_NAME_PREFIX_SIZE_MAX =
