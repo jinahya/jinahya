@@ -30,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.JAXBContext;
@@ -101,6 +102,36 @@ public class StorageLocator extends MappedStorageLocator {
     }
 
 
+    // ---------------------------------------------------------- LOCATED_MILLIS
+    public Long getLocatedMillis() {
+        return locatedMillis;
+    }
+
+
+    public void setLocatedMillis(final Long locatedMillis) {
+        if (locatedMillis != null && this.locatedMillis != null
+            && locatedMillis.longValue() < this.locatedMillis.longValue()) {
+            return;
+        }
+        this.locatedMillis = locatedMillis;
+    }
+
+
+    // ---------------------------------------------------------- UPDATED_MILLIS
+    public Long getUpdatedMillis() {
+        return this.updatedMillis;
+    }
+
+
+    public void setUpdatedMillis(final Long updatedMillis) {
+        if (updatedMillis != null && this.updatedMillis != null
+            && updatedMillis.longValue() < this.updatedMillis.longValue()) {
+            return;
+        }
+        this.updatedMillis = updatedMillis;
+    }
+
+
     // ---------------------------------------------------------- DELETED_MILLIS
     /**
      * Returns deletedMillis.
@@ -144,6 +175,13 @@ public class StorageLocator extends MappedStorageLocator {
     @PrePersist
     protected void _PrePersist() {
         createdMillis = System.currentTimeMillis();
+    }
+
+
+    // -------------------------------------------------------------- @PreUpdate
+    @PreUpdate
+    protected void _PreUpdate() {
+        updatedMillis = System.currentTimeMillis();
     }
 
 
@@ -193,6 +231,22 @@ public class StorageLocator extends MappedStorageLocator {
     @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
     @XmlAttribute
     private long createdMillis;
+
+
+    /**
+     * locatedMillis.
+     */
+    @Basic
+    @Column(name = "LOCATED_MILLIS")
+    private Long locatedMillis;
+
+
+    /**
+     * updatedMillis.
+     */
+    @Basic
+    @Column(name = "UPDATED_MILLIS")
+    private Long updatedMillis;
 
 
     /**
