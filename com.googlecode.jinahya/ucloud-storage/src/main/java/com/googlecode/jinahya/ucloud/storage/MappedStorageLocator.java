@@ -107,8 +107,6 @@ public class MappedStorageLocator {
      * <code>containerNamePrefix</code>.
      */
     public static final int CONTAINER_NAME_PREFIX_SIZE_MAX = 48;
-//        CONTAINER_NAME_SIZE_MAX - (CONTAINER_NAME_SEQUENCE_FORMAT_WIDTH
-//                                   + PREFIX_SEQUENCE_DELIMITER.length());
 
 
     /**
@@ -137,8 +135,6 @@ public class MappedStorageLocator {
      * <code>objectNamePrefix</code>.
      */
     public static final int OBJECT_NAME_PREFIX_SIZE_MAX = 247;
-//        OBJECT_NAME_SIZE_MAX - (OBJECT_NAME_SEQUENCE_FORMAT_WIDTH
-//                                + PREFIX_SEQUENCE_DELIMITER.length());
 
 
     /**
@@ -224,8 +220,6 @@ public class MappedStorageLocator {
 //        setContainerName(
 //            formatContainerName(containerNamePrefix, sequenceNumber));
 //    }
-
-
     // ------------------------------------------------------------- OBJECT_NAME
     /**
      * Returns object name.
@@ -266,8 +260,6 @@ public class MappedStorageLocator {
 //
 //        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
 //    }
-
-
     @Override
     public String toString() {
         return super.toString() + "?containerName=" + containerName
