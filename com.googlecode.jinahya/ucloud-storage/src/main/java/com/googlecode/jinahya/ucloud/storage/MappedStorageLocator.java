@@ -205,21 +205,23 @@ public class MappedStorageLocator {
     }
 
 
-//    /**
-//     * Sets
-//     * <code>containerName</code> with given
-//     * <code>containerNamePrefix</code> and
-//     * <code>sequenceNumber</code>.
-//     *
-//     * @param containerNamePrefix container name prefix
-//     * @param sequenceNumber sequence number
-//     */
-//    public void setContainerName(final String containerNamePrefix,
-//                                 final long sequenceNumber) {
-//
-//        setContainerName(
-//            formatContainerName(containerNamePrefix, sequenceNumber));
-//    }
+    /**
+     * Sets
+     * <code>containerName</code> with given
+     * <code>containerNamePrefix</code> and
+     * <code>sequenceNumber</code>.
+     *
+     * @param containerNamePrefix container name prefix
+     * @param sequenceNumber sequence number
+     */
+    public void setContainerName(final String containerNamePrefix,
+                                 final long sequenceNumber) {
+
+        setContainerName(
+            formatContainerName(containerNamePrefix, sequenceNumber));
+    }
+
+
     // ------------------------------------------------------------- OBJECT_NAME
     /**
      * Returns object name.
@@ -246,20 +248,22 @@ public class MappedStorageLocator {
     }
 
 
-//    /**
-//     * Sets
-//     * <code>objectName</code> with given
-//     * <code>objectNamePrefix</code> and
-//     * <code>sequenceNumber</code>.
-//     *
-//     * @param objectNamePrefix object name prefix
-//     * @param sequenceNumber sequence number
-//     */
-//    public void setObjectName(final String objectNamePrefix,
-//                              final long sequenceNumber) {
-//
-//        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
-//    }
+    /**
+     * Sets
+     * <code>objectName</code> with given
+     * <code>objectNamePrefix</code> and
+     * <code>sequenceNumber</code>.
+     *
+     * @param objectNamePrefix object name prefix
+     * @param sequenceNumber sequence number
+     */
+    public void setObjectName(final String objectNamePrefix,
+                              final long sequenceNumber) {
+
+        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
+    }
+
+
     @Override
     public String toString() {
         return super.toString() + "?containerName=" + containerName
