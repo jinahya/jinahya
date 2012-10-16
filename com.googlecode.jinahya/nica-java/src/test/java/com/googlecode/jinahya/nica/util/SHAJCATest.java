@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import org.testng.annotations.Test;
+
+
 
 /**
  *
@@ -29,6 +32,13 @@ public class SHAJCATest extends SHATest<SHAJCA> {
     @Override
     protected SHAJCA newInstance() {
         return new SHAJCA();
+    }
+
+
+    @Test
+    public void testGetSynchronizedInstance() {
+
+        final SHA sha = SHAJCA.getSynchronizedInstance();
     }
 
 

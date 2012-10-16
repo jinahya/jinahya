@@ -29,17 +29,22 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 public class SHABC extends SHA {
 
 
-    private static final Digest DIGEST = new SHA512Digest();
-
-
     /**
-     * Creates a new synchronized instance.
-     *
-     * @return a new synchronized instance.
+     * The instance for synchronized singleton.
      */
-    public static SHA newSynchronizedInstance() {
+    private static class SynchronizedInstanceHolder {
 
-        return new SHABC() {
+
+        /**
+         * digest.
+         */
+        private static final Digest DIGEST = new SHA512Digest();
+
+
+        /**
+         * instance.
+         */
+        private static final SHA INSTANCE = new SHABC() {
 
 
             //@Override
@@ -61,6 +66,19 @@ public class SHABC extends SHA {
 
 
         };
+
+
+    }
+
+
+    /**
+     * Returns the synchronized singleton instance.
+     *
+     * @return the synchronized singleton instance.
+     */
+    public static SHA getSynchronizedInstance() {
+
+        return SynchronizedInstanceHolder.INSTANCE;
     }
 
 
