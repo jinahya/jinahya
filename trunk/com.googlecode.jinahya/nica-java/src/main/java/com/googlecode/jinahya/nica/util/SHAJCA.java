@@ -36,28 +36,30 @@ public class SHAJCA extends SHA {
 
 
     /**
-     * shared MessageDigest instance for synchronized instances.
+     * instance holder.
      */
-    private static final MessageDigest DIGEST;
+    private static class SynchronizedInstanceHolder {
 
 
-    static {
-        try {
-            DIGEST = MessageDigest.getInstance(ALGORITHM);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new InstantiationError(nsae.getMessage());
+        /**
+         * digest.
+         */
+        private static final MessageDigest DIGEST;
+
+
+        static {
+            try {
+                DIGEST = MessageDigest.getInstance(ALGORITHM);
+            } catch (NoSuchAlgorithmException nsae) {
+                throw new InstantiationError(nsae.getMessage());
+            }
         }
-    }
 
 
-    /**
-     * Creates a new synchronized instance.
-     *
-     * @return a new synchronized instance
-     */
-    public static SHA newSynchronizedInstance() {
-
-        return new SHAJCA() {
+        /**
+         * instance.
+         */
+        private static final SHA INSTANCE = new SHAJCA() {
 
 
             @Override
@@ -75,9 +77,48 @@ public class SHAJCA extends SHA {
 
 
         };
+
+
     }
 
 
+    /**
+     * Return the synchronized instance.
+     *
+     * @return the synchronized instance; singleton.
+     */
+    public static SHA getSynchronizedInstance() {
+
+        return SynchronizedInstanceHolder.INSTANCE;
+    }
+
+
+//    /**
+//     * Creates a new synchronized instance.
+//     *
+//     * @return a new synchronized instance
+//     */
+//    public static SHA newSynchronizedInstance() {
+//
+//        return new SHAJCA() {
+//
+//
+//            @Override
+//            public byte[] hash(final byte[] data) {
+//
+//                if (data == null) {
+//                    throw new IllegalArgumentException("null data");
+//                }
+//
+//                synchronized (DIGEST) {
+//                    DIGEST.reset();
+//                    return DIGEST.digest(data);
+//                }
+//            }
+//
+//
+//        };
+//    }
     @Override
     public byte[] hash(final byte[] data) {
 

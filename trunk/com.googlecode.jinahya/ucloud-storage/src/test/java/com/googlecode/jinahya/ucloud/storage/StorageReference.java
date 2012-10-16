@@ -47,17 +47,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @NamedQueries({
     @NamedQuery(name = StorageReference.NQ_COUNT,
-                query = "SELECT COUNT(r)"
-                        + " FROM StorageReference AS r"),
+                query = "SELECT COUNT(r) FROM StorageReference AS r"),
     @NamedQuery(name = StorageReference.NQ_LIST,
-                query = "SELECT r"
-                        + " FROM StorageReference AS r"
+                query = "SELECT r FROM StorageReference AS r"
                         + " ORDER BY r.createdMillis ASC, r.id ASC")
 })
 @Table(name = "STORAGE_REFERENCE",
        uniqueConstraints = {
     @UniqueConstraint(columnNames = {"STORAGE_LOCATOR_ID"},
-                      name = "UNIQUE_STORAGE_LOCATORE")})
+                      name = "UNIQUE_STORAGE_LOCATOR")})
 @XmlRootElement
 public class StorageReference extends MappedStorageReference<StorageLocator> {
 
@@ -140,8 +138,6 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     // -------------------------------------------------------------- @PreRemove
     @PreRemove
     protected void _PreRemove() {
-
-        LOGGER.info("_PreRemove()");
 
         getStorageLocator().setDeletedMillis(System.currentTimeMillis());
     }
