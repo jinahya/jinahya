@@ -60,7 +60,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * Creates a new instance.
      *
      * @param context context
-     * @param key key
+     * @param key encryption key
      * @param names names
      */
     public NicaRequestInterceptor(final Context context, final byte[] key,
@@ -96,16 +96,16 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         } catch (MissingResourceException mre) {
         }
         constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
-        constantCodes.put(Code.USER_LANGUAGE.name(),
-                          locale.getDisplayLanguage(Locale.ENGLISH));
+//        constantCodes.put(Code.USER_LANGUAGE.name(),
+//                          locale.getDisplayLanguage(Locale.ENGLISH));
         try {
             constantCodes.put(Code.USER_COUNTRY3.name(),
                               locale.getISO3Country());
         } catch (MissingResourceException mre) {
         }
         constantCodes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
-        constantCodes.put(Code.USER_COUNTRY.name(),
-                          locale.getDisplayCountry(Locale.ENGLISH));
+//        constantCodes.put(Code.USER_COUNTRY.name(),
+//                          locale.getDisplayCountry(Locale.ENGLISH));
 
         constantCodes.put(Code.DEVICE_ID.name(),
                           Secure.getString(this.context.getContentResolver(),
@@ -156,7 +156,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * @param key key
      * @param value value
      */
-    public final void putConstantCode(final String key, final String value) {
+    public void putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -168,7 +168,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
         if (constantCodes.containsKey(key)) {
             throw new IllegalArgumentException(
-                "key(" + key + ") is already oocupied");
+                "key(" + key + ") is already occupied");
         }
 
         constantCodes.put(key, value);
@@ -184,7 +184,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      *
      * @return previous value
      */
-    public final String putVariableCode(final String key, final String value) {
+    public String putVariableCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
