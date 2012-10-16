@@ -114,7 +114,8 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
     /**
      * storageLocator.
      */
-    @JoinColumn(name = "STORAGE_LOCATOR_ID", nullable = false)
+    @JoinColumn(name = "STORAGE_LOCATOR_ID", nullable = false,
+                updatable = false)
     @OneToOne(optional = false)
     @NotNull
     @XmlTransient
