@@ -49,16 +49,6 @@ public enum Header {
      * @param fieldName HTTP header field-name.
      */
     private Header(final String fieldName) {
-//        super();
-
-//        if (fieldName == null) {
-//            throw new IllegalArgumentException("null fieldName");
-//        }
-//
-//        if (fieldName.isEmpty()) {
-//            throw new IllegalArgumentException("empty fieldName");
-//        }
-
         this.fieldName = fieldName;
     }
 

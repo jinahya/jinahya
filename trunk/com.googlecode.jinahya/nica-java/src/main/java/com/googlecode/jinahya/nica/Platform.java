@@ -78,15 +78,6 @@ public enum Platform {
      * @param id id
      */
     private Platform(final String id) {
-
-//        if (id == null) {
-//            throw new IllegalArgumentException("null id");
-//        }
-//
-//        if (id.isEmpty()) {
-//            throw new IllegalArgumentException("empty id");
-//        }
-
         this.id = id;
     }
 
