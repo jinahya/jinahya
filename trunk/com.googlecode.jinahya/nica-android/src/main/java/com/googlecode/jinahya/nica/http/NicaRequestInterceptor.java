@@ -23,11 +23,11 @@ import android.provider.Settings.Secure;
 import com.googlecode.jinahya.nica.Code;
 import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.Platform;
-import com.googlecode.jinahya.nica.util.AES;
-import com.googlecode.jinahya.nica.util.AESJCE;
-import com.googlecode.jinahya.nica.util.HEX;
-import com.googlecode.jinahya.nica.util.KVP;
-import com.googlecode.jinahya.nica.util.MACJCE;
+import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.AesJCE;
+import com.googlecode.jinahya.nica.util.HacJCE;
+import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.Par;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
@@ -76,9 +76,9 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
             throw new IllegalArgumentException("null key");
         }
 
-        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
+                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
         if (names == null) {
@@ -87,7 +87,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
         this.context = context;
         this.key = key.clone();
-        this.name = KVP.encode(names);
+        this.name = Par.encode(names);
 
         final Locale locale = Locale.getDefault();
         try {
@@ -123,9 +123,9 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         request.setHeader(Header.NAME.fieldName(), name);
 
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = new byte[AES.KEY_SIZE_IN_BYTES];
+        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
         RANDOM.nextBytes(iv);
-        request.setHeader(Header.INIT.fieldName(), HEX.encodeToString(iv));
+        request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
         variableCodes.put(Code.SYSTEM_MILLIS.name(),
@@ -136,17 +136,17 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         codes.putAll(constantCodes);
         final byte[] base;
         try {
-            base = KVP.encode(codes).getBytes("US-ASCII");
+            base = Par.encode(codes).getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
-        final byte[] code = new AESJCE(key).encrypt(iv, base);
-        request.setHeader(Header.CODE.fieldName(), HEX.encodeToString(code));
+        final byte[] code = new AesJCE(key).encrypt(iv, base);
+        request.setHeader(Header.CODE.fieldName(), Hex.encodeToString(code));
         variableCodes.clear();
 
         // ----------------------------------------------------------- Nica-Auth
-        final byte[] auth = new MACJCE(key).authenticate(base);
-        request.setHeader(Header.AUTH.fieldName(), HEX.encodeToString(auth));
+        final byte[] auth = new HacJCE(key).authenticate(base);
+        request.setHeader(Header.AUTH.fieldName(), Hex.encodeToString(auth));
     }
 
 
