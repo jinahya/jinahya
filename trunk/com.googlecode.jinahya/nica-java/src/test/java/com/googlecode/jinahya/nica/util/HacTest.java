@@ -27,8 +27,9 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <H> Hac type parameter
  */
-public abstract class HacTest<M extends Hac> {
+public abstract class HacTest<H extends Hac> {
 
 
     protected static final Random RANDOM = new Random();
@@ -46,13 +47,13 @@ public abstract class HacTest<M extends Hac> {
     }
 
 
-    protected abstract M newInstance(byte[] key);
+    protected abstract H newInstance(byte[] key);
 
 
     @Test//(invocationCount = 128)
     public void testAuthenticate() {
 
-        final M mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticate((byte[]) null);
@@ -69,7 +70,7 @@ public abstract class HacTest<M extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateWithString() {
 
-        final M mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticate((String) null);
@@ -86,7 +87,7 @@ public abstract class HacTest<M extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateToString() {
 
-        final M mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticateToString((byte[]) null);
@@ -103,7 +104,7 @@ public abstract class HacTest<M extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateToStringWithString() {
 
-        final M mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticateToString((String) null);
