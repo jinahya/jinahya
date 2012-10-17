@@ -27,7 +27,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MACBC extends MAC {
+public class HacBC extends Hac {
 
 
     /**
@@ -35,16 +35,16 @@ public class MACBC extends MAC {
      *
      * @param key encryption key
      */
-    public MACBC(final byte[] key) {
+    public HacBC(final byte[] key) {
         super();
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
         }
 
-        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + AES.KEY_SIZE_IN_BYTES);
+                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
         keyParameter = new KeyParameter(key);

@@ -29,7 +29,7 @@ import java.util.TreeMap;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVP {
+public class Par {
 
 
     /**
@@ -55,8 +55,8 @@ public class KVP {
             if (entry.getValue() == null) {
                 throw new IllegalArgumentException("null value");
             }
-            encoded.put(PER.encodeToString(entry.getKey()),
-                        PER.encodeToString(entry.getValue()));
+            encoded.put(Per.encodeToString(entry.getKey()),
+                        Per.encodeToString(entry.getValue()));
         }
 
         final StringBuilder builder = new StringBuilder();
@@ -121,8 +121,8 @@ public class KVP {
             if (e > a) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = PER.decodeToString(encoded.substring(f, e));
-            final String value = PER.decodeToString(
+            final String key = Per.decodeToString(encoded.substring(f, e));
+            final String value = Per.decodeToString(
                 encoded.substring(e + 1, a));
             if (decoded.put(key, value) != null) {
                 throw new IllegalArgumentException(
@@ -136,8 +136,8 @@ public class KVP {
             if (e == -1) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = PER.decodeToString(encoded.substring(f, e));
-            final String value = PER.decodeToString(encoded.substring(e + 1));
+            final String key = Per.decodeToString(encoded.substring(f, e));
+            final String value = Per.decodeToString(encoded.substring(e + 1));
             if (decoded.put(key, value) != null) {
                 throw new IllegalArgumentException(
                     "illegal encoded: duplicated key: " + key);
@@ -151,7 +151,7 @@ public class KVP {
     /**
      * Creates a new instance.
      */
-    protected KVP() {
+    protected Par() {
         super();
     }
 

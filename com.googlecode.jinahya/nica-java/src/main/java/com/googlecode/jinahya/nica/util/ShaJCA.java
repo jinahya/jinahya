@@ -26,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHAJCA extends SHA {
+public class ShaJCA extends Sha {
 
 
     /**
@@ -96,7 +96,7 @@ public class SHAJCA extends SHA {
      *
      * @return a new synchronized instance
      */
-    public static SHA newSynchronizedInstance() {
+    public static Sha newSynchronizedInstance() {
         /**
          * digest.
          */
@@ -108,7 +108,7 @@ public class SHAJCA extends SHA {
             throw new InstantiationError(nsae.getMessage());
         }
 
-        return new SHAJCA() {
+        return new ShaJCA() {
 
 
             @Override

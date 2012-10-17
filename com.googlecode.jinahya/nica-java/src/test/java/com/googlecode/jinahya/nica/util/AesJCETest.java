@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -27,37 +26,33 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PERTest {
-
-
-    private static final Random RANDOM = new Random();
+public class AesJCETest extends AesTest<AesJCE> {
 
 
     @Test
-    public static void testEncodeDecode() {
+    public void testConstructors() {
 
-        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
-        RANDOM.nextBytes(expected);
+        try {
+            final Aes aes = new AesJCE(null);
+            Assert.fail("passed: new AESJCE(null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
 
-        final byte[] encoded = PER.encode(expected);
+        try {
+            final Aes aes = new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES + 1]);
+            Assert.fail("passed: new AESJCE(byte[AES.KEY_SIZE_IN_BYTES + 1])");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
 
-        final byte[] actual = PER.decode(encoded);
-
-        Assert.assertEquals(actual, expected);
+        final Aes aes = new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES]);
     }
 
 
-    @Test
-    public static void testEncodeDecodeString() {
-
-        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
-        RANDOM.nextBytes(expected);
-
-        final String encoded = PER.encodeToString(expected);
-
-        final byte[] actual = PER.decode(encoded);
-
-        Assert.assertEquals(actual, expected);
+    @Override
+    protected AesJCE newInstance(final byte[] key) {
+        return new AesJCE(key);
     }
 
 

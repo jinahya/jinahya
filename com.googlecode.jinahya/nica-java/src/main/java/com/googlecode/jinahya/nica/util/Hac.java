@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class MAC {
+public abstract class Hac {
 
 
     /**
@@ -70,7 +70,7 @@ public abstract class MAC {
      * @return authentication output as a HEX string
      */
     public String authenticateToString(final byte[] message) {
-        return HEX.encodeToString(authenticate(message));
+        return Hex.encodeToString(authenticate(message));
     }
 
 
@@ -83,7 +83,7 @@ public abstract class MAC {
      * @return authentication output as a HEX string
      */
     public String authenticateToString(final String message) {
-        return HEX.encodeToString(authenticate(message));
+        return Hex.encodeToString(authenticate(message));
     }
 
 

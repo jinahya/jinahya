@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class MACTest<M extends MAC> {
+public abstract class HacTest<M extends Hac> {
 
 
     protected static final Random RANDOM = new Random();
@@ -52,7 +52,7 @@ public abstract class MACTest<M extends MAC> {
     @Test//(invocationCount = 128)
     public void testAuthenticate() {
 
-        final M mac = newInstance(AESTest.generateKey());
+        final M mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticate((byte[]) null);
@@ -62,14 +62,14 @@ public abstract class MACTest<M extends MAC> {
         }
 
         final byte[] output = mac.authenticate(newMessage());
-        Assert.assertTrue(output.length == SHA.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(output.length == Sha.OUTPUT_SIZE_IN_BYTES);
     }
 
 
     @Test//(invocationCount = 128)
     public void testAuthenticateWithString() {
 
-        final M mac = newInstance(AESTest.generateKey());
+        final M mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticate((String) null);
@@ -79,14 +79,14 @@ public abstract class MACTest<M extends MAC> {
         }
 
         final byte[] output = mac.authenticate(newMessageAsString());
-        Assert.assertTrue(output.length == SHA.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(output.length == Sha.OUTPUT_SIZE_IN_BYTES);
     }
 
 
     @Test//(invocationCount = 128)
     public void testAuthenticateToString() {
 
-        final M mac = newInstance(AESTest.generateKey());
+        final M mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticateToString((byte[]) null);
@@ -96,14 +96,14 @@ public abstract class MACTest<M extends MAC> {
         }
 
         final String output = mac.authenticateToString(newMessage());
-        Assert.assertTrue(output.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(output.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
     @Test//(invocationCount = 128)
     public void testAuthenticateToStringWithString() {
 
-        final M mac = newInstance(AESTest.generateKey());
+        final M mac = newInstance(AesTest.generateKey());
 
         try {
             mac.authenticateToString((String) null);
@@ -113,7 +113,7 @@ public abstract class MACTest<M extends MAC> {
         }
 
         final String output = mac.authenticateToString(newMessageAsString());
-        Assert.assertTrue(output.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(output.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 

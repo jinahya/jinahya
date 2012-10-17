@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVPMETest {
+public class ParMETest {
 
 
     private static final Random RANDOM = new Random();
@@ -41,7 +41,7 @@ public class KVPMETest {
     public static void testEncode() {
 
         try {
-            KVPME.encode(null);
+            ParME.encode(null);
             Assert.fail("passed: encode(null)");
         } catch (IllegalArgumentException iae) {
             // expected
@@ -60,7 +60,7 @@ public class KVPMETest {
         decoded.put(RandomStringUtils.random(RANDOM.nextInt(16)),
                     RandomStringUtils.random(RANDOM.nextInt(16)));
 
-        final String encoded = KVPME.encode(decoded);
+        final String encoded = ParME.encode(decoded);
     }
 
 
@@ -68,7 +68,7 @@ public class KVPMETest {
     public static void testDecode() {
 
         try {
-            KVPME.decode(null);
+            ParME.decode(null);
             Assert.fail("passed: decode(null)");
         } catch (IllegalArgumentException iae) {
             // expected
@@ -82,13 +82,13 @@ public class KVPMETest {
 //        }
 
         {
-            final Hashtable decoded = KVPME.decode("");
+            final Hashtable decoded = ParME.decode("");
             Assert.assertTrue(decoded.isEmpty());
         }
 
         {
             try {
-                final Hashtable decoded = KVPME.decode("&");
+                final Hashtable decoded = ParME.decode("&");
                 Assert.fail("passed: decode(\"&\")");
             } catch (IllegalArgumentException iae) {
                 // expected;
@@ -96,13 +96,13 @@ public class KVPMETest {
         }
 
         {
-            final Hashtable decoded = KVPME.decode("=");
+            final Hashtable decoded = ParME.decode("=");
             Assert.assertTrue(decoded.size() == 1);
         }
 
         {
             try {
-                final Hashtable decoded = KVPME.decode("=&=");
+                final Hashtable decoded = ParME.decode("=&=");
                 Assert.fail("passed: decode(\"=&=\")");
             } catch (IllegalArgumentException iae) {
                 // expected
@@ -112,8 +112,8 @@ public class KVPMETest {
 
 
     private static void testEncodeDecode(final Hashtable expected) {
-        final String encoded = KVPME.encode(expected);
-        final Hashtable actual = KVPME.decode(encoded);
+        final String encoded = ParME.encode(expected);
+        final Hashtable actual = ParME.decode(encoded);
         Assert.assertEquals(actual, expected);
     }
 
@@ -149,9 +149,9 @@ public class KVPMETest {
             expected.put(key, val);
         }
 
-        final String encoded = KVPME.encode(expected);
+        final String encoded = ParME.encode(expected);
 
-        final Map<String, String> actual = KVP.decode(encoded);
+        final Map<String, String> actual = Par.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
@@ -170,9 +170,9 @@ public class KVPMETest {
             expected.put(key, val);
         }
 
-        final String encoded = KVP.encode(expected);
+        final String encoded = Par.encode(expected);
 
-        final Hashtable actual = KVPME.decode(encoded);
+        final Hashtable actual = ParME.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }

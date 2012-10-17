@@ -28,7 +28,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AESJCE extends AES {
+public class AesJCE extends Aes {
 
 
     /**
@@ -36,14 +36,14 @@ public class AESJCE extends AES {
      *
      * @param key encryption key
      */
-    public AESJCE(final byte[] key) {
+    public AesJCE(final byte[] key) {
         super();
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
         }
 
-        if (key.length != AES.KEY_SIZE_IN_BYTES) {
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
                 "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
         }

@@ -23,7 +23,7 @@ package com.googlecode.jinahya.nica.util;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AES {
+public abstract class Aes {
 
 
     /**

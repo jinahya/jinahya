@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class SHA {
+public abstract class Sha {
 
 
     /**
@@ -87,7 +87,7 @@ public abstract class SHA {
             throw new IllegalArgumentException("null data");
         }
 
-        return HEX.encodeToString(hash(data));
+        return Hex.encodeToString(hash(data));
     }
 
 
@@ -105,7 +105,7 @@ public abstract class SHA {
             throw new IllegalArgumentException("null data");
         }
 
-        return HEX.encodeToString(hash(data));
+        return Hex.encodeToString(hash(data));
     }
 
 

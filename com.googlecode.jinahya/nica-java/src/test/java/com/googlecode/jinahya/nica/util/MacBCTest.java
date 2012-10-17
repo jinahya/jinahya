@@ -27,19 +27,19 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MACBCTest extends MACTest<MACBC> {
+public class MacBCTest extends HacTest<HacBC> {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(MACBCTest.class.getName());
+        Logger.getLogger(MacBCTest.class.getName());
 
 
     @Override
-    protected MACBC newInstance(final byte[] key) {
-        return new MACBC(key);
+    protected HacBC newInstance(final byte[] key) {
+        return new HacBC(key);
     }
 
 
@@ -48,11 +48,11 @@ public class MACBCTest extends MACTest<MACBC> {
 
         LOGGER.info("testAuthenticateAgainstJCE");
 
-        final byte[] key = AESJCETest.generateKey();
+        final byte[] key = AesJCETest.generateKey();
 
         final byte[] message = newMessage();
 
-        final byte[] expected = new MACJCE(key).authenticate(message);
+        final byte[] expected = new HacJCE(key).authenticate(message);
 
         final byte[] actual = newInstance(key).authenticate(message);
 
@@ -65,11 +65,11 @@ public class MACBCTest extends MACTest<MACBC> {
 
         LOGGER.info("testAuthenticateWithStringAgainstJCE");
 
-        final byte[] key = AESJCETest.generateKey();
+        final byte[] key = AesJCETest.generateKey();
 
         final String message = newMessageAsString();
 
-        final byte[] expected = new MACJCE(key).authenticate(message);
+        final byte[] expected = new HacJCE(key).authenticate(message);
 
         final byte[] actual = newInstance(key).authenticate(message);
 

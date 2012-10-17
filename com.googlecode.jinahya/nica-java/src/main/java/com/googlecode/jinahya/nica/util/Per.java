@@ -26,15 +26,15 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PER {
+public class Per {
 
 
     /**
      * Decodes given
      * <code>encoded</code>.
      *
-     * @param encoded the octets to encode
-     * @return decoded output as octets
+     * @param encoded the bytes to encode
+     * @return decoded output as bytes
      */
     public static byte[] decode(final byte[] encoded) {
 
@@ -59,7 +59,7 @@ public class PER {
                     throw new IllegalArgumentException(
                         "illegal encoded: " + encoded[i]);
                 }
-                decoded.write(HEX.decodeSingle(encoded, ++i));
+                decoded.write(Hex.decodeSingle(encoded, ++i));
                 ++i;
             } else {
                 throw new IllegalArgumentException(
@@ -162,7 +162,7 @@ public class PER {
                 encoded.write(decoded[i]);
             } else {
                 encoded.write(0x25); // '%'
-                HEX.encodeSingle(decoded[i] & 0xFF, hex, 0);
+                Hex.encodeSingle(decoded[i] & 0xFF, hex, 0);
                 encoded.write(hex[0]);
                 encoded.write(hex[1]);
             }
@@ -238,7 +238,7 @@ public class PER {
     /**
      * Creates a new instance.
      */
-    protected PER() {
+    protected Per() {
         super();
     }
 

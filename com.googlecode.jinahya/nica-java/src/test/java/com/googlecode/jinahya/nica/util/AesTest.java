@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AESTest<A extends AES> {
+public abstract class AesTest<A extends Aes> {
 
 
     protected static final Random RANDOM = new Random();
@@ -40,8 +40,8 @@ public abstract class AESTest<A extends AES> {
 
     static {
         try {
-            GENERATOR = KeyGenerator.getInstance(AES.ALGORITHM);
-            GENERATOR.init(AES.KEY_SIZE);
+            GENERATOR = KeyGenerator.getInstance(Aes.ALGORITHM);
+            GENERATOR.init(Aes.KEY_SIZE);
         } catch (NoSuchAlgorithmException nsae) {
             throw new InstantiationError(nsae.getMessage());
         }
@@ -54,7 +54,7 @@ public abstract class AESTest<A extends AES> {
 
 
     protected static byte[] generateIv() {
-        final byte[] iv = new byte[AES.KEY_SIZE_IN_BYTES];
+        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
         RANDOM.nextBytes(iv);
         return iv;
     }

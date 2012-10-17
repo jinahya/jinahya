@@ -22,12 +22,12 @@ package com.googlecode.jinahya.nica.util;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MACJCETest extends MACTest<MACJCE> {
+public class HacJCETest extends HacTest<HacJCE> {
 
 
     @Override
-    protected MACJCE newInstance(final byte[] key) {
-        return new MACJCE(key);
+    protected HacJCE newInstance(final byte[] key) {
+        return new HacJCE(key);
     }
 
 

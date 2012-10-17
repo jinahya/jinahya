@@ -26,19 +26,19 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHABCTest extends SHATest<SHABC> {
+public class ShaBCTest extends ShaTest<ShaBC> {
 
 
     @Test
     public static void testNewSynchronizedInstance() {
 
-        final SHA sha = SHABC.newSynchronizedInstance();
+        final Sha sha = ShaBC.newSynchronizedInstance();
     }
 
 
     @Override
-    protected SHABC newInstance() {
-        return new SHABC();
+    protected ShaBC newInstance() {
+        return new ShaBC();
     }
 
 
@@ -49,7 +49,7 @@ public class SHABCTest extends SHATest<SHABC> {
 
         final byte[] actual = newInstance().hash(unhashed);
 
-        final byte[] expected = new SHAJCA().hash(unhashed);
+        final byte[] expected = new ShaJCA().hash(unhashed);
 
         Assert.assertArrayEquals(actual, expected);
     }
@@ -62,7 +62,7 @@ public class SHABCTest extends SHATest<SHABC> {
 
         final String actual = newInstance().hashToString(unhashed);
 
-        final String expected = new SHAJCA().hashToString(unhashed);
+        final String expected = new ShaJCA().hashToString(unhashed);
 
         Assert.assertEquals(actual, expected);
     }
@@ -75,7 +75,7 @@ public class SHABCTest extends SHATest<SHABC> {
 
         final byte[] actual = newInstance().hash(unhashed);
 
-        final byte[] expected = new SHAJCA().hash(unhashed);
+        final byte[] expected = new ShaJCA().hash(unhashed);
 
         Assert.assertArrayEquals(actual, expected);
     }
@@ -88,7 +88,7 @@ public class SHABCTest extends SHATest<SHABC> {
 
         final String actual = newInstance().hashToString(unhashed);
 
-        final String expected = new SHAJCA().hashToString(unhashed);
+        final String expected = new ShaJCA().hashToString(unhashed);
 
         Assert.assertEquals(actual, expected);
     }
