@@ -30,6 +30,19 @@ public class HeaderTest {
 
 
     @Test
+    public void testIdsAreValid() {
+
+        for (Header value : Header.values()) {
+            final String fieldName = value.fieldName();
+            Assert.assertNotNull(fieldName);
+            Assert.assertEquals(fieldName, fieldName.trim());
+            Assert.assertFalse(fieldName.isEmpty());
+            Assert.assertFalse(fieldName.trim().isEmpty());
+        }
+    }
+
+
+    @Test
     public void testFieldNameUniqueness() {
         for (Header value : Header.values()) {
             for (Header other : Header.values()) {

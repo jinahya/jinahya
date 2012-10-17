@@ -34,7 +34,7 @@ public enum Code {
      */
     USER_COUNTRY2,
     /**
-     * User country/region name in en_US.
+     * User country/region name in en-US. Not strictly required.
      */
     USER_COUNTRY,
     /**
@@ -46,7 +46,7 @@ public enum Code {
      */
     USER_LANGUAGE2,
     /**
-     * User language name in en_US.
+     * User language name in en-US. Not strictly required.
      */
     USER_LANGUAGE,
     /**

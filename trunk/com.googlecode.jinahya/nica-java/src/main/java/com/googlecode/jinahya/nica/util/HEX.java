@@ -70,7 +70,7 @@ public class HEX {
      * @param offset offset in the array
      */
     protected static void encodeSingle(final int decoded, final byte[] encoded,
-                             final int offset) {
+                                       final int offset) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
@@ -315,11 +315,11 @@ public class HEX {
 
     /**
      * Decodes given
-     * <code>encoded</code> and returns as a string.
+     * <code>encoded</code> and returns as a 'UTF-8' encoded String.
      *
      * @param encoded encoded bytes
      *
-     * @return decoded output as a string
+     * @return decoded output as a UTF-8 String
      */
     public static String decodeToString(final byte[] encoded) {
 
@@ -333,11 +333,11 @@ public class HEX {
 
     /**
      * Decodes given
-     * <code>encoded</code> and returns output as a utf string.
+     * <code>encoded</code> and returns output as a 'UTF-8' encoded String.
      *
-     * @param encoded encoded ASCII string
+     * @param encoded encoded 'US-ASCII' String
      *
-     * @return decoded output as an UTF string
+     * @return decoded output as a 'UTF-8' encoded String
      */
     public static String decodeToString(final String encoded) {
 

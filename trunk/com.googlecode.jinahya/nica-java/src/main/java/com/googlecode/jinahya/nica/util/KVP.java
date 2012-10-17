@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -93,23 +92,55 @@ public class KVP {
             throw new IllegalArgumentException("null encoded");
         }
 
-        if (encoded.isEmpty()) {
-            return Collections.<String, String>emptyMap();
-        }
+//        if (encoded.isEmpty()) {
+//            return Collections.<String, String>emptyMap();
+//        }
 
         final Map<String, String> decoded = new HashMap<String, String>();
 
-        for (String pair : encoded.split("&")) {
-            final int index = pair.indexOf('=');
-            if (index == -1) {
+//        for (String pair : encoded.split("&")) {
+//            final int index = pair.indexOf('=');
+//            if (index == -1) {
+//                throw new IllegalArgumentException("illegal encoded");
+//            }
+//            final String key = pair.substring(0, index);
+//            final String val = pair.substring(index + 1);
+//            final String previous = decoded.put(
+//                PER.decodeToString(key), PER.decodeToString(val));
+//            if (previous != null) {
+//                throw new IllegalArgumentException("duplicated entry");
+//            }
+//        }
+
+        int f = 0;
+        for (int a = -1; (a = encoded.indexOf('&', f)) != -1;) {
+            if (a == f) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = pair.substring(0, index);
-            final String val = pair.substring(index + 1);
-            final String previous = decoded.put(
-                PER.decodeToString(key), PER.decodeToString(val));
-            if (previous != null) {
-                throw new IllegalArgumentException("duplicated entry");
+            final int e = encoded.indexOf('=', f);
+            if (e > a) {
+                throw new IllegalArgumentException("illegal encoded");
+            }
+            final String key = PER.decodeToString(encoded.substring(f, e));
+            final String value = PER.decodeToString(
+                encoded.substring(e + 1, a));
+            if (decoded.put(key, value) != null) {
+                throw new IllegalArgumentException(
+                    "illegal encoded: duplicated entry: " + key);
+            }
+            f = a + 1;
+        }
+
+        if (f < encoded.length()) {
+            final int e = encoded.indexOf('=', f);
+            if (e == -1) {
+                throw new IllegalArgumentException("illegal encoded");
+            }
+            final String key = PER.decodeToString(encoded.substring(f, e));
+            final String value = PER.decodeToString(encoded.substring(e + 1));
+            if (decoded.put(key, value) != null) {
+                throw new IllegalArgumentException(
+                    "illegal encoded: duplicated key: " + key);
             }
         }
 

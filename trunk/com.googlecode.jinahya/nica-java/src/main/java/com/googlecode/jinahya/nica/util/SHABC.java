@@ -29,22 +29,67 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 public class SHABC extends SHA {
 
 
+//    /**
+//     * The instance for synchronized singleton.
+//     */
+//    private static class SynchronizedInstanceHolder {
+//
+//
+//        /**
+//         * digest.
+//         */
+//        private static final Digest DIGEST = new SHA512Digest();
+//
+//
+//        /**
+//         * instance.
+//         */
+//        private static final SHA INSTANCE = new SHABC() {
+//
+//
+//            //@Override
+//            public byte[] hash(final byte[] data) {
+//
+//                if (data == null) {
+//                    throw new IllegalArgumentException("null data");
+//                }
+//
+//                synchronized (DIGEST) {
+//                    DIGEST.reset();
+//                    DIGEST.update(data, 0, data.length);
+//                    final byte[] hashed = new byte[DIGEST.getDigestSize()];
+//                    DIGEST.doFinal(hashed, 0);
+//                    return hashed;
+//                }
+//
+//            }
+//
+//
+//        };
+//
+//
+//    }
+//
+//
+//    /**
+//     * Returns the synchronized singleton instance.
+//     *
+//     * @return the synchronized singleton instance.
+//     */
+//    public static SHA getSynchronizedInstance() {
+//
+//        return SynchronizedInstanceHolder.INSTANCE;
+//    }
     /**
-     * The instance for synchronized singleton.
+     * Returns a new synchronized instance.
+     *
+     * @return a new synchronized instance
      */
-    private static class SynchronizedInstanceHolder {
+    public static SHA newSynchronizedInstance() {
 
+        final Digest DIGEST = new SHA512Digest();
 
-        /**
-         * digest.
-         */
-        private static final Digest DIGEST = new SHA512Digest();
-
-
-        /**
-         * instance.
-         */
-        private static final SHA INSTANCE = new SHABC() {
+        return new SHABC() {
 
 
             //@Override
@@ -55,30 +100,15 @@ public class SHABC extends SHA {
                 }
 
                 synchronized (DIGEST) {
-                    DIGEST.reset();
                     DIGEST.update(data, 0, data.length);
                     final byte[] hashed = new byte[DIGEST.getDigestSize()];
                     DIGEST.doFinal(hashed, 0);
                     return hashed;
                 }
-
             }
 
 
         };
-
-
-    }
-
-
-    /**
-     * Returns the synchronized singleton instance.
-     *
-     * @return the synchronized singleton instance.
-     */
-    public static SHA getSynchronizedInstance() {
-
-        return SynchronizedInstanceHolder.INSTANCE;
     }
 
 
