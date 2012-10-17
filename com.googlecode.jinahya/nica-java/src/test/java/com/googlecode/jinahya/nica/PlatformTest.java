@@ -30,6 +30,42 @@ public class PlatformTest {
 
 
     @Test
+    public void testIdsAreValid() {
+
+        for (Platform value : Platform.values()) {
+            final String id = value.id();
+            Assert.assertNotNull(id);
+            Assert.assertEquals(id, id.trim());
+            Assert.assertFalse(id.isEmpty());
+            Assert.assertFalse(id.trim().isEmpty());
+        }
+    }
+
+
+    @Test
+    public static void testFromId() {
+
+        try {
+            final Platform platform = Platform.fromId(null);
+            Assert.fail("passed: fromId(null)");
+        } catch (IllegalArgumentException iae) {
+            // expected;
+        }
+
+        try {
+            final Platform platform = Platform.fromId("/not/exist");
+            Assert.fail("passed: fromId(\"/not/exist\"");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        for (Platform value : Platform.values()) {
+            Assert.assertEquals(Platform.fromId(value.id()), value);
+        }
+    }
+
+
+    @Test
     public void testIdUniqueness() {
         for (Platform value : Platform.values()) {
             for (Platform other : Platform.values()) {

@@ -35,72 +35,31 @@ public class SHAJCA extends SHA {
     public static final String ALGORITHM = "SHA-512";
 
 
-    /**
-     * instance holder.
-     */
-    private static class SynchronizedInstanceHolder {
-
-
-        /**
-         * digest.
-         */
-        private static final MessageDigest DIGEST;
-
-
-        static {
-            try {
-                DIGEST = MessageDigest.getInstance(ALGORITHM);
-            } catch (NoSuchAlgorithmException nsae) {
-                throw new InstantiationError(nsae.getMessage());
-            }
-        }
-
-
-        /**
-         * instance.
-         */
-        private static final SHA INSTANCE = new SHAJCA() {
-
-
-            @Override
-            public byte[] hash(final byte[] data) {
-
-                if (data == null) {
-                    throw new IllegalArgumentException("null data");
-                }
-
-                synchronized (DIGEST) {
-                    DIGEST.reset();
-                    return DIGEST.digest(data);
-                }
-            }
-
-
-        };
-
-
-    }
-
-
-    /**
-     * Return the synchronized instance.
-     *
-     * @return the synchronized instance; singleton.
-     */
-    public static SHA getSynchronizedInstance() {
-
-        return SynchronizedInstanceHolder.INSTANCE;
-    }
-
-
 //    /**
-//     * Creates a new synchronized instance.
-//     *
-//     * @return a new synchronized instance
+//     * instance holder.
 //     */
-//    public static SHA newSynchronizedInstance() {
+//    private static class SynchronizedInstanceHolder {
 //
-//        return new SHAJCA() {
+//
+//        /**
+//         * digest.
+//         */
+//        private static final MessageDigest DIGEST;
+//
+//
+//        static {
+//            try {
+//                DIGEST = MessageDigest.getInstance(ALGORITHM);
+//            } catch (NoSuchAlgorithmException nsae) {
+//                throw new InstantiationError(nsae.getMessage());
+//            }
+//        }
+//
+//
+//        /**
+//         * instance.
+//         */
+//        private static final SHA INSTANCE = new SHAJCA() {
 //
 //
 //            @Override
@@ -118,7 +77,58 @@ public class SHAJCA extends SHA {
 //
 //
 //        };
+//
+//
 //    }
+//
+//
+//    /**
+//     * Return the synchronized instance.
+//     *
+//     * @return the synchronized instance; singleton.
+//     */
+//    public static SHA getSynchronizedInstance() {
+//
+//        return SynchronizedInstanceHolder.INSTANCE;
+//    }
+    /**
+     * Creates a new synchronized instance.
+     *
+     * @return a new synchronized instance
+     */
+    public static SHA newSynchronizedInstance() {
+        /**
+         * digest.
+         */
+        final MessageDigest DIGEST;
+
+        try {
+            DIGEST = MessageDigest.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new InstantiationError(nsae.getMessage());
+        }
+
+        return new SHAJCA() {
+
+
+            @Override
+            public byte[] hash(final byte[] data) {
+
+                if (data == null) {
+                    throw new IllegalArgumentException("null data");
+                }
+
+                synchronized (DIGEST) {
+                    DIGEST.reset();
+                    return DIGEST.digest(data);
+                }
+            }
+
+
+        };
+    }
+
+
     @Override
     public byte[] hash(final byte[] data) {
 

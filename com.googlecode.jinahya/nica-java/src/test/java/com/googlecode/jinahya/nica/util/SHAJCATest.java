@@ -36,9 +36,9 @@ public class SHAJCATest extends SHATest<SHAJCA> {
 
 
     @Test
-    public void testGetSynchronizedInstance() {
+    public void testNewSynchronizedInstance() {
 
-        final SHA sha = SHAJCA.getSynchronizedInstance();
+        final SHA sha = SHAJCA.newSynchronizedInstance();
     }
 
 

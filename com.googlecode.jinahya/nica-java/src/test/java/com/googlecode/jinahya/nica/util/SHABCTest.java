@@ -29,6 +29,13 @@ import org.testng.annotations.Test;
 public class SHABCTest extends SHATest<SHABC> {
 
 
+    @Test
+    public static void testNewSynchronizedInstance() {
+
+        final SHA sha = SHABC.newSynchronizedInstance();
+    }
+
+
     @Override
     protected SHABC newInstance() {
         return new SHABC();

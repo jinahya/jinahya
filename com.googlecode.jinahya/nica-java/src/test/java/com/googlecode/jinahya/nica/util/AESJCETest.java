@@ -18,12 +18,36 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class AESJCETest extends AESTest<AESJCE> {
+
+
+    @Test
+    public void testConstructors() {
+
+        try {
+            final AES aes = new AESJCE(null);
+            Assert.fail("passed: new AESJCE(null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            final AES aes = new AESJCE(new byte[AES.KEY_SIZE_IN_BYTES + 1]);
+            Assert.fail("passed: new AESJCE(byte[AES.KEY_SIZE_IN_BYTES + 1])");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        final AES aes = new AESJCE(new byte[AES.KEY_SIZE_IN_BYTES]);
+    }
 
 
     @Override
