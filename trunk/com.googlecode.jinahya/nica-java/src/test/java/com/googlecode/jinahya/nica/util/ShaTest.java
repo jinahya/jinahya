@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class SHATest<S extends SHA> {
+public abstract class ShaTest<S extends Sha> {
 
 
     protected static final Random RANDOM = new Random();
@@ -64,7 +64,7 @@ public abstract class SHATest<S extends SHA> {
         final byte[] unhashed = newData();
         final byte[] hashed = sha.hash(unhashed);
 
-        Assert.assertTrue(hashed.length == SHA.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(hashed.length == Sha.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -82,7 +82,7 @@ public abstract class SHATest<S extends SHA> {
 
         final String unhashed = newDataAsString();
         final byte[] hashed = sha.hash(unhashed);
-        Assert.assertTrue(hashed.length == SHA.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(hashed.length == Sha.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -100,7 +100,7 @@ public abstract class SHATest<S extends SHA> {
 
         final byte[] unhashed = newData();
         final String hashed = sha.hashToString(unhashed);
-        Assert.assertTrue(hashed.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(hashed.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
@@ -118,7 +118,7 @@ public abstract class SHATest<S extends SHA> {
 
         final String unhashed = newDataAsString();
         final String hashed = sha.hashToString(unhashed);
-        Assert.assertTrue(hashed.length() == SHA.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(hashed.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 

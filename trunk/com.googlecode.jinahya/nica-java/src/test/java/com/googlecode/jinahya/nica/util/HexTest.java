@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HEXTest {
+public class HexTest {
 
 
     private static final Random RANDOM = new Random();
@@ -42,9 +42,9 @@ public class HEXTest {
         final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
         RANDOM.nextBytes(expected);
 
-        final byte[] encoded = HEX.encode(expected);
+        final byte[] encoded = Hex.encode(expected);
 
-        final byte[] actual = HEX.decode(encoded);
+        final byte[] actual = Hex.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
@@ -56,9 +56,9 @@ public class HEXTest {
         final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
         RANDOM.nextBytes(expected);
 
-        final String encoded = HEX.encodeToString(expected);
+        final String encoded = Hex.encodeToString(expected);
 
-        final byte[] actual = HEX.decode(encoded);
+        final byte[] actual = Hex.decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
@@ -81,7 +81,7 @@ public class HEXTest {
         for (Iterator<String> i = Arrays.asList(v).iterator(); i.hasNext();) {
             final String decoded = i.next();
             final String expected = i.next();
-            final String actual = HEX.encodeToString(decoded.getBytes("UTF-8"));
+            final String actual = Hex.encodeToString(decoded.getBytes("UTF-8"));
             Assert.assertEquals(actual, expected);
         }
 
@@ -89,7 +89,7 @@ public class HEXTest {
         for (Iterator<String> i = Arrays.asList(v).iterator(); i.hasNext();) {
             final String expected = i.next();
             final String encoded = i.next();
-            final String actual = HEX.decodeToString(encoded);
+            final String actual = Hex.decodeToString(encoded);
             Assert.assertEquals(actual, expected);
         }
     }

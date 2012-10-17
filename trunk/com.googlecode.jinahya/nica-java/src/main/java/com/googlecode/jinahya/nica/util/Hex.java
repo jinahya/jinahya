@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HEX {
+public class Hex {
 
 
     /**
@@ -352,7 +352,7 @@ public class HEX {
     /**
      * Creates a new instance.
      */
-    protected HEX() {
+    protected Hex() {
         super();
     }
 

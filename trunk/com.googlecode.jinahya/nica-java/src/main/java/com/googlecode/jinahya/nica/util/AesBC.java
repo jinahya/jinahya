@@ -31,7 +31,7 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AESBC extends AES {
+public class AesBC extends Aes {
 
 
     /**
@@ -39,7 +39,7 @@ public class AESBC extends AES {
      *
      * @param key encryption key
      */
-    public AESBC(final byte[] key) {
+    public AesBC(final byte[] key) {
         super();
 
         if (key == null) {

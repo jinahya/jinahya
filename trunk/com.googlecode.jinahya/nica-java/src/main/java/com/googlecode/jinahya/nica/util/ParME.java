@@ -26,7 +26,7 @@ import java.util.Hashtable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVPME {
+public class ParME {
 
 
     /**
@@ -111,7 +111,7 @@ public class KVPME {
                 throw new IllegalArgumentException(
                     "key(" + key + ") is not an instance of " + String.class);
             }
-            normalizedKeys[i] = PER.encodeToString((String) key);
+            normalizedKeys[i] = Per.encodeToString((String) key);
 
             final Object value = decoded.get(key);
             if (!(value instanceof String)) {
@@ -119,7 +119,7 @@ public class KVPME {
                     "value(" + value + ") is not an instance of "
                     + String.class);
             }
-            normalizedValues[i] = PER.encodeToString((String) value);
+            normalizedValues[i] = Per.encodeToString((String) value);
         }
 
         quicksort(normalizedKeys, normalizedValues, 0,
@@ -167,8 +167,8 @@ public class KVPME {
             if (e > a) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = PER.decodeToString(encoded.substring(f, e));
-            final String val = PER.decodeToString(encoded.substring(e + 1, a));
+            final String key = Per.decodeToString(encoded.substring(f, e));
+            final String val = Per.decodeToString(encoded.substring(e + 1, a));
             if (decoded.put(key, val) != null) {
                 throw new IllegalArgumentException(
                     "illegal encoded: duplicated key: " + key);
@@ -181,8 +181,8 @@ public class KVPME {
             if (e == -1) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = PER.decodeToString(encoded.substring(f, e));
-            final String val = PER.decodeToString(encoded.substring(e + 1));
+            final String key = Per.decodeToString(encoded.substring(f, e));
+            final String val = Per.decodeToString(encoded.substring(e + 1));
             if (decoded.put(key, val) != null) {
                 throw new IllegalArgumentException(
                     "illegal encoded: duplicated key: " + key);
@@ -196,7 +196,7 @@ public class KVPME {
     /**
      * Creates a new instance.
      */
-    protected KVPME() {
+    protected ParME() {
         super();
     }
 

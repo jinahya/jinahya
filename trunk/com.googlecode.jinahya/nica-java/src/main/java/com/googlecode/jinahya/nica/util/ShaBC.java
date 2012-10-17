@@ -26,7 +26,7 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SHABC extends SHA {
+public class ShaBC extends Sha {
 
 
 //    /**
@@ -85,11 +85,11 @@ public class SHABC extends SHA {
      *
      * @return a new synchronized instance
      */
-    public static SHA newSynchronizedInstance() {
+    public static Sha newSynchronizedInstance() {
 
         final Digest DIGEST = new SHA512Digest();
 
-        return new SHABC() {
+        return new ShaBC() {
 
 
             //@Override

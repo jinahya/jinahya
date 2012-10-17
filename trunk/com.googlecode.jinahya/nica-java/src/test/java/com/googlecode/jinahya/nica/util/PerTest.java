@@ -18,10 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,37 +27,37 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class KVPTest {
+public class PerTest {
 
 
     private static final Random RANDOM = new Random();
 
 
-    private void testEncodeDecode(final Map<String, String> expected) {
-        final String encoded = KVP.encode(expected);
-        final Map<String, String> actual = KVP.decode(encoded);
+    @Test
+    public static void testEncodeDecode() {
+
+        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        RANDOM.nextBytes(expected);
+
+        final byte[] encoded = Per.encode(expected);
+
+        final byte[] actual = Per.decode(encoded);
+
         Assert.assertEquals(actual, expected);
     }
 
 
-    @Test//(invocationCount = 128)
-    public void testEncodeDecode() {
+    @Test
+    public static void testEncodeDecodeString() {
 
-        final Map<String, String> expected = new HashMap<String, String>();
+        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        RANDOM.nextBytes(expected);
 
-        testEncodeDecode(expected);
+        final String encoded = Per.encodeToString(expected);
 
-        expected.put("", "");
-        testEncodeDecode(expected);
+        final byte[] actual = Per.decode(encoded);
 
-        expected.clear();
-        final int count = RANDOM.nextInt(128) + 1;
-        for (int i = 0; i < count; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, val);
-        }
-        testEncodeDecode(expected);
+        Assert.assertEquals(actual, expected);
     }
 
 

@@ -23,12 +23,12 @@ package com.googlecode.jinahya.nica.util;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AESBCTest extends AESTest<AESBC> {
+public class AesBCTest extends AesTest<AesBC> {
 
 
     @Override
-    protected AESBC newInstance(final byte[] key) {
-        return new AESBC(key);
+    protected AesBC newInstance(final byte[] key) {
+        return new AesBC(key);
     }
 
 

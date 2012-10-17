@@ -18,10 +18,10 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.AES;
-import com.googlecode.jinahya.nica.util.HEX;
-import com.googlecode.jinahya.nica.util.KVP;
-import com.googlecode.jinahya.nica.util.MAC;
+import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.Par;
+import com.googlecode.jinahya.nica.util.Hac;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.security.SecureRandom;
@@ -57,7 +57,7 @@ public abstract class Headers {
      * @param aes an instance of AES
      * @param mac an instance of MAC
      */
-    protected Headers(final String name, final AES aes, final MAC mac) {
+    protected Headers(final String name, final Aes aes, final Hac mac) {
 
         super();
 
@@ -92,9 +92,9 @@ public abstract class Headers {
         headers.put("Nica-Name", name);
 
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = new byte[AES.KEY_SIZE_IN_BYTES];
+        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
         RANDOM.nextBytes(iv);
-        headers.put("Nica-Init", HEX.encodeToString(iv));
+        headers.put("Nica-Init", Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
         variableCodes.put(Code.SYSTEM_MILLIS.name(),
@@ -106,16 +106,16 @@ public abstract class Headers {
         variableCodes.clear();
         final byte[] base;
         try {
-            base = KVP.encode(codes).getBytes("US-ASCII");
+            base = Par.encode(codes).getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
         final byte[] code = aes.encrypt(iv, base);
-        headers.put("Nica-Code", HEX.encodeToString(code));
+        headers.put("Nica-Code", Hex.encodeToString(code));
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = mac.authenticate(base);
-        headers.put("Nica-Auth", HEX.encodeToString(auth));
+        headers.put("Nica-Auth", Hex.encodeToString(auth));
 
         return headers;
     }
@@ -197,10 +197,10 @@ public abstract class Headers {
     private final String name;
 
 
-    private final AES aes;
+    private final Aes aes;
 
 
-    private final MAC mac;
+    private final Hac mac;
 
 
     /**
