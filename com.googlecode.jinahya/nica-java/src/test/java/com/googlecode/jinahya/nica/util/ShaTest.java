@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <S> Sha type parameter
  */
 public abstract class ShaTest<S extends Sha> {
 
