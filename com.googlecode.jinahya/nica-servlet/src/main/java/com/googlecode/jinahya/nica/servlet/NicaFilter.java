@@ -19,11 +19,11 @@ package com.googlecode.jinahya.nica.servlet;
 
 
 import com.googlecode.jinahya.nica.Header;
-import com.googlecode.jinahya.nica.util.AES;
-import com.googlecode.jinahya.nica.util.AESJCE;
-import com.googlecode.jinahya.nica.util.HEX;
-import com.googlecode.jinahya.nica.util.KVP;
-import com.googlecode.jinahya.nica.util.MACJCE;
+import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.AesJCE;
+import com.googlecode.jinahya.nica.util.HacJCE;
+import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.Par;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -181,7 +181,7 @@ public abstract class NicaFilter implements Filter {
         }
         final Map<String, String> names;
         try {
-            names = KVP.decode(nicaName);
+            names = Par.decode(nicaName);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -207,7 +207,7 @@ public abstract class NicaFilter implements Filter {
                                "no key found");
             return;
         }
-        if (key_.length != AES.KEY_SIZE_IN_BYTES) {
+        if (key_.length != Aes.KEY_SIZE_IN_BYTES) {
             System.err.println("wrong key size: " + key_.length);
             hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -223,7 +223,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] init;
         try {
-            init = HEX.decode(nicaInit);
+            init = Hex.decode(nicaInit);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -232,7 +232,7 @@ public abstract class NicaFilter implements Filter {
                 + e.getMessage());
             return;
         }
-        if (init.length != AES.KEY_SIZE_IN_BYTES) {
+        if (init.length != Aes.KEY_SIZE_IN_BYTES) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.INIT.fieldName() + ": size");
@@ -249,7 +249,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] base;
         try {
-            base = new AESJCE(key_).decrypt(init, HEX.decode(nicaCode));
+            base = new AesJCE(key_).decrypt(init, Hex.decode(nicaCode));
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -260,7 +260,7 @@ public abstract class NicaFilter implements Filter {
         }
         final Map<String, String> codes;
         try {
-            codes = KVP.decode(new String(base, "US-ASCII"));
+            codes = Par.decode(new String(base, "US-ASCII"));
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -283,7 +283,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] auth;
         try {
-            auth = HEX.decode(nicaAuth);
+            auth = Hex.decode(nicaAuth);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -294,7 +294,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] aut_;
         try {
-            aut_ = new MACJCE(key_).authenticate(base);
+            aut_ = new HacJCE(key_).authenticate(base);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
