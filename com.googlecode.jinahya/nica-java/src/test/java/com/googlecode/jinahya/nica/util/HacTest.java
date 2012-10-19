@@ -63,7 +63,7 @@ public abstract class HacTest<H extends Hac> {
         }
 
         final byte[] output = mac.authenticate(newMessage());
-        Assert.assertTrue(output.length == Sha.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(output.length == ShaTest.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -80,7 +80,7 @@ public abstract class HacTest<H extends Hac> {
         }
 
         final byte[] output = mac.authenticate(newMessageAsString());
-        Assert.assertTrue(output.length == Sha.OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(output.length == ShaTest.OUTPUT_SIZE_IN_BYTES);
     }
 
 
@@ -97,7 +97,7 @@ public abstract class HacTest<H extends Hac> {
         }
 
         final String output = mac.authenticateToString(newMessage());
-        Assert.assertTrue(output.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(output.length() == ShaTest.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
@@ -114,7 +114,7 @@ public abstract class HacTest<H extends Hac> {
         }
 
         final String output = mac.authenticateToString(newMessageAsString());
-        Assert.assertTrue(output.length() == Sha.OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(output.length() == ShaTest.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 

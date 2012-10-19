@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <A> Aes type parameter
  */
 public abstract class AesTest<A extends Aes> {
 
