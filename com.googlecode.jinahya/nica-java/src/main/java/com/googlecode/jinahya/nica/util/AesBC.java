@@ -35,6 +35,17 @@ public class AesBC extends Aes {
 
 
     /**
+     *
+     * @param key
+     *
+     * @return
+     */
+    public static Aes newInstance(final byte[] key) {
+        return new AesBC(key);
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param key encryption key
