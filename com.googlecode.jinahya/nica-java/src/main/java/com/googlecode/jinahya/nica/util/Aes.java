@@ -27,15 +27,27 @@ public abstract class Aes {
 
 
     /**
+     * AES block size in bits.
+     */
+    public static final int BLOCK_SIZE = 0x80; // 128;
+
+
+    /**
+     * AES block size in bytes.
+     */
+    public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 0x08; // 16
+
+
+    /**
      * Key size in bits.
      */
-    public static final int KEY_SIZE = 0x80; // 128
+    public static final int KEY_SIZE = 0x100; // 256 0x80; // 128
 
 
     /**
      * Key size in bytes.
      */
-    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08; // 16
+    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08; // 32 16
 
 
     /**
