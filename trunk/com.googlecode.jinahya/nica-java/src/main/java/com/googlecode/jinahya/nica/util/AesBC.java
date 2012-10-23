@@ -73,9 +73,9 @@ public class AesBC extends Aes {
             throw new IllegalArgumentException("null iv");
         }
 
-        if (iv.length != KEY_SIZE_IN_BYTES) {
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
         }
 
         if (decrypted == null) {
@@ -116,9 +116,9 @@ public class AesBC extends Aes {
             throw new IllegalArgumentException("null iv");
         }
 
-        if (iv.length != KEY_SIZE_IN_BYTES) {
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "iv.length(" + iv.length + ") != " + KEY_SIZE_IN_BYTES);
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
         }
 
         if (encrypted == null) {

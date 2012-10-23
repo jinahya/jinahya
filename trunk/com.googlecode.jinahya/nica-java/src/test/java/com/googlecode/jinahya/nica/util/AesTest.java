@@ -55,7 +55,7 @@ public abstract class AesTest<A extends Aes> {
 
 
     protected static byte[] generateIv() {
-        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
         RANDOM.nextBytes(iv);
         return iv;
     }

@@ -26,6 +26,23 @@ public enum Code {
 
 
     /**
+     * Number used once per request.
+     */
+    REQUEST_NONCE,
+    /**
+     * Current time in milliseconds since
+     * <code>midnight Coordinated Universal Time (UTC), 1 January 1970</code>.
+     */
+    REQUEST_TIMESTAMP,
+    /**
+     * User's username if required per request.
+     */
+    USER_USERNAME,
+    /**
+     * User's password if required per request.
+     */
+    USER_PASSWORD,
+    /**
      * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
      */
     USER_COUNTRY3,
@@ -50,10 +67,6 @@ public enum Code {
      */
     USER_LANGUAGE,
     /**
-     * Current time in milliseconds since 1970.
-     */
-    SYSTEM_MILLIS,
-    /**
      * System(OS) version.
      */
     SYSTEM_VERSION,
@@ -62,7 +75,7 @@ public enum Code {
      */
     SYSTEM_NAME,
     /**
-     * System(OS) identifier. Must be , if specified, unique by
+     * System(OS) identifier. Must be, if specified, unique by
      * {@link #PLATFORM_ID}.
      */
     SYSTEM_ID,
@@ -75,7 +88,7 @@ public enum Code {
      */
     DEVICE_NAME,
     /**
-     * Device identifier. Must be unique by {@link #PLATFORM_ID}.
+     * Device identifier. Must be, if specified, unique by {@link #PLATFORM_ID}.
      */
     DEVICE_ID,
     /**

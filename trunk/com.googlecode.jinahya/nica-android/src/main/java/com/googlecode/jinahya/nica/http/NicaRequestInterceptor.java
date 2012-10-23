@@ -28,9 +28,10 @@ import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
+import com.googlecode.jinahya.nica.util.Sha;
+import com.googlecode.jinahya.nica.util.ShaJCA;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -51,9 +52,36 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
     /**
-     * random.
+     * Random.
      */
-    private static final Random RANDOM = new SecureRandom();
+    private static final ThreadLocal<Random> RANDOM =
+        new ThreadLocal<Random>() {
+
+
+            @Override
+            protected Random initialValue() {
+                return new Random(
+                    System.currentTimeMillis()
+                    + Thread.currentThread().getId() * 86400000L);
+            }
+
+
+        };
+
+
+    /**
+     * Sha.
+     */
+    private static final ThreadLocal<Sha> SHA = new ThreadLocal<Sha>() {
+
+
+        @Override
+        protected Sha initialValue() {
+            return new ShaJCA();
+        }
+
+
+    };
 
 
     /**
@@ -123,13 +151,40 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         request.setHeader(Header.NAME.fieldName(), name);
 
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
-        RANDOM.nextBytes(iv);
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
+        RANDOM.get().nextBytes(iv);
         request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
-        variableCodes.put(Code.SYSTEM_MILLIS.name(),
-                          Long.toString(System.currentTimeMillis()));
+        final String requestTimestamp =
+            Long.toString(System.currentTimeMillis());
+        variableCodes.put(Code.REQUEST_TIMESTAMP.name(), requestTimestamp);
+        final String platformId = constantCodes.get(Code.PLATFORM_ID.name());
+        if (platformId == null) {
+            throw new RuntimeException("missing " + Code.PLATFORM_ID.name());
+        }
+        final String deviceId = constantCodes.get(Code.DEVICE_ID.name());
+        final String systemId = constantCodes.get(Code.SYSTEM_ID.name());
+        if (deviceId == null && systemId == null) {
+            throw new RuntimeException("missing both " + Code.DEVICE_ID.name()
+                                       + " and " + Code.SYSTEM_ID.name());
+        }
+        if (deviceId == null) {
+            if (systemId.trim().isEmpty()) {
+                throw new RuntimeException("empty " + Code.SYSTEM_ID.name());
+            }
+        }
+        if (systemId == null) {
+            if (deviceId.trim().isEmpty()) {
+                throw new RuntimeException("empty " + Code.DEVICE_ID.name());
+            }
+        }
+        final String requestNonce = SHA.get().hashToString(
+            platformId + "_" + String.valueOf(deviceId) + "_"
+            + String.valueOf(systemId) + "_" + requestTimestamp + "_"
+            + RANDOM.get().nextLong());
+        variableCodes.put(Code.REQUEST_NONCE.name(), requestNonce);
+
         final Map<String, String> codes = new HashMap<String, String>(
             constantCodes.size() + variableCodes.size());
         codes.putAll(variableCodes);
@@ -156,7 +211,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      * @param key key
      * @param value value
      */
-    public void putConstantCode(final String key, final String value) {
+    public final void putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -184,7 +239,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      *
      * @return previous value
      */
-    public String putVariableCode(final String key, final String value) {
+    public final String putVariableCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");

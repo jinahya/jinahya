@@ -24,7 +24,6 @@ import com.googlecode.jinahya.nica.util.Par;
 import com.googlecode.jinahya.nica.util.Hac;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,7 +46,19 @@ public abstract class Headers {
     /**
      * random.
      */
-    private static final Random RANDOM = new SecureRandom();
+    //private static final Random RANDOM = new SecureRandom();
+    private static ThreadLocal<Random> RANDOM = new ThreadLocal<Random>() {
+
+
+        @Override
+        protected Random initialValue() {
+            return new Random(
+                System.currentTimeMillis()
+                + Thread.currentThread().getId() * 86400000L);
+        }
+
+
+    };
 
 
     /**
@@ -92,13 +103,16 @@ public abstract class Headers {
         headers.put("Nica-Name", name);
 
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = new byte[Aes.KEY_SIZE_IN_BYTES];
-        RANDOM.nextBytes(iv);
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
+        RANDOM.get().nextBytes(iv);
         headers.put("Nica-Init", Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
-        variableCodes.put(Code.SYSTEM_MILLIS.name(),
+        final String platformId =
+            (String) constantCodes.get(Code.PLATFORM_ID.name());
+        variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
                           Long.toString(System.currentTimeMillis()));
+//        final String platformId = variableCodes.get(Code.RE)
         final Map codes = new HashMap(
             constantCodes.size() + variableCodes.size());
         codes.putAll(constantCodes);
