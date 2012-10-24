@@ -27,11 +27,13 @@ import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.Nuo;
 import com.googlecode.jinahya.nica.util.Par;
 import com.googlecode.jinahya.nica.util.Sha;
 import com.googlecode.jinahya.nica.util.ShaJCA;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
@@ -51,9 +53,6 @@ import org.apache.http.protocol.HttpContext;
 public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
-    private static final Random RANDOM_ = new SecureRandom();
-
-
     /**
      * Random.
      */
@@ -63,15 +62,26 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
             @Override
             protected Random initialValue() {
-                final byte[] seed = new byte[16];
-                synchronized (RANDOM_) {
-                    RANDOM_.nextBytes(seed);
+                try {
+                    return SecureRandom.getInstance(Nuo.ALGORITHM);
+                } catch (NoSuchAlgorithmException nsae) {
+                    throw new RuntimeException(
+                        "\"" + Nuo.ALGORITHM + "\" is not supported?");
                 }
-                return new SecureRandom(seed);
             }
 
 
         };
+
+
+    /**
+     * Return a thread local Random.
+     *
+     * @return a thread local Random
+     */
+    protected static Random getThreadLocalRandom() {
+        return RANDOM.get();
+    }
 
 
     /**
@@ -89,17 +99,13 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     };
 
 
-    private static final int NONCE_RANDOM_BIT = 20;
-
-
-    private static final int NONCE_RANDOM_MAX =
-        Integer.MIN_VALUE >>> (Integer.SIZE - NONCE_RANDOM_BIT);
-
-
-    static {
-        if (NONCE_RANDOM_MAX != 1048576) {
-            throw new InstantiationError(Integer.toString(NONCE_RANDOM_MAX));
-        }
+    /**
+     * Return a thread local Sha.
+     *
+     * @return a thread local Sha.
+     */
+    protected static Sha getThreadLocalSha() {
+        return SHA.get();
     }
 
 
@@ -175,11 +181,10 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
-        final long currentTimeMillis = System.currentTimeMillis();
+        final long requestTimestamp = System.currentTimeMillis();
         variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
-                          Long.toString(currentTimeMillis));
-        final long requestNonce =
-            ((currentTimeMillis << 20) | RANDOM.get().nextInt(1048576));
+                          Long.toString(requestTimestamp));
+        final long requestNonce = Nuo.generate(requestTimestamp, RANDOM.get());
         variableCodes.put(Code.REQUEST_NONCE.name(),
                           Long.toString(requestNonce));
 
