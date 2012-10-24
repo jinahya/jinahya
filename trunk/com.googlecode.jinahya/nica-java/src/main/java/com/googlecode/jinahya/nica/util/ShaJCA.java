@@ -97,35 +97,38 @@ public class ShaJCA extends Sha {
      * @return a new synchronized instance
      */
     public static Sha newSynchronizedInstance() {
-        /**
-         * digest.
-         */
-        final MessageDigest DIGEST;
-
-        try {
-            DIGEST = MessageDigest.getInstance(ALGORITHM);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new InstantiationError(nsae.getMessage());
-        }
+//        /**
+//         * digest.
+//         */
+//        final MessageDigest DIGEST;
+//
+//        try {
+//            DIGEST = MessageDigest.getInstance(ALGORITHM);
+//        } catch (NoSuchAlgorithmException nsae) {
+//            throw new InstantiationError(nsae.getMessage());
+//        }
 
         return new ShaJCA() {
 
 
             @Override
-            public byte[] hash(final byte[] data) {
-
-                if (data == null) {
-                    throw new IllegalArgumentException("null data");
-                }
-
-                synchronized (DIGEST) {
-                    DIGEST.reset();
-                    return DIGEST.digest(data);
-                }
+            public synchronized byte[] hash(final byte[] data) {
+                return super.hash(data);
             }
 
 
         };
+    }
+
+
+    public ShaJCA() {
+        super();
+
+        try {
+            messageDigest = MessageDigest.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
+        }
     }
 
 
@@ -136,12 +139,16 @@ public class ShaJCA extends Sha {
             throw new IllegalArgumentException("null data");
         }
 
-        try {
-            return MessageDigest.getInstance(ALGORITHM).digest(data);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
-        }
+        return messageDigest.digest(data);
+//        try {
+//            return MessageDigest.getInstance(ALGORITHM).digest(data);
+//        } catch (NoSuchAlgorithmException nsae) {
+//            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
+//        }
     }
+
+
+    private final MessageDigest messageDigest;
 
 
 }

@@ -32,10 +32,10 @@ import com.googlecode.jinahya.nica.util.Sha;
 import com.googlecode.jinahya.nica.util.ShaJCA;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Random;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -51,6 +51,9 @@ import org.apache.http.protocol.HttpContext;
 public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
+    private static final Random RANDOM_ = new SecureRandom();
+
+
     /**
      * Random.
      */
@@ -60,9 +63,11 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
             @Override
             protected Random initialValue() {
-                return new Random(
-                    System.currentTimeMillis()
-                    + Thread.currentThread().getId() * 86400000L);
+                final byte[] seed = new byte[16];
+                synchronized (RANDOM_) {
+                    RANDOM_.nextBytes(seed);
+                }
+                return new SecureRandom(seed);
             }
 
 
@@ -82,6 +87,20 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
     };
+
+
+    private static final int NONCE_RANDOM_BIT = 20;
+
+
+    private static final int NONCE_RANDOM_MAX =
+        Integer.MIN_VALUE >>> (Integer.SIZE - NONCE_RANDOM_BIT);
+
+
+    static {
+        if (NONCE_RANDOM_MAX != 1048576) {
+            throw new InstantiationError(Integer.toString(NONCE_RANDOM_MAX));
+        }
+    }
 
 
     /**
@@ -118,19 +137,19 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         this.name = Par.encode(names);
 
         final Locale locale = Locale.getDefault();
-        try {
-            putConstantCode(Code.USER_LANGUAGE3.name(),
-                            locale.getISO3Language());
-        } catch (MissingResourceException mre) {
-        }
+//        try {
+//            putConstantCode(Code.USER_LANGUAGE3.name(),
+//                            locale.getISO3Language());
+//        } catch (MissingResourceException mre) {
+//        }
         constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
 //        constantCodes.put(Code.USER_LANGUAGE.name(),
 //                          locale.getDisplayLanguage(Locale.ENGLISH));
-        try {
-            constantCodes.put(Code.USER_COUNTRY3.name(),
-                              locale.getISO3Country());
-        } catch (MissingResourceException mre) {
-        }
+//        try {
+//            constantCodes.put(Code.USER_COUNTRY3.name(),
+//                              locale.getISO3Country());
+//        } catch (MissingResourceException mre) {
+//        }
         constantCodes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
 //        constantCodes.put(Code.USER_COUNTRY.name(),
 //                          locale.getDisplayCountry(Locale.ENGLISH));
@@ -156,34 +175,13 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
 
         // ----------------------------------------------------------- Nica-Code
-        final String requestTimestamp =
-            Long.toString(System.currentTimeMillis());
-        variableCodes.put(Code.REQUEST_TIMESTAMP.name(), requestTimestamp);
-        final String platformId = constantCodes.get(Code.PLATFORM_ID.name());
-        if (platformId == null) {
-            throw new RuntimeException("missing " + Code.PLATFORM_ID.name());
-        }
-        final String deviceId = constantCodes.get(Code.DEVICE_ID.name());
-        final String systemId = constantCodes.get(Code.SYSTEM_ID.name());
-        if (deviceId == null && systemId == null) {
-            throw new RuntimeException("missing both " + Code.DEVICE_ID.name()
-                                       + " and " + Code.SYSTEM_ID.name());
-        }
-        if (deviceId == null) {
-            if (systemId.trim().isEmpty()) {
-                throw new RuntimeException("empty " + Code.SYSTEM_ID.name());
-            }
-        }
-        if (systemId == null) {
-            if (deviceId.trim().isEmpty()) {
-                throw new RuntimeException("empty " + Code.DEVICE_ID.name());
-            }
-        }
-        final String requestNonce = SHA.get().hashToString(
-            platformId + "_" + String.valueOf(deviceId) + "_"
-            + String.valueOf(systemId) + "_" + requestTimestamp + "_"
-            + RANDOM.get().nextLong());
-        variableCodes.put(Code.REQUEST_NONCE.name(), requestNonce);
+        final long currentTimeMillis = System.currentTimeMillis();
+        variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
+                          Long.toString(currentTimeMillis));
+        final long requestNonce =
+            ((currentTimeMillis << 20) | RANDOM.get().nextInt(1048576));
+        variableCodes.put(Code.REQUEST_NONCE.name(),
+                          Long.toString(requestNonce));
 
         final Map<String, String> codes = new HashMap<String, String>(
             constantCodes.size() + variableCodes.size());
