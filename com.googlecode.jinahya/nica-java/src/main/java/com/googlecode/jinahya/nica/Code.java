@@ -31,15 +31,16 @@ public enum Code {
     REQUEST_NONCE,
     /**
      * Current time in milliseconds since
-     * <code>midnight Coordinated Universal Time (UTC), 1 January 1970</code>.
+     * <code>midnight Coordinated Universal Time (UTC), 1 January
+     * 1970</code>.
      */
     REQUEST_TIMESTAMP,
     /**
-     * User's username if required per request.
+     * User's username, if required, per request.
      */
     USER_USERNAME,
     /**
-     * User's password if required per request.
+     * User's password, if required, per request.
      */
     USER_PASSWORD,
     /**
