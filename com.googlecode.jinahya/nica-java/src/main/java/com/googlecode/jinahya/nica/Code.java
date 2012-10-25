@@ -78,7 +78,8 @@ public enum Code {
     SYSTEM_NAME,
     /**
      * System(OS) identifier. Must be, if specified, unique by
-     * {@link #DEVICE_ID}.
+     * {@link #DEVICE_ID}. This code is required if {@link #DEVICE_ID} is
+     * absent. The value must not be empty nor blank.
      */
     SYSTEM_ID,
     /**
@@ -91,6 +92,8 @@ public enum Code {
     DEVICE_NAME,
     /**
      * Device identifier. Must be, if specified, unique by {@link #PLATFORM_ID}.
+     * This code is required if {@link #SYSTEM_ID} is absent. The value must not
+     * be empty nor blank.
      */
     DEVICE_ID,
     /**
