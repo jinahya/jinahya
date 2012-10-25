@@ -30,7 +30,10 @@ import java.util.Random;
 public class Nuo {
 
 
-    public static final String ALGORITHM = "SHA1PRNG";
+    /**
+     * RNG algorithm.
+     */
+    private static final String ALGORITHM = "SHA1PRNG";
 
 
     /**
@@ -62,8 +65,7 @@ public class Nuo {
     /**
      * nonce random max.
      */
-    private static final int RANDOM_MAX =
-        Integer.MIN_VALUE >>> (Integer.SIZE - RANDOM_BIT);
+    private static final int RANDOM_MAX = 1 << RANDOM_BIT;
 
 
     /**
@@ -72,7 +74,6 @@ public class Nuo {
      * @return a new value
      */
     public static long generate() {
-
         return generate(System.currentTimeMillis());
     }
 
@@ -104,8 +105,7 @@ public class Nuo {
             throw new IllegalArgumentException("null random");
         }
 
-        return (timestamp << RANDOM_BIT)
-               | random.nextInt(RANDOM_MAX);
+        return (timestamp << RANDOM_BIT) | random.nextInt(RANDOM_MAX);
     }
 
 

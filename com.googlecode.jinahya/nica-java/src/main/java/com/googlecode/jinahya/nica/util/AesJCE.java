@@ -32,10 +32,11 @@ public class AesJCE extends Aes {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param key
+     * @param key encryption key
      *
-     * @return
+     * @return a new instance
      */
     public static Aes newInstance(final byte[] key) {
         return new AesJCE(key);

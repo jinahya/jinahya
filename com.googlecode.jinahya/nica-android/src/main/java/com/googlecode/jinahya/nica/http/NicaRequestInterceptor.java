@@ -29,16 +29,11 @@ import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Nuo;
 import com.googlecode.jinahya.nica.util.Par;
-import com.googlecode.jinahya.nica.util.Sha;
-import com.googlecode.jinahya.nica.util.ShaJCA;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -54,69 +49,15 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
     /**
-     * Random.
-     */
-    private static final ThreadLocal<Random> RANDOM =
-        new ThreadLocal<Random>() {
-
-
-            @Override
-            protected Random initialValue() {
-                try {
-                    return SecureRandom.getInstance(Nuo.ALGORITHM);
-                } catch (NoSuchAlgorithmException nsae) {
-                    throw new RuntimeException(
-                        "\"" + Nuo.ALGORITHM + "\" is not supported?");
-                }
-            }
-
-
-        };
-
-
-    /**
-     * Return a thread local Random.
-     *
-     * @return a thread local Random
-     */
-    protected static Random getThreadLocalRandom() {
-        return RANDOM.get();
-    }
-
-
-    /**
-     * Sha.
-     */
-    private static final ThreadLocal<Sha> SHA = new ThreadLocal<Sha>() {
-
-
-        @Override
-        protected Sha initialValue() {
-            return new ShaJCA();
-        }
-
-
-    };
-
-
-    /**
-     * Return a thread local Sha.
-     *
-     * @return a thread local Sha.
-     */
-    protected static Sha getThreadLocalSha() {
-        return SHA.get();
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param context context
+     * @param deviceIdPrefix the prefix for deviceId. May be null.
      * @param key encryption key
      * @param names names
      */
-    public NicaRequestInterceptor(final Context context, final byte[] key,
+    public NicaRequestInterceptor(final Context context,
+                                  final String deviceIdPrefix, final byte[] key,
                                   final Map<String, String> names) {
 
         super();
@@ -160,9 +101,11 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 //        constantCodes.put(Code.USER_COUNTRY.name(),
 //                          locale.getDisplayCountry(Locale.ENGLISH));
 
-        constantCodes.put(Code.DEVICE_ID.name(),
-                          Secure.getString(this.context.getContentResolver(),
-                                           Secure.ANDROID_ID));
+        final String androidId = Secure.getString(
+            this.context.getContentResolver(), Secure.ANDROID_ID);
+        final String deviceId = (deviceIdPrefix == null
+                                 ? "" : deviceIdPrefix) + androidId;
+        constantCodes.put(Code.DEVICE_ID.name(), deviceId);
 
         constantCodes.put(Code.PLATFORM_ID.name(), Platform.ANDROID.id());
     }
@@ -175,22 +118,24 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         // ----------------------------------------------------------- Nica-Name
         request.setHeader(Header.NAME.fieldName(), name);
 
+
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
-        RANDOM.get().nextBytes(iv);
+        final byte[] iv = Aes.newIv();
         request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
+
 
         // ----------------------------------------------------------- Nica-Code
         final long requestTimestamp = System.currentTimeMillis();
         variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
                           Long.toString(requestTimestamp));
-        final long requestNonce = Nuo.generate(requestTimestamp, RANDOM.get());
+        final long requestNonce = Nuo.generate(requestTimestamp);
         variableCodes.put(Code.REQUEST_NONCE.name(),
                           Long.toString(requestNonce));
 
         final Map<String, String> codes = new HashMap<String, String>(
             constantCodes.size() + variableCodes.size());
         codes.putAll(variableCodes);
+        variableCodes.clear();
         codes.putAll(constantCodes);
         final byte[] base;
         try {
@@ -200,7 +145,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         }
         final byte[] code = new AesJCE(key).encrypt(iv, base);
         request.setHeader(Header.CODE.fieldName(), Hex.encodeToString(code));
-        variableCodes.clear();
+
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = new HacJCE(key).authenticate(base);
