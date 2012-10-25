@@ -19,9 +19,9 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
-import com.googlecode.jinahya.nica.util.Hac;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.util.HashMap;

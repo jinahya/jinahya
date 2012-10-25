@@ -40,7 +40,8 @@ public enum Code {
      */
     USER_USERNAME,
     /**
-     * User's password, if required, per request.
+     * User's password, if required, per request. The value for this code must
+     * be encoded in SHA-512.
      */
     USER_PASSWORD,
     /**
@@ -77,7 +78,7 @@ public enum Code {
     SYSTEM_NAME,
     /**
      * System(OS) identifier. Must be, if specified, unique by
-     * {@link #PLATFORM_ID}.
+     * {@link #DEVICE_ID}.
      */
     SYSTEM_ID,
     /**

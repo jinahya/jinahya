@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.Random;
+
+
 /**
  * An abstract class for AES encryption/decryption.
  *
@@ -73,6 +76,34 @@ public abstract class Aes {
      */
     public static final String TRANSFORMATION =
         ALGORITHM + "/" + MODE + "/" + PADDING;
+
+
+    /**
+     * Random.
+     */
+    private static final ThreadLocal RANDOM = new ThreadLocal() {
+
+
+        //@Override
+        protected Object initialValue() {
+            return new Random(System.currentTimeMillis()
+                              * Thread.currentThread().hashCode());
+        }
+
+
+    };
+
+
+    /**
+     * Generates a new iv.
+     *
+     * @return initialization vector
+     */
+    public static byte[] newIv() {
+        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
+        ((Random) RANDOM.get()).nextBytes(iv);
+        return iv;
+    }
 
 
     /**
