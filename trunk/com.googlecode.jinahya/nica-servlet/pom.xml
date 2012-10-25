@@ -17,13 +17,20 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>nica-java</artifactId>
-        <version>1.0-alpha-1</version>
+        <version>1.0-alpha-2-SNAPSHOT</version>
       </dependency>
+      <dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>6.0</version>
+      </dependency>
+      <!--
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
         <version>3.0.1</version>
       </dependency>
+      -->
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
@@ -48,10 +55,17 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>

@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.servlet;
 
 
+import com.googlecode.jinahya.nica.Code;
 import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
@@ -54,12 +55,28 @@ public abstract class NicaFilter implements Filter {
 
 
     /**
+     * The attribute name for located encryption key. The value must be an array
+     * of bytes.
+     */
+    protected static final String ATTRIBUTE_NICA_NAMES_KEY =
+        NicaFilter.class.getName() + "#names#key";
+
+
+    /**
      * The attribute name for decoded value of {@link Header#CODE}. The value is
      * an instance of unmodifiable
      * <code>Map&lt;String, String&gt;</code>.
      */
     protected static final String ATTRIBUTE_NICA_CODES =
         NicaFilter.class.getName() + "#codes";
+
+
+    /**
+     * The attribute name for validating {@link Header#CODE}. The value must be
+     * a Boolean.
+     */
+    protected static final String ATTRIBUTE_NICA_CODES_VALID =
+        NicaFilter.class.getName() + "#codes#valid";
 
 
     /**
@@ -193,23 +210,38 @@ public abstract class NicaFilter implements Filter {
         if (names.isEmpty()) {
             // ok
         }
-        final byte[] key_;
+        hequest.setAttribute(ATTRIBUTE_NICA_NAMES,
+                             Collections.unmodifiableMap(names));
+
         try {
-            key_ = locateKey(Collections.unmodifiableMap(names));
+            locateKey(request, response, Collections.unmodifiableMap(names));
+        } catch (IOException ioe) {
+            throw ioe;
+        } catch (ServletException se) {
+            throw se;
         } catch (Exception e) {
-            System.err.println("error while locating key: " + e.getMessage());
             e.printStackTrace(System.err);
             hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
-        if (key_ == null) {
-            hesponse.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                               "no key found");
+        if (response.isCommitted()) {
             return;
         }
-        if (key_.length != Aes.KEY_SIZE_IN_BYTES) {
-            System.err.println("wrong key size: " + key_.length);
-            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        final Object nicaKey = request.getAttribute(ATTRIBUTE_NICA_NAMES_KEY);
+        if (nicaKey == null) {
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                               "no key located");
+            return;
+        }
+        if (!(nicaKey instanceof byte[])) {
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                               "wrong key value");
+            return;
+        }
+        final byte[] key = ((byte[]) nicaKey).clone();
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                               "wrong key value");
             return;
         }
 
@@ -221,9 +253,9 @@ public abstract class NicaFilter implements Filter {
                 "missing header: " + Header.INIT.fieldName());
             return;
         }
-        final byte[] init;
+        final byte[] iv;
         try {
-            init = Hex.decode(nicaInit);
+            iv = Hex.decode(nicaInit);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -232,7 +264,7 @@ public abstract class NicaFilter implements Filter {
                 + e.getMessage());
             return;
         }
-        if (init.length != Aes.KEY_SIZE_IN_BYTES) {
+        if (iv.length != Aes.BLOCK_SIZE_IN_BYTES) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
                 "wrong header: " + Header.INIT.fieldName() + ": size");
@@ -249,7 +281,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] base;
         try {
-            base = new AesJCE(key_).decrypt(init, Hex.decode(nicaCode));
+            base = new AesJCE(key).decrypt(iv, Hex.decode(nicaCode));
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -269,9 +301,60 @@ public abstract class NicaFilter implements Filter {
                 + e.getMessage());
             return;
         }
-        if (codes.isEmpty()) {
-            // ok
+        // ----------------------------------------------- Nica-Code/PLATFORM_ID
+        final String platformId = codes.get(Code.PLATFORM_ID.name());
+        if (platformId == null) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "missing code: " + Code.PLATFORM_ID.name());
+            return;
         }
+        if (platformId.trim().isEmpty()) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "empty code: " + Code.PLATFORM_ID.name());
+            return;
+        }
+
+        // ------------------------------------------------- Nica-Code/DEVICE_ID
+        final String deviceId = codes.get(Code.DEVICE_ID.name());
+        if (deviceId != null && deviceId.trim().isEmpty()) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "empty code: " + Code.DEVICE_ID.name());
+            return;
+        }
+        // ------------------------------------------------- Nica-Code/SYSTEM_ID
+        final String systemId = codes.get(Code.SYSTEM_ID.name());
+        if (systemId != null && systemId.trim().isEmpty()) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "empty code: " + Code.SYSTEM_ID.name());
+            return;
+        }
+        // --------------------------------------- Nica-Code/DEVICE_ID+SYSTEM_ID
+        if (deviceId == null && systemId == null) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "no " + Code.DEVICE_ID.name() + " nor "
+                + Code.SYSTEM_ID.name());
+            return;
+        }
+        try {
+            checkCodes(request, response, Collections.unmodifiableMap(codes));
+        } catch (IOException ioe) {
+            throw ioe;
+        } catch (ServletException se) {
+            throw se;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (response.isCommitted()) {
+            return;
+        }
+
 
         // ----------------------------------------------------------- Nica-Auth
         final String nicaAuth = hequest.getHeader(Header.AUTH.fieldName());
@@ -294,7 +377,7 @@ public abstract class NicaFilter implements Filter {
         }
         final byte[] aut_;
         try {
-            aut_ = new HacJCE(key_).authenticate(base);
+            aut_ = new HacJCE(key).authenticate(base);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             hesponse.sendError(
@@ -309,8 +392,7 @@ public abstract class NicaFilter implements Filter {
             return;
         }
 
-        hequest.setAttribute(ATTRIBUTE_NICA_NAMES,
-                             Collections.unmodifiableMap(names));
+
         hequest.setAttribute(ATTRIBUTE_NICA_CODES,
                              Collections.unmodifiableMap(codes));
 
@@ -322,11 +404,32 @@ public abstract class NicaFilter implements Filter {
      * Finds encryption key for given
      * <code>names</code>.
      *
-     * @param names an unmodifiable map of names for locating key
+     * @param request
+     * @param response
+     * @param names an unmodifiable map of names for locating key.
      *
-     * @return located key or <code>null</code> if not found
+     * @throws IOException
+     * @throws ServletException
      */
-    protected abstract byte[] locateKey(Map<String, String> names);
+    protected abstract void locateKey(ServletRequest request,
+                                      ServletResponse response,
+                                      Map<String, String> names)
+        throws IOException, ServletException;
+
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @param codes an unmodifiable map of codes.
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected abstract void checkCodes(ServletRequest request,
+                                       ServletResponse response,
+                                       Map<String, String> codes)
+        throws IOException, ServletException;
 
 
 }
