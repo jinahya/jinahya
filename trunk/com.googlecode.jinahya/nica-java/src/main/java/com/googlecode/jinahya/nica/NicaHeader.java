@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum Header {
+public enum NicaHeader {
 
 
     /**
@@ -48,7 +48,7 @@ public enum Header {
      *
      * @param fieldName HTTP header field-name.
      */
-    private Header(final String fieldName) {
+    private NicaHeader(final String fieldName) {
         this.fieldName = fieldName;
     }
 

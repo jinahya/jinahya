@@ -20,9 +20,9 @@ package com.googlecode.jinahya.nica.http;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
-import com.googlecode.jinahya.nica.Code;
-import com.googlecode.jinahya.nica.Header;
-import com.googlecode.jinahya.nica.Platform;
+import com.googlecode.jinahya.nica.NicaCode;
+import com.googlecode.jinahya.nica.NicaHeader;
+import com.googlecode.jinahya.nica.NicaPlatform;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
@@ -89,7 +89,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 //                            locale.getISO3Language());
 //        } catch (MissingResourceException mre) {
 //        }
-        constantCodes.put(Code.USER_LANGUAGE2.name(), locale.getLanguage());
+        constantCodes.put(NicaCode.USER_LANGUAGE2.name(), locale.getLanguage());
 //        constantCodes.put(Code.USER_LANGUAGE.name(),
 //                          locale.getDisplayLanguage(Locale.ENGLISH));
 //        try {
@@ -97,7 +97,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 //                              locale.getISO3Country());
 //        } catch (MissingResourceException mre) {
 //        }
-        constantCodes.put(Code.USER_COUNTRY2.name(), locale.getLanguage());
+        constantCodes.put(NicaCode.USER_COUNTRY2.name(), locale.getLanguage());
 //        constantCodes.put(Code.USER_COUNTRY.name(),
 //                          locale.getDisplayCountry(Locale.ENGLISH));
 
@@ -105,9 +105,9 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
             this.context.getContentResolver(), Secure.ANDROID_ID);
         final String deviceId = (deviceIdPrefix == null
                                  ? "" : deviceIdPrefix) + androidId;
-        constantCodes.put(Code.DEVICE_ID.name(), deviceId);
+        constantCodes.put(NicaCode.DEVICE_ID.name(), deviceId);
 
-        constantCodes.put(Code.PLATFORM_ID.name(), Platform.ANDROID.id());
+        constantCodes.put(NicaCode.PLATFORM_ID.name(), NicaPlatform.ANDROID.id());
     }
 
 
@@ -116,20 +116,20 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
         throws HttpException, IOException {
 
         // ----------------------------------------------------------- Nica-Name
-        request.setHeader(Header.NAME.fieldName(), name);
+        request.setHeader(NicaHeader.NAME.fieldName(), name);
 
 
         // ----------------------------------------------------------- Nica-Init
         final byte[] iv = Aes.newIv();
-        request.setHeader(Header.INIT.fieldName(), Hex.encodeToString(iv));
+        request.setHeader(NicaHeader.INIT.fieldName(), Hex.encodeToString(iv));
 
 
         // ----------------------------------------------------------- Nica-Code
         final long requestTimestamp = System.currentTimeMillis();
-        variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
+        variableCodes.put(NicaCode.REQUEST_TIMESTAMP.name(),
                           Long.toString(requestTimestamp));
         final long requestNonce = Nuo.generate(requestTimestamp);
-        variableCodes.put(Code.REQUEST_NONCE.name(),
+        variableCodes.put(NicaCode.REQUEST_NONCE.name(),
                           Long.toString(requestNonce));
 
         final Map<String, String> codes = new HashMap<String, String>(
@@ -144,12 +144,12 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
         final byte[] code = new AesJCE(key).encrypt(iv, base);
-        request.setHeader(Header.CODE.fieldName(), Hex.encodeToString(code));
+        request.setHeader(NicaHeader.CODE.fieldName(), Hex.encodeToString(code));
 
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = new HacJCE(key).authenticate(base);
-        request.setHeader(Header.AUTH.fieldName(), Hex.encodeToString(auth));
+        request.setHeader(NicaHeader.AUTH.fieldName(), Hex.encodeToString(auth));
     }
 
 
