@@ -32,7 +32,7 @@ public class PlatformTest {
     @Test
     public void testIdsAreValid() {
 
-        for (Platform value : Platform.values()) {
+        for (NicaPlatform value : NicaPlatform.values()) {
             final String id = value.id();
             Assert.assertNotNull(id);
             Assert.assertEquals(id, id.trim());
@@ -46,29 +46,29 @@ public class PlatformTest {
     public static void testFromId() {
 
         try {
-            final Platform platform = Platform.fromId(null);
+            final NicaPlatform platform = NicaPlatform.fromId(null);
             Assert.fail("passed: fromId(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Platform platform = Platform.fromId("/not/exist");
+            final NicaPlatform platform = NicaPlatform.fromId("/not/exist");
             Assert.fail("passed: fromId(\"/not/exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (Platform value : Platform.values()) {
-            Assert.assertEquals(Platform.fromId(value.id()), value);
+        for (NicaPlatform value : NicaPlatform.values()) {
+            Assert.assertEquals(NicaPlatform.fromId(value.id()), value);
         }
     }
 
 
     @Test
     public void testIdUniqueness() {
-        for (Platform value : Platform.values()) {
-            for (Platform other : Platform.values()) {
+        for (NicaPlatform value : NicaPlatform.values()) {
+            for (NicaPlatform other : NicaPlatform.values()) {
                 if (!value.equals(other) && value.id().equals(other.id())) {
                     Assert.fail("duplicated id");
                 }

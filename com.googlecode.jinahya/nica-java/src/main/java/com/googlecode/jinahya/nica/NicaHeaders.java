@@ -15,11 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.nica.client;
+package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.Code;
-import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
@@ -37,58 +35,65 @@ import java.util.Map.Entry;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaClient {
+public abstract class NicaHeaders {
 
 
-    private static class PrivateNicaClient extends NicaClient {
+    private static class SynchronizedNicaHeaders extends NicaHeaders {
 
 
-        public PrivateNicaClient(final NicaClient nicaClient) {
-            super(nicaClient.name, nicaClient.aes, nicaClient.hac);
+        public SynchronizedNicaHeaders(final NicaHeaders nicaHeaders) {
+            super(nicaHeaders.name, nicaHeaders.aes, nicaHeaders.hac);
+
+            this.nicaHeaders = nicaHeaders;
         }
+
+
+        @Override
+        public void setHeaders(final URLConnection connection) {
+            synchronized (nicaHeaders) {
+                super.setHeaders(connection);
+            }
+        }
+
+
+        @Override
+        public Map<String, String> getHeaders() {
+            synchronized (nicaHeaders) {
+                return super.getHeaders();
+            }
+        }
+
+
+        @Override
+        public void putConstantCode(final String key, final String value) {
+            synchronized (nicaHeaders) {
+                super.putConstantCode(key, value);
+            }
+        }
+
+
+        @Override
+        public String putVariableCode(final String key, final String value) {
+            synchronized (nicaHeaders) {
+                return super.putVariableCode(key, value);
+            }
+        }
+
+
+        private final NicaHeaders nicaHeaders;
 
 
     }
 
 
-    public static NicaClient newSynchronizedInstance(
-        final NicaClient nicaClient) {
+    public static NicaHeaders newSynchronizedInstance(
+        final NicaHeaders nicaHeaders) {
 
-        if (nicaClient == null) {
-            throw new IllegalArgumentException("null nicaClient");
+        if (nicaHeaders == null) {
+            throw new IllegalArgumentException("null nicaHeaders");
         }
 
-        return new PrivateNicaClient(nicaClient) {
-
-
-            @Override
-            public final synchronized void setHeaders(
-                final URLConnection connection) {
-                super.setHeaders(connection);
-            }
-
-
-            @Override
-            public final synchronized Map<String, String> getHeaders() {
-                return super.getHeaders();
-            }
-
-
-            @Override
-            public final synchronized void putConstantCode(
-                final String key, final String value) {
-                super.putConstantCode(key, value);
-            }
-
-
-            @Override
-            public final synchronized String putVariableCode(
-                final String key, final String value) {
-                return super.putVariableCode(key, value);
-            }
-
-
-        };
+        return new SynchronizedNicaHeaders(nicaHeaders);
     }
 
 
@@ -99,7 +104,7 @@ public abstract class NicaClient {
      * @param aes
      * @param hac
      */
-    public NicaClient(final String name, final Aes aes, final Hac hac) {
+    public NicaHeaders(final String name, final Aes aes, final Hac hac) {
 
         super();
 
@@ -154,21 +159,21 @@ public abstract class NicaClient {
 
 
         // ----------------------------------------------------------- Nica-Name
-        headers.put(Header.NAME.fieldName(), name);
+        headers.put(NicaHeader.NAME.fieldName(), name);
 
 
         // ----------------------------------------------------------- Nica-Init
         final byte[] iv = Aes.newIv();
-        headers.put(Header.INIT.fieldName(), Hex.encodeToString(iv));
+        headers.put(NicaHeader.INIT.fieldName(), Hex.encodeToString(iv));
 
 
         // ----------------------------------------------------------- Nica-Code
         final long requestTimestamp = System.currentTimeMillis();
-        variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
+        variableCodes.put(NicaCode.REQUEST_TIMESTAMP.name(),
                           Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        variableCodes.put(Code.REQUEST_NONCE.name(),
+        variableCodes.put(NicaCode.REQUEST_NONCE.name(),
                           Long.toString(requestNonce));
 
         final Map<String, String> codes = new HashMap<String, String>(
@@ -184,12 +189,12 @@ public abstract class NicaClient {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
         final byte[] code = aes.encrypt(iv, base);
-        headers.put(Header.CODE.fieldName(), Hex.encodeToString(code));
+        headers.put(NicaHeader.CODE.fieldName(), Hex.encodeToString(code));
 
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = hac.authenticate(base);
-        headers.put(Header.AUTH.fieldName(), Hex.encodeToString(auth));
+        headers.put(NicaHeader.AUTH.fieldName(), Hex.encodeToString(auth));
 
         return headers;
     }
