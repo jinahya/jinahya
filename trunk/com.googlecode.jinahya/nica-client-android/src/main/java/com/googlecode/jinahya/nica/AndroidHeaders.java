@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.nica.http;
+package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.Codes;
