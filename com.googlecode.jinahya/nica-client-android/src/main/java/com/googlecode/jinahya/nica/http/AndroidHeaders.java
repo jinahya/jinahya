@@ -18,49 +18,44 @@
 package com.googlecode.jinahya.nica.http;
 
 
+import com.googlecode.jinahya.nica.Codes;
 import com.googlecode.jinahya.nica.Headers;
-import java.io.IOException;
-import java.util.Map.Entry;
-import org.apache.http.HttpException;
+import com.googlecode.jinahya.nica.util.AesJCE;
+import com.googlecode.jinahya.nica.util.HacJCE;
+import java.util.Map;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.protocol.HttpContext;
 
 
 /**
- * A RequestInterceptor which sets NICA headers.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class NicaRequestInterceptor implements HttpRequestInterceptor {
+public class AndroidHeaders extends Headers {
+
+
+    public AndroidHeaders(final String name, final Codes codes,
+                          final byte[] key) {
+
+        super(name, codes, new AesJCE(key), new HacJCE(key));
+    }
 
 
     /**
+     * Sets request headers on given
+     * <code>request</code>.
      *
-     * @param headers
+     * @param request request
      */
-    public NicaRequestInterceptor(final Headers headers) {
-        super();
+    public void setHeaders(final HttpRequest request) {
 
-        if (headers == null) {
-            throw new IllegalArgumentException("null headers");
+        if (request == null) {
+            throw new IllegalArgumentException("null connection");
         }
 
-        this.headers = headers;
-    }
-
-
-    @Override
-    public void process(final HttpRequest request, final HttpContext context)
-        throws HttpException, IOException {
-
-        for (Entry<String, String> header : headers.getHeaders().entrySet()) {
+        for (Map.Entry<String, String> header : getHeaders().entrySet()) {
             request.setHeader(header.getKey(), header.getValue());
         }
     }
-
-
-    private final Headers headers;
 
 
 }
