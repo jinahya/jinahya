@@ -15,10 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.nica.client;
+package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
@@ -118,9 +117,6 @@ public abstract class Headers {
         this.aes = aes;
         this.hac = hac;
     }
-
-
-
 
 
     /**

@@ -15,10 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.nica.client;
+package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.Code;
 import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.HashMap;
 import java.util.Map;
