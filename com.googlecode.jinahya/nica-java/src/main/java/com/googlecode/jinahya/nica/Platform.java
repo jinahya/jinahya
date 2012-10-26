@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum NicaPlatform {
+public enum Platform {
 
 
     /**
@@ -55,13 +55,13 @@ public enum NicaPlatform {
      *
      * @return found constant
      */
-    public static NicaPlatform fromId(final String id) {
+    public static Platform fromId(final String id) {
 
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }
 
-        for (NicaPlatform value : values()) {
+        for (Platform value : values()) {
             if (value.id.equals(id)) {
                 return value;
             }
@@ -77,7 +77,7 @@ public enum NicaPlatform {
      *
      * @param id id
      */
-    private NicaPlatform(final String id) {
+    private Platform(final String id) {
         this.id = id;
     }
 
