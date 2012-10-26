@@ -30,7 +30,7 @@ public class CodeTest {
 
     @Test
     public static void testValues() {
-        final NicaCode[] values = NicaCode.values();
+        final Code[] values = Code.values();
     }
 
 

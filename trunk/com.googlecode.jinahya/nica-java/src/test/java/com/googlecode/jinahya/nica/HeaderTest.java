@@ -32,7 +32,7 @@ public class HeaderTest {
     @Test
     public void testIdsAreValid() {
 
-        for (NicaHeader value : NicaHeader.values()) {
+        for (Header value : Header.values()) {
             final String fieldName = value.fieldName();
             Assert.assertNotNull(fieldName);
             Assert.assertEquals(fieldName, fieldName.trim());
@@ -44,8 +44,8 @@ public class HeaderTest {
 
     @Test
     public void testFieldNameUniqueness() {
-        for (NicaHeader value : NicaHeader.values()) {
-            for (NicaHeader other : NicaHeader.values()) {
+        for (Header value : Header.values()) {
+            for (Header other : Header.values()) {
                 if (!value.equals(other)
                     && value.fieldName().equals(other.fieldName())) {
                     Assert.fail("duplicated fieldName");

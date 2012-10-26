@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum NicaCode {
+public enum Code {
 
 
     /**
