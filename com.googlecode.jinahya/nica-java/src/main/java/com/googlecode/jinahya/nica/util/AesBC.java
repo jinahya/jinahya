@@ -28,6 +28,7 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
 
 
 /**
+ * An Aes implementation using Bouncy Castle .
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
