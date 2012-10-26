@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.nica;
+package com.googlecode.jinahya.nica.client;
 
 
+import com.googlecode.jinahya.nica.Header;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
