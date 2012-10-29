@@ -18,19 +18,39 @@
 package com.googlecode.jinahya.nica;
 
 
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CodeTest {
+public final class HeaderFieldNames {
 
 
-    @Test
-    public static void testValues() {
-        final Code[] values = Code.values();
+    /**
+     * Header for names.
+     */
+    public static final String NAME = "Nica-Name";
+
+
+    /**
+     * Header for initialization vector.
+     */
+    public static final String INIT = "Nica-Init";
+
+
+    /**
+     * Header for encrypted code.
+     */
+    public static final String CODE = "Nica-Code";
+
+
+    /**
+     * Header for message authentication.
+     */
+    public static final String AUTH = "Nica-Auth";
+
+
+    private HeaderFieldNames() {
+        super();
     }
 
 

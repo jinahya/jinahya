@@ -22,29 +22,29 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum Platform {
+public enum PlatformId {
 
 
     /**
      * Android.
      */
-    ANDROID("/platforms/android"),
+    ANDROID(PlatformIds.ANDROID),
     /**
      * BlackBerry.
      */
-    BLACKBERRY("/platforms/blackberry"),
+    BLACKBERRY(PlatformIds.BLACKBERRY),
     /**
      * iOS.
      */
-    IOS("/platforms/ios"),
+    IOS(PlatformIds.IOS),
     /**
      * Tizen.
      */
-    TIZEN("/platforms/tizen"),
+    TIZEN(PlatformIds.TIZEN),
     /**
      * Windows Phone.
      */
-    WINDOWS_PHONE("/platforms/windows_phone");
+    WINDOWS_PHONE(PlatformIds.WINDOWS_PHONE);
 
 
     /**
@@ -55,13 +55,13 @@ public enum Platform {
      *
      * @return found constant
      */
-    public static Platform fromId(final String id) {
+    public static PlatformId fromId(final String id) {
 
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }
 
-        for (Platform value : values()) {
+        for (PlatformId value : values()) {
             if (value.id.equals(id)) {
                 return value;
             }
@@ -77,7 +77,7 @@ public enum Platform {
      *
      * @param id id
      */
-    private Platform(final String id) {
+    private PlatformId(final String id) {
         this.id = id;
     }
 

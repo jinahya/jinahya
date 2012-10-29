@@ -26,13 +26,13 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PlatformTest {
+public class PlatformIdTest {
 
 
     @Test
     public void testIdsAreValid() {
 
-        for (Platform value : Platform.values()) {
+        for (PlatformId value : PlatformId.values()) {
             final String id = value.id();
             Assert.assertNotNull(id);
             Assert.assertEquals(id, id.trim());
@@ -46,29 +46,29 @@ public class PlatformTest {
     public static void testFromId() {
 
         try {
-            final Platform platform = Platform.fromId(null);
+            final PlatformId platform = PlatformId.fromId(null);
             Assert.fail("passed: fromId(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Platform platform = Platform.fromId("/not/exist");
+            final PlatformId platform = PlatformId.fromId("/not/exist");
             Assert.fail("passed: fromId(\"/not/exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (Platform value : Platform.values()) {
-            Assert.assertEquals(Platform.fromId(value.id()), value);
+        for (PlatformId value : PlatformId.values()) {
+            Assert.assertEquals(PlatformId.fromId(value.id()), value);
         }
     }
 
 
     @Test
     public void testIdUniqueness() {
-        for (Platform value : Platform.values()) {
-            for (Platform other : Platform.values()) {
+        for (PlatformId value : PlatformId.values()) {
+            for (PlatformId other : PlatformId.values()) {
                 if (!value.equals(other) && value.id().equals(other.id())) {
                     Assert.fail("duplicated id");
                 }
