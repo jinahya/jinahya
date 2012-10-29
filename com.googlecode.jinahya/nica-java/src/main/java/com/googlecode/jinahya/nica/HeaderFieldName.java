@@ -22,25 +22,25 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum Header {
+public enum HeaderFieldName {
 
 
     /**
      * Header for names.
      */
-    NAME("Nica-Name"),
+    NAME(HeaderFieldNames.NAME),
     /**
      * Header for initialization vector.
      */
-    INIT("Nica-Init"),
+    INIT(HeaderFieldNames.INIT),
     /**
      * Header for encrypted code.
      */
-    CODE("Nica-Code"),
+    CODE(HeaderFieldNames.CODE),
     /**
      * Header for HMAC.
      */
-    AUTH("Nica-Auth");
+    AUTH(HeaderFieldNames.AUTH);
 
 
     /**
@@ -48,7 +48,7 @@ public enum Header {
      *
      * @param fieldName HTTP header field-name.
      */
-    private Header(final String fieldName) {
+    private HeaderFieldName(final String fieldName) {
         this.fieldName = fieldName;
     }
 

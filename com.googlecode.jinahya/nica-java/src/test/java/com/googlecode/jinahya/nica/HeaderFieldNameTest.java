@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.nica;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -26,31 +28,20 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HeaderTest {
+public class HeaderFieldNameTest {
 
 
     @Test
-    public void testIdsAreValid() {
+    public void testFieldNames() {
 
-        for (Header value : Header.values()) {
+        final Set<String> fieldNameSet = new HashSet<String>();
+        for (HeaderFieldName value : HeaderFieldName.values()) {
             final String fieldName = value.fieldName();
             Assert.assertNotNull(fieldName);
             Assert.assertEquals(fieldName, fieldName.trim());
             Assert.assertFalse(fieldName.isEmpty());
             Assert.assertFalse(fieldName.trim().isEmpty());
-        }
-    }
-
-
-    @Test
-    public void testFieldNameUniqueness() {
-        for (Header value : Header.values()) {
-            for (Header other : Header.values()) {
-                if (!value.equals(other)
-                    && value.fieldName().equals(other.fieldName())) {
-                    Assert.fail("duplicated fieldName");
-                }
-            }
+            Assert.assertTrue(fieldNameSet.add(fieldName));
         }
     }
 
