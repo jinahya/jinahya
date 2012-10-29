@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.nica.servlet;
 
 
-import com.googlecode.jinahya.nica.Code;
-import com.googlecode.jinahya.nica.Header;
+import com.googlecode.jinahya.nica.CodeName;
+import com.googlecode.jinahya.nica.HeaderFieldName;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
@@ -189,11 +189,11 @@ public abstract class NicaFilter implements Filter {
         final HttpServletResponse hesponse = (HttpServletResponse) response;
 
         // ----------------------------------------------------------- Nica-Name
-        final String nicaName = hequest.getHeader(Header.NAME.fieldName());
+        final String nicaName = hequest.getHeader(HeaderFieldName.NAME.fieldName());
         if (nicaName == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing header: " + Header.NAME.fieldName());
+                "missing header: " + HeaderFieldName.NAME.fieldName());
             return;
         }
         final Map<String, String> names;
@@ -203,7 +203,7 @@ public abstract class NicaFilter implements Filter {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.NAME.fieldName() + ": "
+                "wrong header: " + HeaderFieldName.NAME.fieldName() + ": "
                 + e.getMessage());
             return;
         }
@@ -246,11 +246,11 @@ public abstract class NicaFilter implements Filter {
         }
 
         // ----------------------------------------------------------- Nica-Init
-        final String nicaInit = hequest.getHeader(Header.INIT.fieldName());
+        final String nicaInit = hequest.getHeader(HeaderFieldName.INIT.fieldName());
         if (nicaInit == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing header: " + Header.INIT.fieldName());
+                "missing header: " + HeaderFieldName.INIT.fieldName());
             return;
         }
         final byte[] iv;
@@ -260,23 +260,23 @@ public abstract class NicaFilter implements Filter {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.INIT.fieldName() + ": "
+                "wrong header: " + HeaderFieldName.INIT.fieldName() + ": "
                 + e.getMessage());
             return;
         }
         if (iv.length != Aes.BLOCK_SIZE_IN_BYTES) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.INIT.fieldName() + ": size");
+                "wrong header: " + HeaderFieldName.INIT.fieldName() + ": size");
             return;
         }
 
         // ----------------------------------------------------------- Nica-Code
-        final String nicaCode = hequest.getHeader(Header.CODE.fieldName());
+        final String nicaCode = hequest.getHeader(HeaderFieldName.CODE.fieldName());
         if (nicaCode == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing header: " + Header.CODE.fieldName());
+                "missing header: " + HeaderFieldName.CODE.fieldName());
             return;
         }
         final byte[] base;
@@ -286,7 +286,7 @@ public abstract class NicaFilter implements Filter {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.CODE.fieldName() + ": "
+                "wrong header: " + HeaderFieldName.CODE.fieldName() + ": "
                 + e.getMessage());
             return;
         }
@@ -297,47 +297,47 @@ public abstract class NicaFilter implements Filter {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.CODE.fieldName() + ": "
+                "wrong header: " + HeaderFieldName.CODE.fieldName() + ": "
                 + e.getMessage());
             return;
         }
         // ----------------------------------------------- Nica-Code/PLATFORM_ID
-        final String platformId = codes.get(Code.PLATFORM_ID.name());
+        final String platformId = codes.get(CodeName.PLATFORM_ID.name());
         if (platformId == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing code: " + Code.PLATFORM_ID.name());
+                "missing code: " + CodeName.PLATFORM_ID.name());
             return;
         }
         if (platformId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty code: " + Code.PLATFORM_ID.name());
+                "empty code: " + CodeName.PLATFORM_ID.name());
             return;
         }
 
         // ------------------------------------------------- Nica-Code/DEVICE_ID
-        final String deviceId = codes.get(Code.DEVICE_ID.name());
+        final String deviceId = codes.get(CodeName.DEVICE_ID.name());
         if (deviceId != null && deviceId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty code: " + Code.DEVICE_ID.name());
+                "empty code: " + CodeName.DEVICE_ID.name());
             return;
         }
         // ------------------------------------------------- Nica-Code/SYSTEM_ID
-        final String systemId = codes.get(Code.SYSTEM_ID.name());
+        final String systemId = codes.get(CodeName.SYSTEM_ID.name());
         if (systemId != null && systemId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty code: " + Code.SYSTEM_ID.name());
+                "empty code: " + CodeName.SYSTEM_ID.name());
             return;
         }
         // --------------------------------------- Nica-Code/DEVICE_ID+SYSTEM_ID
         if (deviceId == null && systemId == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "no " + Code.DEVICE_ID.name() + " nor "
-                + Code.SYSTEM_ID.name());
+                "no " + CodeName.DEVICE_ID.name() + " nor "
+                + CodeName.SYSTEM_ID.name());
             return;
         }
         try {
@@ -357,11 +357,11 @@ public abstract class NicaFilter implements Filter {
 
 
         // ----------------------------------------------------------- Nica-Auth
-        final String nicaAuth = hequest.getHeader(Header.AUTH.fieldName());
+        final String nicaAuth = hequest.getHeader(HeaderFieldName.AUTH.fieldName());
         if (nicaAuth == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing header: " + Header.AUTH.fieldName());
+                "missing header: " + HeaderFieldName.AUTH.fieldName());
             return;
         }
         final byte[] auth;
@@ -371,7 +371,7 @@ public abstract class NicaFilter implements Filter {
             e.printStackTrace(System.err);
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "wrong header: " + Header.AUTH.fieldName() + ": "
+                "wrong header: " + HeaderFieldName.AUTH.fieldName() + ": "
                 + e.getMessage());
             return;
         }

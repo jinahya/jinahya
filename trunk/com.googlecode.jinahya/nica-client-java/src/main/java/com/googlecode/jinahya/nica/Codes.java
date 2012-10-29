@@ -92,11 +92,11 @@ public class Codes {
     public Map<String, String> getCodes() {
 
         final long requestTimestamp = System.currentTimeMillis();
-        variableCodes.put(Code.REQUEST_TIMESTAMP.name(),
+        variableCodes.put(CodeName.REQUEST_TIMESTAMP.name(),
                           Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        variableCodes.put(Code.REQUEST_NONCE.name(),
+        variableCodes.put(CodeName.REQUEST_NONCE.name(),
                           Long.toString(requestNonce));
 
         final Map<String, String> codes = new HashMap<String, String>(

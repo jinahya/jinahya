@@ -20,9 +20,9 @@ package com.googlecode.jinahya.nica;
 
 import android.content.Context;
 import android.provider.Settings;
-import com.googlecode.jinahya.nica.Code;
+import com.googlecode.jinahya.nica.CodeName;
 import com.googlecode.jinahya.nica.Codes;
-import com.googlecode.jinahya.nica.Platform;
+import com.googlecode.jinahya.nica.PlatformId;
 import java.util.Locale;
 
 
@@ -46,7 +46,7 @@ public class AndroidCodes extends Codes {
 //                            locale.getISO3Language());
 //        } catch (MissingResourceException mre) {
 //        }
-        putConstantCode(Code.USER_LANGUAGE2.name(), locale.getLanguage());
+        putConstantCode(CodeName.USER_LANGUAGE2.name(), locale.getLanguage());
 //        putConstantCode(Code.USER_LANGUAGE.name(),
 //                        locale.getDisplayLanguage(Locale.ENGLISH));
 
@@ -55,15 +55,15 @@ public class AndroidCodes extends Codes {
 //                            locale.getISO3Country());
 //        } catch (MissingResourceException mre) {
 //        }
-        putConstantCode(Code.USER_COUNTRY2.name(), locale.getLanguage());
+        putConstantCode(CodeName.USER_COUNTRY2.name(), locale.getLanguage());
 //        putConstantCode(Code.USER_COUNTRY.name(),
 //                        locale.getDisplayCountry(Locale.ENGLISH));
 
         final String androidId = Settings.Secure.getString(
             context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        putConstantCode(Code.DEVICE_ID.name(), androidId);
+        putConstantCode(CodeName.DEVICE_ID.name(), androidId);
 
-        putConstantCode(Code.PLATFORM_ID.name(), Platform.ANDROID.id());
+        putConstantCode(CodeName.PLATFORM_ID.name(), PlatformId.ANDROID.id());
     }
 
 
