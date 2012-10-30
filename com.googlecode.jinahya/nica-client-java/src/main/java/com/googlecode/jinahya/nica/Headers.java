@@ -148,12 +148,12 @@ public abstract class Headers {
 
 
         // ----------------------------------------------------------- Nica-Name
-        headers.put(HeaderFieldName.NAME.fieldName(), name);
+        headers.put(Header.NAME.fieldName(), name);
 
 
         // ----------------------------------------------------------- Nica-Init
         final byte[] iv = Aes.newIv();
-        headers.put(HeaderFieldName.INIT.fieldName(), Hex.encodeToString(iv));
+        headers.put(Header.INIT.fieldName(), Hex.encodeToString(iv));
 
 
         // ----------------------------------------------------------- Nica-Code
@@ -164,12 +164,12 @@ public abstract class Headers {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
         final byte[] code = aes.encrypt(iv, base);
-        headers.put(HeaderFieldName.CODE.fieldName(), Hex.encodeToString(code));
+        headers.put(Header.CODE.fieldName(), Hex.encodeToString(code));
 
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = hac.authenticate(base);
-        headers.put(HeaderFieldName.AUTH.fieldName(), Hex.encodeToString(auth));
+        headers.put(Header.AUTH.fieldName(), Hex.encodeToString(auth));
 
         return headers;
     }
