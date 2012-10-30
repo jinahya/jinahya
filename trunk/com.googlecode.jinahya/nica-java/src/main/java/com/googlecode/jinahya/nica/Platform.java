@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum PlatformId {
+public enum Platform {
 
 
     /**
@@ -55,13 +55,9 @@ public enum PlatformId {
      *
      * @return found constant
      */
-    public static PlatformId fromId(final String id) {
+    public static Platform fromId(final String id) {
 
-        if (id == null) {
-            throw new IllegalArgumentException("null id");
-        }
-
-        for (PlatformId value : values()) {
+        for (Platform value : values()) {
             if (value.id.equals(id)) {
                 return value;
             }
@@ -77,7 +73,7 @@ public enum PlatformId {
      *
      * @param id id
      */
-    private PlatformId(final String id) {
+    private Platform(final String id) {
         this.id = id;
     }
 

@@ -22,84 +22,123 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum CodeName {
+public final class CodeKeys {
 
 
     /**
      * Number used once per request.
      */
-    REQUEST_NONCE,
+    public static final String REQUEST_NONCE = "REQUEST_NONCE";
+
+
     /**
      * Current time in milliseconds since
-     * <code>midnight Coordinated Universal Time (UTC), 1 January
-     * 1970</code>.
+     * <code>00:00:00 UTC on 1 January 1970</code>
      */
-    REQUEST_TIMESTAMP,
+    public static final String REQUEST_TIMESTAMP = "REQUEST_TIMESTAMP";
+
+
     /**
      * User's username, if required, per request.
      */
-    USER_USERNAME,
+    public static final String USER_USERNAME = "USER_USERNAME";
+
+
     /**
      * User's password, if required, per request. The value for this code must
      * be encoded in SHA-512.
      */
-    USER_PASSWORD,
+    public static final String USER_PASSWORD = "USER_PASSWORD";
+
+
     /**
      * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
      */
-    USER_COUNTRY3,
+    public static final String USER_COUNTRY3 = "USER_COUNTRY3";
+
+
     /**
      * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
      */
-    USER_COUNTRY2,
+    public static final String USER_COUNTRY2 = "USER_COUNTRY2";
+
+
     /**
      * User country/region name in en-US. Not strictly required.
      */
-    USER_COUNTRY,
+    public static final String USER_COUNTRY = "USER_COUNTRY";
+
+
     /**
      * 3-letter lowercase language code. ISO 639-2.
      */
-    USER_LANGUAGE3,
+    public static final String USER_LANGUAGE3 = "USER_LANGUAGE3";
+
+
     /**
      * 2-letter lowercase language code. ISO 639-1.
      */
-    USER_LANGUAGE2,
+    public static final String USER_LANGUAGE2 = "USER_LANGUAGE2";
+
+
     /**
      * User language name in en-US. Not strictly required.
      */
-    USER_LANGUAGE,
+    public static final String USER_LANGUAGE = "USER_LANGUAGE";
+
+
     /**
      * System(OS) version.
      */
-    SYSTEM_VERSION,
+    public static final String SYSTEM_VERSION = "SYSTEM_VERSION";
+
+
     /**
      * System(OS) name.
      */
-    SYSTEM_NAME,
+    public static final String SYSTEM_NAME = "SYSTEM_NAME";
+
+
     /**
      * System(OS) identifier. Must be, if specified, unique by
-     * {@link #DEVICE_ID}. This code is required if {@link #DEVICE_ID} is
+     * {@link #DEVICE_ID}. This code is required if the {@link #DEVICE_ID} is
      * absent. The value must not be empty nor blank.
      */
-    SYSTEM_ID,
+    public static final String SYSTEM_ID = "SYSTEM_ID";
+
+
     /**
      * Device's version.
      */
-    DEVICE_VERSION,
+    public static final String DEVICE_VERSION = "DEVICE_VERSION";
+
+
     /**
      * Device's name.
      */
-    DEVICE_NAME,
+    public static final String DEVICE_NAME = "DEVICE_NAME";
+
+
     /**
      * Device identifier. Must be, if specified, unique by {@link #PLATFORM_ID}.
-     * This code is required if {@link #SYSTEM_ID} is absent. The value must not
-     * be empty nor blank.
+     * This code is required if the {@link #SYSTEM_ID} is absent. The value must
+     * not be empty nor blank.
      */
-    DEVICE_ID,
+    public static final String DEVICE_ID = "DEVICE_ID";
+
+
     /**
-     * platform identifier.
+     * Platform identifier.
      */
-    PLATFORM_ID;
+    public static final String PLATFORM_ID = "PLATFORM_ID";
+
+
+    /**
+     * Creates a new instance.
+     */
+    private CodeKeys() {
+        super();
+    }
 
 
 }

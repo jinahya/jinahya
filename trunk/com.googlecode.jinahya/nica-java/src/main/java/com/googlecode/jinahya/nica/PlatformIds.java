@@ -55,6 +55,9 @@ public final class PlatformIds {
     public static final String WINDOWS_PHONE = "/platforms/windows_phone";
 
 
+    /**
+     * Creates a new instance.
+     */
     private PlatformIds() {
         super();
     }

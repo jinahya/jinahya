@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.nica;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -26,18 +28,20 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PlatformIdTest {
+public class PlatformTest {
 
 
     @Test
-    public void testIdsAreValid() {
+    public void testIds() {
 
-        for (PlatformId value : PlatformId.values()) {
+        final Set<String> idSet = new HashSet<String>();
+        for (Platform value : Platform.values()) {
             final String id = value.id();
             Assert.assertNotNull(id);
             Assert.assertEquals(id, id.trim());
             Assert.assertFalse(id.isEmpty());
             Assert.assertFalse(id.trim().isEmpty());
+            Assert.assertTrue(idSet.add(id));
         }
     }
 
@@ -46,33 +50,21 @@ public class PlatformIdTest {
     public static void testFromId() {
 
         try {
-            final PlatformId platform = PlatformId.fromId(null);
+            final Platform platform = Platform.fromId(null);
             Assert.fail("passed: fromId(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final PlatformId platform = PlatformId.fromId("/not/exist");
+            final Platform platform = Platform.fromId("/not/exist");
             Assert.fail("passed: fromId(\"/not/exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (PlatformId value : PlatformId.values()) {
-            Assert.assertEquals(PlatformId.fromId(value.id()), value);
-        }
-    }
-
-
-    @Test
-    public void testIdUniqueness() {
-        for (PlatformId value : PlatformId.values()) {
-            for (PlatformId other : PlatformId.values()) {
-                if (!value.equals(other) && value.id().equals(other.id())) {
-                    Assert.fail("duplicated id");
-                }
-            }
+        for (Platform value : Platform.values()) {
+            Assert.assertEquals(Platform.fromId(value.id()), value);
         }
     }
 
