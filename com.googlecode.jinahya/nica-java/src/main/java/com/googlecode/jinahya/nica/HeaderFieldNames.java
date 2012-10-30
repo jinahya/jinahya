@@ -49,6 +49,9 @@ public final class HeaderFieldNames {
     public static final String AUTH = "Nica-Auth";
 
 
+    /**
+     * Creates a new instance.
+     */
     private HeaderFieldNames() {
         super();
     }

@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum HeaderFieldName {
+public enum Header {
 
 
     /**
@@ -43,12 +43,24 @@ public enum HeaderFieldName {
     AUTH(HeaderFieldNames.AUTH);
 
 
+    public static Header fromFieldName(final String fieldName) {
+
+        for (Header value : values()) {
+            if (value.fieldName.equals(fieldName)) {
+                return value;
+            }
+        }
+
+        throw new IllegalArgumentException("unknown fieldName: " + fieldName);
+    }
+
+
     /**
      * Creates a new instance.
      *
      * @param fieldName HTTP header field-name.
      */
-    private HeaderFieldName(final String fieldName) {
+    private Header(final String fieldName) {
         this.fieldName = fieldName;
     }
 
