@@ -65,10 +65,11 @@ public class EntityFacadeSupport {
      * @param <E> entity type parameter
      * @param entityManager entity manager
      * @param entityClass entity class
-     * @param entity entity
+     * @param entityInstance entity instance
      */
     public static <E> void persist(final EntityManager entityManager,
-                                   final Class<E> entityClass, final E entity) {
+                                   final Class<E> entityClass,
+                                   final E entityInstance) {
 
         if (entityManager == null) {
             throw new IllegalArgumentException("null entityManager");
@@ -78,11 +79,11 @@ public class EntityFacadeSupport {
             throw new IllegalArgumentException("null entityClass");
         }
 
-        if (entity == null) {
-            throw new IllegalArgumentException("null entity");
+        if (entityInstance == null) {
+            throw new IllegalArgumentException("null entity instance");
         }
 
-        entityManager.persist(entity);
+        entityManager.persist(entityInstance);
     }
 
 
@@ -92,12 +93,13 @@ public class EntityFacadeSupport {
      * @param <E> entity type parameter
      * @param entityManager entity manager
      * @param entityClass entity class
-     * @param entity entity instance
+     * @param entityInstance entity instance
      *
      * @return merged entity instance or <code>null</code> if removed
      */
     public static <E> E merge(final EntityManager entityManager,
-                              final Class<E> entityClass, final E entity) {
+                              final Class<E> entityClass,
+                              final E entityInstance) {
 
         if (entityManager == null) {
             throw new IllegalArgumentException("null entityManager");
@@ -107,12 +109,12 @@ public class EntityFacadeSupport {
             throw new IllegalArgumentException("null entityClass");
         }
 
-        if (entity == null) {
-            throw new IllegalArgumentException("null entity");
+        if (entityInstance == null) {
+            throw new IllegalArgumentException("null entity instance");
         }
 
         try {
-            return entityManager.merge(entity);
+            return entityManager.merge(entityInstance);
         } catch (IllegalArgumentException iae) {
         }
 
