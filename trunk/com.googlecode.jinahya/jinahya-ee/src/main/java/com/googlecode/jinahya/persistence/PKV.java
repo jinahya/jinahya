@@ -44,7 +44,7 @@ public final class PKV {
 
 
     /**
-     *
+     * Creates a new instance.
      */
     private PKV() {
         super();
