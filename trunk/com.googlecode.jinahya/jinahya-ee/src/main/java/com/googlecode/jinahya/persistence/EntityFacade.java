@@ -31,37 +31,32 @@ public interface EntityFacade<E, I> {
      *
      * @param primaryKey primary key
      *
-     * @return found entity instance or
-     * <code>null</code> if not found
+     * @return found entity instance or <code>null</code> if not found
      */
     E find(I primaryKey);
 
 
     /**
      *
-     * @param entity entity instance to persist
+     * @param entityInstance entity instance to persist
      */
-    void persist(E entity);
+    E persist(E entityInstance);
 
 
     /**
      *
-     * @param entity entity instance to merge
+     * @param entityInstance entity instance to merge
      *
      * @return the merged instance
      */
-    E merge(E entity);
+    E merge(E entityInstance);
 
 
-    /**
-     *
-     */
     /**
      *
      * @param primaryKey primary key
      *
-     * @return removed entity instance or
-     * <code>null</code> if not found
+     * @return removed entity instance or <code>null</code> if not found
      */
     E remove(I primaryKey);
 
