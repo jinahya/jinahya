@@ -113,12 +113,11 @@ public class EntityFacadeSupport {
             throw new IllegalArgumentException("null entity instance");
         }
 
-        try {
-            return entityManager.merge(entityInstance);
-        } catch (IllegalArgumentException iae) {
-        }
+        final E merged = entityManager.merge(entityInstance);
 
-        return null;
+//        entityManager.getEntityManagerFactory().getCache().evict(entityClass);
+
+        return merged;
     }
 
 
@@ -149,13 +148,16 @@ public class EntityFacadeSupport {
             throw new IllegalArgumentException("null primaryKey");
         }
 
-        final E entity = find(entityManager, entityClass, primaryKey);
+        final E entityInstance =
+            entityManager.getReference(entityClass, primaryKey);
 
-        if (entity != null) {
-            entityManager.remove(entity);
+//        final E entityInstance = find(entityManager, entityClass, primaryKey);
+
+        if (entityInstance != null) {
+            entityManager.remove(entityInstance);
         }
 
-        return entity;
+        return entityInstance;
     }
 
 
