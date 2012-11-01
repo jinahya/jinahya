@@ -179,7 +179,7 @@ public class Codes {
 
     /**
      * Puts a variable code. Note that variable codes are cleared after they
-     * used.
+     * once used.
      *
      * @param key key
      * @param value value

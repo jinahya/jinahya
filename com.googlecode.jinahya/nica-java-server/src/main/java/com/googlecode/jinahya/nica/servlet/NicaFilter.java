@@ -71,16 +71,17 @@ public abstract class NicaFilter implements Filter {
         NicaFilter.class.getName() + "#codes";
 
 
-//    /**
-//     * The attribute name for validating {@link Header#CODE}. The value must be
-//     * a Boolean.
-//     */
-//    protected static final String ATTRIBUTE_NICA_CODES_VALID =
-//        NicaFilter.class.getName() + "/codes#valid";
+    /**
+     * The attribute name for response status code. The value must be an
+     * Integer.
+     */
     public static final String ATTRIBUTE_RESPONSE_STATUS_CODE =
         HttpServletResponse.class.getName() + "#status_code";
 
 
+    /**
+     * The attribute name for response reason phrase.
+     */
     public static final String ATTRIBUTE_RESPONSE_REASON_PHRASE =
         HttpServletResponse.class.getName() + "#reason_phrase";
 
