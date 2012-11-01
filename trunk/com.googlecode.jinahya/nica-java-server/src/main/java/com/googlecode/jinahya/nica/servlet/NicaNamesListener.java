@@ -21,23 +21,21 @@ package com.googlecode.jinahya.nica.servlet;
 import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
-import javax.servlet.ServletRequestAttributeListener;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaCodesAttributeListener
-    implements ServletRequestAttributeListener {
+public abstract class NicaNamesListener extends NicaAttributeListener {
 
 
     @Override
     @SuppressWarnings("unchecked")
     public void attributeAdded(final ServletRequestAttributeEvent srae) {
 
-        if (NicaFilter.ATTRIBUTE_NICA_CODES.equals(srae.getName())) {
-            nicaCodesAdded(srae.getServletRequest(),
+        if (NicaFilter.ATTRIBUTE_NICA_NAMES.equals(srae.getName())) {
+            nicaNamesAdded(srae.getServletRequest(),
                            (Map<String, String>) srae.getValue());
         }
     }
@@ -45,23 +43,11 @@ public abstract class NicaCodesAttributeListener
 
     /**
      *
-     * @param request
-     * @param codes
+     * @param request servlet request
+     * @param names nica names
      */
-    protected abstract void nicaCodesAdded(ServletRequest request,
-                                           Map<String, String> codes);
-
-
-    @Override
-    public void attributeRemoved(final ServletRequestAttributeEvent srae) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    @Override
-    public void attributeReplaced(final ServletRequestAttributeEvent srae) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+    protected abstract void nicaNamesAdded(
+        ServletRequest request, Map<String, String> names);
 
 
 }

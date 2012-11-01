@@ -28,36 +28,63 @@ import javax.servlet.ServletRequestAttributeListener;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaNamesAttributeListener
+public abstract class NicaAttributeListener
     implements ServletRequestAttributeListener {
 
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void attributeAdded(final ServletRequestAttributeEvent srae) {
+    /**
+     *
+     * @param srae
+     * @param statusCode
+     * @param reasonPhrase
+     */
+    protected void setResponseError(final ServletRequestAttributeEvent srae,
+                                    final int statusCode,
+                                    final String reasonPhrase) {
 
-        if (NicaFilter.ATTRIBUTE_NICA_NAMES.equals(srae.getName())) {
-            nicaNamesAdded(srae.getServletRequest(),
-                           (Map<String, String>) srae.getValue());
+        if (srae == null) {
+            throw new IllegalArgumentException("null srae");
         }
+
+        setResponseError(srae.getServletRequest(), statusCode, reasonPhrase);
     }
 
 
     /**
      *
      * @param request
-     * @param names
+     * @param statusCode
+     * @param reasonPhrase
      */
-    protected abstract void nicaNamesAdded(ServletRequest request,
-                                           Map<String, String> names);
+    protected void setResponseError(final ServletRequest request,
+                                    final int statusCode,
+                                    final String reasonPhrase) {
+        if (request == null) {
+            throw new IllegalArgumentException("null sr");
+        }
+        request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_STATUS_CODE,
+                             statusCode);
+        request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_REASON_PHRASE,
+                             reasonPhrase);
+    }
 
 
+    /**
+     * Overridden to do nothing.
+     *
+     * @param srae {@inheritDoc }
+     */
     @Override
     public void attributeRemoved(final ServletRequestAttributeEvent srae) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
+    /**
+     * Overridden to do nothing.
+     *
+     * @param srae {@inheritDoc }
+     */
     @Override
     public void attributeReplaced(final ServletRequestAttributeEvent srae) {
         //throw new UnsupportedOperationException("Not supported yet.");
