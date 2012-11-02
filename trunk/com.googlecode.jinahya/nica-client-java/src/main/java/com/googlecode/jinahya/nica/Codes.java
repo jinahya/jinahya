@@ -98,6 +98,7 @@ public class Codes {
      * Returns a synchronized (thread-safe) map backed by the specified codes.
      *
      * @param codes the codes to be "wrapped" in a synchronized codes.
+     *
      * @return a synchronized view of the specified codes.
      */
     public static Codes synchronziedCodes(final Codes codes) {
@@ -131,6 +132,7 @@ public class Codes {
      *
      * @param codes the map to which codes are added
      */
+    //@SuppressWarnings("unchecked")
     public void getCodes(final Map codes) {
 
         if (codes == null) {
@@ -138,11 +140,11 @@ public class Codes {
         }
 
         final long requestTimestamp = System.currentTimeMillis();
-        putVariableCode(Code.REQUEST_TIMESTAMP.name(),
+        putVariableCode(CodeKeys.REQUEST_TIMESTAMP,
                         Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        putVariableCode(Code.REQUEST_NONCE.name(),
+        putVariableCode(CodeKeys.REQUEST_NONCE,
                         Long.toString(requestNonce));
 
         codes.putAll(variableCodes);
@@ -158,6 +160,7 @@ public class Codes {
      * @param key key
      * @param value value
      */
+    //@SuppressWarnings("unchecked")
     public void putConstantCode(final String key, final String value) {
 
         if (key == null) {
@@ -177,6 +180,16 @@ public class Codes {
     }
 
 
+    public boolean hasContantCode(final String key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        return constantCodes.containsKey(key);
+    }
+
+
     /**
      * Puts a variable code. Note that variable codes are cleared after they
      * used.
@@ -186,6 +199,7 @@ public class Codes {
      *
      * @return previous value
      */
+    //@SuppressWarnings("unchecked")
     public String putVariableCode(final String key, final String value) {
 
         if (key == null) {
@@ -197,6 +211,16 @@ public class Codes {
         }
 
         return (String) variableCodes.put(key, value);
+    }
+
+
+    public boolean hasVariableCode(final String key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        return variableCodes.containsKey(key);
     }
 
 
