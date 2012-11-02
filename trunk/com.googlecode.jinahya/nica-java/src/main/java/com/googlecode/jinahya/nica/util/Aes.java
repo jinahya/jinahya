@@ -142,7 +142,7 @@ public abstract class Aes {
      *
      * @return a new encryption key.
      */
-    protected static byte[] newKey() {
+    public static byte[] newKey() {
 
         return randomBytes(new byte[KEY_SIZE_IN_BYTES]);
     }
@@ -173,7 +173,7 @@ public abstract class Aes {
      *
      * @return a new initialization vector
      */
-    protected static byte[] newIv() {
+    public static byte[] newIv() {
         return randomBytes(new byte[BLOCK_SIZE_IN_BYTES]);
     }
 
