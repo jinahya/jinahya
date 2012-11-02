@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Random;
 
 
@@ -30,30 +28,14 @@ import java.util.Random;
 public class Nuo {
 
 
-    /**
-     * RNG algorithm.
-     */
-    private static final String ALGORITHM = "SHA1PRNG";
-
-
+//    /**
+//     * RNG algorithm.
+//     */
+//    private static final String ALGORITHM = "SHA1PRNG";
     /**
      * Random.
      */
-    private static final ThreadLocal<Random> RANDOM =
-        new ThreadLocal<Random>() {
-
-
-            @Override
-            protected Random initialValue() {
-                try {
-                    return SecureRandom.getInstance(ALGORITHM);
-                } catch (NoSuchAlgorithmException nsae) {
-                    throw new RuntimeException(ALGORITHM + " not supported?");
-                }
-            }
-
-
-        };
+    private static final Random RANDOM = new Random();
 
 
     /**
@@ -74,6 +56,7 @@ public class Nuo {
      * @return a new value
      */
     public static long generate() {
+
         return generate(System.currentTimeMillis());
     }
 
@@ -87,7 +70,9 @@ public class Nuo {
      */
     public static long generate(final long timestamp) {
 
-        return generate(timestamp, RANDOM.get());
+        synchronized (RANDOM) {
+            return generate(timestamp, RANDOM);
+        }
     }
 
 
