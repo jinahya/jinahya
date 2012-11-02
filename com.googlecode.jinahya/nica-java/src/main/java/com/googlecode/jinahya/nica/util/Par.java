@@ -49,14 +49,15 @@ public class Par {
         final Map<String, String> encoded = new TreeMap<String, String>();
 
         for (Entry<String, String> entry : decoded.entrySet()) {
-            if (entry.getKey() == null) {
+            final String key = entry.getKey();
+            if (key == null) {
                 throw new IllegalArgumentException("null key");
             }
-            if (entry.getValue() == null) {
+            final String value = entry.getValue();
+            if (value == null) {
                 throw new IllegalArgumentException("null value");
             }
-            encoded.put(Per.encodeToString(entry.getKey()),
-                        Per.encodeToString(entry.getValue()));
+            encoded.put(Per.encodeToString(key), Per.encodeToString(value));
         }
 
         final StringBuilder builder = new StringBuilder();
@@ -64,7 +65,9 @@ public class Par {
             encoded.entrySet().iterator();
         if (entries.hasNext()) {
             final Entry<String, String> entry = entries.next();
-            builder.append(entry.getKey()).append('=').append(entry.getValue());
+            builder.append(entry.getKey()).
+                append('=').
+                append(entry.getValue());
         }
         while (entries.hasNext()) {
             final Entry<String, String> entry = entries.next();
@@ -92,25 +95,7 @@ public class Par {
             throw new IllegalArgumentException("null encoded");
         }
 
-//        if (encoded.isEmpty()) {
-//            return Collections.<String, String>emptyMap();
-//        }
-
         final Map<String, String> decoded = new HashMap<String, String>();
-
-//        for (String pair : encoded.split("&")) {
-//            final int index = pair.indexOf('=');
-//            if (index == -1) {
-//                throw new IllegalArgumentException("illegal encoded");
-//            }
-//            final String key = pair.substring(0, index);
-//            final String val = pair.substring(index + 1);
-//            final String previous = decoded.put(
-//                PER.decodeToString(key), PER.decodeToString(val));
-//            if (previous != null) {
-//                throw new IllegalArgumentException("duplicated entry");
-//            }
-//        }
 
         int f = 0;
         for (int a = -1; (a = encoded.indexOf('&', f)) != -1;) {
