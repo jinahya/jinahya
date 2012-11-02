@@ -34,9 +34,9 @@ public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
 
     @Override
     protected void verifyPerClient(final ServletRequest request,
-                                 final Map<String, String> codes,
-                                 final String platformId, final String deviceId,
-                                 final String systemId) {
+                                   final Map<String, String> codes,
+                                   final String platformId, final String deviceId,
+                                   final String systemId) {
 
         final String requestNonce_ = codes.get(Code.REQUEST_NONCE.key());
 
@@ -66,11 +66,13 @@ public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
 
 
     /**
+     * Verifies given
+     * <code>requestNonce</code> per client.
      *
-     * @param platformId
-     * @param deviceId
-     * @param systemId
-     * @param requestNonce
+     * @param platformId platform id
+     * @param deviceId device id
+     * @param systemId system id
+     * @param requestNonce request nonce
      * @return true if given nonce is ok for given ids; false if duplicated
      */
     protected abstract boolean verifyNonce(final String platformId,

@@ -34,9 +34,9 @@ public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
 
     @Override
     protected void verifyPerClient(final ServletRequest request,
-                              final Map<String, String> codes,
-                              final String platformId, final String deviceId,
-                              final String systemId) {
+                                   final Map<String, String> codes,
+                                   final String platformId, final String deviceId,
+                                   final String systemId) {
 
         final String requestTimestamp_ =
             codes.get(Code.REQUEST_TIMESTAMP.key());
@@ -67,11 +67,13 @@ public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
 
 
     /**
+     * Verifies given
+     * <code>requestTimestamp</code> per client.
      *
-     * @param platformId
-     * @param deviceId
-     * @param systemId
-     * @param requestTimestamp
+     * @param platformId platform id
+     * @param deviceId device id
+     * @param systemId system id
+     * @param requestTimestamp request timestamp
      * @return true if given timestamp is latest for given ids; false if not
      */
     protected abstract boolean verifyTimestamp(final String platformId,
