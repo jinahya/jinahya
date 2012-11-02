@@ -46,15 +46,15 @@ public class Per {
             new ByteArrayOutputStream(encoded.length);
 
         for (int i = 0; i < encoded.length; i++) {
-            if ((encoded[i] >= 0x30 && encoded[i] <= 0x39) // [0-9]
+            if ((encoded[i] >= 0x30 && encoded[i] <= 0x39) //    [0-9]
                 || (encoded[i] >= 0x41 && encoded[i] <= 0x5A) // [a-z]
                 || (encoded[i] >= 0x61 && encoded[i] <= 0x7A) // [A-Z]
-                || encoded[i] == 0x2D // '-'
-                || encoded[i] == 0x5F // '_'
-                || encoded[i] == 0x2E // '.'
-                || encoded[i] == 0x7E) { // '~'                
+                || encoded[i] == 0x2D //                         '-' hyphen
+                || encoded[i] == 0x5F //                         '_' underscore
+                || encoded[i] == 0x2E //                         '.' period
+                || encoded[i] == 0x7E) { //                      '~' tilde
                 decoded.write(encoded[i]);
-            } else if (encoded[i] == 0x25) {
+            } else if (encoded[i] == 0x25) { // '%'
                 if ((i + 2) >= encoded.length) {
                     throw new IllegalArgumentException(
                         "illegal encoded: " + encoded[i]);
@@ -152,16 +152,16 @@ public class Per {
 
         final byte[] hex = new byte[2];
         for (int i = 0; i < decoded.length; i++) {
-            if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) // [0-9]
+            if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) //    [0-9]
                 || (decoded[i] >= 0x41 && decoded[i] <= 0x5A) // [a-z]
                 || (decoded[i] >= 0x61 && decoded[i] <= 0x7A) // [A-Z]
-                || decoded[i] == 0x2D // '-'
-                || decoded[i] == 0x5F // '_'
-                || decoded[i] == 0x2E // '.'
-                || decoded[i] == 0x7E) { // '~'
+                || decoded[i] == 0x2D //                         '-'
+                || decoded[i] == 0x5F //                         '_'
+                || decoded[i] == 0x2E //                         '.'
+                || decoded[i] == 0x7E) { //                      '~'
                 encoded.write(decoded[i]);
             } else {
-                encoded.write(0x25); // '%'
+                encoded.write(0x25); //                          '%'
                 Hex.encodeSingle(decoded[i] & 0xFF, hex, 0);
                 encoded.write(hex[0]);
                 encoded.write(hex[1]);
