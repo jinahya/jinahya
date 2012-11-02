@@ -58,7 +58,7 @@ public abstract class NicaFilter implements Filter {
      * The attribute name for located encryption key. The value must be an array
      * of bytes.
      */
-    protected static final String ATTRIBUTE_NICA_KEY =
+    protected static final String ATTRIBUTE_NICA_SECRET =
         NicaFilter.class.getName() + "#secret";
 
 
@@ -76,27 +76,34 @@ public abstract class NicaFilter implements Filter {
      * Integer.
      */
     public static final String ATTRIBUTE_RESPONSE_STATUS_CODE =
-        HttpServletResponse.class.getName() + "#status_code";
+        NicaFilter.class.getName() + "#response_status_code";
 
 
     /**
      * The attribute name for response reason phrase.
      */
     public static final String ATTRIBUTE_RESPONSE_REASON_PHRASE =
-        HttpServletResponse.class.getName() + "#reason_phrase";
+        NicaFilter.class.getName() + "#response_reason_phrase";
 
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     private static boolean checkResponseAttributes(
         final HttpServletRequest request, final HttpServletResponse response)
         throws IOException {
 
-//        if (request == null) {
-//            throw new IllegalArgumentException("null request");
-//        }
-//
-//        if (response == null) {
-//            throw new IllegalArgumentException("null response");
-//        }
+        if (request == null) {
+            throw new IllegalArgumentException("null request");
+        }
+
+        if (response == null) {
+            throw new IllegalArgumentException("null response");
+        }
 
         final Integer statusCode = (Integer) request.getAttribute(
             ATTRIBUTE_RESPONSE_STATUS_CODE);
@@ -251,7 +258,7 @@ public abstract class NicaFilter implements Filter {
             return;
         }
 
-        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_KEY);
+        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_SECRET);
         if (key == null) {
             hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                                "no key located");
@@ -318,35 +325,35 @@ public abstract class NicaFilter implements Filter {
         }
 
         // ----------------------------------------------- Nica-Code/PLATFORM_ID
-        final String platformId = codes.get(Code.PLATFORM_ID.name());
+        final String platformId = codes.get(Code.PLATFORM_ID.key());
         if (platformId == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "missing code: " + Code.PLATFORM_ID.name());
+                "missing code: " + Code.PLATFORM_ID.key());
             return;
         }
         if (platformId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty (or blank) code: " + Code.PLATFORM_ID.name());
+                "empty (or blank) code: " + Code.PLATFORM_ID.key());
             return;
         }
 
         // ------------------------------------------------- Nica-Code/DEVICE_ID
-        final String deviceId = codes.get(Code.DEVICE_ID.name());
+        final String deviceId = codes.get(Code.DEVICE_ID.key());
         if (deviceId != null && deviceId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty (or blank) code: " + Code.DEVICE_ID.name());
+                "empty (or blank) code: " + Code.DEVICE_ID.key());
             return;
         }
 
         // ------------------------------------------------- Nica-Code/SYSTEM_ID
-        final String systemId = codes.get(Code.SYSTEM_ID.name());
+        final String systemId = codes.get(Code.SYSTEM_ID.key());
         if (systemId != null && systemId.trim().isEmpty()) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "empty (or blank) code: " + Code.SYSTEM_ID.name());
+                "empty (or blank) code: " + Code.SYSTEM_ID.key());
             return;
         }
 
@@ -380,7 +387,7 @@ public abstract class NicaFilter implements Filter {
         }
         if (!Arrays.equals(new HacJCE(key).authenticate(base), auth)) {
             hesponse.sendError(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                HttpServletResponse.SC_UNAUTHORIZED,
                 "authentication failed");
             return;
         }
@@ -393,38 +400,6 @@ public abstract class NicaFilter implements Filter {
 
         chain.doFilter(request, response);
     }
-
-
-    /**
-     * Finds encryption key for given
-     * <code>names</code>.
-     *
-     * @param request
-     * @param response
-     * @param names an unmodifiable map of names for locating key.
-     *
-     * @throws IOException
-     * @throws ServletException
-     */
-    protected abstract void locateKey(ServletRequest request,
-                                      ServletResponse response,
-                                      Map<String, String> names)
-        throws IOException, ServletException;
-
-
-    /**
-     *
-     * @param request
-     * @param response
-     * @param codes an unmodifiable map of codes.
-     *
-     * @throws IOException
-     * @throws ServletException
-     */
-    protected abstract void checkCodes(ServletRequest request,
-                                       ServletResponse response,
-                                       Map<String, String> codes)
-        throws IOException, ServletException;
 
 
 }
