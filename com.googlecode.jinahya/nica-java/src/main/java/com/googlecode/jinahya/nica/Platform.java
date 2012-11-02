@@ -26,23 +26,23 @@ public enum Platform {
 
 
     /**
-     * Android.
+     * See {@link PlatformIds#ANDROID}.
      */
     ANDROID(PlatformIds.ANDROID),
     /**
-     * BlackBerry.
+     * See {@link PlatformIds#BLACKBERRY}.
      */
     BLACKBERRY(PlatformIds.BLACKBERRY),
     /**
-     * iOS.
+     * See {@link PlatformIds#IOS}.
      */
     IOS(PlatformIds.IOS),
     /**
-     * Tizen.
+     * See {@link PlatformIds#TIZEN}.
      */
     TIZEN(PlatformIds.TIZEN),
     /**
-     * Windows Phone.
+     * See {@link PlatformIds#WINDOWS_PHONE}.
      */
     WINDOWS_PHONE(PlatformIds.WINDOWS_PHONE);
 
@@ -74,6 +74,15 @@ public enum Platform {
      * @param id id
      */
     private Platform(final String id) {
+
+        if (id == null) {
+            throw new IllegalArgumentException("null id");
+        }
+
+        if (id.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty id");
+        }
+
         this.id = id;
     }
 

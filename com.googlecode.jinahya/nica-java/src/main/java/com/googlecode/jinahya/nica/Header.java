@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica;
 
 
 /**
+ * Constants for HTTP header field-names.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -26,19 +27,19 @@ public enum Header {
 
 
     /**
-     * Header for names.
+     * See {@link HeaderFieldNames#NAME}.
      */
     NAME(HeaderFieldNames.NAME),
     /**
-     * Header for initialization vector.
+     * See {@link HeaderFieldNames#INIT}.
      */
     INIT(HeaderFieldNames.INIT),
     /**
-     * Header for encrypted code.
+     * See {@link HeaderFieldNames#CODE}.
      */
     CODE(HeaderFieldNames.CODE),
     /**
-     * Header for HMAC.
+     * See {@link HeaderFieldNames#AUTH}.
      */
     AUTH(HeaderFieldNames.AUTH);
 
@@ -68,6 +69,15 @@ public enum Header {
      * @param fieldName HTTP header field-name.
      */
     private Header(final String fieldName) {
+
+        if (fieldName == null) {
+            throw new IllegalArgumentException("null fieldName");
+        }
+
+        if (fieldName.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty fieldName");
+        }
+
         this.fieldName = fieldName;
     }
 

@@ -43,10 +43,8 @@ public class MacBCTest extends HacTest<HacBC> {
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(invocationCount = 128)
     public void testAuthenticateAgainstJCE() {
-
-        LOGGER.info("testAuthenticateAgainstJCE");
 
         final byte[] key = AesJCETest.generateKey();
 
@@ -60,10 +58,8 @@ public class MacBCTest extends HacTest<HacBC> {
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(invocationCount = 128)
     public void testAuthenticateWithStringAgainstJCE() {
-
-        LOGGER.info("testAuthenticateWithStringAgainstJCE");
 
         final byte[] key = AesJCETest.generateKey();
 
