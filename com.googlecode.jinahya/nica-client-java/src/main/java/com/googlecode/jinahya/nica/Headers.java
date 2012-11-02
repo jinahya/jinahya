@@ -38,6 +38,9 @@ import java.util.Map.Entry;
 public abstract class Headers {
 
 
+    /**
+     * synchronized class.
+     */
     private static class SynchronizedHeaders extends Headers {
 
 
@@ -77,6 +80,7 @@ public abstract class Headers {
      * Returns a synchronized (thread-safe) map backed by the specified headers.
      *
      * @param headers the headers to be "wrapped" in a synchronized headers.
+     *
      * @return a synchronized view of the specified headers.
      */
     public static Headers synchronizedHeaders(final Headers headers) {
@@ -92,10 +96,10 @@ public abstract class Headers {
     /**
      * Creates a new instance.
      *
-     * @param name
-     * @param codes
-     * @param aes
-     * @param hac
+     * @param name a Par encoded nica names
+     * @param codes codes
+     * @param aes aes
+     * @param hac hac
      */
     public Headers(final String name, final Codes codes, final Aes aes,
                    final Hac hac) {
@@ -155,6 +159,7 @@ public abstract class Headers {
      *
      * @return a map of request headers
      */
+    //@SuppressWarnings("unchecked")
     public Map getHeaders() {
 
         final Map headers = new HashMap();
@@ -194,12 +199,21 @@ public abstract class Headers {
     private final String name;
 
 
+    /**
+     * codes.
+     */
     private final Codes codes;
 
 
+    /**
+     * aes.
+     */
     private final Aes aes;
 
 
+    /**
+     * hac.
+     */
     private final Hac hac;
 
 

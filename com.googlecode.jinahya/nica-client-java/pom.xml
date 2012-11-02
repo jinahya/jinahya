@@ -287,7 +287,6 @@
     </profile>
     <profile>
       <id>source13</id>
-      <activation/>
       <build>
         <plugins>
           <plugin>
