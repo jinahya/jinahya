@@ -71,10 +71,13 @@ public abstract class AesTest<A extends Aes> {
         final byte[] expected =
             new byte[ThreadLocalRandom.current().nextInt(1024)];
         ThreadLocalRandom.current().nextBytes(expected);
+        System.out.println("expected: " + Hex.encodeToString(expected));
 
         final byte[] encrypted = aes.encrypt(iv, expected);
+        System.out.println("encrypted: " + Hex.encodeToString(encrypted));
 
         final byte[] actual = aes.decrypt(iv, encrypted);
+        System.out.println("actual: " + Hex.encodeToString(actual));
 
         Assert.assertEquals(actual, expected);
     }

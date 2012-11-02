@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESFastEngine;
@@ -37,14 +36,13 @@ public class AesBC extends Aes {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new synchronized instance.
      *
-     * @param key encryption key.
-     *
-     * @return a new instance.
+     * @param key the encryption key.
+     * @return a new synchronized instance.
      */
-    public static Aes newInstance(final byte[] key) {
-        return new AesBC(key);
+    public static Aes newSynchronizedInstance(final byte[] key) {
+        return synchronizedAes(new AesBC(key));
     }
 
 
@@ -65,7 +63,10 @@ public class AesBC extends Aes {
                 "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
-        this.keyParameter = new KeyParameter(key);
+        keyParameter = new KeyParameter(key);
+
+        cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(
+            new AESFastEngine()));
     }
 
 
@@ -85,9 +86,7 @@ public class AesBC extends Aes {
             throw new IllegalArgumentException("null decrypted");
         }
 
-        final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(getAESEngine()));
-
+        cipher.reset();
         cipher.init(true, new ParametersWithIV(keyParameter, iv));
 
         final byte[] encrypted =
@@ -128,9 +127,7 @@ public class AesBC extends Aes {
             throw new IllegalArgumentException("null encrypted");
         }
 
-        final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(getAESEngine()));
-
+        cipher.reset();
         cipher.init(false, new ParametersWithIV(keyParameter, iv));
 
         final byte[] decrypted =
@@ -156,19 +153,15 @@ public class AesBC extends Aes {
 
 
     /**
-     * Return an instance of AESEngine.
-     *
-     * @return an instance of AESEngine
-     */
-    protected BlockCipher getAESEngine() {
-        return new AESFastEngine();
-    }
-
-
-    /**
      * key.
      */
     private final KeyParameter keyParameter;
+
+
+    /**
+     * cipher.
+     */
+    private final BufferedBlockCipher cipher;
 
 
 }

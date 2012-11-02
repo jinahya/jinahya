@@ -81,7 +81,21 @@ public abstract class Aes {
     private static final Random RANDOM = new Random();
 
 
+    /**
+     * Generates a random bytes.
+     *
+     * @param bytes bytes to fill
+     * @return given <code>bytes</code>
+     */
     private static byte[] randomBytes(final byte[] bytes) {
+
+        if (bytes == null) {
+            throw new IllegalArgumentException("null bytes");
+        }
+
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException("zero length bytes");
+        }
 
         final Random random;
 
@@ -93,6 +107,13 @@ public abstract class Aes {
     }
 
 
+    /**
+     * Generates a random bytes.
+     *
+     * @param random the random to use
+     * @param bytes the bytes to fill
+     * @return given <code>bytes</code>
+     */
     private static byte[] randomBytes(final Random random, final byte[] bytes) {
 
         if (random == null) {
@@ -101,6 +122,10 @@ public abstract class Aes {
 
         if (bytes == null) {
             throw new IllegalArgumentException("null bytes");
+        }
+
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException("zero length bytes");
         }
 
         for (int i = 0; i < bytes.length; i++) {
@@ -169,6 +194,64 @@ public abstract class Aes {
             throw new IllegalArgumentException(
                 "key.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
         }
+    }
+
+
+    /**
+     * The class for synchronized instances.
+     */
+    private static class SynchronizedAes extends Aes {
+
+
+        public SynchronizedAes(final Aes aes) {
+            super();
+
+            if (aes == null) {
+                throw new IllegalArgumentException("null aes");
+            }
+
+            this.aes = aes;
+        }
+
+
+        //@Override
+        public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
+            synchronized (aes) {
+                return aes.encrypt(iv, decrypted);
+            }
+        }
+
+
+        //@Override
+        public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
+            synchronized (aes) {
+                return aes.decrypt(iv, encrypted);
+            }
+        }
+
+
+        /**
+         * mutex.
+         */
+        private final Aes aes;
+
+
+    }
+
+
+    /**
+     * Returns a synchronized (thread-safe) aes backed by the specified aes.
+     *
+     * @param aes the aes to be "wrapped" in a synchronized aes.
+     * @return a synchronized view of the specified aes.
+     */
+    public static Aes synchronizedAes(final Aes aes) {
+
+        if (aes == null) {
+            throw new IllegalArgumentException("null aes");
+        }
+
+        return new SynchronizedAes(aes);
     }
 
 

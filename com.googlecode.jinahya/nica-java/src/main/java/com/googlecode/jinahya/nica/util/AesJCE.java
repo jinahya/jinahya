@@ -18,8 +18,14 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -32,14 +38,13 @@ public class AesJCE extends Aes {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new synchronized instance.
      *
-     * @param key encryption key
-     *
+     * @param key the encryption key
      * @return a new instance
      */
-    public static Aes newInstance(final byte[] key) {
-        return new AesJCE(key);
+    public static Aes newSynchronizedInstance(final byte[] key) {
+        return synchronizedAes(new AesJCE(key));
     }
 
 
@@ -61,6 +66,16 @@ public class AesJCE extends Aes {
         }
 
         this.key = new SecretKeySpec(key, ALGORITHM);
+
+        try {
+            cipher = Cipher.getInstance(TRANSFORMATION);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException(
+                "\"" + ALGORITHM + "\" not supported?", nsae);
+        } catch (NoSuchPaddingException nspe) {
+            throw new RuntimeException(
+                "\"" + PADDING + "\" not supported?", nspe);
+        }
     }
 
 
@@ -81,11 +96,19 @@ public class AesJCE extends Aes {
         }
 
         try {
-            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        } catch (InvalidKeyException ike) {
+            throw new RuntimeException(ike);
+        } catch (InvalidAlgorithmParameterException iape) {
+            throw new RuntimeException(iape);
+        }
+
+        try {
             return cipher.doFinal(decrypted);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException ibse) {
+            throw new RuntimeException(ibse);
+        } catch (BadPaddingException bpe) {
+            throw new RuntimeException(bpe);
         }
     }
 
@@ -107,11 +130,19 @@ public class AesJCE extends Aes {
         }
 
         try {
-            final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+        } catch (InvalidKeyException ike) {
+            throw new RuntimeException(ike);
+        } catch (InvalidAlgorithmParameterException iape) {
+            throw new RuntimeException(iape);
+        }
+
+        try {
             return cipher.doFinal(encrypted);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IllegalBlockSizeException ibse) {
+            throw new RuntimeException(ibse);
+        } catch (BadPaddingException bpe) {
+            throw new RuntimeException(bpe);
         }
     }
 
@@ -120,6 +151,12 @@ public class AesJCE extends Aes {
      * key.
      */
     private final Key key;
+
+
+    /**
+     * cipher.
+     */
+    private final Cipher cipher;
 
 
 }
