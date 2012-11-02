@@ -34,21 +34,21 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaKeyFinder extends NicaNamesListener {
+public abstract class NicaKeyLocator extends NicaNamesListener {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(NicaKeyFinder.class.getName());
+        Logger.getLogger(NicaKeyLocator.class.getName());
 
 
     @Override
     protected void nicaNamesAdded(final ServletRequest request,
                                   final Map<String, String> names) {
 
-        final byte[] key = findKey(names);
+        final byte[] key = locateKey(names);
 
         if (key == null) {
             setResponseError(request, HttpServletResponse.SC_UNAUTHORIZED,
@@ -70,7 +70,7 @@ public abstract class NicaKeyFinder extends NicaNamesListener {
      * @param names nica names
      * @return the encryption key or null if unavailable.
      */
-    protected abstract byte[] findKey(Map<String, String> names);
+    protected abstract byte[] locateKey(Map<String, String> names);
 
 
 }
