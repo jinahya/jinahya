@@ -26,78 +26,71 @@ public enum Code {
 
 
     /**
-     * Number used once per request.
+     * See {@link CodeKeys#REQUEST_NONCE}.
      */
     REQUEST_NONCE(CodeKeys.REQUEST_NONCE),
     /**
-     * Current time in milliseconds since
-     * <code>midnight Coordinated Universal Time (UTC), 1 January
-     * 1970</code>.
+     * See {@link CodeKeys#REQUEST_TIMESTAMP}.
      */
     REQUEST_TIMESTAMP(CodeKeys.REQUEST_TIMESTAMP),
     /**
-     * User's password, if required, per request. The value for this code must
-     * be encoded in SHA-512.
+     * See {@link CodeKeys#USER_PASSWORD}.
      */
     USER_PASSWORD(CodeKeys.USER_PASSWORD),
     /**
-     * User's username, if required, per request.
+     * See {@link CodeKeys#USER_USERNAME}.
      */
     USER_USERNAME(CodeKeys.USER_USERNAME),
     /**
-     * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
+     * See {@link CodeKeys#USER_COUNTRY3}.
      */
     USER_COUNTRY3(CodeKeys.USER_COUNTRY3),
     /**
-     * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
+     * See {@link CodeKeys#USER_COUNTRY2}.
      */
     USER_COUNTRY2(CodeKeys.USER_COUNTRY2),
     /**
-     * User country/region name in en-US. Not strictly required.
+     * See {@link CodeKeys#USER_COUNTRY}.
      */
     USER_COUNTRY(CodeKeys.USER_COUNTRY),
     /**
-     * 3-letter lowercase language code. ISO 639-2.
+     * See {@link CodeKeys#USER_LANGUAGE3}.
      */
     USER_LANGUAGE3(CodeKeys.USER_LANGUAGE3),
     /**
-     * 2-letter lowercase language code. ISO 639-1.
+     * See {@link CodeKeys#USER_LANGUAGE2}.
      */
     USER_LANGUAGE2(CodeKeys.USER_LANGUAGE2),
     /**
-     * User language name in en-US. Not strictly required.
+     * See {@link CodeKeys#USER_LANGUAGE}.
      */
     USER_LANGUAGE(CodeKeys.USER_LANGUAGE),
     /**
-     * System(OS) version.
+     * See {@link CodeKeys#SYSTEM_VERSION}.
      */
     SYSTEM_VERSION(CodeKeys.SYSTEM_VERSION),
     /**
-     * System(OS) name.
+     * See {@link CodeKeys#SYSTEM_NAME}.
      */
     SYSTEM_NAME(CodeKeys.SYSTEM_NAME),
     /**
-     * System(OS) identifier. Must be, if specified, unique by
-     * {@link #DEVICE_ID}. This code is required if {@link #DEVICE_ID} is
-     * absent. The value must not be empty nor blank.
+     * See {@link CodeKeys#SYSTEM_ID}.
      */
     SYSTEM_ID(CodeKeys.SYSTEM_ID),
     /**
-     * Device's version.
+     * See {@link CodeKeys#DEVICE_VERSION}.
      */
     DEVICE_VERSION(CodeKeys.DEVICE_VERSION),
     /**
-     * Device's name.
+     * See {@link CodeKeys#DEVICE_NAME}.
      */
     DEVICE_NAME(CodeKeys.DEVICE_NAME),
     /**
-     * Device identifier. Must be, if specified, unique by {@link #PLATFORM_ID}.
-     * This code is required if {@link #SYSTEM_ID} is absent. The value must not
-     * be empty nor blank.
+     * See {@link CodeKeys#DEVICE_ID}.
      */
     DEVICE_ID(CodeKeys.DEVICE_ID),
     /**
-     * platform identifier.
+     * See {@link CodeKeys#PLATFORM_ID}.
      */
     PLATFORM_ID(CodeKeys.PLATFORM_ID);
 
@@ -133,9 +126,9 @@ public enum Code {
 
 
     /**
-     * Returns id.
+     * Returns key.
      *
-     * @return id
+     * @return key
      */
     public String key() {
         return key;
@@ -143,7 +136,7 @@ public enum Code {
 
 
     /**
-     * id.
+     * key.
      */
     private final String key;
 

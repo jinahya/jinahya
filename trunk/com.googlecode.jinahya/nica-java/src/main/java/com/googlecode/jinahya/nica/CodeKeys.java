@@ -33,7 +33,7 @@ public final class CodeKeys {
 
     /**
      * Current time in milliseconds since
-     * <code>00:00:00 UTC on 1 January 1970</code>
+     * <code>00:00:00 UTC on 1 January 1970</code>.
      */
     public static final String REQUEST_TIMESTAMP = "REQUEST_TIMESTAMP";
 
