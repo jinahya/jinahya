@@ -103,9 +103,12 @@ public enum Code {
 
 
     /**
+     * Finds the value whose key matches to given
+     * <code>key</code>. An IllegalArgumentException will be thrown if no values
+     * match.
      *
-     * @param key
-     * @return
+     * @param key key
+     * @return the matched value.
      */
     public static Code fromKey(final String key) {
 
