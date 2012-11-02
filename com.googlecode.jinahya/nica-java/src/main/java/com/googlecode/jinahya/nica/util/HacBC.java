@@ -31,6 +31,53 @@ public class HacBC extends Hac {
 
 
     /**
+     * Returns a new synchronized (thread-safe) instance.
+     *
+     * @param key key
+     * @return a new synchroized instance.
+     */
+    public static Hac newSynchronizedInstance(final byte[] key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
+        }
+
+        final HMac mac = new HMac(new SHA512Digest());
+        mac.init(new KeyParameter(key));
+
+        return new Hac() {
+
+
+            //@Override
+            public byte[] authenticate(byte[] message) {
+
+                if (message == null) {
+                    throw new IllegalArgumentException("null message");
+                }
+
+                synchronized (mac) {
+
+                    mac.reset();
+                    mac.update(message, 0, message.length);
+
+                    final byte[] authenticated = new byte[mac.getMacSize()];
+                    mac.doFinal(authenticated, 0);
+
+                    return authenticated;
+                }
+            }
+
+
+        };
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param key encryption key
@@ -47,7 +94,8 @@ public class HacBC extends Hac {
                 "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
-        keyParameter = new KeyParameter(key);
+        mac = new HMac(new SHA512Digest());
+        mac.init(new KeyParameter(key));
     }
 
 
@@ -58,21 +106,20 @@ public class HacBC extends Hac {
             throw new IllegalArgumentException("null message");
         }
 
-        final HMac mac = new HMac(new SHA512Digest());
-        mac.init(keyParameter);
+        final byte[] output = new byte[mac.getMacSize()];
+
+        mac.reset();
         mac.update(message, 0, message.length);
+        mac.doFinal(output, 0);
 
-        final byte[] authenticated = new byte[mac.getMacSize()];
-        mac.doFinal(authenticated, 0);
-
-        return authenticated;
+        return output;
     }
 
 
     /**
-     * keyParameter.
+     * mac.
      */
-    private final KeyParameter keyParameter;
+    private final HMac mac;
 
 
 }

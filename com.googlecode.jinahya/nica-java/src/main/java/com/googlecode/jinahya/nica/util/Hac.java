@@ -28,6 +28,52 @@ import java.io.UnsupportedEncodingException;
 public abstract class Hac {
 
 
+    private static class SynchronizedHac extends Hac {
+
+
+        public SynchronizedHac(final Hac hac) {
+            super();
+
+            if (hac == null) {
+                throw new IllegalArgumentException("null hac");
+            }
+
+            this.hac = hac;
+        }
+
+
+        //@Override
+        public byte[] authenticate(final byte[] message) {
+            synchronized (hac) {
+                return hac.authenticate(message);
+            }
+        }
+
+
+        private final Hac hac;
+
+
+    }
+
+
+    /**
+     * Returns a synchronized (thread-safe) hac backed by the specified hac. In
+     * order to guarantee serial access, it is critical that all access to the
+     * backing list is accomplished through the returned hac.
+     *
+     * @param hac the hac to be "wrapped" in a synchronized hac.
+     * @return a synchronized view of the specified hac.
+     */
+    public static Hac synchronizedHac(final Hac hac) {
+
+        if (hac == null) {
+            throw new IllegalArgumentException("null hac");
+        }
+
+        return new SynchronizedHac(hac);
+    }
+
+
     /**
      * Authenticates given
      * <code>message</code>.

@@ -19,7 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.crypto.KeyGenerator;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -31,9 +31,6 @@ import org.testng.annotations.Test;
  * @param <A> Aes type parameter
  */
 public abstract class AesTest<A extends Aes> {
-
-
-    protected static final Random RANDOM = new Random();
 
 
     protected static final KeyGenerator GENERATOR;
@@ -50,15 +47,16 @@ public abstract class AesTest<A extends Aes> {
 
 
     protected static byte[] generateKey() {
-        return GENERATOR.generateKey().getEncoded();
+        synchronized (GENERATOR) {
+            return GENERATOR.generateKey().getEncoded();
+        }
     }
 
 
     protected static byte[] generateIv() {
-        return Aes.newIv();
-//        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
-//        RANDOM.nextBytes(iv);
-//        return iv;
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
+        ThreadLocalRandom.current().nextBytes(iv);
+        return iv;
     }
 
 
@@ -70,8 +68,9 @@ public abstract class AesTest<A extends Aes> {
 
         final A aes = newInstance(key);
 
-        final byte[] expected = new byte[RANDOM.nextInt(1024)];
-        RANDOM.nextBytes(expected);
+        final byte[] expected =
+            new byte[ThreadLocalRandom.current().nextInt(1024)];
+        ThreadLocalRandom.current().nextBytes(expected);
 
         final byte[] encrypted = aes.encrypt(iv, expected);
 

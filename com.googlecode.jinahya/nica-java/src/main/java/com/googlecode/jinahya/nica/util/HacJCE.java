@@ -19,7 +19,6 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -39,6 +38,63 @@ public class HacJCE extends Hac {
 
 
     /**
+     * Returns a synchronized (thread-safe) hac. In order to guarantee serial
+     * access, it is critical that all access to the backing hac is accomplished
+     * through the returned hac.
+     *
+     * @param key the encryption key
+     * @return a synchronized instance.
+     */
+    public static Hac newSynchronizedInstance(final byte[] key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
+        }
+
+        final Mac mac;
+        try {
+            mac = Mac.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException(
+                "\"" + ALGORITHM + "\" is not supported?", nsae);
+        }
+
+        try {
+            mac.init(new SecretKeySpec(key, ALGORITHM));
+        } catch (InvalidKeyException ike) {
+            throw new RuntimeException(ike);
+        }
+
+        return new Hac() {
+
+
+            @Override
+            public byte[] authenticate(byte[] message) {
+
+                if (message == null) {
+                    throw new IllegalArgumentException("null message");
+                }
+
+                synchronized (mac) {
+
+                    mac.reset();
+                    mac.update(message);
+
+                    return mac.doFinal();
+                }
+            }
+
+
+        };
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param key encryption key.
@@ -55,7 +111,18 @@ public class HacJCE extends Hac {
                 "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
-        this.key = new SecretKeySpec(key, ALGORITHM);
+        try {
+            mac = Mac.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException(
+                "\"" + ALGORITHM + "\" is not supported?", nsae);
+        }
+
+        try {
+            mac.init(new SecretKeySpec(key, ALGORITHM));
+        } catch (InvalidKeyException ike) {
+            throw new RuntimeException(ike);
+        }
     }
 
 
@@ -63,28 +130,20 @@ public class HacJCE extends Hac {
     public byte[] authenticate(byte[] message) {
 
         if (message == null) {
-            throw new IllegalArgumentException("null unauthenticated");
+            throw new IllegalArgumentException("null message");
         }
 
-        try {
-            final Mac mac = Mac.getInstance(ALGORITHM);
-            try {
-                mac.init(key);
-                return mac.doFinal(message);
-            } catch (InvalidKeyException ike) {
-                throw new RuntimeException(ike);
-            }
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException(
-                "\"" + ALGORITHM + "\" is not supported?", nsae);
-        }
+        mac.reset();
+        mac.update(message);
+
+        return mac.doFinal();
     }
 
 
     /**
-     * key.
+     * mac.
      */
-    private final Key key;
+    private final Mac mac;
 
 
 }

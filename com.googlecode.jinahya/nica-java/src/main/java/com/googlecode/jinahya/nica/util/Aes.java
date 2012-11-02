@@ -30,18 +30,6 @@ public abstract class Aes {
 
 
     /**
-     * AES block size in bits.
-     */
-    public static final int BLOCK_SIZE = 0x80; // 128;
-
-
-    /**
-     * AES block size in bytes.
-     */
-    public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 0x08; // 16
-
-
-    /**
      * Key size in bits.
      */
     public static final int KEY_SIZE = 0x100; // 256 0x80; // 128
@@ -51,6 +39,18 @@ public abstract class Aes {
      * Key size in bytes.
      */
     public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 0x08; // 32 16
+
+
+    /**
+     * AES block size in bits.
+     */
+    public static final int BLOCK_SIZE = 0x80; // 128;
+
+
+    /**
+     * AES block size in bytes.
+     */
+    public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 0x08; // 16
 
 
     /**
@@ -78,31 +78,97 @@ public abstract class Aes {
         ALGORITHM + "/" + MODE + "/" + PADDING;
 
 
-    /**
-     * Random.
-     */
-    private static final ThreadLocal RANDOM = new ThreadLocal() {
+    private static final Random RANDOM = new Random();
 
 
-        //@Override
-        protected Object initialValue() {
-            return new Random(System.currentTimeMillis()
-                              * Thread.currentThread().hashCode());
+    private static byte[] randomBytes(final byte[] bytes) {
+
+        final Random random;
+
+        synchronized (RANDOM) {
+            random = new Random(RANDOM.nextLong());
         }
 
+        return randomBytes(random, bytes);
+    }
 
-    };
+
+    private static byte[] randomBytes(final Random random, final byte[] bytes) {
+
+        if (random == null) {
+            throw new IllegalArgumentException("null random");
+        }
+
+        if (bytes == null) {
+            throw new IllegalArgumentException("null bytes");
+        }
+
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) random.nextInt(256);
+        }
+
+        return bytes;
+    }
 
 
     /**
-     * Generates a new iv.
+     * Generates a new encryption key. This method is not intended to be used in
+     * production stage.
      *
-     * @return initialization vector
+     * @return a new encryption key.
      */
-    public static byte[] newIv() {
-        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
-        ((Random) RANDOM.get()).nextBytes(iv);
-        return iv;
+    protected static byte[] newKey() {
+
+        return randomBytes(new byte[KEY_SIZE_IN_BYTES]);
+    }
+
+
+    /**
+     * Checks given
+     * <code>key</code>.
+     *
+     * @param key key to check
+     */
+    public static void checkKey(final byte[] key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (key.length != KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
+        }
+    }
+
+
+    /**
+     * Generates a new initialization vector. This method is not intended to be
+     * used in production stage.
+     *
+     * @return a new initialization vector
+     */
+    protected static byte[] newIv() {
+        return randomBytes(new byte[BLOCK_SIZE_IN_BYTES]);
+    }
+
+
+    /**
+     * Checks given
+     * <code>iv</code>.
+     *
+     * @param iv the initialization vector to check
+     */
+    protected static void checkIv(final byte[] iv) {
+
+        if (iv == null) {
+            throw new IllegalArgumentException("null iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
     }
 
 

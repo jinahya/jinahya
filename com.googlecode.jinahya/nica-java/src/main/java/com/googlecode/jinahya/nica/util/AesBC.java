@@ -18,9 +18,10 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.bouncycastle.crypto.engines.AESLightEngine;
+import org.bouncycastle.crypto.engines.AESFastEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -85,7 +86,7 @@ public class AesBC extends Aes {
         }
 
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(new AESLightEngine()));
+            new CBCBlockCipher(getAESEngine()));
 
         cipher.init(true, new ParametersWithIV(keyParameter, iv));
 
@@ -128,7 +129,7 @@ public class AesBC extends Aes {
         }
 
         final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-            new CBCBlockCipher(new AESLightEngine()));
+            new CBCBlockCipher(getAESEngine()));
 
         cipher.init(false, new ParametersWithIV(keyParameter, iv));
 
@@ -151,6 +152,16 @@ public class AesBC extends Aes {
         }
 
         return decrypted;
+    }
+
+
+    /**
+     * Return an instance of AESEngine.
+     *
+     * @return an instance of AESEngine
+     */
+    protected BlockCipher getAESEngine() {
+        return new AESFastEngine();
     }
 
 

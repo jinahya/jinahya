@@ -92,6 +92,18 @@ public class Nuo {
 
 
     /**
+     * Generates a value
+     *
+     * @param random random
+     * @return a new value
+     */
+    public static long generate(final Random random) {
+
+        return generate(System.currentTimeMillis(), random);
+    }
+
+
+    /**
      * Generates a value.
      *
      * @param timestamp current timestamp
@@ -106,6 +118,14 @@ public class Nuo {
         }
 
         return (timestamp << RANDOM_BIT) | random.nextInt(RANDOM_MAX);
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    protected Nuo() {
+        super();
     }
 
 
