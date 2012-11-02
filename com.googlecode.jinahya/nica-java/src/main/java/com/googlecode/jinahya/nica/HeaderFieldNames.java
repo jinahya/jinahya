@@ -26,7 +26,7 @@ public final class HeaderFieldNames {
 
 
     /**
-     * Header for names.
+     * Header for nica names.
      */
     public static final String NAME = "Nica-Name";
 
@@ -38,13 +38,13 @@ public final class HeaderFieldNames {
 
 
     /**
-     * Header for encrypted code.
+     * Header for encrypted nica codes.
      */
     public static final String CODE = "Nica-Code";
 
 
     /**
-     * Header for message authentication.
+     * Header for nica-code authentication.
      */
     public static final String AUTH = "Nica-Auth";
 
