@@ -43,6 +43,13 @@ public enum Header {
     AUTH(HeaderFieldNames.AUTH);
 
 
+    /**
+     * Finds value whose fieldName matched with given
+     * <code>fieldName</code>.
+     *
+     * @param fieldName HTTP header field name.
+     * @return matched value.
+     */
     public static Header fromFieldName(final String fieldName) {
 
         for (Header value : values()) {
