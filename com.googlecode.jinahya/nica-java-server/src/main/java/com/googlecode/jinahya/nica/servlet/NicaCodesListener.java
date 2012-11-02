@@ -24,6 +24,7 @@ import javax.servlet.ServletRequestAttributeEvent;
 
 
 /**
+ * An abstract ServletRequestAttributeListener for Nica-Codes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -42,7 +43,7 @@ public abstract class NicaCodesListener extends NicaAttributeListener {
 
 
     /**
-     * Notifies nica codes parsed.
+     * Notifies nica codes added.
      *
      * @param request servlet request
      * @param codes nica codes
