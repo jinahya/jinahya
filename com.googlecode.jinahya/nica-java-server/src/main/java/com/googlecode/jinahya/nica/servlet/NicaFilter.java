@@ -47,6 +47,9 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class NicaFilter implements Filter {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(NicaFilter.class.getName());
 
@@ -81,15 +84,15 @@ public abstract class NicaFilter implements Filter {
      * The attribute name for response status code. The value must be an
      * Integer.
      */
-    public static final String ATTRIBUTE_RESPONSE_STATUS_CODE =
-        NicaFilter.class.getName() + "#response_status_code";
+    public static final String ATTRIBUTE_ERROR_RESPONSE_STATUS_CODE =
+        NicaFilter.class.getName() + "#error_response_status_code";
 
 
     /**
      * The attribute name for response reason phrase.
      */
-    public static final String ATTRIBUTE_RESPONSE_REASON_PHRASE =
-        NicaFilter.class.getName() + "#response_reason_phrase";
+    public static final String ATTRIBUTE_ERROR_RESPONSE_REASON_PHRASE =
+        NicaFilter.class.getName() + "#error_response_reason_phrase";
 
 
     /**
@@ -99,7 +102,7 @@ public abstract class NicaFilter implements Filter {
      * @return
      * @throws IOException
      */
-    private static boolean checkResponseAttributes(
+    private static boolean checkErrorResponseAttributes(
         final HttpServletRequest request, final HttpServletResponse response)
         throws IOException {
 
@@ -112,13 +115,13 @@ public abstract class NicaFilter implements Filter {
         }
 
         final Integer statusCode = (Integer) request.getAttribute(
-            ATTRIBUTE_RESPONSE_STATUS_CODE);
+            ATTRIBUTE_ERROR_RESPONSE_STATUS_CODE);
         if (statusCode == null) {
             return true;
         }
 
         final String reasonPhrase = (String) request.getAttribute(
-            ATTRIBUTE_RESPONSE_REASON_PHRASE);
+            ATTRIBUTE_ERROR_RESPONSE_REASON_PHRASE);
 
         if (reasonPhrase == null) {
             response.sendError(statusCode.intValue());
@@ -261,7 +264,7 @@ public abstract class NicaFilter implements Filter {
         }
         hequest.setAttribute(ATTRIBUTE_NICA_NAMES,
                              Collections.unmodifiableMap(names));
-        if (!checkResponseAttributes(hequest, hesponse)) {
+        if (!checkErrorResponseAttributes(hequest, hesponse)) {
             return;
         }
 
@@ -374,15 +377,6 @@ public abstract class NicaFilter implements Filter {
             return;
         }
 
-        // --------------------------------------------- Nica-Code/REQUEST_NONCE
-        if (deviceId == null && systemId == null) {
-            hesponse.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "no " + Code.DEVICE_ID.name() + " nor "
-                + Code.SYSTEM_ID.name());
-            return;
-        }
-
         // ----------------------------------------------------------- Nica-Auth
         final String nicaAuth = hequest.getHeader(Header.AUTH.fieldName());
         if (nicaAuth == null) {
@@ -404,14 +398,13 @@ public abstract class NicaFilter implements Filter {
         }
         if (!Arrays.equals(new HacJCE(key).authenticate(base), auth)) {
             hesponse.sendError(
-                HttpServletResponse.SC_UNAUTHORIZED,
-                "authentication failed");
+                HttpServletResponse.SC_UNAUTHORIZED, "authentication failed");
             return;
         }
 
         request.setAttribute(ATTRIBUTE_NICA_CODES,
                              Collections.unmodifiableMap(codes));
-        if (!checkResponseAttributes(hequest, hesponse)) {
+        if (!checkErrorResponseAttributes(hequest, hesponse)) {
             return;
         }
 

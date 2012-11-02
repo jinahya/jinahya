@@ -65,9 +65,9 @@ public abstract class NicaAttributeListener
             throw new IllegalArgumentException("null sr");
         }
 
-        request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_STATUS_CODE,
+        request.setAttribute(NicaFilter.ATTRIBUTE_ERROR_RESPONSE_STATUS_CODE,
                              statusCode);
-        request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_REASON_PHRASE,
+        request.setAttribute(NicaFilter.ATTRIBUTE_ERROR_RESPONSE_REASON_PHRASE,
                              reasonPhrase);
     }
 
