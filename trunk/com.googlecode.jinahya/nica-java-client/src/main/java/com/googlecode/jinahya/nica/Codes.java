@@ -138,12 +138,11 @@ public class Codes {
         }
 
         final long requestTimestamp = System.currentTimeMillis();
-        putVariableCode(Code.REQUEST_TIMESTAMP.name(),
+        putVariableCode(CodeKeys.REQUEST_TIMESTAMP,
                         Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        putVariableCode(Code.REQUEST_NONCE.name(),
-                        Long.toString(requestNonce));
+        putVariableCode(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
 
         codes.putAll(variableCodes);
         variableCodes.clear();

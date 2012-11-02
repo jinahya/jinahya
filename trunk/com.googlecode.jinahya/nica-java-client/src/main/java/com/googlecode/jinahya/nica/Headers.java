@@ -38,6 +38,9 @@ import java.util.Map.Entry;
 public abstract class Headers {
 
 
+    /**
+     * The class for synchronized instances.
+     */
     private static class SynchronizedHeaders extends Headers {
 
 
@@ -74,7 +77,8 @@ public abstract class Headers {
 
 
     /**
-     * Returns a synchronized (thread-safe) map backed by the specified headers.
+     * Returns a synchronized (thread-safe) headers backed by the specified
+     * headers.
      *
      * @param headers the headers to be "wrapped" in a synchronized headers.
      * @return a synchronized view of the specified headers.
@@ -194,12 +198,21 @@ public abstract class Headers {
     private final String name;
 
 
+    /**
+     * codes.
+     */
     private final Codes codes;
 
 
+    /**
+     * aes.
+     */
     private final Aes aes;
 
 
+    /**
+     * hac.
+     */
     private final Hac hac;
 
 
