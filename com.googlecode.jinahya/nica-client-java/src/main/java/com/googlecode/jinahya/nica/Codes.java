@@ -78,9 +78,25 @@ public class Codes {
 
 
         //@Override
+        public boolean hasContantCode(final String key) {
+            synchronized (codes) {
+                return super.hasContantCode(key);
+            }
+        }
+
+
+        //@Override
         public String putVariableCode(final String key, final String value) {
             synchronized (codes) {
                 return super.putVariableCode(key, value);
+            }
+        }
+
+
+        //@Override
+        public boolean hasVariableCode(final String key) {
+            synchronized (codes) {
+                return super.hasVariableCode(key);
             }
         }
 

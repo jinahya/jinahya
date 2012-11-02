@@ -77,10 +77,26 @@ public class Codes {
         }
 
 
+        @Override
+        public boolean hasConstantCode(final String key) {
+            synchronized (codes) {
+                return super.hasConstantCode(key);
+            }
+        }
+
+
         //@Override
         public String putVariableCode(final String key, final String value) {
             synchronized (codes) {
                 return super.putVariableCode(key, value);
+            }
+        }
+
+
+        //@Override
+        public boolean hasVariableCode(final String key) {
+            synchronized (key) {
+                return super.hasVariableCode(key);
             }
         }
 
@@ -98,6 +114,7 @@ public class Codes {
      * Returns a synchronized (thread-safe) map backed by the specified codes.
      *
      * @param codes the codes to be "wrapped" in a synchronized codes.
+     *
      * @return a synchronized view of the specified codes.
      */
     public static Codes synchronziedCodes(final Codes codes) {
@@ -176,6 +193,16 @@ public class Codes {
     }
 
 
+    public boolean hasConstantCode(final String key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        return constantCodes.containsKey(key);
+    }
+
+
     /**
      * Puts a variable code. Note that variable codes are cleared after they
      * once used.
@@ -196,6 +223,16 @@ public class Codes {
         }
 
         return (String) variableCodes.put(key, value);
+    }
+
+
+    public boolean hasVariableCode(final String key) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        return variableCodes.containsKey(key);
     }
 
 
