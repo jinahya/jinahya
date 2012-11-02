@@ -96,11 +96,12 @@ public abstract class NicaFilter implements Filter {
 
 
     /**
+     * Checks error response attributes.
      *
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
+     * @param request request
+     * @param response response
+     * @return true if ok; false if error has been sent
+     * @throws IOException if an I/O error occurs
      */
     private static boolean checkErrorResponseAttributes(
         final HttpServletRequest request, final HttpServletResponse response)
@@ -138,7 +139,7 @@ public abstract class NicaFilter implements Filter {
      *
      * @param request servlet request
      *
-     * @return an unmodifiable map of {@link Header#NAME);
+     * @return an unmodifiable map of {@link Header#NAME}
      */
     @SuppressWarnings("unchecked")
     protected static Map<String, String> getNicaNames(
@@ -188,7 +189,7 @@ public abstract class NicaFilter implements Filter {
      *
      * @param request servlet request
      *
-     * @return an unmodifiable map of {@link Header#CODE);
+     * @return an unmodifiable map of {@link Header#CODE}
      */
     @SuppressWarnings("unchecked")
     protected static Map<String, String> getNicaCodes(

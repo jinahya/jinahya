@@ -52,9 +52,10 @@ public abstract class NicaPerClientVerifier extends NicaCodesListener {
 
 
     /**
+     * Verifies nica codes per client.
      *
-     * @param request
-     * @param codes
+     * @param request request
+     * @param codes nica codes
      * @param platformId platform id
      * @param deviceId device id
      * @param systemId system id

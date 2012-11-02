@@ -27,7 +27,7 @@ import javax.servlet.ServletRequestAttributeEvent;
  * An abstract ServletRequestAttributeListener for Nica-Names. One of primary
  * goal of the implementing class is locating a secret key and add it to
  * specified ServletRequest as an attribute named
- * {@link NicaFilter#ATTRIBUTE_NICA_SECRET}.
+ * {@link NicaFilter#ATTRIBUTE_NICA_KEY}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -46,7 +46,7 @@ public abstract class NicaNamesListener extends NicaAttributeListener {
 
 
     /**
-     * Notifies added nica names added.
+     * Notifies nica names added.
      *
      * @param request servlet request
      * @param names nica names
