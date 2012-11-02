@@ -18,13 +18,13 @@
 package com.googlecode.jinahya.nica.servlet;
 
 
-import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 
 
 /**
+ * An abstract ServletRequestAttributeListener.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -33,10 +33,11 @@ public abstract class NicaAttributeListener
 
 
     /**
+     * Sets HTTP response error.
      *
-     * @param srae
-     * @param statusCode
-     * @param reasonPhrase
+     * @param srae event
+     * @param statusCode HTTP response status code
+     * @param reasonPhrase HTTP response reason phrase
      */
     protected void setResponseError(final ServletRequestAttributeEvent srae,
                                     final int statusCode,
@@ -51,10 +52,11 @@ public abstract class NicaAttributeListener
 
 
     /**
+     * Sets HTTP response error.
      *
-     * @param request
-     * @param statusCode
-     * @param reasonPhrase
+     * @param request request
+     * @param statusCode HTTP response status code
+     * @param reasonPhrase HTTP response reason phrase
      */
     protected void setResponseError(final ServletRequest request,
                                     final int statusCode,
@@ -62,6 +64,7 @@ public abstract class NicaAttributeListener
         if (request == null) {
             throw new IllegalArgumentException("null sr");
         }
+
         request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_STATUS_CODE,
                              statusCode);
         request.setAttribute(NicaFilter.ATTRIBUTE_RESPONSE_REASON_PHRASE,

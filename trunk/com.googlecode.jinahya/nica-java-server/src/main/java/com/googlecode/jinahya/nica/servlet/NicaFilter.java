@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -45,6 +47,10 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class NicaFilter implements Filter {
 
 
+    private static final Logger LOGGER =
+        Logger.getLogger(NicaFilter.class.getName());
+
+
     /**
      * The attribute name for decoded value of {@link Header#NAME}. The value is
      * an instance of unmodifiable
@@ -58,8 +64,8 @@ public abstract class NicaFilter implements Filter {
      * The attribute name for located encryption key. The value must be an array
      * of bytes.
      */
-    protected static final String ATTRIBUTE_NICA_SECRET =
-        NicaFilter.class.getName() + "#secret";
+    protected static final String ATTRIBUTE_NICA_KEY =
+        NicaFilter.class.getName() + "#key";
 
 
     /**
@@ -144,25 +150,6 @@ public abstract class NicaFilter implements Filter {
 
 
     /**
-     * Returns an unmodifiable map of {@link Header#CODE}.
-     *
-     * @param request servlet request
-     *
-     * @return an unmodifiable map of {@link Header#CODE);
-     */
-    @SuppressWarnings("unchecked")
-    protected static Map<String, String> getNicaCodes(
-        final ServletRequest request) {
-
-        if (request == null) {
-            throw new IllegalArgumentException("null request");
-        }
-
-        return (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_CODES);
-    }
-
-
-    /**
      * Returns the value mapped to given
      * <code>key</code>.
      *
@@ -190,6 +177,25 @@ public abstract class NicaFilter implements Filter {
         }
 
         return names.get(key);
+    }
+
+
+    /**
+     * Returns an unmodifiable map of {@link Header#CODE}.
+     *
+     * @param request servlet request
+     *
+     * @return an unmodifiable map of {@link Header#CODE);
+     */
+    @SuppressWarnings("unchecked")
+    protected static Map<String, String> getNicaCodes(
+        final ServletRequest request) {
+
+        if (request == null) {
+            throw new IllegalArgumentException("null request");
+        }
+
+        return (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_CODES);
     }
 
 
@@ -233,6 +239,7 @@ public abstract class NicaFilter implements Filter {
         final HttpServletRequest hequest = (HttpServletRequest) request;
         final HttpServletResponse hesponse = (HttpServletResponse) response;
 
+
         // ----------------------------------------------------------- Nica-Name
         final String nicaName = hequest.getHeader(Header.NAME.fieldName());
         if (nicaName == null) {
@@ -258,15 +265,16 @@ public abstract class NicaFilter implements Filter {
             return;
         }
 
-        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_SECRET);
+        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_KEY);
         if (key == null) {
-            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                               "no key located");
+            hesponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                               "no key found");
             return;
         }
         if (key.length != Aes.KEY_SIZE_IN_BYTES) {
-            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                               "wrong key length");
+            LOGGER.log(Level.SEVERE, "key.length({0}) != {1}",
+                       new Object[]{key.length, Aes.KEY_SIZE_IN_BYTES});
+            hesponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
@@ -358,6 +366,15 @@ public abstract class NicaFilter implements Filter {
         }
 
         // --------------------------------------- Nica-Code/DEVICE_ID+SYSTEM_ID
+        if (deviceId == null && systemId == null) {
+            hesponse.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "no " + Code.DEVICE_ID.name() + " nor "
+                + Code.SYSTEM_ID.name());
+            return;
+        }
+
+        // --------------------------------------------- Nica-Code/REQUEST_NONCE
         if (deviceId == null && systemId == null) {
             hesponse.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
