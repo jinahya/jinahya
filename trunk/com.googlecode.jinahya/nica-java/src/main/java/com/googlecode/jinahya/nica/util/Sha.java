@@ -29,6 +29,48 @@ public abstract class Sha {
 
 
     /**
+     * synchronized class.
+     */
+    private static class SynchronizedSha extends Sha {
+
+
+        public SynchronizedSha(final Sha sha) {
+            super();
+
+            if (sha == null) {
+                throw new IllegalArgumentException("null sha");
+            }
+
+            this.sha = sha;
+        }
+
+
+        //@Override
+        public byte[] hash(final byte[] data) {
+            synchronized (sha) {
+                return sha.hash(data);
+            }
+        }
+
+
+        private final Sha sha;
+
+
+    }
+
+
+    /**
+     * Returns a synchronized instance.
+     *
+     * @param sha the sha to be wrapped.
+     * @return a synchronized instance.
+     */
+    public static Sha synchronizedSha(final Sha sha) {
+        return new SynchronizedSha(sha);
+    }
+
+
+    /**
      * Hashes given
      * <code>data</code>.
      *

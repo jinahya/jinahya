@@ -29,57 +29,6 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 public class ShaBC extends Sha {
 
 
-//    /**
-//     * The instance for synchronized singleton.
-//     */
-//    private static class SynchronizedInstanceHolder {
-//
-//
-//        /**
-//         * digest.
-//         */
-//        private static final Digest DIGEST = new SHA512Digest();
-//
-//
-//        /**
-//         * instance.
-//         */
-//        private static final SHA INSTANCE = new SHABC() {
-//
-//
-//            //@Override
-//            public byte[] hash(final byte[] data) {
-//
-//                if (data == null) {
-//                    throw new IllegalArgumentException("null data");
-//                }
-//
-//                synchronized (DIGEST) {
-//                    DIGEST.reset();
-//                    DIGEST.update(data, 0, data.length);
-//                    final byte[] hashed = new byte[DIGEST.getDigestSize()];
-//                    DIGEST.doFinal(hashed, 0);
-//                    return hashed;
-//                }
-//
-//            }
-//
-//
-//        };
-//
-//
-//    }
-//
-//
-//    /**
-//     * Returns the synchronized singleton instance.
-//     *
-//     * @return the synchronized singleton instance.
-//     */
-//    public static SHA getSynchronizedInstance() {
-//
-//        return SynchronizedInstanceHolder.INSTANCE;
-//    }
     /**
      * Returns a new synchronized instance.
      *
@@ -87,9 +36,9 @@ public class ShaBC extends Sha {
      */
     public static Sha newSynchronizedInstance() {
 
-        final Digest DIGEST = new SHA512Digest();
+        final Digest digest = new SHA512Digest();
 
-        return new ShaBC() {
+        return new Sha() {
 
 
             //@Override
@@ -99,16 +48,31 @@ public class ShaBC extends Sha {
                     throw new IllegalArgumentException("null data");
                 }
 
-                synchronized (DIGEST) {
-                    DIGEST.update(data, 0, data.length);
-                    final byte[] hashed = new byte[DIGEST.getDigestSize()];
-                    DIGEST.doFinal(hashed, 0);
+                synchronized (digest) {
+
+                    final byte[] hashed = new byte[digest.getDigestSize()];
+
+                    digest.reset();
+                    digest.update(data, 0, data.length);
+
+                    digest.doFinal(hashed, 0);
+
                     return hashed;
                 }
             }
 
 
         };
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public ShaBC() {
+        super();
+
+        digest = new SHA512Digest();
     }
 
 
@@ -119,12 +83,20 @@ public class ShaBC extends Sha {
             throw new IllegalArgumentException("null data");
         }
 
-        final Digest digest = new SHA512Digest();
-        digest.update(data, 0, data.length);
         final byte[] hashed = new byte[digest.getDigestSize()];
+
+        digest.reset();
+        digest.update(data, 0, data.length);
         digest.doFinal(hashed, 0);
+
         return hashed;
     }
+
+
+    /**
+     * digest.
+     */
+    private final Digest digest;
 
 
 }

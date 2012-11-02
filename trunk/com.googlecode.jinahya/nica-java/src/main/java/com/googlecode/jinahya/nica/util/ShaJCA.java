@@ -35,85 +35,39 @@ public class ShaJCA extends Sha {
     public static final String ALGORITHM = "SHA-512";
 
 
-//    /**
-//     * instance holder.
-//     */
-//    private static class SynchronizedInstanceHolder {
-//
-//
-//        /**
-//         * digest.
-//         */
-//        private static final MessageDigest DIGEST;
-//
-//
-//        static {
-//            try {
-//                DIGEST = MessageDigest.getInstance(ALGORITHM);
-//            } catch (NoSuchAlgorithmException nsae) {
-//                throw new InstantiationError(nsae.getMessage());
-//            }
-//        }
-//
-//
-//        /**
-//         * instance.
-//         */
-//        private static final SHA INSTANCE = new SHAJCA() {
-//
-//
-//            @Override
-//            public byte[] hash(final byte[] data) {
-//
-//                if (data == null) {
-//                    throw new IllegalArgumentException("null data");
-//                }
-//
-//                synchronized (DIGEST) {
-//                    DIGEST.reset();
-//                    return DIGEST.digest(data);
-//                }
-//            }
-//
-//
-//        };
-//
-//
-//    }
-//
-//
-//    /**
-//     * Return the synchronized instance.
-//     *
-//     * @return the synchronized instance; singleton.
-//     */
-//    public static SHA getSynchronizedInstance() {
-//
-//        return SynchronizedInstanceHolder.INSTANCE;
-//    }
     /**
      * Creates a new synchronized instance.
      *
      * @return a new synchronized instance
      */
     public static Sha newSynchronizedInstance() {
-//        /**
-//         * digest.
-//         */
-//        final MessageDigest DIGEST;
-//
-//        try {
-//            DIGEST = MessageDigest.getInstance(ALGORITHM);
-//        } catch (NoSuchAlgorithmException nsae) {
-//            throw new InstantiationError(nsae.getMessage());
-//        }
 
-        return new ShaJCA() {
+        final MessageDigest messageDigest;
+
+        try {
+            messageDigest = MessageDigest.getInstance(ALGORITHM);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
+        }
+
+        return new Sha() {
 
 
             @Override
-            public synchronized byte[] hash(final byte[] data) {
-                return super.hash(data);
+            public byte[] hash(final byte[] data) {
+
+                if (data == null) {
+                    throw new IllegalArgumentException("null data");
+                }
+
+                synchronized (messageDigest) {
+
+                    messageDigest.reset();
+
+                    messageDigest.update(data);
+
+                    return messageDigest.digest();
+                }
             }
 
 
@@ -121,13 +75,17 @@ public class ShaJCA extends Sha {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     public ShaJCA() {
         super();
 
         try {
             messageDigest = MessageDigest.getInstance(ALGORITHM);
         } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
+            throw new RuntimeException("\"" + ALGORITHM + "\" not available?",
+                                       nsae);
         }
     }
 
@@ -139,15 +97,16 @@ public class ShaJCA extends Sha {
             throw new IllegalArgumentException("null data");
         }
 
-        return messageDigest.digest(data);
-//        try {
-//            return MessageDigest.getInstance(ALGORITHM).digest(data);
-//        } catch (NoSuchAlgorithmException nsae) {
-//            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
-//        }
+        messageDigest.reset();
+        messageDigest.update(data);
+
+        return messageDigest.digest();
     }
 
 
+    /**
+     * messageDigest.
+     */
     private final MessageDigest messageDigest;
 
 
