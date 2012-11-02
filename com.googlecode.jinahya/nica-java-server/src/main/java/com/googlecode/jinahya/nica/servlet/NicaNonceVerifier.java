@@ -35,12 +35,13 @@ public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
     @Override
     protected void verifyPerClient(final ServletRequest request,
                                    final Map<String, String> codes,
-                                   final String platformId, final String deviceId,
+                                   final String platformId,
+                                   final String deviceId,
                                    final String systemId) {
 
-        final String requestNonce_ = codes.get(Code.REQUEST_NONCE.key());
+        final String requestNonceString = codes.get(Code.REQUEST_NONCE.key());
 
-        if (requestNonce_ == null) {
+        if (requestNonceString == null) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "missing code: " + Code.REQUEST_NONCE.key());
             return;
@@ -48,7 +49,7 @@ public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
 
         final long requestNonce;
         try {
-            requestNonce = Long.parseLong(requestNonce_);
+            requestNonce = Long.parseLong(requestNonceString);
         } catch (NumberFormatException nfe) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "wrong code: " + Code.REQUEST_NONCE.key());

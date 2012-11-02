@@ -35,13 +35,14 @@ public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
     @Override
     protected void verifyPerClient(final ServletRequest request,
                                    final Map<String, String> codes,
-                                   final String platformId, final String deviceId,
+                                   final String platformId,
+                                   final String deviceId,
                                    final String systemId) {
 
-        final String requestTimestamp_ =
+        final String requestTimestampString =
             codes.get(Code.REQUEST_TIMESTAMP.key());
 
-        if (requestTimestamp_ == null) {
+        if (requestTimestampString == null) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "missing code: " + Code.REQUEST_NONCE.key());
             return;
@@ -49,7 +50,7 @@ public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
 
         final long requestTimestamp;
         try {
-            requestTimestamp = Long.parseLong(requestTimestamp_);
+            requestTimestamp = Long.parseLong(requestTimestampString);
         } catch (NumberFormatException nfe) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "wrong code: " + Code.REQUEST_NONCE.key());
