@@ -82,118 +82,22 @@ public abstract class Aes {
 
 
     /**
-     * Generates a random bytes.
-     *
-     * @param bytes bytes to fill
-     * @return given <code>bytes</code>
-     */
-    private static byte[] randomBytes(final byte[] bytes) {
-
-        if (bytes == null) {
-            throw new IllegalArgumentException("null bytes");
-        }
-
-        if (bytes.length == 0) {
-            throw new IllegalArgumentException("zero length bytes");
-        }
-
-        final Random random;
-
-        synchronized (RANDOM) {
-            random = new Random(RANDOM.nextLong());
-        }
-
-        return randomBytes(random, bytes);
-    }
-
-
-    /**
-     * Generates a random bytes.
-     *
-     * @param random the random to use
-     * @param bytes the bytes to fill
-     * @return given <code>bytes</code>
-     */
-    private static byte[] randomBytes(final Random random, final byte[] bytes) {
-
-        if (random == null) {
-            throw new IllegalArgumentException("null random");
-        }
-
-        if (bytes == null) {
-            throw new IllegalArgumentException("null bytes");
-        }
-
-        if (bytes.length == 0) {
-            throw new IllegalArgumentException("zero length bytes");
-        }
-
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) random.nextInt(256);
-        }
-
-        return bytes;
-    }
-
-
-    /**
-     * Generates a new encryption key. This method is not intended to be used in
-     * production stage.
-     *
-     * @return a new encryption key.
-     */
-    public static byte[] newKey() {
-
-        return randomBytes(new byte[KEY_SIZE_IN_BYTES]);
-    }
-
-
-    /**
-     * Checks given
-     * <code>key</code>.
-     *
-     * @param key key to check
-     */
-    public static void checkKey(final byte[] key) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
-        }
-    }
-
-
-    /**
      * Generates a new initialization vector. This method is not intended to be
      * used in production stage.
      *
      * @return a new initialization vector
      */
     public static byte[] newIv() {
-        return randomBytes(new byte[BLOCK_SIZE_IN_BYTES]);
-    }
 
+        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
 
-    /**
-     * Checks given
-     * <code>iv</code>.
-     *
-     * @param iv the initialization vector to check
-     */
-    protected static void checkIv(final byte[] iv) {
-
-        if (iv == null) {
-            throw new IllegalArgumentException("null iv");
+        synchronized (RANDOM) {
+            for (int i = 0; i < iv.length; i++) {
+                iv[i] = (byte) RANDOM.nextInt(256);
+            }
         }
 
-        if (iv.length != BLOCK_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
-        }
+        return iv;
     }
 
 
@@ -203,6 +107,11 @@ public abstract class Aes {
     private static class SynchronizedAes extends Aes {
 
 
+        /**
+         * Creates a new instance.
+         *
+         * @param aes aes to wrapped
+         */
         public SynchronizedAes(final Aes aes) {
             super();
 
@@ -231,7 +140,7 @@ public abstract class Aes {
 
 
         /**
-         * mutex.
+         * aes.
          */
         private final Aes aes;
 
@@ -243,6 +152,7 @@ public abstract class Aes {
      * Returns a synchronized (thread-safe) aes backed by the specified aes.
      *
      * @param aes the aes to be "wrapped" in a synchronized aes.
+     *
      * @return a synchronized view of the specified aes.
      */
     public static Aes synchronizedAes(final Aes aes) {

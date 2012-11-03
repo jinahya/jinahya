@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.crypto.KeyGenerator;
 import org.testng.Assert;
@@ -46,44 +47,52 @@ public abstract class AesTest<A extends Aes> {
     }
 
 
-    protected static byte[] generateKey() {
+    protected static byte[] newKey() {
         synchronized (GENERATOR) {
             return GENERATOR.generateKey().getEncoded();
         }
     }
 
 
-    protected static byte[] generateIv() {
+    protected static byte[] newIv() {
         final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
         ThreadLocalRandom.current().nextBytes(iv);
         return iv;
     }
 
 
-    @Test
+    protected static byte[] newInput() {
+        final Random random = ThreadLocalRandom.current();
+        final byte[] input = new byte[random.nextInt(65536)];
+        random.nextBytes(input);
+        return input;
+    }
+
+
+    @Test(invocationCount = 128)
     public void testEncryptDecrypt() {
 
-        final byte[] key = generateKey();
-        final byte[] iv = generateIv();
+        final byte[] key = newKey();
+        final byte[] iv = newIv();
 
         final A aes = newInstance(key);
 
-        final byte[] expected =
-            new byte[ThreadLocalRandom.current().nextInt(1024)];
-        ThreadLocalRandom.current().nextBytes(expected);
-        System.out.println("expected: " + Hex.encodeToString(expected));
+        final byte[] expected = newInput();
+        //System.out.println("expected: " + Hex.encodeToString(expected));
 
         final byte[] encrypted = aes.encrypt(iv, expected);
-        System.out.println("encrypted: " + Hex.encodeToString(encrypted));
+        //System.out.println("encrypted: " + Hex.encodeToString(encrypted));
 
         final byte[] actual = aes.decrypt(iv, encrypted);
-        System.out.println("actual: " + Hex.encodeToString(actual));
+        //System.out.println("actual: " + Hex.encodeToString(actual));
 
         Assert.assertEquals(actual, expected);
     }
 
 
     /**
+     *
+     * @param key
      *
      * @return
      */

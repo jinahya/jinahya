@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 
 /**
  *
@@ -29,6 +32,22 @@ public class AesBCTest extends AesTest<AesBC> {
     @Override
     protected AesBC newInstance(final byte[] key) {
         return new AesBC(key);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testDecryptAaginstJCE() {
+
+        final byte[] key = newKey();
+        final byte[] iv = newIv();
+
+        final byte[] expected = newInput();
+
+        final byte[] encrypted = new AesJCE(key).encrypt(iv, expected);
+
+        final byte[] actual = new AesBC(key).decrypt(iv, encrypted);
+
+        Assert.assertEquals(actual, expected);
     }
 
 

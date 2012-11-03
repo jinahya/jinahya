@@ -28,9 +28,17 @@ import java.io.UnsupportedEncodingException;
 public abstract class Hac {
 
 
+    /**
+     * synchronized class.
+     */
     private static class SynchronizedHac extends Hac {
 
 
+        /**
+         * Creates a new instance.
+         *
+         * @param hac the hac to be wrapped.
+         */
         public SynchronizedHac(final Hac hac) {
             super();
 
@@ -50,6 +58,9 @@ public abstract class Hac {
         }
 
 
+        /**
+         * hac.
+         */
         private final Hac hac;
 
 
@@ -57,11 +68,10 @@ public abstract class Hac {
 
 
     /**
-     * Returns a synchronized (thread-safe) hac backed by the specified hac. In
-     * order to guarantee serial access, it is critical that all access to the
-     * backing list is accomplished through the returned hac.
+     * Returns a synchronized (thread-safe) hac backed by the specified hac.
      *
      * @param hac the hac to be "wrapped" in a synchronized hac.
+     *
      * @return a synchronized view of the specified hac.
      */
     public static Hac synchronizedHac(final Hac hac) {

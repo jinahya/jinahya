@@ -27,14 +27,14 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MacBCTest extends HacTest<HacBC> {
+public class HacBCTest extends HacTest<HacBC> {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(MacBCTest.class.getName());
+        Logger.getLogger(HacBCTest.class.getName());
 
 
     @Override
@@ -46,7 +46,7 @@ public class MacBCTest extends HacTest<HacBC> {
     @Test(invocationCount = 128)
     public void testAuthenticateAgainstJCE() {
 
-        final byte[] key = AesJCETest.generateKey();
+        final byte[] key = AesJCETest.newKey();
 
         final byte[] message = newMessage();
 
@@ -61,7 +61,7 @@ public class MacBCTest extends HacTest<HacBC> {
     @Test(invocationCount = 128)
     public void testAuthenticateWithStringAgainstJCE() {
 
-        final byte[] key = AesJCETest.generateKey();
+        final byte[] key = AesJCETest.newKey();
 
         final String message = newMessageAsString();
 

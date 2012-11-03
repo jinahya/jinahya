@@ -33,14 +33,14 @@ public class AesJCETest extends AesTest<AesJCE> {
     public void testConstructors() {
 
         try {
-            final Aes aes = new AesJCE(null);
+            new AesJCE(null);
             Assert.fail("passed: new AESJCE(null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            final Aes aes = new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES + 1]);
+            new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES + 1]);
             Assert.fail("passed: new AESJCE(byte[AES.KEY_SIZE_IN_BYTES + 1])");
         } catch (IllegalArgumentException iae) {
             // expected
@@ -53,6 +53,22 @@ public class AesJCETest extends AesTest<AesJCE> {
     @Override
     protected AesJCE newInstance(final byte[] key) {
         return new AesJCE(key);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testDecryptAaginstBC() {
+
+        final byte[] key = newKey();
+        final byte[] iv = newIv();
+
+        final byte[] expected = newInput();
+
+        final byte[] encrypted = new AesBC(key).encrypt(iv, expected);
+
+        final byte[] actual = new AesJCE(key).decrypt(iv, encrypted);
+
+        Assert.assertEquals(actual, expected);
     }
 
 
