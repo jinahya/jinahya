@@ -70,9 +70,9 @@ public class Codes {
 
 
         //@Override
-        public void putConstantCode(final String key, final String value) {
+        public String putConstantCode(final String key, final String value) {
             synchronized (codes) {
-                super.putConstantCode(key, value);
+                return super.putConstantCode(key, value);
             }
         }
 
@@ -174,7 +174,7 @@ public class Codes {
      * @param key key
      * @param value value
      */
-    public void putConstantCode(final String key, final String value) {
+    public String putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -184,12 +184,12 @@ public class Codes {
             throw new IllegalArgumentException("null value");
         }
 
-        if (constantCodes.containsKey(key)) {
-            throw new IllegalArgumentException(
-                "key(" + key + ") is already occupied");
-        }
+//        if (constantCodes.containsKey(key)) {
+//            throw new IllegalArgumentException(
+//                "key(" + key + ") is already occupied");
+//        }
 
-        constantCodes.put(key, value);
+        return (String) constantCodes.put(key, value);
     }
 
 
