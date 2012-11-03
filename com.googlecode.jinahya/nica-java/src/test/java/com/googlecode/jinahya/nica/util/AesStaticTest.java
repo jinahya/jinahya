@@ -30,22 +30,11 @@ public class AesStaticTest {
 
 
     @Test(invocationCount = 16)
-    public static void testNewKey() {
-        final byte[] key = Aes.newKey();
-        Assert.assertNotNull(key);
-        Assert.assertEquals(key.length, Aes.KEY_SIZE_IN_BYTES);
-        System.out.println("Aes.newKey: " + Hex.encodeToString(key));
-        Aes.checkKey(key);
-    }
-
-
-    @Test(invocationCount = 16)
     public static void testNewIv() {
         final byte[] iv = Aes.newIv();
         Assert.assertNotNull(iv);
         Assert.assertEquals(iv.length, Aes.BLOCK_SIZE_IN_BYTES);
         System.out.println("Aes.newIv: " + Hex.encodeToString(iv));
-        Aes.checkIv(iv);
     }
 
 

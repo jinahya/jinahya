@@ -34,7 +34,8 @@ public class HacBC extends Hac {
      * Returns a new synchronized (thread-safe) instance.
      *
      * @param key key
-     * @return a new synchroized instance.
+     *
+     * @return a new synchronized instance.
      */
     public static Hac newSynchronizedInstance(final byte[] key) {
 
@@ -62,10 +63,10 @@ public class HacBC extends Hac {
 
                 synchronized (mac) {
 
+                    final byte[] authenticated = new byte[mac.getMacSize()];
+
                     mac.reset();
                     mac.update(message, 0, message.length);
-
-                    final byte[] authenticated = new byte[mac.getMacSize()];
                     mac.doFinal(authenticated, 0);
 
                     return authenticated;

@@ -53,7 +53,7 @@ public abstract class HacTest<H extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticate() {
 
-        final H mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.newKey());
 
         try {
             mac.authenticate((byte[]) null);
@@ -70,7 +70,7 @@ public abstract class HacTest<H extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateWithString() {
 
-        final H mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.newKey());
 
         try {
             mac.authenticate((String) null);
@@ -87,7 +87,7 @@ public abstract class HacTest<H extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateToString() {
 
-        final H mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.newKey());
 
         try {
             mac.authenticateToString((byte[]) null);
@@ -104,7 +104,7 @@ public abstract class HacTest<H extends Hac> {
     @Test//(invocationCount = 128)
     public void testAuthenticateToStringWithString() {
 
-        final H mac = newInstance(AesTest.generateKey());
+        final H mac = newInstance(AesTest.newKey());
 
         try {
             mac.authenticateToString((String) null);
