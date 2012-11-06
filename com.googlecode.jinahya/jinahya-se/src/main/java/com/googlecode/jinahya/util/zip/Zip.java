@@ -19,11 +19,9 @@ package com.googlecode.jinahya.util.zip;
 
 
 import com.googlecode.jinahya.io.IO;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -168,7 +166,7 @@ public final class Zip {
             path.delete(length, path.length());
         } else {
             stream.putNextEntry(new ZipEntry(path + file.getName()));
-            IO.copy(file, stream, buffer);
+            IO.copy(file, stream, buffer, -1L);
             stream.closeEntry();
         }
     }
@@ -204,7 +202,7 @@ public final class Zip {
             if (entry.isDirectory()) {
                 assert file.isDirectory();
             } else {
-                IO.copy(stream, file, buffer);
+                IO.copy(stream, file, buffer, -1L);
             }
         }
     }
@@ -244,7 +242,7 @@ public final class Zip {
             } else {
                 final InputStream input = zipfile.getInputStream(entry);
                 try {
-                    IO.copy(input, file, buffer);
+                    IO.copy(input, file, buffer, -1L);
                 } finally {
                     input.close();
                 }
