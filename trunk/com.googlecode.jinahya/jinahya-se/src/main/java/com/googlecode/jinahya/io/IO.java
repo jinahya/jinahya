@@ -19,7 +19,7 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,104 +36,79 @@ import java.io.OutputStream;
 public class IO {
 
 
-    /** default buffer size. */
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
-
-
-    public static long copy(final File file, final OutputStream output)
+    public static long copy(final File input, final OutputStream output,
+                            final byte[] buffer, final long length)
         throws IOException {
 
-        return copy(file, output, new byte[DEFAULT_BUFFER_SIZE]);
-    }
-
-
-    public static long copy(final File file, final OutputStream output,
-                            final byte[] buffer)
-        throws IOException {
-
-        if (file == null) {
+        if (input == null) {
             throw new NullPointerException("null file");
         }
 
-        if (!file.isFile()) {
-            throw new IllegalArgumentException("file is not an existing file");
-        }
-
-        final InputStream input =
-            new BufferedInputStream(new FileInputStream(file));
+        final InputStream fileInput = new FileInputStream(input);
         try {
-            return copy(input, output, buffer);
+            return copy(fileInput, output, buffer, length);
         } finally {
-            input.close();
+            fileInput.close();
         }
     }
 
 
     /**
-     * Copies bytes from <code>input</code> to <code>file</code>.
+     * Copies bytes from
+     * <code>input</code> to
+     * <code>file</code>.
      *
      * @param input source input
-     * @param file target file
-     * @return the number of bytes copied
-     * @throws IOException if an I/O error occurs.
-     */
-    public static long copy(final InputStream input, final File file)
-        throws IOException {
-
-        return copy(input, file, new byte[DEFAULT_BUFFER_SIZE]);
-    }
-
-
-    /**
-     * Copies bytes from <code>input</code> to <code>file</code>.
-     *
-     * @param input source input
-     * @param file target file
+     * @param output target file
      * @param buffer buffer to use
      * @return the number of bytes copied.
      * @throws IOException if an I/O error occurs.
      */
-    public static long copy(final InputStream input, final File file,
-                            final byte[] buffer)
+    public static long copy(final InputStream input, final File output,
+                            final byte[] buffer, final long length)
         throws IOException {
 
-        final BufferedOutputStream output =
-            new BufferedOutputStream(new FileOutputStream(file));
+        final OutputStream fileOutput = new FileOutputStream(output);
         try {
-            return copy(input, output, buffer);
+            try {
+                return copy(input, fileOutput, buffer, length);
+            } finally {
+                fileOutput.flush();
+            }
         } finally {
-            output.flush();
-            output.close();
+            fileOutput.close();
         }
     }
 
 
+//    /**
+//     * Copy bytes from
+//     * <code>input</code> to
+//     * <code>output</code>.
+//     *
+//     * @param input source input
+//     * @param output target output
+//     * @param buffer buffer to use
+//     * @return the number of bytes copied
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    public static long copy(final InputStream input, final OutputStream output,
+//                            final byte[] buffer)
+//        throws IOException {
+//
+//        return copy(input, output, buffer, -1L);
+//    }
     /**
-     * Copy bytes from <code>input</code> to <code>output</code>.
      *
-     * @param input source input
-     * @param output target output
-     * @return the number of bytes copied
-     * @throws IOException if an I/O error occurs.
+     * @param input input
+     * @param output output
+     * @param buffer the buffer
+     * @param length number of bytes to copy; -1L for unlimited.
+     * @return the number of bytes copied.
+     * @throws IOException if an I/O error occurs
      */
-    private static long copy(final InputStream input, final OutputStream output)
-        throws IOException {
-
-        return copy(input, output, new byte[DEFAULT_BUFFER_SIZE]);
-    }
-
-
-    /**
-     * Copy bytes from <code>input</code> to <code>output</code>.
-     *
-     * @param input source input
-     * @param output target output
-     * @param buffer buffer to use
-     * @return the number of bytes copied
-     * @throws IOException if an I/O error occurs.
-     */
-    private static long copy(final InputStream input, final OutputStream output,
-                             final byte[] buffer)
+    public static long copy(final InputStream input, final OutputStream output,
+                            final byte[] buffer, final long length)
         throws IOException {
 
         if (input == null) {
@@ -149,12 +124,24 @@ public class IO {
         }
 
         if (buffer.length == 0) {
-            throw new IllegalArgumentException("zero-length buffer");
+            throw new IllegalArgumentException(
+                "buffer.length(" + buffer.length + ") == 0");
         }
 
         long count = 0L;
-
-        for (int read = -1; (read = input.read(buffer)) != -1; count += read) {
+        int l = buffer.length;
+        for (int read = -1; count < length; count += read) {
+            if (length >/*=*/ 0 && l > (length - count)) {
+                l = (int) (length - count);
+            }
+            read = input.read(buffer, 0, l);
+            if (read == -1) {
+                if (length >/*=*/ 0) {
+                    throw new EOFException("eof");
+                } else {
+                    break;
+                }
+            }
             output.write(buffer, 0, read);
         }
 
