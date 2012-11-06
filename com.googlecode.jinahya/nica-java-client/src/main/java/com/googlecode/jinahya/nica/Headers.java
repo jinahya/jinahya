@@ -23,7 +23,7 @@ import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
 import java.io.UnsupportedEncodingException;
-import java.net.URLConnection;
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,7 +52,7 @@ public abstract class Headers {
 
 
         //@Override
-        public void setHeaders(final URLConnection connection) {
+        public void setHeaders(final HttpURLConnection connection) {
             synchronized (headers) {
                 super.setHeaders(connection);
             }
@@ -81,6 +81,7 @@ public abstract class Headers {
      * headers.
      *
      * @param headers the headers to be "wrapped" in a synchronized headers.
+     *
      * @return a synchronized view of the specified headers.
      */
     public static Headers synchronizedHeaders(final Headers headers) {
@@ -139,11 +140,16 @@ public abstract class Headers {
      *
      * @param connection connection
      */
-    public void setHeaders(final URLConnection connection) {
+    public void setHeaders(final HttpURLConnection connection) {
 
         if (connection == null) {
             throw new IllegalArgumentException("null connection");
         }
+
+        codes.putVariableCode(CodeKeys.REQUEST_URL,
+                              connection.getURL().toExternalForm());
+        codes.putVariableCode(CodeKeys.REQUEST_METHOD,
+                              connection.getRequestMethod());
 
         for (final Iterator entries = getHeaders().entrySet().iterator();
              entries.hasNext();) {
@@ -189,6 +195,11 @@ public abstract class Headers {
         headers.put(HeaderFieldNames.AUTH, Hex.encodeToString(auth));
 
         return headers;
+    }
+
+
+    public Codes getCodes() {
+        return codes;
     }
 
 

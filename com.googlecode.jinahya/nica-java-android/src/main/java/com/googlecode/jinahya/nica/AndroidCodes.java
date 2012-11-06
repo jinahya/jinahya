@@ -21,7 +21,6 @@ package com.googlecode.jinahya.nica;
 import android.content.Context;
 import android.provider.Settings;
 import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -47,41 +46,28 @@ public class AndroidCodes extends Codes {
 
         final Locale locale = Locale.getDefault();
 //        try {
-//            putConstantCode(Code.USER_LANGUAGE3.name(),
+//            putConstantCode(Code.USER_LANGUAGE3,
 //                            locale.getISO3Language());
 //        } catch (MissingResourceException mre) {
 //        }
-        putConstantCode(Code.USER_LANGUAGE2.name(), locale.getLanguage());
-//        putConstantCode(Code.USER_LANGUAGE.name(),
+        putConstantCode(Code.USER_LANGUAGE2, locale.getLanguage());
+//        putConstantCode(Code.USER_LANGUAGE,
 //                        locale.getDisplayLanguage(Locale.ENGLISH));
 
 //        try {
-//            putConstantCode(Code.USER_COUNTRY3.name(),
+//            putConstantCode(Code.USER_COUNTRY3,
 //                            locale.getISO3Country());
 //        } catch (MissingResourceException mre) {
 //        }
-        putConstantCode(Code.USER_COUNTRY2.name(), locale.getLanguage());
-//        putConstantCode(Code.USER_COUNTRY.name(),
+        putConstantCode(Code.USER_COUNTRY2, locale.getLanguage());
+//        putConstantCode(Code.USER_COUNTRY,
 //                        locale.getDisplayCountry(Locale.ENGLISH));
 
-//        final String androidId = Settings.Secure.getString(
-//            context.getContentResolver(), Settings.Secure.ANDROID_ID);
-//        putConstantCode(Code.DEVICE_ID.name(), androidId);
+        final String androidId = Settings.Secure.getString(
+            context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        putConstantCode(Code.SYSTEM_ID, androidId);
 
-        putConstantCode(Code.PLATFORM_ID.name(), Platform.ANDROID.id());
-    }
-
-
-    @Override
-    public void getCodes(final Map codes) {
-
-        if (!hasContantCode(Code.DEVICE_ID.name())) {
-            final String androidId = Settings.Secure.getString(
-                context.getContentResolver(), Settings.Secure.ANDROID_ID);
-            putConstantCode(Code.DEVICE_ID.name(), androidId);
-        }
-
-        super.getCodes(codes);
+        putConstantCode(Code.PLATFORM_ID, Platform.ANDROID.id());
     }
 
 

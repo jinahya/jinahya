@@ -70,17 +70,17 @@ public class Codes {
 
 
         //@Override
-        public String putConstantCode(final String key, final String value) {
+        public void putConstantCode(final String key, final String value) {
             synchronized (codes) {
-                return super.putConstantCode(key, value);
+                super.putConstantCode(key, value);
             }
         }
 
 
-        @Override
-        public boolean hasConstantCode(final String key) {
+        //@Override
+        public void putConstantCode(final Code code, final String value) {
             synchronized (codes) {
-                return super.hasConstantCode(key);
+                super.putConstantCode(code, value);
             }
         }
 
@@ -94,9 +94,9 @@ public class Codes {
 
 
         //@Override
-        public boolean hasVariableCode(final String key) {
-            synchronized (key) {
-                return super.hasVariableCode(key);
+        public String putVariableCode(final Code code, final String key) {
+            synchronized (codes) {
+                return super.putVariableCode(code, key);
             }
         }
 
@@ -148,6 +148,7 @@ public class Codes {
      *
      * @param codes the map to which codes are added
      */
+    //@SuppressWarnings("unchecked")
     public void getCodes(final Map codes) {
 
         if (codes == null) {
@@ -174,7 +175,7 @@ public class Codes {
      * @param key key
      * @param value value
      */
-    public String putConstantCode(final String key, final String value) {
+    public void putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -184,25 +185,33 @@ public class Codes {
             throw new IllegalArgumentException("null value");
         }
 
-//        if (constantCodes.containsKey(key)) {
-//            throw new IllegalArgumentException(
-//                "key(" + key + ") is already occupied");
-//        }
-
-        return (String) constantCodes.put(key, value);
-    }
-
-
-    public boolean hasConstantCode(final String key) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
+        if (constantCodes.containsKey(key)) {
+            throw new IllegalArgumentException(
+                "key(" + key + ") is already occupied");
         }
 
-        return constantCodes.containsKey(key);
+        constantCodes.put(key, value);
     }
 
 
+    public void putConstantCode(final Code code, final String value) {
+
+        if (code == null) {
+            throw new IllegalArgumentException("null code");
+        }
+
+        putConstantCode(code.key(), value);
+    }
+
+
+//    public boolean hasConstantCode(final String key) {
+//
+//        if (key == null) {
+//            throw new IllegalArgumentException("null key");
+//        }
+//
+//        return constantCodes.containsKey(key);
+//    }
     /**
      * Puts a variable code. Note that variable codes are cleared after they
      * once used.
@@ -226,16 +235,24 @@ public class Codes {
     }
 
 
-    public boolean hasVariableCode(final String key) {
+    public String putVariableCode(final Code code, final String value) {
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
+        if (code == null) {
+            throw new IllegalArgumentException("null code");
         }
 
-        return variableCodes.containsKey(key);
+        return putVariableCode(code.key(), value);
     }
 
 
+//    public boolean hasVariableCode(final String key) {
+//
+//        if (key == null) {
+//            throw new IllegalArgumentException("null key");
+//        }
+//
+//        return variableCodes.containsKey(key);
+//    }
     /**
      * constant codes.
      */
