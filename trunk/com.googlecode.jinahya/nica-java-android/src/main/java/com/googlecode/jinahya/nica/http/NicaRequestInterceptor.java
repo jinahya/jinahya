@@ -18,11 +18,14 @@
 package com.googlecode.jinahya.nica.http;
 
 
-import com.googlecode.jinahya.nica.AndroidHeaders;
+import com.googlecode.jinahya.nica.Code;
+import com.googlecode.jinahya.nica.Headers;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.protocol.HttpContext;
 
 
@@ -36,16 +39,16 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
     /**
      *
-     * @param headers
+     * @param headres
      */
-    public NicaRequestInterceptor(final AndroidHeaders headers) {
+    public NicaRequestInterceptor(final Headers headres) {
         super();
 
-        if (headers == null) {
+        if (headres == null) {
             throw new IllegalArgumentException("null headers");
         }
 
-        this.headers = headers;
+        this.headers = headres;
     }
 
 
@@ -53,14 +56,25 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     public void process(final HttpRequest request, final HttpContext context)
         throws HttpException, IOException {
 
-        headers.setHeaders(request);
+        if (request instanceof HttpUriRequest) {
+            final HttpUriRequest uriRequest = (HttpUriRequest) request;
+            try {
+                headers.getCodes().putVariableCode(
+                    Code.REQUEST_URL,
+                    uriRequest.getURI().toURL().toExternalForm());
+            } catch (MalformedURLException murle) {
+                throw new RuntimeException(murle);
+            }
+            headers.getCodes().putVariableCode(
+                Code.REQUEST_METHOD, uriRequest.getMethod());
+        }
     }
 
 
     /**
      * headers.
      */
-    private final AndroidHeaders headers;
+    private final Headers headers;
 
 
 }

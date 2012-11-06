@@ -21,7 +21,7 @@
       </dependency>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>nica-client-java</artifactId>
+        <artifactId>nica-java-client</artifactId>
         <version>1.0-alpha-1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -44,7 +44,7 @@
     </dependency>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>nica-client-java</artifactId>
+      <artifactId>nica-java-client</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

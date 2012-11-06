@@ -39,6 +39,18 @@ public final class CodeKeys {
 
 
     /**
+     *
+     */
+    public static final String REQUEST_METHOD = "REQUEST_METHOD";
+
+
+    /**
+     *
+     */
+    public static final String REQUEST_URL = "REQUEST_URL";
+
+
+    /**
      * User's username, if required, per request.
      */
     public static final String USER_USERNAME = "USER_USERNAME";

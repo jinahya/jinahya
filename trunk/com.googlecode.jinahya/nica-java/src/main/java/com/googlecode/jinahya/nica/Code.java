@@ -34,6 +34,14 @@ public enum Code {
      */
     REQUEST_TIMESTAMP(CodeKeys.REQUEST_TIMESTAMP),
     /**
+     * See {@link CodeKeys#REQUEST_METHOD}.
+     */
+    REQUEST_METHOD(CodeKeys.REQUEST_METHOD),
+    /**
+     * See {@link CodeKeys#REQUEST_URL}.
+     */
+    REQUEST_URL(CodeKeys.REQUEST_URL),
+    /**
      * See {@link CodeKeys#USER_PASSWORD}.
      */
     USER_PASSWORD(CodeKeys.USER_PASSWORD),
@@ -101,6 +109,7 @@ public enum Code {
      * match.
      *
      * @param key key
+     *
      * @return the matched value.
      */
     public static Code fromKey(final String key) {

@@ -20,9 +20,10 @@ package com.googlecode.jinahya.nica;
 
 import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import org.apache.http.HttpRequest;
+import org.apache.http.client.methods.HttpUriRequest;
 
 
 /**
@@ -39,7 +40,7 @@ public class AndroidHeaders extends Headers {
      * @param codes codes
      * @param key the encryption key.
      */
-    public AndroidHeaders(final String name, final AndroidCodes codes,
+    public AndroidHeaders(final String name, final Codes codes,
                           final byte[] key) {
 
         super(name, codes, new AesJCE(key), new HacJCE(key));
@@ -52,11 +53,19 @@ public class AndroidHeaders extends Headers {
      *
      * @param request request
      */
-    public void setHeaders(final HttpRequest request) {
+    public void setHeaders(final HttpUriRequest request) {
 
         if (request == null) {
             throw new IllegalArgumentException("null connection");
         }
+
+        try {
+            getCodes().putVariableCode(
+                Code.REQUEST_URL, request.getURI().toURL().toExternalForm());
+        } catch (MalformedURLException murle) {
+            throw new RuntimeException(murle);
+        }
+        getCodes().putVariableCode(Code.REQUEST_METHOD, request.getMethod());
 
         for (Iterator<?> i = getHeaders().entrySet().iterator(); i.hasNext();) {
             final Entry<?, ?> entry = (Entry<?, ?>) i.next();

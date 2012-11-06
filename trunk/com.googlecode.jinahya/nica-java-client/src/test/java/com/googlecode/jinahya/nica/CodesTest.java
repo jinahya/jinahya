@@ -36,25 +36,44 @@ public class CodesTest {
         final Codes codes = new Codes();
 
         try {
-            codes.putConstantCode(null, "");
-            Assert.fail("passed: putConstantCode(null, )");
+            codes.putConstantCode((String) null, "");
+            Assert.fail("passed: putConstantCode((String) null, \"\")");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            codes.putConstantCode((Code) null, "");
+            Assert.fail("passed: putConstantCode((Code) null, \"\")");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
             codes.putConstantCode("", null);
-            Assert.fail("passed: putConstantCode(, null)");
+            Assert.fail("passed: putConstantCode(\"\", null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        Assert.assertNull(codes.putConstantCode("", ""));
+        try {
+            codes.putConstantCode(Code.PLATFORM_ID, null);
+            Assert.fail("passed: putConstantCode(Code.PLATFORM_ID, null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        codes.putConstantCode("", "");
 
         final String key = RandomStringUtils.random(16);
         final String value = RandomStringUtils.random(16);
-        Assert.assertNull(codes.putConstantCode(key, value));
-        Assert.assertEquals(codes.putConstantCode(key, value), value);
+        codes.putConstantCode(key, value);
+        try {
+            codes.putConstantCode(key, value);
+            Assert.fail("passed: putConstantCode(, ) duplicate key");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
     }
 
 
@@ -64,15 +83,29 @@ public class CodesTest {
         final Codes codes = new Codes();
 
         try {
-            codes.putVariableCode(null, "");
-            Assert.fail("passed: putVariableCode(null, )");
+            codes.putVariableCode((String) null, "");
+            Assert.fail("passed: putVariableCode((String) null, )");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            codes.putVariableCode((Code) null, "");
+            Assert.fail("passed: putVariableCode((Code) null, )");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
             codes.putVariableCode("", null);
-            Assert.fail("passed: putVariableCode(, null)");
+            Assert.fail("passed: putVariableCode(\"\", null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            codes.putVariableCode(Code.PLATFORM_ID, null);
+            Assert.fail("passed: putVariableCode(Code.PLATFORM_ID, null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
