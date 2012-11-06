@@ -37,6 +37,8 @@ public class JinahyaRandom implements Serializable {
 
     /**
      * Creates a new instance.
+     *
+     * @param random the random to be wrapped.
      */
     public JinahyaRandom(final Random random) {
         super();
