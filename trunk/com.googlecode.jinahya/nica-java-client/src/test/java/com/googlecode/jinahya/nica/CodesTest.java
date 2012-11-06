@@ -36,15 +36,8 @@ public class CodesTest {
         final Codes codes = new Codes();
 
         try {
-            codes.putConstantCode((String) null, "");
+            codes.putConstantCode(null, "");
             Assert.fail("passed: putConstantCode((String) null, \"\")");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            codes.putConstantCode((Code) null, "");
-            Assert.fail("passed: putConstantCode((Code) null, \"\")");
         } catch (IllegalArgumentException iae) {
             // expected
         }
@@ -52,13 +45,6 @@ public class CodesTest {
         try {
             codes.putConstantCode("", null);
             Assert.fail("passed: putConstantCode(\"\", null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            codes.putConstantCode(Code.PLATFORM_ID, null);
-            Assert.fail("passed: putConstantCode(Code.PLATFORM_ID, null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
@@ -83,15 +69,8 @@ public class CodesTest {
         final Codes codes = new Codes();
 
         try {
-            codes.putVariableCode((String) null, "");
+            codes.putVariableCode(null, "");
             Assert.fail("passed: putVariableCode((String) null, )");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            codes.putVariableCode((Code) null, "");
-            Assert.fail("passed: putVariableCode((Code) null, )");
         } catch (IllegalArgumentException iae) {
             // expected
         }
@@ -99,13 +78,6 @@ public class CodesTest {
         try {
             codes.putVariableCode("", null);
             Assert.fail("passed: putVariableCode(\"\", null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            codes.putVariableCode(Code.PLATFORM_ID, null);
-            Assert.fail("passed: putVariableCode(Code.PLATFORM_ID, null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }

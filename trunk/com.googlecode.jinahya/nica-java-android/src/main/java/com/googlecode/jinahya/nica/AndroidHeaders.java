@@ -61,11 +61,13 @@ public class AndroidHeaders extends Headers {
 
         try {
             getCodes().putVariableCode(
-                Code.REQUEST_URL, request.getURI().toURL().toExternalForm());
+                Code.REQUEST_URL.key(),
+                request.getURI().toURL().toExternalForm());
         } catch (MalformedURLException murle) {
             throw new RuntimeException(murle);
         }
-        getCodes().putVariableCode(Code.REQUEST_METHOD, request.getMethod());
+        getCodes().putVariableCode(Code.REQUEST_METHOD.key(),
+                                   request.getMethod());
 
         for (Iterator<?> i = getHeaders().entrySet().iterator(); i.hasNext();) {
             final Entry<?, ?> entry = (Entry<?, ?>) i.next();
