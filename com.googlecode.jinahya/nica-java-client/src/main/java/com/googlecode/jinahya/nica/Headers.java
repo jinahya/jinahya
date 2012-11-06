@@ -67,6 +67,14 @@ public abstract class Headers {
         }
 
 
+        //@Override
+        public Codes getCodes() {
+            synchronized (headers) {
+                return headers.getCodes();
+            }
+        }
+
+
         /**
          * headers.
          */
@@ -97,10 +105,10 @@ public abstract class Headers {
     /**
      * Creates a new instance.
      *
-     * @param name
-     * @param codes
-     * @param aes
-     * @param hac
+     * @param name a Par-encoded nica names.
+     * @param codes codes.
+     * @param aes aes.
+     * @param hac hac.
      */
     public Headers(final String name, final Codes codes, final Aes aes,
                    final Hac hac) {

@@ -38,8 +38,9 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param headres
+     * @param headres the headers to be wrapped.
      */
     public NicaRequestInterceptor(final Headers headres) {
         super();
@@ -60,13 +61,13 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
             final HttpUriRequest uriRequest = (HttpUriRequest) request;
             try {
                 headers.getCodes().putVariableCode(
-                    Code.REQUEST_URL,
+                    Code.REQUEST_URL.key(),
                     uriRequest.getURI().toURL().toExternalForm());
             } catch (MalformedURLException murle) {
                 throw new RuntimeException(murle);
             }
             headers.getCodes().putVariableCode(
-                Code.REQUEST_METHOD, uriRequest.getMethod());
+                Code.REQUEST_METHOD.key(), uriRequest.getMethod());
         }
     }
 

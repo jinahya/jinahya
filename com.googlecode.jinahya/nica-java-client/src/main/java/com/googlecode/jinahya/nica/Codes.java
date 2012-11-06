@@ -20,6 +20,7 @@ package com.googlecode.jinahya.nica;
 
 import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -77,12 +78,12 @@ public class Codes {
         }
 
 
-        //@Override
-        public void putConstantCode(final Code code, final String value) {
-            synchronized (codes) {
-                super.putConstantCode(code, value);
-            }
-        }
+//        //@Override
+//        public void putConstantCode(final Code code, final String value) {
+//            synchronized (codes) {
+//                super.putConstantCode(code, value);
+//            }
+//        }
 
 
         //@Override
@@ -93,12 +94,12 @@ public class Codes {
         }
 
 
-        //@Override
-        public String putVariableCode(final Code code, final String key) {
-            synchronized (codes) {
-                return super.putVariableCode(code, key);
-            }
-        }
+//        //@Override
+//        public String putVariableCode(final Code code, final String key) {
+//            synchronized (codes) {
+//                return super.putVariableCode(code, key);
+//            }
+//        }
 
 
         /**
@@ -111,7 +112,7 @@ public class Codes {
 
 
     /**
-     * Returns a synchronized (thread-safe) map backed by the specified codes.
+     * Returns a synchronized (thread-safe) codes backed by the specified codes.
      *
      * @param codes the codes to be "wrapped" in a synchronized codes.
      *
@@ -155,6 +156,30 @@ public class Codes {
             throw new IllegalArgumentException("null codes");
         }
 
+        final Locale locale = Locale.getDefault();
+
+//        try {
+//            putVariableCode(CodeKeys.USER_LANGUAGE3,
+//                            locale.getISO3Language());
+//        } catch (MissingResourceException mre) {
+//        }
+
+        putVariableCode(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+
+//        putVariableCode(CodeKeys.USER_LANGUAGE,
+//                        locale.getDisplayLanguage(Locale.ENGLISH));
+
+//        try {
+//            putVariableCode(CodeKeys.USER_COUNTRY3,
+//                            locale.getISO3Country());
+//        } catch (MissingResourceException mre) {
+//        }
+
+        putVariableCode(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+
+//        putVariableCode(CodeKeys.USER_COUNTRY,
+//                        locale.getDisplayCountry(Locale.ENGLISH));
+
         final long requestTimestamp = System.currentTimeMillis();
         putVariableCode(CodeKeys.REQUEST_TIMESTAMP,
                         Long.toString(requestTimestamp));
@@ -194,24 +219,16 @@ public class Codes {
     }
 
 
-    public void putConstantCode(final Code code, final String value) {
-
-        if (code == null) {
-            throw new IllegalArgumentException("null code");
-        }
-
-        putConstantCode(code.key(), value);
-    }
-
-
-//    public boolean hasConstantCode(final String key) {
+//    public void putConstantCode(final Code code, final String value) {
 //
-//        if (key == null) {
-//            throw new IllegalArgumentException("null key");
+//        if (code == null) {
+//            throw new IllegalArgumentException("null code");
 //        }
 //
-//        return constantCodes.containsKey(key);
+//        putConstantCode(code.key(), value);
 //    }
+
+
     /**
      * Puts a variable code. Note that variable codes are cleared after they
      * once used.
@@ -235,24 +252,16 @@ public class Codes {
     }
 
 
-    public String putVariableCode(final Code code, final String value) {
-
-        if (code == null) {
-            throw new IllegalArgumentException("null code");
-        }
-
-        return putVariableCode(code.key(), value);
-    }
-
-
-//    public boolean hasVariableCode(final String key) {
+//    public String putVariableCode(final Code code, final String value) {
 //
-//        if (key == null) {
-//            throw new IllegalArgumentException("null key");
+//        if (code == null) {
+//            throw new IllegalArgumentException("null code");
 //        }
 //
-//        return variableCodes.containsKey(key);
+//        return putVariableCode(code.key(), value);
 //    }
+
+
     /**
      * constant codes.
      */
