@@ -78,24 +78,42 @@ public abstract class Aes {
         ALGORITHM + "/" + MODE + "/" + PADDING;
 
 
+    /**
+     * private random.
+     */
     private static final Random RANDOM = new Random();
 
 
     /**
      * Generates a new initialization vector. This method is not intended to be
-     * used in production stage.
+     * used in production stages.
      *
      * @return a new initialization vector
      */
-    public static byte[] newIv() {
-
-        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
+    public static final byte[] newIv() {
 
         synchronized (RANDOM) {
-            for (int i = 0; i < iv.length; i++) {
-                iv[i] = (byte) RANDOM.nextInt(256);
-            }
+            return newIv(RANDOM);
         }
+    }
+
+
+    /**
+     * Generates a new initialization vector. This method is not intended to be
+     * used in production states.
+     *
+     * @param random a random to be used
+     *
+     * @return a new initialization vector.
+     */
+    public static final byte[] newIv(final Random random) {
+
+        if (random == null) {
+            throw new IllegalArgumentException("null random");
+        }
+
+        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
+        random.nextBytes(iv);
 
         return iv;
     }

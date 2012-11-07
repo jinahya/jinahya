@@ -22,9 +22,11 @@ import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
+import com.googlecode.jinahya.nica.util.ParME;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
+//import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,77 +37,73 @@ import java.util.Map.Entry;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Headers {
+public class Headers {
 
 
-    /**
-     * The class for synchronized instances.
-     */
-    private static class SynchronizedHeaders extends Headers {
-
-
-        public SynchronizedHeaders(final Headers headers) {
-            super(headers.name, headers.codes, headers.aes, headers.hac);
-
-            this.headers = headers;
-        }
-
-
-        //@Override
-        public void setHeaders(final HttpURLConnection connection) {
-            synchronized (headers) {
-                super.setHeaders(connection);
-            }
-        }
-
-
-        //@Override
-        public Map getHeaders() {
-            synchronized (headers) {
-                return super.getHeaders();
-            }
-        }
-
-
-        //@Override
-        public Codes getCodes() {
-            synchronized (headers) {
-                return headers.getCodes();
-            }
-        }
-
-
-        /**
-         * headers.
-         */
-        private final Headers headers;
-
-
-    }
-
-
-    /**
-     * Returns a synchronized (thread-safe) headers backed by the specified
-     * headers.
-     *
-     * @param headers the headers to be "wrapped" in a synchronized headers.
-     *
-     * @return a synchronized view of the specified headers.
-     */
-    public static Headers synchronizedHeaders(final Headers headers) {
-
-        if (headers == null) {
-            throw new IllegalArgumentException("null headers");
-        }
-
-        return new SynchronizedHeaders(headers);
-    }
-
-
+//    /**
+//     * The class for synchronized instances.
+//     */
+//    private static class SynchronizedHeaders extends Headers {
+//
+//
+//        public SynchronizedHeaders(final Headers headers) {
+//            super(headers.name, headers.codes, headers.aes, headers.hac);
+//
+//            this.mutex = headers;
+//        }
+//
+//
+//        //@Override
+//        public void setHeaders(final HttpURLConnection connection) {
+//            synchronized (mutex) {
+//                super.setHeaders(connection);
+//            }
+//        }
+//
+//
+//        //@Override
+//        public Map getHeaders() {
+//            synchronized (mutex) {
+//                return super.getHeaders();
+//            }
+//        }
+//
+//
+////        //@Override
+////        public Codes getCodes() {
+////            synchronized (mutex) {
+////                return mutex.getCodes();
+////            }
+////        }
+//        /**
+//         * mutex.
+//         */
+//        private final Headers mutex;
+//
+//
+//    }
+//
+//
+//    /**
+//     * Returns a synchronized (thread-safe) headers backed by the specified
+//     * headers.
+//     *
+//     * @param headers the headers to be "wrapped" in a synchronized headers.
+//     *
+//     * @return a synchronized view of the specified headers.
+//     */
+//    public static Headers synchronizedHeaders(final Headers headers) {
+//
+//        if (headers == null) {
+//            throw new IllegalArgumentException("null headers");
+//        }
+//
+//        return new SynchronizedHeaders(headers);
+//    }
     /**
      * Creates a new instance.
      *
-     * @param name a Par-encoded nica names.
+     * @param name a {@link Par}-encoded nica names.
      * @param codes codes.
      * @param aes aes.
      * @param hac hac.
@@ -146,21 +144,21 @@ public abstract class Headers {
      * Sets request headers on given
      * <code>connection</code>.
      *
-     * @param connection connection
+     * @param connection connection.
      */
-    public void setHeaders(final HttpURLConnection connection) {
+    public final void setHeaders(final HttpURLConnection connection) {
 
         if (connection == null) {
             throw new IllegalArgumentException("null connection");
         }
 
-        codes.putVariableCode(CodeKeys.REQUEST_URL,
+        codes.putVolatileCode(CodeKeys.REQUEST_URL,
                               connection.getURL().toExternalForm());
-        codes.putVariableCode(CodeKeys.REQUEST_METHOD,
+        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
                               connection.getRequestMethod());
 
-        for (final Iterator entries = getHeaders().entrySet().iterator();
-             entries.hasNext();) {
+        final Iterator entries = getHeaders().entrySet().iterator();
+        while (entries.hasNext()) {
             final Entry entry = (Entry) entries.next();
             connection.setRequestProperty(
                 (String) entry.getKey(), (String) entry.getValue());
@@ -173,30 +171,43 @@ public abstract class Headers {
      *
      * @return a map of request headers
      */
-    public Map getHeaders() {
+    public final Map getHeaders() {
 
-        final Map headers = new HashMap();
+        return getHeaders(new HashMap(4));
+    }
 
+
+    /**
+     * Put http request headers to given
+     * <code>headers</code>.
+     *
+     * @param headers the map to be filled
+     *
+     * @return given map.
+     */
+    public final Map getHeaders(final Map headers) {
+
+        if (headers == null) {
+            throw new IllegalArgumentException("null headers");
+        }
 
         // ----------------------------------------------------------- Nica-Name
         headers.put(HeaderFieldNames.NAME, name);
-
 
         // ----------------------------------------------------------- Nica-Init
         final byte[] iv = Aes.newIv();
         headers.put(HeaderFieldNames.INIT, Hex.encodeToString(iv));
 
-
         // ----------------------------------------------------------- Nica-Code
         final byte[] base;
         try {
-            base = Par.encode(codes.getCodes()).getBytes("US-ASCII");
+            base = ParME.encode(codes.getCodes(new java.util.Hashtable())).
+                getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
         final byte[] code = aes.encrypt(iv, base);
         headers.put(HeaderFieldNames.CODE, Hex.encodeToString(code));
-
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = hac.authenticate(base);
@@ -206,8 +217,55 @@ public abstract class Headers {
     }
 
 
-    public Codes getCodes() {
-        return codes;
+    /**
+     *
+     * @param headers
+     *
+     * @return
+     *
+     * @deprecated
+     */
+    public final java.util.Hashtable getHeaders(
+        final java.util.Hashtable headers) {
+
+        return getHeaders(headers);
+    }
+
+
+    /**
+     * Puts a constant code entry.
+     *
+     * @param key code key
+     * @param value code value
+     */
+    public final void putConstantCode(final String key, final String value) {
+        codes.putConstantCode(key, value);
+    }
+
+
+    /**
+     * Puts a variable code entry.
+     *
+     * @param key code key
+     * @param value code value
+     *
+     * @return previous value mapped to the key or null
+     */
+    public final String putVariableCode(final String key, final String value) {
+        return codes.putVariableCode(key, value);
+    }
+
+
+    /**
+     * Puts a volatile code entry.
+     *
+     * @param key code key
+     * @param value code value
+     *
+     * @return previous value mapped to the key or null
+     */
+    public final String putVolatileCode(final String key, final String value) {
+        return codes.putVolatileCode(key, value);
     }
 
 

@@ -45,7 +45,7 @@ public class Nuo {
 
 
     /**
-     * nonce random max.
+     * nonce random max (exclusive).
      */
     private static final int RANDOM_MAX = 1 << RANDOM_BIT;
 
@@ -80,6 +80,7 @@ public class Nuo {
      * Generates a value
      *
      * @param random random
+     *
      * @return a new value
      */
     public static long generate(final Random random) {
