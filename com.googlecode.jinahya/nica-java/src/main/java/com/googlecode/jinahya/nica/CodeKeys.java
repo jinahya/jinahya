@@ -39,13 +39,13 @@ public final class CodeKeys {
 
 
     /**
-     *
+     * Request HTTP method.
      */
     public static final String REQUEST_METHOD = "REQUEST_METHOD";
 
 
     /**
-     *
+     * Request URL.
      */
     public static final String REQUEST_URL = "REQUEST_URL";
 
@@ -100,19 +100,19 @@ public final class CodeKeys {
 
 
     /**
-     * System(OS) version.
+     * System (OS) version.
      */
     public static final String SYSTEM_VERSION = "SYSTEM_VERSION";
 
 
     /**
-     * System(OS) name.
+     * System (OS) name.
      */
     public static final String SYSTEM_NAME = "SYSTEM_NAME";
 
 
     /**
-     * System(OS) identifier. Must be, if specified, unique by
+     * System (OS) identifier. Must be, if specified, unique by
      * {@link #DEVICE_ID}. This code is required if the {@link #DEVICE_ID} is
      * absent. The value must not be empty nor blank.
      */
