@@ -22,6 +22,7 @@ import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 
 /**
@@ -32,99 +33,127 @@ import java.util.Map;
 public class Codes {
 
 
-    /**
-     * synchronized class.
-     */
-    private static class SynchronizedCodes extends Codes {
-
-
-        /**
-         * Creates a new instance.
-         *
-         * @param codes the codes to be wrapped
-         */
-        public SynchronizedCodes(final Codes codes) {
-            super();
-
-            if (codes == null) {
-                throw new IllegalArgumentException("null codes");
-            }
-
-            this.codes = codes;
-        }
-
-
-        //@Override
-        public Map getCodes() {
-            synchronized (codes) {
-                return super.getCodes();
-            }
-        }
-
-
-        //@Override
-        public void getCodes(final Map codes) {
-            synchronized (codes) {
-                super.getCodes(codes);
-            }
-        }
-
-
-        //@Override
-        public void putConstantCode(final String key, final String value) {
-            synchronized (codes) {
-                super.putConstantCode(key, value);
-            }
-        }
-
-
+//    /**
+//     * synchronized class.
+//     */
+//    private static final class SynchronizedCodes extends Codes {
+//
+//
+//        /**
+//         * Creates a new instance.
+//         *
+//         * @param mutex the codes instance to be wrapped.
+//         */
+//        public SynchronizedCodes(final Codes mutex) {
+//            super();
+//
+//            if (mutex == null) {
+//                throw new IllegalArgumentException("null mutex");
+//            }
+//
+//            this.mutex = mutex;
+//        }
+//
+//
 //        //@Override
-//        public void putConstantCode(final Code code, final String value) {
-//            synchronized (codes) {
-//                super.putConstantCode(code, value);
+//        public Map getCodes() {
+//            synchronized (mutex) {
+//                return super.getCodes();
 //            }
 //        }
-
-
-        //@Override
-        public String putVariableCode(final String key, final String value) {
-            synchronized (codes) {
-                return super.putVariableCode(key, value);
-            }
-        }
-
-
+//
+//
 //        //@Override
-//        public String putVariableCode(final Code code, final String key) {
-//            synchronized (codes) {
-//                return super.putVariableCode(code, key);
+//        public Map getCodes(final Map codes) {
+//            synchronized (mutex) {
+//                return super.getCodes(codes);
 //            }
 //        }
-
-
-        /**
-         * codes.
-         */
-        private final Codes codes;
-
-
-    }
-
-
+//
+//
+//        //@Override
+//        public java.util.Hashtable getCodes(final java.util.Hashtable codes) {
+//            synchronized (mutex) {
+//                return super.getCodes(codes);
+//            }
+//
+//        }
+//
+//
+//        //@Override
+//        public void putConstantCode(final String key, final String value) {
+//            synchronized (mutex) {
+//                super.putConstantCode(key, value);
+//            }
+//        }
+//
+//
+//        //@Override
+//        public String putVariableCode(final String key, final String value) {
+//            synchronized (mutex) {
+//                return super.putVariableCode(key, value);
+//            }
+//        }
+//
+//
+//        //@Override
+//        public String putVolatileCode(final String key, final String value) {
+//            synchronized (mutex) {
+//                return super.putVolatileCode(key, value);
+//            }
+//        }
+//
+//
+//        /**
+//         * mutex.
+//         */
+//        private final Codes mutex;
+//
+//
+//    }
+//
+//
+//    /**
+//     * Returns a synchronized (thread-safe) codes backed by the specified codes.
+//     *
+//     * @param codes the codes to be "wrapped" in a synchronized codes.
+//     *
+//     * @return a synchronized view of the specified codes.
+//     */
+//    public static Codes synchronziedCodes(final Codes codes) {
+//
+//        if (codes == null) {
+//            throw new IllegalArgumentException("null codes");
+//        }
+//
+//        return new SynchronizedCodes(codes);
+//    }
     /**
-     * Returns a synchronized (thread-safe) codes backed by the specified codes.
-     *
-     * @param codes the codes to be "wrapped" in a synchronized codes.
-     *
-     * @return a synchronized view of the specified codes.
+     * Creates a new instance.
      */
-    public static Codes synchronziedCodes(final Codes codes) {
+    //@SuppressWarnings("unchecked")
+    public Codes() {
+        super();
 
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
+        final Locale locale = Locale.getDefault();
+
+        try {
+            variableCodes.put(CodeKeys.USER_LANGUAGE3,
+                              locale.getISO3Language());
+        } catch (MissingResourceException mre) {
         }
+        variableCodes.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+        variableCodes.put(CodeKeys.USER_LANGUAGE,
+                          locale.getDisplayLanguage(Locale.ENGLISH));
 
-        return new SynchronizedCodes(codes);
+        try {
+            variableCodes.put(CodeKeys.USER_COUNTRY3,
+                              locale.getISO3Country());
+        } catch (MissingResourceException mre) {
+        }
+        variableCodes.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+        variableCodes.put(CodeKeys.USER_COUNTRY,
+                          locale.getDisplayCountry(Locale.ENGLISH));
     }
 
 
@@ -133,64 +162,64 @@ public class Codes {
      *
      * @return codes
      */
-    public Map getCodes() {
+    public final Map getCodes() {
 
-        final Map codes = new HashMap(
-            constantCodes.size() + variableCodes.size() + 2);
+        return getCodes(new HashMap(constantCodes.size() + variableCodes.size()
+                                    + volatileCodes.size() + 2));
+    }
 
-        getCodes(codes);
+
+    /**
+     * Put codes to given
+     * <code>codes</code>.
+     *
+     * @param codes the map to be filled.
+     *
+     * @return given codes.
+     */
+    public final Map getCodes(final Map codes) {
+
+        if (codes == null) {
+            throw new IllegalArgumentException("null codes");
+        }
+
+        final long requestTimestamp = System.currentTimeMillis();
+        volatileCodes.put(CodeKeys.REQUEST_TIMESTAMP,
+                          Long.toString(requestTimestamp));
+
+        final long requestNonce = Nuo.generate(requestTimestamp);
+        volatileCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
+
+        codes.putAll(volatileCodes);
+        volatileCodes.clear();
+
+        codes.putAll(variableCodes);
+
+        codes.putAll(constantCodes);
 
         return codes;
     }
 
 
     /**
-     * Put codes to given map.
+     * Put codes to given
+     * <code>codes</code>.
      *
-     * @param codes the map to which codes are added
+     * @param codes the codes to be filled.
+     *
+     * @return given codes.
+     *
+     * @deprecated Use {@link #getCodes(java.util.Map) method using a Map}.
      */
-    //@SuppressWarnings("unchecked")
-    public void getCodes(final Map codes) {
+    public final java.util.Hashtable getCodes(final java.util.Hashtable codes) {
 
         if (codes == null) {
             throw new IllegalArgumentException("null codes");
         }
 
-        final Locale locale = Locale.getDefault();
+        getCodes((Map) codes);
 
-//        try {
-//            putVariableCode(CodeKeys.USER_LANGUAGE3,
-//                            locale.getISO3Language());
-//        } catch (MissingResourceException mre) {
-//        }
-
-        putVariableCode(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-
-//        putVariableCode(CodeKeys.USER_LANGUAGE,
-//                        locale.getDisplayLanguage(Locale.ENGLISH));
-
-//        try {
-//            putVariableCode(CodeKeys.USER_COUNTRY3,
-//                            locale.getISO3Country());
-//        } catch (MissingResourceException mre) {
-//        }
-
-        putVariableCode(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-
-//        putVariableCode(CodeKeys.USER_COUNTRY,
-//                        locale.getDisplayCountry(Locale.ENGLISH));
-
-        final long requestTimestamp = System.currentTimeMillis();
-        putVariableCode(CodeKeys.REQUEST_TIMESTAMP,
-                        Long.toString(requestTimestamp));
-
-        final long requestNonce = Nuo.generate(requestTimestamp);
-        putVariableCode(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
-
-        codes.putAll(variableCodes);
-        variableCodes.clear();
-
-        codes.putAll(constantCodes);
+        return codes;
     }
 
 
@@ -200,7 +229,7 @@ public class Codes {
      * @param key key
      * @param value value
      */
-    public void putConstantCode(final String key, final String value) {
+    public final void putConstantCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -219,26 +248,15 @@ public class Codes {
     }
 
 
-//    public void putConstantCode(final Code code, final String value) {
-//
-//        if (code == null) {
-//            throw new IllegalArgumentException("null code");
-//        }
-//
-//        putConstantCode(code.key(), value);
-//    }
-
-
     /**
-     * Puts a variable code. Note that variable codes are cleared after they
-     * once used.
+     * Puts a variable code.
      *
      * @param key key
      * @param value value
      *
-     * @return previous value
+     * @return the previous value mapped to the key
      */
-    public String putVariableCode(final String key, final String value) {
+    public final String putVariableCode(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -252,14 +270,27 @@ public class Codes {
     }
 
 
-//    public String putVariableCode(final Code code, final String value) {
-//
-//        if (code == null) {
-//            throw new IllegalArgumentException("null code");
-//        }
-//
-//        return putVariableCode(code.key(), value);
-//    }
+    /**
+     * Puts a volatile code. Note that volatile codes are cleared after they
+     * once used.
+     *
+     * @param key key
+     * @param value value
+     *
+     * @return the previous value mapped to the key
+     */
+    public final String putVolatileCode(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return (String) volatileCodes.put(key, value);
+    }
 
 
     /**
@@ -271,7 +302,13 @@ public class Codes {
     /**
      * variable codes.
      */
-    private final transient Map variableCodes = new HashMap();
+    private final Map variableCodes = new HashMap();
+
+
+    /**
+     * volatile codes.
+     */
+    private final Map volatileCodes = new HashMap();
 
 
 }

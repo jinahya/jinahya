@@ -91,5 +91,33 @@ public class CodesTest {
     }
 
 
+    @Test
+    public void testPutVolatileCode() {
+
+        final Codes codes = new Codes();
+
+        try {
+            codes.putVolatileCode(null, "");
+            Assert.fail("passed: putVolatileCode((String) null, )");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        try {
+            codes.putVolatileCode("", null);
+            Assert.fail("passed: putVolatileCode(\"\", null)");
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        Assert.assertNull(codes.putVolatileCode("", ""));
+
+        final String key = RandomStringUtils.random(16);
+        final String value = RandomStringUtils.random(16);
+        Assert.assertNull(codes.putVolatileCode(key, value));
+        Assert.assertEquals(codes.putVolatileCode(key, value), value);
+    }
+
+
 }
 

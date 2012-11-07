@@ -22,6 +22,8 @@ import com.googlecode.jinahya.nica.Code;
 import com.googlecode.jinahya.nica.Headers;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Iterator;
+import java.util.Map;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -33,7 +35,9 @@ import org.apache.http.protocol.HttpContext;
  * A RequestInterceptor which sets NICA headers.
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @deprecated Use {@link java.net.HttpURLConnection}.
  */
+@Deprecated
 public class NicaRequestInterceptor implements HttpRequestInterceptor {
 
 
@@ -57,17 +61,25 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     public void process(final HttpRequest request, final HttpContext context)
         throws HttpException, IOException {
 
-        if (request instanceof HttpUriRequest) {
+        if (request != null // @@?
+            && request instanceof HttpUriRequest) {
             final HttpUriRequest uriRequest = (HttpUriRequest) request;
             try {
-                headers.getCodes().putVariableCode(
+                headers.putVolatileCode(
                     Code.REQUEST_URL.key(),
                     uriRequest.getURI().toURL().toExternalForm());
             } catch (MalformedURLException murle) {
                 throw new RuntimeException(murle);
             }
-            headers.getCodes().putVariableCode(
+            headers.putVolatileCode(
                 Code.REQUEST_METHOD.key(), uriRequest.getMethod());
+        }
+
+        final Iterator<?> i = headers.getHeaders().entrySet().iterator();
+        while (i.hasNext()) {
+            final Map.Entry<?, ?> entry = (Map.Entry<?, ?>) i.next();
+            request.setHeader((String) entry.getKey(),
+                              (String) entry.getValue());
         }
     }
 
