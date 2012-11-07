@@ -38,6 +38,10 @@ public enum Platform {
      */
     IOS(PlatformIds.IOS),
     /**
+     * See {@link PlatformIds#JAVA_TV}.
+     */
+    JAVA_TV(PlatformIds.JAVA_TV),
+    /**
      * See {@link PlatformIds#TIZEN}.
      */
     TIZEN(PlatformIds.TIZEN),

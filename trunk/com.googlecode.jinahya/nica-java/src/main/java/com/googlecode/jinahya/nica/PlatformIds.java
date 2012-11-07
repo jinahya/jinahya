@@ -44,6 +44,12 @@ public final class PlatformIds {
 
 
     /**
+     * Java TV.
+     */
+    public static final String JAVA_TV = "/platforms/java_tv";
+
+
+    /**
      * Tizen.
      */
     public static final String TIZEN = "/platforms/tizen";

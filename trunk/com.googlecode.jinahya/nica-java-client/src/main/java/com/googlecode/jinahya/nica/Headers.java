@@ -206,6 +206,7 @@ public class Headers {
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
+
         final byte[] code = aes.encrypt(iv, base);
         headers.put(HeaderFieldNames.CODE, Hex.encodeToString(code));
 

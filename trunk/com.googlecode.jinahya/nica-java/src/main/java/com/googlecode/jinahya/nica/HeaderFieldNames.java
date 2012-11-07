@@ -26,25 +26,25 @@ public final class HeaderFieldNames {
 
 
     /**
-     * Header for nica names.
+     * HTTP header field name for names.
      */
     public static final String NAME = "Nica-Name";
 
 
     /**
-     * Header for initialization vector.
+     * HTTP header field name for initialization vector.
      */
     public static final String INIT = "Nica-Init";
 
 
     /**
-     * Header for encrypted nica codes.
+     * HTTP Header field name for encrypted codes.
      */
     public static final String CODE = "Nica-Code";
 
 
     /**
-     * Header for nica-code authentication.
+     * HTTP header field name for authenticated message.
      */
     public static final String AUTH = "Nica-Auth";
 
