@@ -1,12 +1,3 @@
-
-
-package com.googlecode.jinahya.nica;
-
-
-import javax.microedition.xlet.XletContext;
-
-
-
 /*
  * Copyright 2012 Jin Kwon <jinahya at gmail.com>.
  *
@@ -22,6 +13,14 @@ import javax.microedition.xlet.XletContext;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+package com.googlecode.jinahya.nica;
+
+
+import javax.tv.xlet.XletContext;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -43,7 +42,7 @@ public class JavaTVCodes extends CodesME {
 
         this.context = context;
 
-        putConstantCode(CodeKeys.PLATFORM_ID, PlatformIds.JAVA_TV);
+        putConstantEntry(CodeKeys.PLATFORM_ID, PlatformIds.JAVA_TV);
     }
 
 
