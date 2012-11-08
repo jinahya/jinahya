@@ -57,14 +57,6 @@ public class CodesME extends AbstractCodes {
 
 
     /**
-     * Creates a new instance.
-     */
-    public CodesME() {
-        super();
-    }
-
-
-    /**
      * Returns codes.
      *
      * @return codes

@@ -18,14 +18,12 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.AesJCE;
-import com.googlecode.jinahya.nica.util.HacJCE;
 import java.net.MalformedURLException;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.Header;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicHeader;
 
 
@@ -39,14 +37,12 @@ public class AndroidHeaders extends Headers {
     /**
      * Creates a new instance.
      *
-     * @param name a Par-encoded nica-name.
-     * @param codes codes
+     * @param names names
      * @param key the encryption key.
      */
-    public AndroidHeaders(final String name, final Codes codes,
-                          final byte[] key) {
+    public AndroidHeaders(final Map<String, String> names, final byte[] key) {
 
-        super(name, codes, new AesJCE(key), new HacJCE(key));
+        super(names, key);
     }
 
 
@@ -73,35 +69,27 @@ public class AndroidHeaders extends Headers {
         }
         putVolatileCode(Code.REQUEST_METHOD.key(), request.getMethod());
 
-        final Iterator<?> i = getHeaders().entrySet().iterator();
-        while (i.hasNext()) {
-            final Entry<?, ?> entry = (Entry<?, ?>) i.next();
-            request.setHeader((String) entry.getKey(),
-                              (String) entry.getValue());
+        for (Entry<String, String> entry : getHeaders().entrySet()) {
+            request.setHeader(entry.getKey(), entry.getValue());
         }
     }
 
 
     /**
-     * Fills given list.
+     * Adds HTTP headers to given
+     * <code>headers</code>.
      *
      * @param headers the list to be filled
-     *
-     * @return given list.
      *
      * @deprecated Use {@link java.net.HttpURLConnection}.
      */
     @Deprecated
-    public List<Header> getHeaders(final List<Header> headers) {
+    public void getHeaders(final List<Header> headers) {
 
-        final Iterator<?> i = getHeaders().entrySet().iterator();
-        while (i.hasNext()) {
-            final Entry<?, ?> entry = (Entry<?, ?>) i.next();
-            headers.add(new BasicHeader((String) entry.getKey(),
-                                        (String) entry.getValue()));
+        final String[] entries = getEntries();
+        for (int i = 0; i < entries.length; i += 2) {
+            headers.add(new BasicHeader(entries[i], entries[i + 1]));
         }
-
-        return headers;
     }
 
 
