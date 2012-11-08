@@ -69,12 +69,12 @@ public class HeadersTest {
         final DefaultHeaders headers =
             (DefaultHeaders) DefaultHeaders.newInstance(names, key);
 
-        headers.putVolatileCode(CodeKeys.USER_USERNAME, "username");
-        headers.putVolatileCode(CodeKeys.USER_PASSWORD, "password");
+        headers.putVolatileEntry(CodeKeys.USER_USERNAME, "username");
+        headers.putVolatileEntry(CodeKeys.USER_PASSWORD, "password");
 
 
         final long start = System.currentTimeMillis();
-        final Map headers_ = headers.getHeaders();
+        final Map headers_ = headers.getEntries();
         final long finish = System.currentTimeMillis();
         System.out.println("elapsed: " + (finish - start) + "ms");
 

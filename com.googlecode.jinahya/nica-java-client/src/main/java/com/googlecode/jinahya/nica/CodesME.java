@@ -48,7 +48,7 @@ public class CodesME extends Codes {
             throw new IllegalArgumentException("null target");
         }
 
-        final Enumeration keys = source.elements();
+        final Enumeration keys = source.keys();
         while (keys.hasMoreElements()) {
             final Object key = keys.nextElement();
             target.put(key, source.get(key));
@@ -61,15 +61,15 @@ public class CodesME extends Codes {
      *
      * @return codes
      */
-    public final Hashtable getCodes() {
+    public final Hashtable getEntries() {
 
-        final Hashtable codes = new Hashtable(
-            constantCodes.size() + variableCodes.size() + volatileCodes.size()
-            + 2);
+        final Hashtable entries = new Hashtable(
+            constantEntries.size() + variableEntries.size()
+            + volatileEntries.size() + 2);
 
-        getCodes(codes);
+        getEntries(entries);
 
-        return codes;
+        return entries;
     }
 
 
@@ -77,29 +77,29 @@ public class CodesME extends Codes {
      * Put codes to given
      * <code>codes</code>.
      *
-     * @param codes the hashtable to be filled.
+     * @param entries the hashtable to be filled.
      *
      * @return given codes.
      */
-    public final void getCodes(final Hashtable codes) {
+    public final void getEntries(final Hashtable entries) {
 
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
         }
 
-        putTimestampAndNonce(volatileCodes);
+        putTimestampAndNonce(volatileEntries);
 
-        copy(volatileCodes, codes);
-        volatileCodes.clear();
+        copy(volatileEntries, entries);
+        volatileEntries.clear();
 
-        copy(variableCodes, codes);
+        copy(variableEntries, entries);
 
-        copy(constantCodes, codes);
+        copy(constantEntries, entries);
     }
 
 
     //@Override
-    public final void putConstantCode(final String key, final String value) {
+    public final void putConstantEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -109,17 +109,17 @@ public class CodesME extends Codes {
             throw new IllegalArgumentException("null value");
         }
 
-        if (constantCodes.containsKey(key)) {
+        if (constantEntries.containsKey(key)) {
             throw new IllegalArgumentException(
                 "key(" + key + ") is already occupied");
         }
 
-        constantCodes.put(key, value);
+        constantEntries.put(key, value);
     }
 
 
     //@Override
-    public final String putVariableCode(final String key, final String value) {
+    public final String putVariableEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -129,12 +129,12 @@ public class CodesME extends Codes {
             throw new IllegalArgumentException("null value");
         }
 
-        return (String) variableCodes.put(key, value);
+        return (String) variableEntries.put(key, value);
     }
 
 
     //@Override
-    public final String putVolatileCode(final String key, final String value) {
+    public final String putVolatileEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -144,26 +144,26 @@ public class CodesME extends Codes {
             throw new IllegalArgumentException("null value");
         }
 
-        return (String) volatileCodes.put(key, value);
+        return (String) volatileEntries.put(key, value);
     }
 
 
     /**
      * constant codes.
      */
-    private final Hashtable constantCodes = new Hashtable();
+    private final Hashtable constantEntries = new Hashtable();
 
 
     /**
      * variable codes.
      */
-    private final Hashtable variableCodes = new Hashtable();
+    private final Hashtable variableEntries = new Hashtable();
 
 
     /**
      * volatile codes.
      */
-    private final Hashtable volatileCodes = new Hashtable();
+    private final Hashtable volatileEntries = new Hashtable();
 
 
 }

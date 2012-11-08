@@ -142,13 +142,13 @@ public class DefaultCodes extends Codes {
      *
      * @return codes
      */
-    public final Map<String, String> getCodes() {
+    public final Map<String, String> getEntries() {
 
         final Map<String, String> codes = new HashMap<String, String>(
             constantCodes.size() + variableCodes.size() + volatileCodes.size()
             + 2);
 
-        getCodes(codes);
+        getEntries(codes);
 
         return codes;
     }
@@ -158,12 +158,12 @@ public class DefaultCodes extends Codes {
      * Put codes to given
      * <code>codes</code>.
      *
-     * @param codes the map to be filled.
+     * @param entries the map to be filled.
      */
-    public final void getCodes(final Map<String, String> codes) {
+    public final void getEntries(final Map<String, String> entries) {
 
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
         }
 
         final long requestTimestamp = System.currentTimeMillis();
@@ -173,17 +173,17 @@ public class DefaultCodes extends Codes {
         final long requestNonce = Nuo.generate(requestTimestamp);
         volatileCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
 
-        codes.putAll(volatileCodes);
+        entries.putAll(volatileCodes);
         volatileCodes.clear();
 
-        codes.putAll(variableCodes);
+        entries.putAll(variableCodes);
 
-        codes.putAll(constantCodes);
+        entries.putAll(constantCodes);
     }
 
 
     @Override
-    public final void putConstantCode(final String key, final String value) {
+    public final void putConstantEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -203,7 +203,7 @@ public class DefaultCodes extends Codes {
 
 
     @Override
-    public final String putVariableCode(final String key, final String value) {
+    public final String putVariableEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
@@ -218,7 +218,7 @@ public class DefaultCodes extends Codes {
 
 
     @Override
-    public final String putVolatileCode(final String key, final String value) {
+    public final String putVolatileEntry(final String key, final String value) {
 
         if (key == null) {
             throw new IllegalArgumentException("null key");
