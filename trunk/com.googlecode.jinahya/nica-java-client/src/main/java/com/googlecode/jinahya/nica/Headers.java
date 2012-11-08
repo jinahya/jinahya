@@ -22,7 +22,14 @@ import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.util.Hashtable;
+import java.util.Map;
+import javax.microedition.io.HttpConnection;
+import org.apache.http.HttpRequest;
+import org.apache.http.client.methods.HttpUriRequest;
 
 
 /**
@@ -93,8 +100,12 @@ public abstract class Headers extends Codes {
 //
 //        return new SynchronizedHeaders(headers);
 //    }
-    protected static void copy(final String[] entries,
-                               final java.util.Map map) {
+    /**
+     *
+     * @param entries
+     * @param map
+     */
+    private static void copy(final String[] entries, final Map map) {
 
         if (entries == null) {
             throw new IllegalArgumentException("null entries");
@@ -114,8 +125,12 @@ public abstract class Headers extends Codes {
     }
 
 
-    protected static void copy(final String[] entries,
-                               final java.util.Hashtable table) {
+    /**
+     *
+     * @param entries
+     * @param table
+     */
+    private static void copy(final String[] entries, final Hashtable table) {
 
         if (entries == null) {
             throw new IllegalArgumentException("null entries");
@@ -143,8 +158,8 @@ public abstract class Headers extends Codes {
      * @param aes aes.
      * @param hac hac.
      */
-    public Headers(final String name, final Codes codes,
-                   final Aes aes, final Hac hac) {
+    public Headers(final String name, final Codes codes, final Aes aes,
+                   final Hac hac) {
 
         super();
 
@@ -176,7 +191,7 @@ public abstract class Headers extends Codes {
 
 
     /**
-     * Sets request headers on given
+     * Sets HTTP request headers on given
      * <code>connection</code>.
      *
      * @param connection connection.
@@ -187,13 +202,13 @@ public abstract class Headers extends Codes {
             throw new IllegalArgumentException("null connection");
         }
 
-        codes.putVolatileCode(CodeKeys.REQUEST_URL,
-                              connection.getURL().toExternalForm());
+        codes.putVolatileEntry(CodeKeys.REQUEST_URL,
+                               connection.getURL().toExternalForm());
 
-        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
-                              connection.getRequestMethod());
+        codes.putVolatileEntry(CodeKeys.REQUEST_METHOD,
+                               connection.getRequestMethod());
 
-        final String[] entries = getEntries();
+        final String[] entries = getEntriesAsArray();
         for (int i = 0; i < entries.length; i += 2) {
             connection.setRequestProperty(entries[i], entries[i + 1]);
         }
@@ -201,10 +216,128 @@ public abstract class Headers extends Codes {
 
 
     /**
+     * Sets HTTP request headers on given
+     * <code>connection</code>.
+     *
+     * @param connection connection
+     * @throws IOException if an I/O error occurs.
+     */
+    public final void setHeaders(final HttpConnection connection)
+        throws IOException {
+
+        if (connection == null) {
+            throw new IllegalArgumentException("null connection");
+        }
+
+        codes.putVolatileEntry(CodeKeys.REQUEST_URL, connection.getURL());
+
+        codes.putVolatileEntry(CodeKeys.REQUEST_METHOD,
+                               connection.getRequestMethod());
+
+        final String[] entries = getEntriesAsArray();
+        for (int i = 0; i < entries.length; i += 2) {
+            connection.setRequestProperty(entries[i], entries[i + 1]);
+        }
+    }
+
+
+    /**
+     * Sets HTTP request headers on given
+     * <code>request</code>.
+     *
+     * @param request request
+     *
+     * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
+     */
+    @Deprecated
+    public void setHeaders(final HttpUriRequest request) {
+
+        if (request == null) {
+            throw new IllegalArgumentException("null request");
+        }
+
+        try {
+            putVolatileEntry(Code.REQUEST_URL.key(),
+                             request.getURI().toURL().toExternalForm());
+        } catch (MalformedURLException murle) {
+            throw new RuntimeException(murle);
+        }
+        putVolatileEntry(Code.REQUEST_METHOD.key(), request.getMethod());
+
+        final String[] entries = getEntriesAsArray();
+        for (int i = 0; i < entries.length; i += 2) {
+            request.setHeader(entries[i], entries[i + 1]);
+        }
+    }
+
+
+    /**
+     * Sets HTTP request headers on given
+     * <code>request</code>.
+     *
+     * @param request request
+     *
+     * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
+     */
+    @Deprecated
+    public void setHeaders(final HttpRequest request) {
+
+        if (request == null) {
+            throw new IllegalArgumentException("null request");
+        }
+
+        if (request instanceof HttpUriRequest) {
+            setHeaders((HttpUriRequest) request);
+            return;
+        }
+
+        final String[] entries = getEntriesAsArray();
+        for (int i = 0; i < entries.length; i += 2) {
+            request.setHeader(entries[i], entries[i + 1]);
+        }
+    }
+
+
+    /**
+     * Put http request headers to given
+     * <code>headers</code>.
+     *
+     * @param entries the map to be filled
+     *
+     * @return given map.
+     */
+    public final void getEntries(final Map entries) {
+
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
+        }
+
+        copy(getEntriesAsArray(), entries);
+    }
+
+
+    /**
+     * Put http request headers to given
+     * <code>headers</code>.
+     *
+     * @param entries the hashtable to be filled.
+     * @deprecated Use {@link #getEntries(java.util.Map)}.
+     */
+    public final void getEntries(final Hashtable entries) {
+
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
+        }
+
+        copy(getEntriesAsArray(), entries);
+    }
+
+
+    /**
      *
      * @return
      */
-    protected final String[] getEntries() {
+    protected final String[] getEntriesAsArray() {
 
         final String[] headers = new String[8];
         int index = 0;
@@ -244,20 +377,20 @@ public abstract class Headers extends Codes {
 
 
     //@Override
-    public final void putConstantCode(final String key, final String value) {
-        codes.putConstantCode(key, value);
+    public final void putConstantEntry(final String key, final String value) {
+        codes.putConstantEntry(key, value);
     }
 
 
     //@Override
-    public final String putVariableCode(final String key, final String value) {
-        return codes.putVariableCode(key, value);
+    public final String putVariableEntry(final String key, final String value) {
+        return codes.putVariableEntry(key, value);
     }
 
 
     //@Override
-    public final String putVolatileCode(final String key, final String value) {
-        return codes.putVolatileCode(key, value);
+    public final String putVolatileEntry(final String key, final String value) {
+        return codes.putVolatileEntry(key, value);
     }
 
 
@@ -270,7 +403,7 @@ public abstract class Headers extends Codes {
     /**
      * codes.
      */
-    protected final Codes codes;
+    private final Codes codes;
 
 
     /**

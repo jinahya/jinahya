@@ -23,10 +23,8 @@ import com.googlecode.jinahya.nica.util.AesBC;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.HacBC;
 import com.googlecode.jinahya.nica.util.ParME;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
-import javax.microedition.io.HttpConnection;
 
 
 /**
@@ -117,8 +115,8 @@ public class HeadersME extends Headers {
      * @param key
      * @return
      */
-    public static Headers newInstance(final Hashtable names, final Codes codes,
-                                      final byte[] key) {
+    public static Headers newInstance(final Hashtable names,
+                                      final CodesME codes, final byte[] key) {
 
         return new HeadersME(ParME.encode(names), codes, new AesBC(key),
                              new HacBC(key));
@@ -132,29 +130,10 @@ public class HeadersME extends Headers {
      * @param aes
      * @param hac
      */
-    public HeadersME(final String name, final Codes codes, final Aes aes,
+    public HeadersME(final String name, final CodesME codes, final Aes aes,
                      final Hac hac) {
 
         super(name, codes, aes, hac);
-    }
-
-
-    public final void setHeaders(final HttpConnection connection)
-        throws IOException {
-
-        if (connection == null) {
-            throw new IllegalArgumentException("null connection");
-        }
-
-        codes.putVolatileCode(CodeKeys.REQUEST_URL, connection.getURL());
-
-        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
-                              connection.getRequestMethod());
-
-        final String[] entries = getEntries();
-        for (int i = 0; i < entries.length; i += 2) {
-            connection.setRequestProperty(entries[i], entries[i + 1]);
-        }
     }
 
 
@@ -163,36 +142,20 @@ public class HeadersME extends Headers {
      *
      * @return a map of request headers
      */
-    public final Hashtable getHeaders() {
+    public final Hashtable getEntries() {
 
         final Hashtable headers = new Hashtable(4);
 
-        getHeaders(headers);
+        getEntries(headers);
 
         return headers;
-    }
-
-
-    /**
-     * Put http request headers to given
-     * <code>headers</code>.
-     *
-     * @param headers the hashtable to be filled.
-     */
-    public final void getHeaders(final Hashtable headers) {
-
-        if (headers == null) {
-            throw new IllegalArgumentException("null headers");
-        }
-
-        copy(getEntries(), headers);
     }
 
 
     //@Override
     protected byte[] getBase(final Codes codes) {
         try {
-            return ParME.encode(((CodesME) codes).getCodes()).
+            return ParME.encode(((CodesME) codes).getEntries()).
                 getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");

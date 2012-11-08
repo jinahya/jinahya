@@ -36,26 +36,26 @@ public class CodesTest {
         final DefaultCodes codes = new DefaultCodes();
 
         try {
-            codes.putConstantCode(null, "");
+            codes.putConstantEntry(null, "");
             Assert.fail("passed: putConstantCode((String) null, \"\")");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            codes.putConstantCode("", null);
+            codes.putConstantEntry("", null);
             Assert.fail("passed: putConstantCode(\"\", null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        codes.putConstantCode("", "");
+        codes.putConstantEntry("", "");
 
         final String key = RandomStringUtils.random(16);
         final String value = RandomStringUtils.random(16);
-        codes.putConstantCode(key, value);
+        codes.putConstantEntry(key, value);
         try {
-            codes.putConstantCode(key, value);
+            codes.putConstantEntry(key, value);
             Assert.fail("passed: putConstantCode(, ) duplicate key");
         } catch (IllegalArgumentException iae) {
             // expected
@@ -69,25 +69,25 @@ public class CodesTest {
         final DefaultCodes codes = new DefaultCodes();
 
         try {
-            codes.putVariableCode(null, "");
+            codes.putVariableEntry(null, "");
             Assert.fail("passed: putVariableCode((String) null, )");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            codes.putVariableCode("", null);
+            codes.putVariableEntry("", null);
             Assert.fail("passed: putVariableCode(\"\", null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        Assert.assertNull(codes.putVariableCode("", ""));
+        Assert.assertNull(codes.putVariableEntry("", ""));
 
         final String key = RandomStringUtils.random(16);
         final String value = RandomStringUtils.random(16);
-        Assert.assertNull(codes.putVariableCode(key, value));
-        Assert.assertEquals(codes.putVariableCode(key, value), value);
+        Assert.assertNull(codes.putVariableEntry(key, value));
+        Assert.assertEquals(codes.putVariableEntry(key, value), value);
     }
 
 
@@ -97,25 +97,25 @@ public class CodesTest {
         final DefaultCodes codes = new DefaultCodes();
 
         try {
-            codes.putVolatileCode(null, "");
+            codes.putVolatileEntry(null, "");
             Assert.fail("passed: putVolatileCode((String) null, )");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         try {
-            codes.putVolatileCode("", null);
+            codes.putVolatileEntry("", null);
             Assert.fail("passed: putVolatileCode(\"\", null)");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        Assert.assertNull(codes.putVolatileCode("", ""));
+        Assert.assertNull(codes.putVolatileEntry("", ""));
 
         final String key = RandomStringUtils.random(16);
         final String value = RandomStringUtils.random(16);
-        Assert.assertNull(codes.putVolatileCode(key, value));
-        Assert.assertEquals(codes.putVolatileCode(key, value), value);
+        Assert.assertNull(codes.putVolatileEntry(key, value));
+        Assert.assertEquals(codes.putVolatileEntry(key, value), value);
     }
 
 

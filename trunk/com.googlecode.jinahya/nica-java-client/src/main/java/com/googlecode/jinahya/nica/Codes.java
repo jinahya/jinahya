@@ -127,112 +127,110 @@ public abstract class Codes {
 //    }
     /**
      *
-     * @param map
+     * @param entries
      */
-    protected static void putLanguageAndCountry(final java.util.Map map) {
+    protected static void putLanguageAndCountry(final java.util.Map entries) {
 
-        if (map == null) {
-            throw new IllegalArgumentException("null map");
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
         }
 
         final java.util.Locale locale = java.util.Locale.getDefault();
 
         try {
-            map.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
+            entries.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
         } catch (java.util.MissingResourceException mre) {
         }
-        map.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        map.put(CodeKeys.USER_LANGUAGE,
-                locale.getDisplayLanguage(java.util.Locale.ENGLISH));
+        entries.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+        entries.put(CodeKeys.USER_LANGUAGE,
+                    locale.getDisplayLanguage(java.util.Locale.ENGLISH));
 
         try {
-            map.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
+            entries.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
         } catch (java.util.MissingResourceException mre) {
         }
-        map.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        map.put(CodeKeys.USER_COUNTRY,
-                locale.getDisplayCountry(java.util.Locale.ENGLISH));
+        entries.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+        entries.put(CodeKeys.USER_COUNTRY,
+                    locale.getDisplayCountry(java.util.Locale.ENGLISH));
     }
 
 
     /**
      *
-     * @param hashtable
+     * @param entries
      * @deprecated Use {@link #putLanguageAndCountry(java.util.Map)}.
      */
-    protected static void putLanguageAndCountry(final Hashtable hashtable) {
+    protected static void putLanguageAndCountry(final Hashtable entries) {
 
-        if (hashtable == null) {
-            throw new IllegalArgumentException("null hashtabel");
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
         }
 
         final java.util.Locale locale = java.util.Locale.getDefault();
 
         try {
-            hashtable.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
+            entries.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
         } catch (java.util.MissingResourceException mre) {
         }
-        hashtable.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        hashtable.put(CodeKeys.USER_LANGUAGE,
-                      locale.getDisplayLanguage(java.util.Locale.ENGLISH));
+        entries.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+        entries.put(CodeKeys.USER_LANGUAGE,
+                    locale.getDisplayLanguage(java.util.Locale.ENGLISH));
 
         try {
-            hashtable.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
+            entries.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
         } catch (java.util.MissingResourceException mre) {
         }
-        hashtable.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        hashtable.put(CodeKeys.USER_COUNTRY,
-                      locale.getDisplayCountry(java.util.Locale.ENGLISH));
+        entries.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+        entries.put(CodeKeys.USER_COUNTRY,
+                    locale.getDisplayCountry(java.util.Locale.ENGLISH));
     }
 
 
     /**
      *
-     * @param map
+     * @param entries
      */
-    protected static void putTimestampAndNonce(final java.util.Map map) {
+    protected static void putTimestampAndNonce(final java.util.Map entries) {
 
-        if (map == null) {
-            throw new IllegalArgumentException("null map");
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
         }
 
         final long requestTimestamp = System.currentTimeMillis();
-        map.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(requestTimestamp));
+        entries.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        map.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
+        entries.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
     }
 
 
     /**
      *
-     * @param hashtable
+     * @param entries
      * @deprecated Use {@link #putTimestampAndNonce(java.util.Map)}.
      */
-    protected static void putTimestampAndNonce(final Hashtable hashtable) {
+    protected static void putTimestampAndNonce(final Hashtable entries) {
 
-        if (hashtable == null) {
+        if (entries == null) {
             throw new IllegalArgumentException("null hashtable");
         }
 
         final long requestTimestamp = System.currentTimeMillis();
-        hashtable.put(CodeKeys.REQUEST_TIMESTAMP,
-                      Long.toString(requestTimestamp));
+        entries.put(CodeKeys.REQUEST_TIMESTAMP,
+                    Long.toString(requestTimestamp));
 
         final long requestNonce = Nuo.generate(requestTimestamp);
-        hashtable.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
+        entries.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
     }
 
 
-    /**
-     * Creates a new instance.
-     */
-    //@SuppressWarnings("unchecked")
-    public Codes() {
-        super();
-    }
-
-
+//    /**
+//     * Creates a new instance.
+//     */
+//    //@SuppressWarnings("unchecked")
+//    public Codes() {
+//        super();
+//    }
     /**
      * Adds a constant code entry. An IllegalArgumentException will be thrown if
      * <code>key</code> is already occupied.
@@ -240,7 +238,7 @@ public abstract class Codes {
      * @param key code key
      * @param value code value
      */
-    public abstract void putConstantCode(final String key, final String value);
+    public abstract void putConstantEntry(final String key, final String value);
 
 
     /**
@@ -251,8 +249,8 @@ public abstract class Codes {
      *
      * @return previous value mapped to the key.
      */
-    public abstract String putVariableCode(final String key,
-                                           final String value);
+    public abstract String putVariableEntry(final String key,
+                                            final String value);
 
 
     /**
@@ -264,8 +262,8 @@ public abstract class Codes {
      *
      * @return previous value mapped to the key
      */
-    public abstract String putVolatileCode(final String key,
-                                           final String value);
+    public abstract String putVolatileEntry(final String key,
+                                            final String value);
 
 
 }

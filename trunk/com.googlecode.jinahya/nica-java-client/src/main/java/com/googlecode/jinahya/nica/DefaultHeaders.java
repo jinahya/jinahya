@@ -108,16 +108,32 @@ public class DefaultHeaders extends Headers {
     }
 
 
+    /**
+     *
+     * @param names
+     * @param codes
+     * @param key
+     * @return
+     */
     public static Headers newInstance(final Map<String, String> names,
-                                      final Codes codes, final byte[] key) {
+                                      final DefaultCodes codes,
+                                      final byte[] key) {
 
         return new DefaultHeaders(Par.encode(names), codes, new AesJCE(key),
                                   new HacJCE(key));
     }
 
 
-    public DefaultHeaders(final String name, final Codes codes, final Aes aes,
-                          final Hac hac) {
+    /**
+     *
+     * @param name
+     * @param codes
+     * @param aes
+     * @param hac
+     */
+    public DefaultHeaders(final String name, final DefaultCodes codes,
+                          final Aes aes, final Hac hac) {
+
         super(name, codes, aes, hac);
     }
 
@@ -127,41 +143,21 @@ public class DefaultHeaders extends Headers {
      *
      * @return a map of request headers
      */
-    public final Map<String, String> getHeaders() {
+    public final Map<String, String> getEntries() {
 
-        final Map<String, String> headers = new HashMap<String, String>(4);
+        final Map<String, String> entries = new HashMap<String, String>(4);
 
-        getHeaders(headers);
+        getEntries(entries);
 
-        return headers;
-    }
-
-
-    /**
-     * Put http request headers to given
-     * <code>headers</code>.
-     *
-     * @param headers the map to be filled
-     *
-     * @return given map.
-     */
-    public final void getHeaders(final Map<String, String> headers) {
-
-        if (headers == null) {
-            throw new IllegalArgumentException("null headers");
-        }
-
-        final String[] entries = getEntries();
-        for (int i = 0; i < entries.length; i += 2) {
-            headers.put(entries[i], entries[i + 1]);
-        }
+        return entries;
     }
 
 
     @Override
     protected byte[] getBase(final Codes codes) {
         try {
-            return Par.encode(((DefaultCodes) codes).getCodes()).getBytes("US-ASCII");
+            return Par.encode(((DefaultCodes) codes).getEntries()).
+                getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
