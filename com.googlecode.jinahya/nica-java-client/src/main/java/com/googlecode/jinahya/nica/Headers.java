@@ -18,12 +18,11 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.AesJCE;
-import com.googlecode.jinahya.nica.util.HacJCE;
+import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.Hac;
+import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.HttpURLConnection;
 
 
 /**
@@ -31,7 +30,7 @@ import java.util.Map;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Headers extends AbstractHeaders {
+public abstract class Headers extends Codes {
 
 
 //    /**
@@ -94,61 +93,196 @@ public class Headers extends AbstractHeaders {
 //
 //        return new SynchronizedHeaders(headers);
 //    }
-    /**
-     *
-     * @param names
-     * @param key
-     */
-    public Headers(final Map<String, String> names, final byte[] key) {
+    protected static void copy(final String[] entries,
+                               final java.util.Map map) {
 
-        super(Par.encode(names), new Codes(), new AesJCE(key), new HacJCE(key));
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
+        }
+
+        if ((entries.length & 0x01) == 1) {
+            throw new IllegalArgumentException("entries.length is not even");
+        }
+
+        if (map == null) {
+            throw new IllegalArgumentException("null map");
+        }
+
+        for (int i = 0; i < entries.length; i += 2) {
+            map.put(entries[i], entries[i + 1]);
+        }
+    }
+
+
+    protected static void copy(final String[] entries,
+                               final java.util.Hashtable table) {
+
+        if (entries == null) {
+            throw new IllegalArgumentException("null entries");
+        }
+
+        if ((entries.length & 0x01) == 1) {
+            throw new IllegalArgumentException("entries.length is not even");
+        }
+
+        if (table == null) {
+            throw new IllegalArgumentException("null table");
+        }
+
+        for (int i = 0; i < entries.length; i += 2) {
+            table.put(entries[i], entries[i + 1]);
+        }
     }
 
 
     /**
-     * Generates request headers.
+     * Creates a new instance.
      *
-     * @return a map of request headers
+     * @param name a {@link Par}-encoded nica names.
+     * @param codes codes.
+     * @param aes aes.
+     * @param hac hac.
      */
-    public final Map<String, String> getHeaders() {
+    public Headers(final String name, final Codes codes,
+                   final Aes aes, final Hac hac) {
 
-        final Map<String, String> headers = new HashMap<String, String>(4);
+        super();
 
-        getHeaders(headers);
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
+        }
+
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("empty name");
+        }
+
+        if (codes == null) {
+            throw new IllegalArgumentException("null codes");
+        }
+
+        if (aes == null) {
+            throw new IllegalArgumentException("null aes");
+        }
+
+        if (hac == null) {
+            throw new IllegalArgumentException("null hac");
+        }
+
+        this.name = name;
+        this.codes = codes;
+        this.aes = aes;
+        this.hac = hac;
+    }
+
+
+    /**
+     * Sets request headers on given
+     * <code>connection</code>.
+     *
+     * @param connection connection.
+     */
+    public final void setHeaders(final HttpURLConnection connection) {
+
+        if (connection == null) {
+            throw new IllegalArgumentException("null connection");
+        }
+
+        codes.putVolatileCode(CodeKeys.REQUEST_URL,
+                              connection.getURL().toExternalForm());
+
+        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
+                              connection.getRequestMethod());
+
+        final String[] entries = getEntries();
+        for (int i = 0; i < entries.length; i += 2) {
+            connection.setRequestProperty(entries[i], entries[i + 1]);
+        }
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    protected final String[] getEntries() {
+
+        final String[] headers = new String[8];
+        int index = 0;
+
+        // ----------------------------------------------------------- Nica-Name
+        headers[index++] = HeaderFieldNames.NAME;
+        headers[index++] = name;
+
+        // ----------------------------------------------------------- Nica-Init
+        final byte[] iv = Aes.newIv();
+        headers[index++] = HeaderFieldNames.INIT;
+        headers[index++] = Hex.encodeToString(iv);
+
+        // ----------------------------------------------------------- Nica-Base
+        final byte[] base = getBase(codes);
+
+        // ----------------------------------------------------------- Nica-Code
+        final byte[] code = aes.encrypt(iv, base);
+        headers[index++] = HeaderFieldNames.CODE;
+        headers[index++] = Hex.encodeToString(code);
+
+        // ----------------------------------------------------------- Nica-Auth
+        final byte[] auth = hac.authenticate(base);
+        headers[index++] = HeaderFieldNames.AUTH;
+        headers[index++] = Hex.encodeToString(auth);
 
         return headers;
     }
 
 
     /**
-     * Put http request headers to given
-     * <code>headers</code>.
      *
-     * @param headers the map to be filled
-     *
-     * @return given map.
+     * @param codes
+     * @return
      */
-    public final void getHeaders(final Map<String, String> headers) {
+    protected abstract byte[] getBase(Codes codes);
 
-        if (headers == null) {
-            throw new IllegalArgumentException("null headers");
-        }
 
-        final String[] entries = getEntries();
-        for (int i = 0; i < entries.length; i += 2) {
-            headers.put(entries[i], entries[i + 1]);
-        }
+    //@Override
+    public final void putConstantCode(final String key, final String value) {
+        codes.putConstantCode(key, value);
     }
 
 
-    @Override
-    protected byte[] getBase(final AbstractCodes codes) {
-        try {
-            return Par.encode(((Codes) codes).getCodes()).getBytes("US-ASCII");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?");
-        }
+    //@Override
+    public final String putVariableCode(final String key, final String value) {
+        return codes.putVariableCode(key, value);
     }
+
+
+    //@Override
+    public final String putVolatileCode(final String key, final String value) {
+        return codes.putVolatileCode(key, value);
+    }
+
+
+    /**
+     * name.
+     */
+    protected final String name;
+
+
+    /**
+     * codes.
+     */
+    protected final Codes codes;
+
+
+    /**
+     * aes.
+     */
+    protected final Aes aes;
+
+
+    /**
+     * hac.
+     */
+    protected final Hac hac;
 
 
 }

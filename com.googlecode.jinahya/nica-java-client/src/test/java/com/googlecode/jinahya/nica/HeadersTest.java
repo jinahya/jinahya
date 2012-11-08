@@ -19,12 +19,9 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Aes;
-import com.googlecode.jinahya.nica.util.AesBC;
 import com.googlecode.jinahya.nica.util.AesJCE;
-import com.googlecode.jinahya.nica.util.HacBC;
 import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Hex;
-import com.googlecode.jinahya.nica.util.Par;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +66,8 @@ public class HeadersTest {
 
         final byte[] key = newKey();
 
-        final Headers headers = new Headers(names, key);
+        final DefaultHeaders headers =
+            (DefaultHeaders) DefaultHeaders.newInstance(names, key);
 
         headers.putVolatileCode(CodeKeys.USER_USERNAME, "username");
         headers.putVolatileCode(CodeKeys.USER_PASSWORD, "password");

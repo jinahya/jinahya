@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CodesME extends AbstractCodes {
+public class CodesME extends Codes {
 
 
     /**

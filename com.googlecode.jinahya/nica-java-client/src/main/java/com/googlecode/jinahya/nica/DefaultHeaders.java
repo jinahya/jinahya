@@ -19,14 +19,13 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Aes;
-import com.googlecode.jinahya.nica.util.AesBC;
+import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.Hac;
-import com.googlecode.jinahya.nica.util.HacBC;
-import com.googlecode.jinahya.nica.util.ParME;
-import java.io.IOException;
+import com.googlecode.jinahya.nica.util.HacJCE;
+import com.googlecode.jinahya.nica.util.Par;
 import java.io.UnsupportedEncodingException;
-import java.util.Hashtable;
-import javax.microedition.io.HttpConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -34,7 +33,7 @@ import javax.microedition.io.HttpConnection;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HeadersME extends Headers {
+public class DefaultHeaders extends Headers {
 
 
 //    /**
@@ -101,9 +100,9 @@ public class HeadersME extends Headers {
      *
      * @param names
      * @param key
-     * @return
      */
-    public static Headers newInstance(final Hashtable names, final byte[] key) {
+    public static Headers newInstance(final Map<String, String> names,
+                                      final byte[] key) {
 
         if (names == null) {
             throw new IllegalArgumentException("null names");
@@ -122,41 +121,14 @@ public class HeadersME extends Headers {
                 "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
-        return new HeadersME(ParME.encode(names), new DefaultCodes(),
-                             new AesBC(key), new HacBC(key));
+        return new DefaultHeaders(Par.encode(names), new DefaultCodes(),
+                                  new AesJCE(key), new HacJCE(key));
     }
 
 
-    /**
-     *
-     * @param name
-     * @param codes
-     * @param aes
-     * @param hac
-     */
-    public HeadersME(final String name, final Codes codes, final Aes aes,
-                     final Hac hac) {
-
+    public DefaultHeaders(final String name, final Codes codes, final Aes aes,
+                          final Hac hac) {
         super(name, codes, aes, hac);
-    }
-
-
-    public final void setHeaders(final HttpConnection connection)
-        throws IOException {
-
-        if (connection == null) {
-            throw new IllegalArgumentException("null connection");
-        }
-
-        codes.putVolatileCode(CodeKeys.REQUEST_URL, connection.getURL());
-
-        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
-                              connection.getRequestMethod());
-
-        final String[] entries = getEntries();
-        for (int i = 0; i < entries.length; i += 2) {
-            connection.setRequestProperty(entries[i], entries[i + 1]);
-        }
     }
 
 
@@ -165,9 +137,9 @@ public class HeadersME extends Headers {
      *
      * @return a map of request headers
      */
-    public final Hashtable getHeaders() {
+    public final Map<String, String> getHeaders() {
 
-        final Hashtable headers = new Hashtable(4);
+        final Map<String, String> headers = new HashMap<String, String>(4);
 
         getHeaders(headers);
 
@@ -179,23 +151,27 @@ public class HeadersME extends Headers {
      * Put http request headers to given
      * <code>headers</code>.
      *
-     * @param headers the hashtable to be filled.
+     * @param headers the map to be filled
+     *
+     * @return given map.
      */
-    public final void getHeaders(final Hashtable headers) {
+    public final void getHeaders(final Map<String, String> headers) {
 
         if (headers == null) {
             throw new IllegalArgumentException("null headers");
         }
 
-        copy(getEntries(), headers);
+        final String[] entries = getEntries();
+        for (int i = 0; i < entries.length; i += 2) {
+            headers.put(entries[i], entries[i + 1]);
+        }
     }
 
 
-    //@Override
+    @Override
     protected byte[] getBase(final Codes codes) {
         try {
-            return ParME.encode(((CodesME) codes).getCodes()).
-                getBytes("US-ASCII");
+            return Par.encode(((DefaultCodes) codes).getCodes()).getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
