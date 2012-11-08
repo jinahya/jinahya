@@ -71,9 +71,13 @@ public class CodesME extends AbstractCodes {
      */
     public final Hashtable getCodes() {
 
-        return getCodes(new Hashtable(
-            constantCodes.size() + variableCodes.size()
-            + volatileCodes.size() + 2));
+        final Hashtable codes = new Hashtable(
+            constantCodes.size() + variableCodes.size() + volatileCodes.size()
+            + 2);
+
+        getCodes(codes);
+
+        return codes;
     }
 
 
@@ -85,7 +89,7 @@ public class CodesME extends AbstractCodes {
      *
      * @return given codes.
      */
-    public final Hashtable getCodes(final Hashtable codes) {
+    public final void getCodes(final Hashtable codes) {
 
         if (codes == null) {
             throw new IllegalArgumentException("null codes");
@@ -99,8 +103,6 @@ public class CodesME extends AbstractCodes {
         copy(variableCodes, codes);
 
         copy(constantCodes, codes);
-
-        return codes;
     }
 
 

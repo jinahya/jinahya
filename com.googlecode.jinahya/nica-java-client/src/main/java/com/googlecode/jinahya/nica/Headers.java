@@ -18,16 +18,12 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.Aes;
-import com.googlecode.jinahya.nica.util.Hac;
-import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.AesJCE;
+import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Par;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 
 /**
@@ -35,7 +31,7 @@ import java.util.Map.Entry;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Headers {
+public class Headers extends AbstractHeaders {
 
 
 //    /**
@@ -99,68 +95,13 @@ public class Headers {
 //        return new SynchronizedHeaders(headers);
 //    }
     /**
-     * Creates a new instance.
      *
-     * @param name a {@link Par}-encoded nica names.
-     * @param codes codes.
-     * @param aes aes.
-     * @param hac hac.
+     * @param names
+     * @param key
      */
-    public Headers(final String name, final Codes codes, final Aes aes,
-                   final Hac hac) {
+    public Headers(final Map<String, String> names, final byte[] key) {
 
-        super();
-
-        if (name == null) {
-            throw new IllegalArgumentException("null name");
-        }
-
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("empty name");
-        }
-
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
-        }
-
-        if (aes == null) {
-            throw new IllegalArgumentException("null aes");
-        }
-
-        if (hac == null) {
-            throw new IllegalArgumentException("null hac");
-        }
-
-        this.name = name;
-        this.codes = codes;
-        this.aes = aes;
-        this.hac = hac;
-    }
-
-
-    /**
-     * Sets request headers on given
-     * <code>connection</code>.
-     *
-     * @param connection connection.
-     */
-    public final void setHeaders(final HttpURLConnection connection) {
-
-        if (connection == null) {
-            throw new IllegalArgumentException("null connection");
-        }
-
-        codes.putVolatileCode(CodeKeys.REQUEST_URL,
-                              connection.getURL().toExternalForm());
-        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
-                              connection.getRequestMethod());
-
-        final Iterator entries = getHeaders().entrySet().iterator();
-        while (entries.hasNext()) {
-            final Entry entry = (Entry) entries.next();
-            connection.setRequestProperty(
-                (String) entry.getKey(), (String) entry.getValue());
-        }
+        super(Par.encode(names), new Codes(), new AesJCE(key), new HacJCE(key));
     }
 
 
@@ -193,89 +134,21 @@ public class Headers {
             throw new IllegalArgumentException("null headers");
         }
 
-        // ----------------------------------------------------------- Nica-Name
-        headers.put(HeaderFieldNames.NAME, name);
+        final String[] entries = getEntries();
+        for (int i = 0; i < entries.length; i += 2) {
+            headers.put(entries[i], entries[i + 1]);
+        }
+    }
 
-        // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = Aes.newIv();
-        headers.put(HeaderFieldNames.INIT, Hex.encodeToString(iv));
 
-        // ----------------------------------------------------------- Nica-Code
-        final byte[] base;
+    @Override
+    protected byte[] getBase(final AbstractCodes codes) {
         try {
-            base = Par.encode(codes.getCodes()).getBytes("US-ASCII");
+            return Par.encode(((Codes) codes).getCodes()).getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
-
-        final byte[] code = aes.encrypt(iv, base);
-        headers.put(HeaderFieldNames.CODE, Hex.encodeToString(code));
-
-        // ----------------------------------------------------------- Nica-Auth
-        final byte[] auth = hac.authenticate(base);
-        headers.put(HeaderFieldNames.AUTH, Hex.encodeToString(auth));
     }
-
-
-    /**
-     * Puts a constant code entry.
-     *
-     * @param key code key
-     * @param value code value
-     */
-    public final void putConstantCode(final String key, final String value) {
-        codes.putConstantCode(key, value);
-    }
-
-
-    /**
-     * Puts a variable code entry.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key or null
-     */
-    public final String putVariableCode(final String key, final String value) {
-        return codes.putVariableCode(key, value);
-    }
-
-
-    /**
-     * Puts a volatile code entry.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key or null
-     */
-    public final String putVolatileCode(final String key, final String value) {
-        return codes.putVolatileCode(key, value);
-    }
-
-
-    /**
-     * name.
-     */
-    private final String name;
-
-
-    /**
-     * codes.
-     */
-    private final Codes codes;
-
-
-    /**
-     * aes.
-     */
-    private final Aes aes;
-
-
-    /**
-     * hac.
-     */
-    private final Hac hac;
 
 
 }

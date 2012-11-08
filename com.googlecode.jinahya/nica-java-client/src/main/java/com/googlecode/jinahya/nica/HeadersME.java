@@ -18,16 +18,11 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesBC;
-import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.HacBC;
-import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.ParME;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.microedition.io.HttpConnection;
 
@@ -37,7 +32,7 @@ import javax.microedition.io.HttpConnection;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HeadersME {
+public class HeadersME extends AbstractHeaders {
 
 
 //    /**
@@ -106,78 +101,10 @@ public class HeadersME {
      * @param codes
      * @param key
      */
-    public HeadersME(final Hashtable names, final CodesME codes,
-                     final byte[] key) {
+    public HeadersME(final Hashtable names, final byte[] key) {
 
-        this(ParME.encode(names), codes, key);
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param name a {@link ParME}-encoded nica names.
-     * @param codes codes.
-     * @param key the encryption key
-     */
-    public HeadersME(final String name, final CodesME codes, final byte[] key) {
-
-        super();
-
-        if (name == null) {
-            throw new IllegalArgumentException("null name");
-        }
-
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("empty name");
-        }
-
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
-        }
-
-        this.name = name;
-        this.codes = codes;
-
-        aes = new AesBC(key);
-        hac = new HacBC(key);
-    }
-
-
-    /**
-     * Sets request headers on given
-     * <code>connection</code>.
-     *
-     * @param connection connection.
-     */
-    public final void setHeaders(final HttpURLConnection connection) {
-
-        if (connection == null) {
-            throw new IllegalArgumentException("null connection");
-        }
-
-        codes.putVolatileCode(CodeKeys.REQUEST_URL,
-                              connection.getURL().toExternalForm());
-
-        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
-                              connection.getRequestMethod());
-
-        final Hashtable headers = getHeaders();
-        final Enumeration keys = headers.keys();
-        while (keys.hasMoreElements()) {
-            final String fieldName = (String) keys.nextElement();
-            final String fieldValue = (String) headers.get(fieldName);
-            connection.setRequestProperty(fieldName, fieldValue);
-        }
+        super(ParME.encode(names), new CodesME(), new AesBC(key),
+              new HacBC(key));
     }
 
 
@@ -193,12 +120,9 @@ public class HeadersME {
         codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
                               connection.getRequestMethod());
 
-        final Hashtable headers = getHeaders();
-        final Enumeration keys = headers.keys();
-        while (keys.hasMoreElements()) {
-            final String fieldName = (String) keys.nextElement();
-            final String fieldValue = (String) headers.get(fieldName);
-            connection.setRequestProperty(fieldName, fieldValue);
+        final String[] entries = getEntries();
+        for (int i = 0; i < entries.length; i += 2) {
+            connection.setRequestProperty(entries[i], entries[i + 1]);
         }
     }
 
@@ -210,7 +134,11 @@ public class HeadersME {
      */
     public final Hashtable getHeaders() {
 
-        return getHeaders(new Hashtable(4));
+        final Hashtable headers = new Hashtable(4);
+
+        getHeaders(headers);
+
+        return headers;
     }
 
 
@@ -219,100 +147,26 @@ public class HeadersME {
      * <code>headers</code>.
      *
      * @param headers the hashtable to be filled.
-     *
-     * @return given hashtable.
      */
-    public final Hashtable getHeaders(final Hashtable headers) {
+    public final void getHeaders(final Hashtable headers) {
 
         if (headers == null) {
             throw new IllegalArgumentException("null headers");
         }
 
-        // ----------------------------------------------------------- Nica-Name
-        headers.put(HeaderFieldNames.NAME, name);
+        copy(getEntries(), headers);
+    }
 
-        // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = Aes.newIv();
-        headers.put(HeaderFieldNames.INIT, Hex.encodeToString(iv));
 
-        // ----------------------------------------------------------- Nica-Code
-        final byte[] base;
+    @Override
+    protected byte[] getBase(final AbstractCodes codes) {
         try {
-            base = ParME.encode(codes.getCodes()).getBytes("US-ASCII");
+            return ParME.encode(((CodesME) codes).getCodes()).
+                getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
-
-        final byte[] code = aes.encrypt(iv, base);
-        headers.put(HeaderFieldNames.CODE, Hex.encodeToString(code));
-
-        // ----------------------------------------------------------- Nica-Auth
-        final byte[] auth = hac.authenticate(base);
-        headers.put(HeaderFieldNames.AUTH, Hex.encodeToString(auth));
-
-        return headers;
     }
-
-
-    /**
-     * Puts a constant code entry.
-     *
-     * @param key code key
-     * @param value code value
-     */
-    public final void putConstantCode(final String key, final String value) {
-        codes.putConstantCode(key, value);
-    }
-
-
-    /**
-     * Puts a variable code entry.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key or null
-     */
-    public final String putVariableCode(final String key, final String value) {
-        return codes.putVariableCode(key, value);
-    }
-
-
-    /**
-     * Puts a volatile code entry.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key or null
-     */
-    public final String putVolatileCode(final String key, final String value) {
-        return codes.putVolatileCode(key, value);
-    }
-
-
-    /**
-     * name.
-     */
-    private final String name;
-
-
-    /**
-     * codes.
-     */
-    private final CodesME codes;
-
-
-    /**
-     * aes.
-     */
-    private final Aes aes;
-
-
-    /**
-     * hac.
-     */
-    private final Hac hac;
 
 
 }

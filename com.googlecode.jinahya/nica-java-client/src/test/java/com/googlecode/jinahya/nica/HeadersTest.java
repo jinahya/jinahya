@@ -66,16 +66,14 @@ public class HeadersTest {
         final Map<String, String> names = new HashMap<String, String>();
         names.put("key1", "value1");
         names.put("key2", "value2");
-        final String name = Par.encode(names);
-
-        final Codes codes = new Codes();
-        codes.putVolatileCode(CodeKeys.USER_USERNAME, "username");
-        codes.putVolatileCode(CodeKeys.USER_PASSWORD, "password");
 
         final byte[] key = newKey();
 
-        final Headers headers = new Headers(
-            name, codes, new AesBC(key), new HacBC(key));
+        final Headers headers = new Headers(names, key);
+
+        headers.putVolatileCode(CodeKeys.USER_USERNAME, "username");
+        headers.putVolatileCode(CodeKeys.USER_PASSWORD, "password");
+
 
         final long start = System.currentTimeMillis();
         final Map headers_ = headers.getHeaders();

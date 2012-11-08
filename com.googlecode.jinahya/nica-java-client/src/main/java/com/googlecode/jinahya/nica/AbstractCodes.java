@@ -20,9 +20,6 @@ package com.googlecode.jinahya.nica;
 
 import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
 
 
 /**
@@ -132,29 +129,29 @@ public abstract class AbstractCodes {
      *
      * @param map
      */
-    protected static void putLanguageAndCountry(final Map map) {
+    protected static void putLanguageAndCountry(final java.util.Map map) {
 
         if (map == null) {
             throw new IllegalArgumentException("null map");
         }
 
-        final Locale locale = Locale.getDefault();
+        final java.util.Locale locale = java.util.Locale.getDefault();
 
         try {
             map.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
-        } catch (MissingResourceException mre) {
+        } catch (java.util.MissingResourceException mre) {
         }
         map.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
         map.put(CodeKeys.USER_LANGUAGE,
-                locale.getDisplayLanguage(Locale.ENGLISH));
+                locale.getDisplayLanguage(java.util.Locale.ENGLISH));
 
         try {
             map.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
-        } catch (MissingResourceException mre) {
+        } catch (java.util.MissingResourceException mre) {
         }
         map.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
         map.put(CodeKeys.USER_COUNTRY,
-                locale.getDisplayCountry(Locale.ENGLISH));
+                locale.getDisplayCountry(java.util.Locale.ENGLISH));
     }
 
 
@@ -169,23 +166,23 @@ public abstract class AbstractCodes {
             throw new IllegalArgumentException("null hashtabel");
         }
 
-        final Locale locale = Locale.getDefault();
+        final java.util.Locale locale = java.util.Locale.getDefault();
 
         try {
             hashtable.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
-        } catch (MissingResourceException mre) {
+        } catch (java.util.MissingResourceException mre) {
         }
         hashtable.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
         hashtable.put(CodeKeys.USER_LANGUAGE,
-                      locale.getDisplayLanguage(Locale.ENGLISH));
+                      locale.getDisplayLanguage(java.util.Locale.ENGLISH));
 
         try {
             hashtable.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
-        } catch (MissingResourceException mre) {
+        } catch (java.util.MissingResourceException mre) {
         }
         hashtable.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
         hashtable.put(CodeKeys.USER_COUNTRY,
-                      locale.getDisplayCountry(Locale.ENGLISH));
+                      locale.getDisplayCountry(java.util.Locale.ENGLISH));
     }
 
 
@@ -193,7 +190,7 @@ public abstract class AbstractCodes {
      *
      * @param map
      */
-    protected static void putTimestampAndNonce(final Map map) {
+    protected static void putTimestampAndNonce(final java.util.Map map) {
 
         if (map == null) {
             throw new IllegalArgumentException("null map");
@@ -237,8 +234,7 @@ public abstract class AbstractCodes {
 
 
     /**
-     * Adds a constant code entry. An Illegal argument exception will be thrown
-     * if
+     * Adds a constant code entry. An IllegalArgumentException will be thrown if
      * <code>key</code> is already occupied.
      *
      * @param key code key
