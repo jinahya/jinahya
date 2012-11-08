@@ -25,12 +25,12 @@ import java.io.Serializable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SimpleClientEntityId implements Serializable {
+public class SimpleClientId implements Serializable {
 
 
-    public static SimpleClientEntityId newInstance(final String platformId,
-                                                   final String deviceId,
-                                                   final String systemId) {
+    public static SimpleClientId newInstance(final String platformId,
+                                             final String deviceId,
+                                             final String systemId) {
 
         if (platformId == null) {
             throw new IllegalArgumentException("null platformId");
@@ -44,7 +44,7 @@ public class SimpleClientEntityId implements Serializable {
             throw new IllegalArgumentException("null systemId");
         }
 
-        final SimpleClientEntityId instance = new SimpleClientEntityId();
+        final SimpleClientId instance = new SimpleClientId();
 
         instance.platformId = platformId;
         instance.deviceId = deviceId;
@@ -54,7 +54,7 @@ public class SimpleClientEntityId implements Serializable {
     }
 
 
-    protected static <I extends SimpleClientEntityId> I newInstance(
+    protected static <I extends SimpleClientId> I newInstance(
         final Class<I> idClass, final String platformId, final String deviceId,
         final String systemId) {
 
@@ -83,9 +83,9 @@ public class SimpleClientEntityId implements Serializable {
             throw new RuntimeException(iae);
         }
 
-        ((SimpleClientEntityId) instance).platformId = platformId;
-        ((SimpleClientEntityId) instance).deviceId = deviceId;
-        ((SimpleClientEntityId) instance).systemId = systemId;
+        ((SimpleClientId) instance).platformId = platformId;
+        ((SimpleClientId) instance).deviceId = deviceId;
+        ((SimpleClientId) instance).systemId = systemId;
 
         return instance;
 
@@ -94,32 +94,44 @@ public class SimpleClientEntityId implements Serializable {
 
     @Override
     public int hashCode() {
+
         int hash = 7;
+
         hash = 17 * hash + platformId.hashCode();
+
         hash = 17 * hash + deviceId.hashCode();
+
         hash = 17 * hash + systemId.hashCode();
+
         return hash;
     }
 
 
     @Override
     public boolean equals(final Object obj) {
+
         if (obj == null) {
             return false;
         }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SimpleClientEntityId other = (SimpleClientEntityId) obj;
+
+        final SimpleClientId other = (SimpleClientId) obj;
+
         if (!platformId.equals(other.platformId)) {
             return false;
         }
+
         if (!deviceId.equals(other.deviceId)) {
             return false;
         }
+
         if (!systemId.equals(other.systemId)) {
             return false;
         }
+
         return true;
     }
 

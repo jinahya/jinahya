@@ -22,7 +22,7 @@ package com.googlecode.jinahya.nica.persistence;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SimpleClientTimestampId extends SimpleClientEntityId {
+public class SimpleClientTimestampId extends SimpleClientId {
 
 
     public static SimpleClientTimestampId newInstance(
@@ -32,6 +32,18 @@ public class SimpleClientTimestampId extends SimpleClientEntityId {
             SimpleClientTimestampId.class, platformId, deviceId, systemId);
 
         return instance;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
 

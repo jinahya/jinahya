@@ -67,8 +67,8 @@ public abstract class NicaFilter implements Filter {
      * The attribute name for located encryption key. The value must be an array
      * of bytes.
      */
-    protected static final String ATTRIBUTE_NICA_KEY =
-        NicaFilter.class.getName() + "#key";
+    protected static final String ATTRIBUTE_NICA_SECRET_KEY =
+        NicaFilter.class.getName() + "#secret_key";
 
 
     /**
@@ -78,6 +78,16 @@ public abstract class NicaFilter implements Filter {
      */
     protected static final String ATTRIBUTE_NICA_CODES =
         NicaFilter.class.getName() + "#codes";
+
+
+    /**
+     * The attribute name for client id consists
+     * {@link Code#PLATFORM_ID}, {@link Code#DEVICE_ID}, and
+     * {@link Code#SYSTEM_ID}. The value must be an unmodifiable
+     * {@link java.util.List} of {@link java.lang.String}.
+     */
+    protected static final String ATTRIBUTE_NICA_CLIENT_IDS =
+        NicaFilter.class.getName() + "#client_ids";
 
 
     /**
@@ -269,7 +279,7 @@ public abstract class NicaFilter implements Filter {
             return;
         }
 
-        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_KEY);
+        final byte[] key = (byte[]) request.getAttribute(ATTRIBUTE_NICA_SECRET_KEY);
         if (key == null) {
             hesponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                                "no key found");

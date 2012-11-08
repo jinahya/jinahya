@@ -22,12 +22,12 @@ package com.googlecode.jinahya.nica.persistence;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SimpleClientNonceId extends SimpleClientEntityId {
+public class SimpleClientNonceId extends SimpleClientId {
 
 
     public static SimpleClientNonceId newInstance(
         final String platformId, final String deviceId, final String systemId,
-        final long requestNonce) {
+        final String requestNonce) {
 
         final SimpleClientNonceId instance = newInstance(
             SimpleClientNonceId.class, platformId, deviceId, systemId);
@@ -40,8 +40,11 @@ public class SimpleClientNonceId extends SimpleClientEntityId {
 
     @Override
     public int hashCode() {
+
         int hash = super.hashCode();
-        hash = 67 * hash + (int) (requestNonce ^ (requestNonce >>> 32));
+
+        hash = 67 * hash + requestNonce.hashCode();
+
         return hash;
     }
 
@@ -62,19 +65,21 @@ public class SimpleClientNonceId extends SimpleClientEntityId {
         }
 
         final SimpleClientNonceId other = (SimpleClientNonceId) obj;
-        if (requestNonce != other.requestNonce) {
+
+        if (!requestNonce.equals(other.requestNonce)) {
             return false;
         }
+
         return true;
     }
 
 
-    public long getRequestNonce() {
+    public String getRequestNonce() {
         return requestNonce;
     }
 
 
-    private long requestNonce;
+    private String requestNonce;
 
 
 }
