@@ -19,13 +19,15 @@ package com.googlecode.jinahya.nica.test;
 
 
 import com.googlecode.jinahya.nica.CodeKeys;
+import com.googlecode.jinahya.nica.HeaderFieldNames;
 import com.googlecode.jinahya.nica.Headers;
 import com.googlecode.jinahya.nica.JavaTVHeaders;
 import com.googlecode.jinahya.nica.util.Aes;
 import java.security.SecureRandom;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Random;
+import java.util.Set;
 import javax.tv.xlet.Xlet;
 import javax.tv.xlet.XletContext;
 import javax.tv.xlet.XletStateChangeException;
@@ -61,7 +63,13 @@ public class TestXlet implements Xlet {
         headers.putConstantEntry(CodeKeys.DEVICE_ID, "DEVICE_ID");
         headers.putConstantEntry(CodeKeys.SYSTEM_ID, "SYSTEM_ID");
 
+        final Set codes = new HashSet();
+        final Set auths = new HashSet();
+
         for (int i = 0; i < 10; i++) {
+
+            System.out.println("-----------------------------------------------"
+                               + "-------------------------------------------");
 
             headers.putVariableEntry("ROUND", Integer.toString(i));
 
@@ -76,12 +84,14 @@ public class TestXlet implements Xlet {
 
             final Hashtable entries = ((JavaTVHeaders) headers).getEntries();
 
-            final Enumeration keys = entries.keys();
-            while (keys.hasMoreElements()) {
-                final String fieldName = (String) keys.nextElement();
-                final String fieldValue = (String) entries.get(fieldName);
-                System.out.println(fieldName + "[" + i + "]: " + fieldValue);
-            }
+            System.out.println(HeaderFieldNames.NAME + "[" + i + "]: "
+                               + entries.get(HeaderFieldNames.NAME));
+            System.out.println(HeaderFieldNames.INIT + "[" + i + "]: "
+                               + entries.get(HeaderFieldNames.INIT));
+            System.out.println(HeaderFieldNames.CODE + "[" + i + "]: "
+                               + entries.get(HeaderFieldNames.CODE));
+            System.out.println(HeaderFieldNames.AUTH + "[" + i + "]: "
+                               + entries.get(HeaderFieldNames.AUTH));
         }
     }
 
