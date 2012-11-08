@@ -19,10 +19,7 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Nuo;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
+import java.util.Hashtable;
 
 
 /**
@@ -30,7 +27,7 @@ import java.util.MissingResourceException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Codes extends AbstractCodes {
+public abstract class Codes {
 
 
 //    /**
@@ -129,130 +126,146 @@ public class Codes extends AbstractCodes {
 //        return new SynchronizedCodes(codes);
 //    }
     /**
+     *
+     * @param map
+     */
+    protected static void putLanguageAndCountry(final java.util.Map map) {
+
+        if (map == null) {
+            throw new IllegalArgumentException("null map");
+        }
+
+        final java.util.Locale locale = java.util.Locale.getDefault();
+
+        try {
+            map.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
+        } catch (java.util.MissingResourceException mre) {
+        }
+        map.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+        map.put(CodeKeys.USER_LANGUAGE,
+                locale.getDisplayLanguage(java.util.Locale.ENGLISH));
+
+        try {
+            map.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
+        } catch (java.util.MissingResourceException mre) {
+        }
+        map.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+        map.put(CodeKeys.USER_COUNTRY,
+                locale.getDisplayCountry(java.util.Locale.ENGLISH));
+    }
+
+
+    /**
+     *
+     * @param hashtable
+     * @deprecated Use {@link #putLanguageAndCountry(java.util.Map)}.
+     */
+    protected static void putLanguageAndCountry(final Hashtable hashtable) {
+
+        if (hashtable == null) {
+            throw new IllegalArgumentException("null hashtabel");
+        }
+
+        final java.util.Locale locale = java.util.Locale.getDefault();
+
+        try {
+            hashtable.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
+        } catch (java.util.MissingResourceException mre) {
+        }
+        hashtable.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+        hashtable.put(CodeKeys.USER_LANGUAGE,
+                      locale.getDisplayLanguage(java.util.Locale.ENGLISH));
+
+        try {
+            hashtable.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
+        } catch (java.util.MissingResourceException mre) {
+        }
+        hashtable.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+        hashtable.put(CodeKeys.USER_COUNTRY,
+                      locale.getDisplayCountry(java.util.Locale.ENGLISH));
+    }
+
+
+    /**
+     *
+     * @param map
+     */
+    protected static void putTimestampAndNonce(final java.util.Map map) {
+
+        if (map == null) {
+            throw new IllegalArgumentException("null map");
+        }
+
+        final long requestTimestamp = System.currentTimeMillis();
+        map.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(requestTimestamp));
+
+        final long requestNonce = Nuo.generate(requestTimestamp);
+        map.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
+    }
+
+
+    /**
+     *
+     * @param hashtable
+     * @deprecated Use {@link #putTimestampAndNonce(java.util.Map)}.
+     */
+    protected static void putTimestampAndNonce(final Hashtable hashtable) {
+
+        if (hashtable == null) {
+            throw new IllegalArgumentException("null hashtable");
+        }
+
+        final long requestTimestamp = System.currentTimeMillis();
+        hashtable.put(CodeKeys.REQUEST_TIMESTAMP,
+                      Long.toString(requestTimestamp));
+
+        final long requestNonce = Nuo.generate(requestTimestamp);
+        hashtable.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
+    }
+
+
+    /**
      * Creates a new instance.
      */
     //@SuppressWarnings("unchecked")
     public Codes() {
         super();
-
-        putLanguageAndCountry(variableCodes);
     }
 
 
     /**
-     * Returns codes.
+     * Adds a constant code entry. An IllegalArgumentException will be thrown if
+     * <code>key</code> is already occupied.
      *
-     * @return codes
+     * @param key code key
+     * @param value code value
      */
-    public final Map<String, String> getCodes() {
-
-        final Map<String, String> codes = new HashMap<String, String>(
-            constantCodes.size() + variableCodes.size() + volatileCodes.size()
-            + 2);
-
-        getCodes(codes);
-
-        return codes;
-    }
+    public abstract void putConstantCode(final String key, final String value);
 
 
     /**
-     * Put codes to given
-     * <code>codes</code>.
+     * Adds a variable code entry.
      *
-     * @param codes the map to be filled.
+     * @param key code key
+     * @param value code value
+     *
+     * @return previous value mapped to the key.
      */
-    public final void getCodes(final Map<String, String> codes) {
-
-        if (codes == null) {
-            throw new IllegalArgumentException("null codes");
-        }
-
-        final long requestTimestamp = System.currentTimeMillis();
-        volatileCodes.put(CodeKeys.REQUEST_TIMESTAMP,
-                          Long.toString(requestTimestamp));
-
-        final long requestNonce = Nuo.generate(requestTimestamp);
-        volatileCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
-
-        codes.putAll(volatileCodes);
-        volatileCodes.clear();
-
-        codes.putAll(variableCodes);
-
-        codes.putAll(constantCodes);
-    }
-
-
-    @Override
-    public final void putConstantCode(final String key, final String value) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (value == null) {
-            throw new IllegalArgumentException("null value");
-        }
-
-        if (constantCodes.containsKey(key)) {
-            throw new IllegalArgumentException(
-                "key(" + key + ") is already occupied");
-        }
-
-        constantCodes.put(key, value);
-    }
-
-
-    @Override
-    public final String putVariableCode(final String key, final String value) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (value == null) {
-            throw new IllegalArgumentException("null value");
-        }
-
-        return (String) variableCodes.put(key, value);
-    }
-
-
-    @Override
-    public final String putVolatileCode(final String key, final String value) {
-
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (value == null) {
-            throw new IllegalArgumentException("null value");
-        }
-
-        return (String) volatileCodes.put(key, value);
-    }
+    public abstract String putVariableCode(final String key,
+                                           final String value);
 
 
     /**
-     * constant codes.
+     * Adds a volatile code entry. Note that volatile code entries are cleared
+     * after they once used.
+     *
+     * @param key code key
+     * @param value code value
+     *
+     * @return previous value mapped to the key
      */
-    private final Map<String, String> constantCodes =
-        new HashMap<String, String>();
-
-
-    /**
-     * variable codes.
-     */
-    private final Map<String, String> variableCodes =
-        new HashMap<String, String>();
-
-
-    /**
-     * volatile codes.
-     */
-    private final Map<String, String> volatileCodes =
-        new HashMap<String, String>();
+    public abstract String putVolatileCode(final String key,
+                                           final String value);
 
 
 }
