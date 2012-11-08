@@ -153,6 +153,7 @@
             <exclude>com/googlecode/jinahya/nica/DefaultHeaders.java</exclude>
             <exclude>com/googlecode/jinahya/nica/Header.java</exclude>
             <exclude>com/googlecode/jinahya/nica/Platform.java</exclude>
+            <exclude>com/googlecode/jinahya/nica/test/**/*.java</exclude>
             <exclude>com/googlecode/jinahya/nica/util/AesJCE.java</exclude>
             <exclude>com/googlecode/jinahya/nica/util/HacJCE.java</exclude>
             <exclude>com/googlecode/jinahya/nica/util/Par.java</exclude>
