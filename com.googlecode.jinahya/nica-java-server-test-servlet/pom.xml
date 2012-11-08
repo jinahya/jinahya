@@ -54,6 +54,7 @@
   </properties>
 
   <build>
+    <!--finalName>nica-java-server-test-servlet</finalName-->
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -127,6 +128,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.glassfish.embedded</groupId>
+          <artifactId>maven-embedded-glassfish-plugin</artifactId>
+          <version>3.1.2.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -207,6 +213,24 @@
           </reportPlugins>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.glassfish.embedded</groupId>
+        <artifactId>maven-embedded-glassfish-plugin</artifactId>
+        <configuration>
+          <goalPrefix>glassfish</goalPrefix>
+          <!--app>test.war</app-->
+          <port>8080</port>
+          <contextRoot>test</contextRoot>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting/>
@@ -257,23 +281,6 @@
   </repositories>
   <pluginRepositories />
   <distributionManagement>
-    <!--
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Propellors Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    -->
-    <!--
-    <site>
-      <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
-    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
