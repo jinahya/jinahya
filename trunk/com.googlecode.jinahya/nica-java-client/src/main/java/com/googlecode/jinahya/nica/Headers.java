@@ -169,9 +169,13 @@ public class Headers {
      *
      * @return a map of request headers
      */
-    public final Map getHeaders() {
+    public final Map<String, String> getHeaders() {
 
-        return getHeaders(new HashMap(4));
+        final Map<String, String> headers = new HashMap<String, String>(4);
+
+        getHeaders(headers);
+
+        return headers;
     }
 
 
@@ -183,7 +187,7 @@ public class Headers {
      *
      * @return given map.
      */
-    public final Map getHeaders(final Map headers) {
+    public final void getHeaders(final Map<String, String> headers) {
 
         if (headers == null) {
             throw new IllegalArgumentException("null headers");
@@ -210,8 +214,6 @@ public class Headers {
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = hac.authenticate(base);
         headers.put(HeaderFieldNames.AUTH, Hex.encodeToString(auth));
-
-        return headers;
     }
 
 

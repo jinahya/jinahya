@@ -20,9 +20,7 @@ package com.googlecode.jinahya.nica;
 
 import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 
 
 /**
@@ -30,7 +28,7 @@ import java.util.MissingResourceException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Codes {
+public class Codes extends AbstractCodes {
 
 
 //    /**
@@ -135,25 +133,7 @@ public class Codes {
     public Codes() {
         super();
 
-        final Locale locale = Locale.getDefault();
-
-        try {
-            variableCodes.put(CodeKeys.USER_LANGUAGE3,
-                              locale.getISO3Language());
-        } catch (MissingResourceException mre) {
-        }
-        variableCodes.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        variableCodes.put(CodeKeys.USER_LANGUAGE,
-                          locale.getDisplayLanguage(Locale.ENGLISH));
-
-        try {
-            variableCodes.put(CodeKeys.USER_COUNTRY3,
-                              locale.getISO3Country());
-        } catch (MissingResourceException mre) {
-        }
-        variableCodes.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        variableCodes.put(CodeKeys.USER_COUNTRY,
-                          locale.getDisplayCountry(Locale.ENGLISH));
+        putLanguageAndCountry(variableCodes);
     }
 
 
@@ -164,9 +144,13 @@ public class Codes {
      */
     public final Map<String, String> getCodes() {
 
-        return getCodes(new HashMap<String, String>(
+        final Map<String, String> codes = new HashMap<String, String>(
             constantCodes.size() + variableCodes.size() + volatileCodes.size()
-            + 2));
+            + 2);
+
+        getCodes(codes);
+
+        return codes;
     }
 
 
@@ -175,10 +159,8 @@ public class Codes {
      * <code>codes</code>.
      *
      * @param codes the map to be filled.
-     *
-     * @return given codes.
      */
-    public final Map<String, String> getCodes(final Map<String, String> codes) {
+    public final void getCodes(final Map<String, String> codes) {
 
         if (codes == null) {
             throw new IllegalArgumentException("null codes");
@@ -197,17 +179,10 @@ public class Codes {
         codes.putAll(variableCodes);
 
         codes.putAll(constantCodes);
-
-        return codes;
     }
 
 
-    /**
-     * Puts a constant code.
-     *
-     * @param key key
-     * @param value value
-     */
+    @Override
     public final void putConstantCode(final String key, final String value) {
 
         if (key == null) {
@@ -227,14 +202,7 @@ public class Codes {
     }
 
 
-    /**
-     * Puts a variable code.
-     *
-     * @param key key
-     * @param value value
-     *
-     * @return the previous value mapped to the key
-     */
+    @Override
     public final String putVariableCode(final String key, final String value) {
 
         if (key == null) {
@@ -249,15 +217,7 @@ public class Codes {
     }
 
 
-    /**
-     * Puts a volatile code. Note that volatile codes are cleared after they
-     * once used.
-     *
-     * @param key key
-     * @param value value
-     *
-     * @return the previous value mapped to the key
-     */
+    @Override
     public final String putVolatileCode(final String key, final String value) {
 
         if (key == null) {
