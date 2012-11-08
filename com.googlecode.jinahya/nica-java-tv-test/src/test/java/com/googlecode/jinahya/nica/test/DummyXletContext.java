@@ -18,23 +18,33 @@
 package com.googlecode.jinahya.nica.test;
 
 
-import javax.tv.xlet.Xlet;
-import javax.tv.xlet.XletStateChangeException;
-import org.testng.annotations.Test;
+import javax.tv.xlet.XletContext;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class MyXletTest {
+public class DummyXletContext implements XletContext {
 
 
-    @Test
-    public void test() throws XletStateChangeException {
-        final Xlet myXlet = new MyXlet();
-        myXlet.initXlet(null);
-        myXlet.startXlet();
+    public void notifyDestroyed() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void notifyPaused() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public Object getXletProperty(String key) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void resumeRequest() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
