@@ -18,9 +18,13 @@
 package com.googlecode.jinahya.nica.test;
 
 
+import java.io.IOException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.SchemaOutputResolver;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 import org.testng.annotations.Test;
 
 
@@ -34,13 +38,42 @@ public class IndexedKeysTest {
     @Test
     public void generate() throws JAXBException {
 
-        final JAXBContext context =
-            JAXBContext.newInstance(IndexedKeys.class.getPackage().getName());
+        final JAXBContext context = JAXBContext.newInstance(IndexedKeys.class);
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        marshaller.marshal(IndexedKeys.newInstance(1024), System.out);
+        marshaller.marshal(IndexedKeys.newInstance(128), System.out);
+    }
+
+
+    @Test
+    public void printSchema() throws JAXBException, IOException {
+
+        final JAXBContext context = JAXBContext.newInstance(IndexedKeys.class);
+
+        context.generateSchema(new SchemaOutputResolver() {
+
+
+            @Override
+            public Result createOutput(final String namespaceUri,
+                                       final String suggestedFileName)
+                throws IOException {
+
+                return new StreamResult(System.out) {
+
+
+                    @Override
+                    public String getSystemId() {
+                        return "noid";
+                    }
+
+
+                };
+            }
+
+
+        });
     }
 
 

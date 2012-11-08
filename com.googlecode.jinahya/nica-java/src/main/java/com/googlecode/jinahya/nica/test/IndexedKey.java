@@ -22,6 +22,7 @@ import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Keg;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+//@XmlType(propOrder = {"index", "bytes"})
 public class IndexedKey {
 
 
@@ -56,7 +58,8 @@ public class IndexedKey {
     }
 
 
-    protected static IndexedKey newInstance(final int index, final byte[] key) {
+    protected static IndexedKey newInstance(final int index,
+                                            final byte[] bytes) {
 
         if (index < 0) {
             throw new IllegalArgumentException("index(" + index + ") < 0");
@@ -66,34 +69,37 @@ public class IndexedKey {
             throw new IllegalArgumentException("index(" + index + ") >= 10000");
         }
 
-        if (key == null) {
+        if (bytes == null) {
             throw new IllegalArgumentException("null key");
         }
 
-        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
+        if (bytes.length != Aes.KEY_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
+                "bytes.length(" + bytes.length + ") != "
+                + Aes.KEY_SIZE_IN_BYTES);
         }
 
         final IndexedKey instance = new IndexedKey();
 
         instance.index = index;
-        instance.key = key;
+        instance.bytes = bytes;
 
         return instance;
     }
 
 
     @XmlAttribute(required = true)
+    //@XmlElement
     @XmlID
     @XmlJavaTypeAdapter(StringIndexAdapter.class)
     private Integer index;
 
 
     @XmlValue
+    //@XmlElement
     //@XmlSchemaType(name = "hexBinary")
     @XmlJavaTypeAdapter(HexBinaryAdapter.class)
-    private byte[] key;
+    private byte[] bytes;
 
 
 }

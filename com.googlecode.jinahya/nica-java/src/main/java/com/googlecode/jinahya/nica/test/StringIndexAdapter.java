@@ -30,13 +30,13 @@ public class StringIndexAdapter extends XmlAdapter<String, Integer> {
 
     @Override
     public Integer unmarshal(final String value) throws Exception {
-        return Integer.parseInt(value);
+        return Integer.parseInt(value.substring(1));
     }
 
 
     @Override
     public String marshal(final Integer bound) throws Exception {
-        return String.format("%04d", bound);
+        return String.format("i%04d", bound);
     }
 
 
