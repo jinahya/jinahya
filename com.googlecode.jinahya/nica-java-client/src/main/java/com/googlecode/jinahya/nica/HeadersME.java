@@ -105,25 +105,23 @@ public class HeadersME extends Headers {
      */
     public static Headers newInstance(final Hashtable names, final byte[] key) {
 
-        if (names == null) {
-            throw new IllegalArgumentException("null names");
-        }
+        return new HeadersME(ParME.encode(names), new CodesME(), new AesBC(key),
+                             new HacBC(key));
+    }
 
-        if (names.isEmpty()) {
-            throw new IllegalArgumentException("empty names");
-        }
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
+    /**
+     *
+     * @param names
+     * @param codes
+     * @param key
+     * @return
+     */
+    public static Headers newInstance(final Hashtable names, final Codes codes,
+                                      final byte[] key) {
 
-        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
-        }
-
-        return new HeadersME(ParME.encode(names), new DefaultCodes(),
-                             new AesBC(key), new HacBC(key));
+        return new HeadersME(ParME.encode(names), codes, new AesBC(key),
+                             new HacBC(key));
     }
 
 
