@@ -18,16 +18,11 @@
 package com.googlecode.jinahya.nica.http;
 
 
-import com.googlecode.jinahya.nica.Code;
-import com.googlecode.jinahya.nica.Headers;
+import com.googlecode.jinahya.nica.AndroidHeaders;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Iterator;
-import java.util.Map;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.protocol.HttpContext;
 
 
@@ -46,7 +41,7 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
      *
      * @param headres the headers to be wrapped.
      */
-    public NicaRequestInterceptor(final Headers headres) {
+    public NicaRequestInterceptor(final AndroidHeaders headres) {
         super();
 
         if (headres == null) {
@@ -61,33 +56,14 @@ public class NicaRequestInterceptor implements HttpRequestInterceptor {
     public void process(final HttpRequest request, final HttpContext context)
         throws HttpException, IOException {
 
-        if (request != null // @@?
-            && request instanceof HttpUriRequest) {
-            final HttpUriRequest uriRequest = (HttpUriRequest) request;
-            try {
-                headers.putVolatileCode(
-                    Code.REQUEST_URL.key(),
-                    uriRequest.getURI().toURL().toExternalForm());
-            } catch (MalformedURLException murle) {
-                throw new RuntimeException(murle);
-            }
-            headers.putVolatileCode(
-                Code.REQUEST_METHOD.key(), uriRequest.getMethod());
-        }
-
-        final Iterator<?> i = headers.getHeaders().entrySet().iterator();
-        while (i.hasNext()) {
-            final Map.Entry<?, ?> entry = (Map.Entry<?, ?>) i.next();
-            request.setHeader((String) entry.getKey(),
-                              (String) entry.getValue());
-        }
+        headers.setHeaders(request);
     }
 
 
     /**
      * headers.
      */
-    private final Headers headers;
+    private final AndroidHeaders headers;
 
 
 }

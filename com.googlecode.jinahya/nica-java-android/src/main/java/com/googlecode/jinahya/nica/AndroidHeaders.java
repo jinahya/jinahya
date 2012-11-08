@@ -18,20 +18,19 @@
 package com.googlecode.jinahya.nica;
 
 
+import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.Hac;
 import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.http.Header;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.message.BasicHeader;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AndroidHeaders extends Headers {
+public class AndroidHeaders extends DefaultHeaders {
 
 
     /**
@@ -40,54 +39,40 @@ public class AndroidHeaders extends Headers {
      * @param names names
      * @param key the encryption key.
      */
-    public AndroidHeaders(final Map<String, String> names, final byte[] key) {
-        super(names, key);
+    public AndroidHeaders(final String name, final AndroidCodes codes,
+                          final Aes aes, final Hac hac) {
+
+        super(name, codes, aes, hac);
     }
 
 
     /**
-     * Sets request headers on given
+     * Sets HTTP request headers on given
      * <code>request</code>.
      *
      * @param request request
      *
-     * @deprecated Use {@link java.net.HttpURLConnection}.
+     * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
      */
-    @Deprecated
-    public void setHeaders(final HttpUriRequest request) {
+    public void setHeaders(final HttpRequest request) {
 
         if (request == null) {
             throw new IllegalArgumentException("null request");
         }
 
-        try {
-            putVolatileCode(Code.REQUEST_URL.key(),
-                            request.getURI().toURL().toExternalForm());
-        } catch (MalformedURLException murle) {
-            throw new RuntimeException(murle);
+        if (request instanceof HttpUriRequest) {
+            final HttpUriRequest uriRequest = (HttpUriRequest) request;
+            try {
+                putVolatileEntry(Code.REQUEST_URL.key(),
+                                 uriRequest.getURI().toURL().toExternalForm());
+            } catch (MalformedURLException murle) {
+                throw new RuntimeException(murle);
+            }
+            putVolatileEntry(Code.REQUEST_METHOD.key(), uriRequest.getMethod());
         }
-        putVolatileCode(Code.REQUEST_METHOD.key(), request.getMethod());
 
-        for (Entry<String, String> entry : getHeaders().entrySet()) {
+        for (Entry<String, String> entry : getEntries().entrySet()) {
             request.setHeader(entry.getKey(), entry.getValue());
-        }
-    }
-
-
-    /**
-     * Adds HTTP headers to given
-     * <code>headers</code>.
-     *
-     * @param headers the list to be filled
-     *
-     * @deprecated Use {@link java.net.HttpURLConnection}.
-     */
-    @Deprecated
-    public void getHeaders(final List<Header> headers) {
-
-        final String[] entries = getEntries();
-        for (int i = 0; i < entries.length; i += 2) {
-            headers.add(new BasicHeader(entries[i], entries[i + 1]));
         }
     }
 

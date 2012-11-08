@@ -24,12 +24,9 @@ import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.util.Hashtable;
 import java.util.Map;
 import javax.microedition.io.HttpConnection;
-import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.HttpUriRequest;
 
 
 /**
@@ -237,61 +234,6 @@ public abstract class Headers extends Codes {
         final String[] entries = getEntriesAsArray();
         for (int i = 0; i < entries.length; i += 2) {
             connection.setRequestProperty(entries[i], entries[i + 1]);
-        }
-    }
-
-
-    /**
-     * Sets HTTP request headers on given
-     * <code>request</code>.
-     *
-     * @param request request
-     *
-     * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
-     */
-    public void setHeaders(final HttpUriRequest request) {
-
-        if (request == null) {
-            throw new IllegalArgumentException("null request");
-        }
-
-        try {
-            putVolatileEntry(Code.REQUEST_URL.key(),
-                             request.getURI().toURL().toExternalForm());
-        } catch (MalformedURLException murle) {
-            throw new RuntimeException(murle);
-        }
-        putVolatileEntry(Code.REQUEST_METHOD.key(), request.getMethod());
-
-        final String[] entries = getEntriesAsArray();
-        for (int i = 0; i < entries.length; i += 2) {
-            request.setHeader(entries[i], entries[i + 1]);
-        }
-    }
-
-
-    /**
-     * Sets HTTP request headers on given
-     * <code>request</code>.
-     *
-     * @param request request
-     *
-     * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
-     */
-    public void setHeaders(final HttpRequest request) {
-
-        if (request == null) {
-            throw new IllegalArgumentException("null request");
-        }
-
-        if (request instanceof HttpUriRequest) {
-            setHeaders((HttpUriRequest) request);
-            return;
-        }
-
-        final String[] entries = getEntriesAsArray();
-        for (int i = 0; i < entries.length; i += 2) {
-            request.setHeader(entries[i], entries[i + 1]);
         }
     }
 

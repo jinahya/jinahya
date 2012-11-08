@@ -26,7 +26,7 @@ import android.provider.Settings;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AndroidCodes extends Codes {
+public class AndroidCodes extends DefaultCodes {
 
 
     /**
@@ -45,9 +45,9 @@ public class AndroidCodes extends Codes {
 
         final String androidId = Settings.Secure.getString(
             context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        putConstantCode(Code.SYSTEM_ID.key(), androidId);
+        putConstantEntry(Code.SYSTEM_ID.key(), androidId);
 
-        putConstantCode(Code.PLATFORM_ID.key(), Platform.ANDROID.id());
+        putConstantEntry(Code.PLATFORM_ID.key(), Platform.ANDROID.id());
     }
 
 
