@@ -44,7 +44,7 @@ public abstract class NicaAttributeListener
                                     final String reasonPhrase) {
 
         if (srae == null) {
-            throw new IllegalArgumentException("null srae");
+            throw new IllegalArgumentException("null event");
         }
 
         setResponseError(srae.getServletRequest(), statusCode, reasonPhrase);
@@ -72,6 +72,18 @@ public abstract class NicaAttributeListener
     }
 
 
+    protected boolean hasResponseError(
+        final ServletRequestAttributeEvent srae) {
+        return hasResponseError(srae.getServletRequest());
+    }
+
+
+    protected boolean hasResponseError(final ServletRequest request) {
+        return request.getAttribute(
+            NicaFilter.ATTRIBUTE_ERROR_RESPONSE_STATUS_CODE) != null;
+    }
+
+
     /**
      * Overridden to do nothing.
      *
@@ -92,6 +104,9 @@ public abstract class NicaAttributeListener
     public void attributeReplaced(final ServletRequestAttributeEvent srae) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    private boolean responseErrorHasBeenSet = false;
 
 
 }

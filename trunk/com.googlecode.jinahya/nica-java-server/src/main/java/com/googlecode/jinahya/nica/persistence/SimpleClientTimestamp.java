@@ -18,11 +18,16 @@
 package com.googlecode.jinahya.nica.persistence;
 
 
+import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.IdClass;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -30,14 +35,27 @@ import javax.persistence.Table;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@IdClass(SimpleClientTimestampId.class)
 @Table(name = "SIMPLE_CLIENT_TIMESTAMP")
-public class SimpleClientTimestamp extends SimpleClientEntity {
+public class SimpleClientTimestamp implements Serializable {
 
 
     public long getRequestTimetamp() {
         return requestTimestamp;
     }
+
+
+    @Id
+    @PrimaryKeyJoinColumns({
+        @PrimaryKeyJoinColumn(name = "SIMPLE_CLIENT_PLATFORM_ID",
+                              referencedColumnName = "PLATFORM_ID"),
+        @PrimaryKeyJoinColumn(name = "SIMPLE_CLIENT_DEVICE_ID",
+                              referencedColumnName = "DEVICE_ID"),
+        @PrimaryKeyJoinColumn(name = "SIMPLE_CLIENT_SYSTEM_ID",
+                              referencedColumnName = "SYSETM_ID")
+    })
+    @OneToOne(optional = false)
+    @NotNull
+    private SimpleClient simpleClient;
 
 
     @Basic(optional = false)

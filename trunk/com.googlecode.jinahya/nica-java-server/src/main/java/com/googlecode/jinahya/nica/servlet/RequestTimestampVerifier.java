@@ -29,38 +29,41 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
+public abstract class RequestTimestampVerifier extends ClientIdsListener {
 
 
     @Override
-    protected void verifyPerClient(final ServletRequest request,
-                                   final Map<String, String> codes,
-                                   final String platformId,
-                                   final String deviceId,
-                                   final String systemId) {
+    protected void nicaClientIdsAdded(final ServletRequest request,
+                                      final String platformId,
+                                      final String deviceId,
+                                      final String systemId) {
 
-        final String requestNonceString = codes.get(Code.REQUEST_NONCE.key());
+        final Map<String, String> codes =
+            (Map<String, String>) request.getAttribute(
+            NicaFilter.ATTRIBUTE_NICA_CODES);
 
-        if (requestNonceString == null) {
+        final String requestTimestampValue =
+            codes.get(Code.REQUEST_TIMESTAMP.key());
+        if (requestTimestampValue == null) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "missing code: " + Code.REQUEST_NONCE.key());
             return;
         }
 
-        final long requestNonce;
+        final long requestTimestamp;
         try {
-            requestNonce = Long.parseLong(requestNonceString);
+            requestTimestamp = Long.parseLong(requestTimestampValue);
         } catch (NumberFormatException nfe) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "wrong code: " + Code.REQUEST_NONCE.key());
             return;
         }
 
-        final boolean nonceVerified = verifyNonce(
-            platformId, deviceId, systemId, requestNonce);
-        if (!nonceVerified) {
+        final boolean requestTimestampVerified = verifyRequestTimestamp(
+            platformId, deviceId, systemId, requestTimestamp);
+        if (!requestTimestampVerified) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
-                             "unacceptable nonce");
+                             "unaccpetable timestamp");
             return;
         }
     }
@@ -68,18 +71,17 @@ public abstract class NicaNonceVerifier extends NicaPerClientVerifier {
 
     /**
      * Verifies given
-     * <code>requestNonce</code> per client.
+     * <code>requestTimestamp</code> per client.
      *
      * @param platformId platform id
      * @param deviceId device id
      * @param systemId system id
-     * @param requestNonce request nonce
-     * @return true if given nonce is ok for given ids; false if duplicated
+     * @param requestTimestamp request timestamp
+     * @return true if given timestamp is latest for given ids; false if not
      */
-    protected abstract boolean verifyNonce(final String platformId,
-                                           final String deviceId,
-                                           final String systemId,
-                                           final long requestNonce);
+    protected abstract boolean verifyRequestTimestamp(
+        final String platformId, final String deviceId, final String systemId,
+        final long requestTimestamp);
 
 
 }

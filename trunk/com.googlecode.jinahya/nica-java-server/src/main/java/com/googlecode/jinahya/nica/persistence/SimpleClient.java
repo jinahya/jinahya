@@ -18,9 +18,12 @@
 package com.googlecode.jinahya.nica.persistence;
 
 
+import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 
@@ -28,8 +31,10 @@ import javax.validation.constraints.NotNull;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@MappedSuperclass
-public class SimpleClientEntity {
+@Entity
+@IdClass(SimpleClientId.class)
+@Table(name = "SIMPLE_CLIENT")
+public class SimpleClient implements Serializable {
 
 
     public String getPlatformId() {

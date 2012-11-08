@@ -29,39 +29,32 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
+public abstract class RequestNonceVerifier extends ClientIdsListener {
 
 
     @Override
-    protected void verifyPerClient(final ServletRequest request,
-                                   final Map<String, String> codes,
-                                   final String platformId,
-                                   final String deviceId,
-                                   final String systemId) {
+    protected void nicaClientIdsAdded(final ServletRequest request,
+                                      final String platformId,
+                                      final String deviceId,
+                                      final String systemId) {
 
-        final String requestTimestampString =
-            codes.get(Code.REQUEST_TIMESTAMP.key());
+        final Map<String, String> codes =
+            (Map<String, String>) request.getAttribute(
+            NicaFilter.ATTRIBUTE_NICA_CODES);
 
-        if (requestTimestampString == null) {
+        final String requestNonce = codes.get(Code.REQUEST_NONCE.key());
+
+        if (requestNonce == null) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "missing code: " + Code.REQUEST_NONCE.key());
             return;
         }
 
-        final long requestTimestamp;
-        try {
-            requestTimestamp = Long.parseLong(requestTimestampString);
-        } catch (NumberFormatException nfe) {
+        final boolean requestNonceVerified = verifyRequestNonce(
+            platformId, deviceId, systemId, requestNonce);
+        if (!requestNonceVerified) {
             setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
                              "wrong code: " + Code.REQUEST_NONCE.key());
-            return;
-        }
-
-        final boolean timestampVerified = verifyTimestamp(
-            platformId, deviceId, systemId, requestTimestamp);
-        if (!timestampVerified) {
-            setResponseError(request, HttpServletResponse.SC_BAD_REQUEST,
-                             "unaccpetable timestamp");
             return;
         }
     }
@@ -69,18 +62,18 @@ public abstract class NicaTimestampVerifier extends NicaPerClientVerifier {
 
     /**
      * Verifies given
-     * <code>requestTimestamp</code> per client.
+     * <code>requestNonce</code> per client.
      *
      * @param platformId platform id
      * @param deviceId device id
      * @param systemId system id
-     * @param requestTimestamp request timestamp
-     * @return true if given timestamp is latest for given ids; false if not
+     * @param requestNonce request nonce
+     * @return true if given nonce is ok for given ids; false if duplicated
      */
-    protected abstract boolean verifyTimestamp(final String platformId,
-                                               final String deviceId,
-                                               final String systemId,
-                                               final long requestTimestamp);
+    protected abstract boolean verifyRequestNonce(final String platformId,
+                                                  final String deviceId,
+                                                  final String systemId,
+                                                  final String requestNonce);
 
 
 }

@@ -23,6 +23,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -33,18 +34,28 @@ import javax.persistence.Table;
 @Entity
 @IdClass(SimpleClientNonceId.class)
 @Table(name = "SIMPLE_CLIENT_NONCE")
-public class SimpleClientNonce extends SimpleClientEntity {
+public class SimpleClientNonce extends SimpleClient {
 
 
-    public long getRequestNonce() {
+    /**
+     * Returns request nonce.
+     *
+     * @return request nonce.
+     */
+    public String getRequestNonce() {
         return requestNonce;
     }
+
+
+    @Id
+    @ManyToOne(optional = false)
+    private SimpleClientTimestamp simpleClientTimestamp;
 
 
     @Basic(optional = false)
     @Column(name = "REQUEST_NONCE", nullable = false, updatable = false)
     @Id
-    private long requestNonce;
+    private String requestNonce;
 
 
 }
