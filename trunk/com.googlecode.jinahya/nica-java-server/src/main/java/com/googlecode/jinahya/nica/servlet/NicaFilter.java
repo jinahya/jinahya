@@ -86,8 +86,8 @@ public abstract class NicaFilter implements Filter {
      * {@link Code#SYSTEM_ID}. The value must be an unmodifiable
      * {@link java.util.List} of {@link java.lang.String}.
      */
-    protected static final String ATTRIBUTE_NICA_CLIENT_IDS =
-        NicaFilter.class.getName() + "#client_ids";
+    protected static final String ATTRIBUTE_NICA_CLIENT_ID =
+        NicaFilter.class.getName() + "#client_id";
 
 
     /**

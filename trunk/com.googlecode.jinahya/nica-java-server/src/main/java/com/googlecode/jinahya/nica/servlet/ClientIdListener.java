@@ -31,14 +31,14 @@ import javax.servlet.ServletRequestAttributeEvent;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class ClientIdsListener extends NicaAttributeListener {
+public abstract class ClientIdListener extends NicaAttributeListener {
 
 
     @Override
     @SuppressWarnings("unchecked")
     public void attributeAdded(final ServletRequestAttributeEvent srae) {
 
-        if (NicaFilter.ATTRIBUTE_NICA_CLIENT_IDS.equals(srae.getName())) {
+        if (NicaFilter.ATTRIBUTE_NICA_CLIENT_ID.equals(srae.getName())) {
             final List<String> clientIds = (List<String>) srae.getValue();
             nicaClientIdsAdded(srae.getServletRequest(), clientIds.get(0),
                                clientIds.get(1), clientIds.get(2));

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class RequestNonceVerifier extends ClientIdsListener {
+public abstract class RequestNonceVerifier extends ClientIdListener {
 
 
     @Override

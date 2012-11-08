@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class ClientIdsVerifier extends NicaCodesListener {
+public abstract class ClientIdVerifier extends NicaCodesListener {
 
 
     @Override
@@ -80,7 +80,7 @@ public abstract class ClientIdsVerifier extends NicaCodesListener {
             systemId = "";
         }
 
-        request.setAttribute(NicaFilter.ATTRIBUTE_NICA_CLIENT_IDS,
+        request.setAttribute(NicaFilter.ATTRIBUTE_NICA_CLIENT_ID,
                              Arrays.asList(platformId, deviceId, systemId));
     }
 
