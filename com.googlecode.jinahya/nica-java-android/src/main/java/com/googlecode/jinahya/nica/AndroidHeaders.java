@@ -41,7 +41,6 @@ public class AndroidHeaders extends Headers {
      * @param key the encryption key.
      */
     public AndroidHeaders(final Map<String, String> names, final byte[] key) {
-
         super(names, key);
     }
 
