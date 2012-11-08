@@ -104,25 +104,15 @@ public class DefaultHeaders extends Headers {
     public static Headers newInstance(final Map<String, String> names,
                                       final byte[] key) {
 
-        if (names == null) {
-            throw new IllegalArgumentException("null names");
-        }
+        return newInstance(names, new DefaultCodes(), key);
+    }
 
-        if (names.isEmpty()) {
-            throw new IllegalArgumentException("empty names");
-        }
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
+    public static Headers newInstance(final Map<String, String> names,
+                                      final Codes codes, final byte[] key) {
 
-        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
-        }
-
-        return new DefaultHeaders(Par.encode(names), new DefaultCodes(),
-                                  new AesJCE(key), new HacJCE(key));
+        return new DefaultHeaders(Par.encode(names), codes, new AesJCE(key),
+                                  new HacJCE(key));
     }
 
 
