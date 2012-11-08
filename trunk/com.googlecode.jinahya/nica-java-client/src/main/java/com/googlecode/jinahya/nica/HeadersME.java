@@ -19,15 +19,17 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Aes;
+import com.googlecode.jinahya.nica.util.AesBC;
 import com.googlecode.jinahya.nica.util.Hac;
+import com.googlecode.jinahya.nica.util.HacBC;
 import com.googlecode.jinahya.nica.util.Hex;
-import com.googlecode.jinahya.nica.util.Par;
+import com.googlecode.jinahya.nica.util.ParME;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import javax.microedition.io.HttpConnection;
 
 
 /**
@@ -35,7 +37,7 @@ import java.util.Map.Entry;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Headers {
+public class HeadersME {
 
 
 //    /**
@@ -99,15 +101,26 @@ public class Headers {
 //        return new SynchronizedHeaders(headers);
 //    }
     /**
+     *
+     * @param names
+     * @param codes
+     * @param key
+     */
+    public HeadersME(final Hashtable names, final CodesME codes,
+                     final byte[] key) {
+
+        this(ParME.encode(names), codes, key);
+    }
+
+
+    /**
      * Creates a new instance.
      *
-     * @param name a {@link Par}-encoded nica names.
+     * @param name a {@link ParME}-encoded nica names.
      * @param codes codes.
-     * @param aes aes.
-     * @param hac hac.
+     * @param key the encryption key
      */
-    public Headers(final String name, final Codes codes, final Aes aes,
-                   final Hac hac) {
+    public HeadersME(final String name, final CodesME codes, final byte[] key) {
 
         super();
 
@@ -123,18 +136,20 @@ public class Headers {
             throw new IllegalArgumentException("null codes");
         }
 
-        if (aes == null) {
-            throw new IllegalArgumentException("null aes");
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
         }
 
-        if (hac == null) {
-            throw new IllegalArgumentException("null hac");
+        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
         this.name = name;
         this.codes = codes;
-        this.aes = aes;
-        this.hac = hac;
+
+        aes = new AesBC(key);
+        hac = new HacBC(key);
     }
 
 
@@ -152,14 +167,38 @@ public class Headers {
 
         codes.putVolatileCode(CodeKeys.REQUEST_URL,
                               connection.getURL().toExternalForm());
+
         codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
                               connection.getRequestMethod());
 
-        final Iterator entries = getHeaders().entrySet().iterator();
-        while (entries.hasNext()) {
-            final Entry entry = (Entry) entries.next();
-            connection.setRequestProperty(
-                (String) entry.getKey(), (String) entry.getValue());
+        final Hashtable headers = getHeaders();
+        final Enumeration keys = headers.keys();
+        while (keys.hasMoreElements()) {
+            final String fieldName = (String) keys.nextElement();
+            final String fieldValue = (String) headers.get(fieldName);
+            connection.setRequestProperty(fieldName, fieldValue);
+        }
+    }
+
+
+    public final void setHeaders(final HttpConnection connection)
+        throws IOException {
+
+        if (connection == null) {
+            throw new IllegalArgumentException("null connection");
+        }
+
+        codes.putVolatileCode(CodeKeys.REQUEST_URL, connection.getURL());
+
+        codes.putVolatileCode(CodeKeys.REQUEST_METHOD,
+                              connection.getRequestMethod());
+
+        final Hashtable headers = getHeaders();
+        final Enumeration keys = headers.keys();
+        while (keys.hasMoreElements()) {
+            final String fieldName = (String) keys.nextElement();
+            final String fieldValue = (String) headers.get(fieldName);
+            connection.setRequestProperty(fieldName, fieldValue);
         }
     }
 
@@ -169,9 +208,9 @@ public class Headers {
      *
      * @return a map of request headers
      */
-    public final Map getHeaders() {
+    public final Hashtable getHeaders() {
 
-        return getHeaders(new HashMap(4));
+        return getHeaders(new Hashtable(4));
     }
 
 
@@ -179,11 +218,11 @@ public class Headers {
      * Put http request headers to given
      * <code>headers</code>.
      *
-     * @param headers the map to be filled
+     * @param headers the hashtable to be filled.
      *
-     * @return given map.
+     * @return given hashtable.
      */
-    public final Map getHeaders(final Map headers) {
+    public final Hashtable getHeaders(final Hashtable headers) {
 
         if (headers == null) {
             throw new IllegalArgumentException("null headers");
@@ -199,7 +238,7 @@ public class Headers {
         // ----------------------------------------------------------- Nica-Code
         final byte[] base;
         try {
-            base = Par.encode(codes.getCodes()).getBytes("US-ASCII");
+            base = ParME.encode(codes.getCodes()).getBytes("US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
         }
@@ -261,7 +300,7 @@ public class Headers {
     /**
      * codes.
      */
-    private final Codes codes;
+    private final CodesME codes;
 
 
     /**

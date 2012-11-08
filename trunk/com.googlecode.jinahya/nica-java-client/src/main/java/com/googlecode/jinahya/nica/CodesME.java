@@ -19,10 +19,8 @@ package com.googlecode.jinahya.nica;
 
 
 import com.googlecode.jinahya.nica.util.Nuo;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 /**
@@ -30,7 +28,7 @@ import java.util.MissingResourceException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Codes {
+public class CodesME {
 
 
 //    /**
@@ -128,32 +126,50 @@ public class Codes {
 //
 //        return new SynchronizedCodes(codes);
 //    }
+    private void putAll(final Hashtable source, final Hashtable target) {
+
+        if (source == null) {
+            throw new IllegalArgumentException("null source");
+        }
+
+        if (target == null) {
+            throw new IllegalArgumentException("null target");
+        }
+
+        final Enumeration keys = source.elements();
+        while (keys.hasMoreElements()) {
+            final Object key = keys.nextElement();
+            target.put(key, source.get(key));
+        }
+    }
+
+
     /**
      * Creates a new instance.
      */
     //@SuppressWarnings("unchecked")
-    public Codes() {
+    public CodesME() {
         super();
 
-        final Locale locale = Locale.getDefault();
-
-        try {
-            variableCodes.put(CodeKeys.USER_LANGUAGE3,
-                              locale.getISO3Language());
-        } catch (MissingResourceException mre) {
-        }
-        variableCodes.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        variableCodes.put(CodeKeys.USER_LANGUAGE,
-                          locale.getDisplayLanguage(Locale.ENGLISH));
-
-        try {
-            variableCodes.put(CodeKeys.USER_COUNTRY3,
-                              locale.getISO3Country());
-        } catch (MissingResourceException mre) {
-        }
-        variableCodes.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        variableCodes.put(CodeKeys.USER_COUNTRY,
-                          locale.getDisplayCountry(Locale.ENGLISH));
+//        final Locale locale = Locale.getDefault();
+//
+//        try {
+//            variableCodes.put(CodeKeys.USER_LANGUAGE3,
+//                              locale.getISO3Language());
+//        } catch (MissingResourceException mre) {
+//        }
+//        variableCodes.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
+//        variableCodes.put(CodeKeys.USER_LANGUAGE,
+//                          locale.getDisplayLanguage(Locale.ENGLISH));
+//
+//        try {
+//            variableCodes.put(CodeKeys.USER_COUNTRY3,
+//                              locale.getISO3Country());
+//        } catch (MissingResourceException mre) {
+//        }
+//        variableCodes.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
+//        variableCodes.put(CodeKeys.USER_COUNTRY,
+//                          locale.getDisplayCountry(Locale.ENGLISH));
     }
 
 
@@ -162,11 +178,11 @@ public class Codes {
      *
      * @return codes
      */
-    public final Map<String, String> getCodes() {
+    public final Hashtable getCodes() {
 
-        return getCodes(new HashMap<String, String>(
-            constantCodes.size() + variableCodes.size() + volatileCodes.size()
-            + 2));
+        return getCodes(new Hashtable(
+            constantCodes.size() + variableCodes.size()
+            + volatileCodes.size() + 2));
     }
 
 
@@ -174,11 +190,11 @@ public class Codes {
      * Put codes to given
      * <code>codes</code>.
      *
-     * @param codes the map to be filled.
+     * @param codes the hashtable to be filled.
      *
      * @return given codes.
      */
-    public final Map<String, String> getCodes(final Map<String, String> codes) {
+    public final Hashtable getCodes(final Hashtable codes) {
 
         if (codes == null) {
             throw new IllegalArgumentException("null codes");
@@ -191,12 +207,12 @@ public class Codes {
         final long requestNonce = Nuo.generate(requestTimestamp);
         volatileCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
 
-        codes.putAll(volatileCodes);
+        putAll(volatileCodes, codes);
         volatileCodes.clear();
 
-        codes.putAll(variableCodes);
+        putAll(variableCodes, codes);
 
-        codes.putAll(constantCodes);
+        putAll(constantCodes, codes);
 
         return codes;
     }
@@ -275,22 +291,19 @@ public class Codes {
     /**
      * constant codes.
      */
-    private final Map<String, String> constantCodes =
-        new HashMap<String, String>();
+    private final Hashtable constantCodes = new Hashtable();
 
 
     /**
      * variable codes.
      */
-    private final Map<String, String> variableCodes =
-        new HashMap<String, String>();
+    private final Hashtable variableCodes = new Hashtable();
 
 
     /**
      * volatile codes.
      */
-    private final Map<String, String> volatileCodes =
-        new HashMap<String, String>();
+    private final Hashtable volatileCodes = new Hashtable();
 
 
 }

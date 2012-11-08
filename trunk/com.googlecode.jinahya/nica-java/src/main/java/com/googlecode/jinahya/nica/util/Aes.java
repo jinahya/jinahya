@@ -113,7 +113,10 @@ public abstract class Aes {
         }
 
         final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
-        random.nextBytes(iv);
+//        random.nextBytes(iv);
+        for (int i = 0; i < iv.length; i++) {
+            iv[i] = (byte) random.nextInt(256);
+        }
 
         return iv;
     }
