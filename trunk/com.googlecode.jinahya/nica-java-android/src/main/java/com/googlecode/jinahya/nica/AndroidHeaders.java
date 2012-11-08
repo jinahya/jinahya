@@ -20,17 +20,21 @@ package com.googlecode.jinahya.nica;
 
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map.Entry;
+import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.protocol.HttpContext;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AndroidHeaders extends DefaultHeaders {
+public class AndroidHeaders extends DefaultHeaders implements HttpRequestInterceptor {
 
 
     /**
@@ -43,6 +47,14 @@ public class AndroidHeaders extends DefaultHeaders {
                           final Aes aes, final Hac hac) {
 
         super(name, codes, aes, hac);
+    }
+
+
+    @Override
+    public void process(final HttpRequest request, final HttpContext context)
+        throws HttpException, IOException {
+
+        setHeaders(request);
     }
 
 
