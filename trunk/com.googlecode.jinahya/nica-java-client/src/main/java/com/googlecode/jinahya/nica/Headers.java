@@ -249,7 +249,6 @@ public abstract class Headers extends Codes {
      *
      * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
      */
-    @Deprecated
     public void setHeaders(final HttpUriRequest request) {
 
         if (request == null) {
@@ -279,7 +278,6 @@ public abstract class Headers extends Codes {
      *
      * @deprecated Use {@link #setHeaders(java.net.HttpURLConnection) }
      */
-    @Deprecated
     public void setHeaders(final HttpRequest request) {
 
         if (request == null) {
