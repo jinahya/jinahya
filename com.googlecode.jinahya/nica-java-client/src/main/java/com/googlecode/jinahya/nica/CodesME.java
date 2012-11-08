@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.Nuo;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -28,105 +27,18 @@ import java.util.Hashtable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CodesME {
+public class CodesME extends AbstractCodes {
 
 
-//    /**
-//     * synchronized class.
-//     */
-//    private static final class SynchronizedCodes extends Codes {
-//
-//
-//        /**
-//         * Creates a new instance.
-//         *
-//         * @param mutex the codes instance to be wrapped.
-//         */
-//        public SynchronizedCodes(final Codes mutex) {
-//            super();
-//
-//            if (mutex == null) {
-//                throw new IllegalArgumentException("null mutex");
-//            }
-//
-//            this.mutex = mutex;
-//        }
-//
-//
-//        //@Override
-//        public Map getCodes() {
-//            synchronized (mutex) {
-//                return super.getCodes();
-//            }
-//        }
-//
-//
-//        //@Override
-//        public Map getCodes(final Map codes) {
-//            synchronized (mutex) {
-//                return super.getCodes(codes);
-//            }
-//        }
-//
-//
-//        //@Override
-//        public java.util.Hashtable getCodes(final java.util.Hashtable codes) {
-//            synchronized (mutex) {
-//                return super.getCodes(codes);
-//            }
-//
-//        }
-//
-//
-//        //@Override
-//        public void putConstantCode(final String key, final String value) {
-//            synchronized (mutex) {
-//                super.putConstantCode(key, value);
-//            }
-//        }
-//
-//
-//        //@Override
-//        public String putVariableCode(final String key, final String value) {
-//            synchronized (mutex) {
-//                return super.putVariableCode(key, value);
-//            }
-//        }
-//
-//
-//        //@Override
-//        public String putVolatileCode(final String key, final String value) {
-//            synchronized (mutex) {
-//                return super.putVolatileCode(key, value);
-//            }
-//        }
-//
-//
-//        /**
-//         * mutex.
-//         */
-//        private final Codes mutex;
-//
-//
-//    }
-//
-//
-//    /**
-//     * Returns a synchronized (thread-safe) codes backed by the specified codes.
-//     *
-//     * @param codes the codes to be "wrapped" in a synchronized codes.
-//     *
-//     * @return a synchronized view of the specified codes.
-//     */
-//    public static Codes synchronziedCodes(final Codes codes) {
-//
-//        if (codes == null) {
-//            throw new IllegalArgumentException("null codes");
-//        }
-//
-//        return new SynchronizedCodes(codes);
-//    }
-    private void putAll(final Hashtable source, final Hashtable target) {
+    /**
+     * Copies all entries from
+     * <code>source</code> to
+     * <code>target</code>.
+     *
+     * @param source source
+     * @param target target
+     */
+    private static void copy(final Hashtable source, final Hashtable target) {
 
         if (source == null) {
             throw new IllegalArgumentException("null source");
@@ -147,29 +59,8 @@ public class CodesME {
     /**
      * Creates a new instance.
      */
-    //@SuppressWarnings("unchecked")
     public CodesME() {
         super();
-
-//        final Locale locale = Locale.getDefault();
-//
-//        try {
-//            variableCodes.put(CodeKeys.USER_LANGUAGE3,
-//                              locale.getISO3Language());
-//        } catch (MissingResourceException mre) {
-//        }
-//        variableCodes.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-//        variableCodes.put(CodeKeys.USER_LANGUAGE,
-//                          locale.getDisplayLanguage(Locale.ENGLISH));
-//
-//        try {
-//            variableCodes.put(CodeKeys.USER_COUNTRY3,
-//                              locale.getISO3Country());
-//        } catch (MissingResourceException mre) {
-//        }
-//        variableCodes.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-//        variableCodes.put(CodeKeys.USER_COUNTRY,
-//                          locale.getDisplayCountry(Locale.ENGLISH));
     }
 
 
@@ -200,30 +91,20 @@ public class CodesME {
             throw new IllegalArgumentException("null codes");
         }
 
-        final long requestTimestamp = System.currentTimeMillis();
-        volatileCodes.put(CodeKeys.REQUEST_TIMESTAMP,
-                          Long.toString(requestTimestamp));
+        putTimestampAndNonce(volatileCodes);
 
-        final long requestNonce = Nuo.generate(requestTimestamp);
-        volatileCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
-
-        putAll(volatileCodes, codes);
+        copy(volatileCodes, codes);
         volatileCodes.clear();
 
-        putAll(variableCodes, codes);
+        copy(variableCodes, codes);
 
-        putAll(constantCodes, codes);
+        copy(constantCodes, codes);
 
         return codes;
     }
 
 
-    /**
-     * Puts a constant code.
-     *
-     * @param key key
-     * @param value value
-     */
+    //@Override
     public final void putConstantCode(final String key, final String value) {
 
         if (key == null) {
@@ -243,14 +124,7 @@ public class CodesME {
     }
 
 
-    /**
-     * Puts a variable code.
-     *
-     * @param key key
-     * @param value value
-     *
-     * @return the previous value mapped to the key
-     */
+    //@Override
     public final String putVariableCode(final String key, final String value) {
 
         if (key == null) {
@@ -265,15 +139,7 @@ public class CodesME {
     }
 
 
-    /**
-     * Puts a volatile code. Note that volatile codes are cleared after they
-     * once used.
-     *
-     * @param key key
-     * @param value value
-     *
-     * @return the previous value mapped to the key
-     */
+    //@Override
     public final String putVolatileCode(final String key, final String value) {
 
         if (key == null) {
