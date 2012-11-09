@@ -64,5 +64,18 @@ public class ParTest {
     }
 
 
+    @Test
+    public void love() {
+
+        final Map<String, String> expected = new HashMap<String, String>();
+
+        expected.put("English", "love");
+        expected.put("한국어", "사랑");
+
+        final String encoded = Par.encode(expected);
+        System.out.println(encoded);
+    }
+
+
 }
 
