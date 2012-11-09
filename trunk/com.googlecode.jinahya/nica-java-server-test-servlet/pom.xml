@@ -31,7 +31,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <dependencies>      
+  <dependencies>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
       <artifactId>nica-java</artifactId>
@@ -54,7 +54,7 @@
   </properties>
 
   <build>
-    <!--finalName>nica-java-server-test-servlet</finalName-->
+    <finalName>${project.artifactId}</finalName>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -217,11 +217,12 @@
         <groupId>org.glassfish.embedded</groupId>
         <artifactId>maven-embedded-glassfish-plugin</artifactId>
         <configuration>
-          <goalPrefix>glassfish</goalPrefix>
-          <!--app>test.war</app-->
-          <port>8080</port>
-          <contextRoot>test</contextRoot>
+          <contextRoot>${project.build.finalName}</contextRoot>
+          <goalPrefix>embedded-glassfish</goalPrefix>
+          <name>${project.build.finalName}</name>
+          <port>9090</port>
         </configuration>
+        <!--
         <executions>
           <execution>
             <phase>install</phase>
@@ -230,6 +231,7 @@
             </goals>
           </execution>
         </executions>
+        -->
       </plugin>
     </plugins>
   </build>

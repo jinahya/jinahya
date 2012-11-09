@@ -22,7 +22,6 @@ import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Keg;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -89,15 +88,12 @@ public class IndexedKey {
 
 
     @XmlAttribute(required = true)
-    //@XmlElement
     @XmlID
     @XmlJavaTypeAdapter(StringIndexAdapter.class)
     private Integer index;
 
 
     @XmlValue
-    //@XmlElement
-    //@XmlSchemaType(name = "hexBinary")
     @XmlJavaTypeAdapter(HexBinaryAdapter.class)
     private byte[] bytes;
 
