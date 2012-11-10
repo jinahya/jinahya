@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.nica.test;
 
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import org.testng.annotations.Test;
 
 
@@ -28,18 +25,12 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BinaryTest {
+public class KeyTest {
 
 
     @Test
-    public void generate() throws JAXBException {
-
-        final JAXBContext context = JAXBContext.newInstance(Binary.class);
-
-        final Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-        marshaller.marshal(Binary.newInstance(31), System.out);
+    public void testIndex() {
+        final Key indexedKey = new Key();
     }
 
 

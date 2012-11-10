@@ -22,7 +22,6 @@ import com.googlecode.jinahya.nica.util.Aes;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.KeyGenerator;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -33,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@XmlType(propOrder = {"index", "bytes"})
-public class IndexedKey {
+public class Key {
 
 
     private static final KeyGenerator GENERATOR;
@@ -56,13 +55,13 @@ public class IndexedKey {
     }
 
 
-    public static IndexedKey[] newInstances(final int size) {
+    public static Key[] newInstances(final int size) {
 
         if (size < 0) {
             throw new IllegalArgumentException("negative size");
         }
 
-        final IndexedKey[] instances = new IndexedKey[size];
+        final Key[] instances = new Key[size];
 
         for (int i = 0; i < instances.length; i++) {
             instances[i] = newInstance(i);
@@ -72,22 +71,14 @@ public class IndexedKey {
     }
 
 
-    public static IndexedKey newInstance(final int index) {
+    public static Key newInstance(final int index) {
 
         return newInstance(index, newKey());
     }
 
 
-    protected static IndexedKey newInstance(final int index,
-                                            final byte[] bytes) {
-
-        if (index < 0) {
-            throw new IllegalArgumentException("index(" + index + ") < 0");
-        }
-
-        if (index >= 10000) {
-            throw new IllegalArgumentException("index(" + index + ") >= 10000");
-        }
+    protected static Key newInstance(final int index,
+                                     final byte[] bytes) {
 
         if (bytes == null) {
             throw new IllegalArgumentException("null key");
@@ -99,7 +90,7 @@ public class IndexedKey {
                 + Aes.KEY_SIZE_IN_BYTES);
         }
 
-        final IndexedKey instance = new IndexedKey();
+        final Key instance = new Key();
 
         instance.index = index;
         instance.bytes = bytes;
@@ -108,21 +99,16 @@ public class IndexedKey {
     }
 
 
+    /**
+     * index.
+     */
     @XmlAttribute(required = true)
-    @XmlID
-    public String getIndex() {
-        return "i" + index;
-    }
-
-
-    public void setIndex(final String index) {
-        this.index = Integer.parseInt(index.substring(1));
-    }
-
-
     private Integer index;
 
 
+    /**
+     * bytes.
+     */
     @XmlValue
     @XmlJavaTypeAdapter(HexBinaryAdapter.class)
     private byte[] bytes;
