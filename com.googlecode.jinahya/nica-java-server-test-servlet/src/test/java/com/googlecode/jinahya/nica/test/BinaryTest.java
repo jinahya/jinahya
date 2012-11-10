@@ -15,45 +15,31 @@
  */
 
 
-package com.googlecode.jinahya.nica.util;
+package com.googlecode.jinahya.nica.test;
 
 
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.KeyGenerator;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class Keg {
+public class BinaryTest {
 
 
-    private static final KeyGenerator GENERATOR;
+    @Test
+    public void generate() throws JAXBException {
 
+        final JAXBContext context = JAXBContext.newInstance(Binary.class);
 
-    static {
-        try {
-            GENERATOR = KeyGenerator.getInstance(Aes.ALGORITHM);
-            GENERATOR.init(Aes.KEY_SIZE);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new InstantiationError(nsae.getMessage());
-        }
-    }
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-
-    public static byte[] newKey() {
-        synchronized (GENERATOR) {
-            return GENERATOR.generateKey().getEncoded();
-        }
-    }
-
-
-    /**
-     * Creates a new instance.
-     */
-    private Keg() {
-        super();
+        marshaller.marshal(Binary.newInstance(31), System.out);
     }
 
 
