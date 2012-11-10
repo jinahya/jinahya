@@ -15,46 +15,38 @@
  */
 
 
-package com.googlecode.jinahya.nica.util;
+package com.googlecode.jinahya.nica.test;
 
 
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.KeyGenerator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class Keg {
+@XmlRootElement
+public class IndexedKeys {
 
 
-    private static final KeyGenerator GENERATOR;
+    public static IndexedKeys newInstance(final int size) {
 
+        final IndexedKeys instance = new IndexedKeys();
 
-    static {
-        try {
-            GENERATOR = KeyGenerator.getInstance(Aes.ALGORITHM);
-            GENERATOR.init(Aes.KEY_SIZE);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new InstantiationError(nsae.getMessage());
-        }
+        instance.indexedTestKeys = new ArrayList<IndexedKey>(size);
+        instance.indexedTestKeys.addAll(
+            Arrays.asList(IndexedKey.newInstances(size)));
+
+        return instance;
     }
 
 
-    public static byte[] newKey() {
-        synchronized (GENERATOR) {
-            return GENERATOR.generateKey().getEncoded();
-        }
-    }
-
-
-    /**
-     * Creates a new instance.
-     */
-    private Keg() {
-        super();
-    }
+    @XmlElement(name = "indexedKey")
+    private Collection<IndexedKey> indexedTestKeys;
 
 
 }

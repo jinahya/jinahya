@@ -35,70 +35,11 @@ import java.util.Hashtable;
 public class HeadersME extends Headers {
 
 
-//    /**
-//     * The class for synchronized instances.
-//     */
-//    private static class SynchronizedHeaders extends Headers {
-//
-//
-//        public SynchronizedHeaders(final Headers headers) {
-//            super(headers.name, headers.codes, headers.aes, headers.hac);
-//
-//            this.mutex = headers;
-//        }
-//
-//
-//        //@Override
-//        public void setHeaders(final HttpURLConnection connection) {
-//            synchronized (mutex) {
-//                super.setHeaders(connection);
-//            }
-//        }
-//
-//
-//        //@Override
-//        public Map getHeaders() {
-//            synchronized (mutex) {
-//                return super.getHeaders();
-//            }
-//        }
-//
-//
-////        //@Override
-////        public Codes getCodes() {
-////            synchronized (mutex) {
-////                return mutex.getCodes();
-////            }
-////        }
-//        /**
-//         * mutex.
-//         */
-//        private final Headers mutex;
-//
-//
-//    }
-//
-//
-//    /**
-//     * Returns a synchronized (thread-safe) headers backed by the specified
-//     * headers.
-//     *
-//     * @param headers the headers to be "wrapped" in a synchronized headers.
-//     *
-//     * @return a synchronized view of the specified headers.
-//     */
-//    public static Headers synchronizedHeaders(final Headers headers) {
-//
-//        if (headers == null) {
-//            throw new IllegalArgumentException("null headers");
-//        }
-//
-//        return new SynchronizedHeaders(headers);
-//    }
     /**
      *
      * @param names
      * @param key
+     *
      * @return
      */
     public static Headers newInstance(final Hashtable names, final byte[] key) {
@@ -113,6 +54,7 @@ public class HeadersME extends Headers {
      * @param names
      * @param codes
      * @param key
+     *
      * @return
      */
     public static Headers newInstance(final Hashtable names,

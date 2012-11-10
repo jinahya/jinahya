@@ -37,66 +37,6 @@ import javax.microedition.io.HttpConnection;
 public abstract class Headers extends Codes {
 
 
-//    /**
-//     * The class for synchronized instances.
-//     */
-//    private static class SynchronizedHeaders extends Headers {
-//
-//
-//        public SynchronizedHeaders(final Headers headers) {
-//            super(headers.name, headers.codes, headers.aes, headers.hac);
-//
-//            this.mutex = headers;
-//        }
-//
-//
-//        //@Override
-//        public void setHeaders(final HttpURLConnection connection) {
-//            synchronized (mutex) {
-//                super.setHeaders(connection);
-//            }
-//        }
-//
-//
-//        //@Override
-//        public Map getHeaders() {
-//            synchronized (mutex) {
-//                return super.getHeaders();
-//            }
-//        }
-//
-//
-////        //@Override
-////        public Codes getCodes() {
-////            synchronized (mutex) {
-////                return mutex.getCodes();
-////            }
-////        }
-//        /**
-//         * mutex.
-//         */
-//        private final Headers mutex;
-//
-//
-//    }
-//
-//
-//    /**
-//     * Returns a synchronized (thread-safe) headers backed by the specified
-//     * headers.
-//     *
-//     * @param headers the headers to be "wrapped" in a synchronized headers.
-//     *
-//     * @return a synchronized view of the specified headers.
-//     */
-//    public static Headers synchronizedHeaders(final Headers headers) {
-//
-//        if (headers == null) {
-//            throw new IllegalArgumentException("null headers");
-//        }
-//
-//        return new SynchronizedHeaders(headers);
-//    }
     /**
      *
      * @param entries
@@ -217,6 +157,7 @@ public abstract class Headers extends Codes {
      * <code>connection</code>.
      *
      * @param connection connection
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final void setHeaders(final HttpConnection connection)
@@ -261,6 +202,7 @@ public abstract class Headers extends Codes {
      * <code>headers</code>.
      *
      * @param entries the hashtable to be filled.
+     *
      * @deprecated Use {@link #getEntries(java.util.Map)}.
      */
     public final void getEntries(final Hashtable entries) {
@@ -311,6 +253,7 @@ public abstract class Headers extends Codes {
     /**
      *
      * @param codes
+     *
      * @return
      */
     protected abstract byte[] getBase(Codes codes);
