@@ -32,25 +32,25 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class IndexedKeysTest {
+public class KeysTest {
 
 
     @Test
     public void generate() throws JAXBException {
 
-        final JAXBContext context = JAXBContext.newInstance(IndexedKeys.class);
+        final JAXBContext context = JAXBContext.newInstance(Keys.class);
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        marshaller.marshal(IndexedKeys.newInstance(128), System.out);
+        marshaller.marshal(Keys.newInstance(128), System.out);
     }
 
 
     @Test
     public void printSchema() throws JAXBException, IOException {
 
-        final JAXBContext context = JAXBContext.newInstance(IndexedKeys.class);
+        final JAXBContext context = JAXBContext.newInstance(Keys.class);
 
         context.generateSchema(new SchemaOutputResolver() {
 

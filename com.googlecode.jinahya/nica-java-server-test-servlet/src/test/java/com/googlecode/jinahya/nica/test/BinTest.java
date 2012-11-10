@@ -18,35 +18,29 @@
 package com.googlecode.jinahya.nica.test;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class IndexedKeys {
+public class BinTest {
 
 
-    public static IndexedKeys newInstance(final int size) {
+    @Test
+    public void generate() throws JAXBException {
 
-        final IndexedKeys instance = new IndexedKeys();
+        final JAXBContext context = JAXBContext.newInstance(Bin.class);
 
-        instance.indexedTestKeys = new ArrayList<IndexedKey>(size);
-        instance.indexedTestKeys.addAll(
-            Arrays.asList(IndexedKey.newInstances(size)));
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        return instance;
+        marshaller.marshal(Bin.newInstance(31), System.out);
     }
-
-
-    @XmlElement(name = "indexedKey")
-    private Collection<IndexedKey> indexedTestKeys;
 
 
 }

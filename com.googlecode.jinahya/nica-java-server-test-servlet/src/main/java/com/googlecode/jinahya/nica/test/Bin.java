@@ -32,10 +32,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlRootElement
 @XmlType(propOrder = {"hex", "base64"})
-public class Binary {
+public class Bin {
 
 
-    public static Binary newInstance(final int size) {
+    public static Bin newInstance(final int size) {
 
         if (size < 0) {
             throw new IllegalArgumentException("size(" + size + ") < 0");
@@ -44,7 +44,7 @@ public class Binary {
         final byte[] data = new byte[size];
         ThreadLocalRandom.current().nextBytes(data);
 
-        final Binary instance = new Binary();
+        final Bin instance = new Bin();
 
         instance.data = data;
 
@@ -53,7 +53,6 @@ public class Binary {
 
 
     @XmlElement
-    //@XmlSchemaType(name = "hexBinary") // seems not work
     @XmlJavaTypeAdapter(HexBinaryAdapter.class)
     public byte[] getHex() {
         return data;
