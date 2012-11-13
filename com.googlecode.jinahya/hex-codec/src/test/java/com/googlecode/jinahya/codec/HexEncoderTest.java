@@ -19,7 +19,8 @@ package com.googlecode.jinahya.codec;
 
 
 import java.util.Random;
-import org.bouncycastle.util.encoders.Hex;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -57,13 +58,13 @@ public class HexEncoderTest {
 
 
     @Test(invocationCount = 128)
-    public void testEncodingAgainstCommonsHex() {
+    public void testEncodingAgainstCommonsHex() throws DecoderException {
 
         final byte[] expected = newRandomBytes();
 
         final byte[] encoded = new HexEncoder().encode(expected);
 
-        final byte[] actual = Hex.decode(encoded);
+        final byte[] actual = new Hex().decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
