@@ -1,6 +1,6 @@
 #!/bin/sh
 groupId=com.googlecode.jinahya
-artifactId=nica-java
+artifactId=hex-encoder
 path=../../../tags/$groupId/
 svn up $path
 ls -l $path | grep $artifactId
