@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.googlecode.jinahya.nica</groupId>
-  <artifactId>nica-java-server-test-servlet</artifactId>
-  <packaging>war</packaging>
-  <version>1.0-alpha-1-SNAPSHOT</version>
+  <groupId>com.googlecode.jinahya</groupId>
+  <artifactId>hex-codec</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -15,14 +15,24 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>nica-java-server</artifactId>
-        <version>1.0-alpha-1-SNAPSHOT</version>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.7</version>
       </dependency>
       <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-api</artifactId>
-        <version>6.0</version>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>4.2.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>1.47</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
@@ -33,13 +43,23 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>nica-java-server</artifactId>
-      <scope>compile</scope>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -54,7 +74,6 @@
   </properties>
 
   <build>
-    <finalName>${project.artifactId}</finalName>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -129,11 +148,6 @@
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>2.5.2</version>
         </plugin>
-        <plugin>
-          <groupId>org.glassfish.embedded</groupId>
-          <artifactId>maven-embedded-glassfish-plugin</artifactId>
-          <version>3.1.2.2</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -148,11 +162,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <links>
-            <link>http://docs.oracle.com/javaee/6/api/</link>
-          </links>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -185,11 +194,6 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <links>
-                  <link>http://docs.oracle.com/javaee/6/api/</link>
-                </links>
-              </configuration>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -205,7 +209,7 @@
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin> 
+            </plugin>
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
@@ -213,31 +217,11 @@
           </reportPlugins>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.glassfish.embedded</groupId>
-        <artifactId>maven-embedded-glassfish-plugin</artifactId>
-        <configuration>
-          <contextRoot>${project.build.finalName}</contextRoot>
-          <goalPrefix>embedded-glassfish</goalPrefix>
-          <name>${project.build.finalName}</name>
-          <port>9090</port>
-        </configuration>
-        <!--
-        <executions>
-          <execution>
-            <phase>install</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        -->
-      </plugin>
     </plugins>
   </build>
-  <reporting/>
+  <reporting />
 
-  <name>nica-java-server-test-servlet</name>
+  <name>hex-codec</name>
   <url>http://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -262,9 +246,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/nica-java-server-test-servlet</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/nica-java-server-test-servlet</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/nica-java-server-test-servlet/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/hex-codec</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/hex-codec</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/hex-codec/</url>
   </scm>
   <prerequisites>
     <maven>3.0.4</maven>
@@ -283,6 +267,23 @@
   </repositories>
   <pluginRepositories />
   <distributionManagement>
+    <!--
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Propellors Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    -->
+    <!--
+    <site>
+      <id>googlecode</id>
+      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+    </site>
+    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
