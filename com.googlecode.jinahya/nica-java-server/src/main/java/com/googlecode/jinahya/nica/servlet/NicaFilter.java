@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -110,7 +111,9 @@ public abstract class NicaFilter implements Filter {
      *
      * @param request request
      * @param response response
+     *
      * @return true if ok; false if error has been sent
+     *
      * @throws IOException if an I/O error occurs
      */
     private static boolean checkErrorResponseAttributes(
