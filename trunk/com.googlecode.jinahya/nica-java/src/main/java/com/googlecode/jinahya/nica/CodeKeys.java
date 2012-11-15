@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica;
 
 
 /**
+ * Constant names for Nica-Codes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -39,13 +40,13 @@ public final class CodeKeys {
 
 
     /**
-     * Request HTTP method.
+     * HTTP request method in upper case.
      */
     public static final String REQUEST_METHOD = "REQUEST_METHOD";
 
 
     /**
-     * Request URL.
+     * HTTP request URL.
      */
     public static final String REQUEST_URL = "REQUEST_URL";
 
@@ -58,7 +59,7 @@ public final class CodeKeys {
 
     /**
      * User's password, if required, per request. The value for this code must
-     * be encoded in SHA-512.
+     * be hashed in SHA-512.
      */
     public static final String USER_PASSWORD = "USER_PASSWORD";
 
@@ -140,7 +141,8 @@ public final class CodeKeys {
 
 
     /**
-     * Platform identifier.
+     * Platform identifier. This code is required and the value must not be
+     * empty nor blank.
      */
     public static final String PLATFORM_ID = "PLATFORM_ID";
 

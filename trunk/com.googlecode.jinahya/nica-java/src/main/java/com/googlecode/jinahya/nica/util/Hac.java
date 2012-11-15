@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
+ * An abstract class for HMAC-SHA-512.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -37,23 +38,23 @@ public abstract class Hac {
         /**
          * Creates a new instance.
          *
-         * @param hac the hac to be wrapped.
+         * @param mutex the hac to be wrapped.
          */
-        public SynchronizedHac(final Hac hac) {
+        public SynchronizedHac(final Hac mutex) {
             super();
 
-            if (hac == null) {
-                throw new IllegalArgumentException("null hac");
+            if (mutex == null) {
+                throw new IllegalArgumentException("null mutex");
             }
 
-            this.hac = hac;
+            this.mutex = mutex;
         }
 
 
         //@Override
         public byte[] authenticate(final byte[] message) {
-            synchronized (hac) {
-                return hac.authenticate(message);
+            synchronized (mutex) {
+                return mutex.authenticate(message);
             }
         }
 
@@ -61,7 +62,7 @@ public abstract class Hac {
         /**
          * hac.
          */
-        private final Hac hac;
+        private final Hac mutex;
 
 
     }
@@ -123,7 +124,7 @@ public abstract class Hac {
      *
      * @param message the message to authenticate
      *
-     * @return authentication output as a HEX string
+     * @return the output as a HEX string
      */
     public String authenticateToString(final byte[] message) {
         return Hex.encodeToString(authenticate(message));
@@ -136,7 +137,7 @@ public abstract class Hac {
      *
      * @param message the message to authenticate
      *
-     * @return authentication output as a HEX string
+     * @return the output as a HEX string
      */
     public String authenticateToString(final String message) {
         return Hex.encodeToString(authenticate(message));

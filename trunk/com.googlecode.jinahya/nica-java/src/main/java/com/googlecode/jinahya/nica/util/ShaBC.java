@@ -35,34 +35,7 @@ public class ShaBC extends Sha {
      * @return a new synchronized instance
      */
     public static Sha newSynchronizedInstance() {
-
-        final Digest digest = new SHA512Digest();
-
-        return new Sha() {
-
-
-            //@Override
-            public byte[] hash(final byte[] data) {
-
-                if (data == null) {
-                    throw new IllegalArgumentException("null data");
-                }
-
-                synchronized (digest) {
-
-                    final byte[] hashed = new byte[digest.getDigestSize()];
-
-                    digest.reset();
-                    digest.update(data, 0, data.length);
-
-                    digest.doFinal(hashed, 0);
-
-                    return hashed;
-                }
-            }
-
-
-        };
+        return synchronizedSha(new ShaBC());
     }
 
 
@@ -85,7 +58,7 @@ public class ShaBC extends Sha {
 
         final byte[] hashed = new byte[digest.getDigestSize()];
 
-        digest.reset();
+//        digest.reset();
         digest.update(data, 0, data.length);
         digest.doFinal(hashed, 0);
 

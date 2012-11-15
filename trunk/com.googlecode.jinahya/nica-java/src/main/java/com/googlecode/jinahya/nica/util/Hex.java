@@ -35,7 +35,7 @@ public class Hex {
      *
      * @return encoded output
      */
-    private static int encodeHalf(final int decoded) {
+    protected static int encodeHalf(final int decoded) {
 
         switch (decoded) {
             case 0x00:
@@ -71,6 +71,16 @@ public class Hex {
      */
     protected static void encodeSingle(final int decoded, final byte[] encoded,
                                        final int offset) {
+
+        if (decoded < 0x00) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") < 0x00");
+        }
+
+        if (decoded > 0xFF) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") > 0xFF");
+        }
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
@@ -239,25 +249,25 @@ public class Hex {
     }
 
 
-    protected static int decodeSingle(final String encoded, final int offset) {
-
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
-
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
-
-        if (offset >= encoded.length() - 1) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length()
-                + ") - 1");
-        }
-
-        return (decodeHalf((encoded.charAt(offset)) << 4)
-                | decodeHalf((encoded.charAt(offset + 1))));
-    }
+//    protected static int decodeSingle(final String encoded, final int offset) {
+//
+//        if (encoded == null) {
+//            throw new IllegalArgumentException("null encoded");
+//        }
+//
+//        if (offset < 0) {
+//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+//        }
+//
+//        if (offset >= encoded.length() - 1) {
+//            throw new IllegalArgumentException(
+//                "offset(" + offset + ") >= encoded.length(" + encoded.length()
+//                + ") - 1");
+//        }
+//
+//        return (decodeHalf((encoded.charAt(offset)) << 4)
+//                | decodeHalf((encoded.charAt(offset + 1))));
+//    }
 
 
     /**

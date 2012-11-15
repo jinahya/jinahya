@@ -23,6 +23,7 @@ import java.util.Hashtable;
 
 
 /**
+ * A Par for micro edition.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -96,9 +97,9 @@ public class ParME {
             throw new IllegalArgumentException("null decoded");
         }
 
-        if (decoded.isEmpty()) {
-            return "";
-        }
+//        if (decoded.isEmpty()) {
+//            return "";
+//        }
 
         final String[] normalizedKeys = new String[decoded.size()];
         final String[] normalizedValues = new String[decoded.size()];
@@ -122,8 +123,10 @@ public class ParME {
             normalizedValues[i] = Per.encodeToString((String) value);
         }
 
-        quicksort(normalizedKeys, normalizedValues, 0,
-                  normalizedKeys.length - 1);
+        if (normalizedKeys.length > 1) {
+            quicksort(normalizedKeys, normalizedValues, 0,
+                      normalizedKeys.length - 1);
+        }
 
         final StringBuffer buffer = new StringBuffer();
         if (normalizedKeys.length > 0) {
@@ -158,34 +161,38 @@ public class ParME {
 
         final Hashtable decoded = new Hashtable();
 
-        int f = 0;
-        for (int a = -1; (a = encoded.indexOf('&', f)) != -1;) {
-            if (a == f) {
+        if (encoded.length() == 0) {
+            return decoded;
+        }
+        
+        int fr = 0;
+        for (int am = -1; (am = encoded.indexOf('&', fr)) != -1; fr = am + 1) {
+            if (am == fr) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final int e = encoded.indexOf('=', f);
-            if (e > a) {
+            final int eq = encoded.indexOf('=', fr);
+            if (eq == -1 || eq > am) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = Per.decodeToString(encoded.substring(f, e));
-            final String val = Per.decodeToString(encoded.substring(e + 1, a));
+            final String key = Per.decodeToString(encoded.substring(fr, eq));
+            final String val =
+                Per.decodeToString(encoded.substring(eq + 1, am));
             if (decoded.put(key, val) != null) {
                 throw new IllegalArgumentException(
-                    "illegal encoded: duplicated key: " + key);
+                    "illegal encoded: duplicate key: " + key);
             }
-            f = a + 1;
         }
 
-        if (f < encoded.length()) {
-            final int e = encoded.indexOf('=', f);
-            if (e == -1) {
+        if (fr <= encoded.length()) {
+            final int eq = encoded.indexOf('=', fr);
+            if (eq == -1) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = Per.decodeToString(encoded.substring(f, e));
-            final String val = Per.decodeToString(encoded.substring(e + 1));
+            final String key = Per.decodeToString(encoded.substring(fr, eq));
+            final String val = Per.decodeToString(encoded.substring(eq + 1));
             if (decoded.put(key, val) != null) {
                 throw new IllegalArgumentException(
-                    "illegal encoded: duplicated key: " + key);
+                    "illegal encoded: duplicate key: " + key);
             }
         }
 

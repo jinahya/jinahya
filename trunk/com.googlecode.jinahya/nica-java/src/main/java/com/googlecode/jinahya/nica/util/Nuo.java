@@ -22,16 +22,13 @@ import java.util.Random;
 
 
 /**
+ * A nonce generator.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Nuo {
 
 
-//    /**
-//     * RNG algorithm.
-//     */
-//    private static final String ALGORITHM = "SHA1PRNG";
     /**
      * Random.
      */
@@ -51,7 +48,7 @@ public class Nuo {
 
 
     /**
-     * Generates a value.
+     * Generates a nonce for current time millis.
      *
      * @return a new value
      */
@@ -62,7 +59,7 @@ public class Nuo {
 
 
     /**
-     * Generates a value.
+     * Generates a nonce for given <code>timestamp</code>.
      *
      * @param timestamp current timestamp
      *
@@ -77,7 +74,7 @@ public class Nuo {
 
 
     /**
-     * Generates a value
+     * Generates a value.
      *
      * @param random random
      *
@@ -92,8 +89,8 @@ public class Nuo {
     /**
      * Generates a value.
      *
-     * @param timestamp current timestamp
-     * @param random random
+     * @param timestamp current timestamp.
+     * @param random random.
      *
      * @return a new value
      */

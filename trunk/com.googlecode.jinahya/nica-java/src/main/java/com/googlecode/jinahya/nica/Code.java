@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica;
 
 
 /**
+ * Constants for Nica-Code.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

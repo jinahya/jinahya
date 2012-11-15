@@ -90,7 +90,7 @@ public abstract class Aes {
      *
      * @return a new initialization vector
      */
-    public static final byte[] newIv() {
+    public static byte[] newIv() {
 
         synchronized (RANDOM) {
             return newIv(RANDOM);
@@ -100,7 +100,7 @@ public abstract class Aes {
 
     /**
      * Generates a new initialization vector. This method is not intended to be
-     * used in production states.
+     * used in production stages.
      *
      * @param random a random to be used
      *
@@ -131,31 +131,31 @@ public abstract class Aes {
         /**
          * Creates a new instance.
          *
-         * @param aes aes to wrapped
+         * @param mutex aes to wrapped
          */
-        public SynchronizedAes(final Aes aes) {
+        public SynchronizedAes(final Aes mutex) {
             super();
 
-            if (aes == null) {
-                throw new IllegalArgumentException("null aes");
+            if (mutex == null) {
+                throw new IllegalArgumentException("null mutex");
             }
 
-            this.aes = aes;
+            this.mutex = mutex;
         }
 
 
         //@Override
         public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
-            synchronized (aes) {
-                return aes.encrypt(iv, decrypted);
+            synchronized (mutex) {
+                return mutex.encrypt(iv, decrypted);
             }
         }
 
 
         //@Override
         public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
-            synchronized (aes) {
-                return aes.decrypt(iv, encrypted);
+            synchronized (mutex) {
+                return mutex.decrypt(iv, encrypted);
             }
         }
 
@@ -163,7 +163,7 @@ public abstract class Aes {
         /**
          * aes.
          */
-        private final Aes aes;
+        private final Aes mutex;
 
 
     }
@@ -188,7 +188,8 @@ public abstract class Aes {
 
     /**
      * Encrypts given
-     * <code>decrypted</code>.
+     * <code>decrypted</code>. Any implementation/provider specfic exception
+     * will thrown as wrapped in a RuntimeException.
      *
      * @param iv initialization vector
      * @param decrypted the bytes to encrypt
@@ -200,7 +201,8 @@ public abstract class Aes {
 
     /**
      * Decrypts given
-     * <code>encrypted</code>.
+     * <code>encrypted</code>. Any implementation/provider specific exception
+     * will be thrown as wrapped in a Runtimeexception.
      *
      * @param iv initialization vector
      * @param encrypted the bytes to decrypt

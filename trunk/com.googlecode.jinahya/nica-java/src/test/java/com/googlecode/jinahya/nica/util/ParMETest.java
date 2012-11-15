@@ -37,84 +37,66 @@ public class ParMETest {
     private static final Random RANDOM = new Random();
 
 
-    @Test
-    public static void testEncode() {
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public static void testEncodeWithNull() {
+        ParME.encode(null);
+    }
 
-        try {
-            ParME.encode(null);
-            Assert.fail("passed: encode(null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+
+    @Test
+    public static void testEncodeWithEmpty() {
+        ParME.encode(new Hashtable());
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncode() {
 
         final Hashtable<String, String> decoded =
             new Hashtable<String, String>();
 
-//        try {
-//            KVPME.encode(decoded);
-//            Assert.fail("passed: encode([EMPTY])");
-//        } catch (IllegalArgumentException iae) {
-//            // expected
-//        }
+        final int count = RANDOM.nextInt(64);
+        for (int i = 0; i < count; i++) {
+            decoded.put(RandomStringUtils.random(RANDOM.nextInt(32)),
+                        RandomStringUtils.random(RANDOM.nextInt(32)));
+        }
 
-        decoded.put(RandomStringUtils.random(RANDOM.nextInt(16)),
-                    RandomStringUtils.random(RANDOM.nextInt(16)));
+        ParME.encode(decoded);
+    }
 
-        final String encoded = ParME.encode(decoded);
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public static void testDecodeWithNull() {
+        ParME.decode(null);
     }
 
 
     @Test
-    public static void testDecode() {
+    public static void testDecodeWithEmpty() {
+        ParME.decode("");
+    }
 
-        try {
-            ParME.decode(null);
-            Assert.fail("passed: decode(null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
 
-//        try {
-//            KVPME.decode("");
-//            Assert.fail("passed: decode([EMPTY])");
-//        } catch (IllegalArgumentException iae) {
-//            // expected
-//        }
+    @Test
+    public static void testDecodeForValidEncoded() {
 
-        {
-            final Hashtable decoded = ParME.decode("");
-            Assert.assertTrue(decoded.isEmpty());
-        }
-
-        {
-            try {
-                final Hashtable decoded = ParME.decode("&");
-                Assert.fail("passed: decode(\"&\")");
-            } catch (IllegalArgumentException iae) {
-                // expected;
-            }
-        }
-
-        {
-            final Hashtable decoded = ParME.decode("=");
-            Assert.assertTrue(decoded.size() == 1);
-        }
-
-        {
-            try {
-                final Hashtable decoded = ParME.decode("=&=");
-                Assert.fail("passed: decode(\"=&=\")");
-            } catch (IllegalArgumentException iae) {
-                // expected
-            }
+        for (String valid : ParTest.VALID_ENCODED) {
+            ParME.decode(valid);
         }
     }
 
 
-    private static void testEncodeDecode(final Hashtable expected) {
-        final String encoded = ParME.encode(expected);
-        final Hashtable actual = ParME.decode(encoded);
-        Assert.assertEquals(actual, expected);
+    @Test
+    public static void testDecodeForInvalidEncoded() {
+
+        for (String invalid : ParTest.INVALID_ENCODED) {
+            try {
+                ParME.decode(invalid);
+                Assert.fail("passed: decode(\"" + invalid + "\")");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
     }
 
 
@@ -123,17 +105,17 @@ public class ParMETest {
 
         final Hashtable expected = new Hashtable();
 
-        testEncodeDecode(expected);
-        expected.clear();
-
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, val);
+            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                         RandomStringUtils.random(RANDOM.nextInt(128)));
         }
 
-        testEncodeDecode(expected);
+        final String encoded = ParME.encode(expected);
+
+        final Hashtable actual = ParME.decode(encoded);
+
+        Assert.assertEquals(actual, expected);
     }
 
 
@@ -142,11 +124,10 @@ public class ParMETest {
 
         final Hashtable expected = new Hashtable();
 
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = RANDOM.nextInt(128);
         for (int i = 0; i < count; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, val);
+            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                         RandomStringUtils.random(RANDOM.nextInt(128)));
         }
 
         final String encoded = ParME.encode(expected);
@@ -160,14 +141,12 @@ public class ParMETest {
     @Test
     public static void testDecodingAgainstSE() {
 
-
         final Map<String, String> expected = new HashMap<String, String>();
 
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = RANDOM.nextInt(128);
         for (int i = 0; i < count; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, val);
+            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                         RandomStringUtils.random(RANDOM.nextInt(128)));
         }
 
         final String encoded = Par.encode(expected);

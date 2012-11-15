@@ -33,10 +33,10 @@ public class PerTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test
+    @Test(invocationCount = 128)
     public static void testEncodeDecode() {
 
-        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        final byte[] expected = new byte[RANDOM.nextInt(64)];
         RANDOM.nextBytes(expected);
 
         final byte[] encoded = Per.encode(expected);
@@ -47,10 +47,10 @@ public class PerTest {
     }
 
 
-    @Test
+    @Test(invocationCount = 128)
     public static void testEncodeDecodeString() {
 
-        final byte[] expected = new byte[RANDOM.nextInt(512) + 512];
+        final byte[] expected = new byte[RANDOM.nextInt(64)];
         RANDOM.nextBytes(expected);
 
         final String encoded = Per.encodeToString(expected);

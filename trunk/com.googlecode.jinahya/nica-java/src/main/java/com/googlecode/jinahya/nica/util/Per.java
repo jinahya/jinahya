@@ -23,10 +23,112 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
+ * A percent encoder.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Per {
+
+
+    /**
+     * Encodes given
+     * <code>decoded</code>.
+     *
+     * @param decoded input bytes to encode.
+     * @return output bytes.
+     */
+    public static byte[] encode(final byte[] decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        final ByteArrayOutputStream encoded =
+            new ByteArrayOutputStream(decoded.length * 3); // possible maximum
+
+        final byte[] hex = new byte[2];
+        for (int i = 0; i < decoded.length; i++) {
+            if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) //    [0-9]
+                || (decoded[i] >= 0x41 && decoded[i] <= 0x5A) // [a-z]
+                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A) // [A-Z]
+                || decoded[i] == 0x2D //                         '-'
+                || decoded[i] == 0x5F //                         '_'
+                || decoded[i] == 0x2E //                         '.'
+                || decoded[i] == 0x7E) { //                      '~'
+                encoded.write(decoded[i]);
+            } else {
+                encoded.write(0x25); //                          '%'
+                Hex.encodeSingle(decoded[i] & 0xFF, hex, 0);
+                encoded.write(hex[0]);
+                encoded.write(hex[1]);
+            }
+        }
+
+        return encoded.toByteArray();
+    }
+
+
+    /**
+     * Encodes given
+     * <code>decoded</code>.
+     *
+     * @param decoded the UTF-8 string to encode
+     * @return decoded output as octets
+     */
+    public static byte[] encode(final String decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        try {
+            return encode(decoded.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" not supported?");
+        }
+    }
+
+
+    /**
+     * Encodes given
+     * <code>decoded</code> and returns as a US-ASCII encoded string.
+     *
+     * @param decoded the octets to encode
+     * @return encoded output as a string
+     */
+    public static String encodeToString(final byte[] decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        try {
+            return new String(encode(decoded), "US-ASCII");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported?");
+        }
+    }
+
+
+    /**
+     * Encodes given
+     * <code>decoded</code> and returns as a US-ASCII encoded string.
+     *
+     * @param decoded the string to encode; must be UTF-8 decodable
+     * @return encoded output as a string
+     */
+    public static String encodeToString(final String decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        try {
+            return encodeToString(decoded.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?");
+        }
+    }
 
 
     /**
@@ -43,7 +145,7 @@ public class Per {
         }
 
         final ByteArrayOutputStream decoded =
-            new ByteArrayOutputStream(encoded.length);
+            new ByteArrayOutputStream(encoded.length); // possible maximum
 
         for (int i = 0; i < encoded.length; i++) {
             if ((encoded[i] >= 0x30 && encoded[i] <= 0x39) //    [0-9]
@@ -127,110 +229,9 @@ public class Per {
         }
 
         try {
-            return new String(decode(encoded), "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?");
-        }
-    }
-
-
-    /**
-     * Encodes given
-     * <code>decoded</code>.
-     *
-     * @param decoded the octets to encode
-     * @return encoded output as octets
-     */
-    public static byte[] encode(final byte[] decoded) {
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        final ByteArrayOutputStream encoded =
-            new ByteArrayOutputStream(decoded.length * 3);
-
-        final byte[] hex = new byte[2];
-        for (int i = 0; i < decoded.length; i++) {
-            if ((decoded[i] >= 0x30 && decoded[i] <= 0x39) //    [0-9]
-                || (decoded[i] >= 0x41 && decoded[i] <= 0x5A) // [a-z]
-                || (decoded[i] >= 0x61 && decoded[i] <= 0x7A) // [A-Z]
-                || decoded[i] == 0x2D //                         '-'
-                || decoded[i] == 0x5F //                         '_'
-                || decoded[i] == 0x2E //                         '.'
-                || decoded[i] == 0x7E) { //                      '~'
-                encoded.write(decoded[i]);
-            } else {
-                encoded.write(0x25); //                          '%'
-                Hex.encodeSingle(decoded[i] & 0xFF, hex, 0);
-                encoded.write(hex[0]);
-                encoded.write(hex[1]);
-            }
-        }
-
-        return encoded.toByteArray();
-    }
-
-
-    /**
-     * Encodes given
-     * <code>decoded</code>.
-     *
-     * @param decoded the UTF-8 string to encode
-     * @return decoded output as octets
-     */
-    public static byte[] encode(final String decoded) {
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        try {
-            return encode(decoded.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" not supported?");
-        }
-    }
-
-
-    /**
-     * Encodes given
-     * <code>decoded</code> and returns as a US-ASCII encoded string.
-     *
-     * @param decoded the octets to encode
-     * @return encoded output as a string
-     */
-    public static String encodeToString(final byte[] decoded) {
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        try {
-            return new String(encode(decoded), "US-ASCII");
+            return decodeToString(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?");
-        }
-    }
-
-
-    /**
-     * Encodes given
-     * <code>decoded</code> and returns as a US-ASCII encoded string.
-     *
-     * @param decoded the string to encode; must be UTF-8 decodable
-     * @return encoded output as a string
-     */
-    public static String encodeToString(final String decoded) {
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        try {
-            return encodeToString(decoded.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 

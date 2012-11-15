@@ -33,48 +33,13 @@ public class HacBC extends Hac {
     /**
      * Returns a new synchronized (thread-safe) instance.
      *
-     * @param key key
+     * @param key the encryption key.
      *
      * @return a new synchronized instance.
      */
     public static Hac newSynchronizedInstance(final byte[] key) {
 
-        if (key == null) {
-            throw new IllegalArgumentException("null key");
-        }
-
-        if (key.length != Aes.KEY_SIZE_IN_BYTES) {
-            throw new IllegalArgumentException(
-                "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
-        }
-
-        final HMac mac = new HMac(new SHA512Digest());
-        mac.init(new KeyParameter(key));
-
-        return new Hac() {
-
-
-            //@Override
-            public byte[] authenticate(byte[] message) {
-
-                if (message == null) {
-                    throw new IllegalArgumentException("null message");
-                }
-
-                synchronized (mac) {
-
-                    final byte[] authenticated = new byte[mac.getMacSize()];
-
-                    mac.reset();
-                    mac.update(message, 0, message.length);
-                    mac.doFinal(authenticated, 0);
-
-                    return authenticated;
-                }
-            }
-
-
-        };
+        return synchronizedHac(new HacBC(key));
     }
 
 
