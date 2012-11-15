@@ -28,14 +28,14 @@ import java.lang.reflect.Proxy;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HexDecoderProxy implements InvocationHandler {
+public class HexBinaryDecoderProxy implements InvocationHandler {
 
 
     /**
      * Class for
      * <code>org.apache.commons.codec.BinaryEncoder</code>.
      */
-    private static final Class BINARY_DECODER_CLASS;
+    private static final Class<?> BINARY_DECODER_CLASS;
 
 
     static {
@@ -44,6 +44,32 @@ public class HexDecoderProxy implements InvocationHandler {
                 "org.apache.commons.codec.BinaryDecoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
+        }
+    }
+
+
+    private static final Method DECODE_BYTES_METHOD;
+
+
+    static {
+        try {
+            DECODE_BYTES_METHOD =
+                BINARY_DECODER_CLASS.getMethod("decode", byte[].class);
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
+        }
+    }
+
+
+    private static final Method DECODE_OBJECT_METHOD;
+
+
+    static {
+        try {
+            DECODE_OBJECT_METHOD =
+                BINARY_DECODER_CLASS.getMethod("decode", Object.class);
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
         }
     }
 
@@ -110,9 +136,43 @@ public class HexDecoderProxy implements InvocationHandler {
      */
     public static Object newInstance() {
 
+        return newInstance(new HexDecoder());
+    }
+
+
+    /**
+     * Creates a new proxy instance for
+     * <code>org.apache.commons.codec.BinaryDecoder</code>.
+     *
+     * @param hexDecoder the HexDecoder instance to use.
+     *
+     * @return a new proxy instance.
+     */
+    public static Object newInstance(final HexDecoder hexDecoder) {
+
+        if (hexDecoder == null) {
+            throw new IllegalArgumentException("null hexDecoder");
+        }
+
         return Proxy.newProxyInstance(BINARY_DECODER_CLASS.getClassLoader(),
-                                      new Class[]{BINARY_DECODER_CLASS},
-                                      new HexDecoderProxy());
+                                      new Class<?>[]{BINARY_DECODER_CLASS},
+                                      new HexBinaryDecoderProxy(hexDecoder));
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param hexDecoder the HexDecoder to use.
+     */
+    protected HexBinaryDecoderProxy(final HexDecoder hexDecoder) {
+        super();
+
+        if (hexDecoder == null) {
+            throw new IllegalArgumentException("null hexDecoder");
+        }
+
+        this.hexDecoder = hexDecoder;
     }
 
 
@@ -121,8 +181,31 @@ public class HexDecoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        return HexDecoder.decodeMultiple((byte[]) args[0]);
+        if (DECODE_BYTES_METHOD.equals(method)) {
+            return hexDecoder.decode((byte[]) args[0]);
+        }
+
+        if (DECODE_OBJECT_METHOD.equals(method)) {
+            if (args[0] instanceof byte[]) {
+                return invoke(proxy, DECODE_BYTES_METHOD,
+                              new Object[]{(byte[]) args[0]});
+            } else {
+                try {
+                    return invoke(
+                        proxy, DECODE_BYTES_METHOD,
+                        new Object[]{((String) args[0]).getBytes("US-ASCII")});
+                } catch (ClassCastException cce) {
+                    throw newDecoderException(cce);
+                }
+            }
+        }
+
+        throw new UnsupportedOperationException(
+            "unsupported: [" + method + "]");
     }
+
+
+    private final HexDecoder hexDecoder;
 
 
 }

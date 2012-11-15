@@ -18,8 +18,10 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.util.Random;
-import org.apache.commons.codec.DecoderException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -32,19 +34,6 @@ import org.testng.annotations.Test;
 public class HexEncoderTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
-    private static byte[] newRandomBytes() {
-
-        synchronized (RANDOM) {
-            final byte[] bytes = new byte[RANDOM.nextInt(128)];
-            RANDOM.nextBytes(bytes);
-            return bytes;
-        }
-    }
-
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEncodeWithNull() {
         new HexEncoder().encode(null);
@@ -53,18 +42,21 @@ public class HexEncoderTest {
 
     @Test(invocationCount = 128)
     public void testEncode() {
-        new HexEncoder().encode(newRandomBytes());
+        new HexEncoder().encode(HexCodecTestUtil.newDecodedBytes());
     }
 
 
     @Test(invocationCount = 128)
-    public void testEncodingAgainstCommonsHex() throws DecoderException {
+    public void testAgainstCommonsCodecHex() throws EncoderException {
 
-        final byte[] expected = newRandomBytes();
+        final byte[] decoded = HexCodecTestUtil.newDecodedBytes();
 
-        final byte[] encoded = new HexEncoder().encode(expected);
+        final BinaryEncoder encoder = new Hex();
+        byte[] expected = new String(encoder.encode(decoded),
+                                     StandardCharsets.US_ASCII).
+            toUpperCase().getBytes(StandardCharsets.US_ASCII);
 
-        final byte[] actual = new Hex().decode(encoded);
+        final byte[] actual = new HexEncoder().encode(decoded);
 
         Assert.assertEquals(actual, expected);
     }

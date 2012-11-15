@@ -28,12 +28,12 @@ import java.lang.reflect.Proxy;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HexEncoderProxy implements InvocationHandler {
+public class HexBinaryEncoderProxy implements InvocationHandler {
 
 
     /**
      * Class for
-     * <code>org.apache.commons.codec.BinaryEncoder class</code>.
+     * <code>org.apache.commons.codec.BinaryEncoder</code>.
      */
     private static final Class<?> BINARY_ENCODER_CLASS;
 
@@ -44,6 +44,32 @@ public class HexEncoderProxy implements InvocationHandler {
                 "org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
+        }
+    }
+
+
+    private static final Method ENCODE_OBJECT_METHOD;
+
+
+    static {
+        try {
+            ENCODE_OBJECT_METHOD =
+                BINARY_ENCODER_CLASS.getMethod("encode", Object.class);
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
+        }
+    }
+
+
+    private static final Method ENCODE_BYTES_METHOD;
+
+
+    static {
+        try {
+            ENCODE_BYTES_METHOD =
+                BINARY_ENCODER_CLASS.getMethod("encode", byte[].class);
+        } catch (NoSuchMethodException nsme) {
+            throw new InstantiationError(nsme.getMessage());
         }
     }
 
@@ -66,6 +92,15 @@ public class HexEncoderProxy implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance of
+     * <code>org.apache.commons.codec.EncoderException</code>.
+     *
+     * @return a new instance.
+     *
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     private static Throwable newEncoderException()
         throws InstantiationException, IllegalAccessException {
 
@@ -103,17 +138,51 @@ public class HexEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Returns a new instance of BinaryEncoder proxy.
+     * Returns a new proxy instance for
+     * <code>org.apache.commons.codec.BinaryEncoder</code>.
      *
-     * @param base base instance to use
-     *
-     * @return a new instance of BinaryEncoder proxy.
+     * @return a new proxy instance.
      */
     public static Object newInstance() {
 
+        return newInstance(new HexEncoder());
+    }
+
+
+    /**
+     * Returns a new proxy instance for
+     * <code>org.apache.commons.codec.BinaryEncoder</code> with given
+     * <code>hexEncoder</code>.
+     *
+     * @param hexEncoder the HexEncoder to use
+     *
+     * @return a new proxy instance.
+     */
+    public static Object newInstance(final HexEncoder hexEncoder) {
+
+        if (hexEncoder == null) {
+            throw new IllegalArgumentException("null hexEncoder");
+        }
+
         return Proxy.newProxyInstance(BINARY_ENCODER_CLASS.getClassLoader(),
-                                      new Class[]{BINARY_ENCODER_CLASS},
-                                      new HexEncoderProxy());
+                                      new Class<?>[]{BINARY_ENCODER_CLASS},
+                                      new HexBinaryEncoderProxy(hexEncoder));
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param hexEncoder the HexEncoder to use.
+     */
+    protected HexBinaryEncoderProxy(final HexEncoder hexEncoder) {
+        super();
+
+        if (hexEncoder == null) {
+            throw new IllegalArgumentException("null hexEncoder");
+        }
+
+        this.hexEncoder = hexEncoder;
     }
 
 
@@ -122,8 +191,31 @@ public class HexEncoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        return HexEncoder.encodeMultiple((byte[]) args[0]);
+        if (ENCODE_BYTES_METHOD.equals(method)) {
+            return hexEncoder.encode((byte[]) args[0]);
+        }
+
+        if (ENCODE_OBJECT_METHOD.equals(method)) {
+            if (args[0] instanceof byte[]) {
+                return invoke(proxy, ENCODE_BYTES_METHOD,
+                              new Object[]{(byte[]) args[0]});
+            } else {
+                try {
+                    final byte[] bytes = ((String) args[0]).getBytes("UTF-8");
+                    return invoke(proxy, ENCODE_BYTES_METHOD,
+                                  new Object[]{bytes});
+                } catch (ClassCastException cce) {
+                    throw newEncoderException(cce);
+                }
+            }
+        }
+
+        throw new UnsupportedOperationException(
+            "unsupported: [" + method + "]");
     }
+
+
+    private final HexEncoder hexEncoder;
 
 
 }
