@@ -59,6 +59,11 @@ public abstract class ShaTest<S extends Sha> {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @return a new instance.
+     */
     protected abstract S newInstance();
 
 
@@ -88,7 +93,7 @@ public abstract class ShaTest<S extends Sha> {
 
         try {
             sha.hash((String) null);
-            Assert.fail("passed: hash((byte[]) null)");
+            Assert.fail("passed: hash((String) null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
@@ -124,7 +129,7 @@ public abstract class ShaTest<S extends Sha> {
 
         try {
             sha.hashToString((String) null);
-            Assert.fail("passed: hash((byte[]) null)");
+            Assert.fail("passed: hash((String) null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }

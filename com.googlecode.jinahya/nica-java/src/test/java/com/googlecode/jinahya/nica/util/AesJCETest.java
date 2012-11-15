@@ -29,23 +29,15 @@ import org.testng.annotations.Test;
 public class AesJCETest extends AesTest<AesJCE> {
 
 
+    @Test(expectedExceptions = IllegalArgumentException.class,
+          invocationCount = 128)
+    public void testConstructorWithWrongKey() {
+        new AesJCE(newWrongKey());
+    }
+
+
     @Test
-    public void testConstructors() {
-
-        try {
-            new AesJCE(null);
-            Assert.fail("passed: new AESJCE(null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES + 1]);
-            Assert.fail("passed: new AESJCE(byte[AES.KEY_SIZE_IN_BYTES + 1])");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
+    public void testConstructor() {
         final Aes aes = new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES]);
     }
 

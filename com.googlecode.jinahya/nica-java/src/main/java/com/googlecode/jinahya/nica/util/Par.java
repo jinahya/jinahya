@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 
 /**
@@ -30,6 +31,24 @@ import java.util.TreeMap;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Par {
+
+
+    protected static final String WORD = "[^=&]*";
+//        "([\\p{Alnum}\\-\\._~]|%(\\p{XDigit}{2}))*";
+
+
+    protected static final String PAIR = WORD + "=" + WORD;
+
+
+    protected static final String REGEX = "(" + PAIR + ")?(&(" + PAIR + "))*";
+
+
+    protected static final Pattern PATTERN;
+
+
+    static {
+        PATTERN = Pattern.compile(REGEX);
+    }
 
 
     /**
@@ -51,11 +70,11 @@ public class Par {
         for (Entry<String, String> entry : decoded.entrySet()) {
             final String key = entry.getKey();
             if (key == null) {
-                throw new IllegalArgumentException("null key");
+                throw new IllegalArgumentException("null key detected");
             }
             final String value = entry.getValue();
             if (value == null) {
-                throw new IllegalArgumentException("null value");
+                throw new IllegalArgumentException("null value detected");
             }
             encoded.put(Per.encodeToString(key), Per.encodeToString(value));
         }
@@ -97,35 +116,39 @@ public class Par {
 
         final Map<String, String> decoded = new HashMap<String, String>();
 
-        int f = 0;
-        for (int a = -1; (a = encoded.indexOf('&', f)) != -1;) {
-            if (a == f) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final int e = encoded.indexOf('=', f);
-            if (e > a) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final String key = Per.decodeToString(encoded.substring(f, e));
-            final String value = Per.decodeToString(
-                encoded.substring(e + 1, a));
-            if (decoded.put(key, value) != null) {
-                throw new IllegalArgumentException(
-                    "illegal encoded: duplicated entry: " + key);
-            }
-            f = a + 1;
+        if (encoded.isEmpty()) {
+            return decoded;
         }
 
-        if (f < encoded.length()) {
-            final int e = encoded.indexOf('=', f);
-            if (e == -1) {
+        int fr = 0;
+        for (int am = -1; (am = encoded.indexOf('&', fr)) != -1;) {
+            if (am == fr) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = Per.decodeToString(encoded.substring(f, e));
-            final String value = Per.decodeToString(encoded.substring(e + 1));
+            final int eq = encoded.indexOf('=', fr);
+            if (eq == -1 || eq > am) {
+                throw new IllegalArgumentException("illegal encoded");
+            }
+            final String key = Per.decodeToString(encoded.substring(fr, eq));
+            final String value =
+                Per.decodeToString(encoded.substring(eq + 1, am));
             if (decoded.put(key, value) != null) {
                 throw new IllegalArgumentException(
-                    "illegal encoded: duplicated key: " + key);
+                    "illegal encoded: duplicate entry: " + key);
+            }
+            fr = am + 1;
+        }
+
+        if (fr <= encoded.length()) {
+            final int eq = encoded.indexOf('=', fr);
+            if (eq == -1) {
+                throw new IllegalArgumentException("illegal encoded");
+            }
+            final String key = Per.decodeToString(encoded.substring(fr, eq));
+            final String value = Per.decodeToString(encoded.substring(eq + 1));
+            if (decoded.put(key, value) != null) {
+                throw new IllegalArgumentException(
+                    "illegal encoded: duplicate key: " + key);
             }
         }
 

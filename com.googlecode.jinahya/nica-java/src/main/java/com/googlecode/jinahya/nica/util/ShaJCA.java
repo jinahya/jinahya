@@ -41,37 +41,7 @@ public class ShaJCA extends Sha {
      * @return a new synchronized instance
      */
     public static Sha newSynchronizedInstance() {
-
-        final MessageDigest messageDigest;
-
-        try {
-            messageDigest = MessageDigest.getInstance(ALGORITHM);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?");
-        }
-
-        return new Sha() {
-
-
-            @Override
-            public byte[] hash(final byte[] data) {
-
-                if (data == null) {
-                    throw new IllegalArgumentException("null data");
-                }
-
-                synchronized (messageDigest) {
-
-                    messageDigest.reset();
-
-                    messageDigest.update(data);
-
-                    return messageDigest.digest();
-                }
-            }
-
-
-        };
+        return synchronizedSha(new ShaJCA());
     }
 
 
@@ -84,8 +54,8 @@ public class ShaJCA extends Sha {
         try {
             messageDigest = MessageDigest.getInstance(ALGORITHM);
         } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException("\"" + ALGORITHM + "\" not available?",
-                                       nsae);
+            throw new RuntimeException(
+                "\"" + ALGORITHM + "\" not available?", nsae);
         }
     }
 
@@ -97,10 +67,12 @@ public class ShaJCA extends Sha {
             throw new IllegalArgumentException("null data");
         }
 
-        messageDigest.reset();
-        messageDigest.update(data);
+//        messageDigest.reset();
+//        messageDigest.update(data);
+//
+//        return messageDigest.digest();
 
-        return messageDigest.digest();
+        return messageDigest.digest(data);
     }
 
 

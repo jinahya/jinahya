@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -36,10 +37,82 @@ public class ParTest {
     private static final Random RANDOM = new Random();
 
 
-    private void testEncodeDecode(final Map<String, String> expected) {
+    protected static final String[] VALID_ENCODED = new String[]{
+        "",
+        "=",
+        "a=",
+        "a=&=",
+        "a=b",
+        "a=b&b=c"
+    };
+
+
+    protected static final String[] INVALID_ENCODED = new String[]{
+        "&",
+        "a",
+        "a&",
+        "=&",
+        "=&=",
+        "a=&",
+        "a=&a="
+    };
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testEncodeWithNull() {
+        Par.encode(null);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeWithEmpty() {
+        Par.encode(Collections.<String, String>emptyMap());
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncode() {
+
+//        System.out.println(Par.WORD);
+//        System.out.println(Par.PAIR);
+//        System.out.println(Par.REGEX);
+
+        final Map<String, String> expected = new HashMap<String, String>();
+
+        final int count = RANDOM.nextInt(64);
+        for (int i = 0; i < count; i++) {
+            expected.put(RandomStringUtils.random(RANDOM.nextInt(32)),
+                         RandomStringUtils.random(RANDOM.nextInt(32)));
+        }
+
         final String encoded = Par.encode(expected);
-        final Map<String, String> actual = Par.decode(encoded);
-        Assert.assertEquals(actual, expected);
+
+        final boolean matches = Par.PATTERN.matcher(encoded).matches();
+
+        Assert.assertTrue(Par.PATTERN.matcher(encoded).matches());
+    }
+
+
+    @Test
+    public static void testDecodeForValidEncoded() {
+
+        for (String valid : VALID_ENCODED) {
+            Par.decode(valid);
+        }
+    }
+
+
+    @Test
+    public static void testDecodeForInvalidEncoded() {
+
+        for (String invalid : INVALID_ENCODED) {
+            try {
+                Par.decode(invalid);
+                Assert.fail("passed: decode(\"" + invalid + "\")");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
     }
 
 
@@ -48,19 +121,17 @@ public class ParTest {
 
         final Map<String, String> expected = new HashMap<String, String>();
 
-        testEncodeDecode(expected);
-
-        expected.put("", "");
-        testEncodeDecode(expected);
-
-        expected.clear();
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = RANDOM.nextInt(128);
         for (int i = 0; i < count; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(16));
-            final String val = RandomStringUtils.random(RANDOM.nextInt(16));
-            expected.put(key, val);
+            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                         RandomStringUtils.random(RANDOM.nextInt(128)));
         }
-        testEncodeDecode(expected);
+
+        final String encoded = Par.encode(expected);
+
+        final Map<String, String> actual = Par.decode(encoded);
+
+        Assert.assertEquals(actual, expected);
     }
 
 

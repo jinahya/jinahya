@@ -67,8 +67,7 @@ public enum Platform {
             }
         }
 
-        throw new IllegalArgumentException(
-            "constant not found for id: " + id);
+        throw new IllegalArgumentException("unknown id: " + id);
     }
 
 

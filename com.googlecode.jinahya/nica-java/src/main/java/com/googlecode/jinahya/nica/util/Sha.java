@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
+ * An abstract class for SHA-512 codec.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -34,26 +35,26 @@ public abstract class Sha {
     private static class SynchronizedSha extends Sha {
 
 
-        public SynchronizedSha(final Sha sha) {
+        public SynchronizedSha(final Sha mutex) {
             super();
 
-            if (sha == null) {
-                throw new IllegalArgumentException("null sha");
+            if (mutex == null) {
+                throw new IllegalArgumentException("null mutex");
             }
 
-            this.sha = sha;
+            this.mutex = mutex;
         }
 
 
         //@Override
         public byte[] hash(final byte[] data) {
-            synchronized (sha) {
-                return sha.hash(data);
+            synchronized (mutex) {
+                return mutex.hash(data);
             }
         }
 
 
-        private final Sha sha;
+        private final Sha mutex;
 
 
     }
@@ -66,6 +67,11 @@ public abstract class Sha {
      * @return a synchronized instance.
      */
     public static Sha synchronizedSha(final Sha sha) {
+
+        if (sha == null) {
+            throw new IllegalArgumentException("null sha");
+        }
+
         return new SynchronizedSha(sha);
     }
 

@@ -54,10 +54,42 @@ public abstract class AesTest<A extends Aes> {
     }
 
 
+    protected static byte[] newWrongKey() {
+        switch (ThreadLocalRandom.current().nextInt() % 5) {
+            case 0:
+                return new byte[0];
+            case 1:
+                return new byte[Aes.KEY_SIZE_IN_BYTES - 1];
+            case 2:
+                return new byte[Aes.KEY_SIZE_IN_BYTES + 1];
+            case 3:
+            case 4:
+            default:
+                return null;
+        }
+    }
+
+
     protected static byte[] newIv() {
         final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
         ThreadLocalRandom.current().nextBytes(iv);
         return iv;
+    }
+
+
+    protected static byte[] newWrongIv() {
+        switch (ThreadLocalRandom.current().nextInt() % 5) {
+            case 0:
+                return new byte[0];
+            case 1:
+                return new byte[Aes.BLOCK_SIZE_IN_BYTES - 1];
+            case 2:
+                return new byte[Aes.BLOCK_SIZE_IN_BYTES + 1];
+            case 3:
+            case 4:
+            default:
+                return null;
+        }
     }
 
 
@@ -66,6 +98,34 @@ public abstract class AesTest<A extends Aes> {
         final byte[] input = new byte[random.nextInt(65536)];
         random.nextBytes(input);
         return input;
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testEncryptWithWrongIv() {
+
+        newInstance(newKey()).encrypt(newWrongIv(), new byte[0]);
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testEncryptWithNullInput() {
+
+        newInstance(newKey()).encrypt(newIv(), null);
+    }
+
+
+    @Test
+    public void testEncryptWithEmptyInput() {
+
+        newInstance(newKey()).encrypt(newIv(), new byte[0]);
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testDecryptWithNullInput() {
+
+        newInstance(newKey()).decrypt(newIv(), null);
     }
 
 
@@ -91,10 +151,11 @@ public abstract class AesTest<A extends Aes> {
 
 
     /**
+     * Creates a new instance.
      *
-     * @param key
+     * @param key the encryption key
      *
-     * @return
+     * @return a new instance
      */
     protected abstract A newInstance(final byte[] key);
 
