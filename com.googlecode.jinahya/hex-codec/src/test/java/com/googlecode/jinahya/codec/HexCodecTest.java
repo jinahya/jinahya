@@ -30,13 +30,10 @@ import org.testng.annotations.Test;
 public class HexCodecTest {
 
 
-    @Test
+    @Test(invocationCount = 128)
     public void testEncodeDecode() {
 
-        final Random random = new Random();
-
-        final byte[] expected = new byte[random.nextInt(128)];
-        random.nextBytes(expected);
+        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
 
         final byte[] encoded = new HexEncoder().encode(expected);
 

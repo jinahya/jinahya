@@ -19,7 +19,8 @@ package com.googlecode.jinahya.codec;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
+import org.apache.commons.codec.BinaryDecoder;
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -30,19 +31,6 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class HexDecoderTest {
-
-
-    private static final Random RANDOM = new Random();
-
-
-    private static byte[] newRandomBytes() {
-
-        synchronized (RANDOM) {
-            final byte[] bytes = new byte[RANDOM.nextInt(1024)];
-            RANDOM.nextBytes(bytes);
-            return bytes;
-        }
-    }
 
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -70,13 +58,13 @@ public class HexDecoderTest {
 
 
     @Test
-    public void testDecodingAgainstCommonsHex()
-        throws UnsupportedEncodingException {
+    public void testAgainstCommonsCodecHex()
+        throws DecoderException, UnsupportedEncodingException {
 
-        final byte[] expected = newRandomBytes();
+        final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
 
-        final byte[] encoded =
-            new String(Hex.encodeHex(expected, false)).getBytes("US-ASCII");
+        final BinaryDecoder decoder = new Hex();
+        final byte[] expected = decoder.decode(encoded);
 
         final byte[] actual = new HexDecoder().decode(encoded);
 
