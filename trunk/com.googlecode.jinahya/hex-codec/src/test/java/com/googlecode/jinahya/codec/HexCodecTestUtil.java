@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,14 +28,14 @@ import org.apache.commons.lang3.RandomStringUtils;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-final class HexCodecTestUtil {
+class HexCodecTestUtil {
 
 
     protected static byte[] newDecodedBytes() {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] bytes = new byte[random.nextInt(1024)];
+        final byte[] bytes = new byte[random.nextInt(128)];
 
         random.nextBytes(bytes);
 
@@ -47,7 +47,7 @@ final class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        return RandomStringUtils.random(random.nextInt(1024));
+        return RandomStringUtils.random(random.nextInt(128));
     }
 
 
@@ -55,7 +55,7 @@ final class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] bytes = new byte[random.nextInt(512) << 1]; // even
+        final byte[] bytes = new byte[random.nextInt(64) << 1]; // even
 
         for (int i = 0; i < bytes.length; i++) {
             switch (random.nextInt(3)) {
@@ -88,11 +88,7 @@ final class HexCodecTestUtil {
 
 
     protected static String newEncodedString() {
-        try {
-            return new String(newEncodedBytes(), "US-ASCII");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
-        }
+        return new String(newEncodedBytes(), StandardCharsets.US_ASCII);
     }
 
 

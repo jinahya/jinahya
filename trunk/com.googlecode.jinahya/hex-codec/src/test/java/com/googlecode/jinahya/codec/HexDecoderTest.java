@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.io.UnsupportedEncodingException;
-import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
@@ -53,18 +51,17 @@ public class HexDecoderTest {
 
     @Test
     public void testDecode() {
-        new HexDecoder().decode(new byte[]{0x30, 0x66}); // '0', 'f'
+        new HexDecoder().decode(new byte[0]);
+        new HexDecoder().decode(HexCodecTestUtil.newEncodedBytes());
     }
 
 
     @Test
-    public void testAgainstCommonsCodecHex()
-        throws DecoderException, UnsupportedEncodingException {
+    public void testAgainstCommonsCodecHex() throws DecoderException {
 
         final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
 
-        final BinaryDecoder decoder = new Hex();
-        final byte[] expected = decoder.decode(encoded);
+        final byte[] expected = new Hex().decode(encoded);
 
         final byte[] actual = new HexDecoder().decode(encoded);
 
