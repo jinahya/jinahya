@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,15 +29,39 @@ import org.testng.annotations.Test;
 public class HexCodecTest {
 
 
+    @Test
+    public void testEncodeDecodeLikeABoss() {
+        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
+        final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
+        Assert.assertEquals(actual, expected);
+        System.out.println("Damn, I'm good!");
+    }
+
+
+    @Test
+    public void testEncode() {
+        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
+        final byte[] actual = new HexDecoder().decode(encoded);
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testDecode() {
+        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] encoded = new HexEncoder().encode(expected);
+        final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
+        Assert.assertEquals(actual, expected);
+    }
+
+
     @Test(invocationCount = 128)
     public void testEncodeDecode() {
-
         final byte[] expected = HexCodecTestUtil.newDecodedBytes();
-
         final byte[] encoded = new HexEncoder().encode(expected);
-
         final byte[] actual = new HexDecoder().decode(encoded);
-
         Assert.assertEquals(actual, expected);
     }
 

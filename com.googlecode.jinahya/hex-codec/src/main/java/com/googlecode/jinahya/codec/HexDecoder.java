@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.nio.charset.StandardCharsets;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -26,10 +29,11 @@ public class HexDecoder {
 
 
     /**
+     * Decodes a single nibble.
      *
-     * @param encoded
+     * @param encoded the nibble to decode.
      *
-     * @return
+     * @return the decoded half octet.
      */
     protected static int decodeHalf(final int encoded) {
 
@@ -66,11 +70,12 @@ public class HexDecoder {
 
 
     /**
+     * Decodes two nibbles into a single octet.
      *
-     * @param encoded
-     * @param offset
+     * @param encoded the nibble array.
+     * @param offset the offset in the array.
      *
-     * @return
+     * @return decoded octet.
      */
     protected static int decodeSingle(final byte[] encoded, final int offset) {
 
@@ -94,10 +99,11 @@ public class HexDecoder {
 
 
     /**
+     * Encodes given octets into a nibbles.
      *
-     * @param encoded
+     * @param encoded the octets to encode.
      *
-     * @return
+     * @return the encoded nibbles.
      */
     protected static byte[] decodeMultiple(final byte[] encoded) {
 
@@ -111,8 +117,8 @@ public class HexDecoder {
         }
 
         final byte[] decoded = new byte[encoded.length >> 1];
-        int offset = 0;
 
+        int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
             decoded[i] = (byte) decodeSingle(encoded, offset);
             offset += 2;
@@ -123,16 +129,34 @@ public class HexDecoder {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given sequence of nibbles into a sequence of octets.
      *
-     * @param encoded the bytes to decode
+     * @param encoded the nibbles to decode.
      *
-     * @return decoded output
+     * @return the decoded octets.
      */
     public byte[] decode(final byte[] encoded) {
-
         return decodeMultiple(encoded);
+    }
+
+
+    /**
+     * Decodes given sequence of nibbles into a sequence of octets.
+     *
+     * @param encoded the nibbles to decode.
+     *
+     * @return the decoded octets.
+     */
+    public byte[] decodeLikeABoss(byte[] encoded) {
+
+        byte[] decoded = new byte[encoded.length / 2];
+
+        for (int i = 0; i < decoded.length; i++) {
+            String s = new String(encoded, i * 2, 2, StandardCharsets.US_ASCII);
+            decoded[i] = (byte) Integer.parseInt(s, 16);
+        }
+
+        return decoded;
     }
 
 

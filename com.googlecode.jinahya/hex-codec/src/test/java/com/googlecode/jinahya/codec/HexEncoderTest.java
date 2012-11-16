@@ -18,9 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
@@ -42,6 +40,7 @@ public class HexEncoderTest {
 
     @Test(invocationCount = 128)
     public void testEncode() {
+        new HexEncoder().encode(new byte[0]);
         new HexEncoder().encode(HexCodecTestUtil.newDecodedBytes());
     }
 
@@ -51,9 +50,8 @@ public class HexEncoderTest {
 
         final byte[] decoded = HexCodecTestUtil.newDecodedBytes();
 
-        final BinaryEncoder encoder = new Hex();
-        byte[] expected = new String(encoder.encode(decoded),
-                                     StandardCharsets.US_ASCII).
+        final byte[] expected =
+            new String(new Hex().encode(decoded), StandardCharsets.US_ASCII).
             toUpperCase().getBytes(StandardCharsets.US_ASCII);
 
         final byte[] actual = new HexEncoder().encode(decoded);

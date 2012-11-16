@@ -26,12 +26,11 @@ public class HexEncoder {
 
 
     /**
-     * Encodes a half portion of an octet.
+     * Encodes a single nibble.
      *
-     * @param decoded the octet to encode; must be between 0x0 (inclusive) and
-     * 0xF (inclusive)
+     * @param decoded the nibble to encode.
      *
-     * @return the encoded ASCII character.
+     * @return the encoded half octet.
      */
     protected static int encodeHalf(final int decoded) {
 
@@ -61,16 +60,10 @@ public class HexEncoder {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code> and writes those 2 characters onto
-     * <code>encoded</code>[
-     * <code>offset</code>] and
-     * <code>encoded</code>[
-     * <code>offset</code> + 1].
+     * Encodes a single octet into two nibbles.
      *
-     * @param decoded the octet whose lower 8 bits are encoded as 2 ASCII
-     * characters.
-     * @param encoded the byte array to which encoded characters are written.
+     * @param decoded the octet to encode.
+     * @param encoded the array to which each encoded nibbles are written.
      * @param offset the offset in the array.
      */
     protected static void encodeSingle(final int decoded, final byte[] encoded,
@@ -106,12 +99,11 @@ public class HexEncoder {
 
 
     /**
-     * Decodes given
-     * <code>decoded</code>.
+     * Decodes given sequence of octets into a sequence of nibbles.
      *
-     * @param decoded the bytes to encode
+     * @param decoded the octets to encode
      *
-     * @return the decoded bytes.
+     * @return the encoded nibbles.
      */
     protected static byte[] encodeMultiple(final byte[] decoded) {
 
@@ -120,8 +112,8 @@ public class HexEncoder {
         }
 
         final byte[] encoded = new byte[decoded.length << 1];
-        int offset = 0;
 
+        int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
             encodeSingle(decoded[i], encoded, offset);
             offset += 2;
@@ -132,15 +124,40 @@ public class HexEncoder {
 
 
     /**
-     * Encodes given byte array and returns result as a byte array.
+     * Encodes given sequence of octets into a sequence of nibbles.
      *
-     * @param decoded the bytes to encode.
+     * @param decoded the octets to encode.
      *
-     * @return the encoded output.
+     * @return the encoded nibbles.
      */
     public byte[] encode(final byte[] decoded) {
 
         return encodeMultiple(decoded);
+    }
+
+
+    /**
+     * Encodes given sequence of octets into a sequence of nibbles.
+     *
+     * @param decoded the octets to encode.
+     *
+     * @return the encoded nibbles.
+     */
+    public byte[] encodeLikeABoss(byte[] decoded) {
+
+        byte[] encoded = new byte[decoded.length * 2];
+
+        int i = 0;
+        for (byte b : decoded) {
+            String s = Integer.toHexString(b & 0xFF).toUpperCase();
+            if (s.length() == 1) {
+                s = "0" + s;
+            }
+            encoded[i++] = (byte) s.charAt(0);
+            encoded[i++] = (byte) s.charAt(1);
+        }
+
+        return encoded;
     }
 
 
