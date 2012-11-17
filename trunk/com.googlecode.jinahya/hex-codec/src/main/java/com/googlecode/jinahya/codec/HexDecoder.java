@@ -83,6 +83,12 @@ public class HexDecoder {
             throw new IllegalArgumentException("null encoded");
         }
 
+        if (encoded.length < 2) {
+            // not required
+            throw new IllegalArgumentException(
+                "encoded.length(" + encoded.length + ") < 2");
+        }
+
         if (offset < 0) {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
@@ -99,11 +105,11 @@ public class HexDecoder {
 
 
     /**
-     * Encodes given octets into a nibbles.
+     * Encodes given sequence of nibbles into a sequence of octets.
      *
-     * @param encoded the octets to encode.
+     * @param encoded the nibbles to decode.
      *
-     * @return the encoded nibbles.
+     * @return the encoded octets.
      */
     protected static byte[] decodeMultiple(final byte[] encoded) {
 
