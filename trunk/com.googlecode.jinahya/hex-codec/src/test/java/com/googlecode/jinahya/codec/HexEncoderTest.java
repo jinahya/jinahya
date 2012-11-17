@@ -46,13 +46,11 @@ public class HexEncoderTest {
 
 
     @Test(invocationCount = 128)
-    public void testAgainstCommonsCodecHex() throws EncoderException {
+    public void testEncodeAgainstCommonsCodecHex() throws EncoderException {
 
         final byte[] decoded = HexCodecTestUtil.newDecodedBytes();
 
-        final byte[] expected =
-            new String(new Hex().encode(decoded), StandardCharsets.US_ASCII).
-            toUpperCase().getBytes(StandardCharsets.US_ASCII);
+        final byte[] expected = new Hex().encode(decoded);
 
         final byte[] actual = new HexEncoder().encode(decoded);
 

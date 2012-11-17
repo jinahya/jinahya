@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,13 +30,22 @@ import org.testng.annotations.Test;
 public class HexCodecTest {
 
 
-    @Test
+    @Test(invocationCount = 128)
     public void testEncodeDecodeLikeABoss() {
-        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+
+        final byte[] expected =
+            new byte[ThreadLocalRandom.current().nextInt(1024)];
+        ThreadLocalRandom.current().nextBytes(expected);
+
         final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
+        for (int b : encoded) {
+            Assert.assertTrue((b >= 0x30 && b <= 0x39)
+                              || (b >= 0x61 && b <= 0x66));
+        }
+
         final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
+
         Assert.assertEquals(actual, expected);
-        System.out.println("Damn, I'm good!");
     }
 
 

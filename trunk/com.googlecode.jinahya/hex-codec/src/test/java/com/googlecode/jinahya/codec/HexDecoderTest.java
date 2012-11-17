@@ -57,7 +57,7 @@ public class HexDecoderTest {
 
 
     @Test
-    public void testAgainstCommonsCodecHex() throws DecoderException {
+    public void testDecodeAgainstCommonsCodecHex() throws DecoderException {
 
         final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
 

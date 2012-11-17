@@ -52,7 +52,7 @@ public class HexEncoder {
             case 0x0D:
             case 0x0E:
             case 0x0F:
-                return decoded + 0x37; // 0x41('A') - 0x46('F')
+                return decoded + 0x57; // 0x41('a') - 0x46('f')
             default:
                 throw new IllegalArgumentException("illegal half: " + decoded);
         }
@@ -149,7 +149,7 @@ public class HexEncoder {
 
         int i = 0;
         for (byte b : decoded) {
-            String s = Integer.toHexString(b & 0xFF).toUpperCase();
+            String s = Integer.toHexString(b & 0xFF);
             if (s.length() == 1) {
                 s = "0" + s;
             }
