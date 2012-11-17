@@ -38,25 +38,10 @@ public class BossVsEngineerTest {
         Logger.getLogger(BossVsEngineerTest.class.getName());
 
 
-    private static long getUsedMemory(final boolean free) {
-        if (free) {
-            System.gc();
-            System.runFinalization();
-            try {
-                Thread.sleep(5000L);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace(System.err);
-            }
-        }
-        return Runtime.getRuntime().totalMemory()
-               - Runtime.getRuntime().freeMemory();
-    }
-
-
     private static byte[][] newDecodedArray() {
 
         final byte[][] decodedArray =
-            new byte[ThreadLocalRandom.current().nextInt(128)][];
+            new byte[ThreadLocalRandom.current().nextInt(1024)][];
 
         for (int i = 0; i < decodedArray.length; i++) {
             decodedArray[i] = HexCodecTestUtil.newDecodedBytes();
@@ -69,7 +54,7 @@ public class BossVsEngineerTest {
     private static byte[][] newEncodedArray() {
 
         final byte[][] encodedArray =
-            new byte[ThreadLocalRandom.current().nextInt(128)][];
+            new byte[ThreadLocalRandom.current().nextInt(1024)][];
 
         for (int i = 0; i < encodedArray.length; i++) {
             encodedArray[i] = HexCodecTestUtil.newEncodedBytes();
@@ -97,28 +82,6 @@ public class BossVsEngineerTest {
     }
 
 
-    private static void testEncodeLikeAnEngineer(final byte[][] decodedArray,
-                                                 final double[] elapsed,
-                                                 final double[] increased,
-                                                 final int offset) {
-
-        final long before = getUsedMemory(true);
-        elapsed[offset] = encodeLikeAnEngineer(decodedArray);
-        increased[offset] = getUsedMemory(false) - before;
-    }
-
-
-    private static void testEncodeLikeABoss(final byte[][] decodedArray,
-                                            final double[] elapsed,
-                                            final double[] increased,
-                                            final int offset) {
-
-        final long before = getUsedMemory(true);
-        elapsed[offset] = encodeLikeABoss(decodedArray);
-        increased[offset] = getUsedMemory(false) - before;
-    }
-
-
     private static long decodeLikeABoss(final byte[][] encodedArray) {
         final long start = System.currentTimeMillis();
         for (byte[] encoded : encodedArray) {
@@ -137,52 +100,39 @@ public class BossVsEngineerTest {
     }
 
 
-    private static void testDecodeLikeABoss(final byte[][] encodedArray,
-                                            final double[] elapsed,
-                                            final double[] increased,
-                                            final int offset) {
-
-        final long before = getUsedMemory(true);
-        elapsed[offset] = decodeLikeABoss(encodedArray);
-        increased[offset] = getUsedMemory(false) - before;
-    }
-
-
-    private static void testDecodeLikeAnEngineer(final byte[][] encodedArray,
-                                                 final double[] elapsed,
-                                                 final double[] increased,
-                                                 final int offset) {
-
-        final long before = getUsedMemory(true);
-        elapsed[offset] = decodeLikeAnEngineer(encodedArray);
-        increased[offset] = getUsedMemory(false) - before;
+    private static void free() {
+        System.gc();
+        System.gc();
+        System.gc();
+        System.gc();
+        System.gc();
+        System.runFinalization();
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace(System.err);
+        }
     }
 
 
     @Test
     public void testEncode() {
 
-        final int count = 5;
+        final int count = 128;
         Assert.assertTrue(count > 4);
 
         final double[] elapsedLikeABoss = new double[count];
-        final double[] increasedLikeABoss = new double[count];
-
         final double[] elapsedLikeAnEngineer = new double[count];
-        final double[] increasedLikeAnEngineer = new double[count];
 
         for (int i = 0; i < count; i++) {
+//            free();
             final byte[][] decodedArray = newDecodedArray();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                testEncodeLikeABoss(decodedArray, elapsedLikeABoss,
-                                    increasedLikeABoss, i);
-                testEncodeLikeAnEngineer(decodedArray, elapsedLikeAnEngineer,
-                                         increasedLikeAnEngineer, i);
+                elapsedLikeABoss[i] = encodeLikeABoss(decodedArray);
+                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(decodedArray);
             } else {
-                testEncodeLikeAnEngineer(decodedArray, elapsedLikeAnEngineer,
-                                         increasedLikeAnEngineer, i);
-                testEncodeLikeABoss(decodedArray, elapsedLikeABoss,
-                                    increasedLikeABoss, i);
+                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(decodedArray);
+                elapsedLikeABoss[i] = encodeLikeABoss(decodedArray);
             }
         }
 
@@ -196,15 +146,6 @@ public class BossVsEngineerTest {
 
         LOGGER.log(
             Level.INFO,
-            "increased.like.a.boss: {0} [{1}, {2}, ..., {3}, {4}]",
-            new Object[]{StatUtils.mean(increasedLikeABoss),
-                         increasedLikeABoss[0],
-                         increasedLikeABoss[1],
-                         increasedLikeABoss[increasedLikeABoss.length - 2],
-                         increasedLikeABoss[increasedLikeABoss.length - 1]});
-
-        LOGGER.log(
-            Level.INFO,
             "elapsed.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
             new Object[]{
                 StatUtils.mean(elapsedLikeAnEngineer),
@@ -212,43 +153,28 @@ public class BossVsEngineerTest {
                 elapsedLikeAnEngineer[1],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
-
-        LOGGER.log(
-            Level.INFO,
-            "increased.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
-            new Object[]{
-                StatUtils.mean(increasedLikeAnEngineer),
-                increasedLikeAnEngineer[0],
-                increasedLikeAnEngineer[1],
-                increasedLikeAnEngineer[increasedLikeAnEngineer.length - 2],
-                increasedLikeAnEngineer[increasedLikeAnEngineer.length - 1]});
     }
 
 
     @Test
     public void testDecode() {
 
-        final int count = 5;
+        final int count = 128;
         Assert.assertTrue(count > 4);
 
         final double[] elapsedLikeABoss = new double[count];
-        final double[] increasedLikeABoss = new double[count];
 
         final double[] elapsedLikeAnEngineer = new double[count];
-        final double[] increasedLikeAnEngineer = new double[count];
 
         for (int i = 0; i < count; i++) {
+//            free();
             final byte[][] encodedArray = newEncodedArray();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                testDecodeLikeABoss(encodedArray, elapsedLikeABoss,
-                                    increasedLikeABoss, i);
-                testDecodeLikeAnEngineer(encodedArray, elapsedLikeAnEngineer,
-                                         increasedLikeAnEngineer, i);
+                elapsedLikeABoss[i] = encodeLikeABoss(encodedArray);
+                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(encodedArray);
             } else {
-                testDecodeLikeAnEngineer(encodedArray, elapsedLikeAnEngineer,
-                                         increasedLikeAnEngineer, i);
-                testDecodeLikeABoss(encodedArray, elapsedLikeABoss,
-                                    increasedLikeABoss, i);
+                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(encodedArray);
+                elapsedLikeABoss[i] = encodeLikeABoss(encodedArray);
             }
         }
 
@@ -262,15 +188,6 @@ public class BossVsEngineerTest {
 
         LOGGER.log(
             Level.INFO,
-            "increased.like.a.boss: {0} [{1}, {2}, ..., {3}, {4}]",
-            new Object[]{StatUtils.mean(increasedLikeABoss),
-                         increasedLikeABoss[0],
-                         increasedLikeABoss[1],
-                         increasedLikeABoss[increasedLikeABoss.length - 2],
-                         increasedLikeABoss[increasedLikeABoss.length - 1]});
-
-        LOGGER.log(
-            Level.INFO,
             "elapsed.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
             new Object[]{
                 StatUtils.mean(elapsedLikeAnEngineer),
@@ -279,15 +196,7 @@ public class BossVsEngineerTest {
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
 
-        LOGGER.log(
-            Level.INFO,
-            "increased.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
-            new Object[]{
-                StatUtils.mean(increasedLikeAnEngineer),
-                increasedLikeAnEngineer[0],
-                increasedLikeAnEngineer[1],
-                increasedLikeAnEngineer[increasedLikeAnEngineer.length - 2],
-                increasedLikeAnEngineer[increasedLikeAnEngineer.length - 1]});
+
     }
 
 
