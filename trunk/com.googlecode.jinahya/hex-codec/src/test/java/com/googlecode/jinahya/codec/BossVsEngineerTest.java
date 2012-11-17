@@ -22,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.math3.stat.StatUtils;
-import org.junit.Assert;
 import org.testng.annotations.Test;
 
 
@@ -32,6 +31,16 @@ import org.testng.annotations.Test;
  */
 @Test(singleThreaded = true)
 public class BossVsEngineerTest {
+
+
+    private static final int ROUNDS = 128;
+
+
+    static {
+        if (ROUNDS < 5) {
+            throw new InstantiationError("ROUNDS(" + ROUNDS + ") < 5");
+        }
+    }
 
 
     private static final Logger LOGGER =
@@ -77,13 +86,10 @@ public class BossVsEngineerTest {
     @Test
     public void testEncode() {
 
-        final int count = 128;
-        Assert.assertTrue(count > 4);
+        final double[] elapsedLikeABoss = new double[ROUNDS];
+        final double[] elapsedLikeAnEngineer = new double[ROUNDS];
 
-        final double[] elapsedLikeABoss = new double[count];
-        final double[] elapsedLikeAnEngineer = new double[count];
-
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < ROUNDS; i++) {
             final byte[][] decodedArray =
                 HexCodecTestUtil.newMultipleDecodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
@@ -118,14 +124,10 @@ public class BossVsEngineerTest {
     @Test
     public void testDecode() {
 
-        final int count = 128;
-        Assert.assertTrue(count > 4);
+        final double[] elapsedLikeABoss = new double[ROUNDS];
+        final double[] elapsedLikeAnEngineer = new double[ROUNDS];
 
-        final double[] elapsedLikeABoss = new double[count];
-
-        final double[] elapsedLikeAnEngineer = new double[count];
-
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < ROUNDS; i++) {
             final byte[][] encodedArray =
                 HexCodecTestUtil.newMultipleEncodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
