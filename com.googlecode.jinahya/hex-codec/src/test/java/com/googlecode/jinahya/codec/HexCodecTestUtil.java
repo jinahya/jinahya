@@ -58,7 +58,7 @@ class HexCodecTestUtil {
         final byte[] bytes = new byte[random.nextInt(64) << 1]; // even
 
         for (int i = 0; i < bytes.length; i++) {
-            switch (random.nextInt(3)) {
+            switch (random.nextInt() % 3) {
                 case 0: // alpha
                     bytes[i] = (byte) (random.nextInt(10) + 0x30);
                     break;
@@ -67,18 +67,6 @@ class HexCodecTestUtil {
                     break;
                 default: // lower
                     bytes[i] = (byte) (random.nextInt(6) + 0x61);
-                    break;
-            }
-            switch (bytes[i]) {
-                case 0x30:
-                case 0x39:
-                case 0x41:
-                case 0x46:
-                case 0x61:
-                case 0x66:
-//                        System.out.println((char) bytes[i]);
-                    break;
-                default:
                     break;
             }
         }

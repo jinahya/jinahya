@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.Decoder;
 import org.apache.commons.codec.DecoderException;
@@ -54,8 +53,6 @@ public class HexBinaryDecoderProxyTest {
             (BinaryDecoder) HexBinaryDecoderProxy.newInstance();
 
         final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
-//        System.out.println("encoded: "
-//                           + new String(encoded, StandardCharsets.US_ASCII));
 
         final byte[] decoded = decoder.decode(encoded);
     }
@@ -74,7 +71,6 @@ public class HexBinaryDecoderProxyTest {
         }
 
         final String encoded = HexCodecTestUtil.newEncodedString();
-//        System.out.println("encoded: " + encoded);
 
         final byte[] decoded = (byte[]) decoder.decode(encoded);
     }
