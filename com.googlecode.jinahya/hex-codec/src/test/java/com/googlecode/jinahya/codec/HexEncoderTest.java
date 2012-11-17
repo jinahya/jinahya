@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
