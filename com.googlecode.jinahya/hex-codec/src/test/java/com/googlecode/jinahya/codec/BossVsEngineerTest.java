@@ -38,80 +38,39 @@ public class BossVsEngineerTest {
         Logger.getLogger(BossVsEngineerTest.class.getName());
 
 
-    private static byte[][] newDecodedArray() {
-
-        final byte[][] decodedArray =
-            new byte[ThreadLocalRandom.current().nextInt(1024)][];
-
-        for (int i = 0; i < decodedArray.length; i++) {
-            decodedArray[i] = HexCodecTestUtil.newDecodedBytes();
-        }
-
-        return decodedArray;
-    }
-
-
-    private static byte[][] newEncodedArray() {
-
-        final byte[][] encodedArray =
-            new byte[ThreadLocalRandom.current().nextInt(1024)][];
-
-        for (int i = 0; i < encodedArray.length; i++) {
-            encodedArray[i] = HexCodecTestUtil.newEncodedBytes();
-        }
-
-        return encodedArray;
-    }
-
-
-    private static long encodeLikeABoss(final byte[][] decodedArray) {
+    private static long encodeLikeABoss(final byte[][] multipleDecoded) {
         final long start = System.currentTimeMillis();
-        for (byte[] decoded : decodedArray) {
+        for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encodeLikeABoss(decoded);
         }
         return System.currentTimeMillis() - start;
     }
 
 
-    private static long encodeLikeAnEngineer(final byte[][] decodedArray) {
+    private static long encodeLikeAnEngineer(final byte[][] multipleDecoded) {
         final long start = System.currentTimeMillis();
-        for (byte[] decoded : decodedArray) {
+        for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encode(decoded);
         }
         return System.currentTimeMillis() - start;
     }
 
 
-    private static long decodeLikeABoss(final byte[][] encodedArray) {
+    private static long decodeLikeABoss(final byte[][] multipleEncoded) {
         final long start = System.currentTimeMillis();
-        for (byte[] encoded : encodedArray) {
+        for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decodeLikeABoss(encoded);
         }
         return System.currentTimeMillis() - start;
     }
 
 
-    private static long decodeLikeAnEngineer(final byte[][] encodedArray) {
+    private static long decodeLikeAnEngineer(final byte[][] multipleEncoded) {
         final long start = System.currentTimeMillis();
-        for (byte[] encoded : encodedArray) {
+        for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decode(encoded);
         }
         return System.currentTimeMillis() - start;
-    }
-
-
-    private static void free() {
-        System.gc();
-        System.gc();
-        System.gc();
-        System.gc();
-        System.gc();
-        System.runFinalization();
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace(System.err);
-        }
     }
 
 
@@ -125,8 +84,8 @@ public class BossVsEngineerTest {
         final double[] elapsedLikeAnEngineer = new double[count];
 
         for (int i = 0; i < count; i++) {
-//            free();
-            final byte[][] decodedArray = newDecodedArray();
+            final byte[][] decodedArray =
+                HexCodecTestUtil.newMultipleDecodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
                 elapsedLikeABoss[i] = encodeLikeABoss(decodedArray);
                 elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(decodedArray);
@@ -167,8 +126,8 @@ public class BossVsEngineerTest {
         final double[] elapsedLikeAnEngineer = new double[count];
 
         for (int i = 0; i < count; i++) {
-//            free();
-            final byte[][] encodedArray = newEncodedArray();
+            final byte[][] encodedArray =
+                HexCodecTestUtil.newMultipleEncodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
                 elapsedLikeABoss[i] = encodeLikeABoss(encodedArray);
                 elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(encodedArray);
@@ -195,8 +154,6 @@ public class BossVsEngineerTest {
                 elapsedLikeAnEngineer[1],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
-
-
     }
 
 

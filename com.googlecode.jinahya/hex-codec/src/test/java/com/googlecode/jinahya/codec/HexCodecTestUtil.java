@@ -35,11 +35,24 @@ class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] bytes = new byte[random.nextInt(128)];
+        final byte[] decodedBytes = new byte[random.nextInt(1024)];
 
-        random.nextBytes(bytes);
+        random.nextBytes(decodedBytes);
 
-        return bytes;
+        return decodedBytes;
+    }
+
+
+    protected static byte[][] newMultipleDecodedBytes() {
+
+        final byte[][] multipleDecodedBytes =
+            new byte[ThreadLocalRandom.current().nextInt(1024)][];
+
+        for (int i = 0; i < multipleDecodedBytes.length; i++) {
+            multipleDecodedBytes[i] = HexCodecTestUtil.newDecodedBytes();
+        }
+
+        return multipleDecodedBytes;
     }
 
 
@@ -55,23 +68,36 @@ class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] bytes = new byte[random.nextInt(64) << 1]; // even
+        final byte[] encodedBytes = new byte[random.nextInt(512) << 1]; // even
 
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < encodedBytes.length; i++) {
             switch (random.nextInt() % 3) {
                 case 0: // alpha
-                    bytes[i] = (byte) (random.nextInt(10) + 0x30);
+                    encodedBytes[i] = (byte) (random.nextInt(10) + 0x30);
                     break;
                 case 1: // upper\
-                    bytes[i] = (byte) (random.nextInt(6) + 0x41);
+                    encodedBytes[i] = (byte) (random.nextInt(6) + 0x41);
                     break;
                 default: // lower
-                    bytes[i] = (byte) (random.nextInt(6) + 0x61);
+                    encodedBytes[i] = (byte) (random.nextInt(6) + 0x61);
                     break;
             }
         }
 
-        return bytes;
+        return encodedBytes;
+    }
+
+
+    protected static byte[][] newMultipleEncodedBytes() {
+
+        final byte[][] multipleEncodedBytes =
+            new byte[ThreadLocalRandom.current().nextInt(1024)][];
+
+        for (int i = 0; i < multipleEncodedBytes.length; i++) {
+            multipleEncodedBytes[i] = HexCodecTestUtil.newEncodedBytes();
+        }
+
+        return multipleEncodedBytes;
     }
 
 

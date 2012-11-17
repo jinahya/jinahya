@@ -69,16 +69,6 @@ public class HexEncoder {
     protected static void encodeSingle(final int decoded, final byte[] encoded,
                                        final int offset) {
 
-//        if (decoded < 0x00) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") < 0x00");
-//        }
-//
-//        if (decoded > 0xFF) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") > 0xFF");
-//        }
-
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
@@ -131,7 +121,6 @@ public class HexEncoder {
      * @return the encoded nibbles.
      */
     public byte[] encode(final byte[] decoded) {
-
         return encodeMultiple(decoded);
     }
 
