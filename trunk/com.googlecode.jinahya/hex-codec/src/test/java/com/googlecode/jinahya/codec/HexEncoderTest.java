@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.testng.Assert;
