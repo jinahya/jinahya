@@ -142,6 +142,7 @@ public class HexDecoder {
      * @return the decoded octets.
      */
     public byte[] decode(final byte[] encoded) {
+
         return decodeMultiple(encoded);
     }
 

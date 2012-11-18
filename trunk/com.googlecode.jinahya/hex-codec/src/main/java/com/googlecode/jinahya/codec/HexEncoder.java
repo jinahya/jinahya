@@ -73,6 +73,12 @@ public class HexEncoder {
             throw new IllegalArgumentException("null encoded");
         }
 
+        if (encoded.length < 2) {
+            // not required
+            throw new IllegalArgumentException(
+                "encoded.length(" + encoded.length + ") < 2");
+        }
+
         if (offset < 0) {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
@@ -121,6 +127,7 @@ public class HexEncoder {
      * @return the encoded nibbles.
      */
     public byte[] encode(final byte[] decoded) {
+
         return encodeMultiple(decoded);
     }
 
@@ -136,14 +143,13 @@ public class HexEncoder {
 
         byte[] encoded = new byte[decoded.length * 2];
 
-        int i = 0;
-        for (byte b : decoded) {
-            String s = Integer.toHexString(b & 0xFF);
+        for (int i = 0; i < decoded.length; i++) {
+            String s = Integer.toHexString(decoded[i] & 0xFF);
             if (s.length() == 1) {
                 s = "0" + s;
             }
-            encoded[i++] = (byte) s.charAt(0);
-            encoded[i++] = (byte) s.charAt(1);
+            encoded[i * 2] = (byte) s.charAt(0);
+            encoded[i * 2 + 1] = (byte) s.charAt(1);
         }
 
         return encoded;

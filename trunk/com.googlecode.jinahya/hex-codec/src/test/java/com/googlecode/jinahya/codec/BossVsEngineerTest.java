@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 public class BossVsEngineerTest {
 
 
-    private static final int ROUNDS = 128;
+    private static final int ROUNDS = 1024;
 
 
     static {
@@ -90,14 +90,16 @@ public class BossVsEngineerTest {
         final double[] elapsedLikeAnEngineer = new double[ROUNDS];
 
         for (int i = 0; i < ROUNDS; i++) {
-            final byte[][] decodedArray =
+            final byte[][] multipleDecodedBytes =
                 HexCodecTestUtil.newMultipleDecodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                elapsedLikeABoss[i] = encodeLikeABoss(decodedArray);
-                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(decodedArray);
+                elapsedLikeABoss[i] = encodeLikeABoss(multipleDecodedBytes);
+                elapsedLikeAnEngineer[i] =
+                    encodeLikeAnEngineer(multipleDecodedBytes);
             } else {
-                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(decodedArray);
-                elapsedLikeABoss[i] = encodeLikeABoss(decodedArray);
+                elapsedLikeAnEngineer[i] =
+                    encodeLikeAnEngineer(multipleDecodedBytes);
+                elapsedLikeABoss[i] = encodeLikeABoss(multipleDecodedBytes);
             }
         }
 
@@ -128,14 +130,16 @@ public class BossVsEngineerTest {
         final double[] elapsedLikeAnEngineer = new double[ROUNDS];
 
         for (int i = 0; i < ROUNDS; i++) {
-            final byte[][] encodedArray =
+            final byte[][] multipleEncodedBytes =
                 HexCodecTestUtil.newMultipleEncodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                elapsedLikeABoss[i] = encodeLikeABoss(encodedArray);
-                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(encodedArray);
+                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
+                elapsedLikeAnEngineer[i] =
+                    encodeLikeAnEngineer(multipleEncodedBytes);
             } else {
-                elapsedLikeAnEngineer[i] = encodeLikeAnEngineer(encodedArray);
-                elapsedLikeABoss[i] = encodeLikeABoss(encodedArray);
+                elapsedLikeAnEngineer[i] =
+                    encodeLikeAnEngineer(multipleEncodedBytes);
+                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
             }
         }
 
