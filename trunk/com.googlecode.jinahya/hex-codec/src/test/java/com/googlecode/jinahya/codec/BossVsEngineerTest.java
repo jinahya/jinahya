@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,12 +35,12 @@ import org.testng.annotations.Test;
 public class BossVsEngineerTest {
 
 
-    private static final int ROUNDS = 1024;
+    private static final int ROUNDS = 128;
 
 
     static {
-        if (ROUNDS < 5) {
-            throw new InstantiationError("ROUNDS(" + ROUNDS + ") < 5");
+        if (ROUNDS < 7) {
+            throw new InstantiationError("ROUNDS(" + ROUNDS + ") < 7");
         }
     }
 
@@ -59,7 +61,7 @@ public class BossVsEngineerTest {
     private static long encodeLikeAnEngineer(final byte[][] multipleDecoded) {
         final long start = System.currentTimeMillis();
         for (byte[] decoded : multipleDecoded) {
-            new HexEncoder().encode(decoded);
+            new HexEncoder().encodeLikeAnEngineer(decoded);
         }
         return System.currentTimeMillis() - start;
     }
@@ -77,7 +79,7 @@ public class BossVsEngineerTest {
     private static long decodeLikeAnEngineer(final byte[][] multipleEncoded) {
         final long start = System.currentTimeMillis();
         for (byte[] encoded : multipleEncoded) {
-            new HexDecoder().decode(encoded);
+            new HexDecoder().decodeLikeAnEngineer(encoded);
         }
         return System.currentTimeMillis() - start;
     }
@@ -103,21 +105,28 @@ public class BossVsEngineerTest {
             }
         }
 
-        LOGGER.log(Level.INFO,
-                   "elapsed.like.a.boss: {0} [{1}, {2}, ..., {3}, {4}]",
-                   new Object[]{StatUtils.mean(elapsedLikeABoss),
-                                elapsedLikeABoss[0],
-                                elapsedLikeABoss[1],
-                                elapsedLikeABoss[elapsedLikeABoss.length - 2],
-                                elapsedLikeABoss[elapsedLikeABoss.length - 1]});
+        LOGGER.log(
+            Level.INFO,
+            "elapsed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
+            new Object[]{StatUtils.mean(elapsedLikeABoss, 1,
+                                        elapsedLikeABoss.length - 1),
+                         elapsedLikeABoss[0],
+                         elapsedLikeABoss[1],
+                         elapsedLikeABoss[2],
+                         elapsedLikeABoss[elapsedLikeABoss.length - 3],
+                         elapsedLikeABoss[elapsedLikeABoss.length - 2],
+                         elapsedLikeABoss[elapsedLikeABoss.length - 1]});
 
         LOGGER.log(
             Level.INFO,
-            "elapsed.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
+            "elapsed.like.an.engineer: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
             new Object[]{
-                StatUtils.mean(elapsedLikeAnEngineer),
+                StatUtils.mean(elapsedLikeAnEngineer, 1,
+                               elapsedLikeAnEngineer.length - 1),
                 elapsedLikeAnEngineer[0],
                 elapsedLikeAnEngineer[1],
+                elapsedLikeAnEngineer[2],
+                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 3],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
     }
@@ -143,21 +152,29 @@ public class BossVsEngineerTest {
             }
         }
 
-        LOGGER.log(Level.INFO,
-                   "elapsed.like.a.boss: {0} [{1}, {2}, ..., {3}, {4}]",
-                   new Object[]{StatUtils.mean(elapsedLikeABoss),
-                                elapsedLikeABoss[0],
-                                elapsedLikeABoss[1],
-                                elapsedLikeABoss[elapsedLikeABoss.length - 2],
-                                elapsedLikeABoss[elapsedLikeABoss.length - 1]});
+        LOGGER.log(
+            Level.INFO,
+            "elapsed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
+            new Object[]{
+                StatUtils.mean(elapsedLikeABoss, 1,
+                               elapsedLikeABoss.length - 1),
+                elapsedLikeABoss[0],
+                elapsedLikeABoss[1],
+                elapsedLikeABoss[2],
+                elapsedLikeABoss[elapsedLikeABoss.length - 3],
+                elapsedLikeABoss[elapsedLikeABoss.length - 2],
+                elapsedLikeABoss[elapsedLikeABoss.length - 1]});
 
         LOGGER.log(
             Level.INFO,
-            "elapsed.like.an.engineer: {0} [{1}, {2}, ..., {3}, {4}]",
+            "elapsed.like.an.engineer: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
             new Object[]{
-                StatUtils.mean(elapsedLikeAnEngineer),
+                StatUtils.mean(elapsedLikeAnEngineer, 1,
+                               elapsedLikeAnEngineer.length - 1),
                 elapsedLikeAnEngineer[0],
                 elapsedLikeAnEngineer[1],
+                elapsedLikeAnEngineer[2],
+                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 3],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
                 elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
     }

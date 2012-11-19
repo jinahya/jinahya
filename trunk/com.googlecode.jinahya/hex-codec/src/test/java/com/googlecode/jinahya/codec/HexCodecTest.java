@@ -31,37 +31,18 @@ public class HexCodecTest {
 
 
     @Test(invocationCount = 128)
-    public void testEncodeDecodeLikeABoss() {
-
-        final byte[] expected =
-            new byte[ThreadLocalRandom.current().nextInt(1024)];
-        ThreadLocalRandom.current().nextBytes(expected);
-
-        final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
-        for (int b : encoded) {
-            Assert.assertTrue((b >= 0x30 && b <= 0x39)
-                              || (b >= 0x61 && b <= 0x66));
-        }
-
-        final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test
-    public void testEncode() {
+    public void encodeLikeABossAndDecodeLikeAnEngineer() {
         final byte[] expected = HexCodecTestUtil.newDecodedBytes();
         final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
-        final byte[] actual = new HexDecoder().decode(encoded);
+        final byte[] actual = new HexDecoder().decodeLikeAnEngineer(encoded);
         Assert.assertEquals(actual, expected);
     }
 
 
     @Test(invocationCount = 128)
-    public void testDecode() {
+    public void encodeLikeAnEnginenerAndDecodeLikeABoss() {
         final byte[] expected = HexCodecTestUtil.newDecodedBytes();
-        final byte[] encoded = new HexEncoder().encode(expected);
+        final byte[] encoded = new HexEncoder().encodeLikeAnEngineer(expected);
         final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
         Assert.assertEquals(actual, expected);
     }
@@ -72,6 +53,39 @@ public class HexCodecTest {
         final byte[] expected = HexCodecTestUtil.newDecodedBytes();
         final byte[] encoded = new HexEncoder().encode(expected);
         final byte[] actual = new HexDecoder().decode(encoded);
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeDecodeLikeABoss() {
+
+        final byte[] expected =
+            new byte[ThreadLocalRandom.current().nextInt(1024)];
+        ThreadLocalRandom.current().nextBytes(expected);
+
+        final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
+        Assert.assertTrue(encoded.length == expected.length * 2);
+        for (byte b : encoded) {
+            Assert.assertTrue((b >= 0x30 && b <= 0x39)
+                              || (b >= 0x61 && b <= 0x66));
+        }
+
+        final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeDecodeLikeAnEngineer() {
+
+        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+
+        final byte[] encoded = new HexEncoder().encodeLikeAnEngineer(expected);
+
+        final byte[] actual = new HexDecoder().decodeLikeAnEngineer(encoded);
+
         Assert.assertEquals(actual, expected);
     }
 

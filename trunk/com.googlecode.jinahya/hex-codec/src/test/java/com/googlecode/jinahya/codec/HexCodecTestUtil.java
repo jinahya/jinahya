@@ -68,18 +68,18 @@ class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] encodedBytes = new byte[random.nextInt(512) << 1]; // even
+        final byte[] encodedBytes = new byte[random.nextInt(1024) << 1]; // even
 
         for (int i = 0; i < encodedBytes.length; i++) {
             switch (random.nextInt() % 3) {
                 case 0: // alpha
-                    encodedBytes[i] = (byte) (random.nextInt(10) + 0x30);
+                    encodedBytes[i] = (byte) (random.nextInt(0x0A) + 0x30);
                     break;
-                case 1: // upper\
-                    encodedBytes[i] = (byte) (random.nextInt(6) + 0x41);
+                case 1: // upper
+                    encodedBytes[i] = (byte) (random.nextInt(0x06) + 0x41);
                     break;
                 default: // lower
-                    encodedBytes[i] = (byte) (random.nextInt(6) + 0x61);
+                    encodedBytes[i] = (byte) (random.nextInt(0x06) + 0x61);
                     break;
             }
         }
