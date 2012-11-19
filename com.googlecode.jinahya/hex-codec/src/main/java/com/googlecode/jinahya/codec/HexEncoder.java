@@ -133,18 +133,41 @@ public class HexEncoder {
 
 
     /**
-     * Encodes given sequence of octets into a sequence of nibbles.
+     * [TESTING].
      *
-     * @param decoded the octets to encode.
+     * @param decoded octets.
+     * @return nibbles.
+     */
+    public byte[] encodeLikeAnEngineer(final byte[] decoded) {
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        final byte[] encoded = new byte[decoded.length << 1];
+
+        int index = 0; // index in encoded
+        for (int i = 0; i < decoded.length; i++) {
+            encoded[index++] = (byte) encodeHalf((decoded[i] >> 4) & 0x0F);
+            encoded[index++] = (byte) encodeHalf(decoded[i] & 0x0F);
+        }
+
+        return encoded;
+    }
+
+
+    /**
+     * [TESTING].
      *
-     * @return the encoded nibbles.
+     * @param decoded octets.
+     * @return nibbles.
      */
     public byte[] encodeLikeABoss(byte[] decoded) {
 
         byte[] encoded = new byte[decoded.length * 2];
 
         for (int i = 0; i < decoded.length; i++) {
-            String s = Integer.toHexString(decoded[i] & 0xFF);
+            String s = Integer.toString(decoded[i] & 0xFF, 16);
             if (s.length() == 1) {
                 s = "0" + s;
             }

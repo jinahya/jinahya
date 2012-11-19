@@ -148,11 +148,39 @@ public class HexDecoder {
 
 
     /**
-     * Decodes given sequence of nibbles into a sequence of octets.
+     * [TESTING].
      *
-     * @param encoded the nibbles to decode.
+     * @param encoded nibbles.
+     * @return octets.
+     */
+    public byte[] decodeLikeAnEngineer(final byte[] encoded) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if ((encoded.length & 0x01) == 0x01) {
+            throw new IllegalArgumentException(
+                "encoded.length(" + encoded.length + ") is not even");
+        }
+
+        final byte[] decoded = new byte[encoded.length >> 1];
+
+        int index = 0; // index in encoded
+        for (int i = 0; i < decoded.length; i++) {
+            decoded[i] = (byte) ((decodeHalf(encoded[index++]) << 4)
+                                 | decodeHalf(encoded[index++]));
+        }
+
+        return decoded;
+    }
+
+
+    /**
+     * [TESTING].
      *
-     * @return the decoded octets.
+     * @param encoded nibbles.
+     * @return octets.
      */
     public byte[] decodeLikeABoss(byte[] encoded) {
 
