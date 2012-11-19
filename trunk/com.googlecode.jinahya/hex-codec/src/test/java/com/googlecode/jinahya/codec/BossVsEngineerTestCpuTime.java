@@ -50,48 +50,42 @@ public class BossVsEngineerTestCpuTime {
 
 
     private static long encodeLikeABoss(final byte[][] multipleDecoded) {
-
         final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-
         final long start = threadMXBean.getCurrentThreadCpuTime();
-
         for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encodeLikeABoss(decoded);
         }
-
         return threadMXBean.getCurrentThreadCpuTime() - start;
     }
 
 
     private static long encodeLikeAnEngineer(final byte[][] multipleDecoded) {
-
         final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-
         final long start = threadMXBean.getCurrentThreadCpuTime();
-
         for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encodeLikeAnEngineer(decoded);
         }
-
         return threadMXBean.getCurrentThreadCpuTime() - start;
     }
 
 
     private static long decodeLikeABoss(final byte[][] multipleEncoded) {
-        final long start = System.currentTimeMillis();
+        final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        final long start = threadMXBean.getCurrentThreadCpuTime();
         for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decodeLikeABoss(encoded);
         }
-        return System.currentTimeMillis() - start;
+        return threadMXBean.getCurrentThreadCpuTime() - start;
     }
 
 
     private static long decodeLikeAnEngineer(final byte[][] multipleEncoded) {
-        final long start = System.currentTimeMillis();
+        final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        final long start = threadMXBean.getCurrentThreadCpuTime();
         for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decodeLikeAnEngineer(encoded);
         }
-        return System.currentTimeMillis() - start;
+        return threadMXBean.getCurrentThreadCpuTime() - start;
     }
 
 
@@ -118,8 +112,7 @@ public class BossVsEngineerTestCpuTime {
         LOGGER.log(
             Level.INFO,
             "consumed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
-            new Object[]{StatUtils.mean(consumedLikeABoss, 1,
-                                        consumedLikeABoss.length - 1),
+            new Object[]{StatUtils.mean(consumedLikeABoss),
                          consumedLikeABoss[0],
                          consumedLikeABoss[1],
                          consumedLikeABoss[2],
@@ -129,10 +122,10 @@ public class BossVsEngineerTestCpuTime {
 
         LOGGER.log(
             Level.INFO,
-            "consumed.like.an.engineer: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
+            "consumed.like.an.engineer: {0}"
+            + " [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
             new Object[]{
-                StatUtils.mean(consumedLikeAnEngineer, 1,
-                               consumedLikeAnEngineer.length - 1),
+                StatUtils.mean(consumedLikeAnEngineer),
                 consumedLikeAnEngineer[0],
                 consumedLikeAnEngineer[1],
                 consumedLikeAnEngineer[2],
@@ -145,48 +138,47 @@ public class BossVsEngineerTestCpuTime {
     @Test
     public void testDecode() {
 
-        final double[] elapsedLikeABoss = new double[ROUNDS];
-        final double[] elapsedLikeAnEngineer = new double[ROUNDS];
+        final double[] consumedLikeABoss = new double[ROUNDS];
+        final double[] consumedLikeAnEngineer = new double[ROUNDS];
 
         for (int i = 0; i < ROUNDS; i++) {
             final byte[][] multipleEncodedBytes =
                 HexCodecTestUtil.newMultipleEncodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
-                elapsedLikeAnEngineer[i] =
+                consumedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
+                consumedLikeAnEngineer[i] =
                     encodeLikeAnEngineer(multipleEncodedBytes);
             } else {
-                elapsedLikeAnEngineer[i] =
+                consumedLikeAnEngineer[i] =
                     encodeLikeAnEngineer(multipleEncodedBytes);
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
+                consumedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
             }
         }
 
         LOGGER.log(
             Level.INFO,
-            "elapsed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
+            "consumed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
             new Object[]{
-                StatUtils.mean(elapsedLikeABoss, 1,
-                               elapsedLikeABoss.length - 1),
-                elapsedLikeABoss[0],
-                elapsedLikeABoss[1],
-                elapsedLikeABoss[2],
-                elapsedLikeABoss[elapsedLikeABoss.length - 3],
-                elapsedLikeABoss[elapsedLikeABoss.length - 2],
-                elapsedLikeABoss[elapsedLikeABoss.length - 1]});
+                StatUtils.mean(consumedLikeABoss),
+                consumedLikeABoss[0],
+                consumedLikeABoss[1],
+                consumedLikeABoss[2],
+                consumedLikeABoss[consumedLikeABoss.length - 3],
+                consumedLikeABoss[consumedLikeABoss.length - 2],
+                consumedLikeABoss[consumedLikeABoss.length - 1]});
 
         LOGGER.log(
             Level.INFO,
-            "elapsed.like.an.engineer: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
+            "consumed.like.an.engineer: {0}"
+            + " [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
             new Object[]{
-                StatUtils.mean(elapsedLikeAnEngineer, 1,
-                               elapsedLikeAnEngineer.length - 1),
-                elapsedLikeAnEngineer[0],
-                elapsedLikeAnEngineer[1],
-                elapsedLikeAnEngineer[2],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 3],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
+                StatUtils.mean(consumedLikeAnEngineer),
+                consumedLikeAnEngineer[0],
+                consumedLikeAnEngineer[1],
+                consumedLikeAnEngineer[2],
+                consumedLikeAnEngineer[consumedLikeAnEngineer.length - 3],
+                consumedLikeAnEngineer[consumedLikeAnEngineer.length - 2],
+                consumedLikeAnEngineer[consumedLikeAnEngineer.length - 1]});
     }
 
 
