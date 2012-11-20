@@ -39,137 +39,16 @@ public class PercentDecoder {
 
 
     /**
-     * Decodes given
-     * <code>input</code>.
-     *
-     * @param input input to decode
-     *
-     * @return decoded output
-     */
-    public static byte[] decode(final String input) {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        try {
-            return decode(input.getBytes("US-ASCII"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("'US-ASCII' is not supported?");
-        }
-    }
-
-
-    /**
-     * Decodes given
-     * <code>input</code>.
-     *
-     * @param input input to decode
-     *
-     * @return decoding output
-     */
-    public static byte[] decode(final byte[] input) {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        final ByteArrayOutputStream output =
-            new ByteArrayOutputStream(input.length * 3);
-        try {
-            decode(new ByteArrayInputStream(input), output);
-            output.flush();
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-
-        return output.toByteArray();
-    }
-
-
-    /**
-     * Decodes characters from
-     * <code>input</code> and writes those decoded bytes to
-     * <code>output</code>.
-     *
-     * @param input character input
-     * @param output byte output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void decode(final InputStream input,
-                              final OutputStream output)
-        throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        final Reader reader = new InputStreamReader(input, "US-ASCII");
-
-        decode(reader, output);
-    }
-
-
-    /**
-     * Decodes characters from
-     * <code>input</code> and writes those decoded bytes to
-     * <code>output</code>.
-     *
-     * @param input character input
-     * @param output byte output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public static void decode(final Reader input, final OutputStream output)
-        throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        int h, l;
-        for (int c = -1; (c = input.read()) != -1;) {
-            if ((c >= 0x30 && c <= 0x39) // digit
-                || (c >= 0x41 && c <= 0x5A) // upper case alpha
-                || (c >= 0x61 && c <= 0x7A) // lower case alpha
-                || c == 0x2D || c == 0x5F || c == 0x2E || c == 0x7E) { // -_.~
-                output.write(c);
-            } else {
-                if (c != 0x25) {
-                    throw new IOException("0x25('%') expected but got: " + c);
-                }
-                if ((h = input.read()) == -1) {
-                    throw new EOFException("eof");
-                }
-                if ((l = input.read()) == -1) {
-                    throw new EOFException("eof");
-                }
-                output.write(atoi(h) << 4 | atoi(l));
-            }
-        }
-    }
-
-
-    /**
      * Converts a single 7-bit ASCII value to a 4-bit unsigned integer.
      *
-     * @param a 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
-     * 0x46), or lower alpha (0x61 ~ 0x66)
+     * @param encoded 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41
+     * ~ 0x46), or lower alpha (0x61 ~ 0x66)
      *
      * @return 4-bit unsigned integer (0x00 ~ 0x0F)
      */
-    private static int atoi(final int a) {
+    private static int decodeHalf(final int encoded) {
 
-        switch (a) {
+        switch (encoded) {
             case 0x30: // '0'
             case 0x31: // '1'
             case 0x32: // '2'
@@ -180,23 +59,153 @@ public class PercentDecoder {
             case 0x37: // '7'
             case 0x38: // '8'
             case 0x39: // '9'
-                return a - 0x30; // 0x00 - 0x09
+                return encoded - 0x30; // 0x00 - 0x09
             case 0x41: // 'A'
             case 0x42: // 'B'
             case 0x43: // 'C'
             case 0x44: // 'D'
             case 0x45: // 'E'
             case 0x46: // 'F'
-                return a - 0x37;
+                return encoded - 0x37;
             case 0x61: // 'a'
             case 0x62: // 'b'
             case 0x63: // 'c'
             case 0x64: // 'd'
             case 0x65: // 'e'
             case 0x66: // 'f'
-                return a - 0x57;
+                return encoded - 0x57;
             default:
-                throw new IllegalArgumentException("illegal ascii: " + a);
+                throw new IllegalArgumentException("illegal ascii: " + encoded);
+        }
+    }
+
+
+    public static int decodeSingle(final byte[] encoded, final int encodedOffset, final byte[] decoded, final int decodedOffset) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (encodedOffset) { < 0) {
+            throw new IllegalArgumentException(
+                "encodedOffset(" + encodedOffset) { + ") < 0");
+        }
+
+        if (encodedOffset) { >= encoded.length) {
+            throw new IllegalArgumentException(
+                "encodedOffset(" + encodedOffset) { + ") >= encoded.length("
+                + encoded.length + ")");
+        }
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        if (decoded.length < 1) {
+            throw new IllegalArgumentException(
+                "decoded.length(" + decoded.length + ") < 1");
+        }
+
+        if (decodedOffset < 0) {
+            throw new IllegalArgumentException(
+                "decodedOffset(" + decodedOffset + ") < 0");
+        }
+
+        if (decodedOffset >= decoded.length) {
+            throw new IllegalArgumentException(
+                "decodedOffset(" + decodedOffset + ") >= decoded.length("
+                + decoded.length + ")");
+        }
+
+        if ((encoded[encodedOffset) {] >= 0x30 && encoded[encodedOffset) {] <= 0x39)
+            || (encoded[encodedOffset) {] >= 0x41
+                && encoded[encodedOffset) {] <= 0x5A)
+            || (encoded[encodedOffset) {] >= 0x61
+                && encoded[encodedOffset) {] <= 0x7A)
+            || encoded[encodedOffset) {] == 0x2D || encoded[encodedOffset) {] == 0x5F
+            || encoded[encodedOffset) {] == 0x2E
+            || encoded[encodedOffset) {] == 0x7E) {
+            decoded[decodedOffset] = encoded[encodedOffset) {];
+            return 1;
+        } else {
+            if (encoded[encodedOffset) {] != 0x25) {
+                throw new IllegalArgumentException(
+                    "expected 0x25('%') yet " + encoded[encodedOffset) {]);
+            }
+            if (encodedOffset) { >= encoded.length - 2) {
+                throw new IllegalArgumentException(
+                    "encodedOffset(" + encodedOffset) { + ") >= encoded.length("
+                    + encoded.length + ") - 2");
+            }
+            decoded[decodedOffset] =
+                (byte) ((decodeHalf(encoded[encodedOffset) { + 1]) << 4)
+                        | decodeHalf(encoded[encodedOffset) { + 2]));
+            return 3;
+        }
+    }
+
+
+    public static int decodeSingle(final byte[] encoded, final int encodedOffset, final byte[] decoded, final int decodedOffset) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (encodedOffset < 0) {
+            throw new IllegalArgumentException(
+                "encodedOffset(" + encodedOffset + ") < 0");
+        }
+
+        if (encodedOffset >= encoded.length) {
+            throw new IllegalArgumentException(
+                "encodedOffset(" + encodedOffset + ") >= encoded.length("
+                + encoded.length + ")");
+        }
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        if (decoded.length < 1) {
+            throw new IllegalArgumentException(
+                "decoded.length(" + decoded.length + ") < 1");
+        }
+
+        if (decodedOffset < 0) {
+            throw new IllegalArgumentException(
+                "decodedOffset(" + decodedOffset + ") < 0");
+        }
+
+        if (decodedOffset >= decoded.length) {
+            throw new IllegalArgumentException(
+                "decodedOffset(" + decodedOffset + ") >= decoded.length("
+                + decoded.length + ")");
+        }
+
+        if ((encoded[encodedOffset] >= 0x30 && encoded[encodedOffset] <= 0x39)
+            || (encoded[encodedOffset] >= 0x41
+                && encoded[encodedOffset] <= 0x5A)
+            || (encoded[encodedOffset] >= 0x61
+                && encoded[encodedOffset] <= 0x7A)
+            || encoded[encodedOffset] == 0x2D || encoded[encodedOffset] == 0x5F
+            || encoded[encodedOffset] == 0x2E
+            || encoded[encodedOffset] == 0x7E) {
+            decoded[decodedOffset] = encoded[encodedOffset];
+            return 1;
+        } else {
+            if (encoded[encodedOffset] != 0x25) {
+                throw new IllegalArgumentException(
+                    "expected 0x25('%') yet " + encoded[encodedOffset]);
+            }
+            if (encodedOffset >= encoded.length - 2) {
+                throw new IllegalArgumentException(
+                    "encodedOffset(" + encodedOffset + ") >= encoded.length("
+                    + encoded.length + ") - 2");
+            }
+            decoded[decodedOffset] =
+                (byte) ((decodeHalf(encoded[encodedOffset + 1]) << 4)
+                        | decodeHalf(encoded[encodedOffset + 2]));
+            return 3;
         }
     }
 
@@ -204,8 +213,35 @@ public class PercentDecoder {
     /**
      * Creates a new instance.
      */
-    protected PercentDecoder() {
+    public PercentDecoder() {
         super();
+    }
+
+
+    /**
+     * Decodes given
+     * <code>input</code>.
+     *
+     * @param encoded input to decode
+     *
+     * @return decoding output
+     */
+    public static byte[] decode(final byte[] encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("null encoded");
+        }
+
+        final ByteArrayOutputStream output =
+            new ByteArrayOutputStream(encoded.length * 3);
+        try {
+            decode(new ByteArrayInputStream(encoded), output);
+            output.flush();
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+
+        return output.toByteArray();
     }
 
 
