@@ -32,7 +32,7 @@ public class HexEncoder {
      *
      * @return the encoded half octet.
      */
-    protected static int encodeHalf(final int decoded) {
+    private static int encodeHalf(final int decoded) {
 
         switch (decoded) {
             case 0x00:
@@ -136,6 +136,7 @@ public class HexEncoder {
      * [TESTING].
      *
      * @param decoded octets.
+     *
      * @return nibbles.
      */
     public byte[] encodeLikeAnEngineer(final byte[] decoded) {
@@ -148,7 +149,7 @@ public class HexEncoder {
 
         int index = 0; // index in encoded
         for (int i = 0; i < decoded.length; i++) {
-            encoded[index++] = (byte) encodeHalf((decoded[i] >> 4) & 0x0F);
+            encoded[index++] = (byte) encodeHalf((decoded[i] & 0xF0) >> 4);
             encoded[index++] = (byte) encodeHalf(decoded[i] & 0x0F);
         }
 
@@ -160,6 +161,7 @@ public class HexEncoder {
      * [TESTING].
      *
      * @param decoded octets.
+     *
      * @return nibbles.
      */
     public byte[] encodeLikeABoss(byte[] decoded) {
