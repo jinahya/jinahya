@@ -35,7 +35,7 @@ public class HexDecoder {
      *
      * @return the decoded half octet.
      */
-    protected static int decodeHalf(final int encoded) {
+    private static int decodeHalf(final int encoded) {
 
         switch (encoded) {
             case 0x30: // '0'
@@ -151,6 +151,7 @@ public class HexDecoder {
      * [TESTING].
      *
      * @param encoded nibbles.
+     *
      * @return octets.
      */
     public byte[] decodeLikeAnEngineer(final byte[] encoded) {
@@ -180,6 +181,7 @@ public class HexDecoder {
      * [TESTING].
      *
      * @param encoded nibbles.
+     *
      * @return octets.
      */
     public byte[] decodeLikeABoss(byte[] encoded) {

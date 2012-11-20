@@ -36,9 +36,13 @@ public class BossVsEngineerTestCaliper extends SimpleBenchmark {
         Logger.getLogger(BossVsEngineerTestCaliper.class.getName());
 
 
-    //@Test
+    @Test
     public void run() {
-        Runner.main(BossVsEngineerTestCaliper.class, new String[0]);
+        try {
+            Runner.main(BossVsEngineerTestCaliper.class, new String[0]);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
 

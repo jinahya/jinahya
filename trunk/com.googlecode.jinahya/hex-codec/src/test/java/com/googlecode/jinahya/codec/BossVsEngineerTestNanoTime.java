@@ -18,12 +18,14 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.math3.stat.StatUtils;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
@@ -32,10 +34,10 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Test(singleThreaded = true)
-public class BossVsEngineerTest {
+public class BossVsEngineerTestNanoTime {
 
 
-    private static final int ROUNDS = 128;
+    private static final int ROUNDS = 1024;
 
 
     static {
@@ -46,42 +48,86 @@ public class BossVsEngineerTest {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(BossVsEngineerTest.class.getName());
+        Logger.getLogger(BossVsEngineerTestNanoTime.class.getName());
+
+
+    @BeforeClass
+    private static void warmUp() throws IOException {
+        LOGGER.info("warmUp()");
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final long freeMemory = Runtime.getRuntime().freeMemory();
+        LOGGER.log(Level.INFO, "Runtime.freeMemory: {0}", freeMemory);
+
+        for (int i = 0; i < 16; i++) {
+            baos.reset();
+            while (baos.size() < 1048576L) {
+                baos.write(HexCodecTestUtil.newDecodedBytes());
+            }
+            final byte[] decoded = baos.toByteArray();
+            new HexEncoder().encodeLikeABoss(decoded);
+            new HexEncoder().encodeLikeAnEngineer(decoded);
+        }
+
+        for (int i = 0; i < 16; i++) {
+            baos.reset();
+            while (baos.size() < 1048576L) {
+                baos.write(HexCodecTestUtil.newEncodedBytes());
+            }
+            final byte[] encoded = baos.toByteArray();
+            new HexDecoder().decodeLikeABoss(encoded);
+            new HexDecoder().decodeLikeAnEngineer(encoded);
+        }
+
+        for (int i = 0; i < 128; i++) {
+            encodeLikeABoss(HexCodecTestUtil.newMultipleDecodedBytes());
+            encodeLikeAnEngineer(HexCodecTestUtil.newMultipleDecodedBytes());
+            decodeLikeABoss(HexCodecTestUtil.newMultipleEncodedBytes());
+            decodeLikeAnEngineer(HexCodecTestUtil.newMultipleEncodedBytes());
+        }
+    }
+
+
+    @AfterClass
+    private static void coolDown() {
+        LOGGER.info("coolDown()");
+    }
 
 
     private static long encodeLikeABoss(final byte[][] multipleDecoded) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encodeLikeABoss(decoded);
         }
-        return System.currentTimeMillis() - start;
+        return System.nanoTime() - start;
     }
 
 
     private static long encodeLikeAnEngineer(final byte[][] multipleDecoded) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         for (byte[] decoded : multipleDecoded) {
             new HexEncoder().encodeLikeAnEngineer(decoded);
         }
-        return System.currentTimeMillis() - start;
+        return System.nanoTime() - start;
     }
 
 
     private static long decodeLikeABoss(final byte[][] multipleEncoded) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decodeLikeABoss(encoded);
         }
-        return System.currentTimeMillis() - start;
+        return System.nanoTime() - start;
     }
 
 
     private static long decodeLikeAnEngineer(final byte[][] multipleEncoded) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         for (byte[] encoded : multipleEncoded) {
             new HexDecoder().decodeLikeAnEngineer(encoded);
         }
-        return System.currentTimeMillis() - start;
+        return System.nanoTime() - start;
     }
 
 
