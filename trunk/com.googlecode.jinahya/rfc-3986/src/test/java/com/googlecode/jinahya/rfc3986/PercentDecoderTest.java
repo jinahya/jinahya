@@ -59,7 +59,7 @@ public class PercentDecoderTest {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             final Reader reader = new InputStreamReader(
                 new ByteArrayInputStream(encoded), "US-ASCII");
-            PercentDecoder.decode(reader, baos);
+            PercentDecoder.decodeSingle(reader, baos);
             baos.flush();
             decoded2 = new String(baos.toByteArray(), "US-ASCII");
         }
