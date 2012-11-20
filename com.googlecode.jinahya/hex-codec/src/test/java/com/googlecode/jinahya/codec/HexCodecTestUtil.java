@@ -19,16 +19,19 @@ package com.googlecode.jinahya.codec;
 
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-class HexCodecTestUtil {
+public class HexCodecTestUtil {
 
 
     protected static byte[] newDecodedBytes() {
@@ -103,6 +106,26 @@ class HexCodecTestUtil {
 
     protected static String newEncodedString() {
         return new String(newEncodedBytes(), StandardCharsets.US_ASCII);
+    }
+
+
+    @Test
+    public static void testNewEncodedBytes() {
+
+        final Set<Integer> limits = new HashSet<Integer>();
+
+        limits.add(0x30); // '0'
+        limits.add(0x39); // '9'
+        limits.add(0x41); // 'A'
+        limits.add(0x46); // 'F;
+        limits.add(0x61); // 'a'
+        limits.add(0x66); // 'f'
+
+        while (!limits.isEmpty()) {
+            for (byte b : HexCodecTestUtil.newEncodedBytes()) {
+                limits.remove(b & 0xFF);
+            }
+        }
     }
 
 
