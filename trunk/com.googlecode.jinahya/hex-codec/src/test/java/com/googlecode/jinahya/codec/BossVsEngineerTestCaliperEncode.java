@@ -42,7 +42,7 @@ public class BossVsEngineerTestCaliperEncode extends SimpleBenchmark {
 
 
     @Test
-    public void run() {
+    public void main() {
         main(new String[0]);
     }
 
