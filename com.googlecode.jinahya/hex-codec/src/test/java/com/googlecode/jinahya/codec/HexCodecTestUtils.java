@@ -31,14 +31,14 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HexCodecTestUtil {
+public class HexCodecTestUtils {
 
 
     protected static byte[] newDecodedBytes() {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] decodedBytes = new byte[random.nextInt(1024)];
+        final byte[] decodedBytes = new byte[random.nextInt(1048576)];
 
         random.nextBytes(decodedBytes);
 
@@ -46,17 +46,17 @@ public class HexCodecTestUtil {
     }
 
 
-    protected static byte[][] newMultipleDecodedBytes() {
-
-        final byte[][] multipleDecodedBytes =
-            new byte[ThreadLocalRandom.current().nextInt(1024)][];
-
-        for (int i = 0; i < multipleDecodedBytes.length; i++) {
-            multipleDecodedBytes[i] = HexCodecTestUtil.newDecodedBytes();
-        }
-
-        return multipleDecodedBytes;
-    }
+//    protected static byte[][] newMultipleDecodedBytes() {
+//
+//        final byte[][] multipleDecodedBytes =
+//            new byte[ThreadLocalRandom.current().nextInt(1024)][];
+//
+//        for (int i = 0; i < multipleDecodedBytes.length; i++) {
+//            multipleDecodedBytes[i] = HexCodecTestUtil.newDecodedBytes();
+//        }
+//
+//        return multipleDecodedBytes;
+//    }
 
 
     protected static String newDecodedString() {
@@ -71,7 +71,7 @@ public class HexCodecTestUtil {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] encodedBytes = new byte[random.nextInt(1024) << 1]; // even
+        final byte[] encodedBytes = new byte[random.nextInt(1048576) << 1];
 
         for (int i = 0; i < encodedBytes.length; i++) {
             switch (random.nextInt() % 3) {
@@ -91,17 +91,17 @@ public class HexCodecTestUtil {
     }
 
 
-    protected static byte[][] newMultipleEncodedBytes() {
-
-        final byte[][] multipleEncodedBytes =
-            new byte[ThreadLocalRandom.current().nextInt(1024)][];
-
-        for (int i = 0; i < multipleEncodedBytes.length; i++) {
-            multipleEncodedBytes[i] = HexCodecTestUtil.newEncodedBytes();
-        }
-
-        return multipleEncodedBytes;
-    }
+//    protected static byte[][] newMultipleEncodedBytes() {
+//
+//        final byte[][] multipleEncodedBytes =
+//            new byte[ThreadLocalRandom.current().nextInt(1024)][];
+//
+//        for (int i = 0; i < multipleEncodedBytes.length; i++) {
+//            multipleEncodedBytes[i] = HexCodecTestUtil.newEncodedBytes();
+//        }
+//
+//        return multipleEncodedBytes;
+//    }
 
 
     protected static String newEncodedString() {
@@ -122,14 +122,14 @@ public class HexCodecTestUtil {
         limits.add(0x66); // 'f'
 
         while (!limits.isEmpty()) {
-            for (byte b : HexCodecTestUtil.newEncodedBytes()) {
+            for (byte b : HexCodecTestUtils.newEncodedBytes()) {
                 limits.remove(b & 0xFF);
             }
         }
     }
 
 
-    protected HexCodecTestUtil() {
+    protected HexCodecTestUtils() {
         super();
     }
 

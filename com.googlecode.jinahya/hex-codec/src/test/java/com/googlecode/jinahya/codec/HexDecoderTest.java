@@ -52,14 +52,14 @@ public class HexDecoderTest {
     @Test
     public void testDecode() {
         new HexDecoder().decode(new byte[0]);
-        new HexDecoder().decode(HexCodecTestUtil.newEncodedBytes());
+        new HexDecoder().decode(HexCodecTestUtils.newEncodedBytes());
     }
 
 
     @Test(invocationCount = 128)
     public void testDecodeAgainstCommonsCodecHex() throws DecoderException {
 
-        final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
+        final byte[] encoded = HexCodecTestUtils.newEncodedBytes();
 
         final byte[] expected = new Hex().decode(encoded);
 

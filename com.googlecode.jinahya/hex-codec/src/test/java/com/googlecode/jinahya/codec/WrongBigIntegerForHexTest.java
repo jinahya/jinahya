@@ -19,7 +19,6 @@ package com.googlecode.jinahya.codec;
 
 
 import java.math.BigInteger;
-import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -28,6 +27,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@Test(groups = {"wrong"})
 public class WrongBigIntegerForHexTest {
 
 
@@ -45,7 +45,6 @@ public class WrongBigIntegerForHexTest {
     public void seemsWorkHuh() {
         final byte[] expected = new byte[]{0x00, 0x09, 0x1A};
         final String encoded = new BigInteger(expected).toString(16);
-        System.out.println(encoded);
         final byte[] actual = new BigInteger(encoded, 16).toByteArray();
         Assert.assertNotEquals(actual, expected);
     }

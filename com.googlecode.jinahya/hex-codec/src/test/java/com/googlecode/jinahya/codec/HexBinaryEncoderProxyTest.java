@@ -38,11 +38,9 @@ public class HexBinaryEncoderProxyTest {
         final BinaryEncoder encoder =
             (BinaryEncoder) HexBinaryEncoderProxy.newInstance();
 
-        final byte[] decoded = HexCodecTestUtil.newDecodedBytes();
+        final byte[] decoded = HexCodecTestUtils.newDecodedBytes();
 
         final byte[] encoded = encoder.encode(decoded);
-//        System.out.println("encoded: "
-//                           + new String(encoded, StandardCharsets.US_ASCII));
     }
 
 
@@ -58,11 +56,9 @@ public class HexBinaryEncoderProxyTest {
             // expected
         }
 
-        final String decoded = HexCodecTestUtil.newDecodedString();
+        final String decoded = HexCodecTestUtils.newDecodedString();
 
         final byte[] encoded = (byte[]) encoder.encode(decoded);
-//        System.out.println("encoded: "
-//                           + new String(encoded, StandardCharsets.US_ASCII));
     }
 
 
