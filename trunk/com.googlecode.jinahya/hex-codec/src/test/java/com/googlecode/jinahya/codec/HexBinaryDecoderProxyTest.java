@@ -52,7 +52,7 @@ public class HexBinaryDecoderProxyTest {
         final BinaryDecoder decoder =
             (BinaryDecoder) HexBinaryDecoderProxy.newInstance();
 
-        final byte[] encoded = HexCodecTestUtil.newEncodedBytes();
+        final byte[] encoded = HexCodecTestUtils.newEncodedBytes();
 
         final byte[] decoded = decoder.decode(encoded);
     }
@@ -70,7 +70,7 @@ public class HexBinaryDecoderProxyTest {
             // expected
         }
 
-        final String encoded = HexCodecTestUtil.newEncodedString();
+        final String encoded = HexCodecTestUtils.newEncodedString();
 
         final byte[] decoded = (byte[]) decoder.decode(encoded);
     }

@@ -32,7 +32,7 @@ public class HexCodecTest {
 
     @Test(invocationCount = 128)
     public void encodeLikeABossAndDecodeLikeAnEngineer() {
-        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
         final byte[] encoded = new HexEncoder().encodeLikeABoss(expected);
         final byte[] actual = new HexDecoder().decodeLikeAnEngineer(encoded);
         Assert.assertEquals(actual, expected);
@@ -41,7 +41,7 @@ public class HexCodecTest {
 
     @Test(invocationCount = 128)
     public void encodeLikeAnEnginenerAndDecodeLikeABoss() {
-        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
         final byte[] encoded = new HexEncoder().encodeLikeAnEngineer(expected);
         final byte[] actual = new HexDecoder().decodeLikeABoss(encoded);
         Assert.assertEquals(actual, expected);
@@ -50,7 +50,7 @@ public class HexCodecTest {
 
     @Test(invocationCount = 128)
     public void testEncodeDecode() {
-        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
         final byte[] encoded = new HexEncoder().encode(expected);
         final byte[] actual = new HexDecoder().decode(encoded);
         Assert.assertEquals(actual, expected);
@@ -80,7 +80,7 @@ public class HexCodecTest {
     @Test(invocationCount = 128)
     public void testEncodeDecodeLikeAnEngineer() {
 
-        final byte[] expected = HexCodecTestUtil.newDecodedBytes();
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
 
         final byte[] encoded = new HexEncoder().encodeLikeAnEngineer(expected);
 

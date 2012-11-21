@@ -40,14 +40,14 @@ public class HexEncoderTest {
     @Test(invocationCount = 128)
     public void testEncode() {
         new HexEncoder().encode(new byte[0]);
-        new HexEncoder().encode(HexCodecTestUtil.newDecodedBytes());
+        new HexEncoder().encode(HexCodecTestUtils.newDecodedBytes());
     }
 
 
     @Test(invocationCount = 128)
     public void testEncodeAgainstCommonsCodecHex() throws EncoderException {
 
-        final byte[] decoded = HexCodecTestUtil.newDecodedBytes();
+        final byte[] decoded = HexCodecTestUtils.newDecodedBytes();
 
         final byte[] expected = new Hex().encode(decoded);
 

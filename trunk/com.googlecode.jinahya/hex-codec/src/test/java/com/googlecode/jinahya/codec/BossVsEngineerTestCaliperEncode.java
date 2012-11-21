@@ -28,19 +28,20 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Test(singleThreaded = true)
-public class BossVsEngineerTestCaliper extends SimpleBenchmark {
+@Test(groups = {"benchmark"}, singleThreaded = true)
+public class BossVsEngineerTestCaliperEncode extends SimpleBenchmark {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(BossVsEngineerTestCaliper.class.getName());
+        Logger.getLogger(BossVsEngineerTestCaliperEncode.class.getName());
 
 
     @Test
     public void run() {
         try {
-            Runner.main(BossVsEngineerTestCaliper.class, new String[0]);
+            Runner.main(BossVsEngineerTestCaliperEncode.class, new String[0]);
         } catch (Exception e) {
+            System.err.println("e: " + e.getMessage());
             e.printStackTrace(System.err);
         }
     }
@@ -50,8 +51,7 @@ public class BossVsEngineerTestCaliper extends SimpleBenchmark {
     protected void setUp() throws Exception {
         super.setUp();
 
-        multipleDecodedBytes = HexCodecTestUtil.newMultipleDecodedBytes();
-        multipleEncodedBytes = HexCodecTestUtil.newMultipleEncodedBytes();
+        decoded = HexCodecTestUtils.newDecodedBytes();
     }
 
 
@@ -64,9 +64,7 @@ public class BossVsEngineerTestCaliper extends SimpleBenchmark {
     public void timeEncodeLikeABoss(final int reps) {
 
         for (int i = 0; i < reps; i++) {
-            for (byte[] decoded : multipleDecodedBytes) {
-                new HexEncoder().encodeLikeABoss(decoded);
-            }
+            new HexEncoder().encodeLikeABoss(decoded);
         }
     }
 
@@ -74,37 +72,12 @@ public class BossVsEngineerTestCaliper extends SimpleBenchmark {
     public void timeEncodeLikeAnEngineer(final int reps) {
 
         for (int i = 0; i < reps; i++) {
-            for (byte[] decoded : multipleDecodedBytes) {
-                new HexEncoder().encodeLikeAnEngineer(decoded);
-            }
+            new HexEncoder().encodeLikeAnEngineer(decoded);
         }
     }
 
 
-    public void timeDecodeLikeABoss(final int reps) {
-
-        for (int i = 0; i < reps; i++) {
-            for (byte[] encoded : multipleEncodedBytes) {
-                new HexDecoder().decodeLikeABoss(encoded);
-            }
-        }
-    }
-
-
-    public void timeDecodeLikeAnEngineer(final int reps) {
-
-        for (int i = 0; i < reps; i++) {
-            for (byte[] encoded : multipleEncodedBytes) {
-                new HexDecoder().decodeLikeAnEngineer(encoded);
-            }
-        }
-    }
-
-
-    private byte[][] multipleEncodedBytes;
-
-
-    private byte[][] multipleDecodedBytes;
+    private byte[] decoded;
 
 
 }

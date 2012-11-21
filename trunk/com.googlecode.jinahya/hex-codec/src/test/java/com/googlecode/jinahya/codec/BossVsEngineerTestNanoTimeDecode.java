@@ -33,8 +33,8 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Test(singleThreaded = true)
-public class BossVsEngineerTestNanoTime {
+@Test(groups = {"benchmark"}, singleThreaded = true)
+public class BossVsEngineerTestNanoTimeDecode {
 
 
     private static final int ROUNDS = 1024;
@@ -48,7 +48,7 @@ public class BossVsEngineerTestNanoTime {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(BossVsEngineerTestNanoTime.class.getName());
+        Logger.getLogger(BossVsEngineerTestNanoTimeDecode.class.getName());
 
 
     @BeforeClass
@@ -63,7 +63,7 @@ public class BossVsEngineerTestNanoTime {
         for (int i = 0; i < 16; i++) {
             baos.reset();
             while (baos.size() < 1048576L) {
-                baos.write(HexCodecTestUtil.newDecodedBytes());
+                baos.write(HexCodecTestUtils.newDecodedBytes());
             }
             final byte[] decoded = baos.toByteArray();
             new HexEncoder().encodeLikeABoss(decoded);
@@ -73,7 +73,7 @@ public class BossVsEngineerTestNanoTime {
         for (int i = 0; i < 16; i++) {
             baos.reset();
             while (baos.size() < 1048576L) {
-                baos.write(HexCodecTestUtil.newEncodedBytes());
+                baos.write(HexCodecTestUtils.newEncodedBytes());
             }
             final byte[] encoded = baos.toByteArray();
             new HexDecoder().decodeLikeABoss(encoded);
@@ -81,10 +81,8 @@ public class BossVsEngineerTestNanoTime {
         }
 
         for (int i = 0; i < 128; i++) {
-            encodeLikeABoss(HexCodecTestUtil.newMultipleDecodedBytes());
-            encodeLikeAnEngineer(HexCodecTestUtil.newMultipleDecodedBytes());
-            decodeLikeABoss(HexCodecTestUtil.newMultipleEncodedBytes());
-            decodeLikeAnEngineer(HexCodecTestUtil.newMultipleEncodedBytes());
+            decodeLikeABoss(HexCodecTestUtils.newEncodedBytes());
+            decodeLikeAnEngineer(HexCodecTestUtils.newEncodedBytes());
         }
     }
 
@@ -95,86 +93,17 @@ public class BossVsEngineerTestNanoTime {
     }
 
 
-    private static long encodeLikeABoss(final byte[][] multipleDecoded) {
+    private static long decodeLikeABoss(final byte[] encoded) {
         final long start = System.nanoTime();
-        for (byte[] decoded : multipleDecoded) {
-            new HexEncoder().encodeLikeABoss(decoded);
-        }
+        new HexDecoder().decodeLikeABoss(encoded);
         return System.nanoTime() - start;
     }
 
 
-    private static long encodeLikeAnEngineer(final byte[][] multipleDecoded) {
+    private static long decodeLikeAnEngineer(final byte[] encoded) {
         final long start = System.nanoTime();
-        for (byte[] decoded : multipleDecoded) {
-            new HexEncoder().encodeLikeAnEngineer(decoded);
-        }
+        new HexDecoder().decodeLikeAnEngineer(encoded);
         return System.nanoTime() - start;
-    }
-
-
-    private static long decodeLikeABoss(final byte[][] multipleEncoded) {
-        final long start = System.nanoTime();
-        for (byte[] encoded : multipleEncoded) {
-            new HexDecoder().decodeLikeABoss(encoded);
-        }
-        return System.nanoTime() - start;
-    }
-
-
-    private static long decodeLikeAnEngineer(final byte[][] multipleEncoded) {
-        final long start = System.nanoTime();
-        for (byte[] encoded : multipleEncoded) {
-            new HexDecoder().decodeLikeAnEngineer(encoded);
-        }
-        return System.nanoTime() - start;
-    }
-
-
-    @Test
-    public void testEncode() {
-
-        final double[] elapsedLikeABoss = new double[ROUNDS];
-        final double[] elapsedLikeAnEngineer = new double[ROUNDS];
-
-        for (int i = 0; i < ROUNDS; i++) {
-            final byte[][] multipleDecodedBytes =
-                HexCodecTestUtil.newMultipleDecodedBytes();
-            if (ThreadLocalRandom.current().nextBoolean()) {
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleDecodedBytes);
-                elapsedLikeAnEngineer[i] =
-                    encodeLikeAnEngineer(multipleDecodedBytes);
-            } else {
-                elapsedLikeAnEngineer[i] =
-                    encodeLikeAnEngineer(multipleDecodedBytes);
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleDecodedBytes);
-            }
-        }
-
-        LOGGER.log(
-            Level.INFO,
-            "elapsed.like.a.boss: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
-            new Object[]{StatUtils.mean(elapsedLikeABoss, 1,
-                                        elapsedLikeABoss.length - 1),
-                         elapsedLikeABoss[0],
-                         elapsedLikeABoss[1],
-                         elapsedLikeABoss[2],
-                         elapsedLikeABoss[elapsedLikeABoss.length - 3],
-                         elapsedLikeABoss[elapsedLikeABoss.length - 2],
-                         elapsedLikeABoss[elapsedLikeABoss.length - 1]});
-
-        LOGGER.log(
-            Level.INFO,
-            "elapsed.like.an.engineer: {0} [{1}, {2}, {3}, ..., {4}, {5}, {6}]",
-            new Object[]{
-                StatUtils.mean(elapsedLikeAnEngineer, 1,
-                               elapsedLikeAnEngineer.length - 1),
-                elapsedLikeAnEngineer[0],
-                elapsedLikeAnEngineer[1],
-                elapsedLikeAnEngineer[2],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 3],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 2],
-                elapsedLikeAnEngineer[elapsedLikeAnEngineer.length - 1]});
     }
 
 
@@ -185,16 +114,13 @@ public class BossVsEngineerTestNanoTime {
         final double[] elapsedLikeAnEngineer = new double[ROUNDS];
 
         for (int i = 0; i < ROUNDS; i++) {
-            final byte[][] multipleEncodedBytes =
-                HexCodecTestUtil.newMultipleEncodedBytes();
+            final byte[] encoded = HexCodecTestUtils.newEncodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
-                elapsedLikeAnEngineer[i] =
-                    encodeLikeAnEngineer(multipleEncodedBytes);
+                elapsedLikeABoss[i] = decodeLikeABoss(encoded);
+                elapsedLikeAnEngineer[i] = decodeLikeAnEngineer(encoded);
             } else {
-                elapsedLikeAnEngineer[i] =
-                    encodeLikeAnEngineer(multipleEncodedBytes);
-                elapsedLikeABoss[i] = encodeLikeABoss(multipleEncodedBytes);
+                elapsedLikeAnEngineer[i] = decodeLikeAnEngineer(encoded);
+                elapsedLikeABoss[i] = decodeLikeABoss(encoded);
             }
         }
 
