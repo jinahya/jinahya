@@ -36,14 +36,14 @@ public class BossVsEngineerTestCaliperEncode extends SimpleBenchmark {
         Logger.getLogger(BossVsEngineerTestCaliperEncode.class.getName());
 
 
+    public static void main(final String[] args) {
+        Runner.main(BossVsEngineerTestCaliperEncode.class, new String[0]);
+    }
+
+
     @Test
     public void run() {
-        try {
-            Runner.main(BossVsEngineerTestCaliperEncode.class, new String[0]);
-        } catch (Exception e) {
-            System.err.println("e: " + e.getMessage());
-            e.printStackTrace(System.err);
-        }
+        main(new String[0]);
     }
 
 
