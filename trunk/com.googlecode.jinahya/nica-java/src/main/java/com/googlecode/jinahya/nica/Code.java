@@ -43,6 +43,14 @@ public enum Code {
      */
     REQUEST_URL(CodeKeys.REQUEST_URL),
     /**
+     * See {@link CodeKeys#USER_PASSWORD_NEW}.
+     */
+    USER_PASSWORD_NEW(CodeKeys.USER_PASSWORD_NEW),
+    /**
+     * See {@link CodeKeys#USER_PASSWORD_OLD}.
+     */
+    USER_PASSWORD_OLD(CodeKeys.USER_PASSWORD_OLD),
+    /**
      * See {@link CodeKeys#USER_PASSWORD}.
      */
     USER_PASSWORD(CodeKeys.USER_PASSWORD),
