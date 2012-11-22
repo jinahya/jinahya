@@ -52,7 +52,7 @@ public class HexEncoder {
             case 0x0D:
             case 0x0E:
             case 0x0F:
-                return decoded + 0x57; // 0x41('a') - 0x46('f')
+                return decoded + 0x57; // 0x61('a') - 0x66('f')
             default:
                 throw new IllegalArgumentException("illegal half: " + decoded);
         }
