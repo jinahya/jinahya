@@ -35,7 +35,7 @@ public class PercentBinaryEncoderProxyTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test(invocationCount = 128)
+    //@Test(invocationCount = 128)
     public void testEncode() throws Exception {
 
         final BinaryEncoder encoder =
