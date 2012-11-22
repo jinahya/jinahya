@@ -27,6 +27,18 @@ public final class CodeKeys {
 
 
     /**
+     * HTTP request method in upper case.
+     */
+    public static final String REQUEST_METHOD = "REQUEST_METHOD";
+
+
+    /**
+     * HTTP request URL.
+     */
+    public static final String REQUEST_URL = "REQUEST_URL";
+
+
+    /**
      * Number used once per request.
      */
     public static final String REQUEST_NONCE = "REQUEST_NONCE";
@@ -40,21 +52,17 @@ public final class CodeKeys {
 
 
     /**
-     * HTTP request method in upper case.
+     * User's new password for chaning, if required, per request. The value for
+     * this code must be hashed in SHA-512.
      */
-    public static final String REQUEST_METHOD = "REQUEST_METHOD";
+    public static final String USER_PASSWORD_NEW = "USER_PASSWORD_NEW";
 
 
     /**
-     * HTTP request URL.
+     * User's old password for chaning, if required, per request. The value for
+     * this code must be hashed in SHA-512.
      */
-    public static final String REQUEST_URL = "REQUEST_URL";
-
-
-    /**
-     * User's username, if required, per request.
-     */
-    public static final String USER_USERNAME = "USER_USERNAME";
+    public static final String USER_PASSWORD_OLD = "USER_PASSWORD_OLD";
 
 
     /**
@@ -62,6 +70,12 @@ public final class CodeKeys {
      * be hashed in SHA-512.
      */
     public static final String USER_PASSWORD = "USER_PASSWORD";
+
+
+    /**
+     * User's username, if required, per request.
+     */
+    public static final String USER_USERNAME = "USER_USERNAME";
 
 
     /**
