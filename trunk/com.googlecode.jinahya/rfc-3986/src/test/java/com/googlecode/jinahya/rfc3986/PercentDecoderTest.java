@@ -18,15 +18,7 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Random;
-import org.apache.commons.lang.RandomStringUtils;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 
 /**
@@ -39,32 +31,5 @@ public class PercentDecoderTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test(invocationCount = 128)
-    public void testDecodeComparingTwoMethods() throws IOException {
-
-        final byte[] encoded = PercentEncoder.encode(
-            RandomStringUtils.random(RANDOM.nextInt(10)));
-
-
-        final String decoded1;
-        {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PercentDecoder.decode(new ByteArrayInputStream(encoded), baos);
-            baos.flush();
-            decoded1 = new String(baos.toByteArray(), "US-ASCII");
-        }
-
-        final String decoded2;
-        {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final Reader reader = new InputStreamReader(
-                new ByteArrayInputStream(encoded), "US-ASCII");
-            PercentDecoder.decodeSingle(reader, baos);
-            baos.flush();
-            decoded2 = new String(baos.toByteArray(), "US-ASCII");
-        }
-
-        Assert.assertEquals(decoded1, decoded2);
-    }
 }
 

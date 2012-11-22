@@ -18,11 +18,6 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 
@@ -35,52 +30,101 @@ import java.io.UnsupportedEncodingException;
 public class PercentEncoder {
 
 
-    protected static int encodeSingle(final int decoded, final byte[] encoded, final int offset) {
+    private static int encodeHalf(final int decoded) {
 
-        int half;
+        switch (decoded) {
+            case 0x00:
+            case 0x01:
+            case 0x02:
+            case 0x03:
+            case 0x04:
+            case 0x05:
+            case 0x06:
+            case 0x07:
+            case 0x08:
+            case 0x09:
+                return decoded + 0x30; // 0x30('0') - 0x39('9')
+            case 0x0A:
+            case 0x0B:
+            case 0x0C:
+            case 0x0D:
+            case 0x0E:
+            case 0x0F:
+                return decoded + 0x37; // 0x41('A') - 0x46('F')
+            default:
+                throw new IllegalArgumentException("illegal half: " + decoded);
+        }
+    }
+
+
+    protected static void encodeSingle(final int decoded, final byte[] encoded,
+                                       final int offset) {
+
+        if (decoded >> 8 != 0) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") >> 8 != 0");
+        }
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (encoded.length < 1) {
+            throw new IllegalArgumentException(
+                "encoded.length(" + encoded.length + ") < 1");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= encoded.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= encoded.length(" + encoded.length
+                + ")");
+        }
+
         if ((decoded >= 0x30 && decoded <= 0x39) // digit
             || (decoded >= 0x41 && decoded <= 0x5A) // upper case alpha
             || (decoded >= 0x61 && decoded <= 0x7A) // lower case alpha
             || decoded == 0x2D || decoded == 0x5F || decoded == 0x2E
             || decoded == 0x7E) { // -_.~
             encoded[offset] = (byte) decoded;
-            return 1;
         } else {
-            encoded[offset] = 0x25;
-            encoded[offset + 1] = (byte) ((half = decoded >> 4) < 0x0A
-                                          ? half + 0x30 : half + 0x37);
-            encoded[offset + 2] = (byte) ((half = decoded & 0x0F) < 0x0A
-                                          ? half + 0x30 : half + 0x37);
-            return 3;
+            if (offset >= encoded.length - 2) {
+                throw new IllegalArgumentException(
+                    "offset(" + offset + ") >= encoded.length("
+                    + encoded.length + ") - 2");
+            }
+            encoded[offset] = 0x25; // '%'
+            encoded[offset + 1] = (byte) encodeHalf(decoded >> 4);
+            encoded[offset + 2] = (byte) encodeHalf(decoded & 0x0F);
         }
     }
 
 
-    public static void encode(final InputStream input,
-                              final OutputStream output)
-        throws IOException {
+    public static byte[] encodeMultiple(final byte[] decoded) {
 
-        if (input == null) {
-            throw new NullPointerException("null input");
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
         }
 
-        if (output == null) {
-            throw new IllegalArgumentException("null output");
+        final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
+
+        int offset = 0;
+        for (int i = 0; i < decoded.length; i++) {
+            encodeSingle(decoded[i] & 0xFF, encoded, offset);
+            offset += encoded[offset] == 0x25 ? 3 : 1;
         }
 
-        int h;
-        for (int b = -1; (b = input.read()) != -1;) {
-            if ((b >= 0x30 && b <= 0x39) // digit
-                || (b >= 0x41 && b <= 0x5A) // upper case alpha
-                || (b >= 0x61 && b <= 0x7A) // lower case alpha
-                || b == 0x2D || b == 0x5F || b == 0x2E || b == 0x7E) { // -_.~
-                output.write(b);
-            } else {
-                output.write(0x25); // '%'
-                output.write((h = b >> 4) < 0x0A ? h + 0x30 : h + 0x37);
-                output.write((h = b & 0x0F) < 0x0A ? h + 0x30 : h + 0x37);
-            }
+        if (offset == encoded.length) {
+            return encoded;
         }
+
+        final byte[] trimmed = new byte[offset];
+        System.arraycopy(encoded, 0, trimmed, 0, offset);
+
+        return trimmed;
     }
 
 
@@ -103,14 +147,7 @@ public class PercentEncoder {
             throw new NullPointerException("null decoded");
         }
 
-        final byte[] encoded = new byte[decoded.length * 3];
-
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            offset = encodeSingle(decoded[i] & 0xFF, encoded, offset);
-        }
-
-        return encoded;
+        return encodeMultiple(decoded);
     }
 
 

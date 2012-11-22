@@ -47,12 +47,12 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     /**
      * BinaryEncoder Class.
      */
-    private static final Class BINARY_ENCODER_CLAZZ;
+    private static final Class CLASS_BINARY_ENCODER;
 
 
     static {
         try {
-            BINARY_ENCODER_CLAZZ = Class.forName(
+            CLASS_BINARY_ENCODER = Class.forName(
                 "org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
@@ -63,12 +63,12 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
     /**
      * EncoderException Constructor.
      */
-    private static final Constructor ENCODER_EXCEPTION_CONSTRUCTOR;
+    private static final Constructor CONSTRUCTOR_ENCODER_EXCEPTION_CONSTRUCTOR;
 
 
     static {
         try {
-            ENCODER_EXCEPTION_CONSTRUCTOR = Class.forName(
+            CONSTRUCTOR_ENCODER_EXCEPTION_CONSTRUCTOR = Class.forName(
                 "org.apache.commons.codec.EncoderException").getConstructor(
                 new Class[]{Throwable.class});
         } catch (ClassNotFoundException cnfe) {
@@ -86,8 +86,8 @@ public class PercentBinaryEncoderProxy implements InvocationHandler {
      */
     public static Object newInstance() {
         return Proxy.newProxyInstance(
-            BINARY_ENCODER_CLAZZ.getClassLoader(),
-            new Class[]{BINARY_ENCODER_CLAZZ},
+            CLASS_BINARY_ENCODER.getClassLoader(),
+            new Class[]{CLASS_BINARY_ENCODER},
             new PercentBinaryEncoderProxy());
     }
 

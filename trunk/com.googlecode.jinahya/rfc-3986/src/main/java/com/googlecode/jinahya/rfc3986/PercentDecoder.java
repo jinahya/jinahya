@@ -18,17 +18,6 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-
-
 /**
  * Percent Decoder.
  *
@@ -66,147 +55,77 @@ public class PercentDecoder {
             case 0x44: // 'D'
             case 0x45: // 'E'
             case 0x46: // 'F'
-                return encoded - 0x37;
+                return encoded - 0x37; // 0x0A - 0x0F
             case 0x61: // 'a'
             case 0x62: // 'b'
             case 0x63: // 'c'
             case 0x64: // 'd'
             case 0x65: // 'e'
             case 0x66: // 'f'
-                return encoded - 0x57;
+                return encoded - 0x57; // 0x0A - 0x0F
             default:
                 throw new IllegalArgumentException("illegal ascii: " + encoded);
         }
     }
 
 
-    public static int decodeSingle(final byte[] encoded, final int encodedOffset, final byte[] decoded, final int decodedOffset) {
+    public static int decodeSingle(final byte[] encoded, final int offset) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
 
-        if (encodedOffset) { < 0) {
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= encoded.length) {
             throw new IllegalArgumentException(
-                "encodedOffset(" + encodedOffset) { + ") < 0");
+                "offset(" + offset + ") >= encoded.length(" + encoded.length
+                + ")");
         }
 
-        if (encodedOffset) { >= encoded.length) {
-            throw new IllegalArgumentException(
-                "encodedOffset(" + encodedOffset) { + ") >= encoded.length("
-                + encoded.length + ")");
-        }
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        if (decoded.length < 1) {
-            throw new IllegalArgumentException(
-                "decoded.length(" + decoded.length + ") < 1");
-        }
-
-        if (decodedOffset < 0) {
-            throw new IllegalArgumentException(
-                "decodedOffset(" + decodedOffset + ") < 0");
-        }
-
-        if (decodedOffset >= decoded.length) {
-            throw new IllegalArgumentException(
-                "decodedOffset(" + decodedOffset + ") >= decoded.length("
-                + decoded.length + ")");
-        }
-
-        if ((encoded[encodedOffset) {] >= 0x30 && encoded[encodedOffset) {] <= 0x39)
-            || (encoded[encodedOffset) {] >= 0x41
-                && encoded[encodedOffset) {] <= 0x5A)
-            || (encoded[encodedOffset) {] >= 0x61
-                && encoded[encodedOffset) {] <= 0x7A)
-            || encoded[encodedOffset) {] == 0x2D || encoded[encodedOffset) {] == 0x5F
-            || encoded[encodedOffset) {] == 0x2E
-            || encoded[encodedOffset) {] == 0x7E) {
-            decoded[decodedOffset] = encoded[encodedOffset) {];
-            return 1;
+        if ((encoded[offset] >= 0x30 && encoded[offset] <= 0x39)
+            || (encoded[offset] >= 0x41 && encoded[offset] <= 0x5A)
+            || (encoded[offset] >= 0x61 && encoded[offset] <= 0x7A)
+            || encoded[offset] == 0x2D || encoded[offset] == 0x5F
+            || encoded[offset] == 0x2E
+            || encoded[offset] == 0x7E) {
+            return encoded[offset];
         } else {
-            if (encoded[encodedOffset) {] != 0x25) {
+            if (encoded[offset] != 0x25) {
                 throw new IllegalArgumentException(
-                    "expected 0x25('%') yet " + encoded[encodedOffset) {]);
+                    "expected 0x25('%') yet " + encoded[offset]);
             }
-            if (encodedOffset) { >= encoded.length - 2) {
+            if (offset >= encoded.length - 2) {
                 throw new IllegalArgumentException(
-                    "encodedOffset(" + encodedOffset) { + ") >= encoded.length("
+                    "offset(" + offset + ") >= encoded.length("
                     + encoded.length + ") - 2");
             }
-            decoded[decodedOffset] =
-                (byte) ((decodeHalf(encoded[encodedOffset) { + 1]) << 4)
-                        | decodeHalf(encoded[encodedOffset) { + 2]));
-            return 3;
+            return (decodeHalf(encoded[offset + 1]) << 4)
+                   | decodeHalf(encoded[offset + 2]);
         }
     }
 
 
-    public static int decodeSingle(final byte[] encoded, final int encodedOffset, final byte[] decoded, final int decodedOffset) {
+    public static byte[] decodeMultiple(final byte[] encoded) {
 
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+        final byte[] decoded = new byte[encoded.length];
+        int i = 0;
+
+        for (int offset = 0; offset < encoded.length;) {
+            decoded[i++] = (byte) decodeSingle(encoded, offset);
+            offset += encoded[offset] == 0x25 ? 3 : 1;
         }
 
-        if (encodedOffset < 0) {
-            throw new IllegalArgumentException(
-                "encodedOffset(" + encodedOffset + ") < 0");
+        if (i == decoded.length) {
+            return decoded;
         }
 
-        if (encodedOffset >= encoded.length) {
-            throw new IllegalArgumentException(
-                "encodedOffset(" + encodedOffset + ") >= encoded.length("
-                + encoded.length + ")");
-        }
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
-        }
-
-        if (decoded.length < 1) {
-            throw new IllegalArgumentException(
-                "decoded.length(" + decoded.length + ") < 1");
-        }
-
-        if (decodedOffset < 0) {
-            throw new IllegalArgumentException(
-                "decodedOffset(" + decodedOffset + ") < 0");
-        }
-
-        if (decodedOffset >= decoded.length) {
-            throw new IllegalArgumentException(
-                "decodedOffset(" + decodedOffset + ") >= decoded.length("
-                + decoded.length + ")");
-        }
-
-        if ((encoded[encodedOffset] >= 0x30 && encoded[encodedOffset] <= 0x39)
-            || (encoded[encodedOffset] >= 0x41
-                && encoded[encodedOffset] <= 0x5A)
-            || (encoded[encodedOffset] >= 0x61
-                && encoded[encodedOffset] <= 0x7A)
-            || encoded[encodedOffset] == 0x2D || encoded[encodedOffset] == 0x5F
-            || encoded[encodedOffset] == 0x2E
-            || encoded[encodedOffset] == 0x7E) {
-            decoded[decodedOffset] = encoded[encodedOffset];
-            return 1;
-        } else {
-            if (encoded[encodedOffset] != 0x25) {
-                throw new IllegalArgumentException(
-                    "expected 0x25('%') yet " + encoded[encodedOffset]);
-            }
-            if (encodedOffset >= encoded.length - 2) {
-                throw new IllegalArgumentException(
-                    "encodedOffset(" + encodedOffset + ") >= encoded.length("
-                    + encoded.length + ") - 2");
-            }
-            decoded[decodedOffset] =
-                (byte) ((decodeHalf(encoded[encodedOffset + 1]) << 4)
-                        | decodeHalf(encoded[encodedOffset + 2]));
-            return 3;
-        }
+        final byte[] trimmed = new byte[i];
+        System.arraycopy(decoded, 0, trimmed, 0, i);
+        
+        return trimmed;
     }
 
 
@@ -232,16 +151,7 @@ public class PercentDecoder {
             throw new NullPointerException("null encoded");
         }
 
-        final ByteArrayOutputStream output =
-            new ByteArrayOutputStream(encoded.length * 3);
-        try {
-            decode(new ByteArrayInputStream(encoded), output);
-            output.flush();
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-
-        return output.toByteArray();
+        return decodeMultiple(encoded);
     }
 
 

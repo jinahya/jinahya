@@ -18,14 +18,9 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.Random;
-import org.apache.commons.lang.RandomStringUtils;
-import org.testng.Assert;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
 
@@ -40,31 +35,11 @@ public class PercentEncoderTest {
 
 
     @Test(invocationCount = 128)
-    public void testEncodeComparingTwoMethods() throws IOException {
+    public void testEncodeWithString() throws IOException {
 
-        final String string = RandomStringUtils.random(RANDOM.nextInt(1024));
+        final String decoded = RandomStringUtils.random(RANDOM.nextInt(1024));
 
-        final String encoded1;
-        {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PercentEncoder.encode(
-                new ByteArrayInputStream(string.getBytes("UTF-8")), baos);
-            baos.flush();
-            encoded1 = new String(baos.toByteArray(), "US-ASCII");
-        }
-
-        final String encoded2;
-        {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final Writer writer = new OutputStreamWriter(baos, "US-ASCII");
-            PercentEncoder.encode(
-                new ByteArrayInputStream(string.getBytes("UTF-8")), writer);
-            writer.flush();
-            baos.flush();
-            encoded2 = new String(baos.toByteArray(), "US-ASCII");
-        }
-
-        Assert.assertEquals(encoded1, encoded2);
+        final byte[] encoded = new PercentEncoder().encode(decoded);
     }
 
 

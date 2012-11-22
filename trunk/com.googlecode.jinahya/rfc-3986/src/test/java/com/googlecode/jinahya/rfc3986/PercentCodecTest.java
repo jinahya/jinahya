@@ -19,8 +19,8 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import org.apache.commons.lang.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,17 +36,18 @@ public class PercentCodecTest {
 
 
     @Test(invocationCount = 128)
-    public void test() throws IOException {
+    public void testEncodeDecode() throws IOException {
 
-        final String expected = RandomStringUtils.random(RANDOM.nextInt(1024));
+        final byte[] expected = new byte[RANDOM.nextInt(1024)];
+        RANDOM.nextBytes(expected);
 
-        final byte[] original = expected.getBytes("UTF-8");
-        final byte[] encoded = PercentEncoder.encode(original);
-        final byte[] decoded = PercentDecoder.decode(encoded);
+        final byte[] encoded = new PercentEncoder().encode(expected);
 
-        final String actual = new String(decoded, "UTF-8");
+        final byte[] actual = new PercentDecoder().decode(encoded);
 
         Assert.assertEquals(actual, expected);
     }
+
+
 }
 
