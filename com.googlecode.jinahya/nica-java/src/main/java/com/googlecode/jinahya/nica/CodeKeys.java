@@ -27,6 +27,18 @@ public final class CodeKeys {
 
 
     /**
+     * HTTP request query.
+     */
+    public static final String REQUEST_QUERY = "REQUEST_QUERY";
+
+
+    /**
+     * HTTP request path.
+     */
+    public static final String REQUEST_PATH = "REQUEST_PATH";
+
+
+    /**
      * HTTP request method in upper case.
      */
     public static final String REQUEST_METHOD = "REQUEST_METHOD";
@@ -34,6 +46,8 @@ public final class CodeKeys {
 
     /**
      * HTTP request URL.
+     *
+     * @deprecated
      */
     public static final String REQUEST_URL = "REQUEST_URL";
 
