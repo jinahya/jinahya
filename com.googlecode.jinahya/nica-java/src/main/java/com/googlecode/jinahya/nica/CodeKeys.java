@@ -33,23 +33,15 @@ public final class CodeKeys {
 
 
     /**
-     * HTTP request path.
+     * HTTP request target.
      */
-    public static final String REQUEST_PATH = "REQUEST_PATH";
+    public static final String REQUEST_TARGET = "REQUEST_TARGET";
 
 
     /**
      * HTTP request method in upper case.
      */
     public static final String REQUEST_METHOD = "REQUEST_METHOD";
-
-
-    /**
-     * HTTP request URL.
-     *
-     * @deprecated
-     */
-    public static final String REQUEST_URL = "REQUEST_URL";
 
 
     /**

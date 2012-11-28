@@ -27,6 +27,18 @@ public enum Code {
 
 
     /**
+     * See {@link CodeKeys#REQUEST_QUERY}.
+     */
+    REQUEST_QUERY(CodeKeys.REQUEST_QUERY),
+    /**
+     * See {@link CodeKeys#REQUEST_TARGET}.
+     */
+    REQUEST_TARGET(CodeKeys.REQUEST_TARGET),
+    /**
+     * See {@link CodeKeys#REQUEST_METHOD}.
+     */
+    REQUEST_METHOD(CodeKeys.REQUEST_METHOD),
+    /**
      * See {@link CodeKeys#REQUEST_NONCE}.
      */
     REQUEST_NONCE(CodeKeys.REQUEST_NONCE),
@@ -34,14 +46,6 @@ public enum Code {
      * See {@link CodeKeys#REQUEST_TIMESTAMP}.
      */
     REQUEST_TIMESTAMP(CodeKeys.REQUEST_TIMESTAMP),
-    /**
-     * See {@link CodeKeys#REQUEST_METHOD}.
-     */
-    REQUEST_METHOD(CodeKeys.REQUEST_METHOD),
-    /**
-     * See {@link CodeKeys#REQUEST_URL}.
-     */
-    REQUEST_URL(CodeKeys.REQUEST_URL),
     /**
      * See {@link CodeKeys#USER_PASSWORD_NEW}.
      */

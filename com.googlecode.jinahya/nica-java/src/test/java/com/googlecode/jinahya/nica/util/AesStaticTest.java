@@ -34,7 +34,6 @@ public class AesStaticTest {
         final byte[] iv = Aes.newIv();
         Assert.assertNotNull(iv);
         Assert.assertEquals(iv.length, Aes.BLOCK_SIZE_IN_BYTES);
-        System.out.println("Aes.newIv: " + Hex.encodeToString(iv));
     }
 
 

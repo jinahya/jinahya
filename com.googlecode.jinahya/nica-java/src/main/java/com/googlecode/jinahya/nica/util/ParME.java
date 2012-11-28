@@ -20,6 +20,7 @@ package com.googlecode.jinahya.nica.util;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -48,44 +49,174 @@ public class ParME {
      * Sorts given
      * <code>keys</code> along with values.
      *
-     * @param k keys
-     * @param v values
-     * @param l low
-     * @param h high
+     * @param keys keys
+     * @param values values
+     * @param low low
+     * @param high high
      */
-    private static void quicksort(final String[] k, final String[] v,
-                                  final int l, final int h) {
+    private static void sort(final String[] keys, final String[] values,
+                             final int low, final int high) {
 
-        int i = l;
-        int j = h;
-        final String p = k[l + (h - l) / 2];
+        if (keys.length < 2) {
+            return;
+        }
+
+        int i = low;
+        int j = high;
+        final String p = keys[low + (high - low) / 2];
 
         while (i <= j) {
-            while (k[i].compareTo(p) < 0) {
+            while (keys[i].compareTo(p) < 0) {
                 i++;
             }
-            while (k[j].compareTo(p) > 0) {
+            while (keys[j].compareTo(p) > 0) {
                 j--;
             }
             if (i <= j) {
-                exchange(k, i, j);
-                exchange(v, i, j);
+                exchange(keys, i, j);
+                if (values != null) {
+                    exchange(values, i, j);
+                }
                 i++;
                 j--;
             }
         }
-        if (l < j) {
-            quicksort(k, v, l, j);
+        if (low < j) {
+            sort(keys, values, low, j);
         }
-        if (i < h) {
-            quicksort(k, v, i, h);
+        if (i < high) {
+            sort(keys, values, i, high);
         }
     }
 
 
+//    private static String join(final String delimiter, final Vector split) {
+//
+//        if (split == null) {
+//            throw new IllegalArgumentException("null split");
+//        }
+//
+//        if (delimiter == null) {
+//            throw new IllegalArgumentException("null delimiter");
+//        }
+//
+//        final Enumeration elements = split.elements();
+//        for (int i = 0; elements.hasMoreElements(); i++) {
+//            final Object element = elements.nextElement();
+//            if (element == null) {
+//                throw new IllegalArgumentException("null element");
+//            }
+//            if (!(element instanceof String)) {
+//                throw new IllegalArgumentException(
+//                    "element(" + element + ") is not an instance of "
+//                    + String.class);
+//            }
+//            normalizedValues[i] = Per.encodeToString((String) element);
+//        }
+//    }
+    private String[] split_string(String original, String separator) {
+        Vector nodes = new Vector();
+
+        int index = original.indexOf(separator);
+        while (index >= 0) {
+            nodes.addElement(original.substring(0, index));
+            original = original.substring(index + separator.length());
+            index = original.indexOf(separator);
+        }
+        nodes.addElement(original);
+        String[] result = new String[nodes.size()];
+        if (nodes.size() > 0) {
+            for (int loop = 0; loop < nodes.size(); loop++) {
+                result[loop] = (String) nodes.elementAt(loop);
+                System.out.println(result[loop]);
+            }
+        }
+        return result;
+    }
+
+
+    private static Vector split(final String j, final String d,
+                                final Vector s) {
+
+        if (d == null) {
+            throw new IllegalArgumentException("null delimiter");
+        }
+
+        if (d.length() == 0) {
+            throw new IllegalArgumentException(
+                "delimiter.length(" + d.length() + ") == 0");
+        }
+
+        int f = 0;
+        for (int i = -1; (i = j.indexOf(d, f)) != -1; f = i + d.length()) {
+            s.add(j.substring(f, i));
+        }
+
+        s.add(j.substring(f));
+
+        return s;
+    }
+
+
+    private static Vector split(final String j, final String d) {
+
+        return split(j, d, new Vector());
+    }
+
+
+    public static String encodeValues(final Vector values,
+                                      final StringBuffer buffer) {
+
+        if (values == null) {
+            throw new IllegalArgumentException("null values");
+        }
+
+        if (buffer == null) {
+            throw new IllegalArgumentException("null buffer");
+        }
+
+        final String[] normalizedValues = new String[values.size()];
+
+        final Enumeration elements = values.elements();
+        for (int i = 0; elements.hasMoreElements(); i++) {
+
+            final Object value = elements.nextElement();
+            if (value == null) {
+                throw new IllegalArgumentException("null value");
+            }
+            if (!(value instanceof String)) {
+                throw new IllegalArgumentException(
+                    "value(" + value + ") is not an instance of "
+                    + String.class);
+            }
+            normalizedValues[i] = Per.encodeToString((String) value);
+        }
+
+        sort(normalizedValues, null, 0, normalizedValues.length);
+
+        if (normalizedValues.length > 0) {
+            buffer.append(normalizedValues[0]);
+        }
+        for (int i = 1; i < normalizedValues.length; i++) {
+            buffer.append('&').append(normalizedValues[i]);
+        }
+
+        return buffer.toString();
+    }
+
+
+    public static String encodeValues(final Vector values) {
+
+        if (values == null) {
+            throw new IllegalArgumentException("null values");
+        }
+
+        return encodeValues(values, new StringBuffer());
+    }
+
+
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
      * @param decoded key-value pairs to encode
      *
@@ -97,10 +228,6 @@ public class ParME {
             throw new IllegalArgumentException("null decoded");
         }
 
-//        if (decoded.isEmpty()) {
-//            return "";
-//        }
-
         final String[] normalizedKeys = new String[decoded.size()];
         final String[] normalizedValues = new String[decoded.size()];
 
@@ -108,6 +235,9 @@ public class ParME {
         for (int i = 0; keys.hasMoreElements(); i++) {
 
             final Object key = keys.nextElement();
+            if (key == null) {
+                throw new IllegalArgumentException("null key");
+            }
             if (!(key instanceof String)) {
                 throw new IllegalArgumentException(
                     "key(" + key + ") is not an instance of " + String.class);
@@ -115,6 +245,9 @@ public class ParME {
             normalizedKeys[i] = Per.encodeToString((String) key);
 
             final Object value = decoded.get(key);
+            if (value == null) {
+                throw new IllegalArgumentException("null value");
+            }
             if (!(value instanceof String)) {
                 throw new IllegalArgumentException(
                     "value(" + value + ") is not an instance of "
@@ -123,10 +256,7 @@ public class ParME {
             normalizedValues[i] = Per.encodeToString((String) value);
         }
 
-        if (normalizedKeys.length > 1) {
-            quicksort(normalizedKeys, normalizedValues, 0,
-                      normalizedKeys.length - 1);
-        }
+        sort(normalizedKeys, normalizedValues, 0, normalizedKeys.length - 1);
 
         final StringBuffer buffer = new StringBuffer();
         if (normalizedKeys.length > 0) {
@@ -142,6 +272,32 @@ public class ParME {
         }
 
         return buffer.toString();
+    }
+
+
+    public static Vector decodeValues(final String encoded) {
+
+        return decodeValues(encoded, new Vector());
+    }
+
+
+    public static Vector decodeValues(final String encoded,
+                                      final Vector values) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (values == null) {
+            throw new IllegalArgumentException("null values");
+        }
+
+        final Enumeration e = split(encoded, "&", new Vector()).elements();
+        while (e.hasMoreElements()) {
+            values.add(Per.decodeToString((String) e.nextElement()));
+        }
+
+        return values;
     }
 
 
@@ -164,33 +320,17 @@ public class ParME {
         if (encoded.length() == 0) {
             return decoded;
         }
-        
-        int fr = 0;
-        for (int am = -1; (am = encoded.indexOf('&', fr)) != -1; fr = am + 1) {
-            if (am == fr) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final int eq = encoded.indexOf('=', fr);
-            if (eq == -1 || eq > am) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final String key = Per.decodeToString(encoded.substring(fr, eq));
-            final String val =
-                Per.decodeToString(encoded.substring(eq + 1, am));
-            if (decoded.put(key, val) != null) {
-                throw new IllegalArgumentException(
-                    "illegal encoded: duplicate key: " + key);
-            }
-        }
 
-        if (fr <= encoded.length()) {
-            final int eq = encoded.indexOf('=', fr);
-            if (eq == -1) {
+        final Enumeration pairs = split(encoded, "&").elements();
+        while (pairs.hasMoreElements()) {
+            final String pair = (String) pairs.nextElement();
+            final int index = pair.indexOf('=');
+            if (index == -1) {
                 throw new IllegalArgumentException("illegal encoded");
             }
-            final String key = Per.decodeToString(encoded.substring(fr, eq));
-            final String val = Per.decodeToString(encoded.substring(eq + 1));
-            if (decoded.put(key, val) != null) {
+            final String key = Per.decodeToString(pair.substring(0, index));
+            final String value = Per.decodeToString(pair.substring(index + 1));
+            if (decoded.put(key, value) != null) {
                 throw new IllegalArgumentException(
                     "illegal encoded: duplicate key: " + key);
             }

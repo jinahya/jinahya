@@ -49,20 +49,20 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
-    public static void testEncode() {
-
-        final Hashtable<String, String> decoded =
-            new Hashtable<String, String>();
-
-        final int count = RANDOM.nextInt(64);
-        for (int i = 0; i < count; i++) {
-            decoded.put(RandomStringUtils.random(RANDOM.nextInt(32)),
-                        RandomStringUtils.random(RANDOM.nextInt(32)));
-        }
-
-        ParME.encode(decoded);
-    }
+//    //@Test(invocationCount = 128)
+//    public static void testEncode() {
+//
+//        final Hashtable<String, String> decoded =
+//            new Hashtable<String, String>();
+//
+//        final int count = RANDOM.nextInt(64);
+//        for (int i = 0; i < count; i++) {
+//            decoded.put(RandomStringUtils.random(RANDOM.nextInt(32)),
+//                        RandomStringUtils.random(RANDOM.nextInt(32)));
+//        }
+//
+//        ParME.encode(decoded);
+//    }
 
 
     @Test(expectedExceptions = IllegalArgumentException.class)

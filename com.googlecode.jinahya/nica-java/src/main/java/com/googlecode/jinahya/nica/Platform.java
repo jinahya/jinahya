@@ -52,8 +52,7 @@ public enum Platform {
 
 
     /**
-     * Finds a constants mapped to given
-     * <code>value</code>.
+     * Finds a constants mapped to given {@code id}.
      *
      * @param id value
      *
