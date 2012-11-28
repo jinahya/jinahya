@@ -41,7 +41,7 @@ public class JavaTVHeaders extends HeadersME {
      * @param key
      * @return
      */
-    public static Headers newInstance(final Hashtable names,
+    public static AbstractHeaders newInstance(final Hashtable names,
                                       final XletContext context,
                                       final byte[] key) {
 

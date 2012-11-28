@@ -20,7 +20,7 @@ package com.googlecode.jinahya.nica.test;
 
 import com.googlecode.jinahya.nica.CodeKeys;
 import com.googlecode.jinahya.nica.HeaderFieldNames;
-import com.googlecode.jinahya.nica.Headers;
+import com.googlecode.jinahya.nica.AbstractHeaders;
 import com.googlecode.jinahya.nica.JavaTVHeaders;
 import com.googlecode.jinahya.nica.util.Aes;
 import java.security.SecureRandom;
@@ -105,7 +105,7 @@ public class TestXlet implements Xlet {
     }
 
 
-    private Headers headers;
+    private AbstractHeaders headers;
 
 
 }

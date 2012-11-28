@@ -33,7 +33,7 @@ public class CodesTest {
     @Test
     public void testPutConstantCode() {
 
-        final DefaultCodes codes = new DefaultCodes();
+        final Codes codes = new Codes();
 
         try {
             codes.putConstantEntry(null, "");
@@ -66,7 +66,7 @@ public class CodesTest {
     @Test
     public void testPutVariableCode() {
 
-        final DefaultCodes codes = new DefaultCodes();
+        final Codes codes = new Codes();
 
         try {
             codes.putVariableEntry(null, "");
@@ -94,7 +94,7 @@ public class CodesTest {
     @Test
     public void testPutVolatileCode() {
 
-        final DefaultCodes codes = new DefaultCodes();
+        final Codes codes = new Codes();
 
         try {
             codes.putVolatileEntry(null, "");
