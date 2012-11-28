@@ -33,7 +33,8 @@ public final class CodeKeys {
 
 
     /**
-     * HTTP request target.
+     * HTTP request target. The value for this code must be an normalized URI
+     * without the query string.
      */
     public static final String REQUEST_TARGET = "REQUEST_TARGET";
 
@@ -52,20 +53,20 @@ public final class CodeKeys {
 
     /**
      * Current time in milliseconds since
-     * <code>00:00:00 UTC on 1 January 1970</code>.
+     * {@code 00:00:00 UTC on 1 January 1970}.
      */
     public static final String REQUEST_TIMESTAMP = "REQUEST_TIMESTAMP";
 
 
     /**
-     * User's new password for chaning, if required, per request. The value for
+     * User's new password for changing, if required, per request. The value for
      * this code must be hashed in SHA-512.
      */
     public static final String USER_PASSWORD_NEW = "USER_PASSWORD_NEW";
 
 
     /**
-     * User's old password for chaning, if required, per request. The value for
+     * User's old password for changing, if required, per request. The value for
      * this code must be hashed in SHA-512.
      */
     public static final String USER_PASSWORD_OLD = "USER_PASSWORD_OLD";
@@ -79,7 +80,8 @@ public final class CodeKeys {
 
 
     /**
-     * User's username, if required, per request.
+     * User's username, if required, per request. The value for this code may be
+     * hashed in SHA-512.
      */
     public static final String USER_USERNAME = "USER_USERNAME";
 
