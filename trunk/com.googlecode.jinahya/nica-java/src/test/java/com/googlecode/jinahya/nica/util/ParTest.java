@@ -60,7 +60,7 @@ public class ParTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEncodeWithNull() {
-        Par.encode(null);
+        Par.encodeValues(null);
     }
 
 
@@ -70,27 +70,27 @@ public class ParTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void testEncode() {
-
-//        System.out.println(Par.WORD);
-//        System.out.println(Par.PAIR);
-//        System.out.println(Par.REGEX);
-
-        final Map<String, String> expected = new HashMap<String, String>();
-
-        final int count = RANDOM.nextInt(64);
-        for (int i = 0; i < count; i++) {
-            expected.put(RandomStringUtils.random(RANDOM.nextInt(32)),
-                         RandomStringUtils.random(RANDOM.nextInt(32)));
-        }
-
-        final String encoded = Par.encode(expected);
-
-        final boolean matches = Par.PATTERN.matcher(encoded).matches();
-
-        Assert.assertTrue(Par.PATTERN.matcher(encoded).matches());
-    }
+//    //@Test(invocationCount = 128)
+//    public void testEncode() {
+//
+////        System.out.println(Par.WORD);
+////        System.out.println(Par.PAIR);
+////        System.out.println(Par.REGEX);
+//
+//        final Map<String, String> expected = new HashMap<String, String>();
+//
+//        final int count = RANDOM.nextInt(64);
+//        for (int i = 0; i < count; i++) {
+//            expected.put(RandomStringUtils.random(RANDOM.nextInt(32)),
+//                         RandomStringUtils.random(RANDOM.nextInt(32)));
+//        }
+//
+//        final String encoded = Par.encode(expected);
+//
+//        final boolean matches = Par.PATTERN.matcher(encoded).matches();
+//
+//        Assert.assertTrue(Par.PATTERN.matcher(encoded).matches());
+//    }
 
 
     @Test
@@ -116,7 +116,7 @@ public class ParTest {
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(invocationCount = 128)
     public void testEncodeDecode() {
 
         final Map<String, String> expected = new HashMap<String, String>();

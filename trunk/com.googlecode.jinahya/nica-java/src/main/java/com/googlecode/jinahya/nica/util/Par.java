@@ -18,8 +18,12 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -51,18 +55,93 @@ public class Par {
     }
 
 
-    /**
-     * Encodes given
-     * <code>decoded</code>.
-     *
-     * @param decoded a map of keys and values to encode
-     *
-     * @return encoded string
-     */
-    public static String encode(final Map<String, String> decoded) {
+    private static <C extends Collection<String>> C split(final String j,
+                                                          final String d,
+                                                          final C s) {
+
+        if (j == null) {
+            throw new IllegalArgumentException("null joined");
+        }
+
+        if (d == null) {
+            throw new IllegalArgumentException("null delimiter");
+        }
+
+        if (d.length() == 0) {
+            throw new IllegalArgumentException(
+                "delimiter.length(" + d.length() + ") == 0");
+        }
+
+        if (s == null) {
+            throw new IllegalArgumentException("null split");
+        }
+
+        int f = 0;
+        for (int i = -1; (i = j.indexOf(d, f)) != -1; f = i + d.length()) {
+            s.add(j.substring(f, i));
+        }
+
+        s.add(j.substring(f));
+
+        return s;
+    }
+
+
+    private static List<String> split(final String j, final String d) {
+
+        return split(j, d, new ArrayList<String>());
+    }
+
+
+    public static <V extends Collection<String>> String encodeValues(
+        final V values, final StringBuilder builder) {
+
+        if (values == null) {
+            throw new IllegalArgumentException("null values");
+        }
+
+        if (builder == null) {
+            throw new IllegalArgumentException("null builder");
+        }
+
+        final List<String> encoded = new ArrayList<String>(values.size());
+        for (final Iterator<String> i = values.iterator(); i.hasNext();) {
+            final String value = i.next();
+            if (value == null) {
+                throw new IllegalArgumentException("null value");
+            }
+            encoded.add(Per.encodeToString(value));
+        }
+        Collections.sort(encoded);
+
+        final Iterator<String> i = encoded.iterator();
+        if (i.hasNext()) {
+            builder.append(i.next());
+        }
+        while (i.hasNext()) {
+            builder.append('&').append(i.next());
+        }
+
+        return builder.toString();
+    }
+
+
+    public static <V extends Collection<String>> String encodeValues(
+        final V values) {
+
+        return encodeValues(values, new StringBuilder());
+    }
+
+
+    public static String encode(final Map<String, String> decoded,
+                                final StringBuilder builder) {
 
         if (decoded == null) {
             throw new IllegalArgumentException("null decoded");
+        }
+
+        if (builder == null) {
+            throw new IllegalArgumentException("null builder");
         }
 
         final Map<String, String> encoded = new TreeMap<String, String>();
@@ -79,7 +158,6 @@ public class Par {
             encoded.put(Per.encodeToString(key), Per.encodeToString(value));
         }
 
-        final StringBuilder builder = new StringBuilder();
         final Iterator<Entry<String, String>> entries =
             encoded.entrySet().iterator();
         if (entries.hasNext()) {
@@ -101,6 +179,68 @@ public class Par {
 
 
     /**
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded a map of keys and values to encode
+     *
+     * @return encoded string
+     */
+    public static String encode(final Map<String, String> decoded) {
+
+        return encode(decoded, new StringBuilder());
+    }
+
+
+    public static <V extends Collection<String>> V decodeValues(
+        final String encoded, final V values) {
+
+        for (String split : split(encoded, "&", new ArrayList<String>())) {
+            values.add(Per.decodeToString(split));
+        }
+
+        return values;
+    }
+
+
+    public static List<String> decodeValues(final String encoded) {
+
+        return decodeValues(encoded, new ArrayList<String>());
+    }
+
+
+    public static Map<String, String> decode(
+        final String encoded, final Map<String, String> decoded) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        if (encoded.isEmpty()) {
+            return decoded;
+        }
+
+        for (String pair : split(encoded, "&")) {
+            final int index = pair.indexOf('=');
+            if (index == -1) {
+                throw new IllegalArgumentException("illegal encoded");
+            }
+            final String key = Per.decodeToString(pair.substring(0, index));
+            final String value = Per.decodeToString(pair.substring(index + 1));
+            if (decoded.put(key, value) != null) {
+                throw new IllegalArgumentException(
+                    "illegal encoded: duplicate entry: " + key);
+            }
+        }
+
+        return decoded;
+    }
+
+
+    /**
      * Decodes given
      * <code>encoded</code>.
      *
@@ -110,49 +250,7 @@ public class Par {
      */
     public static Map<String, String> decode(final String encoded) {
 
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
-
-        final Map<String, String> decoded = new HashMap<String, String>();
-
-        if (encoded.isEmpty()) {
-            return decoded;
-        }
-
-        int fr = 0;
-        for (int am = -1; (am = encoded.indexOf('&', fr)) != -1;) {
-            if (am == fr) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final int eq = encoded.indexOf('=', fr);
-            if (eq == -1 || eq > am) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final String key = Per.decodeToString(encoded.substring(fr, eq));
-            final String value =
-                Per.decodeToString(encoded.substring(eq + 1, am));
-            if (decoded.put(key, value) != null) {
-                throw new IllegalArgumentException(
-                    "illegal encoded: duplicate entry: " + key);
-            }
-            fr = am + 1;
-        }
-
-        if (fr <= encoded.length()) {
-            final int eq = encoded.indexOf('=', fr);
-            if (eq == -1) {
-                throw new IllegalArgumentException("illegal encoded");
-            }
-            final String key = Per.decodeToString(encoded.substring(fr, eq));
-            final String value = Per.decodeToString(encoded.substring(eq + 1));
-            if (decoded.put(key, value) != null) {
-                throw new IllegalArgumentException(
-                    "illegal encoded: duplicate key: " + key);
-            }
-        }
-
-        return decoded;
+        return decode(encoded, new HashMap<String, String>());
     }
 
 
