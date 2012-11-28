@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica;
 
 
+import com.googlecode.jinahya.nica.util.ParME;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -27,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CodesME extends Codes {
+public class CodesME extends AbstractCodes {
 
 
     /**
@@ -38,7 +39,7 @@ public class CodesME extends Codes {
      * @param source source
      * @param target target
      */
-    private static void copy(final Hashtable source, final Hashtable target) {
+    protected static void copy(final Hashtable source, final Hashtable target) {
 
         if (source == null) {
             throw new IllegalArgumentException("null source");
@@ -82,19 +83,6 @@ public class CodesME extends Codes {
      * @return given codes.
      */
     public final void getEntries(final Hashtable entries) {
-
-        if (entries == null) {
-            throw new IllegalArgumentException("null entries");
-        }
-
-        putTimestampAndNonce(volatileEntries);
-
-        copy(volatileEntries, entries);
-        volatileEntries.clear();
-
-        copy(variableEntries, entries);
-
-        copy(constantEntries, entries);
     }
 
 
@@ -145,6 +133,24 @@ public class CodesME extends Codes {
         }
 
         return (String) volatileEntries.put(key, value);
+    }
+
+
+    //@Override
+    protected final String getBase() {
+
+        putTimestampAndNonce(this);
+
+        final Hashtable decoded = new Hashtable();
+
+        copy(volatileEntries, decoded);
+        volatileEntries.clear();
+
+        copy(variableEntries, decoded);
+
+        copy(constantEntries, decoded);
+
+        return ParME.encode(decoded);
     }
 
 

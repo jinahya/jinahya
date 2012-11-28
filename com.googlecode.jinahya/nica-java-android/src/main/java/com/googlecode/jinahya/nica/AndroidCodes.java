@@ -26,7 +26,7 @@ import android.provider.Settings;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AndroidCodes extends DefaultCodes {
+public class AndroidCodes extends Codes {
 
 
     /**

@@ -18,8 +18,10 @@
 package com.googlecode.jinahya.nica;
 
 
-import com.googlecode.jinahya.nica.util.Nuo;
-import java.util.Hashtable;
+import com.googlecode.jinahya.nica.util.Par;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -27,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class Codes {
+public class Codes extends AbstractCodes {
 
 
 //    /**
@@ -126,144 +128,142 @@ public abstract class Codes {
 //        return new SynchronizedCodes(codes);
 //    }
     /**
-     *
-     * @param entries
+     * Creates a new instance.
      */
-    protected static void putLanguageAndCountry(final java.util.Map entries) {
+    public Codes() {
+        super();
+
+        putLanguageAndCountry(Locale.getDefault(), this);
+    }
+
+
+    /**
+     * Returns codes.
+     *
+     * @return codes
+     */
+    public final Map<String, String> getEntries() {
+
+        final Map<String, String> codes = new HashMap<String, String>(
+            constantCodes.size() + variableCodes.size() + volatileCodes.size()
+            + 2);
+
+        getEntries(codes);
+
+        return codes;
+    }
+
+
+    /**
+     * Put codes to given
+     * <code>codes</code>.
+     *
+     * @param entries the map to be filled.
+     */
+    public final void getEntries(final Map<String, String> entries) {
 
         if (entries == null) {
             throw new IllegalArgumentException("null entries");
         }
 
-        final java.util.Locale locale = java.util.Locale.getDefault();
+        putTimestampAndNonce(this);
 
-        try {
-            entries.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
-        } catch (java.util.MissingResourceException mre) {
-        }
-        entries.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        entries.put(CodeKeys.USER_LANGUAGE,
-                    locale.getDisplayLanguage(java.util.Locale.ENGLISH));
+        entries.putAll(volatileCodes);
+        volatileCodes.clear();
 
-        try {
-            entries.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
-        } catch (java.util.MissingResourceException mre) {
+        entries.putAll(variableCodes);
+
+        entries.putAll(constantCodes);
+    }
+
+
+    @Override
+    public final void putConstantEntry(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
         }
-        entries.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        entries.put(CodeKeys.USER_COUNTRY,
-                    locale.getDisplayCountry(java.util.Locale.ENGLISH));
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        if (constantCodes.containsKey(key)) {
+            throw new IllegalArgumentException(
+                "key(" + key + ") is already occupied");
+        }
+
+        constantCodes.put(key, value);
+    }
+
+
+    @Override
+    public final String putVariableEntry(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return variableCodes.put(key, value);
+    }
+
+
+    @Override
+    public final String putVolatileEntry(final String key, final String value) {
+
+        if (key == null) {
+            throw new IllegalArgumentException("null key");
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("null value");
+        }
+
+        return volatileCodes.put(key, value);
+    }
+
+
+    @Override
+    protected final String getBase() {
+
+        putTimestampAndNonce(this);
+
+        final Map<String, String> entries = new HashMap<String, String>();
+
+        entries.putAll(volatileCodes);
+        volatileCodes.clear();
+
+        entries.putAll(variableCodes);
+
+        entries.putAll(constantCodes);
+
+        return Par.encode(entries);
     }
 
 
     /**
-     *
-     * @param entries
-     * @deprecated Use {@link #putLanguageAndCountry(java.util.Map)}.
+     * constant codes.
      */
-    protected static void putLanguageAndCountry(final Hashtable entries) {
-
-        if (entries == null) {
-            throw new IllegalArgumentException("null entries");
-        }
-
-        final java.util.Locale locale = java.util.Locale.getDefault();
-
-        try {
-            entries.put(CodeKeys.USER_LANGUAGE3, locale.getISO3Language());
-        } catch (java.util.MissingResourceException mre) {
-        }
-        entries.put(CodeKeys.USER_LANGUAGE2, locale.getLanguage());
-        entries.put(CodeKeys.USER_LANGUAGE,
-                    locale.getDisplayLanguage(java.util.Locale.ENGLISH));
-
-        try {
-            entries.put(CodeKeys.USER_COUNTRY3, locale.getISO3Country());
-        } catch (java.util.MissingResourceException mre) {
-        }
-        entries.put(CodeKeys.USER_COUNTRY2, locale.getLanguage());
-        entries.put(CodeKeys.USER_COUNTRY,
-                    locale.getDisplayCountry(java.util.Locale.ENGLISH));
-    }
+    private final Map<String, String> constantCodes =
+        new HashMap<String, String>();
 
 
     /**
-     *
-     * @param entries
+     * variable codes.
      */
-    protected static void putTimestampAndNonce(final java.util.Map entries) {
-
-        if (entries == null) {
-            throw new IllegalArgumentException("null entries");
-        }
-
-        final long requestTimestamp = System.currentTimeMillis();
-        entries.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(requestTimestamp));
-
-        final long requestNonce = Nuo.generate(requestTimestamp);
-        entries.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
-    }
+    private final Map<String, String> variableCodes =
+        new HashMap<String, String>();
 
 
     /**
-     *
-     * @param entries
-     * @deprecated Use {@link #putTimestampAndNonce(java.util.Map)}.
+     * volatile codes.
      */
-    protected static void putTimestampAndNonce(final Hashtable entries) {
-
-        if (entries == null) {
-            throw new IllegalArgumentException("null hashtable");
-        }
-
-        final long requestTimestamp = System.currentTimeMillis();
-        entries.put(CodeKeys.REQUEST_TIMESTAMP,
-                    Long.toString(requestTimestamp));
-
-        final long requestNonce = Nuo.generate(requestTimestamp);
-        entries.put(CodeKeys.REQUEST_NONCE, Long.toString(requestNonce));
-    }
-
-
-//    /**
-//     * Creates a new instance.
-//     */
-//    //@SuppressWarnings("unchecked")
-//    public Codes() {
-//        super();
-//    }
-    /**
-     * Adds a constant code entry. An IllegalArgumentException will be thrown if
-     * <code>key</code> is already occupied.
-     *
-     * @param key code key
-     * @param value code value
-     */
-    public abstract void putConstantEntry(final String key, final String value);
-
-
-    /**
-     * Adds a variable code entry.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key.
-     */
-    public abstract String putVariableEntry(final String key,
-                                            final String value);
-
-
-    /**
-     * Adds a volatile code entry. Note that volatile code entries are cleared
-     * after they once used.
-     *
-     * @param key code key
-     * @param value code value
-     *
-     * @return previous value mapped to the key
-     */
-    public abstract String putVolatileEntry(final String key,
-                                            final String value);
+    private final Map<String, String> volatileCodes =
+        new HashMap<String, String>();
 
 
 }

@@ -34,7 +34,7 @@ import org.apache.http.protocol.HttpContext;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class AndroidHeaders extends DefaultHeaders
+public class AndroidHeaders extends Headers
     implements HttpRequestInterceptor {
 
 
