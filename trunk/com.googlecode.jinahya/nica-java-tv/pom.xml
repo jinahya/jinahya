@@ -149,9 +149,9 @@
           <target>1.1</target>
           <excludes>
             <exclude>com/googlecode/jinahya/nica/Code.java</exclude>
-            <exclude>com/googlecode/jinahya/nica/DefaultCodes.java</exclude>
-            <exclude>com/googlecode/jinahya/nica/DefaultHeaders.java</exclude>
+            <exclude>com/googlecode/jinahya/nica/Codes.java</exclude>
             <exclude>com/googlecode/jinahya/nica/Header.java</exclude>
+            <exclude>com/googlecode/jinahya/nica/Headers.java</exclude>
             <exclude>com/googlecode/jinahya/nica/Platform.java</exclude>
             <exclude>com/googlecode/jinahya/nica/util/AesJCE.java</exclude>
             <exclude>com/googlecode/jinahya/nica/util/HacJCE.java</exclude>
