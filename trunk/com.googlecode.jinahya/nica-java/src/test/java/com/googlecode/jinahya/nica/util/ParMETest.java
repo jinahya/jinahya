@@ -18,10 +18,12 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Vector;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -43,7 +45,7 @@ public class ParMETest {
     }
 
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public static void testEncodeWithEmpty() {
         ParME.encode(new Hashtable());
     }
@@ -63,15 +65,13 @@ public class ParMETest {
 //
 //        ParME.encode(decoded);
 //    }
-
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public static void testDecodeWithNull() {
         ParME.decode(null);
     }
 
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public static void testDecodeWithEmpty() {
         ParME.decode("");
     }
@@ -100,16 +100,51 @@ public class ParMETest {
     }
 
 
-    @Test
-    public static void testEncodeDecode() {
+    protected static Hashtable newSingleValued() {
 
-        final Hashtable expected = new Hashtable();
+        final Hashtable singleValued = new Hashtable();
 
         final int count = RANDOM.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
-            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
-                         RandomStringUtils.random(RANDOM.nextInt(128)));
+            singleValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                             RandomStringUtils.random(RANDOM.nextInt(128)));
         }
+
+        return singleValued;
+    }
+
+
+    protected static Vector newValues() {
+
+        final Vector values = new Vector();
+
+        final int count = RANDOM.nextInt(128) + 1;
+        for (int i = 0; i < count; i++) {
+            values.add(RandomStringUtils.random(RANDOM.nextInt(128)));
+        }
+
+        return values;
+    }
+
+
+    protected static Hashtable newMultiValued() {
+
+        final Hashtable multiValued = new Hashtable();
+
+        final int count = RANDOM.nextInt(128) + 1;
+        for (int i = 0; i < count; i++) {
+            multiValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                            newValues());
+        }
+
+        return multiValued;
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeDecode() {
+
+        final Hashtable expected = newSingleValued();
 
         final String encoded = ParME.encode(expected);
 
@@ -119,16 +154,10 @@ public class ParMETest {
     }
 
 
-    @Test
+    @Test(invocationCount = 128)
     public static void testEncodingAgainstSE() {
 
-        final Hashtable expected = new Hashtable();
-
-        final int count = RANDOM.nextInt(128);
-        for (int i = 0; i < count; i++) {
-            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
-                         RandomStringUtils.random(RANDOM.nextInt(128)));
-        }
+        final Hashtable expected = newSingleValued();
 
         final String encoded = ParME.encode(expected);
 
@@ -138,22 +167,90 @@ public class ParMETest {
     }
 
 
-    @Test
+    @Test(invocationCount = 128)
     public static void testDecodingAgainstSE() {
 
-        final Map<String, String> expected = new HashMap<String, String>();
-
-        final int count = RANDOM.nextInt(128);
-        for (int i = 0; i < count; i++) {
-            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
-                         RandomStringUtils.random(RANDOM.nextInt(128)));
-        }
+        final Map<String, String> expected = ParTest.newSingleValued();
 
         final String encoded = Par.encode(expected);
 
         final Hashtable actual = ParME.decode(encoded);
 
         Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeDecodeValues() {
+
+        final Vector expected = newValues();
+
+        final String encoded = ParME.encodeValues(expected);
+
+        final Vector actual = ParME.decodeValues(encoded);
+
+        Collections.sort(expected);
+        Collections.sort(actual);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeDecodeMultivalued() {
+
+        final Hashtable expected = newMultiValued();
+
+        final String encoded = ParME.encodeMultivalued(expected);
+
+        final Hashtable actual = ParME.decodeMultivalued(encoded);
+
+        Assert.assertEquals(actual.keySet(), expected.keySet());
+
+        for (Object key : actual.keySet()) {
+            Collections.sort((Vector) expected.get(key));
+            Collections.sort((Vector) actual.get(key));
+            Assert.assertEquals(actual.get(key), expected.get(key));
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeMultivaluedAgainstSE() {
+
+        final Hashtable expected = newMultiValued();
+
+        final String encoded = ParME.encodeMultivalued(expected);
+
+        final Map<String, List<String>> actual =
+            Par.decodeMultiValued(encoded);
+
+        Assert.assertEquals(actual.keySet(), expected.keySet());
+
+        for (String key : actual.keySet()) {
+            Collections.sort((Vector) expected.get(key));
+            Collections.sort(actual.get(key));
+            Assert.assertEquals(actual.get(key), expected.get(key));
+        }
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testDecodeMultivaluedAgainstSE() {
+
+        final Map<String, List<String>> expected = ParTest.newMultiValued();
+
+        final String encoded = Par.encodeMultivalued(expected);
+
+        final Hashtable actual = ParME.decodeMultivalued(encoded);
+
+        Assert.assertEquals(actual.keySet(), expected.keySet());
+
+        for (String key : expected.keySet()) {
+            Collections.sort(expected.get(key));
+            Collections.sort((Vector) actual.get(key));
+            Assert.assertEquals(actual.get(key), expected.get(key));
+        }
     }
 
 

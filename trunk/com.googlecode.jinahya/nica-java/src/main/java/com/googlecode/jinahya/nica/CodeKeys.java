@@ -33,8 +33,8 @@ public final class CodeKeys {
 
 
     /**
-     * HTTP request target. The value for this code is an absolute URI which is
-     * normalized.
+     * HTTP request target. The value for this code is the request target in
+     * {@code absolute-form} without the query part.
      */
     public static final String REQUEST_TARGET = "REQUEST_TARGET";
 
