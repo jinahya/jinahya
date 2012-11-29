@@ -219,8 +219,6 @@ public abstract class AbstractHeaders {
 //
 //        copy(getFieldPair(), entries);
 //    }
-
-
     /**
      *
      * @return
@@ -261,22 +259,11 @@ public abstract class AbstractHeaders {
     }
 
 
-//    //@Override
-//    public final void putConstantEntry(final String key, final String value) {
-//        codes.putConstantEntry(key, value);
-//    }
-//
-//
-//    //@Override
-//    public final String putVariableEntry(final String key, final String value) {
-//        return codes.putVariableEntry(key, value);
-//    }
-//
-//
-//    //@Override
-//    public final String putVolatileEntry(final String key, final String value) {
-//        return codes.putVolatileEntry(key, value);
-//    }
+    public AbstractCodes getCodes() {
+        return codes;
+    }
+
+
     /**
      * name.
      */

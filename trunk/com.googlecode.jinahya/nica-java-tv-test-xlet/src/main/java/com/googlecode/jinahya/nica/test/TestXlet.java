@@ -18,9 +18,8 @@
 package com.googlecode.jinahya.nica.test;
 
 
-import com.googlecode.jinahya.nica.CodeKeys;
-import com.googlecode.jinahya.nica.HeaderFieldNames;
 import com.googlecode.jinahya.nica.AbstractHeaders;
+import com.googlecode.jinahya.nica.CodeKeys;
 import com.googlecode.jinahya.nica.JavaTVHeaders;
 import com.googlecode.jinahya.nica.util.Aes;
 import java.security.SecureRandom;
@@ -47,6 +46,7 @@ public class TestXlet implements Xlet {
         throws XletStateChangeException {
 
         final Hashtable names = new Hashtable();
+        names.put("NAME_KEY_ID", "My Key");
         names.put("NAME_en", "Kwon, Jin");
         names.put("NAME_ko", "권 진");
         names.put("NAME_zh", "權 辰");
@@ -60,8 +60,8 @@ public class TestXlet implements Xlet {
 
     public void startXlet() throws XletStateChangeException {
 
-        headers.putConstantEntry(CodeKeys.DEVICE_ID, "DEVICE_ID");
-        headers.putConstantEntry(CodeKeys.SYSTEM_ID, "SYSTEM_ID");
+        headers.getCodes().putConstantEntry(CodeKeys.DEVICE_ID, "DEVICE_ID");
+        headers.getCodes().putConstantEntry(CodeKeys.SYSTEM_ID, "SYSTEM_ID");
 
         final Set codes = new HashSet();
         final Set auths = new HashSet();
@@ -71,27 +71,30 @@ public class TestXlet implements Xlet {
             System.out.println("-----------------------------------------------"
                                + "-------------------------------------------");
 
-            headers.putVariableEntry("ROUND", Integer.toString(i));
+            headers.getCodes().putVariableEntry("ROUND", Integer.toString(i));
 
-            headers.putVariableEntry("SOCIAL_SECURITY_NUMBER", "000-00-0000");
-            headers.putVariableEntry("CREDIT_CARD_NUMBER",
-                                     "0000-0000-0000-0000");
-            headers.putVariableEntry("ADDRESS",
-                                     "46 Linden Street, Riverdale, New York");
+            headers.getCodes().putVariableEntry(
+                "SOCIAL_SECURITY_NUMBER", "000-00-0000");
+            headers.getCodes().putVariableEntry(
+                "CREDIT_CARD_NUMBER", "0000-0000-0000-0000");
+            headers.getCodes().putVariableEntry(
+                "ADDRESS", "46 Linden Street, Riverdale, New York");
 
-            headers.putVolatileEntry(CodeKeys.USER_USERNAME, "USERNAME");
-            headers.putVolatileEntry(CodeKeys.USER_PASSWORD, "PASSWORD");
+            headers.getCodes().putVolatileEntry(
+                CodeKeys.USER_USERNAME, "USERNAME");
+            headers.getCodes().putVolatileEntry(
+                CodeKeys.USER_PASSWORD, "PASSWORD");
 
-            final Hashtable entries = ((JavaTVHeaders) headers).getEntries();
-
-            System.out.println(HeaderFieldNames.NAME + "[" + i + "]: "
-                               + entries.get(HeaderFieldNames.NAME));
-            System.out.println(HeaderFieldNames.INIT + "[" + i + "]: "
-                               + entries.get(HeaderFieldNames.INIT));
-            System.out.println(HeaderFieldNames.CODE + "[" + i + "]: "
-                               + entries.get(HeaderFieldNames.CODE));
-            System.out.println(HeaderFieldNames.AUTH + "[" + i + "]: "
-                               + entries.get(HeaderFieldNames.AUTH));
+//            final Hashtable entries = ((JavaTVHeaders) headers).getEntries();
+//
+//            System.out.println(HeaderFieldNames.NAME + "[" + i + "]: "
+//                               + entries.get(HeaderFieldNames.NAME));
+//            System.out.println(HeaderFieldNames.INIT + "[" + i + "]: "
+//                               + entries.get(HeaderFieldNames.INIT));
+//            System.out.println(HeaderFieldNames.CODE + "[" + i + "]: "
+//                               + entries.get(HeaderFieldNames.CODE));
+//            System.out.println(HeaderFieldNames.AUTH + "[" + i + "]: "
+//                               + entries.get(HeaderFieldNames.AUTH));
         }
     }
 

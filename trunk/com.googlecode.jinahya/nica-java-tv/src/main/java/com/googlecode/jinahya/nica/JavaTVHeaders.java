@@ -39,11 +39,12 @@ public class JavaTVHeaders extends HeadersME {
      * @param names
      * @param context
      * @param key
+     *
      * @return
      */
     public static AbstractHeaders newInstance(final Hashtable names,
-                                      final XletContext context,
-                                      final byte[] key) {
+                                              final XletContext context,
+                                              final byte[] key) {
 
         return new JavaTVHeaders(ParME.encode(names), new JavaTVCodes(context),
                                  new AesBC(key), new HacBC(key));
@@ -57,8 +58,8 @@ public class JavaTVHeaders extends HeadersME {
      * @param aes
      * @param hac
      */
-    public JavaTVHeaders(final String name, final CodesME codes, final Aes aes,
-                         final Hac hac) {
+    public JavaTVHeaders(final String name, final AbstractCodes codes,
+                         final Aes aes, final Hac hac) {
         super(name, codes, aes, hac);
     }
 
