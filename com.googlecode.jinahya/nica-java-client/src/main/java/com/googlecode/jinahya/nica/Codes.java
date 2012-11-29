@@ -137,44 +137,44 @@ public class Codes extends AbstractCodes {
     }
 
 
-    /**
-     * Returns codes.
-     *
-     * @return codes
-     */
-    public final Map<String, String> getEntries() {
-
-        final Map<String, String> codes = new HashMap<String, String>(
-            constantCodes.size() + variableCodes.size() + volatileCodes.size()
-            + 2);
-
-        getEntries(codes);
-
-        return codes;
-    }
-
-
-    /**
-     * Put codes to given
-     * <code>codes</code>.
-     *
-     * @param entries the map to be filled.
-     */
-    public final void getEntries(final Map<String, String> entries) {
-
-        if (entries == null) {
-            throw new IllegalArgumentException("null entries");
-        }
-
-        putTimestampAndNonce(this);
-
-        entries.putAll(volatileCodes);
-        volatileCodes.clear();
-
-        entries.putAll(variableCodes);
-
-        entries.putAll(constantCodes);
-    }
+//    /**
+//     * Returns codes.
+//     *
+//     * @return codes
+//     */
+//    public final Map<String, String> getEntries() {
+//
+//        final Map<String, String> codes = new HashMap<String, String>(
+//            constantCodes.size() + variableCodes.size() + volatileCodes.size()
+//            + 2);
+//
+//        getEntries(codes);
+//
+//        return codes;
+//    }
+//
+//
+//    /**
+//     * Put codes to given
+//     * <code>codes</code>.
+//     *
+//     * @param entries the map to be filled.
+//     */
+//    public final void getEntries(final Map<String, String> entries) {
+//
+//        if (entries == null) {
+//            throw new IllegalArgumentException("null entries");
+//        }
+//
+//        putTimestampAndNonce(this);
+//
+//        entries.putAll(volatileCodes);
+//        volatileCodes.clear();
+//
+//        entries.putAll(variableCodes);
+//
+//        entries.putAll(constantCodes);
+//    }
 
 
     @Override

@@ -57,33 +57,33 @@ public class CodesME extends AbstractCodes {
     }
 
 
-    /**
-     * Returns codes.
-     *
-     * @return codes
-     */
-    public final Hashtable getEntries() {
-
-        final Hashtable entries = new Hashtable(
-            constantEntries.size() + variableEntries.size()
-            + volatileEntries.size() + 2);
-
-        getEntries(entries);
-
-        return entries;
-    }
-
-
-    /**
-     * Put codes to given
-     * <code>codes</code>.
-     *
-     * @param entries the hashtable to be filled.
-     *
-     * @return given codes.
-     */
-    public final void getEntries(final Hashtable entries) {
-    }
+//    /**
+//     * Returns codes.
+//     *
+//     * @return codes
+//     */
+//    public final Hashtable getEntries() {
+//
+//        final Hashtable entries = new Hashtable(
+//            constantEntries.size() + variableEntries.size()
+//            + volatileEntries.size() + 2);
+//
+//        getEntries(entries);
+//
+//        return entries;
+//    }
+//
+//
+//    /**
+//     * Put codes to given
+//     * <code>codes</code>.
+//     *
+//     * @param entries the hashtable to be filled.
+//     *
+//     * @return given codes.
+//     */
+//    public final void getEntries(final Hashtable entries) {
+//    }
 
 
     //@Override
