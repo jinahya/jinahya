@@ -18,8 +18,10 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -38,7 +40,6 @@ public class ParTest {
 
 
     protected static final String[] VALID_ENCODED = new String[]{
-        "",
         "=",
         "a=",
         "a=&=",
@@ -48,6 +49,7 @@ public class ParTest {
 
 
     protected static final String[] INVALID_ENCODED = new String[]{
+        "",
         "&",
         "a",
         "a&",
@@ -64,7 +66,7 @@ public class ParTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEncodeWithEmpty() {
         Par.encode(Collections.<String, String>emptyMap());
     }
@@ -91,8 +93,6 @@ public class ParTest {
 //
 //        Assert.assertTrue(Par.PATTERN.matcher(encoded).matches());
 //    }
-
-
     @Test
     public static void testDecodeForValidEncoded() {
 
@@ -121,8 +121,8 @@ public class ParTest {
 
         final Map<String, String> expected = new HashMap<String, String>();
 
-        final int count = RANDOM.nextInt(128);
-        for (int i = 0; i < count; i++) {
+        final int pairCount = RANDOM.nextInt(128) + 1;
+        for (int i = 0; i < pairCount; i++) {
             expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
                          RandomStringUtils.random(RANDOM.nextInt(128)));
         }
@@ -132,6 +132,89 @@ public class ParTest {
         final Map<String, String> actual = Par.decode(encoded);
 
         Assert.assertEquals(actual, expected);
+    }
+
+
+    protected static Map<String, String> newSingleValued() {
+
+        final Map<String, String> singleValued = new HashMap<String, String>();
+
+        final int count = RANDOM.nextInt(128) + 1;
+        for (int i = 0; i < count; i++) {
+            singleValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                             RandomStringUtils.random(RANDOM.nextInt(128)));
+        }
+
+        return singleValued;
+    }
+
+
+    protected static List<String> newValues() {
+
+        final List<String> values = new ArrayList<String>();
+
+        final int count = RANDOM.nextInt(128) + 1;
+        for (int j = 0; j < count; j++) {
+            values.add(RandomStringUtils.random(RANDOM.nextInt(128)));
+        }
+
+        return values;
+    }
+
+
+    protected static Map<String, List<String>> newMultiValued() {
+
+        final Map<String, List<String>> multiValued =
+            new HashMap<String, List<String>>();
+
+        final int count = RANDOM.nextInt(128) + 1;
+        for (int i = 0; i < count; i++) {
+            multiValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+                            newValues());
+        }
+
+        return multiValued;
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeDecodeValues() {
+
+        final List<String> expected = newValues();
+        final String encoded = Par.encodeValues(expected);
+        final List<String> actual = Par.decodeValues(encoded);
+
+        Collections.sort(expected);
+        Collections.sort(actual);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeDecodeMultivalued() {
+
+        final Map<String, List<String>> expected =
+            new HashMap<String, List<String>>();
+
+        final int pairCount = RANDOM.nextInt(128);
+        for (int i = 0; i < pairCount; i++) {
+            final String key = RandomStringUtils.random(RANDOM.nextInt(128));
+            final List<String> values = newValues();
+            expected.put(key, values);
+        }
+
+        final String encoded = Par.encodeMultivalued(expected);
+
+        final Map<String, List<String>> actual = Par.decodeMultiValued(encoded);
+
+        Assert.assertEquals(actual.keySet(), expected.keySet());
+
+        for (String key : actual.keySet()) {
+            Collections.sort(actual.get(key));
+            Collections.sort(expected.get(key));
+            Assert.assertEquals(actual.get(key), expected.get(key));
+        }
     }
 
 

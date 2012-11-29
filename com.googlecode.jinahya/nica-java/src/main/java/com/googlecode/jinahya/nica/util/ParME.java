@@ -135,97 +135,56 @@ public class ParME {
     }
 
 
-    private static Vector split(final String j, final String d,
-                                final Vector s) {
+    /**
+     *
+     * @param joined joined string
+     * @param delimiter delimiter
+     * @param split split vector
+     * @return given vector
+     */
+    private static Vector split(final String joined, final String delimiter,
+                                final Vector split) {
 
-        if (d == null) {
+        if (delimiter == null) {
             throw new IllegalArgumentException("null delimiter");
         }
 
-        if (d.length() == 0) {
+        if (delimiter.length() == 0) {
             throw new IllegalArgumentException(
-                "delimiter.length(" + d.length() + ") == 0");
+                "delimiter.length(" + delimiter.length() + ") == 0");
         }
 
         int f = 0;
-        for (int i = -1; (i = j.indexOf(d, f)) != -1; f = i + d.length()) {
-            s.add(j.substring(f, i));
+        for (int i = -1; (i = joined.indexOf(delimiter, f)) != -1;
+             f = i + delimiter.length()) {
+            split.add(joined.substring(f, i));
         }
 
-        s.add(j.substring(f));
+        split.add(joined.substring(f));
 
-        return s;
+        return split;
     }
 
 
-    private static Vector split(final String j, final String d) {
+    private static Vector split(final String joined, final String delimiter) {
 
-        return split(j, d, new Vector());
+        return split(joined, delimiter, new Vector());
     }
 
 
-    public static String encodeValues(final Vector values,
-                                      final StringBuffer buffer) {
+    protected static String encode(final Hashtable decoded,
+                                   final StringBuffer buffer) {
 
-        if (values == null) {
-            throw new IllegalArgumentException("null values");
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        if (decoded.isEmpty()) {
+            throw new IllegalArgumentException("empty decoded");
         }
 
         if (buffer == null) {
             throw new IllegalArgumentException("null buffer");
-        }
-
-        final String[] normalizedValues = new String[values.size()];
-
-        final Enumeration elements = values.elements();
-        for (int i = 0; elements.hasMoreElements(); i++) {
-
-            final Object value = elements.nextElement();
-            if (value == null) {
-                throw new IllegalArgumentException("null value");
-            }
-            if (!(value instanceof String)) {
-                throw new IllegalArgumentException(
-                    "value(" + value + ") is not an instance of "
-                    + String.class);
-            }
-            normalizedValues[i] = Per.encodeToString((String) value);
-        }
-
-        sort(normalizedValues, null, 0, normalizedValues.length);
-
-        if (normalizedValues.length > 0) {
-            buffer.append(normalizedValues[0]);
-        }
-        for (int i = 1; i < normalizedValues.length; i++) {
-            buffer.append('&').append(normalizedValues[i]);
-        }
-
-        return buffer.toString();
-    }
-
-
-    public static String encodeValues(final Vector values) {
-
-        if (values == null) {
-            throw new IllegalArgumentException("null values");
-        }
-
-        return encodeValues(values, new StringBuffer());
-    }
-
-
-    /**
-     * Encodes given {@code decoded}.
-     *
-     * @param decoded key-value pairs to encode
-     *
-     * @return encoded hex string
-     */
-    public static String encode(final Hashtable decoded) {
-
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
         }
 
         final String[] normalizedKeys = new String[decoded.size()];
@@ -258,7 +217,6 @@ public class ParME {
 
         sort(normalizedKeys, normalizedValues, 0, normalizedKeys.length - 1);
 
-        final StringBuffer buffer = new StringBuffer();
         if (normalizedKeys.length > 0) {
             buffer.append(normalizedKeys[0]).
                 append('=').
@@ -275,50 +233,121 @@ public class ParME {
     }
 
 
-    public static Vector decodeValues(final String encoded) {
+    /**
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded key-value pairs to encode
+     *
+     * @return encoded hex string
+     */
+    public static String encode(final Hashtable decoded) {
 
-        return decodeValues(encoded, new Vector());
+        return encode(decoded, new StringBuffer());
     }
 
 
-    public static Vector decodeValues(final String encoded,
-                                      final Vector values) {
+    protected static String encodeMultivalued(final Hashtable decoded,
+                                              final StringBuffer buffer) {
 
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
         }
+
+        if (buffer == null) {
+            throw new IllegalArgumentException("null buffer");
+        }
+
+        final Hashtable singleValued = new Hashtable(decoded.size());
+
+        final Enumeration keys = decoded.keys();
+        for (int i = 0; keys.hasMoreElements(); i++) {
+
+            final Object key = keys.nextElement();
+
+            final Object values = decoded.get(key);
+            if (values == null) {
+                throw new IllegalArgumentException("null values");
+            }
+            if (!(values instanceof Vector)) {
+                throw new IllegalArgumentException(
+                    "values(" + values + ") is not an instance of "
+                    + Vector.class);
+            }
+
+            buffer.delete(0, buffer.length());
+            singleValued.put(key, encodeValues((Vector) values, buffer));
+        }
+
+        buffer.delete(0, buffer.length());
+        return encode(singleValued, buffer);
+    }
+
+
+    public static String encodeMultivalued(final Hashtable decoded) {
+        return encodeMultivalued(decoded, new StringBuffer());
+    }
+
+
+    protected static String encodeValues(final Vector values,
+                                         final StringBuffer buffer) {
 
         if (values == null) {
             throw new IllegalArgumentException("null values");
         }
 
-        final Enumeration e = split(encoded, "&", new Vector()).elements();
-        while (e.hasMoreElements()) {
-            values.add(Per.decodeToString((String) e.nextElement()));
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException("empty values");
         }
 
-        return values;
+        if (buffer == null) {
+            throw new IllegalArgumentException("null buffer");
+        }
+
+        final String[] normalizedValues = new String[values.size()];
+
+        final Enumeration elements = values.elements();
+        for (int i = 0; elements.hasMoreElements(); i++) {
+
+            final Object value = elements.nextElement();
+            if (value == null) {
+                throw new IllegalArgumentException("null value");
+            }
+            if (!(value instanceof String)) {
+                throw new IllegalArgumentException(
+                    "value(" + value + ") is not an instance of "
+                    + String.class);
+            }
+            normalizedValues[i] = Per.encodeToString((String) value);
+        }
+
+        sort(normalizedValues, null, 0, normalizedValues.length - 1);
+
+        if (normalizedValues.length > 0) {
+            buffer.append(normalizedValues[0]);
+        }
+        for (int i = 1; i < normalizedValues.length; i++) {
+            buffer.append('&').append(normalizedValues[i]);
+        }
+
+        return buffer.toString();
     }
 
 
-    /**
-     * Decodes given
-     * <code>encoded</code>.
-     *
-     * @param encoded encoded hex string
-     *
-     * @return decoded key-value pairs
-     */
-    public static Hashtable decode(final String encoded) {
+    public static String encodeValues(final Vector values) {
+
+        return encodeValues(values, new StringBuffer());
+    }
+
+
+    public static Hashtable decode(final String encoded,
+                                   final Hashtable decoded) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
         }
 
-        final Hashtable decoded = new Hashtable();
-
-        if (encoded.length() == 0) {
-            return decoded;
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
         }
 
         final Enumeration pairs = split(encoded, "&").elements();
@@ -337,6 +366,66 @@ public class ParME {
         }
 
         return decoded;
+    }
+
+
+    public static Hashtable decode(final String encoded) {
+
+        return decode(encoded, new Hashtable());
+    }
+
+
+    protected static Hashtable decodeMultivalued(final String encoded,
+                                                 final Hashtable decoded) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (decoded == null) {
+            throw new IllegalArgumentException("null decoded");
+        }
+
+        final Hashtable singleValued = decode(encoded);
+        final Enumeration k = singleValued.keys();
+        while (k.hasMoreElements()) {
+            final Object key = k.nextElement();
+            decoded.put(key, decodeValues((String) singleValued.get(key)));
+        }
+
+        return decoded;
+    }
+
+
+    public static Hashtable decodeMultivalued(final String encoded) {
+
+        return decodeMultivalued(encoded, new Hashtable());
+    }
+
+
+    protected static Vector decodeValues(final String encoded,
+                                         final Vector values) {
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (values == null) {
+            throw new IllegalArgumentException("null values");
+        }
+
+        final Enumeration e = split(encoded, "&", new Vector()).elements();
+        while (e.hasMoreElements()) {
+            values.add(Per.decodeToString((String) e.nextElement()));
+        }
+
+        return values;
+    }
+
+
+    public static Vector decodeValues(final String encoded) {
+
+        return decodeValues(encoded, new Vector());
     }
 
 
