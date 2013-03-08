@@ -30,23 +30,13 @@ public class BufferedBitInput extends BitInput {
 
 
     /**
-     * Creates a new instance buffering given <code>output</code>'s buffered
-     * bytes.
-     *
-     * @param output output
-     */
-    public BufferedBitInput(final BufferedBitOutput output) {
-        this(output.toByteArray());
-    }
-
-
-    /**
-     * Creates a new instance with given <code>bytes</code>.
+     * Creates a new instance with given
+     * <code>bytes</code>.
      *
      * @param bytes bytes
      */
     public BufferedBitInput(final byte[] bytes) {
-        super(new ByteArrayInputStream(bytes));
+        super(new ByteInputStream(new ByteArrayInputStream(bytes)));
     }
 
 
