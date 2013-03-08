@@ -42,7 +42,7 @@ public class BufferedBitOutput extends BitOutput {
      * @return buffered bytes.
      */
     public byte[] toByteArray() {
-        return ((ByteArrayOutputStream) out).toByteArray();
+        return ((ByteArrayOutputStream) output).toByteArray();
     }
 
 

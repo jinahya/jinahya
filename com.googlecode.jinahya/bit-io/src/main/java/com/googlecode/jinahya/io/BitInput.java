@@ -18,12 +18,10 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.CharArrayWriter;
-import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UTFDataFormatException;
+import java.util.BitSet;
 
 
 /**
@@ -31,22 +29,66 @@ import java.io.UTFDataFormatException;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BitInput extends BitIOBase {
+public class BitInput {
 
 
     /**
-     * Creates a new instance.
-     *
-     * @param in source octet input
+     * An interface for byte source.
      */
-    public BitInput(final InputStream in) {
-        super();
+    public static interface ByteInput {
 
-        if (in == null) {
-            throw new NullPointerException("null in");
+
+        /**
+         * Reads next byte.
+         *
+         * @return next unsigned byte. -1 for EOF.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
+        int readUnsignedByte() throws IOException;
+
+
+    }
+
+
+    public static class ByteInputStream implements ByteInput {
+
+
+        public ByteInputStream(final InputStream stream) {
+            super();
+
+            if (stream == null) {
+                throw new IllegalArgumentException("null stream");
+            }
+
+            this.stream = stream;
         }
 
-        this.in = in;
+
+        public int readUnsignedByte() throws IOException {
+            return stream.read();
+        }
+
+
+        protected final InputStream stream;
+
+
+    }
+
+
+    public BitInput(final ByteInput input) {
+        super();
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        this.input = input;
+    }
+
+
+    public BitInput(final InputStream stream) {
+        this(new ByteInputStream(stream));
     }
 
 
@@ -54,319 +96,173 @@ public class BitInput extends BitIOBase {
      * Reads an unsigned byte value.
      *
      * @param length bit length between 0 (exclusive) and 8 (inclusive)
+     *
      * @return an unsigned byte value.
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        if (length <= ZERO) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") <= " + ZERO);
+        if (length < 0x01) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
-        if (length > Byte.SIZE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Byte.SIZE);
+        if (length > 0x08) {
+            throw new IllegalArgumentException("length(" + length + ") > 0x08");
         }
 
-        if (index == Byte.SIZE) {
-            final int octet = in.read();
+        if (index == 0x08) {
+            int octet = input.readUnsignedByte();
             if (octet == -1) {
                 throw new EOFException("eof");
             }
-            increaseCount();
-            setOctet(octet);
-            index = ZERO;
+            count++;
+            for (int i = 0x07; i >= 0x00; i--) {
+                bitset.set(i, (octet & 0x01) == 0x01);
+                octet >>= 1;
+            }
+            index = 0x00;
         }
 
-        final int required = length - (Byte.SIZE - index);
+        final int required = length - (0x08 - index);
 
-        if (required > ZERO) {
-            return (readUnsignedByte(length - required) << required)
+        if (required > 0x00) {
+            return (readUnsignedByte(0x08 - index) << required)
                    | readUnsignedByte(required);
         }
 
-        int value = ZERO;
+        int value = 0x00;
         for (int i = 0; i < length; i++) {
             value <<= 1;
-            value |= (getBit(index + i) ? ONE : ZERO);
+            value |= (bitset.get(index++) ? 0x01 : 0x00);
         }
-
-        index += length;
 
         return value;
     }
 
 
     /**
-     * Reads a 1-bit boolean value. ONE for true, ZERO for false.
+     * Reads a 1-bit boolean value. {@code 0x00} for {@code true}, {@code 0x00}
+     * for {@code false}.
      *
-     * @return the read boolean value
+     * @return a boolean value
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean readBoolean() throws IOException {
 
-        return readUnsignedByte(ONE) == ONE;
+        return readUnsignedByte(0x01) == 0x01;
     }
 
 
     /**
-     * Reads a 1-bit boolean value for a null flag.
+     * Reads an {@code length}-bit unsigned short value.
      *
-     * @return true if null and the value must not be read; false otherwise.
-     * @throws IOException if an I/O error occurs.
-     * @see #isNotNull()
-     */
-    protected boolean isNull() throws IOException {
-        return readBoolean();
-    }
-
-
-    /**
-     * Reads a 1-bit boolean value for a null flag.
-     *
-     * @return true if not null and the value must be read; false otherwise.
-     * @throws IOException if an I/O error occurs.
-     * @see #isNull()
-     */
-    protected boolean isNotNull() throws IOException {
-        return !isNull();
-    }
-
-
-    /**
-     * Reads a nullable 1-bit Boolean value. Identical to
-     * <code>readBOOLEAN(null)</code>.
-     *
-     * @return the read Boolean value or
-     * <code>null</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readBOOLEAN(Boolean)
-     */
-    public Boolean readBOOLEAN() throws IOException {
-
-        return readBOOLEAN(null);
-    }
-
-
-    /**
-     * Reads a 1-bit Boolean value. First, a 1-bit boolean value is read for a
-     * null flag. And, if the flag is not set, the value read via
-     * {@link #readBoolean()} is returned, If the null flag is set,
-     * <code>defaultValue</code> is returned.
-     *
-     * @param defaultValue the default value to be returned if the null flag is
-     * set
-     * @return the Boolean value read or the
-     * <code>defaultValue</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readBoolean()
-     */
-    public Boolean readBOOLEAN(final Boolean defaultValue) throws IOException {
-
-        return isNull() ? defaultValue : Boolean.valueOf(readBoolean());
-    }
-
-
-    /**
-     * Reads an unsigned short value.
-     *
-     * @param length bit length between ONE (inclusive) and {@value
+     * @param length bit length between 0x01 (inclusive) and {@value
      * java.lang.Short#SIZE} (inclusive).
+     *
      * @return the unsigned short value read.
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        if (length < ONE) {
-            throw new IllegalArgumentException("length(" + length + ") < ONE");
+        if (length < 0x01) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
-        if (length > Short.SIZE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.SIZE);
+        if (length > 0x10) {
+            throw new IllegalArgumentException("length(" + length + ") > 0x10");
         }
 
-        final int quotient = length / Byte.SIZE;
-        final int remainder = length % Byte.SIZE;
+        final int quotient = length / 0x08;
+        final int remainder = length % 0x08;
 
-        int value = ZERO;
+        int result = 0x00;
+
         for (int i = 0; i < quotient; i++) {
-            value <<= Byte.SIZE;
-            value |= readUnsignedByte(Byte.SIZE);
+            result <<= 0x08;
+            result |= readUnsignedByte(0x08);
         }
 
         if (remainder > 0) {
-            value <<= remainder;
-            value |= readUnsignedByte(remainder);
+            result <<= remainder;
+            result |= readUnsignedByte(remainder);
         }
 
-        return value;
+        return result;
     }
 
 
     /**
-     * Reads an
-     * <code>length</code>-bit unsigned int value.
+     * Reads an {@code length}-bit unsigned {@code int} value.
      *
-     * @param length bit length between 1 (inclusive) and {@value
+     * @param length bit length between 0x01 (inclusive) and {@value
      * java.lang.Integer#SIZE} (exclusive).
-     * @return the unsigned int value read from the input
+     *
+     * @return the unsigned {@code int} value read from the input
+     *
      * @throws IOException if an I/O error occurs
      */
     public int readUnsignedInt(final int length) throws IOException {
 
-        if (length < ONE) {
-            throw new IllegalArgumentException("length(" + length + ") < ONE");
+        if (length < 0x01) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
-        if (length >= Integer.SIZE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") >= " + Integer.SIZE);
+        if (length > 0x1F) {
+            throw new IllegalArgumentException("length(" + length + ") > 0x1F");
         }
 
-        final int quotient = length / Short.SIZE;
-        final int remainder = length % Short.SIZE;
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
 
-        int value = ZERO;
+        int result = 0x00;
+
         for (int i = 0; i < quotient; i++) {
-            value <<= Short.SIZE;
-            value |= readUnsignedShort(Short.SIZE);
+            result <<= 0x10;
+            result |= readUnsignedShort(0x10);
         }
 
-        if (remainder > ZERO) {
-            value <<= remainder;
-            value |= readUnsignedShort(remainder);
+        if (remainder > 0x00) {
+            result <<= remainder;
+            result |= readUnsignedShort(remainder);
         }
 
-        return value;
+        return result;
     }
 
 
     /**
-     * Reads a nullable
-     * <code>length</code>-bit unsigned
-     * <code>Integer</code> value. Identical to
-     * <code>readUnsignedINTEGER(length, null)</code>.
+     * Reads a {@code length}-bit signed {@code int}.
      *
-     * @param length bit length; See {@link #readUnsignedInt(int)} for valid
-     * range.
-     * @return the read Integer or
-     * <code>null</code> if the null flag is set.
-     * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedINTEGER(int, Integer)
-     */
-    public Integer readUnsignedINTEGER(final int length) throws IOException {
-
-        return readUnsignedINTEGER(length, null);
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>length</code>-bit unsigned
-     * <code>Integer</code> value. First, a 1-bit boolean is read for a null
-     * flag. And, if the flag is not set, the value of {@link #readUnsignedInt(int)}
-     * with
-     * <code>length</code> is returned. If the flag is set, the
-     * <code>defaultValue</code> is returned. This method doesn't check the
-     * <code>defaultValue</code>'s validity.
-     *
-     * @param length bit length. See {@link #readUnsignedInt(int)} for valid
-     * range.
-     * @param defaultValue the defaultValue returned if the null flag is set
-     * @return the Integer value or
-     * <code>defaultValue</code> if the null flag is set.
-     * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedInt(int)
-     */
-    public Integer readUnsignedINTEGER(final int length,
-                                       final Integer defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Integer.valueOf(readUnsignedInt(length));
-    }
-
-
-    /**
-     * Reads a
-     * <code>length</code>-bit signed int.
-     *
-     * @param length bit length between ONE (exclusive) and {@value
+     * @param length bit length between 0x00 (exclusive) and {@value
      * java.lang.Integer#SIZE} (inclusive).
-     * @return a unsigned int value read from the input.
+     *
+     * @return an unsigned {@code int} value.
+     *
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
 
-        if (length <= ONE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") <= " + ONE);
+        if (length < 0x02) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x02");
         }
 
-        if (length > Integer.SIZE) { // 32
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Integer.SIZE);
+        if (length > 0x20) { // 32
+            throw new IllegalArgumentException("length(" + length + ") > 0x20");
         }
 
-        return (((readBoolean() ? -1 : ZERO) << (length - 1))
+        return (((readBoolean() ? -1 : 0x00) << (length - 1))
                 | readUnsignedInt(length - 1));
     }
 
 
     /**
-     * Reads a nullable
-     * <code>length</code>-bit signed
-     * <code>Integer</code>. Identical to
-     * <code>readINTEGER(length, null)</code>.
+     * Reads a {@code float} value.
      *
-     * @param length bit length; See {@link #readInt(int)} for valid range.
-     * (inclusive)
-     * @return the read Integer or null if a null flag read.
-     * @throws IOException if an I/O error occurs.
-     * @see #readINTEGER(int, Integer)
-     */
-    public Integer readINTEGER(final int length) throws IOException {
-
-        return readINTEGER(length, null);
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>length</code>-bit signed
-     * <code>Integer</code> value. First, a 1-bit boolean is read for a null
-     * flag. And, if the flag is not set, the value of {@link #readInt(int)} is
-     * returned. If the flag is set, the
-     * <code>defaultValue</code> is returned.
+     * @return the read float value.
      *
-     * @param length bit length. See {@link #readInt(int)} for valid range.
-     * (inclusive)
-     * @param defaultValue the defaultValue returned if the null flag is set
-     * @return the read Integer value or
-     * <code>defaultValue</code> if the null flag is set.
-     * @throws IOException if an I/O error occurs.
-     * @see #readInt(int)
-     */
-    public Integer readINTEGER(final int length, final Integer defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Integer.valueOf(readInt(length));
-    }
-
-
-    /**
-     * Reads a float value.
-     *
-     * @return the read float value
      * @throws IOException if an I/O error occurs
      */
     public float readFloat() throws IOException {
@@ -375,196 +271,67 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Reads a nullable
-     * <code>Float</code> value. Identical to
-     * <code>readFLOAT(null)</code>.
+     * Reads an unsigned {@code long} value.
      *
-     * @return the read Float value or null if a null flag read
-     * @throws IOException if an I/O error occurs.
-     * @see #readFLOAT(Float)
-     */
-    public Float readFLOAT() throws IOException {
-
-        return readFLOAT(null);
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>Float</code> value. First, a 1-bit boolean is read for a null flag.
-     * And, if the flag is not set, the value of
-     * {@link #readFloat()} is returned. If the flag is set, the
-     * <code>defaultValue</code> is returned.
-     *
-     * @param defaultValue the defaultValue to be returned if the null flag is
-     * set
-     * @return the Float value or the
-     * <code>defaultValue</code> if a null flag is set.
-     * @throws IOException if an I/O error occurs.
-     * @see #readFloat()
-     */
-    public Float readFLOAT(final Float defaultValue) throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Float.valueOf(readFloat());
-    }
-
-
-    /**
-     * Reads an unsigned long.
-     *
-     * @param length bit length between ONE (inclusive) and {@value
+     * @param length bit length between 0x01 (inclusive) and {@value
      * java.lang.Long#SIZE} (exclusive)
+     *
      * @return an unsigned long value
+     *
      * @throws IOException if an I/O error occurs
      */
     public long readUnsignedLong(final int length) throws IOException {
 
-        if (length < ONE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") < " + ONE);
+        if (length < 0x01) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
-        if (length >= Long.SIZE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") >= " + Long.SIZE);
+        if (length > 0x3F) {
+            throw new IllegalArgumentException("length(" + length + ") > 0x3F");
         }
 
-        final int quotient = length / Short.SIZE;
-        final int remainder = length % Short.SIZE;
+        final int quotient = length / 0x10;
+        final int remainder = length % 0x10;
 
-        long value = 0x00L;
+        long result = 0x00L;
+
         for (int i = 0; i < quotient; i++) {
-            value <<= Short.SIZE;
-            value |= readUnsignedShort(Short.SIZE);
+            result <<= 0x10;
+            result |= readUnsignedShort(0x10);
         }
 
         if (remainder > 0) {
-            value <<= remainder;
-            value |= readUnsignedShort(remainder);
+            result <<= remainder;
+            result |= readUnsignedShort(remainder);
         }
 
-        return value;
+        return result;
     }
 
 
     /**
-     * Reads a nullable
-     * <code>length</code>-bit unsigned Long value. Identical to
-     * <code>readUnsignedLONG(length, null)</code>.
+     * Reads a {@code length}-bit signed {@code long} value.
      *
-     * @param length the bit length; See {@link #readUnsignedLong(int)} for
-     * valid range.
-     * @return the Long value or the
-     * <code>null</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedLONG(int, Long)
-     */
-    public Long readUnsignedLONG(final int length) throws IOException {
-
-        return readUnsignedLONG(length, null);
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>length</code>-bit unsigned Long value. First, a 1-bit boolean value
-     * is read for a null flag. And, if the null flag is not set, a value read
-     * via {@link #readUnsignedLong(int)} is returned. If the null flag is set,
-     * the
-     * <code>defaultValue</code> is returned. This method doesn't check the
-     * <code>defaultValue</code>'s validity.
-     *
-     * @param length the bit length; See {@link #readUnsignedLong(int)} for
-     * valid range.
-     * @param defaultValue the default value returned if the null flag is set
-     * @return the Long value or the
-     * <code>defaultValue</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedLong(int)
-     */
-    public Long readUnsignedLONG(final int length, final Long defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Long.valueOf(readUnsignedLong(length));
-    }
-
-
-    /**
-     * Reads a
-     * <code>length</code>-bit signed long value.
-     *
-     * @param length bit length between ONE (exclusive) and {@value
+     * @param length bit length between 0x01 (exclusive) and {@value
      * java.lang.Long#SIZE} (inclusive).
+     *
      * @return the signed long value.
+     *
      * @throws IOException if an I/O error occurs.
      */
     public long readLong(final int length) throws IOException {
 
-        if (length <= ONE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") <= " + ONE);
+        if (length < 0x02) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x02");
         }
 
-        if (length > Long.SIZE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Long.SIZE);
+        if (length > 0x40) {
+            throw new IllegalArgumentException("length(" + length + ") > 0x40");
         }
 
-        return (((readBoolean() ? -1L : 0L)
-                 << (length - 1))
+        return (((readBoolean() ? -1L : 0L) << (length - 1))
                 | readUnsignedLong(length - 1));
 
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>length</code>-bit signed Long value. Identical to
-     * <code>readLONG(length, null)</code>.
-     *
-     * @param length the bit length; See {@link #readLong(int)} for valid range.
-     * @return the Long value or the
-     * <code>null</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readLONG(int, Long)
-     */
-    public Long readLONG(final int length) throws IOException {
-
-        return readLONG(length, null);
-    }
-
-
-    /**
-     * Reads a nullable
-     * <code>length</code>-bit signed Long value. First, a 1-bit boolean value
-     * is read for a null flag. And, if the null flag is not set, a value read
-     * via {@link #readLong(int)} is returned. If the null flag is set, the
-     * <code>defaultValue</code> is returned. This method doesn't check the
-     * <code>defaultValue</code>'s validity.
-     *
-     * @param length the bit length; See {@link #readLong(int)} for valid range.
-     * @param defaultValue the default value returned if the null flag is set
-     * @return the Long value or the
-     * <code>defaultValue</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readLong(int)
-     */
-    public Long readLONG(final int length, final Long defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Long.valueOf(readLong(length));
     }
 
 
@@ -572,304 +339,39 @@ public class BitInput extends BitIOBase {
      * Reads a double value.
      *
      * @return double value
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong(Long.SIZE));
+
+        return Double.longBitsToDouble(readLong(0x40));
     }
 
 
     /**
-     * Reads a nullable Double value. Identical to
-     * <code>readDOUBLE(null)</code>.
+     * Align to given {@code length} bytes.
      *
-     * @return the Double value or
-     * <code>null</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readDOUBLE(Double)
-     */
-    public final Double readDOUBLE() throws IOException {
-
-        return readDOUBLE(null);
-    }
-
-
-    /**
-     * Reads a nullable Double value. First, a 1-bit boolean value is read for a
-     * null flag. And, if the null flag is not set, a value read via
-     * {@link #readDouble()} is returned. If the null flag is set, the
-     * <code>defaultValue</code> is returned.
+     * @param length number of bytes to align; must be non-zero positive.
      *
-     * @param defaultValue the default value returned if the null flag is set
-     * @return the Double value or the
-     * <code>defaultValue</code> if null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readDouble()
-     */
-    public final Double readDOUBLE(final Double defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return Double.valueOf(readDouble());
-    }
-
-
-    /**
-     * Reads a non-null byte array. First, a 16-bit unsigned integer is read for
-     * the byte count. And each byte is read.
-     *
-     * @return read byte array
-     * @throws IOException if an I/O error occurs.
-     */
-    public final byte[] readBytes() throws IOException {
-
-        final byte[] value = new byte[readUnsignedInt(0x10)]; // 16
-
-        for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) readUnsignedByte(Byte.SIZE);
-        }
-
-        return value;
-    }
-
-
-    /**
-     * Reads a nullable byte array. Identical to
-     * <code>readBYTES(null)</code>.
-     *
-     * @return a byte array or
-     * <code>null</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readBYTES(byte[])
-     */
-    public final byte[] readBYTES() throws IOException {
-
-        return readBYTES(null);
-    }
-
-
-    /**
-     * Reads a nullable byte array. First, a 1-bit boolean is read for a null
-     * flag. And, if the null flag is not set, the value read via
-     * {@link #readBytes()} is returned. If the null flag is set, the
-     * <code>defaultValue</code> is returned.
-     *
-     * @param defaultValue the default value to be returned if the null flag is
-     * set.
-     * @return a byte array or
-     * <code>defaultValue</code> if the null flag set
-     * @throws IOException if an I/O error occurs.
-     * @see #readBytes()
-     */
-    public final byte[] readBYTES(final byte[] defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return readBytes();
-    }
-
-
-    /**
-     * Reads a nullable 7-bit ASCII String. Identical to
-     * <code>readASCII(null)</code>.
-     *
-     * @return the ASCII String or
-     * <code>null</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readASCII(String)
-     */
-    public final String readASCII() throws IOException {
-
-        return readASCII(null);
-    }
-
-
-    /**
-     * Reads a nullable 7-bit ASCII String. First, a 1-bit boolean is read for a
-     * null flag. And, if the null flag is not set, a 16-bit unsigned integer is
-     * read for the character count following the characters which each is read
-     * as a 7-bit unsigned byte. If the null flag is set, the
-     * <code>defaultValue</code> is returned. This method doesn't check the
-     * <code>defaultValue</code>'s validity.
-     *
-     * @param defaultValue the default value to be returned if the null flag is
-     * set.
-     * @return a read ASCII String or
-     * <code>defaultValue</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     */
-    public final String readASCII(final String defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        final byte[] bytes = new byte[readUnsignedShort(0x10)]; // 16
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) readUnsignedByte(0x07);
-        }
-
-        return new String(bytes, "US-ASCII");
-    }
-
-
-    /**
-     * Reads a modified-UTF8 String. Identical to {@link DataInput#readUTF()}.
-     *
-     * @return a String
-     * @throws IOException if an I/O error occurs.
-     * @see DataInput#readUTF()
-     * @deprecated Not for Bit-I/O. Use {@link #readSTRING(String)}.
-     */
-    public String readUTF() throws IOException {
-
-        final CharArrayWriter caw = new CharArrayWriter();
-
-        int length = readUnsignedInt(Short.SIZE);
-        int i = 0;
-        for (; i < length; i++) {
-
-            int first = readUnsignedByte(Byte.SIZE);
-            if (first <= 0x7F) { // 0xxxxxxx
-                caw.write(first);
-                continue;
-            }
-
-            if (first <= 0xBF) {
-                throw new UTFDataFormatException(
-                    "illegal first byte: " + first);
-            }
-
-            if (first <= 0xDF) { // 110xxxxx
-                int second = readUnsignedByte(Byte.SIZE); // EOFException
-                i++;
-                if (second > 0xBF) { // !10xxxxxxxx
-                    throw new UTFDataFormatException(
-                        "illegal second byte: " + second);
-                }
-                caw.write(((first & 0x1F) << 6) | (second & 0x3F));
-                continue;
-            }
-
-            if (first <= 0xEF) { // 1110xxxx
-                int second = readUnsignedByte(Byte.SIZE); // EOFException
-                i++;
-                if (second > 0xBF) { // !10xxxxxxxx
-                    throw new UTFDataFormatException(
-                        "illegal second byte: " + second);
-                }
-                int third = readUnsignedByte(Byte.SIZE); // EOFException
-                i++;
-                if (third > 0xBF) { // !10xxxxxxxx
-                    throw new UTFDataFormatException(
-                        "illegal third byte: " + second);
-                }
-                caw.write(((first & 0x0F) << 12)
-                          | ((second & 0x3F) << 6)
-                          | (third & 0x3F));
-                continue;
-            }
-
-            throw new UTFDataFormatException("illegal first byte: " + first);
-        }
-
-        return caw.toString();
-    }
-
-
-    /**
-     * Reads a non-null String.
-     *
-     * @param charsetName charset name
-     * @return the String read.
-     * @throws IOException if an I/O error occurs.
-     */
-    public final String readString(final String charsetName)
-        throws IOException {
-
-        return new String(readBytes(), charsetName);
-    }
-
-
-    /**
-     * Reads a nullable String. Identical to
-     * <code>readSTRING(null)</code>.
-     *
-     * @param charsetName the character set name for constructing a String with
-     * raw bytes
-     * @return a String value read or
-     * <code>null</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readSTRING(String)
-     */
-    public final String readSTRING(final String charsetName)
-        throws IOException {
-
-        return readSTRING(charsetName, null);
-    }
-
-
-    /**
-     * Reads a nullable String. First, a 1-bit boolean is read for a null flag.
-     * And, if the null flag is not set, the value from {@link #readBytes()} is
-     * returned as a String created with
-     * <code>characterSet</code>. If the null flag is set, the
-     * <code>defaultValue</code> is returned. This method doesn't check the
-     * <code>defaultValue</code>'s validity.
-     *
-     * @param charsetName the character set name for constructing a String with
-     * raw bytes.
-     * @param defaultValue the default value to be returned if the null flag is
-     * set.
-     * @return a String value or
-     * <code>defaultValue</code> if the null flag is set
-     * @throws IOException if an I/O error occurs.
-     * @see #readBytes()
-     * @see String#String(byte[], String)
-     */
-    public final String readSTRING(final String charsetName,
-                                   final String defaultValue)
-        throws IOException {
-
-        if (isNull()) {
-            return defaultValue;
-        }
-
-        return readString(charsetName);
-    }
-
-
-    /**
-     * Align to given
-     * <code>length</code> octets.
-     *
-     * @param length number of octets to align; must be non-zero positive.
      * @return the number of bits discarded for alignment.
+     *
      * @throws IOException if an I/O error occurs.
      */
-    @Override
     public int align(final int length) throws IOException {
 
-        if (length <= ZERO) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") <= " + ZERO);
+        if (length < 0x01) {
+            throw new IllegalArgumentException("length(" + length + ") < 0x01");
         }
 
         int bits = 0;
 
-        if (index < Byte.SIZE) { // bit index to read
-            bits = (Byte.SIZE - index);
+        // discard remained bits on current octet.
+        if (index > 0x00) {
+            bits = index;
             readUnsignedByte(bits);
         }
 
-        int octets = getCount() % length;
+        int octets = count % length;
 
         if (octets == 0) {
             return bits;
@@ -877,13 +379,13 @@ public class BitInput extends BitIOBase {
 
         if (octets > 0) {
             octets = length - octets;
-        } else { // octets < 0
+        } else {
             octets = 0 - octets;
         }
 
         for (; octets > 0; octets--) {
-            readUnsignedByte(Byte.SIZE);
-            bits += Byte.SIZE;
+            readUnsignedByte(0x08);
+            bits += 0x08;
         }
 
         return bits;
@@ -891,25 +393,21 @@ public class BitInput extends BitIOBase {
 
 
     /**
-     * Returns the number of bits available for reading in current octet.
-     *
-     * @return available bits for reading
+     * byte input.
      */
-    public final int available() {
-        return Byte.SIZE - index;
-    }
+    private final ByteInput input;
+
+
+    private final BitSet bitset = new BitSet(0x08);
+
+
+    private int index = 0x08;
 
 
     /**
-     * source input.
+     * bytes read so far.
      */
-    final InputStream in;
-
-
-    /**
-     * bit index to read.
-     */
-    private int index = Byte.SIZE;
+    private int count = 0x00;
 
 
 }
