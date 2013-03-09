@@ -20,6 +20,7 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.util.Random;
+import org.testng.Assert;
 
 
 /**
@@ -74,6 +75,7 @@ public class Entity {
         unsignedInts = new int[31]; // 1 ~ 31
         for (int i = 0; i < unsignedInts.length; i++) {
             unsignedInts[i] = random.nextInt() >>> (32 - i - 1); // 31 ~ 1
+            Assert.assertEquals(unsignedInts[i] >> (i + 1), 0x00);
             output.writeUnsignedInt(i + 1, unsignedInts[i]);
         }
 
