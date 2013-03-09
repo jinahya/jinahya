@@ -41,7 +41,7 @@ public class EntityTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(baos);
 
-        final Entity[] expected = new Entity[random.nextInt(1024)];
+        final Entity[] expected = new Entity[random.nextInt(1024) + 1024];
         for (int i = 0; i < expected.length; i++) {
             expected[i] = new Entity().write(random, output);
         }
@@ -49,6 +49,7 @@ public class EntityTest {
         baos.flush();
 
         final byte[] bytes = baos.toByteArray();
+        System.out.println("bytes.length: " + bytes.length);
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(bais);
