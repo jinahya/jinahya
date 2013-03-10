@@ -82,18 +82,27 @@ public class Entity {
         signedInts = new int[31]; // 2 ~ 32
         for (int i = 0; i < signedInts.length; i++) {
             signedInts[i] = random.nextInt() >> (32 - i - 2); // 30 ~ 0
+            if (i < 30) {
+                Assert.assertTrue((signedInts[i] >> (i + 2)) == 0x00
+                                  || (signedInts[i] >> (i + 2)) == -1);
+            }
             output.writeInt(i + 2, signedInts[i]);
         }
 
         unsignedLongs = new long[63];
         for (int i = 0; i < unsignedLongs.length; i++) {
             unsignedLongs[i] = random.nextLong() >>> (64 - i - 1); // 63 ~ 1
+            Assert.assertEquals(unsignedLongs[i] >> (i + 1), 0x00L);
             output.writeUnsignedLong(i + 1, unsignedLongs[i]);
         }
 
         signedLongs = new long[63];
         for (int i = 0; i < signedLongs.length; i++) {
             signedLongs[i] = random.nextLong() >> (63 - i - 2); // 62 ~ 0
+            if (i < 62) {
+                Assert.assertTrue((signedLongs[i] >> (i + 2)) == 0x00L
+                                  || (signedLongs[i] >> (i + 2)) == -1L);
+            }
             output.writeLong(i + 2, signedLongs[i]);
         }
 
