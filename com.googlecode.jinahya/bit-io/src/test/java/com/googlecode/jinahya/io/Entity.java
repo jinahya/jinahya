@@ -98,7 +98,7 @@ public class Entity {
 
         signedLongs = new long[63];
         for (int i = 0; i < signedLongs.length; i++) {
-            signedLongs[i] = random.nextLong() >> (63 - i - 2); // 62 ~ 0
+            signedLongs[i] = random.nextLong() >> (64 - i - 2); // 62 ~ 0
             if (i < 62) {
                 Assert.assertTrue((signedLongs[i] >> (i + 2)) == 0x00L
                                   || (signedLongs[i] >> (i + 2)) == -1L);

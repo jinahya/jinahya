@@ -31,14 +31,18 @@ import java.util.BitSet;
 public class BitOutput {
 
 
+    /**
+     * An interface for writing bytes.
+     */
     public interface ByteOutput {
 
 
         /**
+         * Writes an unsigned byte.
          *
-         * @param value
+         * @param value value to write
          *
-         * @throws IOException
+         * @throws IOException if an I/O error occurs.
          */
         void writeUnsignedByte(final int value) throws IOException;
 
@@ -422,7 +426,7 @@ public class BitOutput {
      * @return available bits for writing
      */
     public final int available() {
-        return Byte.SIZE - index;
+        return 0x08 - index;
     }
 
 
