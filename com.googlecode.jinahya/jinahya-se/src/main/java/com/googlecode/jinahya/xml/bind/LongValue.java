@@ -29,6 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LongValue extends SimpleValue<Long> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param rawValue raw value.
+     *
+     * @return a new instance.
+     */
     public static LongValue newInstance(final Long rawValue) {
         return newInstance(LongValue.class, rawValue);
     }
