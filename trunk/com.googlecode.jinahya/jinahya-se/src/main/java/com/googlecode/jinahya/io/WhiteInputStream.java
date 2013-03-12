@@ -32,11 +32,22 @@ public class WhiteInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
+
+        count++;
+
         return random.nextInt(0x0100);
     }
 
 
+    public long getCount() {
+        return count;
+    }
+
+
     private final Random random = new Random();
+
+
+    private long count = 0x00L;
 
 
 }

@@ -31,8 +31,17 @@ public class BlackOutputStream extends OutputStream {
 
     @Override
     public void write(final int b) throws IOException {
-        // do nothing
+
+        count++;
     }
+
+
+    public long getCount() {
+        return count;
+    }
+
+
+    private long count = 0x00L;
 
 
 }
