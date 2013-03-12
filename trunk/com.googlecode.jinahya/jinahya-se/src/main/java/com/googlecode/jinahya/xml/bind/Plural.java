@@ -21,6 +21,7 @@ package com.googlecode.jinahya.xml.bind;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -35,8 +36,7 @@ public class Plural<S> {
 
 
     /**
-     * Creates a new instance of
-     * <code>pluralType<code>.
+     * Creates a new instance of {@code pluralType}.
      *
      * @param <P> plural type parameter
      * @param <S> singular type parameter
@@ -52,36 +52,30 @@ public class Plural<S> {
 
 
     /**
-     * Creates a new instance of given
-     * <code>pluralType</code> contains specified
-     * <code>singulars</code>.
+     * Creates a new instance of given {@code pluralType} contains specified
+     * {@code singulars}.
      *
      * @param <P> plural type parameter
      * @param <S> singular type parameter
      * @param pluralType plural type
-     * @param singulars singular collection; <code>null</code> allowed
+     * @param singulars singular collection
      *
      * @return a new instance of given <code>pluralType<code>
      */
     public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType, final Collection<? extends S> singulars) {
 
-        if (pluralType == null) {
-            throw new IllegalArgumentException("null pluralType");
-        }
+        Objects.requireNonNull(pluralType, "null pluralType");
 
-        if (singulars == null) {
-            throw new IllegalArgumentException("null singulars");
-        }
+
+        Objects.requireNonNull(singulars, "null singulars");
 
         try {
             final P instance = pluralType.newInstance();
             instance.getSingulars().addAll(singulars);
             return instance;
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -94,7 +88,7 @@ public class Plural<S> {
     protected final Collection<S> getSingulars() {
 
         if (singulars == null) {
-            singulars = new ArrayList<S>();
+            singulars = new ArrayList<>();
         }
 
         return singulars;

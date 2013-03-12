@@ -18,31 +18,19 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
-public class LongValue extends Value<Long> {
+public class LongValue extends SimpleValue<Long> {
 
 
-    @XmlValue
-    @Override
-    public Long getRaw() {
-        return super.getRaw();
-    }
-
-
-    @Override
-    public void setRaw(final Long raw) {
-        super.setRaw(raw);
+    public static LongValue newInstance(final Long rawValue) {
+        return newInstance(LongValue.class, rawValue);
     }
 
 

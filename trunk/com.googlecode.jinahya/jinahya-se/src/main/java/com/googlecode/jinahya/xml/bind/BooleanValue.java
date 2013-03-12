@@ -18,31 +18,19 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
-public class BooleanValue extends Value<Boolean> {
+public class BooleanValue extends SimpleValue<Boolean> {
 
 
-    @XmlValue
-    @Override
-    public Boolean getRaw() {
-        return super.getRaw();
-    }
-
-
-    @Override
-    public void setRaw(final Boolean raw) {
-        super.setRaw(raw);
+    public static BooleanValue newInstance(final Boolean rawType) {
+        return newInstance(BooleanValue.class, rawType);
     }
 
 

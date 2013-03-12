@@ -19,16 +19,14 @@ package com.googlecode.jinahya.xml.bind;
 
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class LongValueTest extends ValueTest<LongValue, Long> {
-
-
-    private static final Random RANDOM = new Random();
+public class LongValueTest extends SimpleValueTest<LongValue, Long> {
 
 
     public LongValueTest() {
@@ -37,8 +35,15 @@ public class LongValueTest extends ValueTest<LongValue, Long> {
 
 
     @Override
-    protected Long generateRaw() {
-        return RANDOM.nextLong();
+    protected Long generateRawValue() {
+
+        final Random random = ThreadLocalRandom.current();
+
+        if (random.nextBoolean()) {
+            return null;
+        }
+
+        return random.nextLong();
     }
 
 

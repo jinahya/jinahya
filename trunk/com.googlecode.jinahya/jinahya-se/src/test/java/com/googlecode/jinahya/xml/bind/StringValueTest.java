@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
 
 
@@ -25,7 +27,10 @@ import org.apache.commons.lang3.RandomStringUtils;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StringValueTest extends ValueTest<StringValue, String> {
+public class StringValueTest extends SimpleValueTest<StringValue, String> {
+
+
+    private static final Random RANDOM = new Random();
 
 
     public StringValueTest() {
@@ -34,7 +39,12 @@ public class StringValueTest extends ValueTest<StringValue, String> {
 
 
     @Override
-    protected String generateRaw() {
+    protected String generateRawValue() {
+
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            return null;
+        }
+
         return RandomStringUtils.random(10);
     }
 

@@ -21,6 +21,7 @@ package com.googlecode.jinahya.xml.bind;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -35,31 +36,33 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <V> value type
- * @param <R> raw type
+ * @param <V> SimpleValue type parameter
+ * @param <R> rawValue type parameter
  */
-public abstract class NillableValueTest<V extends NillableValue<R>, R> {
+public abstract class SimpleValueTest<V extends SimpleValue<R>, R> {
 
 
-    public NillableValueTest(final Class<V> valueType) {
+    public SimpleValueTest(final Class<V> simpleValueType) {
         super();
 
-        if (valueType == null) {
-            throw new IllegalArgumentException("null valueType");
-        }
+        Objects.requireNonNull(simpleValueType, "null simpleValueType");
 
-        this.valueType = valueType;
+        this.simpleValueType = simpleValueType;
     }
 
 
-    protected abstract R generateRaw();
+    protected abstract R generateRawValue();
 
 
     @Test
-    public void testSetRaw()
+    public void testSetRawValue()
         throws InstantiationException, IllegalAccessException {
 
-        valueType.newInstance().setRaw(generateRaw());
+        final V simpleValue = simpleValueType.newInstance();
+
+        simpleValue.setRawValue(null);
+
+        simpleValue.setRawValue(generateRawValue());
     }
 
 
@@ -68,30 +71,30 @@ public abstract class NillableValueTest<V extends NillableValue<R>, R> {
         throws JAXBException, InstantiationException, IllegalAccessException,
                IOException {
 
-        final JAXBContext context = JAXBContext.newInstance(valueType);
+        final JAXBContext context = JAXBContext.newInstance(simpleValueType);
 
-
-        final V marshallable = valueType.newInstance();
-        marshallable.setRaw(generateRaw());
+        final V expected = simpleValueType.newInstance();
+        expected.setRawValue(generateRawValue());
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        marshaller.marshal(marshallable, baos);
+        marshaller.marshal(expected, baos);
         baos.flush();
 
         final byte[] bytes = baos.toByteArray();
-        System.out.println(new String(bytes, "UTF-8"));
+        System.out.println(new String(
+            bytes, (String) marshaller.getProperty(Marshaller.JAXB_ENCODING)));
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 
         final Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        final V unmarshalled = valueType.cast(unmarshaller.unmarshal(bais));
+        final V actual = simpleValueType.cast(unmarshaller.unmarshal(bais));
 
-        Assert.assertEquals(unmarshalled, marshallable);
+        Assert.assertEquals(actual, expected);
     }
 
 
@@ -99,15 +102,19 @@ public abstract class NillableValueTest<V extends NillableValue<R>, R> {
     public void testXsd() throws JAXBException, IOException {
 
 
-        final JAXBContext context = JAXBContext.newInstance(valueType);
+        final JAXBContext context = JAXBContext.newInstance(simpleValueType);
 
         context.generateSchema(new SchemaOutputResolver() {
+
+
             @Override
             public Result createOutput(final String namespaceUri,
                                        final String suggestedFileName)
                 throws IOException {
 
                 return new StreamResult(System.out) {
+
+
                     @Override
                     public String getSystemId() {
                         return "noid";
@@ -122,7 +129,7 @@ public abstract class NillableValueTest<V extends NillableValue<R>, R> {
     }
 
 
-    protected final Class<V> valueType;
+    protected final Class<V> simpleValueType;
 
 
 }
