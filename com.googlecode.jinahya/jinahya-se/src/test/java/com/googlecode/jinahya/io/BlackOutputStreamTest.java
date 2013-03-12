@@ -31,16 +31,14 @@ import org.testng.annotations.Test;
 public class BlackOutputStreamTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
     @Test
     public void testWrite() throws IOException {
 
         final OutputStream out = new BlackOutputStream();
 
-        for (int i = 0; i < 1048576; i++) {
-            out.write(RANDOM.nextInt());
+        final Random random = new Random();
+        for (int i = 0; i < 1024; i++) {
+            out.write(random.nextInt(0x0100));
         }
         out.flush();
 
