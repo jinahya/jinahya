@@ -30,9 +30,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class StringValueTest extends SimpleValueTest<StringValue, String> {
 
 
-    private static final Random RANDOM = new Random();
-
-
     public StringValueTest() {
         super(StringValue.class);
     }
@@ -41,11 +38,13 @@ public class StringValueTest extends SimpleValueTest<StringValue, String> {
     @Override
     protected String generateRawValue() {
 
-        if (ThreadLocalRandom.current().nextBoolean()) {
+        final Random random = ThreadLocalRandom.current();
+
+        if (random.nextBoolean()) {
             return null;
         }
 
-        return RandomStringUtils.random(10);
+        return RandomStringUtils.randomAlphanumeric(random.nextInt(128));
     }
 
 

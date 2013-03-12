@@ -66,7 +66,7 @@ public abstract class SimpleValueTest<V extends SimpleValue<R>, R> {
     }
 
 
-    @Test
+    @Test(invocationCount = 128)
     public void testXml()
         throws JAXBException, InstantiationException, IllegalAccessException,
                IOException {
@@ -85,8 +85,8 @@ public abstract class SimpleValueTest<V extends SimpleValue<R>, R> {
         baos.flush();
 
         final byte[] bytes = baos.toByteArray();
-        System.out.println(new String(
-            bytes, (String) marshaller.getProperty(Marshaller.JAXB_ENCODING)));
+//        System.out.println(new String(
+//            bytes, (String) marshaller.getProperty(Marshaller.JAXB_ENCODING)));
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 

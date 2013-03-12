@@ -29,8 +29,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BooleanValue extends SimpleValue<Boolean> {
 
 
-    public static BooleanValue newInstance(final Boolean rawType) {
-        return newInstance(BooleanValue.class, rawType);
+    /**
+     * Creates a new instance.
+     *
+     * @param rawValue raw value
+     *
+     * @return a new instance.
+     */
+    public static BooleanValue newInstance(final Boolean rawValue) {
+        return newInstance(BooleanValue.class, rawValue);
     }
 
 

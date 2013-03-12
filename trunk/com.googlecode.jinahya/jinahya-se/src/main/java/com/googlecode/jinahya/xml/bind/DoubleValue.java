@@ -29,6 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DoubleValue extends SimpleValue<Double> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param rawValue raw value.
+     *
+     * @return a new instance.
+     */
     public static DoubleValue newInstance(final Double rawValue) {
         return newInstance(DoubleValue.class, rawValue);
     }
