@@ -37,9 +37,9 @@ public class WhiteInputStreamTest {
         final InputStream in = new WhiteInputStream();
 
         int read = -1;
-        for (int i = 0; i < 1048576; i++) {
+        for (int i = 0; i < 1024; i++) {
             read = in.read();
-            Assert.assertTrue(read >= 0 && read < 256);
+            Assert.assertTrue(read >= 0x00 && read < 0x0100);
         }
 
         in.close();

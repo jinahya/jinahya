@@ -30,13 +30,13 @@ import java.util.Random;
 public class WhiteInputStream extends InputStream {
 
 
-    private static final Random RANDOM = new Random();
-
-
     @Override
     public int read() throws IOException {
-        return RANDOM.nextInt(256);
+        return random.nextInt(0x0100);
     }
+
+
+    private final Random random = new Random();
 
 
 }
