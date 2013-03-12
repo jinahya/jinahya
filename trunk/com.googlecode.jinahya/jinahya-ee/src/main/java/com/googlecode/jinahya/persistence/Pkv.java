@@ -22,7 +22,7 @@ package com.googlecode.jinahya.persistence;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class XX {
+public final class Pkv {
 
 
     /**
@@ -52,7 +52,7 @@ public final class XX {
     /**
      * Creates a new instance.
      */
-    private XX() {
+    private Pkv() {
         super();
     }
 
