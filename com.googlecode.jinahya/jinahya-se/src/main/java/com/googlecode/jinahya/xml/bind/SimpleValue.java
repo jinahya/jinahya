@@ -18,7 +18,8 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.lang.reflect.Modifier;
+import java.util.Objects;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -28,28 +29,29 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <R> raw value type parameter
  */
 @XmlTransient
-public abstract class NillableValue<R> {
+public abstract class SimpleValue<R> {
 
 
-    public static <V extends NillableValue<R>, R> V newInstance(
-        final Class<V> type, final R raw) {
+    /**
+     *
+     * @param <V> SimpleValue type parameter
+     * @param <R> rawValue type parameter
+     * @param simpleValueType SimpleValue type
+     * @param rawValue rawValue
+     *
+     * @return
+     */
+    public static <V extends SimpleValue<R>, R> V newInstance(
+        final Class<V> simpleValueType, final R rawValue) {
 
-        if (type == null) {
-            throw new IllegalArgumentException("null type");
-        }
-
-        if (Modifier.isAbstract(type.getModifiers())) {
-            throw new IllegalArgumentException("abstract type");
-        }
+        Objects.requireNonNull(simpleValueType, "null type");
 
         try {
-            final V instance = type.newInstance();
-            instance.setRaw(raw);
+            final V instance = simpleValueType.newInstance();
+            instance.setRawValue(rawValue);
             return instance;
-        } catch (InstantiationException ie) {
-            throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -63,9 +65,10 @@ public abstract class NillableValue<R> {
             return false;
         }
         @SuppressWarnings("unchecked")
-        final NillableValue<R> other = (NillableValue<R>) obj;
-        if (this.raw != other.raw
-            && (this.raw == null || !this.raw.equals(other.raw))) {
+        final SimpleValue<R> other = (SimpleValue<R>) obj;
+        if (this.rawValue != other.rawValue
+            && (this.rawValue == null
+                || !this.rawValue.equals(other.rawValue))) {
             return false;
         }
         return true;
@@ -75,7 +78,8 @@ public abstract class NillableValue<R> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + (this.raw != null ? this.raw.hashCode() : 0);
+        hash = 97 * hash
+               + (this.rawValue != null ? this.rawValue.hashCode() : 0);
         return hash;
     }
 
@@ -85,23 +89,24 @@ public abstract class NillableValue<R> {
      *
      * @return raw value
      */
-    public R getRaw() {
-        return raw;
+    @XmlElement(required = true, nillable = true)
+    public R getRawValue() {
+        return rawValue;
     }
 
 
     /**
      * Sets raw value.
      *
-     * @param raw raw value
+     * @param rawValue raw value
      */
-    public void setRaw(final R raw) {
-        this.raw = raw;
+    public void setRawValue(final R rawValue) {
+        this.rawValue = rawValue;
 
     }
 
 
-    private R raw;
+    private R rawValue;
 
 
 }

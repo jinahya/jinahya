@@ -18,31 +18,19 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
-public class DoubleValue extends Value<Double> {
+public class DoubleValue extends SimpleValue<Double> {
 
 
-    @XmlValue
-    @Override
-    public Double getRaw() {
-        return super.getRaw();
-    }
-
-
-    @Override
-    public void setRaw(final Double raw) {
-        super.setRaw(raw);
+    public static DoubleValue newInstance(final Double rawValue) {
+        return newInstance(DoubleValue.class, rawValue);
     }
 
 

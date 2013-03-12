@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -44,18 +45,21 @@ public class PluralTest {
     private static class Item {
 
 
-        private static final Random RANDOM = new Random();
-
-
         public static Item newInstance() {
+
+            return newInstance(ThreadLocalRandom.current());
+        }
+
+
+        public static Item newInstance(final Random random) {
 
             final Item instance = new Item();
 
-            if (RANDOM.nextBoolean()) {
-                instance.id = RANDOM.nextLong();
+            if (random.nextBoolean()) {
+                instance.id = random.nextLong();
             }
 
-            if (RANDOM.nextBoolean()) {
+            if (random.nextBoolean()) {
                 instance.name = "name";
             }
 
@@ -65,7 +69,9 @@ public class PluralTest {
 
         @Override
         public String toString() {
-            return id + "/" + name;
+            return getClass().getSimpleName() + "@" + hashCode()
+                   + "?id=" + id
+                   + "&name=" + name;
         }
 
 
@@ -113,7 +119,7 @@ public class PluralTest {
 
         marshaller.marshal(marshallable, baos);
         baos.flush();
-        
+
         System.out.println(new String(baos.toByteArray(), "UTF-8"));
 
         final Unmarshaller unmarshaller = context.createUnmarshaller();
