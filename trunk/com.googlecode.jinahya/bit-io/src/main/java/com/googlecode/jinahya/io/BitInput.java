@@ -51,31 +51,40 @@ public class BitInput {
     }
 
 
-    public static class ByteInputStream implements ByteInput {
+    private static class ByteInputStream implements ByteInput {
 
 
-        public ByteInputStream(final InputStream stream) {
+        public ByteInputStream(final InputStream input) {
             super();
 
-            if (stream == null) {
-                throw new IllegalArgumentException("null stream");
+            if (input == null) {
+                throw new NullPointerException("null input");
             }
 
-            this.stream = stream;
+            this.input = input;
         }
 
 
+        @Override
         public int readUnsignedByte() throws IOException {
-            return stream.read();
+            return input.read();
         }
 
 
-        protected final InputStream stream;
+        /**
+         * input.
+         */
+        protected final InputStream input;
 
 
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param input input
+     */
     public BitInput(final ByteInput input) {
         super();
 
@@ -87,8 +96,13 @@ public class BitInput {
     }
 
 
-    public BitInput(final InputStream stream) {
-        this(new ByteInputStream(stream));
+    /**
+     * Creates a new instance.
+     *
+     * @param input input
+     */
+    public BitInput(final InputStream input) {
+        this(new ByteInputStream(input));
     }
 
 
@@ -398,14 +412,20 @@ public class BitInput {
     private final ByteInput input;
 
 
+    /**
+     * bitset.
+     */
     private final BitSet bitset = new BitSet(0x08);
 
 
+    /**
+     * bit index to read.
+     */
     private int index = 0x08;
 
 
     /**
-     * bytes read so far.
+     * number of bytes read so far.
      */
     private int count = 0x00;
 

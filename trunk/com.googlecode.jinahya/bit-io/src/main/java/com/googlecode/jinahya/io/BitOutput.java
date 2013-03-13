@@ -53,13 +53,13 @@ public class BitOutput {
     /**
      *
      */
-    public static class ByteOutputStream implements ByteOutput {
+    private static class ByteOutputStream implements ByteOutput {
 
 
         /**
-         * '
+         * Creates a new instance.
          *
-         * @param stream
+         * @param stream the stream to wrap.
          */
         public ByteOutputStream(final OutputStream stream) {
             super();
@@ -72,6 +72,7 @@ public class BitOutput {
         }
 
 
+        @Override
         public void writeUnsignedByte(final int value) throws IOException {
             stream.write(value);
         }
