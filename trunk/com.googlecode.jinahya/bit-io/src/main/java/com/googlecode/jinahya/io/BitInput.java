@@ -51,9 +51,17 @@ public class BitInput {
     }
 
 
+    /**
+     * An {@code ByteInput} implementation for InputStream.
+     */
     private static class ByteInputStream implements ByteInput {
 
 
+        /**
+         * Creates a new instance.
+         *
+         * @param input the stream to wrap.
+         */
         public ByteInputStream(final InputStream input) {
             super();
 
@@ -65,14 +73,14 @@ public class BitInput {
         }
 
 
-        @Override
+        //@Override
         public int readUnsignedByte() throws IOException {
             return input.read();
         }
 
 
         /**
-         * input.
+         * stream.
          */
         protected final InputStream input;
 
@@ -83,7 +91,7 @@ public class BitInput {
     /**
      * Creates a new instance.
      *
-     * @param input input
+     * @param input the byte input
      */
     public BitInput(final ByteInput input) {
         super();
@@ -99,7 +107,7 @@ public class BitInput {
     /**
      * Creates a new instance.
      *
-     * @param input input
+     * @param input the input stream
      */
     public BitInput(final InputStream input) {
         this(new ByteInputStream(input));
@@ -407,13 +415,13 @@ public class BitInput {
 
 
     /**
-     * byte input.
+     * source byte input.
      */
     private final ByteInput input;
 
 
     /**
-     * bitset.
+     * bits in current octet.
      */
     private final BitSet bitset = new BitSet(0x08);
 
