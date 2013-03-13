@@ -47,31 +47,42 @@ public class IdCodecTest {
     }
 
 
-    @Test(invocationCount = 1024)
-    public void testRandom() {
-        encodeAndAssert(RANDOM.nextLong());
-    }
-
-
     @Test
     public void testFiveToFive() {
         System.out.printf("%1$20s %2$20s %3$20s\n", "id", "encoded1",
                           "encoded2");
         System.out.printf("%1$20s %1$20s %1$20s\n", "--------------------");
         for (long decoded = -5L; decoded < 5L; decoded++) {
-            encodeAndAssert(decoded);
-            encodeAndAssert(decoded);
+            for (int j = 0; j < 10; j++) {
+                encodeAndAssert(decoded);
+            }
+            System.out.println();
         }
         encodeAndAssert(-100000000L);
+        encodeAndAssert(-100000000L);
+        encodeAndAssert(-100000000L);
+        
         encodeAndAssert(100000000L);
+        encodeAndAssert(100000000L);
+        encodeAndAssert(100000000L);
+        
         encodeAndAssert(Long.MIN_VALUE);
         encodeAndAssert(Long.MIN_VALUE);
+        encodeAndAssert(Long.MIN_VALUE);
+        
+        encodeAndAssert(Long.MAX_VALUE);
         encodeAndAssert(Long.MAX_VALUE);
         encodeAndAssert(Long.MAX_VALUE);
     }
 
 
-    @Test(invocationCount = 1024)
+    @Test(invocationCount = 128)
+    public void testRandom() {
+        encodeAndAssert(RANDOM.nextLong());
+    }
+
+
+    @Test(invocationCount = 128)
     public void testUUID() {
         final UUID original = UUID.randomUUID();
         for (int i = 0; i < 5; i++) {

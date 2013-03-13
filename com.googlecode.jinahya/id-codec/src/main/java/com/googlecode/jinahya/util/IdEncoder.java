@@ -18,9 +18,8 @@
 package com.googlecode.jinahya.util;
 
 
-import java.security.SecureRandom;
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -32,84 +31,42 @@ public class IdEncoder {
 
 
     /**
-     * RANDOM.
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded the decoded value to encoce
+     *
+     * @return encoded output.
      */
-    private static final Random RANDOM = new SecureRandom();
+    public static String encodeLong(final long decoded) {
 
-
-    /**
-     * Private instance holder.
-     */
-    private static final class PrivateInstanceHolder {
-
-
-        /**
-         * INSTANCE.
-         */
-        private static final IdEncoder INSTANCE = new IdEncoder();
-
-
-        /**
-         * PRIVATE.
-         */
-        private PrivateInstanceHolder() {
-            super();
-        }
-
-
+        return new IdEncoder().encode(decoded);
     }
 
 
     /**
-     * Encodes given <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
-     * @param decoded the value to be encoded
-     * @return the encoded value
+     * @param decoded the value to encode.
+     *
+     * @return encoded output.
      */
     public static String encodeUUID(final UUID decoded) {
 
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
-        }
-
-        final String encoded = encodeId(decoded.getMostSignificantBits()) + "-"
-                               + encodeId(decoded.getLeastSignificantBits());
-
-        assert IdCodec.DOUBLE_PATTERN.matcher(encoded).matches();
-
-        return encoded;
+        return encodeLong(decoded.getMostSignificantBits()) + "-"
+               + encodeLong(decoded.getLeastSignificantBits());
     }
 
 
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
-     * @param decoded the value to be encoded.
+     * @param decoded the value to encode.
      *
-     * @return the decoded value.
-     */
-    public static String encodeId(final long decoded) {
-        return PrivateInstanceHolder.INSTANCE.encode(decoded);
-    }
-
-
-    /**
-     * Encodes given
-     * <code>decoded</code>.
-     *
-     * @param decoded the value to be encoded
-     *
-     * @return the encoded value.
+     * @return encoded result.
      */
     public String encode(final long decoded) {
 
-        final String encoded =
-            block(decoded >>> 32) + "-" + block(decoded & 0xFFFFFFFFL);
-
-        assert IdCodec.SINGLE_PATTERN.matcher(encoded).matches();
-
-        return encoded;
+        return block(decoded >>> 0x20) + "-" + block(decoded & 0xFFFFFFFFL);
     }
 
 
@@ -117,14 +74,17 @@ public class IdEncoder {
      * Encodes a single block.
      *
      * @param decoded block to encode
+     *
      * @return encoded block
      */
     private String block(final long decoded) {
 
         final StringBuilder builder = new StringBuilder(Long.toString(decoded));
 
-        builder.append(Integer.toString(RANDOM.nextInt(9) + 1));
-        builder.append(Integer.toString(RANDOM.nextInt(9) + 1));
+        builder.append(Integer.toString(
+            ThreadLocalRandom.current().nextInt(9) + 1)); // 1-9
+        builder.append(Integer.toString(
+            ThreadLocalRandom.current().nextInt(9) + 1)); // 1-9
 
         builder.reverse();
 

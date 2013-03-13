@@ -18,11 +18,21 @@
 package com.googlecode.jinahya.util;
 
 
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author onacit
  */
 public class IdDecoderTest {
-    
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public static void testDecodeUUIDWithNullDecoded() {
+        IdDecoder.decodeUUID(null);
+    }
+
+
 }
 
