@@ -51,13 +51,13 @@ public class BitOutput {
 
 
     /**
-     *
+     * A {@code ByteOutput} for OutputStreams.
      */
     private static class ByteOutputStream implements ByteOutput {
 
 
         /**
-         * Creates a new instance.
+         * 'Creates a new instance.
          *
          * @param stream the stream to wrap.
          */
@@ -72,12 +72,15 @@ public class BitOutput {
         }
 
 
-        @Override
+        //@Override
         public void writeUnsignedByte(final int value) throws IOException {
             stream.write(value);
         }
 
 
+        /**
+         * stream.
+         */
         protected final OutputStream stream;
 
 
@@ -100,8 +103,13 @@ public class BitOutput {
     }
 
 
-    public BitOutput(final OutputStream stream) {
-        this(new ByteOutputStream(stream));
+    /**
+     * Creates a new instance.
+     *
+     * @param output the output stream
+     */
+    public BitOutput(final OutputStream output) {
+        this(new ByteOutputStream(output));
     }
 
 
@@ -143,7 +151,7 @@ public class BitOutput {
 
         if (index == 0x08) {
             int octet = 0x00;
-            for (int i = 0x07; i >= 0; i--) {
+            for (int i = 0x00; i < 0x08; i++) {
                 octet <<= 1;
                 octet |= (bitset.get(i) ? 0x01 : 0x00);
             }
@@ -163,7 +171,7 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs
      */
     public void writeBoolean(final boolean value) throws IOException {
-        writeUnsignedByte(1, value ? 0x01 : 0x00);
+        writeUnsignedByte(0x01, value ? 0x01 : 0x00);
     }
 
 
@@ -432,13 +440,13 @@ public class BitOutput {
 
 
     /**
-     * target output.
+     * target byte output.
      */
     protected final ByteOutput output;
 
 
     /**
-     * current byte value.
+     * bits in current octet.
      */
     private final BitSet bitset = new BitSet(0x08);
 
@@ -450,7 +458,7 @@ public class BitOutput {
 
 
     /**
-     * bytes written so far.
+     * number of bytes written so far.
      */
     private int count = 0x00;
 

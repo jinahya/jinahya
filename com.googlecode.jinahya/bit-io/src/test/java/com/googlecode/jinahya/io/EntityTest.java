@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 
@@ -41,7 +42,7 @@ public class EntityTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(baos);
 
-        final Entity[] expected = new Entity[random.nextInt(1024) + 1024];
+        final Entity[] expected = new Entity[1]; //random.nextInt(1024) + 1024];
         for (int i = 0; i < expected.length; i++) {
             expected[i] = new Entity().write(random, output);
         }
@@ -58,6 +59,11 @@ public class EntityTest {
         for (int i = 0; i < actual.length; i++) {
             actual[i] = new Entity().read(input);
         }
+
+        System.out.println(actual[0].hashCode());
+        System.out.println(expected[0].hashCode());
+
+        Assert.assertArrayEquals(actual, expected);
     }
 
 

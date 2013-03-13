@@ -19,6 +19,7 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 import org.testng.Assert;
 
@@ -28,6 +29,54 @@ import org.testng.Assert;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Entity {
+
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + (this.b ? 1 : 0);
+        hash = 89 * hash + Float.floatToIntBits(this.f);
+        hash = 89 * hash + (int) (Double.doubleToLongBits(this.d) ^ (Double.doubleToLongBits(this.d) >>> 32));
+        hash = 89 * hash + Arrays.hashCode(this.unsignedInts);
+        hash = 89 * hash + Arrays.hashCode(this.signedInts);
+        hash = 89 * hash + Arrays.hashCode(this.unsignedLongs);
+        hash = 89 * hash + Arrays.hashCode(this.signedLongs);
+        return hash;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Entity other = (Entity) obj;
+        if (this.b != other.b) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.f) != Float.floatToIntBits(other.f)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.d) != Double.doubleToLongBits(other.d)) {
+            return false;
+        }
+        if (!Arrays.equals(this.unsignedInts, other.unsignedInts)) {
+            return false;
+        }
+        if (!Arrays.equals(this.signedInts, other.signedInts)) {
+            return false;
+        }
+        if (!Arrays.equals(this.unsignedLongs, other.unsignedLongs)) {
+            return false;
+        }
+        if (!Arrays.equals(this.signedLongs, other.signedLongs)) {
+            return false;
+        }
+        return true;
+    }
 
 
     public Entity read(final BitInput input) throws IOException {
