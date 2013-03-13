@@ -33,8 +33,7 @@ public class IdCodec {
     /**
      * Pattern string for single block.
      */
-    private static final String SINGLE_PATTERN_STRING =
-        "([a-z0-9]+)-([a-z0-9]+)";
+    private static final String SINGLE_REGEX = "([a-z0-9]+)-([a-z0-9]+)";
 
 
     /**
@@ -45,7 +44,7 @@ public class IdCodec {
 
     static {
         try {
-            SINGLE_PATTERN = Pattern.compile(SINGLE_PATTERN_STRING);
+            SINGLE_PATTERN = Pattern.compile(SINGLE_REGEX);
         } catch (PatternSyntaxException pse) {
             throw new InstantiationError("pattern compilation failed");
         }
@@ -55,8 +54,8 @@ public class IdCodec {
     /**
      * Pattern string for double block.
      */
-    private static final String DOUBLE_PATTERN_STRING =
-        "(" + SINGLE_PATTERN_STRING + ")-(" + SINGLE_PATTERN_STRING + ")";
+    private static final String DOUBLE_REGEX =
+        "(" + SINGLE_REGEX + ")-(" + SINGLE_REGEX + ")";
 
 
     /**
@@ -67,7 +66,7 @@ public class IdCodec {
 
     static {
         try {
-            DOUBLE_PATTERN = Pattern.compile(DOUBLE_PATTERN_STRING);
+            DOUBLE_PATTERN = Pattern.compile(DOUBLE_REGEX);
         } catch (PatternSyntaxException pse) {
             throw new InstantiationError("pattern compilation failed");
         }
@@ -102,6 +101,7 @@ public class IdCodec {
      * <code>decoded</code>.
      *
      * @param decoded the value to be encoded
+     *
      * @return the encoded value
      */
     public static String encodeId(final long decoded) {
@@ -114,6 +114,7 @@ public class IdCodec {
      * <code>decoded</code>.
      *
      * @param decoded the value to be encoded
+     *
      * @return the encoded value
      */
     public static String encodeUUID(final UUID decoded) {
@@ -126,6 +127,7 @@ public class IdCodec {
      * <code>encoded</code>.
      *
      * @param encoded the value to be decoded
+     *
      * @return the decoded value
      */
     public static long decodeId(final String encoded) {
@@ -138,6 +140,7 @@ public class IdCodec {
      * <code>encoded</code>.
      *
      * @param encoded the value to be decoded
+     *
      * @return the decoded value
      */
     public static UUID decodeUUID(final String encoded) {
@@ -150,6 +153,7 @@ public class IdCodec {
      * <code>decoded</code>.
      *
      * @param decoded the value to be encoded
+     *
      * @return the encoded value
      */
     public String encode(final long decoded) {
@@ -162,6 +166,7 @@ public class IdCodec {
      * <code>encoded</code>.
      *
      * @param encoded the value to be decoded
+     *
      * @return the decoded value
      */
     public long decode(final String encoded) {

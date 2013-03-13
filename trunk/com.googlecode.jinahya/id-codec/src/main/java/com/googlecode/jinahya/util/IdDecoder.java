@@ -31,38 +31,14 @@ public class IdDecoder {
 
 
     /**
-     * Private instance holder.
-     */
-    private static final class PrivateInstanceHolder {
-
-
-        /**
-         * INSTANCE.
-         */
-        private static final IdDecoder INSTANCE = new IdDecoder();
-
-
-        /**
-         * PRIVATE.
-         */
-        private PrivateInstanceHolder() {
-            super();
-        }
-
-
-    }
-
-
-    /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
      * @param encoded the value to be decoded
      *
      * @return the decoded value
      */
-    public static long decodeId(final String encoded) {
-        return PrivateInstanceHolder.INSTANCE.decode(encoded);
+    public static long decodeLong(final String encoded) {
+        return new IdDecoder().decode(encoded);
     }
 
 
@@ -71,29 +47,34 @@ public class IdDecoder {
      * <code>encoded</code>.
      *
      * @param encoded the value to be decoded
+     *
      * @return the decoded value
      */
     public static UUID decodeUUID(final String encoded) {
+
+
+        if (encoded == null) {
+            throw new NullPointerException("null encoded");
+        }
 
         final Matcher matcher = IdCodec.DOUBLE_PATTERN.matcher(encoded);
         if (!matcher.matches()) {
             throw new IllegalArgumentException("illegal pattern: " + encoded);
         }
 
-        final long mostSigBits = decodeId(matcher.group(1));
-        final long leastSigBits = decodeId(matcher.group(4));
+        final long mostSigBits = decodeLong(matcher.group(1));
+        final long leastSigBits = decodeLong(matcher.group(4));
 
         return new UUID(mostSigBits, leastSigBits);
     }
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code decoded}.
      *
-     * @param encoded the value to be decoded.
+     * @param encoded encoded value to decode.
      *
-     * @return the decoded value
+     * @return decoded value
      */
     public long decode(final String encoded) {
 
@@ -113,7 +94,8 @@ public class IdDecoder {
     /**
      * Decodes a single block.
      *
-     * @param encoded single block to decode
+     * @param encoded the block to decode
+     *
      * @return decoded block
      */
     private long block(final String encoded) {

@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.annotations.Test;
 
 
@@ -30,24 +30,27 @@ import org.testng.annotations.Test;
 public class IdEncoderTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
-    @Test(invocationCount = 1024)
-    public void testEncodeId() {
-        IdEncoder.encodeId(RANDOM.nextLong());
+    @Test(invocationCount = 128)
+    public static void testEncodeLong() {
+        IdEncoder.encodeLong(ThreadLocalRandom.current().nextLong());
     }
 
 
-    @Test(invocationCount = 1024)
-    public void testEncodeUUID() {
+    @Test(expectedExceptions = {NullPointerException.class})
+    public static void testEncodeUUIDWithNullDecoded() {
+        IdEncoder.encodeUUID(null);
+    }
+
+
+    @Test(invocationCount = 128)
+    public static void testEncodeUUID() {
         IdEncoder.encodeUUID(UUID.randomUUID());
     }
 
 
-    @Test(invocationCount = 1024)
+    @Test(invocationCount = 128)
     public void testEncode() {
-        new IdEncoder().encode(RANDOM.nextLong());
+        new IdEncoder().encode(ThreadLocalRandom.current().nextLong());
     }
 
 
