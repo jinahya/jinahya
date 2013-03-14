@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.io.BitInput.ByteInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import org.testng.Assert;
@@ -34,8 +35,8 @@ public class BitInputTest {
     @Test
     public void testReadBoolean() throws IOException {
 
-        final BitInput input = new BitInput(new ByteArrayInputStream(
-            new byte[]{(byte) 0x80})); // 1000 0000
+        final BitInput input = new BitInput(new ByteInputStream(
+            new ByteArrayInputStream(new byte[]{(byte) 0x80}))); // 1000 0000
 
         Assert.assertTrue(input.readBoolean());
         for (int i = 0; i < 7; i++) {
