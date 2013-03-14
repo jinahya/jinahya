@@ -83,8 +83,6 @@ public abstract class Base {
         }
 
         return (a / gcd(a, b)) * b;
-
-        //return ((a * b) / gcd(a, b));
     }
 
 
@@ -154,8 +152,7 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes in
-     * <code>input</code> and returns encoded characters.
+     * Encodes bytes in {@code input} and returns encoded characters.
      *
      * @param input byte input
      *
@@ -174,8 +171,7 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from
-     * <code>input</code> and return encoded characters.
+     * Encodes bytes from {@code input} and return encoded characters.
      *
      * @param input byte input
      *
@@ -199,9 +195,8 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from
-     * <code>input</code> and writes to
-     * <code>output</code>.
+     * Encodes bytes from {@code input} and writes those encoded octets to
+     * {@code output}.
      *
      * @param input input
      * @param output output
@@ -226,9 +221,8 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from given
-     * <code>input</code> and writes those encoded characters to
-     * <code>output</code>.
+     * Encodes bytes from given {@code input} and writes those encoded
+     * characters to {@code output}.
      *
      * @param input binary input
      * @param output character output
@@ -251,9 +245,8 @@ public abstract class Base {
 
 
     /**
-     * Encodes bits from
-     * <code>input</code> and write those encoded characters to
-     * <code>output</code>.
+     * Encodes bits from {@code input} and write those encoded characters to
+     * {@code output}.
      *
      * @param input binary input
      * @param output character output
@@ -274,11 +267,10 @@ public abstract class Base {
         outer:
         while (true) {
 
-            for (int i = 0; i < charsPerWord; i++) {
-
+            int i;
+            for (i = 0; i < charsPerWord; i++) {
                 final int available =
                     OCTET_SIZE - ((bitsPerChar * i) % OCTET_SIZE);
-
                 if (available >= bitsPerChar) {
                     try {
                         final int unsigned = input.readUnsignedInt(bitsPerChar);
@@ -309,8 +301,7 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters in
-     * <code>input</code> and return decoded bytes.
+     * Decodes characters in {@code input} and return decoded bytes.
      *
      * @param input character input
      *
@@ -329,8 +320,7 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from
-     * <code>input</code> and return decoded bytes.
+     * Decodes characters from {@code input} and return decoded bytes.
      *
      * @param input character input
      *
@@ -354,9 +344,8 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from
-     * <code>input</code> and writes decoded bytes to
-     * <code>output</code>.
+     * Decodes characters from {@code input} and writes decoded octets to
+     * {@code output}.
      *
      * @param input input
      * @param output output
@@ -381,9 +370,8 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from
-     * <code>input</code> and writes decoded bytes to
-     * <code>output</code>.
+     * Decodes characters from {@code input} and writes decoded bytes to
+     * {@code output}.
      *
      * @param input character input
      * @param output binary output
@@ -406,9 +394,8 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters from
-     * <code>input</code> and writes decoded binary to
-     * <code>output</code>.
+     * Decodes characters from {@code input} and writes decoded binary to
+     * {@code output}.
      *
      * @param input character input
      * @param output binary output
@@ -418,44 +405,41 @@ public abstract class Base {
     private void decode(final Reader input, final BitOutput output)
         throws IOException {
 
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
         outer:
         while (true) {
-
-
-            for (int i = 0; i < charsPerWord; i++) {
-
-                int c = input.read();
-
+            int i;
+            int c;
+            for (i = 0; i < charsPerWord; i++) {
+                c = input.read();
                 if (c == -1) { // end of stream
-
                     if (i == 0) { // first character in a word; ok
                         break outer;
                     }
-
                     if (((i * bitsPerChar) % OCTET_SIZE) >= bitsPerChar) {
                         throw new EOFException("not finished properly");
                     }
-
                     if (!padding) {
                         break outer;
                     }
-
                     throw new EOFException("not finished properly");
-
                 } else if (c == PAD) {
-
                     if (!padding) {
                         throw new IOException("bad padding; no pads allowed");
                     }
-
                     if (i == 0) { // first character in a word
                         throw new IOException("bad padding");
                     }
-
                     if (((i * bitsPerChar) % OCTET_SIZE) >= bitsPerChar) {
                         throw new IOException("bad padding");
                     }
-
                     for (int j = i + 1; j < charsPerWord; j++) {
                         c = input.read(); // pad
                         if (c == -1) { // end of stream?
@@ -465,11 +449,8 @@ public abstract class Base {
                             throw new IOException("bad padding");
                         }
                     }
-
                     break outer;
-
                 } else {
-
                     final int value = decode[c - SMALLEST_VISIBLE_ASCII];
                     if (value == -1) {
                         throw new IOException("bad character: " + (char) c);

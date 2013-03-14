@@ -81,6 +81,7 @@ public final class BaseBinaryEncoderProxy implements InvocationHandler {
      * Returns a new instance of BinaryEncoder proxy.
      *
      * @param base base instance to use
+     *
      * @return a new instance of BinaryEncoder proxy.
      */
     public static Object newInstance(final Base base) {
@@ -98,9 +99,9 @@ public final class BaseBinaryEncoderProxy implements InvocationHandler {
     /**
      * Creates a new instance.
      *
-     * @param base base
+     * @param base the base to proxy
      */
-    private BaseBinaryEncoderProxy(final Base base) {
+    protected BaseBinaryEncoderProxy(final Base base) {
         super();
 
         if (base == null) {
@@ -125,7 +126,9 @@ public final class BaseBinaryEncoderProxy implements InvocationHandler {
     }
 
 
-    /** base. */
+    /**
+     * base.
+     */
     private final Base base;
 
 
