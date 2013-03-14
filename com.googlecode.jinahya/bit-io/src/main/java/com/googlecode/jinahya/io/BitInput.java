@@ -112,8 +112,6 @@ public class BitInput {
 //    public BitInput(final InputStream input) {
 //        this(new ByteInputStream(input));
 //    }
-
-
     /**
      * Reads an {@code length}-bit unsigned byte value.
      *
@@ -387,8 +385,8 @@ public class BitInput {
         int bits = 0;
 
         // discard remained bits on current octet.
-        if (index > 0x00) {
-            bits = index;
+        if (index < 0x08) {
+            bits = 0x08 - index;
             readUnsignedByte(bits);
         }
 

@@ -111,8 +111,6 @@ public class BitOutput {
 //    public BitOutput(final OutputStream output) {
 //        this(new ByteOutputStream(output));
 //    }
-
-
     /**
      * Writes an {@code length}-bit unsigned byte value. The lower
      * {@code length} bits in {@code value} are written.
@@ -366,7 +364,7 @@ public class BitOutput {
 
         int bits = 0;
 
-        if (index > 0) { // bit index to write
+        if (index > 0x00) { // bit index to write
             bits = (0x08 - index);
             writeUnsignedByte(bits, 0x00);
         }
@@ -393,23 +391,13 @@ public class BitOutput {
 
 
     /**
-     * Returns the number of bits available for writing in current byte.
-     *
-     * @return available bits for writing
-     */
-    public final int available() {
-        return 0x08 - index;
-    }
-
-
-    /**
      * target byte output.
      */
     protected final ByteOutput output;
 
 
     /**
-     * bits in current octet.
+     * bits in current byte.
      */
     private final BitSet bitset = new BitSet(0x08);
 

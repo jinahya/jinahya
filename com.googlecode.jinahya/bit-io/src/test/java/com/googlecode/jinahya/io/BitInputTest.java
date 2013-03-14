@@ -21,6 +21,7 @@ package com.googlecode.jinahya.io;
 import com.googlecode.jinahya.io.BitInput.ByteInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -42,6 +43,32 @@ public class BitInputTest {
         for (int i = 0; i < 7; i++) {
             Assert.assertFalse(input.readBoolean());
         }
+    }
+
+
+    @Test
+    public void testAlign()
+        throws IOException, NoSuchFieldException, IllegalAccessException {
+
+        final BitInput input = new BitInput(new ByteInputStream(
+            new ByteArrayInputStream(new byte[]{0x00, 0x00})));
+
+        Assert.assertEquals(input.align(1), 0);
+
+        input.readUnsignedByte(6);
+
+        Assert.assertEquals(input.align(1), 2);
+
+        input.readUnsignedByte(5);
+
+        final Field field = BitInput.class.getDeclaredField("count");
+        if (!field.isAccessible()) {
+            field.setAccessible(true);
+        }
+        field.set(input, -2);
+
+        Assert.assertEquals(input.align(1), 3);
+
     }
 
 
