@@ -237,7 +237,9 @@
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/id-codec</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/id-codec</url>
   </scm>
-  <prerequisites />
+  <prerequisites>
+    <maven>3.0.5</maven>
+  </prerequisites>
   <repositories />
   <pluginRepositories />
   <distributionManagement>
