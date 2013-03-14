@@ -37,7 +37,7 @@ public abstract class FileFormatTest<S extends FileFormat> {
     }
 
 
-    protected S newScanner() {
+    protected S newInstance() {
         try {
             return formatClass.newInstance();
         } catch (InstantiationException ie) {
