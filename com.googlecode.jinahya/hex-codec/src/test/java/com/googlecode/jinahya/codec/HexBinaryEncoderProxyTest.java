@@ -18,9 +18,11 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -32,33 +34,57 @@ import org.testng.annotations.Test;
 public class HexBinaryEncoderProxyTest {
 
 
-    @Test
-    public void testAsCommonsCodecBinaryEncoder() throws EncoderException {
+    @Test(expectedExceptions = {UnsupportedOperationException.class})
+    public void testUnsupportedOperations() {
 
-        final BinaryEncoder encoder =
-            (BinaryEncoder) HexBinaryEncoderProxy.newInstance();
+        final Object proxy = HexBinaryEncoderProxy.newInstance();
 
-        final byte[] decoded = HexCodecTestUtils.newDecodedBytes();
-
-        final byte[] encoded = encoder.encode(decoded);
+        proxy.toString();
+        Assert.fail("passed: toString()");
     }
 
 
     @Test
-    public void testAsCommonsCodecEncoder() throws EncoderException {
+    public void testAsCommonsCodecEncoderForObject() throws EncoderException {
 
-        final Encoder encoder = (Encoder) HexBinaryEncoderProxy.newInstance();
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
 
-        try {
-            encoder.encode(new Object());
-            Assert.fail("passed: encode(new Object())");
-        } catch (EncoderException ee) {
-            // expected
-        }
+        final Encoder proxy = (Encoder) HexBinaryEncoderProxy.newInstance();
+        final byte[] encoded = (byte[]) proxy.encode(expected);
 
-        final String decoded = HexCodecTestUtils.newDecodedString();
+        final byte[] actual = new HexDecoder().decode(encoded);
 
-        final byte[] encoded = (byte[]) encoder.encode(decoded);
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test
+    public void testAsCommonsCodecEncoderForString() throws EncoderException {
+
+        final String expected = RandomStringUtils.random(1024);
+
+        final Encoder proxy = (Encoder) HexBinaryEncoderProxy.newInstance();
+        final byte[] encoded = (byte[]) proxy.encode(expected);
+
+        final String actual = new String(HexDecoder.decodeMultiple(encoded),
+                                         StandardCharsets.UTF_8);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test
+    public void testAsCommonsCodecBinaryEncoder() throws EncoderException {
+
+        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
+
+        final BinaryEncoder encoder =
+            (BinaryEncoder) HexBinaryEncoderProxy.newInstance();
+        final byte[] encoded = encoder.encode(expected);
+
+        final byte[] actual = HexDecoder.decodeMultiple(encoded);
+
+        Assert.assertEquals(actual, expected);
     }
 
 

@@ -80,7 +80,7 @@ public class HexDecoder {
     protected static int decodeSingle(final byte[] encoded, final int offset) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("null encoded");
         }
 
         if (encoded.length < 2) {
@@ -114,7 +114,7 @@ public class HexDecoder {
     protected static byte[] decodeMultiple(final byte[] encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("null encoded");
         }
 
         if ((encoded.length & 0x01) == 0x01) {
@@ -135,6 +135,14 @@ public class HexDecoder {
 
 
     /**
+     * Creates a new instance.
+     */
+    public HexDecoder() {
+        super();
+    }
+
+
+    /**
      * Decodes given sequence of nibbles into a sequence of octets.
      *
      * @param encoded the nibbles to decode.
@@ -142,6 +150,10 @@ public class HexDecoder {
      * @return the decoded octets.
      */
     public byte[] decode(final byte[] encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("null encoded");
+        }
 
         return decodeMultiple(encoded);
     }

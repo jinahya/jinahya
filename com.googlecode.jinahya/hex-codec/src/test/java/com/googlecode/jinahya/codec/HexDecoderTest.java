@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 public class HexDecoderTest {
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testDecodeWithNull() {
         new HexDecoder().decode(null);
     }
