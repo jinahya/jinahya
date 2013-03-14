@@ -70,7 +70,7 @@ public class HexEncoder {
                                        final int offset) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("null encoded");
         }
 
         if (encoded.length < 2) {
@@ -104,7 +104,7 @@ public class HexEncoder {
     protected static byte[] encodeMultiple(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("null decoded");
         }
 
         final byte[] encoded = new byte[decoded.length << 1];
@@ -116,6 +116,14 @@ public class HexEncoder {
         }
 
         return encoded;
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public HexEncoder() {
+        super();
     }
 
 
@@ -142,7 +150,7 @@ public class HexEncoder {
     public byte[] encodeLikeAnEngineer(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("null decoded");
         }
 
         final byte[] encoded = new byte[decoded.length << 1];

@@ -32,8 +32,7 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
 
 
     /**
-     * Class for
-     * <code>org.apache.commons.codec.BinaryEncoder</code>.
+     * Class for {@code org.apache.commons.codec.BinaryEncoder}.
      */
     private static final Class<?> CLASS_BINARY_DECODER;
 
@@ -75,8 +74,7 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
 
 
     /**
-     * Class for
-     * <code>org.apache.commons.codec.DecoderException</code>.
+     * Class for {@code org.apache.commons.codec.DecoderException}.
      */
     private static final Class<? extends Throwable> CLASS_DNCODER_EXCEPTION;
 
@@ -129,10 +127,9 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
 
 
     /**
-     * Returns a new proxy for
-     * <code>BinaryEncoder</code>.
+     * Returns a new proxy for {@code org.apache.commons.codec.BinaryDecoder}.
      *
-     * @return a new proxy for <code>BinaryEncoder</code>.
+     * @return a new proxy for {@code org.apache.commons.codec.BinaryDecoder}.
      */
     public static Object newInstance() {
 
@@ -142,37 +139,37 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
 
     /**
      * Creates a new proxy instance for
-     * <code>org.apache.commons.codec.BinaryDecoder</code>.
+     * {@code org.apache.commons.codec.BinaryDecoder}.
      *
-     * @param hexDecoder the HexDecoder instance to use.
+     * @param decoder the decoder to proxy.
      *
      * @return a new proxy instance.
      */
-    public static Object newInstance(final HexDecoder hexDecoder) {
+    public static Object newInstance(final HexDecoder decoder) {
 
-        if (hexDecoder == null) {
-            throw new IllegalArgumentException("null hexDecoder");
+        if (decoder == null) {
+            throw new NullPointerException("null decoder");
         }
 
         return Proxy.newProxyInstance(CLASS_BINARY_DECODER.getClassLoader(),
                                       new Class<?>[]{CLASS_BINARY_DECODER},
-                                      new HexBinaryDecoderProxy(hexDecoder));
+                                      new HexBinaryDecoderProxy(decoder));
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param hexDecoder the HexDecoder to use.
+     * @param decoder the decoder to proxy.
      */
-    protected HexBinaryDecoderProxy(final HexDecoder hexDecoder) {
+    protected HexBinaryDecoderProxy(final HexDecoder decoder) {
         super();
 
-        if (hexDecoder == null) {
-            throw new IllegalArgumentException("null hexDecoder");
+        if (decoder == null) {
+            throw new NullPointerException("null decoder");
         }
 
-        this.hexDecoder = hexDecoder;
+        this.decoder = decoder;
     }
 
 
@@ -182,30 +179,30 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
         throws Throwable {
 
         if (METHOD_DECODE_BYTES.equals(method)) {
-            return hexDecoder.decode((byte[]) args[0]);
+            return decoder.decode((byte[]) args[0]);
         }
 
         if (METHOD_DECODE_OBJECT.equals(method)) {
+
             if (args[0] instanceof byte[]) {
                 return invoke(proxy, METHOD_DECODE_BYTES,
                               new Object[]{(byte[]) args[0]});
-            } else {
-                try {
-                    return invoke(
-                        proxy, METHOD_DECODE_BYTES,
-                        new Object[]{((String) args[0]).getBytes("US-ASCII")});
-                } catch (ClassCastException cce) {
-                    throw newDecoderException(cce);
-                }
             }
+
+            if (args[0] instanceof String) {
+                return invoke(
+                    proxy, METHOD_DECODE_BYTES,
+                    new Object[]{((String) args[0]).getBytes("US-ASCII")});
+            }
+
+            throw newDecoderException("unacceptable parameter: " + args[0]);
         }
 
-        throw new UnsupportedOperationException(
-            "unsupported: [" + method + "]");
+        throw new UnsupportedOperationException("unsupported: " + method);
     }
 
 
-    private final HexDecoder hexDecoder;
+    private final HexDecoder decoder;
 
 
 }
