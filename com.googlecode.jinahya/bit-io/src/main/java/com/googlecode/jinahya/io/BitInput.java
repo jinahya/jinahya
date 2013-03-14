@@ -52,9 +52,9 @@ public class BitInput {
 
 
     /**
-     * An {@code ByteInput} implementation for InputStream.
+     * An implementation for InputStreams.
      */
-    private static class ByteInputStream implements ByteInput {
+    protected static class ByteInputStream implements ByteInput {
 
 
         /**
@@ -73,7 +73,7 @@ public class BitInput {
         }
 
 
-        //@Override
+        @Override
         public int readUnsignedByte() throws IOException {
             return input.read();
         }
@@ -82,7 +82,7 @@ public class BitInput {
         /**
          * stream.
          */
-        protected final InputStream input;
+        private final InputStream input;
 
 
     }
@@ -104,20 +104,20 @@ public class BitInput {
     }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param input the input stream
-     */
-    public BitInput(final InputStream input) {
-        this(new ByteInputStream(input));
-    }
+//    /**
+//     * Creates a new instance.
+//     *
+//     * @param input the input stream
+//     */
+//    public BitInput(final InputStream input) {
+//        this(new ByteInputStream(input));
+//    }
 
 
     /**
-     * Reads an unsigned byte value.
+     * Reads an {@code length}-bit unsigned byte value.
      *
-     * @param length bit length between 0 (exclusive) and 8 (inclusive)
+     * @param length bit length between 0 exclusive and 8 inclusive
      *
      * @return an unsigned byte value.
      *
@@ -164,8 +164,8 @@ public class BitInput {
 
 
     /**
-     * Reads a 1-bit boolean value. {@code 0x00} for {@code true}, {@code 0x00}
-     * for {@code false}.
+     * Reads a {@code 1}-bit boolean value. {@code 0x00} for
+     * {@code true}, {@code 0x00} for {@code false}.
      *
      * @return a boolean value
      *
@@ -222,7 +222,7 @@ public class BitInput {
      * @param length bit length between 0x01 (inclusive) and {@value
      * java.lang.Integer#SIZE} (exclusive).
      *
-     * @return the unsigned {@code int} value read from the input
+     * @return the unsigned {@code length}-bit int value read from the input.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -258,10 +258,9 @@ public class BitInput {
     /**
      * Reads a {@code length}-bit signed {@code int}.
      *
-     * @param length bit length between 0x00 (exclusive) and {@value
-     * java.lang.Integer#SIZE} (inclusive).
+     * @param length bit length between 0 exclusive and 16 inclusive.
      *
-     * @return an unsigned {@code int} value.
+     * @return the signed {@code length}-bit int value read from the input.
      *
      * @throws IOException if an I/O error occurs.
      */

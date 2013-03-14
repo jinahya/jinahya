@@ -51,37 +51,37 @@ public class BitOutput {
 
 
     /**
-     * A {@code ByteOutput} for OutputStreams.
+     * An implementation for OutputStreams.
      */
-    private static class ByteOutputStream implements ByteOutput {
+    protected static class ByteOutputStream implements ByteOutput {
 
 
         /**
          * 'Creates a new instance.
          *
-         * @param stream the stream to wrap.
+         * @param output the stream to wrap.
          */
-        public ByteOutputStream(final OutputStream stream) {
+        public ByteOutputStream(final OutputStream output) {
             super();
 
-            if (stream == null) {
-                throw new NullPointerException("null stream");
+            if (output == null) {
+                throw new NullPointerException("null output");
             }
 
-            this.stream = stream;
+            this.output = output;
         }
 
 
-        //@Override
+        @Override
         public void writeUnsignedByte(final int value) throws IOException {
-            stream.write(value);
+            output.write(value);
         }
 
 
         /**
          * stream.
          */
-        protected final OutputStream stream;
+        private final OutputStream output;
 
 
     }
@@ -103,24 +103,21 @@ public class BitOutput {
     }
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param output the output stream
-     */
-    public BitOutput(final OutputStream output) {
-        this(new ByteOutputStream(output));
-    }
+//    /**
+//     * Creates a new instance.
+//     *
+//     * @param output the output stream
+//     */
+//    public BitOutput(final OutputStream output) {
+//        this(new ByteOutputStream(output));
+//    }
 
 
     /**
-     * Writes an unsigned byte value. This method doesn't check the validity of
-     * the value and writes the lower
-     * <code>length</code> bits in
-     * <code>value</code>.
+     * Writes an {@code length}-bit unsigned byte value. The lower
+     * {@code length} bits in {@code value} are written.
      *
-     * @param length bit length between 1 (inclusive) and {@value
-     * java.lang.Byte#SIZE} (inclusive).
+     * @param length bit length between 1 inclusive and 8 inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -163,8 +160,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. Only one bit is used; 0x01 for true, 0x00
-     * for false.
+     * Writes a 1-bit boolean value. 0x01 for true or 0x00 for false.
      *
      * @param value the boolean value to write
      *
@@ -179,9 +175,8 @@ public class BitOutput {
      * Writes an {@code length}-bit unsigned {@code short}. Only the lower
      * {@code length} bits in {@code value} are written.
      *
-     * @param length bit length between 1 (exclusive) and {@value
-     * java.lang.Short#SIZE} (inclusive)
-     * @param value value to write
+     * @param length bit length between 1 exclusive and 16 inclusivie.
+     * @param value the value whose lower {@code length}-bits are written.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -210,13 +205,11 @@ public class BitOutput {
 
 
     /**
-     * Writes an unsigned int value. An
-     * <code>IllegalArgumentException</code> will be thrown if
-     * <code>length</code> or
-     * <code>value</code> is out of valid range.
+     * Writes an unsigned int value. Only the lower {@code length}-bits are
+     * writen.
      *
-     * @param length bit length between 1 (inclusive) and 32 (exclusive)
-     * @param value the unsigned int value to be written
+     * @param length bit length between 1 inclusive and 32 exclusive.
+     * @param value the value whose lower {@code length}-bits are written.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -269,9 +262,9 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code float}.
+     * Writes a {@code float} value.
      *
-     * @param value the float value
+     * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -281,10 +274,10 @@ public class BitOutput {
 
 
     /**
-     * Writes an unsigned long value.
+     * Writes an {@code length}-bit unsigned long value.
      *
-     * @param length bit length between 0x01 (inclusive) and 0x40 (exclusive)
-     * @param value value to be written
+     * @param length bit length between 1 inclusive and 64 exclusive.
+     * @param value the value whose lower {@code length}-bits are written.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -313,13 +306,10 @@ public class BitOutput {
 
 
     /**
-     * Writes a signed long
-     * <code>value</code> in
-     * <code>length</code> bits.
+     * Writes a {@code length}-bit signed long value.
      *
-     * @param length bit length between 1 (exclusive) and {@value
-     * java.lang.Long#SIZE} (inclusive).
-     * @param value value to be written
+     * @param length bit length between 1 exclusive and 64 inclusive.
+     * @param value the value whose lower {@code length}-bits are written.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -360,38 +350,11 @@ public class BitOutput {
 
 
     /**
-     * Writes a byte array. First, a 31-bit unsigned integer is written for the
-     * byte count. And each byte is written.
-     *
-     * @param value the byte array to be written
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public void writeBytes(final byte[] value) throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
-
-        if (value.length > 65536) {
-            throw new IllegalArgumentException(
-                "too long value: " + value.length);
-        }
-
-        writeUnsignedShort(0x10, value.length); // 31
-
-        for (int i = 0; i < value.length; i++) {
-            writeUnsignedByte(Byte.SIZE, value[i] & 0xFF);
-        }
-    }
-
-
-    /**
      * Aligns to given {@code length} bytes.
      *
      * @param length the number of bytes to align
      *
-     * @return the bits padded to align
+     * @return number of bits padded to align
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -430,7 +393,7 @@ public class BitOutput {
 
 
     /**
-     * Returns the number of bits available for writing in current octet.
+     * Returns the number of bits available for writing in current byte.
      *
      * @return available bits for writing
      */

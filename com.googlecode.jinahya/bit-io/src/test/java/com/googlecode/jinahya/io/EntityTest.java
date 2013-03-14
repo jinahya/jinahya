@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.io.BitInput.ByteInputStream;
+import com.googlecode.jinahya.io.BitOutput.ByteOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class EntityTest {
         final Random random = ThreadLocalRandom.current();
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(baos);
+        final BitOutput output = new BitOutput(new ByteOutputStream(baos));
 
         final Entity[] expected = new Entity[1]; //random.nextInt(1024) + 1024];
         for (int i = 0; i < expected.length; i++) {
@@ -53,7 +55,7 @@ public class EntityTest {
         System.out.println("bytes.length: " + bytes.length);
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        final BitInput input = new BitInput(bais);
+        final BitInput input = new BitInput(new ByteInputStream(bais));
 
         final Entity[] actual = new Entity[expected.length];
         for (int i = 0; i < actual.length; i++) {
