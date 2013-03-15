@@ -29,17 +29,17 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <B>
- * @param <E> 
+ * @param <E>
  */
 public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     extends BaseTest<B> {
 
 
-    public DecodingTest(final B base, final E decoder,
+    public DecodingTest(final B base, final E encoder,
                         final Modifier modifier) {
         super(base);
 
-        this.encoder = decoder;
+        this.encoder = encoder;
         this.modifier = modifier;
     }
 
@@ -51,11 +51,7 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
 
         final byte[] encoded = modifier.modify(encoder.encode(expected));
 
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        base.decode(new ByteArrayInputStream(encoded), output);
-        output.flush();
-
-        final byte[] actual = output.toByteArray();
+        final byte[] actual = base.decode(new ByteArrayInputStream(encoded));
 
         Assert.assertEquals(actual, expected);
     }
@@ -65,5 +61,7 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
 
 
     protected final Modifier modifier;
+
+
 }
 

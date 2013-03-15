@@ -138,7 +138,7 @@ public class BaseBinaryEncoderProxyTest {
     @Test
     public void testBase64URL() throws EncoderException {
 
-        final Base base = new Base64URL();
+        final Base base = new Base64URLa();
         final BinaryEncoder commons =
             new org.apache.commons.codec.binary.Base64(-1, null, true);
 

@@ -83,7 +83,7 @@ public class BaseWelcomeTest {
             System.out.printf("\n");
 
             test("base64", new Base64(), original);
-            test("base64url", new Base64URL(), original);
+            test("base64url", new Base64URLa(), original);
             test("base32", new Base32(), original);
             test("base32hex", new Base32Hex(), original);
             test("base16", new Base16(), original);

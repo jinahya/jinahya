@@ -53,7 +53,6 @@ public abstract class BaseTest<B extends Base> {
 
 
     public BaseTest(final B base) {
-
         super();
 
         this.base = base;
@@ -63,13 +62,13 @@ public abstract class BaseTest<B extends Base> {
     @Test(invocationCount = 128)
     public void testEncodingDecoding() throws IOException {
 
-        final byte[] original = generate(1024);
+        final byte[] expected = generate(1024);
 
-        final byte[] encoded = base.encode(original);
+        final byte[] encoded = base.encode(expected);
 
-        final byte[] decoded = base.decode(encoded);
+        final byte[] actual = base.decode(encoded);
 
-        Assert.assertEquals(decoded, original, "fail");
+        Assert.assertEquals(actual, expected, "fail");
     }
 
 
