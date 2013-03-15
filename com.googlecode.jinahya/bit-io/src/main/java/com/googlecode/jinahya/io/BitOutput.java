@@ -103,14 +103,6 @@ public class BitOutput {
     }
 
 
-//    /**
-//     * Creates a new instance.
-//     *
-//     * @param output the output stream
-//     */
-//    public BitOutput(final OutputStream output) {
-//        this(new ByteOutputStream(output));
-//    }
     /**
      * Writes an {@code length}-bit unsigned byte value. The lower
      * {@code length} bits in {@code value} are written.

@@ -80,7 +80,7 @@ public class BitInput {
 
 
         /**
-         * stream.
+         * input.
          */
         private final InputStream input;
 
@@ -104,14 +104,6 @@ public class BitInput {
     }
 
 
-//    /**
-//     * Creates a new instance.
-//     *
-//     * @param input the input stream
-//     */
-//    public BitInput(final InputStream input) {
-//        this(new ByteInputStream(input));
-//    }
     /**
      * Reads an {@code length}-bit unsigned byte value.
      *
@@ -121,7 +113,7 @@ public class BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedByte(final int length) throws IOException {
+    public int readUnsignedByte(final int length) throws IOException {
 
         if (length < 0x01) {
             throw new IllegalArgumentException("length(" + length + ") < 0x01");
@@ -185,7 +177,7 @@ public class BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedShort(final int length) throws IOException {
+    public int readUnsignedShort(final int length) throws IOException {
 
         if (length < 0x01) {
             throw new IllegalArgumentException("length(" + length + ") < 0x01");
