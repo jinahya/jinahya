@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.ByteInputStream;
-import com.googlecode.jinahya.io.BitOutput.ByteOutputStream;
+import com.googlecode.jinahya.io.BitInput.StreamInput;
+import com.googlecode.jinahya.io.BitOutput.StreamOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         throws InstantiationException, IllegalAccessException, IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(new ByteOutputStream(baos));
+        final BitOutput output = new BitOutput(new StreamOutput(baos));
 
         final E expected = entityClass.newInstance();
         expected.write(output);
@@ -63,7 +63,7 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         System.out.println("bytes[0]: " + bytes[0]);
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        final BitInput input = new BitInput(new ByteInputStream(bais));
+        final BitInput input = new BitInput(new StreamInput(bais));
 
         final E actual = entityClass.newInstance();
         actual.read(input);
@@ -79,7 +79,7 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         final int count = ThreadLocalRandom.current().nextInt(1024) + 1024;
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new BitOutput(new ByteOutputStream(baos));
+        final BitOutput output = new BitOutput(new StreamOutput(baos));
 
         final List<E> expected = new ArrayList<E>(count);
         for (int i = 0; i < count; i++) {
@@ -95,7 +95,7 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         System.out.println("bytes[0]: " + bytes[0]);
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        final BitInput input = new BitInput(new ByteInputStream(bais));
+        final BitInput input = new BitInput(new StreamInput(bais));
 
         final List<E> actual = new ArrayList<E>(expected.size());
         for (int i = 0; i < expected.size(); i++) {

@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.ByteInputStream;
+import com.googlecode.jinahya.io.BitInput.StreamInput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -101,7 +101,7 @@ public abstract class FileFormat {
         throws InstantiationException, IllegalAccessException, IOException {
 
         return readInstance(formatClass,
-                            new BitInput(new ByteInputStream(input)));
+                            new BitInput(new StreamInput(input)));
     }
 
 
@@ -127,7 +127,7 @@ public abstract class FileFormat {
 
     public void read(final InputStream input) throws IOException {
 
-        read(new BitInput(new BitInput.ByteInputStream(input)));
+        read(new BitInput(new BitInput.StreamInput(input)));
     }
 
 

@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitOutput.ByteOutputStream;
+import com.googlecode.jinahya.io.BitOutput.StreamOutput;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class SampleEntityTest {
         // bit-io
         {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final BitOutput output = new BitOutput(new ByteOutputStream(baos));
+            final BitOutput output = new BitOutput(new StreamOutput(baos));
             for (SampleEntity entity : entities) {
                 entity.write(output);
             }

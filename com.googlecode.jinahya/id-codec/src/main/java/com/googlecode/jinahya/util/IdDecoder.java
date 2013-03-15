@@ -62,10 +62,11 @@ public class IdDecoder {
             throw new IllegalArgumentException("illegal pattern: " + encoded);
         }
 
-        final long mostSigBits = decodeLong(matcher.group(1));
-        final long leastSigBits = decodeLong(matcher.group(4));
+        final IdDecoder decoder = new IdDecoder();
+        final long mostSignificantBits = decoder.decode(matcher.group(1));
+        final long leastSignificantBits = decoder.decode(matcher.group(4));
 
-        return new UUID(mostSigBits, leastSigBits);
+        return new UUID(mostSignificantBits, leastSignificantBits);
     }
 
 

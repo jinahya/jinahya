@@ -20,14 +20,19 @@
         <version>1.7</version>
       </dependency>
       <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.6</version>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-math3</artifactId>
+        <version>3.1.1</version>
       </dependency>
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>bit-io</artifactId>
-        <version>1.0-alpha-11</version>
+        <version>1.0-alpha-12-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.shindig</groupId>
@@ -48,8 +53,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

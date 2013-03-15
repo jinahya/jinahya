@@ -25,23 +25,18 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLaEncodingTest extends DecodingTest<Base64Url, Base64> {
+public class Base64UrlEncodingMeanTest
+    extends EncodingMeanTest<Base64Url, Base64> {
 
 
-    public Base64URLaEncodingTest() {
-        super(Base64Url.class, org.apache.commons.codec.binary.Base64.class);
+    public Base64UrlEncodingMeanTest() {
+        super(Base64Url.class, Base64.class);
     }
 
 
     @Override
     protected Base64 newEncoder() {
         return new Base64(-1, null, true);
-    }
-
-
-    @Override
-    protected byte[] forBaseDecoding(final byte[] commonsEncoded) {
-        return commonsEncoded;
     }
 
 

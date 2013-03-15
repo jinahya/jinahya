@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.ByteInputStream;
+import com.googlecode.jinahya.io.BitInput.StreamInput;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -36,7 +36,7 @@ public class BitInputTest {
     @Test
     public void testReadBoolean() throws IOException {
 
-        final BitInput input = new BitInput(new ByteInputStream(
+        final BitInput input = new BitInput(new StreamInput(
             new ByteArrayInputStream(new byte[]{(byte) 0x80}))); // 1000 0000
 
         Assert.assertTrue(input.readBoolean());
@@ -50,7 +50,7 @@ public class BitInputTest {
     public void testAlign()
         throws IOException, NoSuchFieldException, IllegalAccessException {
 
-        final BitInput input = new BitInput(new ByteInputStream(
+        final BitInput input = new BitInput(new StreamInput(
             new ByteArrayInputStream(new byte[]{0x00, 0x00})));
 
         Assert.assertEquals(input.align(1), 0);
