@@ -25,7 +25,7 @@ package com.googlecode.jinahya.rfc4648;
  * @see <a href="http://goo.gl/kD53c">Base 64 Encoding with URL and Filename
  *      Safe Alphabet</a>
  */
-public class Base64URLa extends Base {
+public class Base64Url extends Base {
 
 
     /**
@@ -46,7 +46,7 @@ public class Base64URLa extends Base {
     /**
      * Creates a new instance.
      */
-    public Base64URLa() {
+    public Base64Url() {
         super(ALPHABET, false);
     }
 }
