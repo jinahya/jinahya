@@ -138,7 +138,7 @@ public class BaseBinaryDecoderProxyTest {
     @Test
     public void testBase64URL() throws DecoderException {
 
-        final Base base = new Base64URL();
+        final Base base = new Base64URLa();
         final BinaryDecoder commons =
             new org.apache.commons.codec.binary.Base64(-1, null, true);
 

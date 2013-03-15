@@ -22,7 +22,7 @@ package com.googlecode.jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLTest extends BaseTest<Base64URL> {
+public class Base64URLTest extends BaseTest<Base64URLa> {
 
 
     private static final org.apache.commons.codec.binary.Base64 COMMONS_CODEC =
@@ -30,7 +30,7 @@ public class Base64URLTest extends BaseTest<Base64URL> {
 
 
     public Base64URLTest() {
-        super(new Base64URL());
+        super(new Base64URLa());
     }
 
 

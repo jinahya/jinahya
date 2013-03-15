@@ -143,7 +143,7 @@ public class TestVectors {
     @Test
     public void testBASE64URL() throws IOException {
 
-        testBase(BASE64URL, new Base64URL());
+        testBase(BASE64URL, new Base64URLa());
     }
 
 
