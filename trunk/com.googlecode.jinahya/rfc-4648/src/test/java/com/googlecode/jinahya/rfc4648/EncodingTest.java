@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import org.apache.commons.codec.BinaryDecoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -28,44 +26,41 @@ import org.testng.annotations.Test;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <B>
- * @param <D>
+ * @param <B> base type parameter
+ * @param <D> decoder type parameter
  */
 @Test(singleThreaded = true)
 public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
     extends BaseTest<B> {
 
 
-    public EncodingTest(final B base, final D encoder,
-                        final Modifier modifier) {
-        super(base);
+    public EncodingTest(final Class<B> baseClass, final Class<D> decoderClass) {
+        super(baseClass);
 
-        this.decoder = encoder;
-        this.modifier = modifier;
+        this.decoderClass = decoderClass;
     }
 
 
-    @Test
+    protected abstract D newDecoder();
+
+
+    protected abstract byte[] forCommonsDecoding(final byte[] baseEncoded);
+
+
+    @Test(invocationCount = 128)
     public void testEncoding() throws Exception {
 
-        final byte[] expected = generate();
+        final byte[] expected = decoded();
 
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        base.encode(new ByteArrayInputStream(expected), output);
-        output.flush();
+        final byte[] encoded = newBase().encode(expected);
 
-        final byte[] encoded = output.toByteArray();
-
-        final byte[] actual = decoder.decode(modifier.modify(encoded));
+        final byte[] actual = newDecoder().decode(forCommonsDecoding(encoded));
 
         Assert.assertEquals(actual, expected);
     }
 
 
-    protected final D decoder;
-
-
-    protected final Modifier modifier;
+    protected final Class<D> decoderClass;
 
 
 }

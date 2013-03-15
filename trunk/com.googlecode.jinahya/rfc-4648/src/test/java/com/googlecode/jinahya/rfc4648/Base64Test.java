@@ -25,12 +25,8 @@ package com.googlecode.jinahya.rfc4648;
 public class Base64Test extends BaseTest<Base64> {
 
 
-    private static final org.apache.commons.codec.binary.Base64 COMMONS_CODEC =
-        new org.apache.commons.codec.binary.Base64(-1);
-
-
     public Base64Test() {
-        super(new Base64());
+        super(Base64.class);
     }
 
 

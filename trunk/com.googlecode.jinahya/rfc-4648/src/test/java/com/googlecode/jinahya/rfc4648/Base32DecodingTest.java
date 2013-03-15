@@ -26,14 +26,20 @@ public class Base32DecodingTest
     extends DecodingTest<Base32, org.apache.commons.codec.binary.Base32> {
 
 
-    private static org.apache.commons.codec.binary.Base32 getCommons() {
+    public Base32DecodingTest() {
+        super(Base32.class, org.apache.commons.codec.binary.Base32.class);
+    }
 
+
+    @Override
+    protected org.apache.commons.codec.binary.Base32 newEncoder() {
         return new org.apache.commons.codec.binary.Base32(-1, null, false);
     }
 
 
-    public Base32DecodingTest() {
-        super(new Base32(), getCommons(), Modifier.TO_SAME);
+    @Override
+    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
+        return commonsEncoded;
     }
 
 

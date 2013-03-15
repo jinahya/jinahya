@@ -26,14 +26,20 @@ public class Base64DecodingTest
     extends DecodingTest<Base64, org.apache.commons.codec.binary.Base64> {
 
 
-    private static org.apache.commons.codec.binary.Base64 getCommons() {
+    public Base64DecodingTest() {
+        super(Base64.class, org.apache.commons.codec.binary.Base64.class);
+    }
 
+
+    @Override
+    protected org.apache.commons.codec.binary.Base64 newEncoder() {
         return new org.apache.commons.codec.binary.Base64(-1, null, false);
     }
 
 
-    public Base64DecodingTest() {
-        super(new Base64(), getCommons(), Modifier.TO_SAME);
+    @Override
+    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
+        return commonsEncoded;
     }
 
 

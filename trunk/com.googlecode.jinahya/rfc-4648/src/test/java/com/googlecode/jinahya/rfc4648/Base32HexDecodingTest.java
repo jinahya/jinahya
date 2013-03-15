@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.rfc4648;
 
 
+import org.apache.commons.codec.binary.Base32;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -26,14 +29,20 @@ public class Base32HexDecodingTest
     extends DecodingTest<Base32Hex, org.apache.commons.codec.binary.Base32> {
 
 
-    private static org.apache.commons.codec.binary.Base32 getCommons() {
-
-        return new org.apache.commons.codec.binary.Base32(-1, null, true);
+    public Base32HexDecodingTest() {
+        super(Base32Hex.class, org.apache.commons.codec.binary.Base32.class);
     }
 
 
-    public Base32HexDecodingTest() {
-        super(new Base32Hex(), getCommons(), Modifier.TO_SAME);
+    @Override
+    protected Base32 newEncoder() {
+        return new Base32(-1, null, true);
+    }
+
+
+    @Override
+    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
+        return commonsEncoded;
     }
 
 
