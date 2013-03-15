@@ -18,8 +18,7 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.BinaryEncoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -35,32 +34,34 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     extends BaseTest<B> {
 
 
-    public DecodingTest(final B base, final E encoder,
-                        final Modifier modifier) {
-        super(base);
+    public DecodingTest(final Class<B> baseClass, final Class<E> encoderClass) {
+        super(baseClass);
 
-        this.encoder = encoder;
-        this.modifier = modifier;
+        this.encoderClass = encoderClass;
     }
 
 
-    @Test
+    protected abstract E newEncoder();
+
+
+    protected abstract byte[] forBaseDecoding(byte[] commonsEncoded);
+
+
+    @Test(invocationCount = 128)
     public void testDecoding() throws Exception {
 
-        final byte[] expected = generate();
+        final byte[] expected = decoded();
 
-        final byte[] encoded = modifier.modify(encoder.encode(expected));
+        final byte[] encoded = newEncoder().encode(expected);
+        System.out.println(new String(encoded, StandardCharsets.US_ASCII));
 
-        final byte[] actual = base.decode(new ByteArrayInputStream(encoded));
+        final byte[] actual = newBase().decode(forBaseDecoding(encoded));
 
         Assert.assertEquals(actual, expected);
     }
 
 
-    protected final E encoder;
-
-
-    protected final Modifier modifier;
+    protected final Class<E> encoderClass;
 
 
 }

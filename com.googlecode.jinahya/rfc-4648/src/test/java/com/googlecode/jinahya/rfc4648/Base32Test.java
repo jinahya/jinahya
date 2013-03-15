@@ -26,7 +26,7 @@ public class Base32Test extends BaseTest<Base32> {
 
 
     public Base32Test() {
-        super(new Base32());
+        super(Base32.class);
     }
 
 

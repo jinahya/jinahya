@@ -26,7 +26,7 @@ public class Base32HexTest extends BaseTest<Base32Hex> {
 
 
     public Base32HexTest() {
-        super(new Base32Hex());
+        super(Base32Hex.class);
     }
 
 

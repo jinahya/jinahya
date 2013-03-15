@@ -23,17 +23,23 @@ package com.googlecode.jinahya.rfc4648;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class Base64EncodingTest
-    extends DecodingTest<Base64, org.apache.commons.codec.binary.Base64> {
+    extends EncodingTest<Base64, org.apache.commons.codec.binary.Base64> {
 
 
-    private static org.apache.commons.codec.binary.Base64 getCommons() {
+    public Base64EncodingTest() {
+        super(Base64.class, org.apache.commons.codec.binary.Base64.class);
+    }
 
+
+    @Override
+    protected org.apache.commons.codec.binary.Base64 newDecoder() {
         return new org.apache.commons.codec.binary.Base64(-1, null, false);
     }
 
 
-    public Base64EncodingTest() {
-        super(new Base64(), getCommons(), Modifier.TO_SAME);
+    @Override
+    protected byte[] forCommonsDecoding(byte[] baseEncoded) {
+        return baseEncoded;
     }
 
 

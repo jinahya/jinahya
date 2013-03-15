@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-
-
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
@@ -28,7 +26,9 @@ public class Base16Test extends BaseTest<Base16> {
 
 
     public Base16Test() {
-        super(new Base16());
+        super(Base16.class);
     }
+
+
 }
 

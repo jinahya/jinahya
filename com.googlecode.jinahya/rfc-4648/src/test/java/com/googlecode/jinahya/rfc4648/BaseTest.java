@@ -36,13 +36,13 @@ public abstract class BaseTest<B extends Base> {
     protected static final Random RANDOM = new Random();
 
 
-    protected static byte[] generate() {
+    protected static byte[] decoded() {
 
-        return generate(1024);
+        return decoded(1024);
     }
 
 
-    protected static byte[] generate(final int length) {
+    protected static byte[] decoded(final int length) {
 
         synchronized (RANDOM) {
             final byte[] bytes = new byte[RANDOM.nextInt(length)];
@@ -52,17 +52,64 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    public BaseTest(final B base) {
+    public static byte[] upper(final byte[] lower) {
+
+        final byte[] upper = new byte[lower.length];
+
+        for (int i = 0; i < upper.length; i++) {
+            if (lower[i] >= 0x61 && lower[i] <= 0x7A) {
+                upper[i] = (byte) (lower[i] - 0x20);
+                continue;
+            }
+            upper[i] = lower[i];
+        }
+
+        return upper;
+    }
+
+
+    public static byte[] lower(final byte[] upper) {
+
+        final byte[] lower = new byte[upper.length];
+
+        for (int i = 0; i < lower.length; i++) {
+            if (upper[i] >= 0x41 && upper[i] <= 0x5A) {
+                lower[i] = (byte) (upper[i] + 0x20);
+                continue;
+            }
+            lower[i] = upper[i];
+        }
+
+        return lower;
+    }
+
+
+    public BaseTest(final Class<B> baseClass) {
         super();
 
-        this.base = base;
+        this.baseClass = baseClass;
+    }
+
+
+    protected B newBase() {
+        try {
+            return baseClass.newInstance();
+        } catch (InstantiationException ie) {
+            Assert.fail("failed to create an instance of " + baseClass, ie);
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            Assert.fail("failed to create an instance of " + baseClass, iae);
+            throw new RuntimeException(iae);
+        }
     }
 
 
     @Test(invocationCount = 128)
     public void testEncodingDecoding() throws IOException {
 
-        final byte[] expected = generate(1024);
+        final B base = newBase();
+
+        final byte[] expected = decoded();
 
         final byte[] encoded = base.encode(expected);
 
@@ -72,7 +119,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    protected final B base;
+    protected final Class<B> baseClass;
 
 
 }

@@ -25,11 +25,25 @@ import org.apache.commons.codec.binary.Hex;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base16EncodingTest extends DecodingTest<Base16, Hex> {
+public class Base16EncodingTest extends EncodingTest<Base16, Hex> {
 
 
     public Base16EncodingTest() {
-        super(new Base16(), new Hex(), Modifier.TO_UPPER);
+        super(Base16.class, Hex.class);
     }
+
+
+    @Override
+    protected Hex newDecoder() {
+        return new Hex();
+    }
+
+
+    @Override
+    protected byte[] forCommonsDecoding(byte[] baseEncoded) {
+        return lower(baseEncoded);
+    }
+
+
 }
 
