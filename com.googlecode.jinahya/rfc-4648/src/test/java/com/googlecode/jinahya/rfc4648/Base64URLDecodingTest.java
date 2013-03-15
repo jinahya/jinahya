@@ -23,7 +23,7 @@ package com.googlecode.jinahya.rfc4648;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class Base64URLDecodingTest
-    extends DecodingTest<Base64URLa, org.apache.commons.codec.binary.Base64> {
+    extends DecodingTest<Base64Url, org.apache.commons.codec.binary.Base64> {
 
 
     private static org.apache.commons.codec.binary.Base64 getCommons() {
@@ -33,7 +33,7 @@ public class Base64URLDecodingTest
 
 
     public Base64URLDecodingTest() {
-        super(new Base64URLa(), getCommons(), Modifier.TO_SAME);
+        super(new Base64Url(), getCommons(), Modifier.TO_SAME);
     }
 
 
