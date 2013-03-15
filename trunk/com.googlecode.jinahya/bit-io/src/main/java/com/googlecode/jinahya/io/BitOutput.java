@@ -53,7 +53,7 @@ public class BitOutput {
     /**
      * An implementation for OutputStreams.
      */
-    protected static class ByteOutputStream implements ByteOutput {
+    public static class StreamOutput implements ByteOutput {
 
 
         /**
@@ -61,7 +61,7 @@ public class BitOutput {
          *
          * @param output the stream to wrap.
          */
-        public ByteOutputStream(final OutputStream output) {
+        public StreamOutput(final OutputStream output) {
             super();
 
             if (output == null) {

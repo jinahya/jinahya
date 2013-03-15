@@ -25,10 +25,10 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLaDecodingTest extends DecodingTest<Base64Url, Base64> {
+public class Base64UrlEncodingTest extends DecodingTest<Base64Url, Base64> {
 
 
-    public Base64URLaDecodingTest() {
+    public Base64UrlEncodingTest() {
         super(Base64Url.class, Base64.class);
     }
 
@@ -40,7 +40,7 @@ public class Base64URLaDecodingTest extends DecodingTest<Base64Url, Base64> {
 
 
     @Override
-    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
+    protected byte[] forBaseDecoding(final byte[] commonsEncoded) {
         return commonsEncoded;
     }
 

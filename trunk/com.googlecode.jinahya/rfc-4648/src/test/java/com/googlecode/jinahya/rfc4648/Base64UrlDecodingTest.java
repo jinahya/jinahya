@@ -18,15 +18,30 @@
 package com.googlecode.jinahya.rfc4648;
 
 
+import org.apache.commons.codec.binary.Base64;
+
+
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class Base64URLaTest extends BaseTest<Base64Url> {
+public class Base64UrlDecodingTest extends DecodingTest<Base64Url, Base64> {
 
 
-    public Base64URLaTest() {
-        super(Base64Url.class);
+    public Base64UrlDecodingTest() {
+        super(Base64Url.class, Base64.class);
+    }
+
+
+    @Override
+    protected Base64 newEncoder() {
+        return new Base64(-1, null, true);
+    }
+
+
+    @Override
+    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
+        return commonsEncoded;
     }
 
 

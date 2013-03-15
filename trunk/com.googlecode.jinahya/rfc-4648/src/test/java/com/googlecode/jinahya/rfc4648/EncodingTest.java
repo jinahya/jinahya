@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.rfc4648;
 
 
+import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
 import org.apache.commons.codec.BinaryDecoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;

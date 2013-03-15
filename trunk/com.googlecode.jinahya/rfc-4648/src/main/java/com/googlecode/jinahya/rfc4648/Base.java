@@ -19,7 +19,9 @@ package com.googlecode.jinahya.rfc4648;
 
 
 import com.googlecode.jinahya.io.BitInput;
+import com.googlecode.jinahya.io.BitInput.StreamInput;
 import com.googlecode.jinahya.io.BitOutput;
+import com.googlecode.jinahya.io.BitOutput.StreamOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -240,7 +242,7 @@ public abstract class Base {
             throw new NullPointerException("null output");
         }
 
-        encode(new BitInput(input), output);
+        encode(new BitInput(new StreamInput(input)), output);
     }
 
 
@@ -389,7 +391,7 @@ public abstract class Base {
             throw new NullPointerException("null outpute");
         }
 
-        decode(input, new BitOutput(output));
+        decode(input, new BitOutput(new StreamOutput(output)));
     }
 
 

@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.BinaryEncoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -27,8 +26,8 @@ import org.testng.annotations.Test;
 /**
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
- * @param <B>
- * @param <E>
+ * @param <B> base type parameter
+ * @param <E> encoder type parameter
  */
 public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     extends BaseTest<B> {
@@ -53,7 +52,6 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
         final byte[] expected = decoded();
 
         final byte[] encoded = newEncoder().encode(expected);
-        System.out.println(new String(encoded, StandardCharsets.US_ASCII));
 
         final byte[] actual = newBase().decode(forBaseDecoding(encoded));
 

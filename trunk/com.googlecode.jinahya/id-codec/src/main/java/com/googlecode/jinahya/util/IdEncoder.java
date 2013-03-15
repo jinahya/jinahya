@@ -52,8 +52,10 @@ public class IdEncoder {
      */
     public static String encodeUUID(final UUID decoded) {
 
-        return encodeLong(decoded.getMostSignificantBits()) + "-"
-               + encodeLong(decoded.getLeastSignificantBits());
+        final IdEncoder encoder = new IdEncoder();
+
+        return encoder.encode(decoded.getMostSignificantBits()) + "-"
+               + encoder.encode(decoded.getLeastSignificantBits());
     }
 
 

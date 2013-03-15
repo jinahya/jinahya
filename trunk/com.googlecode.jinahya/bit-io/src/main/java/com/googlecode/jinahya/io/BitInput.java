@@ -54,7 +54,7 @@ public class BitInput {
     /**
      * An implementation for InputStreams.
      */
-    protected static class ByteInputStream implements ByteInput {
+    public static class StreamInput implements ByteInput {
 
 
         /**
@@ -62,7 +62,7 @@ public class BitInput {
          *
          * @param input the stream to wrap.
          */
-        public ByteInputStream(final InputStream input) {
+        public StreamInput(final InputStream input) {
             super();
 
             if (input == null) {
