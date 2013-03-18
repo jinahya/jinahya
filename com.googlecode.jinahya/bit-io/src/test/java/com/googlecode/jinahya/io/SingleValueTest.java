@@ -33,46 +33,52 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E>
+ * @param <S>
  */
-public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
+public abstract class SingleValueTest<S extends SingleValue<?>> {
 
 
-    public SingleValueEntityTest(final Class<E> entityClass) {
+    public SingleValueTest(final Class<S> valueClass) {
         super();
 
-        this.entityClass = entityClass;
+        this.valueClass = valueClass;
     }
 
 
-    @Test
+    @Test(enabled = true)
     public void testSingle()
         throws InstantiationException, IllegalAccessException, IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(new StreamOutput(baos));
 
-        final E expected = entityClass.newInstance();
+        final S expected = valueClass.newInstance();
         expected.write(output);
 
         output.align(1);
         baos.flush();
 
         final byte[] bytes = baos.toByteArray();
-        System.out.println("bytes.length: " + bytes.length);
-        System.out.println("bytes[0]: " + bytes[0]);
+        final int bytesLength = bytes.length;
+        System.out.println(valueClass.getSimpleName() + " bytes.length: "
+                           + bytesLength);
+        for (int j = 0; j < bytesLength; j++) {
+            System.out.println(valueClass.getSimpleName() + " bytes[" + j
+                               + "]: " + (bytes[j] & 0xFF));
+        }
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
 
-        final E actual = entityClass.newInstance();
+        final S actual = valueClass.newInstance();
         actual.read(input);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
 
 
-    @Test
+    @Test(enabled = true)
     public void testMultiple()
         throws InstantiationException, IllegalAccessException, IOException {
 
@@ -81,9 +87,9 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(new StreamOutput(baos));
 
-        final List<E> expected = new ArrayList<E>(count);
+        final List<S> expected = new ArrayList<S>(count);
         for (int i = 0; i < count; i++) {
-            final E entity = entityClass.newInstance();
+            final S entity = valueClass.newInstance();
             entity.write(output);
             expected.add(entity);
         }
@@ -91,24 +97,30 @@ public abstract class SingleValueEntityTest<E extends SingleValueEntity<?>> {
         baos.flush();
 
         final byte[] bytes = baos.toByteArray();
-        System.out.println("bytes.length: " + bytes.length);
-        System.out.println("bytes[0]: " + bytes[0]);
+        final int bytesLength = bytes.length;
+        System.out.println(valueClass.getSimpleName() + " bytes.length: "
+                           + bytesLength);
+        for (int j = 0; j < bytesLength; j++) {
+            System.out.println(valueClass.getSimpleName() + " bytes[" + j
+                               + "]: " + (bytes[j] & 0xFF));
+        }
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
 
-        final List<E> actual = new ArrayList<E>(expected.size());
+        final List<S> actual = new ArrayList<S>(expected.size());
         for (int i = 0; i < expected.size(); i++) {
-            final E entity = entityClass.newInstance();
+            final S entity = valueClass.newInstance();
             entity.read(input);
             actual.add(entity);
         }
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
 
 
-    protected final Class<E> entityClass;
+    protected final Class<S> valueClass;
 
 
 }
