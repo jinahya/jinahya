@@ -113,7 +113,7 @@ public class BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public int readUnsignedByte(final int length) throws IOException {
+    protected int readUnsignedByte(final int length) throws IOException {
 
         if (length < 0x01) {
             throw new IllegalArgumentException("length(" + length + ") < 0x01");
@@ -177,7 +177,7 @@ public class BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public int readUnsignedShort(final int length) throws IOException {
+    protected int readUnsignedShort(final int length) throws IOException {
 
         if (length < 0x01) {
             throw new IllegalArgumentException("length(" + length + ") < 0x01");
