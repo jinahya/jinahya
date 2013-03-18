@@ -359,6 +359,28 @@ public class BitInput {
     }
 
 
+    public int readUTF8Char() throws IOException {
+
+        if (!readBoolean()) {
+            return readUnsignedByte(7);
+        }
+
+        int tails = 0;
+        for (;readBoolean(); tails++) {
+        }
+
+        int value = readUnsignedByte(6 - tails);
+
+        for (int i = 0; i < tails; i++) {
+            readUnsignedByte(2); // 10
+            value <<= 6;
+            value |= readUnsignedByte(6);
+        }
+
+        return value;
+    }
+
+
     /**
      * Align to given {@code length} bytes.
      *

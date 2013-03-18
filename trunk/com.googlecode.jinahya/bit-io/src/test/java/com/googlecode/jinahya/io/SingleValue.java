@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class SingleValueEntity<V> {
+public abstract class SingleValue<V> {
 
 
     @Override
@@ -44,7 +44,7 @@ public abstract class SingleValueEntity<V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SingleValueEntity<V> other = (SingleValueEntity<V>) obj;
+        final SingleValue<V> other = (SingleValue<V>) obj;
         if (this.value != other.value && (this.value == null || !this.value.equals(other.value))) {
             return false;
         }

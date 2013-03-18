@@ -339,6 +339,41 @@ public class BitOutput {
     }
 
 
+    public void writeUTF8Char(final int value) throws IOException {
+
+        if (value >> 21 != 0) {
+            throw new IllegalArgumentException("illegal value: " + value);
+        }
+
+        if (value <= 0x7F) {
+            writeUnsignedByte(0x08, value);
+            return;
+        }
+
+        int tails;
+        if (value >> 11 == 0x00) {
+            tails = 1;
+        } else if (value >> 16 == 0x00) {
+            tails = 2;
+        } else {
+            tails = 3;
+        }
+
+        writeBoolean(true); // 1
+        for (int i = 0; i < tails; i++) {
+            writeBoolean(true); // 1...
+        }
+        writeBoolean(false); // 0
+
+        writeUnsignedByte(0x06 - tails, value >> (tails * 6)); // head
+
+        for (int i = tails - 1; i >= 0; i--) {
+            writeUnsignedByte(2, 0x02); // 10______
+            writeUnsignedByte(6, (value >> (6 * i)) & 0x3F); // __xxxxxx
+        }
+    }
+
+
     /**
      * Aligns to given {@code length} bytes.
      *

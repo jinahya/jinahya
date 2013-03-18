@@ -22,11 +22,11 @@ package com.googlecode.jinahya.io;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BooleanEntityTest extends SingleValueEntityTest<BooleanEntity> {
+public class SingleFloatTest extends SingleValueTest<SingleFloat> {
 
 
-    public BooleanEntityTest() {
-        super(BooleanEntity.class);
+    public SingleFloatTest() {
+        super(SingleFloat.class);
     }
 
 

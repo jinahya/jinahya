@@ -26,29 +26,27 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BooleanEntity extends SingleValueEntity<Boolean> {
+public class SingleInt extends SingleValue<Integer> {
 
 
-    public BooleanEntity() {
+    public SingleInt() {
         super();
 
-        value = ThreadLocalRandom.current().nextBoolean();
+        value = ThreadLocalRandom.current().nextInt();
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        value = Boolean.valueOf(input.readBoolean());
-        System.out.println("read.value: " + value);
+        value = input.readInt(32);
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        System.out.println("write.value: " + value);
-        output.writeBoolean(value.booleanValue());
+        output.writeInt(32, value);
     }
 
 
