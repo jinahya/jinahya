@@ -62,7 +62,7 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
 
         for (int i = 0; i < count; i++) {
 
-            final byte[] decoded = decoded(10);
+            final byte[] decoded = decoded(1024);
 
             start = System.nanoTime();
             base.encode(decoded);
@@ -73,9 +73,11 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
             commons[i] = (System.nanoTime() - start);
         }
 
-        System.out.println(baseClass.getName() + ": " + StatUtils.mean(bases));
-        System.out.println(encoderClass.getName() + ": "
-                           + StatUtils.mean(commons));
+        final double baseMean = StatUtils.mean(bases);
+        final double commonsMean = StatUtils.mean(commons);
+        System.out.println(baseClass.getName() + ": " + baseMean);
+        System.out.println(encoderClass.getName() + ": " + commonsMean);
+        System.out.println(baseMean / commonsMean);
     }
 
 
