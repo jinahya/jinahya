@@ -359,6 +359,13 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads a UTF-8 char.
+     *
+     * @return a UTF-8 decoded character value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public int readUTF8Char() throws IOException {
 
         if (!readBoolean()) {
@@ -366,13 +373,22 @@ public class BitInput {
         }
 
         int tails = 0;
-        for (;readBoolean(); tails++) {
+        for (; readBoolean(); tails++) {
+            if (tails == 3) {
+                throw new IOException("illegal encoding: more than 3 tails");
+            }
+        }
+
+        if (tails == 0) {
+            throw new IOException("illegal encodeding; zero tails");
         }
 
         int value = readUnsignedByte(6 - tails);
 
         for (int i = 0; i < tails; i++) {
-            readUnsignedByte(2); // 10
+            if (readUnsignedByte(2) != 0x02) {
+                throw new IOException("illegal encoding; wrong tail bits");
+            }
             value <<= 6;
             value |= readUnsignedByte(6);
         }

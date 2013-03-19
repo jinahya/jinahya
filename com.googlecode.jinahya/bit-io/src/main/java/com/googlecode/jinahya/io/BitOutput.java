@@ -365,7 +365,7 @@ public class BitOutput {
         }
         writeBoolean(false); // 0
 
-        writeUnsignedByte(0x06 - tails, value >> (tails * 6)); // head
+        writeUnsignedByte(6 - tails, value >> (tails * 6)); // head
 
         for (int i = tails - 1; i >= 0; i--) {
             writeUnsignedByte(2, 0x02); // 10______
