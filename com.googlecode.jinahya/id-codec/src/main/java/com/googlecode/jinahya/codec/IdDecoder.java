@@ -15,11 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.util;
+package com.googlecode.jinahya.codec;
 
 
 import java.util.UUID;
-import java.util.regex.Matcher;
 
 
 /**
@@ -52,19 +51,20 @@ public class IdDecoder {
      */
     public static UUID decodeUUID(final String encoded) {
 
-
         if (encoded == null) {
             throw new NullPointerException("null encoded");
         }
 
-        final Matcher matcher = IdCodec.DOUBLE_PATTERN.matcher(encoded);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("illegal pattern: " + encoded);
+        final int index = encoded.indexOf('_');
+        if (index == -1) {
+            throw new IllegalArgumentException("wrong encoded: " + encoded);
         }
 
         final IdDecoder decoder = new IdDecoder();
-        final long mostSignificantBits = decoder.decode(matcher.group(1));
-        final long leastSignificantBits = decoder.decode(matcher.group(4));
+        final long mostSignificantBits =
+            decoder.decode(encoded.substring(0, index));
+        final long leastSignificantBits =
+            decoder.decode(encoded.substring(index + 1));
 
         return new UUID(mostSignificantBits, leastSignificantBits);
     }
@@ -83,12 +83,13 @@ public class IdDecoder {
             throw new NullPointerException("null encoded");
         }
 
-        final Matcher matcher = IdCodec.SINGLE_PATTERN.matcher(encoded);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("illegal pattern: " + encoded);
+        final int index = encoded.indexOf('-');
+        if (index == -1) {
+            throw new IllegalArgumentException("wrong encoded: " + encoded);
         }
 
-        return (block(matcher.group(1)) << 32) | (block(matcher.group(2)));
+        return (block(encoded.substring(0, index)) << 32)
+               | (block(encoded.substring(index + 1)));
     }
 
 
