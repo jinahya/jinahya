@@ -40,14 +40,12 @@ public class SingleUTF8Char extends SingleValue<Integer> {
     public void read(final BitInput input) throws IOException {
 
         value = Integer.valueOf(input.readUTF8Char());
-        System.out.println("read.value: " + value.intValue());
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        System.out.println("write.value: " + value);
         output.writeUTF8Char(value.intValue());
     }
 

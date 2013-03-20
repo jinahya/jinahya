@@ -40,14 +40,12 @@ public class SingleBoolean extends SingleValue<Boolean> {
     public void read(final BitInput input) throws IOException {
 
         value = Boolean.valueOf(input.readBoolean());
-        System.out.println("read.value: " + value);
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        System.out.println("write.value: " + value);
         output.writeBoolean(value.booleanValue());
     }
 
