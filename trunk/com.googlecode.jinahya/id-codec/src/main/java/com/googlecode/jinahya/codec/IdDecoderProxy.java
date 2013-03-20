@@ -174,8 +174,7 @@ public class IdDecoderProxy implements InvocationHandler {
             }
         }
 
-        throw new UnsupportedOperationException(
-            "unsupported: [" + method + "]");
+        throw new UnsupportedOperationException("unsupported: " + method);
     }
 
 
