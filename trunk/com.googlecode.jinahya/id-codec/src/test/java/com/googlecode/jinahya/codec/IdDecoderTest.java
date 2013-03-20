@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.util;
+package com.googlecode.jinahya.codec;
 
 
+import com.googlecode.jinahya.codec.IdDecoder;
 import org.testng.annotations.Test;
 
 

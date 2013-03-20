@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.util;
+package com.googlecode.jinahya.codec;
 
 
+import com.googlecode.jinahya.codec.IdEncoder;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.annotations.Test;

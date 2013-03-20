@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.util;
+package com.googlecode.jinahya.codec;
 
 
 import java.util.UUID;
@@ -54,7 +54,7 @@ public class IdEncoder {
 
         final IdEncoder encoder = new IdEncoder();
 
-        return encoder.encode(decoded.getMostSignificantBits()) + "-"
+        return encoder.encode(decoded.getMostSignificantBits()) + "_"
                + encoder.encode(decoded.getLeastSignificantBits());
     }
 

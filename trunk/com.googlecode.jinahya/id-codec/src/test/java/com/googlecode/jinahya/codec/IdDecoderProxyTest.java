@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.util.IdEncoder;
 import java.util.concurrent.ThreadLocalRandom;
 import junit.framework.Assert;
 import org.apache.commons.codec.Decoder;
