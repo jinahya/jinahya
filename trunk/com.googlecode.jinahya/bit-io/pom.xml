@@ -45,27 +45,6 @@
 
   <build>
     <extensions>
-      <!--
-      <extension>
-        <groupId>com.google.code.maven-svn-wagon</groupId>
-        <artifactId>maven-svn-wagon</artifactId>
-        <version>1.4</version>
-      </extension>
-      -->
-      <!--
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-http</artifactId>
-        <version>2.4</version>
-      </extension>
-      -->
-      <!--
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav</artifactId>
-        <version>1.0-beta-2</version>
-      </extension>
-      -->
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
@@ -74,11 +53,6 @@
     </extensions>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>com.pyx4me</groupId>
-          <artifactId>proguard-maven-plugin</artifactId>
-          <version>2.0.4</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -191,11 +165,6 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <links>
-                  <link>http://jinahya.googlecode.com/svn/site/com.googlecode.jinahya/jinahya-accessible/${project.dependency.jinahya-accessible.version}/apidocs</link>
-                </links>
-              </configuration>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -227,7 +196,6 @@
   <reporting />
 
   <name>${project.artifactId}</name>
-  <!--url>http://jinahya.googlecode.com/</url-->
   <url>http://jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -238,7 +206,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -246,7 +214,7 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
   <!-- Environment Settings -->
   <issueManagement />
@@ -272,12 +240,6 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    <!--
-    <site>
-      <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
-    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
