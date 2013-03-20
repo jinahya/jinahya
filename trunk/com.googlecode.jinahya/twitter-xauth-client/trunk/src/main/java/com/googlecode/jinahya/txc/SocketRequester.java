@@ -30,7 +30,6 @@ import java.io.Writer;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
-
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -146,7 +145,9 @@ public class SocketRequester extends AbstractSocketRequester {
      * @param protocol protocol
      * @param host target host
      * @param port target port
+     *
      * @return a new Socket
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected Socket create(final String protocol, final String host,
@@ -166,7 +167,9 @@ public class SocketRequester extends AbstractSocketRequester {
      *
      * @param host target host
      * @param port target port
+     *
      * @return a new SSLSocket
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected SSLSocket createSSL(final String host, final int port)
@@ -181,7 +184,9 @@ public class SocketRequester extends AbstractSocketRequester {
      *
      * @param host target host
      * @param port target port
+     *
      * @return a new Socket
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected Socket create(final String host, final int port)
@@ -192,9 +197,11 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * Binds given <code>socket</code>.
+     * Binds given
+     * <code>socket</code>.
      *
      * @param socket socket to bind
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected void bind(final Socket socket) throws IOException {
@@ -202,11 +209,13 @@ public class SocketRequester extends AbstractSocketRequester {
 
 
     /**
-     * Connects given <code>socket</code> to specified address.
+     * Connects given
+     * <code>socket</code> to specified address.
      *
      * @param socket socket
      * @param host target host
      * @param port target port
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected void connect(final Socket socket, final String host,
@@ -215,4 +224,7 @@ public class SocketRequester extends AbstractSocketRequester {
 
         socket.connect(new InetSocketAddress(host, port));
     }
+
+
 }
+
