@@ -60,12 +60,12 @@ public abstract class SingleValueTest<S extends SingleValue<?>> {
 
         final byte[] bytes = baos.toByteArray();
         final int bytesLength = bytes.length;
-        System.out.println(valueClass.getSimpleName() + " bytes.length: "
-                           + bytesLength);
-        for (int j = 0; j < bytesLength; j++) {
-            System.out.println(valueClass.getSimpleName() + " bytes[" + j
-                               + "]: " + (bytes[j] & 0xFF));
-        }
+//        System.out.println(valueClass.getSimpleName() + " bytes.length: "
+//                           + bytesLength);
+//        for (int j = 0; j < bytesLength; j++) {
+//            System.out.println(valueClass.getSimpleName() + " bytes[" + j
+//                               + "]: " + (bytes[j] & 0xFF));
+//        }
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
@@ -98,12 +98,12 @@ public abstract class SingleValueTest<S extends SingleValue<?>> {
 
         final byte[] bytes = baos.toByteArray();
         final int bytesLength = bytes.length;
-        System.out.println(valueClass.getSimpleName() + " bytes.length: "
-                           + bytesLength);
-        for (int j = 0; j < bytesLength; j++) {
-            System.out.println(valueClass.getSimpleName() + " bytes[" + j
-                               + "]: " + (bytes[j] & 0xFF));
-        }
+//        System.out.println(valueClass.getSimpleName() + " bytes.length: "
+//                           + bytesLength);
+//        for (int j = 0; j < bytesLength; j++) {
+//            System.out.println(valueClass.getSimpleName() + " bytes[" + j
+//                               + "]: " + (bytes[j] & 0xFF));
+//        }
 
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
