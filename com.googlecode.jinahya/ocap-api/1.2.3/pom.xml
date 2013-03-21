@@ -134,7 +134,6 @@
     <name>CableLabs</name>
     <url>http://www.cablelabs.com</url>
   </organization>
-  
   <distributionManagement>
     <repository>
       <id>sonatype-nexus-staging</id>
