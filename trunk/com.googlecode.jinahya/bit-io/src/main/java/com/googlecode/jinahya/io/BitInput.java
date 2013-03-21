@@ -35,7 +35,7 @@ public class BitInput {
     /**
      * An interface for byte source.
      */
-    public static interface ByteInput {
+    public interface ByteInput {
 
 
         /**
