@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -32,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <S> singular type parameter
  */
 @XmlTransient
-public class Plural<S> {
+public abstract class Plural<S> {
 
 
     /**
@@ -42,10 +43,12 @@ public class Plural<S> {
      * @param <S> singular type parameter
      * @param pluralType plural type
      *
-     * @return a new instance of given <code>pluralType<code>
+     * @return a new instance of given {@code pluralType}
      */
     public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType) {
+
+        Objects.requireNonNull(pluralType, "null pluralType");
 
         return newInstance(pluralType, Collections.<S>emptyList());
     }
@@ -67,7 +70,6 @@ public class Plural<S> {
 
         Objects.requireNonNull(pluralType, "null pluralType");
 
-
         Objects.requireNonNull(singulars, "null singulars");
 
         try {
@@ -85,7 +87,8 @@ public class Plural<S> {
      *
      * @return singular collection
      */
-    protected final Collection<S> getSingulars() {
+    @XmlAnyElement(lax = true)
+    public Collection<S> getSingulars() {
 
         if (singulars == null) {
             singulars = new ArrayList<>();
@@ -98,6 +101,7 @@ public class Plural<S> {
     /**
      * singular collection.
      */
+//    @XmlTransient
     private Collection<S> singulars;
 
 

@@ -21,17 +21,21 @@ package com.googlecode.jinahya.xml.bind;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -42,6 +46,7 @@ import org.testng.annotations.Test;
 public class PluralTest {
 
 
+    @XmlRootElement
     private static class Item {
 
 
@@ -75,11 +80,40 @@ public class PluralTest {
         }
 
 
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 97 * hash + Objects.hashCode(this.id);
+            hash = 97 * hash + Objects.hashCode(this.name);
+            return hash;
+        }
+
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Item other = (Item) obj;
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
+            if (!Objects.equals(this.name, other.name)) {
+                return false;
+            }
+            return true;
+        }
+
+
         @XmlAttribute
         private Long id;
 
 
-        @XmlValue
+        @XmlElement(nillable = true)
+        //@XmlValue
         private String name;
 
 
@@ -88,27 +122,20 @@ public class PluralTest {
 
     @XmlRootElement
     private static class Items extends Plural<Item> {
-
-
-        @XmlElement(name = "item", nillable = true)
-        public Collection<Item> getItems() {
-            return getSingulars();
-        }
-
-
     }
 
 
     @Test
     public void testXml() throws JAXBException, IOException {
 
-        final JAXBContext context = JAXBContext.newInstance(Items.class);
+        final JAXBContext context =
+            JAXBContext.newInstance(Items.class, Item.class);
 
-        final Items marshallable = new Items();
+        final Items expected = new Items();
         for (int i = 0; i < 5; i++) {
-            marshallable.getItems().add(Item.newInstance());
+            expected.getSingulars().add(Item.newInstance());
         }
-        for (Item item : marshallable.getItems()) {
+        for (Item item : expected.getSingulars()) {
             System.out.println("marshallable.item: " + item);
         }
 
@@ -117,20 +144,56 @@ public class PluralTest {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        marshaller.marshal(marshallable, baos);
+        marshaller.marshal(expected, baos);
         baos.flush();
 
         System.out.println(new String(baos.toByteArray(), "UTF-8"));
 
         final Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        final Items unmarshalled = (Items) unmarshaller.unmarshal(
+        final Items actual = (Items) unmarshaller.unmarshal(
             new ByteArrayInputStream(baos.toByteArray()));
 
-        for (Item item : unmarshalled.getItems()) {
+        for (Item item : actual.getSingulars()) {
             System.out.println("unmarshalled.item: " + item);
         }
 
+        final Iterator<Item> actualItems = actual.getSingulars().iterator();
+        final Iterator<Item> expectedItems = expected.getSingulars().iterator();
+
+        while (actualItems.hasNext()) {
+            Assert.assertEquals(actualItems.next(), expectedItems.next());
+        }
+    }
+
+
+    @Test
+    public void testXsd() throws JAXBException, IOException {
+
+        final JAXBContext context =
+            JAXBContext.newInstance(Items.class, Item.class);
+
+        context.generateSchema(new SchemaOutputResolver() {
+
+
+            @Override
+            public Result createOutput(final String namespaceUri,
+                                       final String suggestedFileName)
+                throws IOException {
+                return new StreamResult(System.out) {
+
+
+                    @Override
+                    public String getSystemId() {
+                        return suggestedFileName;
+                    }
+
+
+                };
+            }
+
+
+        });
     }
 
 
