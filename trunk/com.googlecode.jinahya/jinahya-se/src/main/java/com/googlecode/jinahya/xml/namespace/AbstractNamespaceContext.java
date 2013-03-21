@@ -19,9 +19,8 @@ package com.googlecode.jinahya.xml.namespace;
 
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Objects;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
@@ -35,9 +34,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
 
     protected static boolean isReservedPrefix(final String prefix) {
 
-        if (prefix == null) {
-            throw new IllegalArgumentException("null prefix");
-        }
+        Objects.requireNonNull(prefix, "null prefix");
 
         return XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)
                || XMLConstants.XML_NS_PREFIX.equals(prefix)
@@ -47,9 +44,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
 
     protected static boolean isReservedNamespaceURI(final String namespaceURI) {
 
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("null namespaceURI");
-        }
+        Objects.requireNonNull(namespaceURI, "null namespaceURI");
 
         return XMLConstants.NULL_NS_URI.equals(namespaceURI)
                || XMLConstants.XML_NS_URI.equals(namespaceURI)
@@ -65,9 +60,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
      */
     protected static String getReservedNamespaceURI(final String prefix) {
 
-        if (prefix == null) {
-            throw new IllegalArgumentException("null pefix");
-        }
+        Objects.requireNonNull(prefix, "null prefix");
 
         if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
             return XMLConstants.NULL_NS_URI;
@@ -93,9 +86,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
      */
     protected static String getReservedPrefix(final String namespaceURI) {
 
-        if (namespaceURI == null) {
-            throw new NullPointerException("null namespaceURI");
-        }
+        Objects.requireNonNull(namespaceURI, "null namespaceURI");
 
         if (XMLConstants.NULL_NS_URI.equals(namespaceURI)) {
             return XMLConstants.DEFAULT_NS_PREFIX;
@@ -117,9 +108,7 @@ public abstract class AbstractNamespaceContext implements NamespaceContext {
     @SuppressWarnings("rawtypes")
     public Iterator getPrefixes(final String namespaceURI) {
 
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("null namespaceURI");
-        }
+        Objects.requireNonNull(namespaceURI, "null namespaceURI");
 
         final String prefix = getPrefix(namespaceURI);
 
