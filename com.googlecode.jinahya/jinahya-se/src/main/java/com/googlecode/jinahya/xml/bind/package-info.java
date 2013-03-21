@@ -18,8 +18,11 @@
 @XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
            elementFormDefault = XmlNsForm.QUALIFIED,
            namespace = "http://jinahya.googlecode.com/xml/bind")
+@XmlAccessorType(XmlAccessType.NONE)
 package com.googlecode.jinahya.xml.bind;
 
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;

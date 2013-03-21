@@ -34,17 +34,17 @@ public abstract class SimpleValue<R> {
 
     /**
      *
-     * @param <V> SimpleValue type parameter
-     * @param <R> rawValue type parameter
-     * @param simpleValueType SimpleValue type
-     * @param rawValue rawValue
+     * @param <V> simple value type parameter
+     * @param <R> raw value type parameter
+     * @param simpleValueType simple value type
+     * @param rawValue raw value
      *
      * @return
      */
     public static <V extends SimpleValue<R>, R> V newInstance(
         final Class<V> simpleValueType, final R rawValue) {
 
-        Objects.requireNonNull(simpleValueType, "null type");
+        Objects.requireNonNull(simpleValueType, "null simpleValueType");
 
         try {
             final V instance = simpleValueType.newInstance();
@@ -102,10 +102,12 @@ public abstract class SimpleValue<R> {
      */
     public void setRawValue(final R rawValue) {
         this.rawValue = rawValue;
-
     }
 
 
+    /**
+     * raw value.
+     */
     private R rawValue;
 
 
