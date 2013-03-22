@@ -49,7 +49,8 @@ public class HexEncoderTest {
 
         final byte[] decoded = HexCodecTestUtils.newDecodedBytes();
 
-        final byte[] expected = new Hex().encode(decoded);
+        final byte[] expected =
+            HexCodecTestUtils.toUpperCase(new Hex().encode(decoded));
 
         final byte[] actual = new HexEncoder().encode(decoded);
 
