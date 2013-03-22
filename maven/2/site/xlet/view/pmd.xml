@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2009-07-19T00:09:59.650">
-<file name="/Users/onacit/Documents/svnwc/googlecode.com/jinahya/maven/2/proj/xlet/trunk/view/src/main/java/jinahya/xlet/view/View.java">
-<violation beginline="404" endline="404" begincolumn="9" endcolumn="15" rule="UnnecessaryReturn" ruleset="Basic Rules" package="jinahya.xlet.view" class="View" method="drawString" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryReturn" priority="3">
-Avoid unnecessary return statements
-</violation>
-</file>
-</pmd>

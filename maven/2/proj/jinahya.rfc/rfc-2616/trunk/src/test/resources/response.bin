@@ -1,6 +1,0 @@
-HTTP/1.1 200 OK
-Header1: aaa
-Header2: aaa
- bbb
-
-body

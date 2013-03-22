@@ -1,9 +1,0 @@
-PUT /index.html HTTP/1.1
-Host: www.daum.net:80
-Header1: aaa
-Header2: bbb
- ccc
-Header3: bbb
-	ccc
-
-body
