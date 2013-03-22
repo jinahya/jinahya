@@ -38,7 +38,7 @@ public class HexCodecTestUtils {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] decodedBytes = new byte[random.nextInt(1048576)];
+        final byte[] decodedBytes = new byte[random.nextInt(1024)];
 
         random.nextBytes(decodedBytes);
 
@@ -57,8 +57,6 @@ public class HexCodecTestUtils {
 //
 //        return multipleDecodedBytes;
 //    }
-
-
     protected static String newDecodedString() {
 
         final Random random = ThreadLocalRandom.current();
@@ -102,10 +100,24 @@ public class HexCodecTestUtils {
 //
 //        return multipleEncodedBytes;
 //    }
-
-
     protected static String newEncodedString() {
         return new String(newEncodedBytes(), StandardCharsets.US_ASCII);
+    }
+
+
+    protected static byte[] toUpperCase(final byte[] encoded) {
+
+        final byte[] uppercased = new byte[encoded.length];
+
+        for (int i = 0; i < uppercased.length; i++) {
+            if (encoded[i] >= 0x61) {
+                uppercased[i] = (byte) (encoded[i] - 0x20);
+            } else {
+                uppercased[i] = encoded[i];
+            }
+        }
+
+        return uppercased;
     }
 
 
