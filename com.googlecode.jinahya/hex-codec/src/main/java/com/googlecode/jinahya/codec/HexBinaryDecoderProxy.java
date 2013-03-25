@@ -190,12 +190,11 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
             }
 
             if (args[0] instanceof String) {
-                return invoke(
-                    proxy, METHOD_DECODE_BYTES,
-                    new Object[]{((String) args[0]).getBytes("US-ASCII")});
+                final byte[] bytes = ((String) args[0]).getBytes("US-ASCII");
+                return invoke(proxy, METHOD_DECODE_BYTES, new Object[]{bytes});
             }
 
-            throw newDecoderException("unacceptable parameter: " + args[0]);
+            throw newDecoderException("unacceptable argument: " + args[0]);
         }
 
         throw new UnsupportedOperationException("unsupported: " + method);

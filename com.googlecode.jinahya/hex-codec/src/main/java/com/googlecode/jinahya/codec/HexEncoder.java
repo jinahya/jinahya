@@ -70,6 +70,16 @@ public class HexEncoder {
     protected static void encodeSingle(final int decoded, final byte[] encoded,
                                        final int offset) {
 
+        if (decoded < 0x00) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") < 0x00");
+        }
+
+        if (decoded > 0xFF) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") > 0xFF");
+        }
+        
         if (encoded == null) {
             throw new NullPointerException("null encoded");
         }
@@ -112,7 +122,7 @@ public class HexEncoder {
 
         int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
-            encodeSingle(decoded[i], encoded, offset);
+            encodeSingle(decoded[i] & 0xFF, encoded, offset);
             offset += 2;
         }
 
