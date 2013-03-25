@@ -75,8 +75,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Class for
-     * <code>org.apache.commons.codec.EncoderException</code>.
+     * Class for {@code org.apache.commons.codec.EncoderException}.
      */
     private static final Class<? extends Throwable> CLASS_ENCODER_EXCEPTION;
 
@@ -94,7 +93,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
     /**
      * Creates a new instance of
-     * <code>org.apache.commons.codec.EncoderException</code>.
+     * {@code org.apache.commons.codec.EncoderException}.
      *
      * @return a new instance.
      *
@@ -139,7 +138,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
     /**
      * Returns a new proxy instance for
-     * <code>org.apache.commons.codec.BinaryEncoder</code>.
+     * {@code org.apache.commons.codec.BinaryEncoder}.
      *
      * @return a new proxy instance.
      */
@@ -204,11 +203,10 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
             if (args[0] instanceof String) {
                 final byte[] bytes = ((String) args[0]).getBytes("UTF-8");
-                return invoke(proxy, METHOD_ENCODE_BYTES,
-                              new Object[]{bytes});
+                return invoke(proxy, METHOD_ENCODE_BYTES, new Object[]{bytes});
             }
 
-            throw newEncoderException("unacceptable parameter: " + args[0]);
+            throw newEncoderException("unacceptable argument: " + args[0]);
         }
 
         throw new UnsupportedOperationException("unsupported: " + method);
