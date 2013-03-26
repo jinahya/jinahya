@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 
 /**
@@ -41,6 +42,10 @@ import java.util.Map.Entry;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class UcloudStorageClient {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(UcloudStorageClient.class.getName());
 
 
     private static final String AUTH_URL =
@@ -528,13 +533,13 @@ public class UcloudStorageClient {
             new ContentDataProducer() {
 
 
-                @Override
-                public InputStream getContentData() throws IOException {
-                    return contentData;
-                }
+            @Override
+            public InputStream getContentData() throws IOException {
+                return contentData;
+            }
 
 
-            };
+        };
 
         return updateObject(containerName, objectName, contentType,
                             contentLength, contentDataProducer);
