@@ -40,7 +40,8 @@ public class UcloudStorageClientTest {
 
     private static final String[] CONTAINER_NAMES = new String[]{
         "test",
-        "테스트"
+        "테스트",
+        "1*1"
     };
 
 
@@ -71,7 +72,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test
+    @Test(enabled = true)
     public void testCreateContainer() throws IOException {
 
         final UcloudStorageClient client =
@@ -79,11 +80,12 @@ public class UcloudStorageClientTest {
 
         for (String containerName : CONTAINER_NAMES) {
             client.createContainer(containerName);
+            client.createContainer(containerName);
         }
     }
 
 
-    @Test(dependsOnMethods = {"testCreateContainer"})
+    @Test(dependsOnMethods = {"testCreateContainer"}, enabled = true)
     public void testReadContainerNames() throws IOException {
 
         final UcloudStorageClient client =
@@ -107,7 +109,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test(dependsOnMethods = {"testReadContainerNames"})
+    @Test(dependsOnMethods = {"testReadContainerNames"}, enabled = true)
     public void testUpdateObject() throws IOException {
 
         System.out.println("testUpdateObject()");
@@ -143,7 +145,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test(dependsOnMethods = {"testUpdateObject"})
+    @Test(dependsOnMethods = {"testUpdateObject"}, enabled = true)
     public void testReadObjectNames() throws IOException {
 
         System.out.println("readObjectNames()");
@@ -178,7 +180,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test(dependsOnMethods = {"testUpdateObject"})
+    @Test(dependsOnMethods = {"testUpdateObject"}, enabled = true)
     public void testReadObject() throws IOException {
 
         System.out.println("testReadObject()");
@@ -203,7 +205,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test(dependsOnMethods = {"testReadObject"})
+    @Test(dependsOnMethods = {"testReadObject"}, enabled = true)
     public void testDeleteObject() throws IOException {
 
         System.out.println("testDeleteObject()");
@@ -219,7 +221,7 @@ public class UcloudStorageClientTest {
     }
 
 
-    @Test(dependsOnMethods = {"testDeleteObject"})
+    @Test(dependsOnMethods = {"testDeleteObject"}, enabled = true)
     public void testDeleteContainer() throws IOException {
 
         System.out.println("testDeleteContainer()");
