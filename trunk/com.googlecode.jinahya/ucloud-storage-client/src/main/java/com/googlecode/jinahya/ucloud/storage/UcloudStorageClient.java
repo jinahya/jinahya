@@ -66,9 +66,7 @@ public class UcloudStorageClient {
 
 
     /**
-     * Appends given
-     * <code>queryParams</code> to specified
-     * <code>baseUrl</code>.
+     * Appends given {@code queryParams} to specified {@code baseUrl}.
      *
      * @param baseUrl base url
      * @param queryParams query params
@@ -294,8 +292,7 @@ public class UcloudStorageClient {
 
 
     /**
-     * Deletes a container named as given
-     * <code>containerName</code>.
+     * Deletes a container named as given {@code containerName}.
      *
      * @param containerName container name
      *
@@ -334,68 +331,6 @@ public class UcloudStorageClient {
         connection.disconnect();
 
         if (responseCode == 204 || responseCode == 404) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    public boolean readObjectNamesx(final String containerName,
-                                    final Map<String, String> queryParams,
-                                    final Collection<String> objectNames)
-        throws IOException {
-
-        if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
-        }
-
-        if (queryParams == null) {
-            // ok
-            //throw new IllegalArgumentException("null queryParams");
-        }
-
-        if (objectNames == null) {
-            throw new IllegalArgumentException("null objects");
-        }
-
-        if (!authenticate()) {
-            return false;
-        }
-
-        final String path =
-            storageUrl + "/" + URLEncoder.encode(containerName, "UTF-8");
-        System.out.println("path: " + path);
-        final URL url = new URL(append(path, queryParams));
-
-        final HttpURLConnection connection =
-            (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
-        connection.setRequestProperty("X-Auth-Token", authToken);
-        if (queryParams != null && !queryParams.containsKey("format")) {
-            connection.setRequestProperty("Accept", "text/plain");
-        }
-
-        setTimeout(connection);
-
-        connection.connect();
-
-        setResponse(connection);
-
-        if (responseCode == 200) {
-            final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            for (String line = null; (line = reader.readLine()) != null;) {
-                objectNames.add(line);
-            }
-            reader.close();
-        }
-
-        connection.disconnect();
-
-        if (responseCode == 200 || responseCode == 204) {
             return true;
         }
 
