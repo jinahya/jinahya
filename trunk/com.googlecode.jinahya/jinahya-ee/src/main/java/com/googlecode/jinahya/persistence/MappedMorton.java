@@ -81,13 +81,13 @@ public class MappedMorton implements Serializable {
 
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
                                    final int iterationCount,
-                                   final int KeyLength) {
+                                   final int keyLength) {
 
         try {
             final SecretKeyFactory secretKeyFactory =
                 SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             final KeySpec keySpec = new PBEKeySpec(
-                password, salt, iterationCount, KeyLength);
+                password, salt, iterationCount, keyLength);
             try {
                 final SecretKey secretKey =
                     secretKeyFactory.generateSecret(keySpec);
@@ -132,18 +132,18 @@ public class MappedMorton implements Serializable {
             throw new IllegalArgumentException("bland.length == 0");
         }
 
-        final int degree = 0x01 << density;
-        final int iterationCount =
-            (new BigInteger(bland).intValue() & (degree - 1)) | degree;
-
         final char[] password = new char[bland.length];
         for (int i = 0; i < password.length; i++) {
             password[i] = (char) (bland[i] & 0xFF);
         }
 
-        final byte[] salty = pbkdf2(
-            password, DatatypeConverter.parseHexBinary(sodium), iterationCount,
-            160);
+        final byte[] salt = DatatypeConverter.parseHexBinary(sodium);
+
+        final int degree = 0x01 << density;
+        final int iterationCount =
+            (new BigInteger(bland).intValue() & (degree - 1)) | degree;
+
+        final byte[] salty = pbkdf2(password, salt, iterationCount, 160);
 
         return salty;
     }
@@ -161,7 +161,7 @@ public class MappedMorton implements Serializable {
 
 
     /**
-     * salt.
+     * sodium; salt.
      */
     @Basic(optional = false)
     @Column(length = 16, name = "SODIUM", nullable = false, updatable = false)
