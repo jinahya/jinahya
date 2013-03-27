@@ -20,14 +20,10 @@ package com.googlecode.jinahya.persistence;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Date;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
@@ -59,6 +55,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class MappedMorton implements Serializable {
 
 
+    private static final long serialVersionUID = 4243525203653288446L;
+
+
     /**
      * logger.
      */
@@ -71,90 +70,13 @@ public class MappedMorton implements Serializable {
     }
 
 
-    private static final int DENSITY_MIN = 1;
+    protected static final int DENSITY_MIN = 1;
 
 
-    private static final int DENSITY_MAX = 26;
+    protected static final int DENSITY_MAX = 26;
 
 
     private static final int DENSITY = 16;
-
-
-    static final int WORD_LENGTH = 0x40; // 64 = 512 / 8;
-
-
-    static final int CODE_LENGTH = WORD_LENGTH << 1; // 128 = 64 * 2
-
-
-    private static final int SODIUM_LENGTH = CODE_LENGTH;
-
-
-    private static final int SODIUM_LENGTH_IN_BYTES = SODIUM_LENGTH >> 1;
-
-
-    private static final int SODIUM_SIZE_MIN = SODIUM_LENGTH;
-
-
-    private static final int SODIUM_SIZE_MAX = SODIUM_LENGTH;
-
-
-    protected static final int BLAND_LENGTH = WORD_LENGTH;
-
-
-    private static final int BLAND_LENGTH_IN_BITS = BLAND_LENGTH << 3;
-
-
-    private static final int SALTY_LENGTH = WORD_LENGTH;
-
-
-    private static final int SALTY_LENGTH_IN_BITS = SALTY_LENGTH << 3;
-
-
-    /**
-     * Prints {@code parsed} as hex.
-     *
-     * @param parsed the bytes to print
-     *
-     * @return printed hex string.
-     */
-    static String printHex(final byte[] parsed) {
-
-        Objects.requireNonNull(parsed, "null parsed");
-
-        return DatatypeConverter.printHexBinary(parsed);
-    }
-
-
-    /**
-     * Parses {@code printed} as hex.
-     *
-     * @param printed the string to parse.
-     *
-     * @return the parsed binary.
-     */
-    static byte[] parseHex(final String printed) {
-
-        Objects.requireNonNull(printed, "null printed");
-
-        return DatatypeConverter.parseHexBinary(printed);
-    }
-
-
-    public static byte[] sha512(byte[] word, final int iter) {
-
-        final MessageDigest digest;
-        try {
-            digest = MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException(nsae);
-        }
-
-        for (int i = 0; i < iter; i++) {
-            word = digest.digest(word);
-        }
-
-        return word;
-    }
 
 
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
@@ -166,121 +88,30 @@ public class MappedMorton implements Serializable {
                 SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             final KeySpec keySpec = new PBEKeySpec(
                 password, salt, iterationCount, KeyLength);
-            final SecretKey secretKey =
-                secretKeyFactory.generateSecret(keySpec);
-            return secretKey.getEncoded();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+            try {
+                final SecretKey secretKey =
+                    secretKeyFactory.generateSecret(keySpec);
+                return secretKey.getEncoded();
+            } catch (InvalidKeySpecException ikse) {
+                throw new RuntimeException(ikse);
+            }
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException(nsae);
         }
-    }
-
-
-    private static byte[] pbkdf2(final char[] password, final byte[] salt,
-                                 final int iterationCount) {
-
-        return pbkdf2(password, salt, iterationCount, SALTY_LENGTH_IN_BITS);
-    }
-
-
-    private static byte[] pbkdf2(final byte[] word, final byte[] salt,
-                                 final int iterationCount) {
-
-        if (word == null) {
-            throw new IllegalArgumentException("null word");
-        }
-
-        if (salt == null) {
-            throw new IllegalArgumentException("null salt");
-        }
-
-        final char[] password = new char[word.length];
-        for (int i = 0; i < password.length; i++) {
-            password[i] = (char) (word[i] & 0xFF);
-        }
-
-        return pbkdf2(password, salt, iterationCount);
-    }
-
-
-    static String code(final MappedMorton salt, final byte[] word) {
-
-        if (salt == null) {
-            throw new IllegalArgumentException("null salt");
-        }
-
-        if (word == null) {
-            throw new IllegalArgumentException("null word");
-        }
-
-        if (word.length != WORD_LENGTH) {
-            throw new IllegalArgumentException(
-                "word.length(" + word.length + ") != " + WORD_LENGTH);
-        }
-
-        return printHex(salt.salty(word));
-    }
-
-
-    public static String code(final byte[] word) {
-
-        if (word == null) {
-            throw new IllegalArgumentException("null word");
-        }
-
-        if (word.length != WORD_LENGTH) {
-            throw new IllegalArgumentException(
-                "word.length(" + word.length + ") != " + WORD_LENGTH);
-        }
-
-        final MappedMorton salt = new MappedMorton();
-        salt.density = 1;
-        salt.sodium = printHex(word);
-
-        return code(salt, word);
-    }
-
-
-    public static void main(final String[] args) {
-
-        if (args.length != 2) {
-            return;
-        }
-
-        final long start = System.currentTimeMillis();
-
-        final byte[] user = sha512(
-            args[0].getBytes(StandardCharsets.UTF_8),
-            Shadow.NAME_ITERATION_COUNT + Shadow.WORD_ITERATION_COUNT);
-        final byte[] pass = sha512(
-            args[1].getBytes(StandardCharsets.UTF_8),
-            Shadow.NAME_ITERATION_COUNT + Shadow.WORD_ITERATION_COUNT);
-        final MappedMorton salt = new MappedMorton();
-        System.out.println("salt: " + salt.sodium);
-        System.out.println("user: " + MappedMorton.code(user));
-        System.out.println("pass: " + printHex(salt.salty(pass)));
-
-        final long finish = System.currentTimeMillis();
-        System.out.println("elap: " + (finish - start) + "ms");
     }
 
 
     public MappedMorton() {
         super();
 
-        final byte[] rand = new byte[SODIUM_LENGTH_IN_BYTES];
+        final byte[] rand = new byte[8];
         try {
             SecureRandom.getInstance("SHA1PRNG").nextBytes(rand);
         } catch (NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
         }
 
-        sodium = printHex(rand);
-    }
-
-
-    // -------------------------------------------------------------- CREATED_AT
-    public Date getCreatedAt() {
-        return (Date) createdAt.clone();
+        sodium = DatatypeConverter.printHexBinary(rand);
     }
 
 
@@ -297,16 +128,22 @@ public class MappedMorton implements Serializable {
             throw new NullPointerException("null bland");
         }
 
-        if (bland.length != BLAND_LENGTH) {
-            throw new IllegalArgumentException(
-                "bland.length(" + bland.length + " != " + BLAND_LENGTH);
+        if (bland.length == 0) {
+            throw new IllegalArgumentException("bland.length == 0");
         }
 
         final int degree = 0x01 << density;
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
 
-        final byte[] salty = pbkdf2(bland, parseHex(sodium), iterationCount);
+        final char[] password = new char[bland.length];
+        for (int i = 0; i < password.length; i++) {
+            password[i] = (char) (bland[i] & 0xFF);
+        }
+
+        final byte[] salty = pbkdf2(
+            password, DatatypeConverter.parseHexBinary(sodium), iterationCount,
+            160);
 
         return salty;
     }
@@ -327,10 +164,9 @@ public class MappedMorton implements Serializable {
      * salt.
      */
     @Basic(optional = false)
-    @Column(length = SODIUM_LENGTH, name = "SODIUM", nullable = false,
-            updatable = false)
+    @Column(length = 16, name = "SODIUM", nullable = false, updatable = false)
     @NotNull
-    @Size(min = SODIUM_SIZE_MIN, max = SODIUM_SIZE_MAX)
+    @Size(min = 16, max = 16)
     @XmlTransient
     private String sodium;
 
