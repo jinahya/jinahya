@@ -24,6 +24,7 @@ public class Items implements Serializable {
     private static final long serialVersionUID = 5775071328874654134L;
 
 
+    @XmlElement(name = "item")
     public Collection<Item> getItems() {
 
         if (items == null) {
@@ -34,7 +35,7 @@ public class Items implements Serializable {
     }
 
 
-    @XmlElement(name = "item")
+//    @XmlElement(name = "item")
     private Collection<Item> items;
 
 

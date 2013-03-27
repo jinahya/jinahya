@@ -15,16 +15,17 @@ import javax.xml.bind.JAXBException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Provider
-public class NaturalJSONContextResolver
+//@Provider
+public class RootWrappingJSONContextResolver
     implements ContextResolver<JAXBContext> {
 
 
-    public NaturalJSONContextResolver() throws JAXBException {
+    public RootWrappingJSONContextResolver() throws JAXBException {
         super();
 
-        this.context = new JSONJAXBContext(
-            JSONConfiguration.natural().build(), targetTypes);
+        context = new JSONJAXBContext(
+            JSONConfiguration.natural().rootUnwrapping(false).build(),
+            targetTypes);
     }
 
 
@@ -41,7 +42,8 @@ public class NaturalJSONContextResolver
     }
 
 
-    private final Class[] targetTypes = new Class<?>[]{Items.class, Item.class};
+    private final Class<?>[] targetTypes =
+        new Class<?>[]{Items.class, Item.class};
 
 
     private final JAXBContext context;
