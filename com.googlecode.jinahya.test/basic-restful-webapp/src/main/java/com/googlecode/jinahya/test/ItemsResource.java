@@ -29,13 +29,12 @@ import javax.ws.rs.core.UriInfo;
 public class ItemsResource {
 
 
-    @PostConstruct
-    protected void _PostConstruct() {
-
-
-        ItemFacade.getInstance().insert(Item.newInstance("item1", 30));
-        ItemFacade.getInstance().insert(Item.newInstance("item2", 40));
-    }
+//    @PostConstruct
+//    protected void _PostConstruct() {
+//
+//        ItemFacade.getInstance().insert(Item.newInstance("item1", 30));
+//        ItemFacade.getInstance().insert(Item.newInstance("item2", 40));
+//    }
 
 
     @GET
