@@ -4,7 +4,7 @@ package com.googlecode.jinahya.test;
 
 
 import java.net.URI;
-import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,17 +29,31 @@ import javax.ws.rs.core.UriInfo;
 public class ItemsResource {
 
 
+    @PostConstruct
+    protected void _PostConstruct() {
+
+
+        ItemFacade.getInstance().insert(Item.newInstance("item1", 30));
+        ItemFacade.getInstance().insert(Item.newInstance("item2", 40));
+    }
+
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Items read() {
-        return Items.getInstance();
+
+        final Items items = new Items();
+
+        items.getItems().addAll(ItemFacade.getInstance().selectAll());
+
+        return items;
     }
 
 
     @DELETE
     public void delete() {
 
-        Items.getInstance().getItems().clear();
+        ItemFacade.getInstance().deleteAll();
     }
 
 
@@ -48,9 +62,7 @@ public class ItemsResource {
     public Response createItem(@Context final UriInfo info,
                                final Item item) {
 
-        Item.putCreatedAtAndId(item);
-
-        Items.getInstance().getItems().put(item.getId(), item);
+        ItemFacade.getInstance().insert(item);
 
         UriBuilder builder = info.getAbsolutePathBuilder();
         builder = builder.path(Long.toString(item.getId()));
@@ -61,41 +73,36 @@ public class ItemsResource {
     }
 
 
-    @Path("/item/{id: \\d+}")
+    @Path("/{id: \\d+}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Item readItem(@PathParam("id") final long id) {
 
-        return Items.getInstance().getItems().get(id);
+        return ItemFacade.getInstance().select(id);
     }
 
 
-    @Path("/item/{id: \\d+}")
+    @Path("/{id: \\d+}")
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateItem(@PathParam("id") final long id,
                                final Item newItem) {
 
-        final Item oldItem = readItem(id);
+        final boolean updated = ItemFacade.getInstance().update(id, newItem);
 
-        if (oldItem == null) {
+        if (!updated) {
             return Response.status(Status.NOT_FOUND).build();
         }
-
-        oldItem.updatedAt = new Date();
-
-        oldItem.name = newItem.name;
-        oldItem.stock = newItem.stock;
 
         return Response.status(Status.NO_CONTENT).build();
     }
 
 
-    @Path("/item/{id: \\d+}")
+    @Path("/{id: \\d+}")
     @DELETE
     public void deleteItem(@PathParam("id") final long id) {
 
-        Items.getInstance().getItems().remove(id);
+        ItemFacade.getInstance().delete(id);
     }
 
 

@@ -23,16 +23,28 @@
       <groupId>org.glassfish.main.extras</groupId>
       <artifactId>glassfish-embedded-all</artifactId>
       <version>3.1.2.2</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
     <finalName>basic-restful-webapp</finalName>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.glassfish.embedded</groupId>
+        <artifactId>maven-embedded-glassfish-plugin</artifactId>
+        <version>3.1.2.2</version>
+        <configuration>
+          <app>${project.build.directory}/${project.build.finalName}.war</app>
+          <port>58080</port>
         </configuration>
       </plugin>
     </plugins>
