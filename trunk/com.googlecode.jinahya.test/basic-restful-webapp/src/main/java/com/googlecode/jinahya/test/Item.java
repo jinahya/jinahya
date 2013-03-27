@@ -47,8 +47,6 @@ public class Item implements Serializable {
 
         final Item instance = new Item();
 
-        putCreatedAtAndId(instance);
-
         instance.name = name;
         instance.stock = stock;
 
@@ -85,6 +83,7 @@ public class Item implements Serializable {
 
 
     // ---------------------------------------------------------------------- ID
+    @XmlAttribute
     public Long getId() {
         return id;
     }
