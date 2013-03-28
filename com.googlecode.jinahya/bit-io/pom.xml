@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.0-alpha-12-SNAPSHOT</version>
+  <version>1.0-alpha-12</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -239,7 +239,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization/>
+  <organization />
   <developers>
     <developer>
       <id>jinahya</id>
@@ -247,16 +247,16 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors/>
+  <contributors />
 
   <!-- Environment Settings -->
   <issueManagement />
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/bit-io</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/bit-io-1.0-alpha-12</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/bit-io-1.0-alpha-12</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/bit-io-1.0-alpha-12</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
