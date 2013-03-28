@@ -24,8 +24,8 @@
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="both"/>
       <property name="eclipselink.drop-ddl-jdbc-file-name" value="target/dropDDL.jdbc"/>
-      <property name="eclipselink.logging.level.sql" value="FINE"/>
-      <property name="eclipselink.logging.parameters" value="true"/>
+      <!--<property name="eclipselink.logging.level.sql" value="FIND"/>-->
+      <!--<property name="eclipselink.logging.parameters" value="true"/>-->
       <property name="eclipselink.target-database" value="Derby"/>
 
       <!-- hibernate -->

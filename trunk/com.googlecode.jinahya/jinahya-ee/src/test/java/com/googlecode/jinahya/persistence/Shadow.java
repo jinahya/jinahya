@@ -49,9 +49,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Shadow.NQ_COUNT_BY_USERNAME,
-                query = "SELECT COUNT(s) FROM Shadow AS s"
-                        + " WHERE s.username = :username"),
     @NamedQuery(name = Shadow.NQ_FIND_BY_USERNAME,
                 query = "SELECT s FROM Shadow AS s"
                         + " WHERE s.username = :username")
@@ -70,10 +67,6 @@ public class Shadow implements Serializable {
     static {
         LOGGER.setLevel(Level.INFO);
     }
-
-
-    public static final String NQ_COUNT_BY_USERNAME =
-        "Shadow.NQ_COUNT_BY_USERNAME";
 
 
     public static final String NQ_FIND_BY_USERNAME =
