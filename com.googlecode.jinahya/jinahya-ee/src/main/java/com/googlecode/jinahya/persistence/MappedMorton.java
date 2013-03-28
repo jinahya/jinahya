@@ -163,6 +163,7 @@ public class MappedMorton implements Serializable {
 
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
+        System.out.println("iterationCount: " + iterationCount);
 
         final byte[] salty = pbkdf2(password, sodium, iterationCount,
                                     sodium.length * 8);

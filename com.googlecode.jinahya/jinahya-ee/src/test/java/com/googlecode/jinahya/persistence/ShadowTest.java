@@ -91,7 +91,7 @@ public class ShadowTest {
                 Shadow.USERNAME_SIZE_MIN, Shadow.USERNAME_SIZE_MAX + 1);
             Assert.assertTrue(count >= Shadow.USERNAME_SIZE_MIN
                               && count <= Shadow.USERNAME_SIZE_MAX);
-            username = RandomStringUtils.random(count);
+            username = RandomStringUtils.randomAlphanumeric(32);
         } while (FIND_BY_USERNAME(manager, username) != null);
 
         return username;
@@ -128,7 +128,7 @@ public class ShadowTest {
     }
 
 
-    @Test
+    @Test(enabled = false, invocationCount = 32)
     private void testPersist() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -149,7 +149,7 @@ public class ShadowTest {
     }
 
 
-    @Test
+    @Test(enabled = false, invocationCount = 32)
     public void testAuthenticate() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -164,8 +164,36 @@ public class ShadowTest {
 
                 Assert.assertTrue(shadow.puthenticate(shadow, password));
 
+                transaction.commit();
+            } catch (Exception e) {
+                LocalPU.printConstraintViolation(e);
+                transaction.rollback();
+                e.printStackTrace(System.err);
+                Assert.fail(e.getMessage());
+            }
+        } finally {
+            manager.close();
+        }
+    }
+
+
+    @Test(enabled = true, invocationCount = 32)
+    public void testNassword() {
+        final EntityManager manager = LocalPU.createEntityManager();
+        try {
+            final EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            try {
+                final String username = newUsername(manager);
+                final byte[] password = newPassword();
+
+                Shadow shadow = persistInstance(manager, username, password);
+
                 final byte[] nassword = newPassword();
                 shadow.nassword(shadow, password, nassword);
+                shadow = manager.merge(shadow);
+                manager.flush();
+
                 Assert.assertFalse(shadow.puthenticate(shadow, password));
                 Assert.assertTrue(shadow.puthenticate(shadow, nassword));
 

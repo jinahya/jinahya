@@ -22,6 +22,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
@@ -45,6 +47,25 @@ public class Morton extends MappedMorton {
 
     protected Morton() {
         super(DENSITY, sodium(SODIUM_LENGTH));
+    }
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + hashCode()
+               + "&id=" + id;
+    }
+
+
+    @PrePersist
+    private void _PrePersist() {
+        System.out.println("@PrePersist: " + this);
+    }
+
+
+    @PreRemove
+    private void _PreRemove() {
+        System.out.println("@PreRemove: " + this);
     }
 
 
