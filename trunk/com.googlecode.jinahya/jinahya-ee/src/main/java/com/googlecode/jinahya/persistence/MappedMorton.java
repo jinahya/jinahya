@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
@@ -36,7 +37,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -76,7 +76,16 @@ public class MappedMorton implements Serializable {
     protected static final int DENSITY_MAX = 26;
 
 
-    private static final int DENSITY = 16;
+    protected static final int MAPPED_DENSITY = 16;
+
+
+    protected static final int SODIUM_SIZE_MIN = 8; // 64 / 8
+
+
+    protected static final int SODIUM_SIZE_MAX = 64; // 512 / 8
+
+
+    protected static final int MAPPED_SODIUM_LENGTH = 32; // 256 / 8
 
 
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
@@ -101,24 +110,37 @@ public class MappedMorton implements Serializable {
     }
 
 
-    public MappedMorton() {
-        super();
+    protected static byte[] sodium(final int length) {
 
-        final byte[] rand = new byte[8];
+        final byte[] sodium = new byte[length];
+
         try {
-            SecureRandom.getInstance("SHA1PRNG").nextBytes(rand);
+            SecureRandom.getInstance("SHA1PRNG").nextBytes(sodium);
         } catch (NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
         }
 
-        sodium = DatatypeConverter.printHexBinary(rand);
+        return sodium;
+    }
+
+
+    protected MappedMorton(final int density, final byte[] sodium) {
+        super();
+
+        this.density = density;
+        this.sodium = Arrays.copyOf(sodium, sodium.length);
+    }
+
+
+    public MappedMorton() {
+        this(MAPPED_DENSITY, sodium(MAPPED_SODIUM_LENGTH));
     }
 
 
     /**
      * Makes given {@code bland} salty.
      *
-     * @param bland the bland input
+     * @param bland the bland input; must be not null nor empty.
      *
      * @return the salty output
      */
@@ -137,13 +159,13 @@ public class MappedMorton implements Serializable {
             password[i] = (char) (bland[i] & 0xFF);
         }
 
-        final byte[] salt = DatatypeConverter.parseHexBinary(sodium);
-
         final int degree = 0x01 << density;
+
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
 
-        final byte[] salty = pbkdf2(password, salt, iterationCount, 160);
+        final byte[] salty = pbkdf2(password, sodium, iterationCount,
+                                    sodium.length * 8);
 
         return salty;
     }
@@ -157,18 +179,18 @@ public class MappedMorton implements Serializable {
     @Min(DENSITY_MIN)
     @Max(DENSITY_MAX)
     @XmlTransient
-    private int density = DENSITY;
+    private int density;
 
 
     /**
      * sodium; salt.
      */
     @Basic(optional = false)
-    @Column(length = 16, name = "SODIUM", nullable = false, updatable = false)
+    @Column(name = "SODIUM", nullable = false, updatable = false)
     @NotNull
-    @Size(min = 16, max = 16)
+    @Size(min = SODIUM_SIZE_MIN, max = SODIUM_SIZE_MAX)
     @XmlTransient
-    private String sodium;
+    private byte[] sodium;
 
 
 }
