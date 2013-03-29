@@ -33,6 +33,7 @@
         <version>3.1.2.2</version>
         <configuration>
           <app>${project.build.directory}/${project.build.finalName}.war</app>
+          <contextRoot>/</contextRoot>
           <port>58080</port>
         </configuration>
       </plugin>
