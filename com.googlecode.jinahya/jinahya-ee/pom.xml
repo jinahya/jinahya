@@ -30,6 +30,11 @@
         <version>3.1.2.2</version>
       </dependency>
       <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>4.2.0.Final</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.8</version>
@@ -45,6 +50,11 @@
     <dependency>
       <groupId>org.glassfish.main.extras</groupId>
       <artifactId>glassfish-embedded-all</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
