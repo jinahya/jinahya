@@ -18,13 +18,13 @@
 package com.googlecode.jinahya.persistence;
 
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -37,8 +37,23 @@ import org.testng.annotations.Test;
 public class ShadowTest {
 
 
-    protected static Shadow FIND_BY_USERNAME_NQ(final EntityManager manager,
-                                                final String username) {
+    private static final Logger LOGGER =
+        Logger.getLogger(ShadowTest.class.getName());
+
+
+    protected static List<Morton> MORTONS(final EntityManager manager,
+                                          final int firstResult,
+                                          final int maxResults) {
+
+        return manager.createNamedQuery(Morton.NQ_LIST)
+            .setFirstResult(firstResult)
+            .setMaxResults(maxResults)
+            .getResultList();
+    }
+
+
+    protected static Shadow FIND_BY_USERNAME(final EntityManager manager,
+                                             final String username) {
 
         try {
             return manager.createNamedQuery(Shadow.NQ_FIND_BY_USERNAME,
@@ -49,36 +64,6 @@ public class ShadowTest {
         }
 
         return null;
-    }
-
-
-    protected static Shadow FIND_BY_USERNAME_CQ(
-        final EntityManager manager, final String username) {
-
-        final CriteriaBuilder builder = manager.getCriteriaBuilder();
-        final CriteriaQuery<Shadow> query = builder.createQuery(Shadow.class);
-        final Root<Shadow> shadow = query.from(Shadow.class);
-
-        query.select(shadow).where(
-            builder.equal(shadow.get(Shadow_.username), username));
-
-        try {
-            return manager.createQuery(query).getSingleResult();
-        } catch (NoResultException nre) {
-        }
-
-        return null;
-    }
-
-
-    protected static Shadow FIND_BY_USERNAME(final EntityManager manager,
-                                             final String username) {
-
-        if (ThreadLocalRandom.current().nextBoolean()) {
-            return FIND_BY_USERNAME_NQ(manager, username);
-        } else {
-            return FIND_BY_USERNAME_CQ(manager, username);
-        }
     }
 
 
@@ -128,7 +113,7 @@ public class ShadowTest {
     }
 
 
-    @Test(enabled = false, invocationCount = 32)
+    @Test(enabled = false, invocationCount = 1)
     private void testPersist() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -149,7 +134,7 @@ public class ShadowTest {
     }
 
 
-    @Test(enabled = false, invocationCount = 32)
+    @Test(enabled = false, invocationCount = 1)
     public void testAuthenticate() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -177,7 +162,7 @@ public class ShadowTest {
     }
 
 
-    @Test(enabled = true, invocationCount = 32)
+    @Test(enabled = true, invocationCount = 1)
     public void testNassword() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -188,11 +173,15 @@ public class ShadowTest {
                 final byte[] password = newPassword();
 
                 Shadow shadow = persistInstance(manager, username, password);
+                LOGGER.log(Level.INFO, "morton.list: {0}",
+                           MORTONS(manager, 0, 1024));
 
                 final byte[] nassword = newPassword();
                 shadow.nassword(shadow, password, nassword);
                 shadow = manager.merge(shadow);
                 manager.flush();
+                LOGGER.log(Level.INFO, "morton.list: {0}",
+                           MORTONS(manager, 0, 1024));
 
                 Assert.assertFalse(shadow.puthenticate(shadow, password));
                 Assert.assertTrue(shadow.puthenticate(shadow, nassword));

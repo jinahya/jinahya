@@ -65,7 +65,7 @@ public class Shadow implements Serializable {
 
 
     static {
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.OFF);
     }
 
 

@@ -18,10 +18,14 @@
 package com.googlecode.jinahya.persistence;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
@@ -35,14 +39,27 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = Morton.NQ_LIST,
+                query = "SELECT m"
+                        + " FROM Morton AS m"
+                        + " ORDER BY m.id DESC")
+})
 @Table(name = "MORTON")
 public class Morton extends MappedMorton {
+
+
+    public static final String NQ_LIST = "Morton.NQ_LIST";
 
 
     protected static final int DENSITY = MAPPED_DENSITY + 1;
 
 
     protected static final int SODIUM_LENGTH = MAPPED_SODIUM_LENGTH << 1;
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(Morton.class.getName());
 
 
     protected Morton() {
@@ -58,19 +75,19 @@ public class Morton extends MappedMorton {
 
 
     @PrePersist
-    private void _PrePersist() {
-        System.out.println("@PrePersist: " + this);
+    protected void _PrePersist() {
+        LOGGER.log(Level.INFO, "_PrePersist(): {0}", this);
     }
 
 
     @PreRemove
-    private void _PreRemove() {
-        System.out.println("@PreRemove: " + this);
+    protected void _PreRemove() {
+        LOGGER.log(Level.INFO, "@PreRemove: {0}", this);
     }
 
 
     @Id
-    @GeneratedValue(generator = "LOG_ID_GENERATOR",
+    @GeneratedValue(generator = "MORTON_ID_GENERATOR",
                     strategy = GenerationType.TABLE)
     @TableGenerator(initialValue = Pkv.INITIAL_VALUE,
                     name = "MORTON_ID_GENERATOR",
