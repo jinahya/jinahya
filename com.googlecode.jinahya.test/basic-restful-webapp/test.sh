@@ -1,42 +1,10 @@
 #!/bin/sh
-echo ---------------------------------------------------------------------------
-echo 'CREATE -> POST /items'
-echo ---------------------------------------------------------------------------
-curl -v -X POST -H "Content-type: application/xml" -T src/test/resources/item.xml http://localhost:58080/basic-restful-webapp/items
-echo ---------------------------------------------------------------------------
-echo 'READ -> GET /items/0'
-echo ---------------------------------------------------------------------------
-curl -v -H "Accept: application/json" http://localhost:58080/basic-restful-webapp/items/0 | python -m json.tool
-echo ---------------------------------------------------------------------------
-echo 'CREATE -> POST /items'
-echo ---------------------------------------------------------------------------
-curl -i -X POST -H "Content-type: application/json" -T src/test/resources/item.json http://localhost:58080/basic-restful-webapp/items
-echo ---------------------------------------------------------------------------
-echo 'READ -> GET /items/1'
-echo ---------------------------------------------------------------------------
-curl -v -H "Accept: application/xml" http://localhost:58080/basic-restful-webapp/items/1 | xmllint --format -
-echo ---------------------------------------------------------------------------
-echo 'UPDATE -> PUT /items/0'
-echo ---------------------------------------------------------------------------
-curl -v -X PUT -H "Content-type: application/xml" -T src/test/resources/item.xml.update http://localhost:58080/basic-restful-webapp/items/0
-echo ---------------------------------------------------------------------------
-echo 'READ -> GET /items/0'
-echo ---------------------------------------------------------------------------
-curl -v -H "Accept: application/json" http://localhost:58080/basic-restful-webapp/items/0 | python -m json.tool
-echo ---------------------------------------------------------------------------
-echo 'UPDATE -> PUT /items/1'
-echo ---------------------------------------------------------------------------
-curl -v -X PUT -H "Content-type: application/json" -T src/test/resources/item.json.update http://localhost:58080/basic-restful-webapp/items/1
-echo ---------------------------------------------------------------------------
-echo 'READ -> GET /items/1'
-echo ---------------------------------------------------------------------------
-curl -v -H "Accept: application/xml" http://localhost:58080/basic-restful-webapp/items/1 | xmllint --format -
-echo ---------------------------------------------------------------------------
-echo 'DELETE -> items/0'
-echo ---------------------------------------------------------------------------
-curl -v -X DELETE http://localhost:58080/basic-restful-webapp/items/0
-echo ---------------------------------------------------------------------------
-echo 'DELETE -> items/1'
-echo ---------------------------------------------------------------------------
-curl -v -X DELETE http://localhost:58080/basic-restful-webapp/items/1
-
+cat src/test/resources/item.xml
+curl -i -X POST http://localhost:58080/items -H "Content-type: application/xml" --data "@src/test/resources/item.xml"
+curl -s http://localhost:58080/items/0 -H "Accept: application/xml" | xmllint --format -
+curl -s http://localhost:58080/items/0 -H "Accept: application/json" | python -m json.tool
+cat src/test/resources/item.json
+curl -i -X PUT http://localhost:58080/items/0 -H "Content-type: application/json" --data "@src/test/resources/item.json"
+curl -s http://localhost:58080/items/0 -H "Accept: application/xml" | xmllint --format -
+curl -s http://localhost:58080/items/0 -H "Accept: application/json" | python -m json.tool
+curl -i -X DELETE http://localhost:58080/items/0
