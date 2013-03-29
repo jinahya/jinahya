@@ -4,7 +4,6 @@ package com.googlecode.jinahya.test;
 
 
 import java.net.URI;
-import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,14 +26,6 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("/items")
 public class ItemsResource {
-
-
-//    @PostConstruct
-//    protected void _PostConstruct() {
-//
-//        ItemFacade.getInstance().insert(Item.newInstance("item1", 30));
-//        ItemFacade.getInstance().insert(Item.newInstance("item2", 40));
-//    }
 
 
     @GET
