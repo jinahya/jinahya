@@ -37,7 +37,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8</version>
+        <version>6.8.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -145,8 +145,13 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.14</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.12.3</version>
+          <version>2.12.4</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -255,7 +260,7 @@
                 <linkXref>true</linkXref>
                 <minimumTokens>100</minimumTokens>
                 <minimumPriority>3</minimumPriority>
-                <targetJdk>1.6</targetJdk>
+                <targetJdk>1.7</targetJdk>
               </configuration>
             </plugin>
           </reportPlugins>
@@ -270,6 +275,30 @@
             </execution>
             </executions>
         -->
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>derby.stream.error.file</name>
+              <value>target/derby.log</value>
+            </property>
+            <property>
+              <name>derby.locks.monitor</name>
+              <value>true</value>
+            </property>
+            <property>
+              <name>derby.locks.deadlockTrace</name>
+              <value>true</value>
+            </property>
+            <property>
+              <name>derby.language.logStatementText</name>
+              <value>true</value>
+            </property>
+          </systemProperties>
+        </configuration>
       </plugin>
     </plugins>
   </build>
