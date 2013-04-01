@@ -65,7 +65,7 @@ public class Shadow implements Serializable {
 
 
     static {
-        LOGGER.setLevel(Level.OFF);
+        LOGGER.setLevel(Level.INFO);
     }
 
 
@@ -114,7 +114,7 @@ public class Shadow implements Serializable {
         return getClass().getSimpleName() + "@" + hashCode()
                + "?id=" + id
                + "&username=" + username
-               + "&passcode=" + DatatypeConverter.printHexBinary(passcode);
+               + "&passcode=" + passcode;
     }
 
 
@@ -168,7 +168,7 @@ public class Shadow implements Serializable {
 
     public boolean puthenticate(final Shadow reference, final byte[] password) {
 
-        LOGGER.log(Level.INFO, "authenticate({0}, {1})",
+        LOGGER.log(Level.INFO, "puthenticate({0}, {1})",
                    new Object[]{reference, password});
 
         Objects.requireNonNull(reference, "null reference");
@@ -179,6 +179,12 @@ public class Shadow implements Serializable {
 
         Objects.requireNonNull(password, "null password");
 
+        if (password.length == 0) {
+            throw new IllegalArgumentException(
+                "password.length(" + password.length + ") == 0");
+        }
+
+        LOGGER.log(Level.INFO, "passsalt: {0}", passsalt);
 
         return Arrays.equals(passsalt.salty(password), passcode);
     }
@@ -217,7 +223,8 @@ public class Shadow implements Serializable {
      * passsalt.
      */
     @JoinColumn(name = "PASSSALT_ID", nullable = false)
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                         CascadeType.REMOVE},
               optional = false, orphanRemoval = true)
     @NotNull
     @XmlTransient
