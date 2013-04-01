@@ -45,7 +45,7 @@ public abstract class AbstractFilter implements Filter {
 
 
     /**
-     * Logs given <code>message</code>.
+     * Logs given {@code message}.
      *
      * @param message message
      */
@@ -55,7 +55,7 @@ public abstract class AbstractFilter implements Filter {
 
 
     /**
-     * Logs given <code>message</code> with specified <code>cause</code>.
+     * Logs given {@code message} with specified {@code cause}.
      *
      * @param message message
      * @param cause cause
@@ -91,7 +91,9 @@ public abstract class AbstractFilter implements Filter {
     }
 
 
-    /** filterConfig. */
+    /**
+     * filterConfig.
+     */
     private FilterConfig filterConfig;
 
 
