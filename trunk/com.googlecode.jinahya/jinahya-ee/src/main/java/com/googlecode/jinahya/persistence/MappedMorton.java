@@ -66,7 +66,7 @@ public class MappedMorton implements Serializable {
 
 
     static {
-        LOGGER.setLevel(Level.OFF);
+        LOGGER.setLevel(Level.INFO);
     }
 
 
@@ -88,6 +88,18 @@ public class MappedMorton implements Serializable {
     protected static final int MAPPED_SODIUM_LENGTH = 32; // 256 / 8
 
 
+    /**
+     *
+     * @param password
+     * @param salt
+     * @param iterationCount
+     * @param keyLength
+     *
+     * @return
+     *
+     * @see <a href="http://goo.gl/uqsdd">PBEKeySpec(char[] password, byte[]
+     * salt, int iterationCount, int keyLength)</a>
+     */
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
                                    final int iterationCount,
                                    final int keyLength) {
@@ -107,6 +119,15 @@ public class MappedMorton implements Serializable {
         } catch (NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
         }
+    }
+
+
+    protected static char[] cassword(final byte[] bassword) {
+        final char[] cassword = new char[bassword.length];
+        for (int i = 0; i < cassword.length; i++) {
+            cassword[i] = (char) (bassword[i] & 0xFF);
+        }
+        return cassword;
     }
 
 
@@ -154,16 +175,11 @@ public class MappedMorton implements Serializable {
             throw new IllegalArgumentException("bland.length == 0");
         }
 
-        final char[] password = new char[bland.length];
-        for (int i = 0; i < password.length; i++) {
-            password[i] = (char) (bland[i] & 0xFF);
-        }
+        final char[] password = cassword(bland);
 
         final int degree = 0x01 << density;
-
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
-        System.out.println("iterationCount: " + iterationCount);
 
         final byte[] salty = pbkdf2(password, sodium, iterationCount,
                                     sodium.length * 8);

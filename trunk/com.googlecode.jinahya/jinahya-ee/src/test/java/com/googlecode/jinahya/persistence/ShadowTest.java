@@ -114,7 +114,7 @@ public class ShadowTest {
 
 
     @Test(enabled = false, invocationCount = 1)
-    private void testPersist() {
+    public void testPersist() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
             final EntityTransaction transaction = manager.getTransaction();
@@ -135,7 +135,7 @@ public class ShadowTest {
 
 
     @Test(enabled = false, invocationCount = 1)
-    public void testAuthenticate() {
+    public void testPuthenticate() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
             final EntityTransaction transaction = manager.getTransaction();
@@ -170,21 +170,24 @@ public class ShadowTest {
             transaction.begin();
             try {
                 final String username = newUsername(manager);
-                final byte[] password = newPassword();
+                byte[] password = newPassword();
 
                 Shadow shadow = persistInstance(manager, username, password);
                 LOGGER.log(Level.INFO, "morton.list: {0}",
                            MORTONS(manager, 0, 1024));
 
-                final byte[] nassword = newPassword();
-                shadow.nassword(shadow, password, nassword);
-                shadow = manager.merge(shadow);
-                manager.flush();
-                LOGGER.log(Level.INFO, "morton.list: {0}",
-                           MORTONS(manager, 0, 1024));
-
-                Assert.assertFalse(shadow.puthenticate(shadow, password));
-                Assert.assertTrue(shadow.puthenticate(shadow, nassword));
+                for (int i = 0; i < 3; i++) {
+                    Assert.assertTrue(shadow.puthenticate(shadow, password));
+                    final byte[] nassword = newPassword();
+                    shadow.nassword(shadow, password, nassword);
+                    shadow = manager.merge(shadow);
+                    manager.flush();
+                    LOGGER.log(Level.INFO, "morton.list: {0}",
+                               MORTONS(manager, 0, 1024));
+                    Assert.assertFalse(shadow.puthenticate(shadow, password));
+                    Assert.assertTrue(shadow.puthenticate(shadow, nassword));
+                    password = nassword;
+                }
 
                 transaction.commit();
             } catch (Exception e) {

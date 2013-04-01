@@ -20,6 +20,8 @@ package com.googlecode.jinahya.persistence;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 import org.testng.annotations.Test;
 
@@ -29,6 +31,10 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class MappedMortonTest {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(MappedMortonTest.class.getName());
 
 
     private static final String[] PASSWORDS = new String[]{
@@ -55,27 +61,36 @@ public class MappedMortonTest {
             final byte[] bland = password.getBytes(StandardCharsets.UTF_8);
             final byte[] salty = morton.salty(bland);
 
-            System.out.println("bland: " + password);
-            System.out.println(
-                "salty: " + DatatypeConverter.printHexBinary(salty));
+            LOGGER.log(Level.INFO, "bland: {0}", password);
+            LOGGER.log(Level.INFO, "salty: {0}",
+                       DatatypeConverter.printHexBinary(salty));
         }
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testSaltyWithNullBland() {
+        new MappedMorton().salty(null);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void testSaltyWithEmptyBland() {
+        new MappedMorton().salty(new byte[0]);
+    }
+
+
+    @Test(invocationCount = 32)
     public void testSaltyWithRandomBytes() {
 
         final Random random = new Random();
 
-        final byte[] bland = new byte[random.nextInt(1024)];
+        final byte[] bland = new byte[random.nextInt(128) + 1];
         random.nextBytes(bland);
 
         final MappedMorton morton = new MappedMorton();
 
         final byte[] salty = morton.salty(bland);
-
-//        System.out.println("bland: " + DatatypeConverter.printHexBinary(bland));
-//        System.out.println("salty: " + DatatypeConverter.printHexBinary(salty));
     }
 
 
