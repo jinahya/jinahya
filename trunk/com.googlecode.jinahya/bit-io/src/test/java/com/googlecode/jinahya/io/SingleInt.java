@@ -30,9 +30,7 @@ public class SingleInt extends SingleValue<Integer> {
 
 
     public SingleInt() {
-        super();
-
-        value = ThreadLocalRandom.current().nextInt();
+        super(ThreadLocalRandom.current().nextInt());
     }
 
 

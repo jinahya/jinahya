@@ -30,9 +30,7 @@ public class SingleFloat extends SingleValue<Float> {
 
 
     public SingleFloat() {
-        super();
-
-        value = ThreadLocalRandom.current().nextFloat();
+        super(ThreadLocalRandom.current().nextFloat());
     }
 
 

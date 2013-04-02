@@ -24,8 +24,22 @@ import java.io.IOException;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @param <V>
  */
 public abstract class SingleValue<V> {
+
+
+    public SingleValue(final V value) {
+        super();
+
+        this.value = value;
+    }
+
+
+    @Deprecated
+    public SingleValue() {
+        super();
+    }
 
 
     @Override
@@ -44,6 +58,7 @@ public abstract class SingleValue<V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        @SuppressWarnings("unchecked")
         final SingleValue<V> other = (SingleValue<V>) obj;
         if (this.value != other.value && (this.value == null || !this.value.equals(other.value))) {
             return false;

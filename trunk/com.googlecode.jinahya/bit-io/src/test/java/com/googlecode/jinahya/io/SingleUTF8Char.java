@@ -30,9 +30,7 @@ public class SingleUTF8Char extends SingleValue<Integer> {
 
 
     public SingleUTF8Char() {
-        super();
-
-        value = ThreadLocalRandom.current().nextInt() >>> 11;
+        super(ThreadLocalRandom.current().nextInt() >>> 11);
     }
 
 
