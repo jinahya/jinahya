@@ -49,19 +49,45 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Morton extends MappedMorton {
 
 
-    public static final String NQ_LIST = "Morton.NQ_LIST";
+    /**
+     * generated.
+     */
+    private static final long serialVersionUID = -1421400640928751890L;
 
 
-    protected static final int DENSITY = MAPPED_DENSITY + 1;
-
-
-    protected static final int SODIUM_LENGTH = MAPPED_SODIUM_LENGTH << 1;
-
-
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(Morton.class.getName());
 
 
+    static {
+        LOGGER.setLevel(Level.INFO);
+    }
+
+
+    /**
+     * A named query for listing instances order by {@code id DESC}.
+     */
+    public static final String NQ_LIST = "Morton.NQ_LIST";
+
+
+    /**
+     * default density.
+     */
+    protected static final int DENSITY = MAPPED_DENSITY + 1;
+
+
+    /**
+     * default sodium length.
+     */
+    protected static final int SODIUM_LENGTH = MAPPED_SODIUM_LENGTH << 1;
+
+
+    /**
+     * Creates a new instance.
+     */
     protected Morton() {
         super(DENSITY, sodium(SODIUM_LENGTH));
     }

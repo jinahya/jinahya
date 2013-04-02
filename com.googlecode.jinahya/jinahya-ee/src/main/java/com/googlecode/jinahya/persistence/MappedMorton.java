@@ -55,6 +55,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class MappedMorton implements Serializable {
 
 
+    /**
+     * generated.
+     */
     private static final long serialVersionUID = 4243525203653288446L;
 
 
@@ -66,36 +69,55 @@ public class MappedMorton implements Serializable {
 
 
     static {
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.OFF);
     }
 
 
-    protected static final int DENSITY_MIN = 1;
-
-
-    protected static final int DENSITY_MAX = 26;
-
-
-    protected static final int MAPPED_DENSITY = 16;
-
-
-    protected static final int SODIUM_SIZE_MIN = 8; // 64 / 8
-
-
-    protected static final int SODIUM_SIZE_MAX = 64; // 512 / 8
-
-
-    protected static final int MAPPED_SODIUM_LENGTH = 32; // 256 / 8
+    /**
+     * The minimum value of {@code density}.
+     */
+    public static final int DENSITY_MIN = 1;
 
 
     /**
+     * The maximum value of {@code density}.
+     */
+    public static final int DENSITY_MAX = 26;
+
+
+    /**
+     * The default value fo {@code density}.
+     */
+    protected static final int MAPPED_DENSITY = 16;
+
+
+    /**
+     * The minimum length of {@code sodium}.
+     */
+    protected static final int SODIUM_SIZE_MIN = 8; // = 64 / 8
+
+
+    /**
+     * The maximum length of {@code sodium}.
+     */
+    protected static final int SODIUM_SIZE_MAX = 64; // = 512 / 8
+
+
+    /**
+     * The default length of {@code sodium}.
+     */
+    protected static final int MAPPED_SODIUM_LENGTH = 32; // = 256 / 8
+
+
+    /**
+     * Does {@code PBKDF2}.
      *
-     * @param password
-     * @param salt
-     * @param iterationCount
-     * @param keyLength
+     * @param password password
+     * @param salt salt
+     * @param iterationCount iteration count
+     * @param keyLength key length (in bits).
      *
-     * @return
+     * @return generated output.
      *
      * @see <a href="http://goo.gl/uqsdd">PBEKeySpec(char[] password, byte[]
      * salt, int iterationCount, int keyLength)</a>
@@ -122,15 +144,32 @@ public class MappedMorton implements Serializable {
     }
 
 
+    /**
+     * Converts given {@code bassword} into a {@code char[]}.
+     *
+     * @param bassword the byte array
+     *
+     * @return the char array
+     */
     protected static char[] cassword(final byte[] bassword) {
+
         final char[] cassword = new char[bassword.length];
+
         for (int i = 0; i < cassword.length; i++) {
             cassword[i] = (char) (bassword[i] & 0xFF);
         }
+
         return cassword;
     }
 
 
+    /**
+     * Generates a {@code sodium}.
+     *
+     * @param length number of bytes
+     *
+     * @return a new sodium.
+     */
     protected static byte[] sodium(final int length) {
 
         final byte[] sodium = new byte[length];
@@ -145,6 +184,12 @@ public class MappedMorton implements Serializable {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param density density
+     * @param sodium sodium
+     */
     protected MappedMorton(final int density, final byte[] sodium) {
         super();
 
@@ -153,6 +198,9 @@ public class MappedMorton implements Serializable {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     public MappedMorton() {
         this(MAPPED_DENSITY, sodium(MAPPED_SODIUM_LENGTH));
     }
@@ -180,6 +228,7 @@ public class MappedMorton implements Serializable {
         final int degree = 0x01 << density;
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
+        LOGGER.log(Level.INFO, "iterationCount: {0}", iterationCount);
 
         final byte[] salty = pbkdf2(password, sodium, iterationCount,
                                     sodium.length * 8);
@@ -200,7 +249,7 @@ public class MappedMorton implements Serializable {
 
 
     /**
-     * sodium; salt.
+     * sodium.
      */
     @Basic(optional = false)
     @Column(name = "SODIUM", nullable = false, updatable = false)
