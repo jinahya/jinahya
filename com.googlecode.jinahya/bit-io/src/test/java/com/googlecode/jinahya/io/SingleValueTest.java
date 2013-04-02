@@ -87,7 +87,7 @@ public abstract class SingleValueTest<S extends SingleValue<?>> {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(new StreamOutput(baos));
 
-        final List<S> expected = new ArrayList<S>(count);
+        final List<S> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final S entity = valueClass.newInstance();
             entity.write(output);
@@ -108,7 +108,7 @@ public abstract class SingleValueTest<S extends SingleValue<?>> {
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
 
-        final List<S> actual = new ArrayList<S>(expected.size());
+        final List<S> actual = new ArrayList<>(expected.size());
         for (int i = 0; i < expected.size(); i++) {
             final S entity = valueClass.newInstance();
             entity.read(input);

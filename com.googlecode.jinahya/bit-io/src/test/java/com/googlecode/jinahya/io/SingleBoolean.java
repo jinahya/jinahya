@@ -30,9 +30,7 @@ public class SingleBoolean extends SingleValue<Boolean> {
 
 
     public SingleBoolean() {
-        super();
-
-        value = ThreadLocalRandom.current().nextBoolean();
+        super(ThreadLocalRandom.current().nextBoolean());
     }
 
 

@@ -30,9 +30,7 @@ public class SingleLong extends SingleValue<Long> {
 
 
     public SingleLong() {
-        super();
-
-        value = ThreadLocalRandom.current().nextLong();
+        super(ThreadLocalRandom.current().nextLong());
     }
 
 
