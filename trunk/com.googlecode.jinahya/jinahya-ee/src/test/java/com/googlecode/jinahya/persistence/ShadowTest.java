@@ -37,6 +37,9 @@ import org.testng.annotations.Test;
 public class ShadowTest {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(ShadowTest.class.getName());
 
@@ -113,6 +116,39 @@ public class ShadowTest {
     }
 
 
+    protected static boolean puthenticate(final EntityManager manager,
+                                          final long id, final String username,
+                                          final byte[] password) {
+
+        final Shadow shadow = manager.find(Shadow.class, id);
+
+        if (shadow == null) {
+            return false;
+        }
+
+        return shadow.puthenticate(shadow, password);
+
+    }
+
+
+    protected static boolean puthenticate(final EntityManager manager,
+                                          final String username,
+                                          final byte[] password) {
+
+        final Shadow shadow = manager.createNamedQuery(
+            Shadow.NQ_FIND_BY_USERNAME, Shadow.class)
+            .setParameter("username", username)
+            .getSingleResult();
+
+        if (shadow == null) {
+            return false;
+        }
+
+        return shadow.puthenticate(shadow, password);
+
+    }
+
+
     @Test(enabled = false, invocationCount = 1)
     public void testPersist() {
         final EntityManager manager = LocalPU.createEntityManager();
@@ -163,6 +199,41 @@ public class ShadowTest {
 
 
     @Test(enabled = true, invocationCount = 1)
+    public void testNassword0() {
+        final EntityManager manager = LocalPU.createEntityManager();
+        try {
+            final EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            try {
+                final String username = newUsername(manager);
+                final byte[] password = newPassword();
+                Shadow shadow = persistInstance(manager, username, password);
+                Assert.assertTrue(shadow.puthenticate(shadow, password));
+                System.out.println("=========================================");
+                LOGGER.log(Level.INFO, "mortons: {0}",
+                           MORTONS(manager, 0, 1024));
+                final byte[] nassword = newPassword();
+                shadow.nassword(shadow, password, nassword);
+                shadow = manager.merge(shadow);
+                manager.flush();
+                System.out.println("=========================================");
+                LOGGER.log(Level.INFO, "mortons: {0}",
+                           MORTONS(manager, 0, 1024));
+                Assert.assertFalse(shadow.puthenticate(shadow, password));
+                Assert.assertTrue(shadow.puthenticate(shadow, nassword));
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                e.printStackTrace(System.err);
+                Assert.fail(e.getMessage());
+            }
+        } finally {
+            manager.close();
+        }
+    }
+
+
+    @Test(enabled = false, invocationCount = 1)
     public void testNassword() {
         final EntityManager manager = LocalPU.createEntityManager();
         try {
@@ -177,6 +248,7 @@ public class ShadowTest {
                            MORTONS(manager, 0, 1024));
 
                 for (int i = 0; i < 3; i++) {
+                    System.out.println("-------------------------------------");
                     Assert.assertTrue(shadow.puthenticate(shadow, password));
                     final byte[] nassword = newPassword();
                     shadow.nassword(shadow, password, nassword);

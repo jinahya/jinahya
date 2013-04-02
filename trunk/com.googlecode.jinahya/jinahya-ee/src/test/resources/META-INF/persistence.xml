@@ -5,8 +5,8 @@
 
   <persistence-unit name="localPU" transaction-type="RESOURCE_LOCAL">
 
-    <!--<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <!--<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
     <!--<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>-->
 
     <class>com.googlecode.jinahya.persistence.Morton</class>

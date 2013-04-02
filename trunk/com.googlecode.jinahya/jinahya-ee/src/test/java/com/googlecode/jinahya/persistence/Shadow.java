@@ -38,7 +38,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -58,6 +57,12 @@ public class Shadow implements Serializable {
 
 
     /**
+     * generated.
+     */
+    private static final long serialVersionUID = 8537191938529891477L;
+
+
+    /**
      * logger.
      */
     private static final Logger LOGGER =
@@ -69,20 +74,41 @@ public class Shadow implements Serializable {
     }
 
 
+    /**
+     * A named query for selecting an instance by {@code :username}.
+     */
     public static final String NQ_FIND_BY_USERNAME =
         "Shadow.NQ_FIND_BY_USERNAME";
 
 
+    /**
+     * The minimum length of {@code username}.
+     */
     public static final int USERNAME_SIZE_MIN = 1;
 
 
+    /**
+     * The maximum length of {@code username}.
+     */
     public static final int USERNAME_SIZE_MAX = 255;
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param username username; must be not null nor empty.
+     * @param password password; must be not null nor empty.
+     *
+     * @return a new instance.
+     */
     public static Shadow newInstance(final String username,
                                      final byte[] password) {
 
         Objects.requireNonNull(username, "null username");
+
+        if (username.isEmpty()) {
+            throw new IllegalArgumentException("empty username");
+        }
 
         Objects.requireNonNull(password, "null password");
 
@@ -125,6 +151,15 @@ public class Shadow implements Serializable {
     }
 
 
+    /**
+     * Sets a new password.
+     *
+     * @param reference self
+     * @param password old password
+     * @param nassword new password
+     *
+     * @return true if succeeded; flase otherwise.
+     */
     public boolean nassword(final Shadow reference, final byte[] password,
                             final byte[] nassword) {
 
@@ -166,6 +201,55 @@ public class Shadow implements Serializable {
     }
 
 
+    public boolean nassword(final String username, final byte[] password,
+                            final byte[] nassword) {
+
+        LOGGER.log(Level.INFO, "nassword({0}, {1}, {2})",
+                   new Object[]{username, password, nassword});
+
+        if (username == null) {
+            throw new IllegalArgumentException("null reference");
+        }
+
+        if (username.isEmpty()) {
+            throw new IllegalArgumentException("empty username");
+        }
+
+        if (password == null) {
+            throw new IllegalArgumentException("null password");
+        }
+
+        if (password.length == 0) {
+            throw new IllegalArgumentException("emtpty password");
+        }
+
+        if (nassword == null) {
+            throw new IllegalArgumentException("null nassword");
+        }
+
+        if (nassword.length == 0) {
+            throw new IllegalArgumentException("empty nassword");
+        }
+
+        if (!puthenticate(username, password)) {
+            return false;
+        }
+
+        passsalt = new Morton();
+        passcode = passsalt.salty(nassword);
+
+        return true;
+    }
+
+
+    /**
+     * Authenticates against the password.
+     *
+     * @param reference self
+     * @param password password
+     *
+     * @return true if authenticated; false otherwise.
+     */
     public boolean puthenticate(final Shadow reference, final byte[] password) {
 
         LOGGER.log(Level.INFO, "puthenticate({0}, {1})",
@@ -175,6 +259,38 @@ public class Shadow implements Serializable {
 
         if (this != reference) {
             throw new IllegalArgumentException("this != reference");
+        }
+
+        Objects.requireNonNull(password, "null password");
+
+        if (password.length == 0) {
+            throw new IllegalArgumentException(
+                "password.length(" + password.length + ") == 0");
+        }
+
+        LOGGER.log(Level.INFO, "passsalt: {0}", passsalt);
+
+        return Arrays.equals(passsalt.salty(password), passcode);
+    }
+
+
+    /**
+     * Authenticates against the password.
+     *
+     * @param username username
+     * @param password password
+     *
+     * @return true if authenticated; false otherwise.
+     */
+    public boolean puthenticate(final String username, final byte[] password) {
+
+        LOGGER.log(Level.INFO, "puthenticate({0}, {1})",
+                   new Object[]{username, password});
+
+        Objects.requireNonNull(username, "null username");
+
+        if (username.isEmpty()) {
+            throw new IllegalArgumentException("emtpty username");
         }
 
         Objects.requireNonNull(password, "null password");
