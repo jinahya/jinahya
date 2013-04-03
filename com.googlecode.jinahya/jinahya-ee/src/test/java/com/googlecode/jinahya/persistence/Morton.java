@@ -24,8 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
@@ -39,12 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name = Morton.NQ_LIST,
-                query = "SELECT m"
-                        + " FROM Morton AS m"
-                        + " ORDER BY m.id DESC")
-})
 @Table(name = "MORTON")
 public class Morton extends MappedMorton {
 
@@ -65,12 +57,6 @@ public class Morton extends MappedMorton {
     static {
         LOGGER.setLevel(Level.INFO);
     }
-
-
-    /**
-     * A named query for listing instances order by {@code id DESC}.
-     */
-    public static final String NQ_LIST = "Morton.NQ_LIST";
 
 
     /**

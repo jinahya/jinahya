@@ -158,7 +158,7 @@ public class Shadow implements Serializable {
      * @param password old password
      * @param nassword new password
      *
-     * @return true if succeeded; flase otherwise.
+     * @return true if succeeded; false otherwise.
      */
     public boolean nassword(final Shadow reference, final byte[] password,
                             final byte[] nassword) {
