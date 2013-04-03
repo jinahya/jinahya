@@ -30,6 +30,15 @@ public class Item implements Serializable {
     private static final AtomicLong ATOMIC_ID = new AtomicLong();
 
 
+    public static final Item UNTOUCHABLE = Item.newInstance("untouchable", -1);
+
+
+    static {
+        UNTOUCHABLE.createdAt = new Date();
+        UNTOUCHABLE.id = -1L;
+    }
+
+
     public static Item newInstance(final String name, final int stock) {
 
         final Item instance = new Item();

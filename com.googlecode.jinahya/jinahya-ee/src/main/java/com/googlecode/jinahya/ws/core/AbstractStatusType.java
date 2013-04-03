@@ -32,6 +32,12 @@ import javax.ws.rs.core.Response.StatusType;
 public class AbstractStatusType implements StatusType {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param status the status to wrap
+     * @param reasonPhrase reason phrase
+     */
     protected AbstractStatusType(final Status status,
                                  final String reasonPhrase) {
 
@@ -83,10 +89,9 @@ public class AbstractStatusType implements StatusType {
 
 
     /**
-     * Returns a new
-     * <code>Response</code> for this type.
+     * Returns a new {@code Response} for this type.
      *
-     * @return a new <code>Response</code>.
+     * @return a new {@code Response}.
      */
     public Response build() {
         return Response.status(this).build();
@@ -94,10 +99,9 @@ public class AbstractStatusType implements StatusType {
 
 
     /**
-     * Returns a new
-     * <code>WebApplicationException</code> for this type.
+     * Returns a new {@code WebApplicationException} for this type.
      *
-     * @return a new <code>WebApplicationException</code> to throw
+     * @return a new {@code WebApplicationException} to throw
      */
     public WebApplicationException except() {
         return new WebApplicationException(build());

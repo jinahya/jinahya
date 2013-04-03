@@ -12,6 +12,6 @@ import javax.ws.rs.core.Application;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @ApplicationPath("/")
-public class Application_ extends Application {
+public class BasicRestfulWebApplication extends Application {
 }
 

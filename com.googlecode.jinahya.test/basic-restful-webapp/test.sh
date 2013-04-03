@@ -7,4 +7,9 @@ cat src/test/resources/item.json
 curl -i -X PUT http://localhost:58080/items/0 -H "Content-type: application/json" --data "@src/test/resources/item.json"
 curl -s http://localhost:58080/items/0 -H "Accept: application/xml" | xmllint --format -
 curl -s http://localhost:58080/items/0 -H "Accept: application/json" | python -m json.tool
+curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format -
+curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool
 curl -i -X DELETE http://localhost:58080/items/0
+curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format -
+curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool
+
