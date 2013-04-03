@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @MappedSuperclass
 @XmlTransient
-public class MappedMorton implements Serializable {
+public abstract class MappedMorton implements Serializable {
 
 
     /**
@@ -69,24 +69,24 @@ public class MappedMorton implements Serializable {
 
 
     static {
-        LOGGER.setLevel(Level.OFF);
+        LOGGER.setLevel(Level.INFO);
     }
 
 
     /**
      * The minimum value of {@code density}.
      */
-    public static final int DENSITY_MIN = 1;
+    protected static final int DENSITY_MIN = 1;
 
 
     /**
      * The maximum value of {@code density}.
      */
-    public static final int DENSITY_MAX = 26;
+    protected static final int DENSITY_MAX = 26;
 
 
     /**
-     * The default value fo {@code density}.
+     * The default value for {@code density}.
      */
     protected static final int MAPPED_DENSITY = 16;
 
@@ -123,8 +123,10 @@ public class MappedMorton implements Serializable {
      * salt, int iterationCount, int keyLength)</a>
      */
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
-                                   final int iterationCount,
-                                   final int keyLength) {
+                                    final int iterationCount,
+                                    final int keyLength) {
+
+        final long start = System.currentTimeMillis();
 
         try {
             final SecretKeyFactory secretKeyFactory =
@@ -134,6 +136,8 @@ public class MappedMorton implements Serializable {
             try {
                 final SecretKey secretKey =
                     secretKeyFactory.generateSecret(keySpec);
+                final long finish = System.currentTimeMillis();
+                LOGGER.log(Level.INFO, "elapsed: {0} ms", (finish - start));
                 return secretKey.getEncoded();
             } catch (InvalidKeySpecException ikse) {
                 throw new RuntimeException(ikse);
@@ -144,14 +148,37 @@ public class MappedMorton implements Serializable {
     }
 
 
+    protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
+                                   final int iterationCount,
+                                   final int keyLength) {
+
+        try {
+            return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                .generateSecret(new PBEKeySpec(password, salt, iterationCount,
+                                               keyLength))
+                .getEncoded();
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     /**
      * Converts given {@code bassword} into a {@code char[]}.
      *
-     * @param bassword the byte array
+     * @param bassword the byte array; must be not null nor empty.
      *
      * @return the char array
      */
     protected static char[] cassword(final byte[] bassword) {
+
+        if (bassword == null) {
+            throw new NullPointerException("null bassword");
+        }
+
+        if (bassword.length == 0) {
+            throw new IllegalArgumentException("empty bassword");
+        }
 
         final char[] cassword = new char[bassword.length];
 
@@ -220,7 +247,7 @@ public class MappedMorton implements Serializable {
         }
 
         if (bland.length == 0) {
-            throw new IllegalArgumentException("bland.length == 0");
+            throw new IllegalArgumentException("empty bland");
         }
 
         final char[] password = cassword(bland);
@@ -228,7 +255,17 @@ public class MappedMorton implements Serializable {
         final int degree = 0x01 << density;
         final int iterationCount =
             (new BigInteger(bland).intValue() & (degree - 1)) | degree;
+
         LOGGER.log(Level.INFO, "iterationCount: {0}", iterationCount);
+        if (iterationCount < Math.pow(2, density)) {
+            throw new RuntimeException("iterationCount(" + iterationCount
+                                       + ") < Math.pow(2, " + density + ")");
+        }
+        if (iterationCount >= Math.pow(2, density + 1)) {
+            throw new RuntimeException("iterationCount(" + iterationCount
+                                       + ") < Math.pow(2, " + (density + 1)
+                                       + ")");
+        }
 
         final byte[] salty = pbkdf2(password, sodium, iterationCount,
                                     sodium.length * 8);

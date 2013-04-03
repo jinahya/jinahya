@@ -47,16 +47,28 @@ public class MappedMortonTest {
         "letmein",
         "dragon",
         "111111",
-        "baseball"
+        "baseball",
+        "사랑"
     };
 
 
     @Test(invocationCount = 1)
     public void testSaltyWithPasswords() {
 
+        final byte[][] basswords = new byte[PASSWORDS.length][];
+        for (int i = 0; i < basswords.length; i++) {
+            basswords[i] = PASSWORDS[i].getBytes(StandardCharsets.UTF_16);
+        }
+
+        final char[][] casswords = new char[basswords.length][];
+        for (int i = 0; i < casswords.length; i++) {
+            casswords[i] = MappedMorton.cassword(basswords[i]);
+        }
+
         for (String password : PASSWORDS) {
 
-            final MappedMorton morton = new MappedMorton();
+            final MappedMorton morton = new MappedMorton() {
+            };
 
             final byte[] bland = password.getBytes(StandardCharsets.UTF_8);
             final byte[] salty = morton.salty(bland);
@@ -70,25 +82,28 @@ public class MappedMortonTest {
 
     @Test(expectedExceptions = {NullPointerException.class})
     public void testSaltyWithNullBland() {
-        new MappedMorton().salty(null);
+        new MappedMorton() {
+        }.salty(null);
     }
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void testSaltyWithEmptyBland() {
-        new MappedMorton().salty(new byte[0]);
+        new MappedMorton() {
+        }.salty(new byte[0]);
     }
 
 
     @Test(invocationCount = 32)
-    public void testSaltyWithRandomBytes() {
+    public void testSaltyWithRandomBland() {
 
         final Random random = new Random();
 
         final byte[] bland = new byte[random.nextInt(128) + 1];
         random.nextBytes(bland);
 
-        final MappedMorton morton = new MappedMorton();
+        final MappedMorton morton = new MappedMorton() {
+        };
 
         final byte[] salty = morton.salty(bland);
     }

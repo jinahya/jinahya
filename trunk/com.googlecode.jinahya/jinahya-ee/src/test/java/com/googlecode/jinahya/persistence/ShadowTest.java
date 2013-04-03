@@ -25,6 +25,9 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -48,7 +51,13 @@ public class ShadowTest {
                                           final int firstResult,
                                           final int maxResults) {
 
-        return manager.createNamedQuery(Morton.NQ_LIST)
+        final CriteriaBuilder builder = manager.getCriteriaBuilder();
+        final CriteriaQuery<Morton> query = builder.createQuery(Morton.class);
+        final Root<Morton> morton = query.from(Morton.class);
+
+        query.select(morton).orderBy(builder.desc(morton.get(Morton_.id)));
+
+        return manager.createQuery(query)
             .setFirstResult(firstResult)
             .setMaxResults(maxResults)
             .getResultList();
