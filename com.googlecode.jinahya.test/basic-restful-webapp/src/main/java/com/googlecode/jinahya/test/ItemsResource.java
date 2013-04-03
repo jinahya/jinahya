@@ -38,16 +38,16 @@ public class ItemsResource {
 
         items.getItems().addAll(ItemFacade.getInstance().selectAll());
 
-        if (items.getItems().isEmpty()) {
-            final List<MediaType> acceptableMediaTypes =
-                httpHeaders.getAcceptableMediaTypes();
-            if (acceptableMediaTypes != null && !acceptableMediaTypes.isEmpty()
-                && MediaType.APPLICATION_JSON_TYPE.equals(
-                acceptableMediaTypes.get(0))) {
-                // Accept: application/json
-                return Response.ok("{}").build();
-            }
-        }
+//        if (items.getItems().isEmpty()) {
+//            final List<MediaType> acceptableMediaTypes =
+//                httpHeaders.getAcceptableMediaTypes();
+//            if (acceptableMediaTypes != null && !acceptableMediaTypes.isEmpty()
+//                && MediaType.APPLICATION_JSON_TYPE.equals(
+//                acceptableMediaTypes.get(0))) {
+//                // Accept: application/json
+//                return Response.ok("{}").build();
+//            }
+//        }
 
         return Response.ok(items).build();
     }

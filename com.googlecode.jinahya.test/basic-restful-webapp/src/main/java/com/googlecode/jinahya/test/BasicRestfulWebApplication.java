@@ -3,6 +3,8 @@
 package com.googlecode.jinahya.test;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -21,6 +23,13 @@ public class BasicRestfulWebApplication extends Application {
 //        classes.add(MOXyJsonProvider.class);
 //        classes.add(ItemsResource.class);
 //        return classes;
+//    }
+//    @Override
+//    public Set<Object> getSingletons() {
+//        HashSet<Object> singletons = new HashSet<>();
+//        singletons.add(
+//            new org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider());
+//        return singletons;
 //    }
 
 
