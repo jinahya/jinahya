@@ -13,5 +13,16 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("/")
 public class BasicRestfulWebApplication extends Application {
+
+
+//    @Override
+//    public Set<Class<?>> getClasses() {
+//        final HashSet<Class<?>> classes = new HashSet<>(2);
+//        classes.add(MOXyJsonProvider.class);
+//        classes.add(ItemsResource.class);
+//        return classes;
+//    }
+
+
 }
 
