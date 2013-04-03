@@ -14,6 +14,12 @@
       <version>3.1.2.2</version>
       <scope>provided</scope>
     </dependency>
+<!--    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.moxy</artifactId>
+      <version>2.4.0</version>
+      <scope>compile</scope>
+    </dependency>-->
   </dependencies>
   <build>
     <finalName>basic-restful-webapp</finalName>
@@ -27,6 +33,11 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+<!--      <plugin>
+        <groupId>org.jboss.as.plugins</groupId>
+        <artifactId>jboss-as-maven-plugin</artifactId>
+        <version>7.4.Final</version>
+      </plugin>-->
       <plugin>
         <groupId>org.glassfish.embedded</groupId>
         <artifactId>maven-embedded-glassfish-plugin</artifactId>
@@ -39,4 +50,10 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+<!--    <repository>
+      <id>EclipseLink</id>
+      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+    </repository>-->
+  </repositories>
 </project>
