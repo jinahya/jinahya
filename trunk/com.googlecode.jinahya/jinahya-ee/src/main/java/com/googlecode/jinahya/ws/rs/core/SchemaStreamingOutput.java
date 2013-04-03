@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamResult;
 
 
 /**
+ * An implementation for generating an XML Schema from a JAXBContext.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

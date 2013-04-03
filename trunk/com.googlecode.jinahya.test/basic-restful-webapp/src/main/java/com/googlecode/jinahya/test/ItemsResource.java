@@ -4,6 +4,7 @@ package com.googlecode.jinahya.test;
 
 
 import java.net.URI;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -30,13 +32,24 @@ public class ItemsResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Items read() {
+    public Response read() {
 
         final Items items = new Items();
 
         items.getItems().addAll(ItemFacade.getInstance().selectAll());
 
-        return items;
+        if (items.getItems().isEmpty()) {
+            final List<MediaType> acceptableMediaTypes =
+                httpHeaders.getAcceptableMediaTypes();
+            if (acceptableMediaTypes != null && !acceptableMediaTypes.isEmpty()
+                && MediaType.APPLICATION_JSON_TYPE.equals(
+                acceptableMediaTypes.get(0))) {
+                // Accept: application/json
+                return Response.ok("{}").build();
+            }
+        }
+
+        return Response.ok(items).build();
     }
 
 
@@ -94,6 +107,10 @@ public class ItemsResource {
 
         ItemFacade.getInstance().delete(id);
     }
+
+
+    @Context
+    private HttpHeaders httpHeaders;
 
 
 }
