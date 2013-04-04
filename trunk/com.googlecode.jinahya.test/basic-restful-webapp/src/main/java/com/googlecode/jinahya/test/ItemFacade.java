@@ -7,14 +7,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlTransient
 public class ItemFacade {
 
 

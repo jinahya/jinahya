@@ -6,8 +6,6 @@ package com.googlecode.jinahya.test;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +15,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
 public class Items implements Serializable {
 
@@ -26,8 +23,8 @@ public class Items implements Serializable {
 
 
     @XmlAttribute
-    public String getAmender() {
-        return getItem().isEmpty() ? "" : null;
+    public Boolean isEmpty() {
+        return getItem().isEmpty() ? Boolean.TRUE : null;
     }
 
 

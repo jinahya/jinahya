@@ -17,7 +17,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
@@ -27,7 +26,6 @@ import javax.xml.transform.stream.StreamResult;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Path("/items.xsd")
-@XmlTransient
 public class ItemsXsdResource {
 
 
@@ -35,8 +33,9 @@ public class ItemsXsdResource {
     @Produces({MediaType.APPLICATION_XML})
     public Response read() throws JAXBException, IOException {
 
-        final JAXBContext context =
-            JAXBContext.newInstance("com.googlecode.jinahya.test");
+//        final JAXBContext context =
+//            JAXBContext.newInstance("com.googlecode.jinahya.test");
+        final JAXBContext context = JAXBContext.newInstance(Items.class);
 
         return Response.ok(new StreamingOutput() {
 
