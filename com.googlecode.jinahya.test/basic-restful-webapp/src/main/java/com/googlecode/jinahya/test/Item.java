@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.test;
 
 
+//import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
@@ -66,6 +67,7 @@ public class Item implements Serializable {
 
 
     @XmlAttribute
+//    @JsonProperty(value = "@createdAt")
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -94,10 +96,12 @@ public class Item implements Serializable {
 
 
     @XmlElement(required = true, nillable = true)
+//    @JsonProperty(required = true)
     protected String name;
 
 
     @XmlElement(required = true, nillable = true)
+//    @JsonProperty(required = true)
     protected int stock;
 
 
