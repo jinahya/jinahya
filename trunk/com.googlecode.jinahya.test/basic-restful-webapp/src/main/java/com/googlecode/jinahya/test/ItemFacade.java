@@ -16,9 +16,6 @@ import java.util.Map;
 public class ItemFacade {
 
 
-    private static final long serialVersionUID = 5775071328874654134L;
-
-
     private static class InstanceHolder {
 
 
