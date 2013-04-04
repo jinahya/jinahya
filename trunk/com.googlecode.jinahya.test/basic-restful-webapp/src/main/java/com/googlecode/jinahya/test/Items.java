@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -23,6 +23,12 @@ public class Items implements Serializable {
 
 
     private static final long serialVersionUID = 5775071328874654134L;
+
+
+    @XmlAttribute
+    public String getAmender() {
+        return getItem().isEmpty() ? "" : null;
+    }
 
 
     public Collection<Item> getItem() {
