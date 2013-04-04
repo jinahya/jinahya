@@ -4,7 +4,6 @@ package com.googlecode.jinahya.test;
 
 
 import java.net.URI;
-import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -27,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Path("/items")
+@XmlTransient
 public class ItemsResource {
 
 
@@ -36,7 +37,7 @@ public class ItemsResource {
 
         final Items items = new Items();
 
-        items.getItems().addAll(ItemFacade.getInstance().selectAll());
+        items.getItem().addAll(ItemFacade.getInstance().selectAll());
 
 //        if (items.getItems().isEmpty()) {
 //            final List<MediaType> acceptableMediaTypes =

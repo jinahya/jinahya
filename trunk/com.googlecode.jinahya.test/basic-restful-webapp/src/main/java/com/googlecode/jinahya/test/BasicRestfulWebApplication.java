@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Application;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @ApplicationPath("/")
+@XmlTransient
 public class BasicRestfulWebApplication extends Application {
 
 
