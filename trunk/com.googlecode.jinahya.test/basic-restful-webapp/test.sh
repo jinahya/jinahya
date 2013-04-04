@@ -56,7 +56,6 @@ curl -s http://localhost:58080/imageFormats/jpeg -H "Accept: application/xml" | 
 echo ---------------------------------- reading /imageFormats/png in json format
 curl -s http://localhost:58080/imageFormats/png -H "Accept: application/json" | python -m json.tool
 
-
 echo --------------------------------------- reading /imageTypes in xml format
 curl -s http://localhost:58080/imageTypes -H "Accept: application/xml" | xmllint --format -
 echo -------------------------------------- reading /imageTypes in json format
@@ -65,7 +64,6 @@ echo ---------------------------- reading /imageTypes/image/jpeg in xml format
 curl -s http://localhost:58080/imageTypes/image/jpeg -H "Accept: application/xml" | xmllint --format -
 echo ---------------------------- reading /imageTypes/image/png in json format
 curl -s http://localhost:58080/imageTypes/image/png -H "Accept: application/json" | python -m json.tool
-
 
 curl -s http://localhost:58080/items.xsd | xmllint --format -
 curl -s http://localhost:58080/items.jsd | python -m json.tool

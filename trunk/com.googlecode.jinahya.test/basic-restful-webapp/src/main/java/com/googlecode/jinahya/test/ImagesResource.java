@@ -3,13 +3,14 @@
 package com.googlecode.jinahya.test;
 
 
-import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,7 +20,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 
@@ -35,92 +35,62 @@ public class ImagesResource {
         Logger.getLogger(ImagesResource.class.getName());
 
 
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response read() {
-
-        final Items items = new Items();
-
-        items.getItem().addAll(ItemFacade.getInstance().selectAll());
-
-//        if (items.getItems().isEmpty()) {
-//            final List<MediaType> acceptableMediaTypes =
-//                httpHeaders.getAcceptableMediaTypes();
-//            if (acceptableMediaTypes != null && !acceptableMediaTypes.isEmpty()
-//                && MediaType.APPLICATION_JSON_TYPE.equals(
-//                acceptableMediaTypes.get(0))) {
-//                // Accept: application/json
-//                return Response.ok("{}").build();
-//            }
-//        }
-
-        return Response.ok(items).build();
-    }
+    protected static final Map<String, byte[]> IMAGES =
+        Collections.synchronizedMap(new HashMap<String, byte[]>());
 
 
     @DELETE
     public void delete() {
 
-        ItemFacade.getInstance().deleteAll();
+        LOGGER.info("delete()");
+
+        IMAGES.clear();
     }
 
 
-    @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response createItem(final Item item) {
-
-        LOGGER.log(Level.INFO, "createItem({0})", item);
-
-        ItemFacade.getInstance().insert(item);
-
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder = builder.path(Long.toString(item.getId()));
-
-        final URI uri = builder.build();
-
-        return Response.created(uri).build();
-    }
-
-
-    @Path("/{id: \\d+}")
+    @Path("/{name: .+}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response readItem(@PathParam("id") final long id) {
+    public Response readImage(@PathParam("name") final String name) {
 
-        final Item item = ItemFacade.getInstance().select(id);
+        LOGGER.info("readImage(" + name + ")");
 
-        if (item == null) {
+        final byte[] image = IMAGES.get(name);
+
+        if (image == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        return Response.ok(item).build();
+        return Response.ok(image).build();
     }
 
 
-    @Path("/{id: \\d+}")
+    @Path("/{name: .+}")
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response updateItem(@PathParam("id") final long id,
-                               final Item newItem) {
+    public Response updateImage(@PathParam("name") final String name,
+                                final byte[] image) {
 
-        LOGGER.log(Level.INFO, "updateItem({0}, {1})",
-                   new Object[]{id, newItem});
+        LOGGER.log(Level.INFO, "updateImage({0}, {1})",
+                   new Object[]{name, image});
 
-        final boolean updated = ItemFacade.getInstance().update(id, newItem);
+        final byte[] oldImage = IMAGES.put(name, image);
 
-        if (!updated) {
-            return Response.status(Status.NOT_FOUND).build();
+        if (oldImage == null) {
+            return Response.created(uriInfo.getAbsolutePath()).build();
         }
 
         return Response.status(Status.NO_CONTENT).build();
     }
 
 
-    @Path("/{id: \\d+}")
+    @Path("/{name: .+}")
     @DELETE
-    public void deleteItem(@PathParam("id") final long id) {
+    public void deleteImage(@PathParam("name") final String name) {
 
-        ItemFacade.getInstance().delete(id);
+        LOGGER.log(Level.INFO, "deleteImage({0})", name);
+
+        final byte[] image = IMAGES.remove(name);
     }
 
 

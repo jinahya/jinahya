@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.test;
 
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.ws.rs.GET;
@@ -63,14 +64,19 @@ public class ImageFormatsResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public ImageFormats read() {
 
+        LOGGER.info("read()");
+
         return IMAGE_FORMATS;
     }
 
 
     @GET
-    @Path("/{name: .+}")
+//    @Path("/{name: .+}")
+    @Path("/{name}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response readImageFormat(@PathParam("name") final String name) {
+
+        LOGGER.log(Level.INFO, "readImageFormat({0})", name);
 
         final ImageFormat imageFormat =
             IMAGE_FORMATS.getImageFormat().get(name);

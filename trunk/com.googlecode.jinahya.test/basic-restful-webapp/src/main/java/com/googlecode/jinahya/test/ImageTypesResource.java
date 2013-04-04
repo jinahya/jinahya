@@ -3,6 +3,8 @@
 package com.googlecode.jinahya.test;
 
 
+import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.ws.rs.GET;
@@ -22,11 +24,20 @@ import javax.ws.rs.core.Response.Status;
 public class ImageTypesResource {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(ImageTypesResource.class.getName());
 
 
     private static final ImageTypes IMAGE_TYPES = new ImageTypes();
+
+
+    protected static String[] getImageTypes() {
+        final Set<String> imageTypes = IMAGE_TYPES.getImageType().keySet();
+        return imageTypes.toArray(new String[imageTypes.size()]);
+    }
 
 
     static {
@@ -61,14 +72,18 @@ public class ImageTypesResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public ImageTypes read() {
 
+        LOGGER.info("read()");
+
         return IMAGE_TYPES;
     }
 
 
     @GET
-    @Path("/{name: .+}")
+    @Path("/{name}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response readImageType(@PathParam("name") final String name) {
+
+        LOGGER.log(Level.INFO, "readImageType({0})", name);
 
         final ImageType imageType = IMAGE_TYPES.getImageType().get(name);
 
