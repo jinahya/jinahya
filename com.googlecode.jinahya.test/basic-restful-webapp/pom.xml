@@ -8,20 +8,10 @@
   <name>basic-restful-webapp Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
-    <dependency>
+    <!--    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.1.4</version>
-    </dependency>
-    <!--    <dependency>
-      <groupId>com.fasterxml.jackson.jaxrs</groupId>
-      <artifactId>jackson-jaxrs-json-provider</artifactId>
-      <version>2.1.4</version>
-    </dependency>-->
-    <!--    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-jaxrs</artifactId>
-      <version>1.9.12</version>
     </dependency>-->
     <dependency>
       <groupId>org.glassfish.main.extras</groupId>
@@ -29,72 +19,16 @@
       <version>3.1.2.2</version>
       <scope>provided</scope>
     </dependency>
-    <!--    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.moxy</artifactId>
-      <version>2.4.0</version>
-      <scope>compile</scope>
-    </dependency>-->
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>basic-restful-webapp</finalName>
-    <!--    <resources>
-      <resource>
-        <directory>target/generated-resources/schemagen</directory>
-        <includes>
-          <include>**/*.xsd</include>
-        </includes>
-      </resource>
-    </resources>-->
     <plugins>
-      <plugin>
-        <groupId>com.sun.tools.jxc.maven2</groupId>
-        <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-        <version>1.2</version>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <!--<goal>generate</goal>-->
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <version>1.7</version>
-            <scope>system</scope>
-            <systemPath>${java.home}/../lib/tools.jar</systemPath>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>schemagen</id>
-            <goals>
-              <!--<goal>schemagen</goal>-->
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <includes>
-            <include>com/googlecode/jinahya/test/Items.java</include>
-            <include>com/googlecode/jinahya/test/Item.java</include>
-          </includes>
-          <transformSchemas>
-            <transformSchema>
-              <uri>http://jinahya.googlecode.com/test</uri>
-              <toPrefix>t</toPrefix>
-              <toFile>test</toFile>
-            </transformSchema>
-          </transformSchemas>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -104,11 +38,6 @@
           <target>1.7</target>
         </configuration>
       </plugin>
-      <!--      <plugin>
-        <groupId>org.jboss.as.plugins</groupId>
-        <artifactId>jboss-as-maven-plugin</artifactId>
-        <version>7.4.Final</version>
-      </plugin>-->
       <plugin>
         <groupId>org.glassfish.embedded</groupId>
         <artifactId>maven-embedded-glassfish-plugin</artifactId>
@@ -121,10 +50,5 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <!--    <repository>
-      <id>EclipseLink</id>
-      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
-    </repository>-->
-  </repositories>
+  <repositories/>
 </project>

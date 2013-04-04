@@ -4,6 +4,8 @@ package com.googlecode.jinahya.test;
 
 
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,7 +21,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -27,8 +28,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @Path("/items")
-@XmlTransient
 public class ItemsResource {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(ItemsResource.class.getName());
 
 
     @GET
@@ -63,12 +67,13 @@ public class ItemsResource {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response createItem(@Context final UriInfo info,
-                               final Item item) {
+    public Response createItem(final Item item) {
+
+        LOGGER.log(Level.INFO, "createItem({0})", item);
 
         ItemFacade.getInstance().insert(item);
 
-        UriBuilder builder = info.getAbsolutePathBuilder();
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder = builder.path(Long.toString(item.getId()));
 
         final URI uri = builder.build();
@@ -80,9 +85,15 @@ public class ItemsResource {
     @Path("/{id: \\d+}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Item readItem(@PathParam("id") final long id) {
+    public Response readItem(@PathParam("id") final long id) {
 
-        return ItemFacade.getInstance().select(id);
+        final Item item = ItemFacade.getInstance().select(id);
+
+        if (item == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(item).build();
     }
 
 
@@ -91,6 +102,9 @@ public class ItemsResource {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateItem(@PathParam("id") final long id,
                                final Item newItem) {
+
+        LOGGER.log(Level.INFO, "updateItem({0}, {1})",
+                   new Object[]{id, newItem});
 
         final boolean updated = ItemFacade.getInstance().update(id, newItem);
 
@@ -112,6 +126,10 @@ public class ItemsResource {
 
     @Context
     private HttpHeaders httpHeaders;
+
+
+    @Context
+    private UriInfo uriInfo;
 
 
 }

@@ -3,12 +3,9 @@
 package com.googlecode.jinahya.test;
 
 
-//import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,7 +17,6 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement
 @XmlType(propOrder = {"name", "stock"})
 public class Item implements Serializable {
@@ -30,15 +26,6 @@ public class Item implements Serializable {
 
 
     private static final AtomicLong ATOMIC_ID = new AtomicLong();
-
-
-    public static final Item UNTOUCHABLE = Item.newInstance("untouchable", -1);
-
-
-    static {
-        UNTOUCHABLE.createdAt = new Date();
-        UNTOUCHABLE.id = -1L;
-    }
 
 
     public static Item newInstance(final String name, final int stock) {
@@ -66,13 +53,23 @@ public class Item implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + hashCode()
+               + "?id=" + id
+               + "&name=" + name
+               + "&stock=" + stock;
+    }
+
+
+    // -------------------------------------------------------------- CREATED_AT
     @XmlAttribute
-//    @JsonProperty(value = "@createdAt")
     public Date getCreatedAt() {
         return createdAt;
     }
 
 
+    // -------------------------------------------------------------- UPDATED_AT
     @XmlAttribute
     public Date getUpdatedAt() {
         return updatedAt;
@@ -95,13 +92,11 @@ public class Item implements Serializable {
     private Long id;
 
 
-    @XmlElement(required = true, nillable = true)
-//    @JsonProperty(required = true)
+    @XmlElement(required = true)
     protected String name;
 
 
-    @XmlElement(required = true, nillable = true)
-//    @JsonProperty(required = true)
+    @XmlElement(required = true)
     protected int stock;
 
 

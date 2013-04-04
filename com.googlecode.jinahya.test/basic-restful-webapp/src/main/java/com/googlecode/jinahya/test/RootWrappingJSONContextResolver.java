@@ -8,7 +8,6 @@ import com.sun.jersey.api.json.JSONJAXBContext;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -16,7 +15,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@Provider
-@XmlTransient
 public class RootWrappingJSONContextResolver
     implements ContextResolver<JAXBContext> {
 
