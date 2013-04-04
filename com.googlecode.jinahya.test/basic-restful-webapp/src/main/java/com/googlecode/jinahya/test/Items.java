@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -17,25 +18,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(namespace = "http://jinahya.googlecode.com/test")
+@XmlRootElement
 public class Items implements Serializable {
 
 
     private static final long serialVersionUID = 5775071328874654134L;
 
 
-    public Collection<Item> getItems() {
+    public Collection<Item> getItem() {
 
-        if (items == null) {
-            items = new ArrayList<>();
+        if (item == null) {
+            item = new ArrayList<>();
         }
 
-        return items;
+        return item;
     }
 
 
-    @XmlElement(name = "item")
-    private Collection<Item> items;
+    @XmlElement
+    private Collection<Item> item;
 
 
 }

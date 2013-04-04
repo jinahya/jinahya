@@ -6,9 +6,9 @@ package com.googlecode.jinahya.test;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBException;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 //@Provider
+@XmlTransient
 public class RootWrappingJSONContextResolver
     implements ContextResolver<JAXBContext> {
 

@@ -33,7 +33,63 @@
   </dependencies>
   <build>
     <finalName>basic-restful-webapp</finalName>
+<!--    <resources>
+      <resource>
+        <directory>target/generated-resources/schemagen</directory>
+        <includes>
+          <include>**/*.xsd</include>
+        </includes>
+      </resource>
+    </resources>-->
     <plugins>
+      <plugin>
+        <groupId>com.sun.tools.jxc.maven2</groupId>
+        <artifactId>maven-jaxb-schemagen-plugin</artifactId>
+        <version>1.2</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <!--<goal>generate</goal>-->
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.7</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>schemagen</id>
+            <goals>
+              <!--<goal>schemagen</goal>-->
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>com/googlecode/jinahya/test/Items.java</include>
+            <include>com/googlecode/jinahya/test/Item.java</include>
+          </includes>
+          <transformSchemas>
+            <transformSchema>
+              <uri>http://jinahya.googlecode.com/test</uri>
+              <toPrefix>t</toPrefix>
+              <toFile>test</toFile>
+            </transformSchema>
+          </transformSchemas>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

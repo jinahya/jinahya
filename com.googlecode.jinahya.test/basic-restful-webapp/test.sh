@@ -12,4 +12,8 @@ curl -s http://localhost:58080/items -H "Accept: application/json" | python -m j
 curl -i -X DELETE http://localhost:58080/items/0
 curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format -
 curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool
+#curl -s http://localhost:58080/items.xsd -H "Accept: application/xml" | xmllint --format -
+#curl -s http://localhost:58080/items.jsd -H "Accept: application/json" | python -m json.tool
+curl -s http://localhost:58080/items.xsd | xmllint --format -
+curl -s http://localhost:58080/items.jsd | python -m json.tool
 

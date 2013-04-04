@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(namespace = "http://jinahya.googlecode.com/test")
+@XmlRootElement
 @XmlType(propOrder = {"name", "stock"})
 public class Item implements Serializable {
 
@@ -98,6 +99,13 @@ public class Item implements Serializable {
 
     @XmlElement(required = true, nillable = true)
     protected int stock;
+
+
+    private double hiddel1 = Math.PI;
+
+
+    @XmlTransient
+    private double hiddel2 = Math.PI;
 
 
 }
