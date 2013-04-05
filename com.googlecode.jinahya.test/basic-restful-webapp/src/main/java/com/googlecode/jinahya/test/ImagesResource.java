@@ -53,7 +53,7 @@ public class ImagesResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response readImage(@PathParam("name") final String name) {
 
-        LOGGER.info("readImage(" + name + ")");
+        LOGGER.log(Level.INFO, "readImage({0})", name);
 
         final byte[] image = IMAGES.get(name);
 
