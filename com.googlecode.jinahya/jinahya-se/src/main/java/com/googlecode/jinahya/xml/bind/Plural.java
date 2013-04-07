@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -82,6 +83,12 @@ public abstract class Plural<S> {
     }
 
 
+    @XmlAttribute
+    private Boolean isEmpty() {
+        return getSingulars().isEmpty() ? Boolean.TRUE : null;
+    }
+
+
     /**
      * Returns singular collection.
      *
@@ -101,7 +108,6 @@ public abstract class Plural<S> {
     /**
      * singular collection.
      */
-//    @XmlTransient
     private Collection<S> singulars;
 
 

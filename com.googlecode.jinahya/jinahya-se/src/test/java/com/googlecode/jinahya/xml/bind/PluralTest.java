@@ -126,6 +126,32 @@ public class PluralTest {
 
 
     @Test
+    public void testEmtpyItems() throws JAXBException, IOException {
+
+        final JAXBContext context =
+            JAXBContext.newInstance(Items.class, Item.class);
+
+        final Items expected = new Items();
+
+
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        marshaller.marshal(expected, baos);
+        baos.flush();
+
+        System.out.println(new String(baos.toByteArray(), "UTF-8"));
+
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        final Items actual = (Items) unmarshaller.unmarshal(
+            new ByteArrayInputStream(baos.toByteArray()));
+    }
+
+
+    @Test
     public void testXml() throws JAXBException, IOException {
 
         final JAXBContext context =
