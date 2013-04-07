@@ -31,14 +31,23 @@ import javax.ws.rs.core.UriInfo;
 public class ImagesResource {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(ImagesResource.class.getName());
 
 
+    /**
+     * The map of names and images.
+     */
     protected static final Map<String, byte[]> IMAGES =
         Collections.synchronizedMap(new HashMap<String, byte[]>());
 
 
+    /**
+     * Deletes all images.
+     */
     @DELETE
     public void delete() {
 
@@ -48,6 +57,13 @@ public class ImagesResource {
     }
 
 
+    /**
+     * Reads the image mapped to {@code /{name}}.
+     *
+     * @param name the name of the image
+     *
+     * @return a Response
+     */
     @Path("/{name: .+}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -65,6 +81,14 @@ public class ImagesResource {
     }
 
 
+    /**
+     * Updates the image mapped to {@code /{name}}.
+     *
+     * @param name the name of the image
+     * @param image image bytes
+     *
+     * @return a Response
+     */
     @Path("/{name: .+}")
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -84,6 +108,11 @@ public class ImagesResource {
     }
 
 
+    /**
+     * Deletes the image mapped by {@code /{name}}.
+     *
+     * @param name the name of the image.
+     */
     @Path("/{name: .+}")
     @DELETE
     public void deleteImage(@PathParam("name") final String name) {
@@ -91,6 +120,8 @@ public class ImagesResource {
         LOGGER.log(Level.INFO, "deleteImage({0})", name);
 
         final byte[] image = IMAGES.remove(name);
+
+        // void -> 204 Not Found
     }
 
 
