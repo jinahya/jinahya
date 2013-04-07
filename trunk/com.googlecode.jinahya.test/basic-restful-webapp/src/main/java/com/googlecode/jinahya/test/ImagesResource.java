@@ -101,10 +101,11 @@ public class ImagesResource {
         final byte[] oldImage = IMAGES.put(name, image);
 
         if (oldImage == null) {
+            // 201 Created
             return Response.created(uriInfo.getAbsolutePath()).build();
         }
 
-        return Response.status(Status.NO_CONTENT).build();
+        return Response.status(Status.NO_CONTENT).build(); // 204 No Content
     }
 
 
