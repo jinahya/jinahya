@@ -1,7 +1,8 @@
 
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED,
+@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
+           elementFormDefault = XmlNsForm.QUALIFIED,
            namespace = "http://jinahya.googlecode.com/test")
 package com.googlecode.jinahya.test;
 

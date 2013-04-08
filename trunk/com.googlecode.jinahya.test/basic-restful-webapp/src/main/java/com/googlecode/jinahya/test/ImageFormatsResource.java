@@ -3,6 +3,8 @@
 package com.googlecode.jinahya.test;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -23,37 +25,39 @@ import javax.ws.rs.core.Response.Status;
 public class ImageFormatsResource {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(ImageFormatsResource.class.getName());
 
 
-    private static final ImageFormats IMAGE_FORMATS = new ImageFormats();
+    /**
+     * image formats.
+     */
+    private static final Map<String, ImageFormat> FORMATS = new HashMap<>();
 
 
     static {
 
         final String[] readerFormatNames = ImageIO.getReaderFormatNames();
         for (String readerFormatName : readerFormatNames) {
-            ImageFormat imageFormat =
-                IMAGE_FORMATS.getImageFormat().get(readerFormatName);
+            ImageFormat imageFormat = FORMATS.get(readerFormatName);
             if (imageFormat == null) {
                 imageFormat = new ImageFormat();
-                imageFormat.name = readerFormatName;
-                IMAGE_FORMATS.getImageFormat().put(
-                    readerFormatName, imageFormat);
+                imageFormat.value = readerFormatName;
+                FORMATS.put(readerFormatName, imageFormat);
             }
             imageFormat.canRead = true;
         }
 
         final String[] writerFormatNames = ImageIO.getWriterFormatNames();
         for (String writerFormatName : writerFormatNames) {
-            ImageFormat imageFormat =
-                IMAGE_FORMATS.getImageFormat().get(writerFormatName);
+            ImageFormat imageFormat = FORMATS.get(writerFormatName);
             if (imageFormat == null) {
                 imageFormat = new ImageFormat();
-                imageFormat.name = writerFormatName;
-                IMAGE_FORMATS.getImageFormat().put(
-                    writerFormatName, imageFormat);
+                imageFormat.value = writerFormatName;
+                FORMATS.put(writerFormatName, imageFormat);
             }
             imageFormat.canWrite = true;
         }
@@ -66,20 +70,22 @@ public class ImageFormatsResource {
 
         LOGGER.info("read()");
 
-        return IMAGE_FORMATS;
+        final ImageFormats imageFormats = new ImageFormats();
+
+        imageFormats.getSingulars().addAll(FORMATS.values());
+
+        return imageFormats;
     }
 
 
     @GET
-//    @Path("/{name: .+}")
-    @Path("/{name}")
+    @Path("/{name: .+}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response readImageFormat(@PathParam("name") final String name) {
 
         LOGGER.log(Level.INFO, "readImageFormat({0})", name);
 
-        final ImageFormat imageFormat =
-            IMAGE_FORMATS.getImageFormat().get(name);
+        final ImageFormat imageFormat = FORMATS.get(name);
 
         if (imageFormat == null) {
             return Response.status(Status.NOT_FOUND).build();

@@ -31,6 +31,9 @@ import javax.ws.rs.core.UriInfo;
 public class ItemsResource {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(ItemsResource.class.getName());
 

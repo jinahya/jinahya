@@ -110,7 +110,7 @@ public class ImagesResource {
 
 
     /**
-     * Deletes the image mapped by {@code /{name}}.
+     * Deletes the image mapped to {@code /{name}}.
      *
      * @param name the name of the image.
      */

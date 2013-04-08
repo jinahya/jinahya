@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlSeeAlso(ImageType.class)
-public class ImageTypes extends Plural<ImageType> {
+@XmlSeeAlso(ImageSuffix.class)
+public class ImageSuffixes extends Plural<ImageSuffix> {
 
 
-    private static final long serialVersionUID = -6575982090487265149L;
+    private static final long serialVersionUID = -6461003798452348964L;
 
 
 }
