@@ -7,9 +7,7 @@
 package com.googlecode.jinahya.test;
 
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
@@ -17,19 +15,18 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class ImageFormat {
+public class ImageFormat extends ImageInfo {
 
 
-    @XmlAttribute
-    protected boolean canRead;
+    private static final long serialVersionUID = -7398103404241304565L;
 
 
-    @XmlAttribute
-    protected boolean canWrite;
+    public static ImageFormat newInstance(final boolean canRead,
+                                          final boolean canWriter,
+                                          final String value) {
 
-
-    @XmlValue
-    protected String name;
+        return newInstance(ImageFormat.class, canRead, canWriter, value);
+    }
 
 
 }
