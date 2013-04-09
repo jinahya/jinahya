@@ -37,13 +37,13 @@ public class Items extends Plural<Item> {
     private static final long serialVersionUID = -6764070724647027265L;
 
 
-    @XmlElementRefs({
-        @XmlElementRef(type = Item.class)
-    })
-    @Override
-    public Collection<Item> getSingulars() {
-        return super.getSingulars();
-    }
+//    @XmlElementRefs({
+//        @XmlElementRef(type = Item.class)
+//    })
+//    @Override
+//    public Collection<Item> getSingulars() {
+//        return super.getSingulars();
+//    }
 
 
 }
