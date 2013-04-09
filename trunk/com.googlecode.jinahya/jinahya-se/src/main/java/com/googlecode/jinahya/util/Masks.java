@@ -29,6 +29,7 @@ public class Masks {
      *
      * @param modifier current modifier
      * @param mask the mask to add
+     *
      * @return new modifier
      */
     public static int addMask(final int modifier, final int mask) {
@@ -40,6 +41,7 @@ public class Masks {
      *
      * @param modifier current modifier
      * @param mask the mask to remove
+     *
      * @return new modifier
      */
     public static int removeMask(final int modifier, final int mask) {
@@ -47,6 +49,9 @@ public class Masks {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected Masks() {
         super();
     }
