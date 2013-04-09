@@ -42,6 +42,15 @@ public abstract class ImageInfo implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + hashCode()
+               + "?canRead=" + canRead
+               + "&canWrite=" + canWrite
+               + "&value=" + value;
+    }
+
+
     @XmlAttribute
     protected boolean canRead;
 
