@@ -14,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -40,11 +41,15 @@ public class ItemsResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response read() {
+    public Response read(@QueryParam("empty") final boolean empty) {
+
+        LOGGER.log(Level.INFO, "read({0})", empty);
 
         final Items items = new Items();
 
-        items.getItem().addAll(ItemFacade.getInstance().selectAll());
+        if (!empty) {
+            items.getItem().addAll(ItemFacade.getInstance().selectAll());
+        }
 
         return Response.ok(items).build();
     }
