@@ -18,9 +18,10 @@
 package com.googlecode.jinahya.xml.bind.test;
 
 
-import com.googlecode.jinahya.xml.bind.AbstractPlural;
+import com.googlecode.jinahya.xml.bind.Plural;
 import java.util.Collection;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -30,10 +31,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 //@XmlSeeAlso(Item.class)
-public class Items extends AbstractPlural<Item> {
+public class Items extends Plural<Item> {
 
 
-    @XmlElement(name = "item", nillable = true)
+    private static final long serialVersionUID = -6764070724647027265L;
+
+
+    @XmlElementRefs({
+        @XmlElementRef(type = Item.class)
+    })
     @Override
     public Collection<Item> getSingulars() {
         return super.getSingulars();

@@ -29,9 +29,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DoubleValueTest extends SimpleValueTest<DoubleValue, Double> {
 
 
-    private static final Random RANDOM = new Random();
-
-
     public DoubleValueTest() {
         super(DoubleValue.class);
     }
@@ -42,10 +39,10 @@ public class DoubleValueTest extends SimpleValueTest<DoubleValue, Double> {
 
         final Random random = ThreadLocalRandom.current();
 
-        if (RANDOM.nextBoolean()) {
+        if (random.nextBoolean()) {
             return null;
         }
-        return RANDOM.nextDouble();
+        return random.nextDouble();
     }
 
 

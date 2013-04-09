@@ -18,26 +18,31 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class BooleanValue extends SimpleValue<Boolean> {
+public class FloatValueTest extends SimpleValueTest<FloatValue, Float> {
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param rawValue raw value
-     *
-     * @return a new instance.
-     */
-    public static BooleanValue newInstance(final Boolean rawValue) {
-        return newInstance(BooleanValue.class, rawValue);
+    public FloatValueTest() {
+        super(FloatValue.class);
+    }
+
+
+    @Override
+    protected Float generateRawValue() {
+
+        final Random random = ThreadLocalRandom.current();
+
+        if (random.nextBoolean()) {
+            return null;
+        }
+        return random.nextFloat();
     }
 
 
