@@ -47,7 +47,7 @@ public class Masks {
     }
 
 
-    private Masks() {
+    protected Masks() {
         super();
     }
 

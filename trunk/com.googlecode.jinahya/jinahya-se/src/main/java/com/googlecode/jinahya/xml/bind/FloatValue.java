@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class BooleanValue extends SimpleValue<Boolean> {
+public class FloatValue extends SimpleValue<Float> {
 
 
     /**
      * Creates a new instance.
      *
-     * @param rawValue raw value
+     * @param rawValue raw value.
      *
      * @return a new instance.
      */
-    public static BooleanValue newInstance(final Boolean rawValue) {
-        return newInstance(BooleanValue.class, rawValue);
+    public static FloatValue newInstance(final Float rawValue) {
+        return newInstance(FloatValue.class, rawValue);
     }
 
 

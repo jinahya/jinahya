@@ -18,37 +18,27 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.util.Collection;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * General class for wrapper classes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S> singular type parameter
  */
-@XmlTransient
-public abstract class RelaxedPlural<S> extends AbstractPlural<S> {
+@XmlRootElement
+public class IntegerValue extends SimpleValue<Integer> {
 
 
     /**
-     * Returns singular collection.
+     * Creates a new instance.
      *
-     * @return singular collection
+     * @param rawValue raw value.
+     *
+     * @return a new instance.
      */
-    @XmlAnyElement(lax = true)
-    @Override
-    public Collection<S> getSingulars() {
-        return super.getSingulars();
+    public static IntegerValue newInstance(final Integer rawValue) {
+        return newInstance(IntegerValue.class, rawValue);
     }
-
-
-    /**
-     * singular collection.
-     */
-    private Collection<S> singulars;
 
 
 }

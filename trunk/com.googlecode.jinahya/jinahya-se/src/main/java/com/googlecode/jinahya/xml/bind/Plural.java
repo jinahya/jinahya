@@ -18,10 +18,12 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,7 +35,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <S> singular type parameter
  */
 @XmlTransient
-public abstract class AbstractPlural<S> {
+public abstract class Plural<S> implements Serializable {
+
+
+    private static final long serialVersionUID = 7188972683803348989L;
 
 
     /**
@@ -45,10 +50,8 @@ public abstract class AbstractPlural<S> {
      *
      * @return a new instance of given {@code pluralType}
      */
-    public static <P extends AbstractPlural<S>, S> P newInstance(
+    public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType) {
-
-        Objects.requireNonNull(pluralType, "null pluralType");
 
         return newInstance(pluralType, Collections.<S>emptyList());
     }
@@ -65,7 +68,7 @@ public abstract class AbstractPlural<S> {
      *
      * @return a new instance of given <code>pluralType<code>
      */
-    public static <P extends AbstractPlural<S>, S> P newInstance(
+    public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType, final Collection<? extends S> singulars) {
 
         Objects.requireNonNull(pluralType, "null pluralType");
@@ -84,7 +87,7 @@ public abstract class AbstractPlural<S> {
 
     @XmlAttribute
     private Boolean isEmpty() {
-        return getSingulars().isEmpty() ? Boolean.TRUE : null;
+        return (singulars == null || singulars.isEmpty()) ? Boolean.TRUE : null;
     }
 
 
@@ -93,6 +96,7 @@ public abstract class AbstractPlural<S> {
      *
      * @return singular collection
      */
+    @XmlAnyElement(lax = true)
     public Collection<S> getSingulars() {
 
         if (singulars == null) {
