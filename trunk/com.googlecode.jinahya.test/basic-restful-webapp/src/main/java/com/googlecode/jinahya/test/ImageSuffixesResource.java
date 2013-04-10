@@ -69,7 +69,7 @@ public class ImageSuffixesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ImageSuffix> readAsList(@QueryParam("empty") final boolean empty) {
+    public List<ImageSuffix> read(@QueryParam("empty") final boolean empty) {
 
         LOGGER.log(Level.INFO, "read({0})", empty);
 
@@ -81,35 +81,9 @@ public class ImageSuffixesResource {
     }
 
 
-//    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public ImageSuffix[] readAsArray(@QueryParam("empty") final boolean empty) {
-
-        LOGGER.log(Level.INFO, "read({0})", empty);
-
-        if (empty) {
-            return new ImageSuffix[0];
-        }
-
-        return SUFFIXES.values().toArray(new ImageSuffix[SUFFIXES.size()]);
-    }
-
-
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @PUT
-    public void updateWithList(final List<ImageSuffix> imageSuffixes) {
-
-        LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
-
-        for (ImageSuffix imageSuffix : imageSuffixes) {
-            System.out.println(imageSuffix);
-        }
-    }
-
-
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    @PUT
-    public void updateWithArray(final ImageSuffix[] imageSuffixes) {
+    public void update(final List<ImageSuffix> imageSuffixes) {
 
         LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imageSuffixes>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">jpg</imageSuffix>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">bmp</imageSuffix>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">jpeg</imageSuffix>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">wbmp</imageSuffix>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">png</imageSuffix>
-  <imageSuffix xmlns="http://jinahya.googlecode.com/test" canRead="true" canWrite="true">gif</imageSuffix>
-</imageSuffixes>
