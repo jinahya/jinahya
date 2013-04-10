@@ -31,10 +31,10 @@ curl -s http://localhost:58080/items/2 -H "Accept: application/xml" | xmllint --
 
 echo ------------------------------------------- reading all items in xml format
 curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format -
-curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format - > items.xml
+curl -s http://localhost:58080/items -H "Accept: application/xml" | xmllint --format - > target/items.xml
 echo ------------------------------------------ reading all items in json format
 curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool
-curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool > items.json
+curl -s http://localhost:58080/items -H "Accept: application/json" | python -m json.tool > target/items.json
 
 echo --------------------------------------------------------- deleting /items/0
 curl -i -X DELETE http://localhost:58080/items/1
