@@ -18,8 +18,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 
@@ -69,7 +69,7 @@ public class ImageSuffixesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ImageSuffix> read(@QueryParam("empty") final boolean empty) {
+    public List<ImageSuffix> readAsList(@QueryParam("empty") final boolean empty) {
 
         LOGGER.log(Level.INFO, "read({0})", empty);
 
@@ -81,9 +81,35 @@ public class ImageSuffixesResource {
     }
 
 
-    @PUT
+//    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public ImageSuffix[] readAsArray(@QueryParam("empty") final boolean empty) {
+
+        LOGGER.log(Level.INFO, "read({0})", empty);
+
+        if (empty) {
+            return new ImageSuffix[0];
+        }
+
+        return SUFFIXES.values().toArray(new ImageSuffix[SUFFIXES.size()]);
+    }
+
+
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(final List<ImageSuffix> imageSuffixes) {
+    @PUT
+    public void updateWithList(final List<ImageSuffix> imageSuffixes) {
+
+        LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
+
+        for (ImageSuffix imageSuffix : imageSuffixes) {
+            System.out.println(imageSuffix);
+        }
+    }
+
+
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    @PUT
+    public void updateWithArray(final ImageSuffix[] imageSuffixes) {
 
         LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
 
@@ -96,17 +122,17 @@ public class ImageSuffixesResource {
     @GET
     @Path("/{name: .+}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response readImageSuffix(@PathParam("name") final String name) {
+    public ImageSuffix readImageSuffix(@PathParam("name") final String name) {
 
         LOGGER.log(Level.INFO, "readImageSuffix({0})", name);
 
         final ImageSuffix imageSuffix = SUFFIXES.get(name);
 
         if (imageSuffix == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            throw new WebApplicationException(Status.NOT_FOUND);
         }
 
-        return Response.ok(imageSuffix).build();
+        return imageSuffix;
     }
 
 
