@@ -4,6 +4,7 @@ package com.googlecode.jinahya.test;
 
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -28,6 +29,13 @@ public class ImageSuffix extends ImageInfo {
     protected ImageSuffix() {
         super();
     }
+
+
+    private double hidden1 = Math.E;
+
+
+    @XmlTransient
+    private double hidden2 = Math.PI;
 
 
 }

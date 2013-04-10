@@ -83,13 +83,17 @@ public class Item implements Serializable {
     }
 
 
-    private Date createdAt;
+    @XmlAttribute
+    protected Date claimedAt;
+
+
+    protected Date createdAt;
 
 
     protected Date updatedAt;
 
 
-    private Long id;
+    protected Long id;
 
 
     @XmlElement(required = true)
@@ -100,11 +104,11 @@ public class Item implements Serializable {
     protected int stock;
 
 
-    private double hiddel1 = Math.PI;
+    private double hidden1 = Math.PI;
 
 
     @XmlTransient
-    private double hiddel2 = Math.PI;
+    private double hidden2 = Math.PI;
 
 
 }

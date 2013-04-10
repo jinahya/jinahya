@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<items>
+  <item xmlns="http://jinahya.googlecode.com/test" claimedAt="1970-01-01T09:00:00+09:00" createdAt="2013-04-10T18:35:45.742+09:00" id="1">
+    <name>xml</name>
+    <stock>30</stock>
+  </item>
+</items>

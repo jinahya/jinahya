@@ -3,22 +3,20 @@
 package com.googlecode.jinahya.test;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import javax.imageio.ImageIO;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 
@@ -74,43 +72,28 @@ public class ImageTypesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public ImageTypes read(@QueryParam("pattern") final String regex) {
+    public List<ImageType> read() {
 
-        LOGGER.log(Level.INFO, "read({0})", regex);
+        LOGGER.info("read()");
 
-        final Pattern pattern;
-        try {
-            pattern = regex == null ? null : Pattern.compile(regex);
-        } catch (PatternSyntaxException pse) {
-            throw new WebApplicationException(Status.BAD_REQUEST);
-        }
-
-        final ImageTypes imageTypes = new ImageTypes();
-
-        for (ImageType imageType : TYPES.values()) {
-            if (pattern == null || pattern.matcher(imageType.value).matches()) {
-                imageTypes.getSingulars().add(imageType);
-            }
-        }
-
-        return imageTypes;
+        return new ArrayList<>(TYPES.values());
     }
 
 
     @GET
     @Path("/{name: .+}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response readImageType(@PathParam("name") final String name) {
+    public ImageType readImageType(@PathParam("name") final String name) {
 
         LOGGER.log(Level.INFO, "readImageType({0})", name);
 
         final ImageType imageType = TYPES.get(name);
 
         if (imageType == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            throw new WebApplicationException(Status.BAD_REQUEST);
         }
 
-        return Response.ok(imageType).build();
+        return imageType;
     }
 
 
