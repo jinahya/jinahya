@@ -11,3 +11,9 @@ curl -X PUT -H "Content-Type: application/json" http://localhost:58080/imageSuff
 
 curl -s -H "Accept: application/json" http://localhost:58080/imageSuffixes/png | python -mjson.tool > imageSuffix.json
 curl -X PUT -H "Content-Type: application/json" http://localhost:58080/imageSuffixes/png --data "@imageSuffix.json"
+
+rm imageSuffixes.xml
+rm imageSuffixes.json
+rm imageSuffix.xml
+rm imageSuffix.json
+
