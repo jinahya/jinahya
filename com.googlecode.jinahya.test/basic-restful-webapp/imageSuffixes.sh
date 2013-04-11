@@ -1,31 +1,32 @@
 #!/bin/sh
 
-curl -s -H "Accept: application/xml" http://localhost:58080/imageSuffixes | xmllint --format - > imageSuffixes.xml
-cat imageSuffixes.xml
-read -p "Press any key to continue... "
-curl -X PUT -H "Content-Type: application/xml" http://localhost:58080/imageSuffixes --data "@imageSuffixes.xml"
-read -p "Press any key to continue... "
+url=$1
+if [ -z "$url" ]; then
+    url=http://localhost:58080
+fi
 
-curl -s -H "Accept: application/xml" http://localhost:58080/imageSuffixes/png | xmllint --format - > imageSuffix.xml
-cat imageSuffix.xml
-read -p "Press any key to continue... "
-curl -X PUT -H "Content-Type: application/xml" http://localhost:58080/imageSuffixes/png --data "@imageSuffix.xml"
-read -p "Press any key to continue... "
+echo --------------------------------------------- reading /imageSuffixes as XML
+curl -s -H "Accept: application/xml" $url/imageSuffixes | xmllint --format - > target/imageSuffixes.xml
+cat target/imageSuffixes.xml
+echo ------------------------------------------ updating /imageSuffixes with XML
+curl -X PUT -H "Content-Type: application/xml" $url/imageSuffixes --data "@target/imageSuffixes.xml"
 
-curl -s -H "Accept: application/json" http://localhost:58080/imageSuffixes | python -mjson.tool > imageSuffixes.json
-cat imageSuffixes.json
-read -p "Press any key to continue... "
-curl -X PUT -H "Content-Type: application/json" http://localhost:58080/imageSuffixes --data "@imageSuffixes.json"
-read -p "Press any key to continue... "
-
-curl -s -H "Accept: application/json" http://localhost:58080/imageSuffixes/png | python -mjson.tool > imageSuffix.json
-cat imageSuffix.json
-read -p "Press any key to continue... "
-curl -X PUT -H "Content-Type: application/json" http://localhost:58080/imageSuffixes/png --data "@imageSuffix.json"
+echo ----------------------------------------- reading /imageSuffixes/png as XML
+curl -s -H "Accept: application/xml" $url/imageSuffixes/png | xmllint --format - > target/imageSuffix.xml
+cat target/imageSuffix.xml
+echo -------------------------------------- updating /imageSuffixes/png with XML
+curl -X PUT -H "Content-Type: application/xml" $url/imageSuffixes/png --data "@target/imageSuffix.xml"
 
 
-#rm imageSuffixes.xml
-#rm imageSuffixes.json
-#rm imageSuffix.xml
-#rm imageSuffix.json
+echo -------------------------------------------- reading /imageSuffixes as JSON
+curl -s -H "Accept: application/json" $url/imageSuffixes | python -mjson.tool > target/imageSuffixes.json
+cat target/imageSuffixes.json
+echo ----------------------------------------- updating /imageSuffixes with JSON
+curl -X PUT -H "Content-Type: application/json" $url/imageSuffixes --data "@target/imageSuffixes.json"
+
+echo ---------------------------------------- reading /imageSuffixes/png as JSON
+curl -s -H "Accept: application/json" $url/imageSuffixes/png | python -mjson.tool > target/imageSuffix.json
+cat target/imageSuffix.json
+echo ------------------------------------- updating /imageSuffixes/png with JSON
+curl -X PUT -H "Content-Type: application/json" $url/imageSuffixes/png --data "@target/imageSuffix.json"
 

@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -72,6 +73,7 @@ public class ImageSuffixesResource {
     public List<ImageSuffix> read(@QueryParam("empty") final boolean empty) {
 
         LOGGER.log(Level.INFO, "read({0})", empty);
+        LOGGER.log(Level.INFO, "Accept: {0}", accept);
 
         if (empty) {
             return Collections.emptyList();
@@ -86,6 +88,7 @@ public class ImageSuffixesResource {
     public void update(final List<ImageSuffix> imageSuffixes) {
 
         LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
+        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
 
         for (ImageSuffix imageSuffix : imageSuffixes) {
             System.out.println(imageSuffix);
@@ -99,6 +102,7 @@ public class ImageSuffixesResource {
     public ImageSuffix readImageSuffix(@PathParam("name") final String name) {
 
         LOGGER.log(Level.INFO, "readImageSuffix({0})", name);
+        LOGGER.log(Level.INFO, "Accept: {0}", accept);
 
         final ImageSuffix imageSuffix = SUFFIXES.get(name);
 
@@ -118,7 +122,16 @@ public class ImageSuffixesResource {
 
         LOGGER.log(Level.INFO, "updateImageSuffix({0}, {1})",
                    new Object[]{name, imageSuffix});
+        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
     }
+
+
+    @HeaderParam("Content-Type")
+    private String contentType;
+
+
+    @HeaderParam("Accept")
+    private String accept;
 
 
 }
