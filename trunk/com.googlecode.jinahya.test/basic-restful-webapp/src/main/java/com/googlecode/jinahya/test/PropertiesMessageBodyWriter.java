@@ -68,7 +68,8 @@ public class PropertiesMessageBodyWriter
             return false;
         }
 
-        if (!MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType)
+        if (!MediaType.TEXT_PLAIN_TYPE.isCompatible(mediaType)
+            && !MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType)
             && !MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
             return false;
         }
@@ -89,6 +90,11 @@ public class PropertiesMessageBodyWriter
                    new Object[]{t, type, genericType, annotations, mediaType,
                                 httpHeaders, entityStream});
 
+        if (MediaType.TEXT_PLAIN_TYPE.isCompatible(mediaType)) {
+            t.store(entityStream, null);
+            return;
+        }
+
         if (MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType)) {
             t.storeToXML(entityStream, null);
             return;
@@ -102,15 +108,15 @@ public class PropertiesMessageBodyWriter
             generator.writeStartObject();
 
             for (String stringPropertyName : t.stringPropertyNames()) {
-                generator.writeFieldName(stringPropertyName);
-                generator.writeString(t.getProperty(stringPropertyName));
-                System.out.println(stringPropertyName);
-                System.out.println(t.getProperty(stringPropertyName));
-//                generator.writeStringField(stringPropertyName,
-//                                           t.getProperty(stringPropertyName));
+                generator.writeStringField(stringPropertyName,
+                                           t.getProperty(stringPropertyName));
             }
 
             generator.writeEndObject();
+
+            generator.flush();
+
+            generator.close();
 
             return;
         }

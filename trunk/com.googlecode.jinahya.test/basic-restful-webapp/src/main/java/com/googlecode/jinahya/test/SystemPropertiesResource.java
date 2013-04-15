@@ -30,7 +30,8 @@ public class SystemPropertiesResource {
 
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_XML,
+               MediaType.APPLICATION_JSON})
     public Properties read() {
 
         LOGGER.info("read()");
