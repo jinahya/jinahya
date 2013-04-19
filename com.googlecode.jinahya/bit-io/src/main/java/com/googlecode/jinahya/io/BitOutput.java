@@ -340,9 +340,16 @@ public class BitOutput {
     }
 
 
+    /**
+     * Writes a UTF-8 code point.
+     *
+     * @param value UTF-8 character code point
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void writeUTF8Char(final int value) throws IOException {
 
-        if (value >> 21 != 0) {
+        if (value >> 21 != 0x00) {
             throw new IllegalArgumentException("illegal value: " + value);
         }
 
@@ -415,6 +422,26 @@ public class BitOutput {
         }
 
         return bits;
+    }
+
+
+    /**
+     * Returns current bit index to write.
+     *
+     * @return
+     */
+    public int getIndex() {
+        return index;
+    }
+
+
+    /**
+     * Returns the number of octets written so far excluding current octet.
+     *
+     * @return the number of octets written so far.
+     */
+    public int getCount() {
+        return count;
     }
 
 
