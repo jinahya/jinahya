@@ -3,6 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>bit-io</artifactId>
   <version>1.0-alpha-13-SNAPSHOT</version>
@@ -22,7 +23,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8</version>
+        <version>6.8.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -135,7 +136,7 @@
           <target>1.7</target>
         </configuration>
       </plugin>
-<!--      <plugin>
+      <!--      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <executions>
@@ -239,7 +240,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>

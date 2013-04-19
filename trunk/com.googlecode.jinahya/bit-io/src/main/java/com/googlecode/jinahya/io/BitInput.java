@@ -39,7 +39,7 @@ public class BitInput {
 
 
         /**
-         * Reads next byte.
+         * Reads next unsigned byte.
          *
          * @return next unsigned byte. -1 for EOF.
          *
@@ -358,7 +358,7 @@ public class BitInput {
 
 
     /**
-     * Reads a UTF-8 char.
+     * Reads a UTF-8 code point.
      *
      * @return a UTF-8 decoded character value.
      *
@@ -381,7 +381,7 @@ public class BitInput {
             throw new IOException("illegal encodeding; zero tails");
         }
 
-        int value = readUnsignedByte(6 - tails);
+        int value = readUnsignedByte(8 - 2 - tails);
 
         for (int i = 0; i < tails; i++) {
             if (readUnsignedByte(2) != 0x02) { // !10xxxxxx
@@ -439,11 +439,21 @@ public class BitInput {
     }
 
 
+    /**
+     * Returns current bit index to read.
+     *
+     * @return
+     */
     public int getIndex() {
         return index;
     }
 
 
+    /**
+     * Returns the number of octets read so far including current octet.
+     *
+     * @return the number of octets read so far.
+     */
     public int getCount() {
         return count;
     }
