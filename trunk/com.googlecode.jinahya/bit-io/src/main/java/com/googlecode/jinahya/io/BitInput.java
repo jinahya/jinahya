@@ -357,44 +357,42 @@ public class BitInput {
     }
 
 
-    /**
-     * Reads a UTF-8 code point.
-     *
-     * @return a UTF-8 decoded character value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public int readUTF8Char() throws IOException {
-
-        if (!readBoolean()) {
-            return readUnsignedByte(7);
-        }
-
-        int tails = 0;
-        for (; readBoolean(); tails++) {
-            if (tails == 3) {
-                throw new IOException("illegal encoding: more than 3 tails");
-            }
-        }
-
-        if (tails == 0) {
-            throw new IOException("illegal encodeding; zero tails");
-        }
-
-        int value = readUnsignedByte(8 - 2 - tails);
-
-        for (int i = 0; i < tails; i++) {
-            if (readUnsignedByte(2) != 0x02) { // !10xxxxxx
-                throw new IOException("illegal encoding; wrong tail bits");
-            }
-            value <<= 6;
-            value |= readUnsignedByte(6);
-        }
-
-        return value;
-    }
-
-
+//    /**
+//     * Reads a UTF-8 code point.
+//     *
+//     * @return a UTF-8 decoded character value.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    public int readUTF8Char() throws IOException {
+//
+//        if (!readBoolean()) {
+//            return readUnsignedByte(7);
+//        }
+//
+//        int tails = 0;
+//        for (; readBoolean(); tails++) {
+//            if (tails == 3) {
+//                throw new IOException("illegal encoding: more than 3 tails");
+//            }
+//        }
+//
+//        if (tails == 0) {
+//            throw new IOException("illegal encodeding; zero tails");
+//        }
+//
+//        int value = readUnsignedByte(8 - 2 - tails);
+//
+//        for (int i = 0; i < tails; i++) {
+//            if (readUnsignedByte(2) != 0x02) { // !10xxxxxx
+//                throw new IOException("illegal encoding; wrong tail bits");
+//            }
+//            value <<= 6;
+//            value |= readUnsignedByte(6);
+//        }
+//
+//        return value;
+//    }
     /**
      * Align to given {@code length} bytes.
      *
