@@ -22,12 +22,12 @@ package com.googlecode.jinahya.io;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleUTF8CharTest extends SingleValueTest<SingleUTF8Char> {
+public class SingleUTF8CharTest { //extends SingleValueTest<SingleUTF8Char> {
 
 
-    public SingleUTF8CharTest() {
-        super(SingleUTF8Char.class);
-    }
+//    public SingleUTF8CharTest() {
+//        super(SingleUTF8Char.class);
+//    }
 
 
 }
