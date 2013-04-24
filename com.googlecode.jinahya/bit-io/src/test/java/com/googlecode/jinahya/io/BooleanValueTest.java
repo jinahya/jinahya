@@ -18,34 +18,16 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleUTF8Char { // extends SingleValue<Integer> {
+public class BooleanValueTest extends ValueTest<BooleanValue> {
 
 
-//    public SingleUTF8Char() {
-//        super(ThreadLocalRandom.current().nextInt() >>> 11);
-//    }
-//
-//
-//    @Override
-//    public void read(final BitInput input) throws IOException {
-//
-//        value = Integer.valueOf(input.readUTF8Char());
-//    }
-//
-//
-//    @Override
-//    public void write(final BitOutput output) throws IOException {
-//
-//        output.writeUTF8Char(value.intValue());
-//    }
+    public BooleanValueTest() {
+        super(BooleanValue.class);
+    }
 
 
 }

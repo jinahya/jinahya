@@ -26,19 +26,13 @@ import java.io.IOException;
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <V>
  */
-public abstract class SingleValue<V> {
+public abstract class Value<V> {
 
 
-    public SingleValue(final V value) {
+    public Value(final V value) {
         super();
 
         this.value = value;
-    }
-
-
-    @Deprecated
-    public SingleValue() {
-        super();
     }
 
 
@@ -59,7 +53,7 @@ public abstract class SingleValue<V> {
             return false;
         }
         @SuppressWarnings("unchecked")
-        final SingleValue<V> other = (SingleValue<V>) obj;
+        final Value<V> other = (Value<V>) obj;
         if (this.value != other.value && (this.value == null || !this.value.equals(other.value))) {
             return false;
         }

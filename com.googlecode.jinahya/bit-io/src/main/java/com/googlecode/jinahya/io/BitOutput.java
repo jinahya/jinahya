@@ -38,9 +38,9 @@ public class BitOutput {
 
 
         /**
-         * Writes an unsigned byte.
+         * Writes an unsigned 8-bit integer.
          *
-         * @param value value to write
+         * @param value the value to write
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -51,7 +51,7 @@ public class BitOutput {
 
 
     /**
-     * An implementation for OutputStreams.
+     * A {@link ByteOutput} implementation for OutputStreams.
      */
     public static class StreamOutput implements ByteOutput {
 
@@ -79,7 +79,7 @@ public class BitOutput {
 
 
         /**
-         * stream.
+         * output.
          */
         private final OutputStream output;
 
@@ -107,7 +107,7 @@ public class BitOutput {
      * Writes an {@code length}-bit unsigned byte value. The lower
      * {@code length} bits in {@code value} are written.
      *
-     * @param length bit length between 1 inclusive and 8 inclusive.
+     * @param length bit length between 0 exclusive and 8 inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -115,8 +115,8 @@ public class BitOutput {
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 8) {
@@ -150,9 +150,10 @@ public class BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. 1 for true or 0 for false.
+     * Writes a 1-bit boolean value. {@code 0x00} for {@code false} and
+     * {@code 0x01} for {@code true}.
      *
-     * @param value the boolean value to write
+     * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
      */
@@ -165,7 +166,7 @@ public class BitOutput {
      * Writes an {@code length}-bit unsigned short value. Only the lower
      * {@code length} bits in {@code value} are written.
      *
-     * @param length bit length between 1 exclusive and 16 inclusive.
+     * @param length the bit length between 0 exclusive and 16 inclusive.
      * @param value the value whose lower {@code length}-bits are written.
      *
      * @throws IOException if an I/O error occurs
@@ -173,8 +174,8 @@ public class BitOutput {
     protected void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 16) {
@@ -210,8 +211,13 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        if (length > 31) {
-            throw new IllegalArgumentException("length(" + length + ") > 31");
+        if (length >= 32) {
+            throw new IllegalArgumentException("length(" + length + ") >= 32");
+        }
+
+        if ((value >> length) != 0x00) {
+            throw new IllegalArgumentException(
+                "value(" + value + ") >> length(" + length + ") != 0x00");
         }
 
         final int quotient = length / 16;
@@ -228,8 +234,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit signed int value. Only the lower
-     * {@code length}-bits in {@code value} are written.
+     * Writes a {@code length}-bit signed int value.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @param value the value to write
@@ -238,17 +243,44 @@ public class BitOutput {
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        if (length < 2) {
-            throw new IllegalArgumentException("length(" + length + ") < 2");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 32) {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        writeBoolean(value < 0);
+        if (length < 32) {
+            if (value < 0x00) { // negative
+                if (value >> (length - 1) != ~0) {
+                    throw new IllegalArgumentException(
+                        "value(" + value + ") >> (length(" + length
+                        + ") - 1) != ~0");
+                }
+            } else { // positive
+                if (value >> (length - 1) != 0) {
+                    throw new IllegalArgumentException(
+                        "value(" + value + ") >> (length(" + length
+                        + ") - 1) != 0");
+                }
+            }
+        }
 
-        writeUnsignedInt(length - 1, value);
+//        writeBoolean(value < 0);
+//
+//        writeUnsignedInt(length - 1, value);
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
+
+        if (remainder > 0) {
+            writeUnsignedShort(remainder, value >> (quotient * 16));
+        }
+
+        for (int i = quotient - 1; i >= 0; i--) {
+            writeUnsignedShort(16, value >> (16 * i));
+        }
     }
 
 
@@ -279,19 +311,24 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        if (length > 63) {
-            throw new IllegalArgumentException("length(" + length + ") > 63");
+        if (length >= 64) {
+            throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
-        final int quotient = length / 31;
-        final int remainder = length % 31;
+        if (value >> length != 0) {
+            throw new IllegalArgumentException(
+                "value(" + value + ") >> length(" + length + ") != 0");
+        }
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
 
         if (remainder > 0) {
-            writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
+            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedInt(31, (int) (value >> (i * 31)));
+            writeUnsignedShort(16, (int) (value >> (i * 16)));
         }
     }
 
@@ -307,23 +344,39 @@ public class BitOutput {
     public void writeLong(final int length, final long value)
         throws IOException {
 
-        if (length < 2) {
-            throw new IllegalArgumentException("length(" + length + ") < 2");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 64) {
             throw new IllegalArgumentException("length(" + length + ") > 64");
         }
 
-        final int quotient = length / 31;
-        final int remainder = length % 31;
+        if (length < 64) {
+            if (value < 0L) {
+                if (value >> (length - 1) != ~0) {
+                    throw new IllegalArgumentException(
+                        "value(" + value + ") >> (length(" + length
+                        + ") - 1) != ~0");
+                }
+            } else {
+                if (value >> (length - 1) != 0) {
+                    throw new IllegalArgumentException(
+                        "value(" + value + ") >> (length(" + length
+                        + ") - 1) != 0");
+                }
+            }
+        }
+
+        final int quotient = length / 16;
+        final int remainder = length % 16;
 
         if (remainder > 0) {
-            writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
+            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedInt(31, (int) (value >> (i * 31)));
+            writeUnsignedShort(16, (int) (value >> (i * 16)));
         }
     }
 
@@ -380,8 +433,6 @@ public class BitOutput {
 //            writeUnsignedByte(6, (value >> (6 * i)) & 0x3F); // __xxxxxx
 //        }
 //    }
-
-
     /**
      * Aligns to given {@code length} bytes.
      *

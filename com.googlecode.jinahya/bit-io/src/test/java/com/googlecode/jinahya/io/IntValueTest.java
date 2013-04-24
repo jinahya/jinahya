@@ -22,11 +22,11 @@ package com.googlecode.jinahya.io;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleIntTest extends SingleValueTest<SingleInt> {
+public class IntValueTest extends ValueTest<IntValue> {
 
 
-    public SingleIntTest() {
-        super(SingleInt.class);
+    public IntValueTest() {
+        super(IntValue.class);
     }
 
 
