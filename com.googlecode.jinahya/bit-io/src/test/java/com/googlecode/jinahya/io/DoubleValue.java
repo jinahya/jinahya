@@ -30,7 +30,9 @@ public class DoubleValue extends Value<Double> {
 
 
     public DoubleValue() {
-        super(ThreadLocalRandom.current().nextDouble());
+        super();
+
+        value = ThreadLocalRandom.current().nextDouble();
     }
 
 

@@ -34,9 +34,9 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S>
+ * @param <V>
  */
-public abstract class ValueTest<S extends Value<?>> {
+public abstract class ValueTest<V extends Value<?>> {
 
 
     private static <V extends Value<?>> void test(final Class<V> valueClass,
@@ -66,6 +66,7 @@ public abstract class ValueTest<S extends Value<?>> {
         final List<V> actual = new ArrayList<>(expected.size());
         for (int i = 0; i < expected.size(); i++) {
             final V value = valueClass.newInstance();
+            value.length = expected.get(i).length;
             value.read(input);
             actual.add(value);
         }
@@ -75,7 +76,7 @@ public abstract class ValueTest<S extends Value<?>> {
     }
 
 
-    public ValueTest(final Class<S> valueClass) {
+    public ValueTest(final Class<V> valueClass) {
         super();
 
         if (valueClass == null) {
@@ -90,19 +91,19 @@ public abstract class ValueTest<S extends Value<?>> {
     public void test() throws IOException, InstantiationException,
                               IllegalAccessException {
 
-        test(valueClass, Collections.<S>emptyList());
+        test(valueClass, Collections.<V>emptyList());
 
         final int count = ThreadLocalRandom.current().nextInt(1024);
-        final List<S> expected = new ArrayList<>(count);
+        final List<V> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            final S entity = valueClass.newInstance();
-            expected.add(entity);
+            final V value = valueClass.newInstance();
+            expected.add(value);
         }
         test(valueClass, expected);
     }
 
 
-    protected final Class<S> valueClass;
+    protected final Class<V> valueClass;
 
 
 }

@@ -18,36 +18,15 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.IOException;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class LongValue extends Value<Long> {
+public class UnsignedLongValueTest extends ValueTest<UnsignedLongValue> {
 
 
-    public LongValue() {
-        super();
-
-        length = Generator.longLength();
-
-        value = Generator.longValue(length);
-    }
-
-
-    @Override
-    public void read(final BitInput input) throws IOException {
-
-        value = input.readLong(length);
-    }
-
-
-    @Override
-    public void write(final BitOutput output) throws IOException {
-
-        output.writeLong(length, value);
+    public UnsignedLongValueTest() {
+        super(UnsignedLongValue.class);
     }
 
 

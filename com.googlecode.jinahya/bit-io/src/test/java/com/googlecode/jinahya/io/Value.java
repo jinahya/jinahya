@@ -29,10 +29,24 @@ import java.io.IOException;
 public abstract class Value<V> {
 
 
+    @Deprecated
     public Value(final V value) {
         super();
 
         this.value = value;
+    }
+
+
+    public Value() {
+        super();
+    }
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "@" + hashCode()
+               + "?length=" + length
+               + "&value=" + value;
     }
 
 
@@ -75,6 +89,9 @@ public abstract class Value<V> {
     public void setValue(final V value) {
         this.value = value;
     }
+
+
+    protected int length;
 
 
     protected V value;
