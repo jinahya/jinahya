@@ -107,7 +107,8 @@ public class BitInput {
     /**
      * Reads an {@code length}-bit unsigned byte value.
      *
-     * @param length bit length between 0 exclusive and 8 inclusive
+     * @param length bit length between {@value java.math.BigDecimal#ZERO}
+     * (exclusive) and {@value java.lang.Byte#SIZE} (inclusive).
      *
      * @return an unsigned byte value.
      *
@@ -115,8 +116,8 @@ public class BitInput {
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 8) {
@@ -154,8 +155,9 @@ public class BitInput {
 
 
     /**
-     * Reads a {@code 1}-bit boolean value. {@code 0x01} for
-     * {@code true}, {@code 0x00} for {@code false}.
+     * Reads a {@code 1}-bit boolean value. {@value java.math.BigDecimal#ZERO}
+     * for {@value java.lang.Boolean#FALSE} and
+     * {@value java.math.BigDecimal#ONE} for {@value java.lang.Boolean#TRUE}.
      *
      * @return a boolean value
      *
@@ -170,8 +172,8 @@ public class BitInput {
     /**
      * Reads an {@code length}-bit unsigned short value.
      *
-     * @param length bit length between 1 (inclusive) and
-     * {@value java.lang.Short#SIZE} (inclusive).
+     * @param length bit length between {@value java.math.BigDecimal#ZERO}
+     * (exclusive) and {@value java.lang.Short#SIZE} (inclusive).
      *
      * @return the unsigned short value read.
      *
@@ -179,8 +181,8 @@ public class BitInput {
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         if (length > 16) {
@@ -209,8 +211,8 @@ public class BitInput {
     /**
      * Reads an {@code length}-bit unsigned int value.
      *
-     * @param length bit length between 1 (inclusive) and
-     * {@value java.lang.Integer#SIZE} (exclusive).
+     * @param length bit length between {@value java.math.BigDecimal#ONE}
+     * (inclusive) and {@value java.lang.Integer#SIZE} (exclusive).
      *
      * @return the unsigned {@code length}-bit int value read from the input.
      *
@@ -222,8 +224,8 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        if (length > 31) {
-            throw new IllegalArgumentException("length(" + length + ") > 31");
+        if (length >= 32) {
+            throw new IllegalArgumentException("length(" + length + ") >= 32");
         }
 
         final int quotient = length / 16;
@@ -248,19 +250,20 @@ public class BitInput {
     /**
      * Reads a {@code length}-bit signed int value.
      *
-     * @param length bit length between 1 exclusive and 16 inclusive.
+     * @param length bit length between {@value java.math.BigDecimal#ONE}
+     * (exclusive) and {@value java.lang.Integer#SIZE} (inclusive).
      *
-     * @return the signed {@code length}-bit int value read from the input.
+     * @return the value read from the input.
      *
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
 
-        if (length < 2) {
-            throw new IllegalArgumentException("length(" + length + ") < 2");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
-        if (length > 32) { // 32
+        if (length > 32) {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
@@ -284,7 +287,8 @@ public class BitInput {
     /**
      * Reads a {@code length}-bit unsigned long value.
      *
-     * @param length bit length between 1 (inclusive) and 64 (exclusive)
+     * @param length bit length between {@value java.math.BigDecimal#ONE}
+     * (inclusive) and {@value java.lang.Long#SIZE} (exclusive)
      *
      * @return an unsigned long value
      *
@@ -296,8 +300,8 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        if (length > 63) {
-            throw new IllegalArgumentException("length(" + length + ") > 63");
+        if (length >= 64) {
+            throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
         final int quotient = length / 31;
@@ -322,16 +326,17 @@ public class BitInput {
     /**
      * Reads a {@code length}-bit signed long value.
      *
-     * @param length bit length between 1 (exclusive) and 64 (inclusive).
+     * @param length bit length between {@value java.math.BigDecimal#ONE}
+     * (exclusive) and {@value java.lang.Long#SIZE} (inclusive).
      *
-     * @return the signed long value.
+     * @return the value read from the input.
      *
      * @throws IOException if an I/O error occurs.
      */
     public long readLong(final int length) throws IOException {
 
-        if (length < 2) {
-            throw new IllegalArgumentException("length(" + length + ") < 2");
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
         }
 
         if (length > 64) {

@@ -26,25 +26,25 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleInt extends SingleValue<Integer> {
+public class FloatValue extends Value<Float> {
 
 
-    public SingleInt() {
-        super(ThreadLocalRandom.current().nextInt());
+    public FloatValue() {
+        super(ThreadLocalRandom.current().nextFloat());
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        value = input.readInt(32);
+        value = input.readFloat();
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        output.writeInt(32, value);
+        output.writeFloat(value);
     }
 
 

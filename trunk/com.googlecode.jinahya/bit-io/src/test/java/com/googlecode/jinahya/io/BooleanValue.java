@@ -18,15 +18,33 @@
 package com.googlecode.jinahya.io;
 
 
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleDoubleTest extends SingleValueTest<SingleDouble> {
+public class BooleanValue extends Value<Boolean> {
 
 
-    public SingleDoubleTest() {
-        super(SingleDouble.class);
+    public BooleanValue() {
+        super(ThreadLocalRandom.current().nextBoolean());
+    }
+
+
+    @Override
+    public void read(final BitInput input) throws IOException {
+
+        value = Boolean.valueOf(input.readBoolean());
+    }
+
+
+    @Override
+    public void write(final BitOutput output) throws IOException {
+
+        output.writeBoolean(value.booleanValue());
     }
 
 

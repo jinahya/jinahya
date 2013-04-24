@@ -26,25 +26,25 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleLong extends SingleValue<Long> {
+public class DoubleValue extends Value<Double> {
 
 
-    public SingleLong() {
-        super(ThreadLocalRandom.current().nextLong());
+    public DoubleValue() {
+        super(ThreadLocalRandom.current().nextDouble());
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        value = input.readLong(64);
+        value = input.readDouble();
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        output.writeLong(64, value);
+        output.writeDouble(value);
     }
 
 

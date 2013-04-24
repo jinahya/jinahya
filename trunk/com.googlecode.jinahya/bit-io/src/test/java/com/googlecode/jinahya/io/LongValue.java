@@ -18,15 +18,33 @@
 package com.googlecode.jinahya.io;
 
 
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SingleFloatTest extends SingleValueTest<SingleFloat> {
+public class LongValue extends Value<Long> {
 
 
-    public SingleFloatTest() {
-        super(SingleFloat.class);
+    public LongValue() {
+        super(ThreadLocalRandom.current().nextLong());
+    }
+
+
+    @Override
+    public void read(final BitInput input) throws IOException {
+
+        value = input.readLong(64);
+    }
+
+
+    @Override
+    public void write(final BitOutput output) throws IOException {
+
+        output.writeLong(64, value);
     }
 
 
