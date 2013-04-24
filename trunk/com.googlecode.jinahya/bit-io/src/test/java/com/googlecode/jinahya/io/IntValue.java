@@ -19,7 +19,6 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -30,21 +29,25 @@ public class IntValue extends Value<Integer> {
 
 
     public IntValue() {
-        super(ThreadLocalRandom.current().nextInt());
+        super();
+
+        length = Generator.intLength();
+
+        value = Generator.intValue(length);
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        value = input.readInt(32);
+        value = input.readInt(length);
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        output.writeInt(32, value);
+        output.writeInt(length, value);
     }
 
 

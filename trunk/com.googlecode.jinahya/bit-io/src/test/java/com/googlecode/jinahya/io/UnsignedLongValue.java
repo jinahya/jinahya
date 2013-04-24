@@ -25,29 +25,29 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class LongValue extends Value<Long> {
+public class UnsignedLongValue extends Value<Long> {
 
 
-    public LongValue() {
+    public UnsignedLongValue() {
         super();
 
-        length = Generator.longLength();
+        length = Generator.unsignedLongLength();
 
-        value = Generator.longValue(length);
+        value = Generator.unsignedLongValue(length);
     }
 
 
     @Override
     public void read(final BitInput input) throws IOException {
 
-        value = input.readLong(length);
+        value = input.readUnsignedLong(length);
     }
 
 
     @Override
     public void write(final BitOutput output) throws IOException {
 
-        output.writeLong(length, value);
+        output.writeUnsignedLong(length, value);
     }
 
 

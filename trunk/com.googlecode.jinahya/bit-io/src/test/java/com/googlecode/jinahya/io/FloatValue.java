@@ -30,7 +30,9 @@ public class FloatValue extends Value<Float> {
 
 
     public FloatValue() {
-        super(ThreadLocalRandom.current().nextFloat());
+        super();
+
+        value = ThreadLocalRandom.current().nextFloat();
     }
 
 
