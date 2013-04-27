@@ -30,7 +30,9 @@ public class BooleanValue extends Value<Boolean> {
 
 
     public BooleanValue() {
-        super(ThreadLocalRandom.current().nextBoolean());
+        super();
+
+        value = ThreadLocalRandom.current().nextBoolean();
     }
 
 
