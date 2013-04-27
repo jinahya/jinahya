@@ -445,7 +445,7 @@ public class BitInput {
     /**
      * Returns current bit index to read.
      *
-     * @return
+     * @return current bit index to read.
      */
     public int getIndex() {
         return index;
