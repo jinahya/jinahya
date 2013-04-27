@@ -234,7 +234,7 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <url>http://jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <url>https://jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>
