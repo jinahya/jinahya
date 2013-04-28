@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides mechanisms for accessing the service information (SI) database
+and APIs representing the SI elements it contains. The <tt>javax.tv.service</tt>
+package and its sub-packages are organized into different "views" of service
+information, as follows:
+<ul>
+<li>
+The <i>guide</i> package provides APIs useful for electronic program guides
+(EPGs), including program schedules, program events and program ratings.</li>
+
+<li>
+The <i>navigation</i> package provides APIs to navigate through services
+and hierarchical service information.</li>
+
+<li>
+The <i>selection</i> package provides a mechanism to select a service,
+that is, tune to a service and present its content.</li>
+
+<li>
+The <i>transport</i> package provides information concerning the broadcast
+delivery mechanisms available to the receiver.</li>
+
+<li>
+The top-level <i>service</i> package (this package) provides basic SI APIs
+common to the service sub-packages.</li>
+</ul>
+The Java TV APIs for accessing service information are intended to be used
+in multiple environments where various standards for service information
+delivery already exist. Therefore, these APIs provide a high level
+of abstraction from the details of over-wire protocols.  Some attributes of SI elements are unique to specific SI standards
+or are difficult to map to a common API. In order to provide access to
+such attributes, the service packages define <a href="../../../overview-summary.html#guidelines-opinterfaces">optionally
+implemented interfaces</a>.
+
+<p>The <tt>SIManager</tt> provides the primary access point to the underlying
+SI database. It may be used to acquire the meta-data of an individual
+service and its associated SI elements. The <tt>Service</tt> interface
+provides the minimal information (such as a <tt>Locator</tt>, name and
+optionally a <tt>ServiceNumber</tt>) required to identify and select the
+content of a service. Such information is typically cached and readily
+available on a television receiver at all times. Additional information
+about a service can be obtained through the <tt>ServiceDetails</tt> object.
+
+<p>The <tt>Service</tt> interface represents DVB services, ATSC virtual
+channels (both PSIP and A56) or SCTE virtual channels. It provides
+the minimal information (such as a <tt>Locator</tt>, name, and optionally
+a <tt>ServiceNumber</tt>) required to identify and select the content of
+a service. Such information is typically cached and readily available on
+a television receiver at all times. Additional information about
+a service can be obtained through the <tt>ServiceDetails</tt> object. In
+contrast to the <tt>Service</tt> interface, <tt>ServiceDetails</tt> represents
+service meta-data that exists in the broadcast.
+
+<br>
+<h4>Cache Limitations and Asynchronous SI Retrieval</h4>
+Since TV receivers are designed with varying
+capabilities, it is not expected that very receiver will cache all the
+SI data in memory. The most basic information for accessing services
+is likely to be cached; however, the receiver must parse the broadcast
+stream to acquire data that is not cached. Doing so may take a
+significant amount of time. Therefore the SI APIs provide means for
+asynchronous access to data that is likely to not be in memory at all
+times. All APIs prefixed with 'retrieve' return the requested data via
+an asynchronous callback. This functionality is provided by the
+<tt>SIRequestor</tt>, <tt>SIRequest</tt> and <tt>SIRetrievable</tt>
+interfaces. A caller of an asynchronous method registers as an
+<tt>SIRequestor</tt> in order to receive <tt>SIRetrievable</tt> data
+when it is available. The asynchronous method provides an
+<tt>SIRequest</tt> object to cancel the request if it is no longer
+needed by the caller.
+<p>
+Note that asynchronous SI data retrieval is only a <em>request</em>
+for information. The latencies involved in reading SI data from the
+broadcast stream may make retrieval of a requested SI element
+impractical.  Failed SI retrieval is signaled through a call to
+<code>SIRequestor.notifyFailure(SIRequestFailureType)</code>.
+<br>
+<h4>Scalability</h4> The Java TV API defines several interfaces in the
+<code>javax.tv.service.*</code> packages to represent various forms of
+service information, or "SI elements", that may be encountered.  Not
+every type of SI element may be supported in a given broadcast
+environment, however.  In such a case, asynchronous 'retrieve'
+operations for unsupported SI elements will result in the failure code
+{@link javax.tv.service.SIRequestFailureType#DATA_UNAVAILABLE
+DATA_UNAVAILABLE}.  Likewise, synchronous query operations will fail
+in a manner indicating that the requested data is unavailable.
+<br>
+<h4>
+Time Synchronization</h4>
+The service information usually contains system time-related information
+in the form of the PSIP STT message or DVB TDT and TOT messages. It is
+assumed that the local TV receiver time will be synchronized with the system
+time of the service currently tuned and that this value can be obtained
+using the <tt>java.util.Date</tt> class. This is straightforward if all
+transport multiplexes use a reliable and synchronized data source (such
+as GPS). If a certain multiplex provides erroneous time information, it
+is up to the receiver implementation to resolve the conflict.
+<br>
+<h4>
+SI Change Notification</h4>
+The SI APIs permit applications to be notified of changes to elements in
+the SI database. There are multiple sources of SI change notification:
+<ul>
+<li><tt>Transport</tt> objects report changes concerning services.</li>
+
+<li><tt>TransportStreamCollection</tt> objects report changes concerning
+<tt>TransportStream</tt> information on a <tt>Transport</tt>.</li>
+
+<li><tt>NetworkCollection</tt> objects report changes concerning
+<tt>Network</tt> information on a <tt>Transport</tt>.</li>
+
+<li><tt>BouquetCollection</tt> objects report changes concerning
+<tt>Bouquet</tt> information on a <tt>Transport</tt>.</li>
+
+<li><tt>ServiceDetails</tt> objects report chanes conerning
+<tt>ServiceComponent</tt> information for individual services.</li>
+
+<li><tt>ProgramSchedule</tt> objects report changes detected in the
+program events in the schedule, including the current
+<tt>ProgramEvent</tt>.</li>
+</ul>
+An application can register as an <tt>SIChangeListener</tt> with the
+above listed objects to be notified with an <tt>SIChangeEvent</tt>
+subtype when a change occurs. The resulting <tt>SIChangeEvent</tt>
+will indicate the <tt>SIElement</tt> that changed in the
+database. Note that it may be quite difficult for the receiver to
+provide detailed information concerning the data that changed without
+a field-by-field comparison of old and new SI tables from the
+broadcast.  The receiver may therefore choose to deliver an
+<tt>SIChangeEvent</tt> indicating a change at a high level in the SI
+hierarchy and require the application to determine the specific nature
+of the change.
+<br>
+</body>
+</html>
