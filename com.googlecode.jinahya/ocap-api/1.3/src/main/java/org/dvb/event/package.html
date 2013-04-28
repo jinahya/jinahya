@@ -1,0 +1,13 @@
+<html>
+<body>
+Provides access to user input events before they
+are processed through the event mechanism of the java.awt package.
+<p>
+The algorithm used for generating UserEvents by the MHP terminal when reporting 
+user input to MHP applications shall be the same as that used for java.awt.event.KeyEvent. 
+For example, pressing the Shift key will cause a KEY_PRESSED event with a VK_SHIFT keyCode, 
+while pressing the 'a' key will result in a VK_A keyCode. After the 'a' key is released, a 
+KEY_RELEASED event will be fired with VK_A, followed by a KEY_TYPED event with a keyChar 
+value of 'A'.
+</body>
+</html>

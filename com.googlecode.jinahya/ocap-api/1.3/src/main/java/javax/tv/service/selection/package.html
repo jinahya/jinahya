@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  
+  %W% %E%
+  
+  Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+  SUN PROPRIETARY/CONFIDENTIAL.  Use is subject to license terms.
+  
+-->
+  
+</head>
+<body bgcolor="white">
+
+Provides a mechanism to select a <tt>Service</tt> for
+presentation. The <tt>ServiceContext</tt> interface abstracts
+receiver resources required to tune to and present the content of a
+service, such a tuner, MPEG decoder, screen real estate, and
+interactive content handlers. The <tt>ServiceContext.select()</tt>
+method constitutes a high-level mechanism by which applications may
+cause the receiver to tune to a desired service, demultiplex the
+necessary service components, present the audio and video, and launch
+any associated applications. Applications launched by the
+<tt>ServiceContext.select()</tt> method are said to "run" within the
+<tt>ServiceContext</tt>.<p>
+
+Due to the scarce nature of the resources embodied by a
+<code>ServiceContext</code>, implementations may limit the total
+number of simultaneous <code>ServiceContext</code> objects to a very
+small number, perhaps even one.  (<code>ServiceContext</code> objects
+in the <em>destroyed</em> state do not count toward this total.)
+Given appropriate security permissions, it is always possible to
+access (via {@link
+javax.tv.service.selection.ServiceContextFactory#getServiceContexts})
+or create (via {@link
+javax.tv.service.selection.ServiceContextFactory#createServiceContext})
+at least one <code>ServiceContext</code> instance.<p>
+
+@see javax.tv.service.selection.ServiceContext
+@see javax.tv.service.selection.ServiceContextFactory
+
+</body>
+</html>
