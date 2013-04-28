@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya</groupId>
+  <artifactId>xlet</artifactId>
+  <version>1.0</version>
+  <versioning>
+    <versions>
+      <version>1.0</version>
+      <version>root</version>
+      <version>parent</version>
+    </versions>
+    <lastUpdated>20090830132646</lastUpdated>
+  </versioning>
+</metadata>

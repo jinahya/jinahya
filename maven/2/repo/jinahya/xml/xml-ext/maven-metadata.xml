@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya.xml</groupId>
+  <artifactId>xml-ext</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <versioning>
+    <versions>
+      <version>1.0-SNAPSHOT</version>
+      <version>1.0-S-2007.07.15</version>
+      <version>1.0-S-2010.07.15</version>
+      <version>1.0-S-2010.07.20</version>
+      <version>1.0-S-2010.07.21</version>
+      <version>1.0-S-2010.09.17</version>
+    </versions>
+    <lastUpdated>20100917041706</lastUpdated>
+  </versioning>
+</metadata>

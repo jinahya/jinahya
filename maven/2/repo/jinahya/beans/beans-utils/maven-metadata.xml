@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jinahya.beans</groupId>
+  <artifactId>beans-utils</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <versioning>
+    <versions>
+      <version>1.0-SNAPSHOT</version>
+      <version>1.0-S-2010.10.19</version>
+    </versions>
+    <lastUpdated>20101019064600</lastUpdated>
+  </versioning>
+</metadata>
