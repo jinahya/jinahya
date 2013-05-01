@@ -141,7 +141,7 @@ public class BitInput {
 
         if (required > 0) {
             return (readUnsignedByte(8 - index) << required)
-                   | readUnsignedByte(required);
+                | readUnsignedByte(required);
         }
 
         int value = 0x00;
@@ -268,7 +268,7 @@ public class BitInput {
         }
 
         return (((readBoolean() ? -1 : 0) << (length - 1))
-                | readUnsignedInt(length - 1));
+            | readUnsignedInt(length - 1));
     }
 
 
@@ -344,7 +344,7 @@ public class BitInput {
         }
 
         return (((readBoolean() ? -1L : 0L) << (length - 1))
-                | readUnsignedLong(length - 1));
+            | readUnsignedLong(length - 1));
 
     }
 
@@ -396,8 +396,33 @@ public class BitInput {
 //            value |= readUnsignedByte(6);
 //        }
 //
+//        if (tails == 1) {
+//        switch (tails) {
+//            case 1:
+//                switch (value) {
+//                    case 0x00:
+//                    case 0x40:
+//                        throw new IOException(
+//                            "invalid byte sequence:" + (0xC000 | value));
+//                    default:
+//                        break;
+//                }
+//                break;
+//            case 3:
+//                break;
+//            default:
+//                break;
+//        }
+//
+//        if (value > 0x10FFFF) {
+//            throw new IOException(
+//                "invalid byte sequence: value(" + value + ") > 0x10FFFF");
+//        }
+//
 //        return value;
 //    }
+
+
     /**
      * Align to given {@code length} bytes.
      *
