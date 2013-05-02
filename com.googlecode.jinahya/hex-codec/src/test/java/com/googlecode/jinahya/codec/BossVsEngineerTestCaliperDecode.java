@@ -32,52 +32,52 @@ import org.testng.annotations.Test;
 public class BossVsEngineerTestCaliperDecode extends SimpleBenchmark {
 
 
-    private static final Logger LOGGER =
-        Logger.getLogger(BossVsEngineerTestCaliperDecode.class.getName());
+  private static final Logger LOGGER =
+      Logger.getLogger(BossVsEngineerTestCaliperDecode.class.getName());
 
 
-    public static void main(final String[] args) {
-        Runner.main(BossVsEngineerTestCaliperDecode.class, args);
+  public static void main(final String[] args) {
+    Runner.main(BossVsEngineerTestCaliperDecode.class, args);
+  }
+
+
+  @Test
+  public void main() {
+    main(new String[0]);
+  }
+
+
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+
+    encoded = HexCodecTestUtils.newEncodedBytes();
+  }
+
+
+  @Override
+  protected void tearDown() throws Exception {
+    super.tearDown();
+  }
+
+
+  public void timeDecodeLikeABoss(final int reps) {
+
+    for (int i = 0; i < reps; i++) {
+      new HexDecoder().decodeLikeABoss(encoded);
     }
+  }
 
 
-    @Test
-    public void main() {
-        main(new String[0]);
+  public void timeDecodeLikeAnEngineer(final int reps) {
+
+    for (int i = 0; i < reps; i++) {
+      new HexDecoder().decodeLikeAnEngineer(encoded);
     }
+  }
 
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        encoded = HexCodecTestUtils.newEncodedBytes();
-    }
-
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-
-    public void timeDecodeLikeABoss(final int reps) {
-
-        for (int i = 0; i < reps; i++) {
-            new HexDecoder().decodeLikeABoss(encoded);
-        }
-    }
-
-
-    public void timeDecodeLikeAnEngineer(final int reps) {
-
-        for (int i = 0; i < reps; i++) {
-            new HexDecoder().decodeLikeAnEngineer(encoded);
-        }
-    }
-
-
-    private byte[] encoded;
+  private byte[] encoded;
 
 
 }
