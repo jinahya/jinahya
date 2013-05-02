@@ -31,9 +31,9 @@ public class UnsignedIntValue extends Value<Integer> {
     public UnsignedIntValue() {
         super();
 
-        length = Generator.unsignedIntLength();
+        length = Generator.newLengthIntUnsigned();
 
-        value = Generator.unsignedIntValue(length);
+        value = Generator.newValueIntUnsigned(length);
     }
 
 

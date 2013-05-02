@@ -72,7 +72,7 @@ public class BitOutput {
         }
 
 
-        //@Override
+        //@Override // commented for pre 5
         public void writeUnsignedByte(final int value) throws IOException {
             output.write(value);
         }
@@ -105,7 +105,7 @@ public class BitOutput {
 
     /**
      * Writes an {@code length}-bit unsigned byte value. The lower
-     * {@code length} bits in {@code value} are written.
+     * {@code length} bits in given {@code value} are written.
      *
      * @param length bit length between 0 exclusive and 8 inclusive.
      * @param value the value to write
@@ -164,10 +164,10 @@ public class BitOutput {
 
     /**
      * Writes an {@code length}-bit unsigned short value. Only the lower
-     * {@code length} bits in {@code value} are written.
+     * {@code length} bits in given {@code value} are written.
      *
      * @param length the bit length between 0 exclusive and 16 inclusive.
-     * @param value the value whose lower {@code length}-bits are written.
+     * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
      */
@@ -196,11 +196,11 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit unsigned int value. Only the lower
-     * {@code length}-bits in {@code value} are written.
+     * Writes a {@code length}-bit unsigned int value. The value must be valid
+     * in bit range.
      *
      * @param length bit length between 1 inclusive and 32 exclusive.
-     * @param value the value whose lower {@code length}-bits are written.
+     * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -234,7 +234,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit signed int value.
+     * Writes a {@code length}-bit signed int value. The {@code value} must be
+     * valid in bit range.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @param value the value to write
@@ -251,7 +252,7 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        if (length < 32) {
+        if (length != 32) {
             if (value < 0x00) { // negative
                 if (value >> (length - 1) != ~0) {
                     throw new IllegalArgumentException(
@@ -266,10 +267,6 @@ public class BitOutput {
                 }
             }
         }
-
-//        writeBoolean(value < 0);
-//
-//        writeUnsignedInt(length - 1, value);
 
         final int quotient = length / 16;
         final int remainder = length % 16;
@@ -297,7 +294,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit unsigned long value.
+     * Writes a {@code length}-bit unsigned long value. The {@code value} must
+     * be valid in bit range.
      *
      * @param length bit length between 1 (inclusive) and 64 (exclusive).
      * @param value the value to write.
@@ -315,9 +313,9 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
-        if (value >> length != 0) {
+        if ((value >> length) != 0L) {
             throw new IllegalArgumentException(
-                "value(" + value + ") >> length(" + length + ") != 0");
+                "(value(" + value + ") >> length(" + length + ")) != 0");
         }
 
         final int quotient = length / 16;
@@ -334,7 +332,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit signed long value.
+     * Writes a {@code length}-bit signed long value. The {@code value} must be
+     * valid in bit range.
      *
      * @param length bit length between 1 (exclusive) and 64 (inclusive).
      * @param value the value whose lower {@code length}-bits are written.
@@ -354,16 +353,16 @@ public class BitOutput {
 
         if (length < 64) {
             if (value < 0L) {
-                if (value >> (length - 1) != ~0) {
+                if ((value >> (length - 1)) != ~0L) {
                     throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != ~0");
+                        "(value(" + value + ") >> (length(" + length
+                        + ") - 1)) != ~0L");
                 }
             } else {
-                if (value >> (length - 1) != 0) {
+                if ((value >> (length - 1)) != 0L) {
                     throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != 0");
+                        "(value(" + value + ") >> (length(" + length
+                        + ") - 1)) != 0L");
                 }
             }
         }
@@ -384,55 +383,16 @@ public class BitOutput {
     /**
      * Writes a double value.
      *
-     * @param value the value
+     * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
     public void writeDouble(final double value) throws IOException {
+
         writeLong(64, Double.doubleToRawLongBits(value));
     }
 
 
-//    /**
-//     * Writes a UTF-8 code point.
-//     *
-//     * @param value UTF-8 character code point
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public void writeUTF8Char(final int value) throws IOException {
-//
-//        if (value >> 21 != 0x00) {
-//            throw new IllegalArgumentException("illegal value: " + value);
-//        }
-//
-//        if (value <= 0x7F) {
-//            writeUnsignedByte(8, value);
-//            return;
-//        }
-//
-//        int tails;
-//        if (value >> 11 == 0x00) {
-//            tails = 1;
-//        } else if (value >> 16 == 0x00) {
-//            tails = 2;
-//        } else {
-//            tails = 3;
-//        }
-//
-//        writeBoolean(true); // 1
-//        for (int i = 0; i < tails; i++) {
-//            writeBoolean(true); // 1...
-//        }
-//        writeBoolean(false); // 0
-//
-//        writeUnsignedByte(6 - tails, value >> (tails * 6)); // head
-//
-//        for (int i = tails - 1; i >= 0; i--) {
-//            writeUnsignedByte(2, 0x02); // 10______
-//            writeUnsignedByte(6, (value >> (6 * i)) & 0x3F); // __xxxxxx
-//        }
-//    }
     /**
      * Aligns to given {@code length} bytes.
      *
@@ -473,16 +433,6 @@ public class BitOutput {
         }
 
         return bits;
-    }
-
-
-    /**
-     * Returns current bit index to write.
-     *
-     * @return
-     */
-    public int getIndex() {
-        return index;
     }
 
 

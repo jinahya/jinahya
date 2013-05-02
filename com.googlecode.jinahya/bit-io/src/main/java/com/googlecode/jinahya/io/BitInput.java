@@ -26,7 +26,7 @@ import java.util.BitSet;
 
 /**
  * BitInput.
- *
+ * <p/>
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitInput {
@@ -40,9 +40,9 @@ public class BitInput {
 
         /**
          * Reads next unsigned byte.
-         *
+         * <p/>
          * @return next unsigned byte. -1 for EOF.
-         *
+         * <p/>
          * @throws IOException if an I/O error occurs.
          */
         int readUnsignedByte() throws IOException;
@@ -59,7 +59,7 @@ public class BitInput {
 
         /**
          * Creates a new instance.
-         *
+         * <p/>
          * @param input the stream to wrap.
          */
         public StreamInput(final InputStream input) {
@@ -73,7 +73,7 @@ public class BitInput {
         }
 
 
-        @Override
+        //@Override // commented for pre 5
         public int readUnsignedByte() throws IOException {
             return input.read();
         }
@@ -90,7 +90,7 @@ public class BitInput {
 
     /**
      * Creates a new instance.
-     *
+     * <p/>
      * @param input the byte input
      */
     public BitInput(final ByteInput input) {
@@ -106,12 +106,11 @@ public class BitInput {
 
     /**
      * Reads an {@code length}-bit unsigned byte value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ZERO}
-     * (exclusive) and {@value java.lang.Byte#SIZE} (inclusive).
-     *
+     * <p/>
+     * @param length bit length between 0 (exclusive) and 8 (inclusive).
+     * <p/>
      * @return an unsigned byte value.
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedByte(final int length) throws IOException {
@@ -155,12 +154,11 @@ public class BitInput {
 
 
     /**
-     * Reads a {@code 1}-bit boolean value. {@value java.math.BigDecimal#ZERO}
-     * for {@value java.lang.Boolean#FALSE} and
-     * {@value java.math.BigDecimal#ONE} for {@value java.lang.Boolean#TRUE}.
-     *
+     * Reads a {@code 1}-bit boolean value. {@code 0x00} for false and
+     * {@value 0x01} for true.
+     * <p/>
      * @return a boolean value
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     public boolean readBoolean() throws IOException {
@@ -171,12 +169,11 @@ public class BitInput {
 
     /**
      * Reads an {@code length}-bit unsigned short value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ZERO}
-     * (exclusive) and {@value java.lang.Short#SIZE} (inclusive).
-     *
+     * <p/>
+     * @param length bit length between 0 (exclusive) and 16 (inclusive).
+     * <p/>
      * @return the unsigned short value read.
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedShort(final int length) throws IOException {
@@ -210,12 +207,11 @@ public class BitInput {
 
     /**
      * Reads an {@code length}-bit unsigned int value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ONE}
-     * (inclusive) and {@value java.lang.Integer#SIZE} (exclusive).
-     *
-     * @return the unsigned {@code length}-bit int value read from the input.
-     *
+     * <p/>
+     * @param length bit length between 1 (inclusive) and 32 (exclusive).
+     * <p/>
+     * @return the unsigned int value read from the input.
+     * <p/>
      * @throws IOException if an I/O error occurs
      */
     public int readUnsignedInt(final int length) throws IOException {
@@ -249,12 +245,11 @@ public class BitInput {
 
     /**
      * Reads a {@code length}-bit signed int value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ONE}
-     * (exclusive) and {@value java.lang.Integer#SIZE} (inclusive).
-     *
+     * <p/>
+     * @param length bit length between 1 (exclusive) and 32 (inclusive).
+     * <p/>
      * @return the value read from the input.
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
@@ -267,31 +262,31 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        return (((readBoolean() ? -1 : 0) << (length - 1))
+        return (((readBoolean() ? ~0 : 0) << (length - 1))
             | readUnsignedInt(length - 1));
     }
 
 
     /**
      * Reads a float value.
-     *
+     * <p/>
      * @return a float value.
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs
      */
     public float readFloat() throws IOException {
+
         return Float.intBitsToFloat(readInt(32));
     }
 
 
     /**
      * Reads a {@code length}-bit unsigned long value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ONE}
-     * (inclusive) and {@value java.lang.Long#SIZE} (exclusive)
-     *
-     * @return an unsigned long value
-     *
+     * <p/>
+     * @param length bit length between 1 (inclusive) and 64 (exclusive)
+     * <p/>
+     * @return an unsigned long value read from the input
+     * <p/>
      * @throws IOException if an I/O error occurs
      */
     public long readUnsignedLong(final int length) throws IOException {
@@ -325,12 +320,11 @@ public class BitInput {
 
     /**
      * Reads a {@code length}-bit signed long value.
-     *
-     * @param length bit length between {@value java.math.BigDecimal#ONE}
-     * (exclusive) and {@value java.lang.Long#SIZE} (inclusive).
-     *
-     * @return the value read from the input.
-     *
+     * <p/>
+     * @param length bit length between 1 (exclusive) and 64 (inclusive).
+     * <p/>
+     * @return a signed long value read from the input.
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     public long readLong(final int length) throws IOException {
@@ -351,9 +345,9 @@ public class BitInput {
 
     /**
      * Reads a double value.
-     *
-     * @return double value
-     *
+     * <p/>
+     * @return a double value read from the input
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     public final double readDouble() throws IOException {
@@ -362,85 +356,24 @@ public class BitInput {
     }
 
 
-//    /**
-//     * Reads a UTF-8 code point.
-//     *
-//     * @return a UTF-8 decoded character value.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public int readUTF8Char() throws IOException {
-//
-//        if (!readBoolean()) {
-//            return readUnsignedByte(7);
-//        }
-//
-//        int tails = 0;
-//        for (; readBoolean(); tails++) {
-//            if (tails == 3) {
-//                throw new IOException("illegal encoding: more than 3 tails");
-//            }
-//        }
-//
-//        if (tails == 0) {
-//            throw new IOException("illegal encodeding; zero tails");
-//        }
-//
-//        int value = readUnsignedByte(8 - 2 - tails);
-//
-//        for (int i = 0; i < tails; i++) {
-//            if (readUnsignedByte(2) != 0x02) { // !10xxxxxx
-//                throw new IOException("illegal encoding; wrong tail bits");
-//            }
-//            value <<= 6;
-//            value |= readUnsignedByte(6);
-//        }
-//
-//        if (tails == 1) {
-//        switch (tails) {
-//            case 1:
-//                switch (value) {
-//                    case 0x00:
-//                    case 0x40:
-//                        throw new IOException(
-//                            "invalid byte sequence:" + (0xC000 | value));
-//                    default:
-//                        break;
-//                }
-//                break;
-//            case 3:
-//                break;
-//            default:
-//                break;
-//        }
-//
-//        if (value > 0x10FFFF) {
-//            throw new IOException(
-//                "invalid byte sequence: value(" + value + ") > 0x10FFFF");
-//        }
-//
-//        return value;
-//    }
-
-
     /**
      * Align to given {@code length} bytes.
-     *
+     * <p/>
      * @param length number of bytes to align; must be non-zero positive.
-     *
+     * <p/>
      * @return the number of bits discarded for alignment.
-     *
+     * <p/>
      * @throws IOException if an I/O error occurs.
      */
     public int align(final int length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         int bits = 0;
 
-        // discard remained bits on current octet.
+        // discard remained bits in current octet.
         if (index < 8) {
             bits = 8 - index;
             readUnsignedByte(bits);
@@ -464,16 +397,6 @@ public class BitInput {
         }
 
         return bits;
-    }
-
-
-    /**
-     * Returns current bit index to read.
-     *
-     * @return current bit index to read.
-     */
-    public int getIndex() {
-        return index;
     }
 
 

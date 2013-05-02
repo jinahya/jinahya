@@ -31,9 +31,9 @@ public class UnsignedLongValue extends Value<Long> {
     public UnsignedLongValue() {
         super();
 
-        length = Generator.unsignedLongLength();
+        length = Generator.newLengthLongUnsigned();
 
-        value = Generator.unsignedLongValue(length);
+        value = Generator.newValueLongUnsigned(length);
     }
 
 
