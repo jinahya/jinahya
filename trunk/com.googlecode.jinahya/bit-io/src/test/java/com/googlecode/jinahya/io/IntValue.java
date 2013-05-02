@@ -31,9 +31,9 @@ public class IntValue extends Value<Integer> {
     public IntValue() {
         super();
 
-        length = Generator.intLength();
+        length = Generator.newLengthInt();
 
-        value = Generator.intValue(length);
+        value = Generator.newValueInt(length);
     }
 
 
