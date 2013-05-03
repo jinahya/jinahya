@@ -4,19 +4,18 @@ package com.googlecode.jinahya.book;
 
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
@@ -99,30 +98,22 @@ public class ProjectCoin {
     }
 
 
-    private static void rethrowIoOrSql1() throws IOException, SQLException {
-        try {
-            throwIoOrSql(null); // throws IOException, SQLException
-        } catch (IOException | SQLException e) {
-            throw e;
-        }
-    }
-
-
-    private static void rethrowIoOrSql2() throws IOException, SQLException {
-        try {
-            throwIoOrSql(null); // throws IOException, SQLException
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-
+    /**
+     * Copies bytes from {@code source} to {@code target}.
+     *
+     * @param source source file
+     * @param target target file
+     *
+     * @throws IOException if an I/O error occurs
+     */
     private static void copy1(final File source, final File target)
         throws IOException {
 
-        final InputStream input = new FileInputStream(source);
+        System.out.println("copy1(" + source + ", " + target + ")");
+
+        final InputStream input = new ExtendedFileInputStream(source);
         try {
-            final OutputStream output = new FileOutputStream(target);
+            final OutputStream output = new ExtendedFileOutputStream(target);
             try {
                 final byte[] buffer = new byte[8192];
                 for (int read; (read = input.read(buffer)) != -1;) {
@@ -138,11 +129,21 @@ public class ProjectCoin {
     }
 
 
+    /**
+     * Copies bytes from {@code source} to {@code target}.
+     *
+     * @param source source file
+     * @param target target file
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     private static void copy2(final File source, final File target)
         throws IOException {
 
-        try (InputStream input = new FileInputStream(source);
-             OutputStream output = new FileOutputStream(target)) {
+        System.out.println("copy2(" + source + ", " + target + ")");
+
+        try (InputStream input = new ExtendedFileInputStream(source);
+             OutputStream output = new ExtendedFileOutputStream(target)) {
             final byte[] buffer = new byte[8192];
             for (int read; (read = input.read(buffer)) != -1;) {
                 output.write(buffer, 0, read);
@@ -152,21 +153,23 @@ public class ProjectCoin {
     }
 
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args)
+        throws IOException, SQLException {
 
 
-        // Strings in switch
+        // --------------------------------------------------- strings-in-switch
         final String osName = System.getProperty("os.name");
         switch (osName) {
             default:
-                if (osName.contains("win")) {
-                    System.out.print("Hell No! ");
-                }
                 System.out.println("os.name: " + osName);
+                if (osName.contains("Windows")) {
+                    System.out.println("Hell No! ");
+                }
                 break;
         }
 
-        // BinaryIntegerLiteral
+
+        // ---------------------------------------------- binary-integer-literal
         final int b = 0b11001010_11111110_10111110_10111110;
         final int h = 0xCA_FE_BE_BE;
         assert b == h;
@@ -175,6 +178,7 @@ public class ProjectCoin {
         //final int b2 = 0b1_; // won't compile
 
 
+        // --------------------------------------------------------- multi-catch
         try {
             throwIoOrSql(null);
         } catch (IOException ioe) {
@@ -188,15 +192,48 @@ public class ProjectCoin {
         } catch (IOException | SQLException e) {
             // log(e);
             // e = null; // won't compile; e is implicitly final
-            // smaller bytecode size!!
+            // smaller bytecode size!!!
+        }
+
+
+        // --------------------------------------- improved type checked rethrow
+        try {
+            throwIoOrSql(ThreadLocalRandom.current().nextBoolean());
+        } catch (Exception e) {
+            try {
+                throw e; // NOTE that this(main) method doesn't throw Exception
+            } catch (IOException | SQLException r) {
+                // just re-cached for following statements.
+            }
         }
 
 
         // -------------------------------------------------- try-with-resources
-        {
-            final URL url = new URL("http://www.daum.net/index.html");
+        assert AutoCloseable.class.isAssignableFrom(InputStream.class);
 
+        copy1(new File("source.txt"), new File("target.txt"));
+
+        copy2(new File("source.txt"), new File("target.txt"));
+
+        // watch out!!!
+        final OutputStream notGonnaBeClosed =
+            new ExtendedFileOutputStream(new File("target.txt"));
+        try {
+            try (final OutputStream errorOnClosing =
+                new ExtendedOutputStream(notGonnaBeClosed, true)) {
+            }
+        } catch (IOException ieo) {
+            // exception from outer close()
+            // inner close() is not gonna be closed
         }
+
+
+        // ------------------------------------------------------- diamod-syntax
+        final Map<Integer, Map<String, String>> map1 =
+            new HashMap<Integer, Map<String, String>>();
+
+        final Map<Integer, Map<String, String>> map2 =
+            new HashMap<>();
     }
 
 
