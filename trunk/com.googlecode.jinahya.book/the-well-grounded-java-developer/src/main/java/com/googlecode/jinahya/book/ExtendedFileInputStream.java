@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.book;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,11 +16,13 @@ import java.io.IOException;
 public class ExtendedFileInputStream extends FileInputStream {
 
 
-//    public ExtendedFileInputStream(final File file)
-//        throws FileNotFoundException {
-//
-//        super(file);
-//    }
+    public ExtendedFileInputStream(final File file)
+        throws FileNotFoundException {
+
+        super(file);
+    }
+
+
     public ExtendedFileInputStream(final String name)
         throws FileNotFoundException {
 
