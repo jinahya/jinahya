@@ -3,6 +3,7 @@
 package com.googlecode.jinahya.book;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -74,11 +75,6 @@ public class ProjectCoin {
 
 
     private static void throwIoOrSql() throws IOException, SQLException {
-//        if (ThreadLocalRandom.current().nextBoolean()) {
-//            throw new IOException("IO");
-//        } else {
-//            throw new SQLException("SQL");
-//        }
     }
 
 
@@ -155,11 +151,7 @@ public class ProjectCoin {
         try {
             throwIoOrSql();
         } catch (Exception e) {
-            try {
-                throw e; // NOTE that this(main) method doesn't throw Exception
-            } catch (IOException | SQLException r) {
-                // just re-cached for following statements.
-            }
+            throw e; // NOTE that this(main) method doesn't throw Exception
         }
 
 
@@ -168,9 +160,12 @@ public class ProjectCoin {
 
         assert AutoCloseable.class.isAssignableFrom(InputStream.class);
 
-        final InputStream input1 = new ExtendedFileInputStream("source");
+        final File source = new File("pom.xml");
+        final File target = new File("target" + File.separator + "pom.xml");
+
+        final InputStream input1 = new ExtendedFileInputStream(source);
         try {
-            final OutputStream output1 = new ExtendedFileOutputStream("target");
+            final OutputStream output1 = new ExtendedFileOutputStream(target);
             try {
                 final byte[] buffer = new byte[8192];
                 for (int r; (r = input1.read(buffer)) != -1;) {
@@ -184,8 +179,8 @@ public class ProjectCoin {
             input1.close();
         }
 
-        try (InputStream input = new ExtendedFileInputStream("source");
-             OutputStream output = new ExtendedFileOutputStream("target")) {
+        try (InputStream input = new ExtendedFileInputStream(source);
+             OutputStream output = new ExtendedFileOutputStream(target)) {
             final byte[] buffer = new byte[8192];
             for (int r; (r = input.read(buffer)) != -1;) {
                 output.write(buffer, 0, r);
@@ -195,7 +190,7 @@ public class ProjectCoin {
 
         // watch out!!!
         final OutputStream notGonnaBeClosed =
-            new ExtendedFileOutputStream("target");
+            new ExtendedFileOutputStream(target);
         try {
             try (final OutputStream errorOnClosing =
                 new ExtendedOutputStream(notGonnaBeClosed, true)) {
