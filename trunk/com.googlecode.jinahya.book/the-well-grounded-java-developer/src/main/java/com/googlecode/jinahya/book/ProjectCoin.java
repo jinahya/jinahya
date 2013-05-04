@@ -73,18 +73,6 @@ public class ProjectCoin {
     }
 
 
-    protected static int parseBinaryIntegerLiteral(
-        String binaryIntegerLiteral) {
-
-        if (binaryIntegerLiteral.startsWith("0b")) {
-            binaryIntegerLiteral = binaryIntegerLiteral.substring(2);
-        }
-
-        return Integer.parseInt(binaryIntegerLiteral, 2);
-
-    }
-
-
     private static void throwIoOrSql() throws IOException, SQLException {
 //        if (ThreadLocalRandom.current().nextBoolean()) {
 //            throw new IOException("IO");
