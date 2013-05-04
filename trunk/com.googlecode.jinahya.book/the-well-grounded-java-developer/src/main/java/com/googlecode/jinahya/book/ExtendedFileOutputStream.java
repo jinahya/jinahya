@@ -16,10 +16,17 @@ import java.io.IOException;
 public class ExtendedFileOutputStream extends FileOutputStream {
 
 
-    public ExtendedFileOutputStream(final File file)
+//    public ExtendedFileOutputStream(final File file)
+//        throws FileNotFoundException {
+//
+//        super(file);
+//    }
+
+
+    public ExtendedFileOutputStream(final String name)
         throws FileNotFoundException {
 
-        super(file);
+        super(name);
     }
 
 
