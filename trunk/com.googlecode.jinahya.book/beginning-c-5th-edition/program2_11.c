@@ -6,30 +6,23 @@
 
 #include "program2_11.h"
 
-int program2_11(int argc, char** argv) {
+void program2_11() {
 
   if (0) {
-    return EXIT_SUCCESS;
+    return;
   }
-  printf("program2_11\n");
-  printf("CHAR_MIN: %d\tCHAR_MAX: %d\tUCHAR_MAX: %d\n", CHAR_MIN, CHAR_MAX, UCHAR_MAX);
-  printf("SHRT_MIN: %d\tSHRT_MAX: %d\tUSHAR_MAX: %d\n", SHRT_MIN, SHRT_MAX, USHRT_MAX);
 
-  printf("Variables of type int store values from %d to %d\n", INT_MIN, INT_MAX);
-  printf("Variables of type unsigned int store values from 0 to %u\n", UINT_MAX);
-  printf("Variables of type long store values from %ld to %ld\n", LONG_MIN, LONG_MAX);
-  printf("Variables of type unsigned long store values from 0 to %lu\n", ULONG_MAX);
-  printf("Variables of type long long store values from %lld to %lld\n", LLONG_MIN, LLONG_MAX);
-  printf("Variables of type unsigned long long store values from 0 to %llu\n", ULLONG_MAX);
-  printf("\nThe size of the smallest positive non-zero value of type float is %.3e\n", FLT_MIN);
-  printf("The size of the largest value of type float is %.3e\n", FLT_MAX);
-  printf("The size of the smallest non-zero value of type double is %.3e\n", DBL_MIN);
-  printf("The size of the largest value of type double is %.3e\n", DBL_MAX);
-  printf("The size of the smallest non-zero value of type long double is %.3Le\n", LDBL_MIN);
-  printf("The size of the largest value of type long double is %.3Le\n", LDBL_MAX);
-  printf("\n Variables of type float provide %u decimal digits precision. \n", FLT_DIG);
-  printf("Variables of type double provide %u decimal digits precision. \n", DBL_DIG);
-  printf("Variables of type long double provide %u decimal digits precision. \n",
-          LDBL_DIG);
-  return EXIT_SUCCESS;
+  printf("program2_11\n");
+  printf("%20s %20s %20s\n", "MIN", "MAX", "UMAX");
+  printf("CHAR_MIN: %d\tCHAR_MAX: %d\tUCHAR_MAX: %u\n", CHAR_MIN, CHAR_MAX, UCHAR_MAX);
+  printf("SHRT_MIN: %d\tSHRT_MAX: %d\tUSHAR_MAX: %u\n", SHRT_MIN, SHRT_MAX, USHRT_MAX);
+  printf("INT_MIN: %d\tMIN_MAX: %d\tUNIT_MAX: %u\n", INT_MIN, INT_MAX, UINT_MAX);
+  printf("LONG_MIN: %ld\tLONG_MAX: %ld\tULONG_MAX: %lu\n", LONG_MIN, LONG_MAX, ULONG_MAX);
+  printf("LLONG_MIN: %lld\tLLONG_MAX: %lld\tULlONG_MAX: %llu\n", LLONG_MIN, LLONG_MAX, ULLONG_MAX);
+  printf("FLT_MIN: %e\tFLT_MAX: %e\n", FLT_MIN, FLT_MAX);
+  printf("DBL_MIN: %e\tDBL_MAX: %e\n", DBL_MIN, DBL_MAX);
+  printf("LDBL_MIN: %Le\tLDBL_MAX: %Le\n", LDBL_MIN, LDBL_MAX);
+  printf("FLT_DIG: %u\tDBL_DIG: %u\tLDBL_DIG: %u\n", FLT_DIG, DBL_DIG, LDBL_DIG);
+
+  return;
 }
