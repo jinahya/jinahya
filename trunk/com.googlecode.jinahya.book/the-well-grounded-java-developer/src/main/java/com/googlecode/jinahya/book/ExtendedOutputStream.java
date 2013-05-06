@@ -24,7 +24,7 @@ public class ExtendedOutputStream extends FilterOutputStream {
 
 
     /**
-     * Overridden for simple logging.
+     * Overridden for simple logging and conditional error.
      *
      * @throws IOException if an I/O error occurs.
      */
