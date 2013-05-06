@@ -10,18 +10,11 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 
 
 /**
@@ -31,51 +24,7 @@ import java.util.logging.Logger;
 public class ProjectCoin {
 
 
-    private static final Logger LOGGER =
-        Logger.getLogger(ProjectCoin.class.getName());
-
-
-    protected static final String DAY_OF_WEEK_PATTERN = "EEEE";
-
-
-    public static String printDayOfWeek(final Locale locale,
-                                        final int dayOfWeek) {
-
-        switch (dayOfWeek) {
-            default:
-        }
-
-        final DateFormat dateFormat =
-            new SimpleDateFormat(DAY_OF_WEEK_PATTERN, locale);
-
-        final Calendar calendar = Calendar.getInstance(locale);
-        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-
-        return dateFormat.format(calendar.getTime());
-    }
-
-
-    public static int parseDayOfWeek(final Locale locale,
-                                     final String dayOfWeek)
-        throws ParseException {
-
-        switch (dayOfWeek) {
-            default:
-        }
-
-        final DateFormat dateFormat = new SimpleDateFormat("EEEE", locale);
-
-        final Date date = dateFormat.parse(dayOfWeek);
-
-        final Calendar calendar = Calendar.getInstance(locale);
-        calendar.setTime(date);
-
-        return calendar.get(Calendar.DAY_OF_WEEK);
-    }
-
-
     private static void throwIoOrSql() throws IOException, SQLException {
-        
         // empty
     }
 
@@ -94,7 +43,7 @@ public class ProjectCoin {
      *
      * @param elements elements to be collected
      *
-     * @return a collection containing given {@code lists}.
+     * @return a collection containing given {@code elements}.
      *
      * @see <a href="http://goo.gl/WKdkX">Improved Compiler Warnings and Errors
      * When Using Non-Reifiable Formal Parameters with Varargs Methods</a>
@@ -117,8 +66,6 @@ public class ProjectCoin {
     public static void main(final String[] args)
         throws IOException, SQLException {
 
-//        assert false;
-
         // --------------------------------------------------- STRINGS-IN-SWITCH
         final String osName = System.getProperty("os.name");
         switch (osName) {
@@ -132,7 +79,7 @@ public class ProjectCoin {
 
 
         // ---------------------------------------------- BINARY_INTEGER_LITERAL
-        
+
         final int b = 0b11001010_11111110_10111110_10111110;
         final int h = 0xCA_FE_BE_BE;
         assert b == h;
