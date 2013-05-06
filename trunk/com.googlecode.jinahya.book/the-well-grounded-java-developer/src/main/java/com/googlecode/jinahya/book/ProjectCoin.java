@@ -10,10 +10,13 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -68,15 +71,35 @@ public class ProjectCoin {
 
 
         // --------------------------------------------------- STRINGS-IN-SWITCH
-        final String osName = System.getProperty("os.name");
-        switch (osName) {
+        final String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH)
+            .format(Calendar.getInstance().getTime());
+        System.out.println("Today in English: " + dayOfWeek);
+        System.out.print("Today in Korean: ");
+        switch (dayOfWeek) {
+            case "Sunday":
+                System.out.println("일요일");
+                break;
+            case "Monday":
+                System.out.println("월요일");
+                break;
+            case "Tuesday":
+                System.out.println("화요일");
+                break;
+            case "Wednesday":
+                System.out.println("수요일");
+                break;
+            case "Thursday":
+                System.out.println("목요일");
+                break;
+            case "Friday":
+                System.out.println("금요일");
+                break;
             default:
-                System.out.println("os.name: " + osName);
-                if (osName.contains("Windows")) {
-                    System.out.println("Hell No! ");
-                }
+                assert dayOfWeek.equals("Saturday");
+                System.out.println("토요일");
                 break;
         }
+
 
 
         // ---------------------------------------------- BINARY_INTEGER_LITERAL
@@ -85,8 +108,8 @@ public class ProjectCoin {
         final int h1 = 0x0F;
         assert b1 == h1;
 
-        final int b2 = 0b11001010_11111110_10111110_10111110;
-        final int h2 = 0xCA_FE_BE_BE;
+        final int b2 = 0b11001010_11111110_10111010_10111110;
+        final int h2 = 0xCA_FE_BA_BE;
         assert b2 == h2;
 
         //final int b1 = 0b_1; // won't compile
