@@ -33,7 +33,7 @@ public class ProjectCoin {
         try {
             throwIoOrSql();
         } catch (Exception e) {
-            throw e; // won't compile in pre 7
+            throw e; // won't compile with pre Java 7
         }
     }
 
@@ -66,6 +66,7 @@ public class ProjectCoin {
     public static void main(final String[] args)
         throws IOException, SQLException {
 
+
         // --------------------------------------------------- STRINGS-IN-SWITCH
         final String osName = System.getProperty("os.name");
         switch (osName) {
@@ -80,9 +81,13 @@ public class ProjectCoin {
 
         // ---------------------------------------------- BINARY_INTEGER_LITERAL
 
-        final int b = 0b11001010_11111110_10111110_10111110;
-        final int h = 0xCA_FE_BE_BE;
-        assert b == h;
+        final int b1 = 0b00001111;
+        final int h1 = 0x0F;
+        assert b1 == h1;
+
+        final int b2 = 0b11001010_11111110_10111110_10111110;
+        final int h2 = 0xCA_FE_BE_BE;
+        assert b2 == h2;
 
         //final int b1 = 0b_1; // won't compile
         //final int b2 = 0b1_; // won't compile
@@ -94,8 +99,10 @@ public class ProjectCoin {
             throwIoOrSql();
         } catch (IOException ioe) {
             // log(ioe);
+            ioe = null; // ok
         } catch (SQLException sqle) {
             // log(sqle);
+            sqle = null; // ok
         }
 
         try {
@@ -124,8 +131,8 @@ public class ProjectCoin {
             final OutputStream output1 = new ExtendedFileOutputStream(target);
             try {
                 final byte[] buffer = new byte[8192];
-                for (int r; (r = input1.read(buffer)) != -1;) {
-                    output1.write(buffer, 0, r);
+                for (int read; (read = input1.read(buffer)) != -1;) {
+                    output1.write(buffer, 0, read);
                 }
                 output1.flush();
             } finally {
@@ -141,8 +148,8 @@ public class ProjectCoin {
         try (InputStream input2 = new ExtendedFileInputStream(source);
              OutputStream output2 = new ExtendedFileOutputStream(target)) {
             final byte[] buffer = new byte[8192];
-            for (int r; (r = input2.read(buffer)) != -1;) {
-                output2.write(buffer, 0, r);
+            for (int read; (read = input2.read(buffer)) != -1;) {
+                output2.write(buffer, 0, read);
             }
             output2.flush();
         }
