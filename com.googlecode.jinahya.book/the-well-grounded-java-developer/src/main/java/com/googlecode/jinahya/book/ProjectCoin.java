@@ -75,6 +75,17 @@ public class ProjectCoin {
 
 
     private static void throwIoOrSql() throws IOException, SQLException {
+        
+        // empty
+    }
+
+
+    private static void rethrowIoOrSql() throws IOException, SQLException {
+        try {
+            throwIoOrSql();
+        } catch (Exception e) {
+            throw e; // won't compile in pre 7
+        }
     }
 
 
@@ -107,7 +118,7 @@ public class ProjectCoin {
         throws IOException, SQLException {
 
 
-        // --------------------------------------------------- strings-in-switch
+        // --------------------------------------------------- STRINGS-IN-SWITCH
         final String osName = System.getProperty("os.name");
         switch (osName) {
             default:
@@ -119,7 +130,8 @@ public class ProjectCoin {
         }
 
 
-        // ---------------------------------------------- binary-integer-literal
+        // ---------------------------------------------- BINARY_INTEGER_LITERAL
+        
         final int b = 0b11001010_11111110_10111110_10111110;
         final int h = 0xCA_FE_BE_BE;
         assert b == h;
@@ -148,21 +160,17 @@ public class ProjectCoin {
 
 
         // --------------------------------------- IMPROVED TYPE CHECKED RETHROW
-        try {
-            throwIoOrSql();
-        } catch (Exception e) {
-            throw e; // NOTE that this(main) method doesn't throw Exception
-        }
+
+        rethrowIoOrSql(); // see this method
 
 
 
         // -------------------------------------------------- TRY-WITH-RESOURCES
 
-        assert AutoCloseable.class.isAssignableFrom(InputStream.class);
-
         final File source = new File("pom.xml");
         final File target = new File("target" + File.separator + "pom.xml");
 
+        // traditional I/O
         final InputStream input1 = new ExtendedFileInputStream(source);
         try {
             final OutputStream output1 = new ExtendedFileOutputStream(target);
@@ -179,13 +187,16 @@ public class ProjectCoin {
             input1.close();
         }
 
-        try (InputStream input = new ExtendedFileInputStream(source);
-             OutputStream output = new ExtendedFileOutputStream(target)) {
+        assert AutoCloseable.class.isAssignableFrom(InputStream.class);
+
+        // try-with-resources
+        try (InputStream input2 = new ExtendedFileInputStream(source);
+             OutputStream output2 = new ExtendedFileOutputStream(target)) {
             final byte[] buffer = new byte[8192];
-            for (int r; (r = input.read(buffer)) != -1;) {
-                output.write(buffer, 0, r);
+            for (int r; (r = input2.read(buffer)) != -1;) {
+                output2.write(buffer, 0, r);
             }
-            output.flush();
+            output2.flush();
         }
 
         // watch out!!!
