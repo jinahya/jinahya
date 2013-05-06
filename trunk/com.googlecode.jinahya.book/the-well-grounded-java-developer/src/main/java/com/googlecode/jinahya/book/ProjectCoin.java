@@ -117,6 +117,7 @@ public class ProjectCoin {
     public static void main(final String[] args)
         throws IOException, SQLException {
 
+//        assert false;
 
         // --------------------------------------------------- STRINGS-IN-SWITCH
         final String osName = System.getProperty("os.name");

@@ -35,6 +35,11 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -54,4 +59,28 @@
   <name>the-well-grounded-java-developer</name>
   <url>http://maven.apache.org</url>
 
+  <profiles>
+    <profile>
+      <id>project-coin</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>java</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>com.googlecode.jinahya.book.ProjectCoin</mainClass>
+              <commandlineArgs>-enableassertions</commandlineArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
