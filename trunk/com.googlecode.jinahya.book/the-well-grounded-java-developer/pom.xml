@@ -64,5 +64,30 @@
   <url>http://maven.apache.org</url>
 
   <!-- Environment Settings -->
+  <scm>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/bit-io</url>
+  </scm>
+  <prerequisites>
+    <maven>3.0.5</maven>
+  </prerequisites>
+  <repositories />
+  <pluginRepositories />
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Propellors Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <site>
+      <id>jinahya.com</id>
+      <url>dav:${project.url}</url>
+    </site>
+  </distributionManagement>
 
 </project>
