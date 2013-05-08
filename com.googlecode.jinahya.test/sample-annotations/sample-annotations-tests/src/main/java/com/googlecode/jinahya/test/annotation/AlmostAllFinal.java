@@ -8,11 +8,11 @@ package com.googlecode.jinahya.test.annotation;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @Final
-public final class AllFinal {
+public final class AlmostAllFinal {
 
 
     @Final
-    public AllFinal(final String value) {
+    public AlmostAllFinal(final String value) {
         super();
 
         this.value = value;
@@ -20,8 +20,14 @@ public final class AllFinal {
 
 
     @Final
-    public AllFinal() {
+    public AlmostAllFinal() {
         this(null);
+    }
+
+
+    @Final
+    public String getValue() {
+        return value;
     }
 
 
