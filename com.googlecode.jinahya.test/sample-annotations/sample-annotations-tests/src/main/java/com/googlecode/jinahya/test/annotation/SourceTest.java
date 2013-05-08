@@ -8,6 +8,12 @@ package com.googlecode.jinahya.test.annotation;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
+@Source(created = {@By(name = "mskim"),
+                   @By(name = "jkwon")},
+        reviewed = {@By(name = "ryunseo"),
+                    @By(name = "ymchoi", comment = ""),
+                    @By(name = "mwpark")
+})
 public class SourceTest {
 
 
@@ -15,12 +21,6 @@ public class SourceTest {
      *
      * @param args program arguments
      */
-    @Source(created = {@By(name = "mskim"),
-                       @By(name = "jkwon")},
-            reviewed = {@By(name = "ryunseo"),
-                        @By(name = "ymchoi"),
-                        @By(name = "mwpark")
-    })
     public static void main(final String[] args) {
         System.out.println("hello, world");
     }
