@@ -13,8 +13,11 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 
@@ -40,10 +43,18 @@ public class FinalProcessor extends AbstractProcessor {
 
         final Set<? extends Element> elements =
             roundEnv.getElementsAnnotatedWith(Final.class);
+//        System.out.println(elements.size());
         for (Element element : elements) {
+//            System.out.println("element.simpleName: " + element.getSimpleName());
+//            final ElementKind elementKind = element.getKind();
+//            System.out.println("element.kind: " + elementKind);
+//            final TypeMirror typeMirror = element.asType();
+//            System.out.println("element.type: " + typeMirror);
+//            final TypeKind typeKind = typeMirror.getKind();
+//            System.out.println("element.type.kind: " + typeKind);
             if (!element.getModifiers().contains(Modifier.FINAL)) {
                 processingEnv.getMessager().printMessage(
-                    Diagnostic.Kind.ERROR, element.getSimpleName() + " annotated with " + Final.class.getSimpleName() + " yet not final");
+                    Diagnostic.Kind.MANDATORY_WARNING, element.getKind() + " " + element.getSimpleName() + " annotated with " + Final.class.getSimpleName() + " yet not final");
             }
         }
 
