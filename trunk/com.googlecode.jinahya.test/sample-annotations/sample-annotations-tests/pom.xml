@@ -3,18 +3,28 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <modules>
-    <module>sample-annotations-definitions</module>
-    <module>sample-annotations-processors</module>
-    <module>sample-annotations-tests</module>
-  </modules>
+  <parent>
+    <groupId>com.googlecode.jinahya.test</groupId>
+    <artifactId>sample-annotations</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
   <groupId>com.googlecode.jinahya.test</groupId>
-  <artifactId>sample-annotations</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>sample-annotations-tests</artifactId>
+  <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.googlecode.jinahya.test</groupId>
+        <artifactId>sample-annotations</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya.test</groupId>
+        <artifactId>sample-annotations-processors</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
@@ -23,6 +33,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>com.googlecode.jinahya.test</groupId>
+      <artifactId>sample-annotations-processors</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -51,12 +66,16 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
+          <!--          <annotationProcessors>
+            <annotationProcessor>com.googlecode.jinahya.test.annotation.processing.CreatedProcessor</annotationProcessor>
+            <annotationProcessor>com.googlecode.jinahya.test.annotation.processing.ReviewedProcessor</annotationProcessor>
+          </annotationProcessors>-->
         </configuration>
       </plugin>
     </plugins>
   </build>
 
-  <name>sample-annotations</name>
+  <name>sample-annotations-tests</name>
   <url>http://maven.apache.org</url>
 
   <repositories>
