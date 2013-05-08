@@ -4,9 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya.test</groupId>
-  <artifactId>sample-annotations</artifactId>
+  <artifactId>sample-annotations-definitions</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
+    <parent>
+    <groupId>com.googlecode.jinahya.test</groupId>
+    <artifactId>sample-annotations-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -29,7 +34,6 @@
   </properties>
 
   <build>
-    <finalName>sample-annotations</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -43,7 +47,7 @@
     </plugins>
   </build>
 
-  <name>sample-annotations</name>
+  <name>sample-annotations-definitions</name>
   <url>http://maven.apache.org</url>
 
   <repositories>
