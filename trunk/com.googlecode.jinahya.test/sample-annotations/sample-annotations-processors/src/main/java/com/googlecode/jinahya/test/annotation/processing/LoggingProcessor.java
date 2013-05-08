@@ -116,6 +116,9 @@ public class LoggingProcessor extends AbstractProcessor {
         LOGGER.log(Level.INFO, "process({0}, {1})",
                    new Object[]{annotations, roundEnv});
 
+        for (TypeElement annotation : annotations) {
+        }
+
         return false;
     }
 

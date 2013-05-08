@@ -19,5 +19,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD,
          ElementType.PARAMETER, ElementType.TYPE})
 public @interface Final {
+
+
+    String value() default "";
+
+
 }
 

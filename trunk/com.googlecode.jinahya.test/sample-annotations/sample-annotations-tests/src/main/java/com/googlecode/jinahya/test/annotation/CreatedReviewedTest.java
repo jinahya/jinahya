@@ -15,7 +15,7 @@ public class CreatedReviewedTest {
      * Says 'hello' to the 'world'.
      */
     @Created({
-        @By(name = "JIn Kwon", comment = "Damn, I'm good!")
+        @By(name = "Jin Kwon", comment = "Damn, I'm good!")
     })
     @Reviewed({
         @By(name = "Steve Jobs", comment = "Awesome!"),

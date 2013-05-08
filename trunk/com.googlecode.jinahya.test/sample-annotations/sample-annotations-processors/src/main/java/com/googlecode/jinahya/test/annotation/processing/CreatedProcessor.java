@@ -38,9 +38,13 @@ public class CreatedProcessor extends AbstractProcessor {
         LOGGER.log(Level.INFO, "process({0}, {1})",
                    new Object[]{annotations, roundEnv});
 
-        final Set<? extends Element> elementsAnnotatedWithReviewed =
+        final Set<? extends Element> elements =
             roundEnv.getElementsAnnotatedWith(Created.class);
-        for (Element element : elementsAnnotatedWithReviewed) {
+        for (Element element : elements) {
+            System.out.println("element: " + element);
+            System.out.println("\tenclosedElements: " + element.getEnclosedElements());
+            System.out.println("\tenclosingElement: " + element.getEnclosingElement());
+
             final Created created = element.getAnnotation(Created.class);
             for (By by : created.value()) {
                 final StringBuilder message =
