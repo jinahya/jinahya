@@ -26,7 +26,7 @@ import java.util.BitSet;
 
 /**
  * BitInput.
- * <p/>
+ *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitInput {
@@ -40,9 +40,9 @@ public class BitInput {
 
         /**
          * Reads next unsigned byte.
-         * <p/>
+         *
          * @return next unsigned byte. -1 for EOF.
-         * <p/>
+         *
          * @throws IOException if an I/O error occurs.
          */
         int readUnsignedByte() throws IOException;
@@ -59,7 +59,7 @@ public class BitInput {
 
         /**
          * Creates a new instance.
-         * <p/>
+         *
          * @param input the stream to wrap.
          */
         public StreamInput(final InputStream input) {
@@ -90,7 +90,7 @@ public class BitInput {
 
     /**
      * Creates a new instance.
-     * <p/>
+     *
      * @param input the byte input
      */
     public BitInput(final ByteInput input) {
@@ -106,11 +106,11 @@ public class BitInput {
 
     /**
      * Reads an {@code length}-bit unsigned byte value.
-     * <p/>
+     *
      * @param length bit length between 0 (exclusive) and 8 (inclusive).
-     * <p/>
+     *
      * @return an unsigned byte value.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedByte(final int length) throws IOException {
@@ -136,11 +136,12 @@ public class BitInput {
             index = 0;
         }
 
-        final int required = length - (8 - index);
+        final int available = 8 - index;
+        final int required = length - available;
 
         if (required > 0) {
-            return (readUnsignedByte(8 - index) << required)
-                | readUnsignedByte(required);
+            return (readUnsignedByte(available) << required)
+                   | readUnsignedByte(required);
         }
 
         int value = 0x00;
@@ -169,11 +170,11 @@ public class BitInput {
 
     /**
      * Reads an {@code length}-bit unsigned short value.
-     * <p/>
+     *
      * @param length bit length between 0 (exclusive) and 16 (inclusive).
-     * <p/>
+     *
      * @return the unsigned short value read.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedShort(final int length) throws IOException {
@@ -189,29 +190,29 @@ public class BitInput {
         final int quotient = length / 8;
         final int remainder = length % 8;
 
-        int result = 0x00;
+        int value = 0x00;
 
         for (int i = 0; i < quotient; i++) {
-            result <<= 8;
-            result |= readUnsignedByte(8);
+            value <<= 8;
+            value |= readUnsignedByte(8);
         }
 
         if (remainder > 0) {
-            result <<= remainder;
-            result |= readUnsignedByte(remainder);
+            value <<= remainder;
+            value |= readUnsignedByte(remainder);
         }
 
-        return result;
+        return value;
     }
 
 
     /**
      * Reads an {@code length}-bit unsigned int value.
-     * <p/>
+     *
      * @param length bit length between 1 (inclusive) and 32 (exclusive).
-     * <p/>
+     *
      * @return the unsigned int value read from the input.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs
      */
     public int readUnsignedInt(final int length) throws IOException {
@@ -227,29 +228,29 @@ public class BitInput {
         final int quotient = length / 16;
         final int remainder = length % 16;
 
-        int result = 0x00;
+        int value = 0x00;
 
         for (int i = 0; i < quotient; i++) {
-            result <<= 16;
-            result |= readUnsignedShort(16);
+            value <<= 16;
+            value |= readUnsignedShort(16);
         }
 
         if (remainder > 0) {
-            result <<= remainder;
-            result |= readUnsignedShort(remainder);
+            value <<= remainder;
+            value |= readUnsignedShort(remainder);
         }
 
-        return result;
+        return value;
     }
 
 
     /**
      * Reads a {@code length}-bit signed int value.
-     * <p/>
+     *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
-     * <p/>
+     *
      * @return the value read from the input.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     public int readInt(final int length) throws IOException {
@@ -262,16 +263,18 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
+        final int unsignedLength = length - 1;
+
         return (((readBoolean() ? ~0 : 0) << (length - 1))
-            | readUnsignedInt(length - 1));
+                | readUnsignedInt(length - 1));
     }
 
 
     /**
      * Reads a float value.
-     * <p/>
+     *
      * @return a float value.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs
      */
     public float readFloat() throws IOException {
@@ -282,11 +285,11 @@ public class BitInput {
 
     /**
      * Reads a {@code length}-bit unsigned long value.
-     * <p/>
+     *
      * @param length bit length between 1 (inclusive) and 64 (exclusive)
-     * <p/>
+     *
      * @return an unsigned long value read from the input
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs
      */
     public long readUnsignedLong(final int length) throws IOException {
@@ -338,7 +341,7 @@ public class BitInput {
         }
 
         return (((readBoolean() ? -1L : 0L) << (length - 1))
-            | readUnsignedLong(length - 1));
+                | readUnsignedLong(length - 1));
 
     }
 
