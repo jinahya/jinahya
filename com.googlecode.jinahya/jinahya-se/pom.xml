@@ -234,7 +234,7 @@
   <reporting />
 
   <name>jinahya-se</name>
-  <url>https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+  <url>https://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>
