@@ -263,8 +263,6 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        final int unsignedLength = length - 1;
-
         return (((readBoolean() ? ~0 : 0) << (length - 1))
                 | readUnsignedInt(length - 1));
     }
@@ -323,11 +321,11 @@ public class BitInput {
 
     /**
      * Reads a {@code length}-bit signed long value.
-     * <p/>
+     *
      * @param length bit length between 1 (exclusive) and 64 (inclusive).
-     * <p/>
+     *
      * @return a signed long value read from the input.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     public long readLong(final int length) throws IOException {
@@ -348,9 +346,9 @@ public class BitInput {
 
     /**
      * Reads a double value.
-     * <p/>
+     *
      * @return a double value read from the input
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     public final double readDouble() throws IOException {
@@ -361,11 +359,11 @@ public class BitInput {
 
     /**
      * Align to given {@code length} bytes.
-     * <p/>
+     *
      * @param length number of bytes to align; must be non-zero positive.
-     * <p/>
+     *
      * @return the number of bits discarded for alignment.
-     * <p/>
+     *
      * @throws IOException if an I/O error occurs.
      */
     public int align(final int length) throws IOException {
@@ -376,25 +374,25 @@ public class BitInput {
 
         int bits = 0;
 
-        // discard remained bits in current octet.
+        // discard remained bits in current byte.
         if (index < 8) {
             bits = 8 - index;
             readUnsignedByte(bits);
         }
 
-        int octets = count % length;
+        int bytes = count % length;
 
-        if (octets == 0) {
+        if (bytes == 0) {
             return bits;
         }
 
-        if (octets > 0) {
-            octets = length - octets;
+        if (bytes > 0) {
+            bytes = length - bytes;
         } else {
-            octets = 0 - octets;
+            bytes = 0 - bytes;
         }
 
-        for (; octets > 0; octets--) {
+        for (; bytes > 0; bytes--) {
             readUnsignedByte(8);
             bits += 8;
         }
@@ -404,9 +402,9 @@ public class BitInput {
 
 
     /**
-     * Returns the number of octets read so far including current octet.
+     * Returns the number of bytes read so far including current byte.
      *
-     * @return the number of octets read so far.
+     * @return the number of bytes read so far.
      */
     public int getCount() {
         return count;
