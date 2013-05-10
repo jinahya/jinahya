@@ -288,7 +288,7 @@
     </repository>
     <site>
       <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
+      <url>dav:${project.url}</url>
     </site>
   </distributionManagement>
   <profiles>
