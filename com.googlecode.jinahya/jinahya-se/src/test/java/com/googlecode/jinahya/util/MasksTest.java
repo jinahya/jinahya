@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -31,31 +30,49 @@ import org.testng.annotations.Test;
 public class MasksTest {
 
 
-    @Test(invocationCount = 1024)
-    public void testAddMask() {
+    @Test(invocationCount = 128)
+    public static void testPutOnWithSingleMask() {
 
-        final Random random = ThreadLocalRandom.current();
+        final int mask = ThreadLocalRandom.current().nextInt();
 
-        final int modifier = 0x00;
-
-        final int expected = random.nextInt();
-
-        final int actual = Masks.addMask(modifier, expected);
-
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(Masks.putOn(0x00, mask), mask);
     }
 
 
-    @Test(invocationCount = 1024)
-    public void testRemoveMask() {
+    @Test(expectedExceptions = {NullPointerException.class})
+    public static void testPutOnWithNullMasks() {
 
-        final Random random = ThreadLocalRandom.current();
+        Masks.putOn(0, (int[]) null);
+    }
 
-        final int modifier = random.nextInt();
 
-        final int actual = Masks.removeMask(modifier, modifier);
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public static void testPutOnWithEmptyMasks() {
 
-        Assert.assertEquals(actual, 0x00);
+        Masks.putOn(0, new int[0]);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testTakeOffWithSingleMask() {
+
+        final int mask = ThreadLocalRandom.current().nextInt();
+
+        Assert.assertEquals(Masks.takeOff(mask, mask), 0x00);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public static void testTakeOffWithNullMasks() {
+
+        Masks.takeOff(0, (int[]) null);
+    }
+
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public static void testTakeOffWithEmptyMasks() {
+
+        Masks.takeOff(0, new int[0]);
     }
 
 
