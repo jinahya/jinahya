@@ -25,34 +25,90 @@ package com.googlecode.jinahya.util;
 public class Masks {
 
 
+//    /**
+//     * Puts specified {@code mask} on to given {@code face}.
+//     *
+//     * @param face current face
+//     * @param mask the mask to put on
+//     *
+//     * @return a new face with given {@code mask} on.
+//     */
+//    public static int putOn(final int face, final int mask) {
+//        return face | mask;
+//    }
+
+
     /**
+     * Puts all specified {@code masks} on to given {@code face}.
      *
-     * @param modifier current modifier
-     * @param mask the mask to add
+     * @param face current face
+     * @param mask masks to put on
      *
-     * @return new modifier
+     * @return a new face with all given {@code masks} on.
      */
-    public static int addMask(final int modifier, final int mask) {
-        return modifier | mask;
+    public static int putOn(int face, final int... masks) {
+
+        if (masks == null) {
+            throw new NullPointerException("null masks");
+        }
+
+        if (masks.length == 0) {
+            throw new IllegalArgumentException(
+                "masks.length(" + masks.length + ") == 0");
+        }
+
+        for (int mask : masks) {
+            face |= mask;
+        }
+
+        return face;
     }
 
 
     /**
+     * Takes specified {@code mask} off from given {@code face}.
      *
-     * @param modifier current modifier
-     * @param mask the mask to remove
+     * @param face current face
+     * @param mask the mask to take off
      *
-     * @return new modifier
+     * @return a new face with given {@code mask} off.
      */
-    public static int removeMask(final int modifier, final int mask) {
-        return modifier & ~mask;
+    public static int takeOff(final int face, final int mask) {
+        return face & ~mask;
+    }
+
+
+    /**
+     * Takes all specified {@code masks} off from given {@code face}.
+     *
+     * @param face current face
+     * @param mask masks to take off
+     *
+     * @return a new face with all given {@code masks} off.
+     */
+    public static int takeOff(int face, final int... masks) {
+
+        if (masks == null) {
+            throw new NullPointerException("null masks");
+        }
+
+        if (masks.length == 0) {
+            throw new IllegalArgumentException(
+                "masks.length(" + masks.length + ") == 0");
+        }
+
+        for (int mask : masks) {
+            face = takeOff(face, mask);
+        }
+
+        return face;
     }
 
 
     /**
      * Creates a new instance.
      */
-    protected Masks() {
+    private Masks() {
         super();
     }
 

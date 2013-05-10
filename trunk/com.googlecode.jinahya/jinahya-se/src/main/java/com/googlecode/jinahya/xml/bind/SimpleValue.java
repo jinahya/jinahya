@@ -50,8 +50,10 @@ public abstract class SimpleValue<R> {
             final V instance = simpleValueType.newInstance();
             instance.setRawValue(rawValue);
             return instance;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
         }
     }
 

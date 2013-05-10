@@ -79,8 +79,10 @@ public abstract class Plural<S> implements Serializable {
             final P instance = pluralType.newInstance();
             instance.getSingulars().addAll(singulars);
             return instance;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
         }
     }
 
@@ -100,7 +102,7 @@ public abstract class Plural<S> implements Serializable {
     public Collection<S> getSingulars() {
 
         if (singulars == null) {
-            singulars = new ArrayList<>();
+            singulars = new ArrayList<S>();
         }
 
         return singulars;
