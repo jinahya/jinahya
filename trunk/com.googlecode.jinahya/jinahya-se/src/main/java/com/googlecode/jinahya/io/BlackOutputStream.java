@@ -23,6 +23,7 @@ import java.io.OutputStream;
 
 
 /**
+ * An {@code OutputStream} which blacks out written values.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -31,6 +32,8 @@ public class BlackOutputStream extends OutputStream {
 
     @Override
     public void write(final int b) throws IOException {
+
+        // nothing to do with given 'b'.
 
         count++;
     }
@@ -41,6 +44,9 @@ public class BlackOutputStream extends OutputStream {
     }
 
 
+    /**
+     * count.
+     */
     private long count = 0x00L;
 
 

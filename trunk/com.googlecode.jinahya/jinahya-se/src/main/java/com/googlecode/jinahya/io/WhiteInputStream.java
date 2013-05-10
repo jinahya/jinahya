@@ -24,10 +24,35 @@ import java.util.Random;
 
 
 /**
+ * An {@code InputStream} which generates random values.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class WhiteInputStream extends InputStream {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param random the random for generating values.
+     */
+    protected WhiteInputStream(final Random random) {
+        super();
+
+        if (random == null) {
+            throw new NullPointerException("null random");
+        }
+
+        this.random = random;
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
+    public WhiteInputStream() {
+        this(new Random());
+    }
 
 
     @Override
@@ -44,9 +69,15 @@ public class WhiteInputStream extends InputStream {
     }
 
 
-    private final Random random = new Random();
+    /**
+     * random.
+     */
+    private final Random random;
 
 
+    /**
+     * count.
+     */
     private long count = 0x00L;
 
 
