@@ -20,6 +20,11 @@
         <version>6.0</version>
       </dependency>
       <dependency>
+        <groupId>jinahay.googlecode.com</groupId>
+        <artifactId>jinahya-se</artifactId>
+        <version>1.0-alpha-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>3.1</version>
@@ -75,7 +80,7 @@
 
   <build>
     <extensions>
-<!--      <extension>
+      <!--      <extension>
         <groupId>com.google.code.maven-svn-wagon</groupId>
         <artifactId>maven-svn-wagon</artifactId>
         <version>1.4</version>
