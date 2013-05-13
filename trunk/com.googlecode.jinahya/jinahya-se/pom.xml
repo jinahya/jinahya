@@ -294,7 +294,7 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
     <site>
-      <id>googlecode</id>
+      <id>jinahya.com</id>
       <url>dav:${project.url}</url>
     </site>
   </distributionManagement>
