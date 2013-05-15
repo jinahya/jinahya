@@ -34,23 +34,56 @@ public class cp_info {
     public static final int TAG_CONSTANT_Methodref = 10;
 
 
+    public static final int TAG_CONSTANT_InterfaceMethodref = 11;
+
+
+    public static final int TAG_CONSTANT_String = 8;
+
+
+    public static final int TAG_CONSTANT_Integer = 3;
+
+
+    public static final int TAG_CONSTANT_Float = 4;
+
+
+    public static final int TAG_CONSTANT_Long = 5;
+
+
+    public static final int TAG_CONSTANT_Double = 6;
+
+
+    public static final int TAG_CONSTANT_NameAndType = 12;
+
+
+    public static final int TAG_CONSTANT_Utf8 = 1;
+
+
+    public static final int TAG_CONSTANT_MethodHandle = 15;
+
+
+    public static final int TAG_CONSTANT_MethodType = 16;
+
+
+    public static final int TAG_CONSTANT_InvokeDynamic = 18;
+
+
     public static enum TAG {
 
 
         CONSTANT_Class(TAG_CONSTANT_Class),
         CONSTANT_Fieldref(TAG_CONSTANT_Fieldref),
         CONSTANT_Methodref(TAG_CONSTANT_Methodref),
-        CONSTANT_InterfaceMethodref(11),
-        CONSTANT_String(8),
-        CONSTANT_Integer(3),
-        CONSTANT_Float(4),
-        CONSTANT_Long(5),
-        CONSTANT_Double(6),
-        CONSTANT_NameAndType(12),
-        CONSTANT_Utf8(1),
-        CONSTANT_MethodHandle(15),
-        CONSTANT_MethodType(16),
-        CONSTANT_InvokeDynamic(18);
+        CONSTANT_InterfaceMethodref(TAG_CONSTANT_InterfaceMethodref),
+        CONSTANT_String(TAG_CONSTANT_String),
+        CONSTANT_Integer(TAG_CONSTANT_Integer),
+        CONSTANT_Float(TAG_CONSTANT_Float),
+        CONSTANT_Long(TAG_CONSTANT_Long),
+        CONSTANT_Double(TAG_CONSTANT_Double),
+        CONSTANT_NameAndType(TAG_CONSTANT_MethodType),
+        CONSTANT_Utf8(TAG_CONSTANT_Utf8),
+        CONSTANT_MethodHandle(TAG_CONSTANT_MethodHandle),
+        CONSTANT_MethodType(TAG_CONSTANT_MethodType),
+        CONSTANT_InvokeDynamic(TAG_CONSTANT_InvokeDynamic);
 
 
         public static TAG fromValue(final int value) {
