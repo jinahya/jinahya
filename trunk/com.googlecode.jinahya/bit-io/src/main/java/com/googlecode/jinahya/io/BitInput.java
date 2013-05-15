@@ -25,7 +25,7 @@ import java.util.BitSet;
 
 
 /**
- * BitInput.
+ * A wrapper class for reading arbitrary length of bits.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -33,15 +33,15 @@ public class BitInput {
 
 
     /**
-     * An interface for byte source.
+     * An interface for reading bytes.
      */
     public interface ByteInput {
 
 
         /**
-         * Reads next unsigned byte.
+         * Reads an unsigned 8-bit integer.
          *
-         * @return next unsigned byte. -1 for EOF.
+         * @return an unsigned 8-bit integer. -1 for EOF.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -52,7 +52,7 @@ public class BitInput {
 
 
     /**
-     * An implementation for InputStreams.
+     * A {@link ByteInput} implementation for {@link InputStream}s.
      */
     public static class StreamInput implements ByteInput {
 
@@ -155,11 +155,11 @@ public class BitInput {
 
 
     /**
-     * Reads a {@code 1}-bit boolean value. {@code 0x00} for false and
-     * {@value 0x01} for true.
-     * <p/>
-     * @return a boolean value
-     * <p/>
+     * Reads a {@code 1}-bit boolean value. {@code 0x00} for {@code false} and
+     * {@value 0x01} for {@code true}.
+     *
+     * @return a boolean value.
+     *
      * @throws IOException if an I/O error occurs.
      */
     public boolean readBoolean() throws IOException {
@@ -173,7 +173,7 @@ public class BitInput {
      *
      * @param length bit length between 0 (exclusive) and 16 (inclusive).
      *
-     * @return the unsigned short value read.
+     * @return the unsigned short value.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -374,10 +374,10 @@ public class BitInput {
 
         int bits = 0;
 
-        // discard remained bits in current byte.
+        // discard remained bits from current byte.
         if (index < 8) {
             bits = 8 - index;
-            readUnsignedByte(bits);
+            readUnsignedByte(bits); // count++
         }
 
         int bytes = count % length;

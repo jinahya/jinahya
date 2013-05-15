@@ -45,15 +45,15 @@ public class HexEncoder {
             case 0x07:
             case 0x08:
             case 0x09:
-                return decoded + 0x30; // 0x30('0') - 0x39('9')
+                return decoded + 0x30; // 0x30('0') ~ 0x39('9')
             case 0x0A:
             case 0x0B:
             case 0x0C:
             case 0x0D:
             case 0x0E:
             case 0x0F:
-                //return decoded + 0x57; // 0x61('a') - 0x66('f')
-                return decoded + 0x37; // 0x41('A') - 0x46('F')
+                //return decoded + 0x57; // 0x61('a') ~ 0x66('f')
+                return decoded + 0x37; // 0x41('A') ~ 0x46('F')
             default:
                 throw new IllegalArgumentException("illegal half: " + decoded);
         }
@@ -79,7 +79,7 @@ public class HexEncoder {
             throw new IllegalArgumentException(
                 "decoded(" + decoded + ") > 0xFF");
         }
-        
+
         if (encoded == null) {
             throw new NullPointerException("null encoded");
         }
@@ -138,6 +138,10 @@ public class HexEncoder {
      * @return the encoded nibbles.
      */
     public byte[] encode(final byte[] decoded) {
+
+        if (decoded == null) {
+            throw new NullPointerException("null decoded");
+        }
 
         return encodeMultiple(decoded);
     }

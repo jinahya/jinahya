@@ -24,7 +24,7 @@ import java.util.BitSet;
 
 
 /**
- * BitInput.
+ * A wrapper class for writing arbitrary length of bits.
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
@@ -40,7 +40,7 @@ public class BitOutput {
         /**
          * Writes an unsigned 8-bit integer.
          *
-         * @param value the value to write
+         * @param value an unsigned 8-bit integer.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -51,7 +51,7 @@ public class BitOutput {
 
 
     /**
-     * A {@link ByteOutput} implementation for OutputStreams.
+     * A {@link ByteOutput} implementation for {@link OutputStream}s.
      */
     public static class StreamOutput implements ByteOutput {
 
@@ -90,7 +90,7 @@ public class BitOutput {
     /**
      * Creates a new instance.
      *
-     * @param output target octet output
+     * @param output target byte output
      */
     public BitOutput(final ByteOutput output) {
         super();
@@ -107,7 +107,7 @@ public class BitOutput {
      * Writes an {@code length}-bit unsigned byte value. The lower
      * {@code length} bits in given {@code value} are written.
      *
-     * @param length bit length between 0 exclusive and 8 inclusive.
+     * @param length bit length between 0 (exclusive) and 8 (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -396,40 +396,41 @@ public class BitOutput {
     /**
      * Aligns to given {@code length} bytes.
      *
-     * @param length the number of bytes to align
+     * @param length number of bytes to align; must be non-zero positive.
      *
-     * @return number of bits padded to align
+     * @return number of bits padded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
     public int align(final int length) throws IOException {
 
-        if (length < 0x01) {
-            throw new IllegalArgumentException("length(" + length + ") < 0x01");
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
         int bits = 0;
 
-        if (index > 0x00) { // bit index to write
-            bits = (0x08 - index);
-            writeUnsignedByte(bits, 0x00);
+        // pads remained bits into current byte
+        if (index > 0) {
+            bits = (8 - index);
+            writeUnsignedByte(bits, 0x00); // count++
         }
 
-        int octets = count % length;
+        int bytes = count % length;
 
-        if (octets == 0) {
+        if (bytes == 0) {
             return bits;
         }
 
-        if (octets > 0) {
-            octets = length - octets;
+        if (bytes > 0) {
+            bytes = length - bytes;
         } else { // mod < 0
-            octets = 0 - octets;
+            bytes = 0 - bytes;
         }
 
-        for (; octets > 0; octets--) {
-            writeUnsignedByte(0x08, 0x00);
-            bits += 0x08;
+        for (; bytes > 0; bytes--) {
+            writeUnsignedByte(8, 0x00);
+            bits += 8;
         }
 
         return bits;
@@ -437,9 +438,9 @@ public class BitOutput {
 
 
     /**
-     * Returns the number of octets written so far excluding current octet.
+     * Returns the number of bytes written so far excluding current byte.
      *
-     * @return the number of octets written so far.
+     * @return the number of bytes written so far.
      */
     public int getCount() {
         return count;
@@ -455,19 +456,19 @@ public class BitOutput {
     /**
      * bits in current byte.
      */
-    private final BitSet bitset = new BitSet(0x08);
+    private final BitSet bitset = new BitSet(8);
 
 
     /**
      * bit index to write.
      */
-    private int index = 0x00;
+    private int index = 0;
 
 
     /**
      * number of bytes written so far.
      */
-    private int count = 0x00;
+    private int count = 0;
 
 
 }
