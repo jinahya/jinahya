@@ -26,7 +26,7 @@ public class CONSTANT_InterfaceMethodref_info extends CONSTANT_ref_info {
 
 
     public CONSTANT_InterfaceMethodref_info() {
-        super(TAG.CONSTANT_InterfaceMethodref);
+        super(TAG_CONSTANT_InterfaceMethodref);
     }
 
 

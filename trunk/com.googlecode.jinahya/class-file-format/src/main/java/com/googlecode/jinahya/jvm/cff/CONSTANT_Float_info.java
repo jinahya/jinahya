@@ -26,7 +26,7 @@ public class CONSTANT_Float_info extends CONSTANT_IF_info_ {
 
 
     public CONSTANT_Float_info() {
-        super(TAG.CONSTANT_Float);
+        super(TAG_CONSTANT_Float);
     }
 
 

@@ -26,7 +26,7 @@ public class CONSTANT_Methodref_info extends CONSTANT_ref_info {
 
 
     public CONSTANT_Methodref_info() {
-        super(TAG.CONSTANT_Methodref);
+        super(TAG_CONSTANT_Methodref);
     }
 
 

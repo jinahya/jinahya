@@ -19,7 +19,9 @@ package com.googlecode.jinahya.jvm.cff;
 
 
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,9 +50,9 @@ public class ClassFile {
 
         public static ACCESS_FLAG fromValue(final int value) {
 
-            for (ACCESS_FLAG flag : values()) {
-                if (flag.value == value) {
-                    return flag;
+            for (ACCESS_FLAG constant : values()) {
+                if (constant.value == value) {
+                    return constant;
                 }
             }
 
@@ -58,7 +60,7 @@ public class ClassFile {
         }
 
 
-        ACCESS_FLAG(int value) {
+        ACCESS_FLAG(final int value) {
             this.value = value;
         }
 
@@ -68,7 +70,7 @@ public class ClassFile {
         }
 
 
-        int value;
+        private final int value;
 
 
     }
@@ -76,15 +78,70 @@ public class ClassFile {
 
     public void read(final DataInput input) throws IOException {
 
-        magic = input.readInt();
+        final int magic = input.readInt();
 
         minor_version = input.readUnsignedShort();
 
         major_version = input.readUnsignedShort();
 
-        final int constant_pull_count = input.readUnsignedShort();
+        final int constant_pool_count = input.readUnsignedShort();
+        System.out.println("constant_pool_count: " + constant_pool_count);
+        constant_pool.clear();
+        ((ArrayList) constant_pool).ensureCapacity(constant_pool_count - 1);
+        for (int i = 0; i < constant_pool_count - 1; i++) {
+            final int tag = input.readUnsignedByte();
+//            System.out.println("tag[" + i + "]: " + tag);
+            final cp_info info = cp_info.TAG.newCp_info(tag);
+            info.readInfo(input);
+            constant_pool.add(info);
+        }
 
-        for (int i = 0; i <= constant_pull_count; i++) {
+        access_flags = input.readUnsignedShort();
+
+
+        this_class = input.readUnsignedShort();
+
+        super_class = input.readUnsignedShort();
+
+        final int interface_count = input.readUnsignedShort();
+        interfaces.clear();
+        ((ArrayList) interfaces).ensureCapacity(interface_count);
+        for (int i = 0; i < interface_count; i++) {
+            interfaces.add(input.readUnsignedShort());
+        }
+
+
+        final int fields_count = input.readUnsignedShort();
+
+        for (int i = 0; i < fields_count; i++) {
+            final field_info info = new field_info();
+            info.read(input);
+            fields.add(info);
+        }
+    }
+
+
+    public void write(final DataOutput output) throws IOException {
+
+        output.writeInt(MAGIC);
+
+        output.writeShort(minor_version);
+        output.writeShort(major_version);
+
+        output.writeShort(constant_pool.size() + 1);
+        for (cp_info info : constant_pool) {
+            info.writeInfo(output);
+        }
+
+        output.writeShort(access_flags);
+
+        output.writeShort(this_class);
+
+        output.writeShort(super_class);
+
+        output.writeShort(interfaces.size()); // -------------- interfaces_count
+        for (int interface_ : interfaces) {
+            output.writeShort(interface_);
         }
     }
 
@@ -98,6 +155,9 @@ public class ClassFile {
     private int major_version;
 
 
+    private final List<cp_info> constant_pool = new ArrayList<>();
+
+
     private int access_flags;
 
 
@@ -107,7 +167,10 @@ public class ClassFile {
     private int super_class;
 
 
-    private List<Integer> interfaces;
+    private final List<Integer> interfaces = new ArrayList<>();
+
+
+    private final List<field_info> fields = new ArrayList<>();
 
 
 }

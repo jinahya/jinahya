@@ -26,7 +26,7 @@ public class CONSTANT_Integer_info extends CONSTANT_IF_info_ {
 
 
     public CONSTANT_Integer_info() {
-        super(TAG.CONSTANT_Integer);
+        super(TAG_CONSTANT_Integer);
     }
 
 

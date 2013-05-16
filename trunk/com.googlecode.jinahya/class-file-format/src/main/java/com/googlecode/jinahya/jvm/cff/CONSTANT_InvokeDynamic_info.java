@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -26,7 +31,50 @@ public class CONSTANT_InvokeDynamic_info extends cp_info {
 
 
     public CONSTANT_InvokeDynamic_info() {
-        super(TAG.CONSTANT_InvokeDynamic);
+        super(TAG_CONSTANT_InvokeDynamic);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        bootstrap_method_attr_index = input.readUnsignedShort();
+
+        name_and_type_index = input.readUnsignedShort();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(bootstrap_method_attr_index);
+
+        output.writeShort(name_and_type_index);
+    }
+
+
+    public int getBootstrap_method_attr_index() {
+
+        return bootstrap_method_attr_index;
+    }
+
+
+    public void setBootstrap_method_attr_index(
+        final int bootstrap_method_attr_index) {
+
+        this.bootstrap_method_attr_index = bootstrap_method_attr_index;
+    }
+
+
+    public int getName_and_type_index() {
+
+        return name_and_type_index;
+    }
+
+
+    public void setName_and_type_index(final int name_and_type_index) {
+
+        this.name_and_type_index = name_and_type_index;
     }
 
 

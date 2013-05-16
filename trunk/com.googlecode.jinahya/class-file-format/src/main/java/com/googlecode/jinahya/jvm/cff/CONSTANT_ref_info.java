@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,8 +30,24 @@ package com.googlecode.jinahya.jvm.cff;
 public abstract class CONSTANT_ref_info extends cp_info {
 
 
-    public CONSTANT_ref_info(final TAG tag) {
+    public CONSTANT_ref_info(final int tag) {
         super(tag);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        class_index = input.readUnsignedShort();
+        name_and_type_index = input.readUnsignedShort();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(class_index);
+        output.writeShort(name_and_type_index);
     }
 
 

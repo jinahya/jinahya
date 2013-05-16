@@ -26,7 +26,7 @@ public class CONSTANT_Fieldref_info extends CONSTANT_ref_info {
 
 
     public CONSTANT_Fieldref_info() {
-        super(TAG.CONSTANT_Fieldref);
+        super(TAG_CONSTANT_Fieldref);
     }
 
 
