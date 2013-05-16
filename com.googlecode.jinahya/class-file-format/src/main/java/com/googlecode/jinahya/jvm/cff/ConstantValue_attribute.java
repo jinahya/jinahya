@@ -15,17 +15,22 @@
  */
 
 
-package com.googlecode.jinahya.jvm.cff.attribute;
+package com.googlecode.jinahya.jvm.cff;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ConstantValue extends AttributeInfo {
+public class ConstantValue_attribute extends attribute_info {
 
 
     public int getConstantValueIndex() {
+
+        if (info == null) {
+            info = new byte[2];
+        }
+
         return (info[0] & 0xFF) << 8 | (info[1] & 0xFF);
     }
 
@@ -35,6 +40,9 @@ public class ConstantValue extends AttributeInfo {
         info[0] = (byte) (constantValueIndex >> 8);
         info[1] = (byte) (constantValueIndex & 0xFF);
     }
+
+
+    private int constant_value_index;
 
 
 }

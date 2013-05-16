@@ -18,11 +18,16 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class cp_info {
+public abstract class cp_info {
 
 
     public static final int TAG_CONSTANT_Class = 7;
@@ -70,54 +75,84 @@ public class cp_info {
     public static enum TAG {
 
 
-        CONSTANT_Class(TAG_CONSTANT_Class),
-        CONSTANT_Fieldref(TAG_CONSTANT_Fieldref),
-        CONSTANT_Methodref(TAG_CONSTANT_Methodref),
-        CONSTANT_InterfaceMethodref(TAG_CONSTANT_InterfaceMethodref),
-        CONSTANT_String(TAG_CONSTANT_String),
-        CONSTANT_Integer(TAG_CONSTANT_Integer),
-        CONSTANT_Float(TAG_CONSTANT_Float),
-        CONSTANT_Long(TAG_CONSTANT_Long),
-        CONSTANT_Double(TAG_CONSTANT_Double),
-        CONSTANT_NameAndType(TAG_CONSTANT_MethodType),
-        CONSTANT_Utf8(TAG_CONSTANT_Utf8),
-        CONSTANT_MethodHandle(TAG_CONSTANT_MethodHandle),
-        CONSTANT_MethodType(TAG_CONSTANT_MethodType),
-        CONSTANT_InvokeDynamic(TAG_CONSTANT_InvokeDynamic);
+        CONSTANT_Class(TAG_CONSTANT_Class, CONSTANT_Class_info.class),
+        CONSTANT_Fieldref(TAG_CONSTANT_Fieldref, CONSTANT_Fieldref_info.class),
+        CONSTANT_Methodref(TAG_CONSTANT_Methodref,
+                           CONSTANT_Methodref_info.class),
+        CONSTANT_InterfaceMethodref(TAG_CONSTANT_InterfaceMethodref,
+                                    CONSTANT_Integer_info.class),
+        CONSTANT_String(TAG_CONSTANT_String, CONSTANT_String_info.class),
+        CONSTANT_Integer(TAG_CONSTANT_Integer, CONSTANT_Integer_info.class),
+        CONSTANT_Float(TAG_CONSTANT_Float, CONSTANT_Float_info.class),
+        CONSTANT_Long(TAG_CONSTANT_Long, CONSTANT_Long_info.class),
+        CONSTANT_Double(TAG_CONSTANT_Double, CONSTANT_Double_info.class),
+        CONSTANT_NameAndType(TAG_CONSTANT_NameAndType,
+                             CONSTANT_NameAndType_info.class),
+        CONSTANT_Utf8(TAG_CONSTANT_Utf8, CONSTANT_Utf8_info.class),
+        CONSTANT_MethodHandle(TAG_CONSTANT_MethodHandle,
+                              CONSTANT_MethodHandle_info.class),
+        CONSTANT_MethodType(TAG_CONSTANT_MethodType,
+                            CONSTANT_MethodType_info.class),
+        CONSTANT_InvokeDynamic(TAG_CONSTANT_InvokeDynamic,
+                               CONSTANT_InvokeDynamic_info.class);
 
 
         public static TAG fromValue(final int value) {
+
             for (TAG tag : values()) {
                 if (tag.value == value) {
                     return tag;
                 }
             }
+
             throw new IllegalArgumentException("Unknown value: " + value);
         }
 
 
-        private TAG(final int value) {
-            this.value = value;
+        public static cp_info newCp_info(final int value) {
+
+            try {
+                return fromValue(value)._info.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
-        private int value;
+        private TAG(final int value, final Class<? extends cp_info> _info) {
+            this.value = value;
+            this._info = _info;
+        }
+
+
+        public int getValue() {
+            return value;
+        }
+
+
+        private final int value;
+
+
+        private final Class<? extends cp_info> _info;
 
 
     }
 
 
-    public cp_info(final TAG tag) {
+    public cp_info(final int tag) {
         super();
 
         this.tag = tag;
     }
 
 
-    private final TAG tag;
+    protected abstract void readInfo(DataInput input) throws IOException;
 
 
-    protected byte[] info;
+    protected abstract void writeInfo(DataOutput output) throws IOException;
+
+
+    private final int tag;
 
 
 }

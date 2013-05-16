@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -26,7 +31,22 @@ public class CONSTANT_MethodType_info extends cp_info {
 
 
     public CONSTANT_MethodType_info() {
-        super(TAG.CONSTANT_MethodType);
+        super(TAG_CONSTANT_MethodType);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        descriptor_index = input.readUnsignedShort();
+
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(descriptor_index);
     }
 
 

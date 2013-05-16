@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,15 +30,31 @@ package com.googlecode.jinahya.jvm.cff;
 abstract class CONSTANT_LD_info_ extends cp_info {
 
 
-    public CONSTANT_LD_info_(final TAG tag) {
+    public CONSTANT_LD_info_(final int tag) {
         super(tag);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        high_bytes = input.readInt();
+        low_bytes = input.readInt();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeInt(high_bytes);
+        output.writeInt(low_bytes);
     }
 
 
     private int high_bytes;
 
 
-    private int log_bytes;
+    private int low_bytes;
 
 
 }

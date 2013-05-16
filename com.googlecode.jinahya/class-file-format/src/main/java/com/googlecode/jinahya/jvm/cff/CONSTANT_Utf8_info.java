@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,8 +30,44 @@ package com.googlecode.jinahya.jvm.cff;
 public class CONSTANT_Utf8_info extends cp_info {
 
 
+    public static CONSTANT_Utf8_info newInstance(final byte[] bytes) {
+
+        final CONSTANT_Utf8_info instance = new CONSTANT_Utf8_info();
+
+        instance.bytes = bytes;
+
+        return instance;
+    }
+
+
     public CONSTANT_Utf8_info() {
-        super(TAG.CONSTANT_Utf8);
+        super(TAG_CONSTANT_Utf8);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        final int length = input.readUnsignedShort();
+        input.readFully(bytes = new byte[length]);
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(bytes.length);
+        output.write(bytes);
+    }
+
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+
+    public void setBytes(final byte[] bytes) {
+        this.bytes = bytes;
     }
 
 

@@ -18,23 +18,46 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class CONSTANT_MethodHandle_info extends cp_info {
-
-
+    
+    
     public CONSTANT_MethodHandle_info() {
-        super(TAG.CONSTANT_MethodHandle);
+        super(TAG_CONSTANT_MethodHandle);
     }
-
-
+    
+    
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+        
+        reference_kind = input.readUnsignedByte();
+        
+        reference_index = input.readUnsignedShort();
+    }
+    
+    
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+        
+        output.writeByte(reference_kind);
+        
+        output.writeShort(reference_index);
+    }
+    
+    
     private int reference_kind;
-
-
+    
+    
     private int reference_index;
-
-
+    
+    
 }
 

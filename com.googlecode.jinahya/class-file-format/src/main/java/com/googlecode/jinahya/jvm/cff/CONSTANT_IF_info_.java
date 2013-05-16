@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,8 +30,22 @@ package com.googlecode.jinahya.jvm.cff;
 abstract class CONSTANT_IF_info_ extends cp_info {
 
 
-    public CONSTANT_IF_info_(final TAG tag) {
+    public CONSTANT_IF_info_(final int tag) {
         super(tag);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        bytes = input.readInt();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeInt(bytes);
     }
 
 

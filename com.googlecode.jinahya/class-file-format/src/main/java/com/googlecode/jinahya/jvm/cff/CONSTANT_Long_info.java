@@ -26,7 +26,7 @@ public class CONSTANT_Long_info extends CONSTANT_LD_info_ {
 
 
     public CONSTANT_Long_info() {
-        super(TAG.CONSTANT_Long);
+        super(TAG_CONSTANT_Long);
     }
 
 

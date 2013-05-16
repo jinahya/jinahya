@@ -26,7 +26,7 @@ public class CONSTANT_Double_info extends CONSTANT_LD_info_ {
 
 
     public CONSTANT_Double_info() {
-        super(TAG.CONSTANT_Double);
+        super(TAG_CONSTANT_Double);
     }
 
 

@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -26,7 +31,21 @@ public class CONSTANT_String_info extends cp_info {
 
 
     public CONSTANT_String_info() {
-        super(TAG.CONSTANT_String);
+        super(TAG_CONSTANT_String);
+    }
+
+
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        string_index = input.readUnsignedShort();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(string_index);
     }
 
 
