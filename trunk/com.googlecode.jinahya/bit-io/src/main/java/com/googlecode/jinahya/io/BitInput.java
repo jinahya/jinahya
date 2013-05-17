@@ -21,6 +21,8 @@ package com.googlecode.jinahya.io;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 import java.util.BitSet;
 
 
@@ -83,6 +85,65 @@ public class BitInput {
          * input.
          */
         private final InputStream input;
+
+
+    }
+
+
+    /**
+     * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
+     */
+    public static class ChannelInput implements ByteInput {
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param input the channel to wrap
+         */
+        public ChannelInput(final ReadableByteChannel input) {
+            super();
+
+            if (input == null) {
+                throw new NullPointerException("null input");
+            }
+
+            this.input = input;
+            buffer = ByteBuffer.allocate(1);
+        }
+
+
+        //@Override // commented for pre 5
+        public int readUnsignedByte() throws IOException {
+
+            buffer.clear(); // ------------------------------------------- clear
+
+            for (int read = -1;;) {
+                read = input.read(buffer); // ----------------------------- read
+                if (read == -1) {
+                    throw new EOFException("eof");
+                }
+                if (read == 1) {
+                    break;
+                }
+            }
+
+            buffer.flip(); // --------------------------------------------- flip
+
+            return (buffer.get() & 0xFF); // ------------------------------- get
+        }
+
+
+        /**
+         * input.
+         */
+        private final ReadableByteChannel input;
+
+
+        /**
+         * buffer.
+         */
+        private final ByteBuffer buffer;
 
 
     }
