@@ -18,8 +18,11 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.io.BitInput.ByteInput;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 import java.util.BitSet;
 
 
@@ -82,6 +85,52 @@ public class BitOutput {
          * output.
          */
         private final OutputStream output;
+
+
+    }
+
+
+    /**
+     * A {@link ByteInput} implementation for {@link WritableByteChannel}s.
+     */
+    public static class ChannelOutput implements ByteOutput {
+
+
+        public ChannelOutput(final WritableByteChannel output) {
+            super();
+
+            if (output == null) {
+                throw new NullPointerException("null output");
+            }
+
+            this.output = output;
+            buffer = ByteBuffer.allocate(1);
+        }
+
+
+        //@Override // commented for pre 5
+        public void writeUnsignedByte(final int value) throws IOException {
+
+            buffer.put((byte) value); // ----------------------------------- put
+
+            buffer.flip(); // --------------------------------------------- flip
+
+            while (output.write(buffer) != 1); // ------------------------ write
+
+            buffer.clear(); // ------------------------------------------- clear
+        }
+
+
+        /**
+         * output.
+         */
+        private final WritableByteChannel output;
+
+
+        /**
+         * buffer.
+         */
+        private final ByteBuffer buffer;
 
 
     }
