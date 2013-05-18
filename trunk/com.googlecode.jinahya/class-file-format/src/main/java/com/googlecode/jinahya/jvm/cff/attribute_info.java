@@ -18,8 +18,12 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
@@ -29,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class attribute_info {
+public abstract class attribute_info {
 
 
     public void read(final DataInput input) throws IOException {
@@ -38,16 +42,29 @@ public class attribute_info {
 
         final int attribute_length = input.readInt();
 
-        input.readFully(info = new byte[attribute_length]);
+        final byte[] info = new byte[attribute_length];
+        input.readFully(info);
+        readInfo(new DataInputStream(new ByteArrayInputStream(info)));
     }
+
+
+    protected abstract void readInfo(DataInput input) throws IOException;
 
 
     public void write(final DataOutput output) throws IOException {
 
         output.writeShort(attribute_name_index);
 
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        writeInfo(new DataOutputStream(baos));
+        baos.flush();
+
+        final byte[] info = baos.toByteArray();
         output.write(info);
     }
+
+
+    protected abstract void writeInfo(DataOutput output) throws IOException;
 
 
     @XmlAttribute
