@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,20 +30,29 @@ package com.googlecode.jinahya.jvm.cff;
 public class ConstantValue_attribute extends attribute_info {
 
 
+    @Override
+    protected void readInfo(final DataInput input) throws IOException {
+
+        constant_value_index = input.readUnsignedShort();
+    }
+
+
+    @Override
+    protected void writeInfo(final DataOutput output) throws IOException {
+
+        output.writeShort(constant_value_index);
+    }
+
+
     public int getConstantValueIndex() {
 
-        if (info == null) {
-            info = new byte[2];
-        }
-
-        return (info[0] & 0xFF) << 8 | (info[1] & 0xFF);
+        return constant_value_index;
     }
 
 
     public void setConstantValueIndex(final int constantValueIndex) {
-        info = new byte[2];
-        info[0] = (byte) (constantValueIndex >> 8);
-        info[1] = (byte) (constantValueIndex & 0xFF);
+
+        this.constant_value_index = constantValueIndex;
     }
 
 
