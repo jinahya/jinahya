@@ -30,51 +30,50 @@ import java.io.IOException;
 public class CONSTANT_Utf8_info extends cp_info {
 
 
-    public static CONSTANT_Utf8_info newInstance(final byte[] bytes) {
-
-        final CONSTANT_Utf8_info instance = new CONSTANT_Utf8_info();
-
-        instance.bytes = bytes;
-
-        return instance;
-    }
-
-
+//    public static CONSTANT_Utf8_info newInstance(final byte[] bytes) {
+//
+//        final CONSTANT_Utf8_info instance = new CONSTANT_Utf8_info();
+//
+//        instance.bytes = bytes;
+//
+//        return instance;
+//    }
     public CONSTANT_Utf8_info() {
         super(TAG_CONSTANT_Utf8);
     }
 
 
     @Override
+    public String toString() {
+        return super.toString() + " " + bytes;
+    }
+
+
+    @Override
     protected void readInfo(final DataInput input) throws IOException {
 
-        final int length = input.readUnsignedShort();
-        input.readFully(bytes = new byte[length]);
+        bytes = input.readUTF();
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
 
-        output.writeShort(bytes.length);
-        output.write(bytes);
+        output.writeUTF(bytes);
     }
 
 
-    public byte[] getBytes() {
+    public String getBytes() {
         return bytes;
     }
 
 
-    public void setBytes(final byte[] bytes) {
+    public void setBytes(final String bytes) {
         this.bytes = bytes;
     }
 
 
-    private int length;
-
-
-    private byte[] bytes;
+    private String bytes;
 
 
 }

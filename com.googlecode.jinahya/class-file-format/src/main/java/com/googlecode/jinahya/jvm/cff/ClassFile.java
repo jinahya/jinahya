@@ -32,6 +32,12 @@ import java.util.List;
 public class ClassFile {
 
 
+//    private static final Logger LOGGER =
+//        Logger.getLogger(ClassFile.class.getName());
+//        Logger.getLogger(MethodHandles.lookup().getClass().getName());
+    /**
+     * The magic.
+     */
     public static final int MAGIC = 0xCAFEBABE;
 
 
@@ -88,16 +94,15 @@ public class ClassFile {
         System.out.println("constant_pool_count: " + constant_pool_count);
         constant_pool.clear();
         ((ArrayList) constant_pool).ensureCapacity(constant_pool_count - 1);
-        for (int i = 0; i < constant_pool_count - 1; i++) {
+        for (int i = 1; i < constant_pool_count; i++) {
             final int tag = input.readUnsignedByte();
-//            System.out.println("tag[" + i + "]: " + tag);
-            final cp_info info = cp_info.TAG.newCp_info(tag);
-            info.readInfo(input);
-            constant_pool.add(info);
+            final cp_info cpInfo = cp_info.TAG.newCp_info(tag);
+            cpInfo.readInfo(input);
+            System.out.println("tag[" + i + "]: " + tag + " " + cpInfo);
+            constant_pool.add(cpInfo);
         }
 
         access_flags = input.readUnsignedShort();
-
 
         this_class = input.readUnsignedShort();
 
@@ -110,14 +115,14 @@ public class ClassFile {
             interfaces.add(input.readUnsignedShort());
         }
 
-
-        final int fields_count = input.readUnsignedShort();
-
-        for (int i = 0; i < fields_count; i++) {
-            final field_info info = new field_info();
-            info.read(input);
-            fields.add(info);
-        }
+//
+//        final int fields_count = input.readUnsignedShort();
+//
+//        for (int i = 0; i < fields_count; i++) {
+//            final field_info info = new field_info();
+//            info.read(input);
+//            fields.add(info);
+//        }
     }
 
 
