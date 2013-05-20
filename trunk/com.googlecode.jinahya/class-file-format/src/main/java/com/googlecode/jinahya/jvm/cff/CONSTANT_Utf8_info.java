@@ -45,35 +45,35 @@ public class CONSTANT_Utf8_info extends cp_info {
 
     @Override
     public String toString() {
-        return super.toString() + " " + bytes;
+        return super.toString() + " " + info;
     }
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
 
-        bytes = input.readUTF();
+        info = input.readUTF();
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
 
-        output.writeUTF(bytes);
+        output.writeUTF(info);
     }
 
 
-    public String getBytes() {
-        return bytes;
+    public String setInfo() {
+        return info;
     }
 
 
-    public void setBytes(final String bytes) {
-        this.bytes = bytes;
+    public void setInfo(final String info) {
+        this.info = info;
     }
 
 
-    private String bytes;
+    private String info;
 
 
 }
