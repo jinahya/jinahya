@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -38,6 +39,19 @@ public class BooleanValue extends SimpleValue<Boolean> {
      */
     public static BooleanValue newInstance(final Boolean rawValue) {
         return newInstance(BooleanValue.class, rawValue);
+    }
+
+
+    @XmlElement(nillable = true, required = true)
+    @Override
+    public Boolean getRawValue() {
+        return super.getRawValue();
+    }
+
+
+    @Override
+    public void setRawValue(final Boolean rawValue) {
+        super.setRawValue(rawValue);
     }
 
 
