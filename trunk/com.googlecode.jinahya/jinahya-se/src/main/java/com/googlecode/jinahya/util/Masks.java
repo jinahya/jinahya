@@ -25,19 +25,6 @@ package com.googlecode.jinahya.util;
 public class Masks {
 
 
-//    /**
-//     * Puts specified {@code mask} on to given {@code face}.
-//     *
-//     * @param face current face
-//     * @param mask the mask to put on
-//     *
-//     * @return a new face with given {@code mask} on.
-//     */
-//    public static int putOn(final int face, final int mask) {
-//        return face | mask;
-//    }
-
-
     /**
      * Puts all specified {@code masks} on to given {@code face}.
      *
