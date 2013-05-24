@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.io.Serializable;
 import java.util.Objects;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -29,10 +29,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <R> raw value type parameter
  */
 @XmlTransient
-public abstract class SimpleValue<R> {
+public abstract class SimpleValue<R> implements Serializable {
+
+
+    private static final long serialVersionUID = -4379691091470442003L;
 
 
     /**
+     * Create a new typed instance.
      *
      * @param <V> simple value type parameter
      * @param <R> raw value type parameter
@@ -91,7 +95,6 @@ public abstract class SimpleValue<R> {
      *
      * @return raw value
      */
-    @XmlElement(required = true, nillable = true)
     public R getRawValue() {
         return rawValue;
     }

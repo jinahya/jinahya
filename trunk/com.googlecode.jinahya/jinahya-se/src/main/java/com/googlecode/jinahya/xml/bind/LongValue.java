@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -29,6 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LongValue extends SimpleValue<Long> {
 
 
+    private static final long serialVersionUID = 3456663376428056384L;
+
+
     /**
      * Creates a new instance.
      *
@@ -38,6 +42,19 @@ public class LongValue extends SimpleValue<Long> {
      */
     public static LongValue newInstance(final Long rawValue) {
         return newInstance(LongValue.class, rawValue);
+    }
+
+
+    @XmlElement(nillable = true, required = true)
+    @Override
+    public Long getRawValue() {
+        return super.getRawValue();
+    }
+
+
+    @Override
+    public void setRawValue(final Long rawValue) {
+        super.setRawValue(rawValue);
     }
 
 
