@@ -58,11 +58,11 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
         super();
 
         if (prefix == null) {
-            throw new IllegalArgumentException("null prefix");
+            throw new NullPointerException("null prefix");
         }
 
         if (namespaceURI == null) {
-            throw new IllegalArgumentException("null namespaceURI");
+            throw new NullPointerException("null namespaceURI");
         }
 
         this.prefix = prefix;
@@ -76,7 +76,7 @@ public class VerySimpleNamespaceContext implements NamespaceContext {
     public String getNamespaceURI(final String prefix) {
 
         if (prefix == null) {
-            throw new IllegalArgumentException("null prefix");
+            throw new NullPointerException("null prefix");
         }
 
         if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {

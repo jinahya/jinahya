@@ -30,6 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BooleanValue extends SimpleValue<Boolean> {
 
 
+    private static final long serialVersionUID = -1873141407582226904L;
+
+
     /**
      * Creates a new instance.
      *

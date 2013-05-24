@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -29,6 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FloatValue extends SimpleValue<Float> {
 
 
+    private static final long serialVersionUID = -3588163531567265L;
+
+
     /**
      * Creates a new instance.
      *
@@ -38,6 +42,19 @@ public class FloatValue extends SimpleValue<Float> {
      */
     public static FloatValue newInstance(final Float rawValue) {
         return newInstance(FloatValue.class, rawValue);
+    }
+
+
+    @XmlElement(nillable = true, required = true)
+    @Override
+    public Float getRawValue() {
+        return super.getRawValue();
+    }
+
+
+    @Override
+    public void setRawValue(final Float rawValue) {
+        super.setRawValue(rawValue);
     }
 
 

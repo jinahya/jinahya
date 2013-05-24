@@ -22,7 +22,21 @@ package com.googlecode.jinahya.util;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Masks {
+public final class Masks {
+
+
+    /**
+     * Puts specified {@code mask} on to given {@code face}.
+     *
+     * @param face
+     * @param mask
+     *
+     * @return
+     */
+    public static int putOn(final int face, final int mask) {
+
+        return face | mask;
+    }
 
 
     /**
@@ -45,7 +59,7 @@ public class Masks {
         }
 
         for (int mask : masks) {
-            face |= mask;
+            face = putOn(face, mask);
         }
 
         return face;
