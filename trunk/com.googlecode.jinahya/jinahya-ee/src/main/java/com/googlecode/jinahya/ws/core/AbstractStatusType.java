@@ -91,7 +91,7 @@ public class AbstractStatusType implements StatusType {
     /**
      * Returns a new {@code Response} for this type.
      *
-     * @return a new {@code Response}.
+     * @return a new {@code Response} to respond.
      */
     public Response build() {
         return Response.status(this).build();
