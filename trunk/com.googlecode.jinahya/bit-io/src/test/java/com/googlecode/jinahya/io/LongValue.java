@@ -31,9 +31,9 @@ public class LongValue extends Value<Long> {
     public LongValue() {
         super();
 
-        length = Generator.longLength();
+        length = Generator.newLengthLong();
 
-        value = Generator.longValue(length);
+        value = Generator.newValueLong(length);
     }
 
 

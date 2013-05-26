@@ -213,7 +213,7 @@ class Generator {
     }
 
 
-    public static int longLength() {
+    public static int newLengthLong() {
 
         final Random random = ThreadLocalRandom.current();
 
@@ -223,7 +223,7 @@ class Generator {
     }
 
 
-    public static long longValue(final int length) {
+    public static long newValueLong(final int length) {
 
         final Random random = ThreadLocalRandom.current();
 
