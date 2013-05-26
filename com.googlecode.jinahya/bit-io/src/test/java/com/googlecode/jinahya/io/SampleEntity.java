@@ -21,7 +21,7 @@ package com.googlecode.jinahya.io;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -31,75 +31,28 @@ import java.util.Random;
 public class SampleEntity {
 
 
-    public static SampleEntity newInstance(final Random random) {
-
-        return new SampleEntity(
-            random.nextBoolean(),
-            random.nextInt() >>> 0x0F,
-            random.nextInt() >> 0x10,
-            random.nextLong() >>> 0x1F,
-            random.nextLong() >> 0x10);
-    }
-
-
-    protected SampleEntity(final boolean b, final int ui0x11, final int si0x18,
-                           final long ul0x21, final long sl0x30) {
+    public SampleEntity() {
         super();
 
-        if (ui0x11 >> 0x11 != 0x00) { // unsigned 17 bit
-            throw new IllegalArgumentException(
-                "ui0x11(" + ui0x11 + ") >> 0x11 != 0x00");
-        }
-
-        if (si0x18 < 0) {
-            if (si0x18 >> 0x18 != -1) { // signed 24 bit
-                throw new IllegalArgumentException(
-                    "si0x18(" + si0x18 + ") >> 0x18 != -1");
-            }
-        } else {
-            if (si0x18 >> 0x18 != 0x00) { // signed 24 bit
-                throw new IllegalArgumentException(
-                    "si0x18(" + si0x18 + ") >> 0x18 != 0x00");
-            }
-        }
-
-        if (ul0x21 >> 0x21 != 0x00L) {
-            throw new IllegalArgumentException(
-                "ul0x21(" + ul0x21 + ") >> 0x21 != 0x00L");
-        }
-
-        if (sl0x30 < 0x00L) {
-            if (sl0x30 >> 0x30 != -1L) {
-                throw new IllegalArgumentException(
-                    "sl0x30(" + sl0x30 + ") >> 0x30 != -1L");
-            }
-        } else {
-            if (sl0x30 >> 0x30 != 0x00L) {
-                throw new IllegalArgumentException(
-                    "sl0x30(" + sl0x30 + ") >> 0x30 != 0x00L");
-            }
-
-        }
-
-        this.b = b;
-        this.ui0x11 = ui0x11;
-        this.si0x18 = si0x18;
-        this.ul0x21 = ul0x21;
-        this.sl0x30 = sl0x30;
+        b01 = ThreadLocalRandom.current().nextBoolean();
+        ui17 = ThreadLocalRandom.current().nextInt() >>> 15;
+        si24 = ThreadLocalRandom.current().nextInt() >> 16;
+        ul33 = ThreadLocalRandom.current().nextLong() >>> 31;
+        sl48 = ThreadLocalRandom.current().nextLong() >> 16;
     }
 
 
     public SampleEntity read(final BitInput input) throws IOException {
 
-        b = input.readBoolean();
+        b01 = input.readBoolean();
 
-        ui0x11 = input.readUnsignedInt(0x11);
+        ui17 = input.readUnsignedInt(17);
 
-        si0x18 = input.readInt(0x18);
+        si24 = input.readInt(24);
 
-        ul0x21 = input.readUnsignedLong(0x21);
+        ul33 = input.readUnsignedLong(33);
 
-        sl0x30 = input.readLong(0x30);
+        sl48 = input.readLong(48);
 
         return this;
     }
@@ -107,15 +60,15 @@ public class SampleEntity {
 
     public SampleEntity write(final BitOutput output) throws IOException {
 
-        output.writeBoolean(b);
+        output.writeBoolean(b01);
 
-        output.writeUnsignedInt(0x11, ui0x11);
+        output.writeUnsignedInt(17, ui17);
 
-        output.writeInt(0x18, si0x18);
+        output.writeInt(24, si24);
 
-        output.writeUnsignedLong(0x21, ul0x21);
+        output.writeUnsignedLong(33, ul33);
 
-        output.writeLong(0x30, sl0x30);
+        output.writeLong(48, sl48);
 
         return this;
     }
@@ -123,15 +76,15 @@ public class SampleEntity {
 
     public SampleEntity read(final DataInput input) throws IOException {
 
-        b = input.readBoolean();
+        b01 = input.readBoolean();
 
-        ui0x11 = input.readInt();
+        ui17 = input.readInt();
 
-        si0x18 = input.readInt();
+        si24 = input.readInt();
 
-        ul0x21 = input.readLong();
+        ul33 = input.readLong();
 
-        sl0x30 = input.readLong();
+        sl48 = input.readLong();
 
         return this;
     }
@@ -139,33 +92,33 @@ public class SampleEntity {
 
     public SampleEntity write(final DataOutput output) throws IOException {
 
-        output.writeBoolean(b);
+        output.writeBoolean(b01);
 
-        output.writeInt(ui0x11);
+        output.writeInt(ui17);
 
-        output.writeInt(si0x18);
+        output.writeInt(si24);
 
-        output.writeLong(ul0x21);
+        output.writeLong(ul33);
 
-        output.writeLong(sl0x30);
+        output.writeLong(sl48);
 
         return this;
     }
 
 
-    private boolean b;
+    private boolean b01 = ThreadLocalRandom.current().nextBoolean();
 
 
-    private int ui0x11;
+    private int ui17 = ThreadLocalRandom.current().nextInt() >>> 15;
 
 
-    private int si0x18;
+    private int si24 = ThreadLocalRandom.current().nextInt() >> 16;
 
 
-    private long ul0x21;
+    private long ul33 = ThreadLocalRandom.current().nextLong() >>> 31;
 
 
-    private long sl0x30;
+    private long sl48 = ThreadLocalRandom.current().nextLong() >> 16;
 
 
 }

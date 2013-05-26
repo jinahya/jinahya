@@ -42,7 +42,7 @@ public class SampleEntityTest {
 
         final SampleEntity[] entities = new SampleEntity[count];
         for (int i = 0; i < entities.length; i++) {
-            entities[i] = SampleEntity.newInstance(random);
+            entities[i] = new SampleEntity();
         }
 
         // bit-io
