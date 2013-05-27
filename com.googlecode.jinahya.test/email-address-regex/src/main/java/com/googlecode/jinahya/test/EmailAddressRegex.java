@@ -25,12 +25,15 @@ public class EmailAddressRegex {
             new BufferedReader(new InputStreamReader(addresses, "UTF-8"));
         float count = .0f;
         float match = .0f;
+        long elapsed = 0L;
         for (String address; (address = reader.readLine()) != null;) {
             if (address.startsWith("#") || address.isEmpty()) {
                 continue;
             }
+            final long start = System.nanoTime();
             final Matcher matcher = pattern.matcher(address);
             final boolean matches = matcher.matches();
+            elapsed += (System.nanoTime() - start);
             System.out.printf("%74s %5b\n", address, matches);
             count++;
             if (matches) {
@@ -39,6 +42,7 @@ public class EmailAddressRegex {
         }
         System.out.printf("matches: %s\n",
                           (count > 0 ? ((match / count) * 100.f + "%") : "--"));
+        System.out.printf("elapsed: %d ns\n", elapsed);
     }
 
 
@@ -56,7 +60,13 @@ public class EmailAddressRegex {
             }
             System.out.println("========================================"
                                + "========================================");
-            System.out.println(regex);
+            for (int i = 0; i < regex.length(); i++) {
+                if (i > 0 && i % 80 == 0) {
+                    System.out.println();
+                }
+                System.out.print(regex.charAt(i));
+            }
+            System.out.println();
             final Pattern pattern;
             try {
                 pattern = Pattern.compile(regex);
@@ -67,7 +77,6 @@ public class EmailAddressRegex {
             check(pattern, "/valid");
             check(pattern, "/invalid");
             check(pattern, "/unknown");
-
         }
     }
 
