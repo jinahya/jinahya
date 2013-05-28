@@ -20,7 +20,7 @@ package com.googlecode.jinahya.io;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import junit.framework.Assert;
+import org.testng.Assert;
 
 
 /**
@@ -55,9 +55,10 @@ class Generator {
      *
      * @return given {@code value}
      */
-    private static int assertValueIntUnsigned(int length, final int value) {
+    private static int assertValueIntUnsigned(final int length,
+                                              final int value) {
 
-        length = assertLengthIntUnsigned(length);
+        assertLengthIntUnsigned(length);
 
         Assert.assertTrue((value >> length) == 0);
 
@@ -75,9 +76,9 @@ class Generator {
     }
 
 
-    static int newValueIntUnsigned(int length) {
+    static int newValueIntUnsigned(final int length) {
 
-        length = assertLengthIntUnsigned(length);
+        assertLengthIntUnsigned(length);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -97,9 +98,9 @@ class Generator {
     }
 
 
-    private static int assertValueInt(int length, final int value) {
+    private static int assertValueInt(final int length, final int value) {
 
-        length = assertLengthLong(length);
+        assertLengthLong(length);
 
         if (length != 32) {
             if (value < 0L) {
@@ -123,9 +124,9 @@ class Generator {
     }
 
 
-    static int newValueInt(int length) {
+    static int newValueInt(final int length) {
 
-        length = assertLengthInt(length);
+        assertLengthInt(length);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -145,9 +146,10 @@ class Generator {
     }
 
 
-    private static long assertValueLongUnsigned(int length, final long value) {
+    private static long assertValueLongUnsigned(final int length,
+                                                final long value) {
 
-        length = assertLengthLongUnsigned(length);
+        assertLengthLongUnsigned(length);
 
         Assert.assertTrue((value >> length) == 0L);
 
@@ -175,9 +177,9 @@ class Generator {
      *
      * @return an unsigned long value.
      */
-    static long newValueLongUnsigned(int length) {
+    static long newValueLongUnsigned(final int length) {
 
-        length = assertLengthLongUnsigned(length);
+        assertLengthLongUnsigned(length);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -197,9 +199,9 @@ class Generator {
     }
 
 
-    private static long assertValueLong(int length, final long value) {
+    private static long assertValueLong(final int length, final long value) {
 
-        length = assertLengthLong(length);
+        assertLengthLong(length);
 
         if (length != 64) {
             if (value < 0L) {

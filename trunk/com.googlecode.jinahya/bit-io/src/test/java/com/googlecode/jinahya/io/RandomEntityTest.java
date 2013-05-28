@@ -25,6 +25,9 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -133,6 +136,73 @@ public class RandomEntityTest {
             baos.flush();
             System.out.println("in bytes: " + baos.size());
         }
+    }
+
+
+    @Test
+    public void writeToStreamReadFromChannel() throws IOException {
+
+        final RandomEntity[] expected =
+            new RandomEntity[ThreadLocalRandom.current().nextInt(128)];
+        for (int i = 0; i < expected.length; i++) {
+            expected[i] = new RandomEntity();
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output =
+            new BitOutput(new BitOutput.StreamOutput(baos));
+        for (RandomEntity entity : expected) {
+            entity.write(output);
+        }
+        output.align(1);
+        baos.flush();
+
+        final ReadableByteChannel rbc =
+            Channels.newChannel(new ByteArrayInputStream(baos.toByteArray()));
+        final BitInput input = new BitInput(new BitInput.ChannelInput(rbc));
+
+        final RandomEntity[] actual = new RandomEntity[expected.length];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = new RandomEntity();
+            actual[i].read(input);
+        }
+        input.align(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test
+    public void writeToChannelReadFromStream() throws IOException {
+
+        final RandomEntity[] expected =
+            new RandomEntity[ThreadLocalRandom.current().nextInt(128)];
+        for (int i = 0; i < expected.length; i++) {
+            expected[i] = new RandomEntity();
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final WritableByteChannel wbc = Channels.newChannel(baos);
+        final BitOutput output =
+            new BitOutput(new BitOutput.ChannelOutput(wbc));
+        for (RandomEntity entity : expected) {
+            entity.write(output);
+        }
+        output.align(1);
+        baos.flush();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(new BitInput.StreamInput(bais));
+
+        final RandomEntity[] actual = new RandomEntity[expected.length];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = new RandomEntity();
+            actual[i].read(input);
+        }
+        input.align(1);
+
+        Assert.assertEquals(actual, expected);
     }
 
 
