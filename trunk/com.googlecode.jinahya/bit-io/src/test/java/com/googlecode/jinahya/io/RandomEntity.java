@@ -21,15 +21,18 @@ package com.googlecode.jinahya.io;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.junit.Assert;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RandomEntity {
+public class RandomEntity implements Serializable {
 
 
     public RandomEntity() {
@@ -37,49 +40,117 @@ public class RandomEntity {
 
         final Random random = ThreadLocalRandom.current();
 
-        booleanCount = random.nextInt(128);
-        booleanValues = new boolean[booleanCount];
-        for (int i = 0; i < booleanValues.length; i++) {
-            booleanValues[i] = random.nextBoolean();
+        bv = new boolean[random.nextInt(128)];
+        for (int i = 0; i < bv.length; i++) {
+            bv[i] = random.nextBoolean();
         }
 
-        unsignedIntCount = random.nextInt(128);
-        unsignedIntLengths = new int[unsignedIntCount];
-        unsignedIntValues = new int[unsignedIntLengths.length];
-        for (int i = 0; i < unsignedIntValues.length; i++) {
-            unsignedIntLengths[i] = Generator.newLengthIntUnsigned();
-            unsignedIntValues[i] =
-                Generator.newValueIntUnsigned(unsignedIntLengths[i]);
+        uil = new int[random.nextInt(128)];
+        uiv = new int[uil.length];
+        for (int i = 0; i < uiv.length; i++) {
+            uil[i] = Generator.newLengthIntUnsigned();
+            uiv[i] = Generator.newValueIntUnsigned(uil[i]);
         }
 
-        signedIntCount = random.nextInt(128);
-        signedIntLengths = new int[signedIntCount];
-        signedIntValues = new int[signedIntLengths.length];
-        for (int i = 0; i < signedIntValues.length; i++) {
-            signedIntLengths[i] = Generator.newLengthInt();
-            signedIntValues[i] = Generator.newValueInt(signedIntLengths[i]);
+        sil = new int[random.nextInt(128)];
+        siv = new int[sil.length];
+        for (int i = 0; i < siv.length; i++) {
+            sil[i] = Generator.newLengthInt();
+            siv[i] = Generator.newValueInt(sil[i]);
         }
 
-        unsignedLongCount = random.nextInt(128);
-        unsignedLongLengths = new int[unsignedLongCount];
-        unsignedLongValues = new long[unsignedLongLengths.length];
-        for (int i = 0; i < unsignedLongValues.length; i++) {
-            unsignedLongLengths[i] = Generator.newLengthLongUnsigned();
-            unsignedLongValues[i] =
-                Generator.newValueLongUnsigned(unsignedLongLengths[i]);
+        ull = new int[random.nextInt(128)];
+        ulv = new long[ull.length];
+        for (int i = 0; i < ulv.length; i++) {
+            ull[i] = Generator.newLengthLongUnsigned();
+            ulv[i] = Generator.newValueLongUnsigned(ull[i]);
         }
 
-        signedLongCount = random.nextInt(128);
-        signedLongLengths = new int[signedLongCount];
-        signedLongValues = new long[signedLongLengths.length];
-        for (int i = 0; i < signedLongValues.length; i++) {
-//            signedLongLengths[i] = Generator.newLengthLong();
-//            signedLongValues[i] = Generator.newValueLong(signedLongLengths[i]);
+        sll = new int[random.nextInt(128)];
+        slv = new long[sll.length];
+        for (int i = 0; i < slv.length; i++) {
+            sll[i] = Generator.newLengthLong();
+            slv[i] = Generator.newValueLong(sll[i]);
         }
     }
 
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Arrays.hashCode(this.bv);
+        hash = 53 * hash + Arrays.hashCode(this.uiv);
+        hash = 53 * hash + Arrays.hashCode(this.siv);
+        hash = 53 * hash + Arrays.hashCode(this.ulv);
+        hash = 53 * hash + Arrays.hashCode(this.slv);
+        return hash;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RandomEntity other = (RandomEntity) obj;
+        if (!Arrays.equals(this.bv, other.bv)) {
+            return false;
+        }
+        if (!Arrays.equals(this.uiv, other.uiv)) {
+            return false;
+        }
+        if (!Arrays.equals(this.siv, other.siv)) {
+            return false;
+        }
+        if (!Arrays.equals(this.ulv, other.ulv)) {
+            return false;
+        }
+        if (!Arrays.equals(this.slv, other.slv)) {
+            return false;
+        }
+        return true;
+    }
+
+
     public RandomEntity read(final BitInput input) throws IOException {
+
+        bv = new boolean[input.readUnsignedInt(7)];
+        for (int i = 0; i < bv.length; i++) {
+            bv[i] = input.readBoolean();
+        }
+
+        uil = new int[input.readUnsignedInt(7)];
+        uiv = new int[uil.length];
+        for (int i = 0; i < uiv.length; i++) {
+            uil[i] = input.readUnsignedInt(5);
+            uiv[i] = input.readUnsignedInt(uil[i]);
+        }
+
+        sil = new int[input.readUnsignedInt(7)];
+        siv = new int[sil.length];
+        for (int i = 0; i < sil.length; i++) {
+            sil[i] = input.readUnsignedInt(5) + 1;
+            siv[i] = input.readInt(sil[i]);
+        }
+
+        ull = new int[input.readUnsignedInt(7)];
+        ulv = new long[ull.length];
+        for (int i = 0; i < ull.length; i++) {
+            ull[i] = input.readUnsignedInt(6);
+            ulv[i] = input.readUnsignedLong(ull[i]);
+        }
+
+        sll = new int[input.readUnsignedInt(7)];
+        slv = new long[sll.length];
+        for (int i = 0; i < sll.length; i++) {
+            sll[i] = input.readUnsignedInt(6) + 1;
+            Assert.assertTrue(sll[i] > 1);
+            Assert.assertTrue(sll[i] <= 64);
+            slv[i] = input.readLong(sll[i]);
+        }
 
         return this;
     }
@@ -87,6 +158,34 @@ public class RandomEntity {
 
     public RandomEntity write(final BitOutput output) throws IOException {
 
+        output.writeUnsignedInt(7, bv.length);
+        for (int i = 0; i < bv.length; i++) {
+            output.writeBoolean(bv[i]);
+        }
+
+        output.writeUnsignedInt(7, uil.length);
+        for (int i = 0; i < uil.length; i++) {
+            output.writeUnsignedInt(5, uil[i]);
+            output.writeUnsignedInt(uil[i], uiv[i]);
+        }
+
+        output.writeUnsignedInt(7, sil.length);
+        for (int i = 0; i < sil.length; i++) {
+            output.writeUnsignedInt(5, sil[i] - 1);
+            output.writeInt(sil[i], siv[i]);
+        }
+
+        output.writeUnsignedInt(7, ull.length);
+        for (int i = 0; i < ull.length; i++) {
+            output.writeUnsignedInt(6, ull[i]);
+            output.writeUnsignedLong(ull[i], ulv[i]);
+        }
+
+        output.writeUnsignedInt(7, sll.length);
+        for (int i = 0; i < sll.length; i++) {
+            output.writeUnsignedInt(6, sll[i] - 1);
+            output.writeLong(sll[i], slv[i]);
+        }
 
         return this;
     }
@@ -94,57 +193,91 @@ public class RandomEntity {
 
     public RandomEntity read(final DataInput input) throws IOException {
 
+        bv = new boolean[input.readUnsignedByte()];
+        for (int i = 0; i < bv.length; i++) {
+            bv[i] = input.readBoolean();
+        }
+
+        uiv = new int[input.readUnsignedByte()];
+        for (int i = 0; i < uiv.length; i++) {
+            uiv[i] = input.readInt();
+        }
+
+        siv = new int[input.readUnsignedByte()];
+        for (int i = 0; i < siv.length; i++) {
+            siv[i] = input.readInt();
+        }
+
+        ulv = new long[input.readUnsignedByte()];
+        for (int i = 0; i < ulv.length; i++) {
+            ulv[i] = input.readLong();
+        }
+
+        slv = new long[input.readUnsignedByte()];
+        for (int i = 0; i < slv.length; i++) {
+            slv[i] = input.readLong();
+        }
+
         return this;
     }
 
 
     public RandomEntity write(final DataOutput output) throws IOException {
 
+        output.writeByte(bv.length);
+        for (boolean v : bv) {
+            output.writeBoolean(v);
+        }
+
+        output.writeByte(uiv.length);
+        for (int ui : uiv) {
+            output.writeInt(ui);
+        }
+
+        output.writeByte(siv.length);
+        for (int si : siv) {
+            output.writeInt(si);
+        }
+
+        output.writeByte(ulv.length);
+        for (long ul : ulv) {
+            output.writeLong(ul);
+        }
+
+        output.writeByte(slv.length);
+        for (long sl : slv) {
+            output.writeLong(sl);
+        }
 
         return this;
     }
 
 
-    private int booleanCount;
+    private boolean[] bv;
 
 
-    private boolean[] booleanValues;
+    private int[] uil;
 
 
-    private int unsignedIntCount;
+    private int[] uiv;
 
 
-    private int[] unsignedIntLengths;
+    private int[] sil;
 
 
-    private int[] unsignedIntValues;
+    private int[] siv;
 
 
-    private int signedIntCount;
+    private int[] ull;
 
 
-    private int[] signedIntLengths;
+    private long[] ulv;
 
 
-    private int[] signedIntValues;
+    private int[] sll;
 
 
-    private int unsignedLongCount;
-
-
-    private int[] unsignedLongLengths;
-
-
-    private long[] unsignedLongValues;
-
-
-    private int signedLongCount;
-
-
-    private int[] signedLongLengths;
-
-
-    private long[] signedLongValues;
+    private long[] slv;
 
 
 }
