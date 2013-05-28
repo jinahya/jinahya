@@ -217,7 +217,7 @@ public class BitInput {
 
     /**
      * Reads a {@code 1}-bit boolean value. {@code 0x00} for {@code false} and
-     * {@value 0x01} for {@code true}.
+     * {@code 0x01} for {@code true}.
      *
      * @return a boolean value.
      *
