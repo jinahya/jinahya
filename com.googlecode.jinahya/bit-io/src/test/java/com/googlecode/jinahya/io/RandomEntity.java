@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import org.junit.Assert;
+import org.testng.Assert;
 
 
 /**
