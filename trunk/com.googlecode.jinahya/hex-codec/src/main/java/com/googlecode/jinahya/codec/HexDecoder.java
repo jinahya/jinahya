@@ -56,15 +56,16 @@ public class HexDecoder {
             case 0x45: // 'E'
             case 0x46: // 'F'
                 return encoded - 0x37;
-            case 0x61: // 'a'
-            case 0x62: // 'b'
-            case 0x63: // 'c'
-            case 0x64: // 'd'
-            case 0x65: // 'e'
-            case 0x66: // 'f'
-                return encoded - 0x57;
+//            case 0x61: // 'a'
+//            case 0x62: // 'b'
+//            case 0x63: // 'c'
+//            case 0x64: // 'd'
+//            case 0x65: // 'e'
+//            case 0x66: // 'f'
             default:
-                throw new IllegalArgumentException("illegal half: " + encoded);
+                return encoded - 0x57;
+//            default:
+//                throw new IllegalArgumentException("illegal half: " + encoded);
         }
     }
 
@@ -77,27 +78,27 @@ public class HexDecoder {
      *
      * @return decoded octet.
      */
-    protected static int decodeSingle(final byte[] encoded, final int offset) {
+    public static int decodeSingle(final byte[] encoded, final int offset) {
 
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
-        }
+//        if (encoded == null) {
+//            throw new NullPointerException("null encoded");
+//        }
 
-        if (encoded.length < 2) {
-            // not required
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length + ") < 2");
-        }
+//        if (encoded.length < 2) {
+//            // not required
+//            throw new IllegalArgumentException(
+//                "encoded.length(" + encoded.length + ") < 2");
+//        }
 
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
+//        if (offset < 0) {
+//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+//        }
 
-        if (offset >= encoded.length - 1) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length
-                + ") - 1");
-        }
+//        if (offset >= encoded.length - 1) {
+//            throw new IllegalArgumentException(
+//                "offset(" + offset + ") >= encoded.length(" + encoded.length
+//                + ") - 1");
+//        }
 
         return (decodeHalf(encoded[offset]) << 4)
                | decodeHalf(encoded[offset + 1]);
@@ -111,16 +112,16 @@ public class HexDecoder {
      *
      * @return the encoded octets.
      */
-    protected static byte[] decodeMultiple(final byte[] encoded) {
+    public static byte[] decodeMultiple(final byte[] encoded) {
 
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
-        }
+//        if (encoded == null) {
+//            throw new NullPointerException("null encoded");
+//        }
 
-        if ((encoded.length & 0x01) == 0x01) {
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length + ") is not even");
-        }
+//        if ((encoded.length & 0x01) == 0x01) {
+//            throw new IllegalArgumentException(
+//                "encoded.length(" + encoded.length + ") is not even");
+//        }
 
         final byte[] decoded = new byte[encoded.length >> 1];
 
@@ -135,14 +136,6 @@ public class HexDecoder {
 
 
     /**
-     * Creates a new instance.
-     */
-    public HexDecoder() {
-        super();
-    }
-
-
-    /**
      * Decodes given sequence of nibbles into a sequence of octets.
      *
      * @param encoded the nibbles to decode.
@@ -151,9 +144,9 @@ public class HexDecoder {
      */
     public byte[] decode(final byte[] encoded) {
 
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
-        }
+//        if (encoded == null) {
+//            throw new NullPointerException("null encoded");
+//        }
 
         return decodeMultiple(encoded);
     }
@@ -166,16 +159,16 @@ public class HexDecoder {
      *
      * @return octets.
      */
-    public byte[] decodeLikeAnEngineer(final byte[] encoded) {
+    byte[] decodeLikeAnEngineer(final byte[] encoded) {
 
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
+//        if (encoded == null) {
+//            throw new IllegalArgumentException("null encoded");
+//        }
 
-        if ((encoded.length & 0x01) == 0x01) {
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length + ") is not even");
-        }
+//        if ((encoded.length & 0x01) == 0x01) {
+//            throw new IllegalArgumentException(
+//                "encoded.length(" + encoded.length + ") is not even");
+//        }
 
         final byte[] decoded = new byte[encoded.length >> 1];
 
@@ -196,9 +189,9 @@ public class HexDecoder {
      *
      * @return octets.
      */
-    public byte[] decodeLikeABoss(byte[] encoded) {
+    byte[] decodeLikeABoss(byte[] encoded) {
 
-        byte[] decoded = new byte[encoded.length / 2];
+        final byte[] decoded = new byte[encoded.length / 2];
 
         for (int i = 0; i < decoded.length; i++) {
             String s = new String(encoded, i * 2, 2, StandardCharsets.US_ASCII);
