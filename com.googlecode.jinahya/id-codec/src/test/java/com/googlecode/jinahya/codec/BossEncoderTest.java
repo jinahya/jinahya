@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.lang.reflect.Proxy;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.EncoderException;
 import org.testng.annotations.Test;

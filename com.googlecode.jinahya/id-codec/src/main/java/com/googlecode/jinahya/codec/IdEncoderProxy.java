@@ -32,28 +32,26 @@ public class IdEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Class for
-     * <code>org.apache.commons.codec.BinaryEncoder</code>.
+     * Class for {@code org.apache.commons.codec.Encoder}.
      */
-    private static final Class<?> CLASS_ENCODER;
+    private static final Class<?> ENCODER;
 
 
     static {
         try {
-            CLASS_ENCODER = Class.forName(
-                "org.apache.commons.codec.Encoder");
+            ENCODER = Class.forName("org.apache.commons.codec.Encoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
     }
 
 
-    private static final Method METHOD_ENCODE;
+    private static final Method ENCODE;
 
 
     static {
         try {
-            METHOD_ENCODE = CLASS_ENCODER.getMethod("encode", Object.class);
+            ENCODE = ENCODER.getMethod("encode", Object.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
@@ -63,12 +61,12 @@ public class IdEncoderProxy implements InvocationHandler {
     /**
      * Class for {@code org.apache.commons.codec.EncoderException}.
      */
-    private static final Class<? extends Throwable> CLASS_ENCODER_EXCEPTION;
+    private static final Class<? extends Throwable> ENCODER_EXCEPTION;
 
 
     static {
         try {
-            CLASS_ENCODER_EXCEPTION = Class.forName(
+            ENCODER_EXCEPTION = Class.forName(
                 "org.apache.commons.codec.EncoderException").
                 asSubclass(Throwable.class);
         } catch (ClassNotFoundException cnfe) {
@@ -89,7 +87,7 @@ public class IdEncoderProxy implements InvocationHandler {
     private static Throwable newEncoderException()
         throws InstantiationException, IllegalAccessException {
 
-        return CLASS_ENCODER_EXCEPTION.newInstance();
+        return ENCODER_EXCEPTION.newInstance();
     }
 
 
@@ -97,7 +95,7 @@ public class IdEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.getConstructor(String.class).
+        return ENCODER_EXCEPTION.getConstructor(String.class).
             newInstance(message);
     }
 
@@ -107,7 +105,7 @@ public class IdEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.
+        return ENCODER_EXCEPTION.
             getConstructor(String.class, Throwable.class).
             newInstance(message, cause);
     }
@@ -117,7 +115,7 @@ public class IdEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.getConstructor(Throwable.class).
+        return ENCODER_EXCEPTION.getConstructor(Throwable.class).
             newInstance(cause);
     }
 
@@ -135,39 +133,38 @@ public class IdEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Returns a new proxy instance for
-     * <code>org.apache.commons.codec.BinaryEncoder</code> with given
-     * <code>hexEncoder</code>.
+     * Creates a new proxy instance for {@code org.apache.commons.codec.Encoder}
+     * with given {@code encoder}.
      *
-     * @param idEncoder the HexEncoder to use
+     * @param encoder the encoder to use
      *
      * @return a new proxy instance.
      */
-    public static Object newInstance(final IdEncoder idEncoder) {
+    public static Object newInstance(final IdEncoder encoder) {
 
-        if (idEncoder == null) {
-            throw new NullPointerException("null idEncoder");
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
         }
 
-        return Proxy.newProxyInstance(CLASS_ENCODER.getClassLoader(),
-                                      new Class<?>[]{CLASS_ENCODER},
-                                      new IdEncoderProxy(idEncoder));
+        return Proxy.newProxyInstance(ENCODER.getClassLoader(),
+                                      new Class<?>[]{ENCODER},
+                                      new IdEncoderProxy(encoder));
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param idEncoder the IdEncoder to use.
+     * @param encoder the IdEncoder to use.
      */
-    protected IdEncoderProxy(final IdEncoder idEncoder) {
+    protected IdEncoderProxy(final IdEncoder encoder) {
         super();
 
-        if (idEncoder == null) {
-            throw new NullPointerException("null idEncoder");
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
         }
 
-        this.idEncoder = idEncoder;
+        this.encoder = encoder;
     }
 
 
@@ -176,9 +173,9 @@ public class IdEncoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        if (METHOD_ENCODE.equals(method)) {
+        if (ENCODE.equals(method)) {
             try {
-                return idEncoder.encode((Long) args[0]);
+                return encoder.encode((Long) args[0]);
             } catch (ClassCastException cce) {
                 throw newEncoderException(cce);
             }
@@ -188,7 +185,7 @@ public class IdEncoderProxy implements InvocationHandler {
     }
 
 
-    private final IdEncoder idEncoder;
+    private final IdEncoder encoder;
 
 
 }
