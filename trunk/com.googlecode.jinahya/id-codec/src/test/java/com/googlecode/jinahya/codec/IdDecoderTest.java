@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.codec.IdDecoder;
 import org.testng.annotations.Test;
 
 
@@ -30,7 +29,15 @@ public class IdDecoderTest {
 
 
     @Test(expectedExceptions = {NullPointerException.class})
+    public static void testDecodeLongWithNullDecoded() {
+
+        IdDecoder.decodeLong(null);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
     public static void testDecodeUUIDWithNullDecoded() {
+
         IdDecoder.decodeUUID(null);
     }
 

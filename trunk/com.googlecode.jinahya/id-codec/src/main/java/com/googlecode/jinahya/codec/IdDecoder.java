@@ -30,6 +30,27 @@ public class IdDecoder {
 
 
     /**
+     * Decodes a single block.
+     *
+     * @param encoded the block to decode
+     *
+     * @return decoded block
+     */
+    private static long block(final String encoded) {
+
+        final StringBuilder builder = new StringBuilder(
+            Long.toString(Long.parseLong(encoded, Character.MAX_RADIX)));
+
+        builder.reverse();
+
+        builder.deleteCharAt(builder.length() - 1);
+        builder.deleteCharAt(builder.length() - 1);
+
+        return Long.parseLong(builder.toString());
+    }
+
+
+    /**
      * Decodes given {@code encoded}.
      *
      * @param encoded the value to be decoded
@@ -37,47 +58,6 @@ public class IdDecoder {
      * @return the decoded value
      */
     public static long decodeLong(final String encoded) {
-        return new IdDecoder().decode(encoded);
-    }
-
-
-    /**
-     * Decodes given
-     * <code>encoded</code>.
-     *
-     * @param encoded the value to be decoded
-     *
-     * @return the decoded value
-     */
-    public static UUID decodeUUID(final String encoded) {
-
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
-        }
-
-        final int index = encoded.indexOf('_');
-        if (index == -1) {
-            throw new IllegalArgumentException("wrong encoded: " + encoded);
-        }
-
-        final IdDecoder decoder = new IdDecoder();
-        final long mostSignificantBits =
-            decoder.decode(encoded.substring(0, index));
-        final long leastSignificantBits =
-            decoder.decode(encoded.substring(index + 1));
-
-        return new UUID(mostSignificantBits, leastSignificantBits);
-    }
-
-
-    /**
-     * Decodes given {@code decoded}.
-     *
-     * @param encoded encoded value to decode.
-     *
-     * @return decoded value
-     */
-    public long decode(final String encoded) {
 
         if (encoded == null) {
             throw new NullPointerException("null encoded");
@@ -94,23 +74,42 @@ public class IdDecoder {
 
 
     /**
-     * Decodes a single block.
+     * Decodes given {@code encoded}.
      *
-     * @param encoded the block to decode
+     * @param encoded the value to be decoded
      *
-     * @return decoded block
+     * @return the decoded value
      */
-    private long block(final String encoded) {
+    public static UUID decodeUUID(final String encoded) {
 
-        final StringBuilder builder = new StringBuilder(
-            Long.toString(Long.parseLong(encoded, Character.MAX_RADIX)));
+        if (encoded == null) {
+            throw new NullPointerException("null encoded");
+        }
 
-        builder.reverse();
+        final int index = encoded.indexOf('_');
+        if (index == -1) {
+            throw new IllegalArgumentException("wrong encoded: " + encoded);
+        }
 
-        builder.deleteCharAt(builder.length() - 1);
-        builder.deleteCharAt(builder.length() - 1);
+        final long mostSignificantBits =
+            decodeLong(encoded.substring(0, index));
+        final long leastSignificantBits =
+            decodeLong(encoded.substring(index + 1));
 
-        return Long.parseLong(builder.toString());
+        return new UUID(mostSignificantBits, leastSignificantBits);
+    }
+
+
+    /**
+     * Decodes given {@code decoded}.
+     *
+     * @param encoded encoded value to decode.
+     *
+     * @return decoded value
+     */
+    public long decode(final String encoded) {
+
+        return decodeLong(encoded);
     }
 
 

@@ -31,55 +31,13 @@ public class IdEncoder {
 
 
     /**
-     * Encodes given {@code decoded}.
-     *
-     * @param decoded the decoded value to encoce
-     *
-     * @return encoded output.
-     */
-    public static String encodeLong(final long decoded) {
-
-        return new IdEncoder().encode(decoded);
-    }
-
-
-    /**
-     * Encodes given {@code decoded}.
-     *
-     * @param decoded the value to encode.
-     *
-     * @return encoded output.
-     */
-    public static String encodeUUID(final UUID decoded) {
-
-        final IdEncoder encoder = new IdEncoder();
-
-        return encoder.encode(decoded.getMostSignificantBits()) + "_"
-               + encoder.encode(decoded.getLeastSignificantBits());
-    }
-
-
-    /**
-     * Encodes given {@code decoded}.
-     *
-     * @param decoded the value to encode.
-     *
-     * @return encoded result.
-     */
-    public String encode(final long decoded) {
-
-        return block(decoded >>> 0x20) + "-" + block(decoded & 0xFFFFFFFFL);
-    }
-
-
-    /**
      * Encodes a single block.
      *
      * @param decoded block to encode
      *
      * @return encoded block
      */
-    private String block(final long decoded) {
+    private static String block(final long decoded) {
 
         final StringBuilder builder = new StringBuilder(Long.toString(decoded));
 
@@ -92,6 +50,44 @@ public class IdEncoder {
 
         return Long.toString(
             Long.parseLong(builder.toString()), Character.MAX_RADIX);
+    }
+
+
+    /**
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded the value to encode
+     *
+     * @return encoded output.
+     */
+    public static String encodeLong(final long decoded) {
+        return block(decoded >>> 0x20) + "-" + block(decoded & 0xFFFFFFFFL);
+    }
+
+
+    /**
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded the value to encode.
+     *
+     * @return encoded output.
+     */
+    public static String encodeUUID(final UUID decoded) {
+
+        return encodeLong(decoded.getMostSignificantBits()) + "_"
+               + encodeLong(decoded.getLeastSignificantBits());
+    }
+
+
+    /**
+     * Encodes given {@code decoded}.
+     *
+     * @param decoded the value to encode.
+     *
+     * @return encoded result.
+     */
+    public String encode(final long decoded) {
+        return encodeLong(decoded);
     }
 
 

@@ -19,9 +19,9 @@ package com.googlecode.jinahya.codec;
 
 
 import java.util.concurrent.ThreadLocalRandom;
-import junit.framework.Assert;
 import org.apache.commons.codec.Decoder;
 import org.apache.commons.codec.DecoderException;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 

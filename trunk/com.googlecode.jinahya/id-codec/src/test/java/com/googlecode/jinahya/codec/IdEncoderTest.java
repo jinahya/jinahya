@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.codec.IdEncoder;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.annotations.Test;
@@ -33,25 +32,36 @@ public class IdEncoderTest {
 
     @Test(invocationCount = 128)
     public static void testEncodeLong() {
-        IdEncoder.encodeLong(ThreadLocalRandom.current().nextLong());
+
+        final String encoded =
+            IdEncoder.encodeLong(ThreadLocalRandom.current().nextLong());
     }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testEncodeUUIDWithNullDecoded() {
+
         IdEncoder.encodeUUID(null);
     }
 
 
     @Test(invocationCount = 128)
     public static void testEncodeUUID() {
-        IdEncoder.encodeUUID(UUID.randomUUID());
+
+        final UUID decoded = UUID.randomUUID();
+
+        final String encoded = IdEncoder.encodeUUID(decoded);
+
+        System.out.printf("%40s %40s\n", decoded.toString(), encoded);
     }
 
 
     @Test(invocationCount = 128)
     public void testEncode() {
-        new IdEncoder().encode(ThreadLocalRandom.current().nextLong());
+
+        final long decoded = ThreadLocalRandom.current().nextLong();
+        final String encoded = new IdEncoder().encode(decoded);
+        System.out.printf("%20d %20s\n", decoded, encoded);
     }
 
 
