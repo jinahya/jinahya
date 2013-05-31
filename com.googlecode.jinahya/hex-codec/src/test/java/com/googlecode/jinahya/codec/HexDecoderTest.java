@@ -37,13 +37,13 @@ public class HexDecoderTest {
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(enabled = false, expectedExceptions = IllegalArgumentException.class)
     public void testDecodeWithOddLengthArray() {
         new HexDecoder().decode(new byte[]{0x30}); // '0'
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(enabled = false, expectedExceptions = IllegalArgumentException.class)
     public void testDecodeWithIllegalSingle() {
         new HexDecoder().decode(new byte[]{0x29, 0x30}); // '/', '0'
     }

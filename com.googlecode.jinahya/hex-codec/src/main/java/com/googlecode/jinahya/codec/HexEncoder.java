@@ -46,16 +46,17 @@ public class HexEncoder {
             case 0x08:
             case 0x09:
                 return decoded + 0x30; // 0x30('0') ~ 0x39('9')
-            case 0x0A:
-            case 0x0B:
-            case 0x0C:
-            case 0x0D:
-            case 0x0E:
-            case 0x0F:
+//            case 0x0A:
+//            case 0x0B:
+//            case 0x0C:
+//            case 0x0D:
+//            case 0x0E:
+//            case 0x0F:
+            default:
                 //return decoded + 0x57; // 0x61('a') ~ 0x66('f')
                 return decoded + 0x37; // 0x41('A') ~ 0x46('F')
-            default:
-                throw new IllegalArgumentException("illegal half: " + decoded);
+//            default:
+//                throw new IllegalArgumentException("illegal half: " + decoded);
         }
     }
 
@@ -67,58 +68,58 @@ public class HexEncoder {
      * @param encoded the array to which each encoded nibbles are written.
      * @param offset the offset in the array.
      */
-    protected static void encodeSingle(final int decoded, final byte[] encoded,
-                                       final int offset) {
+    public static void encodeSingle(final int decoded, final byte[] encoded,
+                                    final int offset) {
 
-        if (decoded < 0x00) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") < 0x00");
-        }
+//        if (decoded < 0x00) {
+//            throw new IllegalArgumentException(
+//                "decoded(" + decoded + ") < 0x00");
+//        }
+//
+//        if (decoded > 0xFF) {
+//            throw new IllegalArgumentException(
+//                "decoded(" + decoded + ") > 0xFF");
+//        }
 
-        if (decoded > 0xFF) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") > 0xFF");
-        }
+//        if (encoded == null) {
+//            throw new NullPointerException("null encoded");
+//        }
 
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
-        }
+//        if (encoded.length < 2) {
+//            // not required
+//            throw new IllegalArgumentException(
+//                "encoded.length(" + encoded.length + ") < 2");
+//        }
 
-        if (encoded.length < 2) {
-            // not required
-            throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length + ") < 2");
-        }
+//        if (offset < 0) {
+//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+//        }
 
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
+//        if (offset >= encoded.length - 1) {
+//            throw new IllegalArgumentException(
+//                "offset(" + offset + ") >= encoded.length(" + encoded.length
+//                + ") - 1");
+//        }
 
-        if (offset >= encoded.length - 1) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length
-                + ") - 1");
-        }
-
-        encoded[offset] = (byte) encodeHalf((decoded >> 4) & 0x0F);
+        encoded[offset] = (byte) encodeHalf((decoded & 0xF0) >> 4);
         encoded[offset + 1] = (byte) encodeHalf(decoded & 0x0F);
     }
 
 
     /**
-     * Decodes given sequence of octets into a sequence of nibbles.
+     * Encodes given sequence of octets into a sequence of nibbles.
      *
      * @param decoded the octets to encode
      *
      * @return the encoded nibbles.
      */
-    protected static byte[] encodeMultiple(final byte[] decoded) {
+    public static byte[] encodeMultiple(final byte[] decoded) {
 
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
-        }
+//        if (decoded == null) {
+//            throw new NullPointerException("null decoded");
+//        }
 
-        final byte[] encoded = new byte[decoded.length << 1];
+        final byte[] encoded = new byte[decoded.length << 1]; // * 2
 
         int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
@@ -139,9 +140,9 @@ public class HexEncoder {
      */
     public byte[] encode(final byte[] decoded) {
 
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
-        }
+//        if (decoded == null) {
+//            throw new NullPointerException("null decoded");
+//        }
 
         return encodeMultiple(decoded);
     }
@@ -154,18 +155,14 @@ public class HexEncoder {
      *
      * @return nibbles.
      */
-    public byte[] encodeLikeAnEngineer(final byte[] decoded) {
-
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
-        }
+    byte[] encodeLikeAnEngineer(final byte[] decoded) {
 
         final byte[] encoded = new byte[decoded.length << 1];
 
         int index = 0; // index in encoded
         for (int i = 0; i < decoded.length; i++) {
             encoded[index++] = (byte) encodeHalf((decoded[i] & 0xF0) >> 4);
-            encoded[index++] = (byte) encodeHalf(decoded[i] & 0x0F);
+            encoded[index++] = (byte) encodeHalf((decoded[i] & 0x0F));
         }
 
         return encoded;
@@ -179,9 +176,9 @@ public class HexEncoder {
      *
      * @return nibbles.
      */
-    public byte[] encodeLikeABoss(byte[] decoded) {
+    byte[] encodeLikeABoss(final byte[] decoded) {
 
-        byte[] encoded = new byte[decoded.length * 2];
+        final byte[] encoded = new byte[decoded.length * 2];
 
         for (int i = 0; i < decoded.length; i++) {
             String s = Integer.toString(decoded[i] & 0xFF, 16);

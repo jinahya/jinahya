@@ -32,15 +32,14 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Class for
-     * <code>org.apache.commons.codec.BinaryEncoder</code>.
+     * Class for {@code org.apache.commons.codec.BinaryEncoder}.
      */
-    private static final Class<?> CLASS_BINARY_ENCODER;
+    private static final Class<?> BINARY_ENCODER;
 
 
     static {
         try {
-            CLASS_BINARY_ENCODER = Class.forName(
+            BINARY_ENCODER = Class.forName(
                 "org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
@@ -48,26 +47,24 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
     }
 
 
-    private static final Method METHOD_ENCODE_OBJECT;
+    private static final Method ENCODE_OBJECT;
 
 
     static {
         try {
-            METHOD_ENCODE_OBJECT =
-                CLASS_BINARY_ENCODER.getMethod("encode", Object.class);
+            ENCODE_OBJECT = BINARY_ENCODER.getMethod("encode", Object.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
 
 
-    private static final Method METHOD_ENCODE_BYTES;
+    private static final Method ENCODE_BYTES;
 
 
     static {
         try {
-            METHOD_ENCODE_BYTES =
-                CLASS_BINARY_ENCODER.getMethod("encode", byte[].class);
+            ENCODE_BYTES = BINARY_ENCODER.getMethod("encode", byte[].class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
@@ -77,12 +74,12 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
     /**
      * Class for {@code org.apache.commons.codec.EncoderException}.
      */
-    private static final Class<? extends Throwable> CLASS_ENCODER_EXCEPTION;
+    private static final Class<? extends Throwable> ENCODER_EXCEPTION;
 
 
     static {
         try {
-            CLASS_ENCODER_EXCEPTION = Class.forName(
+            ENCODER_EXCEPTION = Class.forName(
                 "org.apache.commons.codec.EncoderException").
                 asSubclass(Throwable.class);
         } catch (ClassNotFoundException cnfe) {
@@ -103,7 +100,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
     private static Throwable newEncoderException()
         throws InstantiationException, IllegalAccessException {
 
-        return CLASS_ENCODER_EXCEPTION.newInstance();
+        return ENCODER_EXCEPTION.newInstance();
     }
 
 
@@ -111,7 +108,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.getConstructor(String.class).
+        return ENCODER_EXCEPTION.getConstructor(String.class).
             newInstance(message);
     }
 
@@ -121,7 +118,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.
+        return ENCODER_EXCEPTION.
             getConstructor(String.class, Throwable.class).
             newInstance(message, cause);
     }
@@ -131,7 +128,7 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
         throws NoSuchMethodException, InstantiationException,
                IllegalAccessException, InvocationTargetException {
 
-        return CLASS_ENCODER_EXCEPTION.getConstructor(Throwable.class).
+        return ENCODER_EXCEPTION.getConstructor(Throwable.class).
             newInstance(cause);
     }
 
@@ -163,8 +160,8 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null encoder");
         }
 
-        return Proxy.newProxyInstance(CLASS_BINARY_ENCODER.getClassLoader(),
-                                      new Class<?>[]{CLASS_BINARY_ENCODER},
+        return Proxy.newProxyInstance(BINARY_ENCODER.getClassLoader(),
+                                      new Class<?>[]{BINARY_ENCODER},
                                       new HexBinaryEncoderProxy(encoder));
     }
 
@@ -190,20 +187,20 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        if (METHOD_ENCODE_BYTES.equals(method)) {
+        if (ENCODE_BYTES.equals(method)) {
             return encoder.encode((byte[]) args[0]);
         }
 
-        if (METHOD_ENCODE_OBJECT.equals(method)) {
+        if (ENCODE_OBJECT.equals(method)) {
 
             if (args[0] instanceof byte[]) {
-                return invoke(proxy, METHOD_ENCODE_BYTES,
+                return invoke(proxy, ENCODE_BYTES,
                               new Object[]{(byte[]) args[0]});
             }
 
             if (args[0] instanceof String) {
                 final byte[] bytes = ((String) args[0]).getBytes("UTF-8");
-                return invoke(proxy, METHOD_ENCODE_BYTES, new Object[]{bytes});
+                return invoke(proxy, ENCODE_BYTES, new Object[]{bytes});
             }
 
             throw newEncoderException("unacceptable argument: " + args[0]);
