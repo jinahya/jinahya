@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * The abstract class for simple values.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <R> raw value type parameter
@@ -36,7 +37,7 @@ public abstract class SimpleValue<R> implements Serializable {
 
 
     /**
-     * Create a new typed instance.
+     * Creates a new typed instance.
      *
      * @param <V> simple value type parameter
      * @param <R> raw value type parameter
