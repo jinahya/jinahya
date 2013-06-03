@@ -19,11 +19,11 @@
         <artifactId>javaee-api</artifactId>
         <version>6.0</version>
       </dependency>
-      <dependency>
+<!--      <dependency>
         <groupId>jinahay.googlecode.com</groupId>
         <artifactId>jinahya-se</artifactId>
         <version>1.0-alpha-1-SNAPSHOT</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
