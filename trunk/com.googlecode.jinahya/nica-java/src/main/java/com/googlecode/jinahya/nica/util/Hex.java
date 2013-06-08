@@ -102,8 +102,7 @@ public class Hex {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
      * @param decoded the bytes to encode
      *
@@ -268,11 +267,8 @@ public class Hex {
 //        return (decodeHalf((encoded.charAt(offset)) << 4)
 //                | decodeHalf((encoded.charAt(offset + 1))));
 //    }
-
-
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
      * @param encoded the bytes to decode
      *
@@ -302,8 +298,7 @@ public class Hex {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
      * @param encoded the string to decode
      *
@@ -324,8 +319,7 @@ public class Hex {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code> and returns as a 'UTF-8' encoded String.
+     * Decodes given {@code encoded} and returns as a 'UTF-8' encoded String.
      *
      * @param encoded encoded bytes
      *
@@ -342,8 +336,8 @@ public class Hex {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code> and returns output as a 'UTF-8' encoded String.
+     * Decodes given {@code encoded} and returns output as a 'UTF-8' encoded
+     * String.
      *
      * @param encoded encoded 'US-ASCII' String
      *

@@ -117,9 +117,8 @@ public enum Code {
 
 
     /**
-     * Finds the value whose key matches to given
-     * <code>key</code>. An IllegalArgumentException will be thrown if no values
-     * match.
+     * Finds the value whose key matches to given {@code key}. An
+     * IllegalArgumentException will be thrown if no values match.
      *
      * @param key key
      *

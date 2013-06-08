@@ -29,73 +29,73 @@ public enum Header {
     /**
      * See {@link HeaderFieldNames#NAME}.
      */
-    NAME(HeaderFieldNames.NAME),
+    NAME(HeaderNames.NAME),
     /**
      * See {@link HeaderFieldNames#INIT}.
      */
-    INIT(HeaderFieldNames.INIT),
+    INIT(HeaderNames.INIT),
     /**
      * See {@link HeaderFieldNames#CODE}.
      */
-    CODE(HeaderFieldNames.CODE),
+    CODE(HeaderNames.CODE),
     /**
      * See {@link HeaderFieldNames#AUTH}.
      */
-    AUTH(HeaderFieldNames.AUTH);
+    AUTH(HeaderNames.AUTH);
 
 
     /**
-     * Finds value whose fieldName matched with given
-     * <code>fieldName</code>.
+     * Finds value whose name matched with given {@code name}.
      *
-     * @param fieldName HTTP header field name.
+     * @param name HTTP header field-name.
+     *
      * @return matched value.
      */
-    public static Header fromFieldName(final String fieldName) {
+    public static Header fromName(final String name) {
 
         for (Header value : values()) {
-            if (value.fieldName.equals(fieldName)) {
+            if (value.name.equals(name)) {
                 return value;
             }
         }
 
-        throw new IllegalArgumentException("unknown fieldName: " + fieldName);
+        throw new IllegalArgumentException("unknown name: " + name);
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param fieldName HTTP header field-name.
+     * @param name HTTP header field-name.
      */
-    private Header(final String fieldName) {
+    private Header(final String name) {
 
-        if (fieldName == null) {
-            throw new IllegalArgumentException("null fieldName");
+        if (name == null) {
+            throw new IllegalArgumentException("null name");
         }
 
-        if (fieldName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty fieldName");
+        if (name.trim().isEmpty()) {
+            throw new IllegalArgumentException("empty name");
         }
 
-        this.fieldName = fieldName;
+        this.name = name;
     }
 
 
     /**
-     * Returns fieldName.
+     * Returns name.
      *
-     * @return fieldName
+     * @return name
      */
-    public String fieldName() {
-        return fieldName;
+    public String getName() {
+        return name;
     }
 
 
     /**
-     * fieldName.
+     * name.
      */
-    private final String fieldName;
+    private final String name;
 
 
 }

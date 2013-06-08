@@ -41,6 +41,7 @@ public class HacJCE extends Hac {
      * Returns a synchronized (thread-safe) instance.
      *
      * @param key the encryption key
+     *
      * @return a synchronized instance.
      */
     public static Hac newSynchronizedInstance(final byte[] key) {

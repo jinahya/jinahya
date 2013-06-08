@@ -46,6 +46,10 @@ public enum Platform {
      */
     TIZEN(PlatformIds.TIZEN),
     /**
+     * See {@link PlatformIds#UNKNOWN}.
+     */
+    UNKNOWN(PlatformIds.UNKNOWN),
+    /**
      * See {@link PlatformIds#WINDOWS_PHONE}.
      */
     WINDOWS_PHONE(PlatformIds.WINDOWS_PHONE);

@@ -32,39 +32,39 @@ public class HeaderTest {
 
 
     @Test
-    public void testFieldNames() {
+    public void testNames() {
 
-        final Set<String> fieldNameSet = new HashSet<String>();
+        final Set<String> nameSet = new HashSet<String>();
         for (Header value : Header.values()) {
-            final String fieldName = value.fieldName();
+            final String fieldName = value.getName();
             Assert.assertNotNull(fieldName);
             Assert.assertEquals(fieldName, fieldName.trim());
             Assert.assertFalse(fieldName.isEmpty());
             Assert.assertFalse(fieldName.trim().isEmpty());
-            Assert.assertTrue(fieldNameSet.add(fieldName));
+            Assert.assertTrue(nameSet.add(fieldName));
         }
     }
 
 
     @Test
-    public static void testFromFieldName() {
+    public static void testFromName() {
 
         try {
-            final Header header = Header.fromFieldName(null);
+            final Header header = Header.fromName(null);
             Assert.fail("passed: fromFieldName(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Header header = Header.fromFieldName("Not-Exist");
+            final Header header = Header.fromName("Not-Exist");
             Assert.fail("passed: fromId(\"/Not-Exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
         for (Header value : Header.values()) {
-            Assert.assertEquals(Header.fromFieldName(value.fieldName()), value);
+            Assert.assertEquals(Header.fromName(value.getName()), value);
         }
     }
 
