@@ -229,12 +229,12 @@ public abstract class AbstractHeaders {
         int index = 0;
 
         // ----------------------------------------------------------- Nica-Name
-        headers[index++] = HeaderFieldNames.NAME;
+        headers[index++] = HeaderNames.NAME;
         headers[index++] = name;
 
         // ----------------------------------------------------------- Nica-Init
         final byte[] iv = Aes.newIv();
-        headers[index++] = HeaderFieldNames.INIT;
+        headers[index++] = HeaderNames.INIT;
         headers[index++] = Hex.encodeToString(iv);
 
         // ----------------------------------------------------------- Nica-Base
@@ -247,12 +247,12 @@ public abstract class AbstractHeaders {
 
         // ----------------------------------------------------------- Nica-Code
         final byte[] code = aes.encrypt(iv, base);
-        headers[index++] = HeaderFieldNames.CODE;
+        headers[index++] = HeaderNames.CODE;
         headers[index++] = Hex.encodeToString(code);
 
         // ----------------------------------------------------------- Nica-Auth
         final byte[] auth = hac.authenticate(base);
-        headers[index++] = HeaderFieldNames.AUTH;
+        headers[index++] = HeaderNames.AUTH;
         headers[index++] = Hex.encodeToString(auth);
 
         return headers;

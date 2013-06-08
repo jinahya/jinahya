@@ -56,6 +56,12 @@ public final class PlatformIds {
 
 
     /**
+     * Unknown.
+     */
+    public static final String UNKNOWN = "/platforms/unknown";
+
+
+    /**
      * Windows Phone.
      */
     public static final String WINDOWS_PHONE = "/platforms/windows_phone";

@@ -135,7 +135,7 @@ public final class CodeKeys {
 
 
     /**
-     * System (OS) identifier. Must be, if specified, unique by
+     * System(OS) identifier. Must be, if specified, unique by
      * {@link #DEVICE_ID}. This code is required if the {@link #DEVICE_ID} is
      * absent. The value must not be empty nor blank. The actual value must be
      * transformed in a consistent manner. Exposing or storing the raw value is
@@ -157,7 +157,7 @@ public final class CodeKeys {
 
 
     /**
-     * Device (HW) identifier. Must be, if specified, unique by
+     * Device(H/W) identifier. Must be, if specified, unique by
      * {@link #PLATFORM_ID}. This code is required if the {@link #SYSTEM_ID} is
      * absent. The value must not be empty nor blank. The actual value must be
      * transformed in a consistent manner. Exposing or storing the raw value is
