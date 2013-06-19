@@ -123,8 +123,8 @@ public abstract class MappedMorton implements Serializable {
      * salt, int iterationCount, int keyLength)</a>
      */
     protected static byte[] pbkdf2(final char[] password, final byte[] salt,
-                                    final int iterationCount,
-                                    final int keyLength) {
+                                   final int iterationCount,
+                                   final int keyLength) {
 
         final long start = System.currentTimeMillis();
 
@@ -149,8 +149,8 @@ public abstract class MappedMorton implements Serializable {
 
 
     protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
-                                   final int iterationCount,
-                                   final int keyLength) {
+                                    final int iterationCount,
+                                    final int keyLength) {
 
         try {
             return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
@@ -187,6 +187,14 @@ public abstract class MappedMorton implements Serializable {
         }
 
         return cassword;
+    }
+
+
+    protected static int iterationCount(final int density, final byte[] bland) {
+
+        final int degree = 0x01 << density;
+
+        return (new BigInteger(bland).intValue() & (degree - 1)) | degree;
     }
 
 
@@ -250,27 +258,8 @@ public abstract class MappedMorton implements Serializable {
             throw new IllegalArgumentException("empty bland");
         }
 
-        final char[] password = cassword(bland);
-
-        final int degree = 0x01 << density;
-        final int iterationCount =
-            (new BigInteger(bland).intValue() & (degree - 1)) | degree;
-
-        LOGGER.log(Level.INFO, "iterationCount: {0}", iterationCount);
-        if (iterationCount < Math.pow(2, density)) {
-            throw new RuntimeException("iterationCount(" + iterationCount
-                                       + ") < Math.pow(2, " + density + ")");
-        }
-        if (iterationCount >= Math.pow(2, density + 1)) {
-            throw new RuntimeException("iterationCount(" + iterationCount
-                                       + ") < Math.pow(2, " + (density + 1)
-                                       + ")");
-        }
-
-        final byte[] salty = pbkdf2(password, sodium, iterationCount,
-                                    sodium.length * 8);
-
-        return salty;
+        return pbkdf2(cassword(bland), sodium, iterationCount(density, bland),
+                      sodium.length * 8);
     }
 
 
