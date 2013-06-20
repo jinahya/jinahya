@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
 import java.lang.annotation.Documented;
@@ -32,6 +32,11 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({ElementType.FIELD})
-public @interface Unused {
+public @interface Label {
+
+
+    String value();
+
+
 }
 

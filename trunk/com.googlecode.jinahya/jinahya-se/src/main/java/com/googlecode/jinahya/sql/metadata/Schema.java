@@ -15,16 +15,19 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
+import com.googlecode.jinahya.sql.metadata.Table.TablesMapAdapter;
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -35,23 +38,68 @@ import javax.xml.bind.annotation.XmlType;
 public class Schema {
 
 
+    public static final Schema UNNAMED = new Schema();
+
+
+    static {
+        UNNAMED.tableSchem = null;
+    }
+
+
+    public static class Schemas extends ValuesMapAdapter.Values<Schema> {
+
+
+        @XmlElement
+        public List<Schema> getSchema() {
+
+            return getValue();
+        }
+
+
+    }
+
+
+    public static class SchemasMapAdapter
+        extends ValuesMapAdapter<Schema.Schemas, String, Schema> {
+
+
+        public SchemasMapAdapter() {
+
+            super(Schema.Schemas.class);
+        }
+
+
+        @Override
+        protected String getKey(final Schema value) {
+
+            return value.getTableSchem();
+        }
+
+
+    }
+
+
     public Catalog getCatalog() {
+
         return catalog;
     }
 
 
     public void setCatalog(final Catalog catalog) {
+
         this.catalog = catalog;
     }
 
 
     @XmlAttribute
     public String getCatalogName() {
+
         return catalog == null ? null : catalog.getTableCat();
     }
 
 
     public String getTableSchem() {
+
         return tableSchem;
     }
 
@@ -75,10 +123,9 @@ public class Schema {
     private String tableSchem;
 
 
-    @XmlElement
-    @XmlElementWrapper
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(TablesMapAdapter.class)
     private Map<String, Table> tables;
 
 
 }
-

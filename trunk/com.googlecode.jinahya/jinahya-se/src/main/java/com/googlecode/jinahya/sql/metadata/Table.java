@@ -15,12 +15,22 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
+import com.googlecode.jinahya.sql.metadata.Column.ColumnsMapAdapter;
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -28,6 +38,39 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class Table {
+
+
+    public static class Tables extends ValuesMapAdapter.Values<Table> {
+
+
+        @XmlElement
+        public List<Table> getTable() {
+
+            return getValue();
+        }
+
+
+    }
+
+
+    public static class TablesMapAdapter
+        extends ValuesMapAdapter<Table.Tables, String, Table> {
+
+
+        public TablesMapAdapter() {
+
+            super(Table.Tables.class);
+        }
+
+
+        @Override
+        protected String getKey(final Table value) {
+
+            return value.getTableName();
+        }
+
+
+    }
 
 
     @XmlEnum
@@ -73,6 +116,32 @@ public class Table {
     }
 
 
+    public String getTableName() {
+
+        return tableName;
+    }
+
+
+    public Map<String, Column> getColumns() {
+
+        if (columns == null) {
+            columns = new HashMap<String, Column>();
+        }
+
+        return columns;
+    }
+
+
+    public Collection<TablePrivilege> getTablePrivileges() {
+
+        if (tablePrivileges == null) {
+            tablePrivileges = new ArrayList<TablePrivilege>();
+        }
+
+        return tablePrivileges;
+    }
+
+
     @XmlTransient
     private Schema schema;
 
@@ -108,5 +177,15 @@ public class Table {
     private String refGeneration;
 
 
-}
+    @XmlElement(name = "column")
+    @XmlElementWrapper(nillable = true, required = true)
+    @XmlJavaTypeAdapter(ColumnsMapAdapter.class)
+    private Map<String, Column> columns;
 
+
+    @XmlElement(name = "tablePrivilege")
+    @XmlElementWrapper(nillable = true, required = true)
+    private Collection<TablePrivilege> tablePrivileges;
+
+
+}

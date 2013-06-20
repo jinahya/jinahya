@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
 import java.sql.DatabaseMetaData;

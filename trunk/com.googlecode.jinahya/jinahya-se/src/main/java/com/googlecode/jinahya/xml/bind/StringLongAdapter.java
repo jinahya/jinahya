@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2012 Jin Kwon <jinahya at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,45 +15,40 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.xml.bind;
+
+
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TableType {
+public class StringLongAdapter extends XmlAdapter<String, Long> {
 
 
-    public static final String TABLE = "TABLE";
+    @Override
+    public String marshal(final Long bound) throws Exception {
 
+        if (bound == null) {
+            return null;
+        }
 
-    public static final String VIEW = "VIEW";
-
-
-    public static final String SYSTEM_TABLE = "SYSTEM TABLE";
-
-
-    public static final String GLOBAL_TEMPORARY = "GLOBAL TEMPORARY";
-
-
-    public static final String LOCAL_TEMPORARY = "LOCAL TEMPORARY";
-
-
-    public static final String ALIAS = "ALIAS";
-
-
-    public static final String SYNONYM = "SYNONYM";
-
-
-    public String getTableType() {
-        return tableType;
+        return DatatypeConverter.printLong(bound);
     }
 
 
-    @Label("TABLE_TYPE")
-    private String tableType;
+    @Override
+    public Long unmarshal(final String value) throws Exception {
+
+        if (value == null) {
+            return null;
+        }
+
+        return DatatypeConverter.parseLong(value);
+    }
 
 
 }
-

@@ -15,9 +15,13 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.Values;
+import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -26,6 +30,57 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class Column {
+
+
+    public static class Columns extends Values<Column> {
+
+
+        @XmlElement
+        public List<Column> getColumn() {
+
+            return getValue();
+        }
+
+
+    }
+
+
+    public static class ColumnsMapAdapter
+        extends ValuesMapAdapter<Columns, String, Column> {
+
+
+        public ColumnsMapAdapter() {
+
+            super(Columns.class);
+        }
+
+
+        @Override
+        protected String getKey(final Column value) {
+
+            return value.getColumnName();
+        }
+
+
+    }
+
+
+    public Table getTable() {
+
+        return table;
+    }
+
+
+    public void setTable(final Table table) {
+
+        this.table = table;
+    }
+
+
+    public String getColumnName() {
+
+        return columnName;
+    }
 
 
     @XmlTransient
@@ -132,4 +187,3 @@ public class Column {
 
 
 }
-
