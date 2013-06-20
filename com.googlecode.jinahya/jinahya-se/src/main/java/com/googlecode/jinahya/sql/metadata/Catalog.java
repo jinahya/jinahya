@@ -15,14 +15,15 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.sql.metadata;
 
 
+import com.googlecode.jinahya.sql.metadata.Schema.SchemasMapAdapter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -61,10 +62,9 @@ public class Catalog {
     private String tableCat;
 
 
-    @XmlElementWrapper
-    @XmlElement(name = "schema")
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(SchemasMapAdapter.class)
     private Map<String, Schema> schemas;
 
 
 }
-

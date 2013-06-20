@@ -15,27 +15,26 @@
  */
 
 
-package com.googlecode.jinahya.sql;
+package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@Documented
-@Retention(RetentionPolicy.CLASS)
-@Target({ElementType.FIELD})
-public @interface Label {
+public class Entity {
 
 
-    String value();
+    @XmlAttribute(required = true)
+    private long id;
+
+
+    @XmlValue
+    private String name;
 
 
 }
