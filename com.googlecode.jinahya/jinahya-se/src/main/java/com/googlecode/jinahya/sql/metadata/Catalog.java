@@ -19,7 +19,11 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import com.googlecode.jinahya.sql.metadata.Schema.SchemasMapAdapter;
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -31,7 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlType(propOrder = {"tableCat", "schemas"})
-public class Catalog {
+public class Catalog implements Retrievable {
 
 
     public static final Catalog UNNAMED = new Catalog();
@@ -39,6 +43,48 @@ public class Catalog {
 
     static {
         UNNAMED.tableCat = null;
+    }
+
+
+    public static class Catalogs extends ValuesMapAdapter.Values<Catalog> {
+
+
+        @XmlElement
+        public List<Catalog> getCatalog() {
+
+            return getValue();
+        }
+
+
+    }
+
+
+    public static class CatalogsMapAdapter
+        extends ValuesMapAdapter<Catalog.Catalogs, String, Catalog> {
+
+
+        public CatalogsMapAdapter() {
+
+            super(Catalog.Catalogs.class);
+        }
+
+
+        @Override
+        protected String getKey(final Catalog value) {
+
+            return value.getTableCat();
+        }
+
+
+    }
+
+
+    @Override
+    public void retrieve(final DatabaseMetaData databaseMetaData)
+        throws SQLException {
+
+
+        
     }
 
 

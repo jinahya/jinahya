@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import com.googlecode.jinahya.sql.metadata.Column.ColumnsMapAdapter;
+import com.googlecode.jinahya.sql.metadata.VersionColumn.VersionColumnsMapAdapter;
 import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -177,8 +178,7 @@ public class Table {
     private String refGeneration;
 
 
-    @XmlElement(name = "column")
-    @XmlElementWrapper(nillable = true, required = true)
+    @XmlElement(name = "column", required = true)
     @XmlJavaTypeAdapter(ColumnsMapAdapter.class)
     private Map<String, Column> columns;
 
@@ -186,6 +186,11 @@ public class Table {
     @XmlElement(name = "tablePrivilege")
     @XmlElementWrapper(nillable = true, required = true)
     private Collection<TablePrivilege> tablePrivileges;
+
+
+    @XmlElement(name = "versionColumn", required = true)
+    @XmlJavaTypeAdapter(VersionColumnsMapAdapter.class)
+    private Map<String, VersionColumn> versionColumns;
 
 
 }
