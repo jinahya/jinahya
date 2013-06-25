@@ -96,14 +96,14 @@ public class BitOutput {
     public static class ChannelOutput implements ByteOutput {
 
 
-        public ChannelOutput(final WritableByteChannel output) {
+        public ChannelOutput(final WritableByteChannel channel) {
             super();
 
-            if (output == null) {
-                throw new NullPointerException("null output");
+            if (channel == null) {
+                throw new NullPointerException("null channel");
             }
 
-            this.output = output;
+            this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
 
@@ -115,16 +115,55 @@ public class BitOutput {
 
             buffer.flip(); // --------------------------------------------- flip
 
-            while (output.write(buffer) != 1); // ------------------------ write
+            while (channel.write(buffer) != 1); // ------------------------ write
 
             buffer.clear(); // ------------------------------------------- clear
         }
 
 
         /**
-         * output.
+         * channel.
          */
-        private final WritableByteChannel output;
+        private final WritableByteChannel channel;
+
+
+        /**
+         * buffer.
+         */
+        private final ByteBuffer buffer;
+
+
+    }
+
+
+    /**
+     * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+     */
+    public static class BufferOutput implements ByteOutput {
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param buffer the buffer to wrap.
+         */
+        public BufferOutput(final ByteBuffer buffer) {
+
+            super();
+
+            if (buffer == null) {
+                throw new NullPointerException("null buffer");
+            }
+
+            this.buffer = buffer;
+        }
+
+
+        //@Override // commented for pre 5
+        public void writeUnsignedByte(final int value) throws IOException {
+
+            buffer.put(((byte) value));
+        }
 
 
         /**

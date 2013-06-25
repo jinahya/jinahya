@@ -62,29 +62,29 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param input the stream to wrap.
+         * @param stream the stream to wrap.
          */
-        public StreamInput(final InputStream input) {
+        public StreamInput(final InputStream stream) {
             super();
 
-            if (input == null) {
-                throw new NullPointerException("null input");
+            if (stream == null) {
+                throw new NullPointerException("null stream");
             }
 
-            this.input = input;
+            this.stream = stream;
         }
 
 
         //@Override // commented for pre 5
         public int readUnsignedByte() throws IOException {
-            return input.read();
+            return stream.read();
         }
 
 
         /**
          * input.
          */
-        private final InputStream input;
+        private final InputStream stream;
 
 
     }
@@ -99,16 +99,16 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param input the channel to wrap
+         * @param channel the channel to wrap
          */
-        public ChannelInput(final ReadableByteChannel input) {
+        public ChannelInput(final ReadableByteChannel channel) {
             super();
 
-            if (input == null) {
-                throw new NullPointerException("null input");
+            if (channel == null) {
+                throw new NullPointerException("null channel");
             }
 
-            this.input = input;
+            this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
 
@@ -119,7 +119,7 @@ public class BitInput {
             buffer.clear(); // ------------------------------------------- clear
 
             for (int read = -1;;) {
-                read = input.read(buffer); // ----------------------------- read
+                read = channel.read(buffer); // ----------------------------- read
                 if (read == -1) {
                     throw new EOFException("eof");
                 }
@@ -135,9 +135,48 @@ public class BitInput {
 
 
         /**
-         * input.
+         * channel.
          */
-        private final ReadableByteChannel input;
+        private final ReadableByteChannel channel;
+
+
+        /**
+         * buffer.
+         */
+        private final ByteBuffer buffer;
+
+
+    }
+
+
+    /**
+     * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+     */
+    public static class BufferOutput implements ByteInput {
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param buffer the buffer to wrap.
+         */
+        public BufferOutput(final ByteBuffer buffer) {
+
+            super();
+
+            if (buffer == null) {
+                throw new NullPointerException("null buffer");
+            }
+
+            this.buffer = buffer;
+        }
+
+
+        //@Override // commented for pre 5
+        public int readUnsignedByte() throws IOException {
+
+            return (buffer.get() & 0xFF);
+        }
 
 
         /**
