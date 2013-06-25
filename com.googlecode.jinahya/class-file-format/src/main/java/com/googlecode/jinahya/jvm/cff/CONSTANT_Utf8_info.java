@@ -63,7 +63,7 @@ public class CONSTANT_Utf8_info extends cp_info {
     }
 
 
-    public String setInfo() {
+    public String getInfo() {
         return info;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2013 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
 package com.googlecode.jinahya.jvm.cff;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.EOFException;
 import java.io.IOException;
 
 
@@ -27,44 +29,44 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class CONSTANT_ref_info extends cp_info {
-
-
-    public CONSTANT_ref_info(final int tag) {
-        super(tag);
-    }
+public class Unknown_attribute extends attribute_info {
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
 
-        class_index = input.readUnsignedShort();
-        name_and_type_index = input.readUnsignedShort();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            while (true) {
+                baos.write(input.readUnsignedByte());
+            }
+        } catch (EOFException eofe) {
+        }
+        baos.flush();
+        info = baos.toByteArray();
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
 
-        output.writeShort(class_index);
-        output.writeShort(name_and_type_index);
+        output.write(info);
     }
 
 
-    public int getClass_index() {
-        return class_index;
+    public byte[] getInfo() {
+
+        return info;
     }
 
 
-    public int getName_and_type_index() {
-        return name_and_type_index;
+    public void setInfo(final byte[] info) {
+
+        this.info = info;
     }
 
 
-    private int class_index;
-
-
-    private int name_and_type_index;
+    private byte[] info;
 
 
 }

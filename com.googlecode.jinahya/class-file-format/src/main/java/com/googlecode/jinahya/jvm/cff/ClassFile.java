@@ -96,32 +96,51 @@ public class ClassFile {
         ((ArrayList) constant_pool).ensureCapacity(constant_pool_count - 1);
         for (int i = 1; i < constant_pool_count; i++) {
             final int tag = input.readUnsignedByte();
-            final cp_info cpInfo = cp_info.TAG.newCp_info(tag);
-            cpInfo.readInfo(input);
-            System.out.println("tag[" + i + "]: " + tag + " " + cpInfo);
-            constant_pool.add(cpInfo);
+            final cp_info constant = cp_info.TAG.newConstant(tag);
+            constant.classFile = this;
+            constant.readInfo(input);
+            System.out.println("tag[" + i + "]: " + tag + " " + constant);
+            constant_pool.add(constant);
         }
 
         access_flags = input.readUnsignedShort();
 
         this_class = input.readUnsignedShort();
+        final CONSTANT_Class_info cpi = getCp_info(CONSTANT_Class_info.class, this_class);
+        final CONSTANT_Utf8_info cui = getCp_info(CONSTANT_Utf8_info.class, cpi.getName_index());
+        System.out.println(cui.getInfo());
 
         super_class = input.readUnsignedShort();
 
-        final int interface_count = input.readUnsignedShort();
+        final int interfaces_count = input.readUnsignedShort();
+        System.out.println("interfaces_count: " + interfaces_count);
         interfaces.clear();
-        ((ArrayList) interfaces).ensureCapacity(interface_count);
-        for (int i = 0; i < interface_count; i++) {
+        ((ArrayList) interfaces).ensureCapacity(interfaces_count);
+        for (int i = 0; i < interfaces_count; i++) {
             interfaces.add(input.readUnsignedShort());
         }
 
-//
+        final int fields_count = input.readUnsignedShort();
+        System.out.println("fields_count: " + fields_count);
+        fields.clear();
+        ((ArrayList) fields).ensureCapacity(fields_count);
+        for (int i = 0; i < fields_count; i++) {
+            final field_info field = new field_info();
+            field.classFile = this;
+            fields.add(field);
+            field.read(input);
+        }
+
+
 //        final int fields_count = input.readUnsignedShort();
-//
+//        System.out.println("fields_count: " + fields_count);
+//        fields.clear();
+//        ((ArrayList) fields).ensureCapacity(fields_count);
 //        for (int i = 0; i < fields_count; i++) {
-//            final field_info info = new field_info();
-//            info.read(input);
-//            fields.add(info);
+//            final field_info field = new field_info();
+//            field.classFile = this;
+//            fields.add(field);
+//            field.read(input);
 //        }
     }
 
@@ -151,6 +170,42 @@ public class ClassFile {
     }
 
 
+    public int getMinor_version() {
+        return minor_version;
+    }
+
+
+    public int getMajor_version() {
+        return major_version;
+    }
+
+
+    public cp_info getCp_info(final int index) {
+        return constant_pool.get(index - 1);
+    }
+
+
+    public <T extends cp_info> T getCp_info(final Class<T> type,
+                                            final int index) {
+        return type.cast(getCp_info(index));
+    }
+
+
+    public int getAccess_flags() {
+        return access_flags;
+    }
+
+
+    public int getThis_class() {
+        return this_class;
+    }
+
+
+    public int getSuper_class() {
+        return super_class;
+    }
+
+
     private int magic;
 
 
@@ -177,6 +232,6 @@ public class ClassFile {
 
     private final List<field_info> fields = new ArrayList<>();
 
-
+private final List<method_info> methods = new ArrayList<>();
 }
 

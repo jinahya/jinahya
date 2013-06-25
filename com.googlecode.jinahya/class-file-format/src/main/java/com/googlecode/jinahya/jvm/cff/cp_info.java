@@ -21,6 +21,8 @@ package com.googlecode.jinahya.jvm.cff;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -28,6 +30,9 @@ import java.io.IOException;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public abstract class cp_info {
+
+
+    public static final int TAG_CONSTANT_Unknown = -1;
 
 
     public static final int TAG_CONSTANT_Class = 7;
@@ -97,43 +102,62 @@ public abstract class cp_info {
                                CONSTANT_InvokeDynamic_info.class);
 
 
-        public static TAG fromValue(final int value) {
+        public static TAG fromTag(final int tag) {
 
-            for (TAG tag : values()) {
-                if (tag.value == value) {
-                    return tag;
+            for (TAG value : values()) {
+                if (value.tag == tag) {
+                    return value;
                 }
             }
 
-            throw new IllegalArgumentException("Unknown value: " + value);
+            throw new IllegalArgumentException("Unknown tag: " + tag);
         }
 
 
-        public static cp_info newCp_info(final int value) {
+        public static cp_info newConstant(final int tag) {
 
             try {
-                return fromValue(value)._info.newInstance();
+                return fromTag(tag).type.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
 
 
-        private TAG(final int value, final Class<? extends cp_info> _info) {
-            this.value = value;
-            this._info = _info;
+        /**
+         *
+         * @param classFile
+         * @param tag
+         *
+         * @return
+         *
+         * @deprecated
+         */
+        public static cp_info newConstant(final ClassFile classFile, final int tag) {
+
+            try {
+                return fromTag(tag).type.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
-        public int getValue() {
-            return value;
+        private TAG(final int tag, final Class<? extends cp_info> type) {
+            this.tag = tag;
+            this.type = type;
         }
 
 
-        private final int value;
+        public int getTag() {
+            return tag;
+        }
 
 
-        private final Class<? extends cp_info> _info;
+        private final int tag;
+
+
+        private final Class<? extends cp_info> type;
 
 
     }
@@ -152,7 +176,27 @@ public abstract class cp_info {
     protected abstract void writeInfo(DataOutput output) throws IOException;
 
 
+    public int getTag() {
+        return tag;
+    }
+
+
+    public ClassFile getClassFile() {
+        return classFile;
+    }
+
+
+    public void setClassFile(final ClassFile classFile) {
+        this.classFile = classFile;
+    }
+
+
+    @XmlAttribute
     private final int tag;
+
+
+    @XmlTransient
+    transient ClassFile classFile;
 
 
 }
