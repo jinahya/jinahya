@@ -77,6 +77,7 @@ public class BitOutput {
 
         //@Override // commented for pre 5
         public void writeUnsignedByte(final int value) throws IOException {
+
             output.write(value);
         }
 
@@ -162,7 +163,7 @@ public class BitOutput {
         //@Override // commented for pre 5
         public void writeUnsignedByte(final int value) throws IOException {
 
-            buffer.put(((byte) value));
+            buffer.put(((byte) value)); // BufferOverflowException
         }
 
 

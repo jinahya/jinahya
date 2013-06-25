@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2013 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,44 +27,36 @@ import java.io.IOException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class CONSTANT_ref_info extends cp_info {
-
-
-    public CONSTANT_ref_info(final int tag) {
-        super(tag);
-    }
+public class StackMapTable_attribute extends attribute_info {
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
 
-        class_index = input.readUnsignedShort();
-        name_and_type_index = input.readUnsignedShort();
+        constant_value_index = input.readUnsignedShort();
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
 
-        output.writeShort(class_index);
-        output.writeShort(name_and_type_index);
+        output.writeShort(constant_value_index);
     }
 
 
-    public int getClass_index() {
-        return class_index;
+    public int getConstantValueIndex() {
+
+        return constant_value_index;
     }
 
 
-    public int getName_and_type_index() {
-        return name_and_type_index;
+    public void setConstantValueIndex(final int constantValueIndex) {
+
+        this.constant_value_index = constantValueIndex;
     }
 
 
-    private int class_index;
-
-
-    private int name_and_type_index;
+    private int constant_value_index;
 
 
 }

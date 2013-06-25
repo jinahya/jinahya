@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class field_info {
+public class method_info {
 
 
     public static enum ACCESS_FLAG {
@@ -40,10 +40,13 @@ public class field_info {
         ACC_PROTECTED(0x0004),
         ACC_STATIC(0x0008),
         ACC_FINAL(0x0010),
-        ACC_VOLATILE(0x0040),
-        ACC_TRANSIENT(0x0080),
-        ACC_SYNTHETIC(0x1000),
-        ACC_ENUM(0x4000);
+        ACC_SYNCHRONIZED(0x0020),
+        ACC_BRIDE(0x0040),
+        ACC_VARARGS(0x0080),
+        ACC_NATIVE(0x0100),
+        ACC_ABSTRACT(0x0400),
+        ACC_STRICT(0x0800),
+        ACC_SYNTHETIC(0x1000);
 
 
         public static ACCESS_FLAG fromValue(final int value) {

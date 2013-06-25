@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2013 onacit.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,50 +21,36 @@ package com.googlecode.jinahya.jvm.cff;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class CONSTANT_ref_info extends cp_info {
-
-
-    public CONSTANT_ref_info(final int tag) {
-        super(tag);
-    }
+public class Exceptions_attribute extends attribute_info {
 
 
     @Override
     protected void readInfo(final DataInput input) throws IOException {
 
-        class_index = input.readUnsignedShort();
-        name_and_type_index = input.readUnsignedShort();
+        final int number_of_exceptions = input.readUnsignedShort();
+        
+        exception_indexes.clear();;
+        ((ArrayList)exception_indexes).ensureCapacity(number_of_exceptions);
+        for (int i = 0; i < number_of_exceptions; i++) {
+            exception_indexes.add(input.readUnsignedShort());
+        }
     }
 
 
     @Override
     protected void writeInfo(final DataOutput output) throws IOException {
-
-        output.writeShort(class_index);
-        output.writeShort(name_and_type_index);
     }
 
 
-    public int getClass_index() {
-        return class_index;
-    }
-
-
-    public int getName_and_type_index() {
-        return name_and_type_index;
-    }
-
-
-    private int class_index;
-
-
-    private int name_and_type_index;
+    private final List<Integer> exception_indexes = new ArrayList<>();
 
 
 }

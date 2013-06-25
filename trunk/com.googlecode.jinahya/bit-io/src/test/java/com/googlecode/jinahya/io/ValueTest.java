@@ -63,7 +63,7 @@ public abstract class ValueTest<V extends Value<?>> {
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final BitInput input = new BitInput(new StreamInput(bais));
 
-        final List<V> actual = new ArrayList<V>(expected.size());
+        final List<V> actual = new ArrayList<>(expected.size());
         for (int i = 0; i < expected.size(); i++) {
             final V value = valueClass.newInstance();
             value.length = expected.get(i).length;
@@ -94,7 +94,7 @@ public abstract class ValueTest<V extends Value<?>> {
         test(valueClass, Collections.<V>emptyList());
 
         final int count = ThreadLocalRandom.current().nextInt(1024);
-        final List<V> expected = new ArrayList<V>(count);
+        final List<V> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final V value = valueClass.newInstance();
             expected.add(value);

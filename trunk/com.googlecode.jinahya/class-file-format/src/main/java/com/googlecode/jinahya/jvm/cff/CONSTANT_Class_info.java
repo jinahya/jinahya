@@ -47,6 +47,11 @@ public class CONSTANT_Class_info extends cp_info {
     }
 
 
+    public int getName_index() {
+        return name_index;
+    }
+
+
     private int name_index;
 
 

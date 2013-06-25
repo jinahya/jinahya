@@ -175,7 +175,7 @@ public class BitInput {
         //@Override // commented for pre 5
         public int readUnsignedByte() throws IOException {
 
-            return (buffer.get() & 0xFF);
+            return (buffer.get() & 0xFF); // BufferUnderflowException
         }
 
 
