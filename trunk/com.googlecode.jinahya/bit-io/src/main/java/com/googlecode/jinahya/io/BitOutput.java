@@ -487,7 +487,7 @@ public class BitOutput {
      *
      * @param length number of bytes to align; must be non-zero positive.
      *
-     * @return number of bits padded for alignment
+     * @return number of bits padded for alignment.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -499,7 +499,7 @@ public class BitOutput {
 
         int bits = 0;
 
-        // pads remained bits into current byte
+        // padding remained bits into current byte
         if (index > 0) {
             bits = (8 - index);
             writeUnsignedByte(bits, 0x00); // count++
