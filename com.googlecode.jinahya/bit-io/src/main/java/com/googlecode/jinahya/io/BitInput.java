@@ -474,7 +474,7 @@ public class BitInput {
 
         int bits = 0;
 
-        // discard remained bits from current byte.
+        // discarding remained bits from current byte.
         if (index < 8) {
             bits = 8 - index;
             readUnsignedByte(bits); // count++
