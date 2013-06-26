@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.ByteInput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -62,30 +61,30 @@ public class BitOutput {
         /**
          * 'Creates a new instance.
          *
-         * @param output the stream to wrap.
+         * @param stream the stream to wrap.
          */
-        public StreamOutput(final OutputStream output) {
+        public StreamOutput(final OutputStream stream) {
             super();
 
-            if (output == null) {
-                throw new NullPointerException("null output");
+            if (stream == null) {
+                throw new NullPointerException("null stream");
             }
 
-            this.output = output;
+            this.stream = stream;
         }
 
 
         //@Override // commented for pre 5
         public void writeUnsignedByte(final int value) throws IOException {
 
-            output.write(value);
+            stream.write(value);
         }
 
 
         /**
          * output.
          */
-        private final OutputStream output;
+        private final OutputStream stream;
 
 
     }
@@ -93,6 +92,8 @@ public class BitOutput {
 
     /**
      * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
+     *
+     * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
     public static class ChannelOutput implements ByteOutput {
 
@@ -104,6 +105,10 @@ public class BitOutput {
                 throw new NullPointerException("null channel");
             }
 
+            if (!channel.isOpen()) {
+                throw new IllegalArgumentException("channel closed");
+            }
+            
             this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
@@ -482,6 +487,83 @@ public class BitOutput {
     }
 
 
+    public void writeBytes(final int scale, final int range, final byte[] bytes)
+        throws IOException {
+
+
+        if (scale < 1) {
+            throw new IllegalArgumentException("scale(" + scale + ") < 1");
+        }
+
+        if (scale <= 31) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 31");
+        }
+
+        if (range <= 0) {
+            throw new IllegalArgumentException("range(" + range + ") <= 0");
+        }
+
+        if (range > 8) {
+            throw new IllegalArgumentException("range(" + range + ") > 8");
+        }
+
+        if (bytes == null) {
+            throw new NullPointerException("bytes");
+        }
+
+        if ((bytes.length >> scale) > 0) {
+            throw new IllegalArgumentException(
+                "bytes.length(" + bytes.length + ") >> scale(" + scale + ") = "
+                + (bytes.length >> scale) + " > 0");
+        }
+
+        for (int i = 0; i < bytes.length; i++) {
+            writeUnsignedByte(range, bytes[i]);
+        }
+    }
+
+
+    public void writeUsAsciiBytes(final byte[] bytes) throws IOException {
+
+        writeBytes(16, 7, bytes);
+    }
+
+
+    public void writeUsAsciiString(final String value) throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        final byte[] bytes = value.getBytes("US-ASCII");
+
+        writeUsAsciiBytes(bytes);
+    }
+
+
+    public void writeBytes(final byte[] bytes) throws IOException {
+
+        writeBytes(16, 8, bytes);
+    }
+
+
+    public void writeString(final String value, final String charsetName)
+        throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        final byte[] bytes = value.getBytes(charsetName);
+
+        writeBytes(bytes);
+    }
+
+
     /**
      * Aligns to given {@code length} bytes.
      *
@@ -561,4 +643,3 @@ public class BitOutput {
 
 
 }
-

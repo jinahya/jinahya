@@ -92,6 +92,8 @@ public class BitInput {
 
     /**
      * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
+     *
+     * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
     public static class ChannelInput implements ByteInput {
 
@@ -108,6 +110,10 @@ public class BitInput {
                 throw new NullPointerException("null channel");
             }
 
+            if (!channel.isOpen()) {
+                throw new IllegalArgumentException("closed channel");
+            }
+            
             this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
@@ -457,6 +463,53 @@ public class BitInput {
     }
 
 
+    public byte[] readBytes(final int scale, final int range)
+        throws IOException {
+
+        if (scale < 1) {
+            throw new IllegalArgumentException("scale(" + scale + ") < 1");
+        }
+
+        if (scale <= 31) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 31");
+        }
+
+        if (range <= 0) {
+            throw new IllegalArgumentException("range(" + range + ") <= 0");
+        }
+
+        if (range > 8) {
+            throw new IllegalArgumentException("range(" + range + ") > 8");
+        }
+
+        final byte[] bytes = new byte[readUnsignedInt(scale)];
+
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) readUnsignedByte(range);
+        }
+
+        return bytes;
+    }
+
+
+    public byte[] readBytes() throws IOException {
+
+        return readBytes(16, 8);
+    }
+
+
+    public byte[] readUsAsciiBytes() throws IOException {
+
+        return readBytes(16, 7);
+    }
+
+
+    public String readUsAsciiString() throws IOException {
+
+        return new String(readUsAsciiBytes(), "US-ASCII");
+    }
+
+
     /**
      * Align to given {@code length} bytes.
      *
@@ -536,4 +589,3 @@ public class BitInput {
 
 
 }
-
