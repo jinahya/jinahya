@@ -92,7 +92,7 @@ public class BitOutput {
 
 
     /**
-     * A {@link ByteInput} implementation for {@link WritableByteChannel}s.
+     * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
      */
     public static class ChannelOutput implements ByteOutput {
 
@@ -116,7 +116,7 @@ public class BitOutput {
 
             buffer.flip(); // --------------------------------------------- flip
 
-            while (channel.write(buffer) != 1); // ------------------------ write
+            while (channel.write(buffer) != 1); // ----------------------- write
 
             buffer.clear(); // ------------------------------------------- clear
         }
