@@ -119,7 +119,7 @@ public class BitInput {
             buffer.clear(); // ------------------------------------------- clear
 
             for (int read = -1;;) {
-                read = channel.read(buffer); // ----------------------------- read
+                read = channel.read(buffer); // --------------------------- read
                 if (read == -1) {
                     throw new EOFException("eof");
                 }
@@ -150,7 +150,7 @@ public class BitInput {
 
 
     /**
-     * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+     * A {@link ByteInput} implementation for {@link ByteBuffer}s.
      */
     public static class BufferOutput implements ByteInput {
 
