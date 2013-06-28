@@ -113,7 +113,7 @@ public class BitInput {
             if (!channel.isOpen()) {
                 throw new IllegalArgumentException("closed channel");
             }
-            
+
             this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
@@ -463,15 +463,25 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads an array of bytes.
+     *
+     * @param scale array length scale; between 0 exclusive and 16 inclusive.
+     * @param range valid bit range in each bytes.
+     *
+     * @return an array of bytes.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
-        if (scale < 1) {
-            throw new IllegalArgumentException("scale(" + scale + ") < 1");
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
         }
 
-        if (scale <= 31) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 31");
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
         }
 
         if (range <= 0) {
@@ -482,7 +492,7 @@ public class BitInput {
             throw new IllegalArgumentException("range(" + range + ") > 8");
         }
 
-        final byte[] bytes = new byte[readUnsignedInt(scale)];
+        final byte[] bytes = new byte[readUnsignedShort(scale)];
 
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = (byte) readUnsignedByte(range);
@@ -492,21 +502,61 @@ public class BitInput {
     }
 
 
-    public byte[] readBytes() throws IOException {
-
-        return readBytes(16, 8);
-    }
-
-
+    /**
+     * Reads an array of ASCII bytes.
+     *
+     * @return the array of ASCII bytes read.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public byte[] readUsAsciiBytes() throws IOException {
 
         return readBytes(16, 7);
     }
 
 
+    /**
+     * Reads an ASCII string.
+     *
+     * @return the ASCII String read.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public String readUsAsciiString() throws IOException {
 
         return new String(readUsAsciiBytes(), "US-ASCII");
+    }
+
+
+    /**
+     * Reads an array of bytes.
+     *
+     * @return the array of bytes read.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] readBytes() throws IOException {
+
+        return readBytes(16, 8);
+    }
+
+
+    /**
+     * Reads a String.
+     *
+     * @param charsetName the charset name to decode the string.
+     *
+     * @return a String read.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public String readString(final String charsetName) throws IOException {
+
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        return new String(readBytes(), charsetName);
     }
 
 
@@ -589,3 +639,4 @@ public class BitInput {
 
 
 }
+
