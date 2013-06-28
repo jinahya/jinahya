@@ -108,7 +108,7 @@ public class BitOutput {
             if (!channel.isOpen()) {
                 throw new IllegalArgumentException("channel closed");
             }
-            
+
             this.channel = channel;
             buffer = ByteBuffer.allocate(1);
         }
@@ -487,16 +487,24 @@ public class BitOutput {
     }
 
 
-    public void writeBytes(final int scale, final int range, final byte[] bytes)
+    /**
+     * Writes an array of bytes.
+     *
+     * @param scale array length scale; between 0 exclusive and 16 inclusive.
+     * @param range valid bit range in each bytes.
+     * @param value the array of bytes to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
-
-        if (scale < 1) {
-            throw new IllegalArgumentException("scale(" + scale + ") < 1");
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
         }
 
-        if (scale <= 31) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 31");
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
         }
 
         if (range <= 0) {
@@ -507,28 +515,44 @@ public class BitOutput {
             throw new IllegalArgumentException("range(" + range + ") > 8");
         }
 
-        if (bytes == null) {
+        if (value == null) {
             throw new NullPointerException("bytes");
         }
 
-        if ((bytes.length >> scale) > 0) {
+        if ((value.length >> scale) > 0) {
             throw new IllegalArgumentException(
-                "bytes.length(" + bytes.length + ") >> scale(" + scale + ") = "
-                + (bytes.length >> scale) + " > 0");
+                "bytes.length(" + value.length + ") >> scale(" + scale + ") = "
+                + (value.length >> scale) + " > 0");
         }
 
-        for (int i = 0; i < bytes.length; i++) {
-            writeUnsignedByte(range, bytes[i]);
+        writeUnsignedShort(scale, value.length);
+
+        for (int i = 0; i < value.length; i++) {
+            writeUnsignedByte(range, value[i]);
         }
     }
 
 
-    public void writeUsAsciiBytes(final byte[] bytes) throws IOException {
+    /**
+     * Writes an array of ASCII bytes.
+     *
+     * @param value the ASCII bytes to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeUsAsciiBytes(final byte[] value) throws IOException {
 
-        writeBytes(16, 7, bytes);
+        writeBytes(16, 7, value);
     }
 
 
+    /**
+     * Writes an ASCII encoded string.
+     *
+     * @param value the String to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void writeUsAsciiString(final String value) throws IOException {
 
         if (value == null) {
@@ -541,12 +565,27 @@ public class BitOutput {
     }
 
 
+    /**
+     * Writes an array of bytes.
+     *
+     * @param bytes the array of bytes to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void writeBytes(final byte[] bytes) throws IOException {
 
         writeBytes(16, 8, bytes);
     }
 
 
+    /**
+     * Writes a string.
+     *
+     * @param value the string to write.
+     * @param charsetName the charset name to encode the string.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
@@ -643,3 +682,4 @@ public class BitOutput {
 
 
 }
+

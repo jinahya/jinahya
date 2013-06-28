@@ -235,6 +235,24 @@ class Generator {
     }
 
 
+    public static byte[] newValueBytes(final int scale, final int range) {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final byte[] bytes = new byte[random.nextInt() >>> 16];
+
+        random.nextBytes(bytes);
+
+        if (range < 8) {
+            for (int i = 0; i < bytes.length; i++) {
+                bytes[i] = (byte) (bytes[i] >> (8 - range));
+            }
+        }
+
+        return bytes;
+    }
+
+
     private Generator() {
         super();
     }
