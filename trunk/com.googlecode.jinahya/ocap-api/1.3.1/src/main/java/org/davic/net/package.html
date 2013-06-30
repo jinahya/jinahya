@@ -1,0 +1,17 @@
+<html>
+<body>
+Provides general content referencing.
+<p>
+The following errata agreed in DVB have been implemented with respect
+to the original DAVIC work.
+<ul>
+<li>The no-argument constructor for org.davic.net.Locator is considered to not be present.
+The absence of any description on the method indicates that this was an editing error in 
+the DAVIC specificiation. (DVB issue #845).
+<li>Locator.toExternalForm() (DVB issue #848)<p>
+This method is considered to have the following text appended to its description : 
+"If the instance of Locator has been created using Locator(java.lang.String url)
+and the URL is a non-null invalid URL the behaviour is implementation dependent."
+</ul>
+</body>
+</html>
