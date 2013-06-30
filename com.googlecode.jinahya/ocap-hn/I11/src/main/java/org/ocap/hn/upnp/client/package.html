@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <title>Package org.ocap.hn.upnp.client</title>
+    </head>
+<body>
+    Provides UPnP client functionality, permitting access to devices and
+    services on a home network.
+    
+    <p>The UPnP Control Point class ({@link org.ocap.hn.upnp.client.UPnPControlPoint})
+    provides access to devices discovered by the Host device during a UPnP discovery
+    process as defined by the UPnP Device Architecture specification.
+    As defined by UPnP, a device consists of a root device and 0 or more
+    sub-devices.  Each device can contain services such as the Content Directory
+    Service (CDS).  Each service can contain actions, e.g. CDS:Search, and state
+    variables, e.g. CDS:SystemUpdateID.  The
+    {@link org.ocap.hn.upnp.client.UPnPControlPoint#getDevices}
+    method returns a data structure that represents the UPnP devices, services,
+    etc., discovered in a home network.  The data structure returned matches the
+    hierarchy of the discovered UPnP device documents.
+    <p>In the
+    <tt>org.ocap.hn.upnp.client</tt> package UPnP entities are represented as follows:
+    <ul>
+        <li>UPnP Device - {@link org.ocap.hn.upnp.client.UPnPClientDevice}</li>
+        <li>UPnP Device Icon - {@link org.ocap.hn.upnp.client.UPnPClientDeviceIcon}</li>
+        <li>UPnP Service - {@link org.ocap.hn.upnp.client.UPnPClientService}</li>
+        <li>UPnP State Variable - {@link org.ocap.hn.upnp.client.UPnPClientStateVariable}</li>
+    </ul>
+    Objects of these types are immutable in order to represent entities that
+    actually reside in remote Host devices.
+
+    <p>Once an application calls the <code>UPnPControlPoint.getDevices()</code> method
+    it can peruse the data structure returned, access the root device for a
+    specific home network server and exhibit typical UPnP behaviors such as
+    the following:
+    <ul>
+        <li>Evaluate device properties, services, and sub-devices.</li>
+        <li>Evaluate service properties, actions, and state variables.</li>
+        <li>Send an action and get a response.</li>
+        <li>Subscribe to state variable events.</li>
+    </ul>
+
+    <p>In addition to typical UPnP behaviors an application can set itself using
+    as the incoming and/or outgoing message handler using the
+    <tt>UPnPControlPoint</tt>.  An incoming message handler can modify incoming
+    messages before Host device evaluation.  An outgoing message handler can
+    modify outgoing messages before transmission.  This is useful when,
+    for instance, a server device sends non-standard properties in a verbose
+    manner and an application needs to prune for various reasons.
+    </p>
+</body>
+</html>
