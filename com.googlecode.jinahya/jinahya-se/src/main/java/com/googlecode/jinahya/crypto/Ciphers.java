@@ -31,10 +31,7 @@ import javax.crypto.ShortBufferException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CipherHelper {
-
-
-    private static final int INPUTBUF_LENGTH = 8192;
+public class Ciphers {
 
 
     /**
@@ -42,26 +39,7 @@ public class CipherHelper {
      * @param cipher
      * @param input
      * @param output
-     *
-     *
-     * @throws IOException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     */
-    public static void doFinal(final Cipher cipher, final InputStream input,
-                               final OutputStream output)
-        throws IOException, IllegalBlockSizeException, BadPaddingException {
-
-        doFinal(cipher, input, output, new byte[INPUTBUF_LENGTH]);
-    }
-
-
-    /**
-     *
-     * @param cipher
-     * @param input
-     * @param output
-     * @param inputBuf
+     * @param inbuf
      *
      * @throws IOException
      * @throws IllegalBlockSizeException
@@ -69,7 +47,7 @@ public class CipherHelper {
      */
     public static void doFinal(final Cipher cipher, final InputStream input,
                                final OutputStream output,
-                               final byte[] inputBuf)
+                               final byte[] inbuf)
         throws IOException, IllegalBlockSizeException, BadPaddingException {
 
         if (cipher == null) {
@@ -84,44 +62,43 @@ public class CipherHelper {
             throw new IllegalArgumentException("null output");
         }
 
-        if (inputBuf == null) {
-            throw new IllegalArgumentException("null inputBuf");
+        if (inbuf == null) {
+            throw new IllegalArgumentException("null inbuf");
         }
 
-        if (inputBuf.length == 0) {
-            throw new IllegalArgumentException("empty inputBuf");
+        if (inbuf.length == 0) {
+            throw new IllegalArgumentException("inbuf.length == 0");
         }
 
-        byte[] outputBuf = new byte[cipher.getOutputSize(inputBuf.length)];
+        byte[] outbuf = new byte[cipher.getOutputSize(inbuf.length)];
 
-        int outputLen;
+        int outlen;
 
-        for (int inputLen = -1; (inputLen = input.read(outputBuf)) != -1;) {
+        for (int inlen; (inlen = input.read(inbuf)) != -1;) {
             while (true) {
                 try {
-                    outputLen = cipher.update(
-                        inputBuf, 0, inputLen, outputBuf, 0);
+                    outlen = cipher.update(inbuf, 0, inlen, outbuf, 0);
                     break;
                 } catch (ShortBufferException sbe) {
-                    outputBuf = new byte[outputBuf.length * 2];
+                    outbuf = new byte[outbuf.length * 2];
                 }
             }
-            output.write(outputBuf, 0, outputLen);
+            output.write(outbuf, 0, outlen);
         }
 
         while (true) {
             try {
-                outputLen = cipher.doFinal(outputBuf, 0);
+                outlen = cipher.doFinal(outbuf, 0);
                 break;
             } catch (ShortBufferException sbe) {
-                outputBuf = new byte[outputBuf.length * 2];
+                outbuf = new byte[outbuf.length * 2];
             }
         }
-        output.write(outputBuf, 0, outputLen);
+        output.write(outbuf, 0, outlen);
     }
 
 
-    protected CipherHelper() {
+    protected Ciphers() {
         super();
     }
 

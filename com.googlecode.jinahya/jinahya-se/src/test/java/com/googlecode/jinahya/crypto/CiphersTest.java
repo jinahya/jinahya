@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CipherHelperTest {
+public class CiphersTest {
 
 
     @Test
