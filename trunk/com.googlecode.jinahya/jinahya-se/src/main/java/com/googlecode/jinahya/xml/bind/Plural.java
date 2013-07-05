@@ -22,9 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -44,8 +41,8 @@ public abstract class Plural<S> implements Serializable {
     /**
      * Creates a new instance of {@code pluralType}.
      *
-     * @param <P> plural type parameter
-     * @param <S> singular type parameter
+     * @param <P> plural type parameter.
+     * @param <S> singular type parameter.
      * @param pluralType plural type
      *
      * @return a new instance of given {@code pluralType}
@@ -64,20 +61,23 @@ public abstract class Plural<S> implements Serializable {
      * @param <P> plural type parameter
      * @param <S> singular type parameter
      * @param pluralType plural type
-     * @param singulars singular collection
+     * @param singulars a collection of singular elements to add; may be
+     * {@code null}.
      *
      * @return a new instance of given <code>pluralType<code>
      */
     public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType, final Collection<? extends S> singulars) {
 
-        Objects.requireNonNull(pluralType, "null pluralType");
-
-        Objects.requireNonNull(singulars, "null singulars");
+        if (pluralType == null) {
+            throw new NullPointerException("pluralType");
+        }
 
         try {
             final P instance = pluralType.newInstance();
-            instance.getSingulars().addAll(singulars);
+            if (singulars != null && !singulars.isEmpty()) {
+                instance.getSingulars().addAll(singulars);
+            }
             return instance;
         } catch (InstantiationException ie) {
             throw new RuntimeException(ie);
@@ -87,19 +87,13 @@ public abstract class Plural<S> implements Serializable {
     }
 
 
-    @XmlAttribute
-    private Boolean isEmpty() {
-        return (singulars == null || singulars.isEmpty()) ? Boolean.TRUE : null;
-    }
-
-
     /**
      * Returns singular collection.
      *
      * @return singular collection
      */
-    @XmlAnyElement(lax = true)
-    public Collection<S> getSingulars() {
+    @XmlTransient
+    protected Collection<S> getSingulars() {
 
         if (singulars == null) {
             singulars = new ArrayList<S>();
