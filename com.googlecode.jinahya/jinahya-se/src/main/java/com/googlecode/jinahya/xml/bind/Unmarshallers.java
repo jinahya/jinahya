@@ -21,14 +21,11 @@ package com.googlecode.jinahya.xml.bind;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.TypeVariable;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 
 
@@ -39,176 +36,154 @@ import javax.xml.bind.Unmarshaller;
 public class Unmarshallers {
 
 
-    protected static final List<Class<?>> UNMARSHAL_SOURCE_TYPES;
+    public static Object unmarshal(final Unmarshaller unmarshaller,
+                                   final Object source)
+        throws UnmarshalException {
 
+        if (unmarshaller == null) {
+            throw new NullPointerException("unmarshaller");
+        }
 
-    protected static final Map<Class<?>, Method> UNMARSHAL_METHODS;
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
 
+        Method unmarshal = null;
 
-    static {
-
-        final List<Class<?>> unmarshalSourceTypes = new ArrayList<Class<?>>();
-        final Map<Class<?>, Method> unmarshalMethods =
-            new HashMap<Class<?>, Method>();
-
-        for (Method method : Marshaller.class.getMethods()) {
-
-            if (method.isBridge()) {
-                continue;
-            }
-
-            if (method.isSynthetic()) {
-                continue;
-            }
-
+        for (Method method : Unmarshaller.class.getMethods()) {
             final int modifiers = method.getModifiers();
-
-            if (!Modifier.isPublic(modifiers)) {
+            if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
                 continue;
             }
-
-            if (!"unmarshal".equals(method.getName())) {
+            final Class<?> returnType = method.getReturnType();
+            if (!Object.class.equals(method.getReturnType())) {
                 continue;
             }
-
+            final TypeVariable[] typeParameters =
+                returnType.getTypeParameters();
+            if ("unmarshal".equals(method.getName())) {
+                continue;
+            }
             final Class<?>[] parameterTypes = method.getParameterTypes();
-
             if (parameterTypes.length != 1) {
                 continue;
             }
-
-            final Class<?> returnType = method.getReturnType();
-
-            if (!Object.class.equals(returnType)) {
-                continue;
-            }
-
-            unmarshalSourceTypes.add(parameterTypes[1]);
-            unmarshalMethods.put(parameterTypes[1], method);
-        }
-
-        UNMARSHAL_SOURCE_TYPES =
-            Collections.unmodifiableList(unmarshalSourceTypes);
-        UNMARSHAL_METHODS = Collections.unmodifiableMap(unmarshalMethods);
-    }
-
-
-    protected static Class<?> getUnmarshalSourceType(
-        final Class<?> sourceClass) {
-
-        if (sourceClass == null) {
-            throw new NullPointerException("sourceClass");
-        }
-
-        for (Class<?> unmarshalSourceType : UNMARSHAL_SOURCE_TYPES) {
-            if (unmarshalSourceType.isAssignableFrom(sourceClass)) {
-                return unmarshalSourceType;
+            if (parameterTypes[0].isAssignableFrom(source.getClass())) {
+                unmarshal = method;
+                break;
             }
         }
 
-        return null;
-    }
-
-
-    protected static Class<?> getUnmarshalSourceType(final Object source) {
-
-        if (source == null) {
-            throw new NullPointerException("source");
-        }
-
-        return getUnmarshalSourceType(source.getClass());
-    }
-
-
-    public static <T> Object unmarshal(final Unmarshaller unmarshaller,
-                                       final Class<? super T> sourceType,
-                                       final T source)
-        throws IllegalAccessException, InvocationTargetException {
-
-        if (unmarshaller == null) {
-            throw new NullPointerException("unmarshaller");
-        }
-
-        if (sourceType == null) {
-            throw new NullPointerException("sourceType");
-        }
-
-        if (source == null) {
-            throw new NullPointerException("source");
-        }
-
-        final Method method = UNMARSHAL_METHODS.get(sourceType);
-
-        if (method == null) {
+        if (unmarshal == null) {
             throw new IllegalArgumentException(
-                "no method for sourceType(" + sourceType + ")");
+                "no method for " + source.getClass());
         }
 
-        return method.invoke(unmarshaller, source);
-    }
-
-
-    public static Object unmarshal(final Unmarshaller unmarshaller,
-                                   final Object source)
-        throws IllegalAccessException, InvocationTargetException {
-
-        if (unmarshaller == null) {
-            throw new NullPointerException("unmarshaller");
+        try {
+            final Object result = unmarshal.invoke(unmarshaller, source);
+            return result;
+        } catch (IllegalAccessException iae) {
+            throw new UnmarshalException(iae);
+        } catch (InvocationTargetException ite) {
+            final Throwable cause = ite.getCause();
+            if (cause instanceof UnmarshalException) {
+                throw ((UnmarshalException) cause);
+            }
+            throw new UnmarshalException(cause);
         }
-
-        if (source == null) {
-            throw new NullPointerException("source");
-        }
-
-        final Class<?> unmarshalSourceType = getUnmarshalSourceType(source);
-
-        if (unmarshalSourceType == null) {
-            throw new IllegalArgumentException(
-                "no sourceType for target(" + source.getClass() + ")");
-        }
-
-        final Method method = UNMARSHAL_METHODS.get(unmarshalSourceType);
-
-        return method.invoke(unmarshaller, source);
-    }
-
-
-    public static <S> Object unmarshal(final JAXBContext context,
-                                       final Class<? super S> sourceType,
-                                       final S source)
-        throws JAXBException, IllegalAccessException,
-               InvocationTargetException {
-
-        if (context == null) {
-            throw new NullPointerException("context");
-        }
-
-        if (sourceType == null) {
-            throw new NullPointerException("sourceType");
-        }
-
-        if (source == null) {
-            throw new NullPointerException("source");
-        }
-
-        return unmarshal(context.createUnmarshaller(), sourceType, source);
     }
 
 
     public static Object unmarshal(final JAXBContext context,
                                    final Object source)
-        throws JAXBException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         if (context == null) {
             throw new NullPointerException("context");
+        }
+
+        return unmarshal(context.createUnmarshaller(), source);
+    }
+
+
+    public static <T> JAXBElement<T> unmarshal(final Unmarshaller unmarshaller,
+                                               final Object source,
+                                               final Class<T> declaredType)
+        throws UnmarshalException {
+
+        if (unmarshaller == null) {
+            throw new NullPointerException("unmarshaller");
         }
 
         if (source == null) {
             throw new NullPointerException("source");
         }
 
-        return unmarshal(context.createUnmarshaller(), source);
+        if (declaredType == null) {
+            throw new NullPointerException("declaredType");
+        }
+
+        Method unmarshal = null;
+
+        for (Method method : Unmarshaller.class.getMethods()) {
+            final int modifiers = method.getModifiers();
+            if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
+                continue;
+            }
+            final Class<?> returnType = method.getReturnType();
+            if (!JAXBElement.class.equals(method.getReturnType())) {
+                continue;
+            }
+            final TypeVariable[] typeParameters =
+                returnType.getTypeParameters();
+            if ("unmarshal".equals(method.getName())) {
+                continue;
+            }
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length != 2) {
+                continue;
+            }
+            if (!Class.class.equals(parameterTypes[1])) {
+                continue;
+            }
+            if (parameterTypes[1].isAssignableFrom(source.getClass())) {
+                unmarshal = method;
+                break;
+            }
+        }
+
+        if (unmarshal == null) {
+            throw new IllegalArgumentException(
+                "no method for " + source.getClass());
+        }
+
+        try {
+            @SuppressWarnings("unchecked")
+            final JAXBElement<T> result = (JAXBElement<T>) unmarshal.invoke(
+                unmarshaller, source, declaredType);
+            return result;
+        } catch (IllegalAccessException iae) {
+            throw new UnmarshalException(iae);
+        } catch (InvocationTargetException ite) {
+            final Throwable cause = ite.getCause();
+            if (cause instanceof UnmarshalException) {
+                throw ((UnmarshalException) cause);
+            }
+            throw new UnmarshalException(cause);
+        }
+    }
+
+
+    public static <T> JAXBElement<T> unmarshal(final JAXBContext context,
+                                               final Object source,
+                                               final Class<T> declaredType)
+        throws JAXBException {
+
+        if (context == null) {
+            throw new NullPointerException("context");
+        }
+
+        return unmarshal(context.createUnmarshaller(), source, declaredType);
     }
 
 

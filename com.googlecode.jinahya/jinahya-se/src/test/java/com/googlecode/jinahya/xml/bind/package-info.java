@@ -14,31 +14,17 @@
  * limitations under the License.
  */
 
+@XmlAccessorType(value = XmlAccessType.NONE)
+@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
+           elementFormDefault = XmlNsForm.QUALIFIED,
+           namespace = "http://jinahya.googlecode.com/xml/bind")
 
-package com.googlecode.jinahya.xml.bind.test;
-
-
-import com.googlecode.jinahya.xml.bind.Plural;
-import com.googlecode.jinahya.xml.bind.Plural;
-import java.util.Collection;
-import javax.xml.bind.annotation.XmlRootElement;
+package com.googlecode.jinahya.xml.bind;
 
 
-/**
- *
- * @author Jin Kwon <jinahya at gmail.com>
- */
-@XmlRootElement
-public class Items extends Plural<Item> {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;
 
-
-    private static final long serialVersionUID = -6764070724647027265L;
-
-
-    public Collection<Item> getItems() {
-        return getSingulars();
-    }
-
-
-}
 
