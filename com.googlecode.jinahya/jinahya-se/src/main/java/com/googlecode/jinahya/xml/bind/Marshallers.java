@@ -21,14 +21,12 @@ package com.googlecode.jinahya.xml.bind;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.TypeVariable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.MarshalException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 
 /**
@@ -38,188 +36,78 @@ import javax.xml.bind.Marshaller;
 public class Marshallers {
 
 
-    protected static final List<Class<?>> MARSHAL_TARGET_TYPES;
+    public static void marshal(final Marshaller marshaller,
+                               final Object element, final Object target)
+        throws MarshalException {
 
+        if (marshaller == null) {
+            throw new NullPointerException("marshaller");
+        }
 
-    protected static final Map<Class<?>, Method> MARSHAL_METHODS;
+        if (element == null) {
+            throw new NullPointerException("element");
+        }
 
+        if (target == null) {
+            throw new NullPointerException("target");
+        }
 
-    static {
+        Method marshal = null;
 
-        final List<Class<?>> marshalTargetTypes = new ArrayList<Class<?>>();
-        final Map<Class<?>, Method> marshalMethods =
-            new HashMap<Class<?>, Method>();
-
-        for (Method method : Marshaller.class.getMethods()) {
-
-            if (method.isBridge()) {
-                continue;
-            }
-
-            if (method.isSynthetic()) {
-                continue;
-            }
+        for (Method method : Unmarshaller.class.getMethods()) {
 
             final int modifiers = method.getModifiers();
-
-            if (!Modifier.isPublic(modifiers)) {
+            if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
                 continue;
             }
 
-            if (!"marshal".equals(method.getName())) {
+            final Class<?> returnType = method.getReturnType();
+            if (!Object.class.equals(method.getReturnType())) {
+                continue;
+            }
+            final TypeVariable[] typeParameters =
+                returnType.getTypeParameters();
+
+            if ("marshal".equals(method.getName())) {
                 continue;
             }
 
             final Class<?>[] parameterTypes = method.getParameterTypes();
-
             if (parameterTypes.length != 2) {
                 continue;
             }
 
-            if (!Object.class.equals(parameterTypes[0])) {
-                continue;
-            }
-
-            marshalTargetTypes.add(parameterTypes[1]);
-            marshalMethods.put(parameterTypes[1], method);
-        }
-
-        MARSHAL_TARGET_TYPES = Collections.unmodifiableList(marshalTargetTypes);
-        MARSHAL_METHODS = Collections.unmodifiableMap(marshalMethods);
-    }
-
-
-    protected static Class<?> getMarshalTargetType(final Class<?> targetClass) {
-
-        if (targetClass == null) {
-            throw new NullPointerException("targetClass");
-        }
-
-        for (Class<?> marshalTargetType : MARSHAL_TARGET_TYPES) {
-            if (marshalTargetType.isAssignableFrom(targetClass)) {
-                return marshalTargetType;
+            if (parameterTypes[0].isAssignableFrom(target.getClass())) {
+                marshal = method;
+                break;
             }
         }
 
-        return null;
-    }
-
-
-    protected static Class<?> getMarshalTargetType(final Object target) {
-
-        if (target == null) {
-            throw new NullPointerException("target");
-        }
-
-        return getMarshalTargetType(target.getClass());
-    }
-
-
-    public static <T> void marshal(final Marshaller marshaller,
-                                   final Object element,
-                                   final Class<? super T> targetType,
-                                   final T target)
-        throws IllegalAccessException, InvocationTargetException {
-
-        if (marshaller == null) {
-            throw new NullPointerException("marshaller");
-        }
-
-        if (element == null) {
-            throw new NullPointerException("element");
-        }
-
-        if (targetType == null) {
-            throw new NullPointerException("targetType");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("target");
-        }
-
-        final Method method = MARSHAL_METHODS.get(targetType);
-
-        if (method == null) {
+        if (marshal == null) {
             throw new IllegalArgumentException(
-                "no method for targetType(" + targetType + ")");
+                "no method for " + target.getClass());
         }
 
-        method.invoke(marshaller, element, target);
-    }
-
-
-    public static void marshal(final Marshaller marshaller,
-                               final Object element,
-                               final Object target)
-        throws IllegalAccessException, InvocationTargetException {
-
-        if (marshaller == null) {
-            throw new NullPointerException("marshaller");
+        try {
+            final Object result = marshal.invoke(marshaller, target);
+        } catch (IllegalAccessException iae) {
+            throw new MarshalException(iae);
+        } catch (InvocationTargetException ite) {
+            final Throwable cause = ite.getCause();
+            if (cause instanceof MarshalException) {
+                throw ((MarshalException) cause);
+            }
+            throw new MarshalException(cause);
         }
-
-        if (element == null) {
-            throw new NullPointerException("element");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("target");
-        }
-
-        final Class<?> marshalTargetType = getMarshalTargetType(target);
-
-        if (marshalTargetType == null) {
-            throw new IllegalArgumentException(
-                "no targetType for target(" + target.getClass() + ")");
-        }
-
-        final Method method = MARSHAL_METHODS.get(marshalTargetType);
-
-        method.invoke(marshaller, element, target);
-    }
-
-
-    public static <T> void marshal(final JAXBContext context,
-                                   final Object element,
-                                   final Class<? super T> targetType,
-                                   final T target)
-        throws JAXBException, IllegalAccessException,
-               InvocationTargetException {
-
-        if (context == null) {
-            throw new NullPointerException("context");
-        }
-
-        if (element == null) {
-            throw new NullPointerException("element");
-        }
-
-        if (targetType == null) {
-            throw new NullPointerException("targetType");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("target");
-        }
-
-        marshal(context.createMarshaller(), element, targetType, target);
     }
 
 
     public static void marshal(final JAXBContext context, final Object element,
                                final Object target)
-        throws JAXBException, IllegalAccessException,
-               InvocationTargetException {
+        throws JAXBException {
 
         if (context == null) {
             throw new NullPointerException("context");
-        }
-
-        if (element == null) {
-            throw new NullPointerException("element");
-        }
-
-        if (target == null) {
-            throw new NullPointerException("target");
         }
 
         marshal(context.createMarshaller(), element, target);
@@ -232,5 +120,6 @@ public class Marshallers {
     }
 
 
+    boolean useMethodHandle = true;
 }
 
