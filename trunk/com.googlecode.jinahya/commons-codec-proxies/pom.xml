@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.googlecode.jinahya</groupId>
-  <artifactId>id-codec</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
+  <artifactId>commons-codec-proxies</artifactId>
+  <version>1.0-alpha-1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -14,11 +14,6 @@
   </parent>
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.googlecode.jinahya</groupId>
-        <artifactId>commons-codec-proxies</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
@@ -32,11 +27,6 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>com.googlecode.jinahya</groupId>
-      <artifactId>commons-codec-proxies</artifactId>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -68,11 +58,6 @@
     </extensions>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>com.pyx4me</groupId>
-          <artifactId>proguard-maven-plugin</artifactId>
-          <version>2.0.4</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -217,7 +202,6 @@
   <reporting />
 
   <name>${project.artifactId}</name>
-  <!--url>http://jinahya.googlecode.com/</url-->
   <url>https://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -243,9 +227,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/id-codec</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/id-codec</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/id-codec</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/commons-codec-proxies</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/commons-codec-proxies</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/commons-codec-proxies</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
@@ -262,12 +246,6 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    <!--
-    <site>
-      <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
-    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
