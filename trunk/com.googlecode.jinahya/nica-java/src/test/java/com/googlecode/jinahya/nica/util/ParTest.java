@@ -72,7 +72,7 @@ public class ParTest {
     }
 
 
-//    //@Test(invocationCount = 128)
+//    //@Test(invocationCount = 32)
 //    public void testEncode() {
 //
 ////        System.out.println(Par.WORD);
@@ -116,7 +116,7 @@ public class ParTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncodeDecode() {
 
         final Map<String, String> expected = new HashMap<String, String>();
@@ -177,7 +177,7 @@ public class ParTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecodeValues() {
 
         final List<String> expected = newValues();
@@ -191,7 +191,7 @@ public class ParTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncodeDecodeMultivalued() {
 
         final Map<String, List<String>> expected =
@@ -231,5 +231,25 @@ public class ParTest {
     }
 
 
-}
+    @Test
+    public void testFast() {
 
+        final Map<String, String> expected = new HashMap<>();
+
+        expected.put("English", "love");
+        expected.put("한국어", "사랑");
+        expected.put("中國語", "愛");
+
+        System.out.println("expected: " + expected);
+
+        final String encoded = Par.encode(expected);
+        System.out.println("encoded: " + encoded);
+
+        final Map<String, String> actual = Par.decode(encoded);
+        System.out.println("actual: " + actual);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+}

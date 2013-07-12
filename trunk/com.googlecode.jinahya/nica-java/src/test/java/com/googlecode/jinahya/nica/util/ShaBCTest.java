@@ -29,13 +29,6 @@ import org.testng.annotations.Test;
 public class ShaBCTest extends ShaTest<ShaBC> {
 
 
-    @Test
-    public static void testNewSynchronizedInstance() {
-
-        final Sha sha = ShaBC.newSynchronizedInstance();
-    }
-
-
     @Override
     protected ShaBC newInstance() {
         return new ShaBC();
@@ -95,4 +88,3 @@ public class ShaBCTest extends ShaTest<ShaBC> {
 
 
 }
-

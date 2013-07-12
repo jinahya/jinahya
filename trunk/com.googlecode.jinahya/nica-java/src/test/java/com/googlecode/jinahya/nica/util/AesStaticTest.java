@@ -29,9 +29,11 @@ import org.testng.annotations.Test;
 public class AesStaticTest {
 
 
-    @Test(invocationCount = 16)
+    @Test(invocationCount = 32)
     public static void testNewIv() {
+
         final byte[] iv = Aes.newIv();
+
         Assert.assertNotNull(iv);
         Assert.assertEquals(iv.length, Aes.BLOCK_SIZE_IN_BYTES);
     }

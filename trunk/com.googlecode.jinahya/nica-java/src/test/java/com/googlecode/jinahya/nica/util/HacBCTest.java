@@ -38,12 +38,12 @@ public class HacBCTest extends HacTest<HacBC> {
 
 
     @Override
-    protected HacBC newInstance(final byte[] key) {
+    protected HacBC create(final byte[] key) {
         return new HacBC(key);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testAuthenticateAgainstJCE() {
 
         final byte[] key = AesJCETest.newKey();
@@ -52,13 +52,13 @@ public class HacBCTest extends HacTest<HacBC> {
 
         final byte[] expected = new HacJCE(key).authenticate(message);
 
-        final byte[] actual = newInstance(key).authenticate(message);
+        final byte[] actual = create(key).authenticate(message);
 
         Assert.assertEquals(actual, expected);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testAuthenticateWithStringAgainstJCE() {
 
         final byte[] key = AesJCETest.newKey();
@@ -67,7 +67,7 @@ public class HacBCTest extends HacTest<HacBC> {
 
         final byte[] expected = new HacJCE(key).authenticate(message);
 
-        final byte[] actual = newInstance(key).authenticate(message);
+        final byte[] actual = create(key).authenticate(message);
 
         Assert.assertEquals(actual, expected);
     }

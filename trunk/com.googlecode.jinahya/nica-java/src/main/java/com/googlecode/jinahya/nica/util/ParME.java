@@ -46,8 +46,7 @@ public class ParME {
 
 
     /**
-     * Sorts given
-     * <code>keys</code> along with values.
+     * Sorts given {@code keys} along with values.
      *
      * @param keys keys
      * @param values values
@@ -140,6 +139,7 @@ public class ParME {
      * @param joined joined string
      * @param delimiter delimiter
      * @param split split vector
+     *
      * @return given vector
      */
     private static Vector split(final String joined, final String delimiter,
@@ -438,4 +438,3 @@ public class ParME {
 
 
 }
-

@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
- * An abstract class for HMAC-SHA-512.
+ * An abstract class for HMAC-SHA-1.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -30,64 +30,7 @@ public abstract class Hac {
 
 
     /**
-     * synchronized class.
-     */
-    private static class SynchronizedHac extends Hac {
-
-
-        /**
-         * Creates a new instance.
-         *
-         * @param mutex the hac to be wrapped.
-         */
-        public SynchronizedHac(final Hac mutex) {
-            super();
-
-            if (mutex == null) {
-                throw new IllegalArgumentException("null mutex");
-            }
-
-            this.mutex = mutex;
-        }
-
-
-        //@Override
-        public byte[] authenticate(final byte[] message) {
-            synchronized (mutex) {
-                return mutex.authenticate(message);
-            }
-        }
-
-
-        /**
-         * hac.
-         */
-        private final Hac mutex;
-
-
-    }
-
-
-    /**
-     * Returns a synchronized (thread-safe) hac backed by the specified hac.
-     *
-     * @param hac the hac to be "wrapped" in a synchronized hac.
-     *
-     * @return a synchronized view of the specified hac.
-     */
-    public static Hac synchronizedHac(final Hac hac) {
-
-        if (hac == null) {
-            throw new IllegalArgumentException("null hac");
-        }
-
-        return new SynchronizedHac(hac);
-    }
-
-
-    /**
-     * Authenticates given
-     * <code>message</code>.
+     * Authenticates given {@code message}.
      *
      * @param message the message to authenticate
      *
@@ -97,8 +40,7 @@ public abstract class Hac {
 
 
     /**
-     * Authenticates given
-     * <code>message</code>.
+     * Authenticates given {@code message}.
      *
      * @param message the message to authenticate
      *
@@ -107,7 +49,7 @@ public abstract class Hac {
     public byte[] authenticate(final String message) {
 
         if (message == null) {
-            throw new IllegalArgumentException("null message");
+            throw new NullPointerException("message");
         }
 
         try {
@@ -119,30 +61,29 @@ public abstract class Hac {
 
 
     /**
-     * Authenticates given
-     * <code>message</code> and returns output as a HEX string.
+     * Authenticates given {@code message} and returns output as a HEX string.
      *
      * @param message the message to authenticate
      *
      * @return the output as a HEX string
      */
     public String authenticateToString(final byte[] message) {
+
         return Hex.encodeToString(authenticate(message));
     }
 
 
     /**
-     * Authenticates given
-     * <code>message</code> and returns output as a HEX string.
+     * Authenticates given {@code message} and returns output as a HEX string.
      *
      * @param message the message to authenticate
      *
      * @return the output as a HEX string
      */
     public String authenticateToString(final String message) {
+
         return Hex.encodeToString(authenticate(message));
     }
 
 
 }
-

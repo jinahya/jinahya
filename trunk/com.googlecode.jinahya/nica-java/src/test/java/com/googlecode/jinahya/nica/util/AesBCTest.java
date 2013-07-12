@@ -30,25 +30,12 @@ public class AesBCTest extends AesTest<AesBC> {
 
 
     @Override
-    protected AesBC newInstance(final byte[] key) {
+    protected AesBC construct(final byte[] key) {
         return new AesBC(key);
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class,
-          invocationCount = 128)
-    public void testConstructorWithWrongKey() {
-        new AesBC(newWrongKey());
-    }
-
-
-    @Test
-    public void testConstructor() {
-        new AesBC(newKey());
-    }
-
-
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncryptAaginstJCE() {
 
         final byte[] key = newKey();
@@ -56,7 +43,7 @@ public class AesBCTest extends AesTest<AesBC> {
 
         final byte[] expected = newInput();
 
-        final byte[] encrypted = new AesBC(key).encrypt(iv, expected);
+        final byte[] encrypted = construct(key).encrypt(iv, expected);
 
         final byte[] actual = new AesJCE(key).decrypt(iv, encrypted);
 
@@ -64,7 +51,7 @@ public class AesBCTest extends AesTest<AesBC> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testDecryptAaginstJCE() {
 
         final byte[] key = newKey();
@@ -74,11 +61,10 @@ public class AesBCTest extends AesTest<AesBC> {
 
         final byte[] encrypted = new AesJCE(key).encrypt(iv, expected);
 
-        final byte[] actual = new AesBC(key).decrypt(iv, encrypted);
+        final byte[] actual = construct(key).decrypt(iv, encrypted);
 
         Assert.assertEquals(actual, expected);
     }
 
 
 }
-

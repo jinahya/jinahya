@@ -31,16 +31,16 @@ public class Per {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
      * @param decoded input bytes to encode.
-     * @return output bytes.
+     *
+     * @return encoded output.
      */
     public static byte[] encode(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         final ByteArrayOutputStream encoded =
@@ -69,37 +69,38 @@ public class Per {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
-     * @param decoded the UTF-8 string to encode
-     * @return decoded output as octets
+     * @param decoded input string to encode.
+     *
+     * @return encoded output
      */
     public static byte[] encode(final String decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         try {
             return encode(decoded.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" not supported?");
+            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
 
     /**
-     * Encodes given
-     * <code>decoded</code> and returns as a US-ASCII encoded string.
+     * Encodes given {@code decoded} and returns the result as a US-ASCII
+     * encoded string.
      *
-     * @param decoded the octets to encode
+     * @param decoded the bytes to encode
+     *
      * @return encoded output as a string
      */
     public static String encodeToString(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         try {
@@ -111,16 +112,17 @@ public class Per {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code> and returns as a US-ASCII encoded string.
+     * Encodes given {@code decoded} and returns the result as a US-ASCII
+     * encoded string.
      *
-     * @param decoded the string to encode; must be UTF-8 decodable
+     * @param decoded the string to encode.
+     *
      * @return encoded output as a string
      */
     public static String encodeToString(final String decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         try {
@@ -132,16 +134,16 @@ public class Per {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
      * @param encoded the bytes to encode
-     * @return decoded output as bytes
+     *
+     * @return decoded output
      */
     public static byte[] decode(final byte[] encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         final ByteArrayOutputStream decoded =
@@ -174,16 +176,16 @@ public class Per {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
-     * @param encoded the US-ASCII string to decode
-     * @return decoded output as octets
+     * @param encoded the string to decode.
+     *
+     * @return decoded output.
      */
     public static byte[] decode(final String encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("null encoded");
         }
 
         try {
@@ -195,16 +197,16 @@ public class Per {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code> and returns output as an UTF-8 string.
+     * Decodes given {@code encoded} and returns the result as a UTF-8 string.
      *
-     * @param encoded the octets to decode
-     * @return decoded output as a string
+     * @param encoded the bytes to decode.
+     *
+     * @return decoded output as a string.
      */
     public static String decodeToString(final byte[] encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         try {
@@ -216,16 +218,16 @@ public class Per {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code> and returns as an UTF-8 string.
+     * Decodes given {@code encoded} and returns the result as a UTF-8 string.
      *
-     * @param encoded the string to decode
-     * @return decoded output as a string
+     * @param encoded the string to decode.
+     *
+     * @return decoded output as a string.
      */
     public static String decodeToString(final String encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         try {
@@ -245,4 +247,3 @@ public class Per {
 
 
 }
-

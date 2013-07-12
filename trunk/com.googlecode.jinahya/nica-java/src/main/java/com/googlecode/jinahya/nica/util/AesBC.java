@@ -36,17 +36,6 @@ public class AesBC extends Aes {
 
 
     /**
-     * Creates a new synchronized instance.
-     *
-     * @param key the encryption key.
-     * @return a new synchronized instance.
-     */
-    public static Aes newSynchronizedInstance(final byte[] key) {
-        return synchronizedAes(new AesBC(key));
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param key encryption key
@@ -55,7 +44,7 @@ public class AesBC extends Aes {
         super();
 
         if (key == null) {
-            throw new IllegalArgumentException("null key");
+            throw new NullPointerException("key");
         }
 
         if (key.length != KEY_SIZE_IN_BYTES) {
@@ -70,11 +59,11 @@ public class AesBC extends Aes {
     }
 
 
-    //@Override
+    //@Override // commented for pre5
     public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
 
         if (iv == null) {
-            throw new IllegalArgumentException("null iv");
+            throw new NullPointerException("iv");
         }
 
         if (iv.length != BLOCK_SIZE_IN_BYTES) {
@@ -83,7 +72,7 @@ public class AesBC extends Aes {
         }
 
         if (decrypted == null) {
-            throw new IllegalArgumentException("null decrypted");
+            throw new NullPointerException("decrypted");
         }
 
         cipher.reset();
@@ -111,11 +100,11 @@ public class AesBC extends Aes {
     }
 
 
-    //@Override
+    //@Override // commented for pre5
     public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
 
         if (iv == null) {
-            throw new IllegalArgumentException("null iv");
+            throw new NullPointerException("iv");
         }
 
         if (iv.length != BLOCK_SIZE_IN_BYTES) {
@@ -124,7 +113,7 @@ public class AesBC extends Aes {
         }
 
         if (encrypted == null) {
-            throw new IllegalArgumentException("null encrypted");
+            throw new NullPointerException("encrypted");
         }
 
         cipher.reset();
@@ -165,4 +154,3 @@ public class AesBC extends Aes {
 
 
 }
-

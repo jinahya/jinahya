@@ -69,32 +69,32 @@ public class Hex {
      * @param encoded the byte array to which encoded output are written
      * @param offset offset in the array
      */
-    protected static void encodeSingle(final int decoded, final byte[] encoded,
-                                       final int offset) {
+    static void encodeSingle(final int decoded, final byte[] encoded,
+                             final int offset) {
 
-        if (decoded < 0x00) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") < 0x00");
-        }
-
-        if (decoded > 0xFF) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") > 0xFF");
-        }
-
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
-
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
-
-        if (offset >= encoded.length - 1) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length
-                + ") - 1");
-        }
+//        if (decoded < 0x00) {
+//            throw new IllegalArgumentException(
+//                "decoded(" + decoded + ") < 0x00");
+//        }
+//
+//        if (decoded > 0xFF) {
+//            throw new IllegalArgumentException(
+//                "decoded(" + decoded + ") > 0xFF");
+//        }
+//
+//        if (encoded == null) {
+//            throw new IllegalArgumentException("null encoded");
+//        }
+//
+//        if (offset < 0) {
+//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+//        }
+//
+//        if (offset >= encoded.length - 1) {
+//            throw new IllegalArgumentException(
+//                "offset(" + offset + ") >= encoded.length(" + encoded.length
+//                + ") - 1");
+//        }
 
         encoded[offset] = (byte) encodeHalf((decoded >> 4) & 0x0F);
         encoded[offset + 1] = (byte) encodeHalf(decoded & 0x0F);
@@ -111,7 +111,7 @@ public class Hex {
     public static byte[] encode(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         final byte[] encoded = new byte[decoded.length << 1];
@@ -127,8 +127,7 @@ public class Hex {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code>.
+     * Encodes given {@code decoded}.
      *
      * @param decoded the string to encode
      *
@@ -149,8 +148,7 @@ public class Hex {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code> and returns as an ASCII string.
+     * Encodes given {@code decoded} and returns as an ASCII string.
      *
      * @param decoded the bytes to encode
      *
@@ -159,7 +157,7 @@ public class Hex {
     public static String encodeToString(final byte[] decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("null decoded");
         }
 
         try {
@@ -171,8 +169,7 @@ public class Hex {
 
 
     /**
-     * Encodes given
-     * <code>decoded</code> and returns as a string.
+     * Encodes given {@code decoded} and returns as a string.
      *
      * @param decoded the string to encode
      *
@@ -181,7 +178,7 @@ public class Hex {
     public static String encodeToString(final String decoded) {
 
         if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+            throw new NullPointerException("decoded");
         }
 
         try {
@@ -189,6 +186,36 @@ public class Hex {
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?", uee);
 //            throw new RuntimeException("\"UTF-8\" is not supported?");
+        }
+    }
+
+
+    public static byte[] encodeFast(final byte[] decoded) {
+
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
+        }
+
+        final byte[] encoded = new byte[decoded.length << 1];
+
+        int offset = 0;
+        for (int i = 0; i < decoded.length; i++) {
+            final int h = (decoded[i] >> 4) & 0xFF;
+            final int l = decoded[i] & 0xFF;
+            encoded[offset++] = (byte) (h + (h < 0x09 ? 0x30 : 0x37));
+            encoded[offset++] = (byte) (l + (l < 0x09 ? 0x30 : 0x37));
+        }
+
+        return encoded;
+    }
+
+
+    public static String encodeFastToString(final byte[] decoded) {
+
+        try {
+            return new String(encodeFast(decoded), "US-ASCII");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
         }
     }
 
@@ -227,29 +254,8 @@ public class Hex {
     }
 
 
-    protected static int decodeSingle(final byte[] encoded, final int offset) {
+    static int decodeSingle(final byte[] encoded, final int offset) {
 
-        if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
-        }
-
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
-
-        if (offset >= encoded.length - 1) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length
-                + ") - 1");
-        }
-
-        return (decodeHalf(encoded[offset]) << 4)
-               | decodeHalf(encoded[offset + 1]);
-    }
-
-
-//    protected static int decodeSingle(final String encoded, final int offset) {
-//
 //        if (encoded == null) {
 //            throw new IllegalArgumentException("null encoded");
 //        }
@@ -258,15 +264,17 @@ public class Hex {
 //            throw new IllegalArgumentException("offset(" + offset + ") < 0");
 //        }
 //
-//        if (offset >= encoded.length() - 1) {
+//        if (offset >= encoded.length - 1) {
 //            throw new IllegalArgumentException(
-//                "offset(" + offset + ") >= encoded.length(" + encoded.length()
+//                "offset(" + offset + ") >= encoded.length(" + encoded.length
 //                + ") - 1");
 //        }
-//
-//        return (decodeHalf((encoded.charAt(offset)) << 4)
-//                | decodeHalf((encoded.charAt(offset + 1))));
-//    }
+
+        return (decodeHalf(encoded[offset]) << 4)
+               | decodeHalf(encoded[offset + 1]);
+    }
+
+
     /**
      * Decodes given {@code encoded}.
      *
@@ -277,7 +285,7 @@ public class Hex {
     public static byte[] decode(final byte[] encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         if ((encoded.length & 0x01) == 0x01) {
@@ -307,7 +315,7 @@ public class Hex {
     public static byte[] decode(final String encoded) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         try {
@@ -353,6 +361,37 @@ public class Hex {
     }
 
 
+    public static byte[] decodeFast(final byte[] encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        final byte[] decoded = new byte[encoded.length >> 1];
+
+        int offset = 0;
+        for (int i = 0; i < decoded.length; i++) {
+            decoded[i] = (byte) ((encoded[offset++] << 4) | encoded[offset++]);
+        }
+
+        return decoded;
+    }
+
+
+    public static byte[] decodeFastFromString(final String encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        try {
+            return decodeFast(encoded.getBytes("US-ASCII"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported? ", uee);
+        }
+    }
+
+
     /**
      * Creates a new instance.
      */
@@ -362,4 +401,3 @@ public class Hex {
 
 
 }
-

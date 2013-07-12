@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import static com.googlecode.jinahya.nica.util.AesTest.newKey;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,26 +30,13 @@ import org.testng.annotations.Test;
 public class AesJCETest extends AesTest<AesJCE> {
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class,
-          invocationCount = 128)
-    public void testConstructorWithWrongKey() {
-        new AesJCE(newWrongKey());
-    }
-
-
-    @Test
-    public void testConstructor() {
-        final Aes aes = new AesJCE(new byte[Aes.KEY_SIZE_IN_BYTES]);
-    }
-
-
     @Override
-    protected AesJCE newInstance(final byte[] key) {
+    protected AesJCE construct(final byte[] key) {
         return new AesJCE(key);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testDecryptAaginstBC() {
 
         final byte[] key = newKey();
@@ -58,11 +46,26 @@ public class AesJCETest extends AesTest<AesJCE> {
 
         final byte[] encrypted = new AesBC(key).encrypt(iv, expected);
 
-        final byte[] actual = new AesJCE(key).decrypt(iv, encrypted);
+        final byte[] actual = construct(key).decrypt(iv, encrypted);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 32)
+    public void testEncryptAaginstBC() {
+
+        final byte[] key = newKey();
+        final byte[] iv = newIv();
+
+        final byte[] expected = newInput();
+
+        final byte[] encrypted = construct(key).encrypt(iv, expected);
+
+        final byte[] actual = new AesBC(key).decrypt(iv, encrypted);
 
         Assert.assertEquals(actual, expected);
     }
 
 
 }
-

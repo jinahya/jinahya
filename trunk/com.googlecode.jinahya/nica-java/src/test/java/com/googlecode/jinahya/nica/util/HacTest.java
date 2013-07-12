@@ -36,82 +36,76 @@ public abstract class HacTest<H extends Hac> {
 
 
     protected static byte[] newMessage() {
+
         final byte[] message = new byte[RANDOM.nextInt(1024)];
+
         RANDOM.nextBytes(message);
+
         return message;
     }
 
 
     protected static String newMessageAsString() {
+
         return RandomStringUtils.random(RANDOM.nextInt(1024));
     }
 
 
-    protected abstract H newInstance(byte[] key);
+    protected abstract H create(byte[] key);
 
 
-    @Test//(invocationCount = 128)
-    public void testAuthenticate() {
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testAuthenticateWithNullMessageBytes() {
 
-        final H mac = newInstance(AesTest.newKey());
+        final H hac = create(AesTest.newKey());
 
-        try {
-            mac.authenticate((byte[]) null);
-            Assert.fail("passed: authenticate((byte[]) null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        hac.authenticate((byte[]) null);
+    }
+
+
+    @Test(invocationCount = 32)
+    public void testAuthenticateWithBytes() {
+
+        final H mac = create(AesTest.newKey());
 
         final byte[] output = mac.authenticate(newMessage());
         Assert.assertTrue(output.length == ShaTest.OUTPUT_SIZE_IN_BYTES);
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testAuthenticateWithNullMessageString() {
+
+        final H mac = create(AesTest.newKey());
+
+        mac.authenticate((String) null);
+    }
+
+
+    @Test(invocationCount = 32)
     public void testAuthenticateWithString() {
 
-        final H mac = newInstance(AesTest.newKey());
-
-        try {
-            mac.authenticate((String) null);
-            Assert.fail("passed: authenticate((String) null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        final H mac = create(AesTest.newKey());
 
         final byte[] output = mac.authenticate(newMessageAsString());
         Assert.assertTrue(output.length == ShaTest.OUTPUT_SIZE_IN_BYTES);
     }
 
 
-    @Test//(invocationCount = 128)
-    public void testAuthenticateToString() {
+    @Test(invocationCount = 32)
+    public void testAuthenticateToStringWithBytes() {
 
-        final H mac = newInstance(AesTest.newKey());
-
-        try {
-            mac.authenticateToString((byte[]) null);
-            Assert.fail("passed: authenticate((byte[]) null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        final H mac = create(AesTest.newKey());
 
         final String output = mac.authenticateToString(newMessage());
         Assert.assertTrue(output.length() == ShaTest.OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 
-    @Test//(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testAuthenticateToStringWithString() {
 
-        final H mac = newInstance(AesTest.newKey());
-
-        try {
-            mac.authenticateToString((String) null);
-            Assert.fail("passed: authenticate((String) null)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        final H mac = create(AesTest.newKey());
 
         final String output = mac.authenticateToString(newMessageAsString());
         Assert.assertTrue(output.length() == ShaTest.OUTPUT_SIZE_IN_BYTES * 2);
@@ -119,4 +113,3 @@ public abstract class HacTest<H extends Hac> {
 
 
 }
-
