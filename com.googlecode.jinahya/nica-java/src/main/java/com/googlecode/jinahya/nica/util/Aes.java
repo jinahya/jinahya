@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 
@@ -32,7 +33,8 @@ public abstract class Aes {
     /**
      * Key size in bits.
      */
-    public static final int KEY_SIZE = 0x100; // 256
+    //public static final int KEY_SIZE = 0x100; // 256
+    public static final int KEY_SIZE = 0x80; // 128
 
 
     /**
@@ -79,117 +81,40 @@ public abstract class Aes {
 
 
     /**
-     * private random.
-     */
-    private static final Random RANDOM = new Random();
-
-
-    /**
-     * Generates a new initialization vector. This method is not intended to be
-     * used in production stages.
+     * Generates a new initialization vector.
      *
-     * @return a new initialization vector
-     */
-    public static byte[] newIv() {
-
-        synchronized (RANDOM) {
-            return newIv(RANDOM);
-        }
-    }
-
-
-    /**
-     * Generates a new initialization vector. This method is not intended to be
-     * used in production stages.
-     *
-     * @param random a random to be used
+     * @param random a random to use.
      *
      * @return a new initialization vector.
      */
-    public static final byte[] newIv(final Random random) {
+    protected static byte[] newIv(final Random random) {
 
         if (random == null) {
-            throw new IllegalArgumentException("null random");
+            throw new NullPointerException("random");
         }
 
         final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
-//        random.nextBytes(iv);
-        for (int i = 0; i < iv.length; i++) {
-            iv[i] = (byte) random.nextInt(256);
-        }
+
+        random.nextBytes(iv);
 
         return iv;
     }
 
 
     /**
-     * The class for synchronized instances.
+     * Generates a new initialization vector.
+     *
+     * @return a new initialization vector.
      */
-    private static class SynchronizedAes extends Aes {
+    public static byte[] newIv() {
 
-
-        /**
-         * Creates a new instance.
-         *
-         * @param mutex aes to wrapped
-         */
-        public SynchronizedAes(final Aes mutex) {
-            super();
-
-            if (mutex == null) {
-                throw new IllegalArgumentException("null mutex");
-            }
-
-            this.mutex = mutex;
-        }
-
-
-        //@Override
-        public byte[] encrypt(final byte[] iv, final byte[] decrypted) {
-            synchronized (mutex) {
-                return mutex.encrypt(iv, decrypted);
-            }
-        }
-
-
-        //@Override
-        public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
-            synchronized (mutex) {
-                return mutex.decrypt(iv, encrypted);
-            }
-        }
-
-
-        /**
-         * aes.
-         */
-        private final Aes mutex;
-
-
+        return newIv(new SecureRandom());
     }
 
 
     /**
-     * Returns a synchronized (thread-safe) aes backed by the specified aes.
-     *
-     * @param aes the aes to be "wrapped" in a synchronized aes.
-     *
-     * @return a synchronized view of the specified aes.
-     */
-    public static Aes synchronizedAes(final Aes aes) {
-
-        if (aes == null) {
-            throw new IllegalArgumentException("null aes");
-        }
-
-        return new SynchronizedAes(aes);
-    }
-
-
-    /**
-     * Encrypts given
-     * <code>decrypted</code>. Any implementation/provider specfic exception
-     * will thrown as wrapped in a RuntimeException.
+     * Encrypts given {@code decrypted}. Any implementation/provider specific
+     * exception will thrown as wrapped in a RuntimeException.
      *
      * @param iv initialization vector
      * @param decrypted the bytes to encrypt
@@ -200,9 +125,8 @@ public abstract class Aes {
 
 
     /**
-     * Decrypts given
-     * <code>encrypted</code>. Any implementation/provider specific exception
-     * will be thrown as wrapped in a Runtimeexception.
+     * Decrypts given {@code encrypted}. Any implementation/provider specific
+     * exception will be thrown as wrapped in a RuntimeException.
      *
      * @param iv initialization vector
      * @param encrypted the bytes to decrypt
@@ -213,4 +137,3 @@ public abstract class Aes {
 
 
 }
-

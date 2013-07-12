@@ -55,17 +55,14 @@ public abstract class AesTest<A extends Aes> {
 
 
     protected static byte[] newWrongKey() {
-        switch (ThreadLocalRandom.current().nextInt() % 5) {
+        switch (ThreadLocalRandom.current().nextInt() % 2) {
             case 0:
-                return new byte[0];
-            case 1:
                 return new byte[Aes.KEY_SIZE_IN_BYTES - 1];
-            case 2:
+            case 1:
                 return new byte[Aes.KEY_SIZE_IN_BYTES + 1];
-            case 3:
-            case 4:
             default:
-                return null;
+                return new byte[0];
+
         }
     }
 
@@ -78,64 +75,88 @@ public abstract class AesTest<A extends Aes> {
 
 
     protected static byte[] newWrongIv() {
-        switch (ThreadLocalRandom.current().nextInt() % 5) {
+        switch (ThreadLocalRandom.current().nextInt() % 2) {
             case 0:
-                return new byte[0];
-            case 1:
                 return new byte[Aes.BLOCK_SIZE_IN_BYTES - 1];
-            case 2:
+            case 1:
                 return new byte[Aes.BLOCK_SIZE_IN_BYTES + 1];
-            case 3:
-            case 4:
             default:
-                return null;
+                return new byte[0];
         }
     }
 
 
     protected static byte[] newInput() {
+
         final Random random = ThreadLocalRandom.current();
+
         final byte[] input = new byte[random.nextInt(65536)];
+
         random.nextBytes(input);
+
         return input;
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEncryptWithWrongIv() {
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void constructWithNullKey() {
 
-        newInstance(newKey()).encrypt(newWrongIv(), new byte[0]);
+        construct(null);
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class,
+          invocationCount = 32)
+    public void constructWithWrongKey() {
+
+        construct(newWrongKey());
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class,
+          invocationCount = 32)
+    public void testEncryptWithNullIv() {
+
+        construct(newKey()).encrypt(null, new byte[0]);
+    }
+
+
+    @Test(expectedExceptions = IllegalArgumentException.class,
+          invocationCount = 32)
+    public void testEncryptWithWrongIv() {
+
+        construct(newKey()).encrypt(newWrongIv(), new byte[0]);
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
     public void testEncryptWithNullInput() {
 
-        newInstance(newKey()).encrypt(newIv(), null);
+        construct(newKey()).encrypt(newIv(), null);
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testDecryptWithNullInput() {
+
+        construct(newKey()).decrypt(newIv(), null);
     }
 
 
     @Test
     public void testEncryptWithEmptyInput() {
 
-        newInstance(newKey()).encrypt(newIv(), new byte[0]);
+        construct(newKey()).encrypt(newIv(), new byte[0]);
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testDecryptWithNullInput() {
-
-        newInstance(newKey()).decrypt(newIv(), null);
-    }
-
-
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncryptDecrypt() {
 
         final byte[] key = newKey();
         final byte[] iv = newIv();
 
-        final A aes = newInstance(key);
+        final A aes = construct(key);
 
         final byte[] expected = newInput();
         //System.out.println("expected: " + Hex.encodeToString(expected));
@@ -150,6 +171,24 @@ public abstract class AesTest<A extends Aes> {
     }
 
 
+    @Test(invocationCount = 1)
+    public void testEncryptDecryptWithEmptyInput() {
+
+        final byte[] key = newKey();
+        final byte[] iv = newIv();
+
+        final A aes = construct(key);
+
+        final byte[] expected = new byte[0];
+
+        final byte[] encrypted = aes.encrypt(iv, expected);
+
+        final byte[] actual = aes.decrypt(iv, encrypted);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
     /**
      * Creates a new instance.
      *
@@ -157,8 +196,7 @@ public abstract class AesTest<A extends Aes> {
      *
      * @return a new instance
      */
-    protected abstract A newInstance(final byte[] key);
+    protected abstract A construct(final byte[] key);
 
 
 }
-

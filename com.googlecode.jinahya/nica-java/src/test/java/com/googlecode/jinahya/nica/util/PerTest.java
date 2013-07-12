@@ -33,7 +33,7 @@ public class PerTest {
     private static final Random RANDOM = new Random();
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecode() {
 
         final byte[] expected = new byte[RANDOM.nextInt(64)];
@@ -47,7 +47,7 @@ public class PerTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecodeString() {
 
         final byte[] expected = new byte[RANDOM.nextInt(64)];

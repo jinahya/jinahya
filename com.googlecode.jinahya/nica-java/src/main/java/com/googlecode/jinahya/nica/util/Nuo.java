@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 
@@ -27,12 +28,6 @@ import java.util.Random;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Nuo {
-
-
-    /**
-     * Random.
-     */
-    private static final Random RANDOM = new Random();
 
 
     /**
@@ -48,28 +43,33 @@ public class Nuo {
 
 
     /**
-     * Generates a nonce for current time millis.
+     * Generates a value.
+     *
+     * @param timestamp current timestamp.
+     * @param random random.
      *
      * @return a new value
      */
-    public static long generate() {
+    protected static long generate(final long timestamp, final Random random) {
 
-        return generate(System.currentTimeMillis());
+        if (random == null) {
+            throw new NullPointerException("random");
+        }
+
+        return (timestamp << RANDOM_BIT) | random.nextInt(RANDOM_MAX);
     }
 
 
     /**
-     * Generates a nonce for given <code>timestamp</code>.
+     * Generates a nonce for given {@code timestamp}.
      *
      * @param timestamp current timestamp
      *
      * @return a new value
      */
-    public static long generate(final long timestamp) {
+    protected static long generate(final long timestamp) {
 
-        synchronized (RANDOM) {
-            return generate(timestamp, RANDOM);
-        }
+        return generate(timestamp, new SecureRandom());
     }
 
 
@@ -80,27 +80,20 @@ public class Nuo {
      *
      * @return a new value
      */
-    public static long generate(final Random random) {
+    protected static long generate(final Random random) {
 
         return generate(System.currentTimeMillis(), random);
     }
 
 
     /**
-     * Generates a value.
-     *
-     * @param timestamp current timestamp.
-     * @param random random.
+     * Generates a nonce.
      *
      * @return a new value
      */
-    public static long generate(final long timestamp, final Random random) {
+    public static long generate() {
 
-        if (random == null) {
-            throw new IllegalArgumentException("null random");
-        }
-
-        return (timestamp << RANDOM_BIT) | random.nextInt(RANDOM_MAX);
+        return generate(System.currentTimeMillis());
     }
 
 
@@ -113,4 +106,3 @@ public class Nuo {
 
 
 }
-

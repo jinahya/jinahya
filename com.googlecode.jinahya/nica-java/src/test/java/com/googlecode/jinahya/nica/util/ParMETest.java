@@ -141,7 +141,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecode() {
 
         final Hashtable expected = newSingleValued();
@@ -167,7 +167,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testDecodingAgainstSE() {
 
         final Map<String, String> expected = ParTest.newSingleValued();
@@ -180,7 +180,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecodeValues() {
 
         final Vector expected = newValues();
@@ -196,7 +196,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeDecodeMultivalued() {
 
         final Hashtable expected = newMultiValued();
@@ -215,7 +215,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testEncodeMultivaluedAgainstSE() {
 
         final Hashtable expected = newMultiValued();
@@ -235,7 +235,7 @@ public class ParMETest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testDecodeMultivaluedAgainstSE() {
 
         final Map<String, List<String>> expected = ParTest.newMultiValued();

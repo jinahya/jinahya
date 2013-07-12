@@ -32,22 +32,9 @@ public class HacJCE extends Hac {
 
 
     /**
-     * Encryption algorithm.
+     * algorithm.
      */
-    private static final String ALGORITHM = "HmacSHA512";
-
-
-    /**
-     * Returns a synchronized (thread-safe) instance.
-     *
-     * @param key the encryption key
-     *
-     * @return a synchronized instance.
-     */
-    public static Hac newSynchronizedInstance(final byte[] key) {
-
-        return synchronizedHac(new HacJCE(key));
-    }
+    private static final String ALGORITHM = "HmacSHA1";
 
 
     /**
@@ -56,10 +43,11 @@ public class HacJCE extends Hac {
      * @param key encryption key.
      */
     public HacJCE(final byte[] key) {
+
         super();
 
         if (key == null) {
-            throw new IllegalArgumentException("null key");
+            throw new NullPointerException("key");
         }
 
         if (key.length != Aes.KEY_SIZE_IN_BYTES) {
@@ -82,11 +70,11 @@ public class HacJCE extends Hac {
     }
 
 
-    @Override
-    public byte[] authenticate(byte[] message) {
+    //@Override // commented for pre5
+    public byte[] authenticate(final byte[] message) {
 
         if (message == null) {
-            throw new IllegalArgumentException("null message");
+            throw new NullPointerException("message");
         }
 
         mac.reset();
@@ -103,4 +91,3 @@ public class HacJCE extends Hac {
 
 
 }
-

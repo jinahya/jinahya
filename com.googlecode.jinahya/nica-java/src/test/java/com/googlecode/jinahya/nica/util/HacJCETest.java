@@ -26,7 +26,7 @@ public class HacJCETest extends HacTest<HacJCE> {
 
 
     @Override
-    protected HacJCE newInstance(final byte[] key) {
+    protected HacJCE create(final byte[] key) {
         return new HacJCE(key);
     }
 

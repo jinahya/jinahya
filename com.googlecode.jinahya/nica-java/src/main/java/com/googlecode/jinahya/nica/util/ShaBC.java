@@ -19,7 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import org.bouncycastle.crypto.Digest;
-import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.digests.SHA1Digest;
 
 
 /**
@@ -30,22 +30,12 @@ public class ShaBC extends Sha {
 
 
     /**
-     * Returns a new synchronized instance.
-     *
-     * @return a new synchronized instance
-     */
-    public static Sha newSynchronizedInstance() {
-        return synchronizedSha(new ShaBC());
-    }
-
-
-    /**
      * Creates a new instance.
      */
     public ShaBC() {
         super();
 
-        digest = new SHA512Digest();
+        digest = new SHA1Digest();
     }
 
 
@@ -53,14 +43,14 @@ public class ShaBC extends Sha {
     public byte[] hash(final byte[] data) {
 
         if (data == null) {
-            throw new IllegalArgumentException("null data");
+            throw new NullPointerException("null data");
         }
 
         final byte[] hashed = new byte[digest.getDigestSize()];
 
 //        digest.reset();
         digest.update(data, 0, data.length);
-        digest.doFinal(hashed, 0);
+        digest.doFinal(hashed, 0); // reset?
 
         return hashed;
     }
@@ -73,4 +63,3 @@ public class ShaBC extends Sha {
 
 
 }
-

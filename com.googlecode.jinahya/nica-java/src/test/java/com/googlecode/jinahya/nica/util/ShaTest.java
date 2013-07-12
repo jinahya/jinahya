@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -32,30 +33,34 @@ import org.testng.annotations.Test;
 public abstract class ShaTest<S extends Sha> {
 
 
-    protected static final Random RANDOM = new Random();
-
-
     /**
      * Output size in bits.
      */
-    public static final int OUTPUT_SIZE = 0x200; // 512
+    public static final int OUTPUT_SIZE = 0xA0; // 160
 
 
     /**
      * Output size in bytes.
      */
-    public static final int OUTPUT_SIZE_IN_BYTES = OUTPUT_SIZE / 0x08; // 64
+    public static final int OUTPUT_SIZE_IN_BYTES = OUTPUT_SIZE / 0x08; // 20
 
 
     protected static byte[] newData() {
-        final byte[] unhashed = new byte[RANDOM.nextInt(1024)];
-        RANDOM.nextBytes(unhashed);
-        return unhashed;
+
+        final Random random = ThreadLocalRandom.current();
+
+        final byte[] data = new byte[random.nextInt(1024)];
+
+        random.nextBytes(data);
+
+        return data;
     }
 
 
     protected static String newDataAsString() {
-        return RandomStringUtils.random(RANDOM.nextInt(1024));
+
+        return RandomStringUtils.random(
+            ThreadLocalRandom.current().nextInt(1024));
     }
 
 
@@ -75,7 +80,7 @@ public abstract class ShaTest<S extends Sha> {
         try {
             sha.hash((byte[]) null);
             Assert.fail("passed: hash((byte[]) null)");
-        } catch (IllegalArgumentException iae) {
+        } catch (NullPointerException iae) {
             // expected;
         }
 
@@ -94,7 +99,7 @@ public abstract class ShaTest<S extends Sha> {
         try {
             sha.hash((String) null);
             Assert.fail("passed: hash((String) null)");
-        } catch (IllegalArgumentException iae) {
+        } catch (NullPointerException iae) {
             // expected;
         }
 
@@ -112,7 +117,7 @@ public abstract class ShaTest<S extends Sha> {
         try {
             sha.hashToString((byte[]) null);
             Assert.fail("passed: hash((byte[]) null)");
-        } catch (IllegalArgumentException iae) {
+        } catch (NullPointerException iae) {
             // expected;
         }
 
@@ -130,7 +135,7 @@ public abstract class ShaTest<S extends Sha> {
         try {
             sha.hashToString((String) null);
             Assert.fail("passed: hash((String) null)");
-        } catch (IllegalArgumentException iae) {
+        } catch (NullPointerException iae) {
             // expected;
         }
 
@@ -141,4 +146,3 @@ public abstract class ShaTest<S extends Sha> {
 
 
 }
-

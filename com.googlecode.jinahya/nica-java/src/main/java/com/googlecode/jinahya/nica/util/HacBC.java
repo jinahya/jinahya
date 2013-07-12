@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 
@@ -31,28 +31,16 @@ public class HacBC extends Hac {
 
 
     /**
-     * Returns a new synchronized (thread-safe) instance.
-     *
-     * @param key the encryption key.
-     *
-     * @return a new synchronized instance.
-     */
-    public static Hac newSynchronizedInstance(final byte[] key) {
-
-        return synchronizedHac(new HacBC(key));
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param key encryption key
      */
     public HacBC(final byte[] key) {
+
         super();
 
         if (key == null) {
-            throw new IllegalArgumentException("null key");
+            throw new NullPointerException("key");
         }
 
         if (key.length != Aes.KEY_SIZE_IN_BYTES) {
@@ -60,16 +48,16 @@ public class HacBC extends Hac {
                 "key.length(" + key.length + ") != " + Aes.KEY_SIZE_IN_BYTES);
         }
 
-        mac = new HMac(new SHA512Digest());
+        mac = new HMac(new SHA1Digest());
         mac.init(new KeyParameter(key));
     }
 
 
-    //@Override
-    public byte[] authenticate(byte[] message) {
+    //@Override // commented for pre5
+    public byte[] authenticate(final byte[] message) {
 
         if (message == null) {
-            throw new IllegalArgumentException("null message");
+            throw new NullPointerException("message");
         }
 
         final byte[] output = new byte[mac.getMacSize()];
@@ -89,4 +77,3 @@ public class HacBC extends Hac {
 
 
 }
-

@@ -45,14 +45,20 @@ public class NuoTest {
 
 
     private static long average(final List<Integer> conflicts) {
+
         if (conflicts.isEmpty()) {
             return 0L;
         }
+
         long sum = 0L;
+
         for (Integer conflict : conflicts) {
             sum += conflict;
         }
-        return sum / conflicts.size();
+
+        final long avg = sum / conflicts.size();
+
+        return avg;
     }
 
 
@@ -62,7 +68,7 @@ public class NuoTest {
         final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<Long>();
+            final Set<Long> values = new HashSet<>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate())) {
                     conflicts.add(j);
@@ -83,7 +89,7 @@ public class NuoTest {
         final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<Long>();
+            final Set<Long> values = new HashSet<>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate(timestamp))) {
                     conflicts.add(j);
@@ -106,7 +112,7 @@ public class NuoTest {
         final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<Long>();
+            final Set<Long> values = new HashSet<>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate(timestamp, random))) {
                     conflicts.add(j);
@@ -121,4 +127,3 @@ public class NuoTest {
 
 
 }
-

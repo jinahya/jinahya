@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import org.testng.annotations.Test;
-
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -35,12 +31,4 @@ public class ShaJCATest extends ShaTest<ShaJCA> {
     }
 
 
-    @Test
-    public void testNewSynchronizedInstance() {
-
-        final Sha sha = ShaJCA.newSynchronizedInstance();
-    }
-
-
 }
-

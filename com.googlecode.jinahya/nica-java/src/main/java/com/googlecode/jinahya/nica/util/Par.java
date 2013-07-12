@@ -61,11 +61,11 @@ public class Par {
      * @param j joined string
      * @param d the delimiter
      * @param s the collection
+     *
      * @return given collection
      */
-    private static <C extends Collection<String>> C split(final String j,
-                                                          final String d,
-                                                          final C s) {
+    private static <C extends Collection<String>> C split(
+        final String j, final String d, final C s) {
 
         if (j == null) {
             throw new IllegalArgumentException("null joined");
@@ -99,6 +99,7 @@ public class Par {
      *
      * @param j joined string
      * @param d the delimiter
+     *
      * @return a list of split tokens
      */
     private static List<String> split(final String j, final String d) {
@@ -268,6 +269,52 @@ public class Par {
     }
 
 
+    public static String encodeFast(final Map decoded) {
+
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
+        }
+
+        if (decoded.isEmpty()) {
+            throw new IllegalArgumentException("empty decoded");
+        }
+
+        final Map encoded = new TreeMap();
+
+        for (Iterator i = decoded.entrySet().iterator(); i.hasNext();) {
+            final Entry entry = (Entry) i.next();
+            final String key = (String) entry.getKey();
+            if (key == null) {
+                throw new IllegalArgumentException("null key");
+            }
+            final String value = (String) entry.getValue();
+            if (value == null) {
+                throw new IllegalArgumentException("null value");
+            }
+            encoded.put(Per.encodeToString(key), Per.encodeToString(value));
+        }
+
+        String result = "";
+
+        final Iterator entries = encoded.entrySet().iterator();
+        if (entries.hasNext()) {
+            final Entry entry = (Entry) entries.next();
+            result += entry.getKey();
+            result += "=";
+            result += entry.getValue();
+        }
+        while (entries.hasNext()) {
+            final Entry entry = (Entry) entries.next();
+            result += "&";
+            result += entry.getKey();
+            result += "=";
+            result += entry.getValue();
+        }
+
+        return result;
+    }
+
+
     protected static List<String> decodeValues(final String encoded,
                                                final List<String> values) {
 
@@ -353,8 +400,7 @@ public class Par {
 
 
     /**
-     * Decodes given
-     * <code>encoded</code>.
+     * Decodes given {@code encoded}.
      *
      * @param encoded encoded
      *
@@ -363,6 +409,38 @@ public class Par {
     public static Map<String, String> decode(final String encoded) {
 
         return decode(encoded, new HashMap<String, String>());
+    }
+
+
+    public static Map decodeFast(final String encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        final Map decoded = new HashMap();
+
+        int fromIndex = 0;
+        String pair;
+        while (fromIndex < encoded.length()) {
+            final int ampeIndex = encoded.indexOf('&', fromIndex);
+            if (ampeIndex == -1) {
+                pair = encoded.substring(fromIndex);
+                fromIndex = encoded.length();
+            } else {
+                pair = encoded.substring(fromIndex, ampeIndex);
+                fromIndex = ampeIndex + 1;
+            }
+            final int equaIndex = pair.indexOf('=');
+            if (equaIndex == -1) {
+                throw new IllegalArgumentException(
+                    "no equal('=') in pair: " + pair);
+            }
+            decoded.put(Per.decodeToString(pair.substring(0, equaIndex)),
+                        Per.decodeToString(pair.substring(equaIndex + 1)));
+        }
+
+        return decoded;
     }
 
 
@@ -375,4 +453,3 @@ public class Par {
 
 
 }
-

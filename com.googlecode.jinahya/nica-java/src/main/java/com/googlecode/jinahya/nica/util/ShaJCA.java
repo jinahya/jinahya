@@ -32,17 +32,7 @@ public class ShaJCA extends Sha {
     /**
      * Hash algorithm.
      */
-    public static final String ALGORITHM = "SHA-512";
-
-
-    /**
-     * Creates a new synchronized instance.
-     *
-     * @return a new synchronized instance
-     */
-    public static Sha newSynchronizedInstance() {
-        return synchronizedSha(new ShaJCA());
-    }
+    public static final String ALGORITHM = "SHA-1";
 
 
     /**
@@ -64,15 +54,15 @@ public class ShaJCA extends Sha {
     public byte[] hash(final byte[] data) {
 
         if (data == null) {
-            throw new IllegalArgumentException("null data");
+            throw new NullPointerException("dmeata");
         }
 
 //        messageDigest.reset();
-//        messageDigest.update(data);
-//
-//        return messageDigest.digest();
+        messageDigest.update(data);
 
-        return messageDigest.digest(data);
+        return messageDigest.digest(); // reset
+
+//        return messageDigest.digest(data); // works the same.
     }
 
 
@@ -83,4 +73,3 @@ public class ShaJCA extends Sha {
 
 
 }
-
