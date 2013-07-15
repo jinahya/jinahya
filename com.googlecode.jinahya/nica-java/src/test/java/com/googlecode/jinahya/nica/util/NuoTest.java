@@ -41,7 +41,7 @@ public class NuoTest {
         Logger.getLogger(NuoTest.class.getName());
 
 
-    private static final int COUNT = 10000;
+    private static final int COUNT = 1000;
 
 
     private static long average(final List<Integer> conflicts) {
