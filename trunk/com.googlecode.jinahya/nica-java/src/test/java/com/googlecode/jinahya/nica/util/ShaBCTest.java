@@ -30,7 +30,7 @@ public class ShaBCTest extends ShaTest<ShaBC> {
 
 
     @Override
-    protected ShaBC newInstance() {
+    protected ShaBC create() {
         return new ShaBC();
     }
 
@@ -38,9 +38,9 @@ public class ShaBCTest extends ShaTest<ShaBC> {
     @Test
     public void testHashAgainstJCA() {
 
-        final byte[] unhashed = newData();
+        final byte[] unhashed = newBytesData();
 
-        final byte[] actual = newInstance().hash(unhashed);
+        final byte[] actual = create().hash(unhashed);
 
         final byte[] expected = new ShaJCA().hash(unhashed);
 
@@ -51,9 +51,9 @@ public class ShaBCTest extends ShaTest<ShaBC> {
     @Test
     public void testHashToStringAgainstJCA() {
 
-        final byte[] unhashed = newData();
+        final byte[] unhashed = newBytesData();
 
-        final String actual = newInstance().hashToString(unhashed);
+        final String actual = create().hashToString(unhashed);
 
         final String expected = new ShaJCA().hashToString(unhashed);
 
@@ -64,9 +64,9 @@ public class ShaBCTest extends ShaTest<ShaBC> {
     @Test
     public void testHashWithStringAgainstJCA() {
 
-        final String unhashed = newDataAsString();
+        final String unhashed = newStringData();
 
-        final byte[] actual = newInstance().hash(unhashed);
+        final byte[] actual = create().hash(unhashed);
 
         final byte[] expected = new ShaJCA().hash(unhashed);
 
@@ -77,9 +77,9 @@ public class ShaBCTest extends ShaTest<ShaBC> {
     @Test
     public void testHashToStringWithStringAgainstJCA() {
 
-        final String unhashed = newDataAsString();
+        final String unhashed = newStringData();
 
-        final String actual = newInstance().hashToString(unhashed);
+        final String actual = create().hashToString(unhashed);
 
         final String expected = new ShaJCA().hashToString(unhashed);
 

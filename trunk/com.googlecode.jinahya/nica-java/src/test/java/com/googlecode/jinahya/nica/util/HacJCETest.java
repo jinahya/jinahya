@@ -18,6 +18,11 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import static com.googlecode.jinahya.nica.util.HacTest.newMessage;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -31,5 +36,38 @@ public class HacJCETest extends HacTest<HacJCE> {
     }
 
 
-}
+    @Test
+    public void testAuthenticateWithBytesAgainstBC() {
 
+        final byte[] key = AesTest.newKey();
+        final byte[] message = newMessage();
+
+        final Hac jce = create(key);
+        final Hac bc = new HacBC(key);
+
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = bc.authenticate(message);
+            final byte[] actual = jce.authenticate(message);
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+    @Test
+    public void testAuthenticateWithStringAgainstBC() {
+
+        final byte[] key = AesTest.newKey();
+        final String message = newMessageAsString();
+
+        final Hac jce = create(key);
+        final Hac bc = new HacBC(key);
+
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = bc.authenticate(message);
+            final byte[] actual = jce.authenticate(message);
+            Assert.assertEquals(actual, expected);
+        }
+    }
+
+
+}

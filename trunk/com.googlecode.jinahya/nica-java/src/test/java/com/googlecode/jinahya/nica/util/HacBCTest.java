@@ -43,35 +43,38 @@ public class HacBCTest extends HacTest<HacBC> {
     }
 
 
-    @Test(invocationCount = 32)
-    public void testAuthenticateAgainstJCE() {
+    @Test
+    public void testAuthenticateWithBytesAgainstJCE() {
 
-        final byte[] key = AesJCETest.newKey();
-
+        final byte[] key = AesTest.newKey();
         final byte[] message = newMessage();
 
-        final byte[] expected = new HacJCE(key).authenticate(message);
+        final Hac bc = create(key);
+        final Hac jce = new HacJCE(key);
 
-        final byte[] actual = create(key).authenticate(message);
-
-        Assert.assertEquals(actual, expected);
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = jce.authenticate(message);
+            final byte[] actual = bc.authenticate(message);
+            Assert.assertEquals(actual, expected);
+        }
     }
 
 
-    @Test(invocationCount = 32)
+    @Test
     public void testAuthenticateWithStringAgainstJCE() {
 
-        final byte[] key = AesJCETest.newKey();
-
+        final byte[] key = AesTest.newKey();
         final String message = newMessageAsString();
 
-        final byte[] expected = new HacJCE(key).authenticate(message);
+        final Hac bc = create(key);
+        final Hac jce = new HacJCE(key);
 
-        final byte[] actual = create(key).authenticate(message);
-
-        Assert.assertEquals(actual, expected);
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = jce.authenticate(message);
+            final byte[] actual = bc.authenticate(message);
+            Assert.assertEquals(actual, expected);
+        }
     }
 
 
 }
-

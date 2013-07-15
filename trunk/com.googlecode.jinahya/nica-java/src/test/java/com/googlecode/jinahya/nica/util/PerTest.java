@@ -19,6 +19,7 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,14 +31,13 @@ import org.testng.annotations.Test;
 public class PerTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
     @Test(invocationCount = 32)
     public static void testEncodeDecode() {
 
-        final byte[] expected = new byte[RANDOM.nextInt(64)];
-        RANDOM.nextBytes(expected);
+        final Random random = ThreadLocalRandom.current();
+
+        final byte[] expected = new byte[random.nextInt(64)];
+        random.nextBytes(expected);
 
         final byte[] encoded = Per.encode(expected);
 
@@ -50,8 +50,10 @@ public class PerTest {
     @Test(invocationCount = 32)
     public static void testEncodeDecodeString() {
 
-        final byte[] expected = new byte[RANDOM.nextInt(64)];
-        RANDOM.nextBytes(expected);
+        final Random random = ThreadLocalRandom.current();
+
+        final byte[] expected = new byte[random.nextInt(64)];
+        random.nextBytes(expected);
 
         final String encoded = Per.encodeToString(expected);
 
@@ -62,4 +64,3 @@ public class PerTest {
 
 
 }
-

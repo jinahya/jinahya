@@ -63,6 +63,8 @@ public class Par {
      * @param s the collection
      *
      * @return given collection
+     *
+     * @deprecated
      */
     private static <C extends Collection<String>> C split(
         final String j, final String d, final C s) {
@@ -101,6 +103,8 @@ public class Par {
      * @param d the delimiter
      *
      * @return a list of split tokens
+     *
+     * @deprecated
      */
     private static List<String> split(final String j, final String d) {
 
@@ -108,6 +112,15 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param values
+     * @param builder
+     *
+     * @return
+     *
+     * @deprecated
+     */
     protected static String encodeValues(final List<String> values,
                                          final StringBuilder builder) {
 
@@ -146,12 +159,29 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param values
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static String encodeValues(final List<String> values) {
 
         return encodeValues(values, new StringBuilder());
     }
 
 
+    /**
+     *
+     * @param decoded
+     * @param builder
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static String encodeMultivalued(
         final Map<String, List<String>> decoded, final StringBuilder builder) {
 
@@ -200,6 +230,14 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param decoded
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static String encodeMultivalued(
         final Map<String, List<String>> decoded) {
 
@@ -207,6 +245,15 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param decoded
+     * @param builder
+     *
+     * @return
+     *
+     * @deprecated
+     */
     protected static String encode(final Map<String, String> decoded,
                                    final StringBuilder builder) {
 
@@ -262,6 +309,8 @@ public class Par {
      * @param decoded a map of keys and values to encode
      *
      * @return encoded string
+     *
+     * @deprecated
      */
     public static String encode(final Map<String, String> decoded) {
 
@@ -269,14 +318,14 @@ public class Par {
     }
 
 
-    public static String encodeFast(final Map decoded) {
+    public static String encode_(final Map decoded) {
 
         if (decoded == null) {
             throw new NullPointerException("decoded");
         }
 
         if (decoded.isEmpty()) {
-            throw new IllegalArgumentException("empty decoded");
+            return "";
         }
 
         final Map encoded = new TreeMap();
@@ -315,6 +364,15 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param encoded
+     * @param values
+     *
+     * @return
+     *
+     * @deprecated
+     */
     protected static List<String> decodeValues(final String encoded,
                                                final List<String> values) {
 
@@ -326,12 +384,29 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param encoded
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static List<String> decodeValues(final String encoded) {
 
         return decodeValues(encoded, new ArrayList<String>());
     }
 
 
+    /**
+     *
+     * @param encoded
+     * @param decoded
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static Map<String, List<String>> decodeMutivalued(
         final String encoded, final Map<String, List<String>> decoded) {
 
@@ -364,6 +439,14 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param encoded
+     *
+     * @return
+     *
+     * @deprecated
+     */
     public static Map<String, List<String>> decodeMultiValued(
         final String encoded) {
 
@@ -371,6 +454,15 @@ public class Par {
     }
 
 
+    /**
+     *
+     * @param encoded
+     * @param decoded
+     *
+     * @return
+     *
+     * @deprecated
+     */
     protected static Map<String, String> decode(
         final String encoded, final Map<String, String> decoded) {
 
@@ -405,6 +497,8 @@ public class Par {
      * @param encoded encoded
      *
      * @return a map of decoded keys and values.
+     *
+     * @deprecated
      */
     public static Map<String, String> decode(final String encoded) {
 
@@ -412,10 +506,14 @@ public class Par {
     }
 
 
-    public static Map decodeFast(final String encoded) {
+    public static Map decode_(final String encoded) {
 
         if (encoded == null) {
             throw new NullPointerException("encoded");
+        }
+
+        if (encoded.length() == 0 || encoded.trim().length() == 0) {
+            return new HashMap();
         }
 
         final Map decoded = new HashMap();

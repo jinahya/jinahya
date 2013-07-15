@@ -33,7 +33,6 @@ public abstract class Aes {
     /**
      * Key size in bits.
      */
-    //public static final int KEY_SIZE = 0x100; // 256
     public static final int KEY_SIZE = 0x80; // 128
 
 
@@ -55,29 +54,7 @@ public abstract class Aes {
     public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 8; // 16
 
 
-    /**
-     * Cipher algorithm.
-     */
-    public static final String ALGORITHM = "AES";
 
-
-    /**
-     * Cipher mode.
-     */
-    public static final String MODE = "CBC";
-
-
-    /**
-     * Cipher padding.
-     */
-    public static final String PADDING = "PKCS5Padding";
-
-
-    /**
-     * Cipher transformation.
-     */
-    public static final String TRANSFORMATION =
-        ALGORITHM + "/" + MODE + "/" + PADDING;
 
 
     /**
@@ -121,7 +98,7 @@ public abstract class Aes {
      *
      * @return encrypted output
      */
-    public abstract byte[] encrypt(final byte[] iv, final byte[] decrypted);
+    public abstract byte[] encrypt(byte[] iv, byte[] decrypted);
 
 
     /**
@@ -133,7 +110,7 @@ public abstract class Aes {
      *
      * @return decrypted output
      */
-    public abstract byte[] decrypt(final byte[] iv, final byte[] encrypted);
+    public abstract byte[] decrypt(byte[] iv, byte[] encrypted);
 
 
 }

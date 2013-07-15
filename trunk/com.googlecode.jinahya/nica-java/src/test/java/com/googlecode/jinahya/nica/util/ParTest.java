@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,9 +35,6 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class ParTest {
-
-
-    private static final Random RANDOM = new Random();
 
 
     protected static final String[] VALID_ENCODED = new String[]{
@@ -119,12 +117,14 @@ public class ParTest {
     @Test(invocationCount = 32)
     public void testEncodeDecode() {
 
+        final Random random = ThreadLocalRandom.current();
+
         final Map<String, String> expected = new HashMap<String, String>();
 
-        final int pairCount = RANDOM.nextInt(128) + 1;
+        final int pairCount = random.nextInt(128) + 1;
         for (int i = 0; i < pairCount; i++) {
-            expected.put(RandomStringUtils.random(RANDOM.nextInt(128)),
-                         RandomStringUtils.random(RANDOM.nextInt(128)));
+            expected.put(RandomStringUtils.random(random.nextInt(128)),
+                         RandomStringUtils.random(random.nextInt(128)));
         }
 
         final String encoded = Par.encode(expected);
@@ -137,12 +137,14 @@ public class ParTest {
 
     protected static Map<String, String> newSingleValued() {
 
+        final Random random = ThreadLocalRandom.current();
+
         final Map<String, String> singleValued = new HashMap<String, String>();
 
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = random.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
-            singleValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
-                             RandomStringUtils.random(RANDOM.nextInt(128)));
+            singleValued.put(RandomStringUtils.random(random.nextInt(128)),
+                             RandomStringUtils.random(random.nextInt(128)));
         }
 
         return singleValued;
@@ -151,11 +153,13 @@ public class ParTest {
 
     protected static List<String> newValues() {
 
+        final Random random = ThreadLocalRandom.current();
+
         final List<String> values = new ArrayList<String>();
 
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = random.nextInt(128) + 1;
         for (int j = 0; j < count; j++) {
-            values.add(RandomStringUtils.random(RANDOM.nextInt(128)));
+            values.add(RandomStringUtils.random(random.nextInt(128)));
         }
 
         return values;
@@ -164,12 +168,14 @@ public class ParTest {
 
     protected static Map<String, List<String>> newMultiValued() {
 
+        final Random random = ThreadLocalRandom.current();
+
         final Map<String, List<String>> multiValued =
             new HashMap<String, List<String>>();
 
-        final int count = RANDOM.nextInt(128) + 1;
+        final int count = random.nextInt(128) + 1;
         for (int i = 0; i < count; i++) {
-            multiValued.put(RandomStringUtils.random(RANDOM.nextInt(128)),
+            multiValued.put(RandomStringUtils.random(random.nextInt(128)),
                             newValues());
         }
 
@@ -193,6 +199,8 @@ public class ParTest {
 
     @Test(invocationCount = 32)
     public void testEncodeDecodeMultivalued() {
+
+        final Random RANDOM = ThreadLocalRandom.current();
 
         final Map<String, List<String>> expected =
             new HashMap<String, List<String>>();
@@ -219,20 +227,9 @@ public class ParTest {
 
 
     @Test
-    public void love() {
+    public void test() {
 
-        final Map<String, String> expected = new HashMap<String, String>();
-
-        expected.put("English", "love");
-        expected.put("한국어", "사랑");
-
-        final String encoded = Par.encode(expected);
-        System.out.println(encoded);
-    }
-
-
-    @Test
-    public void testFast() {
+        final long start = System.nanoTime();
 
         final Map<String, String> expected = new HashMap<>();
 
@@ -249,6 +246,36 @@ public class ParTest {
         System.out.println("actual: " + actual);
 
         Assert.assertEquals(actual, expected);
+
+        final long finish = System.nanoTime();
+        System.out.println("norm: " + (finish - start) + "ns");
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_() {
+
+        final long start = System.nanoTime();
+
+        final Map expected = new HashMap();
+
+        expected.put("English", "love");
+        expected.put("한국어", "사랑");
+        expected.put("中國語", "愛");
+
+        System.out.println("expected: " + expected);
+
+        final String encoded = Par.encode_(expected);
+        System.out.println("encoded: " + encoded);
+
+        final Map actual = Par.decode_(encoded);
+        System.out.println("actual: " + actual);
+
+        Assert.assertEquals(actual, expected);
+
+        final long finish = System.nanoTime();
+        System.out.println("fast: " + (finish - start) + "ns");
     }
 
 

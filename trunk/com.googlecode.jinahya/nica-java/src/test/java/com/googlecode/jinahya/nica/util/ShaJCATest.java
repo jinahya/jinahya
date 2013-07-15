@@ -26,7 +26,7 @@ public class ShaJCATest extends ShaTest<ShaJCA> {
 
 
     @Override
-    protected ShaJCA newInstance() {
+    protected ShaJCA create() {
         return new ShaJCA();
     }
 

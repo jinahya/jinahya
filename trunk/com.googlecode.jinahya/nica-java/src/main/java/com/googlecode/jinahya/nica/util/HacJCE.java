@@ -77,10 +77,7 @@ public class HacJCE extends Hac {
             throw new NullPointerException("message");
         }
 
-        mac.reset();
-        mac.update(message);
-
-        return mac.doFinal();
+        return mac.doFinal(message);
     }
 
 

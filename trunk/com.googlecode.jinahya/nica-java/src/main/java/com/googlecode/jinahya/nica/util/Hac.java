@@ -36,7 +36,7 @@ public abstract class Hac {
      *
      * @return authentication output
      */
-    public abstract byte[] authenticate(final byte[] message);
+    public abstract byte[] authenticate(byte[] message);
 
 
     /**
