@@ -35,7 +35,7 @@ public class Hex {
      *
      * @return encoded output
      */
-    protected static int encodeHalf(final int decoded) {
+    private static int encodeHalf(final int decoded) {
 
         switch (decoded) {
             case 0x00:
@@ -185,12 +185,11 @@ public class Hex {
             return encodeToString(decoded.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-//            throw new RuntimeException("\"UTF-8\" is not supported?");
         }
     }
 
 
-    public static byte[] encodeFast(final byte[] decoded) {
+    public static byte[] encode_(final byte[] decoded) {
 
         if (decoded == null) {
             throw new NullPointerException("decoded");
@@ -200,8 +199,8 @@ public class Hex {
 
         int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
-            final int h = (decoded[i] >> 4) & 0xFF;
-            final int l = decoded[i] & 0xFF;
+            final int h = (decoded[i] >> 4) & 0x0F;
+            final int l = decoded[i] & 0x0F;
             encoded[offset++] = (byte) (h + (h < 0x09 ? 0x30 : 0x37));
             encoded[offset++] = (byte) (l + (l < 0x09 ? 0x30 : 0x37));
         }
@@ -210,10 +209,35 @@ public class Hex {
     }
 
 
-    public static String encodeFastToString(final byte[] decoded) {
+    public static byte[] encode_(final String decoded) {
+
+
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
+        }
 
         try {
-            return new String(encodeFast(decoded), "US-ASCII");
+            return encode_(decoded.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF_8\" is not supported?", uee);
+        }
+    }
+
+
+    public static String encodeToString_(final byte[] decoded) {
+
+        try {
+            return new String(encode_(decoded), "US-ASCII");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+        }
+    }
+
+
+    public static String encodeToString_(final String decoded) {
+
+        try {
+            return new String(encode_(decoded), "US-ASCII");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
         }
@@ -361,7 +385,7 @@ public class Hex {
     }
 
 
-    public static byte[] decodeFast(final byte[] encoded) {
+    public static byte[] decode_(final byte[] encoded) {
 
         if (encoded == null) {
             throw new NullPointerException("encoded");
@@ -371,23 +395,59 @@ public class Hex {
 
         int offset = 0;
         for (int i = 0; i < decoded.length; i++) {
-            decoded[i] = (byte) ((encoded[offset++] << 4) | encoded[offset++]);
+            final int h = encoded[offset]
+                          - (encoded[offset] <= 0x39 ? 0x30
+                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
+            ++offset;
+            final int l = encoded[offset]
+                          - (encoded[offset] <= 0x39 ? 0x30
+                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
+            ++offset;
+            decoded[i] = (byte) ((h << 4) | l);
         }
 
         return decoded;
     }
 
 
-    public static byte[] decodeFastFromString(final String encoded) {
+    public static byte[] decode_(final String encoded) {
 
         if (encoded == null) {
             throw new NullPointerException("encoded");
         }
 
         try {
-            return decodeFast(encoded.getBytes("US-ASCII"));
+            return decode_(encoded.getBytes("US-ASCII"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"US-ASCII\" is not supported? ", uee);
+        }
+    }
+
+
+    public static String decodeToString_(final byte[] encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        try {
+            return new String(decode_(encoded), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
+        }
+    }
+
+
+    public static String decodeToString_(final String encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        try {
+            return new String(decode_(encoded), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
         }
     }
 

@@ -38,6 +38,31 @@ public class AesJCE extends Aes {
 
 
     /**
+     * Cipher algorithm.
+     */
+    public static final String ALGORITHM = "AES";
+
+
+    /**
+     * Cipher mode.
+     */
+    public static final String MODE = "CBC";
+
+
+    /**
+     * Cipher padding.
+     */
+    public static final String PADDING = "PKCS5Padding";
+
+
+    /**
+     * Cipher transformation.
+     */
+    public static final String TRANSFORMATION =
+        ALGORITHM + "/" + MODE + "/" + PADDING;
+
+
+    /**
      * Creates a new instance.
      *
      * @param key encryption key
@@ -103,11 +128,11 @@ public class AesJCE extends Aes {
     }
 
 
-    @Override
+    //@Override // commented for pre5
     public byte[] decrypt(final byte[] iv, final byte[] encrypted) {
 
         if (iv == null) {
-            throw new NullPointerException("null iv");
+            throw new NullPointerException("iv");
         }
 
         if (iv.length != BLOCK_SIZE_IN_BYTES) {
@@ -116,7 +141,7 @@ public class AesJCE extends Aes {
         }
 
         if (encrypted == null) {
-            throw new NullPointerException("null encrypted");
+            throw new NullPointerException("encrypted");
         }
 
         try {

@@ -55,7 +55,7 @@ public abstract class HacTest<H extends Hac> {
 
 
     @Test(expectedExceptions = {NullPointerException.class})
-    public void testAuthenticateWithNullMessageBytes() {
+    public void testAuthenticateWithNullBytes() {
 
         final H hac = create(AesTest.newKey());
 
@@ -74,7 +74,7 @@ public abstract class HacTest<H extends Hac> {
 
 
     @Test(expectedExceptions = {NullPointerException.class})
-    public void testAuthenticateWithNullMessageString() {
+    public void testAuthenticateWithNullString() {
 
         final H mac = create(AesTest.newKey());
 

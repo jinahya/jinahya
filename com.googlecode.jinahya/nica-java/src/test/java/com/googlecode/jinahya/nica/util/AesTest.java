@@ -39,7 +39,7 @@ public abstract class AesTest<A extends Aes> {
 
     static {
         try {
-            GENERATOR = KeyGenerator.getInstance(Aes.ALGORITHM);
+            GENERATOR = KeyGenerator.getInstance(AesJCE.ALGORITHM);
             GENERATOR.init(Aes.KEY_SIZE);
         } catch (NoSuchAlgorithmException nsae) {
             throw new InstantiationError(nsae.getMessage());

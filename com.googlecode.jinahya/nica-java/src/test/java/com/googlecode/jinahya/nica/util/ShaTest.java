@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S> Sha type parameter
+ * @param <S> {@link Sha} type parameter
  */
 public abstract class ShaTest<S extends Sha> {
 
@@ -45,22 +45,26 @@ public abstract class ShaTest<S extends Sha> {
     public static final int OUTPUT_SIZE_IN_BYTES = OUTPUT_SIZE / 0x08; // 20
 
 
-    protected static byte[] newData() {
+    protected static byte[] newBytesData() {
 
         final Random random = ThreadLocalRandom.current();
 
-        final byte[] data = new byte[random.nextInt(1024)];
-
+        final int length = random.nextInt(1024);
+        final byte[] data = new byte[length];
         random.nextBytes(data);
 
         return data;
     }
 
 
-    protected static String newDataAsString() {
+    protected static String newStringData() {
 
-        return RandomStringUtils.random(
-            ThreadLocalRandom.current().nextInt(1024));
+        final Random random = ThreadLocalRandom.current();
+
+        final int count = random.nextInt(1024);
+        final String data = RandomStringUtils.random(count);
+
+        return data;
     }
 
 
@@ -69,79 +73,90 @@ public abstract class ShaTest<S extends Sha> {
      *
      * @return a new instance.
      */
-    protected abstract S newInstance();
+    protected abstract S create();
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testHashWithNullBytes() {
+
+        final S sha = create();
+
+        sha.hash((byte[]) null);
+    }
 
 
     @Test
     public void testHash() {
 
-        final S sha = newInstance();
+        final S sha = create();
 
-        try {
-            sha.hash((byte[]) null);
-            Assert.fail("passed: hash((byte[]) null)");
-        } catch (NullPointerException iae) {
-            // expected;
-        }
+        final byte[] data = newBytesData();
+        final byte[] hash = sha.hash(data);
 
-        final byte[] unhashed = newData();
-        final byte[] hashed = sha.hash(unhashed);
+        Assert.assertTrue(hash.length == OUTPUT_SIZE_IN_BYTES);
+    }
 
-        Assert.assertTrue(hashed.length == OUTPUT_SIZE_IN_BYTES);
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testHashWithNullString() {
+
+        final S sha = create();
+
+        sha.hash((String) null);
     }
 
 
     @Test
     public void testHashWithString() {
 
-        final S sha = newInstance();
+        final S sha = create();
 
-        try {
-            sha.hash((String) null);
-            Assert.fail("passed: hash((String) null)");
-        } catch (NullPointerException iae) {
-            // expected;
-        }
+        final String data = newStringData();
+        final byte[] hash = sha.hash(data);
 
-        final String unhashed = newDataAsString();
-        final byte[] hashed = sha.hash(unhashed);
-        Assert.assertTrue(hashed.length == OUTPUT_SIZE_IN_BYTES);
+        Assert.assertTrue(hash.length == OUTPUT_SIZE_IN_BYTES);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testHashToStringWithNullBytes() {
+
+        final S sha = create();
+
+        sha.hashToString((byte[]) null);
     }
 
 
     @Test
     public void testHashToString() {
 
-        final S sha = newInstance();
+        final S sha = create();
 
-        try {
-            sha.hashToString((byte[]) null);
-            Assert.fail("passed: hash((byte[]) null)");
-        } catch (NullPointerException iae) {
-            // expected;
-        }
+        final byte[] data = newBytesData();
+        final String hash = sha.hashToString(data);
 
-        final byte[] unhashed = newData();
-        final String hashed = sha.hashToString(unhashed);
-        Assert.assertTrue(hashed.length() == OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(hash.length() == OUTPUT_SIZE_IN_BYTES * 2);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testHashToStringWithNullString() {
+
+        final S sha = create();
+
+        sha.hashToString((String) null);
     }
 
 
     @Test
     public void testHashToStringWithString() {
 
-        final S sha = newInstance();
+        final S sha = create();
 
-        try {
-            sha.hashToString((String) null);
-            Assert.fail("passed: hash((String) null)");
-        } catch (NullPointerException iae) {
-            // expected;
-        }
+        final String data = newStringData();
+        final String hash = sha.hashToString(data);
 
-        final String unhashed = newDataAsString();
-        final String hashed = sha.hashToString(unhashed);
-        Assert.assertTrue(hashed.length() == OUTPUT_SIZE_IN_BYTES * 2);
+        Assert.assertTrue(hash.length() == OUTPUT_SIZE_IN_BYTES * 2);
     }
 
 

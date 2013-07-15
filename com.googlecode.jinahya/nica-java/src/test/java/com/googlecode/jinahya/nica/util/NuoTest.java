@@ -65,7 +65,7 @@ public class NuoTest {
     @Test
     public static void testGenerate() {
 
-        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
+        final List<Integer> conflicts = new ArrayList<>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
             final Set<Long> values = new HashSet<>(COUNT);
@@ -86,7 +86,7 @@ public class NuoTest {
 
         final long timestamp = System.currentTimeMillis();
 
-        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
+        final List<Integer> conflicts = new ArrayList<>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
             final Set<Long> values = new HashSet<>(COUNT);
@@ -109,7 +109,7 @@ public class NuoTest {
         final long timestamp = System.currentTimeMillis();
         final Random random = SecureRandom.getInstance("SHA1PRNG");
 
-        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
+        final List<Integer> conflicts = new ArrayList<>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
             final Set<Long> values = new HashSet<>(COUNT);
