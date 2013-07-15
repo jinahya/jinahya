@@ -51,7 +51,7 @@ public class ParMETest {
     }
 
 
-//    //@Test(invocationCount = 128)
+//    //@Test(invocationCount = 32)
 //    public static void testEncode() {
 //
 //        final Hashtable<String, String> decoded =
