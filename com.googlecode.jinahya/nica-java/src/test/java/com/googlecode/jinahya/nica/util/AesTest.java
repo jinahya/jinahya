@@ -158,20 +158,16 @@ public abstract class AesTest<A extends Aes> {
 
         final A aes = construct(key);
 
-        final byte[] expected = newInput();
-        //System.out.println("expected: " + Hex.encodeToString(expected));
-
-        final byte[] encrypted = aes.encrypt(iv, expected);
-        //System.out.println("encrypted: " + Hex.encodeToString(encrypted));
-
-        final byte[] actual = aes.decrypt(iv, encrypted);
-        //System.out.println("actual: " + Hex.encodeToString(actual));
-
-        Assert.assertEquals(actual, expected);
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = newInput();
+            final byte[] encrypted = aes.encrypt(iv, expected);
+            final byte[] actual = aes.decrypt(iv, encrypted);
+            Assert.assertEquals(actual, expected);
+        }
     }
 
 
-    @Test(invocationCount = 1)
+    @Test(invocationCount = 32)
     public void testEncryptDecryptWithEmptyInput() {
 
         final byte[] key = newKey();
@@ -179,13 +175,12 @@ public abstract class AesTest<A extends Aes> {
 
         final A aes = construct(key);
 
-        final byte[] expected = new byte[0];
-
-        final byte[] encrypted = aes.encrypt(iv, expected);
-
-        final byte[] actual = aes.decrypt(iv, encrypted);
-
-        Assert.assertEquals(actual, expected);
+        for (int i = 0; i < 32; i++) {
+            final byte[] expected = new byte[0];
+            final byte[] encrypted = aes.encrypt(iv, expected);
+            final byte[] actual = aes.decrypt(iv, encrypted);
+            Assert.assertEquals(actual, expected);
+        }
     }
 
 

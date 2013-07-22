@@ -34,10 +34,12 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Test(enabled = false)
 public class NuoTest {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(NuoTest.class.getName());
 
