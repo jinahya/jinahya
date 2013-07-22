@@ -34,6 +34,7 @@ public enum Header {
      * See {@link HeaderFieldNames#INIT}.
      */
     INIT(HeaderNames.INIT),
+    BASE(HeaderNames.BASE),
     /**
      * See {@link HeaderFieldNames#CODE}.
      */
@@ -99,4 +100,3 @@ public enum Header {
 
 
 }
-

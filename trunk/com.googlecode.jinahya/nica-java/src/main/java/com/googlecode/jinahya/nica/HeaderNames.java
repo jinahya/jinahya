@@ -38,6 +38,12 @@ public final class HeaderNames {
 
 
     /**
+     *
+     */
+    public static final String BASE = "Nica-Base";
+
+
+    /**
      * HTTP Header field-name for encrypted codes.
      */
     public static final String CODE = "Nica-Code";
@@ -58,4 +64,3 @@ public final class HeaderNames {
 
 
 }
-
