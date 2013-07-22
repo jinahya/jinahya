@@ -67,9 +67,21 @@ public class Nuo {
      *
      * @return a new value
      */
-    protected static long generate(final long timestamp) {
+    public static long generate(final long timestamp) {
 
         return generate(timestamp, new SecureRandom());
+    }
+
+
+    /**
+     *
+     * @param timestamp
+     *
+     * @return
+     */
+    public static long gemicro(final long timestamp) {
+
+        return generate(timestamp, new Random());
     }
 
 
@@ -80,7 +92,7 @@ public class Nuo {
      *
      * @return a new value
      */
-    protected static long generate(final Random random) {
+    public static long generate(final Random random) {
 
         return generate(System.currentTimeMillis(), random);
     }

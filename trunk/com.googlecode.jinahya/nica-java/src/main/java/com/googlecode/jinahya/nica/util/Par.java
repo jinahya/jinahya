@@ -21,12 +21,15 @@ package com.googlecode.jinahya.nica.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 
@@ -364,6 +367,56 @@ public class Par {
     }
 
 
+    public static String enmicro(final Hashtable decoded) {
+
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
+        }
+
+        if (decoded.isEmpty()) {
+            return "";
+        }
+
+        final Vector encoded = new Vector(decoded.size() * 2);
+
+        outer:
+        for (Enumeration e = decoded.keys(); e.hasMoreElements();) {
+            String key = (String) e.nextElement();
+            System.out.println("key: " + key);
+            String value = (String) decoded.get(key);
+            System.out.println("value: " + value);
+            key = Per.encodeToString(key);
+            value = Per.encodeToString(value);
+            for (int j = 0; j < encoded.size(); j += 2) {
+                if (((String) encoded.elementAt(j)).compareTo(key) > 0) {
+                    encoded.insertElementAt(value, j);
+                    encoded.insertElementAt(key, j);
+                    continue outer;
+                }
+            }
+            encoded.addElement(key);
+            encoded.addElement(value);
+        }
+
+        String result = "";
+
+        final Enumeration elements = encoded.elements();
+        if (elements.hasMoreElements()) {
+            result += elements.nextElement();
+            result += "=";
+            result += elements.nextElement();
+        }
+        while (elements.hasMoreElements()) {
+            result += "&";
+            result += elements.nextElement();
+            result += "=";
+            result += elements.nextElement();
+        }
+
+        return result;
+    }
+
+
     /**
      *
      * @param encoded
@@ -517,6 +570,42 @@ public class Par {
         }
 
         final Map decoded = new HashMap();
+
+        int fromIndex = 0;
+        String pair;
+        while (fromIndex < encoded.length()) {
+            final int ampeIndex = encoded.indexOf('&', fromIndex);
+            if (ampeIndex == -1) {
+                pair = encoded.substring(fromIndex);
+                fromIndex = encoded.length();
+            } else {
+                pair = encoded.substring(fromIndex, ampeIndex);
+                fromIndex = ampeIndex + 1;
+            }
+            final int equaIndex = pair.indexOf('=');
+            if (equaIndex == -1) {
+                throw new IllegalArgumentException(
+                    "no equal('=') in pair: " + pair);
+            }
+            decoded.put(Per.decodeToString(pair.substring(0, equaIndex)),
+                        Per.decodeToString(pair.substring(equaIndex + 1)));
+        }
+
+        return decoded;
+    }
+
+
+    public static Hashtable demicro(final String encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        if (encoded.length() == 0 || encoded.trim().length() == 0) {
+            return new Hashtable();
+        }
+
+        final Hashtable decoded = new Hashtable();
 
         int fromIndex = 0;
         String pair;

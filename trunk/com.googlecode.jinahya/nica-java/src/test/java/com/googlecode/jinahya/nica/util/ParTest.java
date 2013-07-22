@@ -21,6 +21,7 @@ package com.googlecode.jinahya.nica.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -226,7 +227,7 @@ public class ParTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void test() {
 
         final long start = System.nanoTime();
@@ -252,9 +253,11 @@ public class ParTest {
     }
 
 
-    @Test
+    @Test(enabled = true)
     @SuppressWarnings("unchecked")
-    public void test_() {
+    public void encodeDecode() {
+
+        System.out.println("---------------------------------------- standard");
 
         final long start = System.nanoTime();
 
@@ -270,6 +273,35 @@ public class ParTest {
         System.out.println("encoded: " + encoded);
 
         final Map actual = Par.decode_(encoded);
+        System.out.println("actual: " + actual);
+
+        Assert.assertEquals(actual, expected);
+
+        final long finish = System.nanoTime();
+        System.out.println("fast: " + (finish - start) + "ns");
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void enmicroDemicro() {
+
+        System.out.println("------------------------------------------- micro");
+
+        final long start = System.nanoTime();
+
+        final Hashtable expected = new Hashtable();
+
+        expected.put("English", "love");
+        expected.put("한국어", "사랑");
+        expected.put("中國語", "愛");
+
+        System.out.println("expected: " + expected);
+
+        final String encoded = Par.enmicro(expected);
+        System.out.println("encoded: " + encoded);
+
+        final Hashtable actual = Par.demicro(encoded);
         System.out.println("actual: " + actual);
 
         Assert.assertEquals(actual, expected);

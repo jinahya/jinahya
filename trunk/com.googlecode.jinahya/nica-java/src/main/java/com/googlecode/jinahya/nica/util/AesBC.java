@@ -28,7 +28,7 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
 
 
 /**
- * An Aes implementation using Bouncy Castle .
+ * An {@link Aes} implementation using Bouncy Castle .
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -41,6 +41,7 @@ public class AesBC extends Aes {
      * @param key encryption key
      */
     public AesBC(final byte[] key) {
+
         super();
 
         if (key == null) {
