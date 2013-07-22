@@ -87,37 +87,37 @@ public final class CodeKeys {
 
 
     /**
-     * 3-letter uppercase country/region code. ISO 3166-1 alpha-3.
+     * 3-letter uppercase country/region code. {@code ISO 3166-1 alpha-3}.
      */
     public static final String USER_COUNTRY3 = "USER_COUNTRY3";
 
 
     /**
-     * 2-letter uppercase country/region code. ISO 3166-1 alpha-2.
+     * 2-letter uppercase country/region code. {@code ISO 3166-1 alpha-2}.
      */
     public static final String USER_COUNTRY2 = "USER_COUNTRY2";
 
 
     /**
-     * User country/region name in en-US. Not strictly required.
+     * User country/region name in {@code English}. Not strictly required.
      */
     public static final String USER_COUNTRY = "USER_COUNTRY";
 
 
     /**
-     * 3-letter lowercase language code. ISO 639-2.
+     * 3-letter lowercase language code. {@code ISO 639-2}.
      */
     public static final String USER_LANGUAGE3 = "USER_LANGUAGE3";
 
 
     /**
-     * 2-letter lowercase language code. ISO 639-1.
+     * 2-letter lowercase language code. {@code ISO 639-1}.
      */
     public static final String USER_LANGUAGE2 = "USER_LANGUAGE2";
 
 
     /**
-     * User language name in en-US. Not strictly required.
+     * User language name in {@code English}. Not strictly required.
      */
     public static final String USER_LANGUAGE = "USER_LANGUAGE";
 
@@ -182,4 +182,3 @@ public final class CodeKeys {
 
 
 }
-

@@ -132,14 +132,14 @@ public abstract class AesTest<A extends Aes> {
     @Test(expectedExceptions = NullPointerException.class)
     public void testEncryptWithNullInput() {
 
-        construct(newKey()).encrypt(newIv(), null);
+        construct(newKey()).encrypt(newIv(), (byte[]) null);
     }
 
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testDecryptWithNullInput() {
 
-        construct(newKey()).decrypt(newIv(), null);
+        construct(newKey()).decrypt(newIv(), (byte[]) null);
     }
 
 

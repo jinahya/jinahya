@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.util;
 
 
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -52,9 +53,6 @@ public abstract class Aes {
      * AES block size in bytes.
      */
     public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 8; // 16
-
-
-
 
 
     /**
@@ -102,6 +100,88 @@ public abstract class Aes {
 
 
     /**
+     * Encrypts given {@code decrypted}.
+     *
+     * @param iv initialization vector.
+     * @param decrypted the String to encrypted.
+     *
+     * @return encrypted output.
+     */
+    public byte[] encrypt(final byte[] iv, final String decrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (decrypted == null) {
+            throw new NullPointerException("decrypted");
+        }
+
+        try {
+            return encrypt(iv, decrypted.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+        }
+    }
+
+
+    /**
+     * Encodes given {@code decrypted} and returns the result as a {@code hex}
+     * String.
+     *
+     * @param iv initialization vector.
+     * @param decrypted the bytes to encrypt.
+     *
+     * @return encrypted output as a {@code hex string}.
+     */
+    public String encryptToString(final byte[] iv, final byte[] decrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (decrypted == null) {
+            throw new NullPointerException("decrypted");
+        }
+
+        return Hex.encodeToString(encrypt(iv, decrypted));
+    }
+
+
+    public String encryptToString(final byte[] iv, final String decrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (decrypted == null) {
+            throw new NullPointerException("decrypted");
+        }
+
+        try {
+            return Hex.encodeToString(encrypt(iv, decrypted.getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+        }
+    }
+
+
+    /**
      * Decrypts given {@code encrypted}. Any implementation/provider specific
      * exception will be thrown as wrapped in a RuntimeException.
      *
@@ -111,6 +191,71 @@ public abstract class Aes {
      * @return decrypted output
      */
     public abstract byte[] decrypt(byte[] iv, byte[] encrypted);
+
+
+    public byte[] decrypt(final byte[] iv, final String encrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (encrypted == null) {
+            throw new NullPointerException("encrypted");
+        }
+
+        return decrypt(iv, Hex.decode(encrypted));
+    }
+
+
+    public String decryptToString(final byte[] iv, final byte[] encrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (encrypted == null) {
+            throw new NullPointerException("encrypted");
+        }
+
+        try {
+            return new String(decrypt(iv, encrypted), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+        }
+    }
+
+
+    public String decryptToString(final byte[] iv, final String encrypted) {
+
+        if (iv == null) {
+            throw new NullPointerException("iv");
+        }
+
+        if (iv.length != BLOCK_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(
+                "iv.length(" + iv.length + ") != " + BLOCK_SIZE_IN_BYTES);
+        }
+
+        if (encrypted == null) {
+            throw new NullPointerException("encrypted");
+        }
+
+        try {
+            return new String(decrypt(iv, encrypted), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
+        }
+    }
 
 
 }

@@ -69,32 +69,32 @@ public class Hex {
      * @param encoded the byte array to which encoded output are written
      * @param offset offset in the array
      */
-    static void encodeSingle(final int decoded, final byte[] encoded,
-                             final int offset) {
+    protected static void encodeSingle(final int decoded, final byte[] encoded,
+                                       final int offset) {
 
-//        if (decoded < 0x00) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") < 0x00");
-//        }
-//
-//        if (decoded > 0xFF) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") > 0xFF");
-//        }
-//
-//        if (encoded == null) {
-//            throw new IllegalArgumentException("null encoded");
-//        }
-//
-//        if (offset < 0) {
-//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-//        }
-//
-//        if (offset >= encoded.length - 1) {
-//            throw new IllegalArgumentException(
-//                "offset(" + offset + ") >= encoded.length(" + encoded.length
-//                + ") - 1");
-//        }
+        if (decoded < 0x00) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") < 0x00");
+        }
+
+        if (decoded > 0xFF) {
+            throw new IllegalArgumentException(
+                "decoded(" + decoded + ") > 0xFF");
+        }
+
+        if (encoded == null) {
+            throw new IllegalArgumentException("null encoded");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= encoded.length - 1) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= encoded.length(" + encoded.length
+                + ") - 1");
+        }
 
         encoded[offset] = (byte) encodeHalf((decoded >> 4) & 0x0F);
         encoded[offset + 1] = (byte) encodeHalf(decoded & 0x0F);
@@ -189,87 +189,94 @@ public class Hex {
     }
 
 
-    public static byte[] encode_(final byte[] decoded) {
+//    public static byte[] encode_(final byte[] decoded) {
+//
+//        if (decoded == null) {
+//            throw new NullPointerException("decoded");
+//        }
+//
+//        final byte[] encoded = new byte[decoded.length << 1];
+//
+//        int offset = 0;
+//        for (int i = 0; i < decoded.length; i++) {
+//            final int h = (decoded[i] >> 4) & 0x0F;
+//            final int l = decoded[i] & 0x0F;
+//            encoded[offset++] = (byte) (h + (h < 0x09 ? 0x30 : 0x37));
+//            encoded[offset++] = (byte) (l + (l < 0x09 ? 0x30 : 0x37));
+//        }
+//
+//        return encoded;
+//    }
+//
+//
+//    public static byte[] encode_(final String decoded) {
+//
+//
+//        if (decoded == null) {
+//            throw new NullPointerException("decoded");
+//        }
+//
+//        try {
+//            return encode_(decoded.getBytes("UTF-8"));
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"UTF_8\" is not supported?", uee);
+//        }
+//    }
+//
+//
+//    public static String encodeToString_(final byte[] decoded) {
+//
+//        try {
+//            return new String(encode_(decoded), "US-ASCII");
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+//        }
+//    }
+//
+//
+//    public static String encodeToString_(final String decoded) {
+//
+//        try {
+//            return new String(encode_(decoded), "US-ASCII");
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
+//        }
+//    }
 
-        if (decoded == null) {
-            throw new NullPointerException("decoded");
-        }
 
-        final byte[] encoded = new byte[decoded.length << 1];
-
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            final int h = (decoded[i] >> 4) & 0x0F;
-            final int l = decoded[i] & 0x0F;
-            encoded[offset++] = (byte) (h + (h < 0x09 ? 0x30 : 0x37));
-            encoded[offset++] = (byte) (l + (l < 0x09 ? 0x30 : 0x37));
-        }
-
-        return encoded;
-    }
-
-
-    public static byte[] encode_(final String decoded) {
-
-
-        if (decoded == null) {
-            throw new NullPointerException("decoded");
-        }
-
-        try {
-            return encode_(decoded.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF_8\" is not supported?", uee);
-        }
-    }
-
-
-    public static String encodeToString_(final byte[] decoded) {
-
-        try {
-            return new String(encode_(decoded), "US-ASCII");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-        }
-    }
-
-
-    public static String encodeToString_(final String decoded) {
-
-        try {
-            return new String(encode_(decoded), "US-ASCII");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported?", uee);
-        }
-    }
-
-
+    /**
+     * Decodes given {@code encoded nibble}.
+     *
+     * @param encoded encoded nibble.
+     *
+     * @return decoded nibble.
+     */
     private static int decodeHalf(final int encoded) {
 
         switch (encoded) {
             case 0x30: // '0'
-            case 0x31:
-            case 0x32:
-            case 0x33:
-            case 0x34:
-            case 0x35:
-            case 0x36:
-            case 0x37:
-            case 0x38:
+            case 0x31: // '1'
+            case 0x32: // '2'
+            case 0x33: // '3'
+            case 0x34: // '4'
+            case 0x35: // '5'
+            case 0x36: // '6'
+            case 0x37: // '7'
+            case 0x38: // '8'
             case 0x39: // '9'
                 return encoded - 0x30;
             case 0x41: // 'A'
-            case 0x42:
-            case 0x43:
-            case 0x44:
-            case 0x45:
+            case 0x42: // 'B'
+            case 0x43: // 'C'
+            case 0x44: // 'D'
+            case 0x45: // 'E'
             case 0x46: // 'F'
                 return encoded - 0x37;
             case 0x61: // 'a'
-            case 0x62:
-            case 0x63:
-            case 0x64:
-            case 0x65:
+            case 0x62: // 'b'
+            case 0x63: // 'c'
+            case 0x64: // 'd'
+            case 0x65: // 'e'
             case 0x66: // 'f'
                 return encoded - 0x57;
             default:
@@ -278,21 +285,28 @@ public class Hex {
     }
 
 
-    static int decodeSingle(final byte[] encoded, final int offset) {
+    /**
+     *
+     * @param encoded
+     * @param offset
+     *
+     * @return
+     */
+    protected static int decodeSingle(final byte[] encoded, final int offset) {
 
-//        if (encoded == null) {
-//            throw new IllegalArgumentException("null encoded");
-//        }
-//
-//        if (offset < 0) {
-//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-//        }
-//
-//        if (offset >= encoded.length - 1) {
-//            throw new IllegalArgumentException(
-//                "offset(" + offset + ") >= encoded.length(" + encoded.length
-//                + ") - 1");
-//        }
+        if (encoded == null) {
+            throw new IllegalArgumentException("encoded");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= encoded.length - 1) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= encoded.length(" + encoded.length
+                + ") - 1");
+        }
 
         return (decodeHalf(encoded[offset]) << 4)
                | decodeHalf(encoded[offset + 1]);
@@ -351,11 +365,12 @@ public class Hex {
 
 
     /**
-     * Decodes given {@code encoded} and returns as a 'UTF-8' encoded String.
+     * Decodes given {@code encoded} and returns the result as a {@code UTF-8}
+     * encoded String.
      *
      * @param encoded encoded bytes
      *
-     * @return decoded output as a UTF-8 String
+     * @return decoded output as a {@code UTF-8} String
      */
     public static String decodeToString(final byte[] encoded) {
 
@@ -368,12 +383,12 @@ public class Hex {
 
 
     /**
-     * Decodes given {@code encoded} and returns output as a 'UTF-8' encoded
-     * String.
+     * Decodes given {@code encoded} and returns the result as a {@code UTF-8}
+     * encoded String.
      *
-     * @param encoded encoded 'US-ASCII' String
+     * @param encoded encoded String; 'US-ASCII' encoded.
      *
-     * @return decoded output as a 'UTF-8' encoded String
+     * @return decoded output as a {@code UTF-8} encoded String
      */
     public static String decodeToString(final String encoded) {
 
@@ -385,71 +400,71 @@ public class Hex {
     }
 
 
-    public static byte[] decode_(final byte[] encoded) {
-
-        if (encoded == null) {
-            throw new NullPointerException("encoded");
-        }
-
-        final byte[] decoded = new byte[encoded.length >> 1];
-
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            final int h = encoded[offset]
-                          - (encoded[offset] <= 0x39 ? 0x30
-                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
-            ++offset;
-            final int l = encoded[offset]
-                          - (encoded[offset] <= 0x39 ? 0x30
-                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
-            ++offset;
-            decoded[i] = (byte) ((h << 4) | l);
-        }
-
-        return decoded;
-    }
-
-
-    public static byte[] decode_(final String encoded) {
-
-        if (encoded == null) {
-            throw new NullPointerException("encoded");
-        }
-
-        try {
-            return decode_(encoded.getBytes("US-ASCII"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"US-ASCII\" is not supported? ", uee);
-        }
-    }
-
-
-    public static String decodeToString_(final byte[] encoded) {
-
-        if (encoded == null) {
-            throw new NullPointerException("encoded");
-        }
-
-        try {
-            return new String(decode_(encoded), "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
-        }
-    }
-
-
-    public static String decodeToString_(final String encoded) {
-
-        if (encoded == null) {
-            throw new NullPointerException("encoded");
-        }
-
-        try {
-            return new String(decode_(encoded), "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
-        }
-    }
+//    public static byte[] decode_(final byte[] encoded) {
+//
+//        if (encoded == null) {
+//            throw new NullPointerException("encoded");
+//        }
+//
+//        final byte[] decoded = new byte[encoded.length >> 1];
+//
+//        int offset = 0;
+//        for (int i = 0; i < decoded.length; i++) {
+//            final int h = encoded[offset]
+//                          - (encoded[offset] <= 0x39 ? 0x30
+//                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
+//            ++offset;
+//            final int l = encoded[offset]
+//                          - (encoded[offset] <= 0x39 ? 0x30
+//                             : (encoded[offset] <= 0x46 ? 0x37 : 0x57));
+//            ++offset;
+//            decoded[i] = (byte) ((h << 4) | l);
+//        }
+//
+//        return decoded;
+//    }
+//
+//
+//    public static byte[] decode_(final String encoded) {
+//
+//        if (encoded == null) {
+//            throw new NullPointerException("encoded");
+//        }
+//
+//        try {
+//            return decode_(encoded.getBytes("US-ASCII"));
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"US-ASCII\" is not supported? ", uee);
+//        }
+//    }
+//
+//
+//    public static String decodeToString_(final byte[] encoded) {
+//
+//        if (encoded == null) {
+//            throw new NullPointerException("encoded");
+//        }
+//
+//        try {
+//            return new String(decode_(encoded), "UTF-8");
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
+//        }
+//    }
+//
+//
+//    public static String decodeToString_(final String encoded) {
+//
+//        if (encoded == null) {
+//            throw new NullPointerException("encoded");
+//        }
+//
+//        try {
+//            return new String(decode_(encoded), "UTF-8");
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException("\"UTF-8\" is not supported? ", uee);
+//        }
+//    }
 
 
     /**
