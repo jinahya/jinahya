@@ -40,19 +40,19 @@ public abstract class Aes {
     /**
      * Key size in bytes.
      */
-    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE / 8; // 16
+    public static final int KEY_SIZE_IN_BYTES = KEY_SIZE >> 3; // 16
 
 
     /**
-     * AES block size in bits.
+     * Block size in bits.
      */
     public static final int BLOCK_SIZE = 0x80; // 128;
 
 
     /**
-     * AES block size in bytes.
+     * Block size in bytes.
      */
-    public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE / 8; // 16
+    public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE >> 3; // 16
 
 
     /**
@@ -62,7 +62,7 @@ public abstract class Aes {
      *
      * @return a new initialization vector.
      */
-    protected static byte[] newIv(final Random random) {
+    protected static final byte[] newIv(final Random random) {
 
         if (random == null) {
             throw new NullPointerException("random");
@@ -81,7 +81,7 @@ public abstract class Aes {
      *
      * @return a new initialization vector.
      */
-    public static byte[] newIv() {
+    protected static final byte[] newIv() {
 
         return newIv(new SecureRandom());
     }
@@ -89,7 +89,7 @@ public abstract class Aes {
 
     /**
      * Encrypts given {@code decrypted}. Any implementation/provider specific
-     * exception will thrown as wrapped in a RuntimeException.
+     * exception will be wrapped in a {@code RuntimeException}.
      *
      * @param iv initialization vector
      * @param decrypted the bytes to encrypt
@@ -100,12 +100,13 @@ public abstract class Aes {
 
 
     /**
-     * Encrypts given {@code decrypted}.
+     * Encrypts given {@code decrypted} which is treated as a {@code UTF-8}
+     * encoded string.
      *
-     * @param iv initialization vector.
-     * @param decrypted the String to encrypted.
+     * @param iv initialization vector
+     * @param decrypted input string to encrypt
      *
-     * @return encrypted output.
+     * @return encrypted output
      */
     public byte[] encrypt(final byte[] iv, final String decrypted) {
 
@@ -131,13 +132,13 @@ public abstract class Aes {
 
 
     /**
-     * Encodes given {@code decrypted} and returns the result as a {@code hex}
-     * String.
+     * Encrypts given {@code decrypted} and returns output as a {@code hex}
+     * encoded string.
      *
-     * @param iv initialization vector.
-     * @param decrypted the bytes to encrypt.
+     * @param iv initialization vector
+     * @param decrypted input bytes to encrypt
      *
-     * @return encrypted output as a {@code hex string}.
+     * @return encrypted output as a {@code hex} encoded string.
      */
     public String encryptToString(final byte[] iv, final byte[] decrypted) {
 
@@ -158,6 +159,15 @@ public abstract class Aes {
     }
 
 
+    /**
+     * Encrypts given {@code decrypted} which is treated as a {@code UTF-8}
+     * encoded string and returns output as a {@code hex} encoded string.
+     *
+     * @param iv initialization vector
+     * @param decrypted input string to encrypt.
+     *
+     * @return encrypted output as a {@code hex} encoded string.
+     */
     public String encryptToString(final byte[] iv, final String decrypted) {
 
         if (iv == null) {
@@ -174,7 +184,7 @@ public abstract class Aes {
         }
 
         try {
-            return Hex.encodeToString(encrypt(iv, decrypted.getBytes("UTF-8")));
+            return encryptToString(iv, decrypted.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?", uee);
         }
@@ -183,7 +193,7 @@ public abstract class Aes {
 
     /**
      * Decrypts given {@code encrypted}. Any implementation/provider specific
-     * exception will be thrown as wrapped in a RuntimeException.
+     * exception will be wrapped in a {@code RuntimeException}.
      *
      * @param iv initialization vector
      * @param encrypted the bytes to decrypt
@@ -193,6 +203,15 @@ public abstract class Aes {
     public abstract byte[] decrypt(byte[] iv, byte[] encrypted);
 
 
+    /**
+     * Decrypts given {@code encrypted} which is treated as a {@code hex}
+     * string.
+     *
+     * @param iv initialization vector
+     * @param encrypted {@code hex} encoded string
+     *
+     * @return decrypted output
+     */
     public byte[] decrypt(final byte[] iv, final String encrypted) {
 
         if (iv == null) {
@@ -212,6 +231,15 @@ public abstract class Aes {
     }
 
 
+    /**
+     * Decrypts given {@code encrypted} and returns the result as a
+     * {@code UTF-8} encoded string.
+     *
+     * @param iv initialization vector
+     * @param encrypted input to decrypt
+     *
+     * @return decrypted result as a {@code UTF-8} encoded string.
+     */
     public String decryptToString(final byte[] iv, final byte[] encrypted) {
 
         if (iv == null) {
@@ -235,6 +263,15 @@ public abstract class Aes {
     }
 
 
+    /**
+     * Decrypts given {@code encrypted} which is treated as a {@code hex}
+     * encoded string and returns output as a {@code UTF-8} encoded string.
+     *
+     * @param iv initialization vector
+     * @param encrypted {@code hex} encoded string
+     *
+     * @return output as a {@code UTF-8} encoded string.
+     */
     public String decryptToString(final byte[] iv, final String encrypted) {
 
         if (iv == null) {
@@ -250,11 +287,7 @@ public abstract class Aes {
             throw new NullPointerException("encrypted");
         }
 
-        try {
-            return new String(decrypt(iv, encrypted), "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?", uee);
-        }
+        return decryptToString(iv, Hex.decode(encrypted));
     }
 
 

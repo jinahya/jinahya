@@ -25,6 +25,7 @@ import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javax.crypto.KeyGenerator;
 import org.testng.Assert;
@@ -38,7 +39,7 @@ import org.testng.annotations.Test;
 public class NicaTest {
 
 
-    protected static byte[] newKey() {
+    protected static final byte[] newKey() {
         try {
             final KeyGenerator keyGenerator =
                 KeyGenerator.getInstance(AesJCE.ALGORITHM);
@@ -77,27 +78,31 @@ public class NicaTest {
 
         final Map<String, String> codes = new HashMap<>();
         for (int i = 0; i < 5; i++) {
-            codes.put("code" + i, "code" + i);
+//            codes.put("code" + i, "code" + i);
         }
+        codes.put(Locale.KOREAN.getDisplayLanguage(Locale.KOREAN), "사랑");
+        codes.put(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH), "Love");
         System.out.println("codes: " + codes);
 
 
         // ----------------------------------------------- client-side challenge
 
-        final String name = Par.encode_(names);
+        final String name = Par.encode(names);
         System.out.println(HeaderNames.NAME + ": " + name);
 
         final String init = Hex.encodeToString(iv);
-        System.out.println(HeaderNames.INIT + ": " + init);
+        System.out.println(HeaderNames.INIT + ": " + init
+                           + " (" + init.length() + ")");
 
-        final String base = Par.encode_(codes);
+        final String base = Par.encode(codes);
         System.out.println(HeaderNames.BASE + ": " + base);
 
         final String code = new AesJCE(key).encryptToString(iv, base);
         System.out.println(HeaderNames.CODE + ": " + code);
 
         final String auth = new HacJCE(key).authenticateToString(base);
-        System.out.println(HeaderNames.AUTH + ": " + auth);
+        System.out.println(HeaderNames.AUTH + ": " + auth
+                           + " (" + auth.length() + ")");
 
 
         // ---------------------------------------------- server-side validation

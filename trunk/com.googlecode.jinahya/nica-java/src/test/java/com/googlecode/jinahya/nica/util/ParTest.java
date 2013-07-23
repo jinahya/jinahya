@@ -18,11 +18,9 @@
 package com.googlecode.jinahya.nica.util;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,6 +37,7 @@ public class ParTest {
 
 
     protected static final String[] VALID_ENCODED = new String[]{
+        "",
         "=",
         "a=",
         "a=&=",
@@ -48,7 +47,6 @@ public class ParTest {
 
 
     protected static final String[] INVALID_ENCODED = new String[]{
-        "",
         "&",
         "a",
         "a&",
@@ -59,39 +57,21 @@ public class ParTest {
     };
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testEncodeWithNull() {
-        Par.encodeValues(null);
+
+        Par.encode(null);
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testEncodeWithEmpty() {
-        Par.encode(Collections.<String, String>emptyMap());
+
+        Assert.assertTrue(
+            Par.encode(Collections.<String, String>emptyMap()).isEmpty());
     }
 
 
-//    //@Test(invocationCount = 32)
-//    public void testEncode() {
-//
-////        System.out.println(Par.WORD);
-////        System.out.println(Par.PAIR);
-////        System.out.println(Par.REGEX);
-//
-//        final Map<String, String> expected = new HashMap<String, String>();
-//
-//        final int count = RANDOM.nextInt(64);
-//        for (int i = 0; i < count; i++) {
-//            expected.put(RandomStringUtils.random(RANDOM.nextInt(32)),
-//                         RandomStringUtils.random(RANDOM.nextInt(32)));
-//        }
-//
-//        final String encoded = Par.encode(expected);
-//
-//        final boolean matches = Par.PATTERN.matcher(encoded).matches();
-//
-//        Assert.assertTrue(Par.PATTERN.matcher(encoded).matches());
-//    }
     @Test
     public static void testDecodeForValidEncoded() {
 
@@ -115,6 +95,29 @@ public class ParTest {
     }
 
 
+    @Test
+    public static void testDemicroForValidEncoded() {
+
+        for (String valid : VALID_ENCODED) {
+            Par.demicro(valid);
+        }
+    }
+
+
+    @Test
+    public static void testDemicroForInvalidEncoded() {
+
+        for (String invalid : INVALID_ENCODED) {
+            try {
+                Par.demicro(invalid);
+                Assert.fail("passed: decode(\"" + invalid + "\")");
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
+    }
+
+
     @Test(invocationCount = 32)
     public void testEncodeDecode() {
 
@@ -130,126 +133,10 @@ public class ParTest {
 
         final String encoded = Par.encode(expected);
 
+        @SuppressWarnings("unchecked")
         final Map<String, String> actual = Par.decode(encoded);
 
         Assert.assertEquals(actual, expected);
-    }
-
-
-    protected static Map<String, String> newSingleValued() {
-
-        final Random random = ThreadLocalRandom.current();
-
-        final Map<String, String> singleValued = new HashMap<String, String>();
-
-        final int count = random.nextInt(128) + 1;
-        for (int i = 0; i < count; i++) {
-            singleValued.put(RandomStringUtils.random(random.nextInt(128)),
-                             RandomStringUtils.random(random.nextInt(128)));
-        }
-
-        return singleValued;
-    }
-
-
-    protected static List<String> newValues() {
-
-        final Random random = ThreadLocalRandom.current();
-
-        final List<String> values = new ArrayList<String>();
-
-        final int count = random.nextInt(128) + 1;
-        for (int j = 0; j < count; j++) {
-            values.add(RandomStringUtils.random(random.nextInt(128)));
-        }
-
-        return values;
-    }
-
-
-    protected static Map<String, List<String>> newMultiValued() {
-
-        final Random random = ThreadLocalRandom.current();
-
-        final Map<String, List<String>> multiValued =
-            new HashMap<String, List<String>>();
-
-        final int count = random.nextInt(128) + 1;
-        for (int i = 0; i < count; i++) {
-            multiValued.put(RandomStringUtils.random(random.nextInt(128)),
-                            newValues());
-        }
-
-        return multiValued;
-    }
-
-
-    @Test(invocationCount = 32)
-    public static void testEncodeDecodeValues() {
-
-        final List<String> expected = newValues();
-        final String encoded = Par.encodeValues(expected);
-        final List<String> actual = Par.decodeValues(encoded);
-
-        Collections.sort(expected);
-        Collections.sort(actual);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void testEncodeDecodeMultivalued() {
-
-        final Random RANDOM = ThreadLocalRandom.current();
-
-        final Map<String, List<String>> expected =
-            new HashMap<String, List<String>>();
-
-        final int pairCount = RANDOM.nextInt(128);
-        for (int i = 0; i < pairCount; i++) {
-            final String key = RandomStringUtils.random(RANDOM.nextInt(128));
-            final List<String> values = newValues();
-            expected.put(key, values);
-        }
-
-        final String encoded = Par.encodeMultivalued(expected);
-
-        final Map<String, List<String>> actual = Par.decodeMultiValued(encoded);
-
-        Assert.assertEquals(actual.keySet(), expected.keySet());
-
-        for (String key : actual.keySet()) {
-            Collections.sort(actual.get(key));
-            Collections.sort(expected.get(key));
-            Assert.assertEquals(actual.get(key), expected.get(key));
-        }
-    }
-
-
-    @Test(enabled = false)
-    public void test() {
-
-        final long start = System.nanoTime();
-
-        final Map<String, String> expected = new HashMap<>();
-
-        expected.put("English", "love");
-        expected.put("한국어", "사랑");
-        expected.put("中國語", "愛");
-
-        System.out.println("expected: " + expected);
-
-        final String encoded = Par.encode(expected);
-        System.out.println("encoded: " + encoded);
-
-        final Map<String, String> actual = Par.decode(encoded);
-        System.out.println("actual: " + actual);
-
-        Assert.assertEquals(actual, expected);
-
-        final long finish = System.nanoTime();
-        System.out.println("norm: " + (finish - start) + "ns");
     }
 
 
@@ -257,7 +144,7 @@ public class ParTest {
     @SuppressWarnings("unchecked")
     public void encodeDecode() {
 
-        System.out.println("---------------------------------------- standard");
+        System.out.println("----------------------------------- encode/decode");
 
         final long start = System.nanoTime();
 
@@ -269,16 +156,16 @@ public class ParTest {
 
         System.out.println("expected: " + expected);
 
-        final String encoded = Par.encode_(expected);
+        final String encoded = Par.encode(expected);
         System.out.println("encoded: " + encoded);
 
-        final Map actual = Par.decode_(encoded);
+        final Map actual = Par.decode(encoded);
         System.out.println("actual: " + actual);
 
         Assert.assertEquals(actual, expected);
 
         final long finish = System.nanoTime();
-        System.out.println("fast: " + (finish - start) + "ns");
+        System.out.println("encode/decode: " + (finish - start) + " ns");
     }
 
 
@@ -286,7 +173,7 @@ public class ParTest {
     @SuppressWarnings("unchecked")
     public void enmicroDemicro() {
 
-        System.out.println("------------------------------------------- micro");
+        System.out.println("--------------------------------- enmicro/demicro");
 
         final long start = System.nanoTime();
 
@@ -307,7 +194,7 @@ public class ParTest {
         Assert.assertEquals(actual, expected);
 
         final long finish = System.nanoTime();
-        System.out.println("fast: " + (finish - start) + "ns");
+        System.out.println("enmicro/demicro: " + (finish - start) + " ns");
     }
 
 
