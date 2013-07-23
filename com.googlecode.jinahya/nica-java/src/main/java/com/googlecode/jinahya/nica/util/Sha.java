@@ -32,7 +32,7 @@ public abstract class Sha {
     /**
      * Hashes given {@code data}.
      *
-     * @param data data to hash
+     * @param data the bytes to hash
      *
      * @return hashed output
      */
@@ -40,7 +40,8 @@ public abstract class Sha {
 
 
     /**
-     * Hashes given {@code data}.
+     * Hashes given {@code data} which is treated as a {@code UTF-8} encoded
+     * string.
      *
      * @param data the string to hash
      *
@@ -61,11 +62,12 @@ public abstract class Sha {
 
 
     /**
-     * Hashes given {@code data} and returns the result as a HEX string.
+     * Hashes given {@code data} and returns the result as a {@code hex} encoded
+     * string.
      *
-     * @param data data to hash.
+     * @param data the bytes to hash.
      *
-     * @return hashed output as a HEX string.
+     * @return hashed output as a {@code hex} encoded string.
      */
     public String hashToString(final byte[] data) {
 
@@ -74,15 +76,20 @@ public abstract class Sha {
 
 
     /**
-     * Hashes given {@code data} and returns the result as a HEX string.
+     * Hashes given {@code data} which is treated as a {@code UTF-8} encoded
+     * string and returns the result as a {@code hex} encoded string.
      *
      * @param data the string to hash.
      *
-     * @return hashed output as a HEX string.
+     * @return hashed output as a {@code hex} encoded string.
      */
     public String hashToString(final String data) {
 
-        return Hex.encodeToString(hash(data));
+        try {
+            return hashToString(data.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new IllegalArgumentException("\"UTF-8\" is not supported?");
+        }
     }
 
 

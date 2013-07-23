@@ -25,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -60,6 +61,23 @@ public class AesJCE extends Aes {
      */
     public static final String TRANSFORMATION =
         ALGORITHM + "/" + MODE + "/" + PADDING;
+
+
+    /**
+     * Generates a new key.
+     *
+     * @return a new key.
+     */
+    protected static final byte[] newKey() {
+        try {
+            final KeyGenerator keyGenerator =
+                KeyGenerator.getInstance(ALGORITHM);
+            keyGenerator.init(KEY_SIZE);
+            return keyGenerator.generateKey().getEncoded();
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new RuntimeException(nsae);
+        }
+    }
 
 
     /**

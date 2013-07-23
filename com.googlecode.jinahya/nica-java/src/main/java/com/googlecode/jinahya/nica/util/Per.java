@@ -69,9 +69,10 @@ public class Per {
 
 
     /**
-     * Encodes given {@code decoded}.
+     * Encodes given {@code decoded} which is treated as a {@code UTF-8} encoded
+     * string.
      *
-     * @param decoded input string to encode.
+     * @param decoded the string to encode.
      *
      * @return encoded output
      */
@@ -90,12 +91,12 @@ public class Per {
 
 
     /**
-     * Encodes given {@code decoded} and returns the result as a US-ASCII
-     * encoded string.
+     * Encodes given {@code decoded} and returns the result as a
+     * {@code US-ASCII} encoded string.
      *
      * @param decoded the bytes to encode
      *
-     * @return encoded output as a string
+     * @return encoded output as a {@code US-ASCII} encoded string
      */
     public static String encodeToString(final byte[] decoded) {
 
@@ -112,12 +113,12 @@ public class Per {
 
 
     /**
-     * Encodes given {@code decoded} and returns the result as a US-ASCII
-     * encoded string.
+     * Encodes given {@code decoded} which is treated as a {@code UTF-8} encoded
+     * string and returns the result as a {@code US-ASCII} encoded string.
      *
      * @param decoded the string to encode.
      *
-     * @return encoded output as a string
+     * @return encoded output as a {@code US-ASCII} encoded string
      */
     public static String encodeToString(final String decoded) {
 
@@ -176,7 +177,8 @@ public class Per {
 
 
     /**
-     * Decodes given {@code encoded}.
+     * Decodes given {@code encoded} which is treated as a {@code US-ASCII}
+     * encoded string.
      *
      * @param encoded the string to decode.
      *
@@ -197,11 +199,12 @@ public class Per {
 
 
     /**
-     * Decodes given {@code encoded} and returns the result as a UTF-8 string.
+     * Decodes given {@code encoded} and returns the result as a {@code UTF-8}
+     * encoded string.
      *
      * @param encoded the bytes to decode.
      *
-     * @return decoded output as a string.
+     * @return decoded output as a {@code UTF-8} encoded string.
      */
     public static String decodeToString(final byte[] encoded) {
 
@@ -218,11 +221,12 @@ public class Per {
 
 
     /**
-     * Decodes given {@code encoded} and returns the result as a UTF-8 string.
+     * Decodes given {@code encoded} which is treated as a {@code US-ASCII}
+     * encoded string and returns the result as a {@code UTF-8} encoded string.
      *
      * @param encoded the string to decode.
      *
-     * @return decoded output as a string.
+     * @return decoded output as a {@code UTF-8} encoded string.
      */
     public static String decodeToString(final String encoded) {
 
