@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import static com.googlecode.jinahya.commons.codec.EncoderProxy.newInstance;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,14 +28,20 @@ package com.googlecode.jinahya.commons.codec;
 public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
 
 
-    protected static Object newInstance() {
+    protected static Object newInstance(final RareEncoder encoder) {
 
         try {
-            return newInstance(RareEncoderProxy.class, RareEncoder.class,
-                               new RareEncoder());
+            return newInstance(
+                RareEncoderProxy.class, RareEncoder.class, encoder);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    protected static Object newInstance() {
+
+        return newInstance(new RareEncoder());
     }
 
 

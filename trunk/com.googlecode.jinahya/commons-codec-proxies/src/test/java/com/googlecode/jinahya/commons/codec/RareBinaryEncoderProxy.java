@@ -18,12 +18,33 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class RareBinaryEncoderProxy
     extends BinaryEncoderProxy<RareBinaryEncoder> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(RareBinaryEncoderProxy.class.getName());
+
+
+    public static Object newInstance(final RareBinaryEncoder encoder) {
+
+        return newInstance(
+            RareBinaryEncoderProxy.class, RareBinaryEncoder.class, encoder);
+    }
+
+
+    public static Object newInstance() {
+
+        return newInstance(new RareBinaryEncoder());
+    }
 
 
     protected RareBinaryEncoderProxy(final RareBinaryEncoder encoder) {
@@ -33,9 +54,24 @@ public class RareBinaryEncoderProxy
 
 
     @Override
+    protected Object encode(final RareBinaryEncoder encoder,
+                            final Object source)
+        throws Throwable {
+
+        LOGGER.log(Level.INFO, "<Object>encode({0}, {1})",
+                   new Object[]{encoder, source});
+        
+        return super.encode(encoder, source);
+    }
+
+
+    @Override
     protected byte[] encode(final RareBinaryEncoder encoder,
                             final byte[] source)
         throws Throwable {
+
+        LOGGER.log(Level.INFO, "<Binary>encode({0}, {1})",
+                   new Object[]{encoder, source});
 
         return encoder.encode(source);
     }

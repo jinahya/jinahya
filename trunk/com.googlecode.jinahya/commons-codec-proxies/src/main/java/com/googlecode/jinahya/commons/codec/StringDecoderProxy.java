@@ -27,7 +27,7 @@ import java.lang.reflect.Proxy;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <D>
+ * @param <D> decoder type parameter.
  */
 public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
 
@@ -76,9 +76,9 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
                 constructor.setAccessible(true);
             }
             try {
-                return Proxy.newProxyInstance(DECODER.getClassLoader(),
-                                              new Class<?>[]{DECODER},
-                                              constructor.newInstance(decoder));
+                return Proxy.newProxyInstance(
+                    DECODER.getClassLoader(), new Class<?>[]{DECODER},
+                    constructor.newInstance(decoder));
             } catch (InstantiationException ie) {
                 throw new RuntimeException(ie);
             } catch (IllegalAccessException iae) {
@@ -121,7 +121,6 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
         throws Throwable {
 
         if (source == null) {
-            //throw new NullPointerException("source");
             throw newDecoderException("null source"); // documented
         }
 

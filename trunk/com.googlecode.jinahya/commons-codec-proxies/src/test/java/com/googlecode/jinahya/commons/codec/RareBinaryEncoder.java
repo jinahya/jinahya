@@ -22,6 +22,14 @@ package com.googlecode.jinahya.commons.codec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareBinaryEncoder extends AbstractRareEncoder<byte[]> {
+public class RareBinaryEncoder {
+
+
+    public byte[] encode(final byte[] source) {
+
+        return source;
+    }
+
+
 }
 

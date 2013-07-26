@@ -19,7 +19,6 @@ package com.googlecode.jinahya.commons.codec;
 
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -28,9 +27,9 @@ import java.lang.reflect.Proxy;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <D>
+ * @param <T> decoder(delegate) type parameter.
  */
-public abstract class DecoderProxy<D> implements InvocationHandler {
+public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
 
 
     /**
@@ -61,125 +60,19 @@ public abstract class DecoderProxy<D> implements InvocationHandler {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.DecoderException}.
-     */
-    protected static final Class<? extends Throwable> DECODER_EXCEPTION;
-
-
-    static {
-        try {
-            DECODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.DecoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    protected static Throwable newDecoderException()
-        throws InstantiationException, IllegalAccessException {
-
-        return DECODER_EXCEPTION.newInstance();
-    }
-
-
-    protected static Throwable newDecoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION
-            .getConstructor(String.class)
-            .newInstance(message);
-    }
-
-
-    protected static Throwable newDecoderException(final String message,
-                                                   final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION
-            .getConstructor(String.class, Throwable.class)
-            .newInstance(message, cause);
-    }
-
-
-    protected static Throwable newDecoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION
-            .getConstructor(Throwable.class)
-            .newInstance(cause);
-    }
-
-
-    protected static <P extends DecoderProxy<D>, D> Object newInstance(
-        final ClassLoader loader, final Class<?>[] interfaces,
-        final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
-
-        if (loader == null) {
-            throw new NullPointerException("loader");
-        }
-
-        if (interfaces == null) {
-            throw new NullPointerException("interfaces");
-        }
-
-        if (proxyType == null) {
-            throw new NullPointerException("proxyType");
-        }
-
-        if (decoderType == null) {
-            throw new NullPointerException("decoderType");
-        }
-
-        if (decoder == null) {
-            // ok?
-        }
-
-        try {
-            final Constructor<P> constructor =
-                proxyType.getConstructor(decoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(loader, interfaces,
-                                              constructor.newInstance(decoder));
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
-    }
-
-
-    /**
      * Creates a new proxy instance for
      * {@code org.apache.commons.codec.Decoder}.
      *
      * @param <P> proxy type parameter
-     * @param <D> decoder type parameter
+     * @param <T> decoder type parameter
      * @param proxyType proxy type
      * @param decoderType decoder type
      * @param decoder decoder instance
      *
      * @return
-     *
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
      */
-    protected static <P extends DecoderProxy<D>, D> Object newInstance(
-        final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
+    protected static <P extends DecoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
 
         return newInstance(DECODER.getClassLoader(), new Class<?>[]{DECODER},
                            proxyType, decoderType, decoder);
@@ -191,15 +84,9 @@ public abstract class DecoderProxy<D> implements InvocationHandler {
      *
      * @param decoder the decoder to use.
      */
-    protected DecoderProxy(final D decoder) {
+    protected DecoderProxy(final T decoder) {
 
-        super();
-
-//        if (decoder == null) {
-//            throw new NullPointerException("null decoder");
-//        }
-
-        this.decoder = decoder;
+        super(decoder);
     }
 
 
@@ -216,14 +103,18 @@ public abstract class DecoderProxy<D> implements InvocationHandler {
     }
 
 
-    protected abstract Object decode(final D decoder, final Object source)
-        throws Throwable;
-
-
     /**
-     * decoder instance.
+     * Decodes given {@code source}.
+     *
+     * @param decoder decoder instance.
+     * @param source source to decode.
+     *
+     * @return decoded output.
+     *
+     * @throws Throwable if any error occurs.
      */
-    protected final D decoder;
+    protected abstract Object decode(final T decoder, final Object source)
+        throws Throwable;
 
 
 }

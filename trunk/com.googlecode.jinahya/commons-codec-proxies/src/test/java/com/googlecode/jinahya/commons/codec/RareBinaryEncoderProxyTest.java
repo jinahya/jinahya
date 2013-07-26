@@ -18,49 +18,38 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Method;
 import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareBinaryEncoderProxyTest
-    extends AbstractEncoderProxyTest<RareBinaryEncoderProxy, RareBinaryEncoder, BinaryEncoder> {
+public class RareBinaryEncoderProxyTest {
 
 
-    public RareBinaryEncoderProxyTest() {
-        super(RareBinaryEncoderProxy.class, RareBinaryEncoder.class,
-              BinaryEncoder.class);
+    @Test
+    public void testAsEncoder() throws EncoderException {
+
+        final Encoder encoder =
+            (Encoder) RareBinaryEncoderProxy.newInstance();
+
+        encoder.encode((Object) new byte[0]);
     }
 
 
-    @Override
-    protected RareBinaryEncoder newRareEncoder() {
+    @Test
+    public void testAsBinaryEncoder() throws EncoderException {
 
-        return new RareBinaryEncoder();
-    }
+        final BinaryEncoder encoder =
+            (BinaryEncoder) RareBinaryEncoderProxy.newInstance();
 
+        encoder.encode((Object) new byte[0]);
+        encoder.encode(new byte[0]);
 
-    @Override
-    protected Object newProxy(final RareBinaryEncoder rareEncoder) throws Exception {
-        final Method newInstance = BinaryEncoderProxy.class.getDeclaredMethod(
-            "newInstance", Class.class, Class.class, Object.class);
-        if (!newInstance.isAccessible()) {
-            newInstance.setAccessible(true);
-        }
-        return newInstance.invoke(null, proxyType, rareEncoderType,
-                                  rareEncoder);
-    }
-
-
-    @Override
-    protected void invokeEncode(final BinaryEncoder commonsEncoder)
-        throws EncoderException {
-
-        commonsEncoder.encode(new byte[0]);
     }
 
 
