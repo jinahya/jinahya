@@ -20,34 +20,22 @@ package com.googlecode.jinahya.commons.codec;
 
 import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareEncoderProxyTest
-    extends AbstractEncoderProxyTest<RareEncoderProxy, RareEncoder, Encoder> {
+public class RareEncoderProxyTest {
 
 
-    public RareEncoderProxyTest() {
-        super(RareEncoderProxy.class, RareEncoder.class, Encoder.class);
-    }
+    @Test
+    public void testAsEncoder() throws EncoderException {
 
-
-
-
-    @Override
-    protected RareEncoder newRareEncoder() {
-
-        return new RareEncoder();
-    }
-
-    @Override
-    protected void invokeEncode(final Encoder commonsEncoder)
-        throws EncoderException {
-
-        commonsEncoder.encode(new Object());
+        final Encoder encoder = (Encoder) RareEncoderProxy.newInstance();
+        
+        encoder.encode(null);
     }
 
 

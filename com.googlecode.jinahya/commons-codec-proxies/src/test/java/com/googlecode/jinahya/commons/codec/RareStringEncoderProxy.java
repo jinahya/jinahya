@@ -26,9 +26,31 @@ public class RareStringEncoderProxy
     extends StringEncoderProxy<RareStringEncoder> {
 
 
-    protected RareStringEncoderProxy(final RareStringEncoder rareEncoder) {
+    public static Object newInstance(final RareStringEncoder encoder) {
 
-        super(rareEncoder);
+        return newInstance(RareStringEncoderProxy.class,
+                           RareStringEncoder.class, encoder);
+    }
+
+
+    public static Object newInstance() {
+
+        return newInstance(new RareStringEncoder());
+    }
+
+
+    protected RareStringEncoderProxy(final RareStringEncoder encoder) {
+
+        super(encoder);
+    }
+
+
+    @Override
+    protected Object encode(final RareStringEncoder encoder,
+                            final Object source)
+        throws Throwable {
+
+        return super.encode(encoder, source);
     }
 
 

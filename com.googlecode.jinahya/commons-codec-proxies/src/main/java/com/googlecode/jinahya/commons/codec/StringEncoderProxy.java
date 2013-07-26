@@ -18,10 +18,7 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
@@ -35,12 +32,13 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
     /**
      * Class for {@code org.apache.commons.codec.StringEncoder}.
      */
-    private static final Class<?> ENCODER;
+    private static final Class<?> STRING_ENCODER;
 
 
     static {
         try {
-            ENCODER = Class.forName("org.apache.commons.codec.StringEncoder");
+            STRING_ENCODER = Class.forName(
+                "org.apache.commons.codec.StringEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
@@ -48,47 +46,33 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
 
 
     /**
-     * {@code encode(Ljava/lang/String;)Ljava/lang/String;}.
+     * method for {@code encode(Ljava/lang/String;)Ljava/lang/String;}.
      */
     private static final Method ENCODE;
 
 
     static {
         try {
-            ENCODE = ENCODER.getMethod("encode", String.class);
+            ENCODE = STRING_ENCODER.getMethod("encode", String.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
 
 
-    protected static <P extends EncoderProxy<E>, E> Object newInstance(
+    protected static <P extends AbstractEncoderProxy<E>, E> Object newInstance(
         final Class<P> proxyType, final Class<E> encoderType, final E encoder) {
 
-//        if (decoder == null) {
-//            throw new IllegalArgumentException("null decoder");
-//        }
-
-        try {
-            final Constructor<P> constructor =
-                proxyType.getDeclaredConstructor(encoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(ENCODER.getClassLoader(),
-                                              new Class<?>[]{ENCODER},
-                                              constructor.newInstance(encoder));
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
+        if (proxyType != null
+            && !StringEncoderProxy.class.isAssignableFrom(proxyType)) {
+            throw new IllegalArgumentException(
+                "proxyType(" + proxyType + ") is not assignable to "
+                + StringEncoderProxy.class);
         }
+
+        return newInstance(STRING_ENCODER.getClassLoader(),
+                           new Class<?>[]{STRING_ENCODER},
+                           proxyType, encoderType, encoder);
     }
 
 
@@ -121,7 +105,6 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
         throws Throwable {
 
         if (source == null) {
-            //throw new NullPointerException("source");
             throw newEncoderException("null source"); // documented
         }
 

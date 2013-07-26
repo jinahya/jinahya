@@ -18,23 +18,21 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
+ * An abstract class for {@code org.apache.commons.codec.Encoder} proxies.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> encoder(delegate) type parameter
+ * @param <T> encoder (delegate) type parameter.
  */
-public abstract class EncoderProxy<E> implements InvocationHandler {
+public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.Encoder}.
+     * The class for {@code org.apache.commons.codec.Encoder}.
      */
     private static final Class<?> ENCODER;
 
@@ -49,117 +47,16 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
 
 
     /**
-     * Method for {@code encode(Ljava/lang/Object;)Ljava/lang/Object;}
+     * The method for {@code encode(Ljava/lang/Object;)Ljava/lang/Object;}.
      */
-    private static final Method ENCODE;
+    private static final Method ENCODE_OBJECT;
 
 
     static {
         try {
-            ENCODE = ENCODER.getMethod("encode", Object.class);
+            ENCODE_OBJECT = ENCODER.getMethod("encode", Object.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.EncoderException}.
-     */
-    protected static final Class<? extends Throwable> ENCODER_EXCEPTION;
-
-
-    static {
-        try {
-            ENCODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.EncoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    protected static Throwable newEncoderException()
-        throws InstantiationException, IllegalAccessException {
-
-        return ENCODER_EXCEPTION.newInstance();
-    }
-
-
-    protected static Throwable newEncoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION
-            .getConstructor(String.class)
-            .newInstance(message);
-    }
-
-
-    protected static Throwable newEncoderException(final String message,
-                                                   final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION
-            .getConstructor(String.class, Throwable.class)
-            .newInstance(message, cause);
-    }
-
-
-    protected static Throwable newEncoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION
-            .getConstructor(Throwable.class)
-            .newInstance(cause);
-    }
-
-
-    static <P extends EncoderProxy<E>, E> Object newInstance(
-        final ClassLoader loader, final Class<?>[] interfaces,
-        final Class<P> proxyType, final Class<E> encoderType, final E encoder) {
-
-        if (loader == null) {
-            throw new NullPointerException("loader");
-        }
-
-        if (interfaces == null) {
-            throw new NullPointerException("interfaces");
-        }
-
-        if (proxyType == null) {
-            throw new NullPointerException("proxyType");
-        }
-
-        if (encoderType == null) {
-            throw new NullPointerException("encoderType");
-        }
-
-        if (encoder == null) {
-            // ok
-        }
-
-        try {
-            final Constructor<P> constructor =
-                proxyType.getDeclaredConstructor(encoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(loader, interfaces,
-                                              constructor.newInstance(encoder));
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
         }
     }
 
@@ -169,7 +66,7 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
      * {@code org.apache.commons.codec.Encoder}.
      *
      * @param <P> proxy type parameter
-     * @param <E> encoder type parameter
+     * @param <T> encoder (delegate) type parameter
      * @param proxyType proxy type
      * @param encoderType encoder type
      * @param encoder encoder instance
@@ -181,8 +78,15 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    protected static <P extends EncoderProxy<E>, E> Object newInstance(
-        final Class<P> proxyType, final Class<E> encoderType, final E encoder) {
+    protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> encoderType, final T encoder) {
+
+        if (proxyType != null
+            && !EncoderProxy.class.isAssignableFrom(proxyType)) {
+            throw new IllegalArgumentException(
+                "proxyType(" + proxyType + ") is not assignable to "
+                + EncoderProxy.class);
+        }
 
         return newInstance(ENCODER.getClassLoader(), new Class<?>[]{ENCODER},
                            proxyType, encoderType, encoder);
@@ -194,15 +98,9 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
      *
      * @param encoder the delegate
      */
-    protected EncoderProxy(final E encoder) {
+    protected EncoderProxy(final T encoder) {
 
-        super();
-
-//        if (encoder == null) {
-//            throw new NullPointerException("null encoder");
-//        }
-
-        this.encoder = encoder;
+        super(encoder);
     }
 
 
@@ -211,7 +109,7 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
                          final Object[] args)
         throws Throwable {
 
-        if (ENCODE.equals(method)) {
+        if (ENCODE_OBJECT.equals(method)) {
             return encode(encoder, args[0]);
         }
 
@@ -219,14 +117,18 @@ public abstract class EncoderProxy<E> implements InvocationHandler {
     }
 
 
-    protected abstract Object encode(final E encoder, final Object source)
-        throws Throwable;
-
-
     /**
-     * encoder instance.
+     * Encodes given {@code source}.
+     *
+     * @param encoder encoder instance.
+     * @param source source to encode.
+     *
+     * @return encoding result.
+     *
+     * @throws Throwable if failed to encode.
      */
-    protected final E encoder;
+    protected abstract Object encode(final T encoder, final Object source)
+        throws Throwable;
 
 
 }

@@ -18,9 +18,9 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Method;
-import org.apache.commons.codec.StringEncoder;
+import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoder;
 import org.testng.annotations.Test;
 
 
@@ -28,38 +28,28 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareStringEncoderProxyTest
-    extends AbstractEncoderProxyTest<RareStringEncoderProxy, RareStringEncoder, StringEncoder> {
+public class RareStringEncoderProxyTest {
 
 
-    public RareStringEncoderProxyTest() {
-        super(RareStringEncoderProxy.class, RareStringEncoder.class,
-              StringEncoder.class);
+    @Test
+    public void testAsEncoder() throws EncoderException {
+
+        final Encoder encoder =
+            (Encoder) RareStringEncoderProxy.newInstance();
+
+        encoder.encode((Object) "");
     }
 
 
-    @Override
-    protected RareStringEncoder newRareEncoder() {
+    @Test
+    public void testAsStringEncoder() throws EncoderException {
 
-        return new RareStringEncoder();
-    }
-    @Override
-    protected Object newProxy(final RareStringEncoder rareEncoder) throws Exception {
-        final Method newInstance = StringEncoderProxy.class.getDeclaredMethod(
-            "newInstance", Class.class, Class.class, Object.class);
-        if (!newInstance.isAccessible()) {
-            newInstance.setAccessible(true);
-        }
-        return newInstance.invoke(null, proxyType, rareEncoderType,
-                                  rareEncoder);
-    }
+        final StringEncoder encoder =
+            (StringEncoder) RareStringEncoderProxy.newInstance();
 
+        encoder.encode((Object) "");
+        encoder.encode("");
 
-    @Override
-    protected void invokeEncode(final StringEncoder commonsEncoder)
-        throws EncoderException {
-
-        commonsEncoder.encode(new String());
     }
 
 

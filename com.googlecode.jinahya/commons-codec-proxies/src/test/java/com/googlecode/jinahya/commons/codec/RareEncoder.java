@@ -22,6 +22,14 @@ package com.googlecode.jinahya.commons.codec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareEncoder extends AbstractRareEncoder<Object> {
+public class RareEncoder {
+
+
+    public Object encode(final Object source) {
+
+        return source;
+    }
+
+
 }
 

@@ -18,29 +18,27 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
+ * An abstract class for {@code org.apache.commons.codec.BinaryEncoder} proxies.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <E> encoder type parameter
+ * @param <T> encoder(delegate) type parameter
  */
-public abstract class BinaryEncoderProxy<E> extends EncoderProxy<E> {
+public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
 
 
     /**
      * Class for {@code org.apache.commons.codec.BinaryEncoder}.
      */
-    private static final Class<?> ENCODER;
+    private static final Class<?> BINARY_ENCODER;
 
 
     static {
         try {
-            ENCODER = Class.forName(
+            BINARY_ENCODER = Class.forName(
                 "org.apache.commons.codec.BinaryEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
@@ -48,45 +46,34 @@ public abstract class BinaryEncoderProxy<E> extends EncoderProxy<E> {
     }
 
 
+    /**
+     * Method for {@code encode([B)[B}.
+     */
     private static final Method ENCODE;
 
 
     static {
         try {
-            ENCODE = ENCODER.getMethod("encode", byte[].class);
+            ENCODE = BINARY_ENCODER.getMethod("encode", byte[].class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
 
 
-    protected static <P extends EncoderProxy<E>, E> Object newInstance(
-        final Class<P> proxyType, final Class<E> encoderType, final E encoder) {
+    protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> encoderType, final T encoder) {
 
-//        if (decoder == null) {
-//            throw new IllegalArgumentException("null decoder");
+//        if (proxyType != null
+//            && BinaryEncoderProxy.class.isAssignableFrom(proxyType)) {
+//            throw new IllegalArgumentException(
+//                "proxyType(" + proxyType + ") is not assignable to "
+//                + BinaryEncoderProxy.class);
 //        }
 
-        try {
-            final Constructor<P> constructor =
-                proxyType.getDeclaredConstructor(encoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(ENCODER.getClassLoader(),
-                                              new Class<?>[]{ENCODER},
-                                              constructor.newInstance(encoder));
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
+        return newInstance(BINARY_ENCODER.getClassLoader(),
+                           new Class<?>[]{BINARY_ENCODER},
+                           proxyType, encoderType, encoder);
     }
 
 
@@ -95,7 +82,7 @@ public abstract class BinaryEncoderProxy<E> extends EncoderProxy<E> {
      *
      * @param encoder delegate
      */
-    protected BinaryEncoderProxy(final E encoder) {
+    protected BinaryEncoderProxy(final T encoder) {
 
         super(encoder);
     }
@@ -115,11 +102,10 @@ public abstract class BinaryEncoderProxy<E> extends EncoderProxy<E> {
 
 
     @Override
-    protected Object encode(final E encoder, final Object source)
+    protected Object encode(final T encoder, final Object source)
         throws Throwable {
 
         if (source == null) {
-            //throw new NullPointerException("source");
             throw newEncoderException("null source"); // documented
         }
 
@@ -131,7 +117,16 @@ public abstract class BinaryEncoderProxy<E> extends EncoderProxy<E> {
     }
 
 
-    protected abstract byte[] encode(final E decoder, final byte[] source)
+    /**
+     *
+     * @param encoder the delegate.
+     * @param source source to encode.
+     *
+     * @return encoded output.
+     *
+     * @throws Throwable
+     */
+    protected abstract byte[] encode(final T encoder, final byte[] source)
         throws Throwable;
 
 
