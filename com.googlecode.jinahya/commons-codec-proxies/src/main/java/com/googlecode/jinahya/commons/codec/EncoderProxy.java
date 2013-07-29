@@ -71,12 +71,7 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
      * @param encoderType encoder type
      * @param encoder encoder instance
      *
-     * @return
-     *
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @return a new proxy instance.
      */
     protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> encoderType, final T encoder) {

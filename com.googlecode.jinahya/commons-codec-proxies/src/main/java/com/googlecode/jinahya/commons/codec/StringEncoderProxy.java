@@ -69,8 +69,7 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
                 + StringEncoderProxy.class);
         }
 
-        return newInstance(ENCODER.getClassLoader(),
-                           new Class<?>[]{ENCODER},
+        return newInstance(ENCODER.getClassLoader(), new Class<?>[]{ENCODER},
                            proxyType, encoderType, encoder);
     }
 

@@ -60,16 +60,23 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
      * Creates a new proxy instance for
      * {@code org.apache.commons.codec.Decoder}.
      *
-     * @param <P> proxy type parameter
-     * @param <T> decoder type parameter
-     * @param proxyType proxy type
-     * @param decoderType decoder type
-     * @param decoder decoder instance
+     * @param <P> proxy type parameter.
+     * @param <T> decoder type parameter.
+     * @param proxyType proxy type.
+     * @param decoderType decoder type.
+     * @param decoder decoder instance.
      *
-     * @return
+     * @return a new proxy instance.
      */
-    protected static <P extends DecoderProxy<T>, T> Object newInstance(
+    protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
+
+        if (proxyType != null
+            && !DecoderProxy.class.isAssignableFrom(proxyType)) {
+            throw new IllegalArgumentException(
+                "proxyType(" + proxyType + ") is not assignable to "
+                + DecoderProxy.class);
+        }
 
         return newInstance(DECODER.getClassLoader(), new Class<?>[]{DECODER},
                            proxyType, decoderType, decoder);
