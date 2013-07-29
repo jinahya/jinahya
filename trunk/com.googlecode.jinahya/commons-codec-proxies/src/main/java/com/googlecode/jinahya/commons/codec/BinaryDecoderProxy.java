@@ -73,42 +73,18 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
      *
      * @return a new (proxy) instance.
      */
-    protected static <P extends DecoderProxy<D>, D> Object newInstance(
+    protected static <P extends AbstractDecoderProxy<D>, D> Object newInstance(
         final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
 
-        if (proxyType == null) {
-            throw new NullPointerException("proxyType");
+        if (proxyType != null
+            && !BinaryDecoderProxy.class.isAssignableFrom(proxyType)) {
+            throw new IllegalArgumentException(
+                "proxyType(" + proxyType + ") is not assignable to "
+                + BinaryDecoderProxy.class);
         }
 
-        if (decoderType == null) {
-            throw new NullPointerException("decoderType");
-        }
-
-        if (decoder == null) {
-            // ok
-            //throw new IllegalArgumentException("decoder");
-        }
-
-        try {
-            final Constructor<P> constructor =
-                proxyType.getConstructor(decoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(DECODER.getClassLoader(),
-                                              new Class<?>[]{DECODER},
-                                              constructor.newInstance(decoder));
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
+        return newInstance(DECODER.getClassLoader(), new Class<?>[]{DECODER},
+                           proxyType, decoderType, decoder);
     }
 
 

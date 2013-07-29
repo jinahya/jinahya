@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import static com.googlecode.jinahya.commons.codec.AbstractDecoderProxy.newInstance;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -62,33 +63,18 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
     }
 
 
-    protected static <P extends DecoderProxy<D>, D> Object newInstance(
+    protected static <P extends AbstractDecoderProxy<D>, D> Object newInstance(
         final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
 
-//        if (decoder == null) {
-//            throw new IllegalArgumentException("decoder");
-//        }
-
-        try {
-            final Constructor<P> constructor =
-                proxyType.getConstructor(decoderType);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return Proxy.newProxyInstance(
-                    DECODER.getClassLoader(), new Class<?>[]{DECODER},
-                    constructor.newInstance(decoder));
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
+        if (proxyType != null
+            && !StringDecoderProxy.class.isAssignableFrom(proxyType)) {
+            throw new IllegalArgumentException(
+                "proxyType(" + proxyType + ") is not assignable to "
+                + StringDecoderProxy.class);
         }
+
+        return newInstance(DECODER.getClassLoader(), new Class<?>[]{DECODER},
+                           proxyType, decoderType, decoder);
     }
 
 
