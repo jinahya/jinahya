@@ -109,7 +109,7 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
         throws Throwable {
 
         if (DECODE.equals(method)) {
-            return decode(decoder, (String) args[0]);
+            return decode((String) args[0]);
         }
 
         return super.invoke(proxy, method, args);
@@ -117,23 +117,21 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
 
 
     @Override
-    protected Object decode(final D decoder, final Object source)
-        throws Throwable {
+    protected Object decode(final Object source) throws Throwable {
 
         if (source == null) {
             throw newDecoderException("null source"); // documented
         }
 
         try {
-            return decode(decoder, (String) source);
+            return decode((String) source);
         } catch (ClassCastException cce) {
             throw newDecoderException(cce);
         }
     }
 
 
-    protected abstract String decode(final D decoder, final String source)
-        throws Throwable;
+    protected abstract String decode(final String source) throws Throwable;
 
 
 }

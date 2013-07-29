@@ -129,7 +129,7 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
         throws Throwable {
 
         if (DECODE.equals(method)) {
-            return decode(decoder, (byte[]) args[0]);
+            return decode((byte[]) args[0]);
         }
 
         return super.invoke(proxy, method, args);
@@ -137,8 +137,7 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
 
 
     @Override
-    protected Object decode(final D decoder, final Object source)
-        throws Throwable {
+    protected Object decode(final Object source) throws Throwable {
 
         if (source == null) {
             //throw new NullPointerException("source");
@@ -146,15 +145,14 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
         }
 
         try {
-            return decode(decoder, (byte[]) source);
+            return decode((byte[]) source);
         } catch (ClassCastException cce) {
             throw newDecoderException(cce);
         }
     }
 
 
-    protected abstract byte[] decode(final D decoder, final byte[] source)
-        throws Throwable;
+    protected abstract byte[] decode(final byte[] source) throws Throwable;
 
 
 }

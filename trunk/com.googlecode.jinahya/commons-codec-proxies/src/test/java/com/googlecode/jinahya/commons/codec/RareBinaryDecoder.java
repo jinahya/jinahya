@@ -22,30 +22,12 @@ package com.googlecode.jinahya.commons.codec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareEncodeException extends Exception {
+public class RareBinaryDecoder {
 
 
-    public RareEncodeException() {
+    public byte[] decode(final byte[] source) {
 
-        super();
-    }
-
-
-    public RareEncodeException(final String message) {
-
-        super(message);
-    }
-
-
-    public RareEncodeException(final String message, final Throwable cause) {
-
-        super(message, cause);
-    }
-
-
-    public RareEncodeException(final Throwable cause) {
-
-        super(cause);
+        return source;
     }
 
 

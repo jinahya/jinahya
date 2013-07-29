@@ -22,41 +22,37 @@ package com.googlecode.jinahya.commons.codec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class DefaultNoneCommonsCodec<T> extends AbstractNoneCommonsCodec<T, T> {
+public class RareDecoderProxy extends DecoderProxy<RareDecoder> {
+
+
+    protected static Object newInstance(final RareDecoder decoder) {
+
+        try {
+            return newInstance(RareDecoderProxy.class, RareDecoder.class,
+                               decoder);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    protected static Object newInstance() {
+
+        return newInstance(new RareDecoder());
+    }
+
+
+    protected RareDecoderProxy(final RareDecoder decoder) {
+
+        super(decoder);
+    }
 
 
     @Override
-    public T encode(final T decoded) throws RareEncodeException {
+    protected Object decode(final Object source) throws Throwable {
 
-        if (throwException) {
-            throw new RareEncodeException();
-        }
-
-        return decoded;
+        return decoder.decode(source);
     }
-
-
-    @Override
-    public T decode(T encoded) throws RareDecodeException {
-
-        if (throwException) {
-            throw new RareDecodeException();
-        }
-
-        return encoded;
-    }
-
-
-    protected DefaultNoneCommonsCodec<T> setThrowException(
-        final boolean throwException) {
-
-        this.throwException = throwException;
-
-        return this;
-    }
-
-
-    private boolean throwException = false;
 
 
 }

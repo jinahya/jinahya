@@ -45,19 +45,15 @@ public class RareStringEncoderProxy
     }
 
 
-    @Override
-    protected Object encode(final RareStringEncoder encoder,
-                            final Object source)
-        throws Throwable {
-
-        return super.encode(encoder, source);
-    }
+//    @Override
+//    protected Object encode(final Object source) throws Throwable {
+//
+//        return super.encode(source);
+//    }
 
 
     @Override
-    protected String encode(final RareStringEncoder encoder,
-                            final String source)
-        throws Throwable {
+    protected String encode(final String source) throws Throwable {
 
         return encoder.encode(source);
     }

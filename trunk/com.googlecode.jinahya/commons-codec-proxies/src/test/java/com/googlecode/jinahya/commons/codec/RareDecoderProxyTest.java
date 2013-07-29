@@ -18,10 +18,26 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import org.apache.commons.codec.Decoder;
+import org.apache.commons.codec.DecoderException;
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class NotCommonsCodec extends DefaultNoneCommonsCodec<Object> {
+public class RareDecoderProxyTest {
+
+
+    @Test
+    public void testAsDecoder() throws DecoderException {
+
+        final Decoder encoder = (Decoder) RareDecoderProxy.newInstance();
+        
+        encoder.decode(null);
+    }
+
+
 }
 

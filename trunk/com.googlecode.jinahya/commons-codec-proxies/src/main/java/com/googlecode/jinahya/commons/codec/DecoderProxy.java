@@ -18,10 +18,7 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
@@ -96,7 +93,7 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
         throws Throwable {
 
         if (DECODE.equals(method)) {
-            return decode(decoder, args[0]);
+            return decode(args[0]);
         }
 
         throw new UnsupportedOperationException("unsupported: " + method);
@@ -106,15 +103,13 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
     /**
      * Decodes given {@code source}.
      *
-     * @param decoder decoder instance.
      * @param source source to decode.
      *
      * @return decoded output.
      *
      * @throws Throwable if any error occurs.
      */
-    protected abstract Object decode(final T decoder, final Object source)
-        throws Throwable;
+    protected abstract Object decode(final Object source) throws Throwable;
 
 
 }

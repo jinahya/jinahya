@@ -22,6 +22,14 @@ package com.googlecode.jinahya.commons.codec;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class NotCommonsStringCodec extends DefaultNoneCommonsCodec<String> {
+public class RareDecoder {
+
+
+    public Object decode(final Object source) {
+
+        return source;
+    }
+
+
 }
 
