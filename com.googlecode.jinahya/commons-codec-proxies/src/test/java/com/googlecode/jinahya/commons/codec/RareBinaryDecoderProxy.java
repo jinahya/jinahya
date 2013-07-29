@@ -26,43 +26,43 @@ import java.util.logging.Logger;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareBinaryEncoderProxy
-    extends BinaryEncoderProxy<RareBinaryEncoder> {
+public class RareBinaryDecoderProxy
+    extends BinaryDecoderProxy<RareBinaryDecoder> {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(RareBinaryEncoderProxy.class.getName());
+        Logger.getLogger(RareBinaryDecoderProxy.class.getName());
 
 
-    public static Object newInstance(final RareBinaryEncoder encoder) {
+    public static Object newInstance(final RareBinaryDecoder decoder) {
 
         return newInstance(
-            RareBinaryEncoderProxy.class, RareBinaryEncoder.class, encoder);
+            RareBinaryDecoderProxy.class, RareBinaryDecoder.class, decoder);
     }
 
 
     public static Object newInstance() {
 
-        return newInstance(new RareBinaryEncoder());
+        return newInstance(new RareBinaryDecoder());
     }
 
 
-    protected RareBinaryEncoderProxy(final RareBinaryEncoder encoder) {
+    protected RareBinaryDecoderProxy(final RareBinaryDecoder decoder) {
 
-        super(encoder);
+        super(decoder);
     }
 
 
     @Override
-    protected byte[] encode(final byte[] source) throws Throwable {
+    protected byte[] decode(final byte[] source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Binary>encode({0}, {1})",
-                   new Object[]{encoder, source});
+        LOGGER.log(Level.INFO, "<Binary>decode({0}, {1})",
+                   new Object[]{decoder, source});
 
-        return encoder.encode(source);
+        return decoder.decode(source);
     }
 
 

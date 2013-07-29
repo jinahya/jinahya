@@ -52,8 +52,7 @@ public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
 
 
     @Override
-    protected Object encode(final RareEncoder encoder, final Object source)
-        throws Throwable {
+    protected Object encode(final Object source) throws Throwable {
 
         return encoder.encode(source);
     }

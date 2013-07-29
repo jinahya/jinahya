@@ -32,13 +32,12 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
     /**
      * Class for {@code org.apache.commons.codec.StringEncoder}.
      */
-    private static final Class<?> STRING_ENCODER;
+    private static final Class<?> ENCODER;
 
 
     static {
         try {
-            STRING_ENCODER = Class.forName(
-                "org.apache.commons.codec.StringEncoder");
+            ENCODER = Class.forName("org.apache.commons.codec.StringEncoder");
         } catch (ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
@@ -53,7 +52,7 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
 
     static {
         try {
-            ENCODE = STRING_ENCODER.getMethod("encode", String.class);
+            ENCODE = ENCODER.getMethod("encode", String.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
@@ -70,8 +69,8 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
                 + StringEncoderProxy.class);
         }
 
-        return newInstance(STRING_ENCODER.getClassLoader(),
-                           new Class<?>[]{STRING_ENCODER},
+        return newInstance(ENCODER.getClassLoader(),
+                           new Class<?>[]{ENCODER},
                            proxyType, encoderType, encoder);
     }
 
@@ -93,7 +92,7 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
         throws Throwable {
 
         if (ENCODE.equals(method)) {
-            return encode(encoder, (String) args[0]);
+            return encode((String) args[0]);
         }
 
         return super.invoke(proxy, method, args);
@@ -101,23 +100,21 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
 
 
     @Override
-    protected Object encode(final E encoder, final Object source)
-        throws Throwable {
+    protected Object encode(final Object source) throws Throwable {
 
         if (source == null) {
             throw newEncoderException("null source"); // documented
         }
 
         try {
-            return encode(encoder, (String) source);
+            return encode((String) source);
         } catch (ClassCastException cce) {
             throw newEncoderException(cce);
         }
     }
 
 
-    protected abstract String encode(final E decoder, final String source)
-        throws Throwable;
+    protected abstract String encode(final String source) throws Throwable;
 
 
 }

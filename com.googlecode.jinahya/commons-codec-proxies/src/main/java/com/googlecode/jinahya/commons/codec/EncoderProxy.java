@@ -49,12 +49,12 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
     /**
      * The method for {@code encode(Ljava/lang/Object;)Ljava/lang/Object;}.
      */
-    private static final Method ENCODE_OBJECT;
+    private static final Method ENCODE;
 
 
     static {
         try {
-            ENCODE_OBJECT = ENCODER.getMethod("encode", Object.class);
+            ENCODE = ENCODER.getMethod("encode", Object.class);
         } catch (NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
@@ -109,8 +109,8 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
                          final Object[] args)
         throws Throwable {
 
-        if (ENCODE_OBJECT.equals(method)) {
-            return encode(encoder, args[0]);
+        if (ENCODE.equals(method)) {
+            return encode(args[0]);
         }
 
         throw new UnsupportedOperationException("unsupported: " + method);
@@ -120,15 +120,13 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
     /**
      * Encodes given {@code source}.
      *
-     * @param encoder encoder instance.
      * @param source source to encode.
      *
      * @return encoding result.
      *
      * @throws Throwable if failed to encode.
      */
-    protected abstract Object encode(final T encoder, final Object source)
-        throws Throwable;
+    protected abstract Object encode(final Object source) throws Throwable;
 
 
 }
