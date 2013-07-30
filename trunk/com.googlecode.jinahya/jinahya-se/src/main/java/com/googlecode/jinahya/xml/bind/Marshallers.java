@@ -21,12 +21,13 @@ package com.googlecode.jinahya.xml.bind;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.TypeVariable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.MarshalException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 
 /**
@@ -36,90 +37,230 @@ import javax.xml.bind.Unmarshaller;
 public class Marshallers {
 
 
-    public static void marshal(final Marshaller marshaller,
-                               final Object element, final Object target)
-        throws MarshalException {
+    private static final Map<Class<?>, Method> MARSHAL_METHODS;
+
+
+    static {
+        final Map<Class<?>, Method> methods = new HashMap<Class<?>, Method>();
+        for (Method method : Marshaller.class.getMethods()) {
+            final int modifiers = method.getModifiers();
+            if (Modifier.isStatic(modifiers)) {
+                continue;
+            }
+            final Class<?> returnType = method.getReturnType();
+            if (!Void.TYPE.equals(returnType)) {
+                continue;
+            }
+            if (!"marshal".equals(method.getName())) {
+                continue;
+            }
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length != 2) {
+                continue;
+            }
+            if (!Object.class.equals(parameterTypes[0])) {
+                continue;
+            }
+            methods.put(parameterTypes[1], method);
+        }
+        MARSHAL_METHODS = Collections.unmodifiableMap(methods);
+    }
+
+
+    public static <T> void marshal(final Marshaller marshaller,
+                                   final Object value,
+                                   final Class<? super T> outputType,
+                                   final T output)
+        throws JAXBException {
 
         if (marshaller == null) {
             throw new NullPointerException("marshaller");
         }
 
-        if (element == null) {
-            throw new NullPointerException("element");
+        if (value == null) {
+            throw new NullPointerException("value");
         }
 
-        if (target == null) {
-            throw new NullPointerException("target");
+        if (outputType == null) {
+            throw new NullPointerException("outputType");
         }
 
-        Method marshal = null;
-
-        for (Method method : Unmarshaller.class.getMethods()) {
-
-            final int modifiers = method.getModifiers();
-            if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
-                continue;
-            }
-
-            final Class<?> returnType = method.getReturnType();
-            if (!Object.class.equals(method.getReturnType())) {
-                continue;
-            }
-            final TypeVariable[] typeParameters =
-                returnType.getTypeParameters();
-
-            if ("marshal".equals(method.getName())) {
-                continue;
-            }
-
-            final Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length != 2) {
-                continue;
-            }
-
-            if (parameterTypes[0].isAssignableFrom(target.getClass())) {
-                marshal = method;
-                break;
-            }
+        if (output == null) {
+            throw new NullPointerException("output");
         }
 
-        if (marshal == null) {
+        final Method method = MARSHAL_METHODS.get(outputType);
+        if (method == null) {
             throw new IllegalArgumentException(
-                "no method for " + target.getClass());
+                "can't marshal to " + outputType);
         }
 
         try {
-            final Object result = marshal.invoke(marshaller, target);
+            method.invoke(marshaller, value, output);
         } catch (IllegalAccessException iae) {
-            throw new MarshalException(iae);
+            throw new RuntimeException(iae);
         } catch (InvocationTargetException ite) {
             final Throwable cause = ite.getCause();
-            if (cause instanceof MarshalException) {
-                throw ((MarshalException) cause);
+            if (JAXBException.class.isInstance(cause)) {
+                throw (JAXBException) cause;
             }
-            throw new MarshalException(cause);
+            throw new RuntimeException(cause);
         }
     }
 
 
-    public static void marshal(final JAXBContext context, final Object element,
-                               final Object target)
+    /**
+     * Marshals given {@code value} to {@code output}.
+     *
+     * @param <T> output type parameter
+     * @param context context
+     * @param value value to marshal
+     * @param outputType output type
+     * @param output output
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static <T> void marshal(final JAXBContext context,
+                                   final Object value,
+                                   final Class<? super T> outputType,
+                                   final T output)
         throws JAXBException {
 
         if (context == null) {
             throw new NullPointerException("context");
         }
 
-        marshal(context.createMarshaller(), element, target);
+        marshal(context.createMarshaller(), value, outputType, output);
     }
 
 
+    /**
+     * Marshals {@code value} to {@code output}.
+     *
+     * @param <T> output type parameter
+     * @param value value to marshal
+     * @param outputType output type
+     * @param output output
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static <T> void marshal(final Object value,
+                                   final Class<? super T> outputType,
+                                   final T output)
+        throws JAXBException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        final JAXBContext context = JAXBContext.newInstance(value.getClass());
+
+        marshal(context, value, outputType, output);
+    }
+
+
+    /**
+     * Marshals {@code value} to {@code output}.
+     *
+     * @param marshaller marshaller
+     * @param value value
+     * @param output output
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static void marshal(final Marshaller marshaller,
+                               final Object value, final Object output)
+        throws JAXBException {
+
+        if (marshaller == null) {
+            throw new NullPointerException("marshaller");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("output");
+        }
+
+        Method method = null;
+        for (Entry<Class<?>, Method> entry : MARSHAL_METHODS.entrySet()) {
+            if (entry.getKey().isAssignableFrom(output.getClass())) {
+                method = entry.getValue();
+                break;
+            }
+        }
+
+        if (method == null) {
+            throw new IllegalArgumentException(
+                "can't marshal to " + output.getClass());
+        }
+
+        try {
+            method.invoke(marshaller, value, output);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        } catch (InvocationTargetException ite) {
+            final Throwable cause = ite.getCause();
+            if (JAXBException.class.isInstance(cause)) {
+                throw (JAXBException) cause;
+            }
+            throw new RuntimeException(cause);
+        }
+    }
+
+
+    /**
+     * Marshals {@code value} to {@code output}.
+     *
+     * @param context context
+     * @param value value to marshal
+     * @param output output
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static void marshal(final JAXBContext context, final Object value,
+                               final Object output)
+        throws JAXBException {
+
+        if (context == null) {
+            throw new NullPointerException("context");
+        }
+
+        marshal(context.createMarshaller(), value, output);
+    }
+
+
+    /**
+     * Marshals {@code value} to {@code output}.
+     *
+     * @param value value to marshal
+     * @param output output
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
+    public static void marshal(final Object value, final Object output)
+        throws JAXBException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        final JAXBContext context = JAXBContext.newInstance(value.getClass());
+
+        marshal(context, value, output);
+    }
+
+
+    /**
+     * Creates a new instance.
+     */
     protected Marshallers() {
 
         super();
     }
 
 
-    boolean useMethodHandle = true;
 }
 
