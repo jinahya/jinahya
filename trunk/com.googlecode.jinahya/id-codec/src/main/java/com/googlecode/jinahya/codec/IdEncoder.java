@@ -61,6 +61,7 @@ public class IdEncoder {
      * @return encoded output.
      */
     public static String encodeLong(final long decoded) {
+        
         return block(decoded >>> 0x20) + "-" + block(decoded & 0xFFFFFFFFL);
     }
 
@@ -74,7 +75,9 @@ public class IdEncoder {
      */
     public static String encodeUUID(final UUID decoded) {
 
-        return encodeLong(decoded.getMostSignificantBits()) + "_"
+//        return encodeLong(decoded.getMostSignificantBits()) + "_"
+//               + encodeLong(decoded.getLeastSignificantBits());
+        return encodeLong(decoded.getMostSignificantBits()) + "-"
                + encodeLong(decoded.getLeastSignificantBits());
     }
 
@@ -87,6 +90,7 @@ public class IdEncoder {
      * @return encoded result.
      */
     public String encode(final long decoded) {
+        
         return encodeLong(decoded);
     }
 

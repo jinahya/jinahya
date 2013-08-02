@@ -18,8 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
+import com.googlecode.jinahya.commons.codec.DecoderProxy;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -28,86 +27,24 @@ import java.lang.reflect.Proxy;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class IdDecoderProxy implements InvocationHandler {
+public class IdDecoderProxy extends DecoderProxy<IdDecoder> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.Decoder}.
+     * Creates a new proxy instance for {@code org.apache.commons.codec.Decoder}
+     * with given {@code decoder}.
+     *
+     * @param decoder the decoder to use.
+     *
+     * @return a new proxy instance.
      */
-    private static final Class<?> DECODER;
+    public static Object newInstance(final IdDecoder decoder) {
 
-
-    static {
-        try {
-            DECODER = Class.forName("org.apache.commons.codec.Decoder");
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
+        if (decoder == null) {
+            throw new NullPointerException("decoder");
         }
-    }
 
-
-    private static final Method DECODE;
-
-
-    static {
-        try {
-            DECODE = DECODER.getMethod("decode", Object.class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.DecoderException}.
-     */
-    private static final Class<? extends Throwable> DECODER_EXCEPTION;
-
-
-    static {
-        try {
-            DECODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.DecoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    private static Throwable newDecoderException()
-        throws InstantiationException, IllegalAccessException {
-
-        return DECODER_EXCEPTION.newInstance();
-    }
-
-
-    private static Throwable newDecoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.getConstructor(String.class).
-            newInstance(message);
-    }
-
-
-    private static Throwable newDecoderException(final String message,
-                                                 final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.
-            getConstructor(String.class, Throwable.class).
-            newInstance(message, cause);
-    }
-
-
-    private static Throwable newDecoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.getConstructor(Throwable.class).
-            newInstance(cause);
+        return newInstance(IdDecoderProxy.class, IdDecoder.class, decoder);
     }
 
 
@@ -123,59 +60,32 @@ public class IdDecoderProxy implements InvocationHandler {
 
 
     /**
-     * Creates a new proxy instance for {@code org.apache.commons.codec.Decoder}
-     * with given {@code decoder}.
-     *
-     * @param decoder the decoder to use.
-     *
-     * @return a new proxy instance.
-     */
-    public static Object newInstance(final IdDecoder decoder) {
-
-        if (decoder == null) {
-            throw new IllegalArgumentException("null idDecoder");
-        }
-
-        return Proxy.newProxyInstance(DECODER.getClassLoader(),
-                                      new Class<?>[]{DECODER},
-                                      new IdDecoderProxy(decoder));
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param decoder the decoder to use.
      */
     protected IdDecoderProxy(final IdDecoder decoder) {
-        super();
 
-        if (decoder == null) {
-            throw new NullPointerException("null decoder");
-        }
-
-        this.decoder = decoder;
+        super(decoder);
     }
 
 
     @Override
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args)
-        throws Throwable {
+    protected Object decode(final Object source) throws Throwable {
 
-        if (DECODE.equals(method)) {
-            try {
-                return decoder.decode(String.class.cast(args[0]));
-            } catch (ClassCastException cce) {
-                throw newDecoderException(cce);
-            }
+        if (source == null) {
+            throw new NullPointerException("source");
         }
 
-        throw new UnsupportedOperationException("unsupported: " + method);
+        if (!(source instanceof String)) {
+            final String message =
+                source + " is not an instance of " + String.class;
+            throw new IllegalArgumentException(message);
+            //throw newDecoderException(message);
+        }
+
+        return decoder.decode((String) source);
     }
-
-
-    private final IdDecoder decoder;
 
 
 }

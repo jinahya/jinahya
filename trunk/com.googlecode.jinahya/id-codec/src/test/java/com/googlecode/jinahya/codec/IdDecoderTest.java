@@ -18,6 +18,8 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.util.UUID;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
