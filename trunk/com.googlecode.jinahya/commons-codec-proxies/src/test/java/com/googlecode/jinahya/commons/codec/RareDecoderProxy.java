@@ -18,11 +18,19 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class RareDecoderProxy extends DecoderProxy<RareDecoder> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(RareDecoderProxy.class.getName());
 
 
     protected static Object newInstance(final RareDecoder decoder) {
@@ -51,9 +59,10 @@ public class RareDecoderProxy extends DecoderProxy<RareDecoder> {
     @Override
     protected Object decode(final Object source) throws Throwable {
 
+        LOGGER.log(Level.INFO, "<Object>decode({0})", source);
+
         return decoder.decode(source);
     }
 
 
 }
-

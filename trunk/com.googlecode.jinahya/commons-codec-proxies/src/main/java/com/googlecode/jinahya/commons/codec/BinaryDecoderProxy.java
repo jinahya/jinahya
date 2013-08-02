@@ -18,22 +18,20 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
+ * Abstract class for proxies of {@code org.apache.commons.codec.BinaryDecoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <D> decoder type parameter
+ * @param <T> decoder type parameter
  */
-public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
+public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.BinaryDecoder}.
+     * {@code org.apache.commons.codec.BinaryDecoder}.
      */
     private static final Class<?> DECODER;
 
@@ -63,7 +61,7 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
 
 
     /**
-     * Creates a new (proxy) instance.
+     * Creates a new proxy instance.
      *
      * @param <P> proxy type parameter.
      * @param <D> decoder type parameter
@@ -93,7 +91,7 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
      *
      * @param decoder the decoder to delegate.
      */
-    protected BinaryDecoderProxy(final D decoder) {
+    protected BinaryDecoderProxy(final T decoder) {
 
         super(decoder);
     }
@@ -115,11 +113,6 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
     @Override
     protected Object decode(final Object source) throws Throwable {
 
-        if (source == null) {
-            //throw new NullPointerException("source");
-            throw newDecoderException("null source"); // documented?
-        }
-
         try {
             return decode((byte[]) source);
         } catch (ClassCastException cce) {
@@ -128,8 +121,16 @@ public abstract class BinaryDecoderProxy<D> extends DecoderProxy<D> {
     }
 
 
+    /**
+     * Decodes given {@code source}.
+     *
+     * @param source data to decode.
+     *
+     * @return decoded result
+     *
+     * @throws Throwable if an error occurs.
+     */
     protected abstract byte[] decode(final byte[] source) throws Throwable;
 
 
 }
-

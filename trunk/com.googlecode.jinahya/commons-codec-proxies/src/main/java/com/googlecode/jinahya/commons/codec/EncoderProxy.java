@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -32,7 +31,7 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
 
 
     /**
-     * The class for {@code org.apache.commons.codec.Encoder}.
+     * {@code org.apache.commons.codec.Encoder}.
      */
     private static final Class<?> ENCODER;
 
@@ -47,7 +46,7 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
 
 
     /**
-     * The method for {@code encode(Ljava/lang/Object;)Ljava/lang/Object;}.
+     * {@code encode(Ljava/lang/Object;)Ljava/lang/Object;}.
      */
     private static final Method ENCODE;
 
@@ -125,4 +124,3 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
 
 
 }
-
