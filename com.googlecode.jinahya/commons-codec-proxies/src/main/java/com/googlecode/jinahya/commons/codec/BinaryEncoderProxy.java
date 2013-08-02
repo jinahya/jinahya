@@ -31,7 +31,7 @@ public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.BinaryEncoder}.
+     * {@code org.apache.commons.codec.BinaryEncoder}.
      */
     private static final Class<?> ENCODER;
 
@@ -46,7 +46,7 @@ public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
 
 
     /**
-     * Method for {@code encode([B)[B}.
+     * {@code encode([B)[B}.
      */
     private static final Method ENCODE;
 
@@ -102,10 +102,6 @@ public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
     @Override
     protected Object encode(final Object source) throws Throwable {
 
-        if (source == null) {
-            throw newEncoderException("null source"); // documented
-        }
-
         try {
             return encode((byte[]) source);
         } catch (ClassCastException cce) {
@@ -115,15 +111,15 @@ public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
 
 
     /**
+     * Encodes given {@code source}.
      *
      * @param source source to encode.
      *
      * @return encoded output.
      *
-     * @throws Throwable
+     * @throws Throwable if an error occurs.
      */
     protected abstract byte[] encode(final byte[] source) throws Throwable;
 
 
 }
-

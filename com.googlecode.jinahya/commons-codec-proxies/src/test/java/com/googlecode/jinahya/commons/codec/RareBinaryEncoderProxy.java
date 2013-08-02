@@ -30,9 +30,6 @@ public class RareBinaryEncoderProxy
     extends BinaryEncoderProxy<RareBinaryEncoder> {
 
 
-    /**
-     * logger.
-     */
     private static final Logger LOGGER =
         Logger.getLogger(RareBinaryEncoderProxy.class.getName());
 
@@ -59,12 +56,10 @@ public class RareBinaryEncoderProxy
     @Override
     protected byte[] encode(final byte[] source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Binary>encode({0}, {1})",
-                   new Object[]{encoder, source});
+        LOGGER.log(Level.INFO, "<byte[]>encode({0})", source);
 
         return encoder.encode(source);
     }
 
 
 }
-

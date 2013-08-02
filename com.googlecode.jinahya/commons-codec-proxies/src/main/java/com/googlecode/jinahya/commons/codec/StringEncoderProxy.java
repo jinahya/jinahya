@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 
 /**
+ * Abstract class for proxies of {@code org.apache.commons.codec.StringEncoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> encoder (delegate) type parameter
@@ -30,7 +31,7 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.StringEncoder}.
+     * {@code org.apache.commons.codec.StringEncoder}.
      */
     private static final Class<?> ENCODER;
 
@@ -45,7 +46,7 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
 
 
     /**
-     * method for {@code encode(Ljava/lang/String;)Ljava/lang/String;}.
+     * {@code encode(Ljava/lang/String;)Ljava/lang/String;}.
      */
     private static final Method ENCODE;
 
@@ -59,8 +60,19 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
     }
 
 
-    protected static <P extends AbstractEncoderProxy<E>, E> Object newInstance(
-        final Class<P> proxyType, final Class<E> encoderType, final E encoder) {
+    /**
+     * Creates a new proxy instance.
+     *
+     * @param <P> proxy type parameter
+     * @param <T> user encoder type parameter
+     * @param proxyType proxy type
+     * @param encoderType encoder type
+     * @param encoder encoder
+     *
+     * @return a new proxy instance
+     */
+    protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> encoderType, final T encoder) {
 
         if (proxyType != null
             && !StringEncoderProxy.class.isAssignableFrom(proxyType)) {
@@ -101,10 +113,6 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
     @Override
     protected Object encode(final Object source) throws Throwable {
 
-        if (source == null) {
-            throw newEncoderException("null source"); // documented
-        }
-
         try {
             return encode((String) source);
         } catch (ClassCastException cce) {
@@ -113,8 +121,16 @@ public abstract class StringEncoderProxy<E> extends EncoderProxy<E> {
     }
 
 
+    /**
+     * Encodes given {@code source}.
+     *
+     * @param source source
+     *
+     * @return encoded output
+     *
+     * @throws Throwable if an error occurs.
+     */
     protected abstract String encode(final String source) throws Throwable;
 
 
 }
-

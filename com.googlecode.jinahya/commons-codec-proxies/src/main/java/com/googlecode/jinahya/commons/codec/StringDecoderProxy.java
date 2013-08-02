@@ -18,14 +18,11 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import static com.googlecode.jinahya.commons.codec.AbstractDecoderProxy.newInstance;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
+ * Abstract class for proxies of {@code org.apache.commons.codec.StringDecoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <D> decoder type parameter.
@@ -34,7 +31,7 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.StringDecoder}.
+     * {@code org.apache.commons.codec.StringDecoder}.
      */
     private static final Class<?> DECODER;
 
@@ -63,8 +60,19 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
     }
 
 
-    protected static <P extends AbstractDecoderProxy<D>, D> Object newInstance(
-        final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
+    /**
+     * Creates a new proxy instance.
+     *
+     * @param <P> proxy type parameter
+     * @param <T> user decoder type parameter
+     * @param proxyType proxy type
+     * @param decoderType decoder type
+     * @param decoder decoder
+     *
+     * @return a new instance.
+     */
+    protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
 
         if (proxyType != null
             && !StringDecoderProxy.class.isAssignableFrom(proxyType)) {
@@ -105,10 +113,6 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
     @Override
     protected Object decode(final Object source) throws Throwable {
 
-        if (source == null) {
-            throw newDecoderException("null source"); // documented
-        }
-
         try {
             return decode((String) source);
         } catch (ClassCastException cce) {
@@ -117,8 +121,16 @@ public abstract class StringDecoderProxy<D> extends DecoderProxy<D> {
     }
 
 
+    /**
+     * Decodes given {@code source}.
+     *
+     * @param source source to decode
+     *
+     * @return decoded output
+     *
+     * @throws Throwable if an error occurs.
+     */
     protected abstract String decode(final String source) throws Throwable;
 
 
 }
-

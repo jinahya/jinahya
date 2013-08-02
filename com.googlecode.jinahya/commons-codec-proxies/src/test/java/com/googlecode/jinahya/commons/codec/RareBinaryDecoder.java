@@ -18,6 +18,10 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -25,11 +29,16 @@ package com.googlecode.jinahya.commons.codec;
 public class RareBinaryDecoder {
 
 
+    private static final Logger LOGGER =
+        Logger.getLogger(RareBinaryDecoder.class.getName());
+
+
     public byte[] decode(final byte[] source) {
+
+        LOGGER.log(Level.INFO, "<byte[]>decode({0})", source);
 
         return source;
     }
 
 
 }
-

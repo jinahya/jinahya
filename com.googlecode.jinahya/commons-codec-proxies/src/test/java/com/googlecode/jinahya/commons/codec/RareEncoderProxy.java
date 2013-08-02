@@ -18,7 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import static com.googlecode.jinahya.commons.codec.EncoderProxy.newInstance;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -26,6 +27,10 @@ import static com.googlecode.jinahya.commons.codec.EncoderProxy.newInstance;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(RareEncoderProxy.class.getName());
 
 
     protected static Object newInstance(final RareEncoder encoder) {
@@ -54,9 +59,10 @@ public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
     @Override
     protected Object encode(final Object source) throws Throwable {
 
+        LOGGER.log(Level.INFO, "<Object>encode({0})", source);
+
         return encoder.encode(source);
     }
 
 
 }
-

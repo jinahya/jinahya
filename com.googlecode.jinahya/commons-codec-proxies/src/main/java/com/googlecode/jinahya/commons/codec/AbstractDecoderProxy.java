@@ -25,6 +25,7 @@ import java.lang.reflect.Proxy;
 
 
 /**
+ * Abstract class for decoder proxies.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <T> decoder(delegate) type parameter.
@@ -49,8 +50,14 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
     }
 
 
-    protected static Throwable newDecoderException()
-        throws InstantiationException, IllegalAccessException {
+    /**
+     * Creates a new instance of
+     * {@code org.apache.commons.codec.DecoderException}.
+     *
+     * @return a new instance of
+     * {@code org.apache.commons.codec.DecoderException}.
+     */
+    protected static Throwable newDecoderException() {
 
         try {
             return DECODER_EXCEPTION.newInstance();
@@ -62,6 +69,16 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance of
+     * {@code org.apache.commons.codec.DecoderException} with given
+     * {@code message}.
+     *
+     * @param message message
+     *
+     * @return a new instance of
+     * {@code org.apache.commons.codec.DecoderException}.
+     */
     protected static Throwable newDecoderException(final String message) {
 
         try {
@@ -79,6 +96,17 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance of
+     * {@code org.apache.commons.codec.DecoderException} with given
+     * {@code message} and {@code cause}.
+     *
+     * @param message message
+     * @param cause cause
+     *
+     * @return a new instance of
+     * {@code org.apache.commons.codec.DecoderException}.
+     */
     protected static Throwable newDecoderException(final String message,
                                                    final Throwable cause) {
 
@@ -98,6 +126,16 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
     }
 
 
+    /**
+     * Creates a new instance of
+     * {@code org.apache.commons.codec.DecoderException} with given
+     * {@code cause}.
+     *
+     * @param cause cause
+     *
+     * @return a new instance of
+     * {@code org.apache.commons.codec.DecoderException}.
+     */
     protected static Throwable newDecoderException(final Throwable cause) {
 
         try {
@@ -116,16 +154,17 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
 
 
     /**
+     * Creates a new proxy instance.
      *
-     * @param <P>
-     * @param <T>
-     * @param loader
-     * @param interfaces
-     * @param proxyType
-     * @param decoderType
-     * @param decoder
+     * @param <P> proxy type parameter
+     * @param <T> decoder type parameter
+     * @param loader class loader
+     * @param interfaces interfaces
+     * @param proxyType proxy type
+     * @param decoderType decoder type
+     * @param decoder decoder
      *
-     * @return
+     * @return a new proxy instance.
      */
     protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
         final ClassLoader loader, final Class<?>[] interfaces,
@@ -176,14 +215,14 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
     /**
      * Creates a new instance.
      *
-     * @param decoder the decoder to use.
+     * @param decoder the decoder to use. Maybe {@code null}.
      */
     protected AbstractDecoderProxy(final T decoder) {
 
         super();
 
         if (decoder == null) {
-            // okd
+            // ok
         }
 
         this.decoder = decoder;
@@ -191,10 +230,9 @@ public abstract class AbstractDecoderProxy<T> implements InvocationHandler {
 
 
     /**
-     * decoder instance.
+     * The decoder instance passed in constructor. Maybe {@code null}.
      */
     protected final T decoder;
 
 
 }
-

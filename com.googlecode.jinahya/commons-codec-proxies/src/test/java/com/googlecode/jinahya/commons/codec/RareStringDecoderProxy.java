@@ -18,12 +18,20 @@
 package com.googlecode.jinahya.commons.codec;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class RareStringDecoderProxy
     extends StringDecoderProxy<RareStringDecoder> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(RareStringDecoderProxy.class.getName());
 
 
     public static Object newInstance(final RareStringDecoder decoder) {
@@ -46,11 +54,21 @@ public class RareStringDecoderProxy
 
 
     @Override
+    protected Object decode(final Object source) throws Throwable {
+
+        LOGGER.log(Level.INFO, "<Object>decode({0})", source);
+
+        return super.decode(source);
+    }
+
+
+    @Override
     protected String decode(final String source) throws Throwable {
+
+        LOGGER.log(Level.INFO, "<String>decode({0})", source);
 
         return decoder.decode(source);
     }
 
 
 }
-

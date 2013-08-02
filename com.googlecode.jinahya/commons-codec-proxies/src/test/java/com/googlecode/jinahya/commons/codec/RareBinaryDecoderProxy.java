@@ -30,9 +30,6 @@ public class RareBinaryDecoderProxy
     extends BinaryDecoderProxy<RareBinaryDecoder> {
 
 
-    /**
-     * logger.
-     */
     private static final Logger LOGGER =
         Logger.getLogger(RareBinaryDecoderProxy.class.getName());
 
@@ -57,14 +54,21 @@ public class RareBinaryDecoderProxy
 
 
     @Override
+    protected Object decode(final Object source) throws Throwable {
+
+        LOGGER.log(Level.INFO, "<Object>decode({0})", source);
+
+        return super.decode(source);
+    }
+
+
+    @Override
     protected byte[] decode(final byte[] source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Binary>decode({0}, {1})",
-                   new Object[]{decoder, source});
+        LOGGER.log(Level.INFO, "<byte[]>decode({0})", source);
 
         return decoder.decode(source);
     }
 
 
 }
-

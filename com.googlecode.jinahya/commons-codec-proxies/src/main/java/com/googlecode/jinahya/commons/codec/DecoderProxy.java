@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 
 /**
+ * Abstract class for proxies of {@code org.apache.commons.codec.Decoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <T> decoder(delegate) type parameter.
@@ -30,7 +31,7 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.Decoder}.
+     * {@code org.apache.commons.codec.Decoder}.
      */
     private static final Class<?> DECODER;
 
@@ -44,6 +45,9 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
     }
 
 
+    /**
+     * {@code decode(Ljava/lang/Object;)Ljava/lang/Object}.
+     */
     private static final Method DECODE;
 
 
@@ -114,10 +118,9 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
      *
      * @return decoded output.
      *
-     * @throws Throwable if any error occurs.
+     * @throws Throwable if failed to decode.
      */
     protected abstract Object decode(final Object source) throws Throwable;
 
 
 }
-
