@@ -63,8 +63,7 @@ public abstract class BinaryEncoderProxy<T> extends EncoderProxy<T> {
     protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> encoderType, final T encoder) {
 
-        if (proxyType != null
-            && !BinaryEncoderProxy.class.isAssignableFrom(proxyType)) {
+        if (!BinaryEncoderProxy.class.isAssignableFrom(proxyType)) {
             throw new IllegalArgumentException(
                 "proxyType(" + proxyType + ") is not assignable to "
                 + BinaryEncoderProxy.class);
