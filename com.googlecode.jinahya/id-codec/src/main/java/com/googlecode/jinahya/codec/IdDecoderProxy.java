@@ -19,8 +19,6 @@ package com.googlecode.jinahya.codec;
 
 
 import com.googlecode.jinahya.commons.codec.DecoderProxy;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 
 /**
@@ -89,4 +87,3 @@ public class IdDecoderProxy extends DecoderProxy<IdDecoder> {
 
 
 }
-
