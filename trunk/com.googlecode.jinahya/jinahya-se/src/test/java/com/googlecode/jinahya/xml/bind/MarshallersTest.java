@@ -18,10 +18,16 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import com.googlecode.jinahya.xml.bind.test.Item;
+import com.googlecode.jinahya.xml.bind.test.Items;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.testng.annotations.Test;
 
 
@@ -44,8 +50,28 @@ public class MarshallersTest {
         for (Entry<?, ?> entry : value.entrySet()) {
             final Class<?> outputType = (Class<?>) entry.getKey();
             final Method method = (Method) entry.getValue();
-            System.out.println(outputType + "\n\t" + method);
+            System.out.println("output type: " + outputType);
+            System.out.println("method: " + method);
         }
+    }
+
+
+    @Test
+    public static void testMarshal() throws JAXBException {
+
+        final Items items = new Items();
+        items.getItems().add(Item.newInstance());
+
+        Marshallers.marshal(items, System.out);
+        Marshallers.marshal(items, OutputStream.class, System.out);
+
+        final JAXBContext context = JAXBContext.newInstance(Items.class);
+        Marshallers.marshal(context, items, System.out);
+        Marshallers.marshal(context, items, OutputStream.class, System.out);
+
+        final Marshaller marshaller = context.createMarshaller();
+        Marshallers.marshal(marshaller, items, System.out);
+        Marshallers.marshal(marshaller, items, OutputStream.class, System.out);
     }
 
 

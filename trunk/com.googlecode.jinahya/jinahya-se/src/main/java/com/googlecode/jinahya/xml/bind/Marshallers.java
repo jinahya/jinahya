@@ -67,6 +67,18 @@ public class Marshallers {
     }
 
 
+    /**
+     * Marshals given {@code value} to {@code output} using specified
+     * {@code marshaller}.
+     *
+     * @param <T> output type parameter
+     * @param marshaller marshaller
+     * @param value the value to marshal
+     * @param outputType output type
+     * @param output the output to which {@code value} is marshalled.
+     *
+     * @throws JAXBException if a JAXB error occurs.
+     */
     public static <T> void marshal(final Marshaller marshaller,
                                    final Object value,
                                    final Class<? super T> outputType,
@@ -110,13 +122,14 @@ public class Marshallers {
 
 
     /**
-     * Marshals given {@code value} to {@code output}.
+     * Marshals given {@code value} to {@code output} using specified
+     * {@code context}.
      *
      * @param <T> output type parameter
      * @param context context
      * @param value value to marshal
      * @param outputType output type
-     * @param output output
+     * @param output the output to which {@code value} is marshalled.
      *
      * @throws JAXBException if a JAXB error occurs.
      */
@@ -140,7 +153,7 @@ public class Marshallers {
      * @param <T> output type parameter
      * @param value value to marshal
      * @param outputType output type
-     * @param output output
+     * @param output the output to which {@code value} is marshalled.
      *
      * @throws JAXBException if a JAXB error occurs.
      */
@@ -163,8 +176,8 @@ public class Marshallers {
      * Marshals {@code value} to {@code output}.
      *
      * @param marshaller marshaller
-     * @param value value
-     * @param output output
+     * @param value the value to marshal
+     * @param output the output to which {@code value} is marshalled.
      *
      * @throws JAXBException if a JAXB error occurs.
      */
@@ -212,11 +225,11 @@ public class Marshallers {
 
 
     /**
-     * Marshals {@code value} to {@code output}.
+     * Marshals given {@code value} to specified {@code output}.
      *
      * @param context context
-     * @param value value to marshal
-     * @param output output
+     * @param value the value to marshal
+     * @param output the output to which {@code value} is marshalled.
      *
      * @throws JAXBException if a JAXB error occurs.
      */
@@ -233,10 +246,10 @@ public class Marshallers {
 
 
     /**
-     * Marshals {@code value} to {@code output}.
+     * Marshals given {@code value} to specified {@code output}.
      *
-     * @param value value to marshal
-     * @param output output
+     * @param value the value to marshal
+     * @param output the output to which {@code value} is marshalled.
      *
      * @throws JAXBException if a JAXB error occurs.
      */
