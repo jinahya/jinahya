@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,22 +35,34 @@ public class IdEncoder {
      * Encodes a single block.
      *
      * @param decoded block to encode
+     * @param random random
      *
      * @return encoded block
      */
-    private static String block(final long decoded) {
+    private static String block(final long decoded, final Random random) {
 
         final StringBuilder builder = new StringBuilder(Long.toString(decoded));
 
-        builder.append(Integer.toString(
-            ThreadLocalRandom.current().nextInt(9) + 1)); // 1-9
-        builder.append(Integer.toString(
-            ThreadLocalRandom.current().nextInt(9) + 1)); // 1-9
+        builder.append(Integer.toString(random.nextInt(9) + 1)); // 1-9
+        builder.append(Integer.toString(random.nextInt(9) + 1)); // 1-9
 
         builder.reverse();
 
         return Long.toString(
             Long.parseLong(builder.toString()), Character.MAX_RADIX);
+    }
+
+
+    /**
+     * Encodes a single block.
+     *
+     * @param decoded block to encode
+     *
+     * @return encoded block
+     */
+    private static String block(final long decoded) {
+
+        return block(decoded, ThreadLocalRandom.current());
     }
 
 
@@ -61,7 +74,7 @@ public class IdEncoder {
      * @return encoded output.
      */
     public static String encodeLong(final long decoded) {
-        
+
         return block(decoded >>> 0x20) + "-" + block(decoded & 0xFFFFFFFFL);
     }
 
@@ -75,8 +88,6 @@ public class IdEncoder {
      */
     public static String encodeUUID(final UUID decoded) {
 
-//        return encodeLong(decoded.getMostSignificantBits()) + "_"
-//               + encodeLong(decoded.getLeastSignificantBits());
         return encodeLong(decoded.getMostSignificantBits()) + "-"
                + encodeLong(decoded.getLeastSignificantBits());
     }
@@ -90,10 +101,9 @@ public class IdEncoder {
      * @return encoded result.
      */
     public String encode(final long decoded) {
-        
+
         return encodeLong(decoded);
     }
 
 
 }
-
