@@ -60,7 +60,7 @@ public class IdDecoder {
     public static long decodeLong(final String encoded) {
 
         if (encoded == null) {
-            throw new NullPointerException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         final int index = encoded.indexOf('-');
@@ -83,18 +83,23 @@ public class IdDecoder {
     public static UUID decodeUUID(final String encoded) {
 
         if (encoded == null) {
-            throw new NullPointerException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
-        final int index = encoded.indexOf('_');
-        if (index == -1) {
+        final int first = encoded.indexOf('-');
+        if (first == -1) {
+            throw new IllegalArgumentException("wrong encoded: " + encoded);
+        }
+
+        final int second = encoded.indexOf('-', first + 1);
+        if (second == -1) {
             throw new IllegalArgumentException("wrong encoded: " + encoded);
         }
 
         final long mostSignificantBits =
-            decodeLong(encoded.substring(0, index));
+            decodeLong(encoded.substring(0, second));
         final long leastSignificantBits =
-            decodeLong(encoded.substring(index + 1));
+            decodeLong(encoded.substring(second + 1));
 
         return new UUID(mostSignificantBits, leastSignificantBits);
     }

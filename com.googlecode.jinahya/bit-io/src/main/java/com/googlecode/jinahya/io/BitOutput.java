@@ -59,9 +59,9 @@ public class BitOutput {
 
 
         /**
-         * 'Creates a new instance.
+         * Creates a new instance.
          *
-         * @param stream the stream to wrap.
+         * @param stream the output to which composite bytes are written.
          */
         public StreamOutput(final OutputStream stream) {
             super();
@@ -409,7 +409,7 @@ public class BitOutput {
 
         if ((value >> length) != 0L) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> length(" + length + ")) != 0");
+                "(value(" + value + ") >> length(" + length + ")) != 0L");
         }
 
         final int quotient = length / 16;

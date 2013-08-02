@@ -18,118 +18,14 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import com.googlecode.jinahya.commons.codec.EncoderProxy;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class IdEncoderProxy implements InvocationHandler {
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.Encoder}.
-     */
-    private static final Class<?> ENCODER;
-
-
-    static {
-        try {
-            ENCODER = Class.forName("org.apache.commons.codec.Encoder");
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    private static final Method ENCODE;
-
-
-    static {
-        try {
-            ENCODE = ENCODER.getMethod("encode", Object.class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.EncoderException}.
-     */
-    private static final Class<? extends Throwable> ENCODER_EXCEPTION;
-
-
-    static {
-        try {
-            ENCODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.EncoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    /**
-     * Creates a new instance of
-     * {@code org.apache.commons.codec.EncoderException}.
-     *
-     * @return a new instance.
-     *
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    private static Throwable newEncoderException()
-        throws InstantiationException, IllegalAccessException {
-
-        return ENCODER_EXCEPTION.newInstance();
-    }
-
-
-    private static Throwable newEncoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.getConstructor(String.class).
-            newInstance(message);
-    }
-
-
-    private static Throwable newEncoderException(final String message,
-                                                 final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.
-            getConstructor(String.class, Throwable.class).
-            newInstance(message, cause);
-    }
-
-
-    private static Throwable newEncoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.getConstructor(Throwable.class).
-            newInstance(cause);
-    }
-
-
-    /**
-     * Returns a new proxy instance for
-     * {@code org.apache.commons.codec.Encoder}.
-     *
-     * @return a new proxy instance.
-     */
-    public static Object newInstance() {
-
-        return newInstance(new IdEncoder());
-    }
+public class IdEncoderProxy extends EncoderProxy<IdEncoder> {
 
 
     /**
@@ -146,9 +42,20 @@ public class IdEncoderProxy implements InvocationHandler {
             throw new NullPointerException("null encoder");
         }
 
-        return Proxy.newProxyInstance(ENCODER.getClassLoader(),
-                                      new Class<?>[]{ENCODER},
-                                      new IdEncoderProxy(encoder));
+        return EncoderProxy.newInstance(IdEncoderProxy.class, IdEncoder.class,
+                                        encoder);
+    }
+
+
+    /**
+     * Returns a new proxy instance for
+     * {@code org.apache.commons.codec.Encoder}.
+     *
+     * @return a new proxy instance.
+     */
+    public static Object newInstance() {
+
+        return newInstance(new IdEncoder());
     }
 
 
@@ -158,34 +65,27 @@ public class IdEncoderProxy implements InvocationHandler {
      * @param encoder the IdEncoder to use.
      */
     protected IdEncoderProxy(final IdEncoder encoder) {
-        super();
 
-        if (encoder == null) {
-            throw new NullPointerException("null encoder");
-        }
-
-        this.encoder = encoder;
+        super(encoder);
     }
 
 
     @Override
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args)
-        throws Throwable {
+    protected Object encode(final Object source) throws Throwable {
 
-        if (ENCODE.equals(method)) {
-            try {
-                return encoder.encode((Long) args[0]);
-            } catch (ClassCastException cce) {
-                throw newEncoderException(cce);
-            }
+        if (source == null) {
+            throw new NullPointerException("source");
         }
 
-        throw new UnsupportedOperationException("unsupported: " + method);
+        if (!(source instanceof Long)) {
+            final String message =
+                source + " is not an instance of " + Long.class;
+            throw new IllegalArgumentException(message);
+            //throw newEncoderException(message);
+        }
+
+        return encoder.encode((Long) source);
     }
-
-
-    private final IdEncoder encoder;
 
 
 }

@@ -45,14 +45,19 @@ public class IdEncoderTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 16)
     public static void testEncodeUUID() {
+
+        System.out.printf("%40s %40s\n",
+                          "----------------------------------------",
+                          "----------------------------------------");
 
         final UUID decoded = UUID.randomUUID();
 
-        final String encoded = IdEncoder.encodeUUID(decoded);
-
-        System.out.printf("%40s %40s\n", decoded.toString(), encoded);
+        for (int i = 0; i < 10; i++) {
+            final String encoded = IdEncoder.encodeUUID(decoded);
+            System.out.printf("%40s %40s\n", decoded.toString(), encoded);
+        }
     }
 
 
