@@ -64,18 +64,17 @@ public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
      * Creates a new proxy instance.
      *
      * @param <P> proxy type parameter.
-     * @param <D> decoder type parameter
+     * @param <T> decoder type parameter
      * @param proxyType proxy type
      * @param decoderType decoder type
      * @param decoder decoder
      *
      * @return a new (proxy) instance.
      */
-    protected static <P extends AbstractDecoderProxy<D>, D> Object newInstance(
-        final Class<P> proxyType, final Class<D> decoderType, final D decoder) {
+    protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
+        final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
 
-        if (proxyType != null
-            && !BinaryDecoderProxy.class.isAssignableFrom(proxyType)) {
+        if (!BinaryDecoderProxy.class.isAssignableFrom(proxyType)) {
             throw new IllegalArgumentException(
                 "proxyType(" + proxyType + ") is not assignable to "
                 + BinaryDecoderProxy.class);
