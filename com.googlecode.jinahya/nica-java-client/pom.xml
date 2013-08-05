@@ -17,7 +17,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>nica-java</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-10</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -37,7 +37,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8</version>
+        <version>6.8.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -45,6 +45,7 @@
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
       <artifactId>nica-java</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -284,7 +285,6 @@
   </repositories>
   <pluginRepositories />
   <distributionManagement>
-    <!--
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Propellors Snapshots</name>
@@ -294,13 +294,6 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    -->
-    <!--
-    <site>
-      <id>googlecode</id>
-      <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
-    </site>
-    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
