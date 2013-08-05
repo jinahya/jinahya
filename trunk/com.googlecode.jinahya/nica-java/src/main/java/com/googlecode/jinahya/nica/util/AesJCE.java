@@ -68,7 +68,7 @@ public class AesJCE extends Aes {
      *
      * @return a new key.
      */
-    protected static final byte[] newKey() {
+    public static final byte[] newKey() {
         try {
             final KeyGenerator keyGenerator =
                 KeyGenerator.getInstance(ALGORITHM);

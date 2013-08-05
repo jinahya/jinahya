@@ -30,7 +30,7 @@ public class AesBCTest extends AesTest<AesBC> {
 
 
     @Override
-    protected AesBC construct(final byte[] key) {
+    protected AesBC create(final byte[] key) {
         return new AesBC(key);
     }
 
@@ -43,7 +43,7 @@ public class AesBCTest extends AesTest<AesBC> {
 
         final byte[] expected = newInput();
 
-        final byte[] encrypted = construct(key).encrypt(iv, expected);
+        final byte[] encrypted = create(key).encrypt(iv, expected);
 
         final byte[] actual = new AesJCE(key).decrypt(iv, encrypted);
 
@@ -61,7 +61,7 @@ public class AesBCTest extends AesTest<AesBC> {
 
         final byte[] encrypted = new AesJCE(key).encrypt(iv, expected);
 
-        final byte[] actual = construct(key).decrypt(iv, encrypted);
+        final byte[] actual = create(key).decrypt(iv, encrypted);
 
         Assert.assertEquals(actual, expected);
     }

@@ -34,17 +34,18 @@ public abstract class Hac {
      *
      * @param message the message to authenticate
      *
-     * @return authentication output
+     * @return authenticated output
      */
     public abstract byte[] authenticate(byte[] message);
 
 
     /**
-     * Authenticates given {@code message}.
+     * Authenticates given {@code message} which is treated as a {@code UTF-8}
+     * encoded string.
      *
      * @param message the message to authenticate
      *
-     * @return authentication output
+     * @return authenticated output
      */
     public byte[] authenticate(final String message) {
 
@@ -61,11 +62,12 @@ public abstract class Hac {
 
 
     /**
-     * Authenticates given {@code message} and returns output as a HEX string.
+     * Authenticates given {@code message} and returns output as a {@code hex}
+     * encoded string.
      *
      * @param message the message to authenticate
      *
-     * @return the output as a HEX string
+     * @return the output as a {@code hex} encoded string
      */
     public String authenticateToString(final byte[] message) {
 
@@ -74,15 +76,20 @@ public abstract class Hac {
 
 
     /**
-     * Authenticates given {@code message} and returns output as a HEX string.
+     * Authenticates given {@code message} which is treated as a {@code UTF-8}
+     * encoded string and returns output as a {@code hex} encoded string.
      *
      * @param message the message to authenticate
      *
-     * @return the output as a HEX string
+     * @return the output as a {@code hex} encoded string
      */
     public String authenticateToString(final String message) {
 
-        return Hex.encodeToString(authenticate(message));
+        try {
+            return authenticateToString(message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?");
+        }
     }
 
 
