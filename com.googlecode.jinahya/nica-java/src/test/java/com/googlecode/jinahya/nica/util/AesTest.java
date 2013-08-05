@@ -47,40 +47,39 @@ public abstract class AesTest<A extends Aes> {
     }
 
 
-    protected static byte[] newKey() {
+    public static final byte[] newKey() {
         synchronized (GENERATOR) {
             return GENERATOR.generateKey().getEncoded();
         }
     }
 
 
-    protected static byte[] newWrongKey() {
-        switch (ThreadLocalRandom.current().nextInt() % 2) {
+    protected static byte[] wrongKey() {
+        switch (ThreadLocalRandom.current().nextInt(3)) {
             case 0:
                 return new byte[Aes.KEY_SIZE_IN_BYTES - 1];
             case 1:
                 return new byte[Aes.KEY_SIZE_IN_BYTES + 1];
-            default:
+            default: // 2
                 return new byte[0];
 
         }
     }
 
 
-    protected static byte[] newIv() {
-        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
-        ThreadLocalRandom.current().nextBytes(iv);
-        return iv;
+    public static final byte[] newIv() {
+
+        return Aes.newIv();
     }
 
 
-    protected static byte[] newWrongIv() {
-        switch (ThreadLocalRandom.current().nextInt() % 2) {
+    protected static byte[] wrongIv() {
+        switch (ThreadLocalRandom.current().nextInt(3)) {
             case 0:
                 return new byte[Aes.BLOCK_SIZE_IN_BYTES - 1];
             case 1:
                 return new byte[Aes.BLOCK_SIZE_IN_BYTES + 1];
-            default:
+            default: // 2
                 return new byte[0];
         }
     }
@@ -101,7 +100,7 @@ public abstract class AesTest<A extends Aes> {
     @Test(expectedExceptions = {NullPointerException.class})
     public void constructWithNullKey() {
 
-        construct(null);
+        create(null);
     }
 
 
@@ -109,7 +108,7 @@ public abstract class AesTest<A extends Aes> {
           invocationCount = 32)
     public void constructWithWrongKey() {
 
-        construct(newWrongKey());
+        create(wrongKey());
     }
 
 
@@ -117,7 +116,7 @@ public abstract class AesTest<A extends Aes> {
           invocationCount = 32)
     public void testEncryptWithNullIv() {
 
-        construct(newKey()).encrypt(null, new byte[0]);
+        create(newKey()).encrypt(null, new byte[0]);
     }
 
 
@@ -125,28 +124,28 @@ public abstract class AesTest<A extends Aes> {
           invocationCount = 32)
     public void testEncryptWithWrongIv() {
 
-        construct(newKey()).encrypt(newWrongIv(), new byte[0]);
+        create(newKey()).encrypt(wrongIv(), new byte[0]);
     }
 
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testEncryptWithNullInput() {
 
-        construct(newKey()).encrypt(newIv(), (byte[]) null);
+        create(newKey()).encrypt(newIv(), (byte[]) null);
     }
 
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testDecryptWithNullInput() {
 
-        construct(newKey()).decrypt(newIv(), (byte[]) null);
+        create(newKey()).decrypt(newIv(), (byte[]) null);
     }
 
 
     @Test
     public void testEncryptWithEmptyInput() {
 
-        construct(newKey()).encrypt(newIv(), new byte[0]);
+        create(newKey()).encrypt(newIv(), new byte[0]);
     }
 
 
@@ -156,7 +155,7 @@ public abstract class AesTest<A extends Aes> {
         final byte[] key = newKey();
         final byte[] iv = newIv();
 
-        final A aes = construct(key);
+        final A aes = create(key);
 
         for (int i = 0; i < 32; i++) {
             final byte[] expected = newInput();
@@ -173,7 +172,7 @@ public abstract class AesTest<A extends Aes> {
         final byte[] key = newKey();
         final byte[] iv = newIv();
 
-        final A aes = construct(key);
+        final A aes = create(key);
 
         for (int i = 0; i < 32; i++) {
             final byte[] expected = new byte[0];
@@ -191,7 +190,7 @@ public abstract class AesTest<A extends Aes> {
      *
      * @return a new instance
      */
-    protected abstract A construct(final byte[] key);
+    protected abstract A create(final byte[] key);
 
 
 }

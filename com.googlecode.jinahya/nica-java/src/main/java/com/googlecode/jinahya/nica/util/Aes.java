@@ -81,7 +81,7 @@ public abstract class Aes {
      *
      * @return a new initialization vector.
      */
-    protected static final byte[] newIv() {
+    public static final byte[] newIv() {
 
         return newIv(new SecureRandom());
     }

@@ -78,6 +78,8 @@ public class Nuo {
      * @param timestamp
      *
      * @return
+     *
+     * @deprecated
      */
     public static long gemicro(final long timestamp) {
 

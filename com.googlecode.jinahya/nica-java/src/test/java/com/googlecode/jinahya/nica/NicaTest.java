@@ -25,7 +25,6 @@ import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import javax.crypto.KeyGenerator;
 import org.testng.Assert;
@@ -72,16 +71,20 @@ public class NicaTest {
 
         final Map<String, String> names = new HashMap<>();
         for (int i = 0; i < 3; i++) {
-            names.put("name" + i, "name" + i);
+//            names.put("name" + i, "name" + i);
         }
+        names.put("Last", "홍");
+        names.put("First", "길동");
         System.out.println("names: " + names);
 
         final Map<String, String> codes = new HashMap<>();
         for (int i = 0; i < 5; i++) {
 //            codes.put("code" + i, "code" + i);
         }
-        codes.put(Locale.KOREAN.getDisplayLanguage(Locale.KOREAN), "사랑");
-        codes.put(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH), "Love");
+        codes.put("SSN", "1234가");
+        codes.put("CCN", "5678나");
+        codes.put("T", "1");
+        codes.put("N", "1");
         System.out.println("codes: " + codes);
 
 
