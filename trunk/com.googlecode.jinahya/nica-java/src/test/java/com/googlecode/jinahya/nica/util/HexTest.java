@@ -131,7 +131,7 @@ public class HexTest {
 
         final Random random = ThreadLocalRandom.current();
 
-        for (int i = 0; i < 8192; i++) {
+        for (int i = 0; i < 128; i++) {
 
             final String decoded = newDecodedString();
 
@@ -181,7 +181,7 @@ public class HexTest {
 
         final Random random = ThreadLocalRandom.current();
 
-        for (int i = 0; i < 8192; i++) {
+        for (int i = 0; i < 128; i++) {
 
             final String encoded = newEncodedString();
 
