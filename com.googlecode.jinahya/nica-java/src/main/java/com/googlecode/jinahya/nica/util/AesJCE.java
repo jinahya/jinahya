@@ -63,21 +63,21 @@ public class AesJCE extends Aes {
         ALGORITHM + "/" + MODE + "/" + PADDING;
 
 
-    /**
-     * Generates a new key.
-     *
-     * @return a new key.
-     */
-    public static final byte[] newKey() {
-        try {
-            final KeyGenerator keyGenerator =
-                KeyGenerator.getInstance(ALGORITHM);
-            keyGenerator.init(KEY_SIZE);
-            return keyGenerator.generateKey().getEncoded();
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new RuntimeException(nsae);
-        }
-    }
+//    /**
+//     * Generates a new key.
+//     *
+//     * @return a new key.
+//     */
+//    public static byte[] newKey() {
+//        try {
+//            final KeyGenerator keyGenerator =
+//                KeyGenerator.getInstance(ALGORITHM);
+//            keyGenerator.init(KEY_SIZE);
+//            return keyGenerator.generateKey().getEncoded();
+//        } catch (NoSuchAlgorithmException nsae) {
+//            throw new RuntimeException(nsae);
+//        }
+//    }
 
 
     /**
