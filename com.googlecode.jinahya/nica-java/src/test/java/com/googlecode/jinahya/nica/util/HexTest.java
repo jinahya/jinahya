@@ -131,11 +131,12 @@ public class HexTest {
 
         final Random random = ThreadLocalRandom.current();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 8192; i++) {
 
             final String decoded = newDecodedString();
 
             if (random.nextBoolean()) {
+
                 start = System.nanoTime();
                 final String enfasted = Hex.enfastToString(decoded);
                 finish = System.nanoTime();
@@ -145,8 +146,11 @@ public class HexTest {
                 final String encoded = Hex.encodeToString(decoded);
                 finish = System.nanoTime();
                 encodes.addValue(finish - start);
+
+                Assert.assertEquals(enfasted, encoded);
 
             } else {
+
                 start = System.nanoTime();
                 final String encoded = Hex.encodeToString(decoded);
                 finish = System.nanoTime();
@@ -156,6 +160,8 @@ public class HexTest {
                 final String enfasted = Hex.enfastToString(decoded);
                 finish = System.nanoTime();
                 enfasts.addValue(finish - start);
+
+                Assert.assertEquals(encoded, enfasted);
 
             }
         }
@@ -175,11 +181,12 @@ public class HexTest {
 
         final Random random = ThreadLocalRandom.current();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 8192; i++) {
 
             final String encoded = newEncodedString();
 
             if (random.nextBoolean()) {
+
                 start = System.nanoTime();
                 final String defasted = Hex.defastToString(encoded);
                 finish = System.nanoTime();
@@ -190,17 +197,21 @@ public class HexTest {
                 finish = System.nanoTime();
                 decodes.addValue(finish - start);
 
+                Assert.assertEquals(defasted, decoded);
+
             } else {
+
                 start = System.nanoTime();
                 final String decoded = Hex.decodeToString(encoded);
                 finish = System.nanoTime();
                 decodes.addValue(finish - start);
 
                 start = System.nanoTime();
-                final String defasted = Hex.defastToString(decoded);
+                final String defasted = Hex.defastToString(encoded);
                 finish = System.nanoTime();
                 defasts.addValue(finish - start);
 
+                Assert.assertEquals(decoded, defasted);
             }
         }
 
