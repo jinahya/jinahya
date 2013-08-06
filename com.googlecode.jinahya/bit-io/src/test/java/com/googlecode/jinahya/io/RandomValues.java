@@ -141,16 +141,16 @@ final class RandomValues {
     static byte[] newValueBytes(Integer scale, Integer range) {
 
         if (scale == null) {
-            scale = RandomLengths.newBytesScale();
+            scale = RandomLengths.newScaleBytes();
         }
 
-        RandomLengths.assertBytesScale(scale);
+        RandomLengths.assertScaleBytes(scale);
 
         if (range == null) {
-            range = RandomLengths.newBytesRange();
+            range = RandomLengths.newRangeBytes();
         }
 
-        RandomLengths.assertBytesRange(range);
+        RandomLengths.assertRangeBytes(range);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -158,7 +158,7 @@ final class RandomValues {
         random.nextBytes(bytes);
 
         for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) (bytes[i] >> (8 - range));
+            bytes[i] = (byte) ((bytes[i] & 0xFF) >> (8 - range));
         }
 
         return bytes;

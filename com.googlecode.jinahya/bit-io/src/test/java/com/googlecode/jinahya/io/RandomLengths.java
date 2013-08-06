@@ -111,7 +111,7 @@ final class RandomLengths {
     }
 
 
-    static int assertBytesScale(final int sacle) {
+    static int assertScaleBytes(final int sacle) {
 
         Assert.assertTrue(sacle > 0);
         Assert.assertTrue(sacle <= 16);
@@ -120,17 +120,17 @@ final class RandomLengths {
     }
 
 
-    static int newBytesScale() {
+    static int newScaleBytes() {
 
         final Random random = ThreadLocalRandom.current();
 
         final int scale = random.nextInt(16) + 1; // (0 ~ 15) + 1 = (1 ~ 16)
 
-        return assertBytesScale(scale);
+        return assertScaleBytes(scale);
     }
 
 
-    static int assertBytesRange(final int range) {
+    static int assertRangeBytes(final int range) {
 
         Assert.assertTrue(range > 0);
         Assert.assertTrue(range <= 8);
@@ -139,13 +139,13 @@ final class RandomLengths {
     }
 
 
-    static int newBytesRange() {
+    static int newRangeBytes() {
 
         final Random random = ThreadLocalRandom.current();
 
         final int scale = random.nextInt(8) + 1; // (0 ~ 7) + 1 = (1 ~ 8)
 
-        return assertBytesRange(scale);
+        return assertRangeBytes(scale);
     }
 
 

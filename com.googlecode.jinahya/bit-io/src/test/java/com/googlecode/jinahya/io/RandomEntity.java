@@ -36,6 +36,7 @@ public class RandomEntity implements Serializable {
 
 
     public RandomEntity() {
+
         super();
 
         final Random random = ThreadLocalRandom.current();
@@ -72,6 +73,15 @@ public class RandomEntity implements Serializable {
             sll[i] = RandomLengths.newLengthLong();
             slv[i] = RandomValues.newValueLong(sll[i]);
         }
+
+        bas = new int[random.nextInt(32)];
+        bar = new int[bas.length];
+        bav = new byte[bar.length][];
+        for (int i = 0; i < bav.length; i++) {
+            bas[i] = RandomLengths.newScaleBytes();
+            bar[i] = RandomLengths.newRangeBytes();
+            bav[i] = RandomValues.newValueBytes(bas[i], bar[i]);
+        }
     }
 
 
@@ -83,6 +93,7 @@ public class RandomEntity implements Serializable {
         hash = 53 * hash + Arrays.hashCode(this.siv);
         hash = 53 * hash + Arrays.hashCode(this.ulv);
         hash = 53 * hash + Arrays.hashCode(this.slv);
+        hash = 53 * hash + Arrays.deepHashCode(this.bav);
         return hash;
     }
 
@@ -109,6 +120,9 @@ public class RandomEntity implements Serializable {
             return false;
         }
         if (!Arrays.equals(this.slv, other.slv)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.bav, other.bav)) {
             return false;
         }
         return true;
@@ -152,6 +166,16 @@ public class RandomEntity implements Serializable {
             slv[i] = input.readLong(sll[i]);
         }
 
+        bas = new int[input.readUnsignedInt(7)];
+        bar = new int[bas.length];
+        bav = new byte[bar.length][];
+        for (int i = 0; i < bav.length; i++) {
+            bas[i] = input.readUnsignedInt(16);
+            bar[i] = input.readUnsignedInt(8);
+            System.out.println("r: " + bas[i] + "/" + bar[i]);
+            bav[i] = input.readBytes(bas[i], bar[i]);
+        }
+
         return this;
     }
 
@@ -185,6 +209,14 @@ public class RandomEntity implements Serializable {
         for (int i = 0; i < sll.length; i++) {
             output.writeUnsignedInt(6, sll[i] - 1);
             output.writeLong(sll[i], slv[i]);
+        }
+
+        output.writeUnsignedInt(7, bas.length);
+        for (int i = 0; i < bav.length; i++) {
+            output.writeUnsignedInt(16, bas[i]);
+            output.writeUnsignedInt(8, bar[i]);
+            System.out.println("w: " + bas[i] + "/" + bar[i]);
+            output.writeBytes(bas[i], bar[i], bav[i]);
         }
 
         return this;
@@ -280,5 +312,13 @@ public class RandomEntity implements Serializable {
     private long[] slv;
 
 
-}
+    private int[] bas;
 
+
+    private int[] bar;
+
+
+    private byte[][] bav;
+
+
+}
