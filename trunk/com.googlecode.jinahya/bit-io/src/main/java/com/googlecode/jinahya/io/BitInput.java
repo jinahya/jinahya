@@ -68,7 +68,7 @@ public class BitInput {
             super();
 
             if (stream == null) {
-                throw new NullPointerException("null stream");
+                throw new NullPointerException("stream");
             }
 
             this.stream = stream;
@@ -171,7 +171,7 @@ public class BitInput {
             super();
 
             if (buffer == null) {
-                throw new NullPointerException("null buffer");
+                throw new NullPointerException("buffer");
             }
 
             this.buffer = buffer;
@@ -200,10 +200,11 @@ public class BitInput {
      * @param input the byte input
      */
     public BitInput(final ByteInput input) {
+
         super();
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         this.input = input;
@@ -467,7 +468,8 @@ public class BitInput {
      * Reads an array of bytes.
      *
      * @param scale array length scale; between 0 exclusive and 16 inclusive.
-     * @param range valid bit range in each bytes.
+     * @param range valid bit range in each bytes; between 0 exclusive and 8
+     * inclusive.
      *
      * @return an array of bytes.
      *
@@ -503,45 +505,6 @@ public class BitInput {
 
 
     /**
-     * Reads an array of ASCII bytes.
-     *
-     * @return the array of ASCII bytes read.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public byte[] readUsAsciiBytes() throws IOException {
-
-        return readBytes(16, 7);
-    }
-
-
-    /**
-     * Reads an ASCII string.
-     *
-     * @return the ASCII String read.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public String readUsAsciiString() throws IOException {
-
-        return new String(readUsAsciiBytes(), "US-ASCII");
-    }
-
-
-    /**
-     * Reads an array of bytes.
-     *
-     * @return the array of bytes read.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public byte[] readBytes() throws IOException {
-
-        return readBytes(16, 8);
-    }
-
-
-    /**
      * Reads a String.
      *
      * @param charsetName the charset name to decode the string.
@@ -556,7 +519,20 @@ public class BitInput {
             throw new NullPointerException("charsetName");
         }
 
-        return new String(readBytes(), charsetName);
+        return new String(readBytes(16, 8), charsetName);
+    }
+
+
+    /**
+     * Reads an ASCII string with {@code scale} of 16.
+     *
+     * @return an US-ASCII String.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public String readUsAsciiString() throws IOException {
+
+        return new String(readBytes(16, 7), "US-ASCII");
     }
 
 
@@ -577,10 +553,10 @@ public class BitInput {
 
         int bits = 0;
 
-        // discarding remained bits from current byte.
+        // reading(discarding) remained bits from current byte.
         if (index < 8) {
             bits = 8 - index;
-            readUnsignedByte(bits); // count++
+            readUnsignedByte(bits); // count increments
         }
 
         int bytes = count % length;
@@ -639,4 +615,3 @@ public class BitInput {
 
 
 }
-

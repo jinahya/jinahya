@@ -67,7 +67,7 @@ public class BitOutput {
             super();
 
             if (stream == null) {
-                throw new NullPointerException("null stream");
+                throw new NullPointerException("stream");
             }
 
             this.stream = stream;
@@ -102,11 +102,11 @@ public class BitOutput {
             super();
 
             if (channel == null) {
-                throw new NullPointerException("null channel");
+                throw new NullPointerException("channel");
             }
 
             if (!channel.isOpen()) {
-                throw new IllegalArgumentException("channel closed");
+                throw new IllegalArgumentException("closed channel");
             }
 
             this.channel = channel;
@@ -158,7 +158,7 @@ public class BitOutput {
             super();
 
             if (buffer == null) {
-                throw new NullPointerException("null buffer");
+                throw new NullPointerException("buffer");
             }
 
             this.buffer = buffer;
@@ -187,10 +187,11 @@ public class BitOutput {
      * @param output target byte output
      */
     public BitOutput(final ByteOutput output) {
+        
         super();
 
         if (output == null) {
-            throw new NullPointerException("null output");
+            throw new NullPointerException("output");
         }
 
         this.output = output;
@@ -491,7 +492,8 @@ public class BitOutput {
      * Writes an array of bytes.
      *
      * @param scale array length scale; between 0 exclusive and 16 inclusive.
-     * @param range valid bit range in each bytes.
+     * @param range valid bit range in each bytes; between 0 exclusive and 8
+     * inclusive.
      * @param value the array of bytes to write.
      *
      * @throws IOException if an I/O error occurs.
@@ -534,52 +536,7 @@ public class BitOutput {
 
 
     /**
-     * Writes an array of ASCII bytes.
-     *
-     * @param value the ASCII bytes to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public void writeUsAsciiBytes(final byte[] value) throws IOException {
-
-        writeBytes(16, 7, value);
-    }
-
-
-    /**
-     * Writes an ASCII encoded string.
-     *
-     * @param value the String to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public void writeUsAsciiString(final String value) throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("value");
-        }
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-
-        writeUsAsciiBytes(bytes);
-    }
-
-
-    /**
-     * Writes an array of bytes.
-     *
-     * @param bytes the array of bytes to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public void writeBytes(final byte[] bytes) throws IOException {
-
-        writeBytes(16, 8, bytes);
-    }
-
-
-    /**
-     * Writes a string.
+     * Writes a String.
      *
      * @param value the string to write.
      * @param charsetName the charset name to encode the string.
@@ -599,7 +556,26 @@ public class BitOutput {
 
         final byte[] bytes = value.getBytes(charsetName);
 
-        writeBytes(bytes);
+        writeBytes(16, 8, bytes);
+    }
+
+
+    /**
+     * Writes an ASCII encoded string.
+     *
+     * @param value the String to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeUsAsciiString(final String value) throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        final byte[] bytes = value.getBytes("US-ASCII");
+
+        writeBytes(16, 7, bytes);
     }
 
 
@@ -620,10 +596,10 @@ public class BitOutput {
 
         int bits = 0;
 
-        // padding remained bits into current byte
+        // writing(padding) remained bits into current byte
         if (index > 0) {
             bits = (8 - index);
-            writeUnsignedByte(bits, 0x00); // count++
+            writeUnsignedByte(bits, 0x00); // count incremented
         }
 
         int bytes = count % length;
@@ -634,7 +610,7 @@ public class BitOutput {
 
         if (bytes > 0) {
             bytes = length - bytes;
-        } else { // mod < 0
+        } else {
             bytes = 0 - bytes;
         }
 
@@ -682,4 +658,3 @@ public class BitOutput {
 
 
 }
-
