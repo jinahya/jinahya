@@ -15,10 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.nica;
+package com.googlecode.jinahya.nica.client;
 
 
 /**
+ * Defines a factory API that enables applications to obtain a builder.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
@@ -26,7 +27,7 @@ public abstract class NicaBuilderFactory {
 
 
     /**
-     * Creates a new instance.
+     * Protected constructor to prevent instantiation.
      */
     protected NicaBuilderFactory() {
 
@@ -38,8 +39,10 @@ public abstract class NicaBuilderFactory {
      * Creates a new instance of {@link NicaBuilder}.
      *
      * @return a new instance of {@link NicaBuilder}.
+     *
+     * @throws NicaClientException
      */
-    public abstract NicaBuilder newNicaBuilder();
+    public abstract NicaBuilder newNicaBuilder() throws NicaClientException;
 
 
 }
