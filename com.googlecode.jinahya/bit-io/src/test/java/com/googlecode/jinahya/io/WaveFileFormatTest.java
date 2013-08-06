@@ -38,7 +38,8 @@ public class WaveFileFormatTest extends FileFormatTest<WaveFileFormat> {
     @Test(enabled = false)
     public void test() throws IOException {
         final WaveFileFormat scanner = newInstance();
-        final InputStream input = getClass().getResourceAsStream("/M1F1-Alaw-AFsp.wav");
+        final InputStream input =
+            getClass().getResourceAsStream("/M1F1-Alaw-AFsp.wav");
         try {
             scanner.read(input);
         } finally {
@@ -50,7 +51,8 @@ public class WaveFileFormatTest extends FileFormatTest<WaveFileFormat> {
     @Test
     public void test1() throws IOException {
         final WaveFileFormat scanner = newInstance();
-        final InputStream input = getClass().getResourceAsStream("/M1F1-AlawWE-AFsp.wav");
+        final InputStream input =
+            getClass().getResourceAsStream("/M1F1-AlawWE-AFsp.wav");
         try {
             scanner.read(input);
         } finally {
@@ -60,4 +62,3 @@ public class WaveFileFormatTest extends FileFormatTest<WaveFileFormat> {
 
 
 }
-

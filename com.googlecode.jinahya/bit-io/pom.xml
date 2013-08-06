@@ -185,15 +185,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <!--<detectJavaApiLink>false</detectJavaApiLink>-->
-<!--                <javaApiLinks>
-                  <property>
-                    <name>javase_7_docs_api</name>
-                    <value>http://docs.oracle.com/javase/7/docs/api/</value>
-                  </property>
-                </javaApiLinks>-->
-              </configuration>
+              <configuration/>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -202,12 +194,10 @@
                 <targetJdk>1.7</targetJdk>
               </configuration>
             </plugin>
-            <!--
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>cobertura-maven-plugin</artifactId>
             </plugin>
-            -->
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
@@ -276,15 +266,14 @@
   <repositories />
   <pluginRepositories />
   <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Propellors Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
     <repository>
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>

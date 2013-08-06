@@ -48,29 +48,29 @@ public class RandomEntity implements Serializable {
         uil = new int[random.nextInt(128)];
         uiv = new int[uil.length];
         for (int i = 0; i < uiv.length; i++) {
-            uil[i] = Generator.newLengthIntUnsigned();
-            uiv[i] = Generator.newValueIntUnsigned(uil[i]);
+            uil[i] = RandomLengths.newLengthIntUnsigned();
+            uiv[i] = RandomValues.newValueIntUnsigned(uil[i]);
         }
 
         sil = new int[random.nextInt(128)];
         siv = new int[sil.length];
         for (int i = 0; i < siv.length; i++) {
-            sil[i] = Generator.newLengthInt();
-            siv[i] = Generator.newValueInt(sil[i]);
+            sil[i] = RandomLengths.newLengthInt();
+            siv[i] = RandomValues.newValueInt(sil[i]);
         }
 
         ull = new int[random.nextInt(128)];
         ulv = new long[ull.length];
         for (int i = 0; i < ulv.length; i++) {
-            ull[i] = Generator.newLengthLongUnsigned();
-            ulv[i] = Generator.newValueLongUnsigned(ull[i]);
+            ull[i] = RandomLengths.newLengthLongUnsigned();
+            ulv[i] = RandomValues.newValueLongUnsigned(ull[i]);
         }
 
         sll = new int[random.nextInt(128)];
         slv = new long[sll.length];
         for (int i = 0; i < slv.length; i++) {
-            sll[i] = Generator.newLengthLong();
-            slv[i] = Generator.newValueLong(sll[i]);
+            sll[i] = RandomLengths.newLengthLong();
+            slv[i] = RandomValues.newValueLong(sll[i]);
         }
     }
 
