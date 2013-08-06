@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.nica;
+package com.googlecode.jinahya.nica.client;
 
 
 /**
@@ -26,7 +26,7 @@ public abstract class NicaBuilder {
 
 
     /**
-     * Creates a new instance.
+     * Protected constructor.
      */
     protected NicaBuilder() {
 
@@ -76,7 +76,7 @@ public abstract class NicaBuilder {
     /**
      * Builds and attaches request properties on given {@code object}.
      *
-     * @param object connection object
+     * @param object platform dependent connection object
      */
     public abstract void build(Object object);
 
