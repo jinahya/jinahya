@@ -35,9 +35,7 @@ public abstract class NicaBuilder {
 
 
     /**
-     * Puts a {@code constant} entry. The entry will be persistent in all
-     * {@code NicaBuilder} instances created from the originated
-     * {@code NicaBuilderFactory}. An {@code IllegalStateException} will be
+     * Puts a {@code constant} entry. An {@code IllegalStateException} will be
      * thrown if the entry for {@code key} is already occupied.
      *
      * @param key entry key; must not be null.
@@ -49,9 +47,7 @@ public abstract class NicaBuilder {
 
 
     /**
-     * Puts an {@code variable} entry. The entry will be persistent in all
-     * {@code NicaBuilder} instances created from the originated
-     * {@code NicaBuilderFactory}.
+     * Puts an {@code variable} entry.
      *
      * @param key entry key; must not be null.
      * @param value entry value; must not be null.

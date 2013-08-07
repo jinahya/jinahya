@@ -23,4 +23,46 @@ package com.googlecode.jinahya.nica.client;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class NicaClientException extends Exception {
+
+
+    /**
+     * generated.
+     */
+    private static final long serialVersionUID = -5097801054690265673L;
+
+
+    /**
+     * Creates a new instance with the specified detail message.
+     *
+     * @param message the detail message.
+     */
+    public NicaClientException(final String message) {
+
+        super(message);
+    }
+
+
+    /**
+     * Creates a new exception with the specified detail message and cause.
+     *
+     * @param message the detail message.
+     * @param cause the cause.
+     */
+    public NicaClientException(final String message, final Throwable cause) {
+
+        super(message, cause);
+    }
+
+
+    /**
+     * Creates a new instance with specified cause.
+     *
+     * @param cause the cause
+     */
+    public NicaClientException(final Throwable cause) {
+
+        super(cause);
+    }
+
+
 }
