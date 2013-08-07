@@ -207,21 +207,22 @@ public abstract class AndroidNicaBuilder extends NicaBuilder {
         new HashMap<String, String>();
 
 
-    final transient Map<String, String> variableCodes =
+    private final transient Map<String, String> variableCodes =
         new HashMap<String, String>();
 
 
-    final transient Map<String, String> volatileCodes =
+    private final transient Map<String, String> volatileCodes =
         new HashMap<String, String>();
 
 
-    final transient Map<String, String> names = new HashMap<String, String>();
+    private final transient Map<String, String> names =
+        new HashMap<String, String>();
 
 
-    transient Aes aes;
+    private transient Aes aes;
 
 
-    transient Hac hac;
+    private transient Hac hac;
 
 
 }
