@@ -21,6 +21,8 @@ package com.googlecode.jinahya.nica.client;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings.Secure;
+import android.util.AndroidRuntimeException;
+import android.util.Log;
 import com.googlecode.jinahya.nica.CodeKeys;
 import com.googlecode.jinahya.nica.PlatformIds;
 import com.googlecode.jinahya.nica.util.Aes;
@@ -28,8 +30,10 @@ import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
 import com.googlecode.jinahya.nica.util.Sha;
 import com.googlecode.jinahya.nica.util.ShaJCA;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
 
@@ -38,6 +42,9 @@ import java.util.ServiceLoader;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
+
+
+    private static final String LOG_TAG = "NICA";
 
 
     private static ServiceLoader<AndroidNicaBuilderFactory> FACTORIES =
@@ -62,6 +69,28 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
             throw new NullPointerException("context");
         }
 
+        System.out.println("os.arch: " + System.getProperty("os.arch"));
+        System.out.println("os.name: " + System.getProperty("os.name"));
+        System.out.println("os.version: " + System.getProperty("os.version"));
+
+        for (Field field : Build.class.getFields()) {
+            try {
+                Log.i(LOG_TAG, "Build." + field.getName() + ": "
+                               + field.get(null));
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
+
+        for (Field field : Build.VERSION.class.getFields()) {
+            try {
+                Log.i(LOG_TAG, "Build.VERSION." + field.getName() + ": "
+                               + field.get(null));
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
+
         context = context.getApplicationContext(); // required?
 
         for (AndroidNicaBuilderFactory factory : FACTORIES) {
@@ -70,33 +99,36 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
                 CodeKeys.PLATFORM_ID, PlatformIds.ANDROID);
 
             final Sha sha = new ShaJCA();
+
             final String deviceVersion = "unknown";
-            System.out.println("deviceVersion: " + deviceVersion);
             factory.constantCodes.put(
                 CodeKeys.DEVICE_VERSION, sha.hashToString(deviceVersion));
+
             final String deviceName = Build.HARDWARE;
-            System.out.println("deviceName: " + deviceName);
             factory.constantCodes.put(
                 CodeKeys.DEVICE_NAME, sha.hashToString(deviceName));
+
             final String deviceId = Build.SERIAL;
-            System.out.println("deviceId: " + deviceId);
             factory.constantCodes.put(
                 CodeKeys.DEVICE_ID, sha.hashToString(deviceId));
 
-            final String systemVersion =
-                Integer.toString(Build.VERSION.SDK_INT);
-            System.out.println("systemVersion: " + systemVersion);
+            final String systemVersion = Build.VERSION.RELEASE;
             factory.constantCodes.put(
                 CodeKeys.SYSTEM_VERSION, sha.hashToString(systemVersion));
+
             final String systemName = "unknown";
-            System.out.println("systemName: " + systemName);
             factory.constantCodes.put(
                 CodeKeys.SYSTEM_NAME, sha.hashToString(systemName));
+
             final String systemId = Secure.getString(
                 context.getContentResolver(), Secure.ANDROID_ID);
-            System.out.println("systemId: " + systemId);
             factory.constantCodes.put(
                 CodeKeys.SYSTEM_ID, sha.hashToString(systemId));
+
+            for (Entry<String, String> entry
+                 : factory.constantCodes.entrySet()) {
+                Log.i(LOG_TAG, entry.getKey() + ": " + entry.getValue());
+            }
 
             final ClientCredential credential =
                 factory.loadClientCredential(context);
@@ -123,17 +155,56 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
     @Override
     public NicaBuilder newNicaBuilder() throws NicaClientException {
 
-        for (AndroidNicaBuilder bulider : BUILDERS) {
+        for (AndroidNicaBuilder builder : BUILDERS) {
 
-            bulider.constantCodes.putAll(constantCodes);
+            builder.constantCodes.putAll(constantCodes);
 
-            bulider.names.putAll(names);
+            try {
+                final Field field =
+                    AndroidNicaBuilder.class.getDeclaredField("names");
+                field.setAccessible(true);
+                try {
+                    @SuppressWarnings("unchecked")
+                    final Map<String, String> value =
+                        (Map<String, String>) field.get(builder);
+                    value.putAll(names);
+                } catch (IllegalAccessException iae) {
+                    throw new AndroidRuntimeException(iae);
+                }
+            } catch (NoSuchFieldException nsfe) {
+                throw new AndroidRuntimeException(nsfe);
+            }
+//            builder.names.putAll(names);
 
-            bulider.aes = new AesJCE(key);
+            try {
+                final Field field =
+                    AndroidNicaBuilder.class.getDeclaredField("aes");
+                field.setAccessible(true);
+                try {
+                    field.set(builder, new AesJCE(key));
+                } catch (IllegalAccessException iae) {
+                    throw new AndroidRuntimeException(iae);
+                }
+            } catch (NoSuchFieldException nsfe) {
+                throw new AndroidRuntimeException(nsfe);
+            }
+//            builder.aes = new AesJCE(key);
 
-            bulider.hac = new HacJCE(key);
+            try {
+                final Field field =
+                    AndroidNicaBuilder.class.getDeclaredField("hac");
+                field.setAccessible(true);
+                try {
+                    field.set(builder, new HacJCE(key));
+                } catch (IllegalAccessException iae) {
+                    throw new AndroidRuntimeException(iae);
+                }
+            } catch (NoSuchFieldException nsfe) {
+                throw new AndroidRuntimeException(nsfe);
+            }
+//            builder.hac = new HacJCE(key);
 
-            return bulider;
+            return builder;
         }
 
         throw new NicaClientException(
