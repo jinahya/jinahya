@@ -109,7 +109,8 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
             return factory;
         }
 
-        throw new NicaClientException();
+        throw new NicaClientException(
+            "no implementation found: " + AndroidNicaBuilderFactory.class);
     }
 
 
@@ -135,10 +136,19 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
             return bulider;
         }
 
-        throw new NicaClientException();
+        throw new NicaClientException(
+            "no implementation found: " + AndroidNicaBuilder.class);
     }
 
 
+    /**
+     *
+     * @param context application context
+     *
+     * @return a loaded instance of {@link ClientCredential}.
+     *
+     * @throws NicaClientException if failed to load
+     */
     protected abstract ClientCredential loadClientCredential(Context context)
         throws NicaClientException;
 
