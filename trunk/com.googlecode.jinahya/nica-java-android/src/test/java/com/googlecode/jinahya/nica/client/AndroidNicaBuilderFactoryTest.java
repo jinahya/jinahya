@@ -15,10 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.nica;
-
-
-import org.testng.annotations.Test;
+package com.googlecode.jinahya.nica.client;
 
 
 /**
@@ -26,13 +23,4 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class AndroidNicaBuilderFactoryTest {
-
-
-    @Test(expectedExceptions = {NullPointerException.class})
-    public static void testGetInstanceWithNullContext() {
-
-        AndroidNicaBuilderFactory.getInstance(null);
-    }
-
-
 }
