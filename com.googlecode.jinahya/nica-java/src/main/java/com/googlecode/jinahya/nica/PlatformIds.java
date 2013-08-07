@@ -25,46 +25,50 @@ package com.googlecode.jinahya.nica;
 public final class PlatformIds {
 
 
+    private static final String NAMESPACE =
+        "http://jinahya.googlecode.com/nica/platforms";
+
+
     /**
      * Android.
      */
-    public static final String ANDROID = "/platforms/android";
+    public static final String ANDROID = NAMESPACE + "/android";
 
 
     /**
      * BlackBerry.
      */
-    public static final String BLACKBERRY = "/platforms/blackberry";
+    public static final String BLACKBERRY = NAMESPACE + "/blackberry";
 
 
     /**
      * iOS.
      */
-    public static final String IOS = "/platforms/ios";
+    public static final String IOS = NAMESPACE + "/ios";
 
 
     /**
      * Java TV.
      */
-    public static final String JAVA_TV = "/platforms/java_tv";
+    public static final String JAVA_TV = NAMESPACE + "/java_tv";
 
 
     /**
      * Tizen.
      */
-    public static final String TIZEN = "/platforms/tizen";
+    public static final String TIZEN = NAMESPACE + "/tizen";
 
 
     /**
      * Unknown.
      */
-    public static final String UNKNOWN = "/platforms/unknown";
+    public static final String UNKNOWN = NAMESPACE + "/unknown";
 
 
     /**
      * Windows Phone.
      */
-    public static final String WINDOWS_PHONE = "/platforms/windows_phone";
+    public static final String WINDOWS_PHONE = NAMESPACE + "/windows_phone";
 
 
     /**
@@ -76,4 +80,3 @@ public final class PlatformIds {
 
 
 }
-
