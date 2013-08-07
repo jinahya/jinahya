@@ -182,7 +182,6 @@ public abstract class AndroidNicaBuilder extends NicaBuilder {
         new SecureRandom().nextBytes(iv);
         map.put(HeaderNames.INIT, Hex.encodeToString(iv));
 
-
         // ----------------------------------------------------------- Nica-Code
         final Map<String, String> codes = new HashMap<String, String>(
             volatileCodes.size() + variableCodes.size() + constantCodes.size());
@@ -191,7 +190,7 @@ public abstract class AndroidNicaBuilder extends NicaBuilder {
         codes.putAll(constantCodes);
         final String base = Par.encode(codes);
         final String code = aes.encryptToString(iv, base);
-        map.put(HeaderNames.BASE, base);
+        //map.put(HeaderNames.BASE, base);
         map.put(HeaderNames.CODE, code);
 
         // ----------------------------------------------------------- Nica-Auth
