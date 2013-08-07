@@ -23,6 +23,7 @@ import com.googlecode.jinahya.nica.HeaderNames;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
+import com.googlecode.jinahya.nica.util.Nuo;
 import com.googlecode.jinahya.nica.util.Par;
 import java.net.HttpURLConnection;
 import java.security.SecureRandom;
@@ -136,6 +137,12 @@ public abstract class AndroidNicaBuilder extends NicaBuilder {
      * @return a map of request header names and values.
      */
     private Map<String, String> headers() {
+
+        final long timestamp = System.currentTimeMillis();
+        variableCodes.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(timestamp));
+
+        final long nonce = Nuo.generate(timestamp);
+        variableCodes.put(CodeKeys.REQUEST_NONCE, Long.toString(nonce));
 
         final Locale locale = Locale.getDefault();
 
