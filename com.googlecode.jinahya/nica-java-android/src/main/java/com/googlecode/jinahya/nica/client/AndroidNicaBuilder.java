@@ -15,27 +15,30 @@
  */
 
 
-package com.googlecode.jinahya.nica;
+package com.googlecode.jinahya.nica.client;
 
 
+import com.googlecode.jinahya.nica.CodeKeys;
+import com.googlecode.jinahya.nica.HeaderNames;
 import com.googlecode.jinahya.nica.util.Aes;
-import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.Hac;
 import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Par;
 import java.net.HttpURLConnection;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
+import org.apache.http.HttpRequest;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class AndroidNicaBuilder extends NicaBuilder {
+public abstract class AndroidNicaBuilder extends NicaBuilder {
 
 
     protected AndroidNicaBuilder() {
@@ -116,12 +119,23 @@ public class AndroidNicaBuilder extends NicaBuilder {
             return;
         }
 
+        if (object instanceof HttpRequest) {
+            final HttpRequest request = (HttpRequest) object;
+            for (Entry<String, String> entry : headers.entrySet()) {
+                request.addHeader(entry.getKey(), entry.getValue());
+            }
+            return;
+        }
+
         throw new IllegalArgumentException("unsupported: " + object);
     }
 
 
+    /**
+     *
+     * @return a map of request header names and values.
+     */
     private Map<String, String> headers() {
-
 
         final Locale locale = Locale.getDefault();
 
@@ -157,8 +171,10 @@ public class AndroidNicaBuilder extends NicaBuilder {
         map.put(HeaderNames.NAME, Par.encode(names));
 
         // ----------------------------------------------------------- Nica-Init
-        final byte[] iv = AesJCE.newIv();
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
+        new SecureRandom().nextBytes(iv);
         map.put(HeaderNames.INIT, Hex.encodeToString(iv));
+
 
         // ----------------------------------------------------------- Nica-Code
         final Map<String, String> codes = new HashMap<String, String>(
@@ -168,17 +184,17 @@ public class AndroidNicaBuilder extends NicaBuilder {
         codes.putAll(constantCodes);
         final String base = Par.encode(codes);
         final String code = aes.encryptToString(iv, base);
+        map.put(HeaderNames.BASE, base);
         map.put(HeaderNames.CODE, code);
 
         // ----------------------------------------------------------- Nica-Auth
         final String auth = hac.authenticateToString(base);
         map.put(HeaderNames.AUTH, auth);
 
+        volatileCodes.clear();
+
         return map;
     }
-
-
-    private transient AndroidNicaBuilderFactory factory;
 
 
     final transient Map<String, String> constantCodes =
