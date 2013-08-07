@@ -34,7 +34,9 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.ServiceLoader;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -68,6 +70,8 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
         if (context == null) {
             throw new NullPointerException("context");
         }
+
+        final Random random = ThreadLocalRandom.current();
 
         System.out.println("os.arch: " + System.getProperty("os.arch"));
         System.out.println("os.name: " + System.getProperty("os.name"));
