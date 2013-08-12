@@ -137,9 +137,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/${project.artifactId}</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/${project.artifactId}</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/${project.artifactId}</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/${project.groupId}/${project.artifactId}</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/trunk/${project.groupId}/${project.artifactId}</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
