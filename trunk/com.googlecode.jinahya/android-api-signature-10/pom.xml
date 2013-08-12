@@ -20,7 +20,7 @@
         <groupId>com.google</groupId>
         <artifactId>android-api</artifactId>
         <type>jar</type>
-        <version>${android.api}</version>
+        <version>${android.api.level}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -30,13 +30,13 @@
       <artifactId>android-api</artifactId>
       <type>jar</type>
       <scope>system</scope>
-      <systemPath>${env.ANDROID_HOME}/platforms/android-${android.api}/android.jar</systemPath>
+      <systemPath>${env.ANDROID_HOME}/platforms/android-${android.api.level}/android.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <android.api>10</android.api>
+    <android.api.level>10</android.api.level>
   </properties>
 
   <!-- Build Settings -->
@@ -87,7 +87,7 @@
             <configuration>
               <includeJavaHome>false</includeJavaHome>
               <includeDependencies>
-                <includeDependency>com.google:android-api:jar:10</includeDependency>
+                <includeDependency>com.google:android-api:jar:${android.api.level}</includeDependency>
               </includeDependencies>
             </configuration>
           </execution>
@@ -124,9 +124,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/android-api-signature-10</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/android-api-signature-10</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/tags/android-api-signature-10</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/${project.artifactId}</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/${project.artifactId}</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/${project.artifactId}</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
