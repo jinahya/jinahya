@@ -41,8 +41,8 @@ public class AndroidNicaBuilderFactoryImpl extends AndroidNicaBuilderFactory {
             @Override
             public Map getNames() {
                 final Map<String, String> names = new HashMap<String, String>();
-                names.put("key1", "value1");
-                names.put("key2", "value2");
+                names.put("key1", "밸류1");
+                names.put("키2", "value2");
                 return names;
             }
 

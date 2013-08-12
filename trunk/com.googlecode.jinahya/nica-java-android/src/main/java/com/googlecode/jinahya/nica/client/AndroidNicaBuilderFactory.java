@@ -71,8 +71,6 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
             throw new NullPointerException("context");
         }
 
-        final Random random = ThreadLocalRandom.current();
-
         System.out.println("os.arch: " + System.getProperty("os.arch"));
         System.out.println("os.name: " + System.getProperty("os.name"));
         System.out.println("os.version: " + System.getProperty("os.version"));
