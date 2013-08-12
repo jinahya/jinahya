@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -14,8 +12,8 @@
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-  <dependencyManagement/>
-  <dependencies/>
+  <dependencyManagement />
+  <dependencies />
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -99,7 +97,7 @@
       </plugin>
     </plugins>
   </build>
-  <reporting/>
+  <reporting />
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
@@ -113,7 +111,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization/>
+  <organization />
   <developers>
     <developer>
       <id>jinahya</id>
@@ -121,16 +119,16 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors/>
+  <contributors />
 
   <!-- Environment Settings -->
-  <issueManagement/>
-  <ciManagement/>
-  <mailingLists/>
+  <issueManagement />
+  <ciManagement />
+  <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/android-signature-2.3.3</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/android-signature-2.3.3</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/android-signature-2.3.3</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/android-signature-2.3.3</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/android-signature-2.3.3</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/android-signature-2.3.3</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
