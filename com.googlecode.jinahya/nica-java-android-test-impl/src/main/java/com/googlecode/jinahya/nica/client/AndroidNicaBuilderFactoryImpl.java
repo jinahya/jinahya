@@ -36,6 +36,8 @@ public class AndroidNicaBuilderFactoryImpl extends AndroidNicaBuilderFactory {
     protected ClientCredential loadClientCredential(final Context context)
         throws NicaClientException {
 
+        //final Random random = java.util.concurrent.ThreadLocalRandom.current();
+
         return new ClientCredential() {
 
             @Override
