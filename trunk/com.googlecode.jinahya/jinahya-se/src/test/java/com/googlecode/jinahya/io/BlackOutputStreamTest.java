@@ -21,6 +21,7 @@ package com.googlecode.jinahya.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.annotations.Test;
 
 
@@ -34,14 +35,52 @@ public class BlackOutputStreamTest {
     @Test
     public void testWrite() throws IOException {
 
+        final Random random = ThreadLocalRandom.current();
+
         final OutputStream out = new BlackOutputStream();
 
-        final Random random = new Random();
         for (int i = 0; i < 1024; i++) {
-            out.write(random.nextInt(0x0100));
+            out.write(random.nextInt());
         }
-        out.flush();
 
+        out.flush();
+        out.close();
+    }
+
+
+    @Test
+    public void testWriteUnderLimit() throws IOException {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final long limit = (long) (random.nextInt(1048576) + 1);
+
+        final OutputStream out = new BlackOutputStream(limit);
+
+        final int count = random.nextInt((int) limit);
+        for (int i = 0; i < count; i++) {
+            out.write(random.nextInt());
+        }
+
+        out.flush();
+        out.close();
+    }
+
+
+    @Test(expectedExceptions = {IOException.class})
+    public void testWriteOverLimit() throws IOException {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final long limit = (long) random.nextInt(1048576);
+
+        final OutputStream out = new BlackOutputStream(limit);
+
+        for (int i = 0; i < limit + 1; i++) {
+            out.write(random.nextInt());
+        }
+
+        out.flush();
         out.close();
     }
 
