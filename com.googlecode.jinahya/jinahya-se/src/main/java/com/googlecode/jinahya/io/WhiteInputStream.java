@@ -32,53 +32,61 @@ public class WhiteInputStream extends InputStream {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with given {@code limit}.
      *
-     * @param random the random for generating values.
+     * @param limit the maximum number of bytes for reading. Negative for
+     * unlimited.
      */
-    protected WhiteInputStream(final Random random) {
+    protected WhiteInputStream(final long limit) {
+
         super();
 
-        if (random == null) {
-            throw new NullPointerException("null random");
-        }
-
-        this.random = random;
+        this.limit = limit;
     }
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance without a limit.
      */
     public WhiteInputStream() {
-        this(new Random());
+
+        this(-1L);
     }
 
 
     @Override
     public int read() throws IOException {
 
+        if (limit >= 0L && count >= limit) {
+            return -1;
+        }
+
         count++;
 
-        return random.nextInt(0x0100);
+        return (int) (System.currentTimeMillis() & 0xFF);
     }
 
 
+    /**
+     * Returns the number of bytes read so far.
+     *
+     * @return the number of bytes read so far.
+     */
     public long getCount() {
         return count;
     }
 
 
     /**
-     * random.
-     */
-    private final Random random;
-
-
-    /**
      * count.
      */
     private long count = 0x00L;
+
+
+    /**
+     * limit.
+     */
+    private final long limit;
 
 
 }

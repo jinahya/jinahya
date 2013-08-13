@@ -20,6 +20,9 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,11 +39,46 @@ public class WhiteInputStreamTest {
 
         final InputStream in = new WhiteInputStream();
 
-        int read = -1;
-        for (int i = 0; i < 1024; i++) {
+        for (int read, i = 0; i < 1048576; i++) {
             read = in.read();
             Assert.assertTrue(read >= 0x00 && read < 0x0100);
         }
+
+        in.close();
+    }
+
+
+    @Test
+    public void testReadUnderLimit() throws IOException {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final long limit = (long) (random.nextInt(1048576) + 1);
+
+        final InputStream in = new WhiteInputStream(limit);
+
+        final int count = random.nextInt((int) limit);
+        for (int i = 0; i < count; i++) {
+            in.read();
+        }
+
+        in.close();
+    }
+
+
+    @Test
+    public void testWriteOverLimit() throws IOException {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final long limit = (long) random.nextInt(1048576);
+
+        final InputStream in = new WhiteInputStream(limit);
+
+        in.skip(limit);
+        
+        Assert.assertEquals(in.read(), -1);
+        Assert.assertEquals(in.read(), -1);
 
         in.close();
     }

@@ -30,15 +30,45 @@ import java.io.OutputStream;
 public class BlackOutputStream extends OutputStream {
 
 
+    /**
+     * Creates a new instance with given {@code limit}.
+     *
+     * @param limit the maximum number of bytes for writer. Negative for
+     * unlimited.
+     */
+    public BlackOutputStream(final long limit) {
+
+        super();
+
+        this.limit = limit;
+    }
+
+
+    /**
+     * Creates a new instance without a limit.
+     */
+    public BlackOutputStream() {
+
+        this(-1L);
+    }
+
+
     @Override
     public void write(final int b) throws IOException {
 
-        // nothing to do with given 'b'.
+        if (limit >= 0L && count >= limit) {
+            throw new IOException("limit(" + limit + ") exceeded");
+        }
 
         count++;
     }
 
 
+    /**
+     * Returns the number of bytes written so far.
+     *
+     * @return the number of bytes written so far.
+     */
     public long getCount() {
         return count;
     }
@@ -48,6 +78,12 @@ public class BlackOutputStream extends OutputStream {
      * count.
      */
     private long count = 0x00L;
+
+
+    /**
+     * limit.
+     */
+    private final long limit;
 
 
 }
