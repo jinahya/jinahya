@@ -19,6 +19,9 @@ package com.googlecode.jinahya.io;
 
 
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -103,6 +106,44 @@ public class Streams {
         throws IOException {
 
         return copy(input, output, buffer, -1L);
+    }
+
+
+    public static long copy(final File source, final OutputStream output,
+                            final byte[] buffer, final long length)
+        throws IOException {
+
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
+
+        final InputStream input = new FileInputStream(source);
+        try {
+            return copy(input, output, buffer, length);
+        } finally {
+            input.close();
+        }
+    }
+
+
+    public static long copy(final InputStream input, final File target,
+                            final byte[] buffer, final long length)
+        throws IOException {
+
+        if (target == null) {
+            throw new NullPointerException("target");
+        }
+
+        final OutputStream output = new FileOutputStream(target);
+        try {
+            try {
+                return copy(input, output, buffer, length);
+            } finally {
+                output.flush();
+            }
+        } finally {
+            output.close();
+        }
     }
 
 

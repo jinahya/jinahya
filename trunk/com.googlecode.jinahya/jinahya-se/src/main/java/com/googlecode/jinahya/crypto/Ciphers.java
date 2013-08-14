@@ -46,24 +46,23 @@ public class Ciphers {
      * @throws BadPaddingException
      */
     public static void doFinal(final Cipher cipher, final InputStream input,
-                               final OutputStream output,
-                               final byte[] inbuf)
+                               final OutputStream output, final byte[] inbuf)
         throws IOException, IllegalBlockSizeException, BadPaddingException {
 
         if (cipher == null) {
-            throw new IllegalArgumentException("null cipher");
+            throw new IllegalArgumentException("cipher");
         }
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new IllegalArgumentException("input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null output");
+            throw new IllegalArgumentException("output");
         }
 
         if (inbuf == null) {
-            throw new IllegalArgumentException("null inbuf");
+            throw new IllegalArgumentException("inbuf");
         }
 
         if (inbuf.length == 0) {
@@ -98,6 +97,9 @@ public class Ciphers {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected Ciphers() {
         super();
     }
