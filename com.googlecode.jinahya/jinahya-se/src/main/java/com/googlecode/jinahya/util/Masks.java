@@ -22,16 +22,16 @@ package com.googlecode.jinahya.util;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class Masks {
+public class Masks {
 
 
     /**
      * Puts specified {@code mask} on to given {@code face}.
      *
-     * @param face
-     * @param mask
+     * @param face current face.
+     * @param mask mask to put on.
      *
-     * @return
+     * @return a new face with given {@code mask} on.
      */
     public static int putOn(final int face, final int mask) {
 
@@ -50,15 +50,10 @@ public final class Masks {
     public static int putOn(int face, final int... masks) {
 
         if (masks == null) {
-            throw new NullPointerException("null masks");
+            throw new NullPointerException("masks");
         }
 
-        if (masks.length == 0) {
-            throw new IllegalArgumentException(
-                "masks.length(" + masks.length + ") == 0");
-        }
-
-        for (int mask : masks) {
+        for (final int mask : masks) {
             face = putOn(face, mask);
         }
 
@@ -75,6 +70,7 @@ public final class Masks {
      * @return a new face with given {@code mask} off.
      */
     public static int takeOff(final int face, final int mask) {
+        
         return face & ~mask;
     }
 
@@ -90,12 +86,7 @@ public final class Masks {
     public static int takeOff(int face, final int... masks) {
 
         if (masks == null) {
-            throw new NullPointerException("null masks");
-        }
-
-        if (masks.length == 0) {
-            throw new IllegalArgumentException(
-                "masks.length(" + masks.length + ") == 0");
+            throw new NullPointerException("masks");
         }
 
         for (int mask : masks) {
@@ -109,7 +100,8 @@ public final class Masks {
     /**
      * Creates a new instance.
      */
-    private Masks() {
+    protected Masks() {
+        
         super();
     }
 

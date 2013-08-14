@@ -22,6 +22,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -33,23 +35,41 @@ import org.testng.annotations.Test;
 public class JinahyaRandomTest {
 
 
-    private static void testNextBytesWithLength(final JinahyaRandom random,
-                                                final int length) {
+    private static final Logger LOGGER =
+        Logger.getLogger(JinahyaRandomTest.class.getName());
 
-        final byte[] bytes = random.nextBytes(length);
 
-        Assert.assertEquals(bytes.length, length);
+    private static void testNextIntMinMax(final JinahyaRandom random,
+                                          final int minimum,
+                                          final int maximum) {
+
+        LOGGER.log(Level.INFO, "testNextIntMinMax({0}, {1}, {2})",
+                   new Object[]{random, minimum, maximum});
+
+        boolean min = false;
+        boolean max = false;
+        while (!min || !max) {
+            final int nextInt = random.nextInt(minimum, maximum);
+            if (!min && nextInt == minimum) {
+                LOGGER.log(Level.INFO, "minimum generated: {0}", nextInt);
+                min = true;
+            }
+            if (!max && nextInt == maximum - 1) {
+                LOGGER.log(Level.INFO, "maximum generated: {0}", nextInt);
+                max = true;
+            }
+        }
     }
 
 
-    private static void testNextBytesWithRange(final JinahyaRandom random,
-                                               final int minimumLength,
-                                               final int maximumLength) {
+    private static void testNextBytes(final JinahyaRandom random,
+                                      final int minimumLength,
+                                      final int maximumLength) {
 
         final byte[] bytes = random.nextBytes(minimumLength, maximumLength);
 
         Assert.assertTrue(bytes.length >= minimumLength);
-        Assert.assertTrue(bytes.length <= maximumLength);
+        Assert.assertTrue(bytes.length < maximumLength);
     }
 
 
@@ -59,27 +79,52 @@ public class JinahyaRandomTest {
         try {
             new JinahyaRandom(null);
             Assert.fail("passed: JinahyaRandom(null)");
-        } catch (IllegalArgumentException iae) {
+        } catch (NullPointerException npe) {
             // expected
         }
 
-        new JinahyaRandom(new Random());
-        new JinahyaRandom(SecureRandom.getInstance("SHA1PRNG"));
-        new JinahyaRandom(ThreadLocalRandom.current());
+        JinahyaRandom random;
+        random = new JinahyaRandom(new Random());
+        random = new JinahyaRandom(new SecureRandom());
+        random = new JinahyaRandom(ThreadLocalRandom.current());
     }
 
 
     @Test
-    public void testNextIntWithRange() {
+    public void testNextIntWithToWideRange() {
 
         final JinahyaRandom random =
             new JinahyaRandom(ThreadLocalRandom.current());
 
+        random.nextInt(Integer.MIN_VALUE, -1); // ok
+
         try {
-            random.nextInt(-1, -1);
-            Assert.fail("passed: nextInt(-1, -1)");
+            random.nextInt(Integer.MIN_VALUE, 0);
         } catch (IllegalArgumentException iae) {
+            // expected
         }
+
+        try {
+            random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+
+        random.nextInt(0, Integer.MAX_VALUE);
+
+        try {
+            random.nextInt(-1, Integer.MAX_VALUE);
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+
+    @Test
+    public void testNextInt() {
+
+        final JinahyaRandom random =
+            new JinahyaRandom(ThreadLocalRandom.current());
 
         try {
             random.nextInt(0, -1);
@@ -87,6 +132,8 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
         }
 
+        random.nextInt(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        random.nextInt(-1, -1);
         random.nextInt(0, 0);
         random.nextInt(1, 1);
         random.nextInt(Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -95,106 +142,21 @@ public class JinahyaRandomTest {
             ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
         random.nextInt(length, length);
+
+        testNextIntMinMax(random, Integer.MIN_VALUE, Integer.MIN_VALUE + 200);
+        testNextIntMinMax(random, -100, 100);
+        testNextIntMinMax(random, Integer.MAX_VALUE - 200, Integer.MAX_VALUE);
     }
 
 
-    @Test(invocationCount = 128)
-    public void testNextBytesWithLength() {
-
-        final JinahyaRandom random = new JinahyaRandom(new Random());
-
-        try {
-            random.nextBytes(-1);
-            Assert.fail("passed: nextBytes(-1)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        testNextBytesWithLength(random, 0);
-        testNextBytesWithLength(random, 1);
-
-        final int length = ThreadLocalRandom.current().nextInt(1024);
-        testNextBytesWithLength(random, length);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextBytesWithRange() {
+    @Test
+    public void testNextUnsignedIntWithWrongArguments() {
 
         final JinahyaRandom random =
             new JinahyaRandom(ThreadLocalRandom.current());
 
         try {
-            random.nextBytes(-1, -1);
-            Assert.fail("passed: nextBytes(-1, -1)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextBytes(0, -1);
-            Assert.fail("passed: nextBytes(, -1)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        testNextBytesWithRange(random, 0, 1);
-        testNextBytesWithRange(random, 1, 1);
-
-        final int minimumLength = ThreadLocalRandom.current().nextInt(128);
-        final int maximumLength =
-            ThreadLocalRandom.current().nextInt(128) + minimumLength;
-        testNextBytesWithRange(random, minimumLength, maximumLength);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextUnsignedInt() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextUnsignedInt(-1);
-            Assert.fail("passed: nextUnsignedInt(-1)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextUnsignedInt(0);
-            Assert.fail("passed: nextUnsignedInt(0)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextUnsignedInt(Integer.SIZE);
-            Assert.fail("passed: nextUnsignedInt(Integer.SIZE)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        random.nextUnsignedInt(1);
-        random.nextUnsignedInt(Integer.SIZE - 1);
-
-        final int bitLength = ThreadLocalRandom.current().nextInt(31) + 1;
-        Assert.assertTrue(bitLength >= 1);
-        Assert.assertTrue(bitLength < Integer.SIZE);
-
-        final int unsignedInt = random.nextUnsignedInt(bitLength);
-        Assert.assertTrue(unsignedInt >= 0);
-        Assert.assertTrue(unsignedInt >> bitLength == 0);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextUnsignedIntWithRange() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextUnsignedInt(0, 0);
+            random.nextUnsignedInt(0, 1);
             Assert.fail("passed: nextUnsignedInt(0, 0)");
         } catch (IllegalArgumentException iae) {
             // expected
@@ -213,6 +175,14 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
             // expected
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextUnsignedInt() {
+
+        final JinahyaRandom random =
+            new JinahyaRandom(ThreadLocalRandom.current());
 
         random.nextUnsignedInt(1, 1);
         random.nextUnsignedInt(1, Integer.SIZE - 1);
@@ -229,64 +199,15 @@ public class JinahyaRandomTest {
         Assert.assertTrue(maximumBitLength >= minimumBitLength);
         Assert.assertTrue(maximumBitLength < Integer.SIZE);
 
-        final int unsignedInt =
+        final int nextUnsignedInt =
             random.nextUnsignedInt(minimumBitLength, maximumBitLength);
-        Assert.assertTrue(unsignedInt >= 0);
-        Assert.assertTrue(unsignedInt >> maximumBitLength == 0);
+        Assert.assertTrue(nextUnsignedInt >= 0);
+        Assert.assertTrue(nextUnsignedInt >> maximumBitLength == 0);
     }
 
 
-    @Test(invocationCount = 128)
-    public void testNextSignedInt() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextSignedInt(-1);
-            Assert.fail("passed: nextSignedInt(-1)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        try {
-            random.nextSignedInt(0);
-            Assert.fail("passed: nextSignedInt(0)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        try {
-            random.nextSignedInt(1);
-            Assert.fail("passed: nextSignedInt(1)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        try {
-            random.nextSignedInt(Integer.SIZE + 1); // 33
-            Assert.fail("passed: nextUnsignedInt(Integer.SIZE + 1)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        random.nextSignedInt(2);
-        random.nextSignedInt(Integer.SIZE);
-
-        final int bitLength =
-            ThreadLocalRandom.current().nextInt(Integer.SIZE - 1) + 2;
-        Assert.assertTrue(bitLength > 1);
-        Assert.assertTrue(bitLength <= Integer.SIZE);
-
-        final int signedInt = random.nextSignedInt(bitLength);
-        if (bitLength < Integer.SIZE) {
-            if (signedInt >= 0) {
-                Assert.assertTrue(signedInt >> bitLength == 0);
-            } else {
-                Assert.assertTrue(signedInt >> bitLength == -1);
-            }
-        }
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextSignedIntWithRange() {
+    @Test
+    public void testNextSignedIntWithWrongArguments() {
 
         final JinahyaRandom random =
             new JinahyaRandom(ThreadLocalRandom.current());
@@ -295,19 +216,30 @@ public class JinahyaRandomTest {
             random.nextSignedInt(1, 1);
             Assert.fail("passed: nextSignedInt(1, 1)");
         } catch (IllegalArgumentException iae) {
+            // expected
         }
 
         try {
             random.nextSignedInt(2, 1);
             Assert.fail("passed: nextSignedInt(2, 1)");
         } catch (IllegalArgumentException iae) {
+            // expected
         }
 
         try {
             random.nextSignedInt(2, Integer.SIZE + 1);
             Assert.fail("passed: nextSignedInt(2, Integer.SIZE + 1)");
         } catch (IllegalArgumentException iae) {
+            // expected
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextSignedInt() {
+
+        final JinahyaRandom random =
+            new JinahyaRandom(ThreadLocalRandom.current());
 
         random.nextSignedInt(2, 2);
         random.nextSignedInt(2, Integer.SIZE);
@@ -337,93 +269,7 @@ public class JinahyaRandomTest {
 
 
     @Test
-    public void testUnsignedLong() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextUnsignedLong(-1);
-            Assert.fail("passed: nextUnsignedInt(-1)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        try {
-            random.nextUnsignedLong(0);
-            Assert.fail("passed: nextUnsignedInt(0)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        try {
-            random.nextUnsignedLong(Long.SIZE);
-            Assert.fail("passed: nextUnsignedInt(Long.SIZE)");
-        } catch (IllegalArgumentException iae) {
-        }
-
-        random.nextUnsignedLong(1);
-        random.nextUnsignedLong(Long.SIZE - 1); // 63
-
-        final int bitLength =
-            ThreadLocalRandom.current().nextInt(Long.SIZE - 1) + 1;
-        Assert.assertTrue(bitLength >= 1);
-        Assert.assertTrue(bitLength < Long.SIZE);
-
-        final long unsignedLong = random.nextUnsignedLong(bitLength);
-
-        Assert.assertTrue(unsignedLong >= 0L);
-        Assert.assertEquals(unsignedLong >> bitLength, 0L);
-    }
-
-
-    @Test
-    public void testNextSignedLong() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextSignedLong(0);
-            Assert.fail("passed: nextSignedLong(0)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextSignedLong(1);
-            Assert.fail("passed: nextSignedLong(1)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextSignedLong(Long.SIZE + 1);
-            Assert.fail("passed: nextUnSignedLong(Long.SIZE + 1)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        random.nextSignedLong(2);
-        random.nextSignedLong(Long.SIZE);
-
-        final int bitLength =
-            ThreadLocalRandom.current().nextInt(Long.SIZE - 1) + 2;
-        Assert.assertTrue(bitLength > 1);
-        Assert.assertTrue(bitLength <= Long.SIZE);
-
-        final long signedLong = random.nextSignedLong(bitLength);
-
-        if (bitLength < Long.SIZE) {
-            if (signedLong >= 0L) {
-                Assert.assertTrue(signedLong >> bitLength == 0L);
-            } else {
-                Assert.assertTrue(signedLong >> bitLength == -1L);
-            }
-        }
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextSignedLongWithRange() {
+    public void testNextSignedLongWithWrongArguments() {
 
         final JinahyaRandom random =
             new JinahyaRandom(ThreadLocalRandom.current());
@@ -447,6 +293,14 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
             // expected
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextSignedLong() {
+
+        final JinahyaRandom random =
+            new JinahyaRandom(ThreadLocalRandom.current());
 
         random.nextSignedLong(2, 2);
         random.nextSignedLong(2, Long.SIZE);
@@ -476,41 +330,7 @@ public class JinahyaRandomTest {
 
 
     @Test
-    public void testNextUnsignedLong() {
-
-        final JinahyaRandom random =
-            new JinahyaRandom(ThreadLocalRandom.current());
-
-        try {
-            random.nextUnsignedLong(0);
-            Assert.fail("passed: nextUnsignedLong(0)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        try {
-            random.nextUnsignedLong(Long.SIZE);
-            Assert.fail("passed: nextUnsignedLong(Long.SIZE)");
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
-
-        random.nextUnsignedLong(1);
-        random.nextUnsignedLong(Long.SIZE - 1);
-
-        final int bitLength =
-            ThreadLocalRandom.current().nextInt(Long.SIZE - 1) + 1;
-        Assert.assertTrue(bitLength >= 1);
-        Assert.assertTrue(bitLength < Long.SIZE);
-
-        final long unsignedLong = random.nextUnsignedLong(bitLength);
-        Assert.assertTrue(unsignedLong >= 0L);
-        Assert.assertTrue(unsignedLong >> bitLength == 0L);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void testNextUnsignedLongWithRange() {
+    public void testNextUnsignedLongWithWrongArguments() {
 
         final JinahyaRandom random =
             new JinahyaRandom(ThreadLocalRandom.current());
@@ -535,6 +355,14 @@ public class JinahyaRandomTest {
         } catch (IllegalArgumentException iae) {
             // expected
         }
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testNextUnsignedLong() {
+
+        final JinahyaRandom random =
+            new JinahyaRandom(ThreadLocalRandom.current());
 
         random.nextUnsignedLong(1, 1);
         random.nextUnsignedLong(1, Long.SIZE - 1);

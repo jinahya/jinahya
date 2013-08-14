@@ -46,13 +46,6 @@ public class MasksTest {
     }
 
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public static void testPutOnWithEmptyMasks() {
-
-        Masks.putOn(0, new int[0]);
-    }
-
-
     @Test(invocationCount = 128)
     public void testTakeOffWithSingleMask() {
 
@@ -66,13 +59,6 @@ public class MasksTest {
     public static void testTakeOffWithNullMasks() {
 
         Masks.takeOff(0, (int[]) null);
-    }
-
-
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public static void testTakeOffWithEmptyMasks() {
-
-        Masks.takeOff(0, new int[0]);
     }
 
 
