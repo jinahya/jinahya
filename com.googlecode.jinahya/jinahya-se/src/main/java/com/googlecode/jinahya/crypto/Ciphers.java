@@ -24,6 +24,11 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -36,6 +41,40 @@ import javax.crypto.ShortBufferException;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Ciphers {
+
+
+    /**
+     * A map of required transformations and the list of keysizes.
+     *
+     * @see javax.crypto.Cipher
+     * @see <a href="http://goo.gl/QMnzS4">Java Cryptography Architecture
+     * Standard Algorithm Name Documentation"</a>
+     */
+    public static final Map<String, List<Integer>> REQURIED_TRANSFORMATIONS;
+
+
+    static {
+        final Map<String, List<Integer>> m =
+            new HashMap<String, List<Integer>>();
+        m.put("AES/CBC/NoPadding", Arrays.asList(128));
+        m.put("AES/CBC/PKCS5Padding", Arrays.asList(128));
+        m.put("AES/ECB/NoPadding", Arrays.asList(128));
+        m.put("AES/ECB/PKCS5Padding", Arrays.asList(128));
+        m.put("DES/CBC/NoPadding", Arrays.asList(56));
+        m.put("DES/CBC/PKCS5Padding", Arrays.asList(56));
+        m.put("DES/ECB/NoPadding", Arrays.asList(56));
+        m.put("DES/ECB/PKCS5Padding", Arrays.asList(56));
+        m.put("DESede/CBC/NoPadding", Arrays.asList(168));
+        m.put("DESede/CBC/PKCS5Padding", Arrays.asList(168));
+        m.put("DESede/ECB/NoPadding", Arrays.asList(168));
+        m.put("DESede/ECB/PKCS5Padding", Arrays.asList(168));
+        m.put("RSA/ECB/PKCS1Padding", Arrays.asList(1024, 2048));
+        m.put("RSA/ECB/OAEPWithSHA-1AndMGF1Padding",
+              Arrays.asList(1024, 2048));
+        m.put("RSA/ECB/OAEPWithSHA-256AndMGF1Padding",
+              Arrays.asList(1024, 2048));
+        REQURIED_TRANSFORMATIONS = Collections.unmodifiableMap(m);
+    }
 
 
     /**
@@ -152,9 +191,9 @@ public class Ciphers {
                 break;
             }
             inbuf.flip(); // limit -> position, position -> 0
+            outbuf.clear(); // position -> 0, limit -> capacity
             while (true) {
                 try {
-                    outbuf.clear(); // position -> 0, limit -> capacity
                     cipher.update(inbuf, outbuf);
                     outbuf.flip(); // limit -> position, position -> 0
                     while (outbuf.hasRemaining()) {
@@ -167,9 +206,10 @@ public class Ciphers {
             }
         }
 
+        inbuf.limit(0); // input's remaining must be equal to block-size
+        outbuf.clear(); // position -> 0, limit -> capacity
         while (true) {
             try {
-                outbuf.clear(); // position -> 0, limit -> capacity
                 cipher.doFinal(inbuf, outbuf);
                 outbuf.flip(); // limit -> position, position -> 0
                 while (outbuf.hasRemaining()) {

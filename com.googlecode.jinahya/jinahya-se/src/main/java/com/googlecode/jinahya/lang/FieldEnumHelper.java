@@ -24,12 +24,24 @@ import java.util.Set;
 
 
 /**
+ * A helper class for {@link FieldEnum}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class FieldEnumHelper {
 
 
+    /**
+     * Verifies all enum constants are mapped to unique field values including
+     * {@code null}.
+     *
+     * @param <E> enum type parameter
+     * @param <F> field type parameter
+     * @param enumType enum type
+     * @param fieldType field type
+     *
+     * @return true if verified; false otherwise.
+     */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> boolean verify(
         final Class<E> enumType, final Class<F> fieldType) {
 
@@ -58,6 +70,16 @@ public class FieldEnumHelper {
     }
 
 
+    /**
+     * Returns all field values.
+     *
+     * @param <E> enum type parameter
+     * @param <F> field type parameter
+     * @param enumType enum type
+     * @param fieldType field type
+     *
+     * @return all field values.
+     */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> F[] fieldValues(
         final Class<E> enumType, final Class<F> fieldType) {
 
@@ -89,6 +111,19 @@ public class FieldEnumHelper {
     }
 
 
+    /**
+     * Finds enum constant mapped to given {@code fieldValue}. An
+     * {@code IllegalArgumentException} will be thrown if no enum constant
+     * found.
+     *
+     * @param <E> enum type parameter
+     * @param <F> field type parameter
+     * @param enumType enum type
+     * @param fieldType field type
+     * @param fieldValue field value
+     *
+     * @return the mapped enum constant.
+     */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> E fromFieldValue(
         final Class<E> enumType, final Class<F> fieldType, final F fieldValue) {
 
@@ -122,6 +157,9 @@ public class FieldEnumHelper {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected FieldEnumHelper() {
 
         super();

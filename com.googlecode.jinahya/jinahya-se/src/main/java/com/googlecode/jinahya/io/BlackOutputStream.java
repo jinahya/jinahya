@@ -33,7 +33,7 @@ public class BlackOutputStream extends OutputStream {
     /**
      * Creates a new instance with given {@code limit}.
      *
-     * @param limit the maximum number of bytes for writer. Negative for
+     * @param limit the maximum number of bytes for writer. Any negative for
      * unlimited.
      */
     public BlackOutputStream(final long limit) {
@@ -53,6 +53,14 @@ public class BlackOutputStream extends OutputStream {
     }
 
 
+    /**
+     * Writes given {@code b}.
+     *
+     * @param b the byte to write
+     *
+     * @throws IOException if {@code limit} is not negative and the number of
+     * bytes written so far exceeds it.
+     */
     @Override
     public void write(final int b) throws IOException {
 
@@ -70,12 +78,13 @@ public class BlackOutputStream extends OutputStream {
      * @return the number of bytes written so far.
      */
     public long getCount() {
+
         return count;
     }
 
 
     /**
-     * count.
+     * the number of bytes written so far.
      */
     private long count = 0x00L;
 
