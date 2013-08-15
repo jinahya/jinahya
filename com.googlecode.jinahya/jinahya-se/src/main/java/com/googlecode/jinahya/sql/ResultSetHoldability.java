@@ -18,50 +18,69 @@
 package com.googlecode.jinahya.sql;
 
 
+import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
 
 
 /**
+ * Constants for {@link ResultSet}'s holdabilities.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public enum ResultSetHoldability {
+public enum ResultSetHoldability
+    implements FieldEnum<ResultSetHoldability, Integer> {
 
 
     /**
+     * Constant for {@link ResultSet#HOLD_CURSORS_OVER_COMMIT}.
+     *
      * @see java.sql.ResultSet#HOLD_CURSORS_OVER_COMMIT
      */
-    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT),
+    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT), // 1
     /**
+     * Constant for {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}.
      *
      * @see java.sql.ResultSet#CLOSE_CURSORS_AT_COMMIT
      */
-    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT);
+    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT); // 2
 
 
-    public static ResultSetHoldability fromValue(final int value) {
+    /**
+     *
+     * @param fieldValue
+     *
+     * @return
+     */
+    public static ResultSetHoldability fromFieldValue(final int fieldValue) {
 
-        for (ResultSetHoldability constant : values()) {
-            if (constant.value == value) {
-                return constant;
-            }
-        }
-
-        throw new IllegalArgumentException("unknown value: " + value);
+        return FieldEnumHelper.fromFieldValue(
+            ResultSetHoldability.class, int.class, fieldValue);
     }
 
 
-    private ResultSetHoldability(final int value) {
-        this.value = value;
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(
+            ResultSetHoldability.class, int.class);
     }
 
 
-    public int getValue() {
-        return value;
+    private ResultSetHoldability(final int fieldValue) {
+
+        this.fieldValue = fieldValue;
     }
 
 
-    private final int value;
+    @Override
+    public Integer getFieldValue() {
+
+        return fieldValue;
+    }
+
+
+    private final int fieldValue;
 
 
 }
+

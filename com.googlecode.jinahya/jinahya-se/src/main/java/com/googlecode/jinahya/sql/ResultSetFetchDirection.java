@@ -18,50 +18,69 @@
 package com.googlecode.jinahya.sql;
 
 
+import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
 
 
 /**
+ * Constants for {@link ResultSet}'s fetch directions.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public enum ResultSetFetchDirection {
+public enum ResultSetFetchDirection
+    implements FieldEnum<ResultSetFetchDirection, Integer> {
 
 
     /**
-     * @see ResultSet#FETCH_REVERSE
-     */
-    FETCH_FORWARD(ResultSet.FETCH_FORWARD),
-    /**
+     * Constant for {@link ResultSet#FETCH_FORWARD}.
      *
      * @see ResultSet#FETCH_REVERSE
      */
-    FETCH_REVERSE(ResultSet.FETCH_REVERSE);
+    FETCH_FORWARD(ResultSet.FETCH_FORWARD), // 1000
+    /**
+     * Constant for {@link ResultSet#FETCH_REVERSE}.
+     *
+     * @see ResultSet#FETCH_REVERSE
+     */
+    FETCH_REVERSE(ResultSet.FETCH_REVERSE), // 1001
+    /**
+     * Constant for {@link ResultSet#FETCH_UNKNOWN}.
+     *
+     * @see ResultSet#FETCH_UNKNOWN
+     */
+    FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); // 1002
 
 
-    public static ResultSetFetchDirection fromValue(final int value) {
+    public static ResultSetFetchDirection fromFieldValue(final int fieldValue) {
 
-        for (ResultSetFetchDirection constant : values()) {
-            if (constant.value == value) {
-                return constant;
-            }
-        }
-
-        throw new IllegalArgumentException("unknown value: " + value);
+        return FieldEnumHelper.fromFieldValue(ResultSetFetchDirection.class,
+                                              Integer.class, fieldValue);
     }
 
 
-    private ResultSetFetchDirection(final int value) {
-        this.value = value;
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(ResultSetFetchDirection.class,
+                                           Integer.class);
     }
 
 
-    public int getValue() {
-        return value;
+    private ResultSetFetchDirection(final int fieldValue) {
+
+        this.fieldValue = fieldValue;
     }
 
 
-    private final int value;
+    @Override
+    public Integer getFieldValue() {
+
+        return fieldValue;
+    }
+
+
+    private final int fieldValue;
 
 
 }
+
