@@ -34,7 +34,7 @@ public class ResultSetTypeTest {
 
     @Test
     public static void verify() {
-        FieldEnumHelper.verify(ResultSetType.class, int.class);
+        FieldEnumHelper.verify(ResultSetType.class);
     }
 
 

@@ -78,8 +78,7 @@ public enum Type implements FieldEnum<Type, Integer> {
      */
     public static Type fromFieldValue(final int fieldValue) {
 
-        return FieldEnumHelper.fromFieldValue(
-            Type.class, Integer.class, fieldValue);
+        return FieldEnumHelper.fromFieldValue(Type.class, fieldValue);
     }
 
 

@@ -54,8 +54,8 @@ public enum ResultSetFetchDirection
 
     public static ResultSetFetchDirection fromFieldValue(final int fieldValue) {
 
-        return FieldEnumHelper.fromFieldValue(ResultSetFetchDirection.class,
-                                              Integer.class, fieldValue);
+        return FieldEnumHelper.fromFieldValue(
+            ResultSetFetchDirection.class, fieldValue);
     }
 
 

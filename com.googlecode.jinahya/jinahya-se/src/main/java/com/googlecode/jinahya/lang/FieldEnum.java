@@ -19,7 +19,8 @@ package com.googlecode.jinahya.lang;
 
 
 /**
- * An interface for implementing {@code Enum} from old school field constants.
+ * An interface for implementing an {@code Enum} from old school constant
+ * fields.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> enum type parameter

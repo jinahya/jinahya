@@ -34,7 +34,8 @@ public class ResultSetConcurrencyTest {
 
     @Test
     public static void verify() {
-        FieldEnumHelper.verify(ResultSetConcurrency.class, Integer.class);
+
+        FieldEnumHelper.verify(ResultSetConcurrency.class);
     }
 
 

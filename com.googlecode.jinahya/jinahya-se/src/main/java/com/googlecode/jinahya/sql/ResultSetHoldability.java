@@ -55,7 +55,7 @@ public enum ResultSetHoldability
     public static ResultSetHoldability fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(
-            ResultSetHoldability.class, int.class, fieldValue);
+            ResultSetHoldability.class, fieldValue);
     }
 
 

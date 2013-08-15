@@ -34,7 +34,7 @@ public class TypeTest {
 
     @Test
     public static void verify() {
-        FieldEnumHelper.verify(Type.class, int.class);
+        FieldEnumHelper.verify(Type.class);
     }
 
 

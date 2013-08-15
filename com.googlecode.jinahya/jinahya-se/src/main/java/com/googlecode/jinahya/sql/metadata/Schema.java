@@ -46,13 +46,13 @@ public class Schema {
     }
 
 
-    public static class Schemas extends ValuesMapAdapter.Values<Schema> {
+    public static class Schemas extends ValuesMapAdapter.AbstractValues<Schema> {
 
 
         @XmlElement
         public List<Schema> getSchema() {
 
-            return getValue();
+            return getValueList();
         }
 
 

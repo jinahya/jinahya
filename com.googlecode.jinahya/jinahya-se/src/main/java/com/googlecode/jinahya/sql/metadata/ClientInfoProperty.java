@@ -33,13 +33,13 @@ public class ClientInfoProperty implements Retrievable {
 
 
     public static class ClientInfoProperties
-        extends ValuesMapAdapter.Values<ClientInfoProperty> {
+        extends ValuesMapAdapter.AbstractValues<ClientInfoProperty> {
 
 
         @XmlElement
         public List<ClientInfoProperty> getClientInfoProperty() {
 
-            return getValue();
+            return getValueList();
         }
 
 

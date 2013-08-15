@@ -51,19 +51,37 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
     TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); // 1005
 
 
+    /**
+     * Finds the enum constant mapped to given {@code fieldValue}. An
+     * {@code IllegalArgumentException} will be thrown if no enum constant
+     * found.
+     *
+     * @param fieldValue field value.
+     *
+     * @return the enum constant mapped to given {@code fieldValue}.
+     */
     public static ResultSetType fromFieldValue(final int fieldValue) {
 
-        return FieldEnumHelper.fromFieldValue(
-            ResultSetType.class, int.class, fieldValue);
+        return FieldEnumHelper.fromFieldValue(ResultSetType.class, fieldValue);
     }
 
 
+    /**
+     * Returns all field values.
+     *
+     * @return all fields values.
+     */
     public static Integer[] fieldValues() {
 
         return FieldEnumHelper.fieldValues(ResultSetType.class, int.class);
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param fieldValue field value.
+     */
     private ResultSetType(final int fieldValue) {
 
         this.fieldValue = fieldValue;

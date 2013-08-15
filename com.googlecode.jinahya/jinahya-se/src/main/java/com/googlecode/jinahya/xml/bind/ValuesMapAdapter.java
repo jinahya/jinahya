@@ -40,90 +40,108 @@ public abstract class ValuesMapAdapter<T extends Values<V>, K, V>
 
 
     @XmlTransient
-    public static abstract class Values<V> {
+    public static interface Values<V> {
 
 
         /**
-         * Returns value list.
+         * Returns a list of value.
          *
-         * @return value list
+         * @return a list of value.
          */
-        protected List<V> getValue() {
+        @XmlTransient
+        List<V> getValueList();
 
-            if (value == null) {
-                value = new ArrayList<V>();
+
+    }
+
+
+    @XmlTransient
+    public static abstract class AbstractValues<V> implements Values<V> {
+
+
+        @Override
+        @XmlTransient
+        public List<V> getValueList() {
+
+            if (valueList == null) {
+                valueList = new ArrayList<V>();
             }
 
-            return value;
+            return valueList;
         }
 
 
         /**
          * values.
          */
-        private List<V> value;
+        @XmlTransient
+        private List<V> valueList;
 
 
     }
 
 
-    public ValuesMapAdapter(final Class<T> valueTypeClass) {
+    /**
+     * Creates a new instance.
+     *
+     * @param valueType value type.
+     */
+    public ValuesMapAdapter(final Class<T> valueType) {
+
         super();
 
-        if (valueTypeClass == null) {
-            throw new NullPointerException("null valueTypeClass");
+        if (valueType == null) {
+            throw new NullPointerException("valueType");
         }
 
-        this.valueTypeClass = valueTypeClass;
+        this.valueType = valueType;
     }
 
 
     @Override
-    public Map<K, V> unmarshal(final T marshalled) throws Exception {
+    public Map<K, V> unmarshal(final T v) throws Exception {
 
-        if (marshalled == null) {
+        if (v == null) {
             return null;
         }
 
-        final Map<K, V> boundType =
-            new HashMap<K, V>(marshalled.getValue().size());
+        final Map<K, V> b = new HashMap<K, V>(v.getValueList().size());
 
-        for (V value : marshalled.getValue()) {
-            boundType.put(getKey(value), value);
+        for (V value : v.getValueList()) {
+            b.put(getKey(value), value);
         }
 
-        return boundType;
+        return b;
     }
 
 
     @Override
-    public T marshal(final Map<K, V> unmarshalled) throws Exception {
+    public T marshal(final Map<K, V> b) throws Exception {
 
-        if (unmarshalled == null) {
+        if (b == null) {
             return null;
         }
 
-        final T valueType = valueTypeClass.newInstance();
+        final T v = valueType.newInstance();
 
-        for (V value : unmarshalled.values()) {
-            valueType.getValue().add(value);
+        for (V value : b.values()) {
+            v.getValueList().add(value);
         }
 
-        return valueType;
-
+        return v;
     }
 
 
     /**
      * Returns the map to put keys and values.
      *
-     * @param valueTypeSize size hint
+     * @param initialCapacity size hint
      *
      * @return a new BoundType instance
      */
-    protected Map<K, V> newBoundType(final int valueTypeSize) {
+    protected Map<K, V> newBoundType(final int initialCapacity) {
 
-        return new HashMap<K, V>(valueTypeSize);
+        return new HashMap<K, V>(initialCapacity);
     }
 
 
@@ -137,7 +155,11 @@ public abstract class ValuesMapAdapter<T extends Values<V>, K, V>
     protected abstract K getKey(V value);
 
 
-    private final Class<T> valueTypeClass;
+    /**
+     * value type.
+     */
+    private final Class<T> valueType;
 
 
 }
+

@@ -46,13 +46,13 @@ public class Catalog implements Retrievable {
     }
 
 
-    public static class Catalogs extends ValuesMapAdapter.Values<Catalog> {
+    public static class Catalogs extends ValuesMapAdapter.AbstractValues<Catalog> {
 
 
         @XmlElement
         public List<Catalog> getCatalog() {
 
-            return getValue();
+            return getValueList();
         }
 
 
