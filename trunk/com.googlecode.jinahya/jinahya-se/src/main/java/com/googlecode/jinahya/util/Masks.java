@@ -54,7 +54,8 @@ public class Masks {
         }
 
         for (final int mask : masks) {
-            face = putOn(face, mask);
+            //face = putOn(face, mask);
+            face |= mask;
         }
 
         return face;
@@ -90,7 +91,8 @@ public class Masks {
         }
 
         for (int mask : masks) {
-            face = takeOff(face, mask);
+            //face = takeOff(face, mask);
+            face &= ~mask;
         }
 
         return face;

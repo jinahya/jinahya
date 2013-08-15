@@ -18,54 +18,67 @@
 package com.googlecode.jinahya.sql;
 
 
+import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
 
 
 /**
+ * Constants for {@link ResultSet}'s types.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public enum ResultSetType {
+public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
     /**
+     * Constant for {@link ResultSet#TYPE_FORWARD_ONLY}.
+     *
      * @see ResultSet#TYPE_FORWARD_ONLY
      */
-    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY),
+    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), // 1003
     /**
+     * Constant for {@link ResultSet#TYPE_SCROLL_INSENSITIVE}.
      *
      * @see ResultSet#TYPE_SCROLL_INSENSITIVE
      */
-    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE),
+    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE), // 1004
     /**
+     * Constant for {@link ResultSet#TYPE_SCROLL_SENSITIVE}.
+     *
      * @see ResultSet#TYPE_SCROLL_SENSITIVE
      */
-    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE);
+    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); // 1005
 
 
-    public static ResultSetType fromValue(final int value) {
+    public static ResultSetType fromFieldValue(final int fieldValue) {
 
-        for (ResultSetType constant : values()) {
-            if (constant.value == value) {
-                return constant;
-            }
-        }
-
-        throw new IllegalArgumentException("unknown value: " + value);
+        return FieldEnumHelper.fromFieldValue(
+            ResultSetType.class, int.class, fieldValue);
     }
 
 
-    private ResultSetType(final int value) {
-        this.value = value;
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(ResultSetType.class, int.class);
     }
 
 
-    public int getValue() {
-        return value;
+    private ResultSetType(final int fieldValue) {
+
+        this.fieldValue = fieldValue;
     }
 
 
-    private final int value;
+    @Override
+    public Integer getFieldValue() {
+
+        return fieldValue;
+    }
+
+
+    private final int fieldValue;
 
 
 }
+

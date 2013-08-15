@@ -18,13 +18,17 @@
 package com.googlecode.jinahya.crypto;
 
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.security.Key;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.testng.Assert;
+
 import org.testng.annotations.Test;
 
 
@@ -38,39 +42,38 @@ public class CiphersTest {
     @Test
     public void testAES_CBC_PKCS5Padding() throws Exception {
 
+        final String algorithm = "AES";
+        final String mode = "CBC";
+        final String padding = "PKCS5Padding";
+        final String transformation = algorithm + "/" + mode + "/" + padding;
 
-        String message = "This string contains a secret message.";
-        System.out.println("Plaintext: " + message + "\n");
+        final Cipher cipher = Cipher.getInstance(transformation);
 
-        // generate a key
-        KeyGenerator keygen = KeyGenerator.getInstance("AES");
-        keygen.init(128);  // To use 256 bit keys, you need the "unlimited strength" encryption policy files from Sun.
-        byte[] key = keygen.generateKey().getEncoded();
-        SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+        final KeyGenerator keygen = KeyGenerator.getInstance(algorithm);
+        keygen.init(128);
+        final Key key = keygen.generateKey();
 
-        // build the initialization vector.  This example is all zeros, but it 
-        // could be any value or generated using a random number generator.
-        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        IvParameterSpec ivspec = new IvParameterSpec(iv);
+        final byte[] iv = new byte[cipher.getBlockSize()];
+        ThreadLocalRandom.current().nextBytes(iv);
 
-        // initialize the cipher for encrypt mode
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, ivspec);
+        final byte[] expected = new byte[1051];
+        ThreadLocalRandom.current().nextBytes(expected);
 
-        // encrypt the message
-        byte[] encrypted = cipher.doFinal(message.getBytes());
-//        System.out.println("Ciphertext: " + hexEncode(encrypted) + "\n");
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        Ciphers.doFinal(cipher, new ByteArrayInputStream(expected), baos,
+                        new byte[102]);
 
-        // reinitialize the cipher for decryption
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec, ivspec);
+        final byte[] encrypted = baos.toByteArray();
 
-        // decrypt the message
-        byte[] decrypted = cipher.doFinal(encrypted);
-        System.out.println("Plaintext: " + new String(decrypted) + "\n");
+        baos.reset();
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+        Ciphers.doFinal(cipher, new ByteArrayInputStream(encrypted), baos,
+                        new byte[983]);
 
-        final Map<Integer, Integer> m = new HashMap<Integer, Integer>();
-        final Map<Integer, Integer> m2 = Collections.<Integer, Integer>unmodifiableMap(m);
+        final byte[] actual = baos.toByteArray();
 
+        Assert.assertEquals(actual, expected);
     }
 
 

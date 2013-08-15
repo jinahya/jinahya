@@ -18,50 +18,71 @@
 package com.googlecode.jinahya.sql;
 
 
+import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
 
 
 /**
+ * Constants for {@link ResultSet}'s concurrencies.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public enum ResultSetConcurrency {
+public enum ResultSetConcurrency
+    implements FieldEnum<ResultSetConcurrency, Integer> {
 
 
     /**
+     * Constant for {@link ResultSet#CONCUR_READ_ONLY}.
+     *
      * @see ResultSet#CONCUR_READ_ONLY
      */
-    CONCUR_READ_ONLY(ResultSet.CONCUR_READ_ONLY),
+    CONCUR_READ_ONLY(ResultSet.CONCUR_READ_ONLY), // 1007
     /**
+     * Constant for {@link ResultSet#CONCUR_UPDATABLE}.
      *
      * @see ResultSet#CONCUR_UPDATABLE
      */
-    CONCUR_UPDATABLE(ResultSet.CONCUR_UPDATABLE);
+    CONCUR_UPDATABLE(ResultSet.CONCUR_UPDATABLE); // 1008
 
 
-    public static ResultSetConcurrency fromValue(final int value) {
+    /**
+     * Returns the constant whose value is mapped to given {@code value}.
+     *
+     * @param fieldValue either {@link ResultSet#CONCUR_READ_ONLY} or
+     * {@link ResultSet#CONCUR_UPDATABLE}.
+     *
+     * @return mapped constant.
+     */
+    public static ResultSetConcurrency fromFieldValue(final int fieldValue) {
 
-        for (ResultSetConcurrency constant : values()) {
-            if (constant.value == value) {
-                return constant;
-            }
-        }
-
-        throw new IllegalArgumentException("unknown value: " + value);
+        return FieldEnumHelper.fromFieldValue(
+            ResultSetConcurrency.class, Integer.class, fieldValue);
     }
 
 
-    private ResultSetConcurrency(final int value) {
-        this.value = value;
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(ResultSetConcurrency.class,
+                                           Integer.class);
     }
 
 
-    public int getValue() {
-        return value;
+    private ResultSetConcurrency(final int fieldValue) {
+
+        this.fieldValue = fieldValue;
     }
 
 
-    private final int value;
+    @Override
+    public Integer getFieldValue() {
+
+        return fieldValue;
+    }
+
+
+    private final int fieldValue;
 
 
 }
+
