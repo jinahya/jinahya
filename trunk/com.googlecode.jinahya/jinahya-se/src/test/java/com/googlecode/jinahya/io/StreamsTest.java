@@ -62,33 +62,46 @@ public class StreamsTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testCopyWithLength() throws IOException {
 
         final Random random = ThreadLocalRandom.current();
 
         final long length = random.nextInt(1048576);
 
-        final long count = Streams.copy(
-            new WhiteInputStream(), new BlackOutputStream(), new byte[8192],
-            length);
+        final long count = Streams.copy(new WhiteInputStream(),
+                                        new BlackOutputStream(), new byte[8192],
+                                        length);
 
         Assert.assertEquals(count, length);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public static void testCopyWithoutLength() throws IOException {
 
         final Random random = ThreadLocalRandom.current();
 
-        final long length = random.nextInt(1048576);
+        final long limit = random.nextInt(1048576);
 
         final long count = Streams.copy(
-            new WhiteInputStream(length), new BlackOutputStream(),
+            new WhiteInputStream(limit), new BlackOutputStream(),
             new byte[8192], -1L);
 
-        Assert.assertEquals(count, length);
+        Assert.assertEquals(count, limit);
+    }
+
+
+    @Test(expectedExceptions = {EOFException.class})
+    public static void testCopyWithLengthOverLimit() throws IOException {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final long limit = random.nextInt(1048576);
+
+        final long count = Streams.copy(
+            new WhiteInputStream(limit), new BlackOutputStream(),
+            new byte[8192], limit + 1);
     }
 
 

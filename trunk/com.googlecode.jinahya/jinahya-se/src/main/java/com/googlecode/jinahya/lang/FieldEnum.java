@@ -19,6 +19,7 @@ package com.googlecode.jinahya.lang;
 
 
 /**
+ * An interface for implementing {@code Enum} from old school field constants.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <E> enum type parameter
@@ -27,6 +28,11 @@ package com.googlecode.jinahya.lang;
 public interface FieldEnum<E extends Enum<E>, F> {
 
 
+    /**
+     * Returns field value.
+     *
+     * @return field value.
+     */
     F getFieldValue();
 
 

@@ -20,7 +20,6 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
 
 
 /**
@@ -34,7 +33,7 @@ public class WhiteInputStream extends InputStream {
     /**
      * Creates a new instance with given {@code limit}.
      *
-     * @param limit the maximum number of bytes for reading. Negative for
+     * @param limit the maximum number of bytes for reading. any negative for
      * unlimited.
      */
     protected WhiteInputStream(final long limit) {

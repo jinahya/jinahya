@@ -24,6 +24,7 @@ import java.sql.Types;
 
 
 /**
+ * Enum constants for {@link java.sql.Types}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -93,6 +94,11 @@ public enum Type implements FieldEnum<Type, Integer> {
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param fieldValue field value.
+     */
     private Type(final int fieldValue) {
 
         this.fieldValue = fieldValue;
@@ -106,6 +112,9 @@ public enum Type implements FieldEnum<Type, Integer> {
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 

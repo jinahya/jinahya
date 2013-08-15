@@ -36,8 +36,8 @@ public class Streams {
 
 
     /**
-     * Copies all or some bytes from {@code input} to {@code output} using
-     * specified {@code buffer}.
+     * Copies bytes from {@code input} to {@code output} using specified
+     * {@code buffer}.
      *
      * @param input input
      * @param output output
@@ -69,23 +69,23 @@ public class Streams {
                 "buffer.length(" + buffer.length + ") == 0");
         }
 
-        long c = 0L;
-        for (int r, l; length < 0L || c < length; c += r) {
+        long count = 0L;
+        for (int read, l; length < 0L || count < length; count += read) {
             l = buffer.length;
             if (length >= 0) {
-                l = (int) Math.min(l, (length - c));
+                l = (int) Math.min(l, (length - count));
             }
-            r = input.read(buffer, 0, l);
-            if (r == -1) {
+            read = input.read(buffer, 0, l);
+            if (read == -1) {
                 if (length < 0L) {
                     break;
                 }
                 throw new EOFException("eof");
             }
-            output.write(buffer, 0, r);
+            output.write(buffer, 0, read);
         }
 
-        return c;
+        return count;
     }
 
 
@@ -109,40 +109,40 @@ public class Streams {
     }
 
 
-    public static long copy(final File source, final OutputStream output,
+    public static long copy(final File input, final OutputStream output,
                             final byte[] buffer, final long length)
         throws IOException {
 
-        if (source == null) {
-            throw new NullPointerException("source");
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        final InputStream input = new FileInputStream(source);
+        final InputStream input_ = new FileInputStream(input);
         try {
-            return copy(input, output, buffer, length);
+            return copy(input_, output, buffer, length);
         } finally {
-            input.close();
+            input_.close();
         }
     }
 
 
-    public static long copy(final InputStream input, final File target,
+    public static long copy(final InputStream input, final File output,
                             final byte[] buffer, final long length)
         throws IOException {
 
-        if (target == null) {
+        if (output == null) {
             throw new NullPointerException("target");
         }
 
-        final OutputStream output = new FileOutputStream(target);
+        final OutputStream output_ = new FileOutputStream(output);
         try {
             try {
-                return copy(input, output, buffer, length);
+                return copy(input, output_, buffer, length);
             } finally {
-                output.flush();
+                output_.flush();
             }
         } finally {
-            output.close();
+            output_.close();
         }
     }
 

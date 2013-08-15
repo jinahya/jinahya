@@ -26,12 +26,12 @@ import java.util.Objects;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class GenericArray {
+public class GenericArray {
 
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] newInstance1(final Class<T> componentType,
-                                       final int length) {
+    public static <T> T[] newInstance(final Class<T> componentType,
+                                      final int length) {
 
         Objects.requireNonNull(componentType, "null componentType");
 
@@ -43,45 +43,8 @@ public final class GenericArray {
     }
 
 
-    public static <T> T[] newInstance2(final Class<T[]> arrayType,
-                                       final int length) {
+    protected GenericArray() {
 
-        Objects.requireNonNull(arrayType, "null arrayType");
-
-        if (!arrayType.isArray()) {
-            throw new IllegalArgumentException(
-                "arrayType doesn't represent an array class");
-        }
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
-        }
-
-        return arrayType.cast(Array.newInstance(arrayType.getComponentType(),
-                                                length));
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public static <T> T newInstance3(final Class<T> arrayType,
-                                     final int length) {
-
-        Objects.requireNonNull(arrayType, "null arrayType");
-
-        if (!arrayType.isArray()) {
-            throw new IllegalArgumentException(
-                "arrayType doesn't represent an array class");
-        }
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
-        }
-
-        return (T) Array.newInstance(arrayType, length);
-    }
-
-
-    private GenericArray() {
         super();
     }
 

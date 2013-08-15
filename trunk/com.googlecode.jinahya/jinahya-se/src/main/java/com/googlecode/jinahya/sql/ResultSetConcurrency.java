@@ -47,7 +47,7 @@ public enum ResultSetConcurrency
 
 
     /**
-     * Returns the constant whose value is mapped to given {@code value}.
+     * Returns the constant mapped to given {@code fieldValue}.
      *
      * @param fieldValue either {@link ResultSet#CONCUR_READ_ONLY} or
      * {@link ResultSet#CONCUR_UPDATABLE}.
@@ -68,6 +68,11 @@ public enum ResultSetConcurrency
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param fieldValue field value.
+     */
     private ResultSetConcurrency(final int fieldValue) {
 
         this.fieldValue = fieldValue;
@@ -81,6 +86,9 @@ public enum ResultSetConcurrency
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 
