@@ -34,7 +34,7 @@ public class ResultSetHoldabilityTest {
 
     @Test
     public static void verify() {
-        FieldEnumHelper.verify(ResultSetHoldability.class, int.class);
+        FieldEnumHelper.verify(ResultSetHoldability.class);
     }
 
 

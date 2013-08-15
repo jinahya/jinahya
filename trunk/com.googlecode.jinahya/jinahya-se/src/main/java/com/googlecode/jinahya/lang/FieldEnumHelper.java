@@ -38,12 +38,11 @@ public class FieldEnumHelper {
      * @param <E> enum type parameter
      * @param <F> field type parameter
      * @param enumType enum type
-     * @param fieldType field type
      *
      * @return true if verified; false otherwise.
      */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> boolean verify(
-        final Class<E> enumType, final Class<F> fieldType) {
+        final Class<E> enumType) {
 
         if (enumType == null) {
             throw new NullPointerException("enumtype");
@@ -53,10 +52,6 @@ public class FieldEnumHelper {
             // is this required?
             throw new IllegalArgumentException(
                 "enumType(" + enumType + ") is not Enum");
-        }
-
-        if (fieldType == null) {
-            throw new NullPointerException("fieldType");
         }
 
         final Set<F> fieldValues = new HashSet<F>();
@@ -119,13 +114,12 @@ public class FieldEnumHelper {
      * @param <E> enum type parameter
      * @param <F> field type parameter
      * @param enumType enum type
-     * @param fieldType field type
      * @param fieldValue field value
      *
      * @return the mapped enum constant.
      */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> E fromFieldValue(
-        final Class<E> enumType, final Class<F> fieldType, final F fieldValue) {
+        final Class<E> enumType, final F fieldValue) {
 
         if (enumType == null) {
             throw new NullPointerException("enumtype");
@@ -135,10 +129,6 @@ public class FieldEnumHelper {
             // is this required?
             throw new IllegalArgumentException(
                 "enumType(" + enumType + ") is not Enum");
-        }
-
-        if (fieldType == null) {
-            throw new NullPointerException("fieldType");
         }
 
         if (fieldValue == null) {

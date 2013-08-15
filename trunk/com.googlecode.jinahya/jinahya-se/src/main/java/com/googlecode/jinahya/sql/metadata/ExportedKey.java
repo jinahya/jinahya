@@ -19,7 +19,7 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.Values;
+import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.AbstractValues;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ExportedKey {
 
 
-    public static class ImportedKeys extends Values<ExportedKey> {
+    public static class ImportedKeys extends AbstractValues<ExportedKey> {
 
 
         @XmlElement
         public List<ExportedKey> getColumn() {
 
-            return getValue();
+            return getValueList();
         }
 
 

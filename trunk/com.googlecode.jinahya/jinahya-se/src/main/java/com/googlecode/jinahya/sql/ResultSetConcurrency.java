@@ -57,7 +57,7 @@ public enum ResultSetConcurrency
     public static ResultSetConcurrency fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(
-            ResultSetConcurrency.class, Integer.class, fieldValue);
+            ResultSetConcurrency.class, fieldValue);
     }
 
 

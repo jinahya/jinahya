@@ -41,13 +41,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Table {
 
 
-    public static class Tables extends ValuesMapAdapter.Values<Table> {
+    public static class Tables extends ValuesMapAdapter.AbstractValues<Table> {
 
 
         @XmlElement
         public List<Table> getTable() {
 
-            return getValue();
+            return getValueList();
         }
 
 

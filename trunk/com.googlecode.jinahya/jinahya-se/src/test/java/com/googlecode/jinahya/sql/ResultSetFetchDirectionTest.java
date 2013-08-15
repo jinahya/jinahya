@@ -34,7 +34,7 @@ public class ResultSetFetchDirectionTest {
 
     @Test
     public static void verify() {
-        FieldEnumHelper.verify(ResultSetFetchDirection.class, int.class);
+        FieldEnumHelper.verify(ResultSetFetchDirection.class);
     }
 
 
