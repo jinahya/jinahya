@@ -49,7 +49,6 @@ public class Department1Test {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         marshaller.marshal(department, System.out);
-
     }
 
 

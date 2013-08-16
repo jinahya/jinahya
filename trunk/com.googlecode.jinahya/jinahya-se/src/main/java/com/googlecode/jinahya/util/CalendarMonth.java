@@ -29,6 +29,7 @@ import java.util.Calendar;
  */
 public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
+
     JANUARY(Calendar.JANUARY), //        0
     FEBRUARY(Calendar.FEBRUARY), //      1
     MARCH(Calendar.MARCH), //            2
@@ -40,16 +41,29 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
     SEPTEMBER(Calendar.SEPTEMBER), //    8
     OCTOBER(Calendar.OCTOBER), //        9
     NOVEMBER(Calendar.NOVEMBER), //     10
-    DECEMBER(Calendar.DECEMBER), //     11
-    UNDECIMBER(Calendar.UNDECIMBER); // 12
+    DECEMBER(Calendar.DECEMBER); //     11
+    //UNDECIMBER(Calendar.UNDECIMBER); // 12
 
 
+    /**
+     * Returns the constant mapped to given {@code fieldValue}. An
+     * {@code IllegalArgumentException} will be thrown if no constant found.
+     *
+     * @param fieldValue field value
+     *
+     * @return the mapped instance.
+     */
     public static CalendarMonth fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(CalendarMonth.class, fieldValue);
     }
 
 
+    /**
+     * Returns all field values.
+     *
+     * @return all field values.
+     */
     public Integer[] fieldValues() {
 
         return FieldEnumHelper.fieldValues(CalendarMonth.class, int.class);
@@ -75,10 +89,25 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
 
     /**
+     * Sets given {@code calendar}'s {@link Calendar#MONTH} field with
+     * {@code fieldValue}.
+     *
+     * @param calendar the calendar to set
+     */
+    public void set(final Calendar calendar) {
+
+        if (calendar == null) {
+            throw new NullPointerException("calendar");
+        }
+
+        calendar.set(Calendar.MONTH, fieldValue);
+    }
+
+
+    /**
      * field value.
      */
     private final int fieldValue;
 
 
 }
-

@@ -28,8 +28,12 @@ import java.nio.channels.WritableByteChannel;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -84,13 +88,24 @@ public class CiphersTest {
     }
 
 
-    private static void test1(final String transformation, final int keySize,
-                              final boolean requiresIv, final boolean noPadding)
+    private static KeyPair newKeyPair(final String algorithm, final int keySize)
+        throws NoSuchAlgorithmException {
+
+        final KeyPairGenerator keygen = KeyPairGenerator.getInstance(algorithm);
+        keygen.initialize(keySize);
+
+        return keygen.generateKeyPair();
+    }
+
+
+    private static void symmetric(final String transformation,
+                                  final int keySize, final boolean requiresIv,
+                                  final boolean noPadding)
         throws NoSuchAlgorithmException, NoSuchPaddingException,
                InvalidKeyException, InvalidAlgorithmParameterException,
                IOException, IllegalBlockSizeException, BadPaddingException {
 
-        LOGGER.log(Level.INFO, "test1(transformation: {0}, keySize: {1}, "
+        LOGGER.log(Level.INFO, "symmetric(transformation: {0}, keySize: {1}, "
                                + "requiresIv: {2}, noPadding: {3})",
                    new Object[]{transformation, keySize, requiresIv,
                                 noPadding});
@@ -150,134 +165,43 @@ public class CiphersTest {
                 final WritableByteChannel output = Channels.newChannel(baos);
                 Ciphers.doFinal(cipher, input, output, ByteBuffer.allocate(29));
                 actual = baos.toByteArray();
+                Assert.assertEquals(actual, expected);
             }
-            Assert.assertEquals(actual, expected);
         }
     }
 
 
-    @Test(invocationCount = 32)
-    public void AES_CBC_NoPadding_128() throws Exception {
+    @Test(invocationCount = 128)
+    public void test() throws Exception {
 
-        test1("AES/CBC/NoPadding", 128, true, true);
-    }
+        for (Entry<String, List<Integer>> entry
+             : Ciphers.SUPPORTED_TRANSFORMATIONS.entrySet()) {
 
+            final String transformation = entry.getKey();
+            final String[] split = transformation.split("/");
+            final String algorithm = split[0];
+            final String mode = split[1];
+            final String padding = split[2];
+            final List<Integer> keysizes = entry.getValue();
 
-    @Test(invocationCount = 32)
-    public void AES_CBC_PKCS5Padding_128() throws Exception {
+            boolean requiresIv = true;
+            if ("ECB".equals(mode)) {
+                requiresIv = false;
+            }
 
-        test1("AES/CBC/PKCS5Padding", 128, true, false);
-    }
+            boolean noPadding = false;
+            if ("NoPadding".equals(padding)) {
+                noPadding = true;
+            }
 
-
-    @Test(invocationCount = 32)
-    public void AES_ECB_NoPadding_128() throws Exception {
-
-        test1("AES/ECB/NoPadding", 128, false, true);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void AES_ECB_PKCS5Padding_128() throws Exception {
-
-        test1("AES/ECB/PKCS5Padding", 128, false, false);
-    }
-
-
-    // --------------------------------------------------------------------- DES
-    @Test(invocationCount = 32)
-    public void DES_CBC_NoPadding_56() throws Exception {
-
-        test1("DES/CBC/NoPadding", 56, true, true);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DES_CBC_PKCS5Padding_56() throws Exception {
-
-        test1("DES/CBC/PKCS5Padding", 56, true, false);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DES_ECB_NoPadding_56() throws Exception {
-
-        test1("DES/ECB/NoPadding", 56, false, true);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DES_ECB_PKCS5Padding_56() throws Exception {
-
-        test1("DES/ECB/PKCS5Padding", 56, false, false);
-    }
-
-
-    // ------------------------------------------------------------------ DESede
-    @Test(invocationCount = 32)
-    public void DESede_CBC_NoPadding_168() throws Exception {
-
-        test1("DESede/CBC/NoPadding", 168, true, true);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DESede_CBC_PKCS5Padding_168() throws Exception {
-
-        test1("DESede/CBC/PKCS5Padding", 168, true, false);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DESede_ECB_NoPadding_168() throws Exception {
-
-        test1("DESede/ECB/NoPadding", 168, false, true);
-    }
-
-
-    @Test(invocationCount = 32)
-    public void DESede_ECB_PKCS5Padding_168() throws Exception {
-
-        test1("DESede/ECB/PKCS5Padding", 168, false, false);
-    }
-
-
-    // --------------------------------------------------------------------- RSA
-    public void RSA_ECB_PKCS1Padding_1024() throws Exception {
-
-        test1("RSA/ECB/PKCS1Padding", 1024, false, false);
-    }
-
-
-    public void RSA_ECB_PKCS1Padding_2048() throws Exception {
-
-        test1("RSA/ECB/PKCS1Padding", 2048, false, false);
-    }
-
-
-    public void RSA_ECB_OAEPWithSHA_1AndMGF1Padding_1024() throws Exception {
-
-        test1("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", 1024, false, false);
-    }
-
-
-    public void RSA_ECB_OAEPWithSHA_1AndMGF1Padding_2048() throws Exception {
-
-        test1("RSA/ECB/OAEPWithSHA-1AndMGF1Padding", 2048, false, false);
-    }
-
-
-    public void RSA_ECB_OAEPWithSHA_256AndMGF1Padding_1024() throws Exception {
-
-        test1("RSA/ECB/OAEPWithSHA-256AndMGF1Padding", 1024, false, false);
-    }
-
-
-    public void RSA_ECB_OAEPWithSHA_256AndMGF1Padding_2048() throws Exception {
-
-        test1("RSA/ECB/OAEPWithSHA-256AndMGF1Padding", 2048, false, false);
+            for (int keySize : keysizes) {
+                if (algorithm.equals("RSA")) {
+                    continue;
+                }
+                symmetric(transformation, keySize, requiresIv, noPadding);
+            }
+        }
     }
 
 
 }
-
