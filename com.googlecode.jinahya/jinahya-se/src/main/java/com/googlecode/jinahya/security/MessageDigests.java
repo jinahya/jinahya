@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -31,6 +33,10 @@ import java.security.MessageDigest;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class MessageDigests {
+
+
+    public static final List<String> SUPPORTED_ALGORITHMS =
+        Arrays.asList("MD5", "SHA-1", "SHA-256");
 
 
     /**
@@ -124,4 +130,3 @@ public class MessageDigests {
 
 
 }
-

@@ -71,10 +71,25 @@ public enum CalendarDayOfWeek implements FieldEnum<CalendarDayOfWeek, Integer> {
 
 
     /**
+     * Sets given {@code calendar}'s {@link Calendar#DAY_OF_WEEK} field with
+     * {@code fieldValue}.
+     *
+     * @param calendar the calendar to set
+     */
+    public void set(final Calendar calendar) {
+
+        if (calendar == null) {
+            throw new NullPointerException("calendar");
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, fieldValue);
+    }
+
+
+    /**
      * field value.
      */
     private final int fieldValue;
 
 
 }
-

@@ -20,6 +20,8 @@ package com.googlecode.jinahya.sql;
 
 import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Types;
 
 
@@ -112,10 +114,97 @@ public enum Type implements FieldEnum<Type, Integer> {
 
 
     /**
+     * Invokes {@link PreparedStatement#setNull(int, int)} on given
+     * {@code preparedStatement} with {@code parameterIndex} and
+     * {@code fieldValue}.
+     *
+     * @param preparedStatement prepared statement
+     * @param parameterIndex parameter index
+     *
+     * @throws SQLException see {@link PreparedStatement#setNull(int, int)}
+     */
+    public void setNull(final PreparedStatement preparedStatement,
+                        final int parameterIndex)
+        throws SQLException {
+
+        if (preparedStatement == null) {
+            throw new NullPointerException("preparedStatement");
+        }
+
+        if (parameterIndex <= 0) {
+            throw new IllegalArgumentException(
+                "parameterIndex(" + parameterIndex + ") <= 0");
+        }
+
+        preparedStatement.setNull(parameterIndex, fieldValue);
+    }
+
+
+    /**
+     * Invokes {@link PreparedStatement#setObject(int, java.lang.Object, int)}
+     * on given {@code preparedStatement} with
+     * {@code parameterIndex}, {@code x}, and {@code fieldValue}.
+     *
+     * @param preparedStatement prepared statement
+     * @param parameterIndex parameter index
+     * @param x the object to set
+     *
+     * @throws SQLException see
+     * {@link PreparedStatement#setObject(int, java.lang.Object, int)}
+     */
+    public void setObject(final PreparedStatement preparedStatement,
+                          final int parameterIndex, final Object x)
+        throws SQLException {
+
+        if (preparedStatement == null) {
+            throw new NullPointerException("preparedStatement");
+        }
+
+        if (parameterIndex <= 0) {
+            throw new IllegalArgumentException(
+                "parameterIndex(" + parameterIndex + ") <= 0");
+        }
+
+        preparedStatement.setObject(parameterIndex, x, fieldValue);
+    }
+
+
+    /**
+     * Invokes
+     * {@link PreparedStatement#setObject(int, java.lang.Object, int, int)} on
+     * given {@code preparedStatement} with {@code parameterIndex}, {@code x},
+     * and {@code fieldValue}, and {@code scaleOfLength}.
+     *
+     * @param preparedStatement prepared statement
+     * @param parameterIndex parameter index
+     * @param x the object to set
+     * @param scaleOrLength scale or length
+     *
+     * @throws SQLException see
+     * {@link PreparedStatement#setObject(int, java.lang.Object, int, int)}
+     */
+    public void setObject(final PreparedStatement preparedStatement,
+                          final int parameterIndex, final Object x,
+                          final int scaleOrLength)
+        throws SQLException {
+
+        if (preparedStatement == null) {
+            throw new NullPointerException("preparedStatement");
+        }
+
+        if (parameterIndex <= 0) {
+            throw new IllegalArgumentException(
+                "parameterIndex(" + parameterIndex + ") <= 0");
+        }
+
+        preparedStatement.setObject(parameterIndex, x, fieldValue);
+    }
+
+
+    /**
      * field value.
      */
     private final int fieldValue;
 
 
 }
-

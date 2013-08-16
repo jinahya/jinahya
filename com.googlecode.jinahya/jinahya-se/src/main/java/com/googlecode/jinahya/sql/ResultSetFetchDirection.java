@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql;
 import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -52,6 +53,19 @@ public enum ResultSetFetchDirection
     FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); // 1002
 
 
+    /**
+     * Returns the enum constant of this type with the specified
+     * {@code fieldValue}.
+     *
+     * @param fieldValue the fetch direction value; one of
+     * {@link ResultSet#FETCH_FORWARD}, {@link ResultSet#FETCH_REVERSE}, or
+     * {@link ResultSet#FETCH_UNKNOWN}.
+     *
+     * @throws IllegalArgumentException if this enum type has no constant with
+     * the specified fieldValue.
+     *
+     * @return the enum constant with the specified fieldValue.
+     */
     public static ResultSetFetchDirection fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(
@@ -59,6 +73,35 @@ public enum ResultSetFetchDirection
     }
 
 
+    /**
+     * Returns the enum constant of this type with the specified
+     * {@code resultSet}'s current fetch direction value.
+     *
+     * @param resultSet the result set
+     *
+     * @throws SQLException see {@link ResultSet#getFetchDirection()}
+     *
+     * @return the enum constant with the specified resultSet's current fetch
+     * direction.
+     */
+    public static ResultSetFetchDirection fromResultSet(
+        final ResultSet resultSet)
+        throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("resultSet");
+        }
+
+        return fromFieldValue(resultSet.getFetchDirection());
+    }
+
+
+    /**
+     * Returns an array containing the field values of this enum type, in the
+     * order they are declared.
+     *
+     * @return an array containing field values.
+     */
     public static Integer[] fieldValues() {
 
         return FieldEnumHelper.fieldValues(ResultSetFetchDirection.class,
@@ -66,6 +109,11 @@ public enum ResultSetFetchDirection
     }
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param fieldValue field value
+     */
     private ResultSetFetchDirection(final int fieldValue) {
 
         this.fieldValue = fieldValue;
@@ -79,8 +127,29 @@ public enum ResultSetFetchDirection
     }
 
 
+    /**
+     * Invokes {@link ResultSet#setFetchDirection(int) } with
+     * {@code fieldValue}.
+     *
+     * @param resultSet the result set.
+     *
+     * @throws SQLException if a database access error occurs.
+     * @see ResultSet#setFetchDirection(int)
+     */
+    public void set(final ResultSet resultSet) throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("resultSet");
+        }
+
+        resultSet.setFetchDirection(fieldValue);
+    }
+
+
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 
 }
-

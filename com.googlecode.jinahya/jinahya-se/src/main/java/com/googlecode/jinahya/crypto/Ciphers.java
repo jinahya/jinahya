@@ -44,13 +44,13 @@ public class Ciphers {
 
 
     /**
-     * A map of required transformations and the list of keysizes.
+     * A map of supported transformations and the list of keysizes.
      *
      * @see javax.crypto.Cipher
      * @see <a href="http://goo.gl/QMnzS4">Java Cryptography Architecture
      * Standard Algorithm Name Documentation"</a>
      */
-    public static final Map<String, List<Integer>> REQURIED_TRANSFORMATIONS;
+    public static final Map<String, List<Integer>> SUPPORTED_TRANSFORMATIONS;
 
 
     static {
@@ -73,7 +73,7 @@ public class Ciphers {
               Arrays.asList(1024, 2048));
         m.put("RSA/ECB/OAEPWithSHA-256AndMGF1Padding",
               Arrays.asList(1024, 2048));
-        REQURIED_TRANSFORMATIONS = Collections.unmodifiableMap(m);
+        SUPPORTED_TRANSFORMATIONS = Collections.unmodifiableMap(m);
     }
 
 
@@ -233,4 +233,3 @@ public class Ciphers {
 
 
 }
-

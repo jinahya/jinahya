@@ -148,6 +148,44 @@ public class Streams {
 
 
     /**
+     * Copies all or some bytes from {@code input} to {@code output}.
+     *
+     * @param input input file
+     * @param output output file
+     * @param buffer byte buffer
+     * @param length number of bytes to copy; any negative for unlimited
+     *
+     * @return the number of bytes copied
+     *
+     * @throws IOException if an I/O error occurs.a
+     */
+    public static long copy(final File input, final File output,
+                            final byte[] buffer, final long length)
+        throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("target");
+        }
+
+        final InputStream input_ = new FileInputStream(input);
+        try {
+            final OutputStream output_ = new FileOutputStream(output);
+            try {
+                try {
+                    return copy(input_, output_, buffer, length);
+                } finally {
+                    output_.flush();
+                }
+            } finally {
+                output_.close();
+            }
+        } finally {
+            input_.close();
+        }
+    }
+
+
+    /**
      * Creates a new instance.
      */
     protected Streams() {
@@ -157,4 +195,3 @@ public class Streams {
 
 
 }
-
