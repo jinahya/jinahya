@@ -24,6 +24,7 @@ import java.util.Calendar;
 
 
 /**
+ * Constants for {@link Calendar#MONTH}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -111,3 +112,4 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
 
 }
+

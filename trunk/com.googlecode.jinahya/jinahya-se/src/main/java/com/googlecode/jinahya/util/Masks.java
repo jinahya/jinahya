@@ -43,7 +43,7 @@ public class Masks {
      * Puts all specified {@code masks} on to given {@code face}.
      *
      * @param face current face
-     * @param mask masks to put on
+     * @param masks masks to put on
      *
      * @return a new face with all given {@code masks} on.
      */
@@ -71,7 +71,7 @@ public class Masks {
      * @return a new face with given {@code mask} off.
      */
     public static int takeOff(final int face, final int mask) {
-        
+
         return face & ~mask;
     }
 
@@ -80,7 +80,7 @@ public class Masks {
      * Takes all specified {@code masks} off from given {@code face}.
      *
      * @param face current face
-     * @param mask masks to take off
+     * @param masks masks to take off
      *
      * @return a new face with all given {@code masks} off.
      */
@@ -103,7 +103,7 @@ public class Masks {
      * Creates a new instance.
      */
     protected Masks() {
-        
+
         super();
     }
 

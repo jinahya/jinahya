@@ -24,6 +24,7 @@ import java.util.Calendar;
 
 
 /**
+ * Constants for {@link Calendar#DAY_OF_WEEK}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -93,3 +94,4 @@ public enum CalendarDayOfWeek implements FieldEnum<CalendarDayOfWeek, Integer> {
 
 
 }
+
