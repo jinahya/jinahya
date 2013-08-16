@@ -186,7 +186,7 @@ public class Metadata implements Retrievable {
 
 
     @XmlElement
-    @XmlJavaTypeAdapter(ClientInfoProperty.ClientInfoPropertiesMapAdapter.class)
+    @XmlJavaTypeAdapter(ClientInfoPropertiesMapAdapter.class)
     private Map<String, ClientInfoProperty> clientInfoProperties;
 
 
