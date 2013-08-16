@@ -15,50 +15,55 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata;
+package com.googlecode.jinahya.xml.bind;
 
 
-import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
+ * @param <E>
  */
-public class ClientInfoProperty implements Retrievable {
+@XmlTransient
+public class MapEntries<E extends MapEntry<?, ?>> {
 
 
-    @Override
-    public void retrieve(final DatabaseMetaData databaseMetaData)
-        throws SQLException {
-        // empty
+    public MapEntries(final Class<E> entryType) {
+
+        super();
+
+        if (entryType == null) {
+            throw new NullPointerException("entryType");
+        }
+
+        this.entryType = entryType;
     }
 
 
-    public String getName() {
-        return name;
+    public Class<E> getEntryType() {
+
+        return entryType;
     }
 
 
-    @Label("NAME")
-    private String name;
+    protected List<E> getEntries() {
+
+        if (entries == null) {
+            entries = new ArrayList<E>();
+        }
+
+        return entries;
+    }
 
 
-    @Label("MAX_LEN")
-    private int maxLen;
+    private final Class<E> entryType;
 
 
-    @Label("DEFAULT_VALUE")
-    private String defaultValue;
-
-
-    @Label("DESCRIPTION")
-    private String description;
+    private List<E> entries;
 
 
 }

@@ -15,50 +15,37 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata;
+package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoProperty implements Retrievable {
+@XmlRootElement
+public class Department0 {
 
 
-    @Override
-    public void retrieve(final DatabaseMetaData databaseMetaData)
-        throws SQLException {
-        // empty
+    public Map<String, Employee> getEmployees() {
+
+        if (employees == null) {
+            employees = new HashMap<>();
+        }
+
+        return employees;
     }
 
 
-    public String getName() {
-        return name;
-    }
-
-
-    @Label("NAME")
-    private String name;
-
-
-    @Label("MAX_LEN")
-    private int maxLen;
-
-
-    @Label("DEFAULT_VALUE")
-    private String defaultValue;
-
-
-    @Label("DESCRIPTION")
-    private String description;
+    @XmlElement
+    @XmlJavaTypeAdapter(EmployeesAdapter0.class)
+    private Map<String, Employee> employees;
 
 
 }

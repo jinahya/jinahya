@@ -15,13 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata;
+package com.googlecode.jinahya.xml.bind.test.map;
 
 
 import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -30,35 +27,14 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoProperty implements Retrievable {
+public class EmployeeValues extends MapValues<Employee> {
 
 
-    @Override
-    public void retrieve(final DatabaseMetaData databaseMetaData)
-        throws SQLException {
-        // empty
+    @XmlElement(name = "employee")
+    public List<Employee> getEmployees() {
+
+        return super.getValues();
     }
-
-
-    public String getName() {
-        return name;
-    }
-
-
-    @Label("NAME")
-    private String name;
-
-
-    @Label("MAX_LEN")
-    private int maxLen;
-
-
-    @Label("DEFAULT_VALUE")
-    private String defaultValue;
-
-
-    @Label("DESCRIPTION")
-    private String description;
 
 
 }
