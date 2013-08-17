@@ -27,32 +27,38 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeeEntry extends MapEntry<String, Employee> {
+public class EmployeeEntry extends MapEntry<Long, Employee> {
 
 
-    @XmlAttribute
-    public String getId() {
+    public EmployeeEntry() {
 
-        return super.getKey();
+        super(Long.class, Employee.class);
     }
 
 
-    public void setId(final String id) {
+    @XmlAttribute
+    public Long getId() {
 
-        super.setKey(id);
+        return getKey();
+    }
+
+
+    public void setId(final Long id) {
+
+        setKey(id);
     }
 
 
     @XmlElement
     public Employee getEmployee() {
 
-        return super.getValue();
+        return getValue();
     }
 
 
     public void setEmployee(final Employee employee) {
 
-        super.setValue(employee);
+        setValue(employee);
     }
 
 

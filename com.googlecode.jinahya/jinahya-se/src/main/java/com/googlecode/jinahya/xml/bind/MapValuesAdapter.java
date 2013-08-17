@@ -18,7 +18,9 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -38,17 +40,17 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
     /**
      * Creates a new instance.
      *
-     * @param valuesType value type.
+     * @param MapValuesType MapValues type.
      */
-    public MapValuesAdapter(final Class<T> valuesType) {
+    public MapValuesAdapter(final Class<T> mapValuesType) {
 
         super();
 
-        if (valuesType == null) {
-            throw new NullPointerException("valuesType");
+        if (mapValuesType == null) {
+            throw new NullPointerException("mapValuesType");
         }
 
-        this.valuesType = valuesType;
+        this.mapValuesType = mapValuesType;
     }
 
 
@@ -59,7 +61,8 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
             return null;
         }
 
-        final Map<K, V> b = newMap(v.getValues().size());
+        //final Map<K, V> b = newMap(v.getValues().size());
+        final Map<K, V> b = new HashMap<K, V>(v.getValues().size());
 
         for (V value : v.getValues()) {
             b.put(getKey(value), value);
@@ -69,10 +72,10 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
     }
 
 
-    protected Map<K, V> newMap(final int requiredCapacity) {
-
-        return new HashMap<K, V>(requiredCapacity);
-    }
+//    protected Map<K, V> newMap(final int requiredCapacity) {
+//
+//        return new HashMap<K, V>(requiredCapacity);
+//    }
 
 
     /**
@@ -92,18 +95,22 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
             return null;
         }
 
-        final T v = valuesType.newInstance();
+        final T v = mapValuesType.newInstance();
 
-        v.getValues().addAll(b.values());
+        final List<V> values = v.getValues();
+
+        ((ArrayList<V>) values).ensureCapacity(b.size());
+
+        values.addAll(b.values());
 
         return v;
     }
 
 
     /**
-     * value type.
+     * MapValues type.
      */
-    private final Class<T> valuesType;
+    private final Class<T> mapValuesType;
 
 
 }

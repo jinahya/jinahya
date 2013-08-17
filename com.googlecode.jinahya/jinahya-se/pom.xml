@@ -3,6 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>jinahya-se</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
@@ -14,17 +15,21 @@
   </parent>
   <dependencyManagement>
     <dependencies>
+      <!--
       <dependency>
         <groupId>com.sun.jersey.ri</groupId>
         <artifactId>jax-rs-ri</artifactId>
         <type>zip</type>
         <version>1.17.1</version>
       </dependency>
+      -->
+      <!--
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-bundle</artifactId>
         <version>1.17.1</version>
       </dependency>
+      -->
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-json</artifactId>
@@ -83,6 +88,7 @@
     <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
   </properties>
 
+  <!-- Build Settings -->
   <build>
     <extensions>
       <extension>
@@ -142,6 +148,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>1.9</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -224,10 +235,31 @@
           </reportPlugins>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>check-against-java16</id>
+            <phase>test</phase>
+            <goals>
+              <!--<goal>check</goal>-->
+            </goals>
+            <configuration>
+              <signature>
+                <groupId>org.codehaus.mojo.signature</groupId>
+                <artifactId>java16</artifactId>
+                <version>1.1</version>
+              </signature>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting />
 
+  <!-- More Project Information -->
   <name>jinahya-se</name>
   <url>https://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
@@ -249,6 +281,7 @@
   </developers>
   <contributors />
 
+  <!-- Environment Settings -->
   <issueManagement />
   <ciManagement />
   <mailingLists />
@@ -261,6 +294,7 @@
     <maven>3.0.5</maven>
   </prerequisites>
   <repositories>
+    <!--
     <repository>
       <id>sonatype-nexus-snapshots</id>
       <releases>
@@ -271,18 +305,20 @@
       </snapshots>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
+    -->
   </repositories>
   <pluginRepositories />
   <distributionManagement>
+    <!--
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
-      <name>Propellors Snapshots</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>

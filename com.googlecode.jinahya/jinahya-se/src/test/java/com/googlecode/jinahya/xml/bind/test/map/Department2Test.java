@@ -37,9 +37,10 @@ public class Department2Test {
         final Department2 department = new Department2();
 
         for (int i = 2; i >= 0; i--) {
-            final String id = "id" + i;
+            final long id = i;
             final String name = "name" + i;
-            final Employee employee = Employee.newInstance(id, name);
+            final int age = 20 + i;
+            final Employee employee = Employee.newInstance(id, name, age);
             department.getEmployees().put(id, employee);
         }
 

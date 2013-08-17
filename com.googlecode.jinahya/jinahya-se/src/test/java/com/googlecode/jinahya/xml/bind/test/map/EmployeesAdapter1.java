@@ -26,7 +26,7 @@ import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class EmployeesAdapter1
-    extends MapEntriesAdapter<EmployeeEntry, EmployeeEntries, String, Employee> {
+    extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
 
 
     public EmployeesAdapter1() {

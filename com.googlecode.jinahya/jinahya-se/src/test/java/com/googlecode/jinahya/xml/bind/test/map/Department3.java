@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Department3 {
 
 
-    public Map<String, Employee> getEmployees() {
+    public Map<Long, Employee> getEmployees() {
 
         if (employees == null) {
             employees = new TreeMap<>();
@@ -45,7 +45,7 @@ public class Department3 {
 
     @XmlElement
     @XmlJavaTypeAdapter(EmployeesAdapter3.class)
-    private Map<String, Employee> employees;
+    private Map<Long, Employee> employees;
 
 
 }

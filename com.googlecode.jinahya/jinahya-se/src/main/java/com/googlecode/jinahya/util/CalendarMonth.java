@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.util;
 
 
-import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.util.Calendar;
 
@@ -28,7 +27,7 @@ import java.util.Calendar;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
+public enum CalendarMonth implements CalendarFieldEnum<CalendarMonth, Integer> {
 
 
     JANUARY(Calendar.JANUARY), //        0
@@ -47,12 +46,22 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
 
     /**
-     * Returns the constant mapped to given {@code fieldValue}. An
-     * {@code IllegalArgumentException} will be thrown if no constant found.
+     * The target field of {@link Calendar} which this enum type is for.
+     *
+     * @see Calendar#MONTH
+     */
+    public static final int CALENDAR_FIELD = Calendar.MONTH;
+
+
+    /**
+     * Returns the enum constant of this type with the specified field value.
      *
      * @param fieldValue field value
      *
-     * @return the mapped instance.
+     * @throws IllegalArgumentException if this enum type has no constant with
+     * the specified field value.
+     *
+     * @return the enum constant with the specified field value.
      */
     public static CalendarMonth fromFieldValue(final int fieldValue) {
 
@@ -61,13 +70,33 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
 
     /**
-     * Returns all field values.
+     * Returns the enum constant of this type with the specified calendar's
+     * field value.
      *
-     * @return all field values.
+     * @param calendar calendar
+     *
+     * @throws IllegalArgumentException if this enum type has no constant with
+     * the specified calendar's field value.
+     *
+     * @return the enum constant with the specified calendar's field value.
+     */
+    public static CalendarMonth fromCalendar(final Calendar calendar) {
+
+        return CalendarFieldEnumHelper.get(CalendarMonth.class, calendar,
+                                           CALENDAR_FIELD);
+    }
+
+
+    /**
+     * Returns an array containing the field values of this enum type, in order
+     * they are declared.
+     *
+     * @return an array containing the fields values of this enum type, in the
+     * order they are declared
      */
     public Integer[] fieldValues() {
 
-        return FieldEnumHelper.fieldValues(CalendarMonth.class, int.class);
+        return FieldEnumHelper.fieldValues(CalendarMonth.class, Integer.class);
     }
 
 
@@ -89,19 +118,10 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
     }
 
 
-    /**
-     * Sets given {@code calendar}'s {@link Calendar#MONTH} field with
-     * {@code fieldValue}.
-     *
-     * @param calendar the calendar to set
-     */
+    @Override
     public void set(final Calendar calendar) {
 
-        if (calendar == null) {
-            throw new NullPointerException("calendar");
-        }
-
-        calendar.set(Calendar.MONTH, fieldValue);
+        CalendarFieldEnumHelper.set(calendar, CALENDAR_FIELD, this);
     }
 
 
@@ -112,4 +132,3 @@ public enum CalendarMonth implements FieldEnum<CalendarMonth, Integer> {
 
 
 }
-

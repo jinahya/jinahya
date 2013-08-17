@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql;
 
 
-import com.googlecode.jinahya.lang.FieldEnumHelper;
+import com.googlecode.jinahya.lang.FieldEnumTest;
 import java.lang.reflect.Field;
 import java.sql.Types;
 import org.testng.Assert;
@@ -29,12 +29,12 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class TypeTest {
+public class TypeTest extends FieldEnumTest<Type, Integer> {
 
 
-    @Test
-    public static void verify() {
-        FieldEnumHelper.verify(Type.class);
+    public TypeTest() {
+
+        super(Type.class);
     }
 
 
@@ -88,4 +88,3 @@ public class TypeTest {
 
 
 }
-

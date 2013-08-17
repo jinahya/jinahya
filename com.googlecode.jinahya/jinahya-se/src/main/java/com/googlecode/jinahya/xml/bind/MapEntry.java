@@ -24,11 +24,32 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <K>
- * @param <V>
+ * @param <K> key type parameter
+ * @param <V> value type parameter
  */
 @XmlTransient
-public class MapEntry<K, V> {
+public abstract class MapEntry<K, V> {
+
+
+    public MapEntry(final Class<K> keyType, final Class<V> valueType) {
+
+        super();
+
+        this.keyType = keyType;
+        this.valueType = valueType;
+    }
+
+
+    public final Class<K> getKeyType() {
+
+        return keyType;
+    }
+
+
+    public final Class<V> getValueType() {
+
+        return valueType;
+    }
 
 
     protected K getKey() {
@@ -53,6 +74,12 @@ public class MapEntry<K, V> {
 
         this.value = value;
     }
+
+
+    protected final Class<K> keyType;
+
+
+    protected final Class<V> valueType;
 
 
     private K key;
