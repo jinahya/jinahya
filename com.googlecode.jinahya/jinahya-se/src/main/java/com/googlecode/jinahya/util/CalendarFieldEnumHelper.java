@@ -29,6 +29,15 @@ import java.util.Calendar;
 public class CalendarFieldEnumHelper {
 
 
+    /**
+     *
+     * @param <E> enum type parameter
+     * @param enumType enum type
+     * @param calendar calendar
+     * @param field field
+     *
+     * @return
+     */
     public static <E extends Enum<E> & CalendarFieldEnum<E, Integer>> E get(
         final Class<E> enumType, final Calendar calendar, final int field) {
 
@@ -44,6 +53,13 @@ public class CalendarFieldEnumHelper {
     }
 
 
+    /**
+     *
+     * @param <E> enum type parameter
+     * @param calendar calendar
+     * @param field field
+     * @param value value
+     */
     public static <E extends Enum<E> & CalendarFieldEnum<E, Integer>> void set(
         final Calendar calendar, final int field, final E value) {
 
@@ -59,6 +75,9 @@ public class CalendarFieldEnumHelper {
     }
 
 
+    /**
+     * protected constructor.
+     */
     protected CalendarFieldEnumHelper() {
 
         super();
@@ -66,3 +85,4 @@ public class CalendarFieldEnumHelper {
 
 
 }
+

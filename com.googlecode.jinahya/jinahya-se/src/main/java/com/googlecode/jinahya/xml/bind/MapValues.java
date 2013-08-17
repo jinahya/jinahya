@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <V>
+ * @param <V> value parameter type
  */
 @XmlTransient
 public abstract class MapValues<V> {

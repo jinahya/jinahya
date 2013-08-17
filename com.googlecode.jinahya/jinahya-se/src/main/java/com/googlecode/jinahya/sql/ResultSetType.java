@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql;
 import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -36,7 +37,7 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
      *
      * @see ResultSet#TYPE_FORWARD_ONLY
      */
-    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), // 1003
+    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), //             1003
     /**
      * Constant for {@link ResultSet#TYPE_SCROLL_INSENSITIVE}.
      *
@@ -48,21 +49,47 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
      *
      * @see ResultSet#TYPE_SCROLL_SENSITIVE
      */
-    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); // 1005
+    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); //     1005
 
 
     /**
-     * Finds the enum constant mapped to given {@code fieldValue}. An
-     * {@code IllegalArgumentException} will be thrown if no enum constant
-     * found.
+     * Returns the enum constant of this type with the specified field value.
      *
-     * @param fieldValue field value.
+     * @param fieldValue field value
      *
-     * @return the enum constant mapped to given {@code fieldValue}.
+     * @throws IllegalArgumentException if this enum type has no constant with
+     * the specified field value.
+     *
+     * @return the enum constant with the specified field value.
      */
     public static ResultSetType fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(ResultSetType.class, fieldValue);
+    }
+
+
+    /**
+     * Returns the enum constant of this type with the specified ResultSet's
+     * type.
+     *
+     * @param resultSet an instance of ResultSet
+     *
+     * @throws SQLException if a database access error occurs or this method is
+     * called on a closed result set
+     * @throws NullPointerException if {@code resultSet} is {@code null}.
+     * @throws IllegalArgumentException if this enum type has no constant with
+     * the specified field value.
+     *
+     * @return the enum constant with the specified field value.
+     */
+    public static ResultSetType fromResultSet(final ResultSet resultSet)
+        throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("resultSet");
+        }
+
+        return fromFieldValue(resultSet.getType());
     }
 
 
@@ -95,6 +122,9 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 

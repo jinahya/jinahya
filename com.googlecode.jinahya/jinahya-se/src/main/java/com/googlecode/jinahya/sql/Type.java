@@ -33,42 +33,93 @@ import java.sql.Types;
 public enum Type implements FieldEnum<Type, Integer> {
 
 
-    ARRAY(Types.ARRAY),
-    BIGINT(Types.BIGINT),
-    BINARY(Types.BINARY),
-    BIT(Types.BIT),
-    BLOB(Types.BLOB),
-    BOOLEAN(Types.BOOLEAN),
-    CHAR(Types.CHAR),
-    CLOB(Types.CLOB),
-    DATALINK(Types.DATALINK),
-    DATE(Types.DATE),
-    DECIMAL(Types.DECIMAL),
-    DISTINCT(Types.DISTINCT),
-    DOUBLE(Types.DOUBLE),
-    FLOAT(Types.FLOAT),
-    INTEGER(Types.INTEGER),
-    JAVA_OBJECT(Types.JAVA_OBJECT),
-    LONGNVARCHAR(Types.LONGNVARCHAR),
-    LONGVARBINARY(Types.LONGVARBINARY),
-    LONGVARCHAR(Types.LONGVARCHAR),
-    NCHAR(Types.NCHAR),
-    NCLOB(Types.NCLOB),
-    NULL(Types.NULL),
-    NUMERIC(Types.NUMERIC),
-    NVARCHAR(Types.NVARCHAR),
-    OTHER(Types.OTHER),
-    REAL(Types.REAL),
-    REF(Types.REF),
-    ROWID(Types.ROWID),
-    SMALLINT(Types.SMALLINT),
-    SQLXML(Types.SQLXML),
-    STRUCT(Types.STRUCT),
-    TIME(Types.TIME),
-    TIMESTAMP(Types.TIMESTAMP),
-    TINYINT(Types.TINYINT),
-    VARBINARY(Types.VARBINARY),
-    VARCHAR(Types.VARCHAR);
+    /**
+     * Constant for {@link Types#LONGVARCHAR}.
+     */
+    LONGNVARCHAR(Types.LONGNVARCHAR), //  -16
+    /**
+     * Constant for {@link Types#NCHAR}.
+     */
+    NCHAR(Types.NCHAR), //                -15
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#NVARCHAR}.
+     */
+    NVARCHAR(Types.NVARCHAR), //           -9
+    ROWID(Types.ROWID), //                 -8
+    BIT(Types.BIT), //                     -7
+    TINYINT(Types.TINYINT), //             -6
+    BIGINT(Types.BIGINT), //               -5
+    LONGVARBINARY(Types.LONGVARBINARY), // -4
+    VARBINARY(Types.VARBINARY), //         -3
+    BINARY(Types.BINARY), //               -2
+    LONGVARCHAR(Types.LONGVARCHAR), //     -1
+    NULL(Types.NULL), //                    0
+    CHAR(Types.CHAR), //                    1
+    NUMERIC(Types.NUMERIC),//               2
+    DECIMAL(Types.DECIMAL), //              3
+    INTEGER(Types.INTEGER), //              4
+    SMALLINT(Types.SMALLINT), //            5
+    FLOAT(Types.FLOAT), //                  6
+    REAL(Types.REAL), //                    7
+    DOUBLE(Types.DOUBLE), //                8
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#VARCHAR}.
+     */
+    VARCHAR(Types.VARCHAR), //             12
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#BOOLEAN}.
+     */
+    BOOLEAN(Types.BOOLEAN), //             16
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#DATALINK}.
+     */
+    DATALINK(Types.DATALINK), //           70
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#DATE}.
+     */
+    DATE(Types.DATE), //                   91
+    /**
+     * Constant for {@link Types#TIME}.
+     */
+    TIME(Types.TIME), //                   92
+    /**
+     * Constant for {@link Types#TIMESTAMP}.
+     */
+    TIMESTAMP(Types.TIMESTAMP), //         93
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#OTHER}.
+     */
+    OTHER(Types.OTHER), //               1111
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#JAVA_OBJECT}.
+     */
+    JAVA_OBJECT(Types.JAVA_OBJECT), //   2000
+    DISTINCT(Types.DISTINCT), //         2001
+    STRUCT(Types.STRUCT), //             2002
+    /**
+     * Constant for {@link Types#ARRAY}.
+     */
+    ARRAY(Types.ARRAY), //               2003
+    BLOB(Types.BLOB), //                 2004
+    CLOB(Types.CLOB), //                 2005
+    REF(Types.REF), //                   2006
+
+    /**
+     * Constant for {@link Types#SQLXML}.
+     */
+    SQLXML(Types.SQLXML), //             2009
+    // -------------------------------------------------------------------------
+    /**
+     * Constant for {@link Types#NCLOB}.
+     */
+    NCLOB(Types.NCLOB); //               2011
 
 
     /**
@@ -208,3 +259,4 @@ public enum Type implements FieldEnum<Type, Integer> {
 
 
 }
+

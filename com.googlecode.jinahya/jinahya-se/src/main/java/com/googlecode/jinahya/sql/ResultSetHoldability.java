@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql;
 import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -56,6 +57,26 @@ public enum ResultSetHoldability
 
         return FieldEnumHelper.fromFieldValue(
             ResultSetHoldability.class, fieldValue);
+    }
+
+
+    /**
+     *
+     * @param resultSet resultSet
+     *
+     * @return
+     *
+     * @throws SQLException if a database access error occurs or this method is
+     * called on a closed result set
+     */
+    public static ResultSetHoldability fromResultSet(final ResultSet resultSet)
+        throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("resultSet");
+        }
+
+        return fromFieldValue(resultSet.getHoldability());
     }
 
 

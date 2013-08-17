@@ -40,7 +40,7 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
     /**
      * Creates a new instance.
      *
-     * @param MapValuesType MapValues type.
+     * @param mapValuesType MapValues type.
      */
     public MapValuesAdapter(final Class<T> mapValuesType) {
 
@@ -107,3 +107,4 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
 
 }
+
