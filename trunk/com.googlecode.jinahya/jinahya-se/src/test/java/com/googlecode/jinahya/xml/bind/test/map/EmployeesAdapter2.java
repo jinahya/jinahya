@@ -26,7 +26,7 @@ import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class EmployeesAdapter2
-    extends MapValuesAdapter<EmployeeValues, String, Employee> {
+    extends MapValuesAdapter<EmployeeValues, Long, Employee> {
 
 
     public EmployeesAdapter2() {
@@ -36,7 +36,7 @@ public class EmployeesAdapter2
 
 
     @Override
-    protected String getKey(final Employee value) {
+    protected Long getKey(final Employee value) {
 
         return value.getId();
     }

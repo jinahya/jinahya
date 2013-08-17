@@ -18,20 +18,23 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <T>
- * @param <K>
- * @param <V>
+ * @param <E> entry type parameter
+ * @param <T> entries type parameter
+ * @param <K> map key type parameter
+ * @param <V> map value type parameter
  */
-public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
+public abstract class MapEntriesAdapter_OLD<E extends MapEntry<K, V>, T extends MapEntries<E, K, V>, K, V>
     extends XmlAdapter<T, Map<K, V>> {
 
 
@@ -40,7 +43,7 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
      *
      * @param entriesType wrapper type.
      */
-    public MapEntriesAdapter(final Class<T> entriesType) {
+    public MapEntriesAdapter_OLD(final Class<T> entriesType) {
 
         super();
 
@@ -59,7 +62,7 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
             return null;
         }
 
-        final List<? extends MapEntry<K, V>> entries = value.getEntries();
+        final List<E> entries = value.getEntries();
 
         final Map<K, V> bound = new HashMap<K, V>(entries.size());
 
@@ -91,20 +94,14 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
 
         final T value = entriesType.newInstance();
 
-        value.addEntries(bound);
+        ((ArrayList) value.getEntries()).ensureCapacity(bound.size());
 
-//        //final List<? extends MapEntry<K, V>> entries = value.getEntries();
-//        @SuppressWarnings("unchecked")
-//        final List<MapEntry<K, V>> entries =
-//            (List<MapEntry<K, V>>) value.getEntries();
-//        ((ArrayList) entries).ensureCapacity(bound.size());
-//
-//        for (Entry<K, V> bentry : bound.entrySet()) {
-//            final MapEntry<K, V> ventry = value.getEntryType().newInstance();
-//            ventry.setKey(bentry.getKey());
-//            ventry.setValue(bentry.getValue());
-//            entries.add(ventry);
-//        }
+        for (Entry<K, V> bentry : bound.entrySet()) {
+            final E ventry = value.getEntryType().newInstance();
+            ventry.setKey(bentry.getKey());
+            ventry.setValue(bentry.getValue());
+            value.getEntries().add(ventry);
+        }
 
         return value;
     }

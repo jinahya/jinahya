@@ -20,16 +20,20 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <E>
+ * @param <E> entry type parameter
+ * @param <K>
+ * @param <V>
  */
 @XmlTransient
-public class MapEntries<E extends MapEntry<?, ?>> {
+public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
 
 
     public MapEntries(final Class<E> entryType) {
@@ -60,7 +64,47 @@ public class MapEntries<E extends MapEntry<?, ?>> {
     }
 
 
-    private final Class<E> entryType;
+    public void addEntry(final K key, final V value) {
+
+        final E entry;
+        try {
+            entry = entryType.newInstance();
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        }
+
+        entry.setKey(key);
+        entry.setValue(value);
+
+        getEntries().add(entry);
+    }
+
+
+    public void addEntry(final Entry<K, V> entry) {
+
+        if (entry == null) {
+            throw new NullPointerException("entry");
+        }
+
+        addEntry(entry.getKey(), entry.getValue());
+    }
+
+
+    public void addEntries(final Map<K, V> map) {
+
+        if (map == null) {
+            throw new NullPointerException("map");
+        }
+
+        for (Entry<K, V> entry : map.entrySet()) {
+            addEntry(entry);
+        }
+    }
+
+
+    protected final Class<E> entryType;
 
 
     private List<E> entries;

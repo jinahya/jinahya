@@ -18,29 +18,17 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Calendar;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class CalendarDayOfWeekTest {
+public class CalendarDayOfWeekTest
+    extends CalendarFieldEnumTest<CalendarDayOfWeek, Integer> {
 
 
-    @Test
-    public void testSet() {
+    public CalendarDayOfWeekTest() {
 
-        final Calendar calendar = Calendar.getInstance();
-
-        for (CalendarDayOfWeek value : CalendarDayOfWeek.values()) {
-            value.set(calendar);
-            Assert.assertEquals(calendar.get(Calendar.DAY_OF_WEEK),
-                                value.getFieldValue().intValue());
-            System.out.println(calendar.getTime());
-        }
+        super(CalendarDayOfWeek.class, CalendarDayOfWeek.CALENDAR_FIELD);
     }
 
 

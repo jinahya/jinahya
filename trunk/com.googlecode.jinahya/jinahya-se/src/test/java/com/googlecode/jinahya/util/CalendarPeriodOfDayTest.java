@@ -15,31 +15,20 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.test.map;
-
-
-import com.googlecode.jinahya.xml.bind.MapEntries;
-import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
+package com.googlecode.jinahya.util;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeeEntries extends MapEntries<EmployeeEntry, Long, Employee> {
+public class CalendarPeriodOfDayTest
+    extends CalendarFieldEnumTest<CalendarPeriodOfDay, Integer> {
 
 
-    public EmployeeEntries() {
+    public CalendarPeriodOfDayTest() {
 
-        super(EmployeeEntry.class);
-    }
-
-
-    @XmlElement(name = "employeeEntry")
-    public List<EmployeeEntry> getEmployeeEntries() {
-
-        return getEntries();
+        super(CalendarPeriodOfDay.class, CalendarPeriodOfDay.CALENDAR_FIELD);
     }
 
 

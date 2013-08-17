@@ -15,32 +15,22 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.test.map;
+package com.googlecode.jinahya.util;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntries;
-import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
+import com.googlecode.jinahya.lang.FieldEnum;
+import java.util.Calendar;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeeEntries extends MapEntries<EmployeeEntry, Long, Employee> {
+public interface CalendarFieldEnum<E extends Enum<E>, F>
+    extends FieldEnum<E, F> {
 
 
-    public EmployeeEntries() {
-
-        super(EmployeeEntry.class);
-    }
-
-
-    @XmlElement(name = "employeeEntry")
-    public List<EmployeeEntry> getEmployeeEntries() {
-
-        return getEntries();
-    }
+    void set(final Calendar calendar);
 
 
 }

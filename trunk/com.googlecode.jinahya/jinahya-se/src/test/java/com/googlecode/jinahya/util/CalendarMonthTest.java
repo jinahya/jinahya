@@ -18,29 +18,17 @@
 package com.googlecode.jinahya.util;
 
 
-import java.util.Calendar;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class CalendarMonthTest {
+public class CalendarMonthTest
+    extends CalendarFieldEnumTest<CalendarMonth, Integer> {
 
 
-    @Test
-    public void testSet() {
+    public CalendarMonthTest() {
 
-        final Calendar calendar = Calendar.getInstance();
-
-        for (CalendarMonth value : CalendarMonth.values()) {
-            value.set(calendar);
-            Assert.assertEquals(calendar.get(Calendar.MONTH),
-                                value.getFieldValue().intValue());
-            System.out.println(calendar.getTime());
-        }
+        super(CalendarMonth.class, CalendarMonth.CALENDAR_FIELD);
     }
 
 

@@ -28,29 +28,35 @@ import javax.xml.bind.annotation.XmlElement;
 public class Employee {
 
 
-    public static Employee newInstance(final String id, final String name) {
+    public static Employee newInstance(final long id, final String name,
+                                       final int age) {
 
-        final Employee person = new Employee();
+        final Employee employee = new Employee();
 
-        person.id = id;
-        person.name = name;
+        employee.id = id;
+        employee.name = name;
+        employee.age = age;
 
-        return person;
+        return employee;
     }
 
 
-    public String getId() {
+    public long getId() {
 
         return id;
     }
 
 
     @XmlElement
-    private String id;
+    private long id;
 
 
     @XmlElement
     private String name;
+
+
+    @XmlElement
+    private int age;
 
 
 }

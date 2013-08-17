@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql;
 
 
-import com.googlecode.jinahya.lang.FieldEnumHelper;
+import com.googlecode.jinahya.lang.FieldEnumTest;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import org.testng.Assert;
@@ -29,12 +29,13 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ResultSetHoldabilityTest {
+public class ResultSetHoldabilityTest
+    extends FieldEnumTest<ResultSetHoldability, Integer> {
 
 
-    @Test
-    public static void verify() {
-        FieldEnumHelper.verify(ResultSetHoldability.class);
+    public ResultSetHoldabilityTest() {
+
+        super(ResultSetHoldability.class);
     }
 
 
@@ -96,4 +97,3 @@ public class ResultSetHoldabilityTest {
 
 
 }
-

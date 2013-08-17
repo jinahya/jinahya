@@ -23,29 +23,30 @@ import java.util.Calendar;
 
 
 /**
- * Constants for {@link Calendar#DAY_OF_WEEK}.
+ * Constants for {@link Calendar#AM_PM}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public enum CalendarDayOfWeek
-    implements CalendarFieldEnum<CalendarDayOfWeek, Integer> {
+public enum CalendarPeriodOfDay
+    implements CalendarFieldEnum<CalendarPeriodOfDay, Integer> {
 
 
-    SUNDAY(Calendar.SUNDAY), //       1
-    MONDAY(Calendar.MONDAY), //       2
-    TUESDAY(Calendar.TUESDAY),//      3
-    WEDNESDAY(Calendar.WEDNESDAY), // 4
-    THURSDAY(Calendar.THURSDAY), //   5
-    FRIDAY(Calendar.FRIDAY), //       6
-    SATURDAY(Calendar.SATURDAY); //   7
+    /**
+     * Constant for {@link Calendar#AM}.
+     */
+    AM(Calendar.AM), // 0
+    /**
+     * Constant for {@link Calendar#PM}.
+     */
+    PM(Calendar.PM); // 1
 
 
     /**
      * The target field of {@link Calendar} which this enum type is for.
-     * 
-     * @see Calendar#DAY_OF_WEEK
+     *
+     * @see Calendar#AM_PM
      */
-    public static final int CALENDAR_FIELD = Calendar.DAY_OF_WEEK;
+    public static final int CALENDAR_FIELD = Calendar.AM_PM;
 
 
     /**
@@ -58,10 +59,10 @@ public enum CalendarDayOfWeek
      *
      * @return the enum constant with the specified field value.
      */
-    public static CalendarDayOfWeek fromFieldValue(final int fieldValue) {
+    public static CalendarPeriodOfDay fromFieldValue(final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(
-            CalendarDayOfWeek.class, fieldValue);
+            CalendarPeriodOfDay.class, fieldValue);
     }
 
 
@@ -76,9 +77,9 @@ public enum CalendarDayOfWeek
      *
      * @return the enum constant with the specified calendar's field value.
      */
-    public static CalendarDayOfWeek fromCalendar(final Calendar calendar) {
+    public static CalendarPeriodOfDay fromCalendar(final Calendar calendar) {
 
-        return CalendarFieldEnumHelper.get(CalendarDayOfWeek.class, calendar,
+        return CalendarFieldEnumHelper.get(CalendarPeriodOfDay.class, calendar,
                                            CALENDAR_FIELD);
     }
 
@@ -92,7 +93,8 @@ public enum CalendarDayOfWeek
      */
     public Integer[] fieldValues() {
 
-        return FieldEnumHelper.fieldValues(CalendarDayOfWeek.class, int.class);
+        return FieldEnumHelper.fieldValues(
+            CalendarPeriodOfDay.class, Integer.class);
     }
 
 
@@ -101,7 +103,7 @@ public enum CalendarDayOfWeek
      *
      * @param fieldValue field value.
      */
-    private CalendarDayOfWeek(final int fieldValue) {
+    private CalendarPeriodOfDay(final int fieldValue) {
 
         this.fieldValue = fieldValue;
     }
@@ -116,10 +118,6 @@ public enum CalendarDayOfWeek
 
     @Override
     public void set(final Calendar calendar) {
-
-        if (calendar == null) {
-            throw new NullPointerException("calendar");
-        }
 
         CalendarFieldEnumHelper.set(calendar, CALENDAR_FIELD, this);
     }

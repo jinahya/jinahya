@@ -19,8 +19,6 @@ package com.googlecode.jinahya.lang;
 
 
 import java.lang.reflect.Array;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -31,49 +29,51 @@ import java.util.Set;
 public class FieldEnumHelper {
 
 
+//    /**
+//     * Verifies each enum constant of specified type is mapped to a unique field
+//     * value including {@code null}.
+//     *
+//     * @param <E> enum type parameter
+//     * @param <F> field type parameter
+//     * @param enumType enum type
+//     *
+//     * @return true if verified; false otherwise.
+//     */
+//    public static <E extends Enum<E> & FieldEnum<E, ?>> boolean verify(
+//        final Class<E> enumType) {
+//
+//        if (enumType == null) {
+//            throw new NullPointerException("enumtype");
+//        }
+//
+//        if (!enumType.isEnum()) {
+//            // is this required?
+//            throw new IllegalArgumentException(
+//                "enumType(" + enumType + ") is not Enum");
+//        }
+//
+//        final Set<Object> fieldValues = new HashSet<Object>();
+//        for (final E enumConstant : enumType.getEnumConstants()) {
+//            final Object fieldValue = enumConstant.getFieldValue();
+//            if (!fieldValues.add(fieldValue)) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
+
+
     /**
-     * Verifies all enum constants are mapped to unique field values including
-     * {@code null}.
-     *
-     * @param <E> enum type parameter
-     * @param <F> field type parameter
-     * @param enumType enum type
-     *
-     * @return true if verified; false otherwise.
-     */
-    public static <E extends Enum<E> & FieldEnum<E, F>, F> boolean verify(
-        final Class<E> enumType) {
-
-        if (enumType == null) {
-            throw new NullPointerException("enumtype");
-        }
-
-        if (!enumType.isEnum()) {
-            // is this required?
-            throw new IllegalArgumentException(
-                "enumType(" + enumType + ") is not Enum");
-        }
-
-        final Set<F> fieldValues = new HashSet<F>();
-        for (final E enumConstant : enumType.getEnumConstants()) {
-            if (!fieldValues.add(enumConstant.getFieldValue())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    /**
-     * Returns all field values.
+     * Returns an array containing the field values of specified enum type, in
+     * the order those enum constants returned from {@code E.values()}
      *
      * @param <E> enum type parameter
      * @param <F> field type parameter
      * @param enumType enum type
      * @param fieldType field type
      *
-     * @return all field values.
+     * @return an array containing the field values of this enum type
      */
     public static <E extends Enum<E> & FieldEnum<E, F>, F> F[] fieldValues(
         final Class<E> enumType, final Class<F> fieldType) {
@@ -107,14 +107,18 @@ public class FieldEnumHelper {
 
 
     /**
-     * Finds enum constant mapped to given {@code fieldValue}. An
-     * {@code IllegalArgumentException} will be thrown if no enum constant
-     * found.
+     * Returns the enum constant of specified enum type with specified field
+     * value.
      *
      * @param <E> enum type parameter
      * @param <F> field type parameter
      * @param enumType enum type
      * @param fieldValue field value
+     *
+     * @throws NullPointerException if {@code enumType} is null
+     * @throws IllegalArgumentException if the specified enum type has no
+     * constant with the specified field value, or the specified class object
+     * does not represent an enum type
      *
      * @return the mapped enum constant.
      */
@@ -143,7 +147,7 @@ public class FieldEnumHelper {
             }
         }
 
-        throw new IllegalArgumentException("unknwon fieldValue: " + fieldValue);
+        throw new IllegalArgumentException("unknown fieldValue: " + fieldValue);
     }
 
 
@@ -157,4 +161,3 @@ public class FieldEnumHelper {
 
 
 }
-

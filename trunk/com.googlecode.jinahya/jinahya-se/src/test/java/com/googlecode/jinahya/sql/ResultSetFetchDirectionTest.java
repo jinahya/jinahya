@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql;
 
 
-import com.googlecode.jinahya.lang.FieldEnumHelper;
+import com.googlecode.jinahya.lang.FieldEnumTest;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import org.testng.Assert;
@@ -29,12 +29,13 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ResultSetFetchDirectionTest {
+public class ResultSetFetchDirectionTest
+    extends FieldEnumTest<ResultSetFetchDirection, Integer> {
 
 
-    @Test
-    public static void verify() {
-        FieldEnumHelper.verify(ResultSetFetchDirection.class);
+    public ResultSetFetchDirectionTest() {
+
+        super(ResultSetFetchDirection.class);
     }
 
 
@@ -96,4 +97,3 @@ public class ResultSetFetchDirectionTest {
 
 
 }
-
