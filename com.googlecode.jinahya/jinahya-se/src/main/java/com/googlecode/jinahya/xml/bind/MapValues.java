@@ -32,6 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class MapValues<V> {
 
 
+    /**
+     * Returns a list of values.
+     *
+     * @return a list of values.
+     */
     protected List<V> getValues() {
 
         if (values == null) {
@@ -42,6 +47,9 @@ public abstract class MapValues<V> {
     }
 
 
+    /**
+     * values.
+     */
     private List<V> values;
 
 
