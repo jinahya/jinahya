@@ -21,6 +21,7 @@ package com.googlecode.jinahya.sql;
 import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -58,6 +59,17 @@ public enum ResultSetConcurrency
 
         return FieldEnumHelper.fromFieldValue(
             ResultSetConcurrency.class, fieldValue);
+    }
+
+
+    public static ResultSetConcurrency fromResultSet(final ResultSet resultSet)
+        throws SQLException {
+
+        if (resultSet == null) {
+            throw new NullPointerException("resultSet");
+        }
+
+        return fromFieldValue(resultSet.getFetchDirection());
     }
 
 

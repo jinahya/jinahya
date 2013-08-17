@@ -18,11 +18,9 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
@@ -119,3 +117,4 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
 
 
 }
+

@@ -31,18 +31,39 @@ public enum CalendarDayOfWeek
     implements CalendarFieldEnum<CalendarDayOfWeek, Integer> {
 
 
+    /**
+     * Constant for {@link Calendar#SUNDAY}.
+     */
     SUNDAY(Calendar.SUNDAY), //       1
+    /**
+     * Constant for {@link Calendar#MONDAY}.
+     */
     MONDAY(Calendar.MONDAY), //       2
+    /**
+     * Constant for {@link Calendar#TUESDAY}.
+     */
     TUESDAY(Calendar.TUESDAY),//      3
+    /**
+     * Constant for {@link Calendar#WEDNESDAY}.
+     */
     WEDNESDAY(Calendar.WEDNESDAY), // 4
+    /**
+     * Constant for {@link Calendar#THURSDAY}.
+     */
     THURSDAY(Calendar.THURSDAY), //   5
+    /**
+     * Constant for {@link Calendar#FRIDAY}.
+     */
     FRIDAY(Calendar.FRIDAY), //       6
+    /**
+     * Constant for {@link Calendar#SATURDAY}.
+     */
     SATURDAY(Calendar.SATURDAY); //   7
 
 
     /**
      * The target field of {@link Calendar} which this enum type is for.
-     * 
+     *
      * @see Calendar#DAY_OF_WEEK
      */
     public static final int CALENDAR_FIELD = Calendar.DAY_OF_WEEK;
