@@ -29,8 +29,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jin Kwon <onacit at gmail.com>
  * @param <E> entry type parameter
- * @param <K>
- * @param <V>
+ * @param <K> map key type parameter
+ * @param <V> map value type parameter
  */
 @XmlTransient
 public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
@@ -64,9 +64,33 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
     }
 
 
+    /**
+     * Adds a new entry.
+     *
+     * @param key entry key.
+     * @param value entry value.
+     */
     public void addEntry(final K key, final V value) {
 
         final E entry;
+//        try {
+//            final Constructor<E> constructor =
+//                entryType.getDeclaredConstructor();
+//            if (!constructor.isAccessible()) {
+//                constructor.setAccessible(true);
+//            }
+//            try {
+//                entry = constructor.newInstance();
+//            } catch (InstantiationException ie) {
+//                throw new RuntimeException(ie);
+//            } catch (IllegalAccessException iae) {
+//                throw new RuntimeException(iae);
+//            } catch (InvocationTargetException ite) {
+//                throw new RuntimeException(ite);
+//            }
+//        } catch (NoSuchMethodException nsme) {
+//            throw new RuntimeException(nsme);
+//        }
         try {
             entry = entryType.newInstance();
         } catch (InstantiationException ie) {
@@ -82,6 +106,11 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
     }
 
 
+    /**
+     * Adds a new entry.
+     *
+     * @param entry the entry to add
+     */
     public void addEntry(final Entry<K, V> entry) {
 
         if (entry == null) {
@@ -92,6 +121,11 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
     }
 
 
+    /**
+     * Adds entries from specified map.
+     *
+     * @param map the map
+     */
     public void addEntries(final Map<K, V> map) {
 
         if (map == null) {

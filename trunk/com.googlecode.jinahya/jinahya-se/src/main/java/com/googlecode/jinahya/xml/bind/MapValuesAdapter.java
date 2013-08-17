@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
- * An XmlAdapter for Map BoundTypes.
+ * An XmlAdapter for {@link MapValues} and {@link Map}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <T> MapValues type parameter
@@ -61,7 +61,6 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
             return null;
         }
 
-        //final Map<K, V> b = newMap(v.getValues().size());
         final Map<K, V> b = new HashMap<K, V>(v.getValues().size());
 
         for (V value : v.getValues()) {
@@ -70,12 +69,6 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
         return b;
     }
-
-
-//    protected Map<K, V> newMap(final int requiredCapacity) {
-//
-//        return new HashMap<K, V>(requiredCapacity);
-//    }
 
 
     /**
