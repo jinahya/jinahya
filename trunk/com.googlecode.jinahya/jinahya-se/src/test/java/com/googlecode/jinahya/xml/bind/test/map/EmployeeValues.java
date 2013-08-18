@@ -21,12 +21,14 @@ package com.googlecode.jinahya.xml.bind.test.map;
 import com.googlecode.jinahya.xml.bind.MapValues;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
+@XmlRootElement
 public class EmployeeValues extends MapValues<Employee> {
 
 
@@ -38,3 +40,4 @@ public class EmployeeValues extends MapValues<Employee> {
 
 
 }
+

@@ -47,6 +47,39 @@ public class Employee {
     }
 
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 31 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 31 * hash + this.age;
+        return hash;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Employee other = (Employee) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if ((this.name == null)
+            ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if (this.age != other.age) {
+            return false;
+        }
+        return true;
+    }
+
+
     @XmlElement
     private long id;
 
@@ -60,3 +93,4 @@ public class Employee {
 
 
 }
+

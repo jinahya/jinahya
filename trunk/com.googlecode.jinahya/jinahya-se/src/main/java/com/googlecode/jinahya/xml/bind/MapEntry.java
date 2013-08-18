@@ -18,10 +18,12 @@
 package com.googlecode.jinahya.xml.bind;
 
 
+import java.util.Map;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * An abstract class for JAXB aware type of {@link java.util.Map.Entry}.
  *
  * @author Jin Kwon <onacit at gmail.com>
  * @param <K> key type parameter
@@ -31,61 +33,78 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class MapEntry<K, V> {
 
 
-    public MapEntry(final Class<K> keyType, final Class<V> valueType) {
-
-        super();
-
-        this.keyType = keyType;
-        this.valueType = valueType;
-    }
-
-
-    public final Class<K> getKeyType() {
-
-        return keyType;
-    }
-
-
-    public final Class<V> getValueType() {
-
-        return valueType;
-    }
-
-
+    /**
+     * Returns key.
+     *
+     * @return key.
+     */
     protected K getKey() {
 
         return key;
     }
 
 
+    /**
+     * Sets key.
+     *
+     * @param key key.
+     */
     protected void setKey(final K key) {
 
         this.key = key;
     }
 
 
+    /**
+     * Returns value.
+     *
+     * @return value.
+     */
     protected V getValue() {
 
         return value;
     }
 
 
+    /**
+     * Sets value.
+     *
+     * @param value value.
+     */
     protected void setValue(final V value) {
 
         this.value = value;
     }
 
 
-    protected final Class<K> keyType;
+    /**
+     * Pus this entry into specified {@code map}.
+     *
+     * @param map the map
+     *
+     * @return previous value
+     */
+    public V put(final Map<K, V> map) {
+
+        if (map == null) {
+            throw new NullPointerException("map");
+        }
+
+        return map.put(key, value);
+    }
 
 
-    protected final Class<V> valueType;
-
-
+    /**
+     * key.
+     */
     private K key;
 
 
+    /**
+     * value.
+     */
     private V value;
 
 
 }
+

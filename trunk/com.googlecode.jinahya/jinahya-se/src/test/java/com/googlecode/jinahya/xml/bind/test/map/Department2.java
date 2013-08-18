@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,22 +29,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class Department2 {
-
-
-    public Map<Long, Employee> getEmployees() {
-
-        if (employees == null) {
-            employees = new HashMap<>();
-        }
-
-        return employees;
-    }
+public class Department2 extends AbstractDepartment {
 
 
     @XmlElement
     @XmlJavaTypeAdapter(EmployeesAdapter2.class)
-    private Map<Long, Employee> employees;
+    @Override
+    public Map<Long, Employee> getEmployees() {
+
+        return super.getEmployees();
+    }
 
 
 }
+

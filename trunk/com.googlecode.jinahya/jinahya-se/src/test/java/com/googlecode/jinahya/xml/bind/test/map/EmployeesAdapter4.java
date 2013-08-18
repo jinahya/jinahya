@@ -18,20 +18,27 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
+import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeesAdapter2
-    extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
+public class EmployeesAdapter4
+    extends MapValuesAdapter<EmployeeValues, Long, Employee> {
 
 
-    public EmployeesAdapter2() {
+    public EmployeesAdapter4() {
 
-        super(EmployeeEntries.class);
+        super(EmployeeValues.class);
+    }
+
+
+    @Override
+    protected Long getKey(final Employee value) {
+
+        return value.getId();
     }
 
 

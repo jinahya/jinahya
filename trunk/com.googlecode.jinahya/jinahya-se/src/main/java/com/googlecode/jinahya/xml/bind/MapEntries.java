@@ -22,21 +22,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <E> entry type parameter
+ * @param <T> entry type parameter
  * @param <K> map key type parameter
  * @param <V> map value type parameter
  */
 @XmlTransient
-public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
+public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
 
 
-    public MapEntries(final Class<E> entryType) {
+    private static final Logger LOGGER =
+        Logger.getLogger(MapEntries.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.INFO);
+    }
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param entryType entry type
+     */
+    public MapEntries(final Class<T> entryType) {
 
         super();
 
@@ -48,16 +64,26 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
     }
 
 
-    public Class<E> getEntryType() {
+    /**
+     * Returns entry type
+     *
+     * @return entry type.
+     */
+    public Class<T> getEntryType() {
 
         return entryType;
     }
 
 
-    protected List<E> getEntries() {
+    /**
+     * Returns entries.
+     *
+     * @return entries.
+     */
+    protected List<T> getEntries() {
 
         if (entries == null) {
-            entries = new ArrayList<E>();
+            entries = new ArrayList<T>();
         }
 
         return entries;
@@ -72,25 +98,27 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
      */
     public void addEntry(final K key, final V value) {
 
-        final E entry;
-//        try {
-//            final Constructor<E> constructor =
-//                entryType.getDeclaredConstructor();
-//            if (!constructor.isAccessible()) {
-//                constructor.setAccessible(true);
-//            }
-//            try {
-//                entry = constructor.newInstance();
-//            } catch (InstantiationException ie) {
-//                throw new RuntimeException(ie);
-//            } catch (IllegalAccessException iae) {
-//                throw new RuntimeException(iae);
-//            } catch (InvocationTargetException ite) {
-//                throw new RuntimeException(ite);
-//            }
-//        } catch (NoSuchMethodException nsme) {
-//            throw new RuntimeException(nsme);
-//        }
+        final T entry;
+        /*
+         try {
+         final Constructor<E> constructor =
+         entryType.getDeclaredConstructor();
+         if (!constructor.isAccessible()) {
+         constructor.setAccessible(true);
+         }
+         try {
+         entry = constructor.newInstance();
+         } catch (InstantiationException ie) {
+         throw new RuntimeException(ie);
+         } catch (IllegalAccessException iae) {
+         throw new RuntimeException(iae);
+         } catch (InvocationTargetException ite) {
+         throw new RuntimeException(ite);
+         }
+         } catch (NoSuchMethodException nsme) {
+         throw new RuntimeException(nsme);
+         }
+         */
         try {
             entry = entryType.newInstance();
         } catch (InstantiationException ie) {
@@ -138,10 +166,17 @@ public abstract class MapEntries<E extends MapEntry<K, V>, K, V> {
     }
 
 
-    protected final Class<E> entryType;
+    /**
+     * entry type.
+     */
+    protected final Class<T> entryType;
 
 
-    private List<E> entries;
+    /**
+     * entries.
+     */
+    private List<T> entries;
 
 
 }
+

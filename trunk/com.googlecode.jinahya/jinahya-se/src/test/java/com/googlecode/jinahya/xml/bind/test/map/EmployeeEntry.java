@@ -19,24 +19,19 @@ package com.googlecode.jinahya.xml.bind.test.map;
 
 
 import com.googlecode.jinahya.xml.bind.MapEntry;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
+@XmlType(propOrder = {"id", "employee"})
 public class EmployeeEntry extends MapEntry<Long, Employee> {
 
 
-    public EmployeeEntry() {
-
-        super(Long.class, Employee.class);
-    }
-
-
-    @XmlAttribute
+    @XmlElement
     public Long getId() {
 
         return getKey();
@@ -63,3 +58,4 @@ public class EmployeeEntry extends MapEntry<Long, Employee> {
 
 
 }
+

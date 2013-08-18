@@ -18,21 +18,29 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeesAdapter2
-    extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
+@XmlRootElement
+public class Department4 extends AbstractDepartment {
 
 
-    public EmployeesAdapter2() {
+    @XmlElement
+    @XmlJavaTypeAdapter(EmployeesAdapter4.class)
+    @Override
+    public Map<Long, Employee> getEmployees() {
 
-        super(EmployeeEntries.class);
+        return super.getEmployees();
     }
 
 
 }
+

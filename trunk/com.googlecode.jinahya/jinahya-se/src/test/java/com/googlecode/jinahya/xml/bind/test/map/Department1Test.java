@@ -18,39 +18,18 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class Department1Test {
+public class Department1Test extends AbstractDepartmentTest<Department1> {
 
 
-    @Test
-    public void printXml() throws JAXBException {
+    public Department1Test() {
 
-        final Department1 department = new Department1();
-
-        for (int i = 2; i >= 0; i--) {
-            final long id = i;
-            final String name = "name" + i;
-            final int age = 20 + i;
-            final Employee employee = Employee.newInstance(id, name, age);
-            department.getEmployees().put(id, employee);
-        }
-
-        final JAXBContext context = JAXBContext.newInstance(Department1.class);
-
-        final Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-        marshaller.marshal(department, System.out);
+        super(Department1.class);
     }
 
 
 }
+

@@ -72,6 +72,12 @@ public class TypeTest extends FieldEnumTest<Type, Integer> {
 
             // locate by name, compare raw
             final String name = field.getName();
+            if ("NULL".equals(name)) {
+                continue;
+            }
+            if ("OTHER".equals(name)) {
+                continue;
+            }
             {
                 final Type type = Type.valueOf(name);
                 Assert.assertEquals(type.getFieldValue(), field.get(null));

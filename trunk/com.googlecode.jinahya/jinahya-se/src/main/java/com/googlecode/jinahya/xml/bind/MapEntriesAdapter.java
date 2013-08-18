@@ -21,10 +21,13 @@ package com.googlecode.jinahya.xml.bind;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
+ * An {@code XmlAdapter} for {@link MapEntries} and {@link Map}.
  *
  * @author Jin Kwon <onacit at gmail.com>
  * @param <T> MepEntries type parameter
@@ -33,6 +36,15 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
     extends XmlAdapter<T, Map<K, V>> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(MapEntriesAdapter.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.INFO);
+    }
 
 
     /**
@@ -55,33 +67,25 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
     @Override
     public Map<K, V> unmarshal(final T value) throws Exception {
 
+        LOGGER.log(Level.INFO, "unmarshal({0})", value);
+
         if (value == null) {
             return null;
         }
 
-        final List<? extends MapEntry<K, V>> entries = value.getEntries();
+        final List<? extends MapEntry<K, V>> ventries = value.getEntries();
 
-        final Map<K, V> bound = new HashMap<K, V>(entries.size());
+        final Map<K, V> bound = new HashMap<K, V>(ventries.size());
 
-        for (MapEntry<K, V> entry : entries) {
-            bound.put(entry.getKey(), entry.getValue());
+        for (MapEntry<K, V> ventry : ventries) {
+            bound.put(ventry.getKey(), ventry.getValue());
         }
 
+        LOGGER.log(Level.INFO, "bound: {0}", bound);
         return bound;
     }
 
 
-//    /**
-//     * Creates a new map.
-//     *
-//     * @param requiredCapacity required capacity hint
-//     *
-//     * @return a new map.
-//     */
-//    protected Map<K, V> newMap(final int requiredCapacity) {
-//
-//        return new HashMap<K, V>(requiredCapacity);
-//    }
     @Override
     public T marshal(final Map<K, V> bound) throws Exception {
 
@@ -93,18 +97,20 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
 
         value.addEntries(bound);
 
-//        //final List<? extends MapEntry<K, V>> entries = value.getEntries();
-//        @SuppressWarnings("unchecked")
-//        final List<? extends MapEntry<K, V>> entries =
-//            (List<MapEntry<K, V>>) value.getEntries();
-//        ((ArrayList) entries).ensureCapacity(bound.size());
-//
-//        for (Entry<K, V> bentry : bound.entrySet()) {
-//            final MapEntry<K, V> ventry = value.getEntryType().newInstance();
-//            ventry.setKey(bentry.getKey());
-//            ventry.setValue(bentry.getValue());
-//            entries.add(ventry);
-//        }
+        /*
+         //final List<? extends MapEntry<K, V>> entries = value.getEntries();
+         @SuppressWarnings("unchecked")
+         final List<? extends MapEntry<K, V>> entries =
+         (List<MapEntry<K, V>>) value.getEntries();
+         ((ArrayList) entries).ensureCapacity(bound.size());
+
+         for (Entry<K, V> bentry : bound.entrySet()) {
+         final MapEntry<K, V> ventry = value.getEntryType().newInstance();
+         ventry.setKey(bentry.getKey());
+         ventry.setValue(bentry.getValue());
+         entries.add(ventry);
+         }
+         */
 
         return value;
     }

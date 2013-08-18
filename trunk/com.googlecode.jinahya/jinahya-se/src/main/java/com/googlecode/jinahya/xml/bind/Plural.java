@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * General class for wrapper classes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S> singular type parameter
+ * @param <T> singular type parameter
  */
 @XmlTransient
-public abstract class Plural<S> implements Serializable {
+public abstract class Plural<T> implements Serializable {
 
 
     private static final long serialVersionUID = 7188972683803348989L;
@@ -93,10 +93,10 @@ public abstract class Plural<S> implements Serializable {
      * @return singular collection
      */
     @XmlTransient
-    protected Collection<S> getSingulars() {
+    protected Collection<T> getSingulars() {
 
         if (singulars == null) {
-            singulars = new ArrayList<S>();
+            singulars = new ArrayList<T>();
         }
 
         return singulars;
@@ -106,7 +106,7 @@ public abstract class Plural<S> implements Serializable {
     /**
      * singular collection.
      */
-    private Collection<S> singulars;
+    private Collection<T> singulars;
 
 
 }

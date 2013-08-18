@@ -20,17 +20,15 @@ package com.googlecode.jinahya.xml.bind.test.map;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@XmlRootElement
-public class Department0 {
+@XmlTransient
+public abstract class AbstractDepartment {
 
 
     public Map<Long, Employee> getEmployees() {
@@ -40,6 +38,12 @@ public class Department0 {
         }
 
         return employees;
+    }
+
+
+    public void setEmployees(final Map<Long, Employee> employees) {
+
+        this.employees = employees;
     }
 
 
@@ -61,7 +65,7 @@ public class Department0 {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Department0 other = (Department0) obj;
+        final AbstractDepartment other = (AbstractDepartment) obj;
         if (this.employees != other.employees
             && (this.employees == null
                 || !this.employees.equals(other.employees))) {
@@ -71,8 +75,6 @@ public class Department0 {
     }
 
 
-    @XmlElement
-    @XmlJavaTypeAdapter(EmployeesAdapter0.class)
     private Map<Long, Employee> employees;
 
 

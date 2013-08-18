@@ -18,21 +18,18 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
-
-
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeesAdapter2
-    extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
+public class Department4Test extends AbstractDepartmentTest<Department4> {
 
 
-    public EmployeesAdapter2() {
+    public Department4Test() {
 
-        super(EmployeeEntries.class);
+        super(Department4.class);
     }
 
 
 }
+
