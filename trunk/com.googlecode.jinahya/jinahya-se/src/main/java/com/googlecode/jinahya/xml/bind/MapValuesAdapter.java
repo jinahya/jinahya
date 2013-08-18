@@ -72,9 +72,9 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
 
     /**
-     * Returns the map key for specified {@code value}.
+     * Returns the map key for specified map value.
      *
-     * @param value map value
+     * @param value the map value
      *
      * @return map key for specified {@code value}.
      */
