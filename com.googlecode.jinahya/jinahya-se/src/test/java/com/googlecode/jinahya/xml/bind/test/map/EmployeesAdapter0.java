@@ -26,7 +26,6 @@ import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class EmployeesAdapter0
-    //extends MapEntriesAdapter<EmployeeEntry, EmployeeEntries, Long, Employee> {
     extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
 
 
@@ -37,3 +36,4 @@ public class EmployeesAdapter0
 
 
 }
+

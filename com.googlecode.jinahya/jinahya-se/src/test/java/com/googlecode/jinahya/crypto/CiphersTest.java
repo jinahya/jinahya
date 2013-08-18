@@ -171,7 +171,7 @@ public class CiphersTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void test() throws Exception {
 
         for (Entry<String, List<Integer>> entry

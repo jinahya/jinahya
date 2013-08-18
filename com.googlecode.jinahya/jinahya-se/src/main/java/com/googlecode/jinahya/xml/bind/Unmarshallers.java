@@ -33,6 +33,7 @@ import javax.xml.bind.Unmarshaller;
 
 
 /**
+ * A utility class for {@link Unmarshaller}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */

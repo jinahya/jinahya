@@ -20,6 +20,7 @@ package com.googlecode.jinahya.xml.bind.test.map;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -33,26 +34,42 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
+ * @param <T>
  */
-public class Department0Test {
+public abstract class AbstractDepartmentTest<T extends AbstractDepartment> {
+
+
+    public AbstractDepartmentTest(final Class<T> departmentType) {
+
+        super();
+
+        if (departmentType == null) {
+            throw new NullPointerException("departmentType");
+        }
+
+        this.departmentType = departmentType;
+    }
 
 
     @Test
     public void printXml()
         throws InstantiationException, IllegalAccessException, JAXBException {
 
-        final Department0 expected = new Department0();
+        final T expected = departmentType.newInstance();
 
+        final Map<Long, Employee> employees = new HashMap<Long, Employee>();
         for (int i = 2; i >= 0; i--) {
             final long id = i;
             final String name = "name" + i;
             final int age = 20 + i;
             final Employee employee = Employee.newInstance(id, name, age);
-            expected.getEmployees().put(id, employee);
+            employees.put(id, employee);
         }
+        expected.setEmployees(employees);
 
-        final JAXBContext context = JAXBContext.newInstance(Department0.class);
+        final JAXBContext context = JAXBContext.newInstance(departmentType);
 
+        System.out.println("expected.employees: " + expected.getEmployees());
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         //marshaller.marshal(department, System.out);
@@ -62,11 +79,15 @@ public class Department0Test {
 
         final Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        final Department0 actual = (Department0) unmarshaller.unmarshal(
-            new ByteArrayInputStream(baos.toByteArray()));
+        final T actual = departmentType.cast(unmarshaller.unmarshal(
+            new ByteArrayInputStream(baos.toByteArray())));
+        System.out.println("actual.employees: " + actual.getEmployees());
 
         Assert.assertEquals(actual, expected);
     }
+
+
+    private Class<T> departmentType;
 
 
 }

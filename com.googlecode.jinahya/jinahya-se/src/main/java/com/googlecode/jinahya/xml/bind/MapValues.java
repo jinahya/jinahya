@@ -24,12 +24,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
+ * An abstract class.
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <V> value parameter type
+ * @param <T> map value type parameter
  */
 @XmlTransient
-public abstract class MapValues<V> {
+public abstract class MapValues<T> {
 
 
     /**
@@ -37,10 +38,10 @@ public abstract class MapValues<V> {
      *
      * @return a list of values.
      */
-    protected List<V> getValues() {
+    protected List<T> getValues() {
 
         if (values == null) {
-            values = new ArrayList<V>();
+            values = new ArrayList<T>();
         }
 
         return values;
@@ -50,7 +51,8 @@ public abstract class MapValues<V> {
     /**
      * values.
      */
-    private List<V> values;
+    private List<T> values;
 
 
 }
+

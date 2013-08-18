@@ -178,7 +178,7 @@ public class JinahyaRandomTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testNextUnsignedInt() {
 
         final JinahyaRandom random =
@@ -235,7 +235,7 @@ public class JinahyaRandomTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testNextSignedInt() {
 
         final JinahyaRandom random =
@@ -296,7 +296,7 @@ public class JinahyaRandomTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testNextSignedLong() {
 
         final JinahyaRandom random =
@@ -358,7 +358,7 @@ public class JinahyaRandomTest {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testNextUnsignedLong() {
 
         final JinahyaRandom random =

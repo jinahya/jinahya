@@ -46,22 +46,73 @@ public enum Type implements FieldEnum<Type, Integer> {
      * Constant for {@link Types#NVARCHAR}.
      */
     NVARCHAR(Types.NVARCHAR), //           -9
+    /**
+     * Constant for {@link Types#ROWID}.
+     */
     ROWID(Types.ROWID), //                 -8
+    /**
+     * Constant for {@link Types#BIT}.
+     */
     BIT(Types.BIT), //                     -7
+    /**
+     * Constant for {@link Types#TINYINT}.
+     */
     TINYINT(Types.TINYINT), //             -6
+    /**
+     * Constant for {@link Types#BIGINT}.
+     */
     BIGINT(Types.BIGINT), //               -5
+    /**
+     * Constant for {@link Types#LONGVARBINARY}.
+     */
     LONGVARBINARY(Types.LONGVARBINARY), // -4
+    /**
+     * Constant for {@link Types#VARBINARY}.
+     */
     VARBINARY(Types.VARBINARY), //         -3
+    /**
+     * Constant for {@link Types#BINARY}.
+     */
     BINARY(Types.BINARY), //               -2
+    /**
+     * Constant for {@link Types#LONGVARCHAR}.
+     */
     LONGVARCHAR(Types.LONGVARCHAR), //     -1
-    NULL(Types.NULL), //                    0
+//    /**
+//     * Constant for {@link Types#NULL}.
+//     */
+//    NULL(Types.NULL), //                    0
+    /**
+     * Constant for {@link Types#CHAR}.
+     */
     CHAR(Types.CHAR), //                    1
+    /**
+     * Constant for {@link Types#NUMERIC}.
+     */
     NUMERIC(Types.NUMERIC),//               2
+    /**
+     * Constant for {@link Types#DECIMAL}.
+     */
     DECIMAL(Types.DECIMAL), //              3
+    /**
+     * Constant for {@link Types#INTEGER}.
+     */
     INTEGER(Types.INTEGER), //              4
+    /**
+     * Constant for {@link Types#SMALLINT}.
+     */
     SMALLINT(Types.SMALLINT), //            5
+    /**
+     * Constant for {@link Types#FLOAT}.
+     */
     FLOAT(Types.FLOAT), //                  6
+    /**
+     * Constant for {@link Types#REAL}.
+     */
     REAL(Types.REAL), //                    7
+    /**
+     * Constant for {@link Types#DOUBLE}.
+     */
     DOUBLE(Types.DOUBLE), //                8
     // -------------------------------------------------------------------------
     /**
@@ -92,23 +143,38 @@ public enum Type implements FieldEnum<Type, Integer> {
      */
     TIMESTAMP(Types.TIMESTAMP), //         93
     // -------------------------------------------------------------------------
-    /**
-     * Constant for {@link Types#OTHER}.
-     */
-    OTHER(Types.OTHER), //               1111
+//    /**
+//     * Constant for {@link Types#OTHER}.
+//     */
+//    OTHER(Types.OTHER), //               1111
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#JAVA_OBJECT}.
      */
     JAVA_OBJECT(Types.JAVA_OBJECT), //   2000
+    /**
+     * Constant for {@link Types#DISTINCT}.
+     */
     DISTINCT(Types.DISTINCT), //         2001
+    /**
+     * Constant for {@link Types#STRUCT}.
+     */
     STRUCT(Types.STRUCT), //             2002
     /**
      * Constant for {@link Types#ARRAY}.
      */
     ARRAY(Types.ARRAY), //               2003
+    /**
+     * Constant for {@link Types#BLOB}
+     */
     BLOB(Types.BLOB), //                 2004
+    /**
+     * Constant for {@link Types#CLOB}.
+     */
     CLOB(Types.CLOB), //                 2005
+    /**
+     * Constant for {@link Types#REF}.
+     */
     REF(Types.REF), //                   2006
 
     /**
