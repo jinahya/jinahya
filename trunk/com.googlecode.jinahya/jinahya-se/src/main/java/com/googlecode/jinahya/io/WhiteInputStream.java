@@ -36,7 +36,7 @@ public class WhiteInputStream extends InputStream {
      * @param limit the maximum number of bytes for reading. any negative for
      * unlimited.
      */
-    protected WhiteInputStream(final long limit) {
+    public WhiteInputStream(final long limit) {
 
         super();
 
