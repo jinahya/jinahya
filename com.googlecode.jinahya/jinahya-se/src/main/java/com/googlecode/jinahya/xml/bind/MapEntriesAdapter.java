@@ -67,8 +67,6 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
     @Override
     public Map<K, V> unmarshal(final T value) throws Exception {
 
-        LOGGER.log(Level.INFO, "unmarshal({0})", value);
-
         if (value == null) {
             return null;
         }
@@ -81,7 +79,6 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
             bound.put(ventry.getKey(), ventry.getValue());
         }
 
-        LOGGER.log(Level.INFO, "bound: {0}", bound);
         return bound;
     }
 
