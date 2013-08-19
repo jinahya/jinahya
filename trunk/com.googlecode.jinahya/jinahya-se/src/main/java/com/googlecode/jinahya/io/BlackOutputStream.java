@@ -20,6 +20,8 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -31,40 +33,50 @@ public class BlackOutputStream extends OutputStream {
 
 
     /**
+     * A constant value for no limit.
+     */
+    public static final long UNLIMITED = -1L;
+
+
+    /**
      * Creates a new instance with given {@code limit}.
      *
-     * @param limit the maximum number of bytes for writer. Any negative for
-     * unlimited.
+     * @param limit the maximum number of bytes for writer. {@link #UNLIMITED}
+     * for no limit.
      */
     public BlackOutputStream(final long limit) {
 
         super();
+
+        if (limit != UNLIMITED && limit < 0) {
+            throw new IllegalArgumentException("illegal limit: " + limit);
+        }
 
         this.limit = limit;
     }
 
 
     /**
-     * Creates a new instance without a limit.
+     * Creates a new instance without the {@link #UNLIMITED} as {@code limit}.
      */
     public BlackOutputStream() {
 
-        this(-1L);
+        this(UNLIMITED);
     }
 
 
     /**
-     * Writes given {@code b}.
+     * Writes given byte.
      *
      * @param b the byte to write
      *
-     * @throws IOException if {@code limit} is not negative and the number of
-     * bytes written so far exceeds it.
+     * @throws IOException if {@code limit} is not {@link #UNLIMITED} and the
+     * number of bytes written so far exceeds it.
      */
     @Override
     public void write(final int b) throws IOException {
 
-        if (limit >= 0L && count >= limit) {
+        if (limit != UNLIMITED && count >= limit) {
             throw new IOException("limit(" + limit + ") exceeded");
         }
 
@@ -83,6 +95,12 @@ public class BlackOutputStream extends OutputStream {
     }
 
 
+    public WritableByteChannel newChannel() {
+
+        return Channels.newChannel(this);
+    }
+
+
     /**
      * the number of bytes written so far.
      */
@@ -96,4 +114,3 @@ public class BlackOutputStream extends OutputStream {
 
 
 }
-
