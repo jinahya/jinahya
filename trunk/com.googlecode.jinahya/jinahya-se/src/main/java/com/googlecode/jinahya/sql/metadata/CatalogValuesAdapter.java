@@ -25,20 +25,18 @@ import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class SchemaValuesMapAdapter
-    extends MapValuesAdapter<SchemaValues, String, Schema> {
+public class CatalogValuesAdapter
+    extends MapValuesAdapter<CatalogValues, String, Catalog> {
 
 
-    public SchemaValuesMapAdapter() {
-
-        super(SchemaValues.class);
+    public CatalogValuesAdapter() {
+        super(CatalogValues.class);
     }
 
 
     @Override
-    protected String getKey(final Schema value) {
-
-        return value.getTableSchem();
+    protected String getKey(final Catalog value) {
+        return value.getTableCat();
     }
 
 

@@ -333,7 +333,7 @@ public class DatabaseMetadata implements Retrievable {
 
 
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(CatalogValuesMapAdapter.class)
+    @XmlJavaTypeAdapter(CatalogValuesAdapter.class)
     private Map<String, Catalog> catalogs;
 
 
@@ -346,7 +346,7 @@ public class DatabaseMetadata implements Retrievable {
 
 
     @XmlElement
-    @XmlJavaTypeAdapter(ClientInfoPropertiesMapAdapter.class)
+    @XmlJavaTypeAdapter(ClientInfoPropertiesAdapter.class)
     private Map<String, ClientInfoProperty> clientInfoProperties;
 
     // getColumnPrivileges
