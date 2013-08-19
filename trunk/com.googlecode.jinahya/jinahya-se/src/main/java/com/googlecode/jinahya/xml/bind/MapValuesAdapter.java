@@ -61,9 +61,9 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
             return null;
         }
 
-        final Map<K, V> b = new HashMap<K, V>(v.getValues().size());
+        final Map<K, V> b = new HashMap<K, V>(v.getValue().size());
 
-        for (V value : v.getValues()) {
+        for (V value : v.getValue()) {
             b.put(getKey(value), value);
         }
 
@@ -90,7 +90,7 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
         final T v = mapValuesType.newInstance();
 
-        final List<V> values = v.getValues();
+        final List<V> values = v.getValue();
 
         ((ArrayList<V>) values).ensureCapacity(b.size());
 

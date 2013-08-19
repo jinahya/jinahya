@@ -18,14 +18,9 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.Column.ColumnsMapAdapter;
-import com.googlecode.jinahya.sql.metadata.VersionColumn.VersionColumnsMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.sql.ResultSet;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlEnum;
@@ -39,39 +34,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class Table {
-
-
-    public static class Tables extends ValuesMapAdapter.AbstractValues<Table> {
-
-
-        @XmlElement
-        public List<Table> getTable() {
-
-            return getValueList();
-        }
-
-
-    }
-
-
-    public static class TablesMapAdapter
-        extends ValuesMapAdapter<Table.Tables, String, Table> {
-
-
-        public TablesMapAdapter() {
-
-            super(Table.Tables.class);
-        }
-
-
-        @Override
-        protected String getKey(final Table value) {
-
-            return value.getTableName();
-        }
-
-
-    }
 
 
     @XmlEnum
@@ -117,29 +79,142 @@ public class Table {
     }
 
 
-    public String getTableName() {
+    public static Table newInstance(final Schema schema,
+                                    final ResultSet resultSet) {
 
+        final Table instance = new Table();
+
+        instance.schema = schema;
+
+        return instance;
+    }
+
+
+    // ------------------------------------------------------------------ schema
+    public Schema getSchema() {
+
+        return schema;
+    }
+
+
+    // -------------------------------------------------------------- TABLE_NAME
+    public String getTableName() {
         return tableName;
     }
 
 
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+
+    // -------------------------------------------------------------- TABLE_TYPE
+    public String getTableType() {
+        return tableType;
+    }
+
+
+    public void setTableType(String tableType) {
+        this.tableType = tableType;
+    }
+
+
+    // ----------------------------------------------------------------- REMARKS
+    public String getRemarks() {
+        return remarks;
+    }
+
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+
+    // ---------------------------------------------------------------- TYPE_CAT
+    public String getTypeCat() {
+        return typeCat;
+    }
+
+
+    public void setTypeCat(String typeCat) {
+        this.typeCat = typeCat;
+    }
+
+
+    // -------------------------------------------------------------- TYPE_SCHEM
+    public String getTypeSchem() {
+        return typeSchem;
+    }
+
+
+    public void setTypeSchem(String typeSchem) {
+        this.typeSchem = typeSchem;
+    }
+
+
+    // --------------------------------------------------------------- TYPE_NAME
+    public String getTypeName() {
+        return typeName;
+    }
+
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+
+    // ----------------------------------------------- SELF_REFERENCING_COL_NAME
+    public String getSelfReferencingColName() {
+        return selfReferencingColName;
+    }
+
+
+    public void setSelfReferencingColName(String selfReferencingColName) {
+        this.selfReferencingColName = selfReferencingColName;
+    }
+
+
+    // ---------------------------------------------------------- REF_GENERATION
+    public String getRefGeneration() {
+        return refGeneration;
+    }
+
+
+    public void setRefGeneration(String refGeneration) {
+        this.refGeneration = refGeneration;
+    }
+
+
+    // ----------------------------------------------------------------- columns
     public Map<String, Column> getColumns() {
 
         if (columns == null) {
-            columns = new HashMap<String, Column>();
+            columns = new TreeMap<String, Column>();
         }
 
         return columns;
     }
 
 
-    public Collection<TablePrivilege> getTablePrivileges() {
+    // --------------------------------------------------------- tablePrivileges
+    public Map<String, TablePrivilege> getTablePrivileges() {
 
         if (tablePrivileges == null) {
-            tablePrivileges = new ArrayList<TablePrivilege>();
+            tablePrivileges = new TreeMap<String, TablePrivilege>();
         }
 
         return tablePrivileges;
+    }
+
+
+    // ---------------------------------------------------------- versionColumns
+    public Map<String, VersionColumn> getVersionColumns() {
+
+        if (versionColumns == null) {
+            versionColumns = new TreeMap<String, VersionColumn>();
+        }
+
+        return versionColumns;
     }
 
 
@@ -147,49 +222,58 @@ public class Table {
     private Schema schema;
 
 
-    @Label("TABLE_NAME")
+    @ColumnLabel("TABLE_NAME")
+    @XmlElement(required = true)
     private String tableName;
 
 
-    private Type tableType;
+    @ColumnLabel("TABLE_TYPE")
+    @XmlElement(required = true)
+    private String tableType;
 
 
-    @Label("REMARKS")
+    @ColumnLabel("REMARKS")
+    @XmlElement(required = true)
     private String remarks;
 
 
-    @Label("TYPE_CAT")
+    @ColumnLabel("TYPE_CAT")
+    @XmlElement(nillable = true, required = true)
     private String typeCat;
 
 
-    @Label("TYPE_SCHEM")
+    @ColumnLabel("TYPE_SCHEM")
+    @XmlElement(nillable = true, required = true)
     private String typeSchem;
 
 
-    @Label("TYPE_NAME")
+    @ColumnLabel("TYPE_NAME")
+    @XmlElement(nillable = true, required = true)
     private String typeName;
 
 
-    @Label("SELF_REFERENCING_COL_NAME")
+    @ColumnLabel("SELF_REFERENCING_COL_NAME")
+    @XmlElement(nillable = true, required = true)
     private String selfReferencingColName;
 
 
-    @Label("REF_GENERATION")
+    @ColumnLabel("REF_GENERATION")
+    @XmlElement(nillable = true, required = true)
     private String refGeneration;
 
 
-    @XmlElement(name = "column", required = true)
-    @XmlJavaTypeAdapter(ColumnsMapAdapter.class)
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(ColumnValuesAdapter.class)
     private Map<String, Column> columns;
 
 
-    @XmlElement(name = "tablePrivilege")
+    @XmlElement(required = true)
     @XmlElementWrapper(nillable = true, required = true)
-    private Collection<TablePrivilege> tablePrivileges;
+    private Map<String, TablePrivilege> tablePrivileges;
 
 
-    @XmlElement(name = "versionColumn", required = true)
-    @XmlJavaTypeAdapter(VersionColumnsMapAdapter.class)
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(VersionColumnValuesAdapter.class)
     private Map<String, VersionColumn> versionColumns;
 
 

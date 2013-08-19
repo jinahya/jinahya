@@ -68,27 +68,27 @@ public class Function {
     private Catalog catalog;
 
 
-    @Label("FUNCTION_CAT")
+    @ColumnLabel("FUNCTION_CAT")
     private String functionCat;
 
 
-    @Label("FUNCTION_SCHEM")
+    @ColumnLabel("FUNCTION_SCHEM")
     private String functionSchem;
 
 
-    @Label("FUNCTION_NAME")
+    @ColumnLabel("FUNCTION_NAME")
     private String functionName;
 
 
-    @Label("REMARKS")
+    @ColumnLabel("REMARKS")
     private String remarks;
 
 
-    @Label("FUNCTION_TYPE")
+    @ColumnLabel("FUNCTION_TYPE")
     private Type functionType;
 
 
-    @Label("SPECIFIC_NAME")
+    @ColumnLabel("SPECIFIC_NAME")
     private String specificName;
 
 

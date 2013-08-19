@@ -27,11 +27,12 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoProperties extends MapValues<ClientInfoProperty> {
+public class TablePrivilegeValues extends MapValues<TablePrivilege> {
 
 
     @XmlElement
-    public List<ClientInfoProperty> getClientInfoProperty() {
+    public List<TablePrivilege> getTablePrivilege() {
+
         return getValue();
     }
 

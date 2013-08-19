@@ -35,7 +35,7 @@ public class EmployeeValues extends MapValues<Employee> {
     @XmlElement(name = "employee")
     public List<Employee> getEmployees() {
 
-        return super.getValues();
+        return super.getValue();
     }
 
 

@@ -29,67 +29,67 @@ import javax.xml.bind.annotation.XmlTransient;
 public class IndexInfo {
 
 
-    @Label("TABLE_CAT")
+    @ColumnLabel("TABLE_CAT")
     @XmlElement(nillable = true, required = true)
     private String tableCat;
 
 
-    @Label("TABLE_SCHEM")
+    @ColumnLabel("TABLE_SCHEM")
     @XmlElement(nillable = true, required = true)
     private String tableSchem;
 
 
-    @Label("TABLE_NAME")
+    @ColumnLabel("TABLE_NAME")
     @XmlElement(nillable = false, required = true)
     private String tableName;
 
 
-    @Label("NON_UNIQUE")
+    @ColumnLabel("NON_UNIQUE")
     @XmlElement(nillable = false, required = true)
     private boolean nonUnique;
 
 
-    @Label("INDEX_QUALIFIER")
+    @ColumnLabel("INDEX_QUALIFIER")
     @XmlElement(nillable = true, required = true)
     private String indexQualifier;
 
 
-    @Label("INDEX_NAME")
+    @ColumnLabel("INDEX_NAME")
     @XmlElement(nillable = true, required = true)
     private String indexName;
 
 
-    @Label("TYPE")
+    @ColumnLabel("TYPE")
     @XmlElement(required = true)
     private short type;
 
 
-    @Label("ORDINAL_POSITION")
+    @ColumnLabel("ORDINAL_POSITION")
     @XmlElement(required = true)
     private short orginalPosition;
 
 
-    @Label("COLUMN_NAME")
+    @ColumnLabel("COLUMN_NAME")
     @XmlElement(nillable = true, required = true)
     private String columnName;
 
 
-    @Label("ASC_OR_DESC")
+    @ColumnLabel("ASC_OR_DESC")
     @XmlElement(nillable = true, required = true)
     private String ascOrDesc;
 
 
-    @Label("CARDINALITY")
+    @ColumnLabel("CARDINALITY")
     @XmlElement(required = true)
     private int cardinality;
 
 
-    @Label("PAGES")
+    @ColumnLabel("PAGES")
     @XmlElement(required = true)
     private int pages;
 
 
-    @Label("FILTER_CONDITION")
+    @ColumnLabel("FILTER_CONDITION")
     @XmlElement(nillable = true, required = true)
     private String filterCondition;
 

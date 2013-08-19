@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoProperties extends MapValues<ClientInfoProperty> {
+public class CatalogValues extends MapValues<Catalog> {
 
 
     @XmlElement
-    public List<ClientInfoProperty> getClientInfoProperty() {
+    public List<Catalog> getCatalog() {
         return getValue();
     }
 

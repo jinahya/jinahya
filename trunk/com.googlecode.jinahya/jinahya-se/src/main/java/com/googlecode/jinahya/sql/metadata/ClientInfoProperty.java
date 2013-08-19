@@ -45,19 +45,19 @@ public class ClientInfoProperty implements Retrievable {
     }
 
 
-    @Label("NAME")
+    @ColumnLabel("NAME")
     private String name;
 
 
-    @Label("MAX_LEN")
+    @ColumnLabel("MAX_LEN")
     private int maxLen;
 
 
-    @Label("DEFAULT_VALUE")
+    @ColumnLabel("DEFAULT_VALUE")
     private String defaultValue;
 
 
-    @Label("DESCRIPTION")
+    @ColumnLabel("DESCRIPTION")
     private String description;
 
 

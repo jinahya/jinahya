@@ -25,35 +25,35 @@ package com.googlecode.jinahya.sql.metadata;
 public class BestRowIdentifier {
 
 
-    @Label("SCOPE")
+    @ColumnLabel("SCOPE")
     private short scope;
 
 
-    @Label("COLUMN_NAME")
+    @ColumnLabel("COLUMN_NAME")
     private String columnName;
 
 
-    @Label("DATA_TYPE")
+    @ColumnLabel("DATA_TYPE")
     private int dataType;
 
 
-    @Label("TYPE_NAME")
+    @ColumnLabel("TYPE_NAME")
     private int typeName;
 
 
-    @Label("COLUMN_SIZE")
+    @ColumnLabel("COLUMN_SIZE")
     private int columnSize;
 
 
-    @Label("BUFFER_LENGTH")
+    @ColumnLabel("BUFFER_LENGTH")
     private int bufferLength;
 
 
-    @Label("DECIMAL_DIGIT")
+    @ColumnLabel("DECIMAL_DIGIT")
     private short decimalDigits;
 
 
-    @Label("PSEUDO_COLUMN")
+    @ColumnLabel("PSEUDO_COLUMN")
     private short pseudoColumn;
 
 

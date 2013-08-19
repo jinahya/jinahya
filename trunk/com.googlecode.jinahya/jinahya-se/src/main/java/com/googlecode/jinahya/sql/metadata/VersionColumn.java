@@ -18,9 +18,6 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.AbstractValues;
-import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,54 +29,95 @@ import javax.xml.bind.annotation.XmlTransient;
 public class VersionColumn {
 
 
-    public static class VersionColumns extends AbstractValues<VersionColumn> {
-
-
-        @XmlElement
-        public List<VersionColumn> getColumn() {
-
-            return getValueList();
-        }
-
-
+    // ------------------------------------------------------------------- SCOPE
+    public short getScope() {
+        return scope;
     }
 
 
-    public static class VersionColumnsMapAdapter
-        extends ValuesMapAdapter<VersionColumns, String, VersionColumn> {
-
-
-        public VersionColumnsMapAdapter() {
-
-            super(VersionColumns.class);
-        }
-
-
-        @Override
-        protected String getKey(final VersionColumn value) {
-
-            return value.getColumnName();
-        }
-
-
+    public void setScope(short scope) {
+        this.scope = scope;
     }
 
 
-    public Table getTable() {
-
-        return table;
-    }
-
-
-    public void setTable(final Table table) {
-
-        this.table = table;
-    }
-
-
+    // ------------------------------------------------------------- COLUMN_NAME
     public String getColumnName() {
 
         return columnName;
+    }
+
+
+    public void setColumnName(final String columnName) {
+
+        this.columnName = columnName;
+    }
+
+
+    // --------------------------------------------------------------- DATA_TYPE
+    public int getDataType() {
+        return dataType;
+    }
+
+
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
+    }
+
+
+    // --------------------------------------------------------------- TYPE_NAME
+    public String getTypeName() {
+        return typeName;
+    }
+
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+
+    // ------------------------------------------------------------- COLUMN_SIZE
+    public int getColumnSize() {
+        return columnSize;
+    }
+
+
+    public void setColumnSize(int columnSize) {
+        this.columnSize = columnSize;
+    }
+
+
+    // ----------------------------------------------------------- BUFFER_LENGTH
+    public int getBufferLength() {
+        return bufferLength;
+    }
+
+
+    public void setBufferLength(int bufferLength) {
+        this.bufferLength = bufferLength;
+    }
+
+
+    // ---------------------------------------------------------- DECIMAL_DIGITS
+    public Short getDecimalDigits() {
+
+        return decimalDigits;
+    }
+
+
+    public void setDecimalDigits(final Short decimalDigits) {
+
+        this.decimalDigits = decimalDigits;
+    }
+
+
+    // ----------------------------------------------------------- PSEUDO_COLUMN
+    public short getPseudoColumn() {
+        return pseudoColumn;
+    }
+
+
+    public void setPseudoColumn(short pseudoColumn) {
+        this.pseudoColumn = pseudoColumn;
     }
 
 
@@ -87,35 +125,43 @@ public class VersionColumn {
     private Table table;
 
 
-    @Label("SCOPE")
+    @ColumnLabel("SCOPE")
+    @XmlTransient
     private short scope;
 
 
-    @Label("COLUMN_NAME")
+    @ColumnLabel("COLUMN_NAME")
+    @XmlElement(required = true)
     private String columnName;
 
 
-    @Label("DATA_TYPE")
+    @ColumnLabel("DATA_TYPE")
+    @XmlElement(required = true)
     private int dataType;
 
 
-    @Label("TYPE_NAME")
+    @ColumnLabel("TYPE_NAME")
+    @XmlElement(required = true)
     private String typeName;
 
 
-    @Label("COLUMN_SIZE")
+    @ColumnLabel("COLUMN_SIZE")
+    @XmlElement(required = true)
     private int columnSize;
 
 
-    @Label("BUFFER_LENGTH")
+    @ColumnLabel("BUFFER_LENGTH")
+    @XmlElement(required = true)
     private int bufferLength;
 
 
-    @Label("DECIMAL_DIGITS")
-    private short decimalDigits;
+    @ColumnLabel("DECIMAL_DIGITS")
+    @XmlElement(nillable = true, required = true)
+    private Short decimalDigits;
 
 
-    @Label("PSEUDO_COLUMN")
+    @ColumnLabel("PSEUDO_COLUMN")
+    @XmlElement(required = true)
     private short pseudoColumn;
 
 

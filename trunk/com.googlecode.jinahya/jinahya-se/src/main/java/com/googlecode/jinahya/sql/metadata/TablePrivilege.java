@@ -18,45 +18,132 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
+import java.sql.ResultSet;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
+@XmlType(propOrder = {"grantor", "grantee", "privilege", "isGrantable"})
 public class TablePrivilege {
+
+
+    public static TablePrivilege newInstance(final Table table,
+                                             final ResultSet resultSet) {
+
+        final TablePrivilege instance = new TablePrivilege();
+
+        instance.table = table;
+
+        return instance;
+    }
+
+
+    // ------------------------------------------------------------------- table
+    public Table getTable() {
+
+        return table;
+    }
+
+
+    public void setTable(Table table) {
+
+        this.table = table;
+    }
+
+
+    // ----------------------------------------------------------------- GRANTOR
+    public String getGrantor() {
+
+        return grantor;
+    }
+
+
+    public void setGrantor(String grantor) {
+
+        this.grantor = grantor;
+    }
+
+
+    // ----------------------------------------------------------------- GRANTEE
+    public String getGrantee() {
+
+        return grantee;
+    }
+
+
+    public void setGrantee(String grantee) {
+
+        this.grantee = grantee;
+    }
+
+
+    // --------------------------------------------------------------- PRIVILEGE
+    public String getPrivilege() {
+
+        return privilege;
+    }
+
+
+    public void setPrivilege(String privilege) {
+
+        this.privilege = privilege;
+    }
+
+
+    // ------------------------------------------------------------ IS_GRANTABLE
+    public String getIsGrantable() {
+
+        return isGrantable;
+    }
+
+
+    public void setIsGrantable(String isGrantable) {
+
+        this.isGrantable = isGrantable;
+    }
+
+
+    @ColumnLabel("TABLE_CAT")
+    @XmlTransient
+    private String tableCat;
+
+
+    @ColumnLabel("TABLE_SCHEM")
+    @XmlTransient
+    private String tableSchem;
+
+
+    @ColumnLabel("TABLE_NAME")
+    @XmlTransient
+    private String tableName;
 
 
     @XmlTransient
     private Table table;
 
 
-    @Label("TABLE_CAT")
-    private String tableCat;
-
-
-    @Label("TABLE_SCHEM")
-    private String tableSchem;
-
-
-    @Label("TABLE_NAME")
-    private String tableName;
-
-
-    @Label("GRANTOR")
+    @ColumnLabel("GRANTOR")
+    @XmlElement(nillable = true, required = true)
     private String grantor;
 
 
-    @Label("GRANTEE")
+    @ColumnLabel("GRANTEE")
+    @XmlElement(required = true)
     private String grantee;
 
 
-    @Label("PRIVILEGE")
+    @ColumnLabel("PRIVILEGE")
+    @XmlElement(required = true)
     private String privilege;
 
 
-    @Label("IS_GRANTABLE")
+    @ColumnLabel("IS_GRANTABLE")
+    @XmlElement(nillable = true, required = true)
     private String isGrantable;
 
 

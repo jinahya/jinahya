@@ -25,75 +25,75 @@ package com.googlecode.jinahya.sql.metadata;
 public class TypeInfo {
 
 
-    @Label("TYPE_NAME")
+    @ColumnLabel("TYPE_NAME")
     private String typeName;
 
 
-    @Label("DATA_TYPE")
+    @ColumnLabel("DATA_TYPE")
     private int dataType;
 
 
-    @Label("PRECISION")
+    @ColumnLabel("PRECISION")
     private int precision;
 
 
-    @Label("LITERAL_PREFIX")
+    @ColumnLabel("LITERAL_PREFIX")
     private String leteralPrefix;
 
 
-    @Label("LITERAL_SUFFIX")
+    @ColumnLabel("LITERAL_SUFFIX")
     private String leteralSuffix;
 
 
-    @Label("CREATE_PARAMS")
+    @ColumnLabel("CREATE_PARAMS")
     private String createParams;
 
 
-    @Label("NULLABLE")
+    @ColumnLabel("NULLABLE")
     private short nullable;
 
 
-    @Label("CASE_SENSITIVE")
+    @ColumnLabel("CASE_SENSITIVE")
     private boolean caseSensitive;
 
 
-    @Label("SEARCHABLE")
+    @ColumnLabel("SEARCHABLE")
     private short searchable;
 
 
-    @Label("UNSIGNED_ATTRIBUTE")
+    @ColumnLabel("UNSIGNED_ATTRIBUTE")
     private boolean unsignedAttribute;
 
 
-    @Label("FIXED_PREC_SCALE")
+    @ColumnLabel("FIXED_PREC_SCALE")
     private boolean fixedPrecScale;
 
 
-    @Label("AUTO_INCREMENT")
+    @ColumnLabel("AUTO_INCREMENT")
     private boolean autoIncrement;
 
 
-    @Label("LOCAL_TYPE_NAME")
+    @ColumnLabel("LOCAL_TYPE_NAME")
     private String localTypeName;
 
 
-    @Label("MINIMUM_SCALE")
+    @ColumnLabel("MINIMUM_SCALE")
     private short minimumScale;
 
 
-    @Label("MAXIMUM_SCALE")
+    @ColumnLabel("MAXIMUM_SCALE")
     private short maximumScale;
 
 
-    @Label("SQL_DATA_TYPE")
+    @ColumnLabel("SQL_DATA_TYPE")
     private int sqlDataType;
 
 
-    @Label("SQL_DATETIME_SUB")
+    @ColumnLabel("SQL_DATETIME_SUB")
     private int sqlDatetimeSub;
 
 
-    @Label("NUM_PREC_RADIX")
+    @ColumnLabel("NUM_PREC_RADIX")
     private int numPrecRadix;
 
 
