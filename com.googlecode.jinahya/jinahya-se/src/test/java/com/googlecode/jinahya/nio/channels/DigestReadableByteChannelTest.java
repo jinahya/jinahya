@@ -15,9 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.security;
+package com.googlecode.jinahya.nio.channels;
 
 
+import com.googlecode.jinahya.security.MessageDigests;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -34,20 +35,10 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class MessageDigestsTest {
+public class DigestReadableByteChannelTest {
 
 
-    public static MessageDigest newMessageDigestWithRandomAlgorithm()
-        throws NoSuchAlgorithmException {
-
-        return MessageDigest.getInstance(
-            MessageDigests.SUPPORTED_ALGORITHMS
-            .get(ThreadLocalRandom.current().nextInt(
-            MessageDigests.SUPPORTED_ALGORITHMS.size())));
-    }
-
-
-    @Test(invocationCount = 32)
+    @Test(invocationCount = 128)
     public void test() throws NoSuchAlgorithmException, IOException {
 
         final Random random = ThreadLocalRandom.current();
@@ -56,20 +47,34 @@ public class MessageDigestsTest {
         random.nextBytes(data);
 
         for (String algorithm : MessageDigests.SUPPORTED_ALGORITHMS) {
+            System.out.println("algorithm: " + algorithm);
 
-            final MessageDigest digest = MessageDigest.getInstance(algorithm);
+            final MessageDigest digest1 = MessageDigest.getInstance(algorithm);
 
-            final byte[] hash1 = MessageDigests.digest(
-                digest, new ByteArrayInputStream(data), new byte[17],
-                MessageDigests.ALL);
+            final byte[] expected = digest1.digest(data);
+            for (final byte b : expected) {
+                System.out.printf("%1$02X", (b & 0xFF));
+            }
+            System.out.println();
 
-            final byte[] hash2 = MessageDigests.digest(
-                digest, Channels.newChannel(new ByteArrayInputStream(data)),
-                ByteBuffer.allocate(31), MessageDigests.ALL);
+            final MessageDigest digest2 = MessageDigest.getInstance(algorithm);
+            final DigestReadableByteChannel channel =
+                new DigestReadableByteChannel(
+                Channels.newChannel(new ByteArrayInputStream(data)), digest2);
+            final ByteBuffer buffer = ByteBuffer.allocate(1024);
+            for (; channel.read(buffer) != -1; buffer.clear()) {
+                buffer.flip();
+            }
 
-            Assert.assertEquals(hash1, hash2);
+            final byte[] actual = digest2.digest();
+            for (final byte b : actual) {
+                System.out.printf("%1$02X", (b & 0xFF));
+            }
+            System.out.println();
+
+
+            Assert.assertEquals(actual, expected);
         }
-
     }
 
 

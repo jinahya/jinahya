@@ -18,8 +18,14 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.security.MessageDigests;
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
@@ -31,6 +37,20 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class StreamsTest {
+
+
+    protected static File newTempFile() throws IOException {
+
+        final File file = File.createTempFile("prefix", null);
+        file.deleteOnExit();
+
+        // fill input
+        final RandomAccessFile raf = new RandomAccessFile(file, "rwd");
+        raf.setLength(ThreadLocalRandom.current().nextInt(65536));
+        raf.close();
+
+        return file;
+    }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
@@ -105,5 +125,23 @@ public class StreamsTest {
     }
 
 
-}
+    @Test(invocationCount = 32)
+    public static void testCopyFileToFileWithoutLength()
+        throws IOException, NoSuchAlgorithmException {
 
+        final File input = newTempFile();
+
+        final File output = File.createTempFile("prefix", null);
+        output.deleteOnExit();
+
+        Streams.copy(input, output, new byte[1], Streams.ALL);
+
+        final MessageDigest digest = MessageDigest.getInstance("SHA-1");
+
+        Assert.assertEquals(
+            MessageDigests.digest(digest, input, new byte[1024], MessageDigests.ALL),
+            MessageDigests.digest(digest, output, ByteBuffer.allocate(1024), MessageDigests.ALL));
+    }
+
+
+}

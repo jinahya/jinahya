@@ -44,11 +44,8 @@ public class Ciphers {
 
 
     /**
-     * A map of supported transformations and the list of keysizes.
-     *
-     * @see javax.crypto.Cipher
-     * @see <a href="http://goo.gl/QMnzS4">Java Cryptography Architecture
-     * Standard Algorithm Name Documentation"</a>
+     * Transformations and keysizes that every implementation of the Java
+     * platform is required to support.
      */
     public static final Map<String, List<Integer>> SUPPORTED_TRANSFORMATIONS;
 
