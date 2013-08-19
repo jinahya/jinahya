@@ -25,11 +25,11 @@ import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoPropertiesMapAdapter
+public class ClientInfoPropertiesAdapter
     extends MapValuesAdapter<ClientInfoProperties, String, ClientInfoProperty> {
 
 
-    public ClientInfoPropertiesMapAdapter() {
+    public ClientInfoPropertiesAdapter() {
         super(ClientInfoProperties.class);
     }
 

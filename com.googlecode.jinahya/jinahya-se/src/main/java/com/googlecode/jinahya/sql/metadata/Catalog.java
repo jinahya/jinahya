@@ -97,7 +97,7 @@ public class Catalog implements Retrievable {
 
 
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(SchemaValuesMapAdapter.class)
+    @XmlJavaTypeAdapter(SchemaValuesAdapter.class)
     private Map<String, Schema> schemas;
 
 
