@@ -83,59 +83,59 @@ public class ImportedKey {
     }
 
 
-    @Label("PKTABLE_CAT")
+    @ColumnLabel("PKTABLE_CAT")
     private String pktableCat;
 
 
-    @Label("PKTABLE_SCHEM")
+    @ColumnLabel("PKTABLE_SCHEM")
     private String pktableSchem;
 
 
-    @Label("PKTABLE_NAME")
+    @ColumnLabel("PKTABLE_NAME")
     private String pktableName;
 
 
-    @Label("PKCOLUMN_NAME")
+    @ColumnLabel("PKCOLUMN_NAME")
     private String pkcolumnName;
 
 
-    @Label("FKTABLE_CAT")
+    @ColumnLabel("FKTABLE_CAT")
     private String fktableCat;
 
 
-    @Label("FKTABLE_SCHEM")
+    @ColumnLabel("FKTABLE_SCHEM")
     private String fktableSchem;
 
 
-    @Label("FKTABLE_NAME")
+    @ColumnLabel("FKTABLE_NAME")
     private String fktableName;
 
 
-    @Label("FKCOLUMN_NAME")
+    @ColumnLabel("FKCOLUMN_NAME")
     private String fkcolumnName;
 
 
-    @Label("KEY_SEQ")
+    @ColumnLabel("KEY_SEQ")
     private short keySeq;
 
 
-    @Label("UPDATE_RULE")
+    @ColumnLabel("UPDATE_RULE")
     private short updateRule;
 
 
-    @Label("DELETE_RULE")
+    @ColumnLabel("DELETE_RULE")
     private short deleteRule;
 
 
-    @Label("FK_NAME")
+    @ColumnLabel("FK_NAME")
     private String fkName;
 
 
-    @Label("PK_NAME")
+    @ColumnLabel("PK_NAME")
     private String pkName;
 
 
-    @Label("DEFERRABILITY")
+    @ColumnLabel("DEFERRABILITY")
     private short deferrability;
 
 

@@ -48,12 +48,12 @@ public enum ResultSetConcurrency
 
 
     /**
-     * Returns the constant mapped to given {@code fieldValue}.
+     * Returns the enum constant of this type with the specified field value.
      *
      * @param fieldValue either {@link ResultSet#CONCUR_READ_ONLY} or
      * {@link ResultSet#CONCUR_UPDATABLE}.
      *
-     * @return mapped constant.
+     * @return the enum constant with the specified field value
      */
     public static ResultSetConcurrency fromFieldValue(final int fieldValue) {
 
@@ -62,6 +62,19 @@ public enum ResultSetConcurrency
     }
 
 
+    /**
+     * Returns the enum constant of this type with the specified result set's
+     * concurrency.
+     *
+     * @param resultSet the result set
+     *
+     * @return the enum constant with specified result set's concurrency
+     *
+     * @throws SQLException if a database access error occurs or this method is
+     * called on a closed result set
+     *
+     * @see ResultSet#getConcurrency()
+     */
     public static ResultSetConcurrency fromResultSet(final ResultSet resultSet)
         throws SQLException {
 
@@ -73,6 +86,13 @@ public enum ResultSetConcurrency
     }
 
 
+    /**
+     * Returns an array containing the field values of this enum type, in the
+     * order they are declared.
+     *
+     * @return an array containing the field values of this enum type, in the
+     * order they are declared
+     */
     public static Integer[] fieldValues() {
 
         return FieldEnumHelper.fieldValues(ResultSetConcurrency.class,
@@ -105,4 +125,3 @@ public enum ResultSetConcurrency
 
 
 }
-

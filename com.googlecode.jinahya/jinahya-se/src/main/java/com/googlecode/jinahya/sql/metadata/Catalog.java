@@ -18,13 +18,11 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.Schema.SchemasMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -38,78 +36,68 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Catalog implements Retrievable {
 
 
-    public static final Catalog UNNAMED = new Catalog();
+    public static final Catalog UNNAMED = new Catalog() {
 
+        @Override
+        public String getTableCat() {
 
-    static {
-        UNNAMED.tableCat = null;
-    }
-
-
-    public static class Catalogs extends ValuesMapAdapter.AbstractValues<Catalog> {
-
-
-        @XmlElement
-        public List<Catalog> getCatalog() {
-
-            return getValueList();
-        }
-
-
-    }
-
-
-    public static class CatalogsMapAdapter
-        extends ValuesMapAdapter<Catalog.Catalogs, String, Catalog> {
-
-
-        public CatalogsMapAdapter() {
-
-            super(Catalog.Catalogs.class);
+            return null;
         }
 
 
         @Override
-        protected String getKey(final Catalog value) {
-
-            return value.getTableCat();
+        public void setTableCat(final String tableCat) {
+            // do nothing
         }
 
-
-    }
+    };
 
 
     @Override
     public void retrieve(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
-
-        
+        final ResultSet resultSet = databaseMetaData.getSchemas(tableCat, null);
+        try {
+            while (resultSet.next()) {
+            }
+        } finally {
+            resultSet.close();
+        }
     }
 
 
+    // --------------------------------------------------------------- TABLE_CAT
     public String getTableCat() {
+
         return tableCat;
     }
 
 
+    public void setTableCat(final String tableCat) {
+
+        this.tableCat = tableCat;
+    }
+
+
+    // ----------------------------------------------------------------- schemas
     public Map<String, Schema> getSchemas() {
 
         if (schemas == null) {
-            schemas = new HashMap<String, Schema>();
+            schemas = new TreeMap<String, Schema>();
         }
 
         return schemas;
     }
 
 
-    @Label("TABLE_CAT")
+    @ColumnLabel("TABLE_CAT")
     @XmlElement(nillable = true, required = true)
     private String tableCat;
 
 
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(SchemasMapAdapter.class)
+    @XmlJavaTypeAdapter(SchemaValuesMapAdapter.class)
     private Map<String, Schema> schemas;
 
 

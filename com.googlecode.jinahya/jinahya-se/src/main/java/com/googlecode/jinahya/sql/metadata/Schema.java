@@ -18,12 +18,8 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.sql.metadata.Table.TablesMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -38,47 +34,25 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Schema {
 
 
-    public static final Schema UNNAMED = new Schema();
+    public static final Schema UNNAMED = new Schema() {
 
 
-    static {
-        UNNAMED.tableSchem = null;
-    }
+        @Override
+        public final String getTableSchem() {
 
-
-    public static class Schemas extends ValuesMapAdapter.AbstractValues<Schema> {
-
-
-        @XmlElement
-        public List<Schema> getSchema() {
-
-            return getValueList();
-        }
-
-
-    }
-
-
-    public static class SchemasMapAdapter
-        extends ValuesMapAdapter<Schema.Schemas, String, Schema> {
-
-
-        public SchemasMapAdapter() {
-
-            super(Schema.Schemas.class);
+            return null;
         }
 
 
         @Override
-        protected String getKey(final Schema value) {
-
-            return value.getTableSchem();
+        public final void setTableSchem(final String tableSchem) {
+            // do nothing
         }
 
+    };
 
-    }
 
-
+    // ----------------------------------------------------------------- catalog
     public Catalog getCatalog() {
 
         return catalog;
@@ -91,19 +65,20 @@ public class Schema {
     }
 
 
-    @XmlAttribute
-    public String getCatalogName() {
-
-        return catalog == null ? null : catalog.getTableCat();
-    }
-
-
+    // ------------------------------------------------------------- TABLE_SCHEM
     public String getTableSchem() {
 
         return tableSchem;
     }
 
 
+    public void setTableSchem(final String tableSchem) {
+
+        this.tableSchem = tableSchem;
+    }
+
+
+    // ------------------------------------------------------------------ tables
     public Map<String, Table> getTables() {
 
         if (tables == null) {
@@ -118,13 +93,13 @@ public class Schema {
     private Catalog catalog;
 
 
-    @Label("TABLE_SCHEM")
-    @XmlElement(nillable = true, required = true)
+    @ColumnLabel("TABLE_SCHEM")
+    @XmlElement(required = true)
     private String tableSchem;
 
 
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(TablesMapAdapter.class)
+    @XmlJavaTypeAdapter(TableValuesAdapter.class)
     private Map<String, Table> tables;
 
 

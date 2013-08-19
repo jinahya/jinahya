@@ -51,7 +51,7 @@ public class TableType {
     }
 
 
-    @Label("TABLE_TYPE")
+    @ColumnLabel("TABLE_TYPE")
     private String tableType;
 
 

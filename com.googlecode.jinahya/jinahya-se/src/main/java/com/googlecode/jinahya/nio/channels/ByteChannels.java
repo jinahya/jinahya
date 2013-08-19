@@ -29,6 +29,7 @@ import java.nio.channels.WritableByteChannel;
 
 
 /**
+ * A utility class for channels.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
@@ -36,11 +37,19 @@ public class ByteChannels {
 
 
     /**
+     * A constant value for unlimited length.
+     */
+    public static final long ALL = -1L;
+
+
+    /**
+     * Copies all or specified number of bytes from {@code input} to
+     * {@code output}.
      *
-     * @param input
-     * @param output
-     * @param buffer
-     * @param length number of bytes to copy. -1 for unlimited.
+     * @param input the input
+     * @param output the output
+     * @param buffer buffer
+     * @param length number of bytes to copy. {@link #ALL} for all.
      *
      * @return the number of byte copied.
      *
@@ -68,15 +77,15 @@ public class ByteChannels {
                 "buffer.capacity(" + buffer.capacity() + ") == 0");
         }
 
-        if (length != -1 && length < 0) {
+        if (length != ALL && length < 0) {
             throw new IllegalArgumentException(
                 "illegal length(" + length + ")");
         }
 
         long count = 0L;
-        for (int read; length == -1 || count < length; count += read) {
+        for (int read; length == ALL || count < length; count += read) {
             buffer.clear(); // position -> 0, limit -> capacity
-            if (length != -1) {
+            if (length != ALL) {
                 final long r = length - count;
                 if (r < buffer.capacity()) {
                     buffer.limit((int) r);
@@ -84,7 +93,7 @@ public class ByteChannels {
             }
             read = input.read(buffer);
             if (read == -1) {
-                if (length == -1) {
+                if (length == ALL) {
                     break;
                 } else {
                     throw new IOException("eof");
@@ -100,6 +109,19 @@ public class ByteChannels {
     }
 
 
+    /**
+     * Copies all or specified number of bytes from {@code input} to
+     * {@code output}.
+     *
+     * @param input the input
+     * @param output the output
+     * @param buffer buffer
+     * @param length number of bytes to copy. {@link #ALL} for all.
+     *
+     * @return the number of byte copied.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public static long copy(final File input, final WritableByteChannel output,
                             final ByteBuffer buffer, final long length)
         throws IOException {
@@ -121,6 +143,19 @@ public class ByteChannels {
     }
 
 
+    /**
+     * Copies all or specified number of bytes from {@code input} to
+     * {@code output}.
+     *
+     * @param input the input
+     * @param output the output
+     * @param buffer buffer
+     * @param length number of bytes to copy. {@link #ALL} for all.
+     *
+     * @return the number of byte copied.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public static long copy(final ReadableByteChannel input, final File output,
                             final ByteBuffer buffer, final long length)
         throws IOException {
@@ -142,6 +177,19 @@ public class ByteChannels {
     }
 
 
+    /**
+     * Copies all or specified number of bytes from {@code input} to
+     * {@code output}.
+     *
+     * @param input the input
+     * @param output the output
+     * @param buffer buffer
+     * @param length number of bytes to copy. {@link #ALL} for all.
+     *
+     * @return the number of byte copied.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public static long copy(final File input, final File output,
                             final ByteBuffer buffer, final long length)
         throws IOException {

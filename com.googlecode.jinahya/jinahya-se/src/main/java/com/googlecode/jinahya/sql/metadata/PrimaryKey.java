@@ -83,27 +83,27 @@ public class PrimaryKey {
     }
 
 
-    @Label("TABLE_CAT")
+    @ColumnLabel("TABLE_CAT")
     private String tableCat;
 
 
-    @Label("TABLE_SCHEM")
+    @ColumnLabel("TABLE_SCHEM")
     private String tableSchem;
 
 
-    @Label("TABLE_NAME")
+    @ColumnLabel("TABLE_NAME")
     private String tableName;
 
 
-    @Label("COLUMN_NAME")
+    @ColumnLabel("COLUMN_NAME")
     private String columnName;
 
 
-    @Label("KEY_SEQ")
+    @ColumnLabel("KEY_SEQ")
     private short keySeq;
 
 
-    @Label("PK_NAME")
+    @ColumnLabel("PK_NAME")
     private String pkName;
 
 
