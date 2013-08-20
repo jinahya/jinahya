@@ -19,7 +19,6 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -42,6 +41,9 @@ public class IndexInfo {
     @ColumnLabel("TABLE_NAME")
     @XmlElement(nillable = false, required = true)
     private String tableName;
+
+
+    private Table table; // ---------------------------------------------- table
 
 
     @ColumnLabel("NON_UNIQUE")
@@ -92,10 +94,6 @@ public class IndexInfo {
     @ColumnLabel("FILTER_CONDITION")
     @XmlElement(nillable = true, required = true)
     private String filterCondition;
-
-
-    @XmlTransient
-    private transient Table table;
 
 
 }

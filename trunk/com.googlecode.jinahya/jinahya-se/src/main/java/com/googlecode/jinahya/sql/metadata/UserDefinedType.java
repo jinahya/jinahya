@@ -15,14 +15,42 @@
  */
 
 
-@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
-           elementFormDefault = XmlNsForm.QUALIFIED,
-           namespace = "http://jinahya.googlecode.com/sql/metadata")
-@XmlAccessorType(XmlAccessType.NONE)
 package com.googlecode.jinahya.sql.metadata;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlSchema;
+/**
+ *
+ * @author Jin Kwon <onacit at gmail.com>
+ */
+public class UserDefinedType {
+
+
+    @ColumnLabel("TYPE_CAT")
+    private String typeCat;
+
+
+    @ColumnLabel("TYPE_SCHEM")
+    private String typeSchem;
+
+
+    @ColumnLabel("TYPE_NAME")
+    private String typeName;
+
+
+    @ColumnLabel("CLASS_NAME")
+    private String className;
+
+
+    @ColumnLabel("DATA_TYPE")
+    private int dataType;
+
+
+    @ColumnLabel("REMARKS")
+    private String remarks;
+
+
+    @ColumnLabel("BASE_TYPE")
+    private short baseType;
+
+
+}

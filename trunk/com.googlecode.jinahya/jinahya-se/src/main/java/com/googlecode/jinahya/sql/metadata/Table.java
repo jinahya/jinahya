@@ -218,8 +218,18 @@ public class Table {
     }
 
 
+    @ColumnLabel("TABLE_CAT")
     @XmlTransient
-    private Schema schema;
+    private String tableCat;
+
+
+    @ColumnLabel("TABLE_CAT")
+    @XmlTransient
+    private String tableSchem;
+
+
+    @XmlTransient
+    private Schema schema; // ------------------------------------------- schema
 
 
     @ColumnLabel("TABLE_NAME")

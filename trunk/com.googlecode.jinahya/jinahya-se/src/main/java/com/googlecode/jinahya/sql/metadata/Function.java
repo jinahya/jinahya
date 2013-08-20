@@ -19,8 +19,10 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import java.sql.DatabaseMetaData;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -65,22 +67,27 @@ public class Function {
     }
 
 
-    private Catalog catalog;
-
-
     @ColumnLabel("FUNCTION_CAT")
+    @XmlTransient
     private String functionCat;
 
 
+    @XmlTransient
+    private Catalog catalog;
+
+
     @ColumnLabel("FUNCTION_SCHEM")
+    @XmlElement(nillable = true, required = true)
     private String functionSchem;
 
 
     @ColumnLabel("FUNCTION_NAME")
+    @XmlElement(required = true)
     private String functionName;
 
 
     @ColumnLabel("REMARKS")
+    @XmlElement(required = true)
     private String remarks;
 
 
@@ -93,4 +100,3 @@ public class Function {
 
 
 }
-

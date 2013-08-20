@@ -18,25 +18,22 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
+import com.googlecode.jinahya.xml.bind.MapValues;
+import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class ClientInfoPropertiesAdapter
-    extends MapValuesAdapter<ClientInfoProperties, String, ClientInfoProperty> {
+public class ExportedKeyValues extends MapValues<ExportedKey> {
 
 
-    public ClientInfoPropertiesAdapter() {
-        super(ClientInfoProperties.class);
-    }
+    @XmlElement
+    public List<ExportedKey> getExportedKey() {
 
-
-    @Override
-    protected String getKey(final ClientInfoProperty value) {
-        return value.getName();
+        return getValue();
     }
 
 

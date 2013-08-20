@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -35,6 +35,13 @@ public class Schema {
 
 
     public static final Schema UNNAMED = new Schema() {
+
+
+        @Override
+        public Catalog getCatalog() {
+
+            return Catalog.UNNAMED;
+        }
 
 
         @Override
@@ -59,12 +66,6 @@ public class Schema {
     }
 
 
-    public void setCatalog(final Catalog catalog) {
-
-        this.catalog = catalog;
-    }
-
-
     // ------------------------------------------------------------- TABLE_SCHEM
     public String getTableSchem() {
 
@@ -82,15 +83,20 @@ public class Schema {
     public Map<String, Table> getTables() {
 
         if (tables == null) {
-            tables = new HashMap<String, Table>();
+            tables = new TreeMap<String, Table>();
         }
 
         return tables;
     }
 
 
+    @ColumnLabel("TABLE_CATALOG")
     @XmlTransient
-    private Catalog catalog;
+    private String tableCatalog;
+
+
+    @XmlTransient
+    private Catalog catalog; // ---------------------------------------- catalog
 
 
     @ColumnLabel("TABLE_SCHEM")

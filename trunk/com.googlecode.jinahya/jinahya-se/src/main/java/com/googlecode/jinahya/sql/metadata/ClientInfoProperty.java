@@ -18,12 +18,8 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 
 
 /**

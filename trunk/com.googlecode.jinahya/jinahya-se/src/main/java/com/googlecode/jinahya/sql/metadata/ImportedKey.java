@@ -32,115 +32,254 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ImportedKey {
 
 
-    public static class ImportedKeys extends AbstractValues<ImportedKey> {
-
-
-        @XmlElement
-        public List<ImportedKey> getColumn() {
-
-            return getValueList();
-        }
-
-
+    public String getPktableCat() {
+        return pktableCat;
     }
 
 
-    public static class ImportedKeysMapAdapter
-        extends ValuesMapAdapter<ImportedKeys, String, ImportedKey> {
-
-
-        public ImportedKeysMapAdapter() {
-
-            super(ImportedKeys.class);
-        }
-
-
-        @Override
-        protected String getKey(final ImportedKey value) {
-
-            return value.getColumnName();
-        }
-
-
+    public void setPktableCat(String pktableCat) {
+        this.pktableCat = pktableCat;
     }
 
 
-    public String getColumnName() {
+    public String getPktableSchem() {
+        return pktableSchem;
+    }
 
+
+    public void setPktableSchem(String pktableSchem) {
+        this.pktableSchem = pktableSchem;
+    }
+
+
+    public String getPktableName() {
+        return pktableName;
+    }
+
+
+    public void setPktableName(String pktableName) {
+        this.pktableName = pktableName;
+    }
+
+
+    public String getPkcolumnName() {
         return pkcolumnName;
     }
 
 
-    public Table getTable() {
-
-        return table;
+    public void setPkcolumnName(String pkcolumnName) {
+        this.pkcolumnName = pkcolumnName;
     }
 
 
-    public void setTable(final Table table) {
-
-        this.table = table;
+    public Column getPkcolumn() {
+        return pkcolumn;
     }
 
 
+    public void setPkcolumn(Column pkcolumn) {
+        this.pkcolumn = pkcolumn;
+    }
+
+
+    public String getFktableCat() {
+        return fktableCat;
+    }
+
+
+    public void setFktableCat(String fktableCat) {
+        this.fktableCat = fktableCat;
+    }
+
+
+    public String getFktableSchem() {
+        return fktableSchem;
+    }
+
+
+    public void setFktableSchem(String fktableSchem) {
+        this.fktableSchem = fktableSchem;
+    }
+
+
+    public String getFktableName() {
+        return fktableName;
+    }
+
+
+    public void setFktableName(String fktableName) {
+        this.fktableName = fktableName;
+    }
+
+
+    public String getFkcolumnName() {
+        return fkcolumnName;
+    }
+
+
+    public void setFkcolumnName(String fkcolumnName) {
+        this.fkcolumnName = fkcolumnName;
+    }
+
+
+    public Column getFkcolumn() {
+        return fkcolumn;
+    }
+
+
+    public void setFkcolumn(Column fkcolumn) {
+        this.fkcolumn = fkcolumn;
+    }
+
+
+    public short getKeySeq() {
+        return keySeq;
+    }
+
+
+    public void setKeySeq(short keySeq) {
+        this.keySeq = keySeq;
+    }
+
+
+    public short getUpdateRule() {
+        return updateRule;
+    }
+
+
+    public void setUpdateRule(short updateRule) {
+        this.updateRule = updateRule;
+    }
+
+
+    public short getDeleteRule() {
+        return deleteRule;
+    }
+
+
+    public void setDeleteRule(short deleteRule) {
+        this.deleteRule = deleteRule;
+    }
+
+
+    public String getFkName() {
+        return fkName;
+    }
+
+
+    public void setFkName(String fkName) {
+        this.fkName = fkName;
+    }
+
+
+    public String getPkName() {
+        return pkName;
+    }
+
+
+    public void setPkName(String pkName) {
+        this.pkName = pkName;
+    }
+
+
+    public short getDeferrability() {
+        return deferrability;
+    }
+
+
+    public void setDeferrability(short deferrability) {
+        this.deferrability = deferrability;
+    }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @ColumnLabel("PKTABLE_CAT")
+    @XmlTransient
     private String pktableCat;
 
 
     @ColumnLabel("PKTABLE_SCHEM")
+    @XmlTransient
     private String pktableSchem;
 
 
     @ColumnLabel("PKTABLE_NAME")
+    @XmlTransient
     private String pktableName;
 
 
     @ColumnLabel("PKCOLUMN_NAME")
+    @XmlTransient
     private String pkcolumnName;
 
 
+    @XmlElement(required = true)
+    private Column pkcolumn; // --------------------------------------- pkcolumn
+
+
     @ColumnLabel("FKTABLE_CAT")
+    @XmlTransient
     private String fktableCat;
 
 
     @ColumnLabel("FKTABLE_SCHEM")
+    @XmlTransient
     private String fktableSchem;
 
 
     @ColumnLabel("FKTABLE_NAME")
+    @XmlTransient
     private String fktableName;
 
 
     @ColumnLabel("FKCOLUMN_NAME")
+    @XmlTransient
     private String fkcolumnName;
 
 
+    @XmlElement(required = true)
+    private Column fkcolumn; // --------------------------------------- fkcolumn
+
+
     @ColumnLabel("KEY_SEQ")
+    @XmlElement(required = true)
     private short keySeq;
 
 
     @ColumnLabel("UPDATE_RULE")
+    @XmlElement(required = true)
     private short updateRule;
 
 
     @ColumnLabel("DELETE_RULE")
+    @XmlElement(required = true)
     private short deleteRule;
 
 
     @ColumnLabel("FK_NAME")
+    @XmlElement(nillable = true, required = true)
     private String fkName;
 
 
     @ColumnLabel("PK_NAME")
+    @XmlElement(nillable = true, required = true)
     private String pkName;
 
 
     @ColumnLabel("DEFERRABILITY")
+    @XmlElement(required = true)
     private short deferrability;
-
-
-    @XmlTransient
-    private transient Table table;
 
 
 }
