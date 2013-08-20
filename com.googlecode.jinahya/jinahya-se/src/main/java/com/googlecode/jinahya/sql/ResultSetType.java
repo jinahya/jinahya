@@ -37,25 +37,25 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
      *
      * @see ResultSet#TYPE_FORWARD_ONLY
      */
-    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), //             1003
+    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), //                      1003
     /**
      * Constant for {@link ResultSet#TYPE_SCROLL_INSENSITIVE}.
      *
      * @see ResultSet#TYPE_SCROLL_INSENSITIVE
      */
-    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE), // 1004
+    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE), //          1004
     /**
      * Constant for {@link ResultSet#TYPE_SCROLL_SENSITIVE}.
      *
      * @see ResultSet#TYPE_SCROLL_SENSITIVE
      */
-    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); //     1005
+    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); //              1005
 
 
     /**
      * Returns the enum constant of this type with the specified field value.
      *
-     * @param fieldValue field value
+     * @param fieldValue the field value
      *
      * @throws IllegalArgumentException if this enum type has no constant with
      * the specified field value.
@@ -69,10 +69,10 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
     /**
-     * Returns the enum constant of this type with the specified ResultSet's
+     * Returns the enum constant of this type with the specified result set's
      * type.
      *
-     * @param resultSet an instance of ResultSet
+     * @param resultSet the result set
      *
      * @throws SQLException if a database access error occurs or this method is
      * called on a closed result set
@@ -81,6 +81,8 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
      * the specified field value.
      *
      * @return the enum constant with the specified field value.
+     *
+     * @see ResultSet#getType()
      */
     public static ResultSetType fromResultSet(final ResultSet resultSet)
         throws SQLException {
@@ -94,9 +96,9 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
     /**
-     * Returns all field values.
+     * Returns an array containing the fields values of this enum type.
      *
-     * @return all fields values.
+     * @return an array containing the fields values of this enum type
      */
     public static Integer[] fieldValues() {
 
@@ -105,9 +107,9 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with specified field value.
      *
-     * @param fieldValue field value.
+     * @param fieldValue the field value.
      */
     private ResultSetType(final int fieldValue) {
 
@@ -129,4 +131,3 @@ public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
 }
-
