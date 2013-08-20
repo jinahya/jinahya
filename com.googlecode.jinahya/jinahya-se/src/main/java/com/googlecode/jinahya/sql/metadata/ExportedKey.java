@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.AbstractValues;
-import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -30,39 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class ExportedKey {
-
-
-    public static class ImportedKeys extends AbstractValues<ExportedKey> {
-
-
-        @XmlElement
-        public List<ExportedKey> getColumn() {
-
-            return getValueList();
-        }
-
-
-    }
-
-
-    public static class ImportedKeysMapAdapter
-        extends ValuesMapAdapter<ImportedKeys, String, ExportedKey> {
-
-
-        public ImportedKeysMapAdapter() {
-
-            super(ImportedKeys.class);
-        }
-
-
-        @Override
-        protected String getKey(final ExportedKey value) {
-
-            return value.getColumnName();
-        }
-
-
-    }
 
 
     public String getColumnName() {
@@ -84,19 +47,26 @@ public class ExportedKey {
 
 
     @ColumnLabel("PKTABLE_CAT")
+    @XmlTransient
     private String pktableCat;
 
 
     @ColumnLabel("PKTABLE_SCHEM")
+    @XmlTransient
     private String pktableSchem;
 
 
     @ColumnLabel("PKTABLE_NAME")
+    @XmlTransient
     private String pktableName;
 
 
     @ColumnLabel("PKCOLUMN_NAME")
+    @XmlTransient
     private String pkcolumnName;
+
+
+    private Column pkcolumn; // --------------------------------------- pkcolumn
 
 
     @ColumnLabel("FKTABLE_CAT")
@@ -113,6 +83,9 @@ public class ExportedKey {
 
     @ColumnLabel("FKCOLUMN_NAME")
     private String fkcolumnName;
+
+
+    private Column fkcolumn; // --------------------------------------- fkcolumn
 
 
     @ColumnLabel("KEY_SEQ")

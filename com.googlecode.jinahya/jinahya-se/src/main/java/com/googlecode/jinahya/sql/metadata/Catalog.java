@@ -38,15 +38,16 @@ public class Catalog implements Retrievable {
 
     public static final Catalog UNNAMED = new Catalog() {
 
+
         @Override
-        public String getTableCat() {
+        public final String getTableCat() {
 
             return null;
         }
 
 
         @Override
-        public void setTableCat(final String tableCat) {
+        public final void setTableCat(final String tableCat) {
             // do nothing
         }
 

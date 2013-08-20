@@ -18,9 +18,7 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter;
-import com.googlecode.jinahya.xml.bind.ValuesMapAdapter.AbstractValues;
-import java.util.List;
+import java.sql.ResultSet;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,83 +30,92 @@ import javax.xml.bind.annotation.XmlTransient;
 public class PrimaryKey {
 
 
-    public static class PrimaryKeys extends AbstractValues<PrimaryKey> {
+    public static PrimaryKey newInstance(final Table table,
+                                         final ResultSet resultSet) {
 
+        final PrimaryKey instance = new PrimaryKey();
 
-        @XmlElement
-        public List<PrimaryKey> getColumn() {
+        instance.table = table;
 
-            return getValueList();
-        }
-
-
+        return instance;
     }
 
 
-    public static class PrimaryKeysMapAdapter
-        extends ValuesMapAdapter<PrimaryKeys, String, PrimaryKey> {
-
-
-        public PrimaryKeysMapAdapter() {
-
-            super(PrimaryKeys.class);
-        }
-
-
-        @Override
-        protected String getKey(final PrimaryKey value) {
-
-            return value.getColumnName();
-        }
-
-
-    }
-
-
-    public String getColumnName() {
-
-        return columnName;
-    }
-
-
+    // --------------------------------------------------------------- TABLE_CAT
+    // ------------------------------------------------------------- TABLE_SCHEM
+    // -------------------------------------------------------------- TABLE_NAME
+    // ------------------------------------------------------------------- table
     public Table getTable() {
 
         return table;
     }
 
 
-    public void setTable(final Table table) {
+    // ------------------------------------------------------------- COLUMN_NAME
+    public String getColumnName() {
+        return columnName;
+    }
 
-        this.table = table;
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+
+    // ----------------------------------------------------------------- KEY_SEQ
+    public short getKeySeq() {
+        return keySeq;
+    }
+
+
+    public void setKeySeq(short keySeq) {
+        this.keySeq = keySeq;
+    }
+
+
+    // ----------------------------------------------------------------- PK_NAME
+    public String getPkName() {
+        return pkName;
+    }
+
+
+    public void setPkName(String pkName) {
+        this.pkName = pkName;
     }
 
 
     @ColumnLabel("TABLE_CAT")
+    @XmlTransient
     private String tableCat;
 
 
     @ColumnLabel("TABLE_SCHEM")
+    @XmlTransient
     private String tableSchem;
 
 
     @ColumnLabel("TABLE_NAME")
+    @XmlTransient
     private String tableName;
 
 
+    @XmlTransient
+    private Table table;
+
+
     @ColumnLabel("COLUMN_NAME")
+    @XmlElement(required = true)
     private String columnName;
 
 
     @ColumnLabel("KEY_SEQ")
+    @XmlElement(required = true)
     private short keySeq;
 
 
     @ColumnLabel("PK_NAME")
+    @XmlElement(nillable = true, required = true)
     private String pkName;
-
-
-    @XmlTransient
-    private transient Table table;
 
 
 }

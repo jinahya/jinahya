@@ -346,7 +346,7 @@ public class DatabaseMetadata implements Retrievable {
 
 
     @XmlElement
-    @XmlJavaTypeAdapter(ClientInfoPropertiesAdapter.class)
+    @XmlJavaTypeAdapter(ClientInfoPropertyValuesAdapter.class)
     private Map<String, ClientInfoProperty> clientInfoProperties;
 
     // getColumnPrivileges

@@ -18,6 +18,9 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
+import javax.xml.bind.annotation.XmlElement;
+
+
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
@@ -38,14 +41,17 @@ public class TypeInfo {
 
 
     @ColumnLabel("LITERAL_PREFIX")
+    @XmlElement(nillable = true, required = true)
     private String leteralPrefix;
 
 
     @ColumnLabel("LITERAL_SUFFIX")
+    @XmlElement(nillable = true, required = true)
     private String leteralSuffix;
 
 
     @ColumnLabel("CREATE_PARAMS")
+    @XmlElement(nillable = true, required = true)
     private String createParams;
 
 
@@ -74,6 +80,7 @@ public class TypeInfo {
 
 
     @ColumnLabel("LOCAL_TYPE_NAME")
+    @XmlElement(nillable = true, required = true)
     private String localTypeName;
 
 
