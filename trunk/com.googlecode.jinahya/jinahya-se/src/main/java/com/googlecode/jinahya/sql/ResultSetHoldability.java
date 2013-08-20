@@ -35,23 +35,22 @@ public enum ResultSetHoldability
 
     /**
      * Constant for {@link ResultSet#HOLD_CURSORS_OVER_COMMIT}.
-     *
-     * @see java.sql.ResultSet#HOLD_CURSORS_OVER_COMMIT
      */
-    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT), // 1
+    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT), //           1
     /**
      * Constant for {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}.
-     *
-     * @see java.sql.ResultSet#CLOSE_CURSORS_AT_COMMIT
      */
-    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT); // 2
+    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT); //             2
 
 
     /**
+     * Returns the enum constant of this type with the specified result set
+     * holdability.
      *
-     * @param fieldValue
+     * @param fieldValue the result set holdability
      *
-     * @return
+     * @return the enum constant of this type with the specified result set
+     * holdability
      */
     public static ResultSetHoldability fromFieldValue(final int fieldValue) {
 
@@ -61,13 +60,18 @@ public enum ResultSetHoldability
 
 
     /**
+     * Returns the enum constant of this type with the specified result set's
+     * current holdability.
      *
-     * @param resultSet resultSet
+     * @param resultSet the result set
      *
-     * @return
+     * @return the enum constant of this type with the specified result set's
+     * current holdability
      *
      * @throws SQLException if a database access error occurs or this method is
      * called on a closed result set
+     *
+     * @see ResultSet#getHoldability()
      */
     public static ResultSetHoldability fromResultSet(final ResultSet resultSet)
         throws SQLException {
@@ -80,6 +84,11 @@ public enum ResultSetHoldability
     }
 
 
+    /**
+     * Returns an array containing the fields values of this enum type.
+     *
+     * @return an array containing the fields values of this enum type
+     */
     public static Integer[] fieldValues() {
 
         return FieldEnumHelper.fieldValues(
@@ -87,6 +96,11 @@ public enum ResultSetHoldability
     }
 
 
+    /**
+     * Creates a new instance with specified field value.
+     *
+     * @param fieldValue the field value
+     */
     private ResultSetHoldability(final int fieldValue) {
 
         this.fieldValue = fieldValue;
@@ -100,8 +114,10 @@ public enum ResultSetHoldability
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 
 }
-

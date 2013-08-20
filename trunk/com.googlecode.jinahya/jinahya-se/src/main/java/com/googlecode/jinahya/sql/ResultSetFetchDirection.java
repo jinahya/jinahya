@@ -38,33 +38,33 @@ public enum ResultSetFetchDirection
      *
      * @see ResultSet#FETCH_REVERSE
      */
-    FETCH_FORWARD(ResultSet.FETCH_FORWARD), // 1000
+    FETCH_FORWARD(ResultSet.FETCH_FORWARD), //                              1000
     /**
      * Constant for {@link ResultSet#FETCH_REVERSE}.
      *
      * @see ResultSet#FETCH_REVERSE
      */
-    FETCH_REVERSE(ResultSet.FETCH_REVERSE), // 1001
+    FETCH_REVERSE(ResultSet.FETCH_REVERSE), //                              1001
     /**
      * Constant for {@link ResultSet#FETCH_UNKNOWN}.
      *
      * @see ResultSet#FETCH_UNKNOWN
      */
-    FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); // 1002
+    FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); //                              1002
 
 
     /**
-     * Returns the enum constant of this type with the specified
-     * {@code fieldValue}.
+     * Returns the enum constant of this type with the specified fetch direction
+     * value.
      *
      * @param fieldValue the fetch direction value; one of
      * {@link ResultSet#FETCH_FORWARD}, {@link ResultSet#FETCH_REVERSE}, or
      * {@link ResultSet#FETCH_UNKNOWN}.
      *
      * @throws IllegalArgumentException if this enum type has no constant with
-     * the specified fieldValue.
+     * the specified fetch direction value.
      *
-     * @return the enum constant with the specified fieldValue.
+     * @return the enum constant with the specified fetch direction value.
      */
     public static ResultSetFetchDirection fromFieldValue(final int fieldValue) {
 
@@ -74,15 +74,18 @@ public enum ResultSetFetchDirection
 
 
     /**
-     * Returns the enum constant of this type with the specified
-     * {@code resultSet}'s current fetch direction value.
+     * Returns the enum constant of this type with the specified result set's
+     * current fetch direction value.
      *
      * @param resultSet the result set
      *
-     * @throws SQLException see {@link ResultSet#getFetchDirection()}
+     * @throws SQLException if a database access error occurs or this method is
+     * called on a closed result set
      *
      * @return the enum constant with the specified resultSet's current fetch
      * direction.
+     *
+     * @see ResultSet#getFetchDirection()
      */
     public static ResultSetFetchDirection fromResultSet(
         final ResultSet resultSet)
@@ -100,7 +103,8 @@ public enum ResultSetFetchDirection
      * Returns an array containing the field values of this enum type, in the
      * order they are declared.
      *
-     * @return an array containing field values.
+     * @return an array containing field values of this enum type, in the order
+     * they are declared
      */
     public static Integer[] fieldValues() {
 
@@ -110,9 +114,9 @@ public enum ResultSetFetchDirection
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with specified field value.
      *
-     * @param fieldValue field value
+     * @param fieldValue the field value
      */
     private ResultSetFetchDirection(final int fieldValue) {
 
@@ -128,13 +132,15 @@ public enum ResultSetFetchDirection
 
 
     /**
-     * Invokes {@link ResultSet#setFetchDirection(int) } with
-     * {@code fieldValue}.
+     * Invokes {@link ResultSet#setFetchDirection(int)} on specified result set
+     * with the field value of this constant.
      *
      * @param resultSet the result set.
      *
      * @throws SQLException if a database access error occurs.
+     *
      * @see ResultSet#setFetchDirection(int)
+     *
      */
     public void set(final ResultSet resultSet) throws SQLException {
 
@@ -153,4 +159,3 @@ public enum ResultSetFetchDirection
 
 
 }
-
