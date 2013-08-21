@@ -36,7 +36,6 @@
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.use_sql_comments" value="true"/>
 
-
       <!-- openjpa -->
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
 

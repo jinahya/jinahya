@@ -34,7 +34,7 @@ public abstract class AbstractFilter implements Filter {
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
-        
+
         this.filterConfig = filterConfig;
     }
 
@@ -43,29 +43,6 @@ public abstract class AbstractFilter implements Filter {
     public void destroy() {
 
         filterConfig = null;
-    }
-
-
-    /**
-     * Logs given {@code message}.
-     *
-     * @param message message
-     */
-    protected void log(final String message) {
-
-        getServletContext().log(message);
-    }
-
-
-    /**
-     * Logs given {@code message} with specified {@code cause}.
-     *
-     * @param message message
-     * @param cause cause
-     */
-    protected void log(final String message, final Throwable cause) {
-
-        getServletContext().log(message, cause);
     }
 
 
@@ -96,10 +73,36 @@ public abstract class AbstractFilter implements Filter {
 
 
     /**
-     * filterConfig.
+     * Logs given {@code message}.
+     *
+     * @param message message
+     *
+     * @see ServletContext#log(java.lang.String)
+     */
+    protected void log(final String message) {
+
+        getServletContext().log(message);
+    }
+
+
+    /**
+     * Logs given {@code message} with specified {@code cause}.
+     *
+     * @param message message
+     * @param throwable throwable
+     *
+     * @see ServletContext#log(java.lang.String, java.lang.Throwable)
+     */
+    protected void log(final String message, final Throwable throwable) {
+
+        getServletContext().log(message, throwable);
+    }
+
+
+    /**
+     * filter config.
      */
     private FilterConfig filterConfig;
 
 
 }
-
