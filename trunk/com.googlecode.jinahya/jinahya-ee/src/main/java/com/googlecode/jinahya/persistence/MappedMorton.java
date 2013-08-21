@@ -148,21 +148,21 @@ public abstract class MappedMorton implements Serializable {
     }
 
 
-    protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
-                                    final int iterationCount,
-                                    final int keyLength) {
+    /*
+     protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
+     final int iterationCount,
+     final int keyLength) {
 
-        try {
-            return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
-                .generateSecret(new PBEKeySpec(password, salt, iterationCount,
-                                               keyLength))
-                .getEncoded();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
+     try {
+     return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+     .generateSecret(new PBEKeySpec(password, salt, iterationCount,
+     keyLength))
+     .getEncoded();
+     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+     throw new RuntimeException(e);
+     }
+     }
+     */
     /**
      * Converts given {@code bassword} into a {@code char[]}.
      *
@@ -286,4 +286,3 @@ public abstract class MappedMorton implements Serializable {
 
 
 }
-

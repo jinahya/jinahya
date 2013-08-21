@@ -3,6 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>jinahya-ee</artifactId>
   <version>1.0-alpha-3-SNAPSHOT</version>
@@ -19,11 +20,6 @@
         <artifactId>javaee-api</artifactId>
         <version>6.0</version>
       </dependency>
-<!--      <dependency>
-        <groupId>jinahay.googlecode.com</groupId>
-        <artifactId>jinahya-se</artifactId>
-        <version>1.0-alpha-1-SNAPSHOT</version>
-      </dependency>-->
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
@@ -37,35 +33,35 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-entitymanager</artifactId>
-        <version>4.2.0.Final</version>
+        <version>4.2.4.Final</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8.1</version>
+        <version>6.8.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.glassfish.main.extras</groupId>
       <artifactId>glassfish-embedded-all</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -76,15 +72,18 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.testSource>1.7</maven.compiler.testSource>
+    <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
+    <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+    <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+    <maven.compiler.verbose>true</maven.compiler.verbose>
   </properties>
 
+  <!-- Build Settings -->
   <build>
     <extensions>
-      <!--      <extension>
-        <groupId>com.google.code.maven-svn-wagon</groupId>
-        <artifactId>maven-svn-wagon</artifactId>
-        <version>1.4</version>
-      </extension>-->
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
@@ -93,7 +92,7 @@
       <extension>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-jpamodelgen</artifactId>
-        <version>1.2.0.Final</version>
+        <version>1.3.0.Final</version>
       </extension>
     </extensions>
     <pluginManagement>
@@ -156,12 +155,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.14</version>
+          <version>2.15</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.12.4</version>
+          <version>2.15</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -186,22 +185,22 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>2.0</version>
+          <version>2.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
           <verbose>true</verbose>
         </configuration>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -329,6 +328,7 @@
   </build>
   <reporting />
 
+  <!-- More Project Information -->
   <name>jinahya-ee</name>
   <url>https://www.jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
@@ -350,6 +350,7 @@
   </developers>
   <contributors />
 
+  <!-- Environment Settings -->
   <issueManagement />
   <ciManagement />
   <mailingLists />
@@ -359,9 +360,10 @@
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/jinahya-ee/</url>
   </scm>
   <prerequisites>
-    <maven>3.0.4</maven>
+    <maven>3.0.5</maven>
   </prerequisites>
   <repositories>
+    <!--
     <repository>
       <id>sonatype-nexus-snapshots</id>
       <releases>
@@ -372,9 +374,11 @@
       </snapshots>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
+    -->
   </repositories>
   <pluginRepositories />
   <distributionManagement>
+    <!--
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -383,6 +387,7 @@
       <id>sonatype-nexus-staging</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
