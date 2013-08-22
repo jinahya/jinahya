@@ -47,19 +47,19 @@ public class NuoTest {
     private static final int COUNT = 1000;
 
 
-    private static long average(final List<Integer> conflicts) {
+    private static long average(final List<Integer> values) {
 
-        if (conflicts.isEmpty()) {
+        if (values.isEmpty()) {
             return 0L;
         }
 
         long sum = 0L;
 
-        for (Integer conflict : conflicts) {
+        for (Integer conflict : values) {
             sum += conflict;
         }
 
-        final long avg = sum / conflicts.size();
+        final long avg = sum / values.size();
 
         return avg;
     }
@@ -68,10 +68,10 @@ public class NuoTest {
     @Test
     public static void testGenerate() {
 
-        final List<Integer> conflicts = new ArrayList<>(COUNT);
+        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<>(COUNT);
+            final Set<Long> values = new HashSet<Long>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate())) {
                     conflicts.add(j);
@@ -89,10 +89,10 @@ public class NuoTest {
 
         final long timestamp = System.currentTimeMillis();
 
-        final List<Integer> conflicts = new ArrayList<>(COUNT);
+        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<>(COUNT);
+            final Set<Long> values = new HashSet<Long>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate(timestamp))) {
                     conflicts.add(j);
@@ -112,10 +112,10 @@ public class NuoTest {
         final long timestamp = System.currentTimeMillis();
         final Random random = SecureRandom.getInstance("SHA1PRNG");
 
-        final List<Integer> conflicts = new ArrayList<>(COUNT);
+        final List<Integer> conflicts = new ArrayList<Integer>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
-            final Set<Long> values = new HashSet<>(COUNT);
+            final Set<Long> values = new HashSet<Long>(COUNT);
             for (int j = 0; true; j++) {
                 if (!values.add(Nuo.generate(timestamp, random))) {
                     conflicts.add(j);

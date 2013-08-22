@@ -54,15 +54,15 @@ public final class PlatformIds {
 
 
     /**
-     * Tizen.
+     * Other.
      */
-    public static final String TIZEN = NAMESPACE + "/tizen";
+    public static final String OTHER = NAMESPACE + "/other";
 
 
     /**
-     * Unknown.
+     * Tizen.
      */
-    public static final String UNKNOWN = NAMESPACE + "/unknown";
+    public static final String TIZEN = NAMESPACE + "/tizen";
 
 
     /**

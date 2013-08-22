@@ -28,15 +28,15 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class PlatformTest {
+public class PlatformIdTest {
 
 
     @Test
     public void testIds() {
 
         final Set<String> idSet = new HashSet<String>();
-        for (Platform value : Platform.values()) {
-            final String id = value.id();
+        for (PlatformId value : PlatformId.values()) {
+            final String id = value.getFieldValue();
             Assert.assertNotNull(id);
             Assert.assertEquals(id, id.trim());
             Assert.assertFalse(id.isEmpty());
@@ -50,21 +50,21 @@ public class PlatformTest {
     public static void testFromId() {
 
         try {
-            final Platform platform = Platform.fromId(null);
+            final PlatformId platform = PlatformId.fromFieldValue(null);
             Assert.fail("passed: fromId(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Platform platform = Platform.fromId("/not/exist");
+            final PlatformId platform = PlatformId.fromFieldValue("/not/exist");
             Assert.fail("passed: fromId(\"/not/exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (Platform value : Platform.values()) {
-            Assert.assertEquals(Platform.fromId(value.id()), value);
+        for (PlatformId value : PlatformId.values()) {
+            Assert.assertEquals(PlatformId.fromFieldValue(value.getFieldValue()), value);
         }
     }
 

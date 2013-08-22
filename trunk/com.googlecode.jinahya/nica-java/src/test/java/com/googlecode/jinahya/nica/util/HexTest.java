@@ -42,7 +42,7 @@ public class HexTest {
 
 
     static {
-        final Map<String, String> map = new HashMap<>(7);
+        final Map<String, String> map = new HashMap<String, String>(7);
         map.put("", "");
         map.put("f", "66");
         map.put("fo", "666F");
