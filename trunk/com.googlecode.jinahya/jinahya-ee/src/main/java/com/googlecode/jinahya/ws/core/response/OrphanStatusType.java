@@ -48,47 +48,47 @@ public class OrphanStatusType implements StatusType {
 
 
     /**
-     * Creates a new response builder for given arguments.
+     * Returns a new response builder for given arguments.
      *
      * @param statusCode the HTTP status code
      * @param reasonPhrase the HTTP reason phrase
      *
      * @return a new response builder to build
      */
-    public static ResponseBuilder builder(final int statusCode,
-                                          final String reasonPhrase) {
+    public static ResponseBuilder buildable(final int statusCode,
+                                            final String reasonPhrase) {
 
         return Response.status(newInstance(statusCode, reasonPhrase));
     }
 
 
     /**
-     * Creates a new response for given arguments.
+     * Returns a new response for given arguments.
      *
      * @param statusCode the HTTP status code
      * @param reasonPhrase the HTTP reason phrase
      *
      * @return a new response to respond
      */
-    public static Response build(final int statusCode,
+    public static Response built(final int statusCode,
                                  final String reasonPhrase) {
 
-        return builder(statusCode, reasonPhrase).build();
+        return buildable(statusCode, reasonPhrase).build();
     }
 
 
     /**
-     * Creates a new web application exception given arguments.
+     * Returns a new web application exception for given arguments.
      *
      * @param statusCode the HTTP status code
      * @param reasonPhrase the HTTP reason phrase
      *
      * @return a new web application exception to throw
      */
-    public static WebApplicationException except(final int statusCode,
-                                                 final String reasonPhrase) {
+    public static WebApplicationException throwable(final int statusCode,
+                                                    final String reasonPhrase) {
 
-        return new WebApplicationException(build(statusCode, reasonPhrase));
+        return new WebApplicationException(built(statusCode, reasonPhrase));
     }
 
 
@@ -159,7 +159,7 @@ public class OrphanStatusType implements StatusType {
      *
      * @see Response#status(javax.ws.rs.core.Response.StatusType)
      */
-    public ResponseBuilder builder() {
+    public ResponseBuilder buildable() {
 
         return Response.status(this);
     }
@@ -172,9 +172,9 @@ public class OrphanStatusType implements StatusType {
      *
      * @see #builder()
      */
-    public Response build() {
+    public Response built() {
 
-        return builder().build();
+        return buildable().build();
     }
 
 
@@ -185,9 +185,9 @@ public class OrphanStatusType implements StatusType {
      *
      * @see #build()
      */
-    public WebApplicationException except() {
+    public WebApplicationException throwable() {
 
-        return new WebApplicationException(build());
+        return new WebApplicationException(built());
     }
 
 
