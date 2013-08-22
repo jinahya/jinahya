@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.ws.core;
+package com.googlecode.jinahya.ws.core.response;
 
 
 import javax.ws.rs.core.Response.Status;
@@ -25,11 +25,11 @@ import javax.ws.rs.core.Response.Status;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class NotFound404 extends AbstractStatusType {
+public class BadRequest400 extends AbstractStatusType {
 
 
-    public NotFound404(final String reasonPhrase) {
-        super(Status.NOT_FOUND, reasonPhrase);
+    public BadRequest400(final String reasonPhrase) {
+        super(Status.BAD_REQUEST, reasonPhrase);
     }
 
 

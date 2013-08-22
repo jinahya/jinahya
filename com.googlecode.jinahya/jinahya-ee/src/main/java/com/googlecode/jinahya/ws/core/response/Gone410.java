@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.ws.core;
+package com.googlecode.jinahya.ws.core.response;
 
 
 import javax.ws.rs.core.Response.Status;
@@ -25,11 +25,11 @@ import javax.ws.rs.core.Response.Status;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Unauthorized401 extends AbstractStatusType {
+public class Gone410 extends AbstractStatusType {
 
 
-    public Unauthorized401(final String reasonPhrase) {
-        super(Status.UNAUTHORIZED, reasonPhrase);
+    public Gone410(final String reasonPhrase) {
+        super(Status.GONE, reasonPhrase);
     }
 
 

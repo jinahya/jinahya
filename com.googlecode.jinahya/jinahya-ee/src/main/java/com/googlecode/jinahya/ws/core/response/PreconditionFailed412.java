@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.ws.core;
+package com.googlecode.jinahya.ws.core.response;
 
 
 import javax.ws.rs.core.Response.Status;
@@ -25,16 +25,11 @@ import javax.ws.rs.core.Response.Status;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Conflict409 extends AbstractStatusType {
+public class PreconditionFailed412 extends AbstractStatusType {
 
 
-    /**
-     * Creates a new instance.
-     *
-     * @param reasonPhrase HTTP response reason phrase
-     */
-    public Conflict409(final String reasonPhrase) {
-        super(Status.CONFLICT, reasonPhrase);
+    public PreconditionFailed412(final String reasonPhrase) {
+        super(Status.PRECONDITION_FAILED, reasonPhrase);
     }
 
 
