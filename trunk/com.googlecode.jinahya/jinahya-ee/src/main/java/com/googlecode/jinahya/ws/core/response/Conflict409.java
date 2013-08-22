@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.ws.core;
+package com.googlecode.jinahya.ws.core.response;
 
 
 import javax.ws.rs.core.Response.Status;
@@ -25,11 +25,16 @@ import javax.ws.rs.core.Response.Status;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UnsupportedMediaType415 extends AbstractStatusType {
+public class Conflict409 extends AbstractStatusType {
 
 
-    public UnsupportedMediaType415(final String reasonPhrase) {
-        super(Status.UNSUPPORTED_MEDIA_TYPE, reasonPhrase);
+    /**
+     * Creates a new instance.
+     *
+     * @param reasonPhrase HTTP response reason phrase
+     */
+    public Conflict409(final String reasonPhrase) {
+        super(Status.CONFLICT, reasonPhrase);
     }
 
 
