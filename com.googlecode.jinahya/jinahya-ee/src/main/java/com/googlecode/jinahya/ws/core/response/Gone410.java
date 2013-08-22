@@ -29,6 +29,7 @@ public class Gone410 extends AbstractStatusType {
 
 
     public Gone410(final String reasonPhrase) {
+
         super(Status.GONE, reasonPhrase);
     }
 

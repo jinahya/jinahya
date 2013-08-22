@@ -29,6 +29,7 @@ public class UnsupportedMediaType415 extends AbstractStatusType {
 
 
     public UnsupportedMediaType415(final String reasonPhrase) {
+
         super(Status.UNSUPPORTED_MEDIA_TYPE, reasonPhrase);
     }
 

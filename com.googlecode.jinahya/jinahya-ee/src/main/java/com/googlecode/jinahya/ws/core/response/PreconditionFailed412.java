@@ -29,6 +29,7 @@ public class PreconditionFailed412 extends AbstractStatusType {
 
 
     public PreconditionFailed412(final String reasonPhrase) {
+
         super(Status.PRECONDITION_FAILED, reasonPhrase);
     }
 

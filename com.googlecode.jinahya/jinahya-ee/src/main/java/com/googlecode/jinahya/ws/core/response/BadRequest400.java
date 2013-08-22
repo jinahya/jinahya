@@ -29,6 +29,7 @@ public class BadRequest400 extends AbstractStatusType {
 
 
     public BadRequest400(final String reasonPhrase) {
+
         super(Status.BAD_REQUEST, reasonPhrase);
     }
 
