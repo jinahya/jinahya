@@ -28,15 +28,15 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HeaderTest {
+public class HeaderNameTest {
 
 
     @Test
     public void testNames() {
 
         final Set<String> nameSet = new HashSet<String>();
-        for (Header value : Header.values()) {
-            final String fieldName = value.getName();
+        for (HeaderField value : HeaderField.values()) {
+            final String fieldName = value.getFieldValue();
             Assert.assertNotNull(fieldName);
             Assert.assertEquals(fieldName, fieldName.trim());
             Assert.assertFalse(fieldName.isEmpty());
@@ -50,21 +50,21 @@ public class HeaderTest {
     public static void testFromName() {
 
         try {
-            final Header header = Header.fromName(null);
+            final HeaderField header = HeaderField.fromFieldValue(null);
             Assert.fail("passed: fromFieldName(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Header header = Header.fromName("Not-Exist");
+            final HeaderField header = HeaderField.fromFieldValue("Not-Exist");
             Assert.fail("passed: fromId(\"/Not-Exist\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (Header value : Header.values()) {
-            Assert.assertEquals(Header.fromName(value.getName()), value);
+        for (HeaderField value : HeaderField.values()) {
+            Assert.assertEquals(HeaderField.fromFieldValue(value.getFieldValue()), value);
         }
     }
 

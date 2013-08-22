@@ -22,17 +22,17 @@ package com.googlecode.jinahya.nica;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public final class HeaderNames {
+public final class HeaderFields {
 
 
     /**
-     * HTTP header field-name for names.
+     * HTTP header field name for names.
      */
     public static final String NAME = "Nica-Name";
 
 
     /**
-     * HTTP header field-name for initialization vector.
+     * HTTP header field name for initialization vector.
      */
     public static final String INIT = "Nica-Init";
 
@@ -44,13 +44,13 @@ public final class HeaderNames {
 
 
     /**
-     * HTTP Header field-name for encrypted codes.
+     * HTTP Header field name for encrypted codes.
      */
     public static final String CODE = "Nica-Code";
 
 
     /**
-     * HTTP header field-name for authenticated message.
+     * HTTP header field name for authenticated message.
      */
     public static final String AUTH = "Nica-Auth";
 
@@ -58,7 +58,7 @@ public final class HeaderNames {
     /**
      * Creates a new instance.
      */
-    private HeaderNames() {
+    private HeaderFields() {
         super();
     }
 

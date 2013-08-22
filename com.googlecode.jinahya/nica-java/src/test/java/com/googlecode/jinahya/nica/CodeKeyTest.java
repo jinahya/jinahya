@@ -28,15 +28,15 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class CodeTest {
+public class CodeKeyTest {
 
 
     @Test
     public void testKeys() {
 
         final Set<String> keySet = new HashSet<String>();
-        for (Code value : Code.values()) {
-            final String key = value.key();
+        for (CodeKey value : CodeKey.values()) {
+            final String key = value.getFieldValue();
             Assert.assertNotNull(key);
             Assert.assertEquals(key, key.trim());
             Assert.assertFalse(key.isEmpty());
@@ -50,21 +50,21 @@ public class CodeTest {
     public static void testFromKey() {
 
         try {
-            final Code code = Code.fromKey(null);
+            final CodeKey code = CodeKey.fromFieldValue(null);
             Assert.fail("passed: fromKey(null)");
         } catch (IllegalArgumentException iae) {
             // expected;
         }
 
         try {
-            final Code code = Code.fromKey("NOT_EXIST");
+            final CodeKey code = CodeKey.fromFieldValue("NOT_EXIST");
             Assert.fail("passed: fromKey(\"NOT_EXIST\"");
         } catch (IllegalArgumentException iae) {
             // expected
         }
 
-        for (Code value : Code.values()) {
-            Assert.assertEquals(Code.fromKey(value.key()), value);
+        for (CodeKey value : CodeKey.values()) {
+            Assert.assertEquals(CodeKey.fromFieldValue(value.getFieldValue()), value);
         }
     }
 

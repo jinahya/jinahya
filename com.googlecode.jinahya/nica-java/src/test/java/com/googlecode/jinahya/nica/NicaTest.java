@@ -69,7 +69,7 @@ public class NicaTest {
         };
         System.out.println("   iv: " + Hex.encodeToString(iv));
 
-        final Map<String, String> names = new HashMap<>();
+        final Map<String, String> names = new HashMap<String, String>();
         for (int i = 0; i < 3; i++) {
 //            names.put("name" + i, "name" + i);
         }
@@ -77,7 +77,7 @@ public class NicaTest {
         names.put("First", "길동");
         System.out.println("names: " + names);
 
-        final Map<String, String> codes = new HashMap<>();
+        final Map<String, String> codes = new HashMap<String, String>();
         for (int i = 0; i < 5; i++) {
 //            codes.put("code" + i, "code" + i);
         }
@@ -91,20 +91,20 @@ public class NicaTest {
         // ----------------------------------------------- client-side challenge
 
         final String name = Par.encode(names);
-        System.out.println(HeaderNames.NAME + ": " + name);
+        System.out.println(HeaderFields.NAME + ": " + name);
 
         final String init = Hex.encodeToString(iv);
-        System.out.println(HeaderNames.INIT + ": " + init
+        System.out.println(HeaderFields.INIT + ": " + init
                            + " (" + init.length() + ")");
 
         final String base = Par.encode(codes);
-        System.out.println(HeaderNames.BASE + ": " + base);
+        System.out.println(HeaderFields.BASE + ": " + base);
 
         final String code = new AesJCE(key).encryptToString(iv, base);
-        System.out.println(HeaderNames.CODE + ": " + code);
+        System.out.println(HeaderFields.CODE + ": " + code);
 
         final String auth = new HacJCE(key).authenticateToString(base);
-        System.out.println(HeaderNames.AUTH + ": " + auth
+        System.out.println(HeaderFields.AUTH + ": " + auth
                            + " (" + auth.length() + ")");
 
 
