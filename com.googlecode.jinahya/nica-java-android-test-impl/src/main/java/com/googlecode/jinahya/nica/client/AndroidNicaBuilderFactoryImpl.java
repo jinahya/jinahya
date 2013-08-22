@@ -19,10 +19,15 @@ package com.googlecode.jinahya.nica.client;
 
 
 import android.content.Context;
-import com.googlecode.jinahya.nica.util.Aes;
+import android.content.res.AssetManager;
+import com.googlecode.jinahya.nica.util.Hex;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -36,23 +41,51 @@ public class AndroidNicaBuilderFactoryImpl extends AndroidNicaBuilderFactory {
     protected ClientCredential loadClientCredential(final Context context)
         throws NicaClientException {
 
-        //final Random random = java.util.concurrent.ThreadLocalRandom.current();
+        final AssetManager assets = context.getAssets();
+
+        final StringBuilder builder = new StringBuilder();
+        try {
+            final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(assets.open("nica.json"), "UTF-8"));
+            try {
+                for (String line; (line = reader.readLine()) != null;) {
+                    builder.append(line);
+                }
+            } finally {
+                reader.close();
+            }
+        } catch (IOException ioe) {
+            throw new NicaClientException(ioe);
+        }
+
+        final String publisherGuid;
+        final String gameGuid;
+        final String secretGuid;
+        final byte[] key;
+        try {
+            final JSONObject object = new JSONObject(builder.toString());
+            publisherGuid = Integer.toString(object.getInt("publisherGuid"));
+            gameGuid = Integer.toString(object.getInt("gameGuid"));
+            secretGuid = Integer.toString(object.getInt("secretGuid"));
+            key = Hex.decode(object.getString("secretCode"));
+        } catch (JSONException jsone) {
+            throw new NicaClientException(jsone);
+        }
 
         return new ClientCredential() {
 
             @Override
             public Map getNames() {
                 final Map<String, String> names = new HashMap<String, String>();
-                names.put("key1", "밸류1");
-                names.put("키2", "value2");
+                names.put("publisherGuid", publisherGuid);
+                names.put("gameGuid", gameGuid);
+                names.put("secretGuid", secretGuid);
                 return names;
             }
 
 
             @Override
             public byte[] getKey() {
-                final byte[] key = new byte[Aes.KEY_SIZE_IN_BYTES];
-                new Random().nextBytes(key);
                 return key;
             }
 

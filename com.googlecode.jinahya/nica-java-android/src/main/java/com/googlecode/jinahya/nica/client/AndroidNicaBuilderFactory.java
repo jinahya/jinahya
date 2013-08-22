@@ -28,15 +28,14 @@ import com.googlecode.jinahya.nica.PlatformIds;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
 import com.googlecode.jinahya.nica.util.HacJCE;
+import com.googlecode.jinahya.nica.util.Hex;
 import com.googlecode.jinahya.nica.util.Sha;
 import com.googlecode.jinahya.nica.util.ShaJCA;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.ServiceLoader;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -49,10 +48,16 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
     private static final String LOG_TAG = "NICA";
 
 
+    /**
+     * factories.
+     */
     private static ServiceLoader<AndroidNicaBuilderFactory> FACTORIES =
         ServiceLoader.load(AndroidNicaBuilderFactory.class);
 
 
+    /**
+     * builders.
+     */
     private static ServiceLoader<AndroidNicaBuilder> BUILDERS =
         ServiceLoader.load(AndroidNicaBuilder.class);
 
@@ -134,11 +139,13 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
 
             final ClientCredential credential =
                 factory.loadClientCredential(context);
+            Log.i(LOG_TAG, "credential.names: " + credential.getNames());
+            Log.i(LOG_TAG, "credential.key: "
+                           + Hex.encodeToString(credential.getKey()));
             final Map names = credential.getNames();
             factory.names.putAll(names);
             final byte[] key = credential.getKey();
-            System.arraycopy(key, 0, factory.key, 0,
-                             key.length);
+            System.arraycopy(key, 0, factory.key, 0, key.length);
 
             return factory;
         }
@@ -148,6 +155,9 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     protected AndroidNicaBuilderFactory() {
 
         super();
@@ -215,6 +225,7 @@ public abstract class AndroidNicaBuilderFactory extends NicaBuilderFactory {
 
 
     /**
+     * Loads and returns client credential served from the server.
      *
      * @param context application context
      *

@@ -15,37 +15,23 @@
  */
 
 
-package com.googlecode.jinahya.nica.persistence;
+package com.googlecode.jinahya.nica.servlet;
 
 
 /**
+ * An abstract ServletRequestAttributeListener for
+ * {@link NicaFilter#ATTRIBUTE_NICA_NAMES}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class SimpleClientTimestampId extends SimpleClientId {
+public abstract class NicaNamesAttributeListener
+    extends AbstractNicaNamesAttributeListener {
 
 
-    public static SimpleClientTimestampId newInstance(
-        final String platformId, final String deviceId, final String systemId) {
+    public NicaNamesAttributeListener() {
 
-        final SimpleClientTimestampId instance = newInstance(
-            SimpleClientTimestampId.class, platformId, deviceId, systemId);
-
-        return instance;
-    }
-
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+        super(NicaFilter.ATTRIBUTE_NICA_NAMES);
     }
 
 
 }
-

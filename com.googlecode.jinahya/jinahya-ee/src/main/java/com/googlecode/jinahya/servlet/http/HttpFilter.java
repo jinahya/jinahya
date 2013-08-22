@@ -40,16 +40,16 @@ public abstract class HttpFilter extends AbstractFilter {
                          final ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        if (!(request instanceof HttpServletRequest)
-            && !(response instanceof HttpServletResponse)) {
+        if (request instanceof HttpServletRequest
+            && response instanceof HttpServletResponse) {
 
-            chain.doFilter(request, response);
+            doFilter((HttpServletRequest) request,
+                     (HttpServletResponse) response, chain);
 
             return;
         }
 
-        doFilter((HttpServletRequest) request, (HttpServletResponse) response,
-                 chain);
+        chain.doFilter(request, response);
     }
 
 
