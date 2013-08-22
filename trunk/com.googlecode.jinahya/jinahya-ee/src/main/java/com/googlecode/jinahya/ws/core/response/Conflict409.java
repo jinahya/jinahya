@@ -34,6 +34,7 @@ public class Conflict409 extends AbstractStatusType {
      * @param reasonPhrase HTTP response reason phrase
      */
     public Conflict409(final String reasonPhrase) {
+
         super(Status.CONFLICT, reasonPhrase);
     }
 

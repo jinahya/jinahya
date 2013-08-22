@@ -29,6 +29,7 @@ public class NotAcceptable406 extends AbstractStatusType {
 
 
     public NotAcceptable406(final String reasonPhrase) {
+
         super(Status.NOT_ACCEPTABLE, reasonPhrase);
     }
 

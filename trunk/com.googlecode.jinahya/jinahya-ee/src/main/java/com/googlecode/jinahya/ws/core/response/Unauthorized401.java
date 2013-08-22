@@ -29,6 +29,7 @@ public class Unauthorized401 extends AbstractStatusType {
 
 
     public Unauthorized401(final String reasonPhrase) {
+
         super(Status.UNAUTHORIZED, reasonPhrase);
     }
 

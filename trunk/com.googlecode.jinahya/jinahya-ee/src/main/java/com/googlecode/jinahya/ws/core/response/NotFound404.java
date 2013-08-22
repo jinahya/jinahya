@@ -29,6 +29,7 @@ public class NotFound404 extends AbstractStatusType {
 
 
     public NotFound404(final String reasonPhrase) {
+
         super(Status.NOT_FOUND, reasonPhrase);
     }
 

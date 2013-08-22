@@ -18,180 +18,43 @@
 package com.googlecode.jinahya.ws.core.response;
 
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
-import javax.ws.rs.core.Response.StatusType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractStatusType implements StatusType {
-
-
-    private static class AnonymousStatusType extends AbstractStatusType {
-
-
-        public AnonymousStatusType(final Family family, final int statusCode,
-                                   final String reasonPhrase) {
-
-            super(family, statusCode, reasonPhrase);
-        }
-
-
-    }
-
-
-    public static StatusType newAnonymouseInstance(final int statusCode,
-                                                   final String reasonPhrase) {
-
-        if (statusCode >= 100) {
-            return new AnonymousStatusType(Family.INFORMATIONAL, statusCode,
-                                           reasonPhrase);
-        }
-
-        if (statusCode >= 200) {
-            return new AnonymousStatusType(Family.SUCCESSFUL, statusCode,
-                                           reasonPhrase);
-        }
-
-        if (statusCode >= 300) {
-            return new AnonymousStatusType(Family.REDIRECTION, statusCode,
-                                           reasonPhrase);
-        }
-
-        if (statusCode >= 400) {
-            return new AnonymousStatusType(Family.CLIENT_ERROR, statusCode,
-                                           reasonPhrase);
-        }
-
-        if (statusCode >= 500 && statusCode < 600) {
-            return new AnonymousStatusType(Family.SERVER_ERROR, statusCode,
-                                           reasonPhrase);
-        }
-
-        return new AnonymousStatusType(Family.OTHER, statusCode, reasonPhrase);
-    }
+public abstract class AbstractStatusType extends OrphanStatusType {
 
 
     /**
      * Creates a new instance.
      *
-     * @param family
-     * @param statusCode
-     * @param reasonPhrase
+     * @param family the status family
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
      */
-    public AbstractStatusType(final Family family, final int statusCode,
-                              final String reasonPhrase) {
-        super();
+    protected AbstractStatusType(final Family family, final int statusCode,
+                                 final String reasonPhrase) {
 
-        if (family == null) {
-            throw new IllegalArgumentException("null family");
-        }
-
-        if (reasonPhrase == null) {
-            throw new IllegalArgumentException("null reasonPhrase");
-        }
-
-        this.family = family;
-        this.statusCode = statusCode;
-        this.reasonPhrase = reasonPhrase;
+        super(family, statusCode, reasonPhrase);
     }
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with given {@code status} and
+     * {@code reasonPhrase}.
      *
      * @param status the status to wrap
-     * @param reasonPhrase reason phrase
+     * @param reasonPhrase the HTTP reason phrase
      */
     protected AbstractStatusType(final Status status,
                                  final String reasonPhrase) {
 
         this(status.getFamily(), status.getStatusCode(), reasonPhrase);
     }
-
-
-    @Override
-    public Family getFamily() {
-
-        return family;
-    }
-
-
-    @Override
-    public String getReasonPhrase() {
-
-        return reasonPhrase;
-    }
-
-
-    @Override
-    public int getStatusCode() {
-
-        return statusCode;
-    }
-
-
-    /**
-     * Returns a {@link ResponseBuilder} for this type.
-     *
-     * @return a {@link ResponseBuilder} for this type.
-     *
-     * @see Response#status(javax.ws.rs.core.Response.StatusType)
-     */
-    public ResponseBuilder responseBuilder() {
-
-        return Response.status(this);
-    }
-
-
-    /**
-     * Returns a new {@code Response} for this type.
-     *
-     * @return a new {@code Response} to respond.
-     *
-     * @see #responseBuilder()
-     */
-    public Response build() {
-
-        return responseBuilder().build();
-    }
-
-
-    /**
-     * Returns a new {@link WebApplicationException} for this type.
-     *
-     * @return a new {@link WebApplicationException} to throw
-     *
-     * @see #build()
-     */
-    public WebApplicationException except() {
-
-        return new WebApplicationException(build());
-    }
-
-
-    /**
-     * family.
-     */
-    private final Family family;
-
-
-    /**
-     * statusCode.
-     */
-    private final int statusCode;
-
-
-    /**
-     * reasonPhrase.
-     */
-    private final String reasonPhrase;
 
 
 }
