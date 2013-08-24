@@ -410,7 +410,7 @@ public abstract class NicaFilter extends HttpFilter {
         }
         if (!Arrays.equals(new HacJCE(key).authenticate(base), auth)) {
             final String message = "authentication failed";
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
 

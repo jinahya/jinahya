@@ -53,6 +53,16 @@ public abstract class HttpFilter extends AbstractFilter {
     }
 
 
+    /**
+     * Does filtering on given arguments.
+     *
+     * @param request the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @param chain the filter chain
+     *
+     * @throws IOException if an I/O error occurs.
+     * @throws ServletException if a servlet related error occurs.
+     */
     protected abstract void doFilter(HttpServletRequest request,
                                      HttpServletResponse response,
                                      FilterChain chain)
