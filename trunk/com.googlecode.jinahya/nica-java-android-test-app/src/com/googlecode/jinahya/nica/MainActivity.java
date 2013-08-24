@@ -38,6 +38,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
+    }
+
+
+    private void excute() {
 
         final NicaBuilderFactory factory;
         try {
@@ -48,26 +52,10 @@ public class MainActivity extends Activity {
 
         Log.i(TAG, "factory: " + factory);
 
-        /*
-         try {
-         final HttpRequest request = new HttpGet("http://www.daum.net");
-         factory.newNicaBuilder().build(request);
 
-         for (Header header : Header.values()) {
-         try {
-         Log.i(TAG, header.getName() + ": "
-         + request.getFirstHeader(header.getName())
-         .getValue());
-         } catch (NullPointerException npe) {
-         }
-         }
-         } catch (Exception e) {
-         Log.e(TAG, e.getMessage(), e);
-         }
-         */
+        final String base = "http://10.0.2.2:58080/nica-java-server-test";
 
-        final String url =
-            "http://10.0.2.2:58080/nica-java-server-test/servlet/test";
+        final String url = base + "/resources/test";
 
         try {
             final HttpURLConnection connection =
@@ -110,7 +98,8 @@ public class MainActivity extends Activity {
 
             final HttpClient client = new DefaultHttpClient();
             Log.i(TAG, "executing...");
-            final HttpResponse response = client.execute((HttpUriRequest) request);
+            final HttpResponse response =
+                client.execute((HttpUriRequest) request);
             Log.i(TAG, "executed");
             final StatusLine statusLine = response.getStatusLine();
             final int statusCode = statusLine.getStatusCode();
@@ -125,8 +114,49 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-
     }
+
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        synchronized (this) {
+            thread = new Thread() {
+
+
+                @Override
+                public void run() {
+                    while (!isInterrupted()) {
+                        excute();
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException ie) {
+                            break;
+                        }
+                    }
+                }
+
+            };
+
+            thread.start();
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+
+        synchronized (this) {
+            thread.interrupt();
+        }
+
+        super.onStop();
+    }
+
+
+    private volatile Thread thread;
 
 
 }

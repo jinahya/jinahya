@@ -37,6 +37,9 @@ public abstract class AbstractNicaClientIdentifier
     extends NicaCodesAttributeListenerL2 {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(AbstractNicaClientIdentifier.class.getName());
 

@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.nica.servlet;
 
 
-import com.googlecode.jinahya.nica.CodeKeys;
 import com.googlecode.jinahya.nica.HeaderFields;
 import com.googlecode.jinahya.nica.util.Aes;
 import com.googlecode.jinahya.nica.util.AesJCE;
@@ -30,6 +29,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -50,6 +51,13 @@ public abstract class NicaFilter extends HttpFilter {
      */
     private static final Logger LOGGER =
         Logger.getLogger(NicaFilter.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.ALL);
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.addHandler(new ConsoleHandler());
+    }
 
 
     protected static final String ATTRIBUTE_NAMESPACE =
@@ -182,11 +190,11 @@ public abstract class NicaFilter extends HttpFilter {
      * @return an unmodifiable map of nica names.
      */
     @SuppressWarnings("unchecked")
-    protected static Map<String, String> getNames(
+    protected static Map<String, String> getNicaNames(
         final ServletRequest request) {
 
         if (request == null) {
-            throw new IllegalArgumentException("request");
+            throw new NullPointerException("request");
         }
 
         return (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_NAMES);
@@ -202,18 +210,18 @@ public abstract class NicaFilter extends HttpFilter {
      * @return the nica name value mapped to given nica name key or {@code null}
      * if no entries found.
      */
-    protected static String getName(final ServletRequest request,
-                                    final String key) {
+    protected static String getNicaName(final ServletRequest request,
+                                        final String key) {
 
         if (request == null) {
-            throw new IllegalArgumentException("request");
+            throw new NullPointerException("request");
         }
 
         if (key == null) {
-            throw new IllegalArgumentException("key");
+            throw new NullPointerException("key");
         }
 
-        final Map<String, String> names = getNames(request);
+        final Map<String, String> names = getNicaNames(request);
 
         if (names == null) {
             return null;
@@ -231,11 +239,11 @@ public abstract class NicaFilter extends HttpFilter {
      * @return an unmodifiable map of nica codes.
      */
     @SuppressWarnings("unchecked")
-    protected static Map<String, String> getCodes(
+    protected static Map<String, String> getNicaCodes(
         final ServletRequest request) {
 
         if (request == null) {
-            throw new IllegalArgumentException("request");
+            throw new NullPointerException("request");
         }
 
         return (Map<String, String>) request.getAttribute(ATTRIBUTE_NICA_CODES);
@@ -251,18 +259,18 @@ public abstract class NicaFilter extends HttpFilter {
      * @return the nica code value mapped to give nica code key or {@code null}
      * if no entries found.
      */
-    protected static String getCode(final ServletRequest request,
-                                    final String key) {
+    protected static String getNicaCode(final ServletRequest request,
+                                        final String key) {
 
         if (request == null) {
-            throw new IllegalArgumentException("request");
+            throw new NullPointerException("request");
         }
 
         if (key == null) {
-            throw new IllegalArgumentException("key");
+            throw new NullPointerException("key");
         }
 
-        final Map<String, String> codes = getCodes(request);
+        final Map<String, String> codes = getNicaCodes(request);
 
         if (codes == null) {
             return null;
@@ -285,11 +293,11 @@ public abstract class NicaFilter extends HttpFilter {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
-        final Map<String, String> names;
+        final Map<String, String> nicaNames;
         try {
             @SuppressWarnings("unchecked")
-            final Map<String, String> names_ = Par.decode(nicaName);
-            names = Collections.unmodifiableMap(names_);
+            final Map<String, String> nicaNames_ = Par.decode(nicaName);
+            nicaNames = Collections.unmodifiableMap(nicaNames_);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             final String message =
@@ -297,18 +305,19 @@ public abstract class NicaFilter extends HttpFilter {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
-        request.setAttribute(ATTRIBUTE_NICA_NAMES, names);
+        request.setAttribute(ATTRIBUTE_NICA_NAMES, nicaNames);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
-        request.setAttribute(ATTRIBUTE_NICA_NAMES_L2, names);
+        request.setAttribute(ATTRIBUTE_NICA_NAMES_L2, nicaNames);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
-        request.setAttribute(ATTRIBUTE_NICA_NAMES_L3, names);
+        request.setAttribute(ATTRIBUTE_NICA_NAMES_L3, nicaNames);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
+        // Re-chekcing the key. Do not trust developers.
         byte[] key = (byte[]) request.getAttribute(
             AbstractNicaKeyLocator.ATTRIBUTE_NICA_LOCATED_KEY);
         if (key == null) {
@@ -342,6 +351,19 @@ public abstract class NicaFilter extends HttpFilter {
         }
         if (iv.length != Aes.BLOCK_SIZE_IN_BYTES) {
             final String message = "wrong header: " + HeaderFields.INIT;
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
+            return;
+        }
+        boolean zeros = true;
+        for (byte b : iv) {
+            if (b != 0) {
+                zeros = false;
+                break;
+            }
+        }
+        if (zeros) {
+            final String message =
+                "wrong header: " + HeaderFields.INIT + " all zeros";
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
@@ -396,12 +418,12 @@ public abstract class NicaFilter extends HttpFilter {
         // AUTHENTICATED. NOW WE CAN PROCEED WIDH CODES.
         // =====================================================================
 
-        final Map<String, String> codes;
+        final Map<String, String> nicaCodes;
         try {
             @SuppressWarnings("unchecked")
-            final Map<String, String> codes_ =
+            final Map<String, String> nicaCodes_ =
                 (Map<String, String>) Par.decode(new String(base, "US-ASCII"));
-            codes = Collections.unmodifiableMap(codes_);
+            nicaCodes = Collections.unmodifiableMap(nicaCodes_);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             final String message =
@@ -409,67 +431,20 @@ public abstract class NicaFilter extends HttpFilter {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
             return;
         }
-        checkCodes(request, response, Collections.unmodifiableMap(codes));
-        if (response.isCommitted()) {
-            return;
-        }
-        request.setAttribute(ATTRIBUTE_NICA_CODES, codes);
+        request.setAttribute(ATTRIBUTE_NICA_CODES, nicaCodes);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
-        request.setAttribute(ATTRIBUTE_NICA_CODES_L2, codes);
+        request.setAttribute(ATTRIBUTE_NICA_CODES_L2, nicaCodes);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
-        request.setAttribute(ATTRIBUTE_NICA_CODES_L3, codes);
+        request.setAttribute(ATTRIBUTE_NICA_CODES_L3, nicaCodes);
         if (errorOccuredAndSent(request, response)) {
             return;
         }
 
         chain.doFilter(request, response); // ------------------------- doFilter
-    }
-
-
-    protected void checkCodes(final HttpServletRequest request,
-                              final HttpServletResponse response,
-                              final Map<String, String> codes)
-        throws IOException {
-
-        // --------------------------------------------------------- PLATFORM_ID
-        final String platformId = codes.get(CodeKeys.PLATFORM_ID);
-        if (platformId == null || platformId.trim().isEmpty()) {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "missing, empty, or blank code: " + CodeKeys.PLATFORM_ID);
-            return;
-        }
-
-        // ----------------------------------------------------------- DEVICE_ID
-        final String deviceId = codes.get(CodeKeys.DEVICE_ID);
-        if (deviceId != null && deviceId.trim().isEmpty()) {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "missing, empty, or blank code: " + CodeKeys.DEVICE_ID);
-            return;
-        }
-
-        // ----------------------------------------------------------- SYSTEM_ID
-        final String systemId = codes.get(CodeKeys.SYSTEM_ID);
-        if (systemId != null && systemId.trim().isEmpty()) {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "missing, empty, or blank code: " + CodeKeys.SYSTEM_ID);
-            return;
-        }
-
-        // ------------------------------------------------------------- USER_ID
-        final String userId = codes.get(CodeKeys.USER_ID);
-        if (userId != null && userId.trim().isEmpty()) {
-            response.sendError(
-                HttpServletResponse.SC_BAD_REQUEST,
-                "missing, empty, or blank code: " + CodeKeys.USER_ID);
-            return;
-        }
     }
 
 

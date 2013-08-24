@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * An abstract ServletRequestAttributeListener for
- * {@link NicaFilter#ATTRIBUTE_CODES}.
+ * {@link NicaFilter#ATTRIBUTE_NICA_CODES_L3}. All subclasses extending this
+ * class will be notified after all listeners extending
+ * {@link NicaCodesAttributeListenerL2}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
