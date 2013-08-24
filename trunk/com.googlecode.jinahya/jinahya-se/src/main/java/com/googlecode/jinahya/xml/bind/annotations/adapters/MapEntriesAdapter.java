@@ -15,9 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind;
+package com.googlecode.jinahya.xml.bind.annotations.adapters;
 
 
+import com.googlecode.jinahya.xml.bind.MapEntries;
+import com.googlecode.jinahya.xml.bind.MapEntry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

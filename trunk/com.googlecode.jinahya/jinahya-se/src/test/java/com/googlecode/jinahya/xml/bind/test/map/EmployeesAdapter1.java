@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.xml.bind.test.map;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
+import com.googlecode.jinahya.xml.bind.annotations.adapters.MapEntriesAdapter;
 
 
 /**
