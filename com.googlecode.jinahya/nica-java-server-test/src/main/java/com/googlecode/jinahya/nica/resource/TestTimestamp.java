@@ -28,15 +28,15 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@Path("/test")
-public class TestResource {
+@Path("/timestamp")
+public class TestTimestamp {
 
 
     @GET
     @Produces({MediaType.TEXT_PLAIN})
-    public String read() {
+    public long read() {
 
-        return "hello";
+        return System.currentTimeMillis();
     }
 
 

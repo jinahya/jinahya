@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@WebServlet(urlPatterns = {"/servlet/test"})
+@WebServlet(urlPatterns = {"/servlets/test"})
 public class TestServlet extends HttpServlet {
 
 

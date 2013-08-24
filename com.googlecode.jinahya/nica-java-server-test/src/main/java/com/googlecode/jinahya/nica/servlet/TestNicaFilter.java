@@ -20,6 +20,7 @@ package com.googlecode.jinahya.nica.servlet;
 
 import static com.googlecode.jinahya.nica.servlet.NicaFilter.ATTRIBUTE_NICA_NAMES;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -37,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@WebFilter(urlPatterns = {"/servlet/*", "/resource/*"})
+@WebFilter(urlPatterns = {"/servlets/*", "/resources/*"})
 public class TestNicaFilter extends NicaFilter {
 
 
@@ -68,6 +69,18 @@ public class TestNicaFilter extends NicaFilter {
                            + "----------------------------------------");
         System.out.println("doFilter(" + request + ", " + response + ", "
                            + chain + ")");
+
+        // print headers
+        for (final Enumeration<String> headerNames = request.getHeaderNames();
+             headerNames.hasMoreElements();) {
+            final String headerName = headerNames.nextElement();
+            for (final Enumeration<String> headerValues =
+                request.getHeaders(headerName);
+                 headerValues.hasMoreElements();) {
+                System.out.println(
+                    headerName + ": " + headerValues.nextElement());
+            }
+        }
 
         final String requestUri = request.getRequestURI();
         System.out.println("requestUri: " + requestUri);
