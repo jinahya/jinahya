@@ -19,7 +19,7 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
+import com.googlecode.jinahya.xml.bind.annotations.adapters.MapValuesAdapter;
 import java.lang.reflect.Method;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;

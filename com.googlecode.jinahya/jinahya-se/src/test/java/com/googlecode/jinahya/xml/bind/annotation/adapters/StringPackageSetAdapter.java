@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 Jin Kwon <jinahya at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,27 @@
  */
 
 
-package com.googlecode.jinahya.sql.metadata;
+package com.googlecode.jinahya.xml.bind.annotation.adapters;
 
 
-import com.googlecode.jinahya.xml.bind.annotations.adapters.MapValuesAdapter;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
  *
- * @author Jin Kwon <onacit at gmail.com>
+ * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ExportedKeyValuesAdapter
-    extends MapValuesAdapter<ExportedKeyValues, String, ExportedKey> {
-
-
-    public ExportedKeyValuesAdapter() {
-
-        super(ExportedKeyValues.class);
-    }
+public class StringPackageSetAdapter
+    extends StringPackageCollectionAdapter<Set<Package>> {
 
 
     @Override
-    protected String getKey(final ExportedKey value) {
+    protected Set<Package> bound(final String value) {
 
-        return value.getColumnName();
+        return new HashSet<Package>();
     }
 
 
 }
+

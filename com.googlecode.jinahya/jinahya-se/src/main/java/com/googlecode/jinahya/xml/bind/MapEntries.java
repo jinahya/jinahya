@@ -80,7 +80,7 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      *
      * @return entries.
      */
-    protected List<T> getEntries() {
+    public List<T> getEntries() {
 
         if (entries == null) {
             entries = new ArrayList<T>();

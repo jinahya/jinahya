@@ -38,7 +38,7 @@ public abstract class MapEntry<K, V> {
      *
      * @return key.
      */
-    protected K getKey() {
+    public K getKey() {
 
         return key;
     }
@@ -49,7 +49,7 @@ public abstract class MapEntry<K, V> {
      *
      * @param key key.
      */
-    protected void setKey(final K key) {
+    public void setKey(final K key) {
 
         this.key = key;
     }
@@ -60,7 +60,7 @@ public abstract class MapEntry<K, V> {
      *
      * @return value.
      */
-    protected V getValue() {
+    public V getValue() {
 
         return value;
     }
@@ -71,7 +71,7 @@ public abstract class MapEntry<K, V> {
      *
      * @param value value.
      */
-    protected void setValue(final V value) {
+    public void setValue(final V value) {
 
         this.value = value;
     }
