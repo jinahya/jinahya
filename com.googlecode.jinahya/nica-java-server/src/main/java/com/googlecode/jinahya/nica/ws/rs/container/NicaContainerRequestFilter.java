@@ -88,21 +88,22 @@ public abstract class NicaContainerRequestFilter
             final String message = "missing header: " + HeaderFields.NAME;
             throw new BadRequest400(message).throwable();
         }
-        final Map<String, String> names;
+        final Map<String, String> nicaNames;
         try {
             @SuppressWarnings("unchecked")
-            final Map<String, String> names_ = Par.decode(nicaName);
-            names = Collections.unmodifiableMap(names_);
+            final Map<String, String> nicaNames_ = Par.decode(nicaName);
+            nicaNames = Collections.unmodifiableMap(nicaNames_);
         } catch (Exception e) {
             e.printStackTrace(System.err);
             final String message = "missing header: " + HeaderFields.NAME;
             throw new WebApplicationException(Response.status(
                 new BadRequest400(message)).build());
         }
-        context.setProperty(NicaFilter.ATTRIBUTE_NICA_NAMES, names);
+        context.setProperty(NicaFilter.ATTRIBUTE_NICA_NAMES, nicaNames);
         if (errorOccuredAndAborted(context)) {
             return;
         }
+        // Re-chekcing the key. Do not trust developers.
         byte[] key = (byte[]) context.getProperty(
             AbstractNicaKeyLocator.ATTRIBUTE_NICA_LOCATED_KEY);
         if (key == null) {
@@ -112,7 +113,7 @@ public abstract class NicaContainerRequestFilter
         }
         if (key.length != Aes.KEY_SIZE_IN_BYTES) {
             context.abortWith(
-                new InternalServerError500("no key located").built());
+                new InternalServerError500("wrong key located").built());
             return;
         }
         key = Arrays.copyOf(key, key.length);
@@ -135,6 +136,19 @@ public abstract class NicaContainerRequestFilter
         }
         if (iv.length != Aes.BLOCK_SIZE_IN_BYTES) {
             final String message = "wrong header: " + HeaderFields.INIT;
+            context.abortWith(new BadRequest400(message).built());
+            return;
+        }
+        boolean zeros = true;
+        for (byte b : iv) {
+            if (b != 0) {
+                zeros = false;
+                break;
+            }
+        }
+        if (zeros) {
+            final String message =
+                "wrong header: " + HeaderFields.INIT + " all zeros";
             context.abortWith(new BadRequest400(message).built());
             return;
         }
@@ -175,26 +189,38 @@ public abstract class NicaContainerRequestFilter
             throw new BadRequest400(message).throwable();
         }
         if (!Arrays.equals(new HacJCE(key).authenticate(base), auth)) {
-            throw new Unauthorized401("authentication failed").throwable();
+            final String message = "authentication failed";
+            context.abortWith(new BadRequest400(message).built());
         }
 
         // =====================================================================
         // AUTHENTICATED. NOW WE CAN PROCEED WIDH CODES.
         // =====================================================================
 
-        final Map<String, String> codes;
+        final Map<String, String> nicaCodes;
         try {
             @SuppressWarnings("unchecked")
-            final Map<String, String> codes_ =
+            final Map<String, String> nicaCodes_ =
                 (Map<String, String>) Par.decode(new String(base, "US-ASCII"));
-            codes = Collections.unmodifiableMap(codes_);
+            nicaCodes = Collections.unmodifiableMap(nicaCodes_);
         } catch (final Exception e) {
             final String message =
                 "wrong header: " + HeaderFields.CODE + ": " + e.getMessage();
-            throw new BadRequest400(message).throwable();
+            context.abortWith(new BadRequest400(message).built());
+            return;
         }
         context.setProperty(NicaFilter.ATTRIBUTE_NICA_CODES,
-                            Collections.unmodifiableMap(codes));
+                            Collections.unmodifiableMap(nicaCodes));
+        if (errorOccuredAndAborted(context)) {
+            return;
+        }
+        context.setProperty(NicaFilter.ATTRIBUTE_NICA_CODES_L2,
+                            Collections.unmodifiableMap(nicaCodes));
+        if (errorOccuredAndAborted(context)) {
+            return;
+        }
+        context.setProperty(NicaFilter.ATTRIBUTE_NICA_CODES_L3,
+                            Collections.unmodifiableMap(nicaCodes));
         if (errorOccuredAndAborted(context)) {
             return;
         }

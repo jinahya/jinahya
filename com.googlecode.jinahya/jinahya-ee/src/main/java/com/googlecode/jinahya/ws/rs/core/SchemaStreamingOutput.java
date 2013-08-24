@@ -35,11 +35,17 @@ import javax.xml.transform.stream.StreamResult;
 public class SchemaStreamingOutput implements StreamingOutput {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param context the context.
+     */
     public SchemaStreamingOutput(final JAXBContext context) {
+
         super();
 
         if (context == null) {
-            throw new NullPointerException("null context");
+            throw new NullPointerException("context");
         }
 
         this.context = context;
@@ -65,10 +71,8 @@ public class SchemaStreamingOutput implements StreamingOutput {
                         return suggestedFileName;
                     }
 
-
                 };
             }
-
 
         });
     }
@@ -78,4 +82,3 @@ public class SchemaStreamingOutput implements StreamingOutput {
 
 
 }
-
