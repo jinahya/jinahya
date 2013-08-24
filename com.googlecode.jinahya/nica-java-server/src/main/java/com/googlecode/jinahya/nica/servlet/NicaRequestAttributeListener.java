@@ -33,6 +33,13 @@ public abstract class NicaRequestAttributeListener
     implements ServletRequestAttributeListener {
 
 
+    /**
+     * Checks if a response error has been set.
+     *
+     * @param event the event
+     *
+     * @return true if a response error has been set; false otherwise.
+     */
     protected static boolean hasResponseError(
         final ServletRequestAttributeEvent event) {
 

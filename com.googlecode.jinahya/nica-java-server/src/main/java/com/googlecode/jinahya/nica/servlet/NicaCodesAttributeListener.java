@@ -20,7 +20,9 @@ package com.googlecode.jinahya.nica.servlet;
 
 /**
  * An abstract ServletRequestAttributeListener for
- * {@link NicaFilter#ATTRIBUTE_CODES}.
+ * {@link NicaFilter#ATTRIBUTE_NICA_CODES}. All subclasses extending this class
+ * will be notified before any listeners extending
+ * {@link NicaCodesAttributeListenerL2}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -28,6 +30,9 @@ public abstract class NicaCodesAttributeListener
     extends AbstractNicaCodesAttributeListener {
 
 
+    /**
+     * Creates a new instance.
+     */
     public NicaCodesAttributeListener() {
 
         super(NicaFilter.ATTRIBUTE_NICA_CODES);

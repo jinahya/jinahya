@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.nica.client;
 
 
+import android.util.Log;
 import com.googlecode.jinahya.nica.CodeKeys;
 import com.googlecode.jinahya.nica.HeaderNames;
 import com.googlecode.jinahya.nica.util.Aes;
@@ -27,6 +28,7 @@ import com.googlecode.jinahya.nica.util.Nuo;
 import com.googlecode.jinahya.nica.util.Par;
 import java.net.HttpURLConnection;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -139,6 +141,8 @@ public abstract class AndroidNicaBuilder extends NicaBuilder {
     private Map<String, String> headers() {
 
         final long timestamp = System.currentTimeMillis();
+        Log.i("NICA", "timestamp: " + timestamp + " " + new Date(timestamp));
+
         variableCodes.put(CodeKeys.REQUEST_TIMESTAMP, Long.toString(timestamp));
 
         final long nonce = Nuo.generate(timestamp);
