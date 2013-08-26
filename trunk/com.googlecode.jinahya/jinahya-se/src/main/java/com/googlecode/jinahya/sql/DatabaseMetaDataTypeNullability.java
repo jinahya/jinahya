@@ -33,15 +33,15 @@ public enum DatabaseMetaDataTypeNullability
     /**
      * A constant for {@link DatabaseMetaData#typeNoNulls}.
      */
-    typeNoNulls(DatabaseMetaData.typeNoNulls), //                              0
+    typeNoNulls(DatabaseMetaData.typeNoNulls), // 0
     /**
      * A constant for {@link DatabaseMetaData#typeNullable}.
      */
-    typeNullable(DatabaseMetaData.typeNullable), //                            1
+    typeNullable(DatabaseMetaData.typeNullable), // 1
     /**
      * A constant for {@link DatabaseMetaData#typeNullableUnknown}.
      */
-    typeNullableUnknown(DatabaseMetaData.typeNullableUnknown); //              2
+    typeNullableUnknown(DatabaseMetaData.typeNullableUnknown); // 2
 
 
     private DatabaseMetaDataTypeNullability(final int fieldValue) {

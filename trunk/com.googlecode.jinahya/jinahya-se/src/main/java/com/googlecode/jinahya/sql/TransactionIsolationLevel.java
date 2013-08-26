@@ -35,38 +35,35 @@ public enum TransactionIsolationLevel
     /**
      * A constant for {@link Connection#TRANSACTION_NONE}.
      */
-    TRANSACTION_NONE(Connection.TRANSACTION_NONE), //                          0
+    TRANSACTION_NONE(Connection.TRANSACTION_NONE), // 0
     /**
      * A constant for {@link Connection#TRANSACTION_READ_UNCOMMITTED}.
      */
-    TRANSACTION_READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED), //  1
+    TRANSACTION_READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED), // 1
     /**
      * A constant for {@link Connection#TRANSACTION_READ_COMMITTED}.
      */
-    TRANSACTION_READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED), //      2
+    TRANSACTION_READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED), // 2
     /**
      * A constant for {@link Connection#TRANSACTION_REPEATABLE_READ}.
      */
-    TRANSACTION_REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ), //    4
+    TRANSACTION_REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ), // 4
     /**
      * A constant for {@link Connection#TRANSACTION_SERIALIZABLE}.
      */
-    TRANSACTION_SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE); //          8
+    TRANSACTION_SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE); // 8
 
 
     /**
      * Returns the enum constant of this type with the specified transaction
      * isolation level.
      *
-     * @param fieldValue the transaction isolation level, which is one of {@link Connection#TRANSACTION_NONE},
-     * {@link Connection#TRANSACTION_READ_UNCOMMITTED},
-     * {@link Connection#TRANSACTION_READ_COMMITTED},
-     * {@link Connection#TRANSACTION_REPEATABLE_READ}, or
-     * {@link Connection#TRANSACTION_SERIALIZABLE}.
+     * @param fieldValue the transaction isolation level
      *
      * @return the enum constant with the specified transaction isolation level
      */
-    public static TransactionIsolationLevel fromFieldValue(final int fieldValue) {
+    public static TransactionIsolationLevel fromFieldValue(
+        final int fieldValue) {
 
         return FieldEnumHelper.fromFieldValue(
             TransactionIsolationLevel.class, fieldValue);

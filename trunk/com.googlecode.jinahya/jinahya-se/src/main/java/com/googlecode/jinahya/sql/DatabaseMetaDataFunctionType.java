@@ -33,15 +33,15 @@ public enum DatabaseMetaDataFunctionType
     /**
      * A constant for {@link DatabaseMetaData#functionResultUnknown}.
      */
-    functionResultUnknown(DatabaseMetaData.functionResultUnknown), //          0
+    functionResultUnknown(DatabaseMetaData.functionResultUnknown), // 0
     /**
      * A constant for {@link DatabaseMetaData#functionReturnsTable}.
      */
-    functionReturnsTable(DatabaseMetaData.functionReturnsTable), //            2
+    functionReturnsTable(DatabaseMetaData.functionReturnsTable), // 2
     /**
      * A constant for {@link DatabaseMetaData#functionReturn}.
      */
-    functionReturn(DatabaseMetaData.functionReturn); //                        4
+    functionReturn(DatabaseMetaData.functionReturn); // 4
 
 
     /**

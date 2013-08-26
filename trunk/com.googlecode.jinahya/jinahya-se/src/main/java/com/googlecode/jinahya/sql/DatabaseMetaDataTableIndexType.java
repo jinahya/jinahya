@@ -33,19 +33,19 @@ public enum DatabaseMetaDataTableIndexType
     /**
      * A constant for {@link DatabaseMetaData#tableIndexStatistic}.
      */
-    tableIndexStatistic(DatabaseMetaData.tableIndexStatistic), //              0
+    tableIndexStatistic(DatabaseMetaData.tableIndexStatistic), // 0
     /**
      * A constant for {@link DatabaseMetaData#tableIndexClustered}.
      */
-    tableIndexClustered(DatabaseMetaData.tableIndexClustered), //              1
+    tableIndexClustered(DatabaseMetaData.tableIndexClustered), // 1
     /**
      * A constant for {@link DatabaseMetaData#tableIndexHashed}.
      */
-    tableIndexHashed(DatabaseMetaData.tableIndexHashed), //                    2
+    tableIndexHashed(DatabaseMetaData.tableIndexHashed), // 2
     /**
      * A constant for {@link DatabaseMetaData#tableIndexOther}.
      */
-    tableIndexOther(DatabaseMetaData.tableIndexOther); //                      3
+    tableIndexOther(DatabaseMetaData.tableIndexOther); // 3
 
 
     private DatabaseMetaDataTableIndexType(final short fieldValue) {

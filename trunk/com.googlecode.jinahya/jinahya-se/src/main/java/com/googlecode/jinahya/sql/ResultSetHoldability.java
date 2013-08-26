@@ -36,11 +36,11 @@ public enum ResultSetHoldability
     /**
      * Constant for {@link ResultSet#HOLD_CURSORS_OVER_COMMIT}.
      */
-    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT), //           1
+    HOLD_CURSORS_OVER_COMMIT(ResultSet.HOLD_CURSORS_OVER_COMMIT), // 1
     /**
      * Constant for {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}.
      */
-    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT); //             2
+    CLOSE_CURSORS_AT_COMMIT(ResultSet.CLOSE_CURSORS_AT_COMMIT); // 2
 
 
     /**
