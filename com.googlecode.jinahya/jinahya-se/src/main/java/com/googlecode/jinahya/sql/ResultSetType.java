@@ -22,6 +22,7 @@ import com.googlecode.jinahya.lang.FieldEnum;
 import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.xml.bind.annotation.XmlEnum;
 
 
 /**
@@ -29,27 +30,22 @@ import java.sql.SQLException;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
+@XmlEnum
 public enum ResultSetType implements FieldEnum<ResultSetType, Integer> {
 
 
     /**
      * Constant for {@link ResultSet#TYPE_FORWARD_ONLY}.
-     *
-     * @see ResultSet#TYPE_FORWARD_ONLY
      */
-    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), //                      1003
+    TYPE_FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY), // 1003
     /**
      * Constant for {@link ResultSet#TYPE_SCROLL_INSENSITIVE}.
-     *
-     * @see ResultSet#TYPE_SCROLL_INSENSITIVE
      */
-    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE), //          1004
+    TYPE_SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE), // 1004
     /**
      * Constant for {@link ResultSet#TYPE_SCROLL_SENSITIVE}.
-     *
-     * @see ResultSet#TYPE_SCROLL_SENSITIVE
      */
-    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); //              1005
+    TYPE_SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE); // 1005
 
 
     /**

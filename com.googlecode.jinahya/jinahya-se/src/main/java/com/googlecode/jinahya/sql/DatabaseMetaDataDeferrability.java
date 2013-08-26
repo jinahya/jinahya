@@ -34,12 +34,12 @@ public enum DatabaseMetaDataDeferrability
      * A constant for {@link DatabaseMetaData#importedKeyInitiallyDeferred}.
      */
     importedKeyInitiallyDeferred(
-    DatabaseMetaData.importedKeyInitiallyDeferred), //                      5
+    DatabaseMetaData.importedKeyInitiallyDeferred), // 5
     /**
      * A constant for {@link DatabaseMetaData#importedKeyInitiallyImmediate}.
      */
     importedKeyInitiallyImmediate(
-    DatabaseMetaData.importedKeyInitiallyImmediate), //                     6
+    DatabaseMetaData.importedKeyInitiallyImmediate), // 6
     /**
      * A constant for {@link DatabaseMetaData#importedKeyNotDeferrable}.
      */

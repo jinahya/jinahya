@@ -36,32 +36,32 @@ public enum Type implements FieldEnum<Type, Integer> {
     /**
      * Constant for {@link Types#LONGVARCHAR}.
      */
-    LONGNVARCHAR(Types.LONGNVARCHAR), //  -16
+    LONGNVARCHAR(Types.LONGNVARCHAR), // -16
     /**
      * Constant for {@link Types#NCHAR}.
      */
-    NCHAR(Types.NCHAR), //                -15
+    NCHAR(Types.NCHAR), // -15
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#NVARCHAR}.
      */
-    NVARCHAR(Types.NVARCHAR), //           -9
+    NVARCHAR(Types.NVARCHAR), // -9
     /**
      * Constant for {@link Types#ROWID}.
      */
-    ROWID(Types.ROWID), //                 -8
+    ROWID(Types.ROWID), // -8
     /**
      * Constant for {@link Types#BIT}.
      */
-    BIT(Types.BIT), //                     -7
+    BIT(Types.BIT), // -7
     /**
      * Constant for {@link Types#TINYINT}.
      */
-    TINYINT(Types.TINYINT), //             -6
+    TINYINT(Types.TINYINT), // -6
     /**
      * Constant for {@link Types#BIGINT}.
      */
-    BIGINT(Types.BIGINT), //               -5
+    BIGINT(Types.BIGINT), // -5
     /**
      * Constant for {@link Types#LONGVARBINARY}.
      */
@@ -69,131 +69,131 @@ public enum Type implements FieldEnum<Type, Integer> {
     /**
      * Constant for {@link Types#VARBINARY}.
      */
-    VARBINARY(Types.VARBINARY), //         -3
+    VARBINARY(Types.VARBINARY), // -3
     /**
      * Constant for {@link Types#BINARY}.
      */
-    BINARY(Types.BINARY), //               -2
+    BINARY(Types.BINARY), // -2
     /**
      * Constant for {@link Types#LONGVARCHAR}.
      */
-    LONGVARCHAR(Types.LONGVARCHAR), //     -1
-//    /**
-//     * Constant for {@link Types#NULL}.
-//     */
-//    NULL(Types.NULL), //                    0
+    LONGVARCHAR(Types.LONGVARCHAR), // -1
+    //    /**
+    //     * Constant for {@link Types#NULL}.
+    //     */
+    //    NULL(Types.NULL), // 0
     /**
      * Constant for {@link Types#CHAR}.
      */
-    CHAR(Types.CHAR), //                    1
+    CHAR(Types.CHAR), // 1
     /**
      * Constant for {@link Types#NUMERIC}.
      */
-    NUMERIC(Types.NUMERIC),//               2
+    NUMERIC(Types.NUMERIC), // 2
     /**
      * Constant for {@link Types#DECIMAL}.
      */
-    DECIMAL(Types.DECIMAL), //              3
+    DECIMAL(Types.DECIMAL), // 3
     /**
      * Constant for {@link Types#INTEGER}.
      */
-    INTEGER(Types.INTEGER), //              4
+    INTEGER(Types.INTEGER), // 4
     /**
      * Constant for {@link Types#SMALLINT}.
      */
-    SMALLINT(Types.SMALLINT), //            5
+    SMALLINT(Types.SMALLINT), // 5
     /**
      * Constant for {@link Types#FLOAT}.
      */
-    FLOAT(Types.FLOAT), //                  6
+    FLOAT(Types.FLOAT), // 6
     /**
      * Constant for {@link Types#REAL}.
      */
-    REAL(Types.REAL), //                    7
+    REAL(Types.REAL), // 7
     /**
      * Constant for {@link Types#DOUBLE}.
      */
-    DOUBLE(Types.DOUBLE), //                8
+    DOUBLE(Types.DOUBLE), // 8
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#VARCHAR}.
      */
-    VARCHAR(Types.VARCHAR), //             12
+    VARCHAR(Types.VARCHAR), // 12
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#BOOLEAN}.
      */
-    BOOLEAN(Types.BOOLEAN), //             16
+    BOOLEAN(Types.BOOLEAN), // 16
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#DATALINK}.
      */
-    DATALINK(Types.DATALINK), //           70
+    DATALINK(Types.DATALINK), // 70
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#DATE}.
      */
-    DATE(Types.DATE), //                   91
+    DATE(Types.DATE), // 91
     /**
      * Constant for {@link Types#TIME}.
      */
-    TIME(Types.TIME), //                   92
+    TIME(Types.TIME), // 92
     /**
      * Constant for {@link Types#TIMESTAMP}.
      */
-    TIMESTAMP(Types.TIMESTAMP), //         93
+    TIMESTAMP(Types.TIMESTAMP), // 93
     // -------------------------------------------------------------------------
-//    /**
-//     * Constant for {@link Types#OTHER}.
-//     */
-//    OTHER(Types.OTHER), //               1111
+    //    /**
+    //     * Constant for {@link Types#OTHER}.
+    //     */
+    //    OTHER(Types.OTHER), // 1111
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#JAVA_OBJECT}.
      */
-    JAVA_OBJECT(Types.JAVA_OBJECT), //   2000
+    JAVA_OBJECT(Types.JAVA_OBJECT), // 2000
     /**
      * Constant for {@link Types#DISTINCT}.
      */
-    DISTINCT(Types.DISTINCT), //         2001
+    DISTINCT(Types.DISTINCT), // 2001
     /**
      * Constant for {@link Types#STRUCT}.
      */
-    STRUCT(Types.STRUCT), //             2002
+    STRUCT(Types.STRUCT), // 2002
     /**
      * Constant for {@link Types#ARRAY}.
      */
-    ARRAY(Types.ARRAY), //               2003
+    ARRAY(Types.ARRAY), // 2003
     /**
      * Constant for {@link Types#BLOB}
      */
-    BLOB(Types.BLOB), //                 2004
+    BLOB(Types.BLOB), // 2004
     /**
      * Constant for {@link Types#CLOB}.
      */
-    CLOB(Types.CLOB), //                 2005
+    CLOB(Types.CLOB), // 2005
     /**
      * Constant for {@link Types#REF}.
      */
-    REF(Types.REF), //                   2006
+    REF(Types.REF), // 2006
 
     /**
      * Constant for {@link Types#SQLXML}.
      */
-    SQLXML(Types.SQLXML), //             2009
+    SQLXML(Types.SQLXML), // 2009
     // -------------------------------------------------------------------------
     /**
      * Constant for {@link Types#NCLOB}.
      */
-    NCLOB(Types.NCLOB); //               2011
+    NCLOB(Types.NCLOB); // 2011
 
 
     /**
-     * Returns the enum constant mapped to specified {@code fieldValue}.
+     * Return the enum constant of this type with the specified field value.
      *
-     * @param fieldValue the field value to map.
+     * @param fieldValue the field value of the enum constant to be returned
      *
-     * @return the enum constant for specified {@code fieldValue}.
+     * @return the enum constant with specified field value.
      */
     public static Type fromFieldValue(final int fieldValue) {
 
@@ -202,9 +202,9 @@ public enum Type implements FieldEnum<Type, Integer> {
 
 
     /**
-     * Returns all field values.
+     * Returns an array containing the field values of this enum type.
      *
-     * @return all field values.
+     * @return an array containing the field values.
      */
     public static Integer[] fieldValues() {
 
@@ -232,7 +232,7 @@ public enum Type implements FieldEnum<Type, Integer> {
 
     /**
      * Invokes {@link PreparedStatement#setNull(int, int)} on given
-     * {@code preparedStatement} with {@code parameterIndex} and
+     * {@code preparedStatement} with specified {@code parameterIndex} and
      * {@code fieldValue}.
      *
      * @param preparedStatement prepared statement
@@ -325,4 +325,3 @@ public enum Type implements FieldEnum<Type, Integer> {
 
 
 }
-

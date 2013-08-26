@@ -38,19 +38,19 @@ public enum ResultSetFetchDirection
      *
      * @see ResultSet#FETCH_REVERSE
      */
-    FETCH_FORWARD(ResultSet.FETCH_FORWARD), //                              1000
+    FETCH_FORWARD(ResultSet.FETCH_FORWARD), // 1000
     /**
      * Constant for {@link ResultSet#FETCH_REVERSE}.
      *
      * @see ResultSet#FETCH_REVERSE
      */
-    FETCH_REVERSE(ResultSet.FETCH_REVERSE), //                              1001
+    FETCH_REVERSE(ResultSet.FETCH_REVERSE), // 1001
     /**
      * Constant for {@link ResultSet#FETCH_UNKNOWN}.
      *
      * @see ResultSet#FETCH_UNKNOWN
      */
-    FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); //                              1002
+    FETCH_UNKNOWN(ResultSet.FETCH_UNKNOWN); // 1002
 
 
     /**

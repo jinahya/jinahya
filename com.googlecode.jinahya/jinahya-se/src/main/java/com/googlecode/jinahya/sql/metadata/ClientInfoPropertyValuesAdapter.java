@@ -30,12 +30,14 @@ public class ClientInfoPropertyValuesAdapter
 
 
     public ClientInfoPropertyValuesAdapter() {
+        
         super(ClientInfoPropertyValues.class);
     }
 
 
     @Override
     protected String getKey(final ClientInfoProperty value) {
+        
         return value.getName();
     }
 
