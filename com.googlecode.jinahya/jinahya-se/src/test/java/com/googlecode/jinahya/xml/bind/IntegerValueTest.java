@@ -26,11 +26,11 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class IntegerValueTest extends SimpleValueTest<IntegerValue, Integer> {
+public class IntegerValueTest extends SimpleValueTest<NillableInteger, Integer> {
 
 
     public IntegerValueTest() {
-        super(IntegerValue.class);
+        super(NillableInteger.class);
     }
 
 

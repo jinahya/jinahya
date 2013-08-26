@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.io;
 
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,22 +35,16 @@ public class Streams {
 
 
     /**
-     * A constant value for all bytes.
-     */
-    public static final long ALL = -1L;
-
-
-    /**
-     * Copies all({@code length}=={@link #ALL}) or specified({@code length}>=0)
-     * bytes from {@code input} to {@code output} using specified
-     * {@code buffer}.
+     * Copies bytes from given input stream to given output stream using
+     * specified {@code buffer}.
      *
      * @param input the input stream
      * @param output the output stream
      * @param buffer the buffer
-     * @param length number of bytes to copy; {@link #ALL} for all.
+     * @param length the maximum number of bytes to copy; any negative value for
+     * all.
      *
-     * @return the number of bytes copied.
+     * @return the actual number of bytes copied.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -76,26 +69,14 @@ public class Streams {
                 "buffer.length(" + buffer.length + ") == 0");
         }
 
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ")");
-        }
-
         long count = 0L;
-        for (int read; length == ALL || count < length; count += read) {
-            int l = buffer.length;
-            if (length != ALL) {
-                final long r = length - count;
-                if (r < buffer.length) {
-                    l = (int) r;
-                }
-            }
+
+        for (int read; length < 0L || count < length; count += read) {
+            final int l = length < 0L ? buffer.length
+                          : (int) Math.min(buffer.length, length - count);
             read = input.read(buffer, 0, l);
             if (read == -1) {
-                if (length == ALL) {
-                    break;
-                }
-                throw new EOFException("eof");
+                break;
             }
             output.write(buffer, 0, read);
         }
@@ -105,36 +86,16 @@ public class Streams {
 
 
     /**
-     * Copies all bytes from {@code input} to {@code output} using given
-     * {@code buffer}.
-     *
-     * @param input the input
-     * @param output the output
-     * @param buffer the buffer
-     *
-     * @return the number of bytes copied.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public static long copy(final InputStream input, final OutputStream output,
-                            final byte[] buffer)
-        throws IOException {
-
-        return copy(input, output, buffer, ALL);
-    }
-
-
-    /**
-     * Copies all({@code length}=={@link #ALL}) or specified({@code length}>=0)
-     * bytes from {@code input} to {@code output} using specified
+     * Copies bytes from {@code input} to {@code output} using specified
      * {@code buffer}.
      *
      * @param input the input file
      * @param output the output stream
      * @param buffer the buffer
-     * @param length number of bytes to copy; {@link #ALL} for all.
+     * @param length the maximum number of bytes to copy; any negative for all
+     * available bytes.
      *
-     * @return the number of bytes copied.
+     * @return the actual number of bytes copied.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -156,16 +117,16 @@ public class Streams {
 
 
     /**
-     * Copies all({@code length}=={@link #ALL}) or specified({@code length}>=0)
-     * bytes from {@code input} to {@code output} using specified
+     * Copies bytes from {@code input} to {@code output} using specified
      * {@code buffer}.
      *
      * @param input the input stream
      * @param output the output file
      * @param buffer the buffer
-     * @param length number of bytes to copy; {@link #ALL} for all.
+     * @param length the maximum number of bytes to copy; any negative for all
+     * available bytes.
      *
-     * @return the number of bytes copied.
+     * @return the actual number of bytes copied.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -191,16 +152,16 @@ public class Streams {
 
 
     /**
-     * Copies all({@code length}=={@link #ALL}) or specified({@code length}>=0)
-     * bytes from {@code input} to {@code output} using specified
+     * Copies bytes from {@code input} to {@code output} using specified
      * {@code buffer}.
      *
      * @param input the input stream
      * @param output the output file
      * @param buffer the buffer
-     * @param length number of bytes to copy; {@link #ALL} for all.
+     * @param length the maximum number of bytes to copy; any negative for all
+     * available bytes.
      *
-     * @return the number of bytes copied.
+     * @return the actual number of bytes copied.
      *
      * @throws IOException if an I/O error occurs
      */

@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <R> raw value type parameter
  */
 @XmlTransient
-public abstract class SimpleValue<R> implements Serializable {
+public abstract class NillableValue<R> implements Serializable {
 
 
-    private static final long serialVersionUID = -4379691091470442003L;
+    private static final long serialVersionUID = -8939570056699996395L;
 
 
     /**
@@ -46,7 +46,7 @@ public abstract class SimpleValue<R> implements Serializable {
      *
      * @return
      */
-    public static <V extends SimpleValue<R>, R> V newInstance(
+    public static <V extends NillableValue<R>, R> V newInstance(
         final Class<V> simpleValueType, final R rawValue) {
 
         Objects.requireNonNull(simpleValueType, "null simpleValueType");
@@ -72,7 +72,7 @@ public abstract class SimpleValue<R> implements Serializable {
             return false;
         }
         @SuppressWarnings("unchecked")
-        final SimpleValue<R> other = (SimpleValue<R>) obj;
+        final NillableValue<R> other = (NillableValue<R>) obj;
         if (this.rawValue != other.rawValue
             && (this.rawValue == null
                 || !this.rawValue.equals(other.rawValue))) {
@@ -92,21 +92,23 @@ public abstract class SimpleValue<R> implements Serializable {
 
 
     /**
-     * Returns raw value.
+     * Returns the raw value.
      *
-     * @return raw value
+     * @return the raw value
      */
     public R getRawValue() {
+
         return rawValue;
     }
 
 
     /**
-     * Sets raw value.
+     * Sets the raw value.
      *
-     * @param rawValue raw value
+     * @param rawValue the raw value
      */
     public void setRawValue(final R rawValue) {
+
         this.rawValue = rawValue;
     }
 
@@ -118,4 +120,3 @@ public abstract class SimpleValue<R> implements Serializable {
 
 
 }
-

@@ -15,19 +15,29 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotation.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StringPackageListAdapter
-    extends StringPackageCollectionAdapter<List<Package>> {
+public class StringPackageListAdapter extends StringPackageCollectionAdapter<List<Package>> {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(StringPackageListAdapter.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.WARNING);
+    }
 
 
     @Override
@@ -38,4 +48,3 @@ public class StringPackageListAdapter
 
 
 }
-

@@ -15,23 +15,33 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.test.map;
+package com.googlecode.jinahya.xml.bind;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntriesAdapter;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
+ * An abstract XmlAdapter for marshalling sets to concatenated strings with
+ * specific delimiter.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class EmployeesAdapter2
-    extends MapEntriesAdapter<EmployeeEntries, Long, Employee> {
+public abstract class StringSetAdapter<E>
+    extends StringCollectionAdapter<Set<E>, E> {
 
 
-    public EmployeesAdapter2() {
+    public StringSetAdapter(final String delimiter) {
 
-        super(EmployeeEntries.class);
+        super(delimiter);
+    }
+
+
+    @Override
+    protected Set<E> bound(final String value) {
+
+        return new HashSet<E>();
     }
 
 

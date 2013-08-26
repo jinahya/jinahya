@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.annotations.adapters.MapValuesAdapter;
+import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
 
 
 /**

@@ -27,10 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class LongValue extends SimpleValue<Long> {
+public class NillableLong extends NillableValue<Long> {
 
 
-    private static final long serialVersionUID = 3456663376428056384L;
+    private static final long serialVersionUID = 4379443263129501853L;
 
 
     /**
@@ -40,8 +40,8 @@ public class LongValue extends SimpleValue<Long> {
      *
      * @return a new instance.
      */
-    public static LongValue newInstance(final Long rawValue) {
-        return newInstance(LongValue.class, rawValue);
+    public static NillableLong newInstance(final Long rawValue) {
+        return newInstance(NillableLong.class, rawValue);
     }
 
 
@@ -59,4 +59,3 @@ public class LongValue extends SimpleValue<Long> {
 
 
 }
-

@@ -19,9 +19,10 @@ package com.googlecode.jinahya.io;
 
 
 import com.googlecode.jinahya.security.MessageDigests;
-import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -56,21 +57,24 @@ public class StreamsTest {
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullInput() throws IOException {
 
-        Streams.copy(null, new BlackOutputStream(), new byte[1]);
+        Streams.copy((InputStream) null, new BlackOutputStream(), new byte[1],
+                     -1L);
     }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullOutput() throws IOException {
 
-        Streams.copy(new WhiteInputStream(), null, new byte[1]);
+        Streams.copy(new WhiteInputStream(), (OutputStream) null, new byte[1],
+                     -1L);
     }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullBuffer() throws IOException {
 
-        Streams.copy(new WhiteInputStream(), new BlackOutputStream(), null);
+        Streams.copy(new WhiteInputStream(), new BlackOutputStream(), null,
+                     -1L);
     }
 
 
@@ -78,27 +82,27 @@ public class StreamsTest {
     public static void testCopyWithZeroLengthBuffer() throws IOException {
 
         Streams.copy(new WhiteInputStream(), new BlackOutputStream(),
-                     new byte[0]);
+                     new byte[0], -1L);
     }
 
 
     @Test(invocationCount = 32)
-    public static void testCopyWithLength() throws IOException {
+    public static void testCopyWithPositiveLength() throws IOException {
 
         final Random random = ThreadLocalRandom.current();
 
         final long length = random.nextInt(1048576);
 
-        final long count = Streams.copy(new WhiteInputStream(),
-                                        new BlackOutputStream(), new byte[8192],
-                                        length);
+        final long count = Streams.copy(
+            new WhiteInputStream(), new BlackOutputStream(), new byte[8192],
+            length);
 
         Assert.assertEquals(count, length);
     }
 
 
     @Test(invocationCount = 32)
-    public static void testCopyWithoutLength() throws IOException {
+    public static void testCopyWithNegativeLength() throws IOException {
 
         final Random random = ThreadLocalRandom.current();
 
@@ -112,19 +116,6 @@ public class StreamsTest {
     }
 
 
-    @Test(expectedExceptions = {EOFException.class})
-    public static void testCopyWithLengthOverLimit() throws IOException {
-
-        final Random random = ThreadLocalRandom.current();
-
-        final long limit = random.nextInt(1048576);
-
-        final long count = Streams.copy(
-            new WhiteInputStream(limit), new BlackOutputStream(),
-            new byte[8192], limit + 1);
-    }
-
-
     @Test(invocationCount = 32)
     public static void testCopyFileToFileWithoutLength()
         throws IOException, NoSuchAlgorithmException {
@@ -134,13 +125,13 @@ public class StreamsTest {
         final File output = File.createTempFile("prefix", null);
         output.deleteOnExit();
 
-        Streams.copy(input, output, new byte[1], Streams.ALL);
+        Streams.copy(input, output, new byte[1], -1L);
 
         final MessageDigest digest = MessageDigest.getInstance("SHA-1");
 
         Assert.assertEquals(
-            MessageDigests.digest(digest, input, new byte[1024], MessageDigests.ALL),
-            MessageDigests.digest(digest, output, ByteBuffer.allocate(1024), MessageDigests.ALL));
+            MessageDigests.digest(digest, input, new byte[1024], -1L),
+            MessageDigests.digest(digest, output, ByteBuffer.allocate(9), -1L));
     }
 
 

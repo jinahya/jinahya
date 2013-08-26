@@ -19,7 +19,6 @@ package com.googlecode.jinahya.xml.bind.test;
 
 
 import com.googlecode.jinahya.xml.bind.Plural;
-import com.googlecode.jinahya.xml.bind.Plural;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -41,4 +40,3 @@ public class Items extends Plural<Item> {
 
 
 }
-

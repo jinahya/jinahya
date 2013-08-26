@@ -32,7 +32,7 @@ public class SchemaValues extends MapValues<Schema> {
 
     @XmlElement
     public List<Schema> getSchema() {
-        return getValue();
+        return getValues();
     }
 
 

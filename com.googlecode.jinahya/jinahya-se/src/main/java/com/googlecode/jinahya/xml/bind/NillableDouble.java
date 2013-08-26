@@ -27,10 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class FloatValue extends SimpleValue<Float> {
+public class NillableDouble extends NillableValue<Double> {
 
 
-    private static final long serialVersionUID = -3588163531567265L;
+    private static final long serialVersionUID = 3599854626723844516L;
 
 
     /**
@@ -40,23 +40,25 @@ public class FloatValue extends SimpleValue<Float> {
      *
      * @return a new instance.
      */
-    public static FloatValue newInstance(final Float rawValue) {
-        return newInstance(FloatValue.class, rawValue);
+    public static NillableDouble newInstance(final Double rawValue) {
+
+        return newInstance(NillableDouble.class, rawValue);
     }
 
 
     @XmlElement(nillable = true, required = true)
     @Override
-    public Float getRawValue() {
+    public Double getRawValue() {
+
         return super.getRawValue();
     }
 
 
     @Override
-    public void setRawValue(final Float rawValue) {
+    public void setRawValue(final Double rawValue) {
+
         super.setRawValue(rawValue);
     }
 
 
 }
-

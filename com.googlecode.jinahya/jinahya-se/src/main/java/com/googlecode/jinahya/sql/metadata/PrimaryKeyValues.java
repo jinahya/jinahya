@@ -33,7 +33,7 @@ public class PrimaryKeyValues extends MapValues<PrimaryKey> {
     @XmlElement
     public List<PrimaryKey> getPrimaryKey() {
 
-        return getValue();
+        return getValues();
     }
 
 

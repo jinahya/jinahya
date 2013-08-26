@@ -46,26 +46,18 @@ public class MessageDigests {
 
 
     /**
-     * A constant value for unlimited length.
-     */
-    public static final long ALL = -1L;
-
-
-    /**
-     * Digest all({@code length}=={@link #ALL}) or specified
-     * number({@code length}!={@link #ALL}) of bytes from {@code input} using
-     * given {@code buffer}.
+     * Digests on given {@code digest} with bytes read from given input stream
+     * using specified {@code buffer}.
      *
-     * @param digest digest
-     * @param input input file
+     * @param digest the digest
+     * @param input the input stream
      * @param buffer the buffer.
-     * @param length the number of byte to digest; {@link #ALL} for all.
+     * @param length the maximum number of byte to digest; any negative for all
+     * available bytes.
      *
      * @return digest result
      *
-     * @throws IOException if an I/O error occurs; or {@code length} is not
-     * {@link #ALL} and reached to EOF before processing specified number of
-     * bytes.
+     * @throws IOException if an I/O error occurs
      */
     public static byte[] digest(final MessageDigest digest,
                                 final InputStream input, final byte[] buffer,
@@ -88,26 +80,13 @@ public class MessageDigests {
             throw new IllegalArgumentException("buffer.length == 0");
         }
 
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException("illegal length: " + length);
-        }
-
         long count = 0L;
-        for (int read; length == ALL || count < length; count += read) {
-            int l = buffer.length;
-            if (length != ALL) {
-                final long r = length - count;
-                if (r < buffer.length) {
-                    l = (int) r;
-                }
-            }
+        for (int read; length < 0L || count < length; count += read) {
+            final int l = length < 0L ? buffer.length
+                          : (int) Math.min(buffer.length, length - count);
             read = input.read(buffer, 0, l);
             if (read == -1) {
-                if (length == ALL) {
-                    break;
-                } else {
-                    throw new IOException("eof");
-                }
+                break;
             }
             digest.update(buffer, 0, read);
         }
@@ -117,28 +96,24 @@ public class MessageDigests {
 
 
     /**
-     * Digest all({@code length}=={@link #ALL}) or specified
-     * number({@code length}!={@link #ALL}) of bytes from {@code input} using
-     * given {@code buffer}.
+     * Digests on given {@code digest} with bytes read from given input file
+     * using specified {@code buffer}.
      *
-     * @param digest digest
-     * @param input input file
+     * @param digest the digest
+     * @param input the input file
      * @param buffer the buffer.
-     * @param length the number of byte to digest; {@link #ALL} for all.
+     * @param length the maximum number of byte to digest; any negative for all
+     * available bytes.
      *
      * @return digest result
      *
-     * @throws IOException if an I/O error occurs; or {@code length} is not
-     * {@link #ALL} and reached to EOF before processing specified number of
-     * bytes.
+     * @throws IOException if an I/O error occurs
+     *
+     * @see #digest(MessageDigest, InputStream, byte[], long)
      */
     public static byte[] digest(final MessageDigest digest, final File input,
                                 final byte[] buffer, final long length)
         throws IOException {
-
-        if (digest == null) {
-            throw new NullPointerException("digest");
-        }
 
         if (input == null) {
             throw new NullPointerException("input");
@@ -154,20 +129,18 @@ public class MessageDigests {
 
 
     /**
-     * Digest all({@code length}=={@link #ALL}) or specified
-     * number({@code length}!={@link #ALL}) of bytes from {@code input} using
-     * given {@code buffer}.
+     * Digests on give {@code digest} with bytes read from given input channel
+     * using specified {@code buffer}.
      *
-     * @param digest digest
-     * @param input input channel
+     * @param digest the digest
+     * @param input the input channel
      * @param buffer the buffer.
-     * @param length the number of byte to digest; {@link #ALL} for all.
+     * @param length the maximum number of byte to digest; any negative for all
+     * available bytes.
      *
      * @return digest result
      *
-     * @throws IOException if an I/O error occurs; or {@code length} is not
-     * {@link #ALL} and reached to EOF before processing specified number of
-     * bytes.
+     * @throws IOException if an I/O error occurs
      */
     public static byte[] digest(final MessageDigest digest,
                                 final ReadableByteChannel input,
@@ -190,14 +163,10 @@ public class MessageDigests {
             throw new IllegalArgumentException("buffer.capacity == 0");
         }
 
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException("illegal length: " + length);
-        }
-
         long count = 0L;
-        for (int read; length == ALL || count < length; count += read) {
+        for (int read; length < 0L || count < length; count += read) {
             buffer.clear(); // position -> 0, limit -> capacity
-            if (length != ALL) {
+            if (length >= 0L) {
                 final long r = length - count;
                 if (r < buffer.capacity()) {
                     buffer.limit((int) r);
@@ -205,11 +174,7 @@ public class MessageDigests {
             }
             read = input.read(buffer);
             if (read == -1) {
-                if (length == ALL) {
-                    break;
-                } else {
-                    throw new IOException("eof");
-                }
+                break;
             }
             buffer.flip(); // limit -> position, position -> 0
             digest.update(buffer); // position -> limit
@@ -220,14 +185,14 @@ public class MessageDigests {
 
 
     /**
-     * Digest all({@code length}=={@link #ALL}) or specified
-     * number({@code length}!={@link #ALL}) of bytes from {@code input} using
-     * given {@code buffer}.
+     * Digests on given {@code digest} with bytes read from given input file
+     * using specified {@code buffer}.
      *
-     * @param digest digest
-     * @param input input file
+     * @param digest the digest
+     * @param input the input file
      * @param buffer the buffer.
-     * @param length the number of byte to digest; {@link #ALL} for all.
+     * @param length the maximum number of byte to digest; any negative for all
+     * available bytes.
      *
      * @return digest result
      *

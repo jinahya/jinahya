@@ -33,7 +33,7 @@ public class VersionColumnValues extends MapValues<VersionColumn> {
     @XmlElement
     public List<VersionColumn> getVersionColumn() {
 
-        return getValue();
+        return getValues();
     }
 
 

@@ -33,7 +33,7 @@ public class ColumnValues extends MapValues<Column> {
     @XmlElement
     public List<Column> getColumn() {
 
-        return getValue();
+        return getValues();
     }
 
 

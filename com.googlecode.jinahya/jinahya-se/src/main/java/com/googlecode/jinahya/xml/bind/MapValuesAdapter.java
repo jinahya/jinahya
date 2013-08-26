@@ -15,10 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotations.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
-import com.googlecode.jinahya.xml.bind.MapValues;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,9 +61,9 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
             return null;
         }
 
-        final Map<K, V> b = new HashMap<K, V>(v.getValue().size());
+        final Map<K, V> b = new HashMap<K, V>(v.getValues().size());
 
-        for (V value : v.getValue()) {
+        for (V value : v.getValues()) {
             b.put(getKey(value), value);
         }
 
@@ -91,7 +90,7 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
         final T v = mapValuesType.newInstance();
 
-        final List<V> values = v.getValue();
+        final List<V> values = v.getValues();
 
         ((ArrayList<V>) values).ensureCapacity(b.size());
 
@@ -102,10 +101,9 @@ public abstract class MapValuesAdapter<T extends MapValues<V>, K, V>
 
 
     /**
-     * MapValues type.
+     * map values type.
      */
     private final Class<T> mapValuesType;
 
 
 }
-

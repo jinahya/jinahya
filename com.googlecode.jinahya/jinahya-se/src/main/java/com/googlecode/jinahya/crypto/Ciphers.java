@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.crypto;
 
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -75,9 +74,6 @@ public class Ciphers {
     }
 
 
-    public static final long ALL = -1L;
-
-
     /**
      * Updates and finishes a multi-part encryption or description operation.
      *
@@ -85,14 +81,11 @@ public class Ciphers {
      * @param input the input
      * @param output the output
      * @param inbuf the input buffer
-     * @param length the number of bytes to process; {@link #ALL} for all
-     * available bytes
+     * @param length the maximum number of bytes to process; any negative for
+     * all available bytes.
      *
-     * @return the number of bytes processed
+     * @return the actual number of bytes processed
      *
-     * @throws EOFException if {@code length} is not {@link #ALL} and
-     * {@code input} has reached end-of-stream before processing specified
-     * amount of bytes.
      * @throws IOException if an I/O error occurs.
      * @throws IllegalBlockSizeException if this cipher is a block cipher, no
      * padding has been requested (only in encryption mode), and the total input
@@ -133,33 +126,18 @@ public class Ciphers {
             throw new IllegalArgumentException("inbuf.length == 0");
         }
 
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException("illegal length: " + length);
-        }
-
         long count = 0L;
 
         byte[] outbuf = new byte[cipher.getOutputSize(inbuf.length)];
-
         int outlen;
 
-        for (int inlen; length == ALL || count < length; count += inlen) {
-
-            int inoff = inbuf.length;
-            if (length != ALL) {
-                final long remained = length - count;
-                if (remained < inbuf.length) {
-                    inoff = (int) remained;
-                }
-            }
+        for (int inlen; length < 0L || count < length; count += inlen) {
+            final int inoff = length < 0L ? inbuf.length
+                              : (int) Math.min(inbuf.length, length - count);
             inlen = input.read(inbuf, 0, inoff);
             if (inlen == -1) {
-                if (length == ALL) {
-                    break;
-                }
-                throw new EOFException("eof");
+                break;
             }
-
             while (true) {
                 try {
                     outlen = cipher.update(inbuf, 0, inlen, outbuf, 0);
@@ -186,92 +164,17 @@ public class Ciphers {
 
 
     /**
-     * Encrypts or decrypts all bytes from {@code input} and writes output to
-     * {@code output}.
-     *
-     * @param cipher the cipher
-     * @param input the input
-     * @param output the output
-     * @param inbuf the input buffer
-     *
-     * @throws IOException if an I/O error occurs.
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     *
-     * @see Cipher#update(byte[], int, int, byte[], int)
-     * @see Cipher#doFinal(byte[], int)
-     *
-     * @deprecated By
-     * {@link #doFinal(javax.crypto.Cipher, java.io.InputStream, java.io.OutputStream, byte[], long)}
-     */
-    public static void doFinal(final Cipher cipher, final InputStream input,
-                               final OutputStream output, final byte[] inbuf)
-        throws IOException, IllegalBlockSizeException, BadPaddingException {
-
-        doFinal(cipher, input, output, inbuf, ALL);
-//        if (cipher == null) {
-//            throw new IllegalArgumentException("cipher");
-//        }
-//
-//        if (input == null) {
-//            throw new IllegalArgumentException("input");
-//        }
-//
-//        if (output == null) {
-//            throw new IllegalArgumentException("output");
-//        }
-//
-//        if (inbuf == null) {
-//            throw new IllegalArgumentException("inbuf");
-//        }
-//
-//        if (inbuf.length == 0) {
-//            throw new IllegalArgumentException("inbuf.length == 0");
-//        }
-//
-//        byte[] outbuf = new byte[cipher.getOutputSize(inbuf.length)];
-//
-//        int outlen;
-//
-//        for (int inlen; (inlen = input.read(inbuf)) != -1;) {
-//            while (true) {
-//                try {
-//                    outlen = cipher.update(inbuf, 0, inlen, outbuf, 0);
-//                    break;
-//                } catch (ShortBufferException sbe) {
-//                    outbuf = new byte[outbuf.length * 2];
-//                }
-//            }
-//            output.write(outbuf, 0, outlen);
-//        }
-//
-//        while (true) {
-//            try {
-//                outlen = cipher.doFinal(outbuf, 0);
-//                break;
-//            } catch (ShortBufferException sbe) {
-//                outbuf = new byte[outbuf.length * 2];
-//            }
-//        }
-//        output.write(outbuf, 0, outlen);
-    }
-
-
-    /**
      * Updates and finishes a multi-part encryption or description.
      *
      * @param cipher the cipher
      * @param input the input
      * @param output the output
      * @param inbuf the input buffer
-     * @param length the number of bytes to process; {@link #ALL} for all
-     * available bytes
+     * @param length the maximum number of bytes to process; any negative for
+     * all available bytes.
      *
-     * @return the number of bytes processed
+     * @return the actual number of bytes processed
      *
-     * @throws EOFException if {@code length} is not {@link #ALL} and
-     * {@code input} has reached end-of-stream before processing specified
-     * amount of bytes.
      * @throws IOException if an I/O error occurs
      * @throws IllegalBlockSizeException if this cipher is a block cipher, no
      * padding has been requested (only in encryption mode), and the total input
@@ -309,12 +212,7 @@ public class Ciphers {
         }
 
         if (inbuf.capacity() == 0) {
-            throw new IllegalArgumentException(
-                "inbuf.capacity(" + inbuf.capacity() + ") == 0");
-        }
-
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException("illegal length: " + length);
+            throw new IllegalArgumentException("inbuf.capacity == 0");
         }
 
         long count = 0L;
@@ -322,36 +220,31 @@ public class Ciphers {
         ByteBuffer outbuf =
             ByteBuffer.allocate(cipher.getOutputSize(inbuf.capacity()));
 
-        for (int read; length == ALL || count < length; count += read) {
-
+        for (int read; length < 0L || count < length; count += read) {
             inbuf.clear(); // position -> 0, limit -> capacity
-            if (length != ALL) {
-                long remained = length - count;
+            if (length >= 0L) {
+                final long remained = length - count;
                 if (remained < inbuf.remaining()) {
                     inbuf.limit((int) remained);
                 }
             }
             read = input.read(inbuf);
             if (read == -1) {
-                if (length == ALL) {
-                    break;
-                }
-                throw new EOFException("eof");
+                break;
             }
-
             inbuf.flip(); // limit -> position, position -> 0
             outbuf.clear(); // position -> 0, limit -> capacity
             while (true) {
                 try {
                     cipher.update(inbuf, outbuf);
-                    outbuf.flip(); // limit -> position, position -> 0
-                    while (outbuf.hasRemaining()) {
-                        output.write(outbuf);
-                    }
                     break;
                 } catch (ShortBufferException sbe) {
                     outbuf = ByteBuffer.allocate(outbuf.capacity() * 2);
                 }
+            }
+            outbuf.flip(); // limit -> position, position -> 0
+            while (outbuf.hasRemaining()) {
+                output.write(outbuf);
             }
         }
 
@@ -360,107 +253,17 @@ public class Ciphers {
         while (true) {
             try {
                 cipher.doFinal(inbuf, outbuf);
-                outbuf.flip(); // limit -> position, position -> 0
-                while (outbuf.hasRemaining()) {
-                    output.write(outbuf);
-                }
                 break;
             } catch (ShortBufferException sbe) {
                 outbuf = ByteBuffer.allocate(outbuf.capacity() * 2);
             }
         }
+        outbuf.flip(); // limit -> position, position -> 0
+        while (outbuf.hasRemaining()) {
+            output.write(outbuf);
+        }
 
         return count;
-    }
-
-
-    /**
-     * Encrypts or decrypts all bytes from {@code input} and writes result to
-     * {@code output}.
-     *
-     * @param cipher the cipher
-     * @param input the input
-     * @param output the output
-     * @param inbuf input input buffer
-     *
-     * @throws IOException if an I/O error occurs.
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
-     *
-     * @see Cipher#update(java.nio.ByteBuffer, java.nio.ByteBuffer)
-     * @see Cipher#doFinal(java.nio.ByteBuffer, java.nio.ByteBuffer)
-     *
-     * @deprecated By
-     * {@link #doFinal(javax.crypto.Cipher, java.nio.channels.ReadableByteChannel, java.nio.channels.WritableByteChannel, java.nio.ByteBuffer, long)}
-     */
-    @Deprecated
-    public static void doFinal(final Cipher cipher,
-                               final ReadableByteChannel input,
-                               final WritableByteChannel output,
-                               final ByteBuffer inbuf)
-        throws IOException, IllegalBlockSizeException, BadPaddingException {
-
-        doFinal(cipher, input, output, inbuf, ALL);
-
-//        if (cipher == null) {
-//            throw new IllegalArgumentException("cipher");
-//        }
-//
-//        if (input == null) {
-//            throw new IllegalArgumentException("input");
-//        }
-//
-//        if (output == null) {
-//            throw new IllegalArgumentException("output");
-//        }
-//
-//        if (inbuf == null) {
-//            throw new NullPointerException("inbuf");
-//        }
-//
-//        if (inbuf.capacity() == 0) {
-//            throw new IllegalArgumentException(
-//                "inbuf.capacity(" + inbuf.capacity() + ") == 0");
-//        }
-//
-//        ByteBuffer outbuf =
-//            ByteBuffer.allocate(cipher.getOutputSize(inbuf.capacity()));
-//
-//        while (true) {
-//            inbuf.clear(); // position -> 0, limit -> capacity
-//            if (input.read(inbuf) == -1) {
-//                break;
-//            }
-//            inbuf.flip(); // limit -> position, position -> 0
-//            outbuf.clear(); // position -> 0, limit -> capacity
-//            while (true) {
-//                try {
-//                    cipher.update(inbuf, outbuf);
-//                    outbuf.flip(); // limit -> position, position -> 0
-//                    while (outbuf.hasRemaining()) {
-//                        output.write(outbuf);
-//                    }
-//                    break;
-//                } catch (ShortBufferException sbe) {
-//                    outbuf = ByteBuffer.allocate(outbuf.capacity() * 2);
-//                }
-//            }
-//        }
-//
-//        inbuf.limit(0); // input's remaining must be equal to block-size
-//        outbuf.clear(); // position -> 0, limit -> capacity
-//        while (true) {
-//            try {
-//                cipher.doFinal(inbuf, outbuf);
-//                outbuf.flip(); // limit -> position, position -> 0
-//                while (outbuf.hasRemaining()) {
-//                    output.write(outbuf);
-//                }
-//                break;
-//            } catch (ShortBufferException sbe) {
-//                outbuf = ByteBuffer.allocate(outbuf.capacity() * 2);
-//            }
-//        }
     }
 
 

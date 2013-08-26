@@ -101,9 +101,9 @@ public class Unmarshallers {
     }
 
 
-    public static <I> Object unmarshal(final Unmarshaller unmarshaller,
-                                       final Class<? super I> inputType,
-                                       final I input)
+    public static <T> Object unmarshal(final Unmarshaller unmarshaller,
+                                       final Class<? super T> inputType,
+                                       final T input)
         throws UnmarshalException {
 
         if (unmarshaller == null) {
@@ -138,9 +138,9 @@ public class Unmarshallers {
     }
 
 
-    public static <I> Object unmarshal(final JAXBContext context,
-                                       final Class<? super I> inputType,
-                                       final I input)
+    public static <T> Object unmarshal(final JAXBContext context,
+                                       final Class<? super T> inputType,
+                                       final T input)
         throws JAXBException {
 
         if (context == null) {
@@ -204,9 +204,9 @@ public class Unmarshallers {
     }
 
 
-    public static <I, V> JAXBElement<V> unmarshal(
-        final Unmarshaller unmarshaller, final Class<? super I> inputType,
-        final I input, final Class<V> valueType)
+    public static <T, V> JAXBElement<V> unmarshal(
+        final Unmarshaller unmarshaller, final Class<? super T> inputType,
+        final T input, final Class<V> valueType)
         throws UnmarshalException {
 
         if (unmarshaller == null) {
@@ -253,9 +253,9 @@ public class Unmarshallers {
     }
 
 
-    public static <I, V> JAXBElement<V> unmarshal(
-        final JAXBContext context, final Class<? super I> inputType,
-        final I input, final Class<V> valueType)
+    public static <T, V> JAXBElement<V> unmarshal(
+        final JAXBContext context, final Class<? super T> inputType,
+        final T input, final Class<V> valueType)
         throws JAXBException {
 
         if (context == null) {
@@ -266,8 +266,8 @@ public class Unmarshallers {
     }
 
 
-    public static <I, V> JAXBElement<V> unmarshal(
-        final Class<? super I> inputType, final I input,
+    public static <T, V> JAXBElement<V> unmarshal(
+        final Class<? super T> inputType, final T input,
         final Class<V> valueType)
         throws JAXBException {
 
@@ -357,4 +357,3 @@ public class Unmarshallers {
 
 
 }
-

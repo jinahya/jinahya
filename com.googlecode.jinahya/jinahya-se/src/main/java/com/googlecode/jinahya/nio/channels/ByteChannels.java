@@ -37,21 +37,16 @@ public class ByteChannels {
 
 
     /**
-     * A constant value for unlimited length.
-     */
-    public static final long ALL = -1L;
-
-
-    /**
-     * Copies all or specified number of bytes from {@code input} to
-     * {@code output}.
+     * Copies bytes from {@code input} to {@code output} using specified
+     * {@code buffer}.
      *
      * @param input the input
      * @param output the output
-     * @param buffer buffer
-     * @param length number of bytes to copy. {@link #ALL} for all.
+     * @param buffer the buffer
+     * @param length the maximum number of bytes to copy; any negative value for
+     * all available bytes.
      *
-     * @return the number of byte copied.
+     * @return the actual number of byte copied.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -77,15 +72,24 @@ public class ByteChannels {
                 "buffer.capacity(" + buffer.capacity() + ") == 0");
         }
 
-        if (length != ALL && length < 0) {
-            throw new IllegalArgumentException(
-                "illegal length(" + length + ")");
+        if (input instanceof FileChannel) {
+            final FileChannel finput = (FileChannel) input;
+            return finput.transferTo(finput.position(),
+                                     length < 0L ? Long.MAX_VALUE : length,
+                                     output);
+        }
+
+        if (output instanceof FileChannel) {
+            final FileChannel foutput = (FileChannel) output;
+            return foutput.transferFrom(input, foutput.position(),
+                                        length < 0L ? Long.MAX_VALUE : length);
         }
 
         long count = 0L;
-        for (int read; length == ALL || count < length; count += read) {
+
+        for (int read; length < 0L || count < length; count += read) {
             buffer.clear(); // position -> 0, limit -> capacity
-            if (length != ALL) {
+            if (length >= 0L) {
                 final long r = length - count;
                 if (r < buffer.capacity()) {
                     buffer.limit((int) r);
@@ -93,11 +97,7 @@ public class ByteChannels {
             }
             read = input.read(buffer);
             if (read == -1) {
-                if (length == ALL) {
-                    break;
-                } else {
-                    throw new IOException("eof");
-                }
+                break;
             }
             buffer.flip(); // limit -> position, position -> 0
             while (buffer.hasRemaining()) {
@@ -110,15 +110,16 @@ public class ByteChannels {
 
 
     /**
-     * Copies all or specified number of bytes from {@code input} to
-     * {@code output}.
+     * Copies bytes from {@code input} to {@code output} using specified
+     * {@code buffer}.
      *
      * @param input the input
      * @param output the output
-     * @param buffer buffer
-     * @param length number of bytes to copy. {@link #ALL} for all.
+     * @param buffer the buffer
+     * @param length the maximum number of bytes to copy; any negative value for
+     * all available bytes.
      *
-     * @return the number of byte copied.
+     * @return the actual number of byte copied.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -144,15 +145,16 @@ public class ByteChannels {
 
 
     /**
-     * Copies all or specified number of bytes from {@code input} to
-     * {@code output}.
+     * Copies bytes from {@code input} to {@code output} using specified
+     * {@code buffer}.
      *
      * @param input the input
      * @param output the output
-     * @param buffer buffer
-     * @param length number of bytes to copy. {@link #ALL} for all.
+     * @param buffer the buffer
+     * @param length the maximum number of bytes to copy; any negative value for
+     * all available bytes.
      *
-     * @return the number of byte copied.
+     * @return the actual number of byte copied.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -178,15 +180,16 @@ public class ByteChannels {
 
 
     /**
-     * Copies all or specified number of bytes from {@code input} to
-     * {@code output}.
+     * Copies bytes from {@code input} to {@code output} using specified
+     * {@code buffer}.
      *
      * @param input the input
      * @param output the output
-     * @param buffer buffer
-     * @param length number of bytes to copy. {@link #ALL} for all.
+     * @param buffer the buffer
+     * @param length the maximum number of bytes to copy; any negative value for
+     * all available bytes.
      *
-     * @return the number of byte copied.
+     * @return the actual number of byte copied.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -205,7 +208,7 @@ public class ByteChannels {
                 new FileOutputStream(output).getChannel();
             try {
                 try {
-                    return copy(input, output_, buffer, length);
+                    return copy(input_, output_, buffer, length);
                 } finally {
                     output_.force(false);
                 }
@@ -228,4 +231,3 @@ public class ByteChannels {
 
 
 }
-

@@ -15,11 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotations.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
-import com.googlecode.jinahya.xml.bind.MapEntries;
-import com.googlecode.jinahya.xml.bind.MapEntry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * An {@code XmlAdapter} for {@link MapEntries} and {@link Map}.
  *
  * @author Jin Kwon <onacit at gmail.com>
- * @param <T> MepEntries type parameter
+ * @param <T> entries type parameter
  * @param <K> Map key type parameter
  * @param <V> Map value type parameter
  */
@@ -40,19 +38,22 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
     extends XmlAdapter<T, Map<K, V>> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(MapEntriesAdapter.class.getName());
 
 
     static {
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.WARNING);
     }
 
 
     /**
      * Creates a new instance.
      *
-     * @param entriesType wrapper type.
+     * @param entriesType entries type.
      */
     public MapEntriesAdapter(final Class<T> entriesType) {
 
@@ -122,4 +123,3 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
 
 
 }
-

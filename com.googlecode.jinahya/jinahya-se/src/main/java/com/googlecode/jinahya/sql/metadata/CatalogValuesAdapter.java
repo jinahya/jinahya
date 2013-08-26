@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.sql.metadata;
 
 
-import com.googlecode.jinahya.xml.bind.annotations.adapters.MapValuesAdapter;
+import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
 
 
 /**
@@ -30,12 +30,14 @@ public class CatalogValuesAdapter
 
 
     public CatalogValuesAdapter() {
+        
         super(CatalogValues.class);
     }
 
 
     @Override
     protected String getKey(final Catalog value) {
+        
         return value.getTableCat();
     }
 

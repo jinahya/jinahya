@@ -19,7 +19,7 @@ package com.googlecode.jinahya.sql.metadata;
 
 
 import com.googlecode.jinahya.xml.bind.MapValues;
-import com.googlecode.jinahya.xml.bind.annotations.adapters.MapValuesAdapter;
+import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
 import java.lang.reflect.Method;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -62,7 +62,7 @@ public class DatabaseMetadata implements Retrievable {
         @XmlElement
         public List<DeletesAreDetected> getDeletesAreDetected() {
 
-            return super.getValue();
+            return super.getValues();
         }
 
 
@@ -110,7 +110,7 @@ public class DatabaseMetadata implements Retrievable {
         @XmlElement
         public List<UpdatesAreDetected> getUpdatesAreDetected() {
 
-            return super.getValue();
+            return super.getValues();
         }
 
 
@@ -158,7 +158,7 @@ public class DatabaseMetadata implements Retrievable {
         @XmlElement
         public List<SupportsTransactionIsolationLevel> getSupportsTransactionIsolationLevel() {
 
-            return super.getValue();
+            return super.getValues();
         }
 
 

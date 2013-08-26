@@ -32,7 +32,7 @@ public class TableValues extends MapValues<Table> {
 
     @XmlElement
     public List<Table> getTable() {
-        return getValue();
+        return getValues();
     }
 
 

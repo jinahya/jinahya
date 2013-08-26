@@ -1,7 +1,7 @@
-BooleanValue
-DoubleValue
-FloatValue
-IntegerValue
-LongValue
-SimpleValue
-StringValue
+NillableBoolean
+NillableDouble
+NillableFloat
+NillableInteger
+NillableLong
+NillableString
+NillableValue
