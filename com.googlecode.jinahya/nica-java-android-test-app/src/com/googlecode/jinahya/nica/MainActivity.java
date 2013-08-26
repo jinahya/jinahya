@@ -123,6 +123,16 @@ public class MainActivity extends Activity {
         super.onStart();
 
         synchronized (this) {
+
+            if (thread != null) {
+                thread.interrupt();
+                try {
+                    thread.join();
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace(System.err);
+                }
+            }
+
             thread = new Thread() {
 
 
@@ -149,7 +159,15 @@ public class MainActivity extends Activity {
     protected void onStop() {
 
         synchronized (this) {
-            thread.interrupt();
+            if (thread != null) {
+                thread.interrupt();
+                try {
+                    thread.join();
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace(System.err);
+                }
+                thread = null;
+            }
         }
 
         super.onStop();
