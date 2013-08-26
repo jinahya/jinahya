@@ -32,7 +32,8 @@ public class ClientInfoPropertyValues extends MapValues<ClientInfoProperty> {
 
     @XmlElement
     public List<ClientInfoProperty> getClientInfoProperty() {
-        return getValue();
+        
+        return getValues();
     }
 
 

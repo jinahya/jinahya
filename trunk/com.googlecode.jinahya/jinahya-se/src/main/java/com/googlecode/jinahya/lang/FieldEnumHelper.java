@@ -29,41 +29,6 @@ import java.lang.reflect.Array;
 public class FieldEnumHelper {
 
 
-//    /**
-//     * Verifies each enum constant of specified type is mapped to a unique field
-//     * value including {@code null}.
-//     *
-//     * @param <E> enum type parameter
-//     * @param <F> field type parameter
-//     * @param enumType enum type
-//     *
-//     * @return true if verified; false otherwise.
-//     */
-//    public static <E extends Enum<E> & FieldEnum<E, ?>> boolean verify(
-//        final Class<E> enumType) {
-//
-//        if (enumType == null) {
-//            throw new NullPointerException("enumtype");
-//        }
-//
-//        if (!enumType.isEnum()) {
-//            // is this required?
-//            throw new IllegalArgumentException(
-//                "enumType(" + enumType + ") is not Enum");
-//        }
-//
-//        final Set<Object> fieldValues = new HashSet<Object>();
-//        for (final E enumConstant : enumType.getEnumConstants()) {
-//            final Object fieldValue = enumConstant.getFieldValue();
-//            if (!fieldValues.add(fieldValue)) {
-//                return false;
-//            }
-//        }
-//
-//        return true;
-//    }
-
-
     /**
      * Returns an array containing the field values of specified enum type, in
      * the order those enum constants returned from {@code E.values()}

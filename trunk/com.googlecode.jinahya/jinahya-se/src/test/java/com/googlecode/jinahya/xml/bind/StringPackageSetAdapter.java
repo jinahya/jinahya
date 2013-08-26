@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotation.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
 import java.util.HashSet;
@@ -38,4 +38,3 @@ public class StringPackageSetAdapter
 
 
 }
-

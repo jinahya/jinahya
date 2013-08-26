@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
  * @param <V> SimpleValue type parameter
  * @param <R> rawValue type parameter
  */
-public abstract class SimpleValueTest<V extends SimpleValue<R>, R> {
+public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
 
 
     public SimpleValueTest(final Class<V> simpleValueType) {

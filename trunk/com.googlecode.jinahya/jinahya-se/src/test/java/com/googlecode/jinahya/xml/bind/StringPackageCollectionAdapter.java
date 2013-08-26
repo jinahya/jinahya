@@ -15,10 +15,9 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotation.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
-import com.googlecode.jinahya.xml.bind.annotations.adapters.StringCollectionAdapter;
 import java.util.Collection;
 
 
@@ -59,8 +58,6 @@ public abstract class StringPackageCollectionAdapter<C extends Collection<Packag
     @Override
     protected String token(final Package element) {
 
-        System.out.println("newToken(" + element + ")");
-
         if (element == null) {
             return "null";
         }
@@ -70,4 +67,3 @@ public abstract class StringPackageCollectionAdapter<C extends Collection<Packag
 
 
 }
-

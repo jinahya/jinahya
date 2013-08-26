@@ -27,11 +27,11 @@ import org.apache.commons.lang3.RandomStringUtils;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StringValueTest extends SimpleValueTest<StringValue, String> {
+public class StringValueTest extends SimpleValueTest<NillableString, String> {
 
 
     public StringValueTest() {
-        super(StringValue.class);
+        super(NillableString.class);
     }
 
 

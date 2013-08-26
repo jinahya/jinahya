@@ -26,11 +26,11 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BooleanValueTest extends SimpleValueTest<BooleanValue, Boolean> {
+public class BooleanValueTest extends SimpleValueTest<NillableBoolean, Boolean> {
 
 
     public BooleanValueTest() {
-        super(BooleanValue.class);
+        super(NillableBoolean.class);
     }
 
 

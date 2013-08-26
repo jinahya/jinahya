@@ -38,4 +38,3 @@ public interface FieldEnum<E extends Enum<E>, F> {
 
 
 }
-

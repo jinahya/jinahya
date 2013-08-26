@@ -38,7 +38,7 @@ public abstract class MapValues<T> {
      *
      * @return a list of values.
      */
-    public List<T> getValue() {
+    protected List<T> getValues() {
 
         if (values == null) {
             values = new ArrayList<T>();
@@ -55,4 +55,3 @@ public abstract class MapValues<T> {
 
 
 }
-

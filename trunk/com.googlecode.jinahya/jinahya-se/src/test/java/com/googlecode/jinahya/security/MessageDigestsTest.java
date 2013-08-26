@@ -60,12 +60,11 @@ public class MessageDigestsTest {
             final MessageDigest digest = MessageDigest.getInstance(algorithm);
 
             final byte[] hash1 = MessageDigests.digest(
-                digest, new ByteArrayInputStream(data), new byte[17],
-                MessageDigests.ALL);
+                digest, new ByteArrayInputStream(data), new byte[17], -1L);
 
             final byte[] hash2 = MessageDigests.digest(
                 digest, Channels.newChannel(new ByteArrayInputStream(data)),
-                ByteBuffer.allocate(31), MessageDigests.ALL);
+                ByteBuffer.allocate(31), -1L);
 
             Assert.assertEquals(hash1, hash2);
         }

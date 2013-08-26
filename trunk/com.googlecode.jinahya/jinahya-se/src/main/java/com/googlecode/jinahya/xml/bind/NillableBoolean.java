@@ -27,36 +27,38 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-public class IntegerValue extends SimpleValue<Integer> {
+public class NillableBoolean extends NillableValue<Boolean> {
 
 
-    private static final long serialVersionUID = 7326311892099176971L;
+    private static final long serialVersionUID = -5280417730898255170L;
 
 
     /**
      * Creates a new instance.
      *
-     * @param rawValue raw value.
+     * @param rawValue raw value
      *
      * @return a new instance.
      */
-    public static IntegerValue newInstance(final Integer rawValue) {
-        return newInstance(IntegerValue.class, rawValue);
+    public static NillableBoolean newInstance(final Boolean rawValue) {
+
+        return newInstance(NillableBoolean.class, rawValue);
     }
 
 
     @XmlElement(nillable = true, required = true)
     @Override
-    public Integer getRawValue() {
+    public Boolean getRawValue() {
+
         return super.getRawValue();
     }
 
 
     @Override
-    public void setRawValue(final Integer rawValue) {
+    public void setRawValue(final Boolean rawValue) {
+
         super.setRawValue(rawValue);
     }
 
 
 }
-

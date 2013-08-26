@@ -266,6 +266,85 @@ public class Marshallers {
     }
 
 
+//    /**
+//     * Prints given {@code value} using specified {@code marshaller}.
+//     *
+//     * @param marshaller the marshaller
+//     * @param value the value to print
+//     *
+//     * @return the XML representation.
+//     *
+//     * @throws JAXBException if an XML error occurs.
+//     */
+//    public static String print(final Marshaller marshaller, final Object value)
+//        throws JAXBException {
+//
+//        if (marshaller == null) {
+//            throw new NullPointerException("marshaller");
+//        }
+//
+//        if (value == null) {
+//            throw new NullPointerException("value");
+//        }
+//
+//        final Charset charset = Charset.forName("UTF-8");
+//
+//        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+//
+//        final Object previous =
+//            marshaller.getProperty(Marshaller.JAXB_ENCODING);
+//        
+//        marshaller.setProperty(Marshaller.JAXB_ENCODING, charset.name());
+//        marshal(marshaller, value, OutputStream.class, output);
+//        
+//        marshaller.setProperty(Marshaller.JAXB_ENCODING, previous);
+//
+//        return new String(output.toByteArray(), charset);
+//    }
+//
+//
+//    /**
+//     * Prints given {@code value} using specified {@code context}.
+//     *
+//     * @param context the context
+//     * @param value the value to print
+//     *
+//     * @return the XML representation
+//     *
+//     * @throws JAXBException if an XML error occurs.
+//     */
+//    public static String print(final JAXBContext context, final Object value)
+//        throws JAXBException {
+//
+//        if (context == null) {
+//            throw new NullPointerException("context");
+//        }
+//
+//        final Marshaller marshaller = context.createMarshaller();
+//
+//        return print(marshaller, value);
+//    }
+//
+//
+//    /**
+//     * Prints given {@code value}.
+//     *
+//     * @param value the value to print
+//     *
+//     * @return the XML representation
+//     *
+//     * @throws JAXBException if an XML error occurs.
+//     */
+//    public static String print(final Object value) throws JAXBException {
+//
+//        if (value == null) {
+//            throw new NullPointerException("value");
+//        }
+//
+//        final JAXBContext context = JAXBContext.newInstance(value.getClass());
+//
+//        return print(context, value);
+//    }
     /**
      * Creates a new instance.
      */
@@ -276,4 +355,3 @@ public class Marshallers {
 
 
 }
-

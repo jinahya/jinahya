@@ -33,7 +33,7 @@ public class TablePrivilegeValues extends MapValues<TablePrivilege> {
     @XmlElement
     public List<TablePrivilege> getTablePrivilege() {
 
-        return getValue();
+        return getValues();
     }
 
 

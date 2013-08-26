@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.xml.bind.annotations.adapters;
+package com.googlecode.jinahya.xml.bind;
 
 
 import java.util.Collection;
@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 
 /**
+ * An abstract XmlAdapter for marshalling collections to concatenated strings
+ * with specific delimiter.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  * @param <C> collection type parameter
@@ -33,26 +35,27 @@ public abstract class StringCollectionAdapter<C extends Collection<E>, E>
     extends XmlAdapter<String, C> {
 
 
-    public StringCollectionAdapter(final String regex) {
+    /**
+     * Creates a new instance.
+     *
+     * @param delimiter the delimiter
+     */
+    public StringCollectionAdapter(final String delimiter) {
 
         super();
 
-        if (regex == null) {
-            throw new NullPointerException("regex");
+        if (delimiter == null) {
+            throw new NullPointerException("delimiter");
         }
 
-        if (regex.isEmpty()) {
-            throw new IllegalArgumentException("empty regex");
-        }
-
-        this.delimiter = regex;
+        this.delimiter = delimiter;
     }
 
 
     @Override
     public C unmarshal(final String value) throws Exception {
 
-        if (value == null || value.trim().isEmpty()) {
+        if (value == null) {
             return null;
         }
 
@@ -110,7 +113,7 @@ public abstract class StringCollectionAdapter<C extends Collection<E>, E>
     /**
      * Returns an appendable.
      *
-     * @param bound bound
+     * @param bound the bound
      *
      * @return an appendable.
      */
@@ -131,7 +134,7 @@ public abstract class StringCollectionAdapter<C extends Collection<E>, E>
 
 
     /**
-     * Concatenates given appendable.
+     * Prints given appendable.
      *
      * @param appendable the appendable
      *
@@ -139,7 +142,7 @@ public abstract class StringCollectionAdapter<C extends Collection<E>, E>
      */
     protected String string(final Appendable appendable) {
 
-        return ((StringBuilder) appendable).toString();
+        return appendable.toString();
     }
 
 
@@ -150,4 +153,3 @@ public abstract class StringCollectionAdapter<C extends Collection<E>, E>
 
 
 }
-

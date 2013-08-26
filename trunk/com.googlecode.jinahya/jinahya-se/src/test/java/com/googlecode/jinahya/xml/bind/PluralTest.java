@@ -113,10 +113,8 @@ public abstract class PluralTest<P extends Plural<S>, S> {
                         return suggestedFileName;
                     }
 
-
                 };
             }
-
 
         });
     }
@@ -208,4 +206,3 @@ public abstract class PluralTest<P extends Plural<S>, S> {
 
 
 }
-

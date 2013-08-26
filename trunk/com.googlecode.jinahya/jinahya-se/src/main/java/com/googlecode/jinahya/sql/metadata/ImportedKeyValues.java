@@ -33,7 +33,7 @@ public class ImportedKeyValues extends MapValues<ImportedKey> {
     @XmlElement
     public List<ImportedKey> getImportedKey() {
 
-        return getValue();
+        return getValues();
     }
 
 

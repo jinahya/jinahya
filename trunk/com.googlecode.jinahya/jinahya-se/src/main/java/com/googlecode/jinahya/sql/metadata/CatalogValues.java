@@ -32,7 +32,8 @@ public class CatalogValues extends MapValues<Catalog> {
 
     @XmlElement
     public List<Catalog> getCatalog() {
-        return getValue();
+        
+        return getValues();
     }
 
 

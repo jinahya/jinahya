@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2013 Jin Kwon <onacit at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,30 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
+ * An abstract XmlAdapter for marshalling lists to concatenated strings with
+ * specific delimiter.
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author Jin Kwon <onacit at gmail.com>
  */
-public class StringLongAdapter extends XmlAdapter<String, Long> {
+public abstract class StringListAdapter<E>
+    extends StringCollectionAdapter<List<E>, E> {
 
 
-    @Override
-    public String marshal(final Long bound) throws Exception {
+    public StringListAdapter(final String delimiter) {
 
-        if (bound == null) {
-            return null;
-        }
-
-        return DatatypeConverter.printLong(bound);
+        super(delimiter);
     }
 
 
     @Override
-    public Long unmarshal(final String value) throws Exception {
+    protected List<E> bound(final String value) {
 
-        if (value == null) {
-            return null;
-        }
-
-        return DatatypeConverter.parseLong(value);
+        return new ArrayList<E>();
     }
 
 

@@ -38,12 +38,15 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(MapEntries.class.getName());
 
 
     static {
-        LOGGER.setLevel(Level.INFO);
+        LOGGER.setLevel(Level.WARNING);
     }
 
 
@@ -64,15 +67,15 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
     }
 
 
-    /**
-     * Returns entry type
-     *
-     * @return entry type.
-     */
-    public Class<T> getEntryType() {
-
-        return entryType;
-    }
+//    /**
+//     * Returns entry type
+//     *
+//     * @return entry type.
+//     */
+//    protected Class<T> getEntryType() {
+//
+//        return entryType;
+//    }
 
 
     /**
@@ -80,7 +83,7 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      *
      * @return entries.
      */
-    public List<T> getEntries() {
+    protected List<T> getEntries() {
 
         if (entries == null) {
             entries = new ArrayList<T>();
@@ -96,7 +99,7 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      * @param key entry key.
      * @param value entry value.
      */
-    public void addEntry(final K key, final V value) {
+    protected void addEntry(final K key, final V value) {
 
         final T entry;
         /*
@@ -139,7 +142,7 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      *
      * @param entry the entry to add
      */
-    public void addEntry(final Entry<K, V> entry) {
+    protected void addEntry(final Entry<K, V> entry) {
 
         if (entry == null) {
             throw new NullPointerException("entry");
@@ -154,7 +157,7 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      *
      * @param map the map
      */
-    public void addEntries(final Map<K, V> map) {
+    protected void addEntries(final Map<K, V> map) {
 
         if (map == null) {
             throw new NullPointerException("map");
@@ -179,4 +182,3 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
 
 
 }
-
