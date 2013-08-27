@@ -20,8 +20,6 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -33,24 +31,14 @@ public class WhiteInputStream extends InputStream {
 
 
     /**
-     * The constant value for no limit.
-     */
-    public static final long UNLIMITED = -1L;
-
-
-    /**
      * Creates a new instance with given {@code limit}.
      *
-     * @param limit the maximum number of bytes can read. {@link #UNLIMITED} for
+     * @param limit the maximum number of bytes can read; any negative value for
      * no limit.
      */
     public WhiteInputStream(final long limit) {
 
         super();
-
-        if (limit != UNLIMITED && limit < 0) {
-            throw new IllegalArgumentException("illegal limit: " + limit);
-        }
 
         this.limit = limit;
     }
@@ -68,7 +56,7 @@ public class WhiteInputStream extends InputStream {
     @Override
     public int read() throws IOException {
 
-        if (limit != UNLIMITED && count >= limit) {
+        if (limit >= 0L && count >= limit) {
             return -1;
         }
 
@@ -89,14 +77,8 @@ public class WhiteInputStream extends InputStream {
     }
 
 
-    public ReadableByteChannel newChannel() {
-
-        return Channels.newChannel(this);
-    }
-
-
     /**
-     * count.
+     * the number of byte read so far.
      */
     private long count = 0x00L;
 

@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.util.zip;
 
 
-import com.googlecode.jinahya.io.Streams;
+import com.googlecode.jinahya.io.ByteStreams;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -122,7 +122,7 @@ public class Zips {
             path.delete(start, path.length());
         } else {
             stream.putNextEntry(new ZipEntry(path + file.getName()));
-            Streams.copy(file, stream, buffer, -1L);
+            ByteStreams.copy(file, stream, buffer, -1L);
             stream.closeEntry();
         }
     }
@@ -205,7 +205,7 @@ public class Zips {
         while ((entry = stream.getNextEntry()) != null) {
             final File file = file(directory, entry);
             if (!entry.isDirectory()) {
-                Streams.copy(stream, file, buffer, -1L);
+                ByteStreams.copy(stream, file, buffer, -1L);
             }
             stream.closeEntry();
         }
@@ -255,7 +255,7 @@ public class Zips {
             }
             final InputStream input = zipfile.getInputStream(entry);
             try {
-                Streams.copy(input, file, buffer, -1L);
+                ByteStreams.copy(input, file, buffer, -1L);
             } finally {
                 input.close();
             }

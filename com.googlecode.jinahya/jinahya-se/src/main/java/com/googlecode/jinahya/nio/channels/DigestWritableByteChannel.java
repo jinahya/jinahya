@@ -53,12 +53,11 @@ public class DigestWritableByteChannel extends FilterWritableByteChannel {
     @Override
     public int write(final ByteBuffer src) throws IOException {
 
-        src.mark(); // mark -> position
+        final int position = src.position();
 
         final int written = super.write(src);
 
-        src.reset(); // position -> mark
-
+        src.position(position);
         for (int i = 0; i < written; i++) {
             digest.update(src.get());
         }

@@ -41,7 +41,7 @@ public class FilterReadableByteChannel implements ReadableByteChannel {
      *
      * @param channel the underlying channel
      */
-    public FilterReadableByteChannel(final ReadableByteChannel channel) {
+    protected FilterReadableByteChannel(final ReadableByteChannel channel) {
 
         super();
 

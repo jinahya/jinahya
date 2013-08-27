@@ -53,12 +53,11 @@ public class DigestReadableByteChannel extends FilterReadableByteChannel {
     @Override
     public int read(final ByteBuffer dst) throws IOException {
 
-        dst.mark(); // mark -> position
+        final int position = dst.position();
 
         final int read = super.read(dst);
 
-        dst.reset(); // postion -> mark
-
+        dst.position(position);
         for (int i = 0; i < read; i++) {
             digest.update(dst.get());
         }
@@ -67,7 +66,7 @@ public class DigestReadableByteChannel extends FilterReadableByteChannel {
     }
 
 
-    private final MessageDigest digest;
+    protected final MessageDigest digest;
 
 
 }

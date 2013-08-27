@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StreamsTest {
+public class ByteStreamsTest {
 
 
     protected static File newTempFile() throws IOException {
@@ -57,32 +57,32 @@ public class StreamsTest {
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullInput() throws IOException {
 
-        Streams.copy((InputStream) null, new BlackOutputStream(), new byte[1],
-                     -1L);
+        ByteStreams.copy((InputStream) null, new BlackOutputStream(), new byte[1],
+                         -1L);
     }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullOutput() throws IOException {
 
-        Streams.copy(new WhiteInputStream(), (OutputStream) null, new byte[1],
-                     -1L);
+        ByteStreams.copy(new WhiteInputStream(), (OutputStream) null, new byte[1],
+                         -1L);
     }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
     public static void testCopyWithNullBuffer() throws IOException {
 
-        Streams.copy(new WhiteInputStream(), new BlackOutputStream(), null,
-                     -1L);
+        ByteStreams.copy(new WhiteInputStream(), new BlackOutputStream(), null,
+                         -1L);
     }
 
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public static void testCopyWithZeroLengthBuffer() throws IOException {
 
-        Streams.copy(new WhiteInputStream(), new BlackOutputStream(),
-                     new byte[0], -1L);
+        ByteStreams.copy(new WhiteInputStream(), new BlackOutputStream(),
+                         new byte[0], -1L);
     }
 
 
@@ -93,7 +93,7 @@ public class StreamsTest {
 
         final long length = random.nextInt(1048576);
 
-        final long count = Streams.copy(
+        final long count = ByteStreams.copy(
             new WhiteInputStream(), new BlackOutputStream(), new byte[8192],
             length);
 
@@ -108,7 +108,7 @@ public class StreamsTest {
 
         final long limit = random.nextInt(1048576);
 
-        final long count = Streams.copy(
+        final long count = ByteStreams.copy(
             new WhiteInputStream(limit), new BlackOutputStream(),
             new byte[8192], -1L);
 
@@ -121,11 +121,9 @@ public class StreamsTest {
         throws IOException, NoSuchAlgorithmException {
 
         final File input = newTempFile();
+        final File output = newTempFile();
 
-        final File output = File.createTempFile("prefix", null);
-        output.deleteOnExit();
-
-        Streams.copy(input, output, new byte[1], -1L);
+        ByteStreams.copy(input, output, new byte[1], -1L);
 
         final MessageDigest digest = MessageDigest.getInstance("SHA-1");
 
