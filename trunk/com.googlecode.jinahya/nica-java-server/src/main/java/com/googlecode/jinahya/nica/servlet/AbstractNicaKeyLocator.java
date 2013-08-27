@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * An abstract ServletRequestAttributeListener for Nica-Names. One of primary
- * goal of the implementing class is locating a secret key and add it to
+ * An abstract class for locating the secret key with parsed nica names. One of
+ * primary goal of the implementing class is locating a secret key and add it to
  * specified ServletRequest as an attribute named
  * {@link NicaFilter#ATTRIBUTE_NICA_KEY}.
  *
@@ -59,13 +59,14 @@ public abstract class AbstractNicaKeyLocator
         final byte[] locatedKey = locateNicaKey(event);
 
         if (locatedKey == null) {
+            LOGGER.severe("no key located; null.");
             setResponseError(event, HttpServletResponse.SC_BAD_REQUEST,
-                             "no key located");
+                             "no key located; null.");
             return;
         }
 
         if (locatedKey.length != Aes.KEY_SIZE_IN_BYTES) {
-            LOGGER.log(Level.WARNING, "located.key.length({0}) != {1}",
+            LOGGER.log(Level.SEVERE, "located.key.length({0}) != {1}",
                        new Object[]{locatedKey.length, Aes.KEY_SIZE_IN_BYTES});
             setResponseError(
                 event, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

@@ -44,6 +44,9 @@ import org.apache.http.HttpRequest;
 public abstract class AndroidNicaBuilder extends NicaBuilder {
 
 
+    /**
+     * Creates a new instance.
+     */
     protected AndroidNicaBuilder() {
 
         super();
