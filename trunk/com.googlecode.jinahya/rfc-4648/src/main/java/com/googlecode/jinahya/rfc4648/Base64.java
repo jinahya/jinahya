@@ -48,5 +48,6 @@ public class Base64 extends Base {
     public Base64() {
         super(ALPHABET, true);
     }
-}
 
+
+}

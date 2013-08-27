@@ -44,5 +44,6 @@ public class Base32 extends Base {
     public Base32() {
         super(ALPHABET, true);
     }
-}
 
+
+}

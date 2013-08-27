@@ -133,4 +133,3 @@ public final class BaseBinaryDecoderProxy implements InvocationHandler {
 
 
 }
-

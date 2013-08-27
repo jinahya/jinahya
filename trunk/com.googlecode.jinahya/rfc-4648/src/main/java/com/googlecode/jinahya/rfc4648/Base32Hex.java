@@ -23,7 +23,7 @@ package com.googlecode.jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/i20P9">Base 32 Encoding with Extended Hex
- *      Alphabet</a>
+ * Alphabet</a>
  */
 public class Base32Hex extends Base {
 
@@ -45,5 +45,6 @@ public class Base32Hex extends Base {
     public Base32Hex() {
         super(ALPHABAT, true);
     }
-}
 
+
+}
