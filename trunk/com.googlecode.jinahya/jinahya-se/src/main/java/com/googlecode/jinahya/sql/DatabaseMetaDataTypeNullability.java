@@ -74,6 +74,9 @@ public enum DatabaseMetaDataTypeNullability
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 

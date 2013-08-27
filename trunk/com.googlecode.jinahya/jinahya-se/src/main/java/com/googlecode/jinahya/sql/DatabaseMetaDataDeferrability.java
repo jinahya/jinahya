@@ -75,6 +75,9 @@ public enum DatabaseMetaDataDeferrability
     }
 
 
+    /**
+     * field value.
+     */
     private final int fieldValue;
 
 

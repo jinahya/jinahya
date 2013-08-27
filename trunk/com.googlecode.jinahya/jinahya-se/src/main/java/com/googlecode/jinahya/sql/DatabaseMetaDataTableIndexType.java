@@ -77,6 +77,9 @@ public enum DatabaseMetaDataTableIndexType
     }
 
 
+    /**
+     * field value.
+     */
     private final short fieldValue;
 
 
