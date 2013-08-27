@@ -35,14 +35,10 @@ public enum ResultSetConcurrency
 
     /**
      * Constant for {@link ResultSet#CONCUR_READ_ONLY}.
-     *
-     * @see ResultSet#CONCUR_READ_ONLY
      */
     CONCUR_READ_ONLY(ResultSet.CONCUR_READ_ONLY), // 1007
     /**
      * Constant for {@link ResultSet#CONCUR_UPDATABLE}.
-     *
-     * @see ResultSet#CONCUR_UPDATABLE
      */
     CONCUR_UPDATABLE(ResultSet.CONCUR_UPDATABLE); // 1008
 

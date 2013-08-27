@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql;
 
 
 import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.DatabaseMetaData;
 
 
@@ -44,6 +45,21 @@ public enum DatabaseMetaDataDeferrability
      * A constant for {@link DatabaseMetaData#importedKeyNotDeferrable}.
      */
     importedKeyNotDeferrable(DatabaseMetaData.importedKeyNotDeferrable); // 7
+
+
+    public static DatabaseMetaDataDeferrability fromFieldValue(
+        final int fieldValue) {
+
+        return FieldEnumHelper.fromFieldValue(
+            DatabaseMetaDataDeferrability.class, Integer.valueOf(fieldValue));
+    }
+
+
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(DatabaseMetaDataDeferrability.class,
+                                           Integer.class);
+    }
 
 
     private DatabaseMetaDataDeferrability(final int fieldValue) {
