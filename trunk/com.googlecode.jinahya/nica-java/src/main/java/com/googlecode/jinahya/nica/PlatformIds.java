@@ -25,6 +25,9 @@ package com.googlecode.jinahya.nica;
 public final class PlatformIds {
 
 
+    /**
+     * namespace.
+     */
     private static final String NAMESPACE =
         "http://jinahya.googlecode.com/nica/platforms";
 

@@ -69,7 +69,11 @@ public abstract class AesTest<A extends Aes> {
 
     public static final byte[] newIv() {
 
-        return Aes.newIv();
+        final byte[] iv = new byte[Aes.BLOCK_SIZE_IN_BYTES];
+
+        ThreadLocalRandom.current().nextBytes(iv);
+
+        return iv;
     }
 
 

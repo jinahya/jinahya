@@ -20,6 +20,7 @@ package com.googlecode.jinahya.nica.util;
 
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.engines.AESFastEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
@@ -56,7 +57,7 @@ public class AesBC extends Aes {
         keyParameter = new KeyParameter(key);
 
         cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(
-            new AESFastEngine()));
+            new AESEngine()));
     }
 
 

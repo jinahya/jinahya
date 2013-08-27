@@ -25,10 +25,10 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.bouncycastle.util.Arrays;
 
 
 /**
@@ -41,43 +41,26 @@ public class AesJCE extends Aes {
     /**
      * Cipher algorithm.
      */
-    public static final String ALGORITHM = "AES";
+    static final String ALGORITHM = "AES";
 
 
     /**
      * Cipher mode.
      */
-    public static final String MODE = "CBC";
+    static final String MODE = "CBC";
 
 
     /**
      * Cipher padding.
      */
-    public static final String PADDING = "PKCS5Padding";
+    static final String PADDING = "PKCS5Padding";
 
 
     /**
      * Cipher transformation.
      */
-    public static final String TRANSFORMATION =
+    private static final String TRANSFORMATION =
         ALGORITHM + "/" + MODE + "/" + PADDING;
-
-
-//    /**
-//     * Generates a new key.
-//     *
-//     * @return a new key.
-//     */
-//    public static byte[] newKey() {
-//        try {
-//            final KeyGenerator keyGenerator =
-//                KeyGenerator.getInstance(ALGORITHM);
-//            keyGenerator.init(KEY_SIZE);
-//            return keyGenerator.generateKey().getEncoded();
-//        } catch (NoSuchAlgorithmException nsae) {
-//            throw new RuntimeException(nsae);
-//        }
-//    }
 
 
     /**
@@ -98,7 +81,8 @@ public class AesJCE extends Aes {
                 "key.length(" + key.length + ") != " + KEY_SIZE_IN_BYTES);
         }
 
-        this.key = new SecretKeySpec(key, ALGORITHM);
+        this.key = new SecretKeySpec(
+            Arrays.copyOf(key, key.length), ALGORITHM);
 
         try {
             cipher = Cipher.getInstance(TRANSFORMATION);

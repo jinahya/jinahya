@@ -32,7 +32,7 @@ public class ShaJCA extends Sha {
     /**
      * Hash algorithm.
      */
-    public static final String ALGORITHM = "SHA-1";
+    private static final String ALGORITHM = "SHA-1";
 
 
     /**
@@ -50,7 +50,7 @@ public class ShaJCA extends Sha {
     }
 
 
-    @Override
+    //@Override // commented for pre5
     public byte[] hash(final byte[] data) {
 
         if (data == null) {
