@@ -30,18 +30,18 @@ import java.util.Calendar;
 public enum CalendarMonth implements CalendarFieldEnum<CalendarMonth, Integer> {
 
 
-    JANUARY(Calendar.JANUARY), //        0
-    FEBRUARY(Calendar.FEBRUARY), //      1
-    MARCH(Calendar.MARCH), //            2
-    APRIL(Calendar.APRIL), //            3
-    MAY(Calendar.MAY), //                4
-    JUNE(Calendar.JUNE), //              5
-    JULY(Calendar.JULY), //              6
-    AUGUST(Calendar.AUGUST), //          7
-    SEPTEMBER(Calendar.SEPTEMBER), //    8
-    OCTOBER(Calendar.OCTOBER), //        9
-    NOVEMBER(Calendar.NOVEMBER), //     10
-    DECEMBER(Calendar.DECEMBER); //     11
+    JANUARY(Calendar.JANUARY), // 0
+    FEBRUARY(Calendar.FEBRUARY), // 1
+    MARCH(Calendar.MARCH), // 2
+    APRIL(Calendar.APRIL), // 3
+    MAY(Calendar.MAY), // 4
+    JUNE(Calendar.JUNE), // 5
+    JULY(Calendar.JULY), // 6
+    AUGUST(Calendar.AUGUST), // 7
+    SEPTEMBER(Calendar.SEPTEMBER), // 8
+    OCTOBER(Calendar.OCTOBER), // 9
+    NOVEMBER(Calendar.NOVEMBER), // 10
+    DECEMBER(Calendar.DECEMBER); // 11
     //UNDECIMBER(Calendar.UNDECIMBER); // 12
 
 

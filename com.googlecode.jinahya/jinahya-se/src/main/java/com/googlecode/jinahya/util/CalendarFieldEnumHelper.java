@@ -26,7 +26,7 @@ import java.util.Calendar;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class CalendarFieldEnumHelper {
+public final class CalendarFieldEnumHelper {
 
 
     /**
@@ -78,11 +78,10 @@ public class CalendarFieldEnumHelper {
     /**
      * protected constructor.
      */
-    protected CalendarFieldEnumHelper() {
+    private CalendarFieldEnumHelper() {
 
         super();
     }
 
 
 }
-
