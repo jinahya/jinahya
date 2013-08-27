@@ -30,13 +30,13 @@ import java.nio.channels.ReadableByteChannel;
 public class FilterReadableByteChannel implements ReadableByteChannel {
 
 
-    /*
+    /**
      * Creates an instance.
      *
      * @param channel the underlying channel, or {@code null} if this instance
      * is to be created without an underlying channel.
      */
-    /**
+    /*
      * Creates an instance.
      *
      * @param channel the underlying channel
@@ -46,7 +46,7 @@ public class FilterReadableByteChannel implements ReadableByteChannel {
         super();
 
         if (channel == null) {
-            throw new NullPointerException("channel");
+            //throw new NullPointerException("channel");
         }
 
         this.channel = channel;

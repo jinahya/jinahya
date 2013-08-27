@@ -30,13 +30,13 @@ import java.nio.channels.WritableByteChannel;
 public class FilterWritableByteChannel implements WritableByteChannel {
 
 
-    /*
+    /**
      * Creates an instance.
      *
      * @param channel the underlying channel, or {@code null} if this instance
      * is to be created without an underlying channel.
      */
-    /**
+    /*
      * Creates an instance.
      *
      * @param channel the underlying channel
@@ -46,7 +46,7 @@ public class FilterWritableByteChannel implements WritableByteChannel {
         super();
 
         if (channel == null) {
-            throw new NullPointerException("channel");
+            //throw new NullPointerException("channel");
         }
 
         this.channel = channel;
@@ -74,7 +74,7 @@ public class FilterWritableByteChannel implements WritableByteChannel {
     }
 
 
-    protected final WritableByteChannel channel;
+    protected WritableByteChannel channel;
 
 
 }

@@ -66,7 +66,7 @@ public class DigestWritableByteChannel extends FilterWritableByteChannel {
     }
 
 
-    private final MessageDigest digest;
+    private MessageDigest digest;
 
 
 }
