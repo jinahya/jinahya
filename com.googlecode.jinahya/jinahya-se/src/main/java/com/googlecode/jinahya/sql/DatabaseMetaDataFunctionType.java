@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql;
 
 
 import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.DatabaseMetaData;
 
 
@@ -42,6 +43,21 @@ public enum DatabaseMetaDataFunctionType
      * A constant for {@link DatabaseMetaData#functionReturn}.
      */
     functionReturn(DatabaseMetaData.functionReturn); // 4
+
+
+    public static DatabaseMetaDataFunctionType fromFieldValue(
+        final int fieldValue) {
+
+        return FieldEnumHelper.fromFieldValue(
+            DatabaseMetaDataFunctionType.class, Integer.valueOf(fieldValue));
+    }
+
+
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(DatabaseMetaDataFunctionType.class,
+                                           Integer.class);
+    }
 
 
     /**

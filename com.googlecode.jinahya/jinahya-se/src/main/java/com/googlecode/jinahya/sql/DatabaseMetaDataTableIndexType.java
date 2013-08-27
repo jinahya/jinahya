@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql;
 
 
 import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.DatabaseMetaData;
 
 
@@ -46,6 +47,21 @@ public enum DatabaseMetaDataTableIndexType
      * A constant for {@link DatabaseMetaData#tableIndexOther}.
      */
     tableIndexOther(DatabaseMetaData.tableIndexOther); // 3
+
+
+    public static DatabaseMetaDataTableIndexType fromFieldValue(
+        final short fieldValue) {
+
+        return FieldEnumHelper.fromFieldValue(
+            DatabaseMetaDataTableIndexType.class, Short.valueOf(fieldValue));
+    }
+
+
+    public static Short[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(DatabaseMetaDataTableIndexType.class,
+                                           Short.class);
+    }
 
 
     private DatabaseMetaDataTableIndexType(final short fieldValue) {

@@ -19,6 +19,7 @@ package com.googlecode.jinahya.sql;
 
 
 import com.googlecode.jinahya.lang.FieldEnum;
+import com.googlecode.jinahya.lang.FieldEnumHelper;
 import java.sql.DatabaseMetaData;
 
 
@@ -42,6 +43,22 @@ public enum DatabaseMetaDataTypeNullability
      * A constant for {@link DatabaseMetaData#typeNullableUnknown}.
      */
     typeNullableUnknown(DatabaseMetaData.typeNullableUnknown); // 2
+
+
+    public static DatabaseMetaDataTypeNullability fromFieldValue(
+        final int fieldValue) {
+
+        return FieldEnumHelper.fromFieldValue(
+            DatabaseMetaDataTypeNullability.class,
+            Integer.valueOf(fieldValue));
+    }
+
+
+    public static Integer[] fieldValues() {
+
+        return FieldEnumHelper.fieldValues(
+            DatabaseMetaDataTypeNullability.class, Integer.class);
+    }
 
 
     private DatabaseMetaDataTypeNullability(final int fieldValue) {
