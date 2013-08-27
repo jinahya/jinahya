@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <B>
  */
-@Test(singleThreaded = true)
+@Test(singleThreaded = false)
 public abstract class BaseTest<B extends Base> {
 
 
@@ -104,7 +104,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncodingDecoding() throws IOException {
 
         final B base = newBase();

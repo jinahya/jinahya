@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  * @param <B> base type parameter
  * @param <E> encoder type parameter
  */
-@Test(singleThreaded = true)
+@Test(singleThreaded = false)
 public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
     extends BaseTest<B> {
 
