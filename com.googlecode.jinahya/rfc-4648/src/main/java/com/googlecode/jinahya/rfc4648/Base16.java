@@ -41,5 +41,6 @@ public class Base16 extends Base {
     public Base16() {
         super(ALPHABET, true);
     }
-}
 
+
+}

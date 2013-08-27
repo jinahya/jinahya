@@ -23,7 +23,7 @@ package com.googlecode.jinahya.rfc4648;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/kD53c">Base 64 Encoding with URL and Filename
- *      Safe Alphabet</a>
+ * Safe Alphabet</a>
  */
 public class Base64Url extends Base {
 
@@ -49,5 +49,6 @@ public class Base64Url extends Base {
     public Base64Url() {
         super(ALPHABET, false);
     }
-}
 
+
+}
