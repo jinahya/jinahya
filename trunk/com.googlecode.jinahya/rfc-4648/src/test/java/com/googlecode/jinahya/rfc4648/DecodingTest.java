@@ -46,7 +46,7 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     protected abstract byte[] forBaseDecoding(byte[] commonsEncoded);
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testDecoding() throws Exception {
 
         final byte[] expected = decoded();

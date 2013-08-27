@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  * @param <B> base type parameter
  * @param <D> decoder type parameter
  */
-@Test(singleThreaded = true)
+@Test(singleThreaded = false)
 public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
     extends BaseTest<B> {
 
@@ -48,7 +48,7 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
     protected abstract byte[] forCommonsDecoding(final byte[] baseEncoded);
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 32)
     public void testEncoding() throws Exception {
 
         final byte[] expected = decoded();
@@ -65,4 +65,3 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
 
 
 }
-
