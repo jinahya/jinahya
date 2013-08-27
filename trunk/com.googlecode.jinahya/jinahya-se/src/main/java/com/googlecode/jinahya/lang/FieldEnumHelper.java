@@ -26,7 +26,7 @@ import java.lang.reflect.Array;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class FieldEnumHelper {
+public final class FieldEnumHelper {
 
 
     /**
@@ -119,7 +119,7 @@ public class FieldEnumHelper {
     /**
      * Creates a new instance.
      */
-    protected FieldEnumHelper() {
+    private FieldEnumHelper() {
 
         super();
     }
