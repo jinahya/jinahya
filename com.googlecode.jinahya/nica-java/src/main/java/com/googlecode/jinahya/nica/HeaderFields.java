@@ -38,7 +38,7 @@ public final class HeaderFields {
 
 
     /**
-     *
+     * Unused.
      */
     public static final String BASE = "Nica-Base";
 
