@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.FilterChain;
@@ -42,8 +43,18 @@ import javax.servlet.http.HttpServletResponse;
 public class TestNicaFilter extends NicaFilter {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         Logger.getLogger(TestNicaFilter.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.ALL);
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.addHandler(new ConsoleHandler());
+    }
 
 
     @Override
