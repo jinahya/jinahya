@@ -41,7 +41,7 @@ public class FilterWritableByteChannel implements WritableByteChannel {
      *
      * @param channel the underlying channel
      */
-    public FilterWritableByteChannel(final WritableByteChannel channel) {
+    protected FilterWritableByteChannel(final WritableByteChannel channel) {
 
         super();
 

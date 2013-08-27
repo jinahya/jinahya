@@ -20,8 +20,6 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -33,35 +31,25 @@ public class BlackOutputStream extends OutputStream {
 
 
     /**
-     * A constant value for no limit.
-     */
-    public static final long UNLIMITED = -1L;
-
-
-    /**
      * Creates a new instance with given {@code limit}.
      *
-     * @param limit the maximum number of bytes for writer. {@link #UNLIMITED}
+     * @param limit the maximum number of bytes for writer; any negative value
      * for no limit.
      */
     public BlackOutputStream(final long limit) {
 
         super();
 
-        if (limit != UNLIMITED && limit < 0) {
-            throw new IllegalArgumentException("illegal limit: " + limit);
-        }
-
         this.limit = limit;
     }
 
 
     /**
-     * Creates a new instance without the {@link #UNLIMITED} as {@code limit}.
+     * Creates a new instance without a limit.
      */
     public BlackOutputStream() {
 
-        this(UNLIMITED);
+        this(-1L);
     }
 
 
@@ -76,7 +64,7 @@ public class BlackOutputStream extends OutputStream {
     @Override
     public void write(final int b) throws IOException {
 
-        if (limit != UNLIMITED && count >= limit) {
+        if (limit >= 0 && count >= limit) {
             throw new IOException("limit(" + limit + ") exceeded");
         }
 
@@ -92,12 +80,6 @@ public class BlackOutputStream extends OutputStream {
     public long getCount() {
 
         return count;
-    }
-
-
-    public WritableByteChannel newChannel() {
-
-        return Channels.newChannel(this);
     }
 
 

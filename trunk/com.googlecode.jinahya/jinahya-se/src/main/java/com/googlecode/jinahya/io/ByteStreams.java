@@ -31,16 +31,15 @@ import java.io.OutputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class Streams {
+public class ByteStreams {
 
 
     /**
-     * Copies bytes from given input stream to given output stream using
-     * specified {@code buffer}.
+     * Copies bytes from given input stream to given output stream.
      *
      * @param input the input stream
      * @param output the output stream
-     * @param buffer the buffer
+     * @param buffer a buffer
      * @param length the maximum number of bytes to copy; any negative value for
      * all.
      *
@@ -86,12 +85,11 @@ public class Streams {
 
 
     /**
-     * Copies bytes from {@code input} to {@code output} using specified
-     * {@code buffer}.
+     * Copies bytes from given input file to given output stream.
      *
      * @param input the input file
      * @param output the output stream
-     * @param buffer the buffer
+     * @param buffer a buffer
      * @param length the maximum number of bytes to copy; any negative for all
      * available bytes.
      *
@@ -117,12 +115,11 @@ public class Streams {
 
 
     /**
-     * Copies bytes from {@code input} to {@code output} using specified
-     * {@code buffer}.
+     * Copies bytes from given input stream to given output file.
      *
      * @param input the input stream
      * @param output the output file
-     * @param buffer the buffer
+     * @param buffer a buffer
      * @param length the maximum number of bytes to copy; any negative for all
      * available bytes.
      *
@@ -152,12 +149,11 @@ public class Streams {
 
 
     /**
-     * Copies bytes from {@code input} to {@code output} using specified
-     * {@code buffer}.
+     * Copies bytes from given input file to given output file.
      *
-     * @param input the input stream
+     * @param input the input file
      * @param output the output file
-     * @param buffer the buffer
+     * @param buffer a buffer
      * @param length the maximum number of bytes to copy; any negative for all
      * available bytes.
      *
@@ -194,7 +190,7 @@ public class Streams {
     /**
      * Creates a new instance.
      */
-    protected Streams() {
+    protected ByteStreams() {
 
         super();
     }
