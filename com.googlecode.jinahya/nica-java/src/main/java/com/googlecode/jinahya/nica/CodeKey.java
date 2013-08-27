@@ -90,10 +90,6 @@ public enum CodeKey implements FieldEnum<CodeKey, String> {
      * An enum constant for {@link CodeKeys#USER_LANGUAGE}.
      */
     USER_LANGUAGE(CodeKeys.USER_LANGUAGE),
-    //    /**
-    //     * A constant for {@link CodeKeys#CLIENT_ID}.
-    //     */
-    //    CLIENT_ID(CodeKeys.CLIENT_ID),
     /**
      * An enum constant for {@link CodeKeys#USER_ID}.
      */

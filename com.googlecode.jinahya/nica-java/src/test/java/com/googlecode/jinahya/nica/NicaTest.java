@@ -40,8 +40,7 @@ public class NicaTest {
 
     protected static final byte[] newKey() {
         try {
-            final KeyGenerator keyGenerator =
-                KeyGenerator.getInstance(AesJCE.ALGORITHM);
+            final KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(Aes.KEY_SIZE);
             return keyGenerator.generateKey().getEncoded();
         } catch (NoSuchAlgorithmException nsae) {

@@ -33,13 +33,14 @@ public class ShaBC extends Sha {
      * Creates a new instance.
      */
     public ShaBC() {
+
         super();
 
         digest = new SHA1Digest();
     }
 
 
-    //@Override
+    //@Override // commented for pre5
     public byte[] hash(final byte[] data) {
 
         if (data == null) {

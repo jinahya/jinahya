@@ -19,8 +19,6 @@ package com.googlecode.jinahya.nica.util;
 
 
 import java.io.UnsupportedEncodingException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 
 /**
@@ -53,38 +51,6 @@ public abstract class Aes {
      * Block size in bytes.
      */
     public static final int BLOCK_SIZE_IN_BYTES = BLOCK_SIZE >> 3; // 16
-
-
-    /**
-     * Generates a new initialization vector.
-     *
-     * @param random a random to use.
-     *
-     * @return a new initialization vector.
-     */
-    protected static final byte[] newIv(final Random random) {
-
-        if (random == null) {
-            throw new NullPointerException("random");
-        }
-
-        final byte[] iv = new byte[BLOCK_SIZE_IN_BYTES];
-
-        random.nextBytes(iv);
-
-        return iv;
-    }
-
-
-    /**
-     * Generates a new initialization vector.
-     *
-     * @return a new initialization vector.
-     */
-    public static final byte[] newIv() {
-
-        return newIv(new SecureRandom());
-    }
 
 
     /**
