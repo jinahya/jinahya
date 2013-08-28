@@ -85,7 +85,11 @@
         <executions>
           <execution>
             <id>check-against-android-api-signature</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
             <configuration>
+              <includeJavaHome>false</includeJavaHome>
               <signature>
                 <groupId>com.googlecode.jinahya</groupId>
                 <artifactId>android-api-signature-${android.api.level}</artifactId>
