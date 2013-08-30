@@ -18,11 +18,10 @@
 package com.googlecode.jinahya.util;
 
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,159 +32,51 @@ import java.util.Map;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <E> element type parameter
  */
-public class DependencyResolver<E> implements Serializable {
+public class DependencyResolver<E> {
 
 
-    /** GENERATED. */
-    private static final long serialVersionUID = -1081443162006459712L;
+    private DependencyResolver(final Map<E, List<E>> map) {
 
+        super();
 
-    /** synchronized wrapper. */
-    private static final class SynchronizedDependencyResolver<E>
-        extends DependencyResolver<E> {
-
-
-        /** GENERATED. */
-        private static final long serialVersionUID = 7192788693612809266L;
-
-
-        /**
-         * Creates a new instance.
-         */
-        private SynchronizedDependencyResolver() {
-
-            this(new DependencyResolver<E>());
+        if (map == null) {
+            throw new NullPointerException("map");
         }
 
-
-        /**
-         * Creates a new instance.
-         *
-         * @param resolver the resolver to be wrapped
-         */
-        private SynchronizedDependencyResolver(
-            final DependencyResolver<E> resolver) {
-
-            super();
-
-            if (resolver == null) {
-                throw new NullPointerException("null resolver");
-            }
-
-            this.resolver = resolver;
-        }
+        this.map = map;
+    }
 
 
-        @Override
-        public synchronized void add(final E source, final E... targets) {
-            resolver.add(source, targets);
-        }
+    public DependencyResolver() {
 
-
-        @Override
-        public synchronized void remove(final E source, final E... targets) {
-            resolver.remove(source, targets);
-        }
-
-
-        @Override
-        public synchronized boolean contains(final E source, final E target) {
-            return resolver.contains(source, target);
-        }
-
-
-        @Override
-        public synchronized boolean containsAll(final E source,
-                                                final E... target) {
-            return resolver.containsAll(source, target);
-        }
-
-
-        @Override
-        public synchronized boolean containsAny(final E source,
-                                                final E... targets) {
-            return resolver.containsAny(source, targets);
-        }
-
-
-        @Override
-        public synchronized List<List<E>> getPaths(final E source,
-                                                   final E target) {
-            return resolver.getPaths(source, target);
-        }
-
-
-        @Override
-        public synchronized List<E> getSingleGroup() {
-            return resolver.getSingleGroup();
-        }
-
-
-        @Override
-        public synchronized List<List<E>> getHorizontalGroups() {
-            return resolver.getHorizontalGroups();
-        }
-
-
-        @Override
-        public synchronized List<List<E>> getVerticalGroups() {
-            return resolver.getVerticalGroups();
-        }
-
-
-        @Override
-        public synchronized void clear() {
-            resolver.clear();
-        }
-
-
-        /** wrapped resolver. */
-        private final DependencyResolver<E> resolver;
-
-
-    };
-
-
-    /**
-     * Creates a synchronized instance of given <code>resolver</code>.
-     *
-     * @param <E> element type parameter
-     * @param resolver the resolver to be wrapped
-     * @return a synchronized instance
-     */
-    public static <E> DependencyResolver<E> sysnchronizedDependencyResolver(
-        final DependencyResolver<E> resolver) {
-
-        return new SynchronizedDependencyResolver<E>(resolver);
+        this(new HashMap<E, List<E>>());
     }
 
 
     /**
-     * Adds direct dependencies from <code>source</code> to each of
-     * <code>targets</code>.
+     * Adds direct dependencies from {@code source} to each of {@code targets}.
      *
-     * @param source source
-     * @param targets targets
+     * @param source the source
+     * @param targets the targets
      */
-    public void add(final E source, final E... targets) {
+    public void add(final E source, final Collection<? extends E> targets) {
 
         if (source == null) {
-            throw new NullPointerException("null source");
+            throw new NullPointerException("source");
         }
 
         if (targets == null) {
-            throw new NullPointerException("null targets");
+            throw new NullPointerException("targets");
         }
-
-        /*
-        if (targets.length == 0) {
-        throw new IllegalArgumentException("empty targets");
-        }
-         */
 
         List<E> list = map.get(source);
+        if (list == null) {
+            list = new ArrayList<E>(); // default capacity of 10?
+            list.add(null);
+            map.put(source, list);
+        }
 
-        for (E target : targets) {
+        for (final E target : targets) {
 
             if (source.equals(target)) {
                 throw new IllegalArgumentException(
@@ -195,13 +86,8 @@ public class DependencyResolver<E> implements Serializable {
 
             if (target != null && contains(target, source)) {
                 throw new IllegalStateException(
-                    "there is already a dependency from one of targets("
-                    + target + ") to the source(" + source + ")");
-            }
-
-            if (list == null) {
-                list = new ArrayList<E>();
-                map.put(source, list);
+                    "there is already a dependency to one of targets("
+                    + target + ") from the source(" + source + ")");
             }
 
             if (!list.contains(target)) {
@@ -212,108 +98,91 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Removes direct dependencies from <code>source</code> to each of
-     * <code>targets</code>.
+     * Adds direct dependencies from {@code source} to each of {@code targets}.
      *
-     * @param source source
-     * @param targets targets
+     * @param source the source
+     * @param targets the targets
+     *
+     * @see #add(java.lang.Object, java.util.Collection)
      */
-    public void remove(final E source, final E... targets) {
+    public void add(final E source, final E... targets) {
+
+        if (targets == null) {
+            throw new NullPointerException("targets");
+        }
+
+        add(source, Arrays.asList(targets));
+    }
+
+
+    /**
+     * Removes direct dependencies from {@code source} to each of
+     * {@code targets}.
+     *
+     * @param source the source
+     * @param targets the targets
+     */
+    public void remove(final E source, final Collection<? extends E> targets) {
 
         if (source == null) {
-            throw new NullPointerException("null source");
+            throw new NullPointerException("source");
         }
 
         if (targets == null) {
-            throw new NullPointerException("null targets");
+            throw new NullPointerException("targets");
         }
 
         final List<E> list = map.get(source);
-
         if (list == null) {
             return;
         }
 
-        for (E target : targets) {
+        for (final E target : targets) {
             if (list.remove(target) && list.isEmpty()) {
                 map.remove(source);
                 return;
             }
         }
+
+        if (!list.isEmpty() && !list.contains(null)) {
+            list.add(0, null);
+        }
     }
 
 
     /**
-     * Check if all of specified <code>targets</code> has a direct or indirect
-     * dependency from given <code>source</code>.
+     * Removes direct dependencies from {@code source} to each of
+     * {@code targets}.
      *
      * @param source source
      * @param targets targets
-     * @return true if <code>source</code> has dependencies to all of
-     *         <code>targets</code>; false otherwise
+     *
+     * @see #remove(java.lang.Object, java.util.Collection)
      */
-    public boolean containsAll(final E source, final E... targets) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
+    public void remove(final E source, final E... targets) {
 
         if (targets == null) {
-            throw new NullPointerException("null targets");
+            throw new NullPointerException("targets");
         }
 
-        for (E target : targets) {
-            if (!contains(source, target)) {
-                return false;
-            }
-        }
-
-        return true;
+        remove(source, Arrays.asList(targets));
     }
 
 
     /**
-     * Checks if there is any direct or indirect dependency from
-     * <code>source</code> to any of <code>targets</code>.
+     * Checks if there is a direct or indirect dependency from {@code source} to
+     * {@code target}.
      *
-     * @param source source
-     * @param targets targets
-     * @return true if there is a dependency; false otherwise
-     */
-    public boolean containsAny(final E source, final E... targets) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (targets == null) {
-            throw new NullPointerException("null targets");
-        }
-
-        for (E target : targets) {
-            if (contains(source, target)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Checks if there is a direct or indirect dependency from
-     * <code>source</code> to <code>target</code>.
+     * @param source the source
+     * @param target the target
      *
-     * @param source source
-     * @param target target
      * @return true if there is a direct or indirect dependency from
-     *         <code>source</code> to <code>target</code>; false if there is
-     *         none.
+     * {@code source} to {@code target}; false if there is none.
      */
     public boolean contains(final E source, final E target) {
 
         if (source == null) {
-            throw new NullPointerException("null source");
+            throw new NullPointerException("source");
         }
 
         if (source.equals(target)) {
@@ -331,13 +200,8 @@ public class DependencyResolver<E> implements Serializable {
             return true;
         }
 
-        for (E auxiliary : list) {
+        for (final E auxiliary : list) {
             if (auxiliary == null) {
-                /*
-                if (target == null) {
-                return true;
-                }
-                 */
                 continue;
             }
             if (contains(auxiliary, target)) {
@@ -350,17 +214,131 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Finds all direct or indirect paths from given <code>source</code> to
-     * specified <code>target</code>.
+     * Checks if given {@code source} is dependent on all of specified
+     * {@code targets}.
      *
-     * @param source source
-     * @param target target
-     * @return paths from <code>source</code> to <code>target</code>.
+     * @param source the source
+     * @param targets the targets
+     *
+     * @return {@code true} if {@code source} is dependent on all of
+     * {@code targets}; {@code false} if there is no dependency from
+     * {@code source} to any of {@code targets} at all
+     */
+    public boolean containsAll(final E source,
+                               final Collection<? extends E> targets) {
+
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
+
+        if (targets == null) {
+            throw new NullPointerException("targets");
+        }
+
+        for (final E target : targets) {
+            if (!contains(source, target)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Check if given {@code source} is dependent on all of specified
+     * {@code targets}.
+     *
+     * @param source the source
+     * @param targets the targets
+     *
+     * @return {@code true} if {@code source} is dependent on all of
+     * {@code targets}; {@code false} otherwise
+     *
+     * @see #containsAll(java.lang.Object, java.util.Collection)
+     */
+    public boolean containsAll(final E source, final E... targets) {
+
+        if (targets == null) {
+            throw new NullPointerException("targets");
+        }
+
+        return containsAll(source, Arrays.asList(targets));
+    }
+
+
+    /**
+     * Checks if given {@code source} is dependent on any of specified
+     * {@code targets}.
+     *
+     * @param source the source
+     * @param targets the targets
+     *
+     * @return {@code true} if {@code source} is dependent on any of
+     * {@code targets}; {@code false} otherwise
+     */
+    public boolean containsAny(final E source,
+                               final Collection<? extends E> targets) {
+
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
+
+        if (targets == null) {
+            throw new NullPointerException("targets");
+        }
+
+        for (final E target : targets) {
+            if (contains(source, target)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Checks if given {@code source} is dependent on any of specified
+     * {@code targets}.
+     *
+     * @param source the source
+     * @param targets the targets
+     *
+     * @return {@code true} if {@code source} is dependent on any of
+     * {@code targets}; {@code false} otherwise
+     *
+     * @see #containsAny(java.lang.Object, java.util.Collection)
+     */
+    public boolean containsAny(final E source, final E... targets) {
+
+        if (targets == null) {
+            throw new NullPointerException("targets");
+        }
+
+        return containsAny(source, Arrays.asList(targets));
+    }
+
+
+    /**
+     * Finds all direct or indirect dependency paths from given {@code source}
+     * to specified {@code target}. Note that the first element in each list is
+     * always the specified {@code source}.
+     *
+     * @param source the source
+     * @param target the target
+     *
+     * @return a list of possible direct or indirect dependency paths from
+     * {@code source} to {@code target}; possibly empty.
      */
     public List<List<E>> getPaths(final E source, final E target) {
 
         if (source == null) {
-            throw new NullPointerException("null source");
+            throw new NullPointerException("source");
+        }
+
+        if (target == null) {
+            throw new NullPointerException("target");
         }
 
         if (source.equals(target)) {
@@ -376,19 +354,17 @@ public class DependencyResolver<E> implements Serializable {
             return paths;
         }
 
-        for (E auxiliary : targets) {
+        for (final E auxiliary : targets) {
 
-            if ((auxiliary == null && target == null)
-                || auxiliary.equals(target)) {
-
-                final List<E> path = new LinkedList<E>();
-                path.add(source);
-                path.add(auxiliary);
-                paths.add(path);
+            if (auxiliary == null) {
                 continue;
             }
 
-            if (auxiliary == null) {
+            if (auxiliary.equals(target)) {
+                final List<E> path = new ArrayList<E>();
+                path.add(source);
+                path.add(auxiliary);
+                paths.add(path);
                 continue;
             }
 
@@ -403,38 +379,12 @@ public class DependencyResolver<E> implements Serializable {
 
 
     /**
-     * Returns a single group of all elements in order.
-     *
-     * @return a list of all elements in order.
-     */
-    public List<E> getSingleGroup() {
-
-        final List<E> group = new LinkedList<E>();
-
-        for (E source : map.keySet()) {
-            getSingleGroup(source, group);
-        }
-
-        return group;
-    }
-
-
-    /**
-     * Finds and adds all direct or indirect targets from given
-     * <code>source</code>.
+     * Finds and adds all direct or indirect targets from given {@code source}.
      *
      * @param source source
      * @param group target group
      */
     private void getSingleGroup(final E source, final List<E> group) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        if (group == null) {
-            throw new NullPointerException("null group");
-        }
 
         if (group.contains(source)) {
             return;
@@ -442,7 +392,7 @@ public class DependencyResolver<E> implements Serializable {
 
         final List<E> list = map.get(source);
         if (list != null) {
-            for (E target : list) {
+            for (final E target : list) {
                 if (target == null) {
                     continue;
                 }
@@ -451,6 +401,23 @@ public class DependencyResolver<E> implements Serializable {
         }
 
         group.add(source);
+    }
+
+
+    /**
+     * Returns a list of all elements in order.
+     *
+     * @return a list of all elements in order.
+     */
+    public List<E> getSingleGroup() {
+
+        final List<E> group = new ArrayList<E>();
+
+        for (final E source : map.keySet()) {
+            getSingleGroup(source, group);
+        }
+
+        return group;
     }
 
 
@@ -497,13 +464,6 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
-        //assert single.isEmpty();
-        /*
-        if (!single.isEmpty()) {
-        groups.add(single);
-        }
-         */
-
         return groups;
     }
 
@@ -537,28 +497,22 @@ public class DependencyResolver<E> implements Serializable {
             }
         }
 
-        //assert single.isEmpty();
-        /*
-        if (!single.isEmpty()) {
-        groups.add(single);
-        }
-         */
-
         return groups;
     }
 
 
     /**
-     * Removes all dependencies from this resolver.
+     * Clears this instance.
      */
     public void clear() {
         map.clear();
     }
 
 
-    /** map. */
-    private final Map<E, List<E>> map = new HashMap<E, List<E>>();
+    /**
+     * map.
+     */
+    private final Map<E, List<E>> map;
 
 
 }
-
