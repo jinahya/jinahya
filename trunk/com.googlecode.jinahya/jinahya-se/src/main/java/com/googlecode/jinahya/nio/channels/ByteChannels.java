@@ -72,17 +72,18 @@ public class ByteChannels {
                 "buffer.capacity(" + buffer.capacity() + ") == 0");
         }
 
-        if (input instanceof FileChannel) {
+        if (input instanceof FileChannel && false) { // wrong
             final FileChannel finput = (FileChannel) input;
-            return finput.transferTo(finput.position(),
-                                     length < 0L ? Long.MAX_VALUE : length,
-                                     output);
+            final long position = finput.position();
+            final long count = length < 0L ? finput.size() - position : length;
+            return finput.transferTo(position, count, output);
         }
 
-        if (output instanceof FileChannel) {
+        if (output instanceof FileChannel && false) { // wrong
             final FileChannel foutput = (FileChannel) output;
-            return foutput.transferFrom(input, foutput.position(),
-                                        length < 0L ? Long.MAX_VALUE : length);
+            final long position = foutput.position();
+            final long count = length < 0L ? Long.MAX_VALUE : length;
+            return foutput.transferFrom(input, position, count);
         }
 
         long count = 0L;
@@ -90,9 +91,9 @@ public class ByteChannels {
         for (int read; length < 0L || count < length; count += read) {
             buffer.clear(); // position -> 0, limit -> capacity
             if (length >= 0L) {
-                final long r = length - count;
-                if (r < buffer.capacity()) {
-                    buffer.limit((int) r);
+                final long remained = length - count;
+                if (remained < buffer.capacity()) {
+                    buffer.limit((int) remained);
                 }
             }
             read = input.read(buffer);

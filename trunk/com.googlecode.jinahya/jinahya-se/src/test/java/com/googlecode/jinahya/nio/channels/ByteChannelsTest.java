@@ -18,10 +18,14 @@
 package com.googlecode.jinahya.nio.channels;
 
 
+import com.googlecode.jinahya.io.BlackOutputStream;
+import com.googlecode.jinahya.io.WhiteInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,30 +38,63 @@ import org.testng.annotations.Test;
 public class ByteChannelsTest {
 
 
-    protected static File newTempFile() throws IOException {
+    protected static File newTempFile(final boolean empty) throws IOException {
 
         final File f = File.createTempFile("prefix", null);
         f.deleteOnExit();
 
-        // fill input
-        final RandomAccessFile raf = new RandomAccessFile(f, "rwd");
-        raf.setLength(ThreadLocalRandom.current().nextInt(65536));
-        raf.close();
+        if (!empty) {
+            // fill input
+            final RandomAccessFile raf = new RandomAccessFile(f, "rwd");
+            raf.setLength(ThreadLocalRandom.current().nextInt(65536));
+            raf.close();
+        }
 
         return f;
     }
 
 
     @Test(invocationCount = 32)
-    public void testCopyFileToFile() throws IOException {
+    public void testCopyFromFileToFile() throws IOException {
 
-        final File source = newTempFile();
-        final File target = newTempFile();
+        final File source = newTempFile(false);
+        final File target = newTempFile(true);
 
         final long count = ByteChannels.copy(
             source, target, ByteBuffer.allocate(1024), -1L);
 
         Assert.assertEquals(count, source.length());
+    }
+
+
+    @Test(invocationCount = 32)
+    public void testCopyFromFileToBlackOutput() throws IOException {
+
+        final File input = newTempFile(false);
+
+        final WritableByteChannel output = new BlackOutputStream().newChannel();
+
+        final long count = ByteChannels.copy(
+            input, output, ByteBuffer.allocate(1024), -1L);
+
+        Assert.assertEquals(count, input.length());
+    }
+
+
+    @Test(invocationCount = 32)
+    public void testCopyFromWhiteInputToFile() throws IOException {
+
+        final long limit = ThreadLocalRandom.current().nextInt(65535);
+        final ReadableByteChannel input =
+            new WhiteInputStream(limit).newChannel();
+
+        final File output = newTempFile(true);
+
+        final long count = ByteChannels.copy(
+            input, output, ByteBuffer.allocate(1024), -1L);
+
+        Assert.assertEquals(count, limit);
+        Assert.assertEquals(output.length(), limit);
     }
 
 

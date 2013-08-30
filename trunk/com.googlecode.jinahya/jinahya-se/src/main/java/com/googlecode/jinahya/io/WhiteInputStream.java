@@ -20,6 +20,8 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -63,6 +65,17 @@ public class WhiteInputStream extends InputStream {
         count++;
 
         return (int) (System.currentTimeMillis() & 0xFF);
+    }
+
+
+    /**
+     * Constructs a channel that read bytes from this stream.
+     *
+     * @return a new readable byte channel
+     */
+    public ReadableByteChannel newChannel() {
+
+        return Channels.newChannel(this);
     }
 
 
