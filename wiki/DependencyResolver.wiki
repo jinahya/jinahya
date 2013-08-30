@@ -48,9 +48,9 @@ N → null
   * O depends on P and Q
   * P and Q depend on R (P depnds on R and Q depends on R)
 {{{
-  ↗ Q ↘
-P       R
-  ↘ R ↗
+  ↗ P ↘
+O       R
+  ↘ Q ↗
 }}}
 
 You can construct a dependency resolver as follows.
