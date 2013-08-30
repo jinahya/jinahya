@@ -47,6 +47,9 @@ public class DependencyResolver<E> {
     }
 
 
+    /**
+     * Creates a new instance.
+     */
     public DependencyResolver() {
 
         this(new HashMap<E, List<E>>());
