@@ -20,6 +20,8 @@ package com.googlecode.jinahya.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -69,6 +71,17 @@ public class BlackOutputStream extends OutputStream {
         }
 
         count++;
+    }
+
+
+    /**
+     * Constructs a channel that writes bytes to this stream.
+     *
+     * @return A new writable byte channel
+     */
+    public WritableByteChannel newChannel() {
+
+        return Channels.newChannel(this);
     }
 
 
