@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>dependency-resolver-retrotranslated</artifactId>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-beta-1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -122,21 +120,15 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator"
-                         classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
-                         classpathref="maven.plugin.classpath"/>
-                <retrotranslator srcdir="${project.build.outputDirectory}"
-                                 destdir="${project.build.outputDirectory}"
-                                 target="1.3" smart="true" stripannot="true"
-                                 stripsign="true" verify="true"
-                                 failonwarning="true">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory}" target="1.3" smart="true" stripannot="true" stripsign="true" verify="true" failonwarning="true">
                   <classpath>
                     <fileset dir="${basedir}/lib/j2sdk1.3.1_28/jre/lib">
-                      <include name="rt.jar"/>
+                      <include name="rt.jar" />
                     </fileset>
                     <fileset dir="${basedir}/lib/Retrotranslator-1.2.9-bin">
-                      <include name="retrotranslator-runtime13-1.2.9.jar"/>
-                      <include name="backport-util-concurrent-java12-3.1.jar"/>
+                      <include name="retrotranslator-runtime13-1.2.9.jar" />
+                      <include name="backport-util-concurrent-java12-3.1.jar" />
                     </fileset>
                   </classpath>
                 </retrotranslator>
@@ -285,14 +277,14 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/dependency-resolver-retrotranslated</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/dependency-resolver-retrotranslated</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/dependency-resolver-retrotranslated</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/dependency-resolver-retrotranslated-1.0-beta-1</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/dependency-resolver-retrotranslated-1.0-beta-1</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/dependency-resolver-retrotranslated-1.0-beta-1</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
-  <repositories/>
+  <repositories />
   <pluginRepositories />
   <distributionManagement>
     <site>
