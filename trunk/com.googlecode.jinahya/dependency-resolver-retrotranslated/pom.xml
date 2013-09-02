@@ -128,13 +128,14 @@
                 <retrotranslator srcdir="${project.build.outputDirectory}"
                                  destdir="${project.build.outputDirectory}"
                                  target="1.3" smart="true" stripannot="true"
-                                 stripsign="true" verify="true" failonwarning="true">
+                                 stripsign="true" verify="true"
+                                 failonwarning="true">
                   <classpath>
                     <fileset dir="${basedir}/jdk/1.3.1_28/jre/lib"
                              includes="**/*.jar"/>
                     <fileset dir="${basedir}/retrotranslator/Retrotranslator-1.2.9-bin">
-                      <include name="retrotranslator-runtime13-1.2.9.jar" />
-                      <include name="backport-util-concurrent-java12-3.1.jar" />
+                      <include name="retrotranslator-runtime13-1.2.9.jar"/>
+                      <include name="backport-util-concurrent-java12-3.1.jar"/>
                     </fileset>
                   </classpath>
                 </retrotranslator>
