@@ -72,13 +72,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <maven.compiler.testSource>1.7</maven.compiler.testSource>
-    <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
-    <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
-    <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-    <maven.compiler.verbose>true</maven.compiler.verbose>
   </properties>
 
   <!-- Build Settings -->
@@ -190,17 +183,19 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+          <testSource>1.7</testSource>
+          <testTarget>1.7</testTarget>
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
           <verbose>true</verbose>
         </configuration>
       </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -340,7 +335,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -348,12 +343,12 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
   <!-- Environment Settings -->
-  <issueManagement />
-  <ciManagement />
-  <mailingLists />
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jinahya-ee</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jinahya-ee</developerConnection>
@@ -362,32 +357,9 @@
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
-  <repositories>
-    <!--
-    <repository>
-      <id>sonatype-nexus-snapshots</id>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-    -->
-  </repositories>
+  <repositories/>
   <pluginRepositories />
   <distributionManagement>
-    <!--
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    -->
     <site>
       <id>jinahya.com</id>
       <url>dav:${project.url}</url>
