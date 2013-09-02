@@ -133,8 +133,8 @@
                       <include name="rt.jar"/>
                     </fileset>
                     <fileset dir="${basedir}/lib/Retrotranslator-1.2.9-bin">
-                      <include name="retrotranslator-runtime13-1.2.9.jar" />
-                      <include name="backport-util-concurrent-java12-3.1.jar" />
+                      <include name="retrotranslator-runtime13-1.2.9.jar"/>
+                      <include name="backport-util-concurrent-java12-3.1.jar"/>
                     </fileset>
                   </classpath>
                 </retrotranslator>
@@ -276,7 +276,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -284,12 +284,12 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
   <!-- Environment Settings -->
-  <issueManagement />
-  <ciManagement />
-  <mailingLists />
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io-retrotranslated</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/bit-io-retrotranslated</developerConnection>
@@ -298,8 +298,8 @@
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
-  <repositories />
-  <pluginRepositories />
+  <repositories/>
+  <pluginRepositories/>
   <distributionManagement>
     <site>
       <id>jinahya.com</id>
