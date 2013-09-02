@@ -18,7 +18,7 @@
       <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>bit-io</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
