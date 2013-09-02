@@ -30,23 +30,17 @@ import java.util.List;
 public class Source15 {
 
 
-    static {
-        final Long autoboxed = ActionEvent.ACTION_EVENT_MASK; // autoboing
-        final long unboxed = autoboxed; // unboxing
-    }
-
-
     // Typesafe enums
-    public static enum Target13Enum {
+    public static enum AnEnum {
 
 
-        A;
+        CONSTNANT;
 
 
     }
 
 
-    public interface Interface13 {
+    public static interface AnInterface {
 
 
         public Appendable appendable();
@@ -55,7 +49,7 @@ public class Source15 {
     }
 
 
-    public class Implementation13 implements Interface13 {
+    public static class AnImplementation implements AnInterface {
 
 
         @Override // Annotations
@@ -78,6 +72,8 @@ public class Source15 {
         // Generics
         final List<String> list = new ArrayList<String>();
 
+        final Long autoboxed = ActionEvent.ACTION_EVENT_MASK; // autoboxing
+        final long unboxed = autoboxed; // unboxing
     }
 
 

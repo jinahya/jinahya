@@ -8,7 +8,7 @@
   <!-- The Basics -->
   <groupId>com.googlecode.jinahya.test</groupId>
   <artifactId>retrotranslator-antrun-test</artifactId>
-  <version>1.0-alpha-1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -34,6 +34,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <skipTests>true</skipTests>
   </properties>
 
   <!-- Build Settings -->
@@ -221,6 +222,9 @@
     </profile>
     <profile>
       <id>target13</id>
+      <properties>
+        <skipTests>false</skipTests>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -229,8 +233,7 @@
             <executions>
               <execution>
                 <id>retrotranslate</id>
-                <!--<phase>process-classes</phase>-->
-                <phase>compile</phase>
+                <phase>process-classes</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
@@ -246,8 +249,9 @@
                                      stripsign="true" verify="true"
                                      failonwarning="true">
                       <classpath>
-                        <fileset dir="${basedir}/lib/j2sdk1.3.1_28/jre/lib"
-                                 includes="**/*.jar"/>
+                        <fileset dir="${basedir}/lib/j2sdk1.3.1_28/jre/lib">
+                          <include name="rt.jar"/>
+                        </fileset>
                         <fileset dir="${basedir}/lib/Retrotranslator-1.2.9-bin">
                           <include name="retrotranslator-runtime13-1.2.9.jar"/>
                           <include name="backport-util-concurrent-java12-3.1.jar"/>
@@ -266,11 +270,23 @@
               </dependency>
             </dependencies>
           </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>com/googlecode/jinahya/test/Target13Test.java</include>
+              </includes>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
     </profile> 
     <profile>
       <id>target14</id>
+      <properties>
+        <skipTests>false</skipTests>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -279,8 +295,7 @@
             <executions>
               <execution>
                 <id>retrotranslate</id>
-                <!--<phase>process-classes</phase>-->
-                <phase>compile</phase>
+                <phase>process-classes</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
@@ -296,8 +311,11 @@
                                      stripsign="true" verify="true"
                                      failonwarning="true">
                       <classpath>
-                        <fileset dir="${basedir}/lib/j2sdk1.4.2_19/jre/lib"
-                                 includes="**/*.jar"/>
+                        <fileset dir="${basedir}/lib/j2sdk1.4.2_19/jre/lib">
+                          <include name="rt.jar"/>
+                          <include name="jce.jar"/>
+                          <include name="jsse.jar"/>
+                        </fileset>
                         <fileset dir="${basedir}/lib/Retrotranslator-1.2.9-bin">
                           <include name="retrotranslator-runtime-1.2.9.jar"/>
                           <include name="backport-util-concurrent-3.1.jar"/>
@@ -315,6 +333,15 @@
                 <version>1.2.9</version>
               </dependency>
             </dependencies>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>com/googlecode/jinahya/test/Target14Test.java</include>
+              </includes>
+            </configuration>
           </plugin>
         </plugins>
       </build>
