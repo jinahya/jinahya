@@ -74,7 +74,7 @@ public class BitOutput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
             stream.write(value);
@@ -95,6 +95,7 @@ public class BitOutput {
      *
      * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
+    @Deprecated
     public static class ChannelOutput implements ByteOutput {
 
 
@@ -114,7 +115,7 @@ public class BitOutput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
             buffer.put((byte) value); // ----------------------------------- put
@@ -165,7 +166,7 @@ public class BitOutput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
             buffer.put(((byte) value)); // BufferOverflowException
