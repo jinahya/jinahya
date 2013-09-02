@@ -75,7 +75,7 @@ public class BitInput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public int readUnsignedByte() throws IOException {
             return stream.read();
         }
@@ -95,6 +95,7 @@ public class BitInput {
      *
      * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
+    @Deprecated
     public static class ChannelInput implements ByteInput {
 
 
@@ -119,7 +120,7 @@ public class BitInput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public int readUnsignedByte() throws IOException {
 
             buffer.clear(); // ------------------------------------------- clear
@@ -178,7 +179,7 @@ public class BitInput {
         }
 
 
-        //@Override // commented for pre 5
+        @Override
         public int readUnsignedByte() throws IOException {
 
             return (buffer.get() & 0xFF); // BufferUnderflowException
