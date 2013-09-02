@@ -36,7 +36,7 @@ public class BitOutput {
     /**
      * An interface for writing bytes.
      */
-    public interface ByteOutput {
+    public static interface ByteOutput {
 
 
         /**
