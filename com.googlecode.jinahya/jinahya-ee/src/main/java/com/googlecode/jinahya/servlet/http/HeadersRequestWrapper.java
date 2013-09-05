@@ -19,12 +19,13 @@ package com.googlecode.jinahya.servlet.http;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -47,50 +48,108 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
     }
 
 
-    public HeadersRequestWrapper(
+    public static HttpServletRequest newInstanceForPrecedingHeaders(
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
 
+        final HttpServletRequest instance =
+            new HeadersRequestWrapper(request, headers, null);
+
+        return instance;
+    }
+
+
+    public static HttpServletRequest newInstanceForPrecedingHeaders(
+        final HttpServletRequest request,
+        final String name, List<String> values) {
+
+        final Map<String, List<String>> headers = new HashMap<>();
+        headers.put(name, values);
+
+        return newInstanceForPrecedingHeaders(request, headers);
+    }
+
+
+    public static HttpServletRequest newInstanceForPrecedingHeaders(
+        final HttpServletRequest request,
+        final String name, final String value) {
+
+        return newInstanceForPrecedingHeaders(
+            request, name, Arrays.asList(value));
+    }
+
+
+    /**
+     *
+     * @param request
+     * @param precedingHeaders
+     * @param succeedingHeaders
+     */
+    public HeadersRequestWrapper(
+        final HttpServletRequest request,
+        final Map<String, List<String>> precedingHeaders,
+        final Map<String, List<String>> succeedingHeaders) {
+
         super(request);
 
-        if (headers == null) {
-            throw new NullPointerException("headers");
+        headers = new HashMap<>();
+
+        if (precedingHeaders != null) {
+            for (Entry<String, List<String>> e : precedingHeaders.entrySet()) {
+                final String name = e.getKey();
+                List<String> values = headers.get(name);
+                if (values == null) {
+                    values = new ArrayList<>();
+                    headers.put(name, values);
+                }
+                values.addAll(e.getValue());
+            }
         }
 
-        this.headers = headers;
+        for (final Enumeration<String> names = request.getHeaderNames();
+             names.hasMoreElements();) {
+            final String fieldName = names.nextElement();
+            List<String> fieldValues = headers.get(fieldName);
+            if (fieldValues == null) {
+                fieldValues = new ArrayList<>();
+                headers.put(fieldName, fieldValues);
+            }
+            fieldValues.addAll(Collections.list(request.getHeaders(fieldName)));
+        }
+
+
+        if (succeedingHeaders != null) {
+            for (Entry<String, List<String>> e : succeedingHeaders.entrySet()) {
+                final String name = e.getKey();
+                List<String> values = headers.get(name);
+                if (values == null) {
+                    values = new ArrayList<>();
+                    headers.put(name, values);
+                }
+                values.addAll(e.getValue());
+            }
+        }
     }
 
 
     @Override
     public String getHeader(final String name) {
 
-        LOGGER.log(Level.INFO, "getHeader({0})", name);
-
-        final List<String> wrappedValues = headers.get(name);
-        if (wrappedValues != null && !wrappedValues.isEmpty()) {
-            System.out.println("return: " + wrappedValues.get(0));
-            return wrappedValues.get(0);
+        final List<String> values = headers.get(name);
+        if (values != null && !values.isEmpty()) {
+            return values.get(0);
         }
 
-        return super.getHeader(name);
+        return null;
     }
 
 
     @Override
     public Enumeration<String> getHeaders(final String name) {
 
-        LOGGER.log(Level.INFO, "getHeaders({0})", name);
-
-        final List<String> values = new ArrayList<>();
-
-        final List<String> wrappedValues = headers.get(name);
-        if (wrappedValues != null) {
-            values.addAll(wrappedValues);
-        }
-
-        for (final Enumeration<String> requestedValues = super.getHeaders(name);
-             requestedValues.hasMoreElements();) {
-            values.add(requestedValues.nextElement());
+        List<String> values = headers.get(name);
+        if (values == null) {
+            values = Collections.emptyList();
         }
 
         return Collections.enumeration(values);
@@ -102,20 +161,7 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
         LOGGER.info("getHeaderNames()");
 
-        final Set<String> names = new HashSet<>();
-
-        final Set<String> wrappedNames = headers.keySet();
-        names.addAll(wrappedNames);
-
-        final Enumeration<String> requestedNames = super.getHeaderNames();
-        if (requestedNames != null) {
-            while (requestedNames.hasMoreElements()) {
-                final String requestedName = requestedNames.nextElement();
-                names.add(requestedName);
-            }
-        }
-
-        return Collections.enumeration(names);
+        return Collections.enumeration(headers.keySet());
     }
 
 
@@ -123,3 +169,4 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
 
 }
+
