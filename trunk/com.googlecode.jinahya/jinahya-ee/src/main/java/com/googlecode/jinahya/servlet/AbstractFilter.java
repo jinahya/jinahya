@@ -65,6 +65,8 @@ public abstract class AbstractFilter implements Filter {
      * Returns servletContext.
      *
      * @return servletContext
+     *
+     * @see FilterConfig#getServletContext()
      */
     protected ServletContext getServletContext() {
 

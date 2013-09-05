@@ -37,7 +37,8 @@ public abstract class HttpFilter extends AbstractFilter {
 
     @Override
     public void doFilter(final ServletRequest request,
-                         final ServletResponse response, FilterChain chain)
+                         final ServletResponse response,
+                         final FilterChain chain)
         throws IOException, ServletException {
 
         if (request instanceof HttpServletRequest
