@@ -260,7 +260,7 @@
                     </retrotranslator>
                   </target>
                 </configuration>
-              </execution>          
+              </execution>
             </executions>
             <dependencies>
               <dependency>
