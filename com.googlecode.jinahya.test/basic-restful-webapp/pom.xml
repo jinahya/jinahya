@@ -3,17 +3,13 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>com.googlecode.jinahya.test</groupId>
   <artifactId>basic-restful-webapp</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <dependencyManagement>
     <dependencies>
-      <!--      <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-xc</artifactId>
-        <version>1.9.12</version>
-      </dependency>-->
       <dependency>
         <groupId>com.fasterxml.jackson.jaxrs</groupId>
         <artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -23,6 +19,11 @@
         <groupId>com.fasterxml.jackson.module</groupId>
         <artifactId>jackson-module-jaxb-annotations</artifactId>
         <version>2.1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.jinahya</groupId>
+        <artifactId>jinahya-ee</artifactId>
+        <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>javax</groupId>
@@ -48,22 +49,23 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8.1</version>
+        <version>6.8.5</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <!--    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-xc</artifactId>
-    </dependency>-->
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
     </dependency>
-    <dependency>
+<!--    <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-jaxb-annotations</artifactId>
+    </dependency>-->
+    <dependency>
+      <groupId>com.googlecode.jinahya</groupId>
+      <artifactId>jinahya-ee</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.main.extras</groupId>
@@ -76,7 +78,7 @@
       <artifactId>javaee-api</artifactId>
       <scope>provided</scope>
     </dependency>
-<!--    <dependency>
+    <!--    <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jackson-provider</artifactId>
     </dependency>-->
@@ -96,13 +98,27 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
+  <!-- Build Settings -->
   <build>
     <finalName>basic-restful-webapp</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.glassfish.embedded</groupId>
+          <artifactId>maven-embedded-glassfish-plugin</artifactId>
+          <version>3.1.2.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.0</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -111,19 +127,33 @@
       <plugin>
         <groupId>org.glassfish.embedded</groupId>
         <artifactId>maven-embedded-glassfish-plugin</artifactId>
-        <version>3.1.2.2</version>
         <configuration>
-          <app>${project.build.directory}/${project.build.finalName}.war</app>
-          <contextRoot>/</contextRoot>
+          <app>${project.build.directory}/${project.build.finalName}.${project.packaging}</app>
+          <!--<contextRoot>/</contextRoot>-->
           <port>58080</port>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
+  <!-- More Project Information -->
   <name>basic-restful-webapp Maven Webapp</name>
+  <description/>
   <url>http://maven.apache.org</url>
+  <inceptionYear/>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
 
+  <!-- Environment Settings -->
+  <prerequisites>
+    <maven>3.0.5</maven>
+  </prerequisites>
   <repositories>
     <repository>
       <id>sonatype-nexus-snapshots</id>
