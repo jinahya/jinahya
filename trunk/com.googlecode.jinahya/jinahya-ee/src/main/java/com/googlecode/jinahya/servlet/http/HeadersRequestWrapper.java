@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -34,6 +36,15 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class HeadersRequestWrapper extends HttpServletRequestWrapper {
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(HeadersRequestWrapper.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.ALL);
+    }
 
 
     public HeadersRequestWrapper(
@@ -53,8 +64,11 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public String getHeader(final String name) {
 
+        LOGGER.log(Level.INFO, "getHeader({0})", name);
+
         final List<String> wrappedValues = headers.get(name);
         if (wrappedValues != null && !wrappedValues.isEmpty()) {
+            System.out.println("return: " + wrappedValues.get(0));
             return wrappedValues.get(0);
         }
 
@@ -64,6 +78,8 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public Enumeration<String> getHeaders(final String name) {
+
+        LOGGER.log(Level.INFO, "getHeaders({0})", name);
 
         final List<String> values = new ArrayList<>();
 
@@ -83,6 +99,8 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public Enumeration<String> getHeaderNames() {
+
+        LOGGER.info("getHeaderNames()");
 
         final Set<String> names = new HashSet<>();
 
