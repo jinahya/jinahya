@@ -5,16 +5,15 @@ package com.googlecode.jinahya.test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -39,32 +38,36 @@ public class ImageSuffixesResource {
         Logger.getLogger(ImageSuffixesResource.class.getName());
 
 
-    private static final Map<String, ImageSuffix> SUFFIXES = new HashMap<>();
+    public static final Map<String, ImageSuffix> SUFFIXES;
 
 
     static {
 
+        final SortedMap<String, ImageSuffix> suffixes = new TreeMap<>();
+
         final String[] readerFileSuffixes = ImageIO.getReaderFileSuffixes();
         for (String readerFileSuffix : readerFileSuffixes) {
-            ImageSuffix imageSuffix = SUFFIXES.get(readerFileSuffix);
+            ImageSuffix imageSuffix = suffixes.get(readerFileSuffix);
             if (imageSuffix == null) {
                 imageSuffix = new ImageSuffix();
                 imageSuffix.value = readerFileSuffix;
-                SUFFIXES.put(readerFileSuffix, imageSuffix);
+                suffixes.put(readerFileSuffix, imageSuffix);
             }
             imageSuffix.canRead = true;
         }
 
         final String[] writerFileSuffixes = ImageIO.getWriterFileSuffixes();
         for (String writerFileSuffix : writerFileSuffixes) {
-            ImageSuffix imageSuffix = SUFFIXES.get(writerFileSuffix);
+            ImageSuffix imageSuffix = suffixes.get(writerFileSuffix);
             if (imageSuffix == null) {
                 imageSuffix = new ImageSuffix();
                 imageSuffix.value = writerFileSuffix;
-                SUFFIXES.put(writerFileSuffix, imageSuffix);
+                suffixes.put(writerFileSuffix, imageSuffix);
             }
             imageSuffix.canWrite = true;
         }
+
+        SUFFIXES = Collections.unmodifiableSortedMap(suffixes);
     }
 
 
@@ -83,19 +86,17 @@ public class ImageSuffixesResource {
     }
 
 
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @PUT
-    public void update(final List<ImageSuffix> imageSuffixes) {
-
-        LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
-        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
-
-        for (ImageSuffix imageSuffix : imageSuffixes) {
-            System.out.println(imageSuffix);
-        }
-    }
-
-
+//    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    @PUT
+//    public void update(final List<ImageSuffix> imageSuffixes) {
+//
+//        LOGGER.log(Level.INFO, "update({0})", imageSuffixes);
+//        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
+//
+//        for (ImageSuffix imageSuffix : imageSuffixes) {
+//            System.out.println(imageSuffix);
+//        }
+//    }
     @GET
     @Path("/{name: .+}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -114,18 +115,16 @@ public class ImageSuffixesResource {
     }
 
 
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @PUT
-    @Path("/{name: .+}")
-    public void updateImageSuffix(@PathParam("name") final String name,
-                                  final ImageSuffix imageSuffix) {
-
-        LOGGER.log(Level.INFO, "updateImageSuffix({0}, {1})",
-                   new Object[]{name, imageSuffix});
-        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
-    }
-
-
+//    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    @PUT
+//    @Path("/{name: .+}")
+//    public void updateImageSuffix(@PathParam("name") final String name,
+//                                  final ImageSuffix imageSuffix) {
+//
+//        LOGGER.log(Level.INFO, "updateImageSuffix({0}, {1})",
+//                   new Object[]{name, imageSuffix});
+//        LOGGER.log(Level.INFO, "Content-Type: {0}", contentType);
+//    }
     @HeaderParam("Content-Type")
     private String contentType;
 
@@ -135,4 +134,3 @@ public class ImageSuffixesResource {
 
 
 }
-

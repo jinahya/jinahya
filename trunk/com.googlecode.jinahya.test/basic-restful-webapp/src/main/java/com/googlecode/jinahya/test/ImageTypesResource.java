@@ -4,10 +4,12 @@ package com.googlecode.jinahya.test;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -35,32 +37,35 @@ public class ImageTypesResource {
         Logger.getLogger(ImageTypesResource.class.getName());
 
 
-    private static final Map<String, ImageType> TYPES = new HashMap<>();
+    public static final Map<String, ImageType> TYPES;
 
 
     static {
 
+        final SortedMap<String, ImageType> types = new TreeMap<>();
         final String[] readerMIMETypes = ImageIO.getReaderMIMETypes();
         for (String readerMIMEType : readerMIMETypes) {
-            ImageType imageType = TYPES.get(readerMIMEType);
+            ImageType imageType = types.get(readerMIMEType);
             if (imageType == null) {
                 imageType = new ImageType();
                 imageType.value = readerMIMEType;
-                TYPES.put(readerMIMEType, imageType);
+                types.put(readerMIMEType, imageType);
             }
             imageType.canRead = true;
         }
 
-        final String[] writerMIMENames = ImageIO.getWriterMIMETypes();
-        for (String writerMIMEType : writerMIMENames) {
-            ImageType imageType = TYPES.get(writerMIMEType);
+        final String[] writerMIMETypes = ImageIO.getWriterMIMETypes();
+        for (String writerMIMEType : writerMIMETypes) {
+            ImageType imageType = types.get(writerMIMEType);
             if (imageType == null) {
                 imageType = new ImageType();
                 imageType.value = writerMIMEType;
-                TYPES.put(writerMIMEType, imageType);
+                types.put(writerMIMEType, imageType);
             }
             imageType.canWrite = true;
         }
+
+        TYPES = Collections.unmodifiableSortedMap(types);
     }
 
 
@@ -98,4 +103,3 @@ public class ImageTypesResource {
 
 
 }
-
