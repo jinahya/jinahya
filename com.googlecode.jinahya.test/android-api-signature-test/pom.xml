@@ -85,6 +85,7 @@
         <executions>
           <execution>
             <id>check-against-android-api-signature</id>
+            <phase>process-classes</phase> <!-- default bound phase -->
             <goals>
               <goal>check</goal>
             </goals>

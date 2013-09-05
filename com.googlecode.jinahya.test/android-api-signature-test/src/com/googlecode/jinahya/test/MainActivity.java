@@ -6,6 +6,7 @@ package com.googlecode.jinahya.test;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class MainActivity extends Activity {
@@ -17,11 +18,13 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
 
+        Log.i(TAG, "onCreate(" + savedInstanceState + ")");
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
 
-        Log.i(TAG, "onCreate(" + savedInstanceState + ")");
+        //final boolean flag = ThreadLocalRandom.current().nextBoolean();
     }
 
 
