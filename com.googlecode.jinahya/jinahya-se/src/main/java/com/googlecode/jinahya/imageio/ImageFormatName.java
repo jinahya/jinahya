@@ -26,15 +26,5 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFormatName extends ImageAspect {
-
-
-//    protected static ImageFormatName newInstance(final boolean readable,
-//                                                 final boolean writable,
-//                                                 final String key) {
-//
-//        return newInstance(ImageFormatName.class, readable, writable, key);
-//    }
-
-
+public class ImageFormatName extends ImageFeature {
 }

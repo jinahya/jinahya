@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageMediaTypes extends ImageAspects<ImageMediaType> {
+public class ImageMediaTypes extends ImageFeatures<ImageMediaType> {
 
 
     public static ImageMediaTypes newInstance() {
@@ -39,10 +39,10 @@ public class ImageMediaTypes extends ImageAspects<ImageMediaType> {
 
         for (final String readerMIMEType : ImageIO.getReaderMIMETypes()) {
             ImageMediaType imageMediaType =
-                instance.getImageAspects().get(readerMIMEType);
+                instance.getImageFeatures().get(readerMIMEType);
             if (imageMediaType == null) {
                 imageMediaType = new ImageMediaType();
-                instance.getImageAspects().put(
+                instance.getImageFeatures().put(
                     readerMIMEType, imageMediaType);
             }
             imageMediaType.setReadable(true);
@@ -51,10 +51,10 @@ public class ImageMediaTypes extends ImageAspects<ImageMediaType> {
 
         for (final String writerMIMEType : ImageIO.getWriterMIMETypes()) {
             ImageMediaType imageMediaType =
-                instance.getImageAspects().get(writerMIMEType);
+                instance.getImageFeatures().get(writerMIMEType);
             if (imageMediaType == null) {
                 imageMediaType = new ImageMediaType();
-                instance.getImageAspects().put(
+                instance.getImageFeatures().put(
                     writerMIMEType, imageMediaType);
             }
             imageMediaType.setWritable(true);
@@ -68,20 +68,20 @@ public class ImageMediaTypes extends ImageAspects<ImageMediaType> {
     @XmlElement(name = "imageMediaType", nillable = true)
     private List<ImageMediaType> getImageMediaTypeList() {
 
-        return getImageAspectList();
+        return getImageFeatureList();
     }
 
 
     private void setImageMediaTypeList(
         final List<ImageMediaType> imageMediaTypeList) {
 
-        setImageAspectList(imageMediaTypeList);
+        setImageFeatureList(imageMediaTypeList);
     }
 
 
     public Map<String, ImageMediaType> getImageMediaTypes() {
 
-        return getImageAspects();
+        return getImageFeatures();
     }
 
 

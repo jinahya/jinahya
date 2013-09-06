@@ -23,7 +23,7 @@ package com.googlecode.jinahya.imageio;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class ImageMediaTypesTest
-    extends ImageDescriptorsTest<ImageMediaTypes, ImageMediaType> {
+    extends ImageFeaturesTest<ImageMediaTypes, ImageMediaType> {
 
 
     public ImageMediaTypesTest() {

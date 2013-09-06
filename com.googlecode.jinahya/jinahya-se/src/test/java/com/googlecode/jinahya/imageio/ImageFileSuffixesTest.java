@@ -23,7 +23,7 @@ package com.googlecode.jinahya.imageio;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class ImageFileSuffixesTest
-    extends ImageDescriptorsTest<ImageFileSuffixes, ImageFileSuffix> {
+    extends ImageFeaturesTest<ImageFileSuffixes, ImageFileSuffix> {
 
 
     public ImageFileSuffixesTest() {

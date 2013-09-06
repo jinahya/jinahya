@@ -26,15 +26,5 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFileSuffix extends ImageAspect {
-
-
-//    protected static ImageFileSuffix newInstance(final boolean readable,
-//                                                 final boolean writable,
-//                                                 final String key) {
-//
-//        return newInstance(ImageFileSuffix.class, readable, writable, key);
-//    }
-
-
+public class ImageFileSuffix extends ImageFeature {
 }
