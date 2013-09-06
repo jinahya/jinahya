@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  * @param <T>
  * @param <U>
  */
-abstract class ImageFeaturesTest<T extends ImageFeatures<U>, U extends ImageFeature> {
+public abstract class ImageFeaturesTest<T extends ImageFeatures<U>, U extends ImageFeature> {
 
 
     public ImageFeaturesTest(final Class<T> imageDescriptorsType) {

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <T>
  */
 @XmlTransient
-abstract class ImageFeatures<T extends ImageFeature> {
+public abstract class ImageFeatures<T extends ImageFeature> {
 
 
     List<T> getImageFeatureList() {
