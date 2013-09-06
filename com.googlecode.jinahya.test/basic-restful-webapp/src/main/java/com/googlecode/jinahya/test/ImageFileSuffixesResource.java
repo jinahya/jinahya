@@ -5,7 +5,6 @@ package com.googlecode.jinahya.test;
 
 import com.googlecode.jinahya.imageio.ImageFileSuffix;
 import com.googlecode.jinahya.imageio.ImageFileSuffixes;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
@@ -39,9 +38,9 @@ public class ImageFileSuffixesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ImageFileSuffix> read() {
+    public ImageFileSuffixes read() {
 
-        return IMAGE_FILE_SUFFIXES.getImageFileSuffixList();
+        return IMAGE_FILE_SUFFIXES;
     }
 
 

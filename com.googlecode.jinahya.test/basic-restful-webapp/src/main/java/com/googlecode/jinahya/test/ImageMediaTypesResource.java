@@ -5,7 +5,6 @@ package com.googlecode.jinahya.test;
 
 import com.googlecode.jinahya.imageio.ImageMediaType;
 import com.googlecode.jinahya.imageio.ImageMediaTypes;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
@@ -38,11 +37,11 @@ public class ImageMediaTypesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ImageMediaType> read() {
+    public ImageMediaTypes read() {
 
         LOGGER.info("read()");
 
-        return IMAGE_MEDIA_TYPES.getImageMediaTypeList();
+        return IMAGE_MEDIA_TYPES;
     }
 
 

@@ -5,7 +5,6 @@ package com.googlecode.jinahya.test;
 
 import com.googlecode.jinahya.imageio.ImageFormatName;
 import com.googlecode.jinahya.imageio.ImageFormatNames;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
@@ -21,7 +20,7 @@ import javax.ws.rs.core.Response.Status;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@Path("/imageFormats")
+@Path("/imageFormatNames")
 public class ImageFormatNamesResource {
 
 
@@ -38,11 +37,11 @@ public class ImageFormatNamesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ImageFormatName> read() {
+    public ImageFormatNames read() {
 
         LOGGER.info("read()");
 
-        return IMAGE_FORMAT_NAMES.getImageFormatNameList();
+        return IMAGE_FORMAT_NAMES;
     }
 
 
