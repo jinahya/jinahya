@@ -4,11 +4,10 @@ package com.googlecode.jinahya.test;
 
 
 import com.googlecode.jinahya.servlet.http.HeadersRequestWrapper;
+import com.googlecode.jinahya.servlet.http.HttpFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.servlet.FilterChain;
@@ -89,13 +88,11 @@ public abstract class TypeSuffixFilter extends HttpFilter {
                 System.out.println("Accept: " + accept);
                 continue;
             }
-            final Map<String, List<String>> headers = new HashMap<>();
-            headers.put("Accept", Arrays.asList(entry.getValue()));
             final HttpServletRequest wequest =
-                new HeadersRequestWrapper(request, headers);
-//            request.set
-            System.out.println(".xml");
-            final String path = pathInfo.substring(0, pathInfo.length() - entry.getKey().length());
+                HeadersRequestWrapper.newInstanceForPrecedingHeaders(
+                request, "Accept", entry.getValue());
+            final String path = pathInfo.substring(
+                0, pathInfo.length() - entry.getKey().length());
             System.out.println("dispatcher.path: " + path);
             final RequestDispatcher dispatcher =
                 wequest.getRequestDispatcher(path);
