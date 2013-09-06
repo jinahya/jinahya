@@ -25,7 +25,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -151,10 +150,13 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
 
     /**
+     * Creates a new instance with {@code request} and additional headers.
      *
-     * @param request
-     * @param precedingHeaders
-     * @param succeedingHeaders
+     * @param request the request
+     * @param precedingHeaders additional headers precedes requested headers;
+     * {@code null} allowed.
+     * @param succeedingHeaders additional header succeeds requested headers;
+     * {@code null} allowed.
      */
     public HeadersRequestWrapper(
         final HttpServletRequest request,
@@ -166,14 +168,13 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         headers = new HashMap<>();
 
         if (precedingHeaders != null) {
-            for (Entry<String, List<String>> e : precedingHeaders.entrySet()) {
-                final String name = e.getKey();
+            for (final String name : precedingHeaders.keySet()) {
                 List<String> values = headers.get(name);
                 if (values == null) {
                     values = new ArrayList<>();
                     headers.put(name, values);
                 }
-                values.addAll(e.getValue());
+                values.addAll(precedingHeaders.get(name));
             }
         }
 
@@ -189,14 +190,13 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         }
 
         if (succeedingHeaders != null) {
-            for (Entry<String, List<String>> e : succeedingHeaders.entrySet()) {
-                final String name = e.getKey();
+            for (final String name : succeedingHeaders.keySet()) {
                 List<String> values = headers.get(name);
                 if (values == null) {
                     values = new ArrayList<>();
                     headers.put(name, values);
                 }
-                values.addAll(e.getValue());
+                values.addAll(succeedingHeaders.get(name));
             }
         }
     }
@@ -235,6 +235,9 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * aggregated headers.
+     */
     private final Map<String, List<String>> headers;
 
 
