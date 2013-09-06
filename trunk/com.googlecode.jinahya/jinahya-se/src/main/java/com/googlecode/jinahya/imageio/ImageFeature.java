@@ -20,6 +20,7 @@ package com.googlecode.jinahya.imageio;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlValue;
 
 
 /**
@@ -46,13 +47,9 @@ abstract class ImageFeature {
 //            throw new RuntimeException(iae);
 //        }
 //    }
-
-
 //    protected ImageAspect() {
 //        super();
 //    }
-
-
     public boolean isReadable() {
 
         return readable;
@@ -106,7 +103,7 @@ abstract class ImageFeature {
     private boolean writable;
 
 
-    @XmlAttribute
+    @XmlValue
     private String key;
 
 
