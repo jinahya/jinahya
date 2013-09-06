@@ -15,14 +15,22 @@
  */
 
 
-@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
-           elementFormDefault = XmlNsForm.QUALIFIED,
-           namespace = "http://jinahya.googlecode.com/imageio")
+@XmlSchema(
+    attributeFormDefault = XmlNsForm.UNQUALIFIED,
+    elementFormDefault = XmlNsForm.QUALIFIED,
+    namespace = "http://jinahya.googlecode.com/imageio",
+    xmlns = {
+    @XmlNs(prefix = XMLConstants.XML_NS_PREFIX,
+           namespaceURI = XMLConstants.XML_NS_URI),
+    @XmlNs(prefix = "xsi",
+           namespaceURI = XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)})
 @XmlAccessorType(XmlAccessType.NONE)
 package com.googlecode.jinahya.imageio;
 
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;

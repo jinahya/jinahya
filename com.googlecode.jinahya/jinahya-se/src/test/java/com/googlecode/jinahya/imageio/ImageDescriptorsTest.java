@@ -33,8 +33,10 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
+ * @param <T>
+ * @param <U>
  */
-public abstract class ImageDescriptorsTest<T extends ImageDescriptors<?>> {
+public abstract class ImageDescriptorsTest<T extends ImageIODescriptors<U>, U extends ImageIODescriptor> {
 
 
     public ImageDescriptorsTest(final Class<T> imageDescriptorsType) {
@@ -70,6 +72,10 @@ public abstract class ImageDescriptorsTest<T extends ImageDescriptors<?>> {
             new StreamSource(new ByteArrayInputStream(baos.toByteArray()));
         final T actual = unmarshaller.unmarshal(source, imageDescriptorsType)
             .getValue();
+
+        for (U imageDescriptor : actual.getImageDescriptorList()) {
+            System.out.println("unmarshalled: " + imageDescriptor);
+        }
     }
 
 

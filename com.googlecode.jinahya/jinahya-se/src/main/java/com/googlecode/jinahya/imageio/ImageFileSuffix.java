@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFileSuffix extends ImageDescriptor {
+public class ImageFileSuffix extends ImageIODescriptor {
 
 
 //    protected static ImageFileSuffix newInstance(final boolean readable,

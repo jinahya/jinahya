@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFileSuffixes extends ImageDescriptors<ImageFileSuffix> {
+public class ImageFileSuffixes extends ImageIODescriptors<ImageFileSuffix> {
 
 
     public static ImageFileSuffixes newInstance() {
@@ -66,13 +66,13 @@ public class ImageFileSuffixes extends ImageDescriptors<ImageFileSuffix> {
 
 
     @XmlElement(name = "imageFileSuffix", nillable = true)
-    public List<ImageFileSuffix> getImageFileSuffixList() {
+    private List<ImageFileSuffix> getImageFileSuffixList() {
 
-        return super.getImageDescriptorList();
+        return getImageDescriptorList();
     }
 
 
-    public void setImageFileSuffixesList(
+    private void setImageFileSuffixList(
         final List<ImageFileSuffix> iamgeFileSuffixList) {
 
         setImageDescriptorList(iamgeFileSuffixList);
@@ -81,7 +81,7 @@ public class ImageFileSuffixes extends ImageDescriptors<ImageFileSuffix> {
 
     public Map<String, ImageFileSuffix> getImageFileSuffixes() {
 
-        return super.getImageDescriptors();
+        return getImageDescriptors();
     }
 
 

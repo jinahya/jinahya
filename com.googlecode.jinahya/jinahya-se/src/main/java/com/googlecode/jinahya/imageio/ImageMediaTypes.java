@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageMediaTypes extends ImageDescriptors<ImageMediaType> {
+public class ImageMediaTypes extends ImageIODescriptors<ImageMediaType> {
 
 
     public static ImageMediaTypes newInstance() {
@@ -66,13 +66,13 @@ public class ImageMediaTypes extends ImageDescriptors<ImageMediaType> {
 
 
     @XmlElement(name = "imageMediaType", nillable = true)
-    public List<ImageMediaType> getImageMediaTypeList() {
+    private List<ImageMediaType> getImageMediaTypeList() {
 
-        return super.getImageDescriptorList();
+        return getImageDescriptorList();
     }
 
 
-    public void setImageMediaTypeesList(
+    private void setImageMediaTypeList(
         final List<ImageMediaType> imageMediaTypeList) {
 
         setImageDescriptorList(imageMediaTypeList);
@@ -81,7 +81,7 @@ public class ImageMediaTypes extends ImageDescriptors<ImageMediaType> {
 
     public Map<String, ImageMediaType> getImageMediaTypes() {
 
-        return super.getImageDescriptors();
+        return getImageDescriptors();
     }
 
 

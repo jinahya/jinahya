@@ -32,10 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <T>
  */
 @XmlTransient
-public abstract class ImageDescriptors<T extends ImageDescriptor> {
+public abstract class ImageIODescriptors<T extends ImageIODescriptor> {
 
 
-    protected List<T> getImageDescriptorList() {
+    List<T> getImageDescriptorList() {
 
         final Collection<T> values = getImageDescriptors().values();
 
@@ -47,7 +47,7 @@ public abstract class ImageDescriptors<T extends ImageDescriptor> {
     }
 
 
-    protected void setImageDescriptorList(final List<T> imageDescriptorList) {
+    void setImageDescriptorList(final List<T> imageDescriptorList) {
 
         for (T imageDescriptor : imageDescriptorList) {
             getImageDescriptors().put(
@@ -56,7 +56,7 @@ public abstract class ImageDescriptors<T extends ImageDescriptor> {
     }
 
 
-    protected Map<String, T> getImageDescriptors() {
+    Map<String, T> getImageDescriptors() {
 
         if (imageDescriptors == null) {
             imageDescriptors = new TreeMap<String, T>();
