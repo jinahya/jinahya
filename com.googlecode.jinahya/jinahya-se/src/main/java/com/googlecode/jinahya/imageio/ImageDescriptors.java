@@ -56,7 +56,7 @@ public abstract class ImageDescriptors<T extends ImageDescriptor> {
     }
 
 
-    public Map<String, T> getImageDescriptors() {
+    protected Map<String, T> getImageDescriptors() {
 
         if (imageDescriptors == null) {
             imageDescriptors = new TreeMap<String, T>();

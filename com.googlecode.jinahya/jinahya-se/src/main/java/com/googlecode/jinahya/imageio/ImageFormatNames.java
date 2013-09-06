@@ -19,6 +19,7 @@ package com.googlecode.jinahya.imageio;
 
 
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -64,17 +65,23 @@ public class ImageFormatNames extends ImageDescriptors<ImageFormatName> {
     }
 
 
-    @XmlElement(name = "imageFormatName")
-    protected List<ImageFormatName> getImageFormatNameList() {
+    @XmlElement(name = "imageFormatName", nillable = true)
+    public List<ImageFormatName> getImageFormatNameList() {
 
         return super.getImageDescriptorList();
     }
 
 
-    protected void setImageFormatNameList(
+    public void setImageFormatNameList(
         final List<ImageFormatName> imageFormatNameList) {
 
         setImageDescriptorList(imageFormatNameList);
+    }
+
+
+    public Map<String, ImageFormatName> getImageFormatNames() {
+
+        return super.getImageDescriptors();
     }
 
 
