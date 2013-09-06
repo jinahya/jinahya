@@ -52,6 +52,10 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
 
+        if (headers == null) {
+            throw new NullPointerException("headers");
+        }
+
         final HttpServletRequest instance =
             new HeadersRequestWrapper(request, headers, null);
 
@@ -63,6 +67,14 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         final HttpServletRequest request,
         final String name, List<String> values) {
 
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (values == null) {
+            throw new NullPointerException("values");
+        }
+
         final Map<String, List<String>> headers = new HashMap<>();
         headers.put(name, values);
 
@@ -73,6 +85,65 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
     public static HttpServletRequest newInstanceForPrecedingHeaders(
         final HttpServletRequest request,
         final String name, final String value) {
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        return newInstanceForPrecedingHeaders(
+            request, name, Arrays.asList(value));
+    }
+
+
+    public static HttpServletRequest newInstanceForSuccedingHeaders(
+        final HttpServletRequest request,
+        final Map<String, List<String>> headers) {
+
+        if (headers == null) {
+            throw new NullPointerException("headers");
+        }
+
+        final HttpServletRequest instance =
+            new HeadersRequestWrapper(request, headers, null);
+
+        return instance;
+    }
+
+
+    public static HttpServletRequest newInstanceForSucceedingHeaders(
+        final HttpServletRequest request,
+        final String name, List<String> values) {
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (values == null) {
+            throw new NullPointerException("values");
+        }
+
+        final Map<String, List<String>> headers = new HashMap<>();
+        headers.put(name, values);
+
+        return newInstanceForPrecedingHeaders(request, headers);
+    }
+
+
+    public static HttpServletRequest newInstanceForSucceedingHeaders(
+        final HttpServletRequest request,
+        final String name, final String value) {
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
 
         return newInstanceForPrecedingHeaders(
             request, name, Arrays.asList(value));
@@ -108,15 +179,14 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
         for (final Enumeration<String> names = request.getHeaderNames();
              names.hasMoreElements();) {
-            final String fieldName = names.nextElement();
-            List<String> fieldValues = headers.get(fieldName);
-            if (fieldValues == null) {
-                fieldValues = new ArrayList<>();
-                headers.put(fieldName, fieldValues);
+            final String name = names.nextElement();
+            List<String> value = headers.get(name);
+            if (value == null) {
+                value = new ArrayList<>();
+                headers.put(name, value);
             }
-            fieldValues.addAll(Collections.list(request.getHeaders(fieldName)));
+            value.addAll(Collections.list(request.getHeaders(name)));
         }
-
 
         if (succeedingHeaders != null) {
             for (Entry<String, List<String>> e : succeedingHeaders.entrySet()) {
@@ -169,4 +239,3 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
 
 }
-

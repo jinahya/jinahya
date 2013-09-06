@@ -55,7 +55,7 @@ public class ImageFormatNamesResource {
         LOGGER.log(Level.INFO, "readImageFormatName({0})", key);
 
         final ImageFormatName iamgeFormatName =
-            IMAGE_FORMAT_NAMES.getImageDescriptors().get(key);
+            IMAGE_FORMAT_NAMES.getImageFormatNames().get(key);
 
         if (iamgeFormatName == null) {
             throw new WebApplicationException(Status.NOT_FOUND);
