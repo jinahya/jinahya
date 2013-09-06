@@ -20,7 +20,7 @@ package com.googlecode.jinahya.xml.bind.test.map;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -77,6 +77,11 @@ public abstract class AbstractDepartmentTest<T extends AbstractDepartment> {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         marshaller.marshal(expected, baos);
 
+        final String jaxbEncoding =
+            (String) marshaller.getProperty(Marshaller.JAXB_ENCODING);
+        System.out.println(new String(baos.toByteArray(),
+                                      Charset.forName(jaxbEncoding)));
+
         final Unmarshaller unmarshaller = context.createUnmarshaller();
 
         final T actual = departmentType.cast(unmarshaller.unmarshal(
@@ -91,4 +96,3 @@ public abstract class AbstractDepartmentTest<T extends AbstractDepartment> {
 
 
 }
-
