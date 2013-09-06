@@ -19,16 +19,18 @@ package com.googlecode.jinahya.imageio;
 
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public abstract class ImageIODescriptor {
+@XmlTransient
+public abstract class ImageAspect {
 
 
-    protected static <I extends ImageIODescriptor> I newInstance(
+    protected static <I extends ImageAspect> I newInstance(
         final Class<I> type, final boolean readable, final boolean writable,
         final String key) {
 
@@ -46,7 +48,7 @@ public abstract class ImageIODescriptor {
     }
 
 
-    protected ImageIODescriptor() {
+    protected ImageAspect() {
         super();
     }
 

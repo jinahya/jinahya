@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFileSuffixes extends ImageIODescriptors<ImageFileSuffix> {
+public class ImageFileSuffixes extends ImageAspects<ImageFileSuffix> {
 
 
     public static ImageFileSuffixes newInstance() {
@@ -39,10 +39,10 @@ public class ImageFileSuffixes extends ImageIODescriptors<ImageFileSuffix> {
 
         for (final String readerFileSuffix : ImageIO.getReaderFileSuffixes()) {
             ImageFileSuffix imageFileSuffix =
-                instance.getImageDescriptors().get(readerFileSuffix);
+                instance.getImageAspects().get(readerFileSuffix);
             if (imageFileSuffix == null) {
                 imageFileSuffix = new ImageFileSuffix();
-                instance.getImageDescriptors().put(
+                instance.getImageAspects().put(
                     readerFileSuffix, imageFileSuffix);
             }
             imageFileSuffix.setReadable(true);
@@ -51,10 +51,10 @@ public class ImageFileSuffixes extends ImageIODescriptors<ImageFileSuffix> {
 
         for (final String writerFileSuffix : ImageIO.getWriterFileSuffixes()) {
             ImageFileSuffix imageFileSuffix =
-                instance.getImageDescriptors().get(writerFileSuffix);
+                instance.getImageAspects().get(writerFileSuffix);
             if (imageFileSuffix == null) {
                 imageFileSuffix = new ImageFileSuffix();
-                instance.getImageDescriptors().put(
+                instance.getImageAspects().put(
                     writerFileSuffix, imageFileSuffix);
             }
             imageFileSuffix.setWritable(true);
@@ -68,20 +68,20 @@ public class ImageFileSuffixes extends ImageIODescriptors<ImageFileSuffix> {
     @XmlElement(name = "imageFileSuffix", nillable = true)
     private List<ImageFileSuffix> getImageFileSuffixList() {
 
-        return getImageDescriptorList();
+        return getImageAspectList();
     }
 
 
     private void setImageFileSuffixList(
         final List<ImageFileSuffix> iamgeFileSuffixList) {
 
-        setImageDescriptorList(iamgeFileSuffixList);
+        setImageAspectList(iamgeFileSuffixList);
     }
 
 
     public Map<String, ImageFileSuffix> getImageFileSuffixes() {
 
-        return getImageDescriptors();
+        return getImageAspects();
     }
 
 

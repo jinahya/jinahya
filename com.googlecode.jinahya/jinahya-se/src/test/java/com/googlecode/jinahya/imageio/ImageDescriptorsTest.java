@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  * @param <T>
  * @param <U>
  */
-public abstract class ImageDescriptorsTest<T extends ImageIODescriptors<U>, U extends ImageIODescriptor> {
+public abstract class ImageDescriptorsTest<T extends ImageAspects<U>, U extends ImageAspect> {
 
 
     public ImageDescriptorsTest(final Class<T> imageDescriptorsType) {
@@ -52,8 +52,10 @@ public abstract class ImageDescriptorsTest<T extends ImageIODescriptors<U>, U ex
 
         final T expected = newInstance();
 
+//        final JAXBContext context =
+//            JAXBContext.newInstance(imageDescriptorsType);
         final JAXBContext context =
-            JAXBContext.newInstance(imageDescriptorsType);
+            JAXBContext.newInstance(imageDescriptorsType.getPackage().getName());
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -73,7 +75,7 @@ public abstract class ImageDescriptorsTest<T extends ImageIODescriptors<U>, U ex
         final T actual = unmarshaller.unmarshal(source, imageDescriptorsType)
             .getValue();
 
-        for (U imageDescriptor : actual.getImageDescriptorList()) {
+        for (U imageDescriptor : actual.getImageAspectList()) {
             System.out.println("unmarshalled: " + imageDescriptor);
         }
     }

@@ -18,12 +18,12 @@
 @XmlSchema(
     attributeFormDefault = XmlNsForm.UNQUALIFIED,
     elementFormDefault = XmlNsForm.QUALIFIED,
-    namespace = "http://jinahya.googlecode.com/imageio",
+    namespace = "http://jinahya.googlecode.com/imageio"/*,
     xmlns = {
     @XmlNs(prefix = XMLConstants.XML_NS_PREFIX,
            namespaceURI = XMLConstants.XML_NS_URI),
     @XmlNs(prefix = "xsi",
-           namespaceURI = XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)})
+           namespaceURI = XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)}*/)
 @XmlAccessorType(XmlAccessType.NONE)
 package com.googlecode.jinahya.imageio;
 
