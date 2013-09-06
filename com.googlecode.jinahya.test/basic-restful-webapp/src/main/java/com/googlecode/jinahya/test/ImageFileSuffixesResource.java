@@ -54,7 +54,7 @@ public class ImageFileSuffixesResource {
         LOGGER.log(Level.INFO, "readImageFileSuffix({0})", key);
 
         final ImageFileSuffix iamgeFileSuffix =
-            IMAGE_FILE_SUFFIXES.getImageDescriptors().get(key);
+            IMAGE_FILE_SUFFIXES.getImageFileSuffixes().get(key);
 
         if (iamgeFileSuffix == null) {
             throw new WebApplicationException(Status.NOT_FOUND);

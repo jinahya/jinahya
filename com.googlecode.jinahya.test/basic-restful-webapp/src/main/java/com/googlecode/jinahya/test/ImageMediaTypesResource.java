@@ -55,7 +55,7 @@ public class ImageMediaTypesResource {
         LOGGER.log(Level.INFO, "readImageMediaType({0})", key);
 
         final ImageMediaType imageMediaType =
-            IMAGE_MEDIA_TYPES.getImageDescriptors().get(key);
+            IMAGE_MEDIA_TYPES.getImageMediaTypes().get(key);
 
         if (imageMediaType == null) {
             throw new WebApplicationException(Status.BAD_REQUEST);
