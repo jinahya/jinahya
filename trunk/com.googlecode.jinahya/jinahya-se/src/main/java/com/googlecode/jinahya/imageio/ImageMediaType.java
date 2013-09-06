@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageMediaType extends ImageIODescriptor {
+public class ImageMediaType extends ImageAspect {
 
 
 //    protected static ImageMediaType newInstance(final boolean readable,
