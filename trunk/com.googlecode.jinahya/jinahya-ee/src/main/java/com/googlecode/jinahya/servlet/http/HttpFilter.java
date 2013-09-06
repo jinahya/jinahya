@@ -35,6 +35,20 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class HttpFilter extends AbstractFilter {
 
 
+    /**
+     * Overridden to invoke
+     * {@link #doFilter(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * when {@code request} is an instance of {@link HttpServletRequest} and
+     * {@code response} is an instance of {@link HttpServletResponse}.
+     *
+     * @param request the request
+     * @param response the response
+     * @param chain the chain
+     *
+     * @throws IOException {@inheritDoc }
+     * @throws ServletException {@inheritDoc }
+     * @see #doFilter(HttpServletRequest, HttpServletResponse, FilterChain)
+     */
     @Override
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
