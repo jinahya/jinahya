@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFormatNames extends ImageAspects<ImageFormatName> {
+public class ImageFormatNames extends ImageFeatures<ImageFormatName> {
 
 
     public static ImageFormatNames newInstance() {
@@ -39,10 +39,10 @@ public class ImageFormatNames extends ImageAspects<ImageFormatName> {
 
         for (final String readerFormatName : ImageIO.getReaderFormatNames()) {
             ImageFormatName imageFormatName =
-                instance.getImageAspects().get(readerFormatName);
+                instance.getImageFeatures().get(readerFormatName);
             if (imageFormatName == null) {
                 imageFormatName = new ImageFormatName();
-                instance.getImageAspects().put(
+                instance.getImageFeatures().put(
                     readerFormatName, imageFormatName);
             }
             imageFormatName.setReadable(true);
@@ -51,10 +51,10 @@ public class ImageFormatNames extends ImageAspects<ImageFormatName> {
 
         for (final String writerFileSuffix : ImageIO.getWriterFileSuffixes()) {
             ImageFormatName imageFormatName =
-                instance.getImageAspects().get(writerFileSuffix);
+                instance.getImageFeatures().get(writerFileSuffix);
             if (imageFormatName == null) {
                 imageFormatName = new ImageFormatName();
-                instance.getImageAspects().put(
+                instance.getImageFeatures().put(
                     writerFileSuffix, imageFormatName);
             }
             imageFormatName.setWritable(true);
@@ -68,20 +68,20 @@ public class ImageFormatNames extends ImageAspects<ImageFormatName> {
     @XmlElement(name = "imageFormatName", nillable = true)
     private List<ImageFormatName> getImageFormatNameList() {
 
-        return getImageAspectList();
+        return getImageFeatureList();
     }
 
 
     private void setImageFormatNameList(
         final List<ImageFormatName> imageFormatNameList) {
 
-        setImageAspectList(imageFormatNameList);
+        setImageFeatureList(imageFormatNameList);
     }
 
 
     public Map<String, ImageFormatName> getImageFormatNames() {
 
-        return getImageAspects();
+        return getImageFeatures();
     }
 
 

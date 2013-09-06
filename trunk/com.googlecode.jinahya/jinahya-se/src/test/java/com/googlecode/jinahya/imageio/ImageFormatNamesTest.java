@@ -23,7 +23,7 @@ package com.googlecode.jinahya.imageio;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class ImageFormatNamesTest
-    extends ImageDescriptorsTest<ImageFormatNames, ImageFormatName> {
+    extends ImageFeaturesTest<ImageFormatNames, ImageFormatName> {
 
 
     public ImageFormatNamesTest() {

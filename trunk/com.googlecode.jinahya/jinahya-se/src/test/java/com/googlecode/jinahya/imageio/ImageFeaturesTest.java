@@ -36,10 +36,10 @@ import org.testng.annotations.Test;
  * @param <T>
  * @param <U>
  */
-public abstract class ImageDescriptorsTest<T extends ImageAspects<U>, U extends ImageAspect> {
+abstract class ImageFeaturesTest<T extends ImageFeatures<U>, U extends ImageFeature> {
 
 
-    public ImageDescriptorsTest(final Class<T> imageDescriptorsType) {
+    public ImageFeaturesTest(final Class<T> imageDescriptorsType) {
 
         super();
 
@@ -75,7 +75,7 @@ public abstract class ImageDescriptorsTest<T extends ImageAspects<U>, U extends 
         final T actual = unmarshaller.unmarshal(source, imageDescriptorsType)
             .getValue();
 
-        for (U imageDescriptor : actual.getImageAspectList()) {
+        for (U imageDescriptor : actual.getImageFeatureList()) {
             System.out.println("unmarshalled: " + imageDescriptor);
         }
     }

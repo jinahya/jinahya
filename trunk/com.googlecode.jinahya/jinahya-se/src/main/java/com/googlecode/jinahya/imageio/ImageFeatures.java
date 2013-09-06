@@ -32,12 +32,12 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <T>
  */
 @XmlTransient
-public abstract class ImageAspects<T extends ImageAspect> {
+abstract class ImageFeatures<T extends ImageFeature> {
 
 
-    List<T> getImageAspectList() {
+    List<T> getImageFeatureList() {
 
-        final Collection<T> values = getImageAspects().values();
+        final Collection<T> values = getImageFeatures().values();
 
         if (values instanceof List) {
             return (List<T>) values;
@@ -47,25 +47,25 @@ public abstract class ImageAspects<T extends ImageAspect> {
     }
 
 
-    void setImageAspectList(final List<T> imageAspectList) {
+    void setImageFeatureList(final List<T> imageFeatureList) {
 
-        for (T iamgeAspect : imageAspectList) {
-            getImageAspects().put(iamgeAspect.getKey(), iamgeAspect);
+        for (T imageFeature : imageFeatureList) {
+            getImageFeatures().put(imageFeature.getKey(), imageFeature);
         }
     }
 
 
-    Map<String, T> getImageAspects() {
+    Map<String, T> getImageFeatures() {
 
-        if (imageAspects == null) {
-            imageAspects = new TreeMap<String, T>();
+        if (imageFeatures == null) {
+            imageFeatures = new TreeMap<String, T>();
         }
 
-        return imageAspects;
+        return imageFeatures;
     }
 
 
-    private Map<String, T> imageAspects;
+    private Map<String, T> imageFeatures;
 
 
 }
