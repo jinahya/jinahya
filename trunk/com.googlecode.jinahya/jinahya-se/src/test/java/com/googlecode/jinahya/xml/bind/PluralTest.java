@@ -128,7 +128,7 @@ public abstract class PluralTest<P extends Plural<S>, S> {
         final P expected = newPlural();
 
         for (int i = 0; i < singularCount; i++) {
-            expected.getSingulars().add(newSingular());
+            expected.getSingular().add(newSingular());
         }
 
         final Marshaller marshaller = context.createMarshaller();
@@ -168,7 +168,7 @@ public abstract class PluralTest<P extends Plural<S>, S> {
         final P expected = newPlural();
 
         for (int i = 0; i < singularCount; i++) {
-            expected.getSingulars().add(newSingular());
+            expected.getSingular().add(newSingular());
         }
 
         final JSONMarshaller marshaller =

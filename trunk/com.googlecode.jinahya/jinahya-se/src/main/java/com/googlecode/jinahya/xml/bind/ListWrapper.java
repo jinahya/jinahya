@@ -20,6 +20,7 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -27,34 +28,34 @@ import javax.xml.bind.annotation.XmlTransient;
  * General class for wrapper classes.
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <S> singular type parameter
+ * @param <E> element type parameter
  */
 @XmlTransient
-public abstract class Plural<S> {
+public abstract class ListWrapper<E> {
 
 
     /**
-     * Creates a new instance of given {@code pluralType} contains specified
-     * {@code singulars}.
+     * Creates a new instance of given {@code listType} contains specified
+     * {@code elements}.
      *
-     * @param <P> plural type parameter
-     * @param <S> singular type parameter
-     * @param pluralType plural type
-     * @param singulars a collection of elements to add; may be {@code null}.
+     * @param <T> plural type parameter
+     * @param <E> singular type parameter
+     * @param listType plural type
+     * @param elements a collection of elements to add; may be {@code null}.
      *
-     * @return a new instance of given {@code pluralType}.
+     * @return a new instance of given {@code listType}.
      */
-    public static <P extends Plural<S>, S> P newInstance(
-        final Class<P> pluralType, final Collection<? extends S> singulars) {
+    public static <T extends ListWrapper<E>, E> T newInstance(
+        final Class<T> listType, final Collection<? extends E> elements) {
 
-        if (pluralType == null) {
-            throw new NullPointerException("pluralType");
+        if (listType == null) {
+            throw new NullPointerException("listType");
         }
 
         try {
-            final P instance = pluralType.newInstance();
-            if (singulars != null) {
-                instance.getSingular().addAll(singulars);
+            final T instance = listType.newInstance();
+            if (elements != null) {
+                instance.getList().addAll(elements);
             }
             return instance;
         } catch (InstantiationException ie) {
@@ -68,16 +69,16 @@ public abstract class Plural<S> {
     /**
      * Creates a new instance of {@code pluralType}.
      *
-     * @param <P> plural type parameter.
-     * @param <S> singular type parameter.
-     * @param pluralType plural type
+     * @param <T> list type parameter.
+     * @param <E> element type parameter.
+     * @param listType list type
      *
-     * @return a new instance of given {@code pluralType}
+     * @return a new instance of given {@code listType}
      */
-    public static <P extends Plural<S>, S> P newInstance(
-        final Class<P> pluralType) {
+    public static <T extends ListWrapper<E>, E> T newInstance(
+        final Class<T> listType) {
 
-        return newInstance(pluralType, null);
+        return newInstance(listType, null);
     }
 
 
@@ -87,13 +88,13 @@ public abstract class Plural<S> {
      * @return singular collection
      */
     @XmlTransient
-    protected Collection<S> getSingular() {
+    protected List<E> getList() {
 
-        if (singular == null) {
-            singular = new ArrayList<S>();
+        if (list == null) {
+            list = new ArrayList<E>();
         }
 
-        return singular;
+        return list;
     }
 
 
@@ -101,7 +102,7 @@ public abstract class Plural<S> {
      * singular collection.
      */
     @XmlTransient
-    private Collection<S> singular;
+    private List<E> list;
 
 
 }
