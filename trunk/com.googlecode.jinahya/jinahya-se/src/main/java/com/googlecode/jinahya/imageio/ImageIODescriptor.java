@@ -25,10 +25,10 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public abstract class ImageDescriptor {
+public abstract class ImageIODescriptor {
 
 
-    protected static <I extends ImageDescriptor> I newInstance(
+    protected static <I extends ImageIODescriptor> I newInstance(
         final Class<I> type, final boolean readable, final boolean writable,
         final String key) {
 
@@ -46,7 +46,7 @@ public abstract class ImageDescriptor {
     }
 
 
-    protected ImageDescriptor() {
+    protected ImageIODescriptor() {
         super();
     }
 
@@ -84,6 +84,15 @@ public abstract class ImageDescriptor {
     public void setKey(final String key) {
 
         this.key = key;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString()
+               + "?readable=" + readable
+               + "&writable=" + writable
+               + "&key=" + key;
     }
 
 

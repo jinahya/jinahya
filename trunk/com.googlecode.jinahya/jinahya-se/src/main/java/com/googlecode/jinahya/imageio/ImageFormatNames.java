@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class ImageFormatNames extends ImageDescriptors<ImageFormatName> {
+public class ImageFormatNames extends ImageIODescriptors<ImageFormatName> {
 
 
     public static ImageFormatNames newInstance() {
@@ -66,13 +66,13 @@ public class ImageFormatNames extends ImageDescriptors<ImageFormatName> {
 
 
     @XmlElement(name = "imageFormatName", nillable = true)
-    public List<ImageFormatName> getImageFormatNameList() {
+    private List<ImageFormatName> getImageFormatNameList() {
 
-        return super.getImageDescriptorList();
+        return getImageDescriptorList();
     }
 
 
-    public void setImageFormatNameList(
+    private void setImageFormatNameList(
         final List<ImageFormatName> imageFormatNameList) {
 
         setImageDescriptorList(imageFormatNameList);
@@ -81,7 +81,7 @@ public class ImageFormatNames extends ImageDescriptors<ImageFormatName> {
 
     public Map<String, ImageFormatName> getImageFormatNames() {
 
-        return super.getImageDescriptors();
+        return getImageDescriptors();
     }
 
 
