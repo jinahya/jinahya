@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlTransient
-abstract class ImageFeature {
+public abstract class ImageFeature {
 
 
 //    protected static <I extends ImageAspect> I newInstance(
