@@ -35,7 +35,7 @@ public class Items extends Plural<Item> {
 
 
     public Collection<Item> getItems() {
-        return getSingulars();
+        return getSingular();
     }
 
 
