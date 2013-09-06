@@ -19,6 +19,7 @@ package com.googlecode.jinahya.imageio;
 
 
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -64,17 +65,23 @@ public class ImageMediaTypes extends ImageDescriptors<ImageMediaType> {
     }
 
 
-    @XmlElement(name = "imageMediaType")
-    protected List<ImageMediaType> getImageMediaTypeList() {
+    @XmlElement(name = "imageMediaType", nillable = true)
+    public List<ImageMediaType> getImageMediaTypeList() {
 
         return super.getImageDescriptorList();
     }
 
 
-    protected void setImageMediaTypeesList(
-        final List<ImageMediaType> iamgeMediaTypeList) {
+    public void setImageMediaTypeesList(
+        final List<ImageMediaType> imageMediaTypeList) {
 
-        setImageDescriptorList(iamgeMediaTypeList);
+        setImageDescriptorList(imageMediaTypeList);
+    }
+
+
+    public Map<String, ImageMediaType> getImageMediaTypes() {
+
+        return super.getImageDescriptors();
     }
 
 

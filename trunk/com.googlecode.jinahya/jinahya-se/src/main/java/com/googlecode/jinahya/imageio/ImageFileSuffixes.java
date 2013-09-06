@@ -19,6 +19,7 @@ package com.googlecode.jinahya.imageio;
 
 
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -64,17 +65,23 @@ public class ImageFileSuffixes extends ImageDescriptors<ImageFileSuffix> {
     }
 
 
-    @XmlElement(name = "imageFileSuffix")
-    protected List<ImageFileSuffix> getImageFileSuffixList() {
+    @XmlElement(name = "imageFileSuffix", nillable = true)
+    public List<ImageFileSuffix> getImageFileSuffixList() {
 
         return super.getImageDescriptorList();
     }
 
 
-    protected void setImageFileSuffixesList(
+    public void setImageFileSuffixesList(
         final List<ImageFileSuffix> iamgeFileSuffixList) {
 
         setImageDescriptorList(iamgeFileSuffixList);
+    }
+
+
+    public Map<String, ImageFileSuffix> getImageFileSuffixes() {
+
+        return super.getImageDescriptors();
     }
 
 

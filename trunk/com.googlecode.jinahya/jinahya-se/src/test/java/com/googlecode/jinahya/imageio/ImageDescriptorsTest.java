@@ -18,11 +18,15 @@
 package com.googlecode.jinahya.imageio;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import org.testng.annotations.Test;
 
 
@@ -59,6 +63,13 @@ public abstract class ImageDescriptorsTest<T extends ImageDescriptors<?>> {
 
         System.out.println(new String(
             baos.toByteArray(), Charset.forName(jaxbEncoding)));
+
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        final Source source =
+            new StreamSource(new ByteArrayInputStream(baos.toByteArray()));
+        final T actual = unmarshaller.unmarshal(source, imageDescriptorsType)
+            .getValue();
     }
 
 
