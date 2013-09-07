@@ -28,6 +28,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,6 +53,10 @@ public class SuffixedToTypedFilter extends HttpFilter {
 
     public static final Pattern MEDIA_TYPE_PATTERN =
             Pattern.compile(MEDIA_TYPE_EXPRESSION);
+
+
+    private static final Pattern PATH_NAME_PATTERN =
+            Pattern.compile("(.+)\\.(.+)");
 
 
     @Override
@@ -89,14 +95,14 @@ public class SuffixedToTypedFilter extends HttpFilter {
 
         final String pathInfo = request.getPathInfo();
         final String pathTranslated = request.getPathTranslated();
-        final String servletPath = request.getServletPath();
+        final String servletName = request.getServletPath();
         final String requestUri = request.getRequestURI();
         final StringBuffer requestUrl = request.getRequestURL();
 
         System.out.println("-------------------------------------------------");
         System.out.println("pathInfo: " + pathInfo);
         System.out.println("pathTranslated: " + pathTranslated);
-        System.out.println("servletPath: " + servletPath);
+        System.out.println("servletPath: " + servletName);
         System.out.println("requestUri: " + requestUri);
         System.out.println("requestUrl: " + requestUrl);
         System.out.println("-------------------------------------------------");
@@ -119,40 +125,40 @@ public class SuffixedToTypedFilter extends HttpFilter {
             return;
         }
 
-        final String fileName = pathInfo.substring(lastSlashIndex);
-
-        final int lastPeriodIndex = fileName.lastIndexOf('.');
-        if (lastPeriodIndex == -1 || lastPeriodIndex == 0) {
+        final String pathName = pathInfo.substring(lastSlashIndex + 1);
+        final Matcher pathNameMatcher = PATH_NAME_PATTERN.matcher(pathName);
+        if (!pathNameMatcher.matches()) {
             chain.doFilter(request, response);
             return;
         }
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + " -> " + entry.getValue());
-            if (!fileName.endsWith(entry.getKey())) {
-                continue;
-            }
-            System.out.println("pathInfo endsWith " + entry.getKey());
-            final String accept = request.getHeader("Accept");
-            if (accept != null) {
-                System.out.println("Accept: " + accept);
-                continue;
-            }
-            final HttpServletRequest wequest =
-                    HeadersRequestWrapper.newInstanceForPrecedingHeaders(
-                    request, "Accept", entry.getValue());
-            final String path = pathInfo.substring(
-                    0, pathInfo.length() - entry.getKey().length() - 1);
-            System.out.println("dispatcher.path: " + path);
-            final RequestDispatcher dispatcher =
-                    wequest.getRequestDispatcher(path);
-            dispatcher.forward(wequest, response);
-            System.out.println("fowareded");
+        final String fileSuffix = pathNameMatcher.group(2);
+        final String mediaType = map.get(fileSuffix);
+        if (mediaType == null) {
+            chain.doFilter(request, response);
             return;
         }
 
-        System.out.println("normal chain");
-        chain.doFilter(request, response);
+        final String path = pathInfo.substring(
+                0, pathInfo.length() - fileSuffix.length() - 1);
+
+        try {
+            final ServletRegistration servietRegistration =
+                    getServletContext().getServletRegistration(path);
+            if (servietRegistration == null) {
+                chain.doFilter(request, response);
+                return;
+            }
+        } catch (UnsupportedOperationException uoe) {
+            chain.doFilter(request, response);
+            return;
+        }
+        final ServletRequest wrapper =
+                HeadersRequestWrapper.newInstanceForPrecedingHeaders(
+                request, "Accept", mediaType);
+        final RequestDispatcher dispatcher = request.getRequestDispatcher(path);
+        dispatcher.forward(wrapper, response);
+        System.out.println("fowarded");
         return;
     }
 
