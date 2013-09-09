@@ -1,0 +1,7 @@
+<configuration>
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+  </appender>
+  <logger name="com.googlecode.jinahya">
+    <level value="DEBUG"/>
+  </logger>
+</configuration>
