@@ -22,18 +22,17 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -43,7 +42,8 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
 
 
-    public static final String FILE_SUFFIX_EXPRESSION = "file\\.suffix\\.(.+)";
+    public static final String FILE_SUFFIX_EXPRESSION =
+        "file\\.suffix\\.([^\\.].+)";
 
 
     public static final Pattern FILE_SUFFIX_PATTERN =
@@ -57,17 +57,14 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
         Pattern.compile(MEDIA_TYPE_EXPRESSION);
 
 
-    private static final Pattern PATH_NAME_PATTERN =
-        Pattern.compile("(.+)\\.(.+)");
+    private static final Pattern FILE_NAME_PATTERN =
+        Pattern.compile("(.+)\\.([^\\.].+)");
 
 
+//    private static final Logger LOGGER =
+//        Logger.getLogger(FileSuffixToMediaTypeDispatcher.class.getName());
     private static final Logger LOGGER =
-        Logger.getLogger(FileSuffixToMediaTypeDispatcher.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.ALL);
-    }
+        LoggerFactory.getLogger(FileSuffixToMediaTypeDispatcher.class);
 
 
     @Override
@@ -96,6 +93,7 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
             if (map == null) {
                 map = new HashMap<>();
             }
+            LOGGER.debug("{} -> {}", fileSuffix, mediaType);
             map.put(fileSuffix, mediaType);
         }
     }
@@ -107,81 +105,63 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
                             final FilterChain chain)
         throws IOException, ServletException {
 
-        final String pathInfo = request.getPathInfo();
-        final String pathTranslated = request.getPathTranslated();
-        final String servletName = request.getServletPath();
-
-        final StringBuffer requestUrl = request.getRequestURL();
-
         if (map == null) {
-            LOGGER.info("null map");
+            LOGGER.debug("null map");
             chain.doFilter(request, response);
             return;
         }
 
         final String requestUri = request.getRequestURI();
         if (requestUri == null) {
-            LOGGER.info("null requestUri");
+            LOGGER.debug("null requestUri");
             chain.doFilter(request, response);
             return;
         }
 
         final String resourcePath = requestUri.substring(contextPathLength);
-        LOGGER.log(Level.INFO, "resourcePath: {0}", resourcePath);
+        LOGGER.debug("resourcePath: {}", resourcePath);
 
         final int lastSlashIndex = resourcePath.lastIndexOf('/');
         if (lastSlashIndex == -1) {
+            LOGGER.debug("no last slash");
             chain.doFilter(request, response);
             return;
         }
 
-        final String pathName = resourcePath.substring(lastSlashIndex + 1);
-        final Matcher pathNameMatcher = PATH_NAME_PATTERN.matcher(pathName);
-        if (!pathNameMatcher.matches()) {
+        final String fileName = resourcePath.substring(lastSlashIndex + 1);
+        final Matcher fileNameMatcher = FILE_NAME_PATTERN.matcher(fileName);
+        if (!fileNameMatcher.matches()) {
+            LOGGER.debug("fileName not matches");
             chain.doFilter(request, response);
             return;
         }
 
-        final String fileSuffix = pathNameMatcher.group(2);
+        final String fileSuffix = fileNameMatcher.group(2);
         final String mediaType = map.get(fileSuffix);
         if (mediaType == null) {
-            LOGGER.info("no mapped media type.");
+            LOGGER.debug("no mapped media type.");
             chain.doFilter(request, response);
             return;
         }
 
         final String path = resourcePath.substring(
             0, resourcePath.length() - fileSuffix.length() - 1);
-        LOGGER.log(Level.INFO, "path: {0}", path);
-
-        try {
-            final ServletRegistration servietRegistration =
-                getServletContext().getServletRegistration(path);
-//            if (servietRegistration == null) {
-//                LOGGER.info("no servlet registration");
-//                chain.doFilter(request, response);
-//                return;
-//            }
-        } catch (UnsupportedOperationException uoe) {
-            LOGGER.log(Level.INFO, "unsupported", uoe);
-            chain.doFilter(request, response);
-            return;
-        }
+        LOGGER.debug("path: {}", path);
 
         final ServletRequest wrapper =
             RequestHeaderWrapper.newPrecedingInstance(
             request, "Accept", mediaType);
         final RequestDispatcher dispatcher = request.getRequestDispatcher(path);
         dispatcher.forward(wrapper, response);
-        LOGGER.info("fowarded");
+        LOGGER.debug("fowarded");
         return;
     }
 
 
-    private String contextPath;
+    private transient String contextPath;
 
 
-    private int contextPathLength;
+    private transient int contextPathLength;
 
 
     private Map<String, String> map;
