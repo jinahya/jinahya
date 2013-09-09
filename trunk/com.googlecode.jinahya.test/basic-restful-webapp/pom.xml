@@ -12,6 +12,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+      </dependency>
+      <dependency>
         <groupId>com.fasterxml.jackson.jaxrs</groupId>
         <artifactId>jackson-jaxrs-json-provider</artifactId>
         <version>2.2.3</version>
@@ -60,6 +65,11 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
     </dependency>
@@ -100,11 +110,20 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <logback.root.level>DEBUG</logback.root.level>
+    <logback.root.appenderNames>"CONSOLE"</logback.root.appenderNames>
+    <logback.logger.com.googlecode.jinahya.level>DEBUG</logback.logger.com.googlecode.jinahya.level>
   </properties>
 
   <!-- Build Settings -->
   <build>
     <finalName>basic-restful-webapp</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <pluginManagement>
       <plugins>
         <plugin>
