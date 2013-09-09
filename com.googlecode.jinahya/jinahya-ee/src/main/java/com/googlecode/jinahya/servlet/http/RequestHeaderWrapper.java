@@ -25,10 +25,10 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -39,12 +39,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(RequestHeaderWrapper.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.ALL);
-    }
+        LoggerFactory.getLogger(RequestHeaderWrapper.class);
 
 
     public static HttpServletRequest newPrecedingInstance(
@@ -205,6 +200,8 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     @Override
     public String getHeader(final String name) {
 
+        LOGGER.debug("getHeader({})", name);
+
         final List<String> values = headers.get(name);
         if (values != null && !values.isEmpty()) {
             return values.get(0);
@@ -216,6 +213,8 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
 
     @Override
     public Enumeration<String> getHeaders(final String name) {
+
+        LOGGER.debug("getHeaders({})", name);
 
         List<String> values = headers.get(name);
         if (values == null) {
@@ -229,7 +228,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     @Override
     public Enumeration<String> getHeaderNames() {
 
-        LOGGER.info("getHeaderNames()");
+        LOGGER.debug("getHeaderNames()");
 
         return Collections.enumeration(headers.keySet());
     }
