@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletRequestWrapper;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class HeadersRequestWrapper extends HttpServletRequestWrapper {
+public class RequestHeaderWrapper extends HttpServletRequestWrapper {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(HeadersRequestWrapper.class.getName());
+        Logger.getLogger(RequestHeaderWrapper.class.getName());
 
 
     static {
@@ -47,7 +47,7 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
     }
 
 
-    public static HttpServletRequest newInstanceForPrecedingHeaders(
+    public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
 
@@ -56,13 +56,13 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         }
 
         final HttpServletRequest instance =
-            new HeadersRequestWrapper(request, headers, null);
+            new RequestHeaderWrapper(request, headers, null);
 
         return instance;
     }
 
 
-    public static HttpServletRequest newInstanceForPrecedingHeaders(
+    public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final String name, List<String> values) {
 
@@ -77,11 +77,11 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         final Map<String, List<String>> headers = new HashMap<>();
         headers.put(name, values);
 
-        return newInstanceForPrecedingHeaders(request, headers);
+        return newPrecedingInstance(request, headers);
     }
 
 
-    public static HttpServletRequest newInstanceForPrecedingHeaders(
+    public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final String name, final String value) {
 
@@ -93,12 +93,12 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
             throw new NullPointerException("value");
         }
 
-        return newInstanceForPrecedingHeaders(
+        return newPrecedingInstance(
             request, name, Arrays.asList(value));
     }
 
 
-    public static HttpServletRequest newInstanceForSuccedingHeaders(
+    public static HttpServletRequest newSuccedingInstance(
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
 
@@ -107,13 +107,13 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         }
 
         final HttpServletRequest instance =
-            new HeadersRequestWrapper(request, headers, null);
+            new RequestHeaderWrapper(request, headers, null);
 
         return instance;
     }
 
 
-    public static HttpServletRequest newInstanceForSucceedingHeaders(
+    public static HttpServletRequest newSucceedingInstance(
         final HttpServletRequest request,
         final String name, List<String> values) {
 
@@ -128,11 +128,11 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
         final Map<String, List<String>> headers = new HashMap<>();
         headers.put(name, values);
 
-        return newInstanceForPrecedingHeaders(request, headers);
+        return newPrecedingInstance(request, headers);
     }
 
 
-    public static HttpServletRequest newInstanceForSucceedingHeaders(
+    public static HttpServletRequest newSucceedingInstance(
         final HttpServletRequest request,
         final String name, final String value) {
 
@@ -144,7 +144,7 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
             throw new NullPointerException("value");
         }
 
-        return newInstanceForPrecedingHeaders(
+        return newPrecedingInstance(
             request, name, Arrays.asList(value));
     }
 
@@ -158,7 +158,7 @@ public class HeadersRequestWrapper extends HttpServletRequestWrapper {
      * @param succeedingHeaders additional header succeeds requested headers;
      * {@code null} allowed.
      */
-    public HeadersRequestWrapper(
+    public RequestHeaderWrapper(
         final HttpServletRequest request,
         final Map<String, List<String>> precedingHeaders,
         final Map<String, List<String>> succeedingHeaders) {

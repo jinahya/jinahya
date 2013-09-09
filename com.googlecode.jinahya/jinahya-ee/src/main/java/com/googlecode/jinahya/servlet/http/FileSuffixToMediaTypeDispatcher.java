@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.FilterChain;
@@ -38,25 +40,34 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class SuffixedToTypedFilter extends HttpFilter {
+public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
 
 
     public static final String FILE_SUFFIX_EXPRESSION = "file\\.suffix\\.(.+)";
 
 
     public static final Pattern FILE_SUFFIX_PATTERN =
-            Pattern.compile(FILE_SUFFIX_EXPRESSION);
+        Pattern.compile(FILE_SUFFIX_EXPRESSION);
 
 
     public static final String MEDIA_TYPE_EXPRESSION = "media/type/(.+)";
 
 
     public static final Pattern MEDIA_TYPE_PATTERN =
-            Pattern.compile(MEDIA_TYPE_EXPRESSION);
+        Pattern.compile(MEDIA_TYPE_EXPRESSION);
 
 
     private static final Pattern PATH_NAME_PATTERN =
-            Pattern.compile("(.+)\\.(.+)");
+        Pattern.compile("(.+)\\.(.+)");
+
+
+    private static final Logger LOGGER =
+        Logger.getLogger(FileSuffixToMediaTypeDispatcher.class.getName());
+
+
+    static {
+        LOGGER.setLevel(Level.ALL);
+    }
 
 
     @Override
@@ -64,8 +75,11 @@ public class SuffixedToTypedFilter extends HttpFilter {
 
         super.init(filterConfig);
 
+        contextPath = getServletContext().getContextPath();
+        contextPathLength = contextPath.length();
+
         for (final Enumeration<String> initParametrNames =
-                filterConfig.getInitParameterNames();
+            filterConfig.getInitParameterNames();
              initParametrNames.hasMoreElements();) {
             final String name = initParametrNames.nextElement();
             final Matcher nameMatcher = FILE_SUFFIX_PATTERN.matcher(name);
@@ -91,41 +105,37 @@ public class SuffixedToTypedFilter extends HttpFilter {
     protected void doFilter(final HttpServletRequest request,
                             final HttpServletResponse response,
                             final FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
 
         final String pathInfo = request.getPathInfo();
         final String pathTranslated = request.getPathTranslated();
         final String servletName = request.getServletPath();
-        final String requestUri = request.getRequestURI();
+
         final StringBuffer requestUrl = request.getRequestURL();
 
-        System.out.println("-------------------------------------------------");
-        System.out.println("pathInfo: " + pathInfo);
-        System.out.println("pathTranslated: " + pathTranslated);
-        System.out.println("servletPath: " + servletName);
-        System.out.println("requestUri: " + requestUri);
-        System.out.println("requestUrl: " + requestUrl);
-        System.out.println("-------------------------------------------------");
-
         if (map == null) {
-            System.out.println("null suffixes");
+            LOGGER.info("null map");
             chain.doFilter(request, response);
             return;
         }
 
-        if (pathInfo == null) {
-            System.out.println("null pathInfo");
+        final String requestUri = request.getRequestURI();
+        if (requestUri == null) {
+            LOGGER.info("null requestUri");
             chain.doFilter(request, response);
             return;
         }
 
-        final int lastSlashIndex = pathInfo.lastIndexOf('/');
+        final String resourcePath = requestUri.substring(contextPathLength);
+        LOGGER.log(Level.INFO, "resourcePath: {0}", resourcePath);
+
+        final int lastSlashIndex = resourcePath.lastIndexOf('/');
         if (lastSlashIndex == -1) {
             chain.doFilter(request, response);
             return;
         }
 
-        final String pathName = pathInfo.substring(lastSlashIndex + 1);
+        final String pathName = resourcePath.substring(lastSlashIndex + 1);
         final Matcher pathNameMatcher = PATH_NAME_PATTERN.matcher(pathName);
         if (!pathNameMatcher.matches()) {
             chain.doFilter(request, response);
@@ -135,36 +145,46 @@ public class SuffixedToTypedFilter extends HttpFilter {
         final String fileSuffix = pathNameMatcher.group(2);
         final String mediaType = map.get(fileSuffix);
         if (mediaType == null) {
+            LOGGER.info("no mapped media type.");
             chain.doFilter(request, response);
             return;
         }
 
-        final String path = pathInfo.substring(
-                0, pathInfo.length() - fileSuffix.length() - 1);
+        final String path = resourcePath.substring(
+            0, resourcePath.length() - fileSuffix.length() - 1);
+        LOGGER.log(Level.INFO, "path: {0}", path);
 
         try {
             final ServletRegistration servietRegistration =
-                    getServletContext().getServletRegistration(path);
-            if (servietRegistration == null) {
-                chain.doFilter(request, response);
-                return;
-            }
+                getServletContext().getServletRegistration(path);
+//            if (servietRegistration == null) {
+//                LOGGER.info("no servlet registration");
+//                chain.doFilter(request, response);
+//                return;
+//            }
         } catch (UnsupportedOperationException uoe) {
+            LOGGER.log(Level.INFO, "unsupported", uoe);
             chain.doFilter(request, response);
             return;
         }
+
         final ServletRequest wrapper =
-                HeadersRequestWrapper.newInstanceForPrecedingHeaders(
-                request, "Accept", mediaType);
+            RequestHeaderWrapper.newPrecedingInstance(
+            request, "Accept", mediaType);
         final RequestDispatcher dispatcher = request.getRequestDispatcher(path);
         dispatcher.forward(wrapper, response);
-        System.out.println("fowarded");
+        LOGGER.info("fowarded");
         return;
     }
+
+
+    private String contextPath;
+
+
+    private int contextPathLength;
 
 
     private Map<String, String> map;
 
 
 }
-
