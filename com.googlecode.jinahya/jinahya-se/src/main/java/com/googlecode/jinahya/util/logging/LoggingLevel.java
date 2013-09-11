@@ -30,15 +30,15 @@ import java.util.logging.Level;
 public enum LoggingLevel implements FieldEnum<LoggingLevel, Integer> {
 
 
-    OFF(Level.OFF.intValue()),
-    SEVERE(Level.SEVERE.intValue()),
-    WARNING(Level.WARNING.intValue()),
-    INFO(Level.INFO.intValue()),
-    CONFIG(Level.CONFIG.intValue()),
-    FINE(Level.FINE.intValue()),
-    FINER(Level.FINER.intValue()),
-    FINEST(Level.FINEST.intValue()),
-    ALL(Level.ALL.intValue());
+    OFF(Level.OFF),
+    SEVERE(Level.SEVERE),
+    WARNING(Level.WARNING),
+    INFO(Level.INFO),
+    CONFIG(Level.CONFIG),
+    FINE(Level.FINE),
+    FINER(Level.FINER),
+    FINEST(Level.FINEST),
+    ALL(Level.ALL);
 
 
     /**
@@ -94,6 +94,12 @@ public enum LoggingLevel implements FieldEnum<LoggingLevel, Integer> {
     private LoggingLevel(final int fieldValue) {
 
         this.fieldValue = fieldValue;
+    }
+
+
+    private LoggingLevel(final Level level) {
+
+        this(level.intValue());
     }
 
 
