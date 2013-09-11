@@ -1,14 +1,12 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>jinahya-ee</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
+  <version>1.0-alpha-4</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -347,7 +345,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization/>
+  <organization />
   <developers>
     <developer>
       <id>jinahya</id>
@@ -355,21 +353,21 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors/>
+  <contributors />
 
   <!-- Environment Settings -->
-  <issueManagement/>
-  <ciManagement/>
-  <mailingLists/>
+  <issueManagement />
+  <ciManagement />
+  <mailingLists />
   <scm>
-    <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jinahya-ee</connection>
-    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/jinahya-ee</developerConnection>
-    <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/jinahya-ee/</url>
+    <connection>scm:svn:http://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/jinahya-ee-1.0-alpha-4</connection>
+    <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/tags/com.googlecode.jinahya/jinahya-ee-1.0-alpha-4</developerConnection>
+    <url>http://code.google.com/p/jinahya/source/browse/tags/com.googlecode.jinahya/jinahya-ee-1.0-alpha-4</url>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
-  <repositories/>
+  <repositories />
   <pluginRepositories />
   <distributionManagement>
     <site>
