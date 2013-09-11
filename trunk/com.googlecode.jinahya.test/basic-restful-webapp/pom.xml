@@ -57,6 +57,11 @@
         <version>4.2</version>
       </dependency>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-jdk14</artifactId>
+        <version>1.7.5</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.8.5</version>
@@ -85,6 +90,7 @@
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
       <artifactId>jinahya-se</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.main.extras</groupId>
@@ -101,6 +107,11 @@
       <artifactId>imgscalr-lib</artifactId>
       <scope>compile</scope>
     </dependency>
+<!--    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <scope>compile</scope>
+    </dependency>-->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -110,9 +121,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <logback.root.level>DEBUG</logback.root.level>
-    <logback.root.appenderNames>"CONSOLE"</logback.root.appenderNames>
-    <logback.logger.com.googlecode.jinahya.level>DEBUG</logback.logger.com.googlecode.jinahya.level>
   </properties>
 
   <!-- Build Settings -->
@@ -153,6 +161,7 @@
         <artifactId>maven-embedded-glassfish-plugin</artifactId>
         <configuration>
           <app>${project.build.directory}/${project.build.finalName}.${project.packaging}</app>
+          <name>${project.artifactId}</name>
           <port>58080</port>
         </configuration>
       </plugin>
@@ -178,7 +187,7 @@
     <maven>3.0.5</maven>
   </prerequisites>
   <repositories>
-    <repository>
+    <!--    <repository>
       <id>sonatype-nexus-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
       <releases>
@@ -187,6 +196,6 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-    </repository>
+    </repository>-->
   </repositories>
 </project>

@@ -30,8 +30,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@WebServlet(urlPatterns = "/serv/aaa")
+@WebServlet(urlPatterns = "/serv/test")
 public class TestServlet extends HttpServlet {
+
+
+    /**
+     * generated.
+     */
+    private static final long serialVersionUID = -5783497140019630489L;
 
 
     @Override
