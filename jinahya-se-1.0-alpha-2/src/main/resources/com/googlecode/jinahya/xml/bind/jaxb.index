@@ -1,0 +1,7 @@
+NillableBoolean
+NillableDouble
+NillableFloat
+NillableInteger
+NillableLong
+NillableString
+NillableValue
