@@ -36,17 +36,20 @@ public abstract class HttpFilter extends AbstractFilter {
 
 
     /**
+     * {@inheritDoc}
+     * <p/>
      * Overridden to invoke
      * {@link #doFilter(HttpServletRequest, HttpServletResponse, FilterChain)}
      * when {@code request} is an instance of {@link HttpServletRequest} and
      * {@code response} is an instance of {@link HttpServletResponse}.
      *
-     * @param request the request
-     * @param response the response
-     * @param chain the chain
+     * @param request {@inheritDoc}
+     * @param response {@inheritDoc}
+     * @param chain {@inheritDoc}
      *
      * @throws IOException {@inheritDoc }
      * @throws ServletException {@inheritDoc }
+     *
      * @see #doFilter(HttpServletRequest, HttpServletResponse, FilterChain)
      */
     @Override

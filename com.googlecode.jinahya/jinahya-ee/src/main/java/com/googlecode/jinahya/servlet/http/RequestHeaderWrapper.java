@@ -69,7 +69,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
             throw new NullPointerException("values");
         }
 
-        final Map<String, List<String>> headers = new HashMap<>();
+        final Map<String, List<String>> headers = new HashMap<>(1);
         headers.put(name, values);
 
         return newPrecedingInstance(request, headers);
@@ -120,7 +120,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
             throw new NullPointerException("values");
         }
 
-        final Map<String, List<String>> headers = new HashMap<>();
+        final Map<String, List<String>> headers = new HashMap<>(1);
         headers.put(name, values);
 
         return newPrecedingInstance(request, headers);
@@ -218,7 +218,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
 
         List<String> values = headers.get(name);
         if (values == null) {
-            values = Collections.emptyList();
+            return Collections.emptyEnumeration();
         }
 
         return Collections.enumeration(values);

@@ -39,26 +39,38 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
+public class FileSuffixToMediaTypeDispatcher extends HttpFilter {
 
 
+    /**
+     * A regular expression for file suffix.
+     */
     public static final String FILE_SUFFIX_EXPRESSION =
-        "file\\.suffix\\.([^\\.].+)";
+        "file\\.suffix\\.([^\\.]+)";
 
 
-    public static final Pattern FILE_SUFFIX_PATTERN =
+    /**
+     * A precompiled pattern of {@link #FILE_SUFFIX_EXPRESSION}.
+     */
+    protected static final Pattern FILE_SUFFIX_PATTERN =
         Pattern.compile(FILE_SUFFIX_EXPRESSION);
 
 
+    /**
+     * A regular expression for media type.
+     */
     public static final String MEDIA_TYPE_EXPRESSION = "media/type/(.+)";
 
 
-    public static final Pattern MEDIA_TYPE_PATTERN =
+    /**
+     * A precompiled pattern of {@link #MEDIA_TYPE_EXPRESSION}.
+     */
+    protected static final Pattern MEDIA_TYPE_PATTERN =
         Pattern.compile(MEDIA_TYPE_EXPRESSION);
 
 
     private static final Pattern FILE_NAME_PATTERN =
-        Pattern.compile("(.+)\\.([^\\.].+)");
+        Pattern.compile("([^\\.]+)\\.([^\\.]+)");
 
 
 //    private static final Logger LOGGER =
@@ -78,18 +90,21 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
         for (final Enumeration<String> initParametrNames =
             filterConfig.getInitParameterNames();
              initParametrNames.hasMoreElements();) {
-            final String name = initParametrNames.nextElement();
-            final Matcher nameMatcher = FILE_SUFFIX_PATTERN.matcher(name);
-            if (!nameMatcher.matches()) {
+            final String parameterName = initParametrNames.nextElement();
+            final Matcher fileSuffixMatcher =
+                FILE_SUFFIX_PATTERN.matcher(parameterName);
+            if (!fileSuffixMatcher.matches()) {
                 continue;
             }
-            final String value = filterConfig.getInitParameter(name);
-            final Matcher valueMatcher = MEDIA_TYPE_PATTERN.matcher(value);
-            if (!valueMatcher.matches()) {
+            final String parameterValue =
+                filterConfig.getInitParameter(parameterName);
+            final Matcher mediaTypeMatcher =
+                MEDIA_TYPE_PATTERN.matcher(parameterValue);
+            if (!mediaTypeMatcher.matches()) {
                 continue;
             }
-            final String fileSuffix = nameMatcher.group(1);
-            final String mediaType = valueMatcher.group(1);
+            final String fileSuffix = fileSuffixMatcher.group(1);
+            final String mediaType = mediaTypeMatcher.group(1);
             if (map == null) {
                 map = new HashMap<>();
             }
@@ -104,6 +119,14 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
                             final HttpServletResponse response,
                             final FilterChain chain)
         throws IOException, ServletException {
+
+//        final String pathTranslated = request.getPathTranslated();
+//        System.out.println("pathTranslated: " + pathTranslated);
+//
+//        final String pathInfo = request.getPathInfo();
+//        System.out.println("pathInfo: " + pathInfo);
+//        final String realPath = getServletContext().getRealPath(pathInfo);
+//        System.out.println("realPath: " + realPath);
 
         if (map == null) {
             LOGGER.debug("null map");
@@ -131,15 +154,16 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
         final String fileName = resourcePath.substring(lastSlashIndex + 1);
         final Matcher fileNameMatcher = FILE_NAME_PATTERN.matcher(fileName);
         if (!fileNameMatcher.matches()) {
-            LOGGER.debug("fileName not matches");
+            LOGGER.debug("fileName doesn't match");
             chain.doFilter(request, response);
             return;
         }
 
         final String fileSuffix = fileNameMatcher.group(2);
+        LOGGER.debug("fileSuffix: {}", fileSuffix);
         final String mediaType = map.get(fileSuffix);
         if (mediaType == null) {
-            LOGGER.debug("no mapped media type.");
+            LOGGER.debug("no mapped media type");
             chain.doFilter(request, response);
             return;
         }
@@ -154,6 +178,7 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
         final RequestDispatcher dispatcher = request.getRequestDispatcher(path);
         dispatcher.forward(wrapper, response);
         LOGGER.debug("fowarded");
+
         return;
     }
 
@@ -164,7 +189,7 @@ public abstract class FileSuffixToMediaTypeDispatcher extends HttpFilter {
     private transient int contextPathLength;
 
 
-    private Map<String, String> map;
+    private Map<String, String> map = null;
 
 
 }
