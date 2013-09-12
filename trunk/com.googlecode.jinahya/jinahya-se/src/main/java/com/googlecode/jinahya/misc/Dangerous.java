@@ -78,6 +78,19 @@ public final class Dangerous {
     }
 
 
+    public static long getUnsignedInt(final Object o, final long offset) {
+
+        return UNSAFE.getInt(o, offset) & 0xFFFFFFFFL;
+    }
+
+
+    public static void putUnsignedInt(final Object o, final long offset,
+                                      final long x) {
+
+        UNSAFE.putInt(o, offset, (int) (x & 0xFFFFFFFFL));
+    }
+
+
     private Dangerous() {
 
         super();
