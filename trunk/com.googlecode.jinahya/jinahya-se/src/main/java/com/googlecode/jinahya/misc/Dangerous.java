@@ -78,12 +78,29 @@ public final class Dangerous {
     }
 
 
+    /**
+     *
+     * @param o
+     * @param offset
+     *
+     * @return
+     *
+     * @see Unsafe#getInt(java.lang.Object, long)
+     */
     public static long getUnsignedInt(final Object o, final long offset) {
 
         return UNSAFE.getInt(o, offset) & 0xFFFFFFFFL;
     }
 
 
+    /**
+     *
+     * @param o
+     * @param offset
+     * @param x
+     *
+     * @see Unsafe#putInt(java.lang.Object, long, int)
+     */
     public static void putUnsignedInt(final Object o, final long offset,
                                       final long x) {
 
