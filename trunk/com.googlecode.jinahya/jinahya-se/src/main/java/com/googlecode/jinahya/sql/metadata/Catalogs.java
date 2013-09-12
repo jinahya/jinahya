@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class CatalogValues extends MapValues<Catalog> {
+public class Catalogs extends MapValues<Catalog> {
 
 
     @XmlElement

@@ -54,6 +54,14 @@ public class Catalog implements Retrievable {
     };
 
 
+    public static Catalog newInstance(final ResultSet resultSet) {
+
+        final Catalog instance = new Catalog();
+
+        return instance;
+    }
+
+
     @Override
     public void retrieve(final DatabaseMetaData databaseMetaData)
         throws SQLException {

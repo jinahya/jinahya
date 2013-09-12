@@ -200,6 +200,24 @@ public class DatabaseMetadata implements Retrievable {
     public void retrieve(final DatabaseMetaData databaseMetaData)
         throws SQLException {
 
+        // ------------------------------------------------------------ versions
+        databaseMajorVersion = databaseMetaData.getDatabaseMajorVersion();
+        databaseMinorVersion = databaseMetaData.getDatabaseMinorVersion();
+        driverMajorVersion = databaseMetaData.getDriverMajorVersion();
+        driverMinorVersion = databaseMetaData.getDriverMinorVersion();
+
+        // ------------------------------------------------------------ catalogs
+        {
+            final ResultSet resultSet = databaseMetaData.getCatalogs();
+            try {
+                while (resultSet.next()) {
+                    
+                }
+            } finally {
+                resultSet.close();
+            }
+        }
+
         allProceduresAreCallable = databaseMetaData.allProceduresAreCallable();
 
         allTablesAreSelectable = databaseMetaData.allTablesAreSelectable();
