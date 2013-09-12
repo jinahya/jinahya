@@ -26,12 +26,12 @@ import com.googlecode.jinahya.xml.bind.MapValuesAdapter;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class CatalogValuesAdapter
-    extends MapValuesAdapter<CatalogValues, String, Catalog> {
+    extends MapValuesAdapter<Catalogs, String, Catalog> {
 
 
     public CatalogValuesAdapter() {
         
-        super(CatalogValues.class);
+        super(Catalogs.class);
     }
 
 
