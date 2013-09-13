@@ -65,7 +65,7 @@ public class ImageFileSuffixes extends ImageFeatures<ImageFileSuffix> {
     }
 
 
-    @XmlElement(name = "imageFileSuffix", nillable = true)
+    @XmlElement(name = "imageFileSuffix")
     private List<ImageFileSuffix> getImageFileSuffixList() {
 
         return getImageFeatureList();

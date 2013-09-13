@@ -47,31 +47,31 @@ public class SuffixToTypeDispatcher extends HttpFilter {
     /**
      * A regular expression for file suffix.
      */
-    public static final String FILE_SUFFIX_EXPRESSION =
+    public static final String SUFFIX_EXPRESSION =
         "file\\.suffix\\.([^\\.]+)";
 
 
     /**
-     * A precompiled pattern of {@link #FILE_SUFFIX_EXPRESSION}.
+     * A precompiled pattern of {@link #SUFFIX_EXPRESSION}.
      */
-    protected static final Pattern FILE_SUFFIX_PATTERN =
-        Pattern.compile(FILE_SUFFIX_EXPRESSION);
+    protected static final Pattern SUFFIX_PATTERN =
+        Pattern.compile(SUFFIX_EXPRESSION);
 
 
     /**
      * A regular expression for media type.
      */
-    public static final String MEDIA_TYPE_EXPRESSION = "media/type/(.+)";
+    public static final String TYPE_EXPRESSION = "media/type/(.+)";
 
 
     /**
-     * A precompiled pattern of {@link #MEDIA_TYPE_EXPRESSION}.
+     * A precompiled pattern of {@link #TYPE_EXPRESSION}.
      */
-    protected static final Pattern MEDIA_TYPE_PATTERN =
-        Pattern.compile(MEDIA_TYPE_EXPRESSION);
+    protected static final Pattern TYPE_PATTERN =
+        Pattern.compile(TYPE_EXPRESSION);
 
 
-    private static final Pattern FILE_NAME_PATTERN =
+    private static final Pattern NAME_PATTERN =
         Pattern.compile("([^\\.]+)\\.([^\\.]+)");
 
 
@@ -83,38 +83,34 @@ public class SuffixToTypeDispatcher extends HttpFilter {
 
 
     @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig config) throws ServletException {
 
-        LOGGER.debug("init({}", filterConfig);
+        LOGGER.debug("init({}", config);
 
-        super.init(filterConfig);
+        super.init(config);
 
-        contextPath = getServletContext().getContextPath();
+        contextPath = getContext().getContextPath();
         contextPathLength = contextPath.length();
 
-        for (final Enumeration<String> initParametrNames =
-            filterConfig.getInitParameterNames();
-             initParametrNames.hasMoreElements();) {
-            final String parameterName = initParametrNames.nextElement();
-            final Matcher fileSuffixMatcher =
-                FILE_SUFFIX_PATTERN.matcher(parameterName);
-            if (!fileSuffixMatcher.matches()) {
+        for (final Enumeration<String> e = config.getInitParameterNames();
+             e.hasMoreElements();) {
+            final String name = e.nextElement();
+            final Matcher suffixMatcher = SUFFIX_PATTERN.matcher(name);
+            if (!suffixMatcher.matches()) {
                 continue;
             }
-            final String parameterValue =
-                filterConfig.getInitParameter(parameterName);
-            final Matcher mediaTypeMatcher =
-                MEDIA_TYPE_PATTERN.matcher(parameterValue);
-            if (!mediaTypeMatcher.matches()) {
+            final String value = config.getInitParameter(name);
+            final Matcher typeMatcher = TYPE_PATTERN.matcher(value);
+            if (!typeMatcher.matches()) {
                 continue;
             }
-            final String fileSuffix = fileSuffixMatcher.group(1);
-            final String mediaType = mediaTypeMatcher.group(1);
+            final String suffix = suffixMatcher.group(1);
+            final String type = typeMatcher.group(1);
             if (map == null) {
                 map = new HashMap<>();
             }
-            LOGGER.debug("{} -> {}", fileSuffix, mediaType);
-            map.put(fileSuffix, mediaType);
+            LOGGER.debug("{} -> {}", suffix, type);
+            map.put(suffix, type);
         }
     }
 
@@ -151,7 +147,7 @@ public class SuffixToTypeDispatcher extends HttpFilter {
         }
 
         final String fileName = resourcePath.substring(lastSlashIndex + 1);
-        final Matcher fileNameMatcher = FILE_NAME_PATTERN.matcher(fileName);
+        final Matcher fileNameMatcher = NAME_PATTERN.matcher(fileName);
         if (!fileNameMatcher.matches()) {
             LOGGER.debug("fileName doesn't match");
             chain.doFilter(request, response);
