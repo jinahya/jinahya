@@ -89,7 +89,7 @@ public class SuffixToTypeDispatcher extends HttpFilter {
 
         super.init(config);
 
-        contextPath = getContext().getContextPath();
+        contextPath = getServletContext().getContextPath();
         contextPathLength = contextPath.length();
 
         for (final Enumeration<String> e = config.getInitParameterNames();
@@ -168,7 +168,7 @@ public class SuffixToTypeDispatcher extends HttpFilter {
         LOGGER.debug("path: {}", path);
 
         final ServletRequest wrapper =
-            RequestHeaderWrapper.newPrecedingInstance(
+            HeadersRequestWrapper.newPrecedingInstance(
             request, "Accept", mediaType);
         final RequestDispatcher dispatcher = request.getRequestDispatcher(path);
         dispatcher.forward(wrapper, response);

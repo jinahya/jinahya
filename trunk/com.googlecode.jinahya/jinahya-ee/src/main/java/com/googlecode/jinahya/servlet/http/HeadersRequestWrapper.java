@@ -35,14 +35,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class RequestHeaderWrapper extends HttpServletRequestWrapper {
+public class HeadersRequestWrapper extends HttpServletRequestWrapper {
 
 
     /**
      * logger.
      */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(RequestHeaderWrapper.class);
+        LoggerFactory.getLogger(HeadersRequestWrapper.class);
 
 
     /**
@@ -62,7 +62,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
         }
 
         final HttpServletRequest instance =
-            new RequestHeaderWrapper(request, headers, null);
+            new HeadersRequestWrapper(request, headers, null);
 
         return instance;
     }
@@ -139,7 +139,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
         }
 
         final HttpServletRequest instance =
-            new RequestHeaderWrapper(request, headers, null);
+            new HeadersRequestWrapper(request, headers, null);
 
         return instance;
     }
@@ -208,7 +208,7 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
      * @param succeedingHeaders additional header succeed requested headers;
      * {@code null} allowed.
      */
-    public RequestHeaderWrapper(
+    public HeadersRequestWrapper(
         final HttpServletRequest request,
         final Map<String, List<String>> precedingHeaders,
         final Map<String, List<String>> succeedingHeaders) {
