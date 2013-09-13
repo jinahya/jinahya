@@ -30,5 +30,10 @@ public class BasicRestfulWebApplication extends Application {
      * given list with all resources defined in the project.
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.googlecode.jinahya.test.ImageFileSuffixesResource.class);
+        resources.add(com.googlecode.jinahya.test.ImageFormatNamesResource.class);
+        resources.add(com.googlecode.jinahya.test.ImageMediaTypesResource.class);
+        resources.add(com.googlecode.jinahya.test.SchemaXsdResource.class);
+        resources.add(com.googlecode.jinahya.test.SystemPropertiesResource.class);
     }
 }
