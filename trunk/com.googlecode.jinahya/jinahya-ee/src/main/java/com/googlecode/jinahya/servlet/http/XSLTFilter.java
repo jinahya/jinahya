@@ -167,7 +167,6 @@ public abstract class XSLTFilter extends AbstractFilter {
                 "failed to transform: " + te.getMessage());
             return;
         }
-
     }
 
 
