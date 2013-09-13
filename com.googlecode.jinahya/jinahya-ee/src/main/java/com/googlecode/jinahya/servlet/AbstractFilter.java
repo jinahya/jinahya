@@ -25,13 +25,22 @@ import javax.servlet.ServletException;
 
 
 /**
- * Abstract implementation of Filter.
+ * Abstract implementation of {@link Filter}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public abstract class AbstractFilter implements Filter {
 
 
+    /**
+     * {@inheritDoc}
+     * <p/>
+     * Overridden to store given {@code filterConfig}.
+     *
+     * @param filterConfig {@inheritDoc}
+     *
+     * @throws ServletException {@inheritDoc}
+     */
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
 
@@ -39,6 +48,11 @@ public abstract class AbstractFilter implements Filter {
     }
 
 
+    /**
+     * {@inheritDoc}
+     * <p/>
+     * Overridden to remove the stored {@code filterConfig} instance.
+     */
     @Override
     public void destroy() {
 
@@ -50,6 +64,9 @@ public abstract class AbstractFilter implements Filter {
      * Returns filterConfig.
      *
      * @return filterConfig
+     *
+     * @throws IllegalStateException if this method called after
+     * {@link #destroy()} already invoked.
      */
     protected FilterConfig getFilterConfig() {
 
@@ -66,6 +83,7 @@ public abstract class AbstractFilter implements Filter {
      *
      * @return servletContext
      *
+     * @see #getFilterConfig()
      * @see FilterConfig#getServletContext()
      */
     protected ServletContext getServletContext() {
@@ -79,6 +97,7 @@ public abstract class AbstractFilter implements Filter {
      *
      * @param message message
      *
+     * @see #getServletContext()
      * @see ServletContext#log(java.lang.String)
      */
     protected void log(final String message) {
@@ -93,6 +112,7 @@ public abstract class AbstractFilter implements Filter {
      * @param message message
      * @param throwable throwable
      *
+     * @see #getServletContext()
      * @see ServletContext#log(java.lang.String, java.lang.Throwable)
      */
     protected void log(final String message, final Throwable throwable) {

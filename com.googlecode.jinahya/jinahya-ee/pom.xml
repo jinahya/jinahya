@@ -43,7 +43,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8.5</version>
+        <version>6.8.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -168,7 +168,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>cobertura-maven-plugin</artifactId>
-          <version>2.5.2</version>
+          <version>2.6</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -230,6 +230,12 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <detectLinks>true</detectLinks>
+                <links>
+                  <link>http://docs.oracle.com/javaee/7/api/</link>
+                </links>
+              </configuration>
             </plugin>
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -331,7 +337,7 @@
       </plugin>
     </plugins>
   </build>
-  <reporting />
+  <reporting/>
 
   <!-- More Project Information -->
   <name>jinahya-ee</name>

@@ -38,10 +38,21 @@ import org.slf4j.LoggerFactory;
 public class RequestHeaderWrapper extends HttpServletRequestWrapper {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RequestHeaderWrapper.class);
 
 
+    /**
+     * Creates a new instance with preceding headers.
+     *
+     * @param request the actual request
+     * @param headers the preceding headers.
+     *
+     * @return a new instance
+     */
     public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
@@ -57,6 +68,15 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * Creates a new instance with a preceding header.
+     *
+     * @param request the actual request
+     * @param name the preceding header name
+     * @param values the preceding header values.
+     *
+     * @return a new instance.
+     */
     public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final String name, List<String> values) {
@@ -76,6 +96,15 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * Creates a new instance with a preceding header.
+     *
+     * @param request the actual request
+     * @param name the preceding header name
+     * @param value the preceding header value.
+     *
+     * @return a new instance
+     */
     public static HttpServletRequest newPrecedingInstance(
         final HttpServletRequest request,
         final String name, final String value) {
@@ -93,6 +122,14 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * Creates a new instance with succeeding headers.
+     *
+     * @param request the actual request
+     * @param headers the succeeding headers.
+     *
+     * @return a new instance
+     */
     public static HttpServletRequest newSuccedingInstance(
         final HttpServletRequest request,
         final Map<String, List<String>> headers) {
@@ -108,6 +145,15 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * Creates a new instance with a succeeding header.
+     *
+     * @param request the actual request
+     * @param name the succeeding header name
+     * @param values the succeeding header values.
+     *
+     * @return a new instance.
+     */
     public static HttpServletRequest newSucceedingInstance(
         final HttpServletRequest request,
         final String name, List<String> values) {
@@ -127,6 +173,15 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * Creates a new instance with a succeeding header.
+     *
+     * @param request the actual request
+     * @param name the succeeding header name
+     * @param value the succeeding header value.
+     *
+     * @return a new instance
+     */
     public static HttpServletRequest newSucceedingInstance(
         final HttpServletRequest request,
         final String name, final String value) {
@@ -148,9 +203,9 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
      * Creates a new instance with {@code request} and additional headers.
      *
      * @param request the request
-     * @param precedingHeaders additional headers precedes requested headers;
+     * @param precedingHeaders additional headers precede requested headers;
      * {@code null} allowed.
-     * @param succeedingHeaders additional header succeeds requested headers;
+     * @param succeedingHeaders additional header succeed requested headers;
      * {@code null} allowed.
      */
     public RequestHeaderWrapper(
@@ -197,6 +252,13 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param name {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public String getHeader(final String name) {
 
@@ -211,6 +273,13 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param name {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public Enumeration<String> getHeaders(final String name) {
 
@@ -225,6 +294,11 @@ public class RequestHeaderWrapper extends HttpServletRequestWrapper {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public Enumeration<String> getHeaderNames() {
 

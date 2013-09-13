@@ -36,10 +36,12 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ * A {@link javax.servlet.Filter} implementation which dispatches suffixed path
+ * to a typed path.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class FileSuffixToMediaTypeDispatcher extends HttpFilter {
+public class SuffixToTypeDispatcher extends HttpFilter {
 
 
     /**
@@ -73,14 +75,17 @@ public class FileSuffixToMediaTypeDispatcher extends HttpFilter {
         Pattern.compile("([^\\.]+)\\.([^\\.]+)");
 
 
-//    private static final Logger LOGGER =
-//        Logger.getLogger(FileSuffixToMediaTypeDispatcher.class.getName());
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(FileSuffixToMediaTypeDispatcher.class);
+        LoggerFactory.getLogger(SuffixToTypeDispatcher.class);
 
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
+
+        LOGGER.debug("init({}", filterConfig);
 
         super.init(filterConfig);
 
@@ -120,13 +125,7 @@ public class FileSuffixToMediaTypeDispatcher extends HttpFilter {
                             final FilterChain chain)
         throws IOException, ServletException {
 
-//        final String pathTranslated = request.getPathTranslated();
-//        System.out.println("pathTranslated: " + pathTranslated);
-//
-//        final String pathInfo = request.getPathInfo();
-//        System.out.println("pathInfo: " + pathInfo);
-//        final String realPath = getServletContext().getRealPath(pathInfo);
-//        System.out.println("realPath: " + realPath);
+        LOGGER.debug("doFilter({}, {}, {})", request, response, chain);
 
         if (map == null) {
             LOGGER.debug("null map");
