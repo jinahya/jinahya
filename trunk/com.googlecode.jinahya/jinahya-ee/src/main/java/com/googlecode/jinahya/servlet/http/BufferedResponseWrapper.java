@@ -33,8 +33,7 @@ import com.googlecode.jinahya.servlet.BufferedServletOutputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedHttpServletResponseWrapper
-    extends HttpServletResponseWrapper {
+public class BufferedResponseWrapper extends HttpServletResponseWrapper {
 
 
     /**
@@ -42,8 +41,7 @@ public class BufferedHttpServletResponseWrapper
      *
      * @param response response
      */
-    public BufferedHttpServletResponseWrapper(
-        final HttpServletResponse response) {
+    public BufferedResponseWrapper(final HttpServletResponse response) {
 
         super(response);
 
@@ -115,4 +113,3 @@ public class BufferedHttpServletResponseWrapper
 
 
 }
-

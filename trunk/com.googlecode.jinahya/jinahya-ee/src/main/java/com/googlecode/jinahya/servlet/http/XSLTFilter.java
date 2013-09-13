@@ -82,8 +82,8 @@ public abstract class XSLTFilter extends AbstractFilter {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        final BufferedHttpServletResponseWrapper responseWrapper =
-            new BufferedHttpServletResponseWrapper(httpResponse);
+        final BufferedResponseWrapper responseWrapper =
+            new BufferedResponseWrapper(httpResponse);
 
         chain.doFilter(request, responseWrapper); // ------------- doFilter(...)
 
