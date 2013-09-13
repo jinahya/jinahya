@@ -43,6 +43,7 @@ public class BufferedServletOutputStream extends ServletOutputStream {
 
     @Override
     public void write(final int b) throws IOException {
+
         outputStream.write(b);
     }
 
@@ -51,6 +52,7 @@ public class BufferedServletOutputStream extends ServletOutputStream {
      * Reset this OutputStream.
      */
     public final void reset() {
+
         outputStream.reset();
     }
 
@@ -60,7 +62,8 @@ public class BufferedServletOutputStream extends ServletOutputStream {
      *
      * @return buffered bytes
      */
-    public final byte[] getBytes() {
+    public final byte[] bytes() {
+
         return outputStream.toByteArray();
     }
 
@@ -72,4 +75,3 @@ public class BufferedServletOutputStream extends ServletOutputStream {
 
 
 }
-
