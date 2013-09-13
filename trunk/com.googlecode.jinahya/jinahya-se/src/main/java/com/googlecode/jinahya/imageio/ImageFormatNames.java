@@ -65,7 +65,7 @@ public class ImageFormatNames extends ImageFeatures<ImageFormatName> {
     }
 
 
-    @XmlElement(name = "imageFormatName", nillable = true)
+    @XmlElement(name = "imageFormatName")
     private List<ImageFormatName> getImageFormatNameList() {
 
         return getImageFeatureList();

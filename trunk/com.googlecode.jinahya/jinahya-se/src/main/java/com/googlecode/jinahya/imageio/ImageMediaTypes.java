@@ -65,7 +65,7 @@ public class ImageMediaTypes extends ImageFeatures<ImageMediaType> {
     }
 
 
-    @XmlElement(name = "imageMediaType", nillable = true)
+    @XmlElement(name = "imageMediaType")
     private List<ImageMediaType> getImageMediaTypeList() {
 
         return getImageFeatureList();
