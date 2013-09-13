@@ -46,7 +46,7 @@ public class ImageFileSuffixes extends ImageFeatures<ImageFileSuffix> {
                     readerFileSuffix, imageFileSuffix);
             }
             imageFileSuffix.setReadable(true);
-            imageFileSuffix.setKey(readerFileSuffix);
+            imageFileSuffix.setValue(readerFileSuffix);
         }
 
         for (final String writerFileSuffix : ImageIO.getWriterFileSuffixes()) {
@@ -58,7 +58,7 @@ public class ImageFileSuffixes extends ImageFeatures<ImageFileSuffix> {
                     writerFileSuffix, imageFileSuffix);
             }
             imageFileSuffix.setWritable(true);
-            imageFileSuffix.setKey(writerFileSuffix);
+            imageFileSuffix.setValue(writerFileSuffix);
         }
 
         return instance;
