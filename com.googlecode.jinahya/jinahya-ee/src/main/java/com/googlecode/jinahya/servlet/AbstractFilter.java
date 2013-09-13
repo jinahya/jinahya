@@ -37,14 +37,14 @@ public abstract class AbstractFilter implements Filter {
      * <p/>
      * Overridden to store given {@code filterConfig}.
      *
-     * @param config {@inheritDoc}
+     * @param filterConfig {@inheritDoc}
      *
      * @throws ServletException {@inheritDoc}
      */
     @Override
-    public void init(final FilterConfig config) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
 
-        this.config = config;
+        this.filterConfig = filterConfig;
     }
 
 
@@ -56,39 +56,39 @@ public abstract class AbstractFilter implements Filter {
     @Override
     public void destroy() {
 
-        config = null;
+        filterConfig = null;
     }
 
 
     /**
      * Returns config.
      *
-     * @return config
+     * @return filerConfig
      *
      * @throws IllegalStateException if this method called after
      * {@link #destroy()} invoked.
      */
-    protected FilterConfig getConfig() {
+    protected FilterConfig getFilterConfig() {
 
-        if (config == null) {
-            throw new IllegalStateException("no config");
+        if (filterConfig == null) {
+            throw new IllegalStateException("no filterConfig");
         }
 
-        return config;
+        return filterConfig;
     }
 
 
     /**
-     * Returns context.
+     * Returns servlet context.
      *
-     * @return context
+     * @return the servlet context
      *
-     * @see #getConfig()
+     * @see #getServletConfig()
      * @see FilterConfig#getServletContext()
      */
-    protected ServletContext getContext() {
+    protected ServletContext getServletContext() {
 
-        return getConfig().getServletContext();
+        return getFilterConfig().getServletContext();
     }
 
 
@@ -102,7 +102,7 @@ public abstract class AbstractFilter implements Filter {
      */
     protected void log(final String message) {
 
-        getContext().log(message);
+        getServletContext().log(message);
     }
 
 
@@ -117,14 +117,14 @@ public abstract class AbstractFilter implements Filter {
      */
     protected void log(final String message, final Throwable throwable) {
 
-        getContext().log(message, throwable);
+        getServletContext().log(message, throwable);
     }
 
 
     /**
      * filter config.
      */
-    private FilterConfig config;
+    private FilterConfig filterConfig;
 
 
 }
