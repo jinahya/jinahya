@@ -46,7 +46,7 @@ public class ImageFormatNames extends ImageFeatures<ImageFormatName> {
                     readerFormatName, imageFormatName);
             }
             imageFormatName.setReadable(true);
-            imageFormatName.setKey(readerFormatName);
+            imageFormatName.setValue(readerFormatName);
         }
 
         for (final String writerFileSuffix : ImageIO.getWriterFileSuffixes()) {
@@ -58,7 +58,7 @@ public class ImageFormatNames extends ImageFeatures<ImageFormatName> {
                     writerFileSuffix, imageFormatName);
             }
             imageFormatName.setWritable(true);
-            imageFormatName.setKey(writerFileSuffix);
+            imageFormatName.setValue(writerFileSuffix);
         }
 
         return instance;

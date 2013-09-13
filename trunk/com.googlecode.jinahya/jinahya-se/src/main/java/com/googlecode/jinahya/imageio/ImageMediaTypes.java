@@ -46,7 +46,7 @@ public class ImageMediaTypes extends ImageFeatures<ImageMediaType> {
                     readerMIMEType, imageMediaType);
             }
             imageMediaType.setReadable(true);
-            imageMediaType.setKey(readerMIMEType);
+            imageMediaType.setValue(readerMIMEType);
         }
 
         for (final String writerMIMEType : ImageIO.getWriterMIMETypes()) {
@@ -58,7 +58,7 @@ public class ImageMediaTypes extends ImageFeatures<ImageMediaType> {
                     writerMIMEType, imageMediaType);
             }
             imageMediaType.setWritable(true);
-            imageMediaType.setKey(writerMIMEType);
+            imageMediaType.setValue(writerMIMEType);
         }
 
         return instance;

@@ -74,15 +74,15 @@ public abstract class ImageFeature {
     }
 
 
-    public String getKey() {
+    public String getValue() {
 
-        return key;
+        return value;
     }
 
 
-    public void setKey(final String key) {
+    public void setValue(final String value) {
 
-        this.key = key;
+        this.value = value;
     }
 
 
@@ -91,7 +91,7 @@ public abstract class ImageFeature {
         return super.toString()
                + "?readable=" + readable
                + "&writable=" + writable
-               + "&key=" + key;
+               + "&value=" + value;
     }
 
 
@@ -104,7 +104,7 @@ public abstract class ImageFeature {
 
 
     @XmlValue
-    private String key;
+    private String value;
 
 
 }

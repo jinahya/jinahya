@@ -50,7 +50,7 @@ public abstract class ImageFeatures<T extends ImageFeature> {
     void setImageFeatureList(final List<T> imageFeatureList) {
 
         for (T imageFeature : imageFeatureList) {
-            getImageFeatures().put(imageFeature.getKey(), imageFeature);
+            getImageFeatures().put(imageFeature.getValue(), imageFeature);
         }
     }
 
