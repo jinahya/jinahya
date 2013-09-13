@@ -96,7 +96,7 @@ public class BufferedResponseWrapper extends HttpServletResponseWrapper {
      * @return buffered bytes
      */
     public final byte[] getBytes() {
-        return outputStream.getBytes();
+        return outputStream.bytes();
     }
 
 
