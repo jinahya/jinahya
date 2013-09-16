@@ -104,7 +104,7 @@ public class StorageClientHttpTest {
             System.out.println("containerName: " + containerName);
             for (String objectName : OBJECT_NAMES) {
                 System.out.println("\tusing byte array");
-                client.updateObject(
+                client.updateStorageContent(
                     containerName, objectName, "application/octet-stream",
                     contentData);
                 System.out.println("\t\tresponse: " + client.getResponseCode()
@@ -112,7 +112,7 @@ public class StorageClientHttpTest {
             }
             for (String objectName : OBJECT_NAMES) {
                 System.out.println("\tusing input stream");
-                client.updateObject(
+                client.updateStorageContent(
                     containerName, objectName, null, -1L,
                     new ByteArrayInputStream(contentData));
                 System.out.println("\t\tresponse: " + client.getResponseCode()
@@ -138,7 +138,7 @@ public class StorageClientHttpTest {
                 System.out.println("\tobjectName: " + objectName);
                 baos.reset();
 
-                client.readObject(containerName, objectName, contentConsumer);
+                client.readStorageContent(containerName, objectName, contentConsumer);
                 System.out.println(
                     "\t\tcontentType: " + contentConsumer.getContentType());
                 System.out.println(
@@ -248,7 +248,7 @@ public class StorageClientHttpTest {
             for (String objectName : OBJECT_NAMES) {
                 System.out.println("\tobjectName: " + objectName);
                 final boolean result =
-                    client.deleteObject(containerName, objectName);
+                    client.deleteStorageObject(containerName, objectName);
                 System.out.println("\t\tresult: " + result);
                 System.out.println("\t\tresponse: " + client.getResponseCode()
                                    + " " + client.getResponseMessage());

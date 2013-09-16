@@ -35,9 +35,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
-import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 
@@ -78,12 +79,7 @@ public class StorageClient {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageClient.class.getName());
-
-
-    static {
-        //LOGGER.setLevel(Level.OFF);
-    }
+        LoggerFactory.getLogger(StorageClient.class);
 
 
     private static final int RESPONSE_CODE_200_OK = 200;
@@ -120,17 +116,16 @@ public class StorageClient {
 
 
     /**
-     * Returns 'Content-Length' header value from given
-     * <code>connection</code>.
+     * Returns 'Content-Length' header value from given connection.
      *
-     * @param connection connection
+     * @param connection the connection
      *
      * @return parsed value.
      */
     private static long getContentLength(final URLConnection connection) {
 
         if (connection == null) {
-            throw new IllegalArgumentException("null connection");
+            throw new NullPointerException("connection");
         }
 
         long contentLength = connection.getContentLength();
@@ -150,141 +145,112 @@ public class StorageClient {
     }
 
 
+    private static String utf8(final Object string) {
+
+        try {
+            return URLEncoder.encode(String.valueOf(string), "UTF-8");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("\"UTF-8\" is not supported?");
+        }
+    }
+
+
     /**
-     * URL-encodes given
-     * <code>containerName</code>.
+     * URL-encodes given container name.
      *
-     * @param containerName container name
+     * @param containerName the container name
      *
-     * @return the URL-encoded container name
-     *
-     * @throws UnsupportedEncodingException if 'UTF-8' is not supported
+     * @return a URL-encoded value of given container name
      */
-    private static String encodeContainerName(final String containerName)
-        throws UnsupportedEncodingException {
+    private static String encodeContainerName(String containerName) {
 
         if (containerName == null) {
-            throw new IllegalArgumentException("null containerName");
+            throw new NullPointerException("containerName");
         }
 
-        final String trimmedContainerName = containerName.trim();
-
-        if (trimmedContainerName.isEmpty()) {
+        containerName = containerName.trim();
+        if (containerName.isEmpty()) {
             throw new IllegalArgumentException("empty containerName");
         }
 
-//        if (!containerName.equals(trimmedContainerName)) {
-//            throw new IllegalArgumentException("trimmable containerName");
-//        }
-
-        if (trimmedContainerName.contains(PATH_SEPARATOR)) {
+        if (containerName.contains(PATH_SEPARATOR)) {
             throw new IllegalArgumentException(
                 "containerName contains PATH_SEPARATOR(\"" + PATH_SEPARATOR
                 + "\")");
         }
 
-        final String encodedContainerName =
-            URLEncoder.encode(containerName, "UTF-8");
-        if (encodedContainerName.length()
-            > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
+        containerName = utf8(containerName);
+        if (containerName.length() > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
             throw new IllegalArgumentException(
-                "containerName's encoded length("
-                + encodedContainerName.length()
+                "encoded containerName's length(" + containerName.length()
                 + " > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH("
                 + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
         }
 
-        return encodedContainerName;
+        return containerName;
     }
 
 
     /**
-     * URL-encodes given
-     * <code>obectName</code>.
+     * URL-encodes given object name.
      *
-     * @param objectName object name
+     * @param objectName the object name
      *
      * @return the URL-encoded object name
-     *
-     * @throws UnsupportedEncodingException if 'UTF-8' is not supported
      */
-    private static String encodeObjectName(final String objectName)
-        throws UnsupportedEncodingException {
+    private static String encodeObjectName(String objectName) {
 
         if (objectName == null) {
-            throw new IllegalArgumentException("null objectName");
+            throw new NullPointerException("objectName");
         }
 
-        final String trimmedObjectName = objectName.trim();
-
-        if (trimmedObjectName.isEmpty()) {
+        objectName = objectName.trim();
+        if (objectName.isEmpty()) {
             throw new IllegalArgumentException("empty objectName");
         }
 
-//        if (!objectName.equals(trimmedObjectName)) {
-//            throw new IllegalArgumentException("trimmable objectName");
-//        }
-
-        final String encodedObjectName = URLEncoder.encode(objectName, "UTF-8");
-        if (encodedObjectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
+        objectName = utf8(objectName);
+        if (objectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
             throw new IllegalArgumentException(
-                "objectName's encoded length(" + encodedObjectName.length()
+                "encoded objectName's length(" + objectName.length()
                 + "> MAXIMUM_ENCODED_OBJECT_NAME_LENGTH("
                 + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
         }
 
-        return encodedObjectName;
+        return objectName;
     }
 
 
     /**
-     * Appends given
-     * <code>queryParams</code> to specified
-     * <code>baseUrl</code>.
+     * Appends given query parameters onto specified url.
      *
-     * @param baseUrl base url
-     * @param queryParameters query parameters
+     * @param url the url
+     * @param params the query parameters
      *
      * @return append url
-     *
-     * @throws UnsupportedEncodingException 'UTF-8' not recognized?
      */
-    static String append(final String baseUrl,
-                         final Map<String, Object> queryParameters)
-        throws UnsupportedEncodingException {
+    static String append(final String url, final Map<String, Object> params) {
 
-        if (baseUrl == null) {
-            throw new IllegalArgumentException("null baseUrl");
+        if (url == null) {
+            throw new NullPointerException("baseUrl");
         }
 
-        if (queryParameters == null || queryParameters.isEmpty()) {
-            return baseUrl;
+        if (params == null || params.isEmpty()) {
+            return url;
         }
 
-        final StringBuilder builder = new StringBuilder(baseUrl);
+        final StringBuilder builder = new StringBuilder(url);
 
-        final Iterator<Entry<String, Object>> entries =
-            queryParameters.entrySet().iterator();
-        if (entries.hasNext()) {
-            builder.append("?");
-            final Entry<String, Object> entry = entries.next();
-            final String key = entry.getKey();
-            final Object value = entry.getValue();
-            if (key != null && value != null) {
-                builder.append(URLEncoder.encode(key, "UTF-8")).append("=").
-                    append(URLEncoder.encode(value.toString(), "UTF-8"));
-            }
+        final Iterator<Entry<String, Object>> i = params.entrySet().iterator();
+        if (i.hasNext()) {
+            final Entry<String, Object> entry = i.next();
+            builder.append("?").append(utf8(entry.getKey())).append("=")
+                .append(utf8(entry.getValue()));
         }
-        while (entries.hasNext()) {
-            builder.append("&");
-            final Entry<String, Object> entry = entries.next();
-            final String key = entry.getKey();
-            final Object value = entry.getValue();
-            if (key == null || value == null) {
-                continue;
-            }
-            builder.append(URLEncoder.encode(key, "UTF-8")).append("=").
-                append(URLEncoder.encode(value.toString(), "UTF-8"));
+        while (i.hasNext()) {
+            final Entry<String, Object> entry = i.next();
+            builder.append("&").append(utf8(entry.getKey())).append("=")
+                .append(utf8(entry.getValue()));
         }
 
         return builder.toString();
@@ -292,30 +258,12 @@ public class StorageClient {
 
 
     /**
-     * Copy bytes from given
-     * <code>input</code> to specified
-     * <code>output</code>.
+     * Copy bytes from given input stream to specified output stream using given
+     * buffer.
      *
-     * @param input input
-     * @param output output
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    static void copy(final InputStream input, final OutputStream output)
-        throws IOException {
-
-        copy(input, output, new byte[BUFFER_LENGTH]);
-    }
-
-
-    /**
-     * Copy bytes from given
-     * <code>input</code> to specified
-     * <code>output</code>.
-     *
-     * @param input input
-     * @param output output
-     * @param buffer buffer
+     * @param input the input stream
+     * @param output the output stream
+     * @param buffer the byte buffer
      *
      * @throws IOException if an I/O error occurs
      */
@@ -324,15 +272,15 @@ public class StorageClient {
         throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new NullPointerException("null input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null output");
+            throw new NullPointerException("null output");
         }
 
         if (buffer == null) {
-            throw new IllegalArgumentException("null buffer");
+            throw new NullPointerException("null buffer");
         }
 
         if (buffer.length == 0) {
@@ -342,6 +290,21 @@ public class StorageClient {
         for (int read = -1; (read = input.read(buffer)) != -1;) {
             output.write(buffer, 0, read);
         }
+    }
+
+
+    /**
+     * Copy bytes from given input stream to specified output stream.
+     *
+     * @param input the input stream
+     * @param output the output stream
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    static void copy(final InputStream input, final OutputStream output)
+        throws IOException {
+
+        copy(input, output, new byte[BUFFER_LENGTH]);
     }
 
 
@@ -356,19 +319,11 @@ public class StorageClient {
         super();
 
         if (storageUser == null) {
-            throw new IllegalArgumentException("null storageUser");
-        }
-
-        if (storageUser.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty storageUser");
+            throw new NullPointerException("storageUser");
         }
 
         if (storagePass == null) {
-            throw new IllegalArgumentException("null storagePass");
-        }
-
-        if (storagePass.isEmpty()) {
-            throw new IllegalArgumentException("empty storagePass");
+            throw new NullPointerException("storagePass");
         }
 
         this.storageUser = storageUser;
@@ -385,7 +340,7 @@ public class StorageClient {
      */
     private boolean authenticate() throws IOException {
 
-        //LOGGER.info("authenticate()");
+        LOGGER.debug("authenticate()");
 
         final URL url = new URL(AUTH_URL);
 
@@ -414,55 +369,39 @@ public class StorageClient {
 
 
     /**
+     * Reads storage containers information.
      *
-     * @param containerName container name
-     * @param storageContainer storage container
+     * @param queryParameters query parameters; {@code null} is allowed
+     * @param storageContainers the collection to which results are added
      *
      * @return true if succeeded; false otherwise
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
-    public boolean readStorageContainer(final String containerName,
-                                        final StorageContainer storageContainer)
-        throws IOException {
+    public boolean peekStorageContainers() throws IOException {
 
-//        LOGGER.log(Level.INFO, "readStorageContainers({0}, {1})",
-//                   new Object[]{containerName, storageContainer});
-
-        final String encodedContainerName = encodeContainerName(containerName);
-
-        if (storageContainer == null) {
-            throw new IllegalArgumentException("null storageContainer");
-        }
+        LOGGER.debug("peekStorageContainers()");
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName;
-
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(storageUrl);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod("HEAD");
         connection.setRequestProperty("X-Auth-Token", authToken);
+        connection.setRequestProperty("Accept", "application/xml");
 
         setTimeouts(connection);
 
         connection.connect();
         try {
             setResponses(connection);
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                storageContainer.setName(containerName);
-                storageContainer.setCount(Long.parseLong(
-                    connection.getHeaderField("X-Container-Object-Count")));
-                storageContainer.setBytes(Long.parseLong(
-                    connection.getHeaderField("X-Container-Bytes-Used")));
-            }
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
                 return true;
             }
         } finally {
@@ -474,10 +413,10 @@ public class StorageClient {
 
 
     /**
-     * Reads information of containers.
+     * Reads storage containers.
      *
-     * @param queryParameters query parameters; <code>null</code> is allowed
-     * @param storageContainers the collecion to which results are added
+     * @param queryParameters query parameters; {@code null} is allowed
+     * @param storageContainers the collection to which results are added
      *
      * @return true if succeeded; false otherwise
      *
@@ -488,11 +427,15 @@ public class StorageClient {
         final Collection<StorageContainer> storageContainers)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "readStorageContainers({0}, {1})",
-//                   new Object[]{storageContainers, queryParameters});
+        LOGGER.debug("readStorageContainers({}, {})", storageContainers,
+                     queryParameters);
+
+        if (queryParameters == null) {
+            // ok
+        }
 
         if (storageContainers == null) {
-            throw new IllegalArgumentException("null storageContainers");
+            throw new IllegalArgumentException("storageContainers");
         }
 
         if (!authenticate()) {
@@ -553,10 +496,100 @@ public class StorageClient {
 
 
     /**
-     * Creates a container named as given
-     * <code>containerName</code>.
      *
      * @param containerName container name
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean peekStorageContainer(final String containerName)
+        throws IOException {
+
+        LOGGER.debug("peekStorageContainers({})", containerName);
+
+        if (containerName == null) {
+            throw new NullPointerException("containerName");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String spec = storageUrl + PATH_SEPARATOR
+                            + encodeContainerName(containerName);
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
+     *
+     * @param containerName container name
+     * @param storageContainer storage container
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean readStorageContainer(final String containerName,
+                                        final StorageContainer storageContainer)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainers({}, {})", containerName,
+                     storageContainer);
+
+        if (storageContainer == null) {
+            throw new NullPointerException("storageContainer");
+        }
+
+        if (!peekStorageContainer(containerName)) {
+            return false;
+        }
+
+        storageContainer.setName(containerName);
+
+        final String count = getFirstHeaderValue("X-Container-Object-Count");
+        if (count == null) {
+            return false;
+        }
+        storageContainer.setCount(Long.parseLong(count));
+
+        final String bytes = getFirstHeaderValue("X-Container-Bytes-Used");
+        if (bytes == null) {
+            return false;
+        }
+        storageContainer.setBytes(Long.parseLong(bytes));
+
+        return false;
+    }
+
+
+    /**
+     * Creates a storage container named as given name.
+     *
+     * @param containerName the container name
      *
      * @return true if succeeded; false otherwise
      *
@@ -565,18 +598,18 @@ public class StorageClient {
     public boolean createContainer(final String containerName)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "createContainer({0})", containerName);
+        LOGGER.debug("createContainer({})", containerName);
 
+        // check
         final String encodedContainerName = encodeContainerName(containerName);
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
 
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -603,9 +636,9 @@ public class StorageClient {
 
 
     /**
-     * Deletes a container.
+     * Deletes a storage container named as given name.
      *
-     * @param containerName container name
+     * @param containerName the name of the storage container to delete
      *
      * @return true if succeeded; false otherwise
      *
@@ -614,18 +647,18 @@ public class StorageClient {
     public boolean deleteContainer(final String containerName)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "deleteContainer({0})", containerName);
+        LOGGER.debug("deleteContainer({})", containerName);
 
+        // check
         final String encodedContainerName = encodeContainerName(containerName);
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
 
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -652,77 +685,6 @@ public class StorageClient {
 
 
     /**
-     * Reads a
-     * <code>StorageObject</code>.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param storageObject the storageObject
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean readStorageObject(final String containerName,
-                                     final String objectName,
-                                     final StorageObject storageObject)
-        throws IOException {
-
-//        LOGGER.log(Level.INFO, "readStorageObject({0}, {1}, {2})",
-//                   new Object[]{containerName, objectName,
-//                                storageObject});
-
-        final String encodedContainerName = encodeContainerName(containerName);
-
-        final String encodedObjectName = encodeObjectName(objectName);
-
-        if (storageObject == null) {
-            throw new IllegalArgumentException("null storageObjects");
-        }
-
-        if (!authenticate()) {
-            return false;
-        }
-
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName + PATH_SEPARATOR
-                               + encodedObjectName;
-
-        final URL url = new URL(baseUrl);
-
-        final HttpURLConnection connection =
-            (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("HEAD");
-        connection.setRequestProperty("X-Auth-Token", authToken);
-
-        setTimeouts(connection);
-
-        connection.connect();
-        try {
-            setResponses(connection);
-            if (responseCode == RESPONSE_CODE_200_OK
-                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                storageObject.setName(connection.getHeaderField(objectName));
-                storageObject.setHash(connection.getHeaderField("Etag"));
-                storageObject.setBytes(getContentLength(connection));
-                storageObject.setContentType(
-                    connection.getHeaderField("Content-Type"));
-                storageObject.setLastModified(connection.getLastModified());
-            }
-            if (responseCode == RESPONSE_CODE_200_OK
-                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                return true;
-            }
-        } finally {
-            connection.disconnect();
-        }
-
-        return false;
-    }
-
-
-    /**
      * Reads objects information of a container.
      *
      * @param containerName container name
@@ -738,24 +700,22 @@ public class StorageClient {
         final Collection<StorageObject> storageObjects)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "readStorageObjects({0}, {1}, {2})",
-//                   new Object[]{containerName, queryParameters,
-//                                storageObjects});
+        LOGGER.debug("readStorageObjects({0}, {1}, {2})", containerName,
+                     queryParameters, storageObjects);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
         if (storageObjects == null) {
-            throw new IllegalArgumentException("null storageObjects");
+            throw new NullPointerException("storageObjects");
         }
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
 
-        final URL url = new URL(append(baseUrl, queryParameters));
+        final URL url = new URL(append(spec, queryParameters));
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -817,131 +777,75 @@ public class StorageClient {
 
 
     /**
-     * Updates an object's content.
+     * Reads a storage object.
      *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentType content type; <code>null</code> for unknown
-     * @param contentData content data
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean updateObject(final String containerName,
-                                final String objectName,
-                                final String contentType,
-                                final byte[] contentData)
-        throws IOException {
-
-//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3})",
-//                   new Object[]{containerName, objectName, contentType,
-//                                contentData});
-
-        if (contentData == null) {
-            throw new IllegalArgumentException("null contentData");
-        }
-
-        return updateObject(containerName, objectName, contentType,
-                            contentData.length,
-                            new ByteArrayInputStream(contentData));
-    }
-
-
-    /**
-     * Updates an object's content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentType content type; <code>null</code> for unknown
-     * @param contentLength content length; <code>-1L</code> for unknown
-     * @param contentData content data
+     * @param containerName the container name
+     * @param objectName the object name
+     * @param storageObject the storage object
      *
      * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs
      */
-    public boolean updateObject(final String containerName,
-                                final String objectName,
-                                final String contentType,
-                                final long contentLength,
-                                final InputStream contentData)
+    public boolean readStorageObject(final String containerName,
+                                     final String objectName,
+                                     final StorageObject storageObject)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
-//                   new Object[]{containerName, objectName, contentType,
-//                                contentLength, contentData});
+        LOGGER.debug("readStorageObject({}, {}, {})", containerName, objectName,
+                     storageObject);
 
-        if (contentData == null) {
-            throw new IllegalArgumentException("null contentData");
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        final String encodedObjectName = encodeObjectName(objectName);
+
+        if (storageObject == null) {
+            throw new NullPointerException("storageObjects");
         }
 
-        final ContentDataProducer contentDataProducer =
-            new DefaultContentDataProducer(contentData);
+        if (!authenticate()) {
+            return false;
+        }
 
-        return updateObject(containerName, objectName, contentType,
-                            contentLength, contentDataProducer);
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
 
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                storageObject.setName(objectName);
+                storageObject.setHash(connection.getHeaderField("Etag"));
+                storageObject.setBytes(getContentLength(connection));
+                storageObject.setContentType(
+                    connection.getHeaderField("Content-Type"));
+                storageObject.setLastModified(connection.getLastModified());
+            }
+            if (responseCode == RESPONSE_CODE_200_OK
+                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
     }
 
 
     /**
-     * Updates an object's content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentType content type; <code>null</code> for unknown
-     * @param contentLength content length; <code>-1L</code> for unknown
-     * @param contentDataProducer content data producer
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public boolean updateObject(final String containerName,
-                                final String objectName,
-                                final String contentType,
-                                final long contentLength,
-                                final ContentDataProducer contentDataProducer)
-        throws IOException {
-
-//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2}, {3}, {4})",
-//                   new Object[]{containerName, objectName, contentType,
-//                                contentLength, contentDataProducer});
-
-        if (contentDataProducer == null) {
-            throw new IllegalArgumentException("null contentDataProducer");
-        }
-
-        final ContentProducer contentProducer = new ContentProducer() {
-
-
-            @Override
-            public String getContentType() {
-                return contentType;
-            }
-
-
-            @Override
-            public long getContentLength() {
-                return contentLength;
-            }
-
-
-            @Override
-            public InputStream getContentData() throws IOException {
-                return contentDataProducer.getContentData();
-            }
-
-
-        };
-
-        return updateObject(containerName, objectName, contentProducer);
-    }
-
-
-    /**
-     * Updates an object's content.
+     * Updates or creates an storage content.
      *
      * @param containerName container name
      * @param objectName object name
@@ -951,13 +855,13 @@ public class StorageClient {
      *
      * @throws IOException if an I/O error occurs
      */
-    public boolean updateObject(final String containerName,
-                                final String objectName,
-                                final ContentProducer contentProducer)
+    public boolean updateStorageContent(final String containerName,
+                                        final String objectName,
+                                        final ContentProducer contentProducer)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "updateObject({0}, {1}, {2})",
-//                   new Object[]{containerName, objectName, contentProducer});
+        LOGGER.debug("updateStorageContent({}, {}, {})", containerName,
+                     objectName, contentProducer);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
@@ -967,11 +871,10 @@ public class StorageClient {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName + PATH_SEPARATOR
-                               + encodedObjectName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
 
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -1022,132 +925,160 @@ public class StorageClient {
 
 
     /**
-     * Reads an object's content.
+     * Updates an object's content.
      *
      * @param containerName container name
      * @param objectName object name
-     * @param contentDataOutput the output stream to which content is written
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean readObject(final String containerName,
-                              final String objectName,
-                              final OutputStream contentDataOutput)
-        throws IOException {
-
-        if (contentDataOutput == null) {
-            throw new IllegalArgumentException("null contentDataOutput");
-        }
-
-        final ContentDataConsumer contentDataConsumer =
-            new ContentDataConsumer() {
-
-
-                @Override
-                public void setContentData(final InputStream contentData)
-                    throws IOException {
-
-                    copy(contentData, contentDataOutput);
-                }
-
-
-            };
-
-        return readObject(containerName, objectName, contentDataConsumer);
-    }
-
-
-    /**
-     * Reads object content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentDataConsumer content data consumer
+     * @param contentType content type; <code>null</code> for unknown
+     * @param contentLength content length; <code>-1L</code> for unknown
+     * @param contentDataProducer content data producer
      *
      * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs.
      */
-    public boolean readObject(final String containerName,
-                              final String objectName,
-                              final ContentDataConsumer contentDataConsumer)
+    public boolean updateStorageContent(
+        final String containerName, final String objectName,
+        final String contentType, final long contentLength,
+        final ContentDataProducer contentDataProducer)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
-//                   new Object[]{containerName, objectName,
-//                                contentDataConsumer});
+        LOGGER.debug("updateStorageContent({}, {}, {}, {}, {})",
+                     containerName, objectName, contentType, contentLength,
+                     contentDataProducer);
 
-        if (contentDataConsumer == null) {
-            throw new IllegalArgumentException("null contentDataConsumer");
+        if (contentDataProducer == null) {
+            throw new NullPointerException("contentDataProducer");
         }
 
-        final ContentConsumer contentConsumer = new ContentConsumer() {
+        final ContentProducer contentProducer = new ContentProducer() {
 
 
             @Override
-            public void setContentType(final String contentType) {
-                // empty
+            public String getContentType() {
+                return contentType;
             }
 
 
             @Override
-            public void setContentLength(final long contentLength) {
-                // empty
+            public long getContentLength() {
+                return contentLength;
             }
 
 
             @Override
-            public void setContentData(final InputStream contentData)
-                throws IOException {
-
-                contentDataConsumer.setContentData(contentData);
+            public InputStream getContentData() throws IOException {
+                return contentDataProducer.getContentData();
             }
-
 
         };
 
-        return readObject(containerName, objectName, contentConsumer);
+        return updateStorageContent(containerName, objectName, contentProducer);
     }
 
 
     /**
-     * Reads object content.
+     * Updates an storage object's content.
      *
      * @param containerName container name
      * @param objectName object name
-     * @param contentConsumer content consumer
+     * @param contentType content type; {@code null} for unknown
+     * @param contentLength content length; {@code null} for unknown
+     * @param contentData content data
      *
      * @return true if succeeded; false otherwise
      *
      * @throws IOException if an I/O error occurs
      */
-    public boolean readObject(final String containerName,
-                              final String objectName,
-                              final ContentConsumer contentConsumer)
+    public boolean updateStorageContent(final String containerName,
+                                        final String objectName,
+                                        final String contentType,
+                                        final long contentLength,
+                                        final InputStream contentData)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "readObject({0}, {1}, {2})",
-//                   new Object[]{containerName, objectName, contentConsumer});
+        LOGGER.debug("updateStorageContent({}, {}, {}, {}, {})", containerName,
+                     objectName, contentType, contentLength, contentData);
+
+        if (contentData == null) {
+            throw new NullPointerException("contentData");
+        }
+
+        final ContentDataProducer contentDataProducer =
+            new DefaultContentDataProducer(contentData);
+
+        return updateStorageContent(containerName, objectName, contentType,
+                                    contentLength, contentDataProducer);
+
+    }
+
+
+    /**
+     * Updates an object's content.
+     *
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentType content type; {@code null} for unknown
+     * @param contentData content data
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean updateStorageContent(final String containerName,
+                                        final String objectName,
+                                        final String contentType,
+                                        final byte[] contentData)
+        throws IOException {
+
+        LOGGER.debug("updateStorageContent({}, {}, {}, {})", containerName,
+                     objectName, contentType, contentData);
+
+        if (contentData == null) {
+            throw new NullPointerException("contentData");
+        }
+
+        return updateStorageContent(containerName, objectName, contentType,
+                                    contentData.length,
+                                    new ByteArrayInputStream(contentData));
+    }
+
+
+    /**
+     * Reads the content of a storage object.
+     *
+     * @param containerName the container name
+     * @param objectName the object name
+     * @param contentConsumer the content consumer
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean readStorageContent(final String containerName,
+                                      final String objectName,
+                                      final ContentConsumer contentConsumer)
+        throws IOException {
+
+        LOGGER.debug("readStorageContent({}, {}, {})", containerName,
+                     objectName, contentConsumer);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
         final String encodedObjectName = encodeObjectName(objectName);
 
         if (contentConsumer == null) {
-            throw new IllegalArgumentException("null contentConsumer");
+            throw new NullPointerException("contentConsumer");
         }
 
         if (!authenticate()) {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName + PATH_SEPARATOR
-                               + encodedObjectName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
 
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -1177,6 +1108,98 @@ public class StorageClient {
 
 
     /**
+     * Reads object content.
+     *
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentDataConsumer content data consumer
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean readStorageContent(
+        final String containerName, final String objectName,
+        final ContentDataConsumer contentDataConsumer)
+        throws IOException {
+
+        LOGGER.debug("readStorageContent({}, {}, {})", containerName,
+                     objectName, contentDataConsumer);
+
+        if (contentDataConsumer == null) {
+            throw new IllegalArgumentException("null contentDataConsumer");
+        }
+
+        final ContentConsumer contentConsumer = new ContentConsumer() {
+
+
+            @Override
+            public void setContentType(final String contentType) {
+                // empty
+            }
+
+
+            @Override
+            public void setContentLength(final long contentLength) {
+                // empty
+            }
+
+
+            @Override
+            public void setContentData(final InputStream contentData)
+                throws IOException {
+
+                contentDataConsumer.setContentData(contentData);
+            }
+
+        };
+
+        return readStorageContent(containerName, objectName, contentConsumer);
+    }
+
+
+    /**
+     * Reads an object's content.
+     *
+     * @param containerName container name
+     * @param objectName object name
+     * @param contentDataOutput the output stream to which content is written
+     *
+     * @return true if succeeded; false otherwise
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean readStorageContent(final String containerName,
+                                      final String objectName,
+                                      final OutputStream contentDataOutput)
+        throws IOException {
+
+        LOGGER.debug("readStorageContent({}, {}, {})", containerName,
+                     objectName, contentDataOutput);
+
+        if (contentDataOutput == null) {
+            throw new NullPointerException("contentDataOutput");
+        }
+
+        final ContentDataConsumer contentDataConsumer =
+            new ContentDataConsumer() {
+
+
+            @Override
+            public void setContentData(final InputStream contentData)
+                throws IOException {
+
+                copy(contentData, contentDataOutput);
+            }
+
+        };
+
+        return readStorageContent(containerName, objectName,
+                                  contentDataConsumer);
+    }
+
+
+    /**
      * Deletes an object.
      *
      * @param containerName container name
@@ -1186,12 +1209,11 @@ public class StorageClient {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public boolean deleteObject(final String containerName,
-                                final String objectName)
+    public boolean deleteStorageObject(final String containerName,
+                                       final String objectName)
         throws IOException {
 
-//        LOGGER.log(Level.INFO, "deleteObject({0}, {1})",
-//                   new Object[]{containerName, objectName});
+        LOGGER.debug("deleteStorageObject({}, {})", containerName, objectName);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
@@ -1201,11 +1223,10 @@ public class StorageClient {
             return false;
         }
 
-        final String baseUrl = storageUrl + PATH_SEPARATOR
-                               + encodedContainerName + PATH_SEPARATOR
-                               + encodedObjectName;
+        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
 
-        final URL url = new URL(baseUrl);
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -1231,10 +1252,9 @@ public class StorageClient {
 
 
     /**
-     * Sets timeouts to given
-     * <code>connection</code>.
+     * Sets timeouts to given {@code connection}.
      *
-     * @param connection connection
+     * @param connection the connection
      */
     private void setTimeouts(final URLConnection connection) {
 
@@ -1306,10 +1326,9 @@ public class StorageClient {
 
 
     /**
-     * Sets response code and message from given
-     * <code>connection</code>.
+     * Sets response code and message from given {@code connection}.
      *
-     * @param connection connection
+     * @param connection the connection
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -1356,7 +1375,29 @@ public class StorageClient {
      * @return response header fields
      */
     public Map<String, List<String>> getHeaderFields() {
+
         return headerFields;
+    }
+
+
+    public List<String> getHeaderValues(final String name) {
+
+        if (headerFields == null) {
+            throw new IllegalStateException("no header fields");
+        }
+
+        return headerFields.get(name);
+    }
+
+
+    public String getFirstHeaderValue(final String name) {
+
+        final List<String> headerValues = getHeaderValues(name);
+        if (headerValues == null || headerValues.isEmpty()) {
+            return null;
+        }
+
+        return headerValues.get(0);
     }
 
 
@@ -1373,13 +1414,13 @@ public class StorageClient {
 
 
     /**
-     * storage url.
+     * authentication output. storage url.
      */
     private transient String storageUrl;
 
 
     /**
-     * auth token.
+     * authentication output. authentication token.
      */
     private transient String authToken;
 
@@ -1415,4 +1456,3 @@ public class StorageClient {
 
 
 }
-
