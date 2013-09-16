@@ -28,37 +28,38 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"name", "hash", "bytes", "contentType", "lastModified"})
+@XmlType(propOrder = {"objectName", "lastModified", "entityTag", "contentType",
+                      "contentLength"})
 public class StorageObject {
 
 
-    public String getName() {
-        return name;
+    public String getObjectName() {
+        return objectName;
     }
 
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setObjectName(final String objectName) {
+        this.objectName = objectName;
     }
 
 
-    public String getHash() {
-        return hash;
+    public String getEntityTag() {
+        return entityTag;
     }
 
 
-    public void setHash(final String hash) {
-        this.hash = hash;
+    public void setEntityTag(final String entityTag) {
+        this.entityTag = entityTag;
     }
 
 
-    public long getBytes() {
-        return bytes;
+    public long getContentLength() {
+        return contentLength;
     }
 
 
-    public void setBytes(final long bytes) {
-        this.bytes = bytes;
+    public void setContentLength(final long contentLength) {
+        this.contentLength = contentLength;
     }
 
 
@@ -84,21 +85,22 @@ public class StorageObject {
 
     @Override
     public String toString() {
-        return name + "|" + hash + "|" + bytes + "|" + contentType + "|"
-               + lastModified;
+        return super.toString() + "?objectName=" + objectName + "&lastModified="
+               + lastModified + "&entityTag" + entityTag + "&contentType"
+               + contentType + "&contentLength" + contentLength;
     }
 
 
     @XmlElement(required = true)
-    private String name;
+    private String objectName;
 
 
     @XmlElement(required = true)
-    private String hash;
+    private long lastModified;
 
 
     @XmlElement(required = true)
-    private long bytes;
+    private String entityTag;
 
 
     @XmlElement(required = true)
@@ -106,7 +108,7 @@ public class StorageObject {
 
 
     @XmlElement(required = true)
-    private long lastModified;
+    private long contentLength;
 
 
 }

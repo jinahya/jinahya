@@ -132,11 +132,9 @@ public class UcloudStorageClientIT {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final StorageContainer storageContainer = new StorageContainer();
-
         for (final String containerName : CONTAINER_NAMES) {
-            final boolean succeeded =
-                client.readStorageContainer(containerName, storageContainer);
+            final StorageContainer storageContainer =
+                client.readStorageContainer(containerName);
         }
     }
 
@@ -201,12 +199,10 @@ public class UcloudStorageClientIT {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        final StorageObject storageObject = new StorageObject();
-
         for (final String containerName : CONTAINER_NAMES) {
             for (final String objectName : OBJECT_NAMES) {
-                final boolean succeeded = client.readStorageObject(
-                    containerName, objectName, storageObject);
+                final StorageObject storageObject =
+                    client.readStorageObject(containerName, objectName);
             }
         }
     }

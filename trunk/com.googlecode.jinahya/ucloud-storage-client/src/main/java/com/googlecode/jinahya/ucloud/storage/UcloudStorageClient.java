@@ -59,14 +59,13 @@ public class UcloudStorageClient {
     /**
      * Content type for unknown.
      */
-    private static final String UNKNOWN_CONTENT_TYPE =
-        "application/octet-stream";
+    static final String UNKNOWN_CONTENT_TYPE = "application/octet-stream";
 
 
     /**
      * Content length for unknown.
      */
-    private static final long UNKNOWN_CONTENT_LENGTH = -1L;
+    static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
     /**
@@ -183,8 +182,7 @@ public class UcloudStorageClient {
         if (containerName.length() > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
             throw new IllegalArgumentException(
                 "encoded containerName's length(" + containerName.length()
-                + " > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH("
-                + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
+                + " > (" + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
         }
 
         return containerName;
@@ -213,8 +211,7 @@ public class UcloudStorageClient {
         if (objectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
             throw new IllegalArgumentException(
                 "encoded objectName's length(" + objectName.length()
-                + "> MAXIMUM_ENCODED_OBJECT_NAME_LENGTH("
-                + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
+                + "> (" + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
         }
 
         return objectName;
@@ -267,8 +264,8 @@ public class UcloudStorageClient {
      *
      * @throws IOException if an I/O error occurs
      */
-    static void copy(final InputStream input, final OutputStream output,
-                     final byte[] buffer)
+    private static void copy(final InputStream input, final OutputStream output,
+                             final byte[] buffer)
         throws IOException {
 
         if (input == null) {
@@ -301,7 +298,7 @@ public class UcloudStorageClient {
      *
      * @throws IOException if an I/O error occurs
      */
-    static void copy(final InputStream input, final OutputStream output)
+    private static void copy(final InputStream input, final OutputStream output)
         throws IOException {
 
         copy(input, output, new byte[BUFFER_LENGTH]);
@@ -369,6 +366,67 @@ public class UcloudStorageClient {
     }
 
 
+    public boolean readStorageAccount(final StorageAccount storageAccount)
+        throws IOException {
+
+        LOGGER.debug("readStorageAccount({})", storageAccount);
+
+        if (storageAccount == null) {
+            throw new NullPointerException("storageAccount");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String spec = storageUrl;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                storageAccount.setContainerCount(Long.parseLong(
+                    getFirstHeaderValue("X-Account-Container-Count")));
+                storageAccount.setObjectCount(Long.parseLong(
+                    getFirstHeaderValue("X-Account-Object-Count")));
+                storageAccount.setBytesUsed(Long.parseLong(
+                    getFirstHeaderValue("X-Account-Bytes-Used")));
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    public StorageAccount readStorageAccount() throws IOException {
+
+        LOGGER.debug("readStorageAccount()");
+
+        final StorageAccount storageAccount = new StorageAccount();
+
+        if (!readStorageAccount(storageAccount)) {
+            return null;
+        }
+
+        return storageAccount;
+    }
+
+
     /**
      * Reads storage containers.
      *
@@ -384,8 +442,8 @@ public class UcloudStorageClient {
         final Collection<? super StorageContainer> storageContainers)
         throws IOException {
 
-        LOGGER.debug("readStorageContainers({}, {})", storageContainers,
-                     queryParameters);
+        LOGGER.debug("readStorageContainers({}, {})", queryParameters,
+                     storageContainers);
 
         if (queryParameters == null) {
             // ok
@@ -399,11 +457,18 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final URL url = new URL(append(storageUrl, queryParameters));
+        if (queryParameters != null) {
+            queryParameters.remove("format");
+        }
+
+        final String spec = append(storageUrl, queryParameters);
+
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
+        connection.setDoInput(true);
         connection.setRequestMethod("GET");
         connection.setRequestProperty("X-Auth-Token", authToken);
         connection.setRequestProperty("Accept", "application/xml");
@@ -419,13 +484,14 @@ public class UcloudStorageClient {
                     try {
                         final Collection<Map<String, String>> results =
                             SimpleHandler.parse(input, "container");
-                        for (Map<String, String> result : results) {
+                        for (final Map<String, String> result : results) {
                             final StorageContainer storageContainer =
                                 new StorageContainer();
-                            storageContainer.setName(result.get("name"));
-                            storageContainer.setCount(
+                            storageContainer.setContainerName(
+                                result.get("name"));
+                            storageContainer.setObjectCount(
                                 Long.parseLong(result.get("count")));
-                            storageContainer.setBytes(
+                            storageContainer.setBytesUsed(
                                 Long.parseLong(result.get("bytes")));
                             storageContainers.add(storageContainer);
                         }
@@ -452,66 +518,112 @@ public class UcloudStorageClient {
     }
 
 
-    /**
-     *
-     * @param containerName container name
-     * @param storageContainer storage container
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean readStorageContainer(final String containerName,
-                                        final StorageContainer storageContainer)
-        throws IOException {
-
-        LOGGER.debug("readStorageContainer({}, {})", containerName,
-                     storageContainer);
-
-        // check
-        final String encodedContainerName = encodeContainerName(containerName);
-
-        if (storageContainer == null) {
-            throw new NullPointerException("storageContainer");
-        }
-
-        if (!authenticate()) {
-            return false;
-        }
-
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
-
-        final URL url = new URL(spec);
-
-        final HttpURLConnection connection =
-            (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("HEAD");
-        connection.setRequestProperty("X-Auth-Token", authToken);
-
-        setTimeouts(connection);
-
-        connection.connect();
-        try {
-            setResponses(connection);
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                storageContainer.setName(containerName);
-                storageContainer.setCount(Long.parseLong(
-                    connection.getHeaderField("X-Container-Object-Count")));
-                storageContainer.setBytes(Long.parseLong(
-                    connection.getHeaderField("X-Container-Bytes-Used")));
-            }
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                return true;
-            }
-        } finally {
-            connection.disconnect();
-        }
-
-        return false;
-    }
-
-
+//    /**
+//     * Requests the storage container whose name is given container name.
+//     *
+//     * @param containerName the container name
+//     * @param storageContainer storage container
+//     *
+//     * @return true if succeeded; false otherwise
+//     *
+//     * @throws IOException if an I/O error occurs
+//     */
+//    public boolean readStorageContainer(final String containerName,
+//                                        final StorageContainer storageContainer)
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageContainer({}, {})", containerName,
+//                     storageContainer);
+//
+//        // check
+//        final String encodedContainerName = encodeContainerName(containerName);
+//
+//        if (storageContainer == null) {
+//            throw new NullPointerException("storageContainer");
+//        }
+//
+//        if (!authenticate()) {
+//            return false;
+//        }
+//
+//        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+//
+//        final URL url = new URL(base);
+//
+//        final HttpURLConnection connection =
+//            (HttpURLConnection) url.openConnection();
+//
+//        connection.setRequestMethod("HEAD");
+//        connection.setRequestProperty("X-Auth-Token", authToken);
+//
+//        setTimeouts(connection);
+//
+//        connection.connect();
+//        try {
+//            setResponses(connection);
+//            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+//                storageContainer.setContainerName(containerName);
+//                storageContainer.setObjectCount(Long.parseLong(
+//                    getFirstHeaderValue("X-Container-Object-Count")));
+//                storageContainer.setBytesUsed(Long.parseLong(
+//                    getFirstHeaderValue("X-Container-Bytes-Used")));
+//            }
+//            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+//                return true;
+//            }
+//        } finally {
+//            connection.disconnect();
+//        }
+//
+//        return false;
+//    }
+//
+//
+//    /**
+//     *
+//     * @param storageContainer the storage container
+//     *
+//     * @return {@code true} if succeeded; {@code false} if failed.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    public boolean readStorageContainer(final StorageContainer storageContainer)
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageContainer({})", storageContainer);
+//
+//        if (storageContainer == null) {
+//            throw new NullPointerException("storageContainer");
+//        }
+//
+//        return readStorageContainer(storageContainer.getContainerName(),
+//                                    storageContainer);
+//    }
+//    /**
+//     * Retrieves a storage container whose name is mapped to given container
+//     * name.
+//     *
+//     * @param containerName the container name
+//     *
+//     * @return the mapped storage container or {@code null} if not found or
+//     * failed
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    public StorageContainer readStorageContainer(final String containerName)
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageContainer({})", containerName);
+//
+//        final StorageContainer storageContainer = new StorageContainer();
+//        storageContainer.setContainerName(containerName);
+//
+//        if (!readStorageContainer(storageContainer)) {
+//            return null;
+//        }
+//
+//        return storageContainer;
+//    }
     /**
      * Creates a storage container named as given name.
      *
@@ -562,18 +674,75 @@ public class UcloudStorageClient {
 
 
     /**
-     * Deletes a storage container named as given name.
+     * Retrieves a storage container whose name is mapped to given container
+     * name.
+     *
+     * @param containerName the container name
+     *
+     * @return the mapped storage container or {@code null} if not found or
+     * failed
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public StorageContainer readStorageContainer(final String containerName)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainer({})", containerName);
+
+        // check
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        if (!authenticate()) {
+            return null;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final URL url = new URL(base);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                final StorageContainer storageContainer =
+                    new StorageContainer();
+                storageContainer.setContainerName(containerName);
+                storageContainer.setContainerName(containerName);
+                storageContainer.setObjectCount(Long.parseLong(
+                    getFirstHeaderValue("X-Container-Object-Count")));
+                storageContainer.setBytesUsed(Long.parseLong(
+                    getFirstHeaderValue("X-Container-Bytes-Used")));
+                return storageContainer;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Deletes a storage container named as given container name.
      *
      * @param containerName the name of the storage container to delete
      *
-     * @return true if succeeded; false otherwise
+     * @return {@code true} if succeeded; {@code false} otherwise
      *
      * @throws IOException if an I/O error occurs.
      */
     public boolean deleteStorageContainer(final String containerName)
         throws IOException {
 
-        LOGGER.debug("deleteContainer({})", containerName);
+        LOGGER.debug("deleteStorageContainer({})", containerName);
 
         // check
         final String encodedContainerName = encodeContainerName(containerName);
@@ -613,11 +782,11 @@ public class UcloudStorageClient {
     /**
      * Reads objects information of a container.
      *
-     * @param containerName container name
+     * @param containerName the container name
      * @param queryParameters query parameters; {@code null} is allowed
      * @param storageObjects the collection to which all results are added
      *
-     * @return true if succeeded; false otherwise
+     * @return {@code true} if succeeded; {@code false} otherwise
      *
      * @throws IOException if an I/O error occurs
      */
@@ -639,9 +808,13 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
 
-        final URL url = new URL(append(spec, queryParameters));
+        if (queryParameters != null) {
+            queryParameters.remove("format");
+        }
+
+        final URL url = new URL(append(base, queryParameters));
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -665,9 +838,9 @@ public class UcloudStorageClient {
                         for (Map<String, String> result : results) {
                             final StorageObject storageObject =
                                 new StorageObject();
-                            storageObject.setName(result.get("name"));
-                            storageObject.setHash(result.get("hash"));
-                            storageObject.setBytes(
+                            storageObject.setObjectName(result.get("name"));
+                            storageObject.setEntityTag(result.get("hash"));
+                            storageObject.setContentLength(
                                 Long.parseLong(result.get("bytes")));
                             storageObject.setContentType(
                                 result.get("content_type"));
@@ -702,35 +875,84 @@ public class UcloudStorageClient {
     }
 
 
-    /**
-     * Reads a storage object.
-     *
-     * @param containerName the container name
-     * @param objectName the object name
-     * @param storageObject the storage object
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean readStorageObject(final String containerName,
-                                     final String objectName,
-                                     final StorageObject storageObject)
+//    /**
+//     * Reads a storage object.
+//     *
+//     * @param containerName the container name
+//     * @param objectName the object name
+//     * @param storageObject the storage object
+//     *
+//     * @return true if succeeded; false otherwise
+//     *
+//     * @throws IOException if an I/O error occurs
+//     */
+//    public boolean readStorageObject(final String containerName,
+//                                     final String objectName,
+//                                     final StorageObject storageObject)
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageObject({}, {}, {})", containerName, objectName,
+//                     storageObject);
+//
+//        final String encodedContainerName = encodeContainerName(containerName);
+//
+//        final String encodedObjectName = encodeObjectName(objectName);
+//
+//        if (storageObject == null) {
+//            throw new NullPointerException("storageObjects");
+//        }
+//
+//        if (!authenticate()) {
+//            return false;
+//        }
+//
+//        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+//                            + PATH_SEPARATOR + encodedObjectName;
+//
+//        final URL url = new URL(spec);
+//
+//        final HttpURLConnection connection =
+//            (HttpURLConnection) url.openConnection();
+//
+//        connection.setRequestMethod("HEAD");
+//        connection.setRequestProperty("X-Auth-Token", authToken);
+//
+//        setTimeouts(connection);
+//
+//        connection.connect();
+//        try {
+//            setResponses(connection);
+//            if (responseCode == RESPONSE_CODE_200_OK
+//                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+//                storageObject.setObjectName(objectName);
+//                storageObject.setLastModified(connection.getLastModified());
+//                storageObject.setEntityTag(getFirstHeaderValue("Etag"));
+//                storageObject.setContentType(connection.getContentType());
+//                storageObject.setContentLength(getContentLength(connection));
+//                storageObject.setLastModified(connection.getLastModified());
+//            }
+//            if (responseCode == RESPONSE_CODE_200_OK
+//                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+//                return true;
+//            }
+//        } finally {
+//            connection.disconnect();
+//        }
+//
+//        return false;
+//    }
+    public StorageObject readStorageObject(final String containerName,
+                                           final String objectName)
         throws IOException {
 
-        LOGGER.debug("readStorageObject({}, {}, {})", containerName, objectName,
-                     storageObject);
+        LOGGER.debug("readStorageObject({}, {})", containerName, objectName);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
         final String encodedObjectName = encodeObjectName(objectName);
 
-        if (storageObject == null) {
-            throw new NullPointerException("storageObjects");
-        }
-
         if (!authenticate()) {
-            return false;
+            return null;
         }
 
         final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
@@ -751,15 +973,65 @@ public class UcloudStorageClient {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_200_OK
                 || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                storageObject.setName(objectName);
-                storageObject.setHash(connection.getHeaderField("Etag"));
-                storageObject.setBytes(getContentLength(connection));
-                storageObject.setContentType(
-                    connection.getHeaderField("Content-Type"));
+                final StorageObject storageObject = new StorageObject();
+                storageObject.setObjectName(objectName);
                 storageObject.setLastModified(connection.getLastModified());
+                storageObject.setEntityTag(getFirstHeaderValue("Etag"));
+                storageObject.setContentType(connection.getContentType());
+                storageObject.setContentLength(getContentLength(connection));
+                storageObject.setLastModified(connection.getLastModified());
+                return storageObject;
             }
-            if (responseCode == RESPONSE_CODE_200_OK
-                || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+        } finally {
+            connection.disconnect();
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Deletes an object.
+     *
+     * @param containerName the container name
+     * @param objectName the object name
+     *
+     * @return {@code true} if succeeded; {@code false} otherwise
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean deleteStorageObject(final String containerName,
+                                       final String objectName)
+        throws IOException {
+
+        LOGGER.debug("deleteStorageObject({}, {})", containerName, objectName);
+
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        final String encodedObjectName = encodeObjectName(objectName);
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
+
+        final URL url = new URL(base);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT
+                || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
                 return true;
             }
         } finally {
@@ -789,18 +1061,20 @@ public class UcloudStorageClient {
         LOGGER.debug("updateStorageContent({}, {}, {})", containerName,
                      objectName, contentProducer);
 
+        // check
         final String encodedContainerName = encodeContainerName(containerName);
 
+        // check
         final String encodedObjectName = encodeObjectName(objectName);
 
         if (!createStorageContainer(containerName)) {
             return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
                             + PATH_SEPARATOR + encodedObjectName;
 
-        final URL url = new URL(spec);
+        final URL url = new URL(base);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -810,33 +1084,28 @@ public class UcloudStorageClient {
         connection.setRequestProperty("X-Auth-Token", authToken);
 
         String contentType = contentProducer.getContentType();
-        if (contentType == null || contentType.trim().isEmpty()) {
+        if (contentType == null) {
             contentType = UNKNOWN_CONTENT_TYPE;
         }
         connection.setRequestProperty("Content-Type", contentType);
 
         long contentLength = contentProducer.getContentLength();
-        if (contentLength < UNKNOWN_CONTENT_LENGTH) {
-            contentLength = UNKNOWN_CONTENT_LENGTH;
-        }
-        if (contentLength == UNKNOWN_CONTENT_LENGTH) {
-            connection.setChunkedStreamingMode(CHUNK_LENGTH);
-        } else {
+        if (contentLength > UNKNOWN_CONTENT_LENGTH) {
             connection.setRequestProperty(
                 "Content-Length", Long.toString(contentLength));
+        } else {
+            connection.setChunkedStreamingMode(CHUNK_LENGTH);
         }
 
         setTimeouts(connection);
 
         connection.connect();
         try {
-            final OutputStream output = connection.getOutputStream();
+            final OutputStream contentData = connection.getOutputStream();
             try {
-                final InputStream input = contentProducer.getContentData();
-                copy(input, output);
-                output.flush();
+                contentProducer.getContentData(contentData);
             } finally {
-                output.close();
+                contentData.close();
             }
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_201_CREATED) {
@@ -851,65 +1120,12 @@ public class UcloudStorageClient {
 
 
     /**
-     * Updates an object's content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentType content type; <code>null</code> for unknown
-     * @param contentLength content length; <code>-1L</code> for unknown
-     * @param contentDataProducer content data producer
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public boolean updateStorageContent(
-        final String containerName, final String objectName,
-        final String contentType, final long contentLength,
-        final ContentDataProducer contentDataProducer)
-        throws IOException {
-
-        LOGGER.debug("updateStorageContent({}, {}, {}, {}, {})",
-                     containerName, objectName, contentType, contentLength,
-                     contentDataProducer);
-
-        if (contentDataProducer == null) {
-            throw new NullPointerException("contentDataProducer");
-        }
-
-        final ContentProducer contentProducer = new ContentProducer() {
-
-
-            @Override
-            public String getContentType() {
-                return contentType;
-            }
-
-
-            @Override
-            public long getContentLength() {
-                return contentLength;
-            }
-
-
-            @Override
-            public InputStream getContentData() throws IOException {
-                return contentDataProducer.getContentData();
-            }
-
-        };
-
-        return updateStorageContent(containerName, objectName, contentProducer);
-    }
-
-
-    /**
      * Updates an storage object's content.
      *
      * @param containerName container name
      * @param objectName object name
      * @param contentType content type; {@code null} for unknown
-     * @param contentLength content length; {@code null} for unknown
+     * @param contentLength content length; {@code -1L} for unknown
      * @param contentData content data
      *
      * @return true if succeeded; false otherwise
@@ -930,12 +1146,30 @@ public class UcloudStorageClient {
             throw new NullPointerException("contentData");
         }
 
-        final ContentDataProducer contentDataProducer =
-            new DefaultContentDataProducer(contentData);
+        final ContentProducer contentProduer = new ContentProducer() {
 
-        return updateStorageContent(containerName, objectName, contentType,
-                                    contentLength, contentDataProducer);
 
+            @Override
+            public String getContentType() {
+                return contentType;
+            }
+
+
+            @Override
+            public long getContentLength() {
+                return contentLength;
+            }
+
+
+            @Override
+            public void getContentData(final OutputStream contentData_)
+                throws IOException {
+                copy(contentData, contentData_);
+            }
+
+        };
+
+        return updateStorageContent(containerName, objectName, contentProduer);
     }
 
 
@@ -964,9 +1198,9 @@ public class UcloudStorageClient {
             throw new NullPointerException("contentData");
         }
 
-        return updateStorageContent(containerName, objectName, contentType,
-                                    contentData.length,
-                                    new ByteArrayInputStream(contentData));
+        return updateStorageContent(
+            containerName, objectName, contentType, contentData.length,
+            new ByteArrayInputStream(contentData));
     }
 
 
@@ -981,9 +1215,9 @@ public class UcloudStorageClient {
      *
      * @throws IOException if an I/O error occurs
      */
-    public boolean readStorageContent(final String containerName,
-                                      final String objectName,
-                                      final ContentConsumer contentConsumer)
+    public boolean readStorageContent(
+        final String containerName, final String objectName,
+        final ContentConsumer contentConsumer)
         throws IOException {
 
         LOGGER.debug("readStorageContent({}, {}, {})", containerName,
@@ -1020,153 +1254,14 @@ public class UcloudStorageClient {
             if (responseCode == RESPONSE_CODE_200_OK) {
                 contentConsumer.setContentType(connection.getContentType());
                 contentConsumer.setContentLength(getContentLength(connection));
-                contentConsumer.setContentData(connection.getInputStream());
+                final InputStream contentData = connection.getInputStream();
+                try {
+                    contentConsumer.setContentData(contentData);
+                } finally {
+                    contentData.close();
+                }
             }
             if (responseCode == RESPONSE_CODE_200_OK) {
-                return true;
-            }
-        } finally {
-            connection.disconnect();
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Reads object content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentDataConsumer content data consumer
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public boolean readStorageContent(
-        final String containerName, final String objectName,
-        final ContentDataConsumer contentDataConsumer)
-        throws IOException {
-
-        LOGGER.debug("readStorageContent({}, {}, {})", containerName,
-                     objectName, contentDataConsumer);
-
-        if (contentDataConsumer == null) {
-            throw new IllegalArgumentException("null contentDataConsumer");
-        }
-
-        final ContentConsumer contentConsumer = new ContentConsumer() {
-
-
-            @Override
-            public void setContentType(final String contentType) {
-                // empty
-            }
-
-
-            @Override
-            public void setContentLength(final long contentLength) {
-                // empty
-            }
-
-
-            @Override
-            public void setContentData(final InputStream contentData)
-                throws IOException {
-
-                contentDataConsumer.setContentData(contentData);
-            }
-
-        };
-
-        return readStorageContent(containerName, objectName, contentConsumer);
-    }
-
-
-    /**
-     * Reads an object's content.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     * @param contentDataOutput the output stream to which content is written
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public boolean readStorageContent(final String containerName,
-                                      final String objectName,
-                                      final OutputStream contentDataOutput)
-        throws IOException {
-
-        LOGGER.debug("readStorageContent({}, {}, {})", containerName,
-                     objectName, contentDataOutput);
-
-        if (contentDataOutput == null) {
-            throw new NullPointerException("contentDataOutput");
-        }
-
-        final ContentDataConsumer contentDataConsumer =
-            new ContentDataConsumer() {
-
-
-            @Override
-            public void setContentData(final InputStream contentData)
-                throws IOException {
-
-                copy(contentData, contentDataOutput);
-            }
-
-        };
-
-        return readStorageContent(containerName, objectName,
-                                  contentDataConsumer);
-    }
-
-
-    /**
-     * Deletes an object.
-     *
-     * @param containerName container name
-     * @param objectName object name
-     *
-     * @return true if succeeded; false otherwise
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public boolean deleteStorageObject(final String containerName,
-                                       final String objectName)
-        throws IOException {
-
-        LOGGER.debug("deleteStorageObject({}, {})", containerName, objectName);
-
-        final String encodedContainerName = encodeContainerName(containerName);
-
-        final String encodedObjectName = encodeObjectName(objectName);
-
-        if (!authenticate()) {
-            return false;
-        }
-
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
-                            + PATH_SEPARATOR + encodedObjectName;
-
-        final URL url = new URL(spec);
-
-        final HttpURLConnection connection =
-            (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("DELETE");
-        connection.setRequestProperty("X-Auth-Token", authToken);
-
-        setTimeouts(connection);
-
-        connection.connect();
-        try {
-            setResponses(connection);
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT
-                || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
                 return true;
             }
         } finally {
@@ -1308,6 +1403,10 @@ public class UcloudStorageClient {
 
     public List<String> getHeaderValues(final String name) {
 
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
         if (headerFields == null) {
             throw new IllegalStateException("no header fields");
         }
@@ -1323,7 +1422,13 @@ public class UcloudStorageClient {
             return null;
         }
 
-        return headerValues.get(0);
+        for (final String headerValue : headerValues) {
+            if (name.equalsIgnoreCase(headerValue)) {
+                return headerValue;
+            }
+        }
+
+        return null;
     }
 
 
