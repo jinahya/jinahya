@@ -28,7 +28,7 @@ public interface ContentProducer extends ContentDataProducer {
     /**
      * Returns content type.
      *
-     * @return content type; <code>null</code> for unknown
+     * @return content type; {@code null} for unknown
      */
     String getContentType();
 
@@ -36,10 +36,9 @@ public interface ContentProducer extends ContentDataProducer {
     /**
      * Return content length.
      *
-     * @return content length; <code>-1L</code> for unknown
+     * @return content length; {@code -1L} for unknown
      */
     long getContentLength();
 
 
 }
-
