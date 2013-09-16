@@ -60,7 +60,7 @@ public class ContentDataStreamingOutput implements StreamingOutput {
         final ContentDataConsumer contentDataConsumer =
             new DefaultContentDataConsumer(output);
 
-        client.readObject(containerName, objectName, contentDataConsumer);
+        client.readStorageContent(containerName, objectName, contentDataConsumer);
     }
 
 
