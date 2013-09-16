@@ -28,17 +28,17 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @XmlRootElement
-@XmlType(propOrder = {"containerName", "objectCount", "bytesUsed"})
-public class StorageContainer {
+@XmlType(propOrder = {"containerCount", "objectCount", "bytesUsed"})
+public class StorageAccount {
 
 
-    public String getContainerName() {
-        return containerName;
+    public long getContainerCount() {
+        return containerCount;
     }
 
 
-    public void setContainerName(final String containerName) {
-        this.containerName = containerName;
+    public void setContainerCount(final long containerCount) {
+        this.containerCount = containerCount;
     }
 
 
@@ -62,31 +62,15 @@ public class StorageContainer {
     }
 
 
-    @Override
-    public String toString() {
-        return super.toString() + "?containerName=" + containerName
-               + "&objectCount=" + objectCount + "&bytesUsed=" + bytesUsed;
-    }
-
-
-    /**
-     * container name.
-     */
-    @XmlElement(required = true)
-    private String containerName;
-
-
-    /**
-     * object count.
-     */
-    @XmlElement(required = true)
+    @XmlElement
     private long objectCount;
 
 
-    /**
-     * bytes used.
-     */
-    @XmlElement(required = true)
+    @XmlElement
+    private long containerCount;
+
+
+    @XmlElement
     private long bytesUsed;
 
 
