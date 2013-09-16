@@ -26,7 +26,7 @@ public interface ContentProducer extends ContentDataProducer {
 
 
     /**
-     * Returns type.
+     * Returns content type.
      *
      * @return content type; <code>null</code> for unknown
      */
@@ -34,7 +34,7 @@ public interface ContentProducer extends ContentDataProducer {
 
 
     /**
-     * Return length.
+     * Return content length.
      *
      * @return content length; <code>-1L</code> for unknown
      */

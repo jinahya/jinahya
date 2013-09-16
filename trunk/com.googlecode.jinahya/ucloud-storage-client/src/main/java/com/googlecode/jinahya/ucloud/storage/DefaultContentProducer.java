@@ -18,31 +18,31 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.io.InputStream;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentProducer extends BufferedContentDataProducer
+public class DefaultContentProducer extends DefaultContentDataProducer
     implements ContentProducer {
-
-
-    public BufferedContentProducer(final byte[] data) {
-        this(null, data);
-    }
 
 
     /**
      * Creates a new instance.
      *
      * @param contentType content type
+     * @param contentLength content length
      * @param contentData content data
      */
-    public BufferedContentProducer(final String contentType,
-                                   final byte[] contentData) {
+    public DefaultContentProducer(final String contentType,
+                                  final long contentLength,
+                                  final InputStream contentData) {
         super(contentData);
 
         this.contentType = contentType;
-        this.contentLength = contentData.length;
+        this.contentLength = contentLength;
     }
 
 
@@ -58,9 +58,15 @@ public class BufferedContentProducer extends BufferedContentDataProducer
     }
 
 
+    /**
+     * content type.
+     */
     private final String contentType;
 
 
+    /**
+     * content length.
+     */
     private final long contentLength;
 
 

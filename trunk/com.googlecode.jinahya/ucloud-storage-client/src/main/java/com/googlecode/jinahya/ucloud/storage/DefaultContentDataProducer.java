@@ -18,20 +18,44 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import org.testng.annotations.Test;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentConsumerTest {
+public class DefaultContentDataProducer implements ContentDataProducer {
 
 
-    @Test
-    public void testConstructors() {
+    /**
+     * Creates a new instance.
+     *
+     * @param contentData content data
+     */
+    public DefaultContentDataProducer(final InputStream contentData) {
+        super();
 
-        new BufferedContentConsumer();
+        if (contentData == null) {
+            throw new IllegalArgumentException("null contentData");
+        }
+
+        this.contentData = contentData;
     }
+
+
+    @Override
+    public InputStream getContentData() throws IOException {
+        return contentData;
+    }
+
+
+    /**
+     * content data.
+     */
+    private final InputStream contentData;
+
+
 }
 
