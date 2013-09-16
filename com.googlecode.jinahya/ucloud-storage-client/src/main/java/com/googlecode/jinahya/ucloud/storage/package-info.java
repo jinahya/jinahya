@@ -15,34 +15,14 @@
  */
 
 
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
+           elementFormDefault = XmlNsForm.QUALIFIED,
+           namespace = "http://jinahya.googlecode.com/ucloud/storage")
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import junit.framework.Assert;
-import org.testng.annotations.Test;
-
-
-/**
- *
- * @author Jin Kwon <jinahya at gmail.com>
- */
-public class BufferedContentProducerTest {
-
-
-    @Test
-    public void testConstructors() {
-
-        new BufferedContentProducer("application/octet-stream", new byte[0]);
-
-        new BufferedContentProducer(null, new byte[0]);
-
-        try {
-            new BufferedContentProducer("application/octet-stream", null);
-            Assert.fail("passed: new BufferedContentProducer(N/A, null)");
-        } catch (IllegalArgumentException iae) {
-        }
-    }
-
-
-}
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;

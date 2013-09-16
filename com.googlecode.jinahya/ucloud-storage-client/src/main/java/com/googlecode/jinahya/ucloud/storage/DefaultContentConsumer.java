@@ -18,18 +18,31 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.io.OutputStream;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentConsumer extends BufferedContentDataConsumer
+public class DefaultContentConsumer extends DefaultContentDataConsumer
     implements ContentConsumer {
 
 
     /**
-     * Returns type.
+     * Creates a new instance.
      *
-     * @return type
+     * @param contentData content data
+     */
+    public DefaultContentConsumer(final OutputStream contentData) {
+        super(contentData);
+    }
+
+
+    /**
+     * Returns content type.
+     *
+     * @return content type.
      */
     public String getContentType() {
         return contentType;
@@ -43,9 +56,9 @@ public class BufferedContentConsumer extends BufferedContentDataConsumer
 
 
     /**
-     * Returns length.
+     * Returns content length.
      *
-     * @return length
+     * @return content length
      */
     public long getContentLength() {
         return contentLength;
@@ -54,24 +67,18 @@ public class BufferedContentConsumer extends BufferedContentDataConsumer
 
     @Override
     public void setContentLength(final long contentLength) {
-
-        if (contentLength < -1L) {
-            throw new IllegalArgumentException(
-                "length(" + contentLength + ") < -1L");
-        }
-
         this.contentLength = contentLength;
     }
 
 
     /**
-     * type.
+     * content type.
      */
     private String contentType;
 
 
     /**
-     * length.
+     * content length.
      */
     private long contentLength;
 

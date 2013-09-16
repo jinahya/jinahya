@@ -18,16 +18,32 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BufferedContentDataConsumer implements ContentDataConsumer {
+public class DefaultContentDataConsumer implements ContentDataConsumer {
+
+
+    /**
+     * Creates a new instance.
+     *
+     * @param contentData content data
+     */
+    public DefaultContentDataConsumer(final OutputStream contentData) {
+        super();
+
+        if (contentData == null) {
+            throw new IllegalArgumentException("null contentData");
+        }
+
+        this.contentData = contentData;
+    }
 
 
     @Override
@@ -38,31 +54,15 @@ public class BufferedContentDataConsumer implements ContentDataConsumer {
             throw new IllegalArgumentException("null contentData");
         }
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[8192];
-        for (int read = -1; (read = contentData.read(buffer)) != -1;) {
-            baos.write(buffer, 0, read);
-        }
-        baos.flush();
-
-        this.contentData = baos.toByteArray();
+        UcloudStorageClient.copy(contentData, this.contentData);
+        this.contentData.flush();
     }
 
 
     /**
-     * Returns buffered data.
-     *
-     * @return data
+     * content data.
      */
-    public byte[] getContentData() {
-        return contentData;
-    }
-
-
-    /**
-     * data.
-     */
-    private byte[] contentData;
+    private final OutputStream contentData;
 
 
 }

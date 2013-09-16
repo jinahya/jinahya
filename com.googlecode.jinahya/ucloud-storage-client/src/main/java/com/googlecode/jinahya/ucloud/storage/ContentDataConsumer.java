@@ -30,9 +30,9 @@ public interface ContentDataConsumer {
 
 
     /**
-     * Sets data.
+     * Sets content data.
      *
-     * @param contentData data
+     * @param contentData content data
      *
      * @throws IOException if an I/O error occurs.
      */
