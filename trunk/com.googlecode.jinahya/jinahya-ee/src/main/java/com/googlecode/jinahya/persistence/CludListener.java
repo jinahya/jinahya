@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.persistence;
 
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -35,6 +34,9 @@ import org.slf4j.LoggerFactory;
 public class CludListener {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(CludListener.class);
 
@@ -64,17 +66,7 @@ public class CludListener {
     @PrePersist
     protected void setCreatedAt(final Clud clud) {
 
-        try {
-            final Field field = Clud.class.getDeclaredField("createdAt");
-            field.setAccessible(true);
-            try {
-                field.set(clud, new Date());
-            } catch (IllegalAccessException iae) {
-                LOGGER.debug("failed to set createdAt", iae);
-            }
-        } catch (NoSuchFieldException nsfe) {
-            LOGGER.debug("failed to set createdAt", nsfe);
-        }
+        clud.setCreatedAt(new Date());
     }
 
 
