@@ -62,12 +62,19 @@ public class StorageAccount {
     }
 
 
-    @XmlElement
-    private long objectCount;
+    @Override
+    public String toString() {
+        return super.toString() + "?containerCount=" + containerCount
+               + "&objectCount=" + objectCount + "&bytesUsed=" + bytesUsed;
+    }
 
 
     @XmlElement
     private long containerCount;
+
+
+    @XmlElement
+    private long objectCount;
 
 
     @XmlElement

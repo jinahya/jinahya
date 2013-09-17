@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -41,15 +42,13 @@ public class UcloudStorageClientIT {
 
     private static final String[] CONTAINER_NAMES = new String[]{
         "test",
-        "테스트",
-        "1*1"
+        "테스트"
     };
 
 
     private static final String[] OBJECT_NAMES = new String[]{
         "abc",
         "def/ghi",
-        "!@#$%^&*()",
         "가나다",
         "abc/def",
         "라마바/사아자"
@@ -71,34 +70,44 @@ public class UcloudStorageClientIT {
         storageUser = System.getProperty("storageUser");
         if (storageUser == null) {
             throw new SkipException("no storageUser");
-            //Assert.fail("missing property 'storageUser'");
         }
         LOGGER.debug("storageUser: " + storageUser);
 
         storagePass = System.getProperty("storagePass");
         if (storagePass == null) {
             throw new SkipException("no storagePass");
-            //Assert.fail("missing property 'storagePass'");
         }
         LOGGER.debug("storagePass: " + storagePass);
     }
 
 
     @Test(enabled = true)
+    public void testReadStorageAccount() throws IOException {
+
+        LOGGER.debug("testReadStorageAccount()");
+
+        final UcloudStorageClient client =
+            new UcloudStorageClient(storageUser, storagePass);
+
+        final StorageAccount storageAccount = client.readStorageAccount();
+        Assert.assertNotNull(storageAccount);
+        LOGGER.debug("storageAccount: " + storageAccount);
+    }
+
+
+    @Test(dependsOnMethods = {"testReadStorageAccount"}, enabled = true)
     public void testCreateStorageContainer() throws IOException {
+
+        LOGGER.debug("testCreateStorageContainer()");
 
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
         for (final String containerName : CONTAINER_NAMES) {
-            {
-                final boolean succeeded =
-                    client.createStorageContainer(containerName);
-            }
-            {
-                final boolean succeeded =
-                    client.createStorageContainer(containerName);
-            }
+            Assert.assertTrue(client.createStorageContainer(containerName));
+            Assert.assertTrue(client.createStorageContainer(containerName));
+            Assert.assertTrue(client.createStorageContainer(containerName));
+            Assert.assertTrue(client.createStorageContainer(containerName));
         }
     }
 
@@ -116,10 +125,11 @@ public class UcloudStorageClientIT {
         final Collection<StorageContainer> storageContainers =
             new ArrayList<>();
 
-        final boolean succeeded =
-            client.readStorageContainers(queryParameters, storageContainers);
+        Assert.assertTrue(
+            client.readStorageContainers(queryParameters, storageContainers));
 
         for (final StorageContainer storageContainer : storageContainers) {
+            LOGGER.info("storageContainer: " + storageContainer);
         }
     }
 
@@ -135,6 +145,7 @@ public class UcloudStorageClientIT {
         for (final String containerName : CONTAINER_NAMES) {
             final StorageContainer storageContainer =
                 client.readStorageContainer(containerName);
+            LOGGER.debug("storageContainer: {}", storageContainer);
         }
     }
 
@@ -149,7 +160,7 @@ public class UcloudStorageClientIT {
 
         final Random random = new Random();
 
-        final byte[] contentData = new byte[1048576];
+        final byte[] contentData = new byte[128];
         random.nextBytes(contentData);
 
         for (final String containerName : CONTAINER_NAMES) {
@@ -185,8 +196,8 @@ public class UcloudStorageClientIT {
         final Collection<StorageObject> storageObjects = new ArrayList<>();
 
         for (final String containerName : CONTAINER_NAMES) {
-            final boolean succeeded = client.readStorageObjects(
-                containerName, queryParameters, storageObjects);
+            Assert.assertTrue(client.readStorageObjects(
+                containerName, queryParameters, storageObjects));
         }
     }
 
@@ -203,6 +214,8 @@ public class UcloudStorageClientIT {
             for (final String objectName : OBJECT_NAMES) {
                 final StorageObject storageObject =
                     client.readStorageObject(containerName, objectName);
+                LOGGER.debug("storageObject: {}", storageObject);
+                Assert.assertNotNull(storageObject);
             }
         }
     }
@@ -216,10 +229,11 @@ public class UcloudStorageClientIT {
         final UcloudStorageClient client =
             new UcloudStorageClient(storageUser, storagePass);
 
-        for (String containerName : CONTAINER_NAMES) {
-            for (String objectName : OBJECT_NAMES) {
-                final boolean succeeded = client.deleteStorageObject(
-                    containerName, objectName);
+        for (final String containerName : CONTAINER_NAMES) {
+            for (final String objectName : OBJECT_NAMES) {
+                LOGGER.debug("deleting {}/{}", containerName, objectName);
+                Assert.assertTrue(
+                    client.deleteStorageObject(containerName, objectName));
             }
         }
     }
@@ -234,8 +248,7 @@ public class UcloudStorageClientIT {
             new UcloudStorageClient(storageUser, storagePass);
 
         for (final String containerName : CONTAINER_NAMES) {
-            final boolean succeeded =
-                client.deleteStorageContainer(containerName);
+            Assert.assertTrue(client.deleteStorageContainer(containerName));
         }
     }
 
