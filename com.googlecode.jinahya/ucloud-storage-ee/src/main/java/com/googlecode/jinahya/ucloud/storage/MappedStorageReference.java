@@ -40,16 +40,15 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
 
 
     /**
-     * Creates a new instance of given
-     * <code>storageReferencetype</code> with specified
-     * <code>storageObject</code>.
+     * Creates a new instance of given {@code storageReferencetype} with
+     * specified {@code storageObject}.
      *
      * @param <R> storage reference type parameter
      * @param <L> storage locator type parameter
      * @param storageReferenceType storage reference type
      * @param storageLocator storage locator
      *
-     * @return a new instance of given <code>storageReferenceType</code>.
+     * @return a new instance of given {@code storageReferenceType}.
      */
     protected static <R extends MappedStorageReference<L>, L extends MappedStorageLocator> R newInstance(
         final Class<R> storageReferenceType, final L storageLocator) {
@@ -112,7 +111,7 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
 
 
     /**
-     * storageLocator.
+     * storage locator.
      */
     @JoinColumn(name = "STORAGE_LOCATOR_ID", nullable = false,
                 updatable = false)
@@ -123,4 +122,3 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
 
 
 }
-

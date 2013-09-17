@@ -18,21 +18,28 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import com.googlecode.jinahya.persistence.Pkv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -50,7 +57,7 @@ import javax.xml.bind.annotation.XmlRootElement;
                 query = "SELECT COUNT(r) FROM StorageReference AS r"),
     @NamedQuery(name = StorageReference.NQ_LIST,
                 query = "SELECT r FROM StorageReference AS r"
-                        + " ORDER BY r.createdMillis ASC, r.id ASC")
+                        + " ORDER BY r.createdAt ASC, r.id ASC")
 })
 @Table(name = "STORAGE_REFERENCE",
        uniqueConstraints = {
@@ -74,8 +81,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
 
 
     /**
-     * Creates a new instance with given
-     * <code>storageLocator</code>.
+     * Creates a new instance with given {@code storageLocator}.
      *
      * @param storageLocator storageLocator
      *
@@ -88,14 +94,15 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     }
 
 
-    // ---------------------------------------------------------- CREATED_MILLIS
+    // -------------------------------------------------------------- CREATED_AT
     /**
      * Returns createdMillis.
      *
      * @return createdMillis
      */
-    public long getCreatedMillis() {
-        return createdMillis;
+    public Date getCreatedAt() {
+
+        return createdAt == null ? null : new Date(createdAt.getTime());
     }
 
 
@@ -106,14 +113,14 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
      * @return id
      */
     public Long getId() {
+
         return id;
     }
 
 
     // ------------------------------------------------------ STORAGE_LOCATOR_ID
     /**
-     * Returns
-     * <code>storageLocator</code>'s id.
+     * Returns {@code storageLocator}'s id.
      *
      * @return storageLocator's id.
      */
@@ -131,7 +138,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     @PrePersist
     protected void _PrePersist() {
 
-        createdMillis = System.currentTimeMillis();
+        createdAt = new Date();
     }
 
 
@@ -139,14 +146,14 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     @PreRemove
     protected void _PreRemove() {
 
-        getStorageLocator().setDeletedMillis(System.currentTimeMillis());
+        getStorageLocator().setDeletedAt(new Date());
     }
 
 
     @Override
     public String toString() {
         return super.toString()
-               + "?createdMillis=" + createdMillis
+               + "?createdMillis=" + createdAt
                + "&id=" + String.valueOf(id)
                + "&storageLocator=" + String.valueOf(getStorageLocator());
     }
@@ -181,21 +188,29 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
      * createdMillis.
      */
     @Basic(optional = false)
-    @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     @XmlAttribute
-    private long createdMillis;
+    private Date createdAt;
 
 
     /**
      * id.
      */
     @Column(name = "ID", nullable = false, updatable = false)
-    @GeneratedValue
+    @GeneratedValue(generator = "STORAGE_REFERENCE_ID_GENERATOR",
+                    strategy = GenerationType.TABLE)
     @Id
-//    @NotNull // Hibernate doesn't like this!
+    @TableGenerator(initialValue = Pkv.INITIAL_VALUE,
+                    name = "STORAGE_REFERENCE_ID_GENERATOR",
+                    pkColumnName = Pkv.PK_COLUMN_NAME,
+                    pkColumnValue = "STORAGE_REFERENCE_ID",
+                    table = Pkv.TABLE,
+                    valueColumnName = Pkv.VALUE_COLUMN_NAME)
+    @NotNull // Hibernate doesn't like this!
     @XmlAttribute
     private Long id;
 
 
 }
-
