@@ -16,4 +16,14 @@
  */
 
 
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlSchema(attributeFormDefault = XmlNsForm.UNQUALIFIED,
+           elementFormDefault = XmlNsForm.QUALIFIED,
+           namespace = "http://jinahya.googlecode.com/persistence")
 package com.googlecode.jinahya.persistence;
+
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;
