@@ -16,6 +16,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+      </dependency>
+      <dependency>
         <groupId>com.googlecode.jinahya</groupId>
         <artifactId>jinahya-ee</artifactId>
         <version>1.0-alpha-4</version>
@@ -48,7 +53,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-entitymanager</artifactId>
-        <version>4.1.7.Final</version>
+        <version>4.2.5.Final</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -63,6 +68,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>com.googlecode.jinahya</groupId>
       <artifactId>jinahya-ee</artifactId>
@@ -88,11 +98,13 @@
       <artifactId>commons-lang3</artifactId>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <scope>test</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
@@ -203,8 +215,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <compilerArgument>-proc:none</compilerArgument>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>

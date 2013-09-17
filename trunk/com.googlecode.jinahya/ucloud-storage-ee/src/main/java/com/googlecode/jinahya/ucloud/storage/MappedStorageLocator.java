@@ -142,8 +142,8 @@ public class MappedStorageLocator {
      *
      * @return a formatted container name
      */
-    public static String formatContainerName(final String containerNamePrefix,
-                                             final long sequenceNumber) {
+    protected static String formatContainerName(
+        final String containerNamePrefix, final long sequenceNumber) {
 
         return ((containerNamePrefix == null ? "" : containerNamePrefix)
                 + PREFIX_SEQUENCE_DELIMITER
@@ -162,8 +162,8 @@ public class MappedStorageLocator {
      *
      * @return an object name
      */
-    public static String formatObjectName(final String objectNamePrefix,
-                                          final long sequenceNumber) {
+    protected static String formatObjectName(final String objectNamePrefix,
+                                             final long sequenceNumber) {
 
         return ((objectNamePrefix == null ? "" : objectNamePrefix)
                 + PREFIX_SEQUENCE_DELIMITER
@@ -180,6 +180,7 @@ public class MappedStorageLocator {
      * @return container name
      */
     public String getContainerName() {
+
         return containerName;
     }
 
@@ -191,9 +192,9 @@ public class MappedStorageLocator {
      */
     public void setContainerName(final String containerName) {
 
-        if (containerName != null && containerName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty containerName");
-        }
+//        if (containerName != null && containerName.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty containerName");
+//        }
 
         this.containerName = containerName;
     }
@@ -221,6 +222,7 @@ public class MappedStorageLocator {
      * @return object name
      */
     public String getObjectName() {
+
         return objectName;
     }
 
@@ -232,9 +234,9 @@ public class MappedStorageLocator {
      */
     public void setObjectName(final String objectName) {
 
-        if (objectName != null && objectName.trim().isEmpty()) {
-            throw new IllegalArgumentException("empty objectName");
-        }
+//        if (objectName != null && objectName.trim().isEmpty()) {
+//            throw new IllegalArgumentException("empty objectName");
+//        }
 
         this.objectName = objectName;
     }
@@ -256,6 +258,7 @@ public class MappedStorageLocator {
 
     @Override
     public String toString() {
+
         return super.toString() + "?containerName=" + containerName
                + "&objectName=" + objectName;
     }
@@ -266,7 +269,6 @@ public class MappedStorageLocator {
      */
     @Basic
     @Column(name = "CONTAINER_NAME")
-    //@NotNull
     @Size(min = CONTAINER_NAME_SIZE_MIN, max = CONTAINER_NAME_SIZE_MAX)
     @XmlElement(nillable = true, required = true)
     private String containerName;
@@ -277,7 +279,6 @@ public class MappedStorageLocator {
      */
     @Basic
     @Column(name = "OBJECT_NAME")
-    //@NotNull
     @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
     @XmlElement(nillable = true, required = true)
     private String objectName;

@@ -98,6 +98,12 @@ public class StorageLocator extends MappedStorageLocator {
         LoggerFactory.getLogger(StorageLocator.class);
 
 
+    public StorageLocator() {
+
+        super();
+    }
+
+
     // -------------------------------------------------------------- CREATED_AT
     /**
      * Returns createdMillis.
@@ -151,13 +157,13 @@ public class StorageLocator extends MappedStorageLocator {
 
 
     /**
-     * Sets deletedMillis.
+     * Sets deletedAt.
      *
-     * @param deletedAt deletedMillis
+     * @param deletedAt deletedAt
      */
     public void setDeletedAt(final Date deletedAt) {
 
-        LOGGER.debug("setDeletedMillis({})", deletedAt);
+        LOGGER.debug("setDeletedAt({})", deletedAt);
 
         this.deletedAt =
             deletedAt == null ? null : new Date(deletedAt.getTime());

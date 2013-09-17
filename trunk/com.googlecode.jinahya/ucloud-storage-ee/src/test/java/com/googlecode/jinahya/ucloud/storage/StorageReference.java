@@ -22,7 +22,6 @@ import com.googlecode.jinahya.persistence.Pkv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,6 +44,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -77,7 +78,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageReference.class.getName());
+        LoggerFactory.getLogger(StorageReference.class);
 
 
     /**
@@ -94,11 +95,17 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     }
 
 
+    protected StorageReference() {
+
+        super();
+    }
+
+
     // -------------------------------------------------------------- CREATED_AT
     /**
-     * Returns createdMillis.
+     * Returns createdAt.
      *
-     * @return createdMillis
+     * @return createdAt.
      */
     public Date getCreatedAt() {
 
@@ -153,7 +160,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
     @Override
     public String toString() {
         return super.toString()
-               + "?createdMillis=" + createdAt
+               + "?createdAt=" + createdAt
                + "&id=" + String.valueOf(id)
                + "&storageLocator=" + String.valueOf(getStorageLocator());
     }
@@ -185,7 +192,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
 
 
     /**
-     * createdMillis.
+     * createdAt.
      */
     @Basic(optional = false)
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
@@ -208,7 +215,7 @@ public class StorageReference extends MappedStorageReference<StorageLocator> {
                     pkColumnValue = "STORAGE_REFERENCE_ID",
                     table = Pkv.TABLE,
                     valueColumnName = Pkv.VALUE_COLUMN_NAME)
-    @NotNull // Hibernate doesn't like this!
+    @NotNull
     @XmlAttribute
     private Long id;
 
