@@ -210,18 +210,18 @@ public class StorageConsumer {
 
 
     /**
-     * storageReference1.
+     * storage reference 1.
      */
-    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "STORAGE_REFERENCE1")
     @XmlTransient
     private StorageReference storageReference1;
 
 
     /**
-     * storageReference2.
+     * storage reference 2.
      */
-    @OneToOne(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "STORAGE_REFERENCE2")
     @XmlTransient
     private StorageReference storageReference2;

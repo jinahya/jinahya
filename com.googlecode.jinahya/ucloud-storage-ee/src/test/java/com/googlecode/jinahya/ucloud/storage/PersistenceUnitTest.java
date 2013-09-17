@@ -39,152 +39,153 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+@Test(enabled = false)
 public class PersistenceUnitTest {
 
 
-    private static final Logger LOGGER =
-        Logger.getLogger(PersistenceUnitTest.class.getName());
-
-
-    private static EntityManagerFactory ENTITY_MANAGER_FACTORY;
-
-
-    private static EntityManager ENTTIY_MANAGER;
-
-
-    private static final Random RANDOM = new Random();
-
-
-    @BeforeClass
-    public static void setUp() throws ClassNotFoundException, SQLException {
-
-        ENTITY_MANAGER_FACTORY =
-            Persistence.createEntityManagerFactory("ucloudStorageTestPU");
-
-        ENTTIY_MANAGER = ENTITY_MANAGER_FACTORY.createEntityManager();
-    }
-
-
-    @AfterClass
-    public static void tearDown() {
-    }
-
-
-    private static StorageLocator newStorageLocator() {
-
-        final StorageLocator storageLocator = new StorageLocator();
-        ENTTIY_MANAGER.persist(storageLocator);
-
-        storageLocator.setContainerName(
-            MappedStorageLocator.formatContainerName(
-            null, storageLocator.getId()));
-        storageLocator.setObjectName(
-            MappedStorageLocator.formatObjectName(
-            null, storageLocator.getId()));
-
-        return storageLocator;
-    }
-
-
-    private static StorageReference newStorageReference() {
-        return newStorageReference(newStorageLocator());
-    }
-
-
-    private static StorageReference newStorageReference(
-        final StorageLocator storageLocator) {
-
-        final StorageReference storageReference =
-            StorageReference.newInstance(storageLocator);
-        ENTTIY_MANAGER.persist(storageReference);
-
-        return storageReference;
-    }
-
-
-    @Test
-    public void test() throws JAXBException, IOException {
-
-        ENTTIY_MANAGER.getTransaction().begin();
-
-        for (int i = 0; i < 10; i++) {
-            final StorageLocator storageLocator = newStorageLocator();
-            final StorageReference storageReference =
-                newStorageReference(storageLocator);
-            if (RANDOM.nextBoolean()) {
-                ENTTIY_MANAGER.remove(storageReference);
-            }
-        }
-
-        ENTTIY_MANAGER.getTransaction().commit();
-
-
-        ENTTIY_MANAGER.getTransaction().begin();
-
-        {
-            final TypedQuery<Long> query = ENTTIY_MANAGER.createNamedQuery(
-                StorageLocator.NQ_COUNT, Long.class);
-            final long count = query.getSingleResult();
-            LOGGER.log(Level.INFO, "storageLocators.count: {0}", count);
-        }
-
-        {
-            final Query query = ENTTIY_MANAGER.createNamedQuery(
-                StorageLocator.NQ_LIST);
-            @SuppressWarnings("unchecked")
-            final List<StorageLocator> storageLocators =
-                (List<StorageLocator>) query.getResultList();
-            for (StorageLocator storageLocator : storageLocators) {
-                LOGGER.log(Level.INFO, "storageLocator\r\n{0}",
-                           storageLocator.toXml());
-            }
-        }
-
-        {
-            final Query query = ENTTIY_MANAGER.createNamedQuery(
-                StorageReference.NQ_LIST);
-            @SuppressWarnings("unchecked")
-            final List<StorageReference> storageReferences =
-                (List<StorageReference>) query.getResultList();
-            for (StorageReference storageReference : storageReferences) {
-                LOGGER.log(Level.INFO, "storageReference\r\n{0}",
-                           storageReference.toXml());
-            }
-        }
-
-        ENTTIY_MANAGER.getTransaction().commit();
-    }
-
-
-    @Test
-    public void testStorageConsumer() throws JAXBException, IOException {
-
-        ENTTIY_MANAGER.getTransaction().begin();
-
-        final StorageConsumer storageConsumer = new StorageConsumer();
-        ENTTIY_MANAGER.persist(storageConsumer);
-
-        if (RANDOM.nextBoolean()) {
-            final StorageReference storageReference1 = newStorageReference();
-            storageConsumer.setStorageReference1(storageReference1);
-            if (RANDOM.nextBoolean()) {
-                storageConsumer.setStorageReference1(null);
-            }
-        }
-
-        if (RANDOM.nextBoolean()) {
-            final StorageReference storageReference2 = newStorageReference();
-            storageConsumer.setStorageReference2(storageReference2);
-            if (RANDOM.nextBoolean()) {
-                storageConsumer.setStorageReference2(null);
-            }
-        }
-
-        LOGGER.log(Level.INFO, "storageConsumer\r\n{0}",
-                   storageConsumer.toXml());
-
-        ENTTIY_MANAGER.getTransaction().commit();
-    }
+//    private static final Logger LOGGER =
+//        Logger.getLogger(PersistenceUnitTest.class.getName());
+//
+//
+//    private static EntityManagerFactory ENTITY_MANAGER_FACTORY;
+//
+//
+//    private static EntityManager ENTTIY_MANAGER;
+//
+//
+//    private static final Random RANDOM = new Random();
+//
+//
+//    @BeforeClass
+//    public static void setUp() throws ClassNotFoundException, SQLException {
+//
+//        ENTITY_MANAGER_FACTORY =
+//            Persistence.createEntityManagerFactory("localPU");
+//
+//        ENTTIY_MANAGER = ENTITY_MANAGER_FACTORY.createEntityManager();
+//    }
+//
+//
+//    @AfterClass
+//    public static void tearDown() {
+//    }
+//
+//
+//    private static StorageLocator newStorageLocator() {
+//
+//        final StorageLocator storageLocator = new StorageLocator();
+//        ENTTIY_MANAGER.persist(storageLocator);
+//
+//        storageLocator.setContainerName(
+//            MappedStorageLocator.formatContainerName(
+//            null, storageLocator.getId()));
+//        storageLocator.setObjectName(
+//            MappedStorageLocator.formatObjectName(
+//            null, storageLocator.getId()));
+//
+//        return storageLocator;
+//    }
+//
+//
+//    private static StorageReference newStorageReference() {
+//        return newStorageReference(newStorageLocator());
+//    }
+//
+//
+//    private static StorageReference newStorageReference(
+//        final StorageLocator storageLocator) {
+//
+//        final StorageReference storageReference =
+//            StorageReference.newInstance(storageLocator);
+//        ENTTIY_MANAGER.persist(storageReference);
+//
+//        return storageReference;
+//    }
+//
+//
+//    @Test
+//    public void test() throws JAXBException, IOException {
+//
+//        ENTTIY_MANAGER.getTransaction().begin();
+//
+//        for (int i = 0; i < 10; i++) {
+//            final StorageLocator storageLocator = newStorageLocator();
+//            final StorageReference storageReference =
+//                newStorageReference(storageLocator);
+//            if (RANDOM.nextBoolean()) {
+//                ENTTIY_MANAGER.remove(storageReference);
+//            }
+//        }
+//
+//        ENTTIY_MANAGER.getTransaction().commit();
+//
+//
+//        ENTTIY_MANAGER.getTransaction().begin();
+//
+//        {
+//            final TypedQuery<Long> query = ENTTIY_MANAGER.createNamedQuery(
+//                StorageLocator.NQ_COUNT, Long.class);
+//            final long count = query.getSingleResult();
+//            LOGGER.log(Level.INFO, "storageLocators.count: {0}", count);
+//        }
+//
+//        {
+//            final Query query = ENTTIY_MANAGER.createNamedQuery(
+//                StorageLocator.NQ_LIST);
+//            @SuppressWarnings("unchecked")
+//            final List<StorageLocator> storageLocators =
+//                (List<StorageLocator>) query.getResultList();
+//            for (StorageLocator storageLocator : storageLocators) {
+//                LOGGER.log(Level.INFO, "storageLocator\r\n{0}",
+//                           storageLocator.toXml());
+//            }
+//        }
+//
+//        {
+//            final Query query = ENTTIY_MANAGER.createNamedQuery(
+//                StorageReference.NQ_LIST);
+//            @SuppressWarnings("unchecked")
+//            final List<StorageReference> storageReferences =
+//                (List<StorageReference>) query.getResultList();
+//            for (StorageReference storageReference : storageReferences) {
+//                LOGGER.log(Level.INFO, "storageReference\r\n{0}",
+//                           storageReference.toXml());
+//            }
+//        }
+//
+//        ENTTIY_MANAGER.getTransaction().commit();
+//    }
+//
+//
+//    @Test
+//    public void testStorageConsumer() throws JAXBException, IOException {
+//
+//        ENTTIY_MANAGER.getTransaction().begin();
+//
+//        final StorageConsumer storageConsumer = new StorageConsumer();
+//        ENTTIY_MANAGER.persist(storageConsumer);
+//
+//        if (RANDOM.nextBoolean()) {
+//            final StorageReference storageReference1 = newStorageReference();
+//            storageConsumer.setStorageReference1(storageReference1);
+//            if (RANDOM.nextBoolean()) {
+//                storageConsumer.setStorageReference1(null);
+//            }
+//        }
+//
+//        if (RANDOM.nextBoolean()) {
+//            final StorageReference storageReference2 = newStorageReference();
+//            storageConsumer.setStorageReference2(storageReference2);
+//            if (RANDOM.nextBoolean()) {
+//                storageConsumer.setStorageReference2(null);
+//            }
+//        }
+//
+//        LOGGER.log(Level.INFO, "storageConsumer\r\n{0}",
+//                   storageConsumer.toXml());
+//
+//        ENTTIY_MANAGER.getTransaction().commit();
+//    }
 
 
 }

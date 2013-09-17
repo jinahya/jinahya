@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="ucloudStorageTestPU" transaction-type="RESOURCE_LOCAL">
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="localPU" transaction-type="RESOURCE_LOCAL">
+    
+    <!--<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <!--<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>-->
+
     <class>com.googlecode.jinahya.ucloud.storage.StorageLocator</class>
     <class>com.googlecode.jinahya.ucloud.storage.StorageReference</class>
     <class>com.googlecode.jinahya.ucloud.storage.StorageConsumer</class>
+
     <validation-mode>CALLBACK</validation-mode>
+    
     <properties>
+
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:ucloudStorageTestDB;create=true"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:corrsDB;create=true"/>
+      <!--<property name="javax.persistence.jdbc.user" value=""/>-->
+      <!--<property name="javax.persistence.jdbc.password" value=""/>-->
+
+      <!-- eclipselink -->
+      <property name="eclipselink.create-ddl-jdbc-file-name" value="target/createDDL.jdbc"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="eclipselink.ddl-generation.output-mode" value="both"/>
+      <property name="eclipselink.drop-ddl-jdbc-file-name" value="target/dropDDL.jdbc"/>
+      <!--<property name="eclipselink.logging.level.sql" value="FIND"/>-->
+      <!--<property name="eclipselink.logging.parameters" value="true"/>-->
+      <property name="eclipselink.target-database" value="Derby"/>
+
+      <!-- hibernate -->
+      <property name="hibernate.archive.autodetection" value="class"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect"/>
+      <property name="hibernate.format_sql" value="false"/>
       <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-      <!--
-      <property name="eclipselink.ddl-generation" value="create-tables" />
-      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.DerbyPlatform"/>
-      <property name="eclipselink.logging.level" value="INFO"/>
-      -->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.use_sql_comments" value="true"/>
+
+      <!-- openjpa -->
+      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+
     </properties>
+
   </persistence-unit>
 </persistence>

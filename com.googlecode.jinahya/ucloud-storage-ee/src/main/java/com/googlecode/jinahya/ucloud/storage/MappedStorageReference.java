@@ -54,7 +54,7 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
         final Class<R> storageReferenceType, final L storageLocator) {
 
         if (storageReferenceType == null) {
-            throw new IllegalArgumentException("null storageReferenceType");
+            throw new NullPointerException("storageReferenceType");
         }
 
         if (Modifier.isAbstract(storageReferenceType.getModifiers())) {
@@ -106,7 +106,14 @@ public class MappedStorageReference<L extends MappedStorageLocator> {
      * @return storageLocator
      */
     protected L getStorageLocator() {
+
         return storageLocator;
+    }
+
+
+    protected void setStorageLocator(final L storageLocator) {
+
+        this.storageLocator = storageLocator;
     }
 
 
