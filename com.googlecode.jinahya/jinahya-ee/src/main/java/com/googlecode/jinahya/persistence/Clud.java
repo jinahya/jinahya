@@ -19,94 +19,37 @@ package com.googlecode.jinahya.persistence;
 
 
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-@MappedSuperclass
-@XmlTransient
-public abstract class Clud {
+public interface Clud {
 
 
-    // -------------------------------------------------------------- CREATED_AT
-    public Date getCreatedAt() {
-
-        return createdAt == null ? null : new Date(createdAt.getTime());
-    }
+    Date getCreatedAt();
 
 
-    // -------------------------------------------------------------- LOCATED_AT
-    public Date getLocatedAt() {
-
-        return locatedAt == null ? null : new Date(locatedAt.getTime());
-    }
+    void setCreatedAt(Date createdAt);
 
 
-    public void setLocatedAt(final Date locatedAt) {
-
-        this.locatedAt =
-            locatedAt == null ? null : new Date(locatedAt.getTime());
-    }
+    Date getLocatedAt();
 
 
-    // -------------------------------------------------------------- UPDATED_AT
-    public Date getUpdatedAt() {
-
-        return updatedAt == null ? null : new Date(updatedAt.getTime());
-    }
+    void setLocatedAt(Date locatedAt);
 
 
-    public void setUpdatedAt(final Date updatedAt) {
-
-        this.updatedAt =
-            updatedAt == null ? null : new Date(updatedAt.getTime());
-    }
+    Date getUpdatedAt();
 
 
-    // -------------------------------------------------------------- DELETED_AT
-    public Date getDeletedAt() {
-
-        return deletedAt == null ? null : new Date(deletedAt.getTime());
-    }
+    void setUpdatedAt(Date updatedAt);
 
 
-    public void setDeletedAt(final Date deletedAt) {
-
-        this.deletedAt =
-            deletedAt == null ? null : new Date(deletedAt.getTime());
-    }
+    Date getDeletedAt();
 
 
-    @Basic(optional = false)
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-
-    @Basic
-    @Column(name = "LOCATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date locatedAt;
-
-
-    @Basic
-    @Column(name = "UPDATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
-
-
-    @Basic
-    @Column(name = "DELETED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedAt;
+    void setDeletedAt(Date deletedAt);
 
 
 }
