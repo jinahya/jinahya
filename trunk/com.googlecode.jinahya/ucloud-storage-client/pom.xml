@@ -16,6 +16,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>4.3</version>
@@ -33,6 +38,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
@@ -257,7 +267,7 @@
     <maven>3.0.4</maven>
   </prerequisites>
   <repositories>
-<!--    <repository>
+    <!--    <repository>
       <id>sonatype-nexus-snapshots</id>
       <releases>
         <enabled>false</enabled>

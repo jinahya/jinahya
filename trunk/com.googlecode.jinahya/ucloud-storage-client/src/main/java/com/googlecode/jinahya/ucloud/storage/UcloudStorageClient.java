@@ -221,12 +221,13 @@ public class UcloudStorageClient {
     /**
      * Appends given query parameters onto specified url.
      *
-     * @param base the url
+     * @param base the base url
      * @param params the query parameters
      *
      * @return append url
      */
-    static String append(final String base, final Map<String, Object> params) {
+    private static String append(final String base,
+                                 final Map<String, Object> params) {
 
         if (base == null) {
             throw new NullPointerException("base");
@@ -366,22 +367,24 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean readStorageAccount(final StorageAccount storageAccount)
-        throws IOException {
+    /**
+     * Retrieves a storage account.
+     *
+     * @return a storage account or {@code null} if failed.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public StorageAccount readStorageAccount() throws IOException {
 
-        LOGGER.debug("readStorageAccount({})", storageAccount);
-
-        if (storageAccount == null) {
-            throw new NullPointerException("storageAccount");
-        }
+        LOGGER.debug("readStorageAccount()");
 
         if (!authenticate()) {
-            return false;
+            return null;
         }
 
-        final String spec = storageUrl;
+        final String base = storageUrl;
 
-        final URL url = new URL(spec);
+        final URL url = new URL(base);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -389,51 +392,39 @@ public class UcloudStorageClient {
         connection.setRequestMethod("HEAD");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
+        // 406 Not Acceptable without this header, damn.
+        connection.setRequestProperty("Accept", "application/xml"); // @@?
+
         setTimeouts(connection);
 
         connection.connect();
         try {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                final StorageAccount storageAccount = new StorageAccount();
                 storageAccount.setContainerCount(Long.parseLong(
                     getFirstHeaderValue("X-Account-Container-Count")));
                 storageAccount.setObjectCount(Long.parseLong(
                     getFirstHeaderValue("X-Account-Object-Count")));
                 storageAccount.setBytesUsed(Long.parseLong(
                     getFirstHeaderValue("X-Account-Bytes-Used")));
-            }
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                return true;
+                return storageAccount;
             }
         } finally {
             connection.disconnect();
         }
 
-        return false;
-    }
-
-
-    public StorageAccount readStorageAccount() throws IOException {
-
-        LOGGER.debug("readStorageAccount()");
-
-        final StorageAccount storageAccount = new StorageAccount();
-
-        if (!readStorageAccount(storageAccount)) {
-            return null;
-        }
-
-        return storageAccount;
+        return null;
     }
 
 
     /**
-     * Reads storage containers.
+     * Retrieves storage containers.
      *
      * @param queryParameters query parameters; {@code null} is allowed
      * @param storageContainers the collection to which results are added
      *
-     * @return true if succeeded; false otherwise
+     * @return {@code true} if succeeded; {@code false} otherwise
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -468,7 +459,7 @@ public class UcloudStorageClient {
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
-        connection.setDoInput(true);
+        //connection.setDoInput(true);
         connection.setRequestMethod("GET");
         connection.setRequestProperty("X-Auth-Token", authToken);
         connection.setRequestProperty("Accept", "application/xml");
@@ -1356,17 +1347,20 @@ public class UcloudStorageClient {
     private void setResponses(final HttpURLConnection connection)
         throws IOException {
 
+        LOGGER.debug("setResponse({})", connection);
+
         if (connection == null) {
             throw new IllegalArgumentException("null connection");
         }
 
         responseCode = connection.getResponseCode();
+        LOGGER.debug("responseCode: {}", responseCode);
+
         responseMessage = connection.getResponseMessage();
+        LOGGER.debug("responseMessage: {}", responseMessage);
 
         headerFields = connection.getHeaderFields();
-
-//        LOGGER.log(Level.INFO, "response: {0} {1}",
-//                   new Object[]{responseCode, responseMessage});
+        LOGGER.debug("headerFields: {}", headerFields);
     }
 
 
@@ -1376,6 +1370,9 @@ public class UcloudStorageClient {
      * @return status code
      */
     public int getResponseCode() {
+
+        LOGGER.debug("getResponseCode() -> {}", responseCode);
+
         return responseCode;
     }
 
@@ -1386,6 +1383,9 @@ public class UcloudStorageClient {
      * @return reason phrase
      */
     public String getResponseMessage() {
+
+        LOGGER.debug("getResponseMessage() -> {}", responseMessage);
+
         return responseMessage;
     }
 
@@ -1401,34 +1401,32 @@ public class UcloudStorageClient {
     }
 
 
-    public List<String> getHeaderValues(final String name) {
+    public List<String> getHeaderValues(final String headerName) {
 
-        if (name == null) {
-            throw new NullPointerException("name");
+        LOGGER.debug("getHeaderValues({})", headerName);
+
+        if (headerName == null) {
+            throw new NullPointerException("headerName");
         }
 
         if (headerFields == null) {
             throw new IllegalStateException("no header fields");
         }
 
-        return headerFields.get(name);
+        return headerFields.get(headerName);
     }
 
 
-    public String getFirstHeaderValue(final String name) {
+    public String getFirstHeaderValue(final String headerName) {
 
-        final List<String> headerValues = getHeaderValues(name);
+        LOGGER.debug("getFirstHeaderValue({})", headerName);
+
+        final List<String> headerValues = getHeaderValues(headerName);
         if (headerValues == null || headerValues.isEmpty()) {
             return null;
         }
 
-        for (final String headerValue : headerValues) {
-            if (name.equalsIgnoreCase(headerValue)) {
-                return headerValue;
-            }
-        }
-
-        return null;
+        return headerValues.get(0);
     }
 
 
