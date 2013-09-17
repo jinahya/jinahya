@@ -18,27 +18,34 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import com.googlecode.jinahya.persistence.Pkv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -51,14 +58,14 @@ import javax.xml.bind.annotation.XmlType;
                 query = "SELECT COUNT(l) FROM StorageLocator AS l"),
     @NamedQuery(name = StorageLocator.NQ_LIST,
                 query = "SELECT l FROM StorageLocator AS l"
-                        + " ORDER BY l.createdMillis ASC, l.id ASC"),
+                        + " ORDER BY l.createdAt ASC, l.id ASC"),
     @NamedQuery(name = StorageLocator.NQ_COUNT_DELETED,
                 query = "SELECT COUNT(l) FROM StorageLocator AS l"
-                        + " WHERE l.deletedMillis IS NOT NULL"),
+                        + " WHERE l.deletedAt IS NOT NULL"),
     @NamedQuery(name = StorageLocator.NQ_LIST_DELETED,
                 query = "SELECT l FROM StorageLocator AS l"
-                        + " WHERE l.deletedMillis IS NOT NULL"
-                        + " ORDER BY l.createdMillis ASC, l.id ASC")
+                        + " WHERE l.deletedAt IS NOT NULL"
+                        + " ORDER BY l.createdAt ASC, l.id ASC")
 })
 @Table(name = "STORAGE_LOCATOR",
        uniqueConstraints = {
@@ -88,75 +95,72 @@ public class StorageLocator extends MappedStorageLocator {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(StorageLocator.class.getName());
+        LoggerFactory.getLogger(StorageLocator.class);
 
 
-    // ---------------------------------------------------------- CREATED_MILLIS
+    // -------------------------------------------------------------- CREATED_AT
     /**
      * Returns createdMillis.
      *
      * @return createdMillis
      */
-    public long getCreatedMillis() {
-        return createdMillis;
+    public Date getCreatedMillis() {
+
+        return createdAt == null ? null : new Date(createdAt.getTime());
     }
 
 
-    // ---------------------------------------------------------- LOCATED_MILLIS
-    public Long getLocatedMillis() {
-        return locatedMillis;
+    // -------------------------------------------------------------- LOCATED_AT
+    public Date getLocatedAt() {
+
+        return locatedAt == null ? null : new Date(locatedAt.getTime());
     }
 
 
-    public void setLocatedMillis(final Long locatedMillis) {
-        if (locatedMillis != null && this.locatedMillis != null
-            && locatedMillis.longValue() < this.locatedMillis.longValue()) {
-            return;
-        }
-        this.locatedMillis = locatedMillis;
+    public void setLocatedAt(final Date locatedAt) {
+
+        this.locatedAt =
+            locatedAt == null ? null : new Date(locatedAt.getTime());
     }
 
 
-    // ---------------------------------------------------------- UPDATED_MILLIS
-    public Long getUpdatedMillis() {
-        return this.updatedMillis;
+    // -------------------------------------------------------------- UPDATED_AT
+    public Date getUpdatedAt() {
+
+        return updatedAt == null ? null : new Date(updatedAt.getTime());
     }
 
 
-    public void setUpdatedMillis(final Long updatedMillis) {
-        if (updatedMillis != null && this.updatedMillis != null
-            && updatedMillis.longValue() < this.updatedMillis.longValue()) {
-            return;
-        }
-        this.updatedMillis = updatedMillis;
+    public void setUpdatedAt(final Date updatedAt) {
+
+        this.updatedAt =
+            updatedAt == null ? null : new Date(updatedAt.getTime());
     }
 
 
-    // ---------------------------------------------------------- DELETED_MILLIS
+    // -------------------------------------------------------------- DELETED_AT
     /**
-     * Returns deletedMillis.
+     * Returns deletedAt.
      *
-     * @return
+     * @return deletedAt
      */
-    public Long getDeletedMillis() {
-        return deletedMillis;
+    public Date getDeletedAt() {
+
+        return deletedAt == null ? null : new Date(deletedAt.getTime());
     }
 
 
     /**
      * Sets deletedMillis.
      *
-     * @param deletedMillis deletedMillis
+     * @param deletedAt deletedMillis
      */
-    public void setDeletedMillis(final Long deletedMillis) {
+    public void setDeletedAt(final Date deletedAt) {
 
-        LOGGER.log(Level.INFO, "setDeletedMillis({0})", deletedMillis);
+        LOGGER.debug("setDeletedMillis({})", deletedAt);
 
-        if (deletedMillis != null && this.deletedMillis != null) {
-            return;
-        }
-
-        this.deletedMillis = deletedMillis;
+        this.deletedAt =
+            deletedAt == null ? null : new Date(deletedAt.getTime());
     }
 
 
@@ -167,6 +171,7 @@ public class StorageLocator extends MappedStorageLocator {
      * @return id
      */
     public Long getId() {
+
         return id;
     }
 
@@ -174,22 +179,24 @@ public class StorageLocator extends MappedStorageLocator {
     // ------------------------------------------------------------- @PrePersist
     @PrePersist
     protected void _PrePersist() {
-        createdMillis = System.currentTimeMillis();
+
+        createdAt = new Date();
     }
 
 
     // -------------------------------------------------------------- @PreUpdate
     @PreUpdate
     protected void _PreUpdate() {
-        updatedMillis = System.currentTimeMillis();
+
+        updatedAt = new Date();
     }
 
 
     @Override
     public String toString() {
         return super.toString()
-               + "&createdMillis=" + createdMillis
-               + "&deletedMillis=" + String.valueOf(deletedMillis)
+               + "?createdMillis=" + createdAt
+               + "&deletedMillis=" + String.valueOf(deletedAt)
                + "&id=" + String.valueOf(id)
                + "&containerName=" + String.valueOf(getContainerName())
                + "&objectName=" + String.valueOf(getObjectName());
@@ -225,50 +232,61 @@ public class StorageLocator extends MappedStorageLocator {
 
 
     /**
-     * createdMillis.
+     * createdAt.
      */
     @Basic(optional = false)
-    @Column(name = "CREATED_MILLIS", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     @XmlAttribute
-    private long createdMillis;
+    private Date createdAt;
 
 
     /**
-     * locatedMillis.
+     * locatedAt.
      */
     @Basic
-    @Column(name = "LOCATED_MILLIS")
-    private Long locatedMillis;
-
-
-    /**
-     * updatedMillis.
-     */
-    @Basic
-    @Column(name = "UPDATED_MILLIS")
-    private Long updatedMillis;
-
-
-    /**
-     * deletedMillis.
-     */
-    @Basic
-    @Column(name = "DELETED_MILLIS")
+    @Column(name = "LOCATED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
     @XmlAttribute
-    private Long deletedMillis;
+    private Date locatedAt;
+
+
+    /**
+     * updatedAt.
+     */
+    @Basic
+    @Column(name = "UPDATED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+
+    /**
+     * deletedAt.
+     */
+    @Basic
+    @Column(name = "DELETED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    @XmlAttribute
+    private Date deletedAt;
 
 
     /**
      * id.
      */
     @Column(name = "ID", nullable = false, updatable = false)
-    @GeneratedValue
+    @GeneratedValue(generator = "STORAGE_LOCATOR_ID_GENERATOR",
+                    strategy = GenerationType.TABLE)
     @Id
-//    @NotNull // Hibernate doesn't like this!
+    @TableGenerator(initialValue = Pkv.INITIAL_VALUE,
+                    name = "STORAGE_LOCATOR_ID_GENERATOR",
+                    pkColumnName = Pkv.PK_COLUMN_NAME,
+                    pkColumnValue = "STORAGE_LOCATOR_ID",
+                    table = Pkv.TABLE,
+                    valueColumnName = Pkv.VALUE_COLUMN_NAME)
+    @NotNull
     @XmlAttribute
     private Long id;
 
 
-
 }
-

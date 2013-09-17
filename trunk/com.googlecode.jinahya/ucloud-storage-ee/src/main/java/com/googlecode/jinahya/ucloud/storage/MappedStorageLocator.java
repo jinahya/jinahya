@@ -96,15 +96,13 @@ public class MappedStorageLocator {
 
 
     /**
-     * The minimum length of
-     * <code>containerNamePrefix</code>.
+     * The minimum length of {@code containerNamePrefix}.
      */
     public static final int CONTAINER_NAME_PREFIX_SIZE_MIN = 0;
 
 
     /**
-     * The maximum length of
-     * <code>containerNamePrefix</code>.
+     * The maximum length of {@code containerNamePrefix}.
      */
     public static final int CONTAINER_NAME_PREFIX_SIZE_MAX = 48;
 
@@ -124,15 +122,13 @@ public class MappedStorageLocator {
 
 
     /**
-     * The minimum length of
-     * <code>objectPrefixName</code>.
+     * The minimum length of {@code objectPrefixName}.
      */
     public static final int OBJECT_NAME_PREFIX_SIZE_MIN = 0;
 
 
     /**
-     * The maximum length of
-     * <code>objectNamePrefix</code>.
+     * The maximum length of {@code objectNamePrefix}.
      */
     public static final int OBJECT_NAME_PREFIX_SIZE_MAX = 247;
 
@@ -158,9 +154,8 @@ public class MappedStorageLocator {
 
 
     /**
-     * Makes an objectName with given
-     * <code>objectNamePrefix</code> and
-     * <code>sequenceNumber</code>.
+     * Makes an objectName with given {@code objectNamePrefix} and
+     * {@code sequenceNumber}.
      *
      * @param objectNamePrefix object name prefix
      * @param sequenceNumber sequence number
@@ -205,10 +200,8 @@ public class MappedStorageLocator {
 
 
     /**
-     * Sets
-     * <code>containerName</code> with given
-     * <code>containerNamePrefix</code> and
-     * <code>sequenceNumber</code>.
+     * Sets the {@code containerName} with given {@code containerNamePrefix} and
+     * {@code sequenceNumber}.
      *
      * @param containerNamePrefix container name prefix
      * @param sequenceNumber sequence number
@@ -248,10 +241,8 @@ public class MappedStorageLocator {
 
 
     /**
-     * Sets
-     * <code>objectName</code> with given
-     * <code>objectNamePrefix</code> and
-     * <code>sequenceNumber</code>.
+     * Sets {@code objectName} with given {@code objectNamePrefix} and
+     * {@code sequenceNumber}.
      *
      * @param objectNamePrefix object name prefix
      * @param sequenceNumber sequence number
