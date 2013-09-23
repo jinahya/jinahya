@@ -22,16 +22,20 @@ import javax.ws.rs.core.Response.Status;
 
 
 /**
+ * A status type for {@code 409 Conflict} which is a member of
+ * {@code Client Error 4xx}.
  *
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-10.4.10">10.4.10 409
+ * Conflict (RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1)</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Conflict409 extends AbstractStatusType {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with given reason phrase.
      *
-     * @param reasonPhrase HTTP response reason phrase
+     * @param reasonPhrase the reason phrase
      */
     public Conflict409(final String reasonPhrase) {
 
@@ -40,4 +44,3 @@ public class Conflict409 extends AbstractStatusType {
 
 
 }
-

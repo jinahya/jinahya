@@ -22,12 +22,21 @@ import javax.ws.rs.core.Response.Status;
 
 
 /**
+ * A status type for {@code 415 Unsupported Media Type} which is a member of
+ * {@code Client Error 4xx}.
  *
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-10.4.16">10.4.16 415
+ * Unsupported Media Type (RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1)</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class NotFound404 extends AbstractStatusType {
 
 
+    /**
+     * Creates a new instance with given reason phrase.
+     *
+     * @param reasonPhrase the reason phrase
+     */
     public NotFound404(final String reasonPhrase) {
 
         super(Status.NOT_FOUND, reasonPhrase);
@@ -35,4 +44,3 @@ public class NotFound404 extends AbstractStatusType {
 
 
 }
-

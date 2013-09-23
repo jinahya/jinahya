@@ -22,12 +22,21 @@ import javax.ws.rs.core.Response.Status;
 
 
 /**
+ * A status type for {@code 400 Bad Request} which is a member of
+ * {@code Client Error 4xx}.
  *
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-10.4.1">10.4.1 400
+ * Bad Request (RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1)</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class BadRequest400 extends AbstractStatusType {
 
 
+    /**
+     * Creates a new instance with given reason phrase.
+     *
+     * @param reasonPhrase the reason phrase
+     */
     public BadRequest400(final String reasonPhrase) {
 
         super(Status.BAD_REQUEST, reasonPhrase);
@@ -35,4 +44,3 @@ public class BadRequest400 extends AbstractStatusType {
 
 
 }
-

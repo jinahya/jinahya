@@ -22,12 +22,21 @@ import javax.ws.rs.core.Response.Status;
 
 
 /**
+ * A status type for {@code 403 Forbidden} which is a member of
+ * {@code Client Error 4xx}.
  *
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-10.4.4">10.4.4 403
+ * Forbidden (RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1)</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class Forbidden403 extends AbstractStatusType {
 
 
+    /**
+     * Creates a new instance with given reason phrase.
+     *
+     * @param reasonPhrase the reason phrase
+     */
     public Forbidden403(final String reasonPhrase) {
 
         super(Status.FORBIDDEN, reasonPhrase);
@@ -35,4 +44,3 @@ public class Forbidden403 extends AbstractStatusType {
 
 
 }
-
