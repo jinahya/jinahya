@@ -108,10 +108,10 @@ public class UcloudStorageClient {
     private static final String PATH_SEPARATOR = "/";
 
 
-    private static final int MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH = 256;
+    private static final int CONTAINER_NAME_LENGTH_MAX = 256;
 
 
-    private static final int MAXIMUM_ENCODED_OBJECT_NAME_LENGTH = 1024;
+    private static final int OBJECT_NAME_LENGTH_MAX = 1024;
 
 
     /**
@@ -144,10 +144,91 @@ public class UcloudStorageClient {
     }
 
 
-    private static String utf8(final Object string) {
+    private static int percent(final int decoded) {
+
+        switch (decoded) {
+            case 0x00:
+            case 0x01:
+            case 0x02:
+            case 0x03:
+            case 0x04:
+            case 0x05:
+            case 0x06:
+            case 0x07:
+            case 0x08:
+            case 0x09:
+                return decoded + 0x30; // 0x30('0') - 0x39('9')
+            case 0x0A:
+            case 0x0B:
+            case 0x0C:
+            case 0x0D:
+            case 0x0E:
+            case 0x0F:
+                return decoded + 0x37; // 0x41('A') - 0x46('F')
+            default:
+                throw new IllegalArgumentException("illegal half: " + decoded);
+        }
+    }
+
+
+    private static void percent(final int decoded, final byte[] encoded,
+                                final int offset) {
+
+        if ((decoded >= 0x30 && decoded <= 0x39) // digit
+            || (decoded >= 0x41 && decoded <= 0x5A) // upper case alpha
+            || (decoded >= 0x61 && decoded <= 0x7A) // lower case alpha
+            || decoded == 0x2D || decoded == 0x5F || decoded == 0x2E
+            || decoded == 0x7E) { // -_.~
+            encoded[offset] = (byte) decoded;
+        } else {
+            encoded[offset] = 0x25; // '%'
+            encoded[offset + 1] = (byte) percent(decoded >> 4);
+            encoded[offset + 2] = (byte) percent(decoded & 0x0F);
+        }
+    }
+
+
+    private static byte[] percent(final byte[] decoded) {
+
+        final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
+
+        int offset = 0;
+        for (int i = 0; i < decoded.length; i++) {
+            percent(decoded[i] & 0xFF, encoded, offset);
+            offset += encoded[offset] == 0x25 ? 3 : 1;
+        }
+
+        if (offset == encoded.length) {
+            return encoded;
+        }
+
+        final byte[] trimmed = new byte[offset];
+        System.arraycopy(encoded, 0, trimmed, 0, offset);
+
+        return trimmed;
+    }
+
+
+    private static String percent(final Object string) {
+
+        try {
+            final byte[] decoded = String.valueOf(string).getBytes("UTF-8");
+            return new String(percent(decoded), "US-ASCII");
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
+        }
+    }
+
+
+    private static String encode(final Object string) {
+
+        if (string == null) {
+            throw new NullPointerException("string");
+        }
 
         try {
             return URLEncoder.encode(String.valueOf(string), "UTF-8");
+            //return URLEncoder.encode(string, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?");
         }
@@ -162,6 +243,8 @@ public class UcloudStorageClient {
      * @return a URL-encoded value of given container name
      */
     private static String encodeContainerName(String containerName) {
+
+        LOGGER.debug("encodeContainerName({})", containerName);
 
         if (containerName == null) {
             throw new NullPointerException("containerName");
@@ -178,11 +261,13 @@ public class UcloudStorageClient {
                 + "\")");
         }
 
-        containerName = utf8(containerName);
-        if (containerName.length() > MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH) {
+        containerName = encode(containerName);
+        //containerName = percent(containerName);
+        LOGGER.debug("encoded: {}", containerName);
+        if (containerName.length() > CONTAINER_NAME_LENGTH_MAX) {
             throw new IllegalArgumentException(
                 "encoded containerName's length(" + containerName.length()
-                + " > (" + MAXIMUM_ENCODED_CONTAINER_NAME_LENGTH + ")");
+                + " > (" + CONTAINER_NAME_LENGTH_MAX + ")");
         }
 
         return containerName;
@@ -207,11 +292,11 @@ public class UcloudStorageClient {
             throw new IllegalArgumentException("empty objectName");
         }
 
-        objectName = utf8(objectName);
-        if (objectName.length() > MAXIMUM_ENCODED_OBJECT_NAME_LENGTH) {
+        objectName = encode(objectName);
+        if (objectName.length() > OBJECT_NAME_LENGTH_MAX) {
             throw new IllegalArgumentException(
                 "encoded objectName's length(" + objectName.length()
-                + "> (" + MAXIMUM_ENCODED_OBJECT_NAME_LENGTH + ")");
+                + "> (" + OBJECT_NAME_LENGTH_MAX + ")");
         }
 
         return objectName;
@@ -242,13 +327,13 @@ public class UcloudStorageClient {
         final Iterator<Entry<String, Object>> i = params.entrySet().iterator();
         if (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
-            builder.append("?").append(utf8(entry.getKey())).append("=")
-                .append(utf8(entry.getValue()));
+            builder.append("?").append(encode(entry.getKey())).append("=")
+                .append(encode(entry.getValue()));
         }
         while (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
-            builder.append("&").append(utf8(entry.getKey())).append("=")
-                .append(utf8(entry.getValue()));
+            builder.append("&").append(encode(entry.getKey())).append("=")
+                .append(encode(entry.getValue()));
         }
 
         return builder.toString();
