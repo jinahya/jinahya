@@ -29,12 +29,29 @@ import java.io.InputStream;
 public interface ContentConsumer {
 
 
+    /**
+     * Consumes given content type.
+     *
+     * @param contentType the content type
+     */
     void setContentType(String contentType);
 
 
+    /**
+     * Consumes given content length.
+     *
+     * @param contentLength the content length
+     */
     void setContentLength(long contentLength);
 
 
+    /**
+     * Consumes given content data.
+     *
+     * @param contentData the content data.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     void setContentData(InputStream contentData) throws IOException;
 
 

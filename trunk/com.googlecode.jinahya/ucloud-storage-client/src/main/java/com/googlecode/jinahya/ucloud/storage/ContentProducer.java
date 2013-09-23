@@ -29,13 +29,30 @@ import java.io.OutputStream;
 public interface ContentProducer {
 
 
-    abstract String getContentType();
+    /**
+     * Produces a content type.
+     *
+     * @return a content type
+     */
+    String getContentType();
 
 
-    abstract long getContentLength();
+    /**
+     * Produces a content length.
+     *
+     * @return a content length
+     */
+    long getContentLength();
 
 
-    abstract void getContentData(OutputStream contentData) throws IOException;
+    /**
+     * Produces a content data.
+     *
+     * @param contentData a content data
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void getContentData(OutputStream contentData) throws IOException;
 
 
 }
