@@ -18,15 +18,158 @@
 package com.googlecode.jinahya.ws.core.response;
 
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
+import javax.ws.rs.core.Response.StatusType;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public abstract class AbstractStatusType extends OrphanStatusType {
+public abstract class AbstractStatusType implements StatusType {
+
+
+    /**
+     * Creates a new status type for given arguments.
+     *
+     * @param family the status family
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new instance of this status type.
+     */
+    public static StatusType newInstance(final Family family,
+                                         final int statusCode,
+                                         final String reasonPhrase) {
+
+        return new AbstractStatusType(family, statusCode, reasonPhrase) {
+        };
+    }
+
+
+    /**
+     * Creates a new status type for given arguments.
+     *
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new instance of this status type.
+     */
+    public static StatusType newInstance(final int statusCode,
+                                         final String reasonPhrase) {
+
+        return newInstance(null, statusCode, reasonPhrase);
+    }
+
+
+    /**
+     * Creates a new status type for given arguments.
+     *
+     * @param status the status
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new instance of this status type.
+     */
+    public static StatusType newInstance(final Status status,
+                                         final String reasonPhrase) {
+
+        return newInstance(status.getFamily(), status.getStatusCode(),
+                           reasonPhrase);
+    }
+
+
+    /**
+     * Returns a new response builder for given arguments.
+     *
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new response builder to build
+     */
+    public static ResponseBuilder buildable(final int statusCode,
+                                            final String reasonPhrase) {
+
+        return Response.status(newInstance(statusCode, reasonPhrase));
+    }
+
+
+    /**
+     * Returns a new response builder for given arguments.
+     *
+     * @param status the status
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new response builder to build
+     */
+    public static ResponseBuilder buildable(final Status status,
+                                            final String reasonPhrase) {
+
+        return Response.status(newInstance(status, reasonPhrase));
+    }
+
+
+    /**
+     * Returns a new response for given arguments.
+     *
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new response to respond
+     */
+    public static Response built(final int statusCode,
+                                 final String reasonPhrase) {
+
+        return buildable(statusCode, reasonPhrase).build();
+    }
+
+
+    /**
+     * Returns a new response for given arguments.
+     *
+     * @param status the status
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new response to respond
+     */
+    public static Response built(final Status status,
+                                 final String reasonPhrase) {
+
+        return buildable(status, reasonPhrase).build();
+    }
+
+
+    /**
+     * Returns a new web application exception for given arguments.
+     *
+     * @param statusCode the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new web application exception to throw
+     */
+    public static WebApplicationException throwable(final int statusCode,
+                                                    final String reasonPhrase) {
+
+        return new WebApplicationException(built(statusCode, reasonPhrase));
+    }
+
+
+    /**
+     * Returns a new web application exception for given arguments.
+     *
+     * @param status the HTTP status code
+     * @param reasonPhrase the HTTP reason phrase
+     *
+     * @return a new web application exception to throw
+     */
+    public static WebApplicationException throwable(final Status status,
+                                                    final String reasonPhrase) {
+
+        return new WebApplicationException(built(status, reasonPhrase));
+    }
 
 
     /**
@@ -39,7 +182,9 @@ public abstract class AbstractStatusType extends OrphanStatusType {
     protected AbstractStatusType(final Family family, final int statusCode,
                                  final String reasonPhrase) {
 
-        super(family, statusCode, reasonPhrase);
+        this.family = family;
+        this.statusCode = statusCode;
+        this.reasonPhrase = reasonPhrase;
     }
 
 
@@ -55,6 +200,101 @@ public abstract class AbstractStatusType extends OrphanStatusType {
 
         this(status.getFamily(), status.getStatusCode(), reasonPhrase);
     }
+
+
+    @Override
+    public Family getFamily() {
+
+        if (family != null) {
+            return family;
+        }
+
+        switch (statusCode / 100) {
+            case 1:
+                return Family.INFORMATIONAL;
+            case 2:
+                return Family.SUCCESSFUL;
+            case 3:
+                return Family.REDIRECTION;
+            case 4:
+                return Family.CLIENT_ERROR;
+            case 5:
+                return Family.SERVER_ERROR;
+            default:
+                return Family.OTHER;
+        }
+    }
+
+
+    @Override
+    public String getReasonPhrase() {
+
+        return reasonPhrase;
+    }
+
+
+    @Override
+    public int getStatusCode() {
+
+        return statusCode;
+    }
+
+
+    /**
+     * Returns a new response builder for this status type.
+     *
+     * @return a new response builder to build
+     *
+     * @see Response#status(StatusType)
+     */
+    public Response.ResponseBuilder buildable() {
+
+        return Response.status(this);
+    }
+
+
+    /**
+     * Returns a new response for this status type.
+     *
+     * @return a new response to respond.
+     *
+     * @see #buildable()
+     */
+    public Response built() {
+
+        return buildable().build();
+    }
+
+
+    /**
+     * Returns a new web application exception for this status type.
+     *
+     * @return a new web application exception to throw
+     *
+     * @see #built()
+     */
+    public WebApplicationException throwable() {
+
+        return new WebApplicationException(built());
+    }
+
+
+    /**
+     * family.
+     */
+    private final Family family;
+
+
+    /**
+     * status code.
+     */
+    private final int statusCode;
+
+
+    /**
+     * reason phrase.
+     */
+    private final String reasonPhrase;
 
 
 }

@@ -22,12 +22,21 @@ import javax.ws.rs.core.Response.Status;
 
 
 /**
+ * A status type for {@code 412 Precondition Failed} which is a member of
+ * {@code Client Error 4xx}.
  *
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-10.4.13">10.4.13 412
+ * Precondition Failed (RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1)</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class PreconditionFailed412 extends AbstractStatusType {
 
 
+    /**
+     * Creates a new instance with given reason phrase.
+     *
+     * @param reasonPhrase the reason phrase
+     */
     public PreconditionFailed412(final String reasonPhrase) {
 
         super(Status.PRECONDITION_FAILED, reasonPhrase);
@@ -35,4 +44,3 @@ public class PreconditionFailed412 extends AbstractStatusType {
 
 
 }
-

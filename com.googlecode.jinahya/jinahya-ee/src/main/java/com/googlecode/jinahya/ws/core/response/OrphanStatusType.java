@@ -28,7 +28,9 @@ import javax.ws.rs.core.Response.StatusType;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
+ * @deprecated Use {@link AbstractStatusType}
  */
+@Deprecated
 public class OrphanStatusType implements StatusType {
 
 
