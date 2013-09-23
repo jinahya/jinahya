@@ -40,10 +40,6 @@ public class UnwrappedLongTest extends UnwrappedValueTest<UnwrappedLong, Long> {
 
         final Random random = ThreadLocalRandom.current();
 
-        if (random.nextBoolean()) {
-            return null;
-        }
-
         return random.nextLong();
     }
 

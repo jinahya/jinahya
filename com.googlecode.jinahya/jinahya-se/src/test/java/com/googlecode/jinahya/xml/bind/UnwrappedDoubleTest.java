@@ -41,10 +41,6 @@ public class UnwrappedDoubleTest
 
         final Random random = ThreadLocalRandom.current();
 
-        if (random.nextBoolean()) {
-            return null;
-        }
-        
         return random.nextDouble();
     }
 

@@ -31,7 +31,7 @@ import java.io.OutputStream;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ByteStreams {
+public final class ByteStreams {
 
 
     /**
@@ -190,7 +190,7 @@ public class ByteStreams {
     /**
      * Creates a new instance.
      */
-    protected ByteStreams() {
+    private ByteStreams() {
 
         super();
     }

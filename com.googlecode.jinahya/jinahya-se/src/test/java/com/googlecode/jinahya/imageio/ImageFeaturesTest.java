@@ -52,10 +52,8 @@ public abstract class ImageFeaturesTest<T extends ImageFeatures<U>, U extends Im
 
         final T expected = newInstance();
 
-//        final JAXBContext context =
-//            JAXBContext.newInstance(imageDescriptorsType);
-        final JAXBContext context =
-            JAXBContext.newInstance(imageDescriptorsType.getPackage().getName());
+        final JAXBContext context = JAXBContext.newInstance(
+            imageDescriptorsType.getPackage().getName());
 
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
