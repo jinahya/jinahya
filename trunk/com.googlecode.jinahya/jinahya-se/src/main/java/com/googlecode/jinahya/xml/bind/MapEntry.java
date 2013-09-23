@@ -78,7 +78,7 @@ public abstract class MapEntry<K, V> {
 
 
     /**
-     * Pus this entry into specified {@code map}.
+     * Puts this entry into specified map.
      *
      * @param map the map
      *

@@ -22,9 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlTransient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -42,40 +43,20 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(MapEntries.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.WARNING);
-    }
+        LoggerFactory.getLogger(MapEntries.class);
 
 
     /**
      * Creates a new instance.
      *
-     * @param entryType entry type
+     * @param entryType the entry type
      */
     public MapEntries(final Class<T> entryType) {
 
         super();
 
-        if (entryType == null) {
-            throw new NullPointerException("entryType");
-        }
-
-        this.entryType = entryType;
+        this.entryType = Objects.requireNonNull(entryType, "entryType");
     }
-
-
-//    /**
-//     * Returns entry type
-//     *
-//     * @return entry type.
-//     */
-//    protected Class<T> getEntryType() {
-//
-//        return entryType;
-//    }
 
 
     /**
@@ -102,26 +83,6 @@ public abstract class MapEntries<T extends MapEntry<K, V>, K, V> {
     protected void addEntry(final K key, final V value) {
 
         final T entry;
-        /*
-         try {
-         final Constructor<E> constructor =
-         entryType.getDeclaredConstructor();
-         if (!constructor.isAccessible()) {
-         constructor.setAccessible(true);
-         }
-         try {
-         entry = constructor.newInstance();
-         } catch (InstantiationException ie) {
-         throw new RuntimeException(ie);
-         } catch (IllegalAccessException iae) {
-         throw new RuntimeException(iae);
-         } catch (InvocationTargetException ite) {
-         throw new RuntimeException(ite);
-         }
-         } catch (NoSuchMethodException nsme) {
-         throw new RuntimeException(nsme);
-         }
-         */
         try {
             entry = entryType.newInstance();
         } catch (InstantiationException ie) {

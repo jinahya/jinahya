@@ -36,14 +36,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -56,7 +56,7 @@ public class CiphersTest {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(CiphersTest.class.getName());
+        LoggerFactory.getLogger(CiphersTest.class);
 
 
     private static Key newKey(final String algorithm, final int keySize)
@@ -105,10 +105,8 @@ public class CiphersTest {
                InvalidKeyException, InvalidAlgorithmParameterException,
                IOException, IllegalBlockSizeException, BadPaddingException {
 
-        LOGGER.log(Level.INFO, "symmetric(transformation: {0}, keySize: {1}, "
-                               + "requiresIv: {2}, noPadding: {3})",
-                   new Object[]{transformation, keySize, requiresIv,
-                                noPadding});
+        LOGGER.debug("symmetric({}, {}, {}, {})",
+                     transformation, keySize, requiresIv, noPadding);
 
         final Random random = ThreadLocalRandom.current();
 

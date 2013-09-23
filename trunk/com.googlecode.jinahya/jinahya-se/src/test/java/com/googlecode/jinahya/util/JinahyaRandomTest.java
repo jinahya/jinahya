@@ -22,8 +22,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,26 +36,25 @@ public class JinahyaRandomTest {
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(JinahyaRandomTest.class.getName());
+        LoggerFactory.getLogger(JinahyaRandomTest.class);
 
 
     private static void testNextIntMinMax(final JinahyaRandom random,
                                           final int minimum,
                                           final int maximum) {
 
-        LOGGER.log(Level.INFO, "testNextIntMinMax({0}, {1}, {2})",
-                   new Object[]{random, minimum, maximum});
+        LOGGER.debug("testNextIntMinMax({}, {}, {})", random, minimum, maximum);
 
         boolean min = false;
         boolean max = false;
         while (!min || !max) {
             final int nextInt = random.nextInt(minimum, maximum);
             if (!min && nextInt == minimum) {
-                LOGGER.log(Level.INFO, "minimum generated: {0}", nextInt);
+                LOGGER.debug("minimum generated: {}", nextInt);
                 min = true;
             }
             if (!max && nextInt == maximum - 1) {
-                LOGGER.log(Level.INFO, "maximum generated: {0}", nextInt);
+                LOGGER.debug("maximum generated: {}", nextInt);
                 max = true;
             }
         }
@@ -388,4 +387,3 @@ public class JinahyaRandomTest {
 
 
 }
-
