@@ -39,8 +39,8 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-entitymanager</artifactId>
-        <version>4.2.4.Final</version>
-        <!--<version>4.2.5.Final</version>-->
+        <!--<version>4.2.4.Final</version>-->
+        <version>4.2.5.Final</version>
         <!--<version>4.3.0.Beta4</version>-->
       </dependency>
       <dependency>
