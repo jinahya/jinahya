@@ -92,7 +92,7 @@ public class MappedStorageLocator {
     /**
      * The delimiter.
      */
-    private static final String PREFIX_SEQUENCE_DELIMITER = "*";
+    private static final String PREFIX_SEQUENCE_DELIMITER = "-";
 
 
     /**
@@ -137,15 +137,15 @@ public class MappedStorageLocator {
      * Formats a containerName with given {@code containerNamePrefix} and
      * {@code sequenceNumber}.
      *
-     * @param containerNamePrefix the container name prefix
+     * @param prefix the container name prefix
      * @param sequenceNumber the sequence number
      *
      * @return a formatted container name
      */
-    protected static String formatContainerName(
-        final String containerNamePrefix, final long sequenceNumber) {
+    protected static String formatContainerName(final String prefix,
+                                                final long sequenceNumber) {
 
-        return ((containerNamePrefix == null ? "" : containerNamePrefix)
+        return ((prefix == null ? "" : prefix)
                 + PREFIX_SEQUENCE_DELIMITER
                 + (String.format(
                    CONTAINER_NAME_SEQUENCE_FORMAT,
@@ -157,15 +157,15 @@ public class MappedStorageLocator {
      * Makes an objectName with given {@code objectNamePrefix} and
      * {@code sequenceNumber}.
      *
-     * @param objectNamePrefix object name prefix
+     * @param prefix object name prefix
      * @param sequenceNumber sequence number
      *
      * @return an object name
      */
-    protected static String formatObjectName(final String objectNamePrefix,
+    protected static String formatObjectName(final String prefix,
                                              final long sequenceNumber) {
 
-        return ((objectNamePrefix == null ? "" : objectNamePrefix)
+        return ((prefix == null ? "" : prefix)
                 + PREFIX_SEQUENCE_DELIMITER
                 + (String.format(
                    OBJECT_NAME_SEQUENCE_FORMAT,
@@ -204,14 +204,13 @@ public class MappedStorageLocator {
      * Sets the {@code containerName} with given {@code containerNamePrefix} and
      * {@code sequenceNumber}.
      *
-     * @param containerNamePrefix container name prefix
+     * @param prefix container name prefix
      * @param sequenceNumber sequence number
      */
-    public void setContainerName(final String containerNamePrefix,
+    public void setContainerName(final String prefix,
                                  final long sequenceNumber) {
 
-        setContainerName(
-            formatContainerName(containerNamePrefix, sequenceNumber));
+        setContainerName(formatContainerName(prefix, sequenceNumber));
     }
 
 
@@ -246,20 +245,20 @@ public class MappedStorageLocator {
      * Sets {@code objectName} with given {@code objectNamePrefix} and
      * {@code sequenceNumber}.
      *
-     * @param objectNamePrefix object name prefix
+     * @param prefix object name prefix
      * @param sequenceNumber sequence number
      */
-    public void setObjectName(final String objectNamePrefix,
-                              final long sequenceNumber) {
+    public void setObjectName(final String prefix, final long sequenceNumber) {
 
-        setObjectName(formatObjectName(objectNamePrefix, sequenceNumber));
+        setObjectName(formatObjectName(prefix, sequenceNumber));
     }
 
 
     @Override
     public String toString() {
 
-        return super.toString() + "?containerName=" + containerName
+        return super.toString()
+               + "?containerName=" + containerName
                + "&objectName=" + objectName;
     }
 
@@ -270,7 +269,7 @@ public class MappedStorageLocator {
     @Basic
     @Column(name = "CONTAINER_NAME")
     @Size(min = CONTAINER_NAME_SIZE_MIN, max = CONTAINER_NAME_SIZE_MAX)
-    @XmlElement(nillable = true, required = true)
+    @XmlElement(nillable = false, required = true)
     private String containerName;
 
 
@@ -280,7 +279,7 @@ public class MappedStorageLocator {
     @Basic
     @Column(name = "OBJECT_NAME")
     @Size(min = OBJECT_NAME_SIZE_MIN, max = OBJECT_NAME_SIZE_MAX)
-    @XmlElement(nillable = true, required = true)
+    @XmlElement(nillable = false, required = true)
     private String objectName;
 
 
