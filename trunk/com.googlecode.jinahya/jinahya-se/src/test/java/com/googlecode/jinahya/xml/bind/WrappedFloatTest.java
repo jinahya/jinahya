@@ -26,23 +26,25 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class DoubleValueTest extends SimpleValueTest<NillableDouble, Double> {
+public class WrappedFloatTest extends WrappedValueTest<WrappedFloat, Float> {
 
 
-    public DoubleValueTest() {
-        super(NillableDouble.class);
+    public WrappedFloatTest() {
+        
+        super(WrappedFloat.class);
     }
 
 
     @Override
-    protected Double generateRawValue() {
+    protected Float generateRawValue() {
 
         final Random random = ThreadLocalRandom.current();
 
         if (random.nextBoolean()) {
             return null;
         }
-        return random.nextDouble();
+        
+        return random.nextFloat();
     }
 
 

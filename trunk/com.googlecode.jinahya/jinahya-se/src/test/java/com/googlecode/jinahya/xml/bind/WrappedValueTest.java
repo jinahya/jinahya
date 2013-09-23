@@ -36,18 +36,17 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
- * @param <V> SimpleValue type parameter
- * @param <R> rawValue type parameter
+ * @param <W> wrapped value type parameter
+ * @param <R> raw value type parameter
  */
-public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
+public abstract class WrappedValueTest<W extends WrappedValue<R>, R> {
 
 
-    public SimpleValueTest(final Class<V> simpleValueType) {
+    public WrappedValueTest(final Class<W> valueType) {
+
         super();
 
-        Objects.requireNonNull(simpleValueType, "null simpleValueType");
-
-        this.simpleValueType = simpleValueType;
+        this.valueType = Objects.requireNonNull(valueType, "valueType");
     }
 
 
@@ -58,11 +57,9 @@ public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
     public void testSetRawValue()
         throws InstantiationException, IllegalAccessException {
 
-        final V simpleValue = simpleValueType.newInstance();
+        final W value = valueType.newInstance();
 
-        simpleValue.setRawValue(null);
-
-        simpleValue.setRawValue(generateRawValue());
+        value.setRawValue(generateRawValue());
     }
 
 
@@ -71,9 +68,9 @@ public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
         throws JAXBException, InstantiationException, IllegalAccessException,
                IOException {
 
-        final JAXBContext context = JAXBContext.newInstance(simpleValueType);
+        final JAXBContext context = JAXBContext.newInstance(valueType);
 
-        final V expected = simpleValueType.newInstance();
+        final W expected = valueType.newInstance();
         expected.setRawValue(generateRawValue());
 
         final Marshaller marshaller = context.createMarshaller();
@@ -92,7 +89,7 @@ public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
 
         final Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        final V actual = simpleValueType.cast(unmarshaller.unmarshal(bais));
+        final W actual = valueType.cast(unmarshaller.unmarshal(bais));
 
         Assert.assertEquals(actual, expected);
     }
@@ -102,7 +99,7 @@ public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
     public void testXsd() throws JAXBException, IOException {
 
 
-        final JAXBContext context = JAXBContext.newInstance(simpleValueType);
+        final JAXBContext context = JAXBContext.newInstance(valueType);
 
         context.generateSchema(new SchemaOutputResolver() {
 
@@ -120,17 +117,14 @@ public abstract class SimpleValueTest<V extends NillableValue<R>, R> {
                         return "noid";
                     }
 
-
                 };
             }
-
 
         });
     }
 
 
-    protected final Class<V> simpleValueType;
+    protected final Class<W> valueType;
 
 
 }
-

@@ -18,47 +18,35 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class NillableFloat extends NillableValue<Float> {
+public class WrappedDoubleTest extends WrappedValueTest<WrappedDouble, Double> {
 
 
-    private static final long serialVersionUID = -2621560981106532989L;
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @param rawValue raw value.
-     *
-     * @return a new instance.
-     */
-    public static NillableFloat newInstance(final Float rawValue) {
-
-        return newInstance(NillableFloat.class, rawValue);
-    }
-
-
-    @XmlElement(nillable = true, required = true)
-    @Override
-    public Float getRawValue() {
-
-        return super.getRawValue();
+    public WrappedDoubleTest() {
+        
+        super(WrappedDouble.class);
     }
 
 
     @Override
-    public void setRawValue(final Float rawValue) {
+    protected Double generateRawValue() {
 
-        super.setRawValue(rawValue);
+        final Random random = ThreadLocalRandom.current();
+
+        if (random.nextBoolean()) {
+            return null;
+        }
+        
+        return random.nextDouble();
     }
 
 
 }
+

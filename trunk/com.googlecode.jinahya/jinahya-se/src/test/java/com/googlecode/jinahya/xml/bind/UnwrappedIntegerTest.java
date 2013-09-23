@@ -18,43 +18,34 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-@XmlRootElement
-public class NillableLong extends NillableValue<Long> {
+public class UnwrappedIntegerTest
+    extends UnwrappedValueTest<UnwrappedInteger, Integer> {
 
 
-    private static final long serialVersionUID = 4379443263129501853L;
+    public UnwrappedIntegerTest() {
 
-
-    /**
-     * Creates a new instance.
-     *
-     * @param rawValue raw value.
-     *
-     * @return a new instance.
-     */
-    public static NillableLong newInstance(final Long rawValue) {
-        return newInstance(NillableLong.class, rawValue);
-    }
-
-
-    @XmlElement(nillable = true, required = true)
-    @Override
-    public Long getRawValue() {
-        return super.getRawValue();
+        super(UnwrappedInteger.class);
     }
 
 
     @Override
-    public void setRawValue(final Long rawValue) {
-        super.setRawValue(rawValue);
+    protected Integer generateRawValue() {
+
+        final Random random = ThreadLocalRandom.current();
+
+        if (random.nextBoolean()) {
+            return null;
+        }
+
+        return random.nextInt();
     }
 
 

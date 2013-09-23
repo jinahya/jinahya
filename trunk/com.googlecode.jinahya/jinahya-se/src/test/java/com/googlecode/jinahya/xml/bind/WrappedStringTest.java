@@ -20,22 +20,24 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class LongValueTest extends SimpleValueTest<NillableLong, Long> {
+public class WrappedStringTest extends WrappedValueTest<WrappedString, String> {
 
 
-    public LongValueTest() {
-        super(NillableLong.class);
+    public WrappedStringTest() {
+        
+        super(WrappedString.class);
     }
 
 
     @Override
-    protected Long generateRawValue() {
+    protected String generateRawValue() {
 
         final Random random = ThreadLocalRandom.current();
 
@@ -43,9 +45,8 @@ public class LongValueTest extends SimpleValueTest<NillableLong, Long> {
             return null;
         }
 
-        return random.nextLong();
+        return RandomStringUtils.randomAlphanumeric(random.nextInt(128));
     }
 
 
 }
-
