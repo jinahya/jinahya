@@ -38,27 +38,20 @@ public final class Dangerous {
 
     static {
         /*
-         try {
-         final Field field = Unsafe.class.getDeclaredField("theUnsafe");
-         if (!field.isAccessible()) {
-         field.setAccessible(true);
-         }
-         try {
-         UNSAFE = (Unsafe) field.get(null);
-         } catch (IllegalAccessException iae) {
-         throw new InstantiationError(iae.getMessage());
-         }
-         } catch (NoSuchFieldException nsfe) {
-         throw new InstantiationError(nsfe.getMessage());
-         }
+         * try { final Field field = Unsafe.class.getDeclaredField("theUnsafe");
+         * if (!field.isAccessible()) { field.setAccessible(true); } try {
+         * UNSAFE = (Unsafe) field.get(null); } catch (IllegalAccessException
+         * iae) { throw new InstantiationError(iae.getMessage()); } } catch
+         * (NoSuchFieldException nsfe) { throw new
+         * InstantiationError(nsfe.getMessage()); }
          */
         Unsafe unsafe = null;
         for (final Field field : Unsafe.class.getDeclaredFields()) {
-            if (!Unsafe.class.equals(field.getType())) {
-                continue;
-            }
             final int modifiers = field.getModifiers();
             if (!Modifier.isStatic(modifiers)) {
+                continue;
+            }
+            if (!Unsafe.class.equals(field.getType())) {
                 continue;
             }
             if (!field.isAccessible()) {
@@ -72,7 +65,7 @@ public final class Dangerous {
             }
         }
         if (unsafe == null) {
-            throw new InstantiationError("unable to find unsafe");
+            throw new InstantiationError("unable to locate unsafe");
         }
         UNSAFE = unsafe;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2013 Jin Kwon <onacit at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,44 +18,38 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author Jin Kwon <onacit at gmail.com>
  */
 @XmlRootElement
-public class NillableDouble extends NillableValue<Double> {
+public class UnwrappedInteger extends UnwrappedValue<Integer> {
 
 
-    private static final long serialVersionUID = 3599854626723844516L;
+    public static UnwrappedInteger newInstance(final Integer rawValue) {
 
+        if (rawValue == null) {
+            throw new NullPointerException("rawValue");
+        }
 
-    /**
-     * Creates a new instance.
-     *
-     * @param rawValue raw value.
-     *
-     * @return a new instance.
-     */
-    public static NillableDouble newInstance(final Double rawValue) {
-
-        return newInstance(NillableDouble.class, rawValue);
+        return newInstance(UnwrappedInteger.class, rawValue);
     }
 
 
-    @XmlElement(nillable = true, required = true)
+    @XmlValue
     @Override
-    public Double getRawValue() {
+    public Integer getRawValue() {
 
         return super.getRawValue();
     }
 
 
     @Override
-    public void setRawValue(final Double rawValue) {
+    public void setRawValue(final Integer rawValue) {
 
         super.setRawValue(rawValue);
     }

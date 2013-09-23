@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -30,29 +29,26 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <R> raw value type parameter
  */
 @XmlTransient
-public abstract class NillableValue<R> implements Serializable {
-
-
-    private static final long serialVersionUID = -8939570056699996395L;
+public abstract class WrappedValue<R> {
 
 
     /**
      * Creates a new typed instance.
      *
-     * @param <V> simple value type parameter
+     * @param <W> wrapped value type parameter
      * @param <R> raw value type parameter
-     * @param simpleValueType simple value type
+     * @param wrappedValueType wrapped value type
      * @param rawValue raw value
      *
-     * @return
+     * @return a new instance
      */
-    public static <V extends NillableValue<R>, R> V newInstance(
-        final Class<V> simpleValueType, final R rawValue) {
+    public static <W extends WrappedValue<R>, R> W newInstance(
+        final Class<W> wrappedValueType, final R rawValue) {
 
-        Objects.requireNonNull(simpleValueType, "null simpleValueType");
+        Objects.requireNonNull(wrappedValueType, "wrappedValueType");
 
         try {
-            final V instance = simpleValueType.newInstance();
+            final W instance = wrappedValueType.newInstance();
             instance.setRawValue(rawValue);
             return instance;
         } catch (InstantiationException ie) {
@@ -65,28 +61,35 @@ public abstract class NillableValue<R> implements Serializable {
 
     @Override
     public boolean equals(final Object obj) {
+
         if (obj == null) {
             return false;
         }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked")
-        final NillableValue<R> other = (NillableValue<R>) obj;
+
+        final WrappedValue<?> other = (WrappedValue<?>) obj;
+
         if (this.rawValue != other.rawValue
             && (this.rawValue == null
                 || !this.rawValue.equals(other.rawValue))) {
             return false;
         }
+
         return true;
     }
 
 
     @Override
     public int hashCode() {
+
         int hash = 7;
+
         hash = 97 * hash
                + (this.rawValue != null ? this.rawValue.hashCode() : 0);
+
         return hash;
     }
 

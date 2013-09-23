@@ -26,11 +26,13 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class FloatValueTest extends SimpleValueTest<NillableFloat, Float> {
+public class UnwrappedFloatTest
+    extends UnwrappedValueTest<UnwrappedFloat, Float> {
 
 
-    public FloatValueTest() {
-        super(NillableFloat.class);
+    public UnwrappedFloatTest() {
+
+        super(UnwrappedFloat.class);
     }
 
 
@@ -47,4 +49,3 @@ public class FloatValueTest extends SimpleValueTest<NillableFloat, Float> {
 
 
 }
-

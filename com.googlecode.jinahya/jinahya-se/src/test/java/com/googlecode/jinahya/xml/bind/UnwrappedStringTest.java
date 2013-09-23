@@ -20,32 +20,30 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class IntegerValueTest extends SimpleValueTest<NillableInteger, Integer> {
+public class UnwrappedStringTest
+    extends UnwrappedValueTest<UnwrappedString, String> {
 
 
-    public IntegerValueTest() {
-        super(NillableInteger.class);
+    public UnwrappedStringTest() {
+
+        super(UnwrappedString.class);
     }
 
 
     @Override
-    protected Integer generateRawValue() {
+    protected String generateRawValue() {
 
         final Random random = ThreadLocalRandom.current();
 
-        if (random.nextBoolean()) {
-            return null;
-        }
-
-        return random.nextInt();
+        return RandomStringUtils.randomAlphanumeric(random.nextInt(128));
     }
 
 
 }
-

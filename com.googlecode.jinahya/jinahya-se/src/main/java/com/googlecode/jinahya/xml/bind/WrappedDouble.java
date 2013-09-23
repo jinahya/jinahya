@@ -18,35 +18,44 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.lang3.RandomStringUtils;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StringValueTest extends SimpleValueTest<NillableString, String> {
+@XmlRootElement
+public class WrappedDouble extends WrappedValue<Double> {
 
 
-    public StringValueTest() {
-        super(NillableString.class);
+    /**
+     * Creates a new instance.
+     *
+     * @param rawValue raw value.
+     *
+     * @return a new instance.
+     */
+    public static WrappedDouble newInstance(final Double rawValue) {
+
+        return newInstance(WrappedDouble.class, rawValue);
+    }
+
+
+    @XmlElement(nillable = true, required = true)
+    @Override
+    public Double getRawValue() {
+
+        return super.getRawValue();
     }
 
 
     @Override
-    protected String generateRawValue() {
+    public void setRawValue(final Double rawValue) {
 
-        final Random random = ThreadLocalRandom.current();
-
-        if (random.nextBoolean()) {
-            return null;
-        }
-
-        return RandomStringUtils.randomAlphanumeric(random.nextInt(128));
+        super.setRawValue(rawValue);
     }
 
 
 }
-

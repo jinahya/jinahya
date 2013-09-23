@@ -18,34 +18,44 @@
 package com.googlecode.jinahya.xml.bind;
 
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BooleanValueTest extends SimpleValueTest<NillableBoolean, Boolean> {
+@XmlRootElement
+public class WrappedBoolean extends WrappedValue<Boolean> {
 
 
-    public BooleanValueTest() {
-        super(NillableBoolean.class);
+    /**
+     * Creates a new instance.
+     *
+     * @param rawValue raw value
+     *
+     * @return a new instance.
+     */
+    public static WrappedBoolean newInstance(final Boolean rawValue) {
+
+        return newInstance(WrappedBoolean.class, rawValue);
+    }
+
+
+    @XmlElement(nillable = true, required = true)
+    @Override
+    public Boolean getRawValue() {
+
+        return super.getRawValue();
     }
 
 
     @Override
-    protected Boolean generateRawValue() {
+    public void setRawValue(final Boolean rawValue) {
 
-        final Random random = ThreadLocalRandom.current();
-
-        if (random.nextBoolean()) {
-            return null;
-        }
-
-        return random.nextBoolean();
+        super.setRawValue(rawValue);
     }
 
 
 }
-
