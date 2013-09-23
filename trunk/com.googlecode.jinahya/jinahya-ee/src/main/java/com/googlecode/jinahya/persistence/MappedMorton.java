@@ -25,8 +25,6 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -38,6 +36,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * </figcaption>
  * </figure>
  *
+ * @see <a href="http://goo.gl/NV6lJU">HISTORY OF THE UMBRELLA GIRL</a>
  * @author Jin Kwon <jinahya at gmail.com>
  */
 @MappedSuperclass
@@ -65,12 +66,7 @@ public abstract class MappedMorton implements Serializable {
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(MappedMorton.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.INFO);
-    }
+        LoggerFactory.getLogger(MappedMorton.class);
 
 
     /**
@@ -126,6 +122,9 @@ public abstract class MappedMorton implements Serializable {
                                    final int iterationCount,
                                    final int keyLength) {
 
+        LOGGER.debug("pbkdf2({}, {}, {}, {}", password, salt, iterationCount,
+                     keyLength);
+
         final long start = System.currentTimeMillis();
 
         try {
@@ -137,7 +136,7 @@ public abstract class MappedMorton implements Serializable {
                 final SecretKey secretKey =
                     secretKeyFactory.generateSecret(keySpec);
                 final long finish = System.currentTimeMillis();
-                LOGGER.log(Level.INFO, "elapsed: {0} ms", (finish - start));
+                LOGGER.debug("elapsed: {} ms", (finish - start));
                 return secretKey.getEncoded();
             } catch (InvalidKeySpecException ikse) {
                 throw new RuntimeException(ikse);
@@ -149,19 +148,13 @@ public abstract class MappedMorton implements Serializable {
 
 
     /*
-     protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
-     final int iterationCount,
-     final int keyLength) {
-
-     try {
-     return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
-     .generateSecret(new PBEKeySpec(password, salt, iterationCount,
-     keyLength))
-     .getEncoded();
-     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-     throw new RuntimeException(e);
-     }
-     }
+     * protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
+     * final int iterationCount, final int keyLength) {
+     *
+     * try { return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+     * .generateSecret(new PBEKeySpec(password, salt, iterationCount,
+     * keyLength)) .getEncoded(); } catch (NoSuchAlgorithmException |
+     * InvalidKeySpecException e) { throw new RuntimeException(e); } }
      */
     /**
      * Converts given {@code bassword} into a {@code char[]}.
@@ -173,12 +166,12 @@ public abstract class MappedMorton implements Serializable {
     protected static char[] cassword(final byte[] bassword) {
 
         if (bassword == null) {
-            throw new NullPointerException("null bassword");
+            throw new NullPointerException("bassword");
         }
 
-        if (bassword.length == 0) {
-            throw new IllegalArgumentException("empty bassword");
-        }
+//        if (bassword.length == 0) {
+//            throw new IllegalArgumentException("empty bassword");
+//        }
 
         final char[] cassword = new char[bassword.length];
 
@@ -199,7 +192,7 @@ public abstract class MappedMorton implements Serializable {
 
 
     /**
-     * Generates a {@code sodium}.
+     * Generates a sodium.
      *
      * @param length number of bytes
      *
@@ -226,6 +219,7 @@ public abstract class MappedMorton implements Serializable {
      * @param sodium sodium
      */
     protected MappedMorton(final int density, final byte[] sodium) {
+
         super();
 
         this.density = density;
@@ -237,6 +231,7 @@ public abstract class MappedMorton implements Serializable {
      * Creates a new instance.
      */
     public MappedMorton() {
+
         this(MAPPED_DENSITY, sodium(MAPPED_SODIUM_LENGTH));
     }
 
@@ -251,15 +246,19 @@ public abstract class MappedMorton implements Serializable {
     public byte[] salty(final byte[] bland) {
 
         if (bland == null) {
-            throw new NullPointerException("null bland");
+            throw new NullPointerException("bland");
         }
 
-        if (bland.length == 0) {
-            throw new IllegalArgumentException("empty bland");
-        }
+//        if (bland.length == 0) {
+//            throw new IllegalArgumentException("empty bland");
+//        }
 
-        return pbkdf2(cassword(bland), sodium, iterationCount(density, bland),
-                      sodium.length * 8);
+        final char[] password = cassword(bland);
+        final byte[] salt = sodium;
+        final int iterationCount = iterationCount(density, bland);
+        final int keyLength = sodium.length * 8;
+
+        return pbkdf2(password, salt, iterationCount, keyLength);
     }
 
 
