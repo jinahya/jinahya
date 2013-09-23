@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
+ * An unwrapped value for integers.
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
@@ -30,6 +31,13 @@ import javax.xml.bind.annotation.XmlValue;
 public class UnwrappedInteger extends UnwrappedValue<Integer> {
 
 
+    /**
+     * Creates a new instance with given raw value.
+     *
+     * @param rawValue the raw value
+     *
+     * @return a new instance
+     */
     public static UnwrappedInteger newInstance(final Integer rawValue) {
 
         if (rawValue == null) {

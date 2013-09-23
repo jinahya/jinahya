@@ -20,24 +20,23 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class StringPackageListAdapter extends StringPackageCollectionAdapter<List<Package>> {
+public class StringPackageListAdapter
+    extends StringPackageCollectionAdapter<List<Package>> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        Logger.getLogger(StringPackageListAdapter.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.WARNING);
-    }
+        LoggerFactory.getLogger(StringPackageListAdapter.class);
 
 
     @Override

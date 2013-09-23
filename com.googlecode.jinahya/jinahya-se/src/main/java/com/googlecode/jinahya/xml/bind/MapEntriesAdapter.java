@@ -21,9 +21,10 @@ package com.googlecode.jinahya.xml.bind;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -42,12 +43,7 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
      * logger.
      */
     private static final Logger LOGGER =
-        Logger.getLogger(MapEntriesAdapter.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.WARNING);
-    }
+        LoggerFactory.getLogger(MapEntriesAdapter.class);
 
 
     /**
@@ -59,11 +55,7 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
 
         super();
 
-        if (entriesType == null) {
-            throw new NullPointerException("entriesType");
-        }
-
-        this.entriesType = entriesType;
+        this.entriesType = Objects.requireNonNull(entriesType, "entriesType");
     }
 
 
@@ -96,21 +88,6 @@ public abstract class MapEntriesAdapter<T extends MapEntries<?, K, V>, K, V>
         final T value = entriesType.newInstance();
 
         value.addEntries(bound);
-
-        /*
-         //final List<? extends MapEntry<K, V>> entries = value.getEntries();
-         @SuppressWarnings("unchecked")
-         final List<? extends MapEntry<K, V>> entries =
-         (List<MapEntry<K, V>>) value.getEntries();
-         ((ArrayList) entries).ensureCapacity(bound.size());
-
-         for (Entry<K, V> bentry : bound.entrySet()) {
-         final MapEntry<K, V> ventry = value.getEntryType().newInstance();
-         ventry.setKey(bentry.getKey());
-         ventry.setValue(bentry.getValue());
-         entries.add(ventry);
-         }
-         */
 
         return value;
     }

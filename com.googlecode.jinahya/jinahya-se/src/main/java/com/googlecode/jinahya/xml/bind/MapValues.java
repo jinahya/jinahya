@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
- * An abstract class.
+ * An abstract class for map values.
  *
  * @author Jin Kwon <onacit at gmail.com>
  * @param <T> map value type parameter

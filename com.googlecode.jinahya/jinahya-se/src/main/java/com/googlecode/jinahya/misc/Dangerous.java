@@ -97,6 +97,12 @@ public final class Dangerous {
     public static void putUnsignedInt(final Object o, final long offset,
                                       final long x) {
 
+//        if (x < 0L) {
+//            throw new IllegalArgumentException("x(" + x + ") < 0L");
+//        }
+//
+//        UNSAFE.putInt(o, offset, (int) x);
+
         UNSAFE.putInt(o, offset, (int) (x & 0xFFFFFFFFL));
     }
 

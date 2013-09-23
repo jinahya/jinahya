@@ -66,13 +66,13 @@ public abstract class Plural<S> {
 
 
     /**
-     * Creates a new instance of {@code pluralType}.
+     * Creates a new empty instance of given plural type.
      *
      * @param <P> plural type parameter.
      * @param <S> singular type parameter.
-     * @param pluralType plural type
+     * @param pluralType the plural type
      *
-     * @return a new instance of given {@code pluralType}
+     * @return a new empty instance of given {@code pluralType}
      */
     public static <P extends Plural<S>, S> P newInstance(
         final Class<P> pluralType) {
