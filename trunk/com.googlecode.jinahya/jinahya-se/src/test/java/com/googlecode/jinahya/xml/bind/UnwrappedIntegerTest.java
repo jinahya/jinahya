@@ -41,10 +41,6 @@ public class UnwrappedIntegerTest
 
         final Random random = ThreadLocalRandom.current();
 
-        if (random.nextBoolean()) {
-            return null;
-        }
-
         return random.nextInt();
     }
 

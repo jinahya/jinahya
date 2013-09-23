@@ -20,28 +20,33 @@ package com.googlecode.jinahya.xml.bind;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UnwrappedFloatTest
-    extends UnwrappedValueTest<UnwrappedFloat, Float> {
+public class WrappedNormalizedStringTest
+    extends WrappedValueTest<WrappedNormalizedString, String> {
 
 
-    public UnwrappedFloatTest() {
+    public WrappedNormalizedStringTest() {
 
-        super(UnwrappedFloat.class);
+        super(WrappedNormalizedString.class);
     }
 
 
     @Override
-    protected Float generateRawValue() {
+    protected String generateRawValue() {
 
         final Random random = ThreadLocalRandom.current();
 
-        return random.nextFloat();
+        if (random.nextBoolean()) {
+            return null;
+        }
+
+        return RandomStringUtils.randomAlphanumeric(random.nextInt(128));
     }
 
 
