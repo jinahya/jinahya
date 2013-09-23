@@ -125,7 +125,28 @@ public abstract class MappedMorton implements Serializable {
         LOGGER.debug("pbkdf2({}, {}, {}, {}", password, salt, iterationCount,
                      keyLength);
 
-        final long start = System.currentTimeMillis();
+        // we don't have to check those arguments.
+        // arguments are directly passed to PBEKeySpec
+
+//        // An empty char[] is used if null is specified for password.
+//        //Objects.requireNonNull(salt, "password");
+//
+//        Objects.requireNonNull(salt, "salt");
+//
+//        if (salt.length == 0) {
+//            throw new IllegalArgumentException(
+//                "salt.length(" + salt.length + ") == 0");
+//        }
+//
+//        if (iterationCount <= 0) {
+//            throw new IllegalArgumentException(
+//                "iterationCount(" + iterationCount + ") <= 0");
+//        }
+//
+//        if (keyLength <= 0) {
+//            throw new IllegalArgumentException(
+//                "keyLength(" + keyLength + ") <= 0");
+//        }
 
         try {
             final SecretKeyFactory secretKeyFactory =
@@ -135,27 +156,16 @@ public abstract class MappedMorton implements Serializable {
             try {
                 final SecretKey secretKey =
                     secretKeyFactory.generateSecret(keySpec);
-                final long finish = System.currentTimeMillis();
-                LOGGER.debug("elapsed: {} ms", (finish - start));
                 return secretKey.getEncoded();
-            } catch (InvalidKeySpecException ikse) {
+            } catch (final InvalidKeySpecException ikse) {
                 throw new RuntimeException(ikse);
             }
-        } catch (NoSuchAlgorithmException nsae) {
+        } catch (final NoSuchAlgorithmException nsae) {
             throw new RuntimeException(nsae);
         }
     }
 
 
-    /*
-     * protected static byte[] pbkdf2_(final char[] password, final byte[] salt,
-     * final int iterationCount, final int keyLength) {
-     *
-     * try { return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
-     * .generateSecret(new PBEKeySpec(password, salt, iterationCount,
-     * keyLength)) .getEncoded(); } catch (NoSuchAlgorithmException |
-     * InvalidKeySpecException e) { throw new RuntimeException(e); } }
-     */
     /**
      * Converts given {@code bassword} into a {@code char[]}.
      *
@@ -169,10 +179,6 @@ public abstract class MappedMorton implements Serializable {
             throw new NullPointerException("bassword");
         }
 
-//        if (bassword.length == 0) {
-//            throw new IllegalArgumentException("empty bassword");
-//        }
-
         final char[] cassword = new char[bassword.length];
 
         for (int i = 0; i < cassword.length; i++) {
@@ -183,7 +189,35 @@ public abstract class MappedMorton implements Serializable {
     }
 
 
+    /**
+     * Calculates an iteration count based on given arguments.
+     *
+     * @param density density; must be between {@link #DENSITY_MIN} (inclusive)
+     * and {@link #DENSITY_MAX} (inclusive).
+     * @param bland bland
+     *
+     * @return calculated iteration count
+     */
     protected static int iterationCount(final int density, final byte[] bland) {
+
+        if (density < DENSITY_MIN) {
+            throw new IllegalArgumentException(
+                "density(" + density + ") < " + DENSITY_MIN);
+        }
+
+        if (density > DENSITY_MAX) {
+            throw new IllegalArgumentException(
+                "density(" + density + ") > " + DENSITY_MAX);
+        }
+
+        if (bland == null) {
+            throw new NullPointerException("bland");
+        }
+
+        if (bland.length == 0) {
+            throw new IllegalArgumentException(
+                "bland.length(" + bland.length + ") == 0");
+        }
 
         final int degree = 0x01 << density;
 
@@ -199,6 +233,12 @@ public abstract class MappedMorton implements Serializable {
      * @return a new sodium.
      */
     protected static byte[] sodium(final int length) {
+
+        LOGGER.debug("sodium({})", length);
+
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
 
         final byte[] sodium = new byte[length];
 
@@ -239,19 +279,17 @@ public abstract class MappedMorton implements Serializable {
     /**
      * Makes given {@code bland} salty.
      *
-     * @param bland the bland input; must be not null nor empty.
+     * @param bland the bland
      *
      * @return the salty output
      */
     public byte[] salty(final byte[] bland) {
 
+        LOGGER.debug("salty({})", bland);
+
         if (bland == null) {
             throw new NullPointerException("bland");
         }
-
-//        if (bland.length == 0) {
-//            throw new IllegalArgumentException("empty bland");
-//        }
 
         final char[] password = cassword(bland);
         final byte[] salt = sodium;
