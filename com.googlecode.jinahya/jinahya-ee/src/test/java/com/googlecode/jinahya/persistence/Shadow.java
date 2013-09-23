@@ -21,8 +21,6 @@ package com.googlecode.jinahya.persistence;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +38,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -65,13 +65,7 @@ public class Shadow implements Serializable {
     /**
      * logger.
      */
-    private static final Logger LOGGER =
-        Logger.getLogger(Shadow.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.INFO);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(Shadow.class);
 
 
     /**
@@ -163,8 +157,7 @@ public class Shadow implements Serializable {
     public boolean nassword(final Shadow reference, final byte[] password,
                             final byte[] nassword) {
 
-        LOGGER.log(Level.INFO, "nassword({0}, {1}, {2})",
-                   new Object[]{reference, password, nassword});
+        LOGGER.debug("nassword({}, {}, {})", reference, password, nassword);
 
         if (reference == null) {
             throw new IllegalArgumentException("null reference");
@@ -204,8 +197,7 @@ public class Shadow implements Serializable {
     public boolean nassword(final String username, final byte[] password,
                             final byte[] nassword) {
 
-        LOGGER.log(Level.INFO, "nassword({0}, {1}, {2})",
-                   new Object[]{username, password, nassword});
+        LOGGER.debug("nassword({}, {}, {})", username, password, nassword);
 
         if (username == null) {
             throw new IllegalArgumentException("null reference");
@@ -252,8 +244,7 @@ public class Shadow implements Serializable {
      */
     public boolean puthenticate(final Shadow reference, final byte[] password) {
 
-        LOGGER.log(Level.INFO, "puthenticate({0}, {1})",
-                   new Object[]{reference, password});
+        LOGGER.debug("puthenticate({}, {})", reference, password);
 
         Objects.requireNonNull(reference, "null reference");
 
@@ -268,7 +259,7 @@ public class Shadow implements Serializable {
                 "password.length(" + password.length + ") == 0");
         }
 
-        LOGGER.log(Level.INFO, "passsalt: {0}", passsalt);
+        LOGGER.debug("passsalt: {}", passsalt);
 
         return Arrays.equals(passsalt.salty(password), passcode);
     }
@@ -284,8 +275,7 @@ public class Shadow implements Serializable {
      */
     public boolean puthenticate(final String username, final byte[] password) {
 
-        LOGGER.log(Level.INFO, "puthenticate({0}, {1})",
-                   new Object[]{username, password});
+        LOGGER.debug("puthenticate({}, {})", username, password);
 
         Objects.requireNonNull(username, "null username");
 
@@ -300,7 +290,7 @@ public class Shadow implements Serializable {
                 "password.length(" + password.length + ") == 0");
         }
 
-        LOGGER.log(Level.INFO, "passsalt: {0}", passsalt);
+        LOGGER.debug("passsalt: {}", passsalt);
 
         return Arrays.equals(passsalt.salty(password), passcode);
     }
@@ -359,4 +349,3 @@ public class Shadow implements Serializable {
 
 
 }
-

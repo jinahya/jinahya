@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.persistence;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +28,8 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -50,13 +50,7 @@ public class Morton extends MappedMorton {
     /**
      * logger.
      */
-    private static final Logger LOGGER =
-        Logger.getLogger(Morton.class.getName());
-
-
-    static {
-        LOGGER.setLevel(Level.INFO);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(Morton.class);
 
 
     /**
@@ -75,6 +69,7 @@ public class Morton extends MappedMorton {
      * Creates a new instance.
      */
     protected Morton() {
+        
         super(DENSITY, sodium(SODIUM_LENGTH));
     }
 
@@ -88,13 +83,15 @@ public class Morton extends MappedMorton {
 
     @PrePersist
     protected void _PrePersist() {
-        LOGGER.log(Level.INFO, "_PrePersist(): {0}", this);
+
+        LOGGER.debug("_PrePersist()");
     }
 
 
     @PreRemove
     protected void _PreRemove() {
-        LOGGER.log(Level.INFO, "@PreRemove: {0}", this);
+
+        LOGGER.debug("_PreRemove()");
     }
 
 
@@ -113,4 +110,3 @@ public class Morton extends MappedMorton {
 
 
 }
-
