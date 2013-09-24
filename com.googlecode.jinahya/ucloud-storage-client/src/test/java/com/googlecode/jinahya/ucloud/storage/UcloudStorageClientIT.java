@@ -216,7 +216,8 @@ public class UcloudStorageClientIT {
             final StorageContainer storageContainer =
                 client.readStorageContainer(containerName);
             LOGGER.debug("storageContainer: {}", storageContainer);
-            Assert.assertEquals(storageContainer.getContainerName(), containerName);
+            Assert.assertEquals(storageContainer.getContainerName(),
+                                containerName);
             Assert.assertEquals(storageContainer.getObjectCount(), 0L);
             Assert.assertEquals(storageContainer.getBytesUsed(), 0L);
         }
@@ -233,7 +234,7 @@ public class UcloudStorageClientIT {
 
         final Random random = new Random();
 
-        final byte[] contentData = new byte[128];
+        final byte[] contentData = new byte[random.nextInt(128)];
         random.nextBytes(contentData);
 
         for (final String containerName : CONTAINER_NAMES) {
@@ -252,6 +253,13 @@ public class UcloudStorageClientIT {
                     containerName, objectName, "application/octet-stream", -1L,
                     new ByteArrayInputStream(contentData));
             }
+
+            final StorageContainer storageContainer =
+                client.readStorageContainer(containerName);
+            Assert.assertEquals(storageContainer.getContainerName(),
+                                containerName);
+            Assert.assertTrue(storageContainer.getObjectCount() > 0L);
+            Assert.assertTrue(storageContainer.getBytesUsed() >= 0L);
         }
     }
 
@@ -308,6 +316,13 @@ public class UcloudStorageClientIT {
                 Assert.assertTrue(
                     client.deleteStorageObject(containerName, objectName));
             }
+
+            final StorageContainer storageContainer =
+                client.readStorageContainer(containerName);
+            Assert.assertEquals(storageContainer.getContainerName(),
+                                containerName);
+            Assert.assertEquals(storageContainer.getObjectCount(), 0L);
+            Assert.assertEquals(storageContainer.getBytesUsed(), 0L);
         }
     }
 
