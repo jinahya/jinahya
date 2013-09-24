@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,21 +58,22 @@ public class UcloudStorageClient {
 
 
     /**
-     * Content type for unknown.
+     * content type for unknown.
      */
-    static final String UNKNOWN_CONTENT_TYPE = "application/octet-stream";
+    private static final String UNKNOWN_CONTENT_TYPE =
+        "application/octet-stream";
 
 
     /**
-     * Content length for unknown.
+     * content length for unknown.
      */
-    static final long UNKNOWN_CONTENT_LENGTH = -1L;
+    private static final long UNKNOWN_CONTENT_LENGTH = -1L;
 
 
     /**
-     * UTC TimeZone.
+     * utc timeZone.
      */
-    private static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
+    private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
 
     /**
@@ -144,91 +146,88 @@ public class UcloudStorageClient {
     }
 
 
-    private static int percent(final int decoded) {
+//    private static int percent(final int decoded) {
+//
+//        switch (decoded) {
+//            case 0x00:
+//            case 0x01:
+//            case 0x02:
+//            case 0x03:
+//            case 0x04:
+//            case 0x05:
+//            case 0x06:
+//            case 0x07:
+//            case 0x08:
+//            case 0x09:
+//                return decoded + 0x30; // 0x30('0') - 0x39('9')
+//            case 0x0A:
+//            case 0x0B:
+//            case 0x0C:
+//            case 0x0D:
+//            case 0x0E:
+//            case 0x0F:
+//                return decoded + 0x37; // 0x41('A') - 0x46('F')
+//            default:
+//                throw new IllegalArgumentException("illegal half: " + decoded);
+//        }
+//    }
+//
+//
+//    private static void percent(final int decoded, final byte[] encoded,
+//                                final int offset) {
+//
+//        if ((decoded >= 0x30 && decoded <= 0x39) // digit
+//            || (decoded >= 0x41 && decoded <= 0x5A) // upper case alpha
+//            || (decoded >= 0x61 && decoded <= 0x7A) // lower case alpha
+//            || decoded == 0x2D || decoded == 0x5F || decoded == 0x2E
+//            || decoded == 0x7E) { // -_.~
+//            encoded[offset] = (byte) decoded;
+//        } else {
+//            encoded[offset] = 0x25; // '%'
+//            encoded[offset + 1] = (byte) percent(decoded >> 4);
+//            encoded[offset + 2] = (byte) percent(decoded & 0x0F);
+//        }
+//    }
+//
+//
+//    private static byte[] percent(final byte[] decoded) {
+//
+//        final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
+//
+//        int offset = 0;
+//        for (int i = 0; i < decoded.length; i++) {
+//            percent(decoded[i] & 0xFF, encoded, offset);
+//            offset += encoded[offset] == 0x25 ? 3 : 1;
+//        }
+//
+//        if (offset == encoded.length) {
+//            return encoded;
+//        }
+//
+//        final byte[] trimmed = new byte[offset];
+//        System.arraycopy(encoded, 0, trimmed, 0, offset);
+//
+//        return trimmed;
+//    }
+//
+//
+//    private static String percent(final Object string) {
+//
+//        try {
+//            final byte[] decoded = String.valueOf(string).getBytes("UTF-8");
+//            return new String(percent(decoded), "US-ASCII");
+//        } catch (UnsupportedEncodingException uee) {
+//            throw new RuntimeException(uee);
+//        }
+//    }
+    private static String encode(final Object object) {
 
-        switch (decoded) {
-            case 0x00:
-            case 0x01:
-            case 0x02:
-            case 0x03:
-            case 0x04:
-            case 0x05:
-            case 0x06:
-            case 0x07:
-            case 0x08:
-            case 0x09:
-                return decoded + 0x30; // 0x30('0') - 0x39('9')
-            case 0x0A:
-            case 0x0B:
-            case 0x0C:
-            case 0x0D:
-            case 0x0E:
-            case 0x0F:
-                return decoded + 0x37; // 0x41('A') - 0x46('F')
-            default:
-                throw new IllegalArgumentException("illegal half: " + decoded);
-        }
-    }
-
-
-    private static void percent(final int decoded, final byte[] encoded,
-                                final int offset) {
-
-        if ((decoded >= 0x30 && decoded <= 0x39) // digit
-            || (decoded >= 0x41 && decoded <= 0x5A) // upper case alpha
-            || (decoded >= 0x61 && decoded <= 0x7A) // lower case alpha
-            || decoded == 0x2D || decoded == 0x5F || decoded == 0x2E
-            || decoded == 0x7E) { // -_.~
-            encoded[offset] = (byte) decoded;
-        } else {
-            encoded[offset] = 0x25; // '%'
-            encoded[offset + 1] = (byte) percent(decoded >> 4);
-            encoded[offset + 2] = (byte) percent(decoded & 0x0F);
-        }
-    }
-
-
-    private static byte[] percent(final byte[] decoded) {
-
-        final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
-
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            percent(decoded[i] & 0xFF, encoded, offset);
-            offset += encoded[offset] == 0x25 ? 3 : 1;
-        }
-
-        if (offset == encoded.length) {
-            return encoded;
-        }
-
-        final byte[] trimmed = new byte[offset];
-        System.arraycopy(encoded, 0, trimmed, 0, offset);
-
-        return trimmed;
-    }
-
-
-    private static String percent(final Object string) {
-
-        try {
-            final byte[] decoded = String.valueOf(string).getBytes("UTF-8");
-            return new String(percent(decoded), "US-ASCII");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
-        }
-    }
-
-
-    private static String encode(final Object string) {
-
-        if (string == null) {
-            throw new NullPointerException("string");
+        if (object == null) {
+            throw new NullPointerException("object");
         }
 
         try {
-            return URLEncoder.encode(String.valueOf(string), "UTF-8");
-            //return URLEncoder.encode(string, "UTF-8");
+            return URLEncoder.encode(object.toString(), "UTF-8");
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("\"UTF-8\" is not supported?");
         }
@@ -236,11 +235,11 @@ public class UcloudStorageClient {
 
 
     /**
-     * URL-encodes given container name.
+     * Encodes given container name.
      *
      * @param containerName the container name
      *
-     * @return a URL-encoded value of given container name
+     * @return the encoded value of given container name
      */
     private static String encodeContainerName(String containerName) {
 
@@ -262,7 +261,6 @@ public class UcloudStorageClient {
         }
 
         containerName = encode(containerName);
-        //containerName = percent(containerName);
         LOGGER.debug("encoded: {}", containerName);
         if (containerName.length() > CONTAINER_NAME_LENGTH_MAX) {
             throw new IllegalArgumentException(
@@ -275,11 +273,11 @@ public class UcloudStorageClient {
 
 
     /**
-     * URL-encodes given object name.
+     * Encodes given object name.
      *
      * @param objectName the object name
      *
-     * @return the URL-encoded object name
+     * @return the encoded value of given object name
      */
     private static String encodeObjectName(String objectName) {
 
@@ -304,7 +302,7 @@ public class UcloudStorageClient {
 
 
     /**
-     * Appends given query parameters onto specified url.
+     * Appends given query parameters onto specified base url.
      *
      * @param base the base url
      * @param params the query parameters
@@ -327,12 +325,16 @@ public class UcloudStorageClient {
         final Iterator<Entry<String, Object>> i = params.entrySet().iterator();
         if (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
-            builder.append("?").append(encode(entry.getKey())).append("=")
+            builder.append("?")
+                .append(encode(entry.getKey()))
+                .append("=")
                 .append(encode(entry.getValue()));
         }
         while (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
-            builder.append("&").append(encode(entry.getKey())).append("=")
+            builder.append("&")
+                .append(encode(entry.getKey()))
+                .append("=")
                 .append(encode(entry.getValue()));
         }
 
@@ -341,8 +343,8 @@ public class UcloudStorageClient {
 
 
     /**
-     * Copy bytes from given input stream to specified output stream using given
-     * buffer.
+     * Copies bytes from given input stream to specified output stream using
+     * given buffer.
      *
      * @param input the input stream
      * @param output the output stream
@@ -478,7 +480,7 @@ public class UcloudStorageClient {
         connection.setRequestProperty("X-Auth-Token", authToken);
 
         // 406 Not Acceptable without this header, damn.
-        connection.setRequestProperty("Accept", "application/xml"); // @@?
+        connection.setRequestProperty("Accept", "application/xml");
 
         setTimeouts(connection);
 
@@ -488,11 +490,11 @@ public class UcloudStorageClient {
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
                 final StorageAccount storageAccount = new StorageAccount();
                 storageAccount.setContainerCount(Long.parseLong(
-                    getFirstHeaderValue("X-Account-Container-Count")));
+                    getFirstHeaderFieldValue("X-Account-Container-Count")));
                 storageAccount.setObjectCount(Long.parseLong(
-                    getFirstHeaderValue("X-Account-Object-Count")));
+                    getFirstHeaderFieldValue("X-Account-Object-Count")));
                 storageAccount.setBytesUsed(Long.parseLong(
-                    getFirstHeaderValue("X-Account-Bytes-Used")));
+                    getFirstHeaderFieldValue("X-Account-Bytes-Used")));
                 return storageAccount;
             }
         } finally {
@@ -500,6 +502,183 @@ public class UcloudStorageClient {
         }
 
         return null;
+    }
+
+
+    public boolean readStorageAccountMetadata(
+        final Map<String, String> metadata)
+        throws IOException {
+
+        LOGGER.debug("readStorageAccountMetadata({})", metadata);
+
+        if (metadata == null) {
+            throw new NullPointerException("metadata");
+        }
+
+        final StorageAccount storageAccount = readStorageAccount();
+        if (storageAccount == null) {
+            return false;
+        }
+
+        for (final String fieldName : headerFields.keySet()) {
+            if (fieldName == null
+                || !fieldName.toLowerCase().startsWith("x-account-meta-")) {
+                continue;
+            }
+            metadata.put(fieldName, getFirstHeaderFieldValue(fieldName));
+        }
+
+        return true;
+    }
+
+
+    public Map<String, String> readStorageAccountMetadata() throws IOException {
+
+        LOGGER.debug("readStorageAccountMetadata()");
+
+        final Map<String, String> metadata = new HashMap<String, String>();
+
+        if (!readStorageAccountMetadata(metadata)) {
+            return null;
+        }
+
+        return metadata;
+    }
+
+
+    public String readStorageAccountMetadata(String name) throws IOException {
+
+        LOGGER.debug("readStorageAccountMetadata({})", name);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (!name.toLowerCase().startsWith("x-account-meta-")) {
+            name = "X-Account-Meta-" + name;
+            LOGGER.debug("name: {}", name);
+        }
+
+        final Map<String, String> metadata = readStorageAccountMetadata();
+        LOGGER.debug("metadata: " + metadata);
+        if (metadata == null) {
+            return null;
+        }
+
+        for (final Entry<String, String> entry : metadata.entrySet()) {
+            if (name.equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
+
+
+    public boolean updateStorageAccountMetadata(String name, final String value)
+        throws IOException {
+
+        LOGGER.debug("updateStorageAccountMetadata({}, {})", name, value);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (name.toLowerCase().startsWith("x-remove-account-meta-")) {
+            return deleteStorageAccountMetadata(name);
+        }
+
+        if (!name.toLowerCase().startsWith("x-account-meta-")) {
+            name = "X-Account-Meta-" + name;
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl;
+
+        final URL url = new URL(base);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        connection.setRequestProperty(name, value);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Deletes an storage account metadata mapped to given name.
+     *
+     * @param name the name
+     *
+     * @return {@code true} if succeeded; {@code false} if failed.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean deleteStorageAccountMetadata(String name)
+        throws IOException {
+
+        LOGGER.debug("deleteStorageAccountMetadata({})", name);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+        
+        if (!name.toLowerCase().startsWith("x-remove-account-meta-")) {
+            name = "X-Remove-Account-Meta-" + name;
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl;
+
+        final URL url = new URL(base);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        connection.setRequestProperty(name, "delete");
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
     }
 
 
@@ -793,9 +972,9 @@ public class UcloudStorageClient {
                 storageContainer.setContainerName(containerName);
                 storageContainer.setContainerName(containerName);
                 storageContainer.setObjectCount(Long.parseLong(
-                    getFirstHeaderValue("X-Container-Object-Count")));
+                    getFirstHeaderFieldValue("X-Container-Object-Count")));
                 storageContainer.setBytesUsed(Long.parseLong(
-                    getFirstHeaderValue("X-Container-Bytes-Used")));
+                    getFirstHeaderFieldValue("X-Container-Bytes-Used")));
                 return storageContainer;
             }
         } finally {
@@ -923,7 +1102,7 @@ public class UcloudStorageClient {
                             final Calendar lastModified =
                                 DatatypeConverter.parseDateTime(
                                 result.get("last_modified"));
-                            lastModified.setTimeZone(UTC_TIME_ZONE);
+                            lastModified.setTimeZone(UTC);
                             storageObject.setLastModified(
                                 lastModified.getTime().getTime());
                             storageObjects.add(storageObject);
@@ -1052,7 +1231,7 @@ public class UcloudStorageClient {
                 final StorageObject storageObject = new StorageObject();
                 storageObject.setObjectName(objectName);
                 storageObject.setLastModified(connection.getLastModified());
-                storageObject.setEntityTag(getFirstHeaderValue("Etag"));
+                storageObject.setEntityTag(getFirstHeaderFieldValue("Etag"));
                 storageObject.setContentType(connection.getContentType());
                 storageObject.setContentLength(getContentLength(connection));
                 storageObject.setLastModified(connection.getLastModified());
@@ -1486,32 +1665,41 @@ public class UcloudStorageClient {
     }
 
 
-    public List<String> getHeaderValues(final String headerName) {
+    public List<String> getHeaderFieldValues(final String fieldName) {
 
-        LOGGER.debug("getHeaderValues({})", headerName);
+        LOGGER.debug("getHeaderFieldValues({})", fieldName);
 
-        if (headerName == null) {
-            throw new NullPointerException("headerName");
+        if (fieldName == null) {
+            throw new NullPointerException("fieldName");
         }
 
         if (headerFields == null) {
             throw new IllegalStateException("no header fields");
         }
 
-        return headerFields.get(headerName);
+        for (final Entry<String, List<String>> entry
+             : headerFields.entrySet()) {
+            if (fieldName.equalsIgnoreCase(entry.getKey())) {
+                LOGGER.debug("-> {}", entry.getValue());
+                return entry.getValue();
+            }
+        }
+
+        return null;
     }
 
 
-    public String getFirstHeaderValue(final String headerName) {
+    public String getFirstHeaderFieldValue(final String fieldName) {
 
-        LOGGER.debug("getFirstHeaderValue({})", headerName);
+        LOGGER.debug("getFirstHeaderFieldValue({})", fieldName);
 
-        final List<String> headerValues = getHeaderValues(headerName);
-        if (headerValues == null || headerValues.isEmpty()) {
+        final List<String> headerFieldValues = getHeaderFieldValues(fieldName);
+        if (headerFieldValues == null || headerFieldValues.isEmpty()) {
             return null;
         }
 
-        return headerValues.get(0);
+        LOGGER.debug("-> {}", headerFieldValues.get(0));
+        return headerFieldValues.get(0);
     }
 
 

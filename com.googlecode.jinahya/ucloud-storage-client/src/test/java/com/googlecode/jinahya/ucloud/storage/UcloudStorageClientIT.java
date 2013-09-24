@@ -96,6 +96,38 @@ public class UcloudStorageClientIT {
 
 
     @Test(dependsOnMethods = {"testReadStorageAccount"}, enabled = true)
+    public void testStorageAccountMetadata() throws IOException {
+
+        LOGGER.debug("testStorageAccountMetadata()");
+
+        final UcloudStorageClient client =
+            new UcloudStorageClient(storageUser, storagePass);
+
+        final Map<String, String> metadata =
+            client.readStorageAccountMetadata();
+        Assert.assertNotNull(metadata);
+
+        final String name = "name";
+        final String value = "value";
+
+        final boolean updated =
+            client.updateStorageAccountMetadata(name, value);
+        LOGGER.debug("updated: {}: ", updated);
+        Assert.assertTrue(updated);
+
+        final String value1 = client.readStorageAccountMetadata(name);
+        Assert.assertEquals(value1, value);
+
+        final boolean deleted = client.deleteStorageAccountMetadata(name);
+        LOGGER.debug("deleted: {}: ", deleted);
+        Assert.assertTrue(deleted);
+
+        final String value2 = client.readStorageAccountMetadata(name);
+        Assert.assertNull(value2);
+    }
+
+
+    @Test(dependsOnMethods = {"testStorageAccountMetadata"}, enabled = true)
     public void testCreateStorageContainer() throws IOException {
 
         LOGGER.debug("testCreateStorageContainer()");
