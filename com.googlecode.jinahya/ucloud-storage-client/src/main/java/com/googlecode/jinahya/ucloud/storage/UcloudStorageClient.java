@@ -480,7 +480,7 @@ public class UcloudStorageClient {
         connection.setRequestProperty("X-Auth-Token", authToken);
 
         // 406 Not Acceptable without this header, damn.
-        connection.setRequestProperty("Accept", "application/xml");
+        connection.setRequestProperty("Accept", "*/*");
 
         setTimeouts(connection);
 
@@ -859,6 +859,9 @@ public class UcloudStorageClient {
         connection.setRequestMethod("HEAD");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
+        // 406 Not Acceptable without this header, damn
+        connection.setRequestProperty("Accept", "*/*");
+
         setTimeouts(connection);
 
         connection.connect();
@@ -922,6 +925,216 @@ public class UcloudStorageClient {
 
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT
                 || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    public boolean readStorageContainerMetadata(
+        final String containerName, final Map<String, String> metadata)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerMetadata({}, {})", containerName,
+                     metadata);
+
+        if (metadata == null) {
+            throw new NullPointerException("metadata");
+        }
+
+        final StorageContainer storageContainer =
+            readStorageContainer(containerName);
+        if (storageContainer == null) {
+            return false;
+        }
+
+        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+            final String fieldName = e.getKey();
+            if (fieldName == null
+                || !fieldName.toLowerCase().startsWith("x-container-meta-")) {
+                continue;
+            }
+            final List<String> fieldValues = e.getValue();
+            if (fieldValues == null || fieldValues.isEmpty()) {
+                continue;
+            }
+            metadata.put(fieldName, fieldValues.get(0));
+        }
+
+        return true;
+    }
+
+
+    public Map<String, String> readStorageContainerMetadata(
+        final String containerName)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerMetadata()");
+
+        final Map<String, String> metadata = new HashMap<String, String>();
+
+        if (!readStorageContainerMetadata(containerName, metadata)) {
+            return null;
+        }
+
+        return metadata;
+    }
+
+
+    public String readStorageContainerMetadata(final String containerName,
+                                               String name)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerMetadata({}, {})", containerName,
+                     name);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (!name.toLowerCase().startsWith("x-container-meta-")) {
+            name = "X-Container-Meta-" + name;
+            LOGGER.debug("name: {}", name);
+        }
+
+        final Map<String, String> metadata =
+            readStorageContainerMetadata(containerName);
+        LOGGER.debug("metadata: " + metadata);
+        if (metadata == null) {
+            return null;
+        }
+
+        for (final Entry<String, String> entry : metadata.entrySet()) {
+            if (name.equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
+
+
+    public boolean updateStorageContainerMetadata(final String containerName,
+                                                  String name,
+                                                  final String value)
+        throws IOException {
+
+        LOGGER.debug("updateStorageContainerMetadata({}, {}, {})",
+                     containerName, name, value);
+
+        // check
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value");
+        }
+
+        if (name.toLowerCase().startsWith("x-remove-container-meta-")) {
+            return deleteStorageContainerMetadata(containerName, name);
+        }
+
+        if (!name.toLowerCase().startsWith("x-container-meta-")) {
+            name = "X-Container-Meta-" + name;
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final String spec = base;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        connection.setRequestProperty(name, value);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Deletes an storage container metadata mapped to given name.
+     *
+     * @param containerName container name
+     * @param name the name
+     *
+     * @return {@code true} if succeeded; {@code false} if failed.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean deleteStorageContainerMetadata(final String containerName,
+                                                  String name)
+        throws IOException {
+
+        LOGGER.debug("deleteStorageContainerMetadata({}, {})", containerName,
+                     name);
+
+        // check
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (!name.toLowerCase().startsWith("x-remove-container-meta-")) {
+            name = "X-Remove-Container-Meta-" + name;
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final String spec = base;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        connection.setRequestProperty(name, "delete");
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
                 return true;
             }
         } finally {
