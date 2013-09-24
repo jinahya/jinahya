@@ -34,14 +34,11 @@
         <groupId>org.glassfish.main.extras</groupId>
         <artifactId>glassfish-embedded-all</artifactId>
         <version>3.1.2.2</version>
-        <!--<version>4.0</version>-->
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-entitymanager</artifactId>
-        <!--<version>4.2.4.Final</version>-->
         <version>4.2.5.Final</version>
-        <!--<version>4.3.0.Beta4</version>-->
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -61,7 +58,7 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency> <!-- must be positioned prior to glassfish-embedded-all -->
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>compile</scope>
@@ -86,11 +83,6 @@
       <artifactId>hibernate-entitymanager</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <scope>compile</scope>
-    </dependency>-->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
