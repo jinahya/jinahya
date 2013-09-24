@@ -33,39 +33,48 @@ public class StorageAccount {
 
 
     public long getContainerCount() {
+
         return containerCount;
     }
 
 
     public void setContainerCount(final long containerCount) {
+
         this.containerCount = containerCount;
     }
 
 
     public long getObjectCount() {
+
         return objectCount;
     }
 
 
     public void setObjectCount(final long objectCount) {
+
         this.objectCount = objectCount;
     }
 
 
     public long getBytesUsed() {
+
         return bytesUsed;
     }
 
 
     public void setBytesUsed(final long bytesUsed) {
+
         this.bytesUsed = bytesUsed;
     }
 
 
     @Override
     public String toString() {
-        return super.toString() + "?containerCount=" + containerCount
-               + "&objectCount=" + objectCount + "&bytesUsed=" + bytesUsed;
+
+        return super.toString()
+               + "?containerCount=" + containerCount
+               + "&objectCount=" + objectCount
+               + "&bytesUsed=" + bytesUsed;
     }
 
 
