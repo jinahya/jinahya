@@ -1692,6 +1692,120 @@ public class UcloudStorageClient {
     }
 
 
+    public boolean readStorageObjectMetadata(
+        final String containerName, final String objectName,
+        final Map<String, String> objectMetadata)
+        throws IOException {
+
+        LOGGER.debug("readStorageObjectMetadata({}, {}, {})", containerName,
+                     objectName, objectMetadata);
+
+        if (objectMetadata == null) {
+            throw new NullPointerException("objectMetadata");
+        }
+
+        final StorageObject storageObject =
+            readStorageObject(containerName, objectName);
+        if (storageObject == null) {
+            return false;
+        }
+
+        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+            final String fieldName = e.getKey();
+            if (fieldName == null
+                || !fieldName.toLowerCase().startsWith("x-object-meta-")) {
+                continue;
+            }
+            final List<String> fieldValues = e.getValue();
+            if (fieldValues == null || fieldValues.isEmpty()) {
+                continue;
+            }
+            objectMetadata.put(fieldName, fieldValues.get(0));
+        }
+
+        return true;
+    }
+
+
+    public Map<String, String> readStorageObjectMetadata(
+        final String containerName, final String objectName)
+        throws IOException {
+
+        LOGGER.debug("readStorageObjectMetadata({}, {})", containerName,
+                     objectName);
+
+        final Map<String, String> objectMetadata =
+            new HashMap<String, String>();
+
+        if (!readStorageObjectMetadata(containerName, objectName,
+                                       objectMetadata)) {
+            return null;
+        }
+
+        return objectMetadata;
+    }
+
+
+    public boolean updateStorageObjectMetadata(
+        final String containerName, final String objectName,
+        final Map<String, String> objectMetadata)
+        throws IOException {
+
+        LOGGER.debug("updateStorageObjectMetadata({}, {}, {})", containerName,
+                     objectName, objectMetadata);
+
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        final String encodedObjectName = encodeObjectName(objectName);
+
+        if (objectMetadata == null) {
+            throw new NullPointerException("objectMetadata");
+        }
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
+                            + PATH_SEPARATOR + encodedObjectName;
+
+        final String spec = base;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        for (final Entry<String, String> entry : objectMetadata.entrySet()) {
+            String fieldName = entry.getKey();
+            if (!fieldName.toLowerCase().startsWith("x-object-meta-")) {
+                fieldName = "X-Object-Meta-" + fieldName;
+            }
+            final String fieldValue = entry.getKey();
+            connection.setRequestProperty(fieldName, fieldValue);
+        }
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_202_ACCEPTED) {
+            }
+            if (responseCode == RESPONSE_CODE_202_ACCEPTED) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
     /**
      * Sets timeouts to given {@code connection}.
      *
