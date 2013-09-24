@@ -520,12 +520,17 @@ public class UcloudStorageClient {
             return false;
         }
 
-        for (final String fieldName : headerFields.keySet()) {
+        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+            final String fieldName = e.getKey();
             if (fieldName == null
                 || !fieldName.toLowerCase().startsWith("x-account-meta-")) {
                 continue;
             }
-            metadata.put(fieldName, getFirstHeaderFieldValue(fieldName));
+            final List<String> fieldValues = e.getValue();
+            if (fieldValues == null || fieldValues.isEmpty()) {
+                continue;
+            }
+            metadata.put(fieldName, fieldValues.get(0));
         }
 
         return true;
@@ -645,7 +650,7 @@ public class UcloudStorageClient {
         if (name == null) {
             throw new NullPointerException("name");
         }
-        
+
         if (!name.toLowerCase().startsWith("x-remove-account-meta-")) {
             name = "X-Remove-Account-Meta-" + name;
         }
@@ -723,7 +728,6 @@ public class UcloudStorageClient {
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
 
-        //connection.setDoInput(true);
         connection.setRequestMethod("GET");
         connection.setRequestProperty("X-Auth-Token", authToken);
         connection.setRequestProperty("Accept", "application/xml");
@@ -773,112 +777,6 @@ public class UcloudStorageClient {
     }
 
 
-//    /**
-//     * Requests the storage container whose name is given container name.
-//     *
-//     * @param containerName the container name
-//     * @param storageContainer storage container
-//     *
-//     * @return true if succeeded; false otherwise
-//     *
-//     * @throws IOException if an I/O error occurs
-//     */
-//    public boolean readStorageContainer(final String containerName,
-//                                        final StorageContainer storageContainer)
-//        throws IOException {
-//
-//        LOGGER.debug("readStorageContainer({}, {})", containerName,
-//                     storageContainer);
-//
-//        // check
-//        final String encodedContainerName = encodeContainerName(containerName);
-//
-//        if (storageContainer == null) {
-//            throw new NullPointerException("storageContainer");
-//        }
-//
-//        if (!authenticate()) {
-//            return false;
-//        }
-//
-//        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
-//
-//        final URL url = new URL(base);
-//
-//        final HttpURLConnection connection =
-//            (HttpURLConnection) url.openConnection();
-//
-//        connection.setRequestMethod("HEAD");
-//        connection.setRequestProperty("X-Auth-Token", authToken);
-//
-//        setTimeouts(connection);
-//
-//        connection.connect();
-//        try {
-//            setResponses(connection);
-//            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-//                storageContainer.setContainerName(containerName);
-//                storageContainer.setObjectCount(Long.parseLong(
-//                    getFirstHeaderValue("X-Container-Object-Count")));
-//                storageContainer.setBytesUsed(Long.parseLong(
-//                    getFirstHeaderValue("X-Container-Bytes-Used")));
-//            }
-//            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-//                return true;
-//            }
-//        } finally {
-//            connection.disconnect();
-//        }
-//
-//        return false;
-//    }
-//
-//
-//    /**
-//     *
-//     * @param storageContainer the storage container
-//     *
-//     * @return {@code true} if succeeded; {@code false} if failed.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public boolean readStorageContainer(final StorageContainer storageContainer)
-//        throws IOException {
-//
-//        LOGGER.debug("readStorageContainer({})", storageContainer);
-//
-//        if (storageContainer == null) {
-//            throw new NullPointerException("storageContainer");
-//        }
-//
-//        return readStorageContainer(storageContainer.getContainerName(),
-//                                    storageContainer);
-//    }
-//    /**
-//     * Retrieves a storage container whose name is mapped to given container
-//     * name.
-//     *
-//     * @param containerName the container name
-//     *
-//     * @return the mapped storage container or {@code null} if not found or
-//     * failed
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public StorageContainer readStorageContainer(final String containerName)
-//        throws IOException {
-//
-//        LOGGER.debug("readStorageContainer({})", containerName);
-//
-//        final StorageContainer storageContainer = new StorageContainer();
-//        storageContainer.setContainerName(containerName);
-//
-//        if (!readStorageContainer(storageContainer)) {
-//            return null;
-//        }
-//
-//        return storageContainer;
-//    }
     /**
      * Creates a storage container named as given name.
      *
@@ -1490,8 +1388,10 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
                             + PATH_SEPARATOR + encodedObjectName;
+
+        final String spec = base;
 
         final URL url = new URL(spec);
 
@@ -1535,7 +1435,7 @@ public class UcloudStorageClient {
     private void setTimeouts(final URLConnection connection) {
 
         if (connection == null) {
-            throw new IllegalArgumentException("null connection");
+            throw new NullPointerException("connection");
         }
 
         if (connectTimeout != null) {
@@ -1554,6 +1454,7 @@ public class UcloudStorageClient {
      * @return connect timeout
      */
     public Integer getConnectTimeout() {
+
         return connectTimeout;
     }
 
@@ -1581,6 +1482,7 @@ public class UcloudStorageClient {
      * @return read timeout.
      */
     public Integer getReadTimeout() {
+
         return readTimeout;
     }
 
@@ -1661,6 +1563,10 @@ public class UcloudStorageClient {
      */
     public Map<String, List<String>> getHeaderFields() {
 
+        if (headerFields == null) {
+            throw new IllegalStateException("no header fields");
+        }
+
         return headerFields;
     }
 
@@ -1673,12 +1579,7 @@ public class UcloudStorageClient {
             throw new NullPointerException("fieldName");
         }
 
-        if (headerFields == null) {
-            throw new IllegalStateException("no header fields");
-        }
-
-        for (final Entry<String, List<String>> entry
-             : headerFields.entrySet()) {
+        for (Entry<String, List<String>> entry : getHeaderFields().entrySet()) {
             if (fieldName.equalsIgnoreCase(entry.getKey())) {
                 LOGGER.debug("-> {}", entry.getValue());
                 return entry.getValue();
