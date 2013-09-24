@@ -216,6 +216,9 @@ public class UcloudStorageClientIT {
             final StorageContainer storageContainer =
                 client.readStorageContainer(containerName);
             LOGGER.debug("storageContainer: {}", storageContainer);
+            Assert.assertEquals(storageContainer.getContainerName(), containerName);
+            Assert.assertEquals(storageContainer.getObjectCount(), 0L);
+            Assert.assertEquals(storageContainer.getBytesUsed(), 0L);
         }
     }
 

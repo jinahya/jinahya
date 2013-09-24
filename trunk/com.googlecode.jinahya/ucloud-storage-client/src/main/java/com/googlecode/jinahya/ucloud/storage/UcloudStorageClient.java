@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -357,15 +358,15 @@ public class UcloudStorageClient {
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null output");
+            throw new NullPointerException("output");
         }
 
         if (buffer == null) {
-            throw new NullPointerException("null buffer");
+            throw new NullPointerException("buffer");
         }
 
         if (buffer.length == 0) {
@@ -390,6 +391,25 @@ public class UcloudStorageClient {
         throws IOException {
 
         copy(input, output, new byte[BUFFER_LENGTH]);
+    }
+
+
+    private static long getHeaderFieldLong(final URLConnection connection,
+                                           final String fieldName,
+                                           final long defaultValue) {
+        try {
+            final Method method = URLConnection.class.getMethod(
+                "getHeaderFieldLong", String.class, Long.TYPE);
+            try {
+                return (Long) method.invoke(connection, fieldName,
+                                            defaultValue);
+            } catch (IllegalAccessException iae) {
+            } catch (InvocationTargetException ite) {
+            }
+        } catch (NoSuchMethodException nsfe) {
+        }
+
+        return defaultValue;
     }
 
 
@@ -489,12 +509,12 @@ public class UcloudStorageClient {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
                 final StorageAccount storageAccount = new StorageAccount();
-                storageAccount.setContainerCount(Long.parseLong(
-                    getFirstHeaderFieldValue("X-Account-Container-Count")));
-                storageAccount.setObjectCount(Long.parseLong(
-                    getFirstHeaderFieldValue("X-Account-Object-Count")));
-                storageAccount.setBytesUsed(Long.parseLong(
-                    getFirstHeaderFieldValue("X-Account-Bytes-Used")));
+                storageAccount.setContainerCount(getFirstHeaderFieldLong(
+                    "X-Account-Container-Count", -1L));
+                storageAccount.setObjectCount(getFirstHeaderFieldLong(
+                    "X-Account-Object-Count", -1L));
+                storageAccount.setBytesUsed(getFirstHeaderFieldLong(
+                    "X-Account-Bytes-Used", -1L));
                 return storageAccount;
             }
         } finally {
@@ -859,7 +879,7 @@ public class UcloudStorageClient {
         connection.setRequestMethod("HEAD");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        // 406 Not Acceptable without this header, damn
+        // 406 Not Acceptable without this header. Damn it!
         connection.setRequestProperty("Accept", "*/*");
 
         setTimeouts(connection);
@@ -871,11 +891,10 @@ public class UcloudStorageClient {
                 final StorageContainer storageContainer =
                     new StorageContainer();
                 storageContainer.setContainerName(containerName);
-                storageContainer.setContainerName(containerName);
-                storageContainer.setObjectCount(Long.parseLong(
-                    getFirstHeaderFieldValue("X-Container-Object-Count")));
-                storageContainer.setBytesUsed(Long.parseLong(
-                    getFirstHeaderFieldValue("X-Container-Bytes-Used")));
+                storageContainer.setObjectCount(getFirstHeaderFieldLong(
+                    "X-Container-Object-Count", -1L));
+                storageContainer.setBytesUsed(getFirstHeaderFieldLong(
+                    "X-Container-Bytes-Used", -1L));
                 return storageContainer;
             }
         } finally {
@@ -969,11 +988,21 @@ public class UcloudStorageClient {
     }
 
 
+    /**
+     * Reads all metadata of the storage container mapped to given container
+     * name.
+     *
+     * @param containerName the container name
+     *
+     * @return a map of metadata names and values
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public Map<String, String> readStorageContainerMetadata(
         final String containerName)
         throws IOException {
 
-        LOGGER.debug("readStorageContainerMetadata()");
+        LOGGER.debug("readStorageContainerMetadata({})", containerName);
 
         final Map<String, String> metadata = new HashMap<String, String>();
 
@@ -985,31 +1014,40 @@ public class UcloudStorageClient {
     }
 
 
+    /**
+     * Reads a metadata value with given metadata name of the storage container
+     * mapped to given container name.
+     *
+     * @param containerName the container name
+     * @param metadataName the metadata name
+     *
+     * @return the metadata value or {@code null} if failed to read.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public String readStorageContainerMetadata(final String containerName,
-                                               String name)
+                                               String metadataName)
         throws IOException {
 
         LOGGER.debug("readStorageContainerMetadata({}, {})", containerName,
-                     name);
+                     metadataName);
 
-        if (name == null) {
-            throw new NullPointerException("name");
+        if (metadataName == null) {
+            throw new NullPointerException("metadataName");
         }
 
-        if (!name.toLowerCase().startsWith("x-container-meta-")) {
-            name = "X-Container-Meta-" + name;
-            LOGGER.debug("name: {}", name);
+        if (!metadataName.toLowerCase().startsWith("x-container-meta-")) {
+            metadataName = "X-Container-Meta-" + metadataName;
         }
 
         final Map<String, String> metadata =
             readStorageContainerMetadata(containerName);
-        LOGGER.debug("metadata: " + metadata);
         if (metadata == null) {
             return null;
         }
 
         for (final Entry<String, String> entry : metadata.entrySet()) {
-            if (name.equalsIgnoreCase(entry.getKey())) {
+            if (metadataName.equalsIgnoreCase(entry.getKey())) {
                 return entry.getValue();
             }
         }
@@ -1018,31 +1056,43 @@ public class UcloudStorageClient {
     }
 
 
+    /**
+     * Updates a metadata value with given metadata name of the storage
+     * container mapped to given container name.
+     *
+     * @param containerName the container name
+     * @param metadataName the metadata name
+     * @param metadataValue the metadata value
+     *
+     * @return {@code true} if succeeded; {@code false} otherwise.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public boolean updateStorageContainerMetadata(final String containerName,
-                                                  String name,
-                                                  final String value)
+                                                  String metadataName,
+                                                  final String metadataValue)
         throws IOException {
 
         LOGGER.debug("updateStorageContainerMetadata({}, {}, {})",
-                     containerName, name, value);
+                     containerName, metadataName, metadataValue);
 
         // check
         final String encodedContainerName = encodeContainerName(containerName);
 
-        if (name == null) {
-            throw new NullPointerException("name");
+        if (metadataName == null) {
+            throw new NullPointerException("metadataName");
         }
 
-        if (value == null) {
-            throw new NullPointerException("value");
+        if (metadataValue == null) {
+            throw new NullPointerException("metadataValue");
         }
 
-        if (name.toLowerCase().startsWith("x-remove-container-meta-")) {
-            return deleteStorageContainerMetadata(containerName, name);
+        if (metadataName.toLowerCase().startsWith("x-remove-container-meta-")) {
+            return deleteStorageContainerMetadata(containerName, metadataName);
         }
 
-        if (!name.toLowerCase().startsWith("x-container-meta-")) {
-            name = "X-Container-Meta-" + name;
+        if (!metadataName.toLowerCase().startsWith("x-container-meta-")) {
+            metadataName = "X-Container-Meta-" + metadataName;
         }
 
         if (!authenticate()) {
@@ -1061,7 +1111,7 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(name, value);
+        connection.setRequestProperty(metadataName, metadataValue);
 
         setTimeouts(connection);
 
@@ -1082,31 +1132,33 @@ public class UcloudStorageClient {
 
 
     /**
-     * Deletes an storage container metadata mapped to given name.
+     * Deletes a metadata with given metadata name of the storage container
+     * mapped to given container name.
      *
-     * @param containerName container name
-     * @param name the name
+     * @param containerName the container name
+     * @param metadataName the metadata name
      *
      * @return {@code true} if succeeded; {@code false} if failed.
      *
      * @throws IOException if an I/O error occurs.
      */
     public boolean deleteStorageContainerMetadata(final String containerName,
-                                                  String name)
+                                                  String metadataName)
         throws IOException {
 
         LOGGER.debug("deleteStorageContainerMetadata({}, {})", containerName,
-                     name);
+                     metadataName);
 
         // check
         final String encodedContainerName = encodeContainerName(containerName);
 
-        if (name == null) {
-            throw new NullPointerException("name");
+        if (metadataName == null) {
+            throw new NullPointerException("metadataName");
         }
 
-        if (!name.toLowerCase().startsWith("x-remove-container-meta-")) {
-            name = "X-Remove-Container-Meta-" + name;
+        if (!metadataName.toLowerCase()
+            .startsWith("x-remove-container-meta-")) {
+            metadataName = "X-Remove-Container-Meta-" + metadataName;
         }
 
         if (!authenticate()) {
@@ -1125,7 +1177,7 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(name, "delete");
+        connection.setRequestProperty(metadataName, "delete");
 
         setTimeouts(connection);
 
@@ -1814,6 +1866,22 @@ public class UcloudStorageClient {
 
         LOGGER.debug("-> {}", headerFieldValues.get(0));
         return headerFieldValues.get(0);
+    }
+
+
+    public long getFirstHeaderFieldLong(final String fieldName,
+                                        final long defaultValue) {
+
+        LOGGER.debug("getFirstHeaderFieldLong({}, {})", fieldName,
+                     defaultValue);
+
+        try {
+            return Long.parseLong(getFirstHeaderFieldValue(fieldName));
+        } catch (NullPointerException npe) {
+        } catch (NumberFormatException nfe) {
+        }
+
+        return defaultValue;
     }
 
 
