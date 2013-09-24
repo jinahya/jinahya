@@ -14,7 +14,7 @@
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8.5</version>
+        <version>6.8.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -89,4 +89,8 @@
   <name>proguard-with-maven</name>
   <url>https://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya.test/proguard-with-maven</url>
 
+  <!-- Environment Settings -->
+  <prerequisites>
+    <maven>3.0.5</maven>
+  </prerequisites>
 </project>
