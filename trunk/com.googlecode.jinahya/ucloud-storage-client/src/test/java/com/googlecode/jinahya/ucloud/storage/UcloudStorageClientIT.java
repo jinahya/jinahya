@@ -145,6 +145,44 @@ public class UcloudStorageClientIT {
 
 
     @Test(dependsOnMethods = {"testCreateStorageContainer"}, enabled = true)
+    public void testStorageContainerMetadata() throws IOException {
+
+        LOGGER.debug("testStorageContainerMetadata()");
+
+        final UcloudStorageClient client =
+            new UcloudStorageClient(storageUser, storagePass);
+
+        for (final String containerName : CONTAINER_NAMES) {
+
+            final Map<String, String> metadata =
+                client.readStorageContainerMetadata(containerName);
+            Assert.assertNotNull(metadata);
+
+            final String name = "container-metadata-name";
+            final String value = "container-metadata-value";
+
+            final boolean updated = client.updateStorageContainerMetadata(
+                containerName, name, value);
+            LOGGER.debug("container.metadata.updated: {}: ", updated);
+            Assert.assertTrue(updated);
+
+            final String value1 = client.readStorageContainerMetadata(
+                containerName, name);
+            Assert.assertEquals(value1, value);
+
+            final boolean deleted = client.deleteStorageContainerMetadata(
+                containerName, name);
+            LOGGER.debug("container.metadata.deleted: {}: ", deleted);
+            Assert.assertTrue(deleted);
+
+            final String value2 = client.readStorageContainerMetadata(
+                containerName, name);
+            Assert.assertNull(value2);
+        }
+    }
+
+
+    @Test(dependsOnMethods = {"testStorageContainerMetadata"}, enabled = true)
     public void testReadStorageContainers() throws IOException {
 
         LOGGER.debug("testReadStorageContainers()");
