@@ -124,11 +124,12 @@ public abstract class Base {
      * @param alphabet alphabet to be used
      * @param padding flag for padding
      */
-    protected Base(final byte[] alphabet, final boolean padding) {
+    public Base(final byte[] alphabet, final boolean padding) {
+
         super();
 
         if (alphabet == null) {
-            throw new NullPointerException("null alphabet");
+            throw new NullPointerException("alphabet");
         }
 
         if (alphabet.length == 0) {
@@ -154,99 +155,6 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes in {@code input} and returns encoded characters.
-     *
-     * @param input byte input
-     *
-     * @return encoded characters
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public final byte[] encode(final byte[] input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        return encode(new ByteArrayInputStream(input));
-    }
-
-
-    /**
-     * Encodes bytes from {@code input} and return encoded characters.
-     *
-     * @param input byte input
-     *
-     * @return encoded characters
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public final byte[] encode(final InputStream input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        encode(input, output);
-        output.flush();
-
-        return output.toByteArray();
-    }
-
-
-    /**
-     * Encodes bytes from {@code input} and writes those encoded octets to
-     * {@code output}.
-     *
-     * @param input input
-     * @param output output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public final void encode(final InputStream input, final OutputStream output)
-        throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        final Writer writer = new OutputStreamWriter(output, "US-ASCII");
-        encode(input, writer);
-        writer.flush();
-    }
-
-
-    /**
-     * Encodes bytes from given {@code input} and writes those encoded
-     * characters to {@code output}.
-     *
-     * @param input binary input
-     * @param output character output
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    public final void encode(final InputStream input, final Writer output)
-        throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        encode(new BitInput(new StreamInput(input)), output);
-    }
-
-
-    /**
      * Encodes bits from {@code input} and write those encoded characters to
      * {@code output}.
      *
@@ -259,11 +167,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new IllegalArgumentException("null input");
+            throw new IllegalArgumentException("input");
         }
 
         if (output == null) {
-            throw new IllegalArgumentException("null output");
+            throw new IllegalArgumentException("output");
         }
 
         outer:
@@ -303,50 +211,31 @@ public abstract class Base {
 
 
     /**
-     * Decodes characters in {@code input} and return decoded bytes.
+     * Encodes bytes from given {@code input} and writes those encoded
+     * characters to {@code output}.
      *
-     * @param input character input
+     * @param input binary input
+     * @param output character output
      *
-     * @return decoded bytes
-     *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
      */
-    public final byte[] decode(final byte[] input) throws IOException {
+    public void encode(final InputStream input, final Writer output)
+        throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
-        return decode(new ByteArrayInputStream(input));
+        if (output == null) {
+            throw new NullPointerException("output");
+        }
+
+        encode(new BitInput(new StreamInput(input)), output);
     }
 
 
     /**
-     * Decodes characters from {@code input} and return decoded bytes.
-     *
-     * @param input character input
-     *
-     * @return decoded bytes
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public final byte[] decode(final InputStream input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        decode(input, output);
-        output.flush();
-
-        return output.toByteArray();
-    }
-
-
-    /**
-     * Decodes characters from {@code input} and writes decoded octets to
+     * Encodes bytes from {@code input} and writes those encoded octets to
      * {@code output}.
      *
      * @param input input
@@ -354,44 +243,105 @@ public abstract class Base {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public final void decode(final InputStream input, final OutputStream output)
+    public void encode(final InputStream input, final OutputStream output)
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null outpute");
+            throw new NullPointerException("output");
         }
 
-        final Reader reader = new InputStreamReader(input, "US-ASCII");
-
-        decode(reader, output);
+        final Writer writer = new OutputStreamWriter(output, "US-ASCII");
+        encode(input, writer);
+        writer.flush();
     }
 
 
     /**
-     * Decodes characters from {@code input} and writes decoded bytes to
-     * {@code output}.
+     * Encodes bytes from given input stream and returns result.
      *
-     * @param input character input
-     * @param output binary output
+     * @param input the input stream
      *
-     * @throws IOException if an I/O error occurs
+     * @return encoded output
+     *
+     * @throws IOException if an I/O error occurs.
      */
-    public final void decode(final Reader input, final OutputStream output)
-        throws IOException {
+    public final byte[] encode(final InputStream input) throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
         }
 
-        if (output == null) {
-            throw new NullPointerException("null outpute");
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        encode(input, output);
+        output.flush();
+
+        return output.toByteArray();
+    }
+
+
+    /**
+     * Encodes bytes in {@code input} and returns encoded characters.
+     *
+     * @param input byte input
+     *
+     * @return encoded characters
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] encode(final byte[] input) throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        decode(input, new BitOutput(new StreamOutput(output)));
+        return encode(new ByteArrayInputStream(input));
+    }
+
+
+    public String encodeToString(final byte[] input, final String outputCharset)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input), outputCharset);
+    }
+
+
+    public byte[] encode(final String input, final String inputCharset)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return encode(input.getBytes(inputCharset));
+    }
+
+
+    public String encodeToString(final String input, final String inputCharset,
+                                 final String outputCharset)
+        throws IOException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input, inputCharset), outputCharset);
     }
 
 
@@ -461,6 +411,142 @@ public abstract class Base {
                 }
             }
         }
+    }
+
+
+    /**
+     * Decodes characters from {@code input} and writes decoded bytes to
+     * {@code output}.
+     *
+     * @param input character input
+     * @param output binary output
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    public void decode(final Reader input, final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null outpute");
+        }
+
+        decode(input, new BitOutput(new StreamOutput(output)));
+    }
+
+
+    /**
+     * Decodes characters from {@code input} and writes decoded octets to
+     * {@code output}.
+     *
+     * @param input input
+     * @param output output
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void decode(final InputStream input, final OutputStream output)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("null outpute");
+        }
+
+        final Reader reader = new InputStreamReader(input, "US-ASCII");
+
+        decode(reader, output);
+    }
+
+
+    /**
+     * Decodes characters from {@code input} and return decoded bytes.
+     *
+     * @param input character input
+     *
+     * @return decoded bytes
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] decode(final InputStream input) throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        decode(input, output);
+        output.flush();
+
+        return output.toByteArray();
+    }
+
+
+    /**
+     * Decodes characters in {@code input} and return decoded bytes.
+     *
+     * @param input character input
+     *
+     * @return decoded bytes
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] decode(final byte[] input) throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        return decode(new ByteArrayInputStream(input));
+    }
+
+
+    public String decodeToString(final byte[] input, final String outputCharset)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(decode(input), outputCharset);
+    }
+
+
+    public byte[] decode(final String input, final String inputCharset)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return decode(input.getBytes(inputCharset));
+    }
+
+
+    public String decodeToString(final String input,
+                                 final String inputCharset,
+                                 final String outputCharset)
+        throws IOException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(decode(input, inputCharset), outputCharset);
     }
 
 

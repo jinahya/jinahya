@@ -21,7 +21,7 @@ package com.googlecode.jinahya.rfc4648;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class BaseWelcomeTest {
+public class WelcomeTest {
 
 
     private static final PrintStream UTF8;
@@ -100,9 +100,9 @@ public class BaseWelcomeTest {
         System.out.printf("\t%1$10s: %2$s\n", name, new String(encoded));
 
         final byte[] decoded = base.decode(encoded);
-        assert Arrays.equals(decoded, original) : "fail";
+
+        Assert.assertEquals(decoded, original);
     }
 
 
 }
-
