@@ -267,28 +267,9 @@
     <maven>3.0.4</maven>
   </prerequisites>
   <repositories>
-    <!--    <repository>
-      <id>sonatype-nexus-snapshots</id>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>-->
   </repositories>
   <pluginRepositories />
   <distributionManagement>
-    <!--    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Propellors Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>-->
     <site>
       <id>googlecode</id>
       <url>svn:https://jinahya.googlecode.com/svn/site/${project.groupId}/${project.artifactId}/${project.version}</url>
