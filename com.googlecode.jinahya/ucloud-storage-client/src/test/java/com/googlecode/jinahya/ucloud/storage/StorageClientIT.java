@@ -20,11 +20,13 @@ package com.googlecode.jinahya.ucloud.storage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -41,8 +43,8 @@ public class StorageClientIT {
 
 
     private static final String[] CONTAINER_NAMES = new String[]{
-        "_test test",
-        "_test테스트"
+        "it_test test",
+        "it test_테스트"
     };
 
 
@@ -55,16 +57,10 @@ public class StorageClientIT {
     };
 
 
-    protected static StorageAccount readStorageAccount(
-        final StorageClient client)
-        throws IOException {
+    private static transient String storageUser;
 
-        if (client == null) {
-//            client = 
-        }
 
-        return client.readStorageAccount();
-    }
+    private static transient String storagePass;
 
 
     /**
@@ -74,8 +70,20 @@ public class StorageClientIT {
         LoggerFactory.getLogger(StorageClientIT.class);
 
 
+    private static final String CONTAINER_NAME_PREFIX;
+
+
+    static {
+        CONTAINER_NAME_PREFIX =
+            MethodHandles.lookup().lookupClass().getCanonicalName();
+        if (CONTAINER_NAME_PREFIX == null) {
+            throw new InstantiationError("null canonical name");
+        }
+    }
+
+
     @BeforeClass()
-    private void readUserAndPass() {
+    private static void readUserAndPass() {
 
         LOGGER.debug("readUserAndPass()");
 
@@ -93,15 +101,21 @@ public class StorageClientIT {
     }
 
 
+    protected static StorageClient newStorageClient() {
+
+        return new StorageClient(storageUser, storagePass);
+    }
+
+
     @Test(enabled = true)
     public void testReadStorageAccount() throws IOException {
 
         LOGGER.debug("testReadStorageAccount()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
-        final StorageAccount storageAccount = client.readStorageAccount();
+        final StorageAccount storageAccount =
+            storageClient.readStorageAccount();
         Assert.assertNotNull(storageAccount);
         LOGGER.debug("storageAccount: " + storageAccount);
     }
@@ -112,29 +126,42 @@ public class StorageClientIT {
 
         LOGGER.debug("testStorageAccountProperties()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
-        final Collection<StorageProperty> storageProperties =
-            client.readStorageAccountProperties();
-        Assert.assertNotNull(storageProperties);
+        final Map<String, String> storageProperties =
+            new HashMap<String, String>();
 
-        final String key = "account-property-key 가나다라";
-        final String value = "account-property-value 마바사";
+        storageProperties.clear();
+        storageClient.readStorageAccountProperties(storageProperties);
 
-        final boolean updated = client.updateStorageAccountProperty(key, value);
+        final String propertyKey = "account-property-key 가나다라";
+        final String propertyValue = "account-property-value 마바사";
+
+        final boolean updated = storageClient.updateStorageAccountProperty(
+            propertyKey, propertyValue);
         LOGGER.info("account.property.updated: {}: ", updated);
         Assert.assertTrue(updated);
 
-        final String value1 = client.readStorageAccountProperty(key);
-        Assert.assertEquals(value1, value);
+        storageProperties.clear();
+        storageClient.readStorageAccountProperties(storageProperties);
+        Assert.assertEquals(storageProperties.get(propertyKey), propertyValue);
 
-        final boolean deleted = client.deleteStorageAccountProperty(key);
+        final String propertyValue1 =
+            storageClient.readStorageAccountProperty(propertyKey);
+        Assert.assertEquals(propertyValue1, propertyValue);
+
+        final boolean deleted =
+            storageClient.deleteStorageAccountProperty(propertyKey);
         LOGGER.debug("account.property.deleted: {}: ", deleted);
         Assert.assertTrue(deleted);
 
-        final String value2 = client.readStorageAccountProperty(key);
-        Assert.assertNull(value2);
+        storageProperties.clear();
+        storageClient.readStorageAccountProperties(storageProperties);
+        Assert.assertNull(storageProperties.get(propertyKey));
+
+        final String propertyValue2 =
+            storageClient.readStorageAccountProperty(propertyKey);
+        Assert.assertNull(propertyValue2);
     }
 
 
@@ -143,14 +170,14 @@ public class StorageClientIT {
 
         LOGGER.debug("testCreateStorageContainer()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         for (final String containerName : CONTAINER_NAMES) {
-            Assert.assertTrue(client.createStorageContainer(containerName));
-            Assert.assertTrue(client.createStorageContainer(containerName));
-            Assert.assertTrue(client.createStorageContainer(containerName));
-            Assert.assertTrue(client.createStorageContainer(containerName));
+            for (int i = 0; i < 5; i++) {
+                final boolean created =
+                    storageClient.createStorageContainer(containerName);
+                Assert.assertTrue(created);
+            }
         }
     }
 
@@ -160,35 +187,52 @@ public class StorageClientIT {
 
         LOGGER.debug("testStorageContainerProperties()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
+
+        final Map<String, String> storageProperties =
+            new HashMap<String, String>();
 
         for (final String containerName : CONTAINER_NAMES) {
 
-            final Collection<StorageProperty> storageProperties =
-                client.readStorageContainerProperties(containerName);
-            Assert.assertNotNull(storageProperties);
+            storageProperties.clear();
+            storageClient.readStorageContainerProperties(
+                containerName, storageProperties);
 
-            final String name = "container-metadata-name";
-            final String value = "container-metadata-value";
+            final String propertyKey = "container-property-key";
+            final String propertyValue = "container-property-value";
 
-            final boolean updated = client.updateStorageContainerProperty(
-                containerName, name, value);
-            LOGGER.debug("container.metadata.updated: {}: ", updated);
+            final boolean updated =
+                storageClient.updateStorageContainerProperty(
+                containerName, propertyKey, propertyValue);
+            LOGGER.debug("container.property.updated: {}: ", updated);
             Assert.assertTrue(updated);
 
-            final String value1 = client.readStorageContainerProperty(
-                containerName, name);
-            Assert.assertEquals(value1, value);
+            storageProperties.clear();
+            storageClient.readStorageContainerProperties(
+                containerName, storageProperties);
+            Assert.assertEquals(storageProperties.get(propertyKey),
+                                propertyValue);
 
-            final boolean deleted = client.deleteStorageContainerProperty(
-                containerName, name);
-            LOGGER.debug("container.metadata.deleted: {}: ", deleted);
+            final String propertyValue1 =
+                storageClient.readStorageContainerProperty(
+                containerName, propertyKey);
+            Assert.assertEquals(propertyValue1, propertyValue);
+
+            final boolean deleted =
+                storageClient.deleteStorageContainerProperty(
+                containerName, propertyKey);
+            LOGGER.debug("container.proeprty.deleted: {}: ", deleted);
             Assert.assertTrue(deleted);
 
-            final String value2 = client.readStorageContainerProperty(
-                containerName, name);
-            Assert.assertNull(value2);
+            storageProperties.clear();
+            storageClient.readStorageContainerProperties(
+                containerName, storageProperties);
+            Assert.assertNull(storageProperties.get(propertyKey));
+
+            final String propertyValue2 =
+                storageClient.readStorageContainerProperty(
+                containerName, propertyKey);
+            Assert.assertNull(propertyValue2);
         }
     }
 
@@ -198,19 +242,19 @@ public class StorageClientIT {
 
         LOGGER.debug("testReadStorageContainers()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         final Map<String, Object> queryParameters = new HashMap<>();
 
         final Collection<StorageContainer> storageContainers =
             new ArrayList<>();
 
-        Assert.assertTrue(
-            client.readStorageContainers(queryParameters, storageContainers));
+        final boolean read = storageClient.readStorageContainers(
+            queryParameters, storageContainers);
+        Assert.assertTrue(read);
 
         for (final StorageContainer storageContainer : storageContainers) {
-            LOGGER.info("storageContainer: " + storageContainer);
+            LOGGER.debug("storageContainer: {}", storageContainer);
         }
     }
 
@@ -220,17 +264,16 @@ public class StorageClientIT {
 
         LOGGER.debug("testReadStorageContainer()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         for (final String containerName : CONTAINER_NAMES) {
             final StorageContainer storageContainer =
-                client.readStorageContainer(containerName);
+                storageClient.readStorageContainer(containerName);
             LOGGER.debug("storageContainer: {}", storageContainer);
             Assert.assertEquals(storageContainer.getContainerName(),
                                 containerName);
-            //Assert.assertEquals(storageContainer.getObjectCount(), 0L);
-            //Assert.assertEquals(storageContainer.getBytesUsed(), 0L);
+            Assert.assertEquals(storageContainer.getObjectCount(), 0L);
+            Assert.assertEquals(storageContainer.getBytesUsed(), 0L);
         }
     }
 
@@ -240,33 +283,32 @@ public class StorageClientIT {
 
         LOGGER.debug("testUpdateStorageContent()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
-        final Random random = new Random();
+        final Random random = ThreadLocalRandom.current();
 
         final byte[] contentData = new byte[random.nextInt(128)];
         random.nextBytes(contentData);
 
         for (final String containerName : CONTAINER_NAMES) {
             for (final String objectName : OBJECT_NAMES) {
-                client.updateStorageContent(
+                storageClient.updateStorageContent(
                     containerName, objectName, "application/octet-stream",
                     contentData);
             }
             for (final String objectName : OBJECT_NAMES) {
-                client.updateStorageContent(
+                storageClient.updateStorageContent(
                     containerName, objectName, "application/octet-stream",
                     contentData.length, new ByteArrayInputStream(contentData));
             }
             for (final String objectName : OBJECT_NAMES) {
-                client.updateStorageContent(
+                storageClient.updateStorageContent(
                     containerName, objectName, "application/octet-stream", -1L,
                     new ByteArrayInputStream(contentData));
             }
 
             final StorageContainer storageContainer =
-                client.readStorageContainer(containerName);
+                storageClient.readStorageContainer(containerName);
             Assert.assertEquals(storageContainer.getContainerName(),
                                 containerName);
             Assert.assertTrue(storageContainer.getObjectCount() > 0L);
@@ -280,15 +322,14 @@ public class StorageClientIT {
 
         LOGGER.debug("testReadStorageObjects()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         final Map<String, Object> queryParameters = new HashMap<>();
 
         final Collection<StorageObject> storageObjects = new ArrayList<>();
 
         for (final String containerName : CONTAINER_NAMES) {
-            Assert.assertTrue(client.readStorageObjects(
+            Assert.assertTrue(storageClient.readStorageObjects(
                 containerName, queryParameters, storageObjects));
         }
     }
@@ -318,18 +359,18 @@ public class StorageClientIT {
 
         LOGGER.debug("testDeleteStorageObject()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         for (final String containerName : CONTAINER_NAMES) {
             for (final String objectName : OBJECT_NAMES) {
                 LOGGER.debug("deleting {}/{}", containerName, objectName);
-                Assert.assertTrue(
-                    client.deleteStorageObject(containerName, objectName));
+                final boolean deleted = storageClient.deleteStorageObject(
+                    containerName, objectName);
+                Assert.assertTrue(deleted);
             }
 
             final StorageContainer storageContainer =
-                client.readStorageContainer(containerName);
+                storageClient.readStorageContainer(containerName);
             Assert.assertEquals(storageContainer.getContainerName(),
                                 containerName);
             Assert.assertEquals(storageContainer.getObjectCount(), 0L);
@@ -343,19 +384,14 @@ public class StorageClientIT {
 
         LOGGER.debug("testDeleteStorageContainer()");
 
-        final StorageClient client =
-            new StorageClient(storageUser, storagePass);
+        final StorageClient storageClient = newStorageClient();
 
         for (final String containerName : CONTAINER_NAMES) {
-            Assert.assertTrue(client.deleteStorageContainer(containerName));
+            final boolean deleted = storageClient.deleteStorageContainer(
+                containerName);
+            Assert.assertTrue(deleted);
         }
     }
-
-
-    private transient String storageUser;
-
-
-    private transient String storagePass;
 
 
 }
