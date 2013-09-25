@@ -34,60 +34,74 @@ public class StorageObject {
 
 
     public String getObjectName() {
+
         return objectName;
     }
 
 
     public void setObjectName(final String objectName) {
+
         this.objectName = objectName;
     }
 
 
     public String getEntityTag() {
+
         return entityTag;
     }
 
 
     public void setEntityTag(final String entityTag) {
+
         this.entityTag = entityTag;
     }
 
 
     public long getContentLength() {
+
         return contentLength;
     }
 
 
     public void setContentLength(final long contentLength) {
+
         this.contentLength = contentLength;
     }
 
 
     public String getContentType() {
+
         return contentType;
     }
 
 
     public void setContentType(final String contentType) {
+
         this.contentType = contentType;
     }
 
 
     public long getLastModified() {
+
         return lastModified;
     }
 
 
     public void setLastModified(final long lastModified) {
+
         this.lastModified = lastModified;
     }
 
 
     @Override
     public String toString() {
-        return super.toString() + "?objectName=" + objectName + "&lastModified="
-               + lastModified + "&entityTag" + entityTag + "&contentType"
-               + contentType + "&contentLength" + contentLength;
+
+        return super.toString()
+               + "?objectName=" + objectName
+               + "&lastModified=" + lastModified
+               + "&entityTag" + entityTag
+               + "&contentType" + contentType
+               + "&contentLength" + contentLength;
     }
 
 

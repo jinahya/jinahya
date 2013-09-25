@@ -78,15 +78,15 @@ public class StorageAccount {
     }
 
 
-    @XmlElement
+    @XmlElement(required = true)
     private long containerCount;
 
 
-    @XmlElement
+    @XmlElement(required = true)
     private long objectCount;
 
 
-    @XmlElement
+    @XmlElement(required = true)
     private long bytesUsed;
 
 
