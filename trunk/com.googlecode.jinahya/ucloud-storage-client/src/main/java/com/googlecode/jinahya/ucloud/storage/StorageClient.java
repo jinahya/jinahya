@@ -742,7 +742,7 @@ public class StorageClient {
 
 
     public boolean readStorageAccountProperties(
-        final Collection<? super StorageProperty> storageProperties)
+        final Map<String, String> storageProperties)
         throws IOException {
 
         LOGGER.debug("readStorageAccountProperties({})", storageProperties);
@@ -762,24 +762,8 @@ public class StorageClient {
     }
 
 
-    public Collection<StorageProperty> readStorageAccountProperties()
-        throws IOException {
-
-        LOGGER.debug("readStorageAccountProperties()");
-
-        final Collection<StorageProperty> storageProperties =
-            new ArrayList<StorageProperty>();
-
-        if (!readStorageAccountProperties(storageProperties)) {
-            return null;
-        }
-
-        return storageProperties;
-    }
-
-
     public boolean readStorageAccountProperties(
-        final Map<String, String> storageProperties)
+        final Collection<? super StorageProperty> storageProperties)
         throws IOException {
 
         LOGGER.debug("readStorageAccountProperties({})", storageProperties);
@@ -788,18 +772,32 @@ public class StorageClient {
             throw new NullPointerException("storageProperties");
         }
 
-        final Collection<StorageProperty> collected =
-            readStorageAccountProperties();
-        if (collected == null) {
+        final Map<String, String> mapped = new HashMap<String, String>();
+
+        if (!readStorageAccountProperties(mapped)) {
             return false;
         }
 
-        StorageProperty.copy(collected, storageProperties);
+        StorageProperty.copy(mapped, storageProperties);
 
         return true;
     }
 
 
+//    public Collection<StorageProperty> readStorageAccountProperties()
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageAccountProperties()");
+//
+//        final Collection<StorageProperty> storageProperties =
+//            new ArrayList<StorageProperty>();
+//
+//        if (!readStorageAccountProperties(storageProperties)) {
+//            return null;
+//        }
+//
+//        return storageProperties;
+//    }
     public boolean updateStorageAccountProperties(
         final Map<String, String> storageProperties)
         throws IOException {
@@ -907,19 +905,14 @@ public class StorageClient {
             throw new NullPointerException("propertyKey");
         }
 
-        final Collection<StorageProperty> storageProperties =
-            readStorageAccountProperties();
-        if (storageProperties == null) {
+        final Map<String, String> storageProperties =
+            new HashMap<String, String>(1);
+
+        if (!readStorageAccountProperties(storageProperties)) {
             return null;
         }
 
-        for (StorageProperty storageProperty : storageProperties) {
-            if (propertykey.equals(storageProperty.getKey())) {
-                return storageProperty.getValue();
-            }
-        }
-
-        return null;
+        return storageProperties.get(propertykey);
     }
 
 
@@ -1322,8 +1315,7 @@ public class StorageClient {
 
 
     public boolean readStorageContainerProperties(
-        final String containerName,
-        final Collection<? super StorageProperty> storageProperties)
+        final String containerName, final Map<String, String> storageProperties)
         throws IOException {
 
         LOGGER.debug("readStorageContainerProperties({}, {})", containerName,
@@ -1344,25 +1336,9 @@ public class StorageClient {
     }
 
 
-    public Collection<StorageProperty> readStorageContainerProperties(
-        final String containerName)
-        throws IOException {
-
-        LOGGER.debug("readStorageContainerProperties({})", containerName);
-
-        final Collection<StorageProperty> storageProperties =
-            new ArrayList<StorageProperty>();
-
-        if (!readStorageContainerProperties(containerName, storageProperties)) {
-            return null;
-        }
-
-        return storageProperties;
-    }
-
-
     public boolean readStorageContainerProperties(
-        final String containerName, final Map<String, String> storageProperties)
+        final String containerName,
+        final Collection<? super StorageProperty> storageProperties)
         throws IOException {
 
         LOGGER.debug("readStorageContainerProperties({}, {})", containerName,
@@ -1372,23 +1348,33 @@ public class StorageClient {
             throw new NullPointerException("storageProperties");
         }
 
-        final Collection<StorageProperty> collected =
-            readStorageContainerProperties(containerName);
-        if (collected == null) {
+        final Map<String, String> mapped = new HashMap<String, String>();
+
+        if (!readStorageContainerProperties(containerName, mapped)) {
             return false;
         }
 
-        try {
-            storageProperties.entrySet().addAll(collected); // unsupported
-        } catch (UnsupportedOperationException uoe) {
-            for (final StorageProperty storageProperty : collected) {
-                storageProperties.put(storageProperty.getKey(),
-                                      storageProperty.getValue());
-            }
-        }
+        StorageProperty.copy(mapped, storageProperties);
 
         return true;
     }
+
+
+//    public Collection<StorageProperty> readStorageContainerProperties(
+//        final String containerName)
+//        throws IOException {
+//
+//        LOGGER.debug("readStorageContainerProperties({})", containerName);
+//
+//        final Collection<StorageProperty> storageProperties =
+//            new ArrayList<StorageProperty>();
+//
+//        if (!readStorageContainerProperties(containerName, storageProperties)) {
+//            return null;
+//        }
+//
+//        return storageProperties;
+//    }
 
 
     public boolean updateStorageContainerProperties(
@@ -1546,12 +1532,12 @@ public class StorageClient {
 
 
     /**
-     * Updates a metadata value with given metadata name of the storage
+     * Updates a property value mapped to given property key of the storage
      * container mapped to given container name.
      *
      * @param containerName the container name
-     * @param propertyKey the metadata name
-     * @param propertyValue the metadata value
+     * @param propertyKey the property key
+     * @param propertyValue the property value
      *
      * @return {@code true} if succeeded; {@code false} otherwise.
      *
