@@ -33,39 +33,48 @@ public class StorageContainer {
 
 
     public String getContainerName() {
+
         return containerName;
     }
 
 
     public void setContainerName(final String containerName) {
+
         this.containerName = containerName;
     }
 
 
     public long getObjectCount() {
+
         return objectCount;
     }
 
 
     public void setObjectCount(final long objectCount) {
+
         this.objectCount = objectCount;
     }
 
 
     public long getBytesUsed() {
+
         return bytesUsed;
     }
 
 
     public void setBytesUsed(final long bytesUsed) {
+
         this.bytesUsed = bytesUsed;
     }
 
 
     @Override
     public String toString() {
-        return super.toString() + "?containerName=" + containerName
-               + "&objectCount=" + objectCount + "&bytesUsed=" + bytesUsed;
+
+        return super.toString()
+               + "?containerName=" + containerName
+               + "&objectCount=" + objectCount
+               + "&bytesUsed=" + bytesUsed;
     }
 
 

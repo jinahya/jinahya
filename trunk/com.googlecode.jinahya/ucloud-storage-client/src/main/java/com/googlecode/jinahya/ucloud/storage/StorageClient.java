@@ -28,9 +28,12 @@ import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -48,7 +51,7 @@ import org.xml.sax.SAXException;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class UcloudStorageClient {
+public class StorageClient {
 
 
     /**
@@ -81,7 +84,7 @@ public class UcloudStorageClient {
      * logger.
      */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(UcloudStorageClient.class);
+        LoggerFactory.getLogger(StorageClient.class);
 
 
     private static final int RESPONSE_CODE_200_OK = 200;
@@ -115,6 +118,26 @@ public class UcloudStorageClient {
 
 
     private static final int OBJECT_NAME_LENGTH_MAX = 1024;
+
+
+    private static final String PROPERTY_PREFIX_KEY_ACCOUNT =
+        "X-Account-Meta-0x";
+
+
+    private static final String PROPERTY_PREFIX_VALUE_ACCOUNT = "0x";
+
+
+    private static final String PROPERTY_PREFIX_KEY_CONTAINER =
+        "X-Container-Meta-0x";
+
+
+    private static final String PROPERTY_PREFIX_VALUE_CONTAINER = "0x";
+
+
+    private static final String PROPERTY_PREFIX_KEY_OBJECT = "X-Object-Meta-0x";
+
+
+    private static final String PROPERTY_PREFIX_VALUE_OBJECT = "0x";
 
 
     /**
@@ -221,16 +244,30 @@ public class UcloudStorageClient {
 //            throw new RuntimeException(uee);
 //        }
 //    }
-    private static String encode(final Object object) {
+    private static String encode(final String decoded) {
 
-        if (object == null) {
-            throw new NullPointerException("object");
+        if (decoded == null) {
+            throw new NullPointerException("decoded");
         }
 
         try {
-            return URLEncoder.encode(object.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("\"UTF-8\" is not supported?");
+            return URLEncoder.encode(decoded.toString(), "UTF-8");
+        } catch (final UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
+        }
+    }
+
+
+    private static String decode(final String encoded) {
+
+        if (encoded == null) {
+            throw new NullPointerException("encoded");
+        }
+
+        try {
+            return URLDecoder.decode(encoded.toString(), "UTF-8");
+        } catch (final UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
         }
     }
 
@@ -302,6 +339,43 @@ public class UcloudStorageClient {
     }
 
 
+    private static String h(final String d)
+        throws UnsupportedEncodingException {
+
+        final byte[] bytes = d.getBytes("UTF-8");
+
+        final char[] chars = new char[bytes.length << 1];
+        int index = 0;
+
+        for (final byte b : bytes) {
+            final String s = Integer.toHexString(b & 0xFF);
+            if (s.length() == 1) {
+                chars[index++] = '0';
+                chars[index++] = s.charAt(0);
+            } else {
+                chars[index++] = s.charAt(0);
+                chars[index++] = s.charAt(1);
+            }
+        }
+
+        return new String(chars);
+    }
+
+
+    private static String d(final String h)
+        throws UnsupportedEncodingException {
+
+        final byte[] bytes = new byte[h.length() / 2];
+        int index = 0;
+
+        for (int i = 0; i < h.length(); i += 2) {
+            bytes[index++] = (byte) Integer.parseInt(h.substring(i, i + 2), 16);
+        }
+
+        return new String(bytes, "UTF-8");
+    }
+
+
     /**
      * Appends given query parameters onto specified base url.
      *
@@ -326,17 +400,33 @@ public class UcloudStorageClient {
         final Iterator<Entry<String, Object>> i = params.entrySet().iterator();
         if (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
+            final String key = entry.getKey();
+            if (key == null) {
+                throw new IllegalArgumentException("null parameter key");
+            }
+            final Object value = entry.getValue();
+            if (value == null) {
+                throw new IllegalArgumentException("null parameter value");
+            }
             builder.append("?")
-                .append(encode(entry.getKey()))
+                .append(encode(key))
                 .append("=")
-                .append(encode(entry.getValue()));
+                .append(encode(value.toString()));
         }
         while (i.hasNext()) {
             final Entry<String, Object> entry = i.next();
+            final String key = entry.getKey();
+            if (key == null) {
+                throw new IllegalArgumentException("null parameter key");
+            }
+            final Object value = entry.getValue();
+            if (value == null) {
+                throw new IllegalArgumentException("null parameter value");
+            }
             builder.append("&")
-                .append(encode(entry.getKey()))
+                .append(encode(key))
                 .append("=")
-                .append(encode(entry.getValue()));
+                .append(encode(value.toString()));
         }
 
         return builder.toString();
@@ -370,7 +460,7 @@ public class UcloudStorageClient {
         }
 
         if (buffer.length == 0) {
-            throw new IllegalArgumentException("zero-length buffer");
+            throw new IllegalArgumentException("buffer.length == 0");
         }
 
         for (int read = -1; (read = input.read(buffer)) != -1;) {
@@ -401,15 +491,129 @@ public class UcloudStorageClient {
             final Method method = URLConnection.class.getMethod(
                 "getHeaderFieldLong", String.class, Long.TYPE);
             try {
-                return (Long) method.invoke(connection, fieldName,
-                                            defaultValue);
+                return (Long) method.invoke(
+                    connection, fieldName, defaultValue);
             } catch (IllegalAccessException iae) {
+                LOGGER.debug("failed to invoke getHeaderFieldLong", iae);
             } catch (InvocationTargetException ite) {
+                LOGGER.debug("failed to invoke getHeaderFieldLong", ite);
             }
-        } catch (NoSuchMethodException nsfe) {
+        } catch (NoSuchMethodException nsme) {
+            LOGGER.debug("no getHeaderFieldLong", nsme);
         }
 
         return defaultValue;
+    }
+
+
+    /**
+     *
+     * @param headerFields the header fields
+     * @param keyPrefix the name prefix
+     * @param valuePrefix the value prefix
+     * @param storageProperties the collection
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    private static void getStorageProperties(
+        final Map<String, List<String>> headerFields, final String keyPrefix,
+        final String valuePrefix,
+        final Collection<? super StorageProperty> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("getStorageProperties({}, {}, {}, {})", headerFields,
+                     keyPrefix, valuePrefix, storageProperties);
+
+        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+
+            String fieldName = e.getKey();
+            if (fieldName == null) {
+                continue;
+            }
+            if (!fieldName.toLowerCase().startsWith(keyPrefix.toLowerCase())) {
+                continue;
+            }
+            fieldName = fieldName.substring(keyPrefix.length());
+            fieldName = d(fieldName);
+            LOGGER.debug("fieldName: " + fieldName);
+
+            final List<String> fieldValues = e.getValue();
+            if (fieldValues == null || fieldValues.isEmpty()) {
+                continue;
+            }
+            String fieldValue = fieldValues.get(0);
+            if (fieldValue == null) {
+                continue;
+            }
+            if (!fieldValue.toLowerCase().startsWith(
+                valuePrefix.toLowerCase())) {
+                continue;
+            }
+            fieldValue = fieldValue.substring(valuePrefix.length());
+            fieldValue = d(fieldValue);
+            LOGGER.debug("fieldValue: " + fieldValue);
+
+            final StorageProperty storageProperty = new StorageProperty();
+
+            storageProperty.setKey(fieldName);
+            storageProperty.setValue(fieldValue);
+
+            storageProperties.add(storageProperty);
+        }
+    }
+
+
+    private static void getStorageProperties(
+        final Map<String, List<String>> headerFields, final String keyPrefix,
+        final String valuePrefix, final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("getStorageProperties({}, {}, {}, {})", headerFields,
+                     keyPrefix, valuePrefix, storageProperties);
+
+        final Collection<StorageProperty> collected =
+            new ArrayList<StorageProperty>();
+        getStorageProperties(headerFields, keyPrefix, valuePrefix, collected);
+
+        //storageProperties.entrySet().addAll(collected); // unsupported
+
+        for (final StorageProperty storageProperty : collected) {
+            storageProperties.put(storageProperty.getKey(),
+                                  storageProperty.getValue());
+        }
+    }
+
+
+    private static void setStorageProperties(
+        final URLConnection connection, final String keyPrefix,
+        final String valuePrefix, final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("setStorageProperties({}, {}, {}, {})", connection,
+                     keyPrefix, valuePrefix, storageProperties);
+
+        for (final Entry<String, String> e : storageProperties.entrySet()) {
+            final String key = keyPrefix + h(e.getKey());
+            final String value = valuePrefix + h(e.getValue());
+            connection.setRequestProperty(key, value);
+        }
+    }
+
+
+    private static void setStorageProperties(
+        final URLConnection connection, final String keyPrefix,
+        final String valuePrefix,
+        final Collection<? extends StorageProperty> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("setStorageProperties({}, {}, {}, {})", connection,
+                     keyPrefix, valuePrefix, storageProperties);
+
+        for (final StorageProperty storageProperty : storageProperties) {
+            final String key = keyPrefix + h(storageProperty.getKey());
+            final String value = valuePrefix + h(storageProperty.getValue());
+            connection.setRequestProperty(key, value);
+        }
     }
 
 
@@ -419,8 +623,8 @@ public class UcloudStorageClient {
      * @param storageUser user id
      * @param storagePass api key
      */
-    public UcloudStorageClient(final String storageUser,
-                               final String storagePass) {
+    public StorageClient(final String storageUser,
+                         final String storagePass) {
 
         super();
 
@@ -474,24 +678,19 @@ public class UcloudStorageClient {
     }
 
 
-    /**
-     * Retrieves a storage account.
-     *
-     * @return a storage account or {@code null} if failed.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public StorageAccount readStorageAccount() throws IOException {
+    public boolean peekStorageAccount() throws IOException {
 
-        LOGGER.debug("readStorageAccount()");
+        LOGGER.debug("peekStoageAccount()");
 
         if (!authenticate()) {
-            return null;
+            return false;
         }
 
         final String base = storageUrl;
 
-        final URL url = new URL(base);
+        final String spec = base;
+
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -508,91 +707,222 @@ public class UcloudStorageClient {
         try {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                final StorageAccount storageAccount = new StorageAccount();
-                storageAccount.setContainerCount(getFirstHeaderFieldLong(
-                    "X-Account-Container-Count", -1L));
-                storageAccount.setObjectCount(getFirstHeaderFieldLong(
-                    "X-Account-Object-Count", -1L));
-                storageAccount.setBytesUsed(getFirstHeaderFieldLong(
-                    "X-Account-Bytes-Used", -1L));
-                return storageAccount;
+                // do nothing
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
             }
         } finally {
             connection.disconnect();
         }
 
-        return null;
+        return false;
     }
 
 
-    public boolean readStorageAccountMetadata(
-        final Map<String, String> metadata)
-        throws IOException {
+    /**
+     * Retrieves a storage account.
+     *
+     * @return a storage account or {@code null} if failed.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public StorageAccount readStorageAccount() throws IOException {
 
-        LOGGER.debug("readStorageAccountMetadata({})", metadata);
+        LOGGER.debug("readStorageAccount()");
 
-        if (metadata == null) {
-            throw new NullPointerException("metadata");
+        if (!peekStorageAccount()) {
+            return null;
         }
 
-        final StorageAccount storageAccount = readStorageAccount();
-        if (storageAccount == null) {
+        final StorageAccount storageAccount = new StorageAccount();
+
+        storageAccount.setContainerCount(getFirstHeaderFieldLong(
+            "X-Account-Container-Count", -1L));
+        storageAccount.setObjectCount(getFirstHeaderFieldLong(
+            "X-Account-Object-Count", -1L));
+        storageAccount.setBytesUsed(getFirstHeaderFieldLong(
+            "X-Account-Bytes-Used", -1L));
+
+        return storageAccount;
+    }
+
+
+    public boolean readStorageAccountProperties(
+        final Collection<? super StorageProperty> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("readStorageAccountProperties({})", storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        if (!peekStorageAccount()) {
             return false;
         }
 
-        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
-            final String fieldName = e.getKey();
-            if (fieldName == null
-                || !fieldName.toLowerCase().startsWith("x-account-meta-")) {
-                continue;
-            }
-            final List<String> fieldValues = e.getValue();
-            if (fieldValues == null || fieldValues.isEmpty()) {
-                continue;
-            }
-            metadata.put(fieldName, fieldValues.get(0));
-        }
+        getStorageProperties(headerFields, "X-Account-Meta-0x", "0x",
+                             storageProperties);
 
         return true;
     }
 
 
-    public Map<String, String> readStorageAccountMetadata() throws IOException {
+    public Collection<StorageProperty> readStorageAccountProperties()
+        throws IOException {
 
-        LOGGER.debug("readStorageAccountMetadata()");
+        LOGGER.debug("readStorageAccountProperties()");
 
-        final Map<String, String> metadata = new HashMap<String, String>();
+        final Collection<StorageProperty> storageProperties =
+            new ArrayList<StorageProperty>();
 
-        if (!readStorageAccountMetadata(metadata)) {
+        if (!readStorageAccountProperties(storageProperties)) {
             return null;
         }
 
-        return metadata;
+        return storageProperties;
     }
 
 
-    public String readStorageAccountMetadata(String name) throws IOException {
+    public boolean readStorageAccountProperties(
+        final Map<String, String> storageProperties)
+        throws IOException {
 
-        LOGGER.debug("readStorageAccountMetadata({})", name);
+        LOGGER.debug("readStorageAccountProperties({})", storageProperties);
 
-        if (name == null) {
-            throw new NullPointerException("name");
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
         }
 
-        if (!name.toLowerCase().startsWith("x-account-meta-")) {
-            name = "X-Account-Meta-" + name;
-            LOGGER.debug("name: {}", name);
+        final Collection<StorageProperty> collected =
+            readStorageAccountProperties();
+        if (collected == null) {
+            return false;
         }
 
-        final Map<String, String> metadata = readStorageAccountMetadata();
-        LOGGER.debug("metadata: " + metadata);
-        if (metadata == null) {
+        storageProperties.entrySet().addAll(collected);
+
+        return true;
+    }
+
+
+    public boolean updateStorageAccountProperties(
+        final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("updateStorageAccountProperties({})", storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Map<String, String> previousProperties =
+            new HashMap<String, String>();
+        if (!readStorageAccountProperties(previousProperties)) {
+            return false;
+        }
+        previousProperties.keySet().removeAll(storageProperties.keySet());
+
+        if (false || !authenticate()) { // skip
+            return false;
+        }
+
+        final String base = storageUrl;
+
+        final String spec = base;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setStorageProperties(connection, "X-Remove-Account-Meta-0x", "0x",
+                             previousProperties);
+        setStorageProperties(connection, "X-Account-Meta-0x", "0x",
+                             storageProperties);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                // do nothing
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Updates (replaces) all storage properties on the storage account.
+     *
+     * @param storageProperties storage properties
+     *
+     * @return {@code true} if succeeded; {@code false} otherwise.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean updateStorageAccountProperties(
+        final Collection<? extends StorageProperty> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("updateStorageAccountProperties({})", storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Map<String, String> mapped =
+            new HashMap<String, String>(storageProperties.size());
+        mapped.entrySet().addAll(storageProperties);
+
+        return updateStorageAccountProperties(mapped);
+    }
+
+
+    /**
+     * Deletes all storage properties on the storage account.
+     *
+     * @return {@code true} if succeeded; {@code false} otherwise.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public boolean deleteStorageAccountProperties() throws IOException {
+
+        return updateStorageAccountProperties(
+            Collections.<String, String>emptyMap());
+    }
+
+
+    public String readStorageAccountProperty(final String propertykey)
+        throws IOException {
+
+        LOGGER.debug("readStorageAccountProperty({})", propertykey);
+
+        if (propertykey == null) {
+            throw new NullPointerException("propertyKey");
+        }
+
+        final Collection<StorageProperty> storageProperties =
+            readStorageAccountProperties();
+        if (storageProperties == null) {
             return null;
         }
 
-        for (final Entry<String, String> entry : metadata.entrySet()) {
-            if (name.equalsIgnoreCase(entry.getKey())) {
-                return entry.getValue();
+        for (StorageProperty storageProperty : storageProperties) {
+            if (propertykey.equals(storageProperty.getKey())) {
+                return storageProperty.getValue();
             }
         }
 
@@ -600,25 +930,14 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean updateStorageAccountMetadata(String name, final String value)
+    public boolean updateStorageAccountProperty(
+        final StorageProperty storageProperty)
         throws IOException {
 
-        LOGGER.debug("updateStorageAccountMetadata({}, {})", name, value);
+        LOGGER.debug("updateStorageAccountProperty({}, {})", storageProperty);
 
-        if (name == null) {
-            throw new NullPointerException("name");
-        }
-
-        if (name.toLowerCase().startsWith("x-remove-account-meta-")) {
-            return deleteStorageAccountMetadata(name);
-        }
-
-        if (!name.toLowerCase().startsWith("x-account-meta-")) {
-            name = "X-Account-Meta-" + name;
-        }
-
-        if (value == null) {
-            throw new NullPointerException("value");
+        if (storageProperty == null) {
+            throw new NullPointerException("storageProperty");
         }
 
         if (!authenticate()) {
@@ -635,7 +954,8 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(name, value);
+        setStorageProperties(connection, "X-Account-Meta-0x", "0x",
+                             Collections.singleton(storageProperty));
 
         setTimeouts(connection);
 
@@ -653,26 +973,45 @@ public class UcloudStorageClient {
     }
 
 
+    public boolean updateStorageAccountProperty(final String propertyKey,
+                                                final String propertyValue)
+        throws IOException {
+
+        LOGGER.debug("updateStorageAccountProperty({}, {})", propertyKey,
+                     propertyValue);
+
+        if (propertyKey == null) {
+            throw new NullPointerException("propertyKey");
+        }
+
+        if (propertyValue == null) {
+            throw new NullPointerException("propertyValue");
+        }
+
+        final StorageProperty storageProperty = new StorageProperty();
+        storageProperty.setKey(propertyKey);
+        storageProperty.setValue(propertyValue);
+
+        return updateStorageAccountProperty(storageProperty);
+    }
+
+
     /**
-     * Deletes an storage account metadata mapped to given name.
+     * Deletes an storage account properties mapped to given name.
      *
-     * @param name the name
+     * @param propertyKey the name
      *
      * @return {@code true} if succeeded; {@code false} if failed.
      *
      * @throws IOException if an I/O error occurs.
      */
-    public boolean deleteStorageAccountMetadata(String name)
+    public boolean deleteStorageAccountProperty(final String propertyKey)
         throws IOException {
 
-        LOGGER.debug("deleteStorageAccountMetadata({})", name);
+        LOGGER.debug("deleteStorageAccountProperty({})", propertyKey);
 
-        if (name == null) {
-            throw new NullPointerException("name");
-        }
-
-        if (!name.toLowerCase().startsWith("x-remove-account-meta-")) {
-            name = "X-Remove-Account-Meta-" + name;
+        if (propertyKey == null) {
+            throw new NullPointerException("propertyKey");
         }
 
         if (!authenticate()) {
@@ -681,7 +1020,9 @@ public class UcloudStorageClient {
 
         final String base = storageUrl;
 
-        final URL url = new URL(base);
+        final String spec = base;
+
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -689,7 +1030,12 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(name, "delete");
+        final StorageProperty storageProperty = new StorageProperty();
+        storageProperty.setKey(propertyKey);
+        storageProperty.setValue("delete");
+
+        setStorageProperties(connection, "X-Remove-Account-Meta-0x", "0x",
+                             Collections.singletonList(storageProperty));
 
         setTimeouts(connection);
 
@@ -797,6 +1143,51 @@ public class UcloudStorageClient {
     }
 
 
+    public boolean peekStorageContainer(final String containerName)
+        throws IOException {
+
+        LOGGER.debug("peekStorageContainer({})", containerName);
+
+        // check
+        final String encodedContainerName = encodeContainerName(containerName);
+
+        if (!authenticate()) {
+            return false;
+        }
+
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final String spec = base;
+
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        // 406
+        connection.setRequestProperty("Accept", "*/*");
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+            }
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
+            }
+        } finally {
+            connection.disconnect();
+        }
+
+        return false;
+    }
+
+
     /**
      * Creates a storage container named as given name.
      *
@@ -818,7 +1209,9 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final String spec = base;
 
         final URL url = new URL(spec);
 
@@ -833,7 +1226,10 @@ public class UcloudStorageClient {
         connection.connect();
         try {
             setResponses(connection);
-
+            if (responseCode == RESPONSE_CODE_201_CREATED
+                || responseCode == RESPONSE_CODE_202_ACCEPTED) {
+                // do nothing
+            }
             if (responseCode == RESPONSE_CODE_201_CREATED
                 || responseCode == RESPONSE_CODE_202_ACCEPTED) {
                 return true;
@@ -862,46 +1258,19 @@ public class UcloudStorageClient {
 
         LOGGER.debug("readStorageContainer({})", containerName);
 
-        // check
-        final String encodedContainerName = encodeContainerName(containerName);
-
-        if (!authenticate()) {
+        if (!peekStorageContainer(containerName)) {
             return null;
         }
 
-        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+        final StorageContainer storageContainer = new StorageContainer();
 
-        final URL url = new URL(base);
+        storageContainer.setContainerName(containerName);
+        storageContainer.setObjectCount(getFirstHeaderFieldLong(
+            "X-Container-Object-Count", -1L));
+        storageContainer.setBytesUsed(getFirstHeaderFieldLong(
+            "X-Container-Bytes-Used", -1L));
 
-        final HttpURLConnection connection =
-            (HttpURLConnection) url.openConnection();
-
-        connection.setRequestMethod("HEAD");
-        connection.setRequestProperty("X-Auth-Token", authToken);
-
-        // 406 Not Acceptable without this header. Damn it!
-        connection.setRequestProperty("Accept", "*/*");
-
-        setTimeouts(connection);
-
-        connection.connect();
-        try {
-            setResponses(connection);
-            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                final StorageContainer storageContainer =
-                    new StorageContainer();
-                storageContainer.setContainerName(containerName);
-                storageContainer.setObjectCount(getFirstHeaderFieldLong(
-                    "X-Container-Object-Count", -1L));
-                storageContainer.setBytesUsed(getFirstHeaderFieldLong(
-                    "X-Container-Bytes-Used", -1L));
-                return storageContainer;
-            }
-        } finally {
-            connection.disconnect();
-        }
-
-        return null;
+        return storageContainer;
     }
 
 
@@ -926,7 +1295,9 @@ public class UcloudStorageClient {
             return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName;
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName;
+
+        final String spec = base;
 
         final URL url = new URL(spec);
 
@@ -941,7 +1312,10 @@ public class UcloudStorageClient {
         connection.connect();
         try {
             setResponses(connection);
-
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT
+                || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
+                // do nothing
+            }
             if (responseCode == RESPONSE_CODE_204_NO_CONTENT
                 || responseCode == RESPONSE_CODE_404_NOT_FOUND) {
                 return true;
@@ -954,145 +1328,189 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean readStorageContainerMetadata(
-        final String containerName, final Map<String, String> metadata)
+    public boolean readStorageContainerProperties(
+        final String containerName,
+        final Collection<? super StorageProperty> storageProperties)
         throws IOException {
 
-        LOGGER.debug("readStorageContainerMetadata({}, {})", containerName,
-                     metadata);
+        LOGGER.debug("readStorageContainerProperties({}, {})", containerName,
+                     storageProperties);
 
-        if (metadata == null) {
-            throw new NullPointerException("metadata");
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
         }
 
-        final StorageContainer storageContainer =
-            readStorageContainer(containerName);
-        if (storageContainer == null) {
+        if (!peekStorageContainer(containerName)) {
             return false;
         }
 
-        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
-            final String fieldName = e.getKey();
-            if (fieldName == null
-                || !fieldName.toLowerCase().startsWith("x-container-meta-")) {
-                continue;
-            }
-            final List<String> fieldValues = e.getValue();
-            if (fieldValues == null || fieldValues.isEmpty()) {
-                continue;
-            }
-            metadata.put(fieldName, fieldValues.get(0));
+        getStorageProperties(headerFields, "X-Container-Meta-0x", "0x",
+                             storageProperties);
+
+        return true;
+    }
+
+
+    public Collection<StorageProperty> readStorageContainerProperties(
+        final String containerName)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerProperties({})", containerName);
+
+        final Collection<StorageProperty> storageProperties =
+            new ArrayList<StorageProperty>();
+
+        if (!readStorageContainerProperties(containerName, storageProperties)) {
+            return null;
+        }
+
+        return storageProperties;
+    }
+
+
+    public boolean readStorageContainerProperties(
+        final String containerName, final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerProperties({}, {})", containerName,
+                     storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Collection<StorageProperty> collected =
+            readStorageContainerProperties(containerName);
+        if (collected == null) {
+            return false;
+        }
+
+        //storageProperties.entrySet().addAll(collected); // unsupported
+
+        for (final StorageProperty storageProperty : collected) {
+            storageProperties.put(storageProperty.getKey(),
+                                  storageProperty.getValue());
         }
 
         return true;
     }
 
 
-    /**
-     * Reads all metadata of the storage container mapped to given container
-     * name.
-     *
-     * @param containerName the container name
-     *
-     * @return a map of metadata names and values
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public Map<String, String> readStorageContainerMetadata(
-        final String containerName)
+    public boolean updateStorageContainerProperties(
+        final String containerName, final Map<String, String> storageProperties)
         throws IOException {
 
-        LOGGER.debug("readStorageContainerMetadata({})", containerName);
+        LOGGER.debug("updateStorageContainerProperties({})", storageProperties);
 
-        final Map<String, String> metadata = new HashMap<String, String>();
-
-        if (!readStorageContainerMetadata(containerName, metadata)) {
-            return null;
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
         }
 
-        return metadata;
-    }
+        final Map<String, String> previousProperties =
+            new HashMap<String, String>();
+        if (!readStorageContainerProperties(
+            containerName, previousProperties)) {
+            return false;
+        }
+        previousProperties.keySet().removeAll(storageProperties.keySet());
 
-
-    /**
-     * Reads a metadata value with given metadata name of the storage container
-     * mapped to given container name.
-     *
-     * @param containerName the container name
-     * @param metadataName the metadata name
-     *
-     * @return the metadata value or {@code null} if failed to read.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public String readStorageContainerMetadata(final String containerName,
-                                               String metadataName)
-        throws IOException {
-
-        LOGGER.debug("readStorageContainerMetadata({}, {})", containerName,
-                     metadataName);
-
-        if (metadataName == null) {
-            throw new NullPointerException("metadataName");
+        if (false || !authenticate()) { // skip
+            return false;
         }
 
-        if (!metadataName.toLowerCase().startsWith("x-container-meta-")) {
-            metadataName = "X-Container-Meta-" + metadataName;
-        }
+        final String base = storageUrl;
 
-        final Map<String, String> metadata =
-            readStorageContainerMetadata(containerName);
-        if (metadata == null) {
-            return null;
-        }
+        final String spec = base;
 
-        for (final Entry<String, String> entry : metadata.entrySet()) {
-            if (metadataName.equalsIgnoreCase(entry.getKey())) {
-                return entry.getValue();
+        final URL url = new URL(spec);
+
+        final HttpURLConnection connection =
+            (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("X-Auth-Token", authToken);
+
+        setStorageProperties(connection, "X-Remove-Container-Meta-0x", "0x",
+                             previousProperties);
+        setStorageProperties(connection, "X-Container-Meta-0x", "0x",
+                             storageProperties);
+
+        setTimeouts(connection);
+
+        connection.connect();
+        try {
+            setResponses(connection);
+            if (responseCode == RESPONSE_CODE_204_NO_CONTENT) {
+                return true;
             }
+        } finally {
+            connection.disconnect();
         }
 
-        return null;
+        return false;
     }
 
 
-    /**
-     * Updates a metadata value with given metadata name of the storage
-     * container mapped to given container name.
-     *
-     * @param containerName the container name
-     * @param metadataName the metadata name
-     * @param metadataValue the metadata value
-     *
-     * @return {@code true} if succeeded; {@code false} otherwise.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public boolean updateStorageContainerMetadata(final String containerName,
-                                                  String metadataName,
-                                                  final String metadataValue)
+    public boolean updateStorageContainerProperties(
+        final String containerName,
+        final Collection<? extends StorageProperty> storageProperties)
         throws IOException {
 
-        LOGGER.debug("updateStorageContainerMetadata({}, {}, {})",
-                     containerName, metadataName, metadataValue);
+        LOGGER.debug("updateStorageContainerProperties({})", storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Map<String, String> mapped =
+            new HashMap<String, String>(storageProperties.size());
+        mapped.entrySet().addAll(storageProperties);
+
+        return updateStorageContainerProperties(containerName, mapped);
+    }
+
+
+    public boolean deleteStorageContainerProperties(final String containerName)
+        throws IOException {
+
+        return updateStorageContainerProperties(
+            containerName, Collections.<String, String>emptyMap());
+    }
+
+
+    public String readStorageContainerProperty(
+        final String containerName, final String propertyKey)
+        throws IOException {
+
+        LOGGER.debug("readStorageContainerProperty({}, {})", containerName,
+                     propertyKey);
+
+        if (propertyKey == null) {
+            throw new NullPointerException("storageProperty");
+        }
+
+        final Map<String, String> storageProperties =
+            new HashMap<String, String>();
+        if (!readStorageContainerProperties(containerName, storageProperties)) {
+            return null;
+        }
+
+        return storageProperties.get(propertyKey);
+    }
+
+
+    public boolean updateStorageContainerProperty(
+        final String containerName, final StorageProperty storageProperty)
+        throws IOException {
+
+        LOGGER.debug("updateStorageContainerProperty({}, {})",
+                     containerName, storageProperty);
 
         // check
         final String encodedContainerName = encodeContainerName(containerName);
 
-        if (metadataName == null) {
-            throw new NullPointerException("metadataName");
-        }
-
-        if (metadataValue == null) {
-            throw new NullPointerException("metadataValue");
-        }
-
-        if (metadataName.toLowerCase().startsWith("x-remove-container-meta-")) {
-            return deleteStorageContainerMetadata(containerName, metadataName);
-        }
-
-        if (!metadataName.toLowerCase().startsWith("x-container-meta-")) {
-            metadataName = "X-Container-Meta-" + metadataName;
+        if (storageProperty == null) {
+            throw new NullPointerException("storageProperty");
         }
 
         if (!authenticate()) {
@@ -1111,7 +1529,8 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(metadataName, metadataValue);
+        setStorageProperties(connection, "X-Container-Meta-0x", "0x",
+                             Collections.singleton(storageProperty));
 
         setTimeouts(connection);
 
@@ -1132,33 +1551,54 @@ public class UcloudStorageClient {
 
 
     /**
-     * Deletes a metadata with given metadata name of the storage container
-     * mapped to given container name.
+     * Updates a metadata value with given metadata name of the storage
+     * container mapped to given container name.
      *
      * @param containerName the container name
-     * @param metadataName the metadata name
+     * @param propertyKey the metadata name
+     * @param propertyValue the metadata value
      *
-     * @return {@code true} if succeeded; {@code false} if failed.
+     * @return {@code true} if succeeded; {@code false} otherwise.
      *
      * @throws IOException if an I/O error occurs.
      */
-    public boolean deleteStorageContainerMetadata(final String containerName,
-                                                  String metadataName)
+    public boolean updateStorageContainerProperty(final String containerName,
+                                                  final String propertyKey,
+                                                  final String propertyValue)
         throws IOException {
 
-        LOGGER.debug("deleteStorageContainerMetadata({}, {})", containerName,
-                     metadataName);
+        LOGGER.debug("updateStorageContainerProperty({}, {}, {})",
+                     containerName, propertyKey, propertyValue);
+
+        if (propertyKey == null) {
+            throw new NullPointerException("propertyKey");
+        }
+
+        if (propertyValue == null) {
+            throw new NullPointerException("propertyValue");
+        }
+
+        final StorageProperty storageProperty = new StorageProperty();
+
+        storageProperty.setKey(propertyKey);
+        storageProperty.setValue(propertyValue);
+
+        return updateStorageContainerProperty(containerName, storageProperty);
+    }
+
+
+    public boolean deleteStorageContainerProperty(final String containerName,
+                                                  final String propertyKey)
+        throws IOException {
+
+        LOGGER.debug("deleteStorageContainerProperty({}, {})", containerName,
+                     propertyKey);
 
         // check
         final String encodedContainerName = encodeContainerName(containerName);
 
-        if (metadataName == null) {
-            throw new NullPointerException("metadataName");
-        }
-
-        if (!metadataName.toLowerCase()
-            .startsWith("x-remove-container-meta-")) {
-            metadataName = "X-Remove-Container-Meta-" + metadataName;
+        if (propertyKey == null) {
+            throw new NullPointerException("propertyKey");
         }
 
         if (!authenticate()) {
@@ -1177,7 +1617,12 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        connection.setRequestProperty(metadataName, "delete");
+        final StorageProperty storageProperty = new StorageProperty();
+        storageProperty.setKey(propertyKey);
+        storageProperty.setValue("delete");
+
+        setStorageProperties(connection, "X-Remove-Container-Meta-0x", "0x",
+                             Collections.singletonList(storageProperty));
 
         setTimeouts(connection);
 
@@ -1359,22 +1804,24 @@ public class UcloudStorageClient {
 //
 //        return false;
 //    }
-    public StorageObject readStorageObject(final String containerName,
-                                           final String objectName)
+    public boolean peekStorageObject(final String containerName,
+                                     final String objectName)
         throws IOException {
 
-        LOGGER.debug("readStorageObject({}, {})", containerName, objectName);
+        LOGGER.debug("peekStorageObject({}, {})", containerName, objectName);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
         final String encodedObjectName = encodeObjectName(objectName);
 
         if (!authenticate()) {
-            return null;
+            return false;
         }
 
-        final String spec = storageUrl + PATH_SEPARATOR + encodedContainerName
+        final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
                             + PATH_SEPARATOR + encodedObjectName;
+
+        final String spec = base;
 
         final URL url = new URL(spec);
 
@@ -1391,20 +1838,37 @@ public class UcloudStorageClient {
             setResponses(connection);
             if (responseCode == RESPONSE_CODE_200_OK
                 || responseCode == RESPONSE_CODE_204_NO_CONTENT) {
-                final StorageObject storageObject = new StorageObject();
-                storageObject.setObjectName(objectName);
-                storageObject.setLastModified(connection.getLastModified());
-                storageObject.setEntityTag(getFirstHeaderFieldValue("Etag"));
-                storageObject.setContentType(connection.getContentType());
-                storageObject.setContentLength(getContentLength(connection));
-                storageObject.setLastModified(connection.getLastModified());
-                return storageObject;
+                return true;
             }
         } finally {
             connection.disconnect();
         }
 
-        return null;
+        return false;
+    }
+
+
+    public StorageObject readStorageObject(final String containerName,
+                                           final String objectName)
+        throws IOException {
+
+        LOGGER.debug("readStorageObject({}, {})", containerName, objectName);
+
+        if (!peekStorageObject(containerName, objectName)) {
+            return null;
+        }
+
+        final StorageObject storageObject = new StorageObject();
+
+        storageObject.setObjectName(objectName);
+        storageObject.setLastModified(
+            getFirstHeaderFieldLong("Last-Modified", -1L));
+        storageObject.setEntityTag(getFirstHeaderFieldValue("Etag"));
+        storageObject.setContentType(getFirstHeaderFieldValue("Content-Type"));
+        storageObject.setContentLength(
+            getFirstHeaderFieldLong("Content-Length", -1L));
+
+        return storageObject;
     }
 
 
@@ -1435,7 +1899,9 @@ public class UcloudStorageClient {
         final String base = storageUrl + PATH_SEPARATOR + encodedContainerName
                             + PATH_SEPARATOR + encodedObjectName;
 
-        final URL url = new URL(base);
+        final String spec = base;
+
+        final URL url = new URL(spec);
 
         final HttpURLConnection connection =
             (HttpURLConnection) url.openConnection();
@@ -1692,36 +2158,67 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean readStorageObjectMetadata(
+    public boolean readStorageObjectProperties(
         final String containerName, final String objectName,
-        final Map<String, String> objectMetadata)
+        final Collection<? super StorageProperty> storageProperties)
         throws IOException {
 
-        LOGGER.debug("readStorageObjectMetadata({}, {}, {})", containerName,
-                     objectName, objectMetadata);
+        LOGGER.debug("readStorageObjectProperties({}, {}, {})", containerName,
+                     objectName, storageProperties);
 
-        if (objectMetadata == null) {
-            throw new NullPointerException("objectMetadata");
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
         }
 
-        final StorageObject storageObject =
-            readStorageObject(containerName, objectName);
-        if (storageObject == null) {
+        if (!peekStorageObject(containerName, objectName)) {
             return false;
         }
 
-        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
-            final String fieldName = e.getKey();
-            if (fieldName == null
-                || !fieldName.toLowerCase().startsWith("x-object-meta-")) {
-                continue;
-            }
-            final List<String> fieldValues = e.getValue();
-            if (fieldValues == null || fieldValues.isEmpty()) {
-                continue;
-            }
-            objectMetadata.put(fieldName, fieldValues.get(0));
+        getStorageProperties(headerFields, "X-Object-Meta-0x", "0x",
+                             storageProperties);
+
+        return true;
+    }
+
+
+    public Collection<StorageProperty> readStorageObjectProperties(
+        final String containerName, final String objectName)
+        throws IOException {
+
+        LOGGER.debug("readStorageObjectProperties({}, {})", containerName,
+                     objectName);
+
+        final Collection<StorageProperty> storageProperties =
+            new ArrayList<StorageProperty>();
+
+        if (!readStorageObjectProperties(containerName, objectName,
+                                         storageProperties)) {
+            return null;
         }
+
+        return storageProperties;
+    }
+
+
+    public boolean readStorageObjectProperties(
+        final String containerName, final String objectName,
+        final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("readStorageObjectProperties({}, {}, {})", containerName,
+                     objectName, storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Collection<StorageProperty> collected =
+            readStorageObjectProperties(containerName, objectName);
+        if (collected == null) {
+            return false;
+        }
+
+        storageProperties.entrySet().addAll(collected);
 
         return true;
     }
@@ -1737,8 +2234,8 @@ public class UcloudStorageClient {
         final Map<String, String> objectMetadata =
             new HashMap<String, String>();
 
-        if (!readStorageObjectMetadata(containerName, objectName,
-                                       objectMetadata)) {
+        if (!readStorageObjectProperties(containerName, objectName,
+                                         objectMetadata)) {
             return null;
         }
 
@@ -1746,20 +2243,20 @@ public class UcloudStorageClient {
     }
 
 
-    public boolean updateStorageObjectMetadata(
+    public boolean updateStorageObjectProperties(
         final String containerName, final String objectName,
-        final Map<String, String> objectMetadata)
+        final Map<String, String> storageProperties)
         throws IOException {
 
-        LOGGER.debug("updateStorageObjectMetadata({}, {}, {})", containerName,
-                     objectName, objectMetadata);
+        LOGGER.debug("updateStorageObjectProperties({}, {}, {})", containerName,
+                     objectName, storageProperties);
 
         final String encodedContainerName = encodeContainerName(containerName);
 
         final String encodedObjectName = encodeObjectName(objectName);
 
-        if (objectMetadata == null) {
-            throw new NullPointerException("objectMetadata");
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
         }
 
         if (!authenticate()) {
@@ -1779,14 +2276,8 @@ public class UcloudStorageClient {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-Auth-Token", authToken);
 
-        for (final Entry<String, String> entry : objectMetadata.entrySet()) {
-            String fieldName = entry.getKey();
-            if (!fieldName.toLowerCase().startsWith("x-object-meta-")) {
-                fieldName = "X-Object-Meta-" + fieldName;
-            }
-            final String fieldValue = entry.getKey();
-            connection.setRequestProperty(fieldName, fieldValue);
-        }
+        setStorageProperties(connection, "X-Object-Meta-0x", "0x",
+                             storageProperties);
 
         setTimeouts(connection);
 
@@ -1803,6 +2294,26 @@ public class UcloudStorageClient {
         }
 
         return false;
+    }
+
+
+    public boolean updateStorageObjectProperties(
+        final String containerName, final String objectName,
+        final Collection<? extends StorageProperty> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("updateStorageObjectProperties({}, {}, {})", containerName,
+                     objectName, storageProperties);
+
+        if (storageProperties == null) {
+            throw new NullPointerException("storageProperties");
+        }
+
+        final Map<String, String> mapped =
+            new HashMap<String, String>(storageProperties.size());
+        mapped.entrySet().addAll(storageProperties);
+
+        return updateStorageObjectProperties(containerName, objectName, mapped);
     }
 
 
