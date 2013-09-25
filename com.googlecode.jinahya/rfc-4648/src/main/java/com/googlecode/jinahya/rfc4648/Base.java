@@ -272,7 +272,7 @@ public abstract class Base {
     public final byte[] encode(final InputStream input) throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -358,11 +358,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null output");
+            throw new NullPointerException("output");
         }
 
         outer:
@@ -427,11 +427,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null outpute");
+            throw new NullPointerException("outpute");
         }
 
         decode(input, new BitOutput(new StreamOutput(output)));
@@ -451,11 +451,11 @@ public abstract class Base {
         throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         if (output == null) {
-            throw new NullPointerException("null outpute");
+            throw new NullPointerException("outpute");
         }
 
         final Reader reader = new InputStreamReader(input, "US-ASCII");
@@ -476,7 +476,7 @@ public abstract class Base {
     public byte[] decode(final InputStream input) throws IOException {
 
         if (input == null) {
-            throw new NullPointerException("null input");
+            throw new NullPointerException("input");
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
