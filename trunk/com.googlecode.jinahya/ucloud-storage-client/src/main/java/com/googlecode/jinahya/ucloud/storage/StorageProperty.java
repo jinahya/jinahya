@@ -18,6 +18,10 @@
 package com.googlecode.jinahya.ucloud.storage;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -27,6 +31,52 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Jin Kwon <onacit at gmail.com>
  */
 public class StorageProperty implements Entry<String, String> {
+
+
+    static Map<String, String> copy(
+        final Collection<? extends StorageProperty> source,
+        final Map<String, String> target) {
+
+        try {
+            target.entrySet().addAll(source);
+        } catch (final UnsupportedOperationException uoe) {
+            for (final StorageProperty storageProperty : source) {
+                target.put(storageProperty.getKey(),
+                           storageProperty.getValue());
+            }
+        }
+
+        return target;
+    }
+
+
+    static Map<String, String> map(
+        final Collection<? extends StorageProperty> source) {
+
+        return copy(source, new HashMap<String, String>(source.size()));
+    }
+
+
+    static Collection<? super StorageProperty> copy(
+        final Map<String, String> source,
+        final Collection<? super StorageProperty> target) {
+
+        for (final Entry<String, String> entry : source.entrySet()) {
+            final StorageProperty storageProperty = new StorageProperty();
+            storageProperty.setKey(entry.getKey());
+            storageProperty.setValue(entry.getValue());
+            target.add(storageProperty);
+        }
+
+        return target;
+    }
+
+
+    static Collection<? super StorageProperty> collect(
+        final Map<String, String> source) {
+
+        return copy(source, new ArrayList<StorageProperty>(source.size()));
+    }
 
 
     @Override

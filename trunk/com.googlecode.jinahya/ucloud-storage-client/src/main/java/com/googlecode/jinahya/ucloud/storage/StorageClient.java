@@ -506,6 +506,52 @@ public class StorageClient {
     }
 
 
+    private static void getStorageProperties(
+        final Map<String, List<String>> headerFields, final String keyPrefix,
+        final String valuePrefix, final Map<String, String> storageProperties)
+        throws IOException {
+
+        LOGGER.debug("getStorageProperties({}, {}, {}, {})", headerFields,
+                     keyPrefix, valuePrefix, storageProperties);
+
+//        final Collection<StorageProperty> collected =
+//            new ArrayList<StorageProperty>();
+//        getStorageProperties(headerFields, keyPrefix, valuePrefix, collected);
+//
+//        StorageProperty.copy(collected, storageProperties);
+
+        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+
+            String fieldName = e.getKey();
+            if (fieldName == null) {
+                continue;
+            }
+            if (!fieldName.toLowerCase().startsWith(keyPrefix.toLowerCase())) {
+                continue;
+            }
+            fieldName = fieldName.substring(keyPrefix.length());
+            fieldName = d(fieldName);
+
+            final List<String> fieldValues = e.getValue();
+            if (fieldValues == null || fieldValues.isEmpty()) {
+                continue;
+            }
+            String fieldValue = fieldValues.get(0);
+            if (fieldValue == null) {
+                continue;
+            }
+            if (!fieldValue.toLowerCase().startsWith(
+                valuePrefix.toLowerCase())) {
+                continue;
+            }
+            fieldValue = fieldValue.substring(valuePrefix.length());
+            fieldValue = d(fieldValue);
+
+            storageProperties.put(fieldName, fieldValue);
+        }
+    }
+
+
     /**
      *
      * @param headerFields the header fields
@@ -524,63 +570,10 @@ public class StorageClient {
         LOGGER.debug("getStorageProperties({}, {}, {}, {})", headerFields,
                      keyPrefix, valuePrefix, storageProperties);
 
-        for (final Entry<String, List<String>> e : headerFields.entrySet()) {
+        final Map<String, String> mapped = new HashMap<String, String>();
+        getStorageProperties(headerFields, keyPrefix, valuePrefix, mapped);
 
-            String fieldName = e.getKey();
-            if (fieldName == null) {
-                continue;
-            }
-            if (!fieldName.toLowerCase().startsWith(keyPrefix.toLowerCase())) {
-                continue;
-            }
-            fieldName = fieldName.substring(keyPrefix.length());
-            fieldName = d(fieldName);
-            LOGGER.debug("fieldName: " + fieldName);
-
-            final List<String> fieldValues = e.getValue();
-            if (fieldValues == null || fieldValues.isEmpty()) {
-                continue;
-            }
-            String fieldValue = fieldValues.get(0);
-            if (fieldValue == null) {
-                continue;
-            }
-            if (!fieldValue.toLowerCase().startsWith(
-                valuePrefix.toLowerCase())) {
-                continue;
-            }
-            fieldValue = fieldValue.substring(valuePrefix.length());
-            fieldValue = d(fieldValue);
-            LOGGER.debug("fieldValue: " + fieldValue);
-
-            final StorageProperty storageProperty = new StorageProperty();
-
-            storageProperty.setKey(fieldName);
-            storageProperty.setValue(fieldValue);
-
-            storageProperties.add(storageProperty);
-        }
-    }
-
-
-    private static void getStorageProperties(
-        final Map<String, List<String>> headerFields, final String keyPrefix,
-        final String valuePrefix, final Map<String, String> storageProperties)
-        throws IOException {
-
-        LOGGER.debug("getStorageProperties({}, {}, {}, {})", headerFields,
-                     keyPrefix, valuePrefix, storageProperties);
-
-        final Collection<StorageProperty> collected =
-            new ArrayList<StorageProperty>();
-        getStorageProperties(headerFields, keyPrefix, valuePrefix, collected);
-
-        //storageProperties.entrySet().addAll(collected); // unsupported
-
-        for (final StorageProperty storageProperty : collected) {
-            storageProperties.put(storageProperty.getKey(),
-                                  storageProperty.getValue());
-        }
+        StorageProperty.copy(mapped, storageProperties);
     }
 
 
@@ -609,11 +602,11 @@ public class StorageClient {
         LOGGER.debug("setStorageProperties({}, {}, {}, {})", connection,
                      keyPrefix, valuePrefix, storageProperties);
 
-        for (final StorageProperty storageProperty : storageProperties) {
-            final String key = keyPrefix + h(storageProperty.getKey());
-            final String value = valuePrefix + h(storageProperty.getValue());
-            connection.setRequestProperty(key, value);
-        }
+        final Map<String, String> mapped =
+            new HashMap<String, String>(storageProperties.size());
+        StorageProperty.copy(storageProperties, mapped);
+
+        setStorageProperties(connection, keyPrefix, valuePrefix, mapped);
     }
 
 
@@ -801,7 +794,7 @@ public class StorageClient {
             return false;
         }
 
-        storageProperties.entrySet().addAll(collected);
+        StorageProperty.copy(collected, storageProperties);
 
         return true;
     }
@@ -1385,11 +1378,13 @@ public class StorageClient {
             return false;
         }
 
-        //storageProperties.entrySet().addAll(collected); // unsupported
-
-        for (final StorageProperty storageProperty : collected) {
-            storageProperties.put(storageProperty.getKey(),
-                                  storageProperty.getValue());
+        try {
+            storageProperties.entrySet().addAll(collected); // unsupported
+        } catch (UnsupportedOperationException uoe) {
+            for (final StorageProperty storageProperty : collected) {
+                storageProperties.put(storageProperty.getKey(),
+                                      storageProperty.getValue());
+            }
         }
 
         return true;
@@ -1464,7 +1459,7 @@ public class StorageClient {
 
         final Map<String, String> mapped =
             new HashMap<String, String>(storageProperties.size());
-        mapped.entrySet().addAll(storageProperties);
+        StorageProperty.copy(storageProperties, mapped);
 
         return updateStorageContainerProperties(containerName, mapped);
     }
@@ -2218,7 +2213,14 @@ public class StorageClient {
             return false;
         }
 
-        storageProperties.entrySet().addAll(collected);
+        try {
+            storageProperties.entrySet().addAll(collected);
+        } catch (UnsupportedOperationException uoe) {
+            for (StorageProperty storageProperty : collected) {
+                storageProperties.put(storageProperty.getKey(),
+                                      storageProperty.getValue());
+            }
+        }
 
         return true;
     }
