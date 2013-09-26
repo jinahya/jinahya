@@ -49,11 +49,11 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     @Test(invocationCount = 32)
     public void testDecoding() throws Exception {
 
-        final byte[] expected = newDecoded();
+        final byte[] expected = decoded();
 
         final byte[] encoded = newEncoder().encode(expected);
 
-        final byte[] actual = newBase().decode(forBaseDecoding(encoded));
+        final byte[] actual = base().decode(forBaseDecoding(encoded));
 
         Assert.assertEquals(actual, expected);
     }

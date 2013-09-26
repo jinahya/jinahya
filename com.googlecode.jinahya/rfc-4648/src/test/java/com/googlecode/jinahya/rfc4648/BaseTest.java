@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc4648;
 
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
@@ -34,7 +35,7 @@ import org.testng.annotations.Test;
 public abstract class BaseTest<B extends Base> {
 
 
-    protected static byte[] newDecoded(final int length) {
+    protected static byte[] decoded(final int length) {
 
         final Random random = ThreadLocalRandom.current();
 
@@ -45,13 +46,13 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    protected static byte[] newDecoded() {
+    protected static byte[] decoded() {
 
-        return newDecoded(1024);
+        return decoded(1024);
     }
 
 
-    public static byte[] toUpper(final byte[] lower) {
+    public static byte[] upper(final byte[] lower) {
 
         final byte[] upper = new byte[lower.length];
 
@@ -67,7 +68,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    public static byte[] toLower(final byte[] upper) {
+    public static byte[] lower(final byte[] upper) {
 
         final byte[] lower = new byte[upper.length];
 
@@ -90,7 +91,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    protected B newBase() {
+    protected B base() {
         try {
             return baseClass.newInstance();
         } catch (InstantiationException ie) {
@@ -106,15 +107,31 @@ public abstract class BaseTest<B extends Base> {
     @Test(invocationCount = 32)
     public void testEncodingDecoding() throws IOException {
 
-        final B base = newBase();
+        final B base = base();
 
-        final byte[] expected = newDecoded();
+        final byte[] expected = decoded();
 
         final byte[] encoded = base.encode(expected);
 
         final byte[] actual = base.decode(encoded);
 
         Assert.assertEquals(actual, expected, "fail");
+
+        boolean lower = true;
+        try {
+            final Field field = Base.class.getDeclaredField("lower");
+            field.setAccessible(true);
+            try {
+                lower = (Boolean) field.getBoolean(base);
+            } catch (IllegalAccessException iae) {
+            }
+        } catch (NoSuchFieldException nsfe) {
+        }
+
+        if (!lower) {
+            final byte[] actual2 = base.decode(lower(encoded));
+            Assert.assertEquals(actual2, expected);
+        }
     }
 
 

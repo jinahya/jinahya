@@ -41,7 +41,7 @@ public class Base16EncodingTest extends EncodingTest<Base16, Hex> {
 
     @Override
     protected byte[] forCommonsDecoding(byte[] baseEncoded) {
-        return toLower(baseEncoded);
+        return lower(baseEncoded);
     }
 
 
