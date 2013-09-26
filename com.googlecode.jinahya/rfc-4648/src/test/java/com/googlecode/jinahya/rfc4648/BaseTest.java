@@ -20,6 +20,7 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
@@ -31,7 +32,6 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @param <B>
  */
-@Test(singleThreaded = false)
 public abstract class BaseTest<B extends Base> {
 
 
@@ -52,7 +52,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    public static byte[] upper(final byte[] lower) {
+    protected static byte[] upper(final byte[] lower) {
 
         final byte[] upper = new byte[lower.length];
 
@@ -68,7 +68,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    public static byte[] lower(final byte[] upper) {
+    protected static byte[] lower(final byte[] upper) {
 
         final byte[] lower = new byte[upper.length];
 
@@ -85,9 +85,11 @@ public abstract class BaseTest<B extends Base> {
 
 
     public BaseTest(final Class<B> baseClass) {
+
         super();
 
-        this.baseClass = baseClass;
+        this.baseClass = Objects.requireNonNull(
+            baseClass, "baseClass can not be null.");
     }
 
 
@@ -124,17 +126,22 @@ public abstract class BaseTest<B extends Base> {
             try {
                 lower = (Boolean) field.getBoolean(base);
             } catch (IllegalAccessException iae) {
+                Assert.fail(iae.toString());
             }
         } catch (NoSuchFieldException nsfe) {
+            Assert.fail(nsfe.toString());
         }
 
-        if (!lower) {
+        if (!lower) { // upper case characters only
             final byte[] actual2 = base.decode(lower(encoded));
             Assert.assertEquals(actual2, expected);
         }
     }
 
 
+    /**
+     * base class.
+     */
     protected final Class<B> baseClass;
 
 
