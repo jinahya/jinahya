@@ -15,4 +15,11 @@
  */
 
 
+/**
+ * Implementation of <a href="http://tools.ietf.org/html/rfc4648">RFC 4648: The
+ * Base16, Base32, and Base64 Data Encodings</a>.
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc4648">RFC 4648: The Base16,
+ * Base32, and Base64 Data Encodings</a>
+ */
 package com.googlecode.jinahya.rfc4648;

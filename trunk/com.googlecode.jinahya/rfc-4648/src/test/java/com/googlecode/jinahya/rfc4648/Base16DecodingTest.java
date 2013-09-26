@@ -41,7 +41,7 @@ public class Base16DecodingTest extends DecodingTest<Base16, Hex> {
 
     @Override
     protected byte[] forBaseDecoding(byte[] commonsEncoded) {
-        return toUpper(commonsEncoded);
+        return upper(commonsEncoded);
     }
 
 

@@ -637,7 +637,7 @@ public abstract class Base {
 
 
     /**
-     * flag for lower-case characters only.
+     * flag for lower-case characters.
      */
     private final boolean lower;
 
