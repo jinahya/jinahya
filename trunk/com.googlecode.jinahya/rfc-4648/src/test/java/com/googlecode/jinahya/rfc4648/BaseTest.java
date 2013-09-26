@@ -20,6 +20,7 @@ package com.googlecode.jinahya.rfc4648;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -33,26 +34,24 @@ import org.testng.annotations.Test;
 public abstract class BaseTest<B extends Base> {
 
 
-    protected static final Random RANDOM = new Random();
+    protected static byte[] newDecoded(final int length) {
 
+        final Random random = ThreadLocalRandom.current();
 
-    protected static byte[] decoded() {
+        final byte[] bytes = new byte[random.nextInt(length)];
+        random.nextBytes(bytes);
 
-        return decoded(1024);
+        return bytes;
     }
 
 
-    protected static byte[] decoded(final int length) {
+    protected static byte[] newDecoded() {
 
-        synchronized (RANDOM) {
-            final byte[] bytes = new byte[RANDOM.nextInt(length)];
-            RANDOM.nextBytes(bytes);
-            return bytes;
-        }
+        return newDecoded(1024);
     }
 
 
-    public static byte[] upper(final byte[] lower) {
+    public static byte[] toUpper(final byte[] lower) {
 
         final byte[] upper = new byte[lower.length];
 
@@ -68,7 +67,7 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
-    public static byte[] lower(final byte[] upper) {
+    public static byte[] toLower(final byte[] upper) {
 
         final byte[] lower = new byte[upper.length];
 
@@ -109,7 +108,7 @@ public abstract class BaseTest<B extends Base> {
 
         final B base = newBase();
 
-        final byte[] expected = decoded();
+        final byte[] expected = newDecoded();
 
         final byte[] encoded = base.encode(expected);
 
@@ -123,4 +122,3 @@ public abstract class BaseTest<B extends Base> {
 
 
 }
-

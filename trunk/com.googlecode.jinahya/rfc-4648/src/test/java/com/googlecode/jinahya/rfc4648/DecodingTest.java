@@ -49,7 +49,7 @@ public abstract class DecodingTest<B extends Base, E extends BinaryEncoder>
     @Test(invocationCount = 32)
     public void testDecoding() throws Exception {
 
-        final byte[] expected = decoded();
+        final byte[] expected = newDecoded();
 
         final byte[] encoded = newEncoder().encode(expected);
 

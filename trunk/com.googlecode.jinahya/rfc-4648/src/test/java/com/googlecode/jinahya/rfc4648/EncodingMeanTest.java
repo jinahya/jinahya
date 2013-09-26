@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
+import static com.googlecode.jinahya.rfc4648.BaseTest.newDecoded;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.math3.stat.StatUtils;
@@ -62,7 +62,7 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
 
         for (int i = 0; i < count; i++) {
 
-            final byte[] decoded = decoded(1024);
+            final byte[] decoded = newDecoded(1024);
 
             start = System.nanoTime();
             base.encode(decoded);
