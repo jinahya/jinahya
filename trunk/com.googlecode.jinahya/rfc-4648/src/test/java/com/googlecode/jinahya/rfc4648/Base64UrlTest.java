@@ -26,9 +26,9 @@ public class Base64UrlTest extends BaseTest<Base64Url> {
 
 
     public Base64UrlTest() {
+
         super(Base64Url.class);
     }
 
 
 }
-

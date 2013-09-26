@@ -27,21 +27,23 @@ public class Base32DecodingTest
 
 
     public Base32DecodingTest() {
+
         super(Base32.class, org.apache.commons.codec.binary.Base32.class);
     }
 
 
     @Override
-    protected org.apache.commons.codec.binary.Base32 newEncoder() {
+    protected org.apache.commons.codec.binary.Base32 encoder() {
+
         return new org.apache.commons.codec.binary.Base32(-1, null, false);
     }
 
 
     @Override
-    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
-        return commonsEncoded;
+    protected byte[] decoding(byte[] encoded) {
+
+        return encoded;
     }
 
 
 }
-

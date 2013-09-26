@@ -27,21 +27,23 @@ public class Base64EncodingTest
 
 
     public Base64EncodingTest() {
+
         super(Base64.class, org.apache.commons.codec.binary.Base64.class);
     }
 
 
     @Override
-    protected org.apache.commons.codec.binary.Base64 newDecoder() {
+    protected org.apache.commons.codec.binary.Base64 decoder() {
+
         return new org.apache.commons.codec.binary.Base64(-1, null, false);
     }
 
 
     @Override
-    protected byte[] forCommonsDecoding(byte[] baseEncoded) {
-        return baseEncoded;
+    protected byte[] decoding(byte[] encoded) {
+
+        return encoded;
     }
 
 
 }
-

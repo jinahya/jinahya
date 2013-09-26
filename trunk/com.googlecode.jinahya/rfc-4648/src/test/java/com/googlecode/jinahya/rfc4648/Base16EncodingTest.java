@@ -29,19 +29,22 @@ public class Base16EncodingTest extends EncodingTest<Base16, Hex> {
 
 
     public Base16EncodingTest() {
+        
         super(Base16.class, Hex.class);
     }
 
 
     @Override
-    protected Hex newDecoder() {
+    protected Hex decoder() {
+        
         return new Hex();
     }
 
 
     @Override
-    protected byte[] forCommonsDecoding(byte[] baseEncoded) {
-        return lower(baseEncoded);
+    protected byte[] decoding(byte[] encoded) {
+        
+        return lower(encoded);
     }
 
 

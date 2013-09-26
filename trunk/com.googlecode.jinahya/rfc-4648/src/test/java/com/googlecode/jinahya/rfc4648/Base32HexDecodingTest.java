@@ -30,21 +30,23 @@ public class Base32HexDecodingTest
 
 
     public Base32HexDecodingTest() {
+
         super(Base32Hex.class, org.apache.commons.codec.binary.Base32.class);
     }
 
 
     @Override
-    protected Base32 newEncoder() {
+    protected Base32 encoder() {
+
         return new Base32(-1, null, true);
     }
 
 
     @Override
-    protected byte[] forBaseDecoding(byte[] commonsEncoded) {
-        return commonsEncoded;
+    protected byte[] decoding(byte[] encoded) {
+
+        return encoded;
     }
 
 
 }
-

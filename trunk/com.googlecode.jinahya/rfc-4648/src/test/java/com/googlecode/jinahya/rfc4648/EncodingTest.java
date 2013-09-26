@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc4648;
 
 
 import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
+import java.util.Objects;
 import org.apache.commons.codec.BinaryDecoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -36,16 +37,17 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
 
 
     public EncodingTest(final Class<B> baseClass, final Class<D> decoderClass) {
+
         super(baseClass);
 
-        this.decoderClass = decoderClass;
+        this.decoderClass = Objects.requireNonNull(decoderClass);
     }
 
 
-    protected abstract D newDecoder();
+    protected abstract D decoder();
 
 
-    protected abstract byte[] forCommonsDecoding(final byte[] baseEncoded);
+    protected abstract byte[] decoding(final byte[] encoded);
 
 
     @Test(invocationCount = 32)
@@ -55,7 +57,7 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
 
         final byte[] encoded = base().encode(expected);
 
-        final byte[] actual = newDecoder().decode(forCommonsDecoding(encoded));
+        final byte[] actual = decoder().decode(decoding(encoded));
 
         Assert.assertEquals(actual, expected);
     }
