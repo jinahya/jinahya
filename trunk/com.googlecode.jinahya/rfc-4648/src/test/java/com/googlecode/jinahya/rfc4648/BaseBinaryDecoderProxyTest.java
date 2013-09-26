@@ -98,7 +98,7 @@ public class BaseBinaryDecoderProxyTest {
         final Base base = new Base16();
         final BinaryDecoder commons = new Hex();
 
-        test(TestVectors.BASE16, base, commons, Modifier.TO_LOWER);
+        test(TestVectorsTest.BASE16, base, commons, Modifier.TO_LOWER);
     }
 
 
@@ -109,7 +109,7 @@ public class BaseBinaryDecoderProxyTest {
         final BinaryDecoder commons =
             new org.apache.commons.codec.binary.Base32(-1, null, false);
 
-        test(TestVectors.BASE32, base, commons);
+        test(TestVectorsTest.BASE32, base, commons);
     }
 
 
@@ -120,7 +120,7 @@ public class BaseBinaryDecoderProxyTest {
         final BinaryDecoder commons =
             new org.apache.commons.codec.binary.Base32(-1, null, true);
 
-        test(TestVectors.BASE32HEX, base, commons);
+        test(TestVectorsTest.BASE32HEX, base, commons);
     }
 
 
@@ -131,7 +131,7 @@ public class BaseBinaryDecoderProxyTest {
         final BinaryDecoder commons =
             new org.apache.commons.codec.binary.Base64(-1, null, false);
 
-        test(TestVectors.BASE64, base, commons);
+        test(TestVectorsTest.BASE64, base, commons);
     }
 
 
@@ -142,7 +142,7 @@ public class BaseBinaryDecoderProxyTest {
         final BinaryDecoder commons =
             new org.apache.commons.codec.binary.Base64(-1, null, true);
 
-        test(TestVectors.BASE64URL, base, commons);
+        test(TestVectorsTest.BASE64URL, base, commons);
     }
 
 

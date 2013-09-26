@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  *
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
-public class TestVectors {
+public class TestVectorsTest {
 
 
     public static final Map<String, String> BASE64;
@@ -55,7 +55,7 @@ public class TestVectors {
 
     static {
         final Map<String, String> map = new HashMap<String, String>(BASE64);
-        for (Entry<String, String> entry : map.entrySet()) {
+        for (final Entry<String, String> entry : map.entrySet()) {
             final String value = entry.getValue();
             final int padIndex = value.indexOf(Base.PAD);
             if (padIndex != -1) {
@@ -117,18 +117,18 @@ public class TestVectors {
     private void testBase(final Map<String, String> map, final Base base)
         throws IOException {
 
-        for (Entry<String, String> entry : map.entrySet()) {
-            final byte[] input = entry.getKey().getBytes("US-ASCII");
-            final byte[] output = base.encode(input);
-            Assert.assertEquals(new String(output, "US-ASCII"),
-                                entry.getValue());
+        for (final Entry<String, String> entry : map.entrySet()) {
+            final String expected = entry.getValue();
+            final String actual =
+                base.encodeToString(entry.getKey(), "UTF-8", "US-ASCII");
+            Assert.assertEquals(actual, expected);
         }
 
-        for (Entry<String, String> entry : map.entrySet()) {
-            final byte[] input = entry.getValue().getBytes("US-ASCII");
-            final byte[] output = base.decode(input);
-            Assert.assertEquals(new String(output, "US-ASCII"),
-                                entry.getKey());
+        for (final Entry<String, String> entry : map.entrySet()) {
+            final String expected = entry.getKey();
+            final String actual =
+                base.decodeToString(entry.getValue(), "US-ASCII", "UTF-8");
+            Assert.assertEquals(actual, expected);
         }
     }
 
@@ -169,4 +169,3 @@ public class TestVectors {
 
 
 }
-

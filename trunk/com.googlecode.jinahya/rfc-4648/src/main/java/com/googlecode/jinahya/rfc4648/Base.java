@@ -63,7 +63,7 @@ public abstract class Base {
     /**
      * MAGIC NUMBER: SMALLEST VISIBLE ASCII.
      */
-    private static final int SMALLEST_VISIBLE_ASCII = 33;
+    private static final int SMALLEST_VISIBLE_ASCII = 0x21; // 33
 
 
     /**
@@ -124,7 +124,7 @@ public abstract class Base {
      * @param alphabet alphabet to be used
      * @param padding flag for padding
      */
-    public Base(final byte[] alphabet, final boolean padding) {
+    protected Base(final byte[] alphabet, final boolean padding) {
 
         super();
 
@@ -142,9 +142,14 @@ public abstract class Base {
         for (int i = 0; i < decode.length; i++) {
             decode[i] = -1;
         }
+        boolean lower_ = false;
         for (byte i = 0; i < encode.length; i++) {
             decode[encode[i] - SMALLEST_VISIBLE_ASCII] = i;
+            if (encode[i] >= 0x61 && encode[i] <= 0x7A) { // 'a' <= c <= 'z'
+                lower_ = true;
+            }
         }
+        this.lower = lower_;
 
         this.padding = padding;
 
@@ -176,9 +181,7 @@ public abstract class Base {
 
         outer:
         while (true) {
-
-            int i;
-            for (i = 0; i < charsPerWord; i++) {
+            for (int i = 0; i < charsPerWord; i++) {
                 final int available =
                     OCTET_SIZE - ((bitsPerChar * i) % OCTET_SIZE);
                 if (available >= bitsPerChar) {
@@ -367,9 +370,8 @@ public abstract class Base {
 
         outer:
         while (true) {
-            int i;
             int c;
-            for (i = 0; i < charsPerWord; i++) {
+            for (int i = 0; i < charsPerWord; i++) {
                 c = input.read();
                 if (c == -1) { // end of stream
                     if (i == 0) { // first character in a word; ok
@@ -403,6 +405,9 @@ public abstract class Base {
                     }
                     break outer;
                 } else {
+                    if (!lower && (c >= 0x61 && c <= 0x7A)) { // 'a' <= c <= 'z'
+                        c -= 0x20; // to upper
+                    }
                     final int value = decode[c - SMALLEST_VISIBLE_ASCII];
                     if (value == -1) {
                         throw new IOException("bad character: " + (char) c);
@@ -537,6 +542,17 @@ public abstract class Base {
     }
 
 
+    /**
+     * Decodes given encoded input string.
+     *
+     * @param input the encoded input string.
+     * @param inputCharset the charset name to decode input string.
+     * @param outputCharset the charset name to encode output string.
+     *
+     * @return a decoded output as a string
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public String decodeToString(final String input,
                                  final String inputCharset,
                                  final String outputCharset)
@@ -560,6 +576,12 @@ public abstract class Base {
      * characters for decoding.
      */
     private final byte[] decode;
+
+
+    /**
+     * flag for lower-case characters.
+     */
+    private final boolean lower;
 
 
     /**

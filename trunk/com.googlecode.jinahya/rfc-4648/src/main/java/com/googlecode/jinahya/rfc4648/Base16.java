@@ -39,6 +39,7 @@ public class Base16 extends Base {
      * Creates a new instance.
      */
     public Base16() {
+
         super(ALPHABET, true);
     }
 
