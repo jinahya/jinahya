@@ -106,6 +106,18 @@ public abstract class BaseTest<B extends Base> {
     }
 
 
+    protected byte[] encoded(final byte[] decoded) throws IOException {
+
+        return base().encode(decoded);
+    }
+
+
+    protected byte[] encoded() throws IOException {
+
+        return encoded(decoded());
+    }
+
+
     @Test(invocationCount = 32)
     public void testEncodingDecoding() throws IOException {
 

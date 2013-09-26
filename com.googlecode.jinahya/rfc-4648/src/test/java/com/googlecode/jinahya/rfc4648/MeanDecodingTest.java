@@ -18,10 +18,9 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.math3.stat.StatUtils;
 import org.testng.annotations.Test;
 
@@ -33,23 +32,23 @@ import org.testng.annotations.Test;
  * @param <E> encoder type parameter
  */
 @Test(singleThreaded = false)
-public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
+public abstract class MeanDecodingTest<B extends Base, E extends BinaryDecoder>
     extends BaseTest<B> {
 
 
-    public EncodingMeanTest(final Class<B> baseClass,
-                            final Class<E> encoderClass) {
+    public MeanDecodingTest(final Class<B> baseClass,
+                            final Class<E> decoderClass) {
         super(baseClass);
 
-        this.encoderClass = Objects.requireNonNull(encoderClass);
+        this.decoderClass = Objects.requireNonNull(decoderClass);
     }
 
 
-    protected abstract E encoder();
+    protected abstract E decoder();
 
 
     @Test(invocationCount = 1)
-    public void testEncoding() throws Exception {
+    public void testDecoding() throws Exception {
 
         final int count = ThreadLocalRandom.current().nextInt(1024) + 1024;
 
@@ -57,32 +56,33 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
         final double commons[] = new double[count];
 
         final B base = base();
-        final E encoder = encoder();
+        final E encoder = decoder();
 
         long start;
 
         for (int i = 0; i < count; i++) {
 
-            final byte[] decoded = decoded(1024);
+            final byte[] decoded = decoded();
+            final byte[] encoded = encoded(decoded);
 
             start = System.nanoTime();
-            base.encode(decoded);
+            final byte[] baseDecoded = base.decode(encoded);
             bases[i] = (System.nanoTime() - start);
 
             start = System.nanoTime();
-            encoder.encode(decoded);
+            final byte[] commonsDecoded = encoder.decode(encoded);
             commons[i] = (System.nanoTime() - start);
         }
 
         final double baseMean = StatUtils.mean(bases);
         final double commonsMean = StatUtils.mean(commons);
         System.out.printf("%12s: %20.4f\n", baseClass.getSimpleName(), baseMean);
-        System.out.printf("%12s: %20.4f\n", encoderClass.getSimpleName(), commonsMean);
+        System.out.printf("%12s: %20.4f\n", decoderClass.getSimpleName(), commonsMean);
         System.out.printf("base/commons: %20.4f\n", (baseMean / commonsMean));
     }
 
 
-    protected final Class<E> encoderClass;
+    protected final Class<E> decoderClass;
 
 
 }
