@@ -70,15 +70,16 @@ public class WelcomeTest {
 
 
     private static void test(final String[] strings) throws IOException {
-        for (String string : strings) {
+
+        for (final String string : strings) {
 
             UTF8.printf("%1$5s: %2$s\n", "input", string);
 
             final byte[] original = string.getBytes("UTF-8");
 
             System.out.printf("%1$5s: ", "UTF-8");
-            for (byte b : original) {
-                System.out.printf("%1$s", Integer.toHexString(b & 0xFF));
+            for (final byte b : original) {
+                System.out.printf("%1$02X", Integer.valueOf(b & 0xFF));
             }
             System.out.printf("\n");
 
