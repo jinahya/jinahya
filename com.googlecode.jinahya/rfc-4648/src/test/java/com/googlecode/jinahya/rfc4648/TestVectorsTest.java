@@ -57,7 +57,7 @@ public class TestVectorsTest {
         final Map<String, String> map = new HashMap<String, String>(BASE64);
         for (final Entry<String, String> entry : map.entrySet()) {
             final String value = entry.getValue();
-            final int padIndex = value.indexOf(Base.PAD);
+            final int padIndex = value.indexOf('=');
             if (padIndex != -1) {
                 entry.setValue(value.substring(0, padIndex));
             }

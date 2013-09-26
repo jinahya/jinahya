@@ -32,6 +32,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -43,9 +45,15 @@ public abstract class Base {
 
 
     /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Base.class);
+
+
+    /**
      * Default pad character.
      */
-    static final char PAD = '=';
+    private static final char PAD = '=';
 
 
     /**
@@ -214,11 +222,11 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from given {@code input} and writes those encoded
-     * characters to {@code output}.
+     * Encodes bytes from given input stream and writes encoded characters to
+     * specified writer.
      *
-     * @param input binary input
-     * @param output character output
+     * @param input the binary input stream.
+     * @param output the character output writer
      *
      * @throws IOException if an I/O error occurs
      */
@@ -238,11 +246,11 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes from {@code input} and writes those encoded octets to
-     * {@code output}.
+     * Encodes bytes from given input stream and writes encoded bytes to
+     * specified output stream.
      *
-     * @param input input
-     * @param output output
+     * @param input the input stream
+     * @param output the output stream
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -263,22 +271,19 @@ public abstract class Base {
     }
 
 
-    /**
-     * Encodes bytes from given input stream and returns result.
-     *
-     * @param input the input stream
-     *
-     * @return encoded output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public final byte[] encode(final InputStream input) throws IOException {
+    private byte[] encode(final InputStream input, int outputCapacity)
+        throws IOException {
 
         if (input == null) {
             throw new NullPointerException("input");
         }
 
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final ByteArrayOutputStream output;
+        if (outputCapacity > 0) {
+            output = new ByteArrayOutputStream(outputCapacity);
+        } else {
+            output = new ByteArrayOutputStream();
+        }
 
         encode(input, output);
         output.flush();
@@ -288,11 +293,27 @@ public abstract class Base {
 
 
     /**
-     * Encodes bytes in {@code input} and returns encoded characters.
+     * Encodes bytes from given input stream and returns result as an array of
+     * bytes.
      *
-     * @param input byte input
+     * @param input the input stream
      *
-     * @return encoded characters
+     * @return an array of encoded bytes
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] encode(final InputStream input) throws IOException {
+
+        return encode(input, -1);
+    }
+
+
+    /**
+     * Encodes given bytes and returns result.
+     *
+     * @param input the input bytes
+     *
+     * @return encoded result
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -302,16 +323,40 @@ public abstract class Base {
             throw new NullPointerException("input");
         }
 
-        return encode(new ByteArrayInputStream(input));
+        int wordCount = input.length / bytesPerWord;
+        if (input.length % bytesPerWord > 0) {
+            wordCount++;
+        }
+        final int outputCapacity = wordCount * charsPerWord;
+
+        final byte[] output =
+            encode(new ByteArrayInputStream(input), outputCapacity);
+
+        if (output.length > outputCapacity) {
+            LOGGER.debug("input.length: {}", Integer.valueOf(input.length));
+            LOGGER.debug("bytes/word: {}", Integer.valueOf(bytesPerWord));
+            LOGGER.debug("chars/word: {}", Integer.valueOf(charsPerWord));
+            LOGGER.debug("encoded.output.length({}) > outputCapacity({})",
+                         Integer.valueOf(output.length),
+                         Integer.valueOf(outputCapacity));
+        }
+
+        return output;
     }
 
 
+    /**
+     * Encodes given bytes and returns the result as a string.
+     *
+     * @param input the input bytes.
+     * @param outputCharset the charset name to encode output string.
+     *
+     * @return the result string
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public String encodeToString(final byte[] input, final String outputCharset)
         throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
 
         if (outputCharset == null) {
             throw new NullPointerException("outputCharset");
@@ -431,10 +476,6 @@ public abstract class Base {
     public void decode(final Reader input, final OutputStream output)
         throws IOException {
 
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
-
         if (output == null) {
             throw new NullPointerException("outpute");
         }
@@ -459,13 +500,30 @@ public abstract class Base {
             throw new NullPointerException("input");
         }
 
-        if (output == null) {
-            throw new NullPointerException("outpute");
-        }
-
         final Reader reader = new InputStreamReader(input, "US-ASCII");
 
         decode(reader, output);
+    }
+
+
+    private byte[] decode(final InputStream input, final int outputCapacity)
+        throws IOException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        final ByteArrayOutputStream output;
+        if (outputCapacity >= 0) {
+            output = new ByteArrayOutputStream(outputCapacity);
+        } else {
+            output = new ByteArrayOutputStream();
+        }
+
+        decode(input, output);
+        output.flush();
+
+        return output.toByteArray();
     }
 
 
@@ -480,25 +538,16 @@ public abstract class Base {
      */
     public byte[] decode(final InputStream input) throws IOException {
 
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
-
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        decode(input, output);
-        output.flush();
-
-        return output.toByteArray();
+        return decode(input, -1);
     }
 
 
     /**
-     * Decodes characters in {@code input} and return decoded bytes.
+     * Decodes given encoded bytes and return decoded bytes.
      *
-     * @param input character input
+     * @param input the encoded bytes to decode
      *
-     * @return decoded bytes
+     * @return the decoded bytes
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -508,16 +557,25 @@ public abstract class Base {
             throw new NullPointerException("input");
         }
 
-        return decode(new ByteArrayInputStream(input));
+        final int outputCapacity = input.length * bytesPerWord / charsPerWord;
+
+        final byte[] output =
+            decode(new ByteArrayInputStream(input), outputCapacity);
+        if (output.length > outputCapacity) {
+            LOGGER.debug("input.length: {}", Integer.valueOf(input.length));
+            LOGGER.debug("bytes/word: {}", Integer.valueOf(bytesPerWord));
+            LOGGER.debug("chars/word: {}", Integer.valueOf(charsPerWord));
+            LOGGER.debug("decoded.output.length({}) > outputCapacity({})",
+                         Integer.valueOf(output.length),
+                         Integer.valueOf(outputCapacity));
+        }
+
+        return output;
     }
 
 
     public String decodeToString(final byte[] input, final String outputCharset)
         throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
 
         if (outputCharset == null) {
             throw new NullPointerException("outputCharset");
@@ -579,7 +637,7 @@ public abstract class Base {
 
 
     /**
-     * flag for lower-case characters.
+     * flag for lower-case characters only.
      */
     private final boolean lower;
 

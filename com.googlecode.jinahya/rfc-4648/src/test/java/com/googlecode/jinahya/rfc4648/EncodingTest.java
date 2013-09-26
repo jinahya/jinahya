@@ -18,7 +18,7 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
+import static com.googlecode.jinahya.rfc4648.BaseTest.newDecoded;
 import org.apache.commons.codec.BinaryDecoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -51,7 +51,7 @@ public abstract class EncodingTest<B extends Base, D extends BinaryDecoder>
     @Test(invocationCount = 32)
     public void testEncoding() throws Exception {
 
-        final byte[] expected = decoded();
+        final byte[] expected = newDecoded();
 
         final byte[] encoded = newBase().encode(expected);
 
