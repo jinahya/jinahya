@@ -29,21 +29,23 @@ public class Base64UrlEncodingTest extends DecodingTest<Base64Url, Base64> {
 
 
     public Base64UrlEncodingTest() {
+
         super(Base64Url.class, Base64.class);
     }
 
 
     @Override
-    protected Base64 newEncoder() {
+    protected Base64 encoder() {
+
         return new Base64(-1, null, true);
     }
 
 
     @Override
-    protected byte[] forBaseDecoding(final byte[] commonsEncoded) {
-        return commonsEncoded;
+    protected byte[] decoding(final byte[] encoded) {
+
+        return encoded;
     }
 
 
 }
-

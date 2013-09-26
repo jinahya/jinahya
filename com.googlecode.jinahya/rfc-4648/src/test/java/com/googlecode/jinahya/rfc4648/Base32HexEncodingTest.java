@@ -29,21 +29,23 @@ public class Base32HexEncodingTest extends EncodingTest<Base32Hex, Base32> {
 
 
     public Base32HexEncodingTest() {
+
         super(Base32Hex.class, Base32.class);
     }
 
 
     @Override
-    protected Base32 newDecoder() {
+    protected Base32 decoder() {
+
         return new Base32(-1, null, true);
     }
 
 
     @Override
-    protected byte[] forCommonsDecoding(byte[] baseEncoded) {
-        return baseEncoded;
+    protected byte[] decoding(byte[] encoded) {
+
+        return encoded;
     }
 
 
 }
-

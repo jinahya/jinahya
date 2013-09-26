@@ -30,12 +30,14 @@ public class Base64UrlEncodingMeanTest
 
 
     public Base64UrlEncodingMeanTest() {
+        
         super(Base64Url.class, Base64.class);
     }
 
 
     @Override
-    protected Base64 newEncoder() {
+    protected Base64 encoder() {
+        
         return new Base64(-1, null, true);
     }
 

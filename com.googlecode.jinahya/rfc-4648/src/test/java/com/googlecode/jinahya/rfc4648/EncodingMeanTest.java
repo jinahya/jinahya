@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc4648;
 
 
 import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.math3.stat.StatUtils;
@@ -40,11 +41,11 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
                             final Class<E> encoderClass) {
         super(baseClass);
 
-        this.encoderClass = encoderClass;
+        this.encoderClass = Objects.requireNonNull(encoderClass);
     }
 
 
-    protected abstract E newEncoder();
+    protected abstract E encoder();
 
 
     @Test(invocationCount = 1)
@@ -56,7 +57,7 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
         final double commons[] = new double[count];
 
         final B base = base();
-        final E encoder = newEncoder();
+        final E encoder = encoder();
 
         long start;
 
@@ -75,9 +76,9 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
 
         final double baseMean = StatUtils.mean(bases);
         final double commonsMean = StatUtils.mean(commons);
-        System.out.println(baseClass.getName() + ": " + baseMean);
-        System.out.println(encoderClass.getName() + ": " + commonsMean);
-        System.out.println(baseMean / commonsMean);
+        System.out.printf("%12s: %20.4f\n", baseClass.getSimpleName(), baseMean);
+        System.out.printf("%12s: %20.4f\n", encoderClass.getSimpleName(), commonsMean);
+        System.out.printf("base/commons: %20.4f\n", (baseMean / commonsMean));
     }
 
 
@@ -85,4 +86,3 @@ public abstract class EncodingMeanTest<B extends Base, E extends BinaryEncoder>
 
 
 }
-

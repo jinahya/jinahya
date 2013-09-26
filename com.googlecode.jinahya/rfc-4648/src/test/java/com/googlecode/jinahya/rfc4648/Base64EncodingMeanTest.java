@@ -27,12 +27,14 @@ public class Base64EncodingMeanTest
 
 
     public Base64EncodingMeanTest() {
+        
         super(Base64.class, org.apache.commons.codec.binary.Base64.class);
     }
 
 
     @Override
-    protected org.apache.commons.codec.binary.Base64 newEncoder() {
+    protected org.apache.commons.codec.binary.Base64 encoder() {
+        
         return new org.apache.commons.codec.binary.Base64(-1, null, false);
     }
 
