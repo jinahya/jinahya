@@ -18,6 +18,10 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+
+
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -28,13 +32,13 @@ public class HexEncoder {
     /**
      * Encodes a single nibble.
      *
-     * @param decoded the nibble to encode.
+     * @param input the nibble to encode.
      *
      * @return the encoded half octet.
      */
-    private static int encodeHalf(final int decoded) {
+    private static int encodeHalf(final int input) {
 
-        switch (decoded) {
+        switch (input) {
             case 0x00:
             case 0x01:
             case 0x02:
@@ -45,18 +49,16 @@ public class HexEncoder {
             case 0x07:
             case 0x08:
             case 0x09:
-                return decoded + 0x30; // 0x30('0') ~ 0x39('9')
-//            case 0x0A:
-//            case 0x0B:
-//            case 0x0C:
-//            case 0x0D:
-//            case 0x0E:
-//            case 0x0F:
+                return input + 0x30; // 0x30('0') ~ 0x39('9')
+            case 0x0A:
+            case 0x0B:
+            case 0x0C:
+            case 0x0D:
+            case 0x0E:
+            case 0x0F:
+                return input + 0x57; // 0x61('a') ~ 0x66('f')
             default:
-                //return decoded + 0x57; // 0x61('a') ~ 0x66('f')
-                return decoded + 0x37; // 0x41('A') ~ 0x46('F')
-//            default:
-//                throw new IllegalArgumentException("illegal half: " + decoded);
+                throw new IllegalArgumentException("illegal half: " + input);
         }
     }
 
@@ -64,67 +66,103 @@ public class HexEncoder {
     /**
      * Encodes a single octet into two nibbles.
      *
-     * @param decoded the octet to encode.
-     * @param encoded the array to which each encoded nibbles are written.
-     * @param offset the offset in the array.
+     * @param input the octet to encode.
+     * @param output the array to which each encoded nibbles are written.
+     * @param outputOffset the offset in the output array.
      */
-    public static void encodeSingle(final int decoded, final byte[] encoded,
-                                    final int offset) {
+    public static void encodeSingle(final int input, final byte[] output,
+                                    final int outputOffset) {
 
-//        if (decoded < 0x00) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") < 0x00");
-//        }
-//
-//        if (decoded > 0xFF) {
-//            throw new IllegalArgumentException(
-//                "decoded(" + decoded + ") > 0xFF");
-//        }
+        if (output == null) {
+            throw new NullPointerException("output");
+        }
 
-//        if (encoded == null) {
-//            throw new NullPointerException("null encoded");
-//        }
+        if (outputOffset < 0) {
+            throw new IllegalArgumentException(
+                "outputOffset(" + outputOffset + ") < 0");
+        }
 
-//        if (encoded.length < 2) {
-//            // not required
-//            throw new IllegalArgumentException(
-//                "encoded.length(" + encoded.length + ") < 2");
-//        }
+        if (outputOffset >= output.length - 1) {
+            throw new IllegalArgumentException(
+                "outputOffset(" + outputOffset + ") >= output.length("
+                + output.length + ") - 1");
+        }
 
-//        if (offset < 0) {
-//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-//        }
-
-//        if (offset >= encoded.length - 1) {
-//            throw new IllegalArgumentException(
-//                "offset(" + offset + ") >= encoded.length(" + encoded.length
-//                + ") - 1");
-//        }
-
-        encoded[offset] = (byte) encodeHalf((decoded & 0xF0) >> 4);
-        encoded[offset + 1] = (byte) encodeHalf(decoded & 0x0F);
+        output[outputOffset] = (byte) encodeHalf((input >> 4) & 0x0F);
+        output[outputOffset + 1] = (byte) encodeHalf(input & 0x0F);
     }
 
 
     /**
-     * Encodes given sequence of octets into a sequence of nibbles.
+     * Encodes a single octet into two nibbles.
      *
-     * @param decoded the octets to encode
-     *
-     * @return the encoded nibbles.
+     * @param input the input byte array
+     * @param inputOffset the offset in the input array
+     * @param output the array to which each encoded nibbles are written.
+     * @param outputOffset the offset in the output array.
      */
-    public static byte[] encodeMultiple(final byte[] decoded) {
+    public static void encodeSingle(final byte[] input, final int inputOffset,
+                                    final byte[] output,
+                                    final int outputOffset) {
 
-//        if (decoded == null) {
-//            throw new NullPointerException("null decoded");
-//        }
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
 
-        final byte[] encoded = new byte[decoded.length << 1]; // * 2
+        if (inputOffset < 0) {
+            throw new IllegalArgumentException(
+                "inputOffset(" + inputOffset + ") < 0");
+        }
 
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            encodeSingle(decoded[i] & 0xFF, encoded, offset);
-            offset += 2;
+        if (inputOffset >= input.length) {
+            throw new IllegalArgumentException(
+                "inputOffset(" + inputOffset + ") >= input.length("
+                + input.length + ")");
+        }
+
+        encodeSingle(input[inputOffset], output, outputOffset);
+    }
+
+
+    public static byte[] encodeMultiple(
+        final byte[] input, int inputOffset, final int inputLength,
+        final byte[] output, int outputOffset) {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputOffset < 0) {
+            throw new IllegalArgumentException(
+                "inputOffset(" + inputOffset + ") < 0");
+        }
+
+        if (inputLength < 0) {
+            throw new IllegalArgumentException(
+                "inputLength(" + inputLength + ") < 0");
+        }
+
+        if (inputOffset + inputLength > input.length) {
+            throw new IllegalArgumentException(
+                "inputOffset(" + inputOffset + ") + inputLength(" + inputLength
+                + ") >= input.length(" + input.length + ")");
+        }
+
+        if (output == null) {
+            throw new NullPointerException("output");
+        }
+
+        if (outputOffset < 0) {
+            throw new IllegalArgumentException(
+                "outputOffset(" + outputOffset + ") < 0");
+        }
+
+        final byte[] encoded = new byte[input.length << 1]; // * 2
+
+        for (int i = 0; i < inputLength; i++) {
+            encodeSingle(input, inputOffset, encoded, outputOffset);
+            inputOffset += 1;
+            outputOffset += 2;
         }
 
         return encoded;
@@ -134,17 +172,113 @@ public class HexEncoder {
     /**
      * Encodes given sequence of octets into a sequence of nibbles.
      *
-     * @param decoded the octets to encode.
+     * @param input the octets to encode
      *
      * @return the encoded nibbles.
      */
-    public byte[] encode(final byte[] decoded) {
+    public static byte[] encodeMultiple(final byte[] input) {
 
-//        if (decoded == null) {
-//            throw new NullPointerException("null decoded");
-//        }
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
 
-        return encodeMultiple(decoded);
+        final byte[] output = new byte[input.length << 1]; // * 2
+
+        encodeMultiple(input, 0, input.length, output, 0);
+
+        return output;
+    }
+
+
+    /**
+     * Encodes given sequence of octets into a sequence of nibbles.
+     *
+     * @param input the octets to encode.
+     *
+     * @return the encoded nibbles.
+     */
+    public byte[] encode(final byte[] input) {
+
+        if (input == null) {
+            throw new NullPointerException("decoded");
+        }
+
+        return encodeMultiple(input);
+    }
+
+
+    public String encodedToString(final byte[] input,
+                                  final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input), outputCharset);
+    }
+
+
+    public String encodedToString(final byte[] input,
+                                  final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input), outputCharset);
+    }
+
+
+    public byte[] encode(final String input, final String inputCharset)
+        throws UnsupportedEncodingException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return encode(input.getBytes(inputCharset));
+    }
+
+
+    public byte[] encode(final String input, final Charset inputCharset) {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return encode(input.getBytes(inputCharset));
+    }
+
+
+    public String encodeToString(final String input, final String inputCharset,
+                                 final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input, inputCharset), outputCharset);
+    }
+
+
+    public String encodeToString(final String input, final Charset inputCharset,
+                                 final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input, inputCharset), outputCharset);
     }
 
 
@@ -194,4 +328,3 @@ public class HexEncoder {
 
 
 }
-
