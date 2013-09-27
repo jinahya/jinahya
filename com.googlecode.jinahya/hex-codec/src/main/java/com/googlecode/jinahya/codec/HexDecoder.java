@@ -21,6 +21,8 @@ package com.googlecode.jinahya.codec;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,6 +33,13 @@ public class HexDecoder {
 
 
     /**
+     * logger.
+     */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(HexDecoder.class);
+
+
+    /**
      * Decodes a single nibble.
      *
      * @param input the nibble to decode.
@@ -38,6 +47,8 @@ public class HexDecoder {
      * @return the decoded half octet.
      */
     private static int decodeHalf(final int input) {
+
+        LOGGER.debug("decodeHalf({})", input);
 
         switch (input) {
             case 0x30: // '0'
@@ -75,11 +86,13 @@ public class HexDecoder {
      * Decodes two nibbles into a single octet.
      *
      * @param input the nibble array.
-     * @param inputOffset the offset in the array.
+     * @param inoff the offset in the array.
      *
      * @return decoded octet.
      */
-    public static int decodeSingle(final byte[] input, final int inputOffset) {
+    public static int decodeSingle(final byte[] input, final int inoff) {
+
+        LOGGER.debug("decodeSingle({}, {})", input, inoff);
 
         if (input == null) {
             throw new NullPointerException("input");
@@ -91,58 +104,54 @@ public class HexDecoder {
                 "input.length(" + input.length + ") < 2");
         }
 
-        if (inputOffset < 0) {
-            throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") < 0");
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
         }
 
-        if (inputOffset >= input.length - 1) {
+        if (inoff >= input.length - 1) {
             throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") >= input.length("
-                + input.length + ") - 1");
+                "inoff(" + inoff + ") >= input.length(" + input.length
+                + ") - 1");
         }
 
-        return (decodeHalf(input[inputOffset] & 0xFF) << 4)
-               | decodeHalf(input[inputOffset + 1] & 0xFF);
+        return (decodeHalf(input[inoff] & 0xFF) << 4)
+               | decodeHalf(input[inoff + 1] & 0xFF);
     }
 
 
-    public static void decodeSingle(final byte[] input, final int inputOffset,
-                                    final byte[] output,
-                                    final int outputOffset) {
+    public static void decodeSingle(final byte[] input, final int inoff,
+                                    final byte[] output, final int outoff) {
 
         if (output == null) {
             throw new NullPointerException("output");
         }
 
-        if (outputOffset < 0) {
-            throw new IllegalArgumentException(
-                "outputOffset(" + outputOffset + ") < 0");
+        if (outoff < 0) {
+            throw new IllegalArgumentException("outoff(" + outoff + ") < 0");
         }
 
-        if (outputOffset >= output.length) {
+        if (outoff >= output.length) {
             throw new IllegalArgumentException(
-                "outputOffset (" + outputOffset + ") >= output.length("
-                + output.length + ")");
+                "outoff(" + outoff + ") >= output.length(" + output.length
+                + ")");
         }
 
-        output[outputOffset] = (byte) decodeSingle(input, inputOffset);
+        output[outoff] = (byte) decodeSingle(input, inoff);
     }
 
 
-    public static void decodeMultiple(final byte[] input, int inputOffset,
-                                      final byte[] output, int outputOffset,
-                                      final int outputLength) {
+    public static void decodeMultiple(final byte[] input, int inoff,
+                                      final byte[] output, int outoff,
+                                      final int count) {
 
-        if (outputLength < 0) {
-            throw new IllegalArgumentException(
-                "inputLength(" + outputLength + ") < 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count(" + count + ") < 0");
         }
 
-        for (int i = 0; i < outputLength; i++) {
-            decodeSingle(input, inputOffset, output, outputOffset);
-            inputOffset += 2;
-            outputOffset += 1;
+        for (int i = 0; i < count; i++) {
+            decodeSingle(input, inoff, output, outoff);
+            inoff += 2;
+            outoff += 1;
         }
     }
 
@@ -298,3 +307,4 @@ public class HexDecoder {
 
 
 }
+

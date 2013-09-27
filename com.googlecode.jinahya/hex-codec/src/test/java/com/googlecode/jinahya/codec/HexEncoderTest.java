@@ -18,8 +18,11 @@
 package com.googlecode.jinahya.codec;
 
 
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -28,35 +31,58 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-//@Test(enabled = false)
 public class HexEncoderTest {
 
 
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testEncodeWithNull() {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(HexEncoderTest.class);
+
+
+    @Test(enabled = true)
+    public static void testEncodeSingle() {
+
+        final byte[] output = new byte[2];
+        for (int i = 0; i < 256; i++) {
+            HexEncoder.encodeSingle(i, output, 0);
+            final String hex =
+                (i < 0x10 ? "0" : "") + Integer.toHexString(i).toUpperCase();
+            Assert.assertEquals(new String(output, StandardCharsets.US_ASCII),
+                                hex);
+        }
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testEncodeWithNullBytes() {
+
         new HexEncoder().encode(null);
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(invocationCount = 1)
     public void testEncode() {
         new HexEncoder().encode(new byte[0]);
-        new HexEncoder().encode(HexCodecTestUtils.newDecodedBytes());
+        new HexEncoder().encode(Tests.decodedBytes());
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(enabled = true, invocationCount = 1)
     public void testEncodeAgainstCommonsCodecHex() throws EncoderException {
 
-        final byte[] decoded = HexCodecTestUtils.newDecodedBytes();
+        final byte[] decoded = Tests.decodedBytes();
 
-        final byte[] expected =
-            HexCodecTestUtils.toUpperCase(new Hex().encode(decoded));
+        final byte[] expected = Tests.uppercase(new Hex().encode(decoded));
+        LOGGER.debug("expected: {}", expected);
 
         final byte[] actual = new HexEncoder().encode(decoded);
+        LOGGER.debug("actual: {}", actual);
 
         Assert.assertEquals(actual, expected);
     }
 
 
 }
+

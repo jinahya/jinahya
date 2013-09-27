@@ -18,118 +18,33 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import com.googlecode.jinahya.commons.codec.BinaryEncoderProxy;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HexBinaryEncoderProxy implements InvocationHandler {
+public class HexBinaryEncoderProxy extends BinaryEncoderProxy<HexEncoder> {
 
 
     /**
-     * Class for {@code org.apache.commons.codec.BinaryEncoder}.
-     */
-    private static final Class<?> BINARY_ENCODER;
-
-
-    static {
-        try {
-            BINARY_ENCODER = Class.forName(
-                "org.apache.commons.codec.BinaryEncoder");
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    private static final Method ENCODE_OBJECT;
-
-
-    static {
-        try {
-            ENCODE_OBJECT = BINARY_ENCODER.getMethod("encode", Object.class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    private static final Method ENCODE_BYTES;
-
-
-    static {
-        try {
-            ENCODE_BYTES = BINARY_ENCODER.getMethod("encode", byte[].class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.EncoderException}.
-     */
-    private static final Class<? extends Throwable> ENCODER_EXCEPTION;
-
-
-    static {
-        try {
-            ENCODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.EncoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    /**
-     * Creates a new instance of
-     * {@code org.apache.commons.codec.EncoderException}.
+     * Returns a new proxy instance for
+     * {@code org.apache.commons.codec.BinaryEncoder} with given
+     * {@code encoder}.
      *
-     * @return a new instance.
+     * @param encoder the encoder to proxy
      *
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @return a new proxy instance.
      */
-    private static Throwable newEncoderException()
-        throws InstantiationException, IllegalAccessException {
+    public static Object newInstance(final HexEncoder encoder) {
 
-        return ENCODER_EXCEPTION.newInstance();
-    }
+        if (encoder == null) {
+            throw new NullPointerException("encoder");
+        }
 
-
-    private static Throwable newEncoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.getConstructor(String.class).
-            newInstance(message);
-    }
-
-
-    private static Throwable newEncoderException(final String message,
-                                                 final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.
-            getConstructor(String.class, Throwable.class).
-            newInstance(message, cause);
-    }
-
-
-    private static Throwable newEncoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return ENCODER_EXCEPTION.getConstructor(Throwable.class).
-            newInstance(cause);
+        return newInstance(
+            HexBinaryEncoderProxy.class, HexEncoder.class, encoder);
     }
 
 
@@ -146,71 +61,25 @@ public class HexBinaryEncoderProxy implements InvocationHandler {
 
 
     /**
-     * Returns a new proxy instance for
-     * {@code org.apache.commons.codec.BinaryEncoder} with given
-     * {@code encoder}.
-     *
-     * @param encoder the encoder to proxy
-     *
-     * @return a new proxy instance.
-     */
-    public static Object newInstance(final HexEncoder encoder) {
-
-        if (encoder == null) {
-            throw new NullPointerException("null encoder");
-        }
-
-        return Proxy.newProxyInstance(BINARY_ENCODER.getClassLoader(),
-                                      new Class<?>[]{BINARY_ENCODER},
-                                      new HexBinaryEncoderProxy(encoder));
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param encoder the encoder to use.
      */
     protected HexBinaryEncoderProxy(final HexEncoder encoder) {
-        super();
 
-        if (encoder == null) {
-            throw new NullPointerException("null encoder");
-        }
-
-        this.encoder = encoder;
+        super(encoder);
     }
 
 
     @Override
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args)
-        throws Throwable {
+    protected byte[] encode(final byte[] source) throws Throwable {
 
-        if (ENCODE_BYTES.equals(method)) {
-            return encoder.encode((byte[]) args[0]);
+        if (source == null) {
+            throw new NullPointerException("source");
         }
 
-        if (ENCODE_OBJECT.equals(method)) {
-
-            if (args[0] instanceof byte[]) {
-                return invoke(proxy, ENCODE_BYTES,
-                              new Object[]{(byte[]) args[0]});
-            }
-
-            if (args[0] instanceof String) {
-                final byte[] bytes = ((String) args[0]).getBytes("UTF-8");
-                return invoke(proxy, ENCODE_BYTES, new Object[]{bytes});
-            }
-
-            throw newEncoderException("unacceptable argument: " + args[0]);
-        }
-
-        throw new UnsupportedOperationException("unsupported: " + method);
+        return encoder.encode(source);
     }
-
-
-    private final HexEncoder encoder;
 
 
 }

@@ -18,109 +18,20 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import com.googlecode.jinahya.commons.codec.BinaryDecoderProxy;
 
 
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class HexBinaryDecoderProxy implements InvocationHandler {
+public class HexBinaryDecoderProxy extends BinaryDecoderProxy<HexDecoder> {
 
 
-    /**
-     * Class for {@code org.apache.commons.codec.BinaryDecoder}.
-     */
-    private static final Class<?> BINARY_DECODER;
+    public static Object newInstance(final HexDecoder decoder) {
 
-
-    static {
-        try {
-            BINARY_DECODER = Class.forName(
-                "org.apache.commons.codec.BinaryDecoder");
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    private static final Method DECODE_OBJECT;
-
-
-    static {
-        try {
-            DECODE_OBJECT = BINARY_DECODER.getMethod("decode", Object.class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    private static final Method DECODE_BYTES;
-
-
-    static {
-        try {
-            DECODE_BYTES = BINARY_DECODER.getMethod("decode", byte[].class);
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Class for {@code org.apache.commons.codec.DecoderException}.
-     */
-    private static final Class<? extends Throwable> DECODER_EXCEPTION;
-
-
-    static {
-        try {
-            DECODER_EXCEPTION = Class.forName(
-                "org.apache.commons.codec.DecoderException").
-                asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        }
-    }
-
-
-    private static Throwable newDecoderException()
-        throws InstantiationException, IllegalAccessException {
-
-        return DECODER_EXCEPTION.newInstance();
-    }
-
-
-    private static Throwable newDecoderException(final String message)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.getConstructor(String.class).
-            newInstance(message);
-    }
-
-
-    private static Throwable newDecoderException(final String message,
-                                                 final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.
-            getConstructor(String.class, Throwable.class).
-            newInstance(message, cause);
-    }
-
-
-    private static Throwable newDecoderException(final Throwable cause)
-        throws NoSuchMethodException, InstantiationException,
-               IllegalAccessException, InvocationTargetException {
-
-        return DECODER_EXCEPTION.getConstructor(Throwable.class).
-            newInstance(cause);
+        return newInstance(
+            HexBinaryDecoderProxy.class, HexDecoder.class, decoder);
     }
 
 
@@ -136,70 +47,25 @@ public class HexBinaryDecoderProxy implements InvocationHandler {
 
 
     /**
-     * Creates a new proxy instance for
-     * {@code org.apache.commons.codec.BinaryDecoder}.
-     *
-     * @param decoder the decoder to proxy.
-     *
-     * @return a new proxy instance.
-     */
-    public static Object newInstance(final HexDecoder decoder) {
-
-        if (decoder == null) {
-            throw new NullPointerException("null decoder");
-        }
-
-        return Proxy.newProxyInstance(BINARY_DECODER.getClassLoader(),
-                                      new Class<?>[]{BINARY_DECODER},
-                                      new HexBinaryDecoderProxy(decoder));
-    }
-
-
-    /**
      * Creates a new instance.
      *
      * @param decoder the decoder to proxy.
      */
     protected HexBinaryDecoderProxy(final HexDecoder decoder) {
-        super();
 
-        if (decoder == null) {
-            throw new NullPointerException("null decoder");
-        }
-
-        this.decoder = decoder;
+        super(decoder);
     }
 
 
     @Override
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args)
-        throws Throwable {
+    protected byte[] decode(final byte[] source) throws Throwable {
 
-        if (DECODE_BYTES.equals(method)) {
-            return decoder.decode((byte[]) args[0]);
+        if (source == null) {
+            throw new NullPointerException("source");
         }
 
-        if (DECODE_OBJECT.equals(method)) {
-
-            if (args[0] instanceof byte[]) {
-                return invoke(proxy, DECODE_BYTES,
-                              new Object[]{(byte[]) args[0]});
-            }
-
-            if (args[0] instanceof String) {
-                final byte[] bytes = ((String) args[0]).getBytes("US-ASCII");
-                return invoke(proxy, DECODE_BYTES, new Object[]{bytes});
-            }
-
-            throw newDecoderException("unacceptable argument: " + args[0]);
-        }
-
-        throw new UnsupportedOperationException("unsupported: " + method);
+        return decoder.decode(source);
     }
-
-
-    private final HexDecoder decoder;
 
 
 }

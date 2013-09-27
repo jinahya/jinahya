@@ -18,11 +18,9 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -45,46 +43,37 @@ public class HexBinaryEncoderProxyTest {
 
 
     @Test
-    public void testAsCommonsCodecEncoderForObject() throws EncoderException {
+    public void testAsEncoder() throws EncoderException {
 
-        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
+        final Encoder encoder = (Encoder) HexBinaryEncoderProxy.newInstance();
 
-        final Encoder proxy = (Encoder) HexBinaryEncoderProxy.newInstance();
-        final byte[] encoded = (byte[]) proxy.encode(expected);
+        try {
+            encoder.encode(null);
+            Assert.fail("passed: <Object>encode(null)");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
 
-        final byte[] actual = new HexDecoder().decode(encoded);
-
-        Assert.assertEquals(actual, expected);
+        final Object decoded = Tests.decodedBytes();
+        final Object encoded = encoder.encode(decoded);
     }
 
 
     @Test
-    public void testAsCommonsCodecEncoderForString() throws EncoderException {
-
-        final String expected = RandomStringUtils.random(1024);
-
-        final Encoder proxy = (Encoder) HexBinaryEncoderProxy.newInstance();
-        final byte[] encoded = (byte[]) proxy.encode(expected);
-
-        final String actual = new String(HexDecoder.decodeMultiple(encoded),
-                                         StandardCharsets.UTF_8);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test
-    public void testAsCommonsCodecBinaryEncoder() throws EncoderException {
-
-        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
+    public void testAsBinaryEncoder() throws EncoderException {
 
         final BinaryEncoder encoder =
             (BinaryEncoder) HexBinaryEncoderProxy.newInstance();
-        final byte[] encoded = encoder.encode(expected);
 
-        final byte[] actual = HexDecoder.decodeMultiple(encoded);
+        try {
+            encoder.encode((byte[]) null);
+            Assert.fail("passed: encode((byte[]) null)");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
 
-        Assert.assertEquals(actual, expected);
+        final byte[] decoded = Tests.decodedBytes();
+        final byte[] encoded = encoder.encode(decoded);
     }
 
 
