@@ -56,7 +56,7 @@ public class HexEncoder {
             case 0x0D:
             case 0x0E:
             case 0x0F:
-                return input + 0x57; // 0x61('a') ~ 0x66('f')
+                return input + 0x37; // 0x41('A') ~ 0x46('F')
             default:
                 throw new IllegalArgumentException("illegal half: " + input);
         }
@@ -68,28 +68,27 @@ public class HexEncoder {
      *
      * @param input the octet to encode.
      * @param output the array to which each encoded nibbles are written.
-     * @param outputOffset the offset in the output array.
+     * @param outoff the offset in the output array.
      */
     public static void encodeSingle(final int input, final byte[] output,
-                                    final int outputOffset) {
+                                    final int outoff) {
 
         if (output == null) {
             throw new NullPointerException("output");
         }
 
-        if (outputOffset < 0) {
-            throw new IllegalArgumentException(
-                "outputOffset(" + outputOffset + ") < 0");
+        if (outoff < 0) {
+            throw new IllegalArgumentException("outoff(" + outoff + ") < 0");
         }
 
-        if (outputOffset >= output.length - 1) {
+        if (outoff >= output.length - 1) {
             throw new IllegalArgumentException(
-                "outputOffset(" + outputOffset + ") >= output.length("
-                + output.length + ") - 1");
+                "outoff(" + outoff + ") >= output.length(" + output.length
+                + ") - 1");
         }
 
-        output[outputOffset] = (byte) encodeHalf((input >> 4) & 0x0F);
-        output[outputOffset + 1] = (byte) encodeHalf(input & 0x0F);
+        output[outoff] = (byte) encodeHalf((input >> 4) & 0x0F);
+        output[outoff + 1] = (byte) encodeHalf(input & 0x0F);
     }
 
 
@@ -97,75 +96,47 @@ public class HexEncoder {
      * Encodes a single octet into two nibbles.
      *
      * @param input the input byte array
-     * @param inputOffset the offset in the input array
+     * @param inoff the offset in the input array
      * @param output the array to which each encoded nibbles are written.
-     * @param outputOffset the offset in the output array.
+     * @param outoff the offset in the output array.
      */
-    public static void encodeSingle(final byte[] input, final int inputOffset,
-                                    final byte[] output,
-                                    final int outputOffset) {
+    public static void encodeSingle(final byte[] input, final int inoff,
+                                    final byte[] output, final int outoff) {
 
         if (input == null) {
             throw new NullPointerException("input");
         }
 
-        if (inputOffset < 0) {
-            throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") < 0");
+        if (inoff < 0) {
+            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
         }
 
-        if (inputOffset >= input.length) {
+        if (inoff >= input.length) {
             throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") >= input.length("
-                + input.length + ")");
+                "inoff(" + inoff + ") >= input.length(" + input.length + ")");
         }
 
-        encodeSingle(input[inputOffset], output, outputOffset);
+        encodeSingle(input[inoff], output, outoff);
     }
 
 
-    public static byte[] encodeMultiple(
-        final byte[] input, int inputOffset, final int inputLength,
-        final byte[] output, int outputOffset) {
+    public static void encodeMultiple(final byte[] input, int inoff,
+                                      final byte[] output, int outoff,
+                                      final int count) {
 
         if (input == null) {
             throw new NullPointerException("input");
         }
 
-        if (inputOffset < 0) {
-            throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") < 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count(" + count + ") < 0");
         }
 
-        if (inputLength < 0) {
-            throw new IllegalArgumentException(
-                "inputLength(" + inputLength + ") < 0");
+        for (int i = 0; i < count; i++) {
+            encodeSingle(input, inoff, output, outoff);
+            inoff += 1;
+            outoff += 2;
         }
-
-        if (inputOffset + inputLength > input.length) {
-            throw new IllegalArgumentException(
-                "inputOffset(" + inputOffset + ") + inputLength(" + inputLength
-                + ") >= input.length(" + input.length + ")");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("output");
-        }
-
-        if (outputOffset < 0) {
-            throw new IllegalArgumentException(
-                "outputOffset(" + outputOffset + ") < 0");
-        }
-
-        final byte[] encoded = new byte[input.length << 1]; // * 2
-
-        for (int i = 0; i < inputLength; i++) {
-            encodeSingle(input, inputOffset, encoded, outputOffset);
-            inputOffset += 1;
-            outputOffset += 2;
-        }
-
-        return encoded;
     }
 
 
@@ -184,7 +155,7 @@ public class HexEncoder {
 
         final byte[] output = new byte[input.length << 1]; // * 2
 
-        encodeMultiple(input, 0, input.length, output, 0);
+        encodeMultiple(input, 0, output, 0, input.length);
 
         return output;
     }
@@ -198,10 +169,6 @@ public class HexEncoder {
      * @return the encoded nibbles.
      */
     public byte[] encode(final byte[] input) {
-
-        if (input == null) {
-            throw new NullPointerException("decoded");
-        }
 
         return encodeMultiple(input);
     }
@@ -328,3 +295,4 @@ public class HexEncoder {
 
 
 }
+

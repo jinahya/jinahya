@@ -20,6 +20,8 @@ package com.googlecode.jinahya.codec;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -31,8 +33,35 @@ import org.testng.annotations.Test;
 public class HexDecoderTest {
 
 
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testDecodeWithNull() {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(HexDecoderTest.class);
+
+
+    @Test
+    public static void testDecodeSingle() {
+
+        final byte[] input = new byte[2];
+        for (int i = 0; i < 256; i++) {
+            final String hex = Integer.toHexString(i);
+            if (hex.length() == 1) {
+                input[0] = (byte) '0';
+                input[1] = (byte) hex.charAt(0);
+            } else {
+                input[0] = (byte) hex.charAt(0);
+                input[1] = (byte) hex.charAt(1);
+            }
+            final int decoded = HexDecoder.decodeSingle(input, 0);
+            Assert.assertEquals(decoded, i);
+        }
+    }
+
+
+    @Test(enabled = true, expectedExceptions = {NullPointerException.class})
+    public void testDecodeWithNullBytes() {
+
         new HexDecoder().decode(null);
     }
 
@@ -49,17 +78,17 @@ public class HexDecoderTest {
     }
 
 
-    @Test
+    @Test(enabled = true)
     public void testDecode() {
         new HexDecoder().decode(new byte[0]);
-        new HexDecoder().decode(HexCodecTestUtils.newEncodedBytes());
+        new HexDecoder().decode(Tests.encodedBytes());
     }
 
 
-    @Test(invocationCount = 128)
+    @Test(enabled = true, invocationCount = 128)
     public void testDecodeAgainstCommonsCodecHex() throws DecoderException {
 
-        final byte[] encoded = HexCodecTestUtils.newEncodedBytes();
+        final byte[] encoded = Tests.encodedBytes();
 
         final byte[] expected = new Hex().decode(encoded);
 

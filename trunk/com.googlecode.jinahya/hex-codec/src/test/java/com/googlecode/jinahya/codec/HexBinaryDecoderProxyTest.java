@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.io.UnsupportedEncodingException;
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.Decoder;
 import org.apache.commons.codec.DecoderException;
@@ -44,47 +43,37 @@ public class HexBinaryDecoderProxyTest {
 
 
     @Test
-    public void testAsCommonsCodecDecoderForObject() throws DecoderException {
-
-        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
-
-        final Object encoded = new HexEncoder().encode(expected);
+    public void testAsDecoder() throws DecoderException {
 
         final Decoder decoder = (Decoder) HexBinaryDecoderProxy.newInstance();
-        final byte[] actual = (byte[]) decoder.decode(encoded);
 
-        Assert.assertEquals(actual, expected);
+        try {
+            decoder.decode(null);
+            Assert.fail("decode(null)");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+
+        final Object encoded = Tests.encodedBytes();
+        final Object decoded = decoder.decode(encoded);
     }
 
 
     @Test
-    public void testAsCommonsCodecDecoderForString()
-        throws UnsupportedEncodingException, DecoderException {
-
-        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
-
-        final String encoded =
-            new String(new HexEncoder().encode(expected), "US-ASCII");
-
-        final Decoder decoder = (Decoder) HexBinaryDecoderProxy.newInstance();
-        final byte[] actual = (byte[]) decoder.decode(encoded);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-
-    @Test
-    public void testAsCommonsCodecBinaryDecoder() throws DecoderException {
-
-        final byte[] expected = HexCodecTestUtils.newDecodedBytes();
-
-        final byte[] encoded = new HexEncoder().encode(expected);
+    public void testAsBinaryDecoder() throws DecoderException {
 
         final BinaryDecoder decoder =
             (BinaryDecoder) HexBinaryDecoderProxy.newInstance();
-        final byte[] actual = decoder.decode(encoded);
 
-        Assert.assertEquals(actual, expected);
+        try {
+            decoder.decode((byte[]) null);
+            Assert.fail("decode((byte[]) null)");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+
+        final byte[] encoded = Tests.encodedBytes();
+        final byte[] decoded = decoder.decode(encoded);
     }
 
 

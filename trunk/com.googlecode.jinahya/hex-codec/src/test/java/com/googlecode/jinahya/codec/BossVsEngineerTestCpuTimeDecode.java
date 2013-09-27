@@ -72,7 +72,7 @@ public class BossVsEngineerTestCpuTimeDecode {
         final double[] consumedLikeAnEngineer = new double[ROUNDS];
 
         for (int i = 0; i < ROUNDS; i++) {
-            final byte[] encoded = HexCodecTestUtils.newEncodedBytes();
+            final byte[] encoded = Tests.encodedBytes();
             if (ThreadLocalRandom.current().nextBoolean()) {
                 consumedLikeABoss[i] = decodeLikeABoss(encoded);
                 consumedLikeAnEngineer[i] = decodeLikeAnEngineer(encoded);
