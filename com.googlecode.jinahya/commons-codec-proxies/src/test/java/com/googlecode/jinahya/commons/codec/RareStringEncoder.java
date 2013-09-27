@@ -28,7 +28,7 @@ public class RareStringEncoder {
     public String encode(final String source) {
 
         if (source == null) {
-            return source;
+            throw new NullPointerException("source");
         }
 
         return source;

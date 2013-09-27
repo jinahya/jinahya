@@ -39,7 +39,7 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
     static {
         try {
             DECODER = Class.forName("org.apache.commons.codec.Decoder");
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
     }
@@ -54,7 +54,7 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
     static {
         try {
             DECODE = DECODER.getMethod("decode", Object.class);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
@@ -74,6 +74,10 @@ public abstract class DecoderProxy<T> extends AbstractDecoderProxy<T> {
      */
     protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
+
+        if (proxyType == null) {
+            throw new NullPointerException("proxyType");
+        }
 
         if (!DecoderProxy.class.isAssignableFrom(proxyType)) {
             throw new IllegalArgumentException(

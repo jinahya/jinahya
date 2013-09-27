@@ -16,22 +16,44 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+      </dependency>
+      <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
-        <version>1.8</version>
+        <!-- let's stay with old version -->
+        <!-- codec 1.6 requires java 1.5 -->
+        <version>1.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.5</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>6.8.5</version>
+        <version>6.8.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <scope>test</scope>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -43,7 +65,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
+    <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.7</maven.compiler.testSource>
     <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
   </properties>
@@ -54,7 +76,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>2.2</version>
+        <version>2.4</version>
       </extension>
     </extensions>
     <pluginManagement>
@@ -113,6 +135,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.14.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>1.9</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -176,6 +203,7 @@
                 <targetJdk>1.5</targetJdk>
               </configuration>
             </plugin>
+
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>cobertura-maven-plugin</artifactId>
@@ -188,11 +216,37 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>-Xms512m -Xmx512m</argLine>
-        </configuration>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>check-against-java</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>process-classes</phase>
+            <configuration>
+              <signature>
+                <groupId>org.codehaus.mojo.signature</groupId>
+                <artifactId>java15</artifactId>
+                <version>1.0</version>
+              </signature>
+            </configuration>
+          </execution>
+          <execution>
+            <id>check-against-android</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <signature>
+                <groupId>com.googlecode.jinahya</groupId>
+                <artifactId>android-api-signature-10</artifactId>
+                <version>1.0.2</version>
+              </signature>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

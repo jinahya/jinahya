@@ -18,9 +18,9 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import org.apache.commons.codec.Encoder;
-import org.apache.commons.codec.EncoderException;
-import org.apache.commons.codec.StringEncoder;
+import org.apache.commons.codec.Decoder;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.StringDecoder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,50 +29,49 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class RareStringEncoderProxyTest {
+public class RareStringDecoderProxyTest {
 
 
     @Test
-    public void testAsEncoder() throws EncoderException {
+    public void testAsDecoder() throws DecoderException {
 
-        final Encoder encoder =
-            (Encoder) RareStringEncoderProxy.newInstance();
+        final Decoder decoder = (Decoder) RareStringDecoderProxy.newInstance();
 
         try {
-            encoder.encode(null);
-            Assert.fail("passed: <Object>encode(null)");
+            decoder.decode((Object) null);
+            Assert.fail("passed: decode((Object) null)");
         } catch (final NullPointerException npe) {
             // expected
         }
 
         try {
-            encoder.encode(new Object());
-            Assert.fail("passed: encode(new Object())");
-        } catch (final EncoderException en) {
+            decoder.decode(new Object());
+            Assert.fail("passed: decode(new Object())");
+        } catch (final DecoderException de) {
             // expected;
         }
 
         final Object expected = "";
-        final Object actual = encoder.encode(expected);
+        final Object actual = decoder.decode(expected);
         Assert.assertEquals(actual, expected);
     }
 
 
     @Test
-    public void testAsStringEncoder() throws EncoderException {
+    public void testAsStringDecoder() throws DecoderException {
 
-        final StringEncoder encoder =
-            (StringEncoder) RareStringEncoderProxy.newInstance();
+        final StringDecoder decoder =
+            (StringDecoder) RareStringDecoderProxy.newInstance();
 
         try {
-            encoder.encode((String) null);
-            Assert.fail("passed: encode((String) null)");
+            decoder.decode((String) null);
+            Assert.fail("passed: decode((String) null)");
         } catch (final NullPointerException npe) {
             // expected
         }
 
         final String expected = "";
-        final String actual = encoder.encode(expected);
+        final String actual = decoder.decode(expected);
         Assert.assertEquals(actual, expected);
     }
 

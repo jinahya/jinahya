@@ -44,7 +44,7 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
             ENCODER_EXCEPTION = Class.forName(
                 "org.apache.commons.codec.EncoderException").
                 asSubclass(Throwable.class);
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
     }
@@ -59,9 +59,9 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
 
         try {
             return ENCODER_EXCEPTION.newInstance();
-        } catch (InstantiationException ie) {
+        } catch (final InstantiationException ie) {
             throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
+        } catch (final IllegalAccessException iae) {
             throw new RuntimeException(iae);
         }
     }
@@ -82,13 +82,13 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
         try {
             return ENCODER_EXCEPTION.getConstructor(String.class)
                 .newInstance(message);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
-        } catch (InstantiationException ie) {
+        } catch (final InstantiationException ie) {
             throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
+        } catch (final IllegalAccessException iae) {
             throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
+        } catch (final InvocationTargetException ite) {
             throw new RuntimeException(ite);
         }
     }
@@ -109,13 +109,13 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
         try {
             return ENCODER_EXCEPTION.getConstructor(Throwable.class)
                 .newInstance(cause);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
-        } catch (InstantiationException ie) {
+        } catch (final InstantiationException ie) {
             throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
+        } catch (final IllegalAccessException iae) {
             throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
+        } catch (final InvocationTargetException ite) {
             throw new RuntimeException(ite);
         }
     }
@@ -139,13 +139,13 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
             return ENCODER_EXCEPTION
                 .getConstructor(String.class, Throwable.class)
                 .newInstance(message, cause);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
-        } catch (InstantiationException ie) {
+        } catch (final InstantiationException ie) {
             throw new RuntimeException(ie);
-        } catch (IllegalAccessException iae) {
+        } catch (final IllegalAccessException iae) {
             throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
+        } catch (final InvocationTargetException ite) {
             throw new RuntimeException(ite);
         }
     }
@@ -197,14 +197,14 @@ public abstract class AbstractEncoderProxy<T> implements InvocationHandler {
             try {
                 return Proxy.newProxyInstance(
                     loader, interfaces, constructor.newInstance(encoder));
-            } catch (IllegalAccessException iae) {
+            } catch (final IllegalAccessException iae) {
                 throw new RuntimeException(iae);
-            } catch (InstantiationException ie) {
+            } catch (final InstantiationException ie) {
                 throw new RuntimeException(ie);
-            } catch (InvocationTargetException ite) {
+            } catch (final InvocationTargetException ite) {
                 throw new RuntimeException(ite);
             }
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new RuntimeException(nsme);
         }
     }

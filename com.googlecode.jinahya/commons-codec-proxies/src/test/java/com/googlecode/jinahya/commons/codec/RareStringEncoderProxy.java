@@ -28,8 +28,12 @@ public class RareStringEncoderProxy
 
     public static Object newInstance(final RareStringEncoder encoder) {
 
-        return newInstance(RareStringEncoderProxy.class,
-                           RareStringEncoder.class, encoder);
+        if (encoder == null) {
+            throw new NullPointerException("encoder");
+        }
+
+        return newInstance(
+            RareStringEncoderProxy.class, RareStringEncoder.class, encoder);
     }
 
 
@@ -60,4 +64,3 @@ public class RareStringEncoderProxy
 
 
 }
-

@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,13 +29,20 @@ import java.util.logging.Logger;
 public class RareDecoder {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        Logger.getLogger(RareDecoder.class.getName());
+        LoggerFactory.getLogger(RareDecoder.class);
 
 
     public Object decode(final Object source) {
 
-        LOGGER.log(Level.INFO, "decode({0})", source);
+        LOGGER.debug("decode({})", source);
+
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
 
         return source;
     }
