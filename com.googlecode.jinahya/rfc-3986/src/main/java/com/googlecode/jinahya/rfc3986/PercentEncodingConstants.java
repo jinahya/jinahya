@@ -18,10 +18,6 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.util.HashSet;
-import java.util.Set;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
@@ -124,4 +120,3 @@ public final class PercentEncodingConstants {
 
 
 }
-
