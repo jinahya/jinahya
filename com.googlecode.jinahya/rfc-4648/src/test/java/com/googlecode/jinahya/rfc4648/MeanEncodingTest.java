@@ -18,7 +18,6 @@
 package com.googlecode.jinahya.rfc4648;
 
 
-import static com.googlecode.jinahya.rfc4648.BaseTest.decoded;
 import java.util.Objects;
 import org.apache.commons.codec.BinaryEncoder;
 import org.apache.commons.math3.stat.StatUtils;
@@ -38,23 +37,25 @@ public abstract class MeanEncodingTest<B extends Base, E extends BinaryEncoder>
 
 
     private static <B extends Base, E extends BinaryEncoder> void test(
-        final B base, final E encoder, final double[] bases,
-        final double[] commons, final int index, final boolean assertEquals)
+        final B base, final E encoder, final double[] baseElapsed,
+        final double[] commonsElapsed, final int index,
+        final boolean assertEquals)
         throws Exception {
 
         long start;
 
         //final byte[] decoded = decoded(1024);
+        final byte[] decoded = decoded(8192);
         //final byte[] decoded = decoded(524288);
-        final byte[] decoded = decoded(1048576);
+        //final byte[] decoded = decoded(1048576);
 
         start = System.nanoTime();
         final byte[] baseEncoded = base.encode(decoded);
-        bases[index] = (System.nanoTime() - start);
+        baseElapsed[index] = (System.nanoTime() - start);
 
         start = System.nanoTime();
         final byte[] commonsEncoded = encoder.encode(decoded);
-        commons[index] = (System.nanoTime() - start);
+        commonsElapsed[index] = (System.nanoTime() - start);
 
         if (assertEquals) {
             Assert.assertArrayEquals(commonsEncoded, baseEncoded);
@@ -79,17 +80,17 @@ public abstract class MeanEncodingTest<B extends Base, E extends BinaryEncoder>
         //final int count = 1024;
         //final int count = 2048;
         //final int count = 4096;
-        //final int count = 8192;
+        final int count = 8192;
         //final int count = 16384;
         //final int count = 32768;
         //final int count = 65536;
         //final int count = 131072;
         //final int count = 262144;
         //final int count = 524288;
-        final int count = 1048576;
+        //final int count = 1048576;
 
-        final double bases[] = new double[count];
-        final double commons[] = new double[count];
+        final double baseElapsed[] = new double[count];
+        final double commonsElapsed[] = new double[count];
 
         final B base = base();
         final E encoder = encoder();
@@ -98,19 +99,19 @@ public abstract class MeanEncodingTest<B extends Base, E extends BinaryEncoder>
 
         // warm-up
         for (int i = 0; i < 1024; i++) {
-            System.out.println(i);
-            test(base, encoder, bases, commons, i, true);
+            test(base, encoder, baseElapsed, commonsElapsed, i, true);
         }
 
         for (int i = 0; i < count; i++) {
-            System.out.println(i);
-            test(base, encoder, bases, commons, i, false);
+            test(base, encoder, baseElapsed, commonsElapsed, i, false);
         }
 
-        final double baseMean = StatUtils.mean(bases);
-        final double commonsMean = StatUtils.mean(commons);
-        System.out.printf("%12s: %20.4f\n", baseClass.getSimpleName(), baseMean);
-        System.out.printf("%12s: %20.4f\n", encoderClass.getSimpleName(), commonsMean);
+        final double baseMean = StatUtils.mean(baseElapsed);
+        final double commonsMean = StatUtils.mean(commonsElapsed);
+        System.out.printf("%12s: %20.4f\n", baseClass.getSimpleName(),
+                          baseMean);
+        System.out.printf("%12s: %20.4f\n", encoderClass.getSimpleName(),
+                          commonsMean);
         System.out.printf("base/commons: %20.4f\n", (baseMean / commonsMean));
     }
 
