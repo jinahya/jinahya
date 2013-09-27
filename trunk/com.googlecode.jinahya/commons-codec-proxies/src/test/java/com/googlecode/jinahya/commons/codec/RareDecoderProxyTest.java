@@ -20,6 +20,9 @@ package com.googlecode.jinahya.commons.codec;
 
 import org.apache.commons.codec.Decoder;
 import org.apache.commons.codec.DecoderException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -30,14 +33,29 @@ import org.testng.annotations.Test;
 public class RareDecoderProxyTest {
 
 
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(RareDecoderProxyTest.class);
+
+
     @Test
     public void testAsDecoder() throws DecoderException {
 
-        final Decoder encoder = (Decoder) RareDecoderProxy.newInstance();
-        
-        encoder.decode(null);
+        final Decoder decoder = (Decoder) RareDecoderProxy.newInstance();
+
+        try {
+            decoder.decode(null);
+            Assert.fail("passed: <Object>decode(null)");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+
+        final Object expected = new Object();
+        final Object actual = decoder.decode(expected);
+        Assert.assertEquals(actual, expected);
     }
 
 
 }
-

@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,14 +30,21 @@ public class RareStringDecoderProxy
     extends StringDecoderProxy<RareStringDecoder> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        Logger.getLogger(RareStringDecoderProxy.class.getName());
+        LoggerFactory.getLogger(RareStringDecoderProxy.class);
 
 
     public static Object newInstance(final RareStringDecoder decoder) {
 
-        return newInstance(RareStringDecoderProxy.class,
-                           RareStringDecoder.class, decoder);
+        if (decoder == null) {
+            throw new NullPointerException("decoder");
+        }
+
+        return newInstance(
+            RareStringDecoderProxy.class, RareStringDecoder.class, decoder);
     }
 
 
@@ -56,7 +63,7 @@ public class RareStringDecoderProxy
     @Override
     protected Object decode(final Object source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Object>decode({0})", source);
+        LOGGER.debug("<Object>decode({})", source);
 
         return super.decode(source);
     }
@@ -65,7 +72,7 @@ public class RareStringDecoderProxy
     @Override
     protected String decode(final String source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<String>decode({0})", source);
+        LOGGER.debug("<String>decode({})", source);
 
         return decoder.decode(source);
     }

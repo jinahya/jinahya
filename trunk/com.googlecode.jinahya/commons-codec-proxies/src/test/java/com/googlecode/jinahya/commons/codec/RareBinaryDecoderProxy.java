@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,11 +31,15 @@ public class RareBinaryDecoderProxy
 
 
     private static final Logger LOGGER =
-        Logger.getLogger(RareBinaryDecoderProxy.class.getName());
+        LoggerFactory.getLogger(RareBinaryDecoderProxy.class);
 
 
     public static Object newInstance(final RareBinaryDecoder decoder) {
 
+        if (decoder == null) {
+            throw new NullPointerException("decoder");
+        }
+        
         return newInstance(
             RareBinaryDecoderProxy.class, RareBinaryDecoder.class, decoder);
     }
@@ -56,7 +60,7 @@ public class RareBinaryDecoderProxy
     @Override
     protected Object decode(final Object source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Object>decode({0})", source);
+        LOGGER.debug("<Object>decode({})", source);
 
         return super.decode(source);
     }
@@ -65,7 +69,7 @@ public class RareBinaryDecoderProxy
     @Override
     protected byte[] decode(final byte[] source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<byte[]>decode({0})", source);
+        LOGGER.debug("<byte[]>decode({})", source);
 
         return decoder.decode(source);
     }

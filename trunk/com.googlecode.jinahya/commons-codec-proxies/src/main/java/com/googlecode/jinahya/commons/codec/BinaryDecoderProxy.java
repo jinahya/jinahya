@@ -39,7 +39,7 @@ public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
     static {
         try {
             DECODER = Class.forName("org.apache.commons.codec.BinaryDecoder");
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
     }
@@ -54,7 +54,7 @@ public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
     static {
         try {
             DECODE = DECODER.getMethod("decode", byte[].class);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
@@ -73,6 +73,10 @@ public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
      */
     protected static <P extends AbstractDecoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> decoderType, final T decoder) {
+
+        if (proxyType == null) {
+            throw new NullPointerException("proxyType");
+        }
 
         if (!BinaryDecoderProxy.class.isAssignableFrom(proxyType)) {
             throw new IllegalArgumentException(
@@ -114,7 +118,7 @@ public abstract class BinaryDecoderProxy<T> extends DecoderProxy<T> {
 
         try {
             return decode((byte[]) source);
-        } catch (ClassCastException cce) {
+        } catch (final ClassCastException cce) {
             throw newDecoderException(cce);
         }
     }

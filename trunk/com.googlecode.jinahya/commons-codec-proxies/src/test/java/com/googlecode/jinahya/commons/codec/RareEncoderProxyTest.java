@@ -20,6 +20,7 @@ package com.googlecode.jinahya.commons.codec;
 
 import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.EncoderException;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -34,10 +35,18 @@ public class RareEncoderProxyTest {
     public void testAsEncoder() throws EncoderException {
 
         final Encoder encoder = (Encoder) RareEncoderProxy.newInstance();
-        
-        encoder.encode(null);
+
+        try {
+            encoder.encode(null);
+            Assert.fail("passed: <Object>encode(null)");
+        } catch (final NullPointerException npe) {
+            //expected
+        }
+
+        final Object expected = new Object();
+        final Object actual = encoder.encode(expected);
+        Assert.assertEquals(actual, expected);
     }
 
 
 }
-

@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,13 +29,20 @@ import java.util.logging.Logger;
 public class RareBinaryEncoder {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        Logger.getLogger(RareBinaryEncoder.class.getName());
+        LoggerFactory.getLogger(RareBinaryEncoder.class);
 
 
     public byte[] encode(final byte[] source) {
 
-        LOGGER.log(Level.INFO, "<byte[]>encode({0})", source);
+        LOGGER.debug("<byte[]>encode({})", source);
+
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
 
         return source;
     }

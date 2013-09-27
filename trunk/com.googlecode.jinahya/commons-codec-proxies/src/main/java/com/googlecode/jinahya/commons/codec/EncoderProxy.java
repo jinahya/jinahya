@@ -39,7 +39,7 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
     static {
         try {
             ENCODER = Class.forName("org.apache.commons.codec.Encoder");
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             throw new InstantiationError(cnfe.getMessage());
         }
     }
@@ -54,7 +54,7 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
     static {
         try {
             ENCODE = ENCODER.getMethod("encode", Object.class);
-        } catch (NoSuchMethodException nsme) {
+        } catch (final NoSuchMethodException nsme) {
             throw new InstantiationError(nsme.getMessage());
         }
     }
@@ -75,6 +75,10 @@ public abstract class EncoderProxy<T> extends AbstractEncoderProxy<T> {
     protected static <P extends AbstractEncoderProxy<T>, T> Object newInstance(
         final Class<P> proxyType, final Class<T> encoderType, final T encoder) {
 
+        if (proxyType == null) {
+            throw new NullPointerException("proxyType");
+        }
+        
         if (!EncoderProxy.class.isAssignableFrom(proxyType)) {
             throw new IllegalArgumentException(
                 "proxyType(" + proxyType + ") is not assignable to "

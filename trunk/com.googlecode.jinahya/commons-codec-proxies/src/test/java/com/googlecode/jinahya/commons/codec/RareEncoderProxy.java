@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.commons.codec;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,18 +29,20 @@ import java.util.logging.Logger;
 public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
 
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
-        Logger.getLogger(RareEncoderProxy.class.getName());
+        LoggerFactory.getLogger(RareEncoderProxy.class);
 
 
     protected static Object newInstance(final RareEncoder encoder) {
 
-        try {
-            return newInstance(
-                RareEncoderProxy.class, RareEncoder.class, encoder);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (encoder == null) {
+            throw new NullPointerException("encoder");
         }
+
+        return newInstance(RareEncoderProxy.class, RareEncoder.class, encoder);
     }
 
 
@@ -59,7 +61,7 @@ public class RareEncoderProxy extends EncoderProxy<RareEncoder> {
     @Override
     protected Object encode(final Object source) throws Throwable {
 
-        LOGGER.log(Level.INFO, "<Object>encode({0})", source);
+        LOGGER.debug("<Object>encode({})", source);
 
         return encoder.encode(source);
     }

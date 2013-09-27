@@ -27,9 +27,12 @@ public class RareStringDecoder {
 
     public String decode(final String source) {
 
+        if (source == null) {
+            throw new NullPointerException("source");
+        }
+
         return source;
     }
 
 
 }
-
