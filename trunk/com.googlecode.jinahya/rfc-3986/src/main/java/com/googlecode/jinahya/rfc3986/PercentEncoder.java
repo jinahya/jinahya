@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 
 /**
@@ -57,16 +58,11 @@ public class PercentEncoder {
     }
 
 
-    protected static void encodeSingle(final int decoded, final byte[] encoded,
-                                       final int offset) {
-
-        if (decoded >> 8 != 0) {
-            throw new IllegalArgumentException(
-                "decoded(" + decoded + ") >> 8 != 0");
-        }
+    private static void encodeSingle(final int decoded, final byte[] encoded,
+                                     final int offset) {
 
         if (encoded == null) {
-            throw new IllegalArgumentException("null encoded");
+            throw new NullPointerException("encoded");
         }
 
         if (encoded.length < 1) {
@@ -97,7 +93,7 @@ public class PercentEncoder {
                     + encoded.length + ") - 2");
             }
             encoded[offset] = 0x25; // '%'
-            encoded[offset + 1] = (byte) encodeHalf(decoded >> 4);
+            encoded[offset + 1] = (byte) encodeHalf((decoded >> 4) & 0xFF);
             encoded[offset + 2] = (byte) encodeHalf(decoded & 0x0F);
         }
     }
@@ -109,6 +105,7 @@ public class PercentEncoder {
             throw new IllegalArgumentException("null decoded");
         }
 
+        // possible maximum
         final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
 
         int offset = 0;
@@ -129,49 +126,105 @@ public class PercentEncoder {
 
 
     /**
-     * Creates a new instance.
+     * Encodes given bytes.
+     *
+     * @param input bytes to encode
+     *
+     * @return encoded output
      */
-    public PercentEncoder() {
-        super();
+    public byte[] encode(final byte[] input) {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        return encodeMultiple(input);
+    }
+
+
+    public String encodeToString(final byte[] input, final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input), outputCharset);
+    }
+
+
+    public String encodeToString(final byte[] input,
+                                 final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input), outputCharset);
     }
 
 
     /**
+     * Encodes given {@code input}.
      *
-     * @param decoded
-     * @return
+     * @param input string to encode
+     * @param input charset name
+     *
+     * @return encoded output
+     *
+     * @throws UnsupportedEncodingException if specified {@code inputCharset} is
+     * not supported
      */
-    public byte[] encode(final byte[] decoded) {
+    public byte[] encode(final String input, final String inputCharset)
+        throws UnsupportedEncodingException {
 
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        return encodeMultiple(decoded);
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return encode(input.getBytes(inputCharset));
     }
 
 
-    /**
-     * Encodes given
-     * <code>input</code>.
-     *
-     * @param decoded string to encode
-     *
-     * @return encoding output
-     */
-    public byte[] encode(final String decoded) {
+    public byte[] encode(final String input, final Charset inputCharset) {
 
-        if (decoded == null) {
-            throw new NullPointerException("null decoded");
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        try {
-            return encode(decoded.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("'UTF-8' is not supported?");
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
         }
+
+        return encode(input.getBytes(inputCharset));
+    }
+
+
+    public String encodeToString(final String input, final String inputCharset,
+                                 final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input, inputCharset), outputCharset);
+    }
+
+
+    public String encodeToString(final String input, final Charset inputCharset,
+                                 final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(encode(input, inputCharset), outputCharset);
     }
 
 
 }
-

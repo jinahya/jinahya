@@ -18,6 +18,10 @@
 package com.googlecode.jinahya.rfc3986;
 
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+
+
 /**
  * Percent Decoder.
  *
@@ -69,7 +73,7 @@ public class PercentDecoder {
     }
 
 
-    public static int decodeSingle(final byte[] encoded, final int offset) {
+    private static int decodeSingle(final byte[] encoded, final int offset) {
 
         if (encoded == null) {
             throw new IllegalArgumentException("null encoded");
@@ -108,6 +112,12 @@ public class PercentDecoder {
     }
 
 
+    /**
+     *
+     * @param encoded
+     *
+     * @return
+     */
     public static byte[] decodeMultiple(final byte[] encoded) {
 
         final byte[] decoded = new byte[encoded.length];
@@ -124,16 +134,8 @@ public class PercentDecoder {
 
         final byte[] trimmed = new byte[i];
         System.arraycopy(decoded, 0, trimmed, 0, i);
-        
+
         return trimmed;
-    }
-
-
-    /**
-     * Creates a new instance.
-     */
-    public PercentDecoder() {
-        super();
     }
 
 
@@ -141,19 +143,84 @@ public class PercentDecoder {
      * Decodes given
      * <code>input</code>.
      *
-     * @param encoded input to decode
+     * @param input input to decode
      *
      * @return decoding output
      */
-    public static byte[] decode(final byte[] encoded) {
+    public byte[] decode(final byte[] input) {
 
-        if (encoded == null) {
-            throw new NullPointerException("null encoded");
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        return decodeMultiple(encoded);
+        return decodeMultiple(input);
+    }
+
+
+    public String decodeToString(final byte[] input, final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(decode(input), outputCharset);
+    }
+
+
+    public String decodeToString(final byte[] input,
+                                 final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
+
+        return new String(decode(input), outputCharset);
+    }
+
+
+    public byte[] decode(final String input, final String inputCharset)
+        throws UnsupportedEncodingException {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return decode(input.getBytes(inputCharset));
+    }
+
+
+    public byte[] decode(final String input, final Charset inputCharset) {
+
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
+
+        if (inputCharset == null) {
+            throw new NullPointerException("inputCharset");
+        }
+
+        return decode(input.getBytes(inputCharset));
+    }
+
+
+    public String decodeToString(final String input, final String inputCharset,
+                                 final String outputCharset)
+        throws UnsupportedEncodingException {
+
+        return new String(decode(input, inputCharset), outputCharset);
+    }
+
+
+    public String decodeToString(final String input, final Charset inputCharset,
+                                 final Charset outputCharset) {
+
+        return new String(decode(input, inputCharset), outputCharset);
     }
 
 
 }
-

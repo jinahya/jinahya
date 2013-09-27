@@ -18,10 +18,9 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import com.googlecode.jinahya.commons.codec.BinaryEncoderProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -41,78 +40,59 @@ import java.lang.reflect.Proxy;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  * @see <a href="http://goo.gl/SId47">BinaryEncoder (Apache Commons Codec)</a>
  */
-public class PercentBinaryEncoderProxy implements InvocationHandler {
+public class PercentBinaryEncoderProxy
+    extends BinaryEncoderProxy<PercentEncoder> {
 
 
     /**
-     * BinaryEncoder Class.
+     * logger.
      */
-    private static final Class CLASS_BINARY_ENCODER;
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(PercentBinaryEncoderProxy.class);
 
 
-    static {
-        try {
-            CLASS_BINARY_ENCODER = Class.forName(
-                "org.apache.commons.codec.BinaryEncoder");
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
+    public static Object newInstance(final PercentEncoder encoder) {
+
+        if (encoder == null) {
+            throw new NullPointerException("encoder");
         }
+
+        return newInstance(
+            PercentBinaryEncoderProxy.class, PercentEncoder.class, encoder);
     }
 
 
-    /**
-     * EncoderException Constructor.
-     */
-    private static final Constructor CONSTRUCTOR_ENCODER_EXCEPTION_CONSTRUCTOR;
-
-
-    static {
-        try {
-            CONSTRUCTOR_ENCODER_EXCEPTION_CONSTRUCTOR = Class.forName(
-                "org.apache.commons.codec.EncoderException").getConstructor(
-                new Class[]{Throwable.class});
-        } catch (ClassNotFoundException cnfe) {
-            throw new InstantiationError(cnfe.getMessage());
-        } catch (NoSuchMethodException nsme) {
-            throw new InstantiationError(nsme.getMessage());
-        }
-    }
-
-
-    /**
-     * Creates a new instance.
-     *
-     * @return a new proxy instance.
-     */
     public static Object newInstance() {
-        return Proxy.newProxyInstance(
-            CLASS_BINARY_ENCODER.getClassLoader(),
-            new Class[]{CLASS_BINARY_ENCODER},
-            new PercentBinaryEncoderProxy());
+
+        return newInstance(new PercentEncoder());
     }
 
 
     /**
      * Creates a new instance.
      */
-    protected PercentBinaryEncoderProxy() {
-        super();
+    protected PercentBinaryEncoderProxy(final PercentEncoder encoder) {
+
+        super(encoder);
     }
 
 
-    //@Override
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args)
-        throws Throwable {
+    @Override
+    protected Object encode(final Object source) throws Throwable {
 
-        if (args[0] == null) {
-            throw new NullPointerException("null source");
-        }
+        LOGGER.debug("<Object>encode({})", source);
 
-        return null;
-//        return PercentEncoder.encodeMultiple((byte[]) args[0]);
+        return super.encode(source);
+    }
+
+
+    @Override
+    protected byte[] encode(final byte[] source) throws Throwable {
+
+        LOGGER.debug("encode({})", source);
+
+        return encoder.encode(source);
     }
 
 
 }
-

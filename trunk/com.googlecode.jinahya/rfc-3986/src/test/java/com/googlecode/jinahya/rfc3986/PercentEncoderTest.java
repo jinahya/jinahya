@@ -18,9 +18,10 @@
 package com.googlecode.jinahya.rfc3986;
 
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import org.apache.commons.lang3.RandomStringUtils;
+import java.util.concurrent.ThreadLocalRandom;
 import org.testng.annotations.Test;
 
 
@@ -31,17 +32,110 @@ import org.testng.annotations.Test;
 public class PercentEncoderTest {
 
 
-    private static final Random RANDOM = new Random();
+    private static Random random() {
+
+        return ThreadLocalRandom.current();
+    }
+
+
+    static byte[] encoded(final byte[] decoded) {
+
+        return PercentEncoder.encodeMultiple(decoded);
+    }
+
+
+    static byte[] encodedBytes() {
+
+        return encoded(PercentDecoderTest.decodedBytes());
+    }
+
+
+    static String encodedString() {
+
+        return new String(encodedBytes(), StandardCharsets.US_ASCII);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testEncodeWithNullBytes() {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final byte[] decoded = null;
+
+        final byte[] encoded = encoder.encode(decoded);
+    }
 
 
     @Test(invocationCount = 128)
-    public void testEncodeWithString() throws IOException {
+    public void testEncodeWithBytes() {
 
-        final String decoded = RandomStringUtils.random(RANDOM.nextInt(1024));
+        final PercentEncoder encoder = new PercentEncoder();
 
-        final byte[] encoded = new PercentEncoder().encode(decoded);
+        final byte[] decoded = PercentDecoderTest.decodedBytes();
+
+        final byte[] encoded = encoder.encode(decoded);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testEncodeToStringWithNullBytes() {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final byte[] decoded = null;
+
+        final String encoded =
+            encoder.encodeToString(decoded, StandardCharsets.US_ASCII);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeToStringWithBytes() {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final byte[] decoded = PercentDecoderTest.decodedBytes();
+
+        final String encoded =
+            encoder.encodeToString(decoded, StandardCharsets.US_ASCII);
+    }
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testEncodeWithNullString() {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final String decoded = null;
+
+        final byte[] encoded = encoder.encode(decoded, StandardCharsets.UTF_8);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeWithString() {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final String decoded = PercentDecoderTest.decodedString();
+
+        final byte[] encoded = new PercentEncoder().encode(
+            decoded, StandardCharsets.UTF_8);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testEncodeToStringWithString()
+        throws UnsupportedEncodingException {
+
+        final PercentEncoder encoder = new PercentEncoder();
+
+        final String decoded = PercentDecoderTest.decodedString();
+
+        final String encoded = new PercentEncoder().encodeToString(
+            decoded, StandardCharsets.UTF_8, StandardCharsets.US_ASCII);
     }
 
 
 }
-

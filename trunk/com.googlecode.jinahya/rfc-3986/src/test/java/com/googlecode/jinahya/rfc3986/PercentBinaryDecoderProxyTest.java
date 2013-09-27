@@ -19,6 +19,7 @@ package com.googlecode.jinahya.rfc3986;
 
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.BinaryDecoder;
 import org.apache.commons.codec.binary.Base64;
 import org.testng.Assert;
@@ -32,10 +33,7 @@ import org.testng.annotations.Test;
 public class PercentBinaryDecoderProxyTest {
 
 
-    private static final Random RANDOM = new Random();
-
-
-    //@Test(invocationCount = 128)
+    @Test(invocationCount = 128)
     public void testDecode() throws Exception {
 
         final BinaryDecoder decoder =
@@ -55,8 +53,10 @@ public class PercentBinaryDecoderProxyTest {
             // ok
         }
 
-        final byte[] expected = new byte[RANDOM.nextInt(10)];
-        RANDOM.nextBytes(expected);
+        final Random random = ThreadLocalRandom.current();
+
+        final byte[] expected = new byte[random.nextInt(128)];
+        random.nextBytes(expected);
         System.out.println("original ----------------------------------------");
         System.out.println(Base64.encodeBase64String(expected));
 
@@ -73,4 +73,3 @@ public class PercentBinaryDecoderProxyTest {
 
 
 }
-
