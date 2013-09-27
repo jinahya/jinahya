@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
+//@Test(enabled = false)
 public class HexEncoderTest {
 
 
@@ -59,4 +60,3 @@ public class HexEncoderTest {
 
 
 }
-
