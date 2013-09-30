@@ -46,7 +46,7 @@ public class HexDecoder {
      *
      * @return the decoded half octet.
      */
-    public static int decodeHalf(final int input) {
+    private static int decodeHalf(final int input) {
 
         switch (input) {
             case 0x30: // '0'
@@ -81,10 +81,9 @@ public class HexDecoder {
 
 
     /**
-     * Decodes two nibbles in given array and returns the result as a single
-     * octet.
+     * Decodes two nibbles in given input array and returns the decoded octet.
      *
-     * @param input the array of nibbles.
+     * @param input the input array of nibbles.
      * @param inoff the offset in the array.
      *
      * @return the decoded octet.
@@ -357,3 +356,4 @@ public class HexDecoder {
 
 
 }
+
