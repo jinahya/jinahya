@@ -22,6 +22,7 @@ import com.googlecode.jinahya.commons.codec.BinaryDecoderProxy;
 
 
 /**
+ * A proxy class for {@code org.apache.commons.codec.BinaryEncoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -29,6 +30,10 @@ public class HexBinaryDecoderProxy extends BinaryDecoderProxy<HexDecoder> {
 
 
     public static Object newInstance(final HexDecoder decoder) {
+
+        if (decoder == null) {
+            throw new NullPointerException("decoder");
+        }
 
         return newInstance(
             HexBinaryDecoderProxy.class, HexDecoder.class, decoder);
@@ -69,4 +74,3 @@ public class HexBinaryDecoderProxy extends BinaryDecoderProxy<HexDecoder> {
 
 
 }
-

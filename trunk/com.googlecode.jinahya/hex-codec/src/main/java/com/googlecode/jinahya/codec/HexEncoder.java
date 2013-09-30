@@ -36,7 +36,7 @@ public class HexEncoder {
      *
      * @return the encoded half octet.
      */
-    private static int encodeHalf(final int input) {
+    public static int encodeHalf(final int input) {
 
         switch (input) {
             case 0x00:
@@ -123,10 +123,6 @@ public class HexEncoder {
     public static void encodeMultiple(final byte[] input, int inoff,
                                       final byte[] output, int outoff,
                                       final int count) {
-
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
 
         if (count < 0) {
             throw new IllegalArgumentException("count(" + count + ") < 0");
@@ -238,6 +234,15 @@ public class HexEncoder {
     }
 
 
+    /**
+     * Encodes given string.
+     *
+     * @param input the input string.
+     * @param inputCharset the charset to decode input string
+     * @param outputCharset the charset to encode output string.
+     *
+     * @return the encoded string.
+     */
     public String encodeToString(final String input, final Charset inputCharset,
                                  final Charset outputCharset) {
 
@@ -252,47 +257,55 @@ public class HexEncoder {
     /**
      * [TESTING].
      *
-     * @param decoded octets.
+     * @param input octets.
      *
      * @return nibbles.
      */
-    byte[] encodeLikeAnEngineer(final byte[] decoded) {
+    byte[] encodeLikeAnEngineer(final byte[] input) {
 
-        final byte[] encoded = new byte[decoded.length << 1];
-
-        int index = 0; // index in encoded
-        for (int i = 0; i < decoded.length; i++) {
-            encoded[index++] = (byte) encodeHalf((decoded[i] & 0xF0) >> 4);
-            encoded[index++] = (byte) encodeHalf((decoded[i] & 0x0F));
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        return encoded;
+        final byte[] output = new byte[input.length << 1];
+
+        int index = 0; // index in output
+        for (int i = 0; i < input.length; i++) {
+            output[index++] = (byte) encodeHalf((input[i] >> 4) & 0x0F);
+            output[index++] = (byte) encodeHalf((input[i] & 0x0F));
+        }
+
+        return output;
     }
 
 
     /**
      * [TESTING].
      *
-     * @param decoded octets.
+     * @param input octets.
      *
      * @return nibbles.
      */
-    byte[] encodeLikeABoss(final byte[] decoded) {
+    byte[] encodeLikeABoss(final byte[] input) {
 
-        final byte[] encoded = new byte[decoded.length * 2];
+        if (input == null) {
+            throw new NullPointerException("input");
+        }
 
-        for (int i = 0; i < decoded.length; i++) {
-            String s = Integer.toString(decoded[i] & 0xFF, 16);
+        final byte[] output = new byte[input.length << 1];
+
+        int index = 0; // index in output
+        for (int i = 0; i < input.length; i++) {
+            String s = Integer.toString(input[i] & 0xFF, 16);
             if (s.length() == 1) {
                 s = "0" + s;
             }
-            encoded[i * 2] = (byte) s.charAt(0);
-            encoded[i * 2 + 1] = (byte) s.charAt(1);
+            output[index++] = (byte) s.charAt(0);
+            output[index++] = (byte) s.charAt(1);
         }
 
-        return encoded;
+        return output;
     }
 
 
 }
-

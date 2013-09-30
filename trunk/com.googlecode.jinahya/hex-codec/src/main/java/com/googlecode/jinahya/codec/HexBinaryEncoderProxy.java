@@ -22,6 +22,7 @@ import com.googlecode.jinahya.commons.codec.BinaryEncoderProxy;
 
 
 /**
+ * A proxy class for {@code org.apache.commons.codec.BinaryEncoder}.
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
@@ -83,4 +84,3 @@ public class HexBinaryEncoderProxy extends BinaryEncoderProxy<HexEncoder> {
 
 
 }
-
