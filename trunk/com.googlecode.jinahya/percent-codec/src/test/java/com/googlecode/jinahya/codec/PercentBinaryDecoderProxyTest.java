@@ -21,6 +21,7 @@ package com.googlecode.jinahya.codec;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.BinaryDecoder;
+import org.apache.commons.codec.Decoder;
 import org.apache.commons.codec.binary.Base64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -31,6 +32,42 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class PercentBinaryDecoderProxyTest {
+
+
+    @Test
+    public void testAsDecoder() throws Exception {
+
+        final Decoder decoder =
+            (Decoder) PercentBinaryDecoderProxy.newInstance();
+
+        try {
+            decoder.decode((Object) null);
+            Assert.fail("passed: decode((Object) null)");
+        } catch (NullPointerException npe) {
+            // ok
+        }
+
+        final Object input = PercentCodecTestHelper.encodedBytes(1024);
+        final Object output = decoder.decode(input);
+    }
+
+
+    @Test
+    public void testAsBinaryDecoder() throws Exception {
+
+        final BinaryDecoder decoder =
+            (BinaryDecoder) PercentBinaryDecoderProxy.newInstance();
+
+        try {
+            decoder.decode((byte[]) null);
+            Assert.fail("passed: decode((byte[]) null)");
+        } catch (NullPointerException npe) {
+            // ok
+        }
+
+        final byte[] input = PercentCodecTestHelper.encodedBytes(1024);
+        final byte[] output = decoder.decode(input);
+    }
 
 
     @Test(invocationCount = 128)

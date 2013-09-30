@@ -30,15 +30,26 @@ import org.testng.annotations.Test;
 public class PercentCodecTestHelperTest {
 
 
+    /**
+     * logger.
+     */
     private static Logger LOGGER =
         LoggerFactory.getLogger(PercentCodecTestHelperTest.class);
 
 
     @Test
-    public static void testEncodedBytes() {
+    public static void testDecodedString() {
 
-        final byte[] encodedBytes = PercentCodecTestHelper.encodedBytes(1024);
-        LOGGER.debug("encodedBytes: {}", encodedBytes);
+        final String decodedString = PercentCodecTestHelper.decodedString(1024);
+        LOGGER.debug("decodedString: {}", decodedString);
+    }
+
+
+    @Test
+    public static void testDecodedBytes() {
+
+        final byte[] decodedBytes = PercentCodecTestHelper.decodedBytes(1024);
+        LOGGER.debug("decodedBytes: {}", decodedBytes);
     }
 
 
@@ -47,6 +58,14 @@ public class PercentCodecTestHelperTest {
 
         final String encodedString = PercentCodecTestHelper.encodedString(1024);
         LOGGER.debug("encodedString: {}", encodedString);
+    }
+
+
+    @Test
+    public static void testEncodedBytes() {
+
+        final byte[] encodedBytes = PercentCodecTestHelper.encodedBytes(1024);
+        LOGGER.debug("encodedBytes: {}", encodedBytes);
     }
 
 

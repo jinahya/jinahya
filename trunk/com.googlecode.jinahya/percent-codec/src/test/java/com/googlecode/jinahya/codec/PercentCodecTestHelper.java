@@ -41,12 +41,14 @@ public class PercentCodecTestHelper {
     /**
      * Returns an {@code UTF-8} encoded string.
      *
-     * @param maxlen maximum string length
+     * @param maxlen maximum number of characters
      *
      * @return a random string
      */
     public static String decodedString(final int maxlen) {
 
+        RandomStringUtils.random(0);
+        
         return RandomStringUtils.random(random().nextInt(maxlen));
     }
 
