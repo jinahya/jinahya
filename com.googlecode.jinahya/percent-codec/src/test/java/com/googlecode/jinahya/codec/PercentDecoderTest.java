@@ -18,11 +18,8 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.codec.PercentDecoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
 
@@ -31,28 +28,6 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class PercentDecoderTest {
-
-
-    private static Random random() {
-
-        return ThreadLocalRandom.current();
-    }
-
-
-    static byte[] decodedBytes() {
-
-        final byte[] decoded = new byte[random().nextInt(1024)];
-
-        random().nextBytes(decoded);
-
-        return decoded;
-    }
-
-
-    static String decodedString() {
-
-        return RandomStringUtils.random(random().nextInt(1024));
-    }
 
 
     @Test(expectedExceptions = {NullPointerException.class})
@@ -71,7 +46,7 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final byte[] encoded = PercentEncoderTest.encodedBytes();
+        final byte[] encoded = PercentCodecTestHelper.encodedBytes(1024);
 
         final byte[] decoded = decoder.decode(encoded);
     }
@@ -94,10 +69,10 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final byte[] encoded = PercentEncoderTest.encodedBytes();
+        final byte[] input = PercentCodecTestHelper.encodedBytes(1024);
 
-        final String decoded = decoder.decodeToString(
-            encoded, StandardCharsets.UTF_8);
+        final String output =
+            decoder.decodeToString(input, StandardCharsets.UTF_8);
     }
 
 
@@ -106,10 +81,9 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final String encoded = null;
+        final String input = null;
 
-        final byte[] decoded = decoder.decode(
-            encoded, StandardCharsets.US_ASCII);
+        final byte[] output = decoder.decode(input, Charset.defaultCharset());
     }
 
 
@@ -118,10 +92,9 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final String encoded = PercentEncoderTest.encodedString();
+        final String input = PercentCodecTestHelper.encodedString(1024);
 
-        final byte[] decoded =
-            decoder.decode(encoded, StandardCharsets.US_ASCII);
+        final byte[] output = decoder.decode(input, StandardCharsets.US_ASCII);
     }
 
 
@@ -130,10 +103,10 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final String encoded = null;
+        final String input = null;
 
-        final String decoded = decoder.decodeToString(
-            encoded, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
+        final String output = decoder.decodeToString(
+            input, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
     }
 
 
@@ -142,10 +115,10 @@ public class PercentDecoderTest {
 
         final PercentDecoder decoder = new PercentDecoder();
 
-        final String encoded = PercentEncoderTest.encodedString();
+        final String input = PercentCodecTestHelper.encodedString(1024);
 
-        final String decoded = decoder.decodeToString(
-            encoded, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
+        final String output = decoder.decodeToString(
+            input, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
     }
 
 

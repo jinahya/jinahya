@@ -31,48 +31,46 @@ import java.nio.charset.Charset;
 public class PercentDecoder {
 
 
-    /**
-     * Converts a single 7-bit ASCII value to a 4-bit unsigned integer.
-     *
-     * @param input 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
-     * 0x46), or lower alpha (0x61 ~ 0x66)
-     *
-     * @return 4-bit unsigned integer (0x00 ~ 0x0F)
-     */
-    public static int decodeHalf(final int input) {
-
-        switch (input) {
-            case 0x30: // '0'
-            case 0x31: // '1'
-            case 0x32: // '2'
-            case 0x33: // '3'
-            case 0x34: // '4'
-            case 0x35: // '5'
-            case 0x36: // '6'
-            case 0x37: // '7'
-            case 0x38: // '8'
-            case 0x39: // '9'
-                return input - 0x30; // 0x00 - 0x09
-            case 0x41: // 'A'
-            case 0x42: // 'B'
-            case 0x43: // 'C'
-            case 0x44: // 'D'
-            case 0x45: // 'E'
-            case 0x46: // 'F'
-                return input - 0x37; // 0x0A - 0x0F
-            case 0x61: // 'a'
-            case 0x62: // 'b'
-            case 0x63: // 'c'
-            case 0x64: // 'd'
-            case 0x65: // 'e'
-            case 0x66: // 'f'
-                return input - 0x57; // 0x0A - 0x0F
-            default:
-                throw new IllegalArgumentException("illegal input: " + input);
-        }
-    }
-
-
+//    /**
+//     * Converts a single 7-bit ASCII value to a 4-bit unsigned integer.
+//     *
+//     * @param input 7-bit ASCII value; digit (0x30 ~ 0x39), upper alpha (0x41 ~
+//     * 0x46), or lower alpha (0x61 ~ 0x66)
+//     *
+//     * @return 4-bit unsigned integer (0x00 ~ 0x0F)
+//     */
+//    public static int decodeHalf(final int input) {
+//
+//        switch (input) {
+//            case 0x30: // '0'
+//            case 0x31: // '1'
+//            case 0x32: // '2'
+//            case 0x33: // '3'
+//            case 0x34: // '4'
+//            case 0x35: // '5'
+//            case 0x36: // '6'
+//            case 0x37: // '7'
+//            case 0x38: // '8'
+//            case 0x39: // '9'
+//                return input - 0x30; // 0x00 - 0x09
+//            case 0x41: // 'A'
+//            case 0x42: // 'B'
+//            case 0x43: // 'C'
+//            case 0x44: // 'D'
+//            case 0x45: // 'E'
+//            case 0x46: // 'F'
+//                return input - 0x37; // 0x0A - 0x0F
+//            case 0x61: // 'a'
+//            case 0x62: // 'b'
+//            case 0x63: // 'c'
+//            case 0x64: // 'd'
+//            case 0x65: // 'e'
+//            case 0x66: // 'f'
+//                return input - 0x57; // 0x0A - 0x0F
+//            default:
+//                throw new IllegalArgumentException("illegal input: " + input);
+//        }
+//    }
     public static int decodeSingle(final byte[] input, final int inoff) {
 
         if (input == null) {
@@ -111,42 +109,40 @@ public class PercentDecoder {
     }
 
 
-    public static boolean decodeSingle(final byte[] input, final int inoff,
-                                       final byte[] output, final int outoff) {
-
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
-
-        if (inoff < 0) {
-            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
-        }
-
-        if (inoff >= input.length) {
-            throw new IllegalArgumentException(
-                "inoff(" + inoff + ") >= input.length(" + input.length + ")");
-        }
-
-        if (output == null) {
-            throw new NullPointerException("output");
-        }
-
-        if (outoff < 0) {
-            throw new IllegalArgumentException("outoff(" + outoff + ") < 0");
-        }
-
-        if (outoff >= output.length) {
-            throw new IllegalArgumentException(
-                "outoff(" + outoff + ") >= output.length(" + output.length
-                + ")");
-        }
-
-        output[outoff] = (byte) decodeSingle(input, inoff);
-
-        return input[inoff] == 0x25;
-    }
-
-
+//    public static boolean decodeSingle(final byte[] input, final int inoff,
+//                                       final byte[] output, final int outoff) {
+//
+//        if (input == null) {
+//            throw new NullPointerException("input");
+//        }
+//
+//        if (inoff < 0) {
+//            throw new IllegalArgumentException("inoff(" + inoff + ") < 0");
+//        }
+//
+//        if (inoff >= input.length) {
+//            throw new IllegalArgumentException(
+//                "inoff(" + inoff + ") >= input.length(" + input.length + ")");
+//        }
+//
+//        if (output == null) {
+//            throw new NullPointerException("output");
+//        }
+//
+//        if (outoff < 0) {
+//            throw new IllegalArgumentException("outoff(" + outoff + ") < 0");
+//        }
+//
+//        if (outoff >= output.length) {
+//            throw new IllegalArgumentException(
+//                "outoff(" + outoff + ") >= output.length(" + output.length
+//                + ")");
+//        }
+//
+//        output[outoff] = (byte) decodeSingle(input, inoff);
+//
+//        return input[inoff] == 0x25;
+//    }
     /**
      *
      * @param input
@@ -160,31 +156,30 @@ public class PercentDecoder {
         }
 
         final byte[] output = new byte[input.length]; // possible maximum
-        int i = 0;
+        int outoff = 0;
 
         for (int inoff = 0; inoff < input.length;) {
-            output[i++] = (byte) decodeSingle(input, inoff);
-            inoff += input[inoff] == 0x25 ? 3 : 1;
+            output[outoff++] = (byte) decodeSingle(input, inoff);
+            inoff += (input[inoff] == 0x25 ? 3 : 1);
         }
 
-        if (i == output.length) {
+        if (outoff == output.length) {
             return output;
         }
 
-        final byte[] trimmed = new byte[i];
-        System.arraycopy(output, 0, trimmed, 0, i);
+        final byte[] trimmed = new byte[outoff];
+        System.arraycopy(output, 0, trimmed, 0, outoff);
 
         return trimmed;
     }
 
 
     /**
-     * Decodes given
-     * <code>input</code>.
+     * Decodes given input bytes.
      *
-     * @param input input to decode
+     * @param input the input bytes to decode
      *
-     * @return decoding output
+     * @return decoded output
      */
     public byte[] decode(final byte[] input) {
 

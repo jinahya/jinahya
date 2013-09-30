@@ -31,95 +31,102 @@ import java.nio.charset.Charset;
 public class PercentEncoder {
 
 
-    private static int encodeHalf(final int decoded) {
+//    private static int encodeHalf(final int decoded) {
+//
+//        switch (decoded) {
+//            case 0x00:
+//            case 0x01:
+//            case 0x02:
+//            case 0x03:
+//            case 0x04:
+//            case 0x05:
+//            case 0x06:
+//            case 0x07:
+//            case 0x08:
+//            case 0x09:
+//                return decoded + 0x30; // 0x30('0') - 0x39('9')
+//            case 0x0A:
+//            case 0x0B:
+//            case 0x0C:
+//            case 0x0D:
+//            case 0x0E:
+//            case 0x0F:
+//                return decoded + 0x37; // 0x41('A') - 0x46('F')
+//            default:
+//                throw new IllegalArgumentException("illegal half: " + decoded);
+//        }
+//    }
+    public static void encodeSingle(final int input, final byte[] output,
+                                    final int outoff) {
 
-        switch (decoded) {
-            case 0x00:
-            case 0x01:
-            case 0x02:
-            case 0x03:
-            case 0x04:
-            case 0x05:
-            case 0x06:
-            case 0x07:
-            case 0x08:
-            case 0x09:
-                return decoded + 0x30; // 0x30('0') - 0x39('9')
-            case 0x0A:
-            case 0x0B:
-            case 0x0C:
-            case 0x0D:
-            case 0x0E:
-            case 0x0F:
-                return decoded + 0x37; // 0x41('A') - 0x46('F')
-            default:
-                throw new IllegalArgumentException("illegal half: " + decoded);
-        }
-    }
-
-
-    private static void encodeSingle(final int decoded, final byte[] encoded,
-                                     final int offset) {
-
-        if (encoded == null) {
-            throw new NullPointerException("encoded");
+        if (output == null) {
+            throw new NullPointerException("output");
         }
 
-        if (encoded.length < 1) {
+        if (output.length < 1) {
+            // not required by (outoff >= output.length) check below
             throw new IllegalArgumentException(
-                "encoded.length(" + encoded.length + ") < 1");
+                "encoded.length(" + output.length + ") < 1");
         }
 
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        if (outoff < 0) {
+            throw new IllegalArgumentException("outoff(" + outoff + ") < 0");
         }
 
-        if (offset >= encoded.length) {
+        if (outoff >= output.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") >= encoded.length(" + encoded.length
+                "outoff(" + outoff + ") >= output.length(" + output.length
                 + ")");
         }
 
-        if ((decoded >= 0x30 && decoded <= 0x39) // digit
-            || (decoded >= 0x41 && decoded <= 0x5A) // upper case alpha
-            || (decoded >= 0x61 && decoded <= 0x7A) // lower case alpha
-            || decoded == 0x2D || decoded == 0x5F || decoded == 0x2E
-            || decoded == 0x7E) { // -_.~
-            encoded[offset] = (byte) decoded;
+        if ((input >= 0x30 && input <= 0x39) // digit
+            || (input >= 0x41 && input <= 0x5A) // upper case alpha
+            || (input >= 0x61 && input <= 0x7A) // lower case alpha
+            || input == 0x2D // '-'
+            || input == 0x5F // '_'
+            || input == 0x2E // '.'
+            || input == 0x7E) { // '~'
+            output[outoff] = (byte) input;
         } else {
-            if (offset >= encoded.length - 2) {
+            if (outoff >= output.length - 2) {
                 throw new IllegalArgumentException(
-                    "offset(" + offset + ") >= encoded.length("
-                    + encoded.length + ") - 2");
+                    "outoff(" + outoff + ") >= output.length(" + output.length
+                    + ") - 2");
             }
-            encoded[offset] = 0x25; // '%'
-            encoded[offset + 1] = (byte) encodeHalf((decoded >> 4) & 0xFF);
-            encoded[offset + 2] = (byte) encodeHalf(decoded & 0x0F);
+            output[outoff] = 0x25; // '%'
+            HexEncoder.encodeSingle(input, output, outoff + 1);
+            //output[outoff + 1] = (byte) encodeHalf((input >> 4) & 0xFF);
+            //output[outoff + 2] = (byte) encodeHalf(input & 0x0F);
         }
     }
 
 
-    public static byte[] encodeMultiple(final byte[] decoded) {
+    /**
+     *
+     * @param input the input byte array
+     *
+     * @return encoded output
+     */
+    public static byte[] encodeMultiple(final byte[] input) {
 
-        if (decoded == null) {
-            throw new IllegalArgumentException("null decoded");
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        // possible maximum
-        final byte[] encoded = new byte[(decoded.length << 2) + decoded.length];
+        final byte[] output = new byte[input.length * 3]; // possible maximum
+        int outoff = 0;
 
-        int offset = 0;
-        for (int i = 0; i < decoded.length; i++) {
-            encodeSingle(decoded[i] & 0xFF, encoded, offset);
-            offset += encoded[offset] == 0x25 ? 3 : 1;
+        for (int i = 0; i < input.length; i++) {
+            encodeSingle(input[i] & 0xFF, output, outoff);
+            outoff += (output[outoff] == 0x25 ? 3 : 1);
         }
 
-        if (offset == encoded.length) {
-            return encoded;
+        if (outoff == output.length) {
+            return output;
         }
 
-        final byte[] trimmed = new byte[offset];
-        System.arraycopy(encoded, 0, trimmed, 0, offset);
+        final byte[] trimmed = new byte[outoff];
+        System.arraycopy(output, 0, trimmed, 0, outoff);
 
         return trimmed;
     }
@@ -133,10 +140,6 @@ public class PercentEncoder {
      * @return encoded output
      */
     public byte[] encode(final byte[] input) {
-
-        if (input == null) {
-            throw new NullPointerException("input");
-        }
 
         return encodeMultiple(input);
     }

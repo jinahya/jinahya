@@ -18,9 +18,8 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.codec.PercentEncoder;
-import com.googlecode.jinahya.codec.PercentDecoder;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -33,15 +32,60 @@ public class PercentCodecTest {
 
 
     @Test(invocationCount = 128)
-    public void testEncodeDecode() throws IOException {
+    public void testBytesToBytes() throws IOException {
 
-        final byte[] decoded = PercentDecoderTest.decodedBytes();
+        final byte[] expected = PercentCodecTestHelper.decodedBytes(1024);
 
-        final byte[] encoded = new PercentEncoder().encode(decoded);
+        final byte[] encoded = new PercentEncoder().encode(expected);
 
         final byte[] actual = new PercentDecoder().decode(encoded);
 
-        Assert.assertEquals(actual, decoded);
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testBytesToString() throws IOException {
+
+        final byte[] expected = PercentCodecTestHelper.decodedBytes(1024);
+
+        final String encoded = new PercentEncoder().encodeToString(
+            expected, StandardCharsets.US_ASCII);
+
+        final byte[] actual = new PercentDecoder().decode(
+            encoded, StandardCharsets.US_ASCII);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testStringToBytes() throws IOException {
+
+        final String expected = PercentCodecTestHelper.decodedString(1024);
+
+        final byte[] encoded = new PercentEncoder().encode(
+            expected, StandardCharsets.UTF_8);
+
+        final String actual = new PercentDecoder().decodeToString(
+            encoded, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void testStringToString() throws IOException {
+
+        final String expected = PercentCodecTestHelper.decodedString(1024);
+
+        final String encoded = new PercentEncoder().encodeToString(
+            expected, StandardCharsets.UTF_8, StandardCharsets.US_ASCII);
+
+        final String actual = new PercentDecoder().decodeToString(
+            encoded, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
+
+        Assert.assertEquals(actual, expected);
     }
 
 

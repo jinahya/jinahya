@@ -54,7 +54,7 @@ public class PercentBinaryEncoderProxy
     public static Object newInstance(final PercentEncoder encoder) {
 
         if (encoder == null) {
-            throw new NullPointerException("encoder");
+            //throw new NullPointerException("encoder");
         }
 
         return newInstance(
@@ -89,7 +89,7 @@ public class PercentBinaryEncoderProxy
     @Override
     protected byte[] encode(final byte[] source) throws Throwable {
 
-        LOGGER.debug("encode({})", source);
+        LOGGER.debug("<byte[]>encode({})", source);
 
         return encoder.encode(source);
     }
