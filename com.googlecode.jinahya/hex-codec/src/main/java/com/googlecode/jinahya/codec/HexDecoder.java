@@ -46,9 +46,7 @@ public class HexDecoder {
      *
      * @return the decoded half octet.
      */
-    private static int decodeHalf(final int input) {
-
-        LOGGER.debug("decodeHalf({})", input);
+    public static int decodeHalf(final int input) {
 
         switch (input) {
             case 0x30: // '0'
@@ -77,29 +75,28 @@ public class HexDecoder {
             case 0x66: // 'f'
                 return input - 0x57;
             default:
-                throw new IllegalArgumentException("illegal half: " + input);
+                throw new IllegalArgumentException("illegal input: " + input);
         }
     }
 
 
     /**
-     * Decodes two nibbles into a single octet.
+     * Decodes two nibbles in given array and returns the result as a single
+     * octet.
      *
-     * @param input the nibble array.
+     * @param input the array of nibbles.
      * @param inoff the offset in the array.
      *
-     * @return decoded octet.
+     * @return the decoded octet.
      */
     public static int decodeSingle(final byte[] input, final int inoff) {
-
-        LOGGER.debug("decodeSingle({}, {})", input, inoff);
 
         if (input == null) {
             throw new NullPointerException("input");
         }
 
         if (input.length < 2) {
-            // not required
+            // not required by (inoff >= input.length -1) checked below
             throw new IllegalArgumentException(
                 "input.length(" + input.length + ") < 2");
         }
@@ -119,6 +116,15 @@ public class HexDecoder {
     }
 
 
+    /**
+     * Decodes two nibbles in given input array and writes the resulting single
+     * octet into specified output array.
+     *
+     * @param input the input array
+     * @param inoff the offset in input array
+     * @param output the output array
+     * @param outoff the offset in output array
+     */
     public static void decodeSingle(final byte[] input, final int inoff,
                                     final byte[] output, final int outoff) {
 
@@ -140,6 +146,16 @@ public class HexDecoder {
     }
 
 
+    /**
+     * Decodes multiple units in given input array and writes the resulting
+     * octets into specifed output array.
+     *
+     * @param input the input array
+     * @param inoff the offset in input array
+     * @param output the output array
+     * @param outoff the offset in output array
+     * @param count the number of units to process
+     */
     public static void decodeMultiple(final byte[] input, int inoff,
                                       final byte[] output, int outoff,
                                       final int count) {
@@ -161,7 +177,7 @@ public class HexDecoder {
      *
      * @param input the nibbles to decode.
      *
-     * @return the encoded octets.
+     * @return the decoded octets.
      */
     public static byte[] decodeMultiple(final byte[] input) {
 
@@ -190,6 +206,16 @@ public class HexDecoder {
     }
 
 
+    /**
+     * Decodes given sequence of nibbles into a string.
+     *
+     * @param input the nibbles to decode
+     * @param outputCharset the charset name to encode output string
+     *
+     * @return the decoded string.
+     *
+     * @throws UnsupportedEncodingException if outputCharset is not supported
+     */
     public String decodeToString(final byte[] input, final String outputCharset)
         throws UnsupportedEncodingException {
 
@@ -197,8 +223,20 @@ public class HexDecoder {
     }
 
 
+    /**
+     * Decodes given sequence of nibbles into a string.
+     *
+     * @param input the nibbles to decode
+     * @param outputCharset the charset to encode output string
+     *
+     * @return the decoded string
+     */
     public String decodeToString(final byte[] input,
                                  final Charset outputCharset) {
+
+        if (outputCharset == null) {
+            throw new NullPointerException("outputCharset");
+        }
 
         return new String(decode(input), outputCharset);
     }
@@ -259,52 +297,63 @@ public class HexDecoder {
     /**
      * [TESTING].
      *
-     * @param encoded nibbles.
+     * @param input nibbles.
      *
      * @return octets.
      */
-    byte[] decodeLikeAnEngineer(final byte[] encoded) {
+    byte[] decodeLikeAnEngineer(final byte[] input) {
 
-//        if (encoded == null) {
-//            throw new IllegalArgumentException("null encoded");
-//        }
-
-//        if ((encoded.length & 0x01) == 0x01) {
-//            throw new IllegalArgumentException(
-//                "encoded.length(" + encoded.length + ") is not even");
-//        }
-
-        final byte[] decoded = new byte[encoded.length >> 1];
-
-        int index = 0; // index in encoded
-        for (int i = 0; i < decoded.length; i++) {
-            decoded[i] = (byte) ((decodeHalf(encoded[index++]) << 4)
-                                 | decodeHalf(encoded[index++]));
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        return decoded;
+        if ((input.length & 0x01) == 0x01) {
+            throw new IllegalArgumentException(
+                "input.length(" + input.length + ") is not even");
+        }
+
+        final byte[] output = new byte[input.length >> 1];
+
+        int index = 0; // index in input
+        for (int i = 0; i < output.length; i++) {
+            output[i] = (byte) ((decodeHalf(input[index++]) << 4)
+                                | decodeHalf(input[index++]));
+        }
+
+        return output;
     }
 
 
     /**
      * [TESTING].
      *
-     * @param encoded nibbles.
+     * @param input nibbles.
      *
      * @return octets.
      */
-    byte[] decodeLikeABoss(byte[] encoded) {
+    byte[] decodeLikeABoss(final byte[] input) {
 
-        final byte[] decoded = new byte[encoded.length / 2];
-
-        for (int i = 0; i < decoded.length; i++) {
-            String s = new String(encoded, i * 2, 2, StandardCharsets.US_ASCII);
-            decoded[i] = (byte) Integer.parseInt(s, 16);
+        if (input == null) {
+            throw new NullPointerException("input");
         }
 
-        return decoded;
+        if ((input.length & 0x01) == 0x01) {
+            throw new IllegalArgumentException(
+                "input.length(" + input.length + ") is not even");
+        }
+
+        final byte[] output = new byte[input.length / 2];
+
+        int index = 0; // index in input
+        for (int i = 0; i < output.length; i++) {
+            final String s = new String(
+                input, index, 2, StandardCharsets.US_ASCII);
+            output[i] = (byte) Integer.parseInt(s, 16);
+            index += 2;
+        }
+
+        return output;
     }
 
 
 }
-
