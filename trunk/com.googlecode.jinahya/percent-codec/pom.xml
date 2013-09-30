@@ -3,6 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- The Basics -->
   <groupId>com.googlecode.jinahya</groupId>
   <artifactId>percent-codec</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
@@ -107,6 +108,7 @@
     <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
   </properties>
 
+  <!-- Build Settings -->
   <build>
     <extensions>
       <extension>
