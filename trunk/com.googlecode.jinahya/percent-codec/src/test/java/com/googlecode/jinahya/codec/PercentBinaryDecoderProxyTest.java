@@ -18,8 +18,6 @@
 package com.googlecode.jinahya.codec;
 
 
-import com.googlecode.jinahya.codec.PercentBinaryDecoderProxy;
-import com.googlecode.jinahya.codec.PercentEncoder;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.codec.BinaryDecoder;

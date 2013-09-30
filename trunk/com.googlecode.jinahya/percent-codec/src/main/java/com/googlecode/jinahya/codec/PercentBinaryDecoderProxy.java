@@ -50,10 +50,16 @@ public class PercentBinaryDecoderProxy
         LoggerFactory.getLogger(PercentBinaryDecoderProxy.class);
 
 
+    /**
+     *
+     * @param decoder
+     *
+     * @return
+     */
     public static Object newInstance(final PercentDecoder decoder) {
 
         if (decoder == null) {
-            throw new NullPointerException("decoder");
+            //throw new NullPointerException("decoder");
         }
 
         return newInstance(
@@ -61,12 +67,22 @@ public class PercentBinaryDecoderProxy
     }
 
 
+    /**
+     * Creates a new proxy instance.
+     *
+     * @return a new proxy instance.
+     */
     public static Object newInstance() {
 
         return newInstance(new PercentDecoder());
     }
 
 
+    /**
+     * Creates a new instance wrapping given decoder instance.
+     *
+     * @param decoder the decoder instance to wrap
+     */
     protected PercentBinaryDecoderProxy(final PercentDecoder decoder) {
 
         super(decoder);
@@ -85,7 +101,7 @@ public class PercentBinaryDecoderProxy
     @Override
     protected byte[] decode(final byte[] source) throws Throwable {
 
-        LOGGER.debug("decode({})", source);
+        LOGGER.debug("<byet[]>decode({})", source);
 
         return decoder.decode(source);
     }
