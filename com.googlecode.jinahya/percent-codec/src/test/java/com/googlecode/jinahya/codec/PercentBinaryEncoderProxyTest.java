@@ -18,8 +18,8 @@
 package com.googlecode.jinahya.codec;
 
 
-import java.util.Random;
 import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.Encoder;
 import org.apache.commons.codec.binary.Base64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -32,7 +32,40 @@ import org.testng.annotations.Test;
 public class PercentBinaryEncoderProxyTest {
 
 
-    private static final Random RANDOM = new Random();
+    @Test
+    public void testAsEncoder() throws Exception {
+
+        final Encoder encoder =
+            (Encoder) PercentBinaryEncoderProxy.newInstance();
+
+        try {
+            encoder.encode((Object) null);
+            Assert.fail("passed: encode((Object) null)");
+        } catch (final NullPointerException npe) {
+            // ok
+        }
+
+        final Object input = PercentCodecTestHelper.decodedBytes(1024);
+        final Object output = encoder.encode(input);
+    }
+
+
+    @Test
+    public void testAsBinaryDecoder() throws Exception {
+
+        final BinaryEncoder encoder =
+            (BinaryEncoder) PercentBinaryEncoderProxy.newInstance();
+
+        try {
+            encoder.encode((byte[]) null);
+            Assert.fail("passed: encode((byte[]) null)");
+        } catch (final NullPointerException npe) {
+            // ok
+        }
+
+        final byte[] input = PercentCodecTestHelper.decodedBytes(1024);
+        final byte[] output = encoder.encode(input);
+    }
 
 
     @Test(invocationCount = 128)
@@ -55,20 +88,19 @@ public class PercentBinaryEncoderProxyTest {
             // expected
         }
 
-        final byte[] expected = new byte[RANDOM.nextInt(1024)];
-        RANDOM.nextBytes(expected);
+        final byte[] origin = PercentCodecTestHelper.decodedBytes(1024);
         System.out.println("original ----------------------------------------");
-        System.out.println(Base64.encodeBase64String(expected));
+        System.out.println(Base64.encodeBase64String(origin));
 
-        final byte[] encoded = encoder.encode(expected);
+        final byte[] encoded = encoder.encode(origin);
         System.out.println("encoded -----------------------------------------");
         System.out.println(new String(encoded, "US-ASCII"));
 
-        final byte[] actual = PercentDecoder.decodeMultiple(encoded);
+        final byte[] decoded = PercentDecoder.decodeMultiple(encoded);
         System.out.println("decoded -----------------------------------------");
-        System.out.println(Base64.encodeBase64String(actual));
+        System.out.println(Base64.encodeBase64String(decoded));
 
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(decoded, origin);
     }
 
 
