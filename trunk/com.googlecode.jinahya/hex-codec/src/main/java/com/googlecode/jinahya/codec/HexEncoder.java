@@ -30,13 +30,13 @@ public class HexEncoder {
 
 
     /**
-     * Encodes a single nibble.
+     * Encodes a nibble to a single hex char.
      *
-     * @param input the nibble to encode.
+     * @param input the nibble to encode
      *
-     * @return the encoded half octet.
+     * @return the encoded hex char.
      */
-    public static int encodeHalf(final int input) {
+    private static int encodeHalf(final int input) {
 
         switch (input) {
             case 0x00:
@@ -64,10 +64,10 @@ public class HexEncoder {
 
 
     /**
-     * Encodes a single octet into two nibbles.
+     * Encodes a single octet into two hex chars.
      *
      * @param input the octet to encode.
-     * @param output the array to which each encoded nibbles are written.
+     * @param output the array to which each encoded hex chars are written.
      * @param outoff the offset in the output array.
      */
     public static void encodeSingle(final int input, final byte[] output,
