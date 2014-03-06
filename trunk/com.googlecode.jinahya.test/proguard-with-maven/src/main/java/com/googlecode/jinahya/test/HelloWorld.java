@@ -6,36 +6,51 @@ package com.googlecode.jinahya.test;
 public class HelloWorld {
 
 
-    private static final Object private_static_field = null;
+    static final Object static_field_ = null;
 
 
-    protected static final Object protected_static_field = null;
+    private static final Object static_field_private = null;
 
 
-    public static final Object public_static_field = null;
+    protected static final Object static_field_protected = null;
 
 
-    private static void private_static_method() {
+    public static final Object static_field_public = null;
+
+
+    static void static_method_() {
     }
 
 
-    protected static void protected_static_method() {
+    private static void static_method_private() {
+    }
+
+
+    protected static void static_method_protected() {
+    }
+
+
+    public static void static_method_public() {
     }
 
 
     public static void main(final String[] args) {
 
-        System.out.println("hello, world");
+        System.out.print("hello, world\n");
     }
 
 
-    private Object private_instance_field = null;
+    Object instance_field_ = null;
 
 
-    protected Object protected_instance_field = null;
+    private Object instance_field_private = null;
 
 
-    public Object public_instance_field = null;
+    protected Object instance_field_protected = null;
+
+
+    public Object instance_field_public = null;
 
 
 }
+
