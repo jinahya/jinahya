@@ -236,10 +236,10 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
-                  <compilerArguments>-Aeclipselink.persistencexml=src/main/resources/META-INF/persistence.xml</compilerArguments>
                   <processors>
                     <processor>org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor</processor>
                   </processors>
+                  <compilerArguments>-Aeclipselink.persistencexml=src/main/resources/META-INF/persistence.xml</compilerArguments>
                 </configuration>
               </execution>
             </executions>
@@ -271,6 +271,43 @@
           <optional>true</optional>
         </dependency>
       </dependencies>
+    </profile>
+    <profile>
+      <id>datanucleus2</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bsc.maven</groupId>
+            <artifactId>maven-processor-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>process</id>
+                <goals>
+                  <goal>process</goal>
+                </goals>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <processors>
+                    <processor>org.datanucleus.jpa.query.JPACriteriaProcessor</processor>
+                  </processors>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-jpa-query</artifactId>
+                <version>${datanucleus.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-core</artifactId>
+                <version>${datanucleus.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
