@@ -109,15 +109,6 @@
       <id>hibernate2</id>
       <build>
         <plugins>
-          <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <proc>none</proc>
-            </configuration>
-          </plugin>
-          -->
           <plugin>
             <groupId>org.bsc.maven</groupId>
             <artifactId>maven-processor-plugin</artifactId>
@@ -175,15 +166,6 @@
       <id>openjpa2</id>
       <build>
         <plugins>
-          <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <proc>none</proc>
-            </configuration>
-          </plugin>
-          -->
           <plugin>
             <groupId>org.bsc.maven</groupId>
             <artifactId>maven-processor-plugin</artifactId>
@@ -243,16 +225,6 @@
       <id>eclipselink2</id>
       <build>
         <plugins>
-          <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <source>1.6</source>
-              <target>1.6</target>
-            </configuration>
-          </plugin>
-          -->
           <plugin>
             <groupId>org.bsc.maven</groupId>
             <artifactId>maven-processor-plugin</artifactId>
