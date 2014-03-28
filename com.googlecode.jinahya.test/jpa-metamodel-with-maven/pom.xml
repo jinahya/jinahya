@@ -22,6 +22,11 @@
         <version>${openjpa.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.datanucleus</groupId>
+        <artifactId>datanucleus-jpa-query</artifactId>
+        <version>${datanucleus.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.eclipse.persistence</groupId>
         <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
         <version>${eclipselink.version}</version>
@@ -48,6 +53,7 @@
     <maven.compiler.testSource>1.7</maven.compiler.testSource>
     <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
     <openjpa.version>2.3.0</openjpa.version>
+    <datanucleus.version>4.0.0-m1</datanucleus.version>
     <eclipselink.version>2.5.2-M1</eclipselink.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
   </properties>
@@ -219,6 +225,19 @@
           <optional>true</optional>
         </dependency>
       </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <compilerArgs>
+                <arg>-Aeclipselink.persistencexml=src/main/resources/META-INF/persistence.xml</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>eclipselink2</id>
@@ -262,6 +281,24 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>datanucleus1</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.datanucleus</groupId>
+          <artifactId>datanucleus-jpa-query</artifactId>
+          <scope>compile</scope>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+          <groupId>org.datanucleus</groupId>
+          <artifactId>datanucleus-core</artifactId>
+          <version>${datanucleus.version}</version>
+          <scope>compile</scope>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 </project>
