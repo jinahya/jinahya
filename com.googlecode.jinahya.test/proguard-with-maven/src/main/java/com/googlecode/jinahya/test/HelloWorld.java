@@ -40,7 +40,19 @@ public class HelloWorld {
     }
 
 
-    Object instance_field_ = null;
+    private void private_instance_method() {
+    }
+
+
+    protected void proected_instance_method() {
+    }
+
+
+    public void public_instance_method() {
+    }
+
+
+    private Object private_instance_field = null;
 
 
     private Object instance_field_private = null;
@@ -51,6 +63,4 @@ public class HelloWorld {
 
     public Object instance_field_public = null;
 
-
 }
-
