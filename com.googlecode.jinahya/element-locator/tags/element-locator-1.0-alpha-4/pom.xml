@@ -71,7 +71,7 @@
       <dependency>
         <groupId>xom</groupId>
         <artifactId>xom</artifactId>
-        <version>1.2.5</version>
+        <version>1.3.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -196,11 +196,11 @@
       </plugin>
     </plugins>
   </build>
-  <reporting />
+  <reporting/>
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <description />
+  <description/>
   <url>http://jinahya.googlecode.com</url>
   <inceptionYear>2010</inceptionYear>
   <licenses>
@@ -211,7 +211,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -219,20 +219,20 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
   <!-- Environment Settings -->
-  <issueManagement />
-  <ciManagement />
-  <mailingLists />
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/element-locator/tags/element-locator-1.0-alpha-4</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/element-locator/tags/element-locator-1.0-alpha-4</developerConnection>
     <url>http://code.google.com/p/jinahya/source/browse/trunk/com.googlecode.jinahya/element-locator/tags/element-locator-1.0-alpha-4</url>
   </scm>
-  <prerequisites />
-  <repositories />
-  <pluginRepositories />
+  <prerequisites/>
+  <repositories/>
+  <pluginRepositories/>
   <distributionManagement>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
