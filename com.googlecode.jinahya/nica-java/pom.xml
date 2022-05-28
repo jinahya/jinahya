@@ -32,7 +32,7 @@
       <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk15on</artifactId>
-        <version>1.49</version>
+        <version>1.69</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
@@ -251,7 +251,7 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-  <organization />
+  <organization/>
   <developers>
     <developer>
       <id>jinahya</id>
@@ -259,11 +259,11 @@
       <email>jinahya@gmail.com</email>
     </developer>
   </developers>
-  <contributors />
+  <contributors/>
 
-  <issueManagement />
-  <ciManagement />
-  <mailingLists />
+  <issueManagement/>
+  <ciManagement/>
+  <mailingLists/>
   <scm>
     <connection>scm:svn:http://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/nica-java</connection>
     <developerConnection>scm:svn:https://jinahya.googlecode.com/svn/trunk/com.googlecode.jinahya/nica-java</developerConnection>
@@ -284,7 +284,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
   </repositories>
-  <pluginRepositories />
+  <pluginRepositories/>
   <distributionManagement>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
